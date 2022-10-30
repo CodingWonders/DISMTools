@@ -1,0 +1,756 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{042ED465-C910-407A-93D1-736639FF0EA5}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>DISMTools.My.MyApplication</StartupObject>
+    <RootNamespace>DISMTools</RootNamespace>
+    <AssemblyName>DISMTools</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>WindowsForms</MyType>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>DISMTools.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>DISMTools.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>logo.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Windows.Forms" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MainForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.vb">
+      <DependentUpon>MainForm.vb</DependentUpon>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Panels\DoWork\ProgressPanel.Designer.vb">
+      <DependentUpon>ProgressPanel.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\DoWork\ProgressPanel.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Exe_Ops\DismComponents.Designer.vb">
+      <DependentUpon>DismComponents.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Exe_Ops\DismComponents.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Exe_Ops\DTSettingForm.Designer.vb">
+      <DependentUpon>DTSettingForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Exe_Ops\DTSettingForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Exe_Ops\PrgAbout.Designer.vb">
+      <DependentUpon>PrgAbout.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Exe_Ops\PrgAbout.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\GetImgInfoDlg.Designer.vb">
+      <DependentUpon>GetImgInfoDlg.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\GetImgInfoDlg.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\Pkgs\GetPkgInfo.Designer.vb">
+      <DependentUpon>GetPkgInfo.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\Pkgs\GetPkgInfo.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\ApplicationDriveSpecifier.Designer.vb">
+      <DependentUpon>ApplicationDriveSpecifier.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\ApplicationDriveSpecifier.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Conversion\ImgWim2Esd.Designer.vb">
+      <DependentUpon>ImgWim2Esd.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Conversion\ImgWim2Esd.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\ImgAppend.Designer.vb">
+      <DependentUpon>ImgAppend.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\ImgAppend.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\ImgApply.Designer.vb">
+      <DependentUpon>ImgApply.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\ImgApply.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\ImgCapture.Designer.vb">
+      <DependentUpon>ImgCapture.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\ImgCapture.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\ImgUMount.Designer.vb">
+      <DependentUpon>ImgUMount.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\ImgUMount.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\ImgMount.Designer.vb">
+      <DependentUpon>ImgMount.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\ImgMount.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Merger\ImgSwmToWim.Designer.vb">
+      <DependentUpon>ImgSwmToWim.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Merger\ImgSwmToWim.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Pkgs\AddPackage.Designer.vb">
+      <DependentUpon>AddPackage.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Pkgs\AddPackage.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Switch\ImgIndexSwitch.Designer.vb">
+      <DependentUpon>ImgIndexSwitch.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Switch\ImgIndexSwitch.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Internal\Pkgs\PkgErrorText.Designer.vb">
+      <DependentUpon>PkgErrorText.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Internal\Pkgs\PkgErrorText.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Internal\ProjectValueLoadForm.Designer.vb">
+      <DependentUpon>ProjectValueLoadForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Internal\ProjectValueLoadForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\MSEdge\AddEdgeBrowser.Designer.vb">
+      <DependentUpon>AddEdgeBrowser.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\MSEdge\AddEdgeBrowser.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\MSEdge\AddEdgeFull.Designer.vb">
+      <DependentUpon>AddEdgeFull.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\MSEdge\AddEdgeFull.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\MSEdge\AddEdgeWebView.Designer.vb">
+      <DependentUpon>AddEdgeWebView.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\MSEdge\AddEdgeWebView.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\OSUninst\OSNoRollbackErrorDlg.Designer.vb">
+      <DependentUpon>OSNoRollbackErrorDlg.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\OSUninst\OSNoRollbackErrorDlg.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\OSUninst\SetOSUninstWindow.Designer.vb">
+      <DependentUpon>SetOSUninstWindow.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\OSUninst\SetOSUninstWindow.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Prj_Ops\NewProj.Designer.vb">
+      <DependentUpon>NewProj.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Prj_Ops\NewProj.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Exe_Ops\Options.Designer.vb">
+      <DependentUpon>Options.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Exe_Ops\Options.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Prj_Ops\SqlServer\SqlServerProjectErrorDlg.Designer.vb">
+      <DependentUpon>SqlServerProjectErrorDlg.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Prj_Ops\SqlServer\SqlServerProjectErrorDlg.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Questions\ImgConversionSuccessDialog.Designer.vb">
+      <DependentUpon>ImgConversionSuccessDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Questions\ImgConversionSuccessDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Questions\ImgWinVistaIncompatibilityDialog.Designer.vb">
+      <DependentUpon>ImgWinVistaIncompatibilityDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Questions\ImgWinVistaIncompatibilityDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Questions\OrphanedMountedImgDialog.Designer.vb">
+      <DependentUpon>OrphanedMountedImgDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Questions\OrphanedMountedImgDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\DoWork\PleaseWaitDialog.Designer.vb">
+      <DependentUpon>PleaseWaitDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\DoWork\PleaseWaitDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Prj_Ops\ProjProperties.Designer.vb">
+      <DependentUpon>ProjProperties.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Prj_Ops\ProjProperties.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Questions\SaveProjectQuestionDialog.Designer.vb">
+      <DependentUpon>SaveProjectQuestionDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Questions\SaveProjectQuestionDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Report_Dlgs\Add-Package\ReportForm.Designer.vb">
+      <DependentUpon>ReportForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Report_Dlgs\Add-Package\ReportForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Report_Dlgs\Get-ImageInfo\ReportForm.Designer.vb">
+      <DependentUpon>ReportForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Report_Dlgs\Get-ImageInfo\ReportForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Unattend_Files\Addition\NewUnattendWiz.Designer.vb">
+      <DependentUpon>NewUnattendWiz.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Unattend_Files\Addition\NewUnattendWiz.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Unattend_Files\Management\UnattendMgr.Designer.vb">
+      <DependentUpon>UnattendMgr.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Unattend_Files\Management\UnattendMgr.vb">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\DoWork\ProgressPanel.resx">
+      <DependentUpon>ProgressPanel.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Exe_Ops\DismComponents.resx">
+      <DependentUpon>DismComponents.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Exe_Ops\DTSettingForm.resx">
+      <DependentUpon>DTSettingForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Exe_Ops\PrgAbout.resx">
+      <DependentUpon>PrgAbout.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Get_Ops\GetImgInfoDlg.resx">
+      <DependentUpon>GetImgInfoDlg.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Get_Ops\Pkgs\GetPkgInfo.resx">
+      <DependentUpon>GetPkgInfo.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\ApplicationDriveSpecifier.resx">
+      <DependentUpon>ApplicationDriveSpecifier.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Conversion\ImgWim2Esd.resx">
+      <DependentUpon>ImgWim2Esd.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\ImgAppend.resx">
+      <DependentUpon>ImgAppend.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\ImgApply.resx">
+      <DependentUpon>ImgApply.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\ImgCapture.resx">
+      <DependentUpon>ImgCapture.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\ImgUMount.resx">
+      <DependentUpon>ImgUMount.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\ImgMount.resx">
+      <DependentUpon>ImgMount.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Merger\ImgSwmToWim.resx">
+      <DependentUpon>ImgSwmToWim.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Pkgs\AddPackage.resx">
+      <DependentUpon>AddPackage.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Switch\ImgIndexSwitch.resx">
+      <DependentUpon>ImgIndexSwitch.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Internal\Pkgs\PkgErrorText.resx">
+      <DependentUpon>PkgErrorText.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Internal\ProjectValueLoadForm.resx">
+      <DependentUpon>ProjectValueLoadForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\MSEdge\AddEdgeBrowser.resx">
+      <DependentUpon>AddEdgeBrowser.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\MSEdge\AddEdgeFull.resx">
+      <DependentUpon>AddEdgeFull.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\MSEdge\AddEdgeWebView.resx">
+      <DependentUpon>AddEdgeWebView.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\OSUninst\OSNoRollbackErrorDlg.resx">
+      <DependentUpon>OSNoRollbackErrorDlg.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\OSUninst\SetOSUninstWindow.resx">
+      <DependentUpon>SetOSUninstWindow.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Prj_Ops\NewProj.resx">
+      <DependentUpon>NewProj.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Exe_Ops\Options.resx">
+      <DependentUpon>Options.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Prj_Ops\SqlServer\SqlServerProjectErrorDlg.resx">
+      <DependentUpon>SqlServerProjectErrorDlg.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Questions\ImgConversionSuccessDialog.resx">
+      <DependentUpon>ImgConversionSuccessDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Questions\ImgWinVistaIncompatibilityDialog.resx">
+      <DependentUpon>ImgWinVistaIncompatibilityDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Questions\OrphanedMountedImgDialog.resx">
+      <DependentUpon>OrphanedMountedImgDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\DoWork\PleaseWaitDialog.resx">
+      <DependentUpon>PleaseWaitDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Prj_Ops\ProjProperties.resx">
+      <DependentUpon>ProjProperties.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Questions\SaveProjectQuestionDialog.resx">
+      <DependentUpon>SaveProjectQuestionDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Report_Dlgs\Add-Package\ReportForm.resx">
+      <DependentUpon>ReportForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Report_Dlgs\Get-ImageInfo\ReportForm.resx">
+      <DependentUpon>ReportForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Unattend_Files\Addition\NewUnattendWiz.resx">
+      <DependentUpon>NewUnattendWiz.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Unattend_Files\Management\UnattendMgr.resx">
+      <DependentUpon>UnattendMgr.vb</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Helpers\dthelper.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extbatch\cmdhelp.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="LICENSE">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="My Project\app.manifest">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="settings.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Panels\readme.md" />
+    <None Include="Resources\project.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\proj_name_edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\proj_name_set.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\progress\imgoperation.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\menus\save_glyph.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\menus\show_glyph.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\menus\hide_glyph.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\menus\clear_glyph.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mount_img.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\append_img.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\info_16px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8_info_32px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8_event_log_32px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8_output_32px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8_code_32px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="logo.ico" />
+    <None Include="Resources\prg_logo_32px.png" />
+    <None Include="Resources\sqlserver_32px.png" />
+    <None Include="Resources\vs_32px.png" />
+    <None Include="Resources\menus\branch_dark.png" />
+    <None Include="Resources\menus\branch.png" />
+    <None Include="Resources\menus\setting_error_glyph_dark.png" />
+    <None Include="Resources\menus\setting_error_glyph.png" />
+    <None Include="Resources\menus\hide_glyph_dark.png" />
+    <None Include="Resources\menus\show_glyph_dark.png" />
+    <None Include="Resources\menus\refresh_glyph_dark.png" />
+    <None Include="Resources\menus\expand_glyph_dark.png" />
+    <None Include="Resources\menus\collapse_glyph_dark.png" />
+    <None Include="Resources\menus\save_glyph_dark.png" />
+    <None Include="Resources\menus\progress_window_dark.png" />
+    <None Include="Resources\menus\prj_unload_glyph_dark.png" />
+    <None Include="Resources\merge_swm.png" />
+    <None Include="Resources\capture_img.png" />
+    <None Include="Resources\apply_img.png" />
+    <None Include="Resources\uninst_os.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win81\win81_9_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win81\win81_8_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win81\win81_7_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win81\win81_6_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win81\win81_5_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win81\win81_4_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win81\win81_3_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win81\win81_24_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win81\win81_23_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win81\win81_22_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win81\win81_21_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win81\win81_20_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win81\win81_2_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win81\win81_19_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win81\win81_18_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win81\win81_17_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win81\win81_16_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win81\win81_15_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win81\win81_14_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win81\win81_13_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win81\win81_12_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win81\win81_11_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win81\win81_10_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win81\win81_1_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win81\win81_0_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win8\win8_9_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win8\win8_8_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win8\win8_7_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win8\win8_6_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win8\win8_5_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win8\win8_4_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win8\win8_3_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win8\win8_24_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win8\win8_23_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win8\win8_22_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win8\win8_21_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win8\win8_20_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win8\win8_2_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win8\win8_19_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win8\win8_18_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win8\win8_17_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win8\win8_16_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win8\win8_15_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win8\win8_14_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win8\win8_13_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win8\win8_12_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win8\win8_11_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win8\win8_10_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win8\win8_1_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\btn_previews\win8\win8_0_previews.png" />
+    <None Include="Resources\ua_creation\win8_accents\win81\win81_9.png" />
+    <None Include="Resources\ua_creation\win8_accents\win81\win81_8.png" />
+    <None Include="Resources\ua_creation\win8_accents\win81\win81_7.png" />
+    <None Include="Resources\ua_creation\win8_accents\win81\win81_6.png" />
+    <None Include="Resources\ua_creation\win8_accents\win81\win81_5.png" />
+    <None Include="Resources\ua_creation\win8_accents\win81\win81_4.png" />
+    <None Include="Resources\ua_creation\win8_accents\win81\win81_3.png" />
+    <None Include="Resources\ua_creation\win8_accents\win81\win81_24.png" />
+    <None Include="Resources\ua_creation\win8_accents\win81\win81_23.png" />
+    <None Include="Resources\ua_creation\win8_accents\win81\win81_22.png" />
+    <None Include="Resources\ua_creation\win8_accents\win81\win81_21.png" />
+    <None Include="Resources\ua_creation\win8_accents\win81\win81_20.png" />
+    <None Include="Resources\ua_creation\win8_accents\win81\win81_2.png" />
+    <None Include="Resources\ua_creation\win8_accents\win81\win81_19.png" />
+    <None Include="Resources\ua_creation\win8_accents\win81\win81_18.png" />
+    <None Include="Resources\ua_creation\win8_accents\win81\win81_17.png" />
+    <None Include="Resources\ua_creation\win8_accents\win81\win81_16.png" />
+    <None Include="Resources\ua_creation\win8_accents\win81\win81_15.png" />
+    <None Include="Resources\ua_creation\win8_accents\win81\win81_14.png" />
+    <None Include="Resources\ua_creation\win8_accents\win81\win81_13.png" />
+    <None Include="Resources\ua_creation\win8_accents\win81\win81_12.png" />
+    <None Include="Resources\ua_creation\win8_accents\win81\win81_11.png" />
+    <None Include="Resources\ua_creation\win8_accents\win81\win81_10.png" />
+    <None Include="Resources\ua_creation\win8_accents\win81\win81_1.png" />
+    <None Include="Resources\ua_creation\win8_accents\win81\win81_0.png" />
+    <None Include="Resources\ua_creation\win8_accents\win8\win8_9.png" />
+    <None Include="Resources\ua_creation\win8_accents\win8\win8_8.png" />
+    <None Include="Resources\ua_creation\win8_accents\win8\win8_7.png" />
+    <None Include="Resources\ua_creation\win8_accents\win8\win8_6.png" />
+    <None Include="Resources\ua_creation\win8_accents\win8\win8_5.png" />
+    <None Include="Resources\ua_creation\win8_accents\win8\win8_4.png" />
+    <None Include="Resources\ua_creation\win8_accents\win8\win8_3.png" />
+    <None Include="Resources\ua_creation\win8_accents\win8\win8_24.png" />
+    <None Include="Resources\ua_creation\win8_accents\win8\win8_23.png" />
+    <None Include="Resources\ua_creation\win8_accents\win8\win8_22.png" />
+    <None Include="Resources\ua_creation\win8_accents\win8\win8_21.png" />
+    <None Include="Resources\ua_creation\win8_accents\win8\win8_20.png" />
+    <None Include="Resources\ua_creation\win8_accents\win8\win8_2.png" />
+    <None Include="Resources\ua_creation\win8_accents\win8\win8_19.png" />
+    <None Include="Resources\ua_creation\win8_accents\win8\win8_18.png" />
+    <None Include="Resources\ua_creation\win8_accents\win8\win8_17.png" />
+    <None Include="Resources\ua_creation\win8_accents\win8\win8_16.png" />
+    <None Include="Resources\ua_creation\win8_accents\win8\win8_15.png" />
+    <None Include="Resources\ua_creation\win8_accents\win8\win8_14.png" />
+    <None Include="Resources\ua_creation\win8_accents\win8\win8_13.png" />
+    <None Include="Resources\ua_creation\win8_accents\win8\win8_12.png" />
+    <None Include="Resources\ua_creation\win8_accents\win8\win8_11.png" />
+    <None Include="Resources\ua_creation\win8_accents\win8\win8_10.png" />
+    <None Include="Resources\ua_creation\win8_accents\win8\win8_1.png" />
+    <None Include="Resources\ua_creation\win8_accents\win8\win8_0.png" />
+    <None Include="Resources\ua_creation\usr_pic.png" />
+    <None Include="Resources\ua_creation\cpl_classic_smallview.png" />
+    <None Include="Resources\ua_creation\cpl_classic_largeview.png" />
+    <None Include="Resources\ua_creation\cpl_catview.png" />
+    <None Include="Resources\ua_creation\windows_update.png" />
+    <None Include="Resources\ua_creation\eula_scr_disabled.png" />
+    <None Include="Resources\ua_creation\work_net.png" />
+    <None Include="Resources\ua_creation\public_net.png" />
+    <None Include="Resources\ua_creation\home_net.png" />
+    <None Include="Resources\ua_creation\eula_scr.png" />
+    <None Include="Resources\ua_creation\usr_personalization.png" />
+    <None Include="Resources\ua_creation\wireless.png" />
+    <None Include="Resources\ua_creation\usr_security.png" />
+    <None Include="Resources\ua_creation\usr_ceip.png" />
+    <None Include="Resources\ua_creation\unattend_progress.png" />
+    <None Include="Resources\ua_creation\unattend_prep.png" />
+    <None Include="Resources\ua_creation\unattend_finish.png" />
+    <None Include="Resources\ua_creation\regional_settings.png" />
+    <None Include="Resources\ua_creation\oobe_skip.png" />
+    <None Include="Resources\ua_creation\partitioning.png" />
+    <None Include="Resources\ua_creation\net_security.png" />
+    <None Include="Resources\ua_creation\cpl.png" />
+    <None Include="Resources\ua_creation\comp_protection.png" />
+    <None Include="Resources\ua_creation\comp_personalization.png" />
+    <None Include="Resources\ua_creation\eula.png" />
+    <None Include="Resources\ua_creation\activation.png" />
+    <None Include="Resources\glyphs\express_mode_select.png" />
+    <None Include="Resources\glyphs\editor_mode_select.png" />
+    <None Include="Resources\ua_creation\targetos.png" />
+    <None Include="Resources\express_mode_fc.png" />
+    <None Include="Resources\editor_mode_fc.png" />
+    <None Include="Resources\glyphs\express_mode.png" />
+    <None Include="Resources\glyphs\editor_mode.png" />
+    <None Include="Resources\menus\progress_window.png" />
+    <None Include="Resources\sedition_pic.png" />
+    <None Include="Resources\prg_logo.png" />
+    <None Include="Resources\logo_aboutdlg_light.png" />
+    <None Include="Resources\logo_aboutdlg_dark.png" />
+    <None Include="Resources\reports\success_pic.png" />
+    <None Include="Resources\reports\failure_pic.png" />
+    <None Include="Resources\menus\refresh_glyph.png" />
+    <None Include="Resources\menus\expand_glyph.png" />
+    <None Include="Resources\menus\collapse_glyph.png" />
+    <None Include="Resources\op_report_header.png" />
+    <None Include="Panels\MSEdge\dlg_cat_desc" />
+    <None Include="Resources\add_edgewebview.png" />
+    <None Include="Resources\add_edgebrowser.png" />
+    <None Include="Resources\img_info.png" />
+    <None Include="Resources\umount_img.png" />
+    <None Include="Resources\commit_img_dlg.png" />
+    <None Include="Resources\menus\report_glyph.png" />
+    <None Include="Resources\menus\prj_unload_glyph.png" />
+    <None Include="Resources\logo_mainscr_light.png" />
+    <None Include="Resources\logo_mainscr_dark.png" />
+    <None Include="Resources\getting_started.png" />
+    <None Include="Resources\caution.png" />
+    <None Include="Resources\ver_stability.png" />
+    <None Include="Resources\please_wait.png" />
+    <None Include="Resources\new_proj.png" />
+    <None Include="Resources\menus\close_glyph.png" />
+    <None Include="Resources\switch_indexes.png" />
+    <None Include="Resources\servsession_reload.png" />
+    <None Include="Resources\get_feat_info.png" />
+    <None Include="Resources\enable_feature.png" />
+    <None Include="Resources\disable_feature.png" />
+    <None Include="Resources\rem_pkg.png" />
+    <None Include="Resources\get_pkg_info.png" />
+    <None Include="Resources\add_pkg.png" />
+    <None Include="Resources\commit_img.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Debug\" />
+    <Folder Include="Panels\Img_Ops\Features\" />
+    <Folder Include="Panels\Set_Ops\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>ECHO Generating program structure...
+IF NOT EXIST bin (
+	md bin
+	md bin\exthelpers
+	md bin\extbatch
+	md bin\utils
+	move helpers\extbatch\*.* bin\extbatch
+	move helpers\dthelper.bat bin
+	IF EXIST HELPERS (
+		rd HELPERS /s /q
+	)
+) ELSE (
+	echo A bin folder already exists
+)
+IF EXIST "\Program Files\7-Zip" (
+	COPY "\Program Files\7-Zip\7z.exe" $(TargetDir)bin\utils\7z.exe
+	COPY "\Program Files\7-Zip\7z.dll" $(TargetDir)bin\utils\7z.dll
+)</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>ECHO Deleting bin folder...
+IF EXIST bin (
+	rd bin /s /q
+)</PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

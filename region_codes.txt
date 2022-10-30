@@ -1,0 +1,729 @@
+KEYBOARD OR INPUT METHODS
+
+1052:0000041c
+1025:00000401
+66561:00010401
+132097:00020401
+1067:0000042b
+66603:0001042b
+1101:0000044d
+2092:0000082c
+1068:0000042c
+1133:0000046d
+1059:00000423
+67596:0001080c
+2067:00000813
+2060:0000080c
+1093:00000445
+132165:00020445
+66629:00010445
+8218:0000201a
+197634:0030402
+66562:00010402
+132098:00020402
+263170:00040402
+4105:00001009
+3084:00000c0c
+69641:00011009
+2052:00000804
+1028:00000404
+5124:00001404
+4100:00001004
+1050:0000041a
+1029:00000405
+66565:00010405
+132101:00020405
+1030:00000406
+1081:00000439
+1125:00000465
+66661:00010465
+1043:00000413
+1061:00000425
+1080:00000438
+1035:0000040b
+67643:0001083b
+1036:0000040c
+71689:00011809
+55:00000437
+132151:00020437
+66615:00010437
+1031:00000407
+66567:00010407
+1032:00000408
+66568:00010408
+197640:00030408
+132104:00020408
+263176:00040408
+328713:00050409
+394248:00060408
+1135:0000046f
+1095:00000447
+1128:00000468
+1037:0000040d
+66617:00010439
+1038:0000040e
+66574:0001040e
+1039:0000040f
+1136:00000470
+2141:0000085d
+66653:0001045d
+6153:00001809
+1040:00000410
+66576:00010410
+1041:00000411
+1099:0000044b
+1087:0000043f
+1107:00000453
+1042:00000412
+1088:00000440
+1108:00000454
+2058:0000080a
+1062:00000426
+66598:00010426
+66599:00010427
+1063:00000427
+132135:00020427
+1134:0000046e
+1071:0000042f
+66607:0001042f
+1100:0000044c
+1082:0000043a
+66618:0001043a
+1153:00000481
+1102:0000044e
+2128:00000850
+1104:00000450
+1121:00000461
+1044:00000414
+1083:0000043b
+1096:00000448
+1123:00000463
+1065:00000429
+66581:00010415
+1045:00000415
+2070:00000816
+1046:00000416
+66582:00010416
+1094:00000446
+1048:00000418
+132120:00020418
+66584:00010418
+1049:00000419
+66585:00010419
+133179:0002083b
+66619:0001043b
+3098:00000c1a
+2074:0000081a
+1132:0000046c
+1074:00000432
+1115:0000045b
+66651:0001045b
+1051:0000041b
+66587:0001041b
+1060:00000424
+66606:0001042e
+132142:0002042e
+1070:0000042e
+1034:0000040a
+66570:0001040a
+1053:0000041d
+2107:0000083b
+4108:0000100c
+2055:00000807
+1114:0000045a
+66650:0001045a
+1064:00000428
+1097:00000449
+1092:00000444
+1098:0000044a
+1054:0000041e
+132126:0002041e
+66590:0001041e
+197662:0003041e
+1105:00000451
+66591:0001041f
+1055:0000041f
+1090:00000442
+1152:00000480
+1058:00000422
+132130:00020422
+2057:00000809
+1106:00000452
+66569:00010409
+132105:00020409
+197641:00030409
+263177:00040409
+1033:00000409
+1056:00000420
+66688:00010480
+2115:00000843
+1066:0000042a
+1160:00000488
+1157:00000485
+1130:0000046a
+
+CURRENCY AND DATE FORMATS
+
+af-ZA
+sq-AL
+gsw-FR
+am-ET
+ar-DZ
+ar-BH
+ar-EG
+ar-IQ
+ar-JO
+ar-KW
+ar-LB
+ar-LY
+ar-MA
+ar-OM
+ar-QA
+ar-SA
+ar-SY
+ar-TN
+ar-AE
+ar-YE
+hy-AM
+as-IN
+az-Cyrl-AZ
+az-Latn-AZ
+bn-BD
+bn-IN
+ba-RU
+eu-ES
+be-BY
+bs-Cyrl-BA
+bs-Latn-BA
+br-FR
+bg-BG
+my-MM
+ca-ES
+fr-FR
+tzm-Latn-DZ
+tzm-Tfng-MA
+ku-Arab-IQ
+chr-Cher-US
+zh-TW
+zh-TW
+zh-CN
+zh-CN
+co-FR
+hr-BA
+hr-HR
+cs-CZ
+da-DK
+prs-AF
+dv-MV
+nl-BE
+nl-NL
+en-AU
+en-BZ
+en-CA
+en-029
+en-IN
+en-IE
+en-JM
+en-MY
+en-NZ
+en-PH
+en-SG
+en-ZA
+en-TT
+en-GB
+en-US
+en-ZW
+et-EE
+fo-FO
+fil-PH
+fi-FI
+fr-BE
+fr-CA
+fr-FR
+fr-LU
+fr-MC
+fr-CH
+fy-NL
+ff-Latn-SN
+gl-ES
+ka-GE
+de-AT
+de-DE
+de-LI
+de-LU
+de-CH
+el-GR
+kl-GL
+gn-PY
+gu-IN
+ha-Latn-NG
+haw-US
+he-IL
+hi-IN
+hu-HU
+is-IS
+ig-NG
+smn-FI
+id-ID
+iu-Latn-CA
+iu-Cans-CA
+ga-IE
+xh-ZA
+zu-ZA
+it-IT
+it-CH
+ja-JP
+jv-Latn-ID
+kn-IN
+kk-KZ
+km-KH
+qut-GT
+rw-RW
+kok-IN
+ko-KR
+ky-KG
+lo-LA
+lv-LV
+lv-LV
+lt-LT
+dsb-DE
+smj-NO
+smj-SE
+lb-LU
+mk-MK
+ms-BN
+ms-MY
+ml-IN
+mt-MT
+mi-NZ
+arn-CL
+mr-IN
+moh-CA
+mn-MN
+mn-Mong-MN
+mn-Mong-CN
+mn-Mong-CN
+nqo-GN
+ne-NP
+se-FI
+se-NO
+se-SE
+nb-NO
+nn-NO
+oc-FR
+or-IN
+ps-AF
+fa-IR
+pl-PL
+pt-BR
+pt-PT
+pa-IN
+pa-Arab-PK
+quz-BO
+quz-EC
+quz-PE
+ro-RO
+rm-CH
+ru-RU
+sah-RU
+sa-IN
+gd-GB
+sr-Cyrl-BA
+sr-Latn-BA
+sr-Cyrl-ME
+sr-Latn-ME
+sr-Cyrl-RS
+sr-Latn-RS
+sr-Cyrl-CS
+sr-Latn-CS
+nso-ZA
+tn-BW
+tn-ZA
+sn-Latn-ZW
+sd-Arab-PK
+si-LK
+sms-FI
+sk-SK
+sl-SI
+sma-NO
+sma-SE
+es-AR
+es-VE
+es-BO
+es-CL
+es-CO
+es-CR
+es-DO
+es-EC
+es-SV
+es-GT
+es-HN
+es-MX
+es-NI
+es-PA
+es-PY
+es-PE
+es-PR
+es-ES
+es-ES_tradnl
+es-US
+es-UY
+zgh-Tfng-MA
+sw-KE
+sv-FI
+sv-SE
+syr-SY
+tg-Cyrl-TJ
+ta-IN
+ta-LK
+tt-RU
+tt-RU
+te-IN
+th-TH
+bo-CN
+ti-ET
+ti-ET
+tr-TR
+tk-TM
+uk-UA
+hsb-DE
+ur-IN
+ur-PK
+ug-CN
+uz-Cyrl-UZ
+uz-Latn-UZ
+ca-ES-valencia
+vi-VN
+cy-GB
+wo-SN
+ii-CN
+yo-NG
+
+TIME ZONE:
+
+Dateline Standard Time
+UTC-11
+Hawaiian Standard Time
+Alaskan Standard Time
+Pacific Standard Time
+Pacific Standard Time (Mexico)
+US Mountain Standard Time
+Mountain Standard Time (Mexico)
+Mountain Standard Time
+Central America Standard Time
+Central Standard Time
+Central Standard Time (Mexico)
+Canada Central Standard Time
+SA Pacific Standard Time
+Eastern Standard Time
+US Eastern Standard Time
+Venezuela Standard Time
+Paraguay Standard Time
+Atlantic Standard Time
+SA Western Standard Time
+Pacific SA Standard Time
+Newfoundland Standard Time
+E. South America Standard Tim
+Argentina Standard Time
+SA Eastern Standard Time
+Greenland Standard Time
+Montevideo Standard Time
+Mid-Atlantic Standard Time
+Azores Standard Time
+Cape Verde Standard Time
+Morocco Standard Time
+UTC
+GMT Standard Time
+Greenwich Standard Time
+W. Europe Standard Time
+Central Europe Standard Time
+Romance Standard Time
+Central European Standard Tim
+W. Central Africa Standard Time
+Jordan Standard Time
+GTB Standard Time
+Middle East Standard Time
+Egypt Standard Time
+South Africa Standard Time
+FLE Standard Time
+Israel Standard Time
+Kaliningrad Standard Time
+Namibia Standard Time
+Arabic Standard Time
+Arab Standard Time
+Russian Standard Time
+E. Africa Standard Time
+Georgian Standard Time
+Iran Standard Time
+Arabian Standard Time
+Azerbaijan Standard Time
+Mauritius Standard Time
+Caucasus Standard Time
+Afghanistan Standard Time
+Ekaterinburg Standard Time
+Pakistan Standard Time
+West Asia Standard Time
+India Standard Time
+Nepal Standard Time
+N. Central Asia Standard Time
+Central Asia Standard Time
+Myanmar Standard Time
+SE Asia Standard Time
+North Asia Standard Time
+China Standard Time
+North Asia East Standard Time
+Singapore Standard Time
+W. Australia Standard Time
+Taipei Standard Time
+Tokyo Standard Time
+Korea Standard Time
+Yakutsk Standard Time
+Cen. Australia Standard Time
+AUS Central Standard Time
+E. Australia Standard Time
+AUS Eastern Standard Time
+West Pacific Standard Time
+Tasmania Standard Time
+Vladivostok Standard Time
+Central Pacific Standard Time
+New Zealand Standard Time
+Fiji Standard Time
+UTC+12
+Tonga Standard Time
+
+UI LANGUAGE:
+
+af-ZA
+sq-AL
+gsw-FR
+am-ET
+ar-DZ
+ar-BH
+ar-EG
+ar-IQ
+ar-JO
+ar-KW
+ar-LB
+ar-LY
+ar-MA
+ar-OM
+ar-QA
+ar-SA
+ar-SY
+ar-TN
+ar-AE
+ar-YE
+hy-AM
+as-IN
+az-Cyrl-AZ
+az-Latn-AZ
+bn-BD
+bn-IN
+ba-RU
+eu-ES
+be-BY
+bs-Cyrl-BA
+bs-Latn-BA
+br-FR
+bg-BG
+my-MM
+ca-ES
+fr-FR
+tzm-Latn-DZ
+tzm-Tfng-MA
+ku-Arab-IQ
+chr-Cher-US
+zh-TW
+zh-TW
+zh-CN
+zh-CN
+co-FR
+hr-BA
+hr-HR
+cs-CZ
+da-DK
+prs-AF
+dv-MV
+nl-BE
+nl-NL
+en-AU
+en-BZ
+en-CA
+en-029
+en-IN
+en-IE
+en-JM
+en-MY
+en-NZ
+en-PH
+en-SG
+en-ZA
+en-TT
+en-GB
+en-US
+en-ZW
+et-EE
+fo-FO
+fil-PH
+fi-FI
+fr-BE
+fr-CA
+fr-FR
+fr-LU
+fr-MC
+fr-CH
+fy-NL
+ff-Latn-SN
+gl-ES
+ka-GE
+de-AT
+de-DE
+de-LI
+de-LU
+de-CH
+el-GR
+kl-GL
+gn-PY
+gu-IN
+ha-Latn-NG
+haw-US
+he-IL
+hi-IN
+hu-HU
+is-IS
+ig-NG
+smn-FI
+id-ID
+iu-Latn-CA
+iu-Cans-CA
+ga-IE
+xh-ZA
+zu-ZA
+it-IT
+it-CH
+ja-JP
+jv-Latn-ID
+kn-IN
+kk-KZ
+km-KH
+qut-GT
+rw-RW
+kok-IN
+ko-KR
+ky-KG
+lo-LA
+lv-LV
+lv-LV
+lt-LT
+dsb-DE
+smj-NO
+smj-SE
+lb-LU
+mk-MK
+ms-BN
+ms-MY
+ml-IN
+mt-MT
+mi-NZ
+arn-CL
+mr-IN
+moh-CA
+mn-MN
+mn-Mong-MN
+mn-Mong-CN
+mn-Mong-CN
+nqo-GN
+ne-NP
+se-FI
+se-NO
+se-SE
+nb-NO
+nn-NO
+oc-FR
+or-IN
+ps-AF
+fa-IR
+pl-PL
+pt-BR
+pt-PT
+pa-IN
+pa-Arab-PK
+quz-BO
+quz-EC
+quz-PE
+ro-RO
+rm-CH
+ru-RU
+sah-RU
+sa-IN
+gd-GB
+sr-Cyrl-BA
+sr-Latn-BA
+sr-Cyrl-ME
+sr-Latn-ME
+sr-Cyrl-RS
+sr-Latn-RS
+sr-Cyrl-CS
+sr-Latn-CS
+nso-ZA
+tn-BW
+tn-ZA
+sn-Latn-ZW
+sd-Arab-PK
+si-LK
+sms-FI
+sk-SK
+sl-SI
+sma-NO
+sma-SE
+es-AR
+es-VE
+es-BO
+es-CL
+es-CO
+es-CR
+es-DO
+es-EC
+es-SV
+es-GT
+es-HN
+es-MX
+es-NI
+es-PA
+es-PY
+es-PE
+es-PR
+es-ES
+es-ES_tradnl
+es-US
+es-UY
+zgh-Tfng-MA
+sw-KE
+sv-FI
+sv-SE
+syr-SY
+tg-Cyrl-TJ
+ta-IN
+ta-LK
+tt-RU
+tt-RU
+te-IN
+th-TH
+bo-CN
+ti-ET
+ti-ET
+tr-TR
+tk-TM
+uk-UA
+hsb-DE
+ur-IN
+ur-PK
+ug-CN
+uz-Cyrl-UZ
+uz-Latn-UZ
+ca-ES-valencia
+vi-VN
+cy-GB
+wo-SN
+ii-CN
+yo-NG

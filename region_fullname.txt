@@ -1,0 +1,728 @@
+KEYBOARD OR INPUT METHODS
+
+Albanian
+Arabic (101)
+Arabic (102)
+Arabic (102) AZERTY
+Armenian Eastern
+Armenian Western
+Assamese - Inscript
+Azeri Cyrillic
+Azeri Latin
+Bashkir
+Belarusian
+Belgian (Comma)
+Belgian (Period)
+Belgian French
+Bengali
+Bengali - Inscript
+Bengali - Inscript (Legacy)
+Bosnian (Cyrillic)
+Bulgarian
+Bulgarian (Latin)
+Bulgarian (phonetic layout)
+Bulgarian (phonetic traditional)
+Canadian French
+Canadian French (Legacy)
+Canadian Multilingual Standard
+Chinese (Simplified) - US Keyboard
+Chinese (Traditional) - US Keyboard
+Chinese (Traditional Macao S.A.R.) US Keyboard
+Chinese (Simplified, Singapore) - US keyboard
+Croatian
+Czech
+Czech (QWERTY)
+Czech Programmers
+Danish
+Devanagari - Inscript
+Divehi Phonetic
+Divehi Typewriter
+Dutch
+Estonian
+Faeroese
+Finnish
+Finnish with Sami
+French
+Gaelic
+Georgian
+Georgian (Ergonomic)
+Georgian (QWERTY)
+German
+German (IBM)
+Greek
+Greek (220)
+Greek (220) Latin
+Greek (319)
+Greek (319) Latin
+Greek Latin
+Greek Polytonic
+Greenlandic
+Gujarati
+Hausa
+Hebrew
+Hindi Traditional
+Hungarian
+ungarian 101-key
+Icelandic
+Igbo
+Inuktitut - Latin
+Inuktitut - Naqittaut
+Irish
+Italian
+Italian (142)
+Japanese
+Kannada
+Kazakh
+Khmer
+Korean
+Kyrgyz Cyrillic
+Lao
+Latin American
+Latvian
+Latvian (QWERTY)
+Lithuanian
+Lithuanian IBM
+Lithuanian New
+Luxembourgish
+Macedonian (FYROM)
+Macedonian (FYROM) - Standard
+Malayalam
+Maltese 47-Key
+Maltese 48-Key
+Maori
+Marathi
+Mongolian (Mongolian Script)
+Mongolian Cyrillic
+Nepali
+Norwegian
+Norwegian with Sami
+Oriya
+Pashto (Afghanistan)
+Persian
+Polish (214)
+Polish (Programmers)
+Portuguese
+Portuguese (Brazilian ABNT)
+Portuguese (Brazilian ABNT2)
+Punjabi
+Romanian (Legacy)
+Romanian (Programmers)
+Romanian (Standard)
+Russian
+Russian (Typewriter)
+Sami Extended Finland-Sweden
+Sami Extended Norway
+Serbian (Cyrillic)
+Serbian (Latin)
+Sesotho sa Leboa
+Setswana
+Sinhala
+Sinhala - wij 9
+Slovak
+Slovak (QWERTY)
+Slovenian
+Sorbian Extended
+Sorbian Standard
+Sorbian Standard (Legacy)
+Spanish
+Spanish Variation
+Swedish
+Swedish with Sami
+Swiss French
+Swiss German
+Syriac
+Syriac Phonetic
+Tajik
+Tamil
+Tatar
+Telugu
+Thai Kedmanee
+Thai Kedmanee (non-ShiftLock)
+Thai Pattachote
+Thai Pattachote (non-ShiftLock)
+Tibetan (PRC)
+Turkish F
+Turkish Q
+Turkmen
+Uyghur (Legacy)
+Ukrainian
+Ukrainian (Enhanced)
+United Kingdom
+United Kingdom Extended
+United States - Dvorak
+United States - International
+United States - Devorak for left hand
+United States - Dvorak for right hand
+United States - English
+Urdu
+Uyghur
+Uzbek Cyrillic
+Vietnamese
+Wolof
+Yakut
+Yoruba
+
+CURRENCY AND DATE FORMATS
+
+Afrikaans - South Africa
+Albanian - Albania
+Alsatian - France
+Amharic - Ethiopia
+Arabic - Algeria
+Arabic - Bahrain
+Arabic - Egypt
+Arabic - Iraq
+Arabic - Jordan
+Arabic - Kuwait
+Arabic - Lebanon
+Arabic - Libya
+Arabic - Morocco
+Arabic - Oman
+Arabic - Qatar
+Arabic - Saudi Arabia
+Arabic - Syria
+Arabic - Tunisia
+Arabic - U.A.E.
+Arabic - Yemen
+Armenian - Armenia
+Assamese - India
+Azerbaijani - Azerbaijan (Cyrillic)
+Azerbaijani - Azerbaijan (Latin)
+Bangla - Bangladesh
+Bangla - India (Bengali Script)
+Bashkir - Russia
+Basque - Basque
+Belarusian - Belarus
+Bosnian - Bosnia and Herzegovina (Cyrillic)
+Bosnian - Bosnia and Herzegovina (Latin)
+Breton - France
+Bulgarian - Bulgaria
+Burmese - Myanmar
+Catalan - Catalan
+Central Atlas Tamazight (Latin) - Algeria
+Central Atlas Tamazight (Latin) - Algeria
+Central Atlas Tamazight (Tifinagh) - Morocco
+Central Kurdish (Iraq)
+Cherokee (Cherokee, United States)
+Chinese - Hong Kong
+Chinese - Macao
+Chinese - PRC
+Chinese - Singapore
+Corsican - France
+Croatian - Bosnia and Herzegovina
+Croatian - Croatia
+Czech - Czech Republic
+Danish - Denmark
+Dari - Afghanistan
+Divehi - Maldives
+Dutch - Belgium
+Dutch - Netherlands
+English - Australia
+English - Belize
+English - Canada
+English - Caribbean
+English - India
+English - Ireland
+English - Jamaica
+English - Malaysia
+English - New Zealand
+English - Philippines
+English - Singapore
+English - South Africa
+English - Trinidad
+English - United Kingdom
+English - United States
+English - Zimbabwe
+Estonian - Estonia
+Faroese - Faroe Islands
+Filipino - Philippines
+Finnish - Finland
+French - Belgium
+French - Canada
+French - France
+French - Luxembourg
+French - Monaco
+French - Switzerland
+Frisian - Netherlands
+Fulah (Latin, Senegal)
+Galician - Galician
+Georgian - Georgia
+German - Austria
+German - Germany
+German - Liechtenstein
+German - Luxembourg
+German - Switzerland
+Greek - Greece
+Greenlandic - Greenland
+Guarani - Paraguay
+Gujarati - India (Gujarati Script)
+Hausa (Latin) - Nigeria
+Hawaiian - United States
+Hebrew - Israel
+Hindi - India
+Hungarian - Hungary
+Icelandic - Iceland
+Igbo - Nigeria
+Inari Sami - Finland
+Indonesian - Indonesia
+Inuktitut (Latin) - Canada
+Inuktitut (Syllabics) - Canada
+Irish - Ireland
+isiXhosa / Xhosa - South Africa
+isiZulu / Zulu - South Africa
+Italian - Italy
+Italian - Switzerland
+Japanese - Japan
+Javanese (Latin) - Indonesia
+Kannada - India (Kannada Script)
+Kazakh - Kazakhstan
+Khmer - Cambodia
+K'iche - Guatemala
+Kinyarwanda - Rwanda
+Konkani - India
+Korean(Extended Wansung) - Korea
+Kyrgyz - Kyrgyzstan
+Lao - Lao PDR
+Latvian - Legacy
+Latvian - Standard
+Lithuanian - Lithuania
+Lower Sorbian - Germany
+Lule Sami - Norway
+Lule Sami - Sweden
+Luxembourgish - Luxembourg
+Macedonian - F.Y.R.O.M
+Malay - Brunei
+Malay - Malaysia
+Malayalam - India (Malayalam Script)
+Maltese - Malta
+Maori - New Zealand
+Mapudungun - Chile
+Marathi - India
+Mohawk - Mohawk
+Mongolian (Cyrillic) - Mongolia
+Mongolian (Mongolian) - Mongolia
+Mongolian (Mongolian - PRC - Legacy)
+Mongolian (Mongolian - PRC - Standard)
+N'ko - Guinea
+Nepali - Nepal
+Northern Sami - Finland
+Northern Sami - Norway
+Northern Sami - Sweden
+Norwegian - Norway (Bokmal)
+Norwegian - Norway (Nynorsk)
+Occitan - France
+Odia - India (Odia Script)
+Pashto - Afghanistan
+Persian
+Polish - Poland
+Portuguese - Brazil
+Portuguese - Portugal
+Punjabi - India (Gurmukhi Script)
+Punjabi (Islamic Republic of Pakistan)
+Quechua - Bolivia
+Quechua - Ecuador
+Quechua - Peru
+Romanian - Romania
+Romansh - Switzerland
+Russian - Russia
+Sakha - Russia
+Sanskrit - India
+Scottish Gaelic - United Kingdom
+Serbian - Bosnia and Herzegovina (Cyrillic)
+Serbian - Bosnia and Herzegovina (Latin)
+Serbian - Montenegro (Cyrillic)
+Serbian - Montenegro (Latin)
+Serbian - Serbia (Cyrillic)
+Serbian - Serbia (Latin)
+Serbian - Serbia and Montenegro (Former) (Cyrillic)
+Serbian - Serbia and Montenegro (Former) (Latin)
+Sesotho sa Leboa / Northern Sotho - South Africa
+Setswana / Tswana - Botswana
+Setswana / Tswana - South Africa
+Shona - Zimbabwe
+Sindhi (Islamic Republic of Pakistan)
+Sinhala - Sri Lanka
+Skolt Sami - Finland
+Slovak - Slovakia
+Slovenian - Slovenia
+Southern Sami - Norway
+Southern Sami - Sweden
+Spanish - Argentina
+Spanish - Bolivarian Republic of Venezuela
+Spanish - Bolivia
+Spanish - Chile
+Spanish - Colombia
+Spanish - Costa Rica
+Spanish - Dominican Republic
+Spanish - Ecuador
+Spanish - El Salvador
+Spanish - Guatemala
+Spanish - Honduras
+Spanish - Mexico
+Spanish - Nicaragua
+Spanish - Panama
+Spanish - Paraguay
+Spanish - Peru
+Spanish - Puerto Rico
+Spanish - Spain (International Sort)
+Spanish - Spain (Traditional Sort)
+Spanish - United States
+Spanish - Uruguay
+Standard Moroccan Tamazight - Morocco
+Swahili - Kenya
+Swedish - Finland
+Swedish - Sweden
+Syriac - Syria
+Tajik - Tajikistan
+Tamil - India
+Tamil - Sri Lanka
+Tatar - Russia (Legacy)
+Tatar - Russia (Standard)
+Telugu - India (Telugu Script)
+Thai - Thailand
+Tibetan - PRC
+Tigrinya (Eritrea)
+Tigrinya (Ethiopia)
+Turkish - Turkey
+Turkmen - Turkmenistan
+Ukrainian - Ukraine
+Upper Sorbian - Germany
+Urdu - India
+Urdu (Islamic Republic of Pakistan)
+Uyghur - PRC
+Uzbek - Uzbekistan (Cyrillic)
+Uzbek - Uzbekistan (Latin)
+Valencian - Valencia
+Vietnamese - Vietnam
+Welsh - United Kingdom
+Wolof - Senegal
+Yi - PRC
+Yoruba - Nigeria
+
+TIME ZONE:
+
+(UTC-12:00) International Date Line West
+(UTC-11:00) Midway Island, Samoa
+(UTC-10:00) Hawaii
+(UTC-09:00) Alaska
+(UTC-08:00) Pacific Time (US &amp; Canada)
+(UTC-08:00) Tijuana, Baja California
+(UTC-07:00) Arizona
+(UTC-07:00) Chihuahua, La Paz, Mazatlan
+(UTC-07:00) Mountain Time (US &amp; Canada)
+(UTC-06:00) Central America
+(UTC-06:00) Central Time (US &amp; Canada)
+(UTC-06:00) Guadalajara, Mexico City, Monterrey
+(UTC-06:00) Saskatchewan
+(UTC-05:00) Bogota, Lima, Quito
+(UTC-05:00) Eastern Time (US &amp; Canada)
+(UTC-05:00) Indiana (East)
+(UTC-04:30) Caracas
+(UTC-04:00) Asuncion
+(UTC-04:00) Atlantic Time (Canada)
+(UTC-04:00) Georgetown, La Paz, San Juan
+(UTC-04:00) Santiago
+(UTC-03:30) Newfoundland
+(UTC-03:00) Brasilia
+(UTC-03:00) Buenos Aires
+(UTC-03:00) Cayenne
+(UTC-03:00) Greenland
+(UTC-03:00) Montevideo
+(UTC-02:00) Mid-Atlantic
+(UTC-01:00) Azores
+(UTC-01:00) Cape Verde Is.
+(UTC) Casablanca
+(UTC) Coordinated Universal Time
+(UTC) Dublin, Edinburgh, Lisbon, London
+(UTC) Monrovia, Reykjavik
+(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna
+(UTC+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague
+(UTC+01:00) Brussels, Copenhagen, Madrid, Paris
+(UTC+01:00) Sarajevo, Skopje, Warsaw, Zagreb
+(UTC+01:00) West Central Africa
+(UTC+02:00) Amman
+(UTC+02:00) Athens, Bucharest, Istanbul
+(UTC+02:00) Beirut
+(UTC+02:00) Cairo
+(UTC+02:00) Harare, Pretoria
+(UTC+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius
+(UTC+02:00) Jerusalem
+(UTC+02:00) Minsk
+(UTC+02:00) Windhoek
+(UTC+03:00) Baghdad
+(UTC+03:00) Kuwait, Riyadh
+(UTC+03:00) Moscow, St. Petersburg, Volgograd
+(UTC+03:00) Nairobi
+(UTC+03:00) Tbilisi
+(UTC+03:30) Tehran
+(UTC+04:00) Abu Dhabi, Muscat
+(UTC+04:00) Baku
+(UTC+04:00) Port Louis
+(UTC+04:00) Yerevan
+(UTC+04:30) Kabul
+(UTC+05:00) Ekaterinburg
+(UTC+05:00) Islamabad, Karachi
+(UTC+05:00) Tashkent
+(UTC+05:30) Chennai, Kolkata, Mumbai, New Delhi
+(UTC+05:45) Kathmandu
+(UTC+06:00) Almaty, Novosibirsk
+(UTC+06:00) Astana, Dhaka
+(UTC+06:30) Yangon (Rangoon)
+(UTC+07:00) Bangkok, Hanoi, Jakarta
+(UTC+07:00) Krasnoyarsk
+(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi
+(UTC+08:00) Irkutsk, Ulaan Bataar
+(UTC+08:00) Kuala Lumpur, Singapore
+(UTC+08:00) Perth
+(UTC+08:00) Taipei
+(UTC+09:00) Osaka, Sapporo, Tokyo
+(UTC+09:00) Seoul
+(UTC+09:00) Yakutsk
+(UTC+09:30) Adelaide
+(UTC+09:30) Darwin
+(UTC+10:00) Brisbane
+(UTC+10:00) Canberra, Melbourne, Sydney
+(UTC+10:00) Guam, Port Moresby
+(UTC+10:00) Hobart
+(UTC+10:00) Vladivostok
+(UTC+11:00) Magadan, Solomon Is., New Caledonia
+(UTC+12:00) Auckland, Wellington
+(UTC+12:00) Fiji, Marshall Is.
+(UTC+12:00) Petropavlovsk-Kamchatsky
+(UTC+13:00) Nuku'alofa
+
+UI LANGUAGE:
+Afrikaans - South Africa
+Albanian - Albania
+Alsatian - France
+Amharic - Ethiopia
+Arabic - Algeria
+Arabic - Bahrain
+Arabic - Egypt
+Arabic - Iraq
+Arabic - Jordan
+Arabic - Kuwait
+Arabic - Lebanon
+Arabic - Libya
+Arabic - Morocco
+Arabic - Oman
+Arabic - Qatar
+Arabic - Saudi Arabia
+Arabic - Syria
+Arabic - Tunisia
+Arabic - U.A.E.
+Arabic - Yemen
+Armenian - Armenia
+Assamese - India
+Azerbaijani - Azerbaijan (Cyrillic)
+Azerbaijani - Azerbaijan (Latin)
+Bangla - Bangladesh
+Bangla - India (Bengali Script)
+Bashkir - Russia
+Basque - Basque
+Belarusian - Belarus
+Bosnian - Bosnia and Herzegovina (Cyrillic)
+Bosnian - Bosnia and Herzegovina (Latin)
+Breton - France
+Bulgarian - Bulgaria
+Burmese - Myanmar
+Catalan - Catalan
+Central Atlas Tamazight (Latin) - Algeria
+Central Atlas Tamazight (Latin) - Algeria
+Central Atlas Tamazight (Tifinagh) - Morocco
+Central Kurdish (Iraq)
+Cherokee (Cherokee, United States)
+Chinese - Hong Kong
+Chinese - Macao
+Chinese - PRC
+Chinese - Singapore
+Corsican - France
+Croatian - Bosnia and Herzegovina
+Croatian - Croatia
+Czech - Czech Republic
+Danish - Denmark
+Dari - Afghanistan
+Divehi - Maldives
+Dutch - Belgium
+Dutch - Netherlands
+English - Australia
+English - Belize
+English - Canada
+English - Caribbean
+English - India
+English - Ireland
+English - Jamaica
+English - Malaysia
+English - New Zealand
+English - Philippines
+English - Singapore
+English - South Africa
+English - Trinidad
+English - United Kingdom
+English - United States
+English - Zimbabwe
+Estonian - Estonia
+Faroese - Faroe Islands
+Filipino - Philippines
+Finnish - Finland
+French - Belgium
+French - Canada
+French - France
+French - Luxembourg
+French - Monaco
+French - Switzerland
+Frisian - Netherlands
+Fulah (Latin, Senegal)
+Galician - Galician
+Georgian - Georgia
+German - Austria
+German - Germany
+German - Liechtenstein
+German - Luxembourg
+German - Switzerland
+Greek - Greece
+Greenlandic - Greenland
+Guarani - Paraguay
+Gujarati - India (Gujarati Script)
+Hausa (Latin) - Nigeria
+Hawaiian - United States
+Hebrew - Israel
+Hindi - India
+Hungarian - Hungary
+Icelandic - Iceland
+Igbo - Nigeria
+Inari Sami - Finland
+Indonesian - Indonesia
+Inuktitut (Latin) - Canada
+Inuktitut (Syllabics) - Canada
+Irish - Ireland
+isiXhosa / Xhosa - South Africa
+isiZulu / Zulu - South Africa
+Italian - Italy
+Italian - Switzerland
+Japanese - Japan
+Javanese (Latin) - Indonesia
+Kannada - India (Kannada Script)
+Kazakh - Kazakhstan
+Khmer - Cambodia
+K'iche - Guatemala
+Kinyarwanda - Rwanda
+Konkani - India
+Korean(Extended Wansung) - Korea
+Kyrgyz - Kyrgyzstan
+Lao - Lao PDR
+Latvian - Legacy
+Latvian - Standard
+Lithuanian - Lithuania
+Lower Sorbian - Germany
+Lule Sami - Norway
+Lule Sami - Sweden
+Luxembourgish - Luxembourg
+Macedonian - F.Y.R.O.M
+Malay - Brunei
+Malay - Malaysia
+Malayalam - India (Malayalam Script)
+Maltese - Malta
+Maori - New Zealand
+Mapudungun - Chile
+Marathi - India
+Mohawk - Mohawk
+Mongolian (Cyrillic) - Mongolia
+Mongolian (Mongolian) - Mongolia
+Mongolian (Mongolian - PRC - Legacy)
+Mongolian (Mongolian - PRC - Standard)
+N'ko - Guinea
+Nepali - Nepal
+Northern Sami - Finland
+Northern Sami - Norway
+Northern Sami - Sweden
+Norwegian - Norway (Bokmal)
+Norwegian - Norway (Nynorsk)
+Occitan - France
+Odia - India (Odia Script)
+Pashto - Afghanistan
+Persian
+Polish - Poland
+Portuguese - Brazil
+Portuguese - Portugal
+Punjabi - India (Gurmukhi Script)
+Punjabi (Islamic Republic of Pakistan)
+Quechua - Bolivia
+Quechua - Ecuador
+Quechua - Peru
+Romanian - Romania
+Romansh - Switzerland
+Russian - Russia
+Sakha - Russia
+Sanskrit - India
+Scottish Gaelic - United Kingdom
+Serbian - Bosnia and Herzegovina (Cyrillic)
+Serbian - Bosnia and Herzegovina (Latin)
+Serbian - Montenegro (Cyrillic)
+Serbian - Montenegro (Latin)
+Serbian - Serbia (Cyrillic)
+Serbian - Serbia (Latin)
+Serbian - Serbia and Montenegro (Former) (Cyrillic)
+Serbian - Serbia and Montenegro (Former) (Latin)
+Sesotho sa Leboa / Northern Sotho - South Africa
+Setswana / Tswana - Botswana
+Setswana / Tswana - South Africa
+Shona - Zimbabwe
+Sindhi (Islamic Republic of Pakistan)
+Sinhala - Sri Lanka
+Skolt Sami - Finland
+Slovak - Slovakia
+Slovenian - Slovenia
+Southern Sami - Norway
+Southern Sami - Sweden
+Spanish - Argentina
+Spanish - Bolivarian Republic of Venezuela
+Spanish - Bolivia
+Spanish - Chile
+Spanish - Colombia
+Spanish - Costa Rica
+Spanish - Dominican Republic
+Spanish - Ecuador
+Spanish - El Salvador
+Spanish - Guatemala
+Spanish - Honduras
+Spanish - Mexico
+Spanish - Nicaragua
+Spanish - Panama
+Spanish - Paraguay
+Spanish - Peru
+Spanish - Puerto Rico
+Spanish - Spain (International Sort)
+Spanish - Spain (Traditional Sort)
+Spanish - United States
+Spanish - Uruguay
+Standard Moroccan Tamazight - Morocco
+Swahili - Kenya
+Swedish - Finland
+Swedish - Sweden
+Syriac - Syria
+Tajik - Tajikistan
+Tamil - India
+Tamil - Sri Lanka
+Tatar - Russia (Legacy)
+Tatar - Russia (Standard)
+Telugu - India (Telugu Script)
+Thai - Thailand
+Tibetan - PRC
+Tigrinya (Eritrea)
+Tigrinya (Ethiopia)
+Turkish - Turkey
+Turkmen - Turkmenistan
+Ukrainian - Ukraine
+Upper Sorbian - Germany
+Urdu - India
+Urdu (Islamic Republic of Pakistan)
+Uyghur - PRC
+Uzbek - Uzbekistan (Cyrillic)
+Uzbek - Uzbekistan (Latin)
+Valencian - Valencia
+Vietnamese - Vietnam
+Welsh - United Kingdom
+Wolof - Senegal
+Yi - PRC
+Yoruba - Nigeria

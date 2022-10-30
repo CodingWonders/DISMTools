@@ -1,0 +1,14 @@
+User details panel (centered)
+Pic: 328;84
+Label78: 228;189
+TextBox4: 229;208
+Label79: 228;234
+TextBox5: 229;253
+Label80: 228;281
+User details panel (off-centered)
+Pic: 133;84
+Label78: 33;189
+TextBox4: 34;208
+Label79: 33;234
+TextBox5: 34;253
+Label80: 33;281
