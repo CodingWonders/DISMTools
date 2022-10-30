@@ -222,7 +222,9 @@ Public Class MainForm
                     ReportView = 1
                 End If
             Else
-
+                GenerateDTSettings()
+                LoadDTSettings(1)
+                Exit Sub
             End If
         End If
         If Debugger.IsAttached Then
@@ -280,6 +282,31 @@ Public Class MainForm
         If isExeProblematic Or isLogFontProblematic Or isLogFileProblematic Or isScratchDirProblematic Then
             InvalidSettingsTSMI.Visible = True
         End If
+    End Sub
+
+    Sub GenerateDTSettings()
+        DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.1) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & "\Windows\system32\dism.exe" & Quote)
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "Volatile=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Personalization]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("ColorMode=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "Language=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFont=" & Quote & "Courier New" & Quote)
+        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & "\Windows\Logs\DISM\DISM.log" & Quote)
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=3")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ImgOps]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("ImgOperationMode=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "Quiet=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "NoRestart=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ScratchDir]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("UseScratch=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "ScratchDirLocation=" & Quote & "" & Quote)
+        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Output]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("EnglishOutput=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "ReportView=0")
+        File.WriteAllText(".\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
     End Sub
 
     Sub SaveDTSettings()
