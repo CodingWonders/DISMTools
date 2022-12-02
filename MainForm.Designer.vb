@@ -212,12 +212,9 @@ Partial Class MainForm
         Me.SplitPanels = New System.Windows.Forms.SplitContainer()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
-        Me.ProjNameEditBtn = New System.Windows.Forms.Button()
-        Me.ProjActions = New System.Windows.Forms.GroupBox()
         Me.UnloadBtn = New System.Windows.Forms.Button()
+        Me.ProjNameEditBtn = New System.Windows.Forms.Button()
         Me.ExplorerView = New System.Windows.Forms.Button()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.Label6 = New System.Windows.Forms.Label()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.Button14 = New System.Windows.Forms.Button()
@@ -232,9 +229,6 @@ Partial Class MainForm
         Me.TabPageTitle1 = New System.Windows.Forms.Label()
         Me.projNameText = New System.Windows.Forms.TextBox()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
-        Me.ImageNotMountedPanel = New System.Windows.Forms.Panel()
-        Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
-        Me.Label23 = New System.Windows.Forms.Label()
         Me.ImagePanel = New System.Windows.Forms.Panel()
         Me.TabTitleSummary2 = New System.Windows.Forms.Panel()
         Me.TabPageIcon2 = New System.Windows.Forms.PictureBox()
@@ -252,9 +246,11 @@ Partial Class MainForm
         Me.Label12 = New System.Windows.Forms.Label()
         Me.Button16 = New System.Windows.Forms.Button()
         Me.Button15 = New System.Windows.Forms.Button()
+        Me.ImageNotMountedPanel = New System.Windows.Forms.Panel()
+        Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
+        Me.Label23 = New System.Windows.Forms.Label()
         Me.TabControl2 = New System.Windows.Forms.TabControl()
         Me.TabPage3 = New System.Windows.Forms.TabPage()
-        Me.Label9 = New System.Windows.Forms.Label()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.Button8 = New System.Windows.Forms.Button()
         Me.Button9 = New System.Windows.Forms.Button()
@@ -271,6 +267,13 @@ Partial Class MainForm
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.Button4 = New System.Windows.Forms.Button()
+        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
+        Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator14 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripButton3 = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator15 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripButton4 = New System.Windows.Forms.ToolStripButton()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.prjTreeView = New System.Windows.Forms.TreeView()
         Me.ToolStrip2 = New System.Windows.Forms.ToolStrip()
@@ -280,15 +283,6 @@ Partial Class MainForm
         Me.prjTreeStatus = New System.Windows.Forms.StatusStrip()
         Me.ToolStripStatusLabel2 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolStripProgressBar1 = New System.Windows.Forms.ToolStripProgressBar()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
-        Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripSeparator14 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripButton3 = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripSeparator15 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripButton4 = New System.Windows.Forms.ToolStripButton()
         Me.StatusStrip = New System.Windows.Forms.StatusStrip()
         Me.MenuDesc = New System.Windows.Forms.ToolStripStatusLabel()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
@@ -298,6 +292,8 @@ Partial Class MainForm
         Me.FeatureInfoCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.FeatureBasicInfo = New System.Windows.Forms.ToolStripMenuItem()
         Me.FeatureDetailedInfo = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ImgBW = New System.ComponentModel.BackgroundWorker()
+        Me.ImgProcesses = New System.Diagnostics.Process()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -317,24 +313,22 @@ Partial Class MainForm
         Me.SplitPanels.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
-        Me.ProjActions.SuspendLayout()
         Me.TabTitleSummary1.SuspendLayout()
         CType(Me.TabPageIcon1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabPage2.SuspendLayout()
-        Me.ImageNotMountedPanel.SuspendLayout()
         Me.ImagePanel.SuspendLayout()
         Me.TabTitleSummary2.SuspendLayout()
         CType(Me.TabPageIcon2, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.ImageNotMountedPanel.SuspendLayout()
         Me.TabControl2.SuspendLayout()
         Me.TabPage3.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
+        Me.ToolStrip1.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.ToolStrip2.SuspendLayout()
         Me.prjTreeStatus.SuspendLayout()
-        Me.Panel1.SuspendLayout()
-        Me.ToolStrip1.SuspendLayout()
         Me.StatusStrip.SuspendLayout()
         Me.PkgInfoCMS.SuspendLayout()
         Me.FeatureInfoCMS.SuspendLayout()
@@ -1581,9 +1575,9 @@ Partial Class MainForm
         Me.LabelHeader1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LabelHeader1.Location = New System.Drawing.Point(14, 76)
         Me.LabelHeader1.Name = "LabelHeader1"
-        Me.LabelHeader1.Size = New System.Drawing.Size(61, 21)
+        Me.LabelHeader1.Size = New System.Drawing.Size(49, 21)
         Me.LabelHeader1.TabIndex = 1
-        Me.LabelHeader1.Text = "Actions"
+        Me.LabelHeader1.Text = "Begin"
         '
         'Panel3
         '
@@ -1607,6 +1601,9 @@ Partial Class MainForm
         'PrjPanel
         '
         Me.PrjPanel.Controls.Add(Me.SplitPanels)
+        Me.PrjPanel.Controls.Add(Me.ToolStrip1)
+        Me.PrjPanel.Controls.Add(Me.Panel2)
+        Me.PrjPanel.Controls.Add(Me.StatusStrip)
         Me.PrjPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PrjPanel.Location = New System.Drawing.Point(0, 24)
         Me.PrjPanel.Name = "PrjPanel"
@@ -1616,21 +1613,22 @@ Partial Class MainForm
         'SplitPanels
         '
         Me.SplitPanels.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SplitPanels.IsSplitterFixed = True
-        Me.SplitPanels.Location = New System.Drawing.Point(0, 0)
+        Me.SplitPanels.FixedPanel = System.Windows.Forms.FixedPanel.Panel1
+        Me.SplitPanels.Location = New System.Drawing.Point(0, 25)
         Me.SplitPanels.Name = "SplitPanels"
         '
         'SplitPanels.Panel1
         '
         Me.SplitPanels.Panel1.Controls.Add(Me.TabControl1)
+        Me.SplitPanels.Panel1MinSize = 256
         '
         'SplitPanels.Panel2
         '
         Me.SplitPanels.Panel2.Controls.Add(Me.TabControl2)
-        Me.SplitPanels.Panel2.Controls.Add(Me.ToolStrip1)
-        Me.SplitPanels.Panel2.Controls.Add(Me.StatusStrip)
-        Me.SplitPanels.Size = New System.Drawing.Size(1008, 537)
+        Me.SplitPanels.Panel2MinSize = 384
+        Me.SplitPanels.Size = New System.Drawing.Size(752, 490)
         Me.SplitPanels.SplitterDistance = 264
+        Me.SplitPanels.SplitterWidth = 2
         Me.SplitPanels.TabIndex = 1
         Me.SplitPanels.Visible = False
         '
@@ -1643,13 +1641,14 @@ Partial Class MainForm
         Me.TabControl1.Multiline = True
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(264, 537)
+        Me.TabControl1.Size = New System.Drawing.Size(264, 490)
         Me.TabControl1.TabIndex = 0
         '
         'TabPage1
         '
+        Me.TabPage1.Controls.Add(Me.UnloadBtn)
         Me.TabPage1.Controls.Add(Me.ProjNameEditBtn)
-        Me.TabPage1.Controls.Add(Me.ProjActions)
+        Me.TabPage1.Controls.Add(Me.ExplorerView)
         Me.TabPage1.Controls.Add(Me.LinkLabel1)
         Me.TabPage1.Controls.Add(Me.Label5)
         Me.TabPage1.Controls.Add(Me.Button14)
@@ -1663,10 +1662,22 @@ Partial Class MainForm
         Me.TabPage1.Location = New System.Drawing.Point(4, 22)
         Me.TabPage1.Name = "TabPage1"
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(256, 511)
+        Me.TabPage1.Size = New System.Drawing.Size(256, 464)
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Project"
         Me.TabPage1.UseVisualStyleBackColor = True
+        '
+        'UnloadBtn
+        '
+        Me.UnloadBtn.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.UnloadBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.UnloadBtn.Location = New System.Drawing.Point(36, 422)
+        Me.UnloadBtn.Name = "UnloadBtn"
+        Me.UnloadBtn.Size = New System.Drawing.Size(185, 28)
+        Me.UnloadBtn.TabIndex = 1
+        Me.UnloadBtn.Text = "Unload project..."
+        Me.UnloadBtn.UseVisualStyleBackColor = True
         '
         'ProjNameEditBtn
         '
@@ -1678,65 +1689,17 @@ Partial Class MainForm
         Me.ProjNameEditBtn.TabIndex = 7
         Me.ProjNameEditBtn.UseVisualStyleBackColor = True
         '
-        'ProjActions
-        '
-        Me.ProjActions.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ProjActions.Controls.Add(Me.UnloadBtn)
-        Me.ProjActions.Controls.Add(Me.ExplorerView)
-        Me.ProjActions.Controls.Add(Me.Label7)
-        Me.ProjActions.Controls.Add(Me.Label6)
-        Me.ProjActions.Location = New System.Drawing.Point(27, 341)
-        Me.ProjActions.Name = "ProjActions"
-        Me.ProjActions.Size = New System.Drawing.Size(206, 150)
-        Me.ProjActions.TabIndex = 6
-        Me.ProjActions.TabStop = False
-        Me.ProjActions.Text = "Project actions"
-        '
-        'UnloadBtn
-        '
-        Me.UnloadBtn.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.UnloadBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.UnloadBtn.Location = New System.Drawing.Point(21, 110)
-        Me.UnloadBtn.Name = "UnloadBtn"
-        Me.UnloadBtn.Size = New System.Drawing.Size(167, 23)
-        Me.UnloadBtn.TabIndex = 1
-        Me.UnloadBtn.Text = "Unload project..."
-        Me.UnloadBtn.UseVisualStyleBackColor = True
-        '
         'ExplorerView
         '
-        Me.ExplorerView.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.ExplorerView.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ExplorerView.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.ExplorerView.Location = New System.Drawing.Point(21, 55)
+        Me.ExplorerView.Location = New System.Drawing.Point(36, 388)
         Me.ExplorerView.Name = "ExplorerView"
-        Me.ExplorerView.Size = New System.Drawing.Size(167, 23)
+        Me.ExplorerView.Size = New System.Drawing.Size(185, 28)
         Me.ExplorerView.TabIndex = 1
         Me.ExplorerView.Text = "View in File Explorer"
         Me.ExplorerView.UseVisualStyleBackColor = True
-        '
-        'Label7
-        '
-        Me.Label7.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label7.Location = New System.Drawing.Point(21, 81)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(167, 26)
-        Me.Label7.TabIndex = 0
-        Me.Label7.Text = "To unload this project and return to the home page, click here"
-        '
-        'Label6
-        '
-        Me.Label6.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label6.Location = New System.Drawing.Point(21, 26)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(167, 26)
-        Me.Label6.TabIndex = 0
-        Me.Label6.Text = "To view this project's files, click here"
         '
         'LinkLabel1
         '
@@ -1766,7 +1729,7 @@ Partial Class MainForm
         Me.Button14.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button14.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button14.Location = New System.Drawing.Point(36, 268)
+        Me.Button14.Location = New System.Drawing.Point(36, 354)
         Me.Button14.Name = "Button14"
         Me.Button14.Size = New System.Drawing.Size(185, 28)
         Me.Button14.TabIndex = 1
@@ -1790,7 +1753,7 @@ Partial Class MainForm
         Me.Label3.AutoEllipsis = True
         Me.Label3.Location = New System.Drawing.Point(81, 116)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(152, 53)
+        Me.Label3.Size = New System.Drawing.Size(152, 28)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "projPath"
         '
@@ -1881,49 +1844,10 @@ Partial Class MainForm
         Me.TabPage2.Location = New System.Drawing.Point(4, 22)
         Me.TabPage2.Name = "TabPage2"
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(256, 511)
+        Me.TabPage2.Size = New System.Drawing.Size(256, 464)
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "Image"
         Me.TabPage2.UseVisualStyleBackColor = True
-        '
-        'ImageNotMountedPanel
-        '
-        Me.ImageNotMountedPanel.Controls.Add(Me.LinkLabel2)
-        Me.ImageNotMountedPanel.Controls.Add(Me.Label23)
-        Me.ImageNotMountedPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ImageNotMountedPanel.Location = New System.Drawing.Point(3, 3)
-        Me.ImageNotMountedPanel.Name = "ImageNotMountedPanel"
-        Me.ImageNotMountedPanel.Size = New System.Drawing.Size(250, 505)
-        Me.ImageNotMountedPanel.TabIndex = 0
-        '
-        'LinkLabel2
-        '
-        Me.LinkLabel2.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.LinkLabel2.ForeColor = System.Drawing.Color.Crimson
-        Me.LinkLabel2.LinkArea = New System.Windows.Forms.LinkArea(72, 4)
-        Me.LinkLabel2.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel2.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel2.Location = New System.Drawing.Point(21, 256)
-        Me.LinkLabel2.Name = "LinkLabel2"
-        Me.LinkLabel2.Size = New System.Drawing.Size(210, 44)
-        Me.LinkLabel2.TabIndex = 1
-        Me.LinkLabel2.TabStop = True
-        Me.LinkLabel2.Text = "You need to mount an image in order to view its information here. Click here to m" & _
-    "ount an image."
-        Me.LinkLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.LinkLabel2.UseCompatibleTextRendering = True
-        '
-        'Label23
-        '
-        Me.Label23.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.Label23.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label23.ForeColor = System.Drawing.Color.Crimson
-        Me.Label23.Location = New System.Drawing.Point(20, 205)
-        Me.Label23.Name = "Label23"
-        Me.Label23.Size = New System.Drawing.Size(211, 51)
-        Me.Label23.TabIndex = 0
-        Me.Label23.Text = "No image has been mounted"
-        Me.Label23.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'ImagePanel
         '
@@ -1943,7 +1867,7 @@ Partial Class MainForm
         Me.ImagePanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ImagePanel.Location = New System.Drawing.Point(3, 3)
         Me.ImagePanel.Name = "ImagePanel"
-        Me.ImagePanel.Size = New System.Drawing.Size(250, 505)
+        Me.ImagePanel.Size = New System.Drawing.Size(250, 458)
         Me.ImagePanel.TabIndex = 9
         '
         'TabTitleSummary2
@@ -1990,7 +1914,7 @@ Partial Class MainForm
         'Label15
         '
         Me.Label15.AutoSize = True
-        Me.Label15.Location = New System.Drawing.Point(27, 94)
+        Me.Label15.Location = New System.Drawing.Point(27, 81)
         Me.Label15.Name = "Label15"
         Me.Label15.Size = New System.Drawing.Size(70, 13)
         Me.Label15.TabIndex = 4
@@ -2001,7 +1925,7 @@ Partial Class MainForm
         Me.Label14.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label14.AutoEllipsis = True
-        Me.Label14.Location = New System.Drawing.Point(103, 88)
+        Me.Label14.Location = New System.Drawing.Point(103, 75)
         Me.Label14.Name = "Label14"
         Me.Label14.Size = New System.Drawing.Size(103, 24)
         Me.Label14.TabIndex = 6
@@ -2013,7 +1937,7 @@ Partial Class MainForm
         Me.Label17.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label17.AutoEllipsis = True
-        Me.Label17.Location = New System.Drawing.Point(79, 231)
+        Me.Label17.Location = New System.Drawing.Point(79, 218)
         Me.Label17.Name = "Label17"
         Me.Label17.Size = New System.Drawing.Size(157, 56)
         Me.Label17.TabIndex = 6
@@ -2024,7 +1948,7 @@ Partial Class MainForm
         Me.Label18.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label18.AutoEllipsis = True
-        Me.Label18.Location = New System.Drawing.Point(71, 296)
+        Me.Label18.Location = New System.Drawing.Point(71, 283)
         Me.Label18.Name = "Label18"
         Me.Label18.Size = New System.Drawing.Size(165, 56)
         Me.Label18.TabIndex = 6
@@ -2033,7 +1957,7 @@ Partial Class MainForm
         'Label13
         '
         Me.Label13.AutoSize = True
-        Me.Label13.Location = New System.Drawing.Point(27, 124)
+        Me.Label13.Location = New System.Drawing.Point(27, 111)
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(68, 13)
         Me.Label13.TabIndex = 3
@@ -2041,19 +1965,20 @@ Partial Class MainForm
         '
         'Label20
         '
-        Me.Label20.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.Label20.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label20.AutoEllipsis = True
-        Me.Label20.Location = New System.Drawing.Point(97, 358)
+        Me.Label20.Location = New System.Drawing.Point(97, 345)
         Me.Label20.Name = "Label20"
-        Me.Label20.Size = New System.Drawing.Size(139, 47)
+        Me.Label20.Size = New System.Drawing.Size(139, 32)
         Me.Label20.TabIndex = 6
         Me.Label20.Text = "imgDesc"
         '
         'Label16
         '
         Me.Label16.AutoSize = True
-        Me.Label16.Location = New System.Drawing.Point(27, 231)
+        Me.Label16.Location = New System.Drawing.Point(27, 218)
         Me.Label16.Name = "Label16"
         Me.Label16.Size = New System.Drawing.Size(46, 13)
         Me.Label16.TabIndex = 3
@@ -2062,7 +1987,7 @@ Partial Class MainForm
         'Label19
         '
         Me.Label19.AutoSize = True
-        Me.Label19.Location = New System.Drawing.Point(27, 296)
+        Me.Label19.Location = New System.Drawing.Point(27, 283)
         Me.Label19.Name = "Label19"
         Me.Label19.Size = New System.Drawing.Size(38, 13)
         Me.Label19.TabIndex = 3
@@ -2071,7 +1996,7 @@ Partial Class MainForm
         'Label21
         '
         Me.Label21.AutoSize = True
-        Me.Label21.Location = New System.Drawing.Point(27, 358)
+        Me.Label21.Location = New System.Drawing.Point(27, 345)
         Me.Label21.Name = "Label21"
         Me.Label21.Size = New System.Drawing.Size(64, 13)
         Me.Label21.TabIndex = 3
@@ -2083,9 +2008,9 @@ Partial Class MainForm
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label12.AutoEllipsis = True
-        Me.Label12.Location = New System.Drawing.Point(101, 124)
+        Me.Label12.Location = New System.Drawing.Point(101, 111)
         Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(135, 101)
+        Me.Label12.Size = New System.Drawing.Size(135, 54)
         Me.Label12.TabIndex = 5
         Me.Label12.Text = "mountPoint"
         '
@@ -2094,7 +2019,7 @@ Partial Class MainForm
         Me.Button16.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button16.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button16.Location = New System.Drawing.Point(36, 447)
+        Me.Button16.Location = New System.Drawing.Point(33, 419)
         Me.Button16.Name = "Button16"
         Me.Button16.Size = New System.Drawing.Size(185, 28)
         Me.Button16.TabIndex = 8
@@ -2106,57 +2031,82 @@ Partial Class MainForm
         Me.Button15.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button15.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button15.Location = New System.Drawing.Point(36, 413)
+        Me.Button15.Location = New System.Drawing.Point(33, 385)
         Me.Button15.Name = "Button15"
         Me.Button15.Size = New System.Drawing.Size(185, 28)
         Me.Button15.TabIndex = 8
         Me.Button15.Text = "View image properties"
         Me.Button15.UseVisualStyleBackColor = True
         '
+        'ImageNotMountedPanel
+        '
+        Me.ImageNotMountedPanel.Controls.Add(Me.LinkLabel2)
+        Me.ImageNotMountedPanel.Controls.Add(Me.Label23)
+        Me.ImageNotMountedPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ImageNotMountedPanel.Location = New System.Drawing.Point(3, 3)
+        Me.ImageNotMountedPanel.Name = "ImageNotMountedPanel"
+        Me.ImageNotMountedPanel.Size = New System.Drawing.Size(250, 458)
+        Me.ImageNotMountedPanel.TabIndex = 0
+        '
+        'LinkLabel2
+        '
+        Me.LinkLabel2.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.LinkLabel2.ForeColor = System.Drawing.Color.Crimson
+        Me.LinkLabel2.LinkArea = New System.Windows.Forms.LinkArea(72, 4)
+        Me.LinkLabel2.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel2.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel2.Location = New System.Drawing.Point(21, 233)
+        Me.LinkLabel2.Name = "LinkLabel2"
+        Me.LinkLabel2.Size = New System.Drawing.Size(210, 44)
+        Me.LinkLabel2.TabIndex = 1
+        Me.LinkLabel2.TabStop = True
+        Me.LinkLabel2.Text = "You need to mount an image in order to view its information here. Click here to m" & _
+    "ount an image."
+        Me.LinkLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.LinkLabel2.UseCompatibleTextRendering = True
+        '
+        'Label23
+        '
+        Me.Label23.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.Label23.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label23.ForeColor = System.Drawing.Color.Crimson
+        Me.Label23.Location = New System.Drawing.Point(20, 182)
+        Me.Label23.Name = "Label23"
+        Me.Label23.Size = New System.Drawing.Size(211, 51)
+        Me.Label23.TabIndex = 0
+        Me.Label23.Text = "No image has been mounted"
+        Me.Label23.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'TabControl2
         '
         Me.TabControl2.Controls.Add(Me.TabPage3)
         Me.TabControl2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TabControl2.Location = New System.Drawing.Point(0, 25)
+        Me.TabControl2.Location = New System.Drawing.Point(0, 0)
         Me.TabControl2.Name = "TabControl2"
         Me.TabControl2.SelectedIndex = 0
-        Me.TabControl2.Size = New System.Drawing.Size(740, 490)
+        Me.TabControl2.Size = New System.Drawing.Size(486, 490)
         Me.TabControl2.TabIndex = 3
         '
         'TabPage3
         '
-        Me.TabPage3.Controls.Add(Me.Label9)
         Me.TabPage3.Controls.Add(Me.GroupBox3)
         Me.TabPage3.Controls.Add(Me.GroupBox2)
         Me.TabPage3.Controls.Add(Me.GroupBox1)
-        Me.TabPage3.Controls.Add(Me.Panel2)
-        Me.TabPage3.Controls.Add(Me.Panel1)
         Me.TabPage3.Location = New System.Drawing.Point(4, 22)
         Me.TabPage3.Name = "TabPage3"
         Me.TabPage3.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage3.Size = New System.Drawing.Size(732, 464)
+        Me.TabPage3.Size = New System.Drawing.Size(478, 464)
         Me.TabPage3.TabIndex = 0
         Me.TabPage3.Text = "Actions"
         Me.TabPage3.UseVisualStyleBackColor = True
         '
-        'Label9
-        '
-        Me.Label9.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label9.AutoEllipsis = True
-        Me.Label9.Location = New System.Drawing.Point(9, 428)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(452, 28)
-        Me.Label9.TabIndex = 2
-        Me.Label9.Text = "An action you want to perform isn't in this screen? Check the menu bar. You will " & _
-    "have descriptions at the bottom of the program."
-        '
         'GroupBox3
         '
+        Me.GroupBox3.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.GroupBox3.Controls.Add(Me.Button8)
         Me.GroupBox3.Controls.Add(Me.Button9)
         Me.GroupBox3.Controls.Add(Me.Button10)
-        Me.GroupBox3.Location = New System.Drawing.Point(6, 333)
+        Me.GroupBox3.Location = New System.Drawing.Point(9, 332)
         Me.GroupBox3.Name = "GroupBox3"
         Me.GroupBox3.Size = New System.Drawing.Size(460, 92)
         Me.GroupBox3.TabIndex = 2
@@ -2201,11 +2151,12 @@ Partial Class MainForm
         '
         'GroupBox2
         '
+        Me.GroupBox2.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.GroupBox2.Controls.Add(Me.Button6)
         Me.GroupBox2.Controls.Add(Me.Button7)
         Me.GroupBox2.Controls.Add(Me.Button5)
         Me.GroupBox2.Controls.Add(Me.Button12)
-        Me.GroupBox2.Location = New System.Drawing.Point(6, 206)
+        Me.GroupBox2.Location = New System.Drawing.Point(9, 205)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(460, 121)
         Me.GroupBox2.TabIndex = 2
@@ -2263,13 +2214,14 @@ Partial Class MainForm
         '
         'GroupBox1
         '
+        Me.GroupBox1.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.GroupBox1.Controls.Add(Me.Button13)
         Me.GroupBox1.Controls.Add(Me.Button11)
         Me.GroupBox1.Controls.Add(Me.Button1)
         Me.GroupBox1.Controls.Add(Me.Button2)
         Me.GroupBox1.Controls.Add(Me.Button3)
         Me.GroupBox1.Controls.Add(Me.Button4)
-        Me.GroupBox1.Location = New System.Drawing.Point(6, 41)
+        Me.GroupBox1.Location = New System.Drawing.Point(9, 40)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(460, 159)
         Me.GroupBox1.TabIndex = 2
@@ -2349,114 +2301,12 @@ Partial Class MainForm
         Me.Button4.Text = "Unmount image discarding changes"
         Me.Button4.UseVisualStyleBackColor = True
         '
-        'Panel2
-        '
-        Me.Panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.Panel2.Controls.Add(Me.prjTreeView)
-        Me.Panel2.Controls.Add(Me.ToolStrip2)
-        Me.Panel2.Controls.Add(Me.prjTreeStatus)
-        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Panel2.Location = New System.Drawing.Point(473, 35)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(256, 426)
-        Me.Panel2.TabIndex = 1
-        '
-        'prjTreeView
-        '
-        Me.prjTreeView.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.prjTreeView.Location = New System.Drawing.Point(0, 25)
-        Me.prjTreeView.Name = "prjTreeView"
-        Me.prjTreeView.Size = New System.Drawing.Size(252, 397)
-        Me.prjTreeView.TabIndex = 3
-        '
-        'ToolStrip2
-        '
-        Me.ToolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RefreshViewTSB, Me.ToolStripSeparator17, Me.ExpandCollapseTSB})
-        Me.ToolStrip2.Location = New System.Drawing.Point(0, 0)
-        Me.ToolStrip2.Name = "ToolStrip2"
-        Me.ToolStrip2.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.ToolStrip2.Size = New System.Drawing.Size(252, 25)
-        Me.ToolStrip2.TabIndex = 1
-        Me.ToolStrip2.Text = "ToolStrip2"
-        '
-        'RefreshViewTSB
-        '
-        Me.RefreshViewTSB.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.RefreshViewTSB.Image = Global.DISMTools.My.Resources.Resources.refresh_glyph
-        Me.RefreshViewTSB.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.RefreshViewTSB.Name = "RefreshViewTSB"
-        Me.RefreshViewTSB.Size = New System.Drawing.Size(23, 22)
-        Me.RefreshViewTSB.Text = "Refresh view"
-        '
-        'ToolStripSeparator17
-        '
-        Me.ToolStripSeparator17.Name = "ToolStripSeparator17"
-        Me.ToolStripSeparator17.Size = New System.Drawing.Size(6, 25)
-        '
-        'ExpandCollapseTSB
-        '
-        Me.ExpandCollapseTSB.Image = Global.DISMTools.My.Resources.Resources.expand_glyph
-        Me.ExpandCollapseTSB.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ExpandCollapseTSB.Name = "ExpandCollapseTSB"
-        Me.ExpandCollapseTSB.Size = New System.Drawing.Size(66, 22)
-        Me.ExpandCollapseTSB.Text = "Expand"
-        '
-        'prjTreeStatus
-        '
-        Me.prjTreeStatus.BackColor = System.Drawing.SystemColors.Control
-        Me.prjTreeStatus.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.prjTreeStatus.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel2, Me.ToolStripProgressBar1})
-        Me.prjTreeStatus.Location = New System.Drawing.Point(0, 400)
-        Me.prjTreeStatus.Name = "prjTreeStatus"
-        Me.prjTreeStatus.Size = New System.Drawing.Size(252, 22)
-        Me.prjTreeStatus.SizingGrip = False
-        Me.prjTreeStatus.TabIndex = 0
-        Me.prjTreeStatus.Text = "StatusStrip1"
-        Me.prjTreeStatus.Visible = False
-        '
-        'ToolStripStatusLabel2
-        '
-        Me.ToolStripStatusLabel2.Name = "ToolStripStatusLabel2"
-        Me.ToolStripStatusLabel2.Size = New System.Drawing.Size(125, 17)
-        Me.ToolStripStatusLabel2.Text = "Preparing project tree..."
-        '
-        'ToolStripProgressBar1
-        '
-        Me.ToolStripProgressBar1.Name = "ToolStripProgressBar1"
-        Me.ToolStripProgressBar1.Size = New System.Drawing.Size(100, 16)
-        '
-        'Panel1
-        '
-        Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.Panel1.Controls.Add(Me.Label8)
-        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel1.Location = New System.Drawing.Point(3, 3)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(726, 32)
-        Me.Panel1.TabIndex = 0
-        '
-        'Label8
-        '
-        Me.Label8.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label8.AutoEllipsis = True
-        Me.Label8.Location = New System.Drawing.Point(8, 8)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(699, 13)
-        Me.Label8.TabIndex = 2
-        Me.Label8.Text = "Select an action below to perform to the mounted image, or select an item on the " & _
-    "menu above for all possible settings:"
-        '
         'ToolStrip1
         '
-        Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripSeparator14, Me.ToolStripButton3, Me.ToolStripSeparator15, Me.ToolStripButton4})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.ToolStrip1.Size = New System.Drawing.Size(740, 25)
+        Me.ToolStrip1.Size = New System.Drawing.Size(752, 25)
         Me.ToolStrip1.TabIndex = 2
         Me.ToolStrip1.Text = "ToolStrip1"
         '
@@ -2511,20 +2361,96 @@ Partial Class MainForm
         Me.ToolStripButton4.Text = "Show progress window"
         Me.ToolStripButton4.Visible = False
         '
+        'Panel2
+        '
+        Me.Panel2.Controls.Add(Me.prjTreeView)
+        Me.Panel2.Controls.Add(Me.ToolStrip2)
+        Me.Panel2.Controls.Add(Me.prjTreeStatus)
+        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Right
+        Me.Panel2.Location = New System.Drawing.Point(752, 0)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(256, 515)
+        Me.Panel2.TabIndex = 1
+        '
+        'prjTreeView
+        '
+        Me.prjTreeView.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.prjTreeView.Location = New System.Drawing.Point(0, 25)
+        Me.prjTreeView.Name = "prjTreeView"
+        Me.prjTreeView.Size = New System.Drawing.Size(256, 490)
+        Me.prjTreeView.TabIndex = 3
+        '
+        'ToolStrip2
+        '
+        Me.ToolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
+        Me.ToolStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RefreshViewTSB, Me.ToolStripSeparator17, Me.ExpandCollapseTSB})
+        Me.ToolStrip2.Location = New System.Drawing.Point(0, 0)
+        Me.ToolStrip2.Name = "ToolStrip2"
+        Me.ToolStrip2.Size = New System.Drawing.Size(256, 25)
+        Me.ToolStrip2.TabIndex = 1
+        Me.ToolStrip2.Text = "ToolStrip2"
+        '
+        'RefreshViewTSB
+        '
+        Me.RefreshViewTSB.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.RefreshViewTSB.Image = Global.DISMTools.My.Resources.Resources.refresh_glyph
+        Me.RefreshViewTSB.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.RefreshViewTSB.Name = "RefreshViewTSB"
+        Me.RefreshViewTSB.Size = New System.Drawing.Size(23, 22)
+        Me.RefreshViewTSB.Text = "Refresh view"
+        '
+        'ToolStripSeparator17
+        '
+        Me.ToolStripSeparator17.Name = "ToolStripSeparator17"
+        Me.ToolStripSeparator17.Size = New System.Drawing.Size(6, 25)
+        '
+        'ExpandCollapseTSB
+        '
+        Me.ExpandCollapseTSB.Image = Global.DISMTools.My.Resources.Resources.expand_glyph
+        Me.ExpandCollapseTSB.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ExpandCollapseTSB.Name = "ExpandCollapseTSB"
+        Me.ExpandCollapseTSB.Size = New System.Drawing.Size(66, 22)
+        Me.ExpandCollapseTSB.Text = "Expand"
+        '
+        'prjTreeStatus
+        '
+        Me.prjTreeStatus.BackColor = System.Drawing.SystemColors.Control
+        Me.prjTreeStatus.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.prjTreeStatus.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel2, Me.ToolStripProgressBar1})
+        Me.prjTreeStatus.Location = New System.Drawing.Point(0, 400)
+        Me.prjTreeStatus.Name = "prjTreeStatus"
+        Me.prjTreeStatus.Size = New System.Drawing.Size(252, 22)
+        Me.prjTreeStatus.SizingGrip = False
+        Me.prjTreeStatus.TabIndex = 0
+        Me.prjTreeStatus.Text = "StatusStrip1"
+        Me.prjTreeStatus.Visible = False
+        '
+        'ToolStripStatusLabel2
+        '
+        Me.ToolStripStatusLabel2.Name = "ToolStripStatusLabel2"
+        Me.ToolStripStatusLabel2.Size = New System.Drawing.Size(125, 17)
+        Me.ToolStripStatusLabel2.Text = "Preparing project tree..."
+        '
+        'ToolStripProgressBar1
+        '
+        Me.ToolStripProgressBar1.Name = "ToolStripProgressBar1"
+        Me.ToolStripProgressBar1.Size = New System.Drawing.Size(100, 16)
+        '
         'StatusStrip
         '
         Me.StatusStrip.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.StatusStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MenuDesc})
         Me.StatusStrip.Location = New System.Drawing.Point(0, 515)
         Me.StatusStrip.Name = "StatusStrip"
-        Me.StatusStrip.Size = New System.Drawing.Size(740, 22)
+        Me.StatusStrip.Size = New System.Drawing.Size(1008, 22)
         Me.StatusStrip.TabIndex = 0
         Me.StatusStrip.Text = "Status"
         '
         'MenuDesc
         '
+        Me.MenuDesc.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.MenuDesc.Name = "MenuDesc"
-        Me.MenuDesc.Size = New System.Drawing.Size(38, 17)
+        Me.MenuDesc.Size = New System.Drawing.Size(39, 17)
         Me.MenuDesc.Text = "Ready"
         '
         'OpenFileDialog1
@@ -2536,43 +2462,56 @@ Partial Class MainForm
         '
         'PkgInfoCMS
         '
-        Me.PkgInfoCMS.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.PkgInfoCMS.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.PkgInfoCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.PkgBasicInfo, Me.PkgDetailedInfo})
         Me.PkgInfoCMS.Name = "PkgInfoCMS"
         Me.PkgInfoCMS.ShowImageMargin = False
-        Me.PkgInfoCMS.Size = New System.Drawing.Size(254, 48)
+        Me.PkgInfoCMS.Size = New System.Drawing.Size(277, 48)
         '
         'PkgBasicInfo
         '
         Me.PkgBasicInfo.Name = "PkgBasicInfo"
-        Me.PkgBasicInfo.Size = New System.Drawing.Size(253, 22)
+        Me.PkgBasicInfo.Size = New System.Drawing.Size(276, 22)
         Me.PkgBasicInfo.Text = "Get basic information (all packages)"
         '
         'PkgDetailedInfo
         '
         Me.PkgDetailedInfo.Name = "PkgDetailedInfo"
-        Me.PkgDetailedInfo.Size = New System.Drawing.Size(253, 22)
+        Me.PkgDetailedInfo.Size = New System.Drawing.Size(276, 22)
         Me.PkgDetailedInfo.Text = "Get detailed information (specific package)"
         '
         'FeatureInfoCMS
         '
-        Me.FeatureInfoCMS.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.FeatureInfoCMS.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.FeatureInfoCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FeatureBasicInfo, Me.FeatureDetailedInfo})
         Me.FeatureInfoCMS.Name = "PkgInfoCMS"
         Me.FeatureInfoCMS.ShowImageMargin = False
-        Me.FeatureInfoCMS.Size = New System.Drawing.Size(250, 48)
+        Me.FeatureInfoCMS.Size = New System.Drawing.Size(270, 48)
         '
         'FeatureBasicInfo
         '
         Me.FeatureBasicInfo.Name = "FeatureBasicInfo"
-        Me.FeatureBasicInfo.Size = New System.Drawing.Size(249, 22)
+        Me.FeatureBasicInfo.Size = New System.Drawing.Size(269, 22)
         Me.FeatureBasicInfo.Text = "Get basic information (all features)"
         '
         'FeatureDetailedInfo
         '
         Me.FeatureDetailedInfo.Name = "FeatureDetailedInfo"
-        Me.FeatureDetailedInfo.Size = New System.Drawing.Size(249, 22)
+        Me.FeatureDetailedInfo.Size = New System.Drawing.Size(269, 22)
         Me.FeatureDetailedInfo.Text = "Get detailed information (specific feature)"
+        '
+        'ImgBW
+        '
+        '
+        'ImgProcesses
+        '
+        Me.ImgProcesses.StartInfo.Domain = ""
+        Me.ImgProcesses.StartInfo.LoadUserProfile = False
+        Me.ImgProcesses.StartInfo.Password = Nothing
+        Me.ImgProcesses.StartInfo.StandardErrorEncoding = Nothing
+        Me.ImgProcesses.StartInfo.StandardOutputEncoding = Nothing
+        Me.ImgProcesses.StartInfo.UserName = ""
+        Me.ImgProcesses.SynchronizingObject = Me
         '
         'MainForm
         '
@@ -2605,39 +2544,37 @@ Partial Class MainForm
         Me.Panel3.PerformLayout()
         CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PrjPanel.ResumeLayout(False)
+        Me.PrjPanel.PerformLayout()
         Me.SplitPanels.Panel1.ResumeLayout(False)
         Me.SplitPanels.Panel2.ResumeLayout(False)
-        Me.SplitPanels.Panel2.PerformLayout()
         CType(Me.SplitPanels, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitPanels.ResumeLayout(False)
         Me.TabControl1.ResumeLayout(False)
         Me.TabPage1.ResumeLayout(False)
         Me.TabPage1.PerformLayout()
-        Me.ProjActions.ResumeLayout(False)
         Me.TabTitleSummary1.ResumeLayout(False)
         Me.TabTitleSummary1.PerformLayout()
         CType(Me.TabPageIcon1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TabPage2.ResumeLayout(False)
-        Me.ImageNotMountedPanel.ResumeLayout(False)
         Me.ImagePanel.ResumeLayout(False)
         Me.ImagePanel.PerformLayout()
         Me.TabTitleSummary2.ResumeLayout(False)
         Me.TabTitleSummary2.PerformLayout()
         CType(Me.TabPageIcon2, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.ImageNotMountedPanel.ResumeLayout(False)
         Me.TabControl2.ResumeLayout(False)
         Me.TabPage3.ResumeLayout(False)
         Me.GroupBox3.ResumeLayout(False)
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
+        Me.ToolStrip1.ResumeLayout(False)
+        Me.ToolStrip1.PerformLayout()
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
         Me.ToolStrip2.ResumeLayout(False)
         Me.ToolStrip2.PerformLayout()
         Me.prjTreeStatus.ResumeLayout(False)
         Me.prjTreeStatus.PerformLayout()
-        Me.Panel1.ResumeLayout(False)
-        Me.ToolStrip1.ResumeLayout(False)
-        Me.ToolStrip1.PerformLayout()
         Me.StatusStrip.ResumeLayout(False)
         Me.StatusStrip.PerformLayout()
         Me.PkgInfoCMS.ResumeLayout(False)
@@ -2791,11 +2728,8 @@ Partial Class MainForm
     Friend WithEvents TabControl1 As System.Windows.Forms.TabControl
     Friend WithEvents TabPage1 As System.Windows.Forms.TabPage
     Friend WithEvents ProjNameEditBtn As System.Windows.Forms.Button
-    Friend WithEvents ProjActions As System.Windows.Forms.GroupBox
     Friend WithEvents UnloadBtn As System.Windows.Forms.Button
     Friend WithEvents ExplorerView As System.Windows.Forms.Button
-    Friend WithEvents Label7 As System.Windows.Forms.Label
-    Friend WithEvents Label6 As System.Windows.Forms.Label
     Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
     Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents Label4 As System.Windows.Forms.Label
@@ -2815,7 +2749,6 @@ Partial Class MainForm
     Friend WithEvents TabPageTitle2 As System.Windows.Forms.Label
     Friend WithEvents TabControl2 As System.Windows.Forms.TabControl
     Friend WithEvents TabPage3 As System.Windows.Forms.TabPage
-    Friend WithEvents Label9 As System.Windows.Forms.Label
     Friend WithEvents GroupBox3 As System.Windows.Forms.GroupBox
     Friend WithEvents Button8 As System.Windows.Forms.Button
     Friend WithEvents Button9 As System.Windows.Forms.Button
@@ -2832,8 +2765,6 @@ Partial Class MainForm
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents Button3 As System.Windows.Forms.Button
     Friend WithEvents Button4 As System.Windows.Forms.Button
-    Friend WithEvents Panel1 As System.Windows.Forms.Panel
-    Friend WithEvents Label8 As System.Windows.Forms.Label
     Friend WithEvents ToolStrip1 As System.Windows.Forms.ToolStrip
     Friend WithEvents ToolStripButton1 As System.Windows.Forms.ToolStripButton
     Friend WithEvents StatusStrip As System.Windows.Forms.StatusStrip
@@ -2920,5 +2851,6 @@ Partial Class MainForm
     Friend WithEvents ISHelp As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents BranchTSMI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ReportFeedbackToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-
+    Friend WithEvents ImgBW As System.ComponentModel.BackgroundWorker
+    Friend WithEvents ImgProcesses As Process
 End Class
