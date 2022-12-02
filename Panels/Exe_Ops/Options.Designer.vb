@@ -48,6 +48,8 @@ Partial Class Options
         Me.Label2 = New System.Windows.Forms.Label()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Toggle1 = New System.Windows.Forms.CheckBox()
+        Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
         Me.LogPreview = New System.Windows.Forms.TextBox()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.Label9 = New System.Windows.Forms.Label()
@@ -63,11 +65,11 @@ Partial Class Options
         Me.Label15 = New System.Windows.Forms.Label()
         Me.TrackBar1 = New System.Windows.Forms.TrackBar()
         Me.Label13 = New System.Windows.Forms.Label()
-        Me.PictureBox4 = New System.Windows.Forms.PictureBox()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.Label14 = New System.Windows.Forms.Label()
         Me.Label12 = New System.Windows.Forms.Label()
+        Me.PictureBox4 = New System.Windows.Forms.PictureBox()
         Me.TabPage4 = New System.Windows.Forms.TabPage()
         Me.Label19 = New System.Windows.Forms.Label()
         Me.Label18 = New System.Windows.Forms.Label()
@@ -77,19 +79,23 @@ Partial Class Options
         Me.RadioButton1 = New System.Windows.Forms.RadioButton()
         Me.Label17 = New System.Windows.Forms.Label()
         Me.TabPage5 = New System.Windows.Forms.TabPage()
+        Me.Label24 = New System.Windows.Forms.Label()
+        Me.Label23 = New System.Windows.Forms.Label()
+        Me.Label22 = New System.Windows.Forms.Label()
         Me.Button4 = New System.Windows.Forms.Button()
         Me.TextBox3 = New System.Windows.Forms.TextBox()
         Me.Label21 = New System.Windows.Forms.Label()
         Me.Label20 = New System.Windows.Forms.Label()
         Me.CheckBox4 = New System.Windows.Forms.CheckBox()
-        Me.TabPage6 = New System.Windows.Forms.TabPage()
-        Me.Label24 = New System.Windows.Forms.Label()
         Me.PictureBox5 = New System.Windows.Forms.PictureBox()
+        Me.TabPage6 = New System.Windows.Forms.TabPage()
+        Me.Label27 = New System.Windows.Forms.Label()
         Me.TextBox4 = New System.Windows.Forms.TextBox()
         Me.ComboBox5 = New System.Windows.Forms.ComboBox()
-        Me.Label23 = New System.Windows.Forms.Label()
-        Me.Label22 = New System.Windows.Forms.Label()
+        Me.Label26 = New System.Windows.Forms.Label()
+        Me.Label25 = New System.Windows.Forms.Label()
         Me.CheckBox5 = New System.Windows.Forms.CheckBox()
+        Me.PictureBox6 = New System.Windows.Forms.PictureBox()
         Me.PrefReset = New System.Windows.Forms.Button()
         Me.LogSFD = New System.Windows.Forms.SaveFileDialog()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -101,14 +107,16 @@ Partial Class Options
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabPage2.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
+        CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabPage3.SuspendLayout()
         Me.Panel1.SuspendLayout()
         CType(Me.TrackBar1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabPage4.SuspendLayout()
         Me.TabPage5.SuspendLayout()
-        Me.TabPage6.SuspendLayout()
         CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.TabPage6.SuspendLayout()
+        CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -260,7 +268,7 @@ Partial Class Options
         '
         'LinkLabel1
         '
-        Me.LinkLabel1.LinkArea = New System.Windows.Forms.LinkArea(100, 98)
+        Me.LinkLabel1.LinkArea = New System.Windows.Forms.LinkArea(100, 100)
         Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
         Me.LinkLabel1.Location = New System.Drawing.Point(48, 79)
@@ -269,8 +277,8 @@ Partial Class Options
         Me.LinkLabel1.TabIndex = 4
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "The program will enable or disable certain features according to what the program" & _
-    " version supports. How is it going to affect my use of this program, and which f" & _
-    "eatures will be disabled accordingly?"
+    " version supports. How is it going to affect my usage of this program, and which" & _
+    " features will be disabled accordingly?"
         Me.LinkLabel1.UseCompatibleTextRendering = True
         '
         'PictureBox2
@@ -371,6 +379,8 @@ Partial Class Options
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.Toggle1)
+        Me.GroupBox1.Controls.Add(Me.NumericUpDown1)
         Me.GroupBox1.Controls.Add(Me.LogPreview)
         Me.GroupBox1.Controls.Add(Me.Label11)
         Me.GroupBox1.Controls.Add(Me.Label9)
@@ -382,6 +392,27 @@ Partial Class Options
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Log customization"
+        '
+        'Toggle1
+        '
+        Me.Toggle1.Appearance = System.Windows.Forms.Appearance.Button
+        Me.Toggle1.AutoSize = True
+        Me.Toggle1.Image = Global.DISMTools.My.Resources.Resources.bold_font
+        Me.Toggle1.Location = New System.Drawing.Point(634, 56)
+        Me.Toggle1.Name = "Toggle1"
+        Me.Toggle1.Size = New System.Drawing.Size(22, 22)
+        Me.Toggle1.TabIndex = 6
+        Me.Toggle1.UseVisualStyleBackColor = True
+        '
+        'NumericUpDown1
+        '
+        Me.NumericUpDown1.Location = New System.Drawing.Point(578, 56)
+        Me.NumericUpDown1.Maximum = New Decimal(New Integer() {96, 0, 0, 0})
+        Me.NumericUpDown1.Minimum = New Decimal(New Integer() {8, 0, 0, 0})
+        Me.NumericUpDown1.Name = "NumericUpDown1"
+        Me.NumericUpDown1.Size = New System.Drawing.Size(50, 21)
+        Me.NumericUpDown1.TabIndex = 5
+        Me.NumericUpDown1.Value = New Decimal(New Integer() {10, 0, 0, 0})
         '
         'LogPreview
         '
@@ -427,7 +458,7 @@ Partial Class Options
         Me.ComboBox4.FormattingEnabled = True
         Me.ComboBox4.Location = New System.Drawing.Point(142, 56)
         Me.ComboBox4.Name = "ComboBox4"
-        Me.ComboBox4.Size = New System.Drawing.Size(514, 21)
+        Me.ComboBox4.Size = New System.Drawing.Size(430, 21)
         Me.ComboBox4.TabIndex = 3
         Me.ComboBox4.Text = "Courier New"
         '
@@ -474,11 +505,11 @@ Partial Class Options
         Me.TabPage3.Controls.Add(Me.Panel1)
         Me.TabPage3.Controls.Add(Me.TrackBar1)
         Me.TabPage3.Controls.Add(Me.Label13)
-        Me.TabPage3.Controls.Add(Me.PictureBox4)
         Me.TabPage3.Controls.Add(Me.Button3)
         Me.TabPage3.Controls.Add(Me.TextBox2)
         Me.TabPage3.Controls.Add(Me.Label14)
         Me.TabPage3.Controls.Add(Me.Label12)
+        Me.TabPage3.Controls.Add(Me.PictureBox4)
         Me.TabPage3.Location = New System.Drawing.Point(4, 22)
         Me.TabPage3.Name = "TabPage3"
         Me.TabPage3.Size = New System.Drawing.Size(751, 433)
@@ -536,16 +567,6 @@ Partial Class Options
         Me.Label13.Text = "When performing image operations in the command line, specify the ""/LogFile"" argu" & _
     "ment to save the image operation log to the target log file."
         '
-        'PictureBox4
-        '
-        Me.PictureBox4.Image = Global.DISMTools.My.Resources.Resources.info_16px
-        Me.PictureBox4.Location = New System.Drawing.Point(25, 47)
-        Me.PictureBox4.Name = "PictureBox4"
-        Me.PictureBox4.Size = New System.Drawing.Size(16, 16)
-        Me.PictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.PictureBox4.TabIndex = 6
-        Me.PictureBox4.TabStop = False
-        '
         'Button3
         '
         Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
@@ -580,6 +601,16 @@ Partial Class Options
         Me.Label12.Size = New System.Drawing.Size(93, 13)
         Me.Label12.TabIndex = 3
         Me.Label12.Text = "Operation log file:"
+        '
+        'PictureBox4
+        '
+        Me.PictureBox4.Image = Global.DISMTools.My.Resources.Resources.info_16px
+        Me.PictureBox4.Location = New System.Drawing.Point(25, 47)
+        Me.PictureBox4.Name = "PictureBox4"
+        Me.PictureBox4.Size = New System.Drawing.Size(16, 16)
+        Me.PictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox4.TabIndex = 6
+        Me.PictureBox4.TabStop = False
         '
         'TabPage4
         '
@@ -669,17 +700,52 @@ Partial Class Options
         '
         'TabPage5
         '
+        Me.TabPage5.Controls.Add(Me.Label24)
+        Me.TabPage5.Controls.Add(Me.Label23)
+        Me.TabPage5.Controls.Add(Me.Label22)
         Me.TabPage5.Controls.Add(Me.Button4)
         Me.TabPage5.Controls.Add(Me.TextBox3)
         Me.TabPage5.Controls.Add(Me.Label21)
         Me.TabPage5.Controls.Add(Me.Label20)
         Me.TabPage5.Controls.Add(Me.CheckBox4)
+        Me.TabPage5.Controls.Add(Me.PictureBox5)
         Me.TabPage5.Location = New System.Drawing.Point(4, 22)
         Me.TabPage5.Name = "TabPage5"
         Me.TabPage5.Size = New System.Drawing.Size(751, 433)
         Me.TabPage5.TabIndex = 4
         Me.TabPage5.Text = "Scratch directory"
         Me.TabPage5.UseVisualStyleBackColor = True
+        '
+        'Label24
+        '
+        Me.Label24.Enabled = False
+        Me.Label24.Location = New System.Drawing.Point(64, 116)
+        Me.Label24.Name = "Label24"
+        Me.Label24.Size = New System.Drawing.Size(640, 32)
+        Me.Label24.TabIndex = 11
+        Me.Label24.Text = "You may not have enough space on the selected scratch directory for some operatio" & _
+    "ns."
+        Me.Label24.Visible = False
+        '
+        'Label23
+        '
+        Me.Label23.AutoSize = True
+        Me.Label23.Enabled = False
+        Me.Label23.Location = New System.Drawing.Point(246, 95)
+        Me.Label23.Name = "Label23"
+        Me.Label23.Size = New System.Drawing.Size(79, 13)
+        Me.Label23.TabIndex = 4
+        Me.Label23.Text = "<scdir_space>"
+        '
+        'Label22
+        '
+        Me.Label22.AutoSize = True
+        Me.Label22.Enabled = False
+        Me.Label22.Location = New System.Drawing.Point(39, 95)
+        Me.Label22.Name = "Label22"
+        Me.Label22.Size = New System.Drawing.Size(201, 13)
+        Me.Label22.TabIndex = 4
+        Me.Label22.Text = "Space left on selected scratch directory:"
         '
         'Button4
         '
@@ -730,15 +796,27 @@ Partial Class Options
         Me.CheckBox4.Text = "Use a scratch directory"
         Me.CheckBox4.UseVisualStyleBackColor = True
         '
+        'PictureBox5
+        '
+        Me.PictureBox5.Enabled = False
+        Me.PictureBox5.Image = Global.DISMTools.My.Resources.Resources.warning_16px
+        Me.PictureBox5.Location = New System.Drawing.Point(42, 115)
+        Me.PictureBox5.Name = "PictureBox5"
+        Me.PictureBox5.Size = New System.Drawing.Size(16, 16)
+        Me.PictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox5.TabIndex = 10
+        Me.PictureBox5.TabStop = False
+        Me.PictureBox5.Visible = False
+        '
         'TabPage6
         '
-        Me.TabPage6.Controls.Add(Me.Label24)
-        Me.TabPage6.Controls.Add(Me.PictureBox5)
+        Me.TabPage6.Controls.Add(Me.Label27)
         Me.TabPage6.Controls.Add(Me.TextBox4)
         Me.TabPage6.Controls.Add(Me.ComboBox5)
-        Me.TabPage6.Controls.Add(Me.Label23)
-        Me.TabPage6.Controls.Add(Me.Label22)
+        Me.TabPage6.Controls.Add(Me.Label26)
+        Me.TabPage6.Controls.Add(Me.Label25)
         Me.TabPage6.Controls.Add(Me.CheckBox5)
+        Me.TabPage6.Controls.Add(Me.PictureBox6)
         Me.TabPage6.Location = New System.Drawing.Point(4, 22)
         Me.TabPage6.Name = "TabPage6"
         Me.TabPage6.Size = New System.Drawing.Size(751, 433)
@@ -746,23 +824,13 @@ Partial Class Options
         Me.TabPage6.Text = "Program output"
         Me.TabPage6.UseVisualStyleBackColor = True
         '
-        'Label24
+        'Label27
         '
-        Me.Label24.Location = New System.Drawing.Point(44, 394)
-        Me.Label24.Name = "Label24"
-        Me.Label24.Size = New System.Drawing.Size(682, 32)
-        Me.Label24.TabIndex = 9
-        Me.Label24.Text = "Some reports do not allow being shown as a table."
-        '
-        'PictureBox5
-        '
-        Me.PictureBox5.Image = Global.DISMTools.My.Resources.Resources.info_16px
-        Me.PictureBox5.Location = New System.Drawing.Point(22, 393)
-        Me.PictureBox5.Name = "PictureBox5"
-        Me.PictureBox5.Size = New System.Drawing.Size(16, 16)
-        Me.PictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.PictureBox5.TabIndex = 8
-        Me.PictureBox5.TabStop = False
+        Me.Label27.Location = New System.Drawing.Point(44, 394)
+        Me.Label27.Name = "Label27"
+        Me.Label27.Size = New System.Drawing.Size(682, 32)
+        Me.Label27.TabIndex = 9
+        Me.Label27.Text = "Some reports do not allow being shown as a table."
         '
         'TextBox4
         '
@@ -786,23 +854,23 @@ Partial Class Options
         Me.ComboBox5.TabIndex = 3
         Me.ComboBox5.Text = "list"
         '
-        'Label23
+        'Label26
         '
-        Me.Label23.AutoSize = True
-        Me.Label23.Location = New System.Drawing.Point(19, 122)
-        Me.Label23.Name = "Label23"
-        Me.Label23.Size = New System.Drawing.Size(84, 13)
-        Me.Label23.TabIndex = 2
-        Me.Label23.Text = "Example report:"
+        Me.Label26.AutoSize = True
+        Me.Label26.Location = New System.Drawing.Point(19, 122)
+        Me.Label26.Name = "Label26"
+        Me.Label26.Size = New System.Drawing.Size(84, 13)
+        Me.Label26.TabIndex = 2
+        Me.Label26.Text = "Example report:"
         '
-        'Label22
+        'Label25
         '
-        Me.Label22.AutoSize = True
-        Me.Label22.Location = New System.Drawing.Point(19, 58)
-        Me.Label22.Name = "Label22"
-        Me.Label22.Size = New System.Drawing.Size(53, 13)
-        Me.Label22.TabIndex = 2
-        Me.Label22.Text = "Log view:"
+        Me.Label25.AutoSize = True
+        Me.Label25.Location = New System.Drawing.Point(19, 58)
+        Me.Label25.Name = "Label25"
+        Me.Label25.Size = New System.Drawing.Size(53, 13)
+        Me.Label25.TabIndex = 2
+        Me.Label25.Text = "Log view:"
         '
         'CheckBox5
         '
@@ -815,6 +883,16 @@ Partial Class Options
         Me.CheckBox5.TabIndex = 1
         Me.CheckBox5.Text = "Show command output in English"
         Me.CheckBox5.UseVisualStyleBackColor = True
+        '
+        'PictureBox6
+        '
+        Me.PictureBox6.Image = Global.DISMTools.My.Resources.Resources.info_16px
+        Me.PictureBox6.Location = New System.Drawing.Point(22, 393)
+        Me.PictureBox6.Name = "PictureBox6"
+        Me.PictureBox6.Size = New System.Drawing.Size(16, 16)
+        Me.PictureBox6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox6.TabIndex = 8
+        Me.PictureBox6.TabStop = False
         '
         'PrefReset
         '
@@ -863,6 +941,7 @@ Partial Class Options
         Me.TabPage2.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TabPage3.ResumeLayout(False)
         Me.TabPage3.PerformLayout()
         Me.Panel1.ResumeLayout(False)
@@ -873,9 +952,10 @@ Partial Class Options
         Me.TabPage4.PerformLayout()
         Me.TabPage5.ResumeLayout(False)
         Me.TabPage5.PerformLayout()
+        CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TabPage6.ResumeLayout(False)
         Me.TabPage6.PerformLayout()
-        CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -939,14 +1019,20 @@ Partial Class Options
     Friend WithEvents Label21 As System.Windows.Forms.Label
     Friend WithEvents Label20 As System.Windows.Forms.Label
     Friend WithEvents CheckBox4 As System.Windows.Forms.CheckBox
-    Friend WithEvents Label24 As System.Windows.Forms.Label
-    Friend WithEvents PictureBox5 As System.Windows.Forms.PictureBox
+    Friend WithEvents Label27 As System.Windows.Forms.Label
+    Friend WithEvents PictureBox6 As System.Windows.Forms.PictureBox
     Friend WithEvents TextBox4 As System.Windows.Forms.TextBox
     Friend WithEvents ComboBox5 As System.Windows.Forms.ComboBox
-    Friend WithEvents Label23 As System.Windows.Forms.Label
-    Friend WithEvents Label22 As System.Windows.Forms.Label
+    Friend WithEvents Label26 As System.Windows.Forms.Label
+    Friend WithEvents Label25 As System.Windows.Forms.Label
     Friend WithEvents CheckBox5 As System.Windows.Forms.CheckBox
     Friend WithEvents PrefReset As System.Windows.Forms.Button
     Friend WithEvents LogSFD As System.Windows.Forms.SaveFileDialog
+    Friend WithEvents Label24 As System.Windows.Forms.Label
+    Friend WithEvents PictureBox5 As System.Windows.Forms.PictureBox
+    Friend WithEvents Label23 As System.Windows.Forms.Label
+    Friend WithEvents Label22 As System.Windows.Forms.Label
+    Friend WithEvents Toggle1 As System.Windows.Forms.CheckBox
+    Friend WithEvents NumericUpDown1 As System.Windows.Forms.NumericUpDown
 
 End Class

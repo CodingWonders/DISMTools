@@ -75,6 +75,12 @@ Public Class Options
         MainForm.ColorMode = ComboBox2.SelectedIndex
         MainForm.Language = 1       ' This version doesn't support languages
         MainForm.LogFont = ComboBox4.Text
+        MainForm.LogFontSize = NumericUpDown1.Value
+        If Toggle1.Checked Then
+            MainForm.LogFontIsBold = True
+        Else
+            MainForm.LogFontIsBold = False
+        End If
         MainForm.LogFile = TextBox2.Text
         MainForm.LogLevel = TrackBar1.Value + 1
         If RadioButton1.Checked Then
@@ -182,6 +188,12 @@ Public Class Options
         End Select
         ComboBox3.SelectedIndex = 1
         ComboBox4.Text = MainForm.LogFont
+        NumericUpDown1.Value = MainForm.LogFontSize
+        If MainForm.LogFontIsBold Then
+            Toggle1.Checked = True
+        Else
+            Toggle1.Checked = False
+        End If
         TextBox2.Text = MainForm.LogFile
         TrackBar1.Value = MainForm.LogLevel - 1
         Select Case MainForm.ImgOperationMode
@@ -220,6 +232,7 @@ Public Class Options
             Case 1
                 ComboBox5.SelectedIndex = 1
         End Select
+        GetRootSpace(TextBox3.Text)
     End Sub
 
     Private Sub ComboBox5_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox5.SelectedIndexChanged
@@ -255,7 +268,11 @@ Public Class Options
     End Sub
 
     Private Sub ComboBox4_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox4.SelectedIndexChanged
-        LogPreview.Font = New Font(ComboBox4.Text, 9.75)
+        If Toggle1.Checked Then
+            LogPreview.Font = New Font(ComboBox4.Text, NumericUpDown1.Value, FontStyle.Bold)
+        Else
+            LogPreview.Font = New Font(ComboBox4.Text, NumericUpDown1.Value, FontStyle.Regular)
+        End If
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
@@ -313,11 +330,84 @@ Public Class Options
             Label21.Enabled = True
             TextBox3.Enabled = True
             Button4.Enabled = True
+            Label22.Enabled = True
+            Label23.Enabled = True
+            Label24.Enabled = True
+            PictureBox5.Enabled = True
         Else
             Label20.Enabled = False
             Label21.Enabled = False
             TextBox3.Enabled = False
             Button4.Enabled = False
+            Label22.Enabled = False
+            Label23.Enabled = False
+            Label24.Enabled = False
+            PictureBox5.Enabled = False
+        End If
+    End Sub
+
+    Private Sub TextBox3_TextChanged(sender As Object, e As EventArgs) Handles TextBox3.TextChanged
+        GetRootSpace(TextBox3.Text)
+    End Sub
+
+    ''' <summary>
+    ''' Gets the space of the drive which contains the scratch directory (referred to as the root drive)
+    ''' </summary>
+    ''' <param name="SourceDir"></param>
+    ''' <remarks></remarks>
+    Sub GetRootSpace(SourceDir As String)
+        If SourceDir = "" Then
+            Label23.Text = "Please specify a scratch directory."
+            Label24.Visible = False
+            PictureBox5.Visible = False
+            PictureBox5.Image = New Bitmap(My.Resources.info_16px)
+            Label24.Text = "You have enough space on the selected scratch directory"
+        Else
+            Try
+                Dim drInfo As New DriveInfo(Path.GetPathRoot(SourceDir))
+                Dim FreeSpace As Double = drInfo.AvailableFreeSpace / (1024 ^ 3)
+                Label23.Text = Math.Round(FreeSpace, 2) & " GB"
+                Select Case Math.Round(FreeSpace, 0)
+                    Case Is < 5
+                        Label24.Visible = True
+                        PictureBox5.Visible = True
+                        PictureBox5.Image = New Bitmap(My.Resources.error_16px)
+                        Label24.Text = "You don't have enough space on the selected scratch directory to perform image operations. Try freeing some space from the drive"
+                    Case 5 To 19.99
+                        Label24.Visible = True
+                        PictureBox5.Visible = True
+                        PictureBox5.Image = New Bitmap(My.Resources.warning_16px)
+                        Label24.Text = "You may not have enough space on the selected scratch directory for some operations."
+                    Case Is >= 20
+                        Label24.Visible = False
+                        PictureBox5.Visible = False
+                        PictureBox5.Image = New Bitmap(My.Resources.info_16px)
+                        Label24.Text = "You have enough space on the selected scratch directory"
+                End Select
+            Catch ex As Exception
+                Label23.Text = "Could not get available free space. Continue at your own risk"
+                Label24.Visible = False
+                PictureBox5.Visible = False
+                PictureBox5.Image = New Bitmap(My.Resources.info_16px)
+                Label24.Text = "You have enough space on the selected scratch directory"
+                Exit Sub
+            End Try
+        End If
+    End Sub
+
+    Private Sub Toggle1_CheckedChanged(sender As Object, e As EventArgs) Handles Toggle1.CheckedChanged
+        If Toggle1.Checked Then
+            LogPreview.Font = New Font(ComboBox4.Text, NumericUpDown1.Value, FontStyle.Bold)
+        Else
+            LogPreview.Font = New Font(ComboBox4.Text, NumericUpDown1.Value, FontStyle.Regular)
+        End If
+    End Sub
+
+    Private Sub NumericUpDown1_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown1.ValueChanged
+        If Toggle1.Checked Then
+            LogPreview.Font = New Font(ComboBox4.Text, NumericUpDown1.Value, FontStyle.Bold)
+        Else
+            LogPreview.Font = New Font(ComboBox4.Text, NumericUpDown1.Value, FontStyle.Regular)
         End If
     End Sub
 End Class
