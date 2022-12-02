@@ -34,15 +34,6 @@ Partial Class ProgressPanel
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.LogView = New System.Windows.Forms.TextBox()
-        Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
-        Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
-        Me.Panel3 = New System.Windows.Forms.Panel()
-        Me.ToolStrip2 = New System.Windows.Forms.ToolStrip()
-        Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripLabel1 = New System.Windows.Forms.ToolStripLabel()
-        Me.ToolStripLabel2 = New System.Windows.Forms.ToolStripLabel()
-        Me.logActions = New System.Windows.Forms.Label()
         Me.LogButton = New System.Windows.Forms.Button()
         Me.ProgressBW = New System.ComponentModel.BackgroundWorker()
         Me.BodyPanel = New System.Windows.Forms.Panel()
@@ -51,10 +42,6 @@ Partial Class ProgressPanel
         Me.DISMProc = New System.Diagnostics.Process()
         Me.GroupBox1.SuspendLayout()
         Me.Panel1.SuspendLayout()
-        Me.Panel2.SuspendLayout()
-        Me.ToolStrip1.SuspendLayout()
-        Me.Panel3.SuspendLayout()
-        Me.ToolStrip2.SuspendLayout()
         Me.BodyPanel.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -133,7 +120,7 @@ Partial Class ProgressPanel
         'GroupBox1
         '
         Me.GroupBox1.Controls.Add(Me.Panel1)
-        Me.GroupBox1.Location = New System.Drawing.Point(58, 238)
+        Me.GroupBox1.Location = New System.Drawing.Point(58, 242)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(696, 153)
         Me.GroupBox1.TabIndex = 6
@@ -143,7 +130,6 @@ Partial Class ProgressPanel
         'Panel1
         '
         Me.Panel1.Controls.Add(Me.LogView)
-        Me.Panel1.Controls.Add(Me.Panel2)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(3, 17)
         Me.Panel1.Name = "Panel1"
@@ -160,99 +146,8 @@ Partial Class ProgressPanel
         Me.LogView.Name = "LogView"
         Me.LogView.ReadOnly = True
         Me.LogView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.LogView.Size = New System.Drawing.Size(690, 110)
+        Me.LogView.Size = New System.Drawing.Size(690, 133)
         Me.LogView.TabIndex = 2
-        '
-        'Panel2
-        '
-        Me.Panel2.Controls.Add(Me.ToolStrip1)
-        Me.Panel2.Controls.Add(Me.Panel3)
-        Me.Panel2.Controls.Add(Me.logActions)
-        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel2.Location = New System.Drawing.Point(0, 110)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(690, 23)
-        Me.Panel2.TabIndex = 1
-        '
-        'ToolStrip1
-        '
-        Me.ToolStrip1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ToolStrip1.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1})
-        Me.ToolStrip1.Location = New System.Drawing.Point(65, 0)
-        Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.ToolStrip1.Size = New System.Drawing.Size(425, 23)
-        Me.ToolStrip1.TabIndex = 4
-        Me.ToolStrip1.Text = "ToolStrip1"
-        '
-        'ToolStripButton1
-        '
-        Me.ToolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton1.Image = Global.DISMTools.My.Resources.Resources.save_glyph
-        Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton1.Name = "ToolStripButton1"
-        Me.ToolStripButton1.Size = New System.Drawing.Size(23, 20)
-        Me.ToolStripButton1.Text = "Save"
-        '
-        'Panel3
-        '
-        Me.Panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Panel3.Controls.Add(Me.ToolStrip2)
-        Me.Panel3.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Panel3.Location = New System.Drawing.Point(490, 0)
-        Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(200, 23)
-        Me.Panel3.TabIndex = 3
-        '
-        'ToolStrip2
-        '
-        Me.ToolStrip2.CanOverflow = False
-        Me.ToolStrip2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ToolStrip2.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ToolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton2, Me.ToolStripLabel1, Me.ToolStripLabel2})
-        Me.ToolStrip2.Location = New System.Drawing.Point(0, 0)
-        Me.ToolStrip2.Name = "ToolStrip2"
-        Me.ToolStrip2.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.ToolStrip2.Size = New System.Drawing.Size(198, 21)
-        Me.ToolStrip2.TabIndex = 5
-        Me.ToolStrip2.Text = "ToolStrip2"
-        '
-        'ToolStripButton2
-        '
-        Me.ToolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton2.Image = Global.DISMTools.My.Resources.Resources.hide_glyph
-        Me.ToolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton2.Name = "ToolStripButton2"
-        Me.ToolStripButton2.Size = New System.Drawing.Size(23, 18)
-        Me.ToolStripButton2.Text = "ToolStripButton2"
-        '
-        'ToolStripLabel1
-        '
-        Me.ToolStripLabel1.BackColor = System.Drawing.SystemColors.Control
-        Me.ToolStripLabel1.Name = "ToolStripLabel1"
-        Me.ToolStripLabel1.Size = New System.Drawing.Size(83, 18)
-        Me.ToolStripLabel1.Text = "Warnings: warn"
-        '
-        'ToolStripLabel2
-        '
-        Me.ToolStripLabel2.BackColor = System.Drawing.SystemColors.Control
-        Me.ToolStripLabel2.Name = "ToolStripLabel2"
-        Me.ToolStripLabel2.Size = New System.Drawing.Size(57, 18)
-        Me.ToolStripLabel2.Text = "Errors: err"
-        '
-        'logActions
-        '
-        Me.logActions.BackColor = System.Drawing.SystemColors.Control
-        Me.logActions.Dock = System.Windows.Forms.DockStyle.Left
-        Me.logActions.Location = New System.Drawing.Point(0, 0)
-        Me.logActions.Name = "logActions"
-        Me.logActions.Size = New System.Drawing.Size(65, 23)
-        Me.logActions.TabIndex = 2
-        Me.logActions.Text = "Log actions:"
-        Me.logActions.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'LogButton
         '
@@ -342,14 +237,6 @@ Partial Class ProgressPanel
         Me.GroupBox1.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
-        Me.Panel2.ResumeLayout(False)
-        Me.Panel2.PerformLayout()
-        Me.ToolStrip1.ResumeLayout(False)
-        Me.ToolStrip1.PerformLayout()
-        Me.Panel3.ResumeLayout(False)
-        Me.Panel3.PerformLayout()
-        Me.ToolStrip2.ResumeLayout(False)
-        Me.ToolStrip2.PerformLayout()
         Me.BodyPanel.ResumeLayout(False)
         Me.BodyPanel.PerformLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
@@ -367,16 +254,7 @@ Partial Class ProgressPanel
     Friend WithEvents taskCountLbl As System.Windows.Forms.Label
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
-    Friend WithEvents Panel2 As System.Windows.Forms.Panel
-    Friend WithEvents logActions As System.Windows.Forms.Label
-    Friend WithEvents ToolStrip1 As System.Windows.Forms.ToolStrip
-    Friend WithEvents ToolStripButton1 As System.Windows.Forms.ToolStripButton
-    Friend WithEvents Panel3 As System.Windows.Forms.Panel
-    Friend WithEvents ToolStrip2 As System.Windows.Forms.ToolStrip
-    Friend WithEvents ToolStripButton2 As System.Windows.Forms.ToolStripButton
     Friend WithEvents LogButton As System.Windows.Forms.Button
-    Friend WithEvents ToolStripLabel1 As System.Windows.Forms.ToolStripLabel
-    Friend WithEvents ToolStripLabel2 As System.Windows.Forms.ToolStripLabel
     Friend WithEvents ProgressBW As System.ComponentModel.BackgroundWorker
     Friend WithEvents LogView As System.Windows.Forms.TextBox
     Friend WithEvents BodyPanel As System.Windows.Forms.Panel

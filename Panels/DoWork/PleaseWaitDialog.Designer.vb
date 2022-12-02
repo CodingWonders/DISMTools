@@ -26,6 +26,7 @@ Partial Class PleaseWaitDialog
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.Sup_DISMProc = New System.Diagnostics.Process()
         Me.Panel1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -76,6 +77,17 @@ Partial Class PleaseWaitDialog
         Me.PictureBox1.TabIndex = 1
         Me.PictureBox1.TabStop = False
         '
+        'Sup_DISMProc
+        '
+        Me.Sup_DISMProc.EnableRaisingEvents = True
+        Me.Sup_DISMProc.StartInfo.Domain = ""
+        Me.Sup_DISMProc.StartInfo.LoadUserProfile = False
+        Me.Sup_DISMProc.StartInfo.Password = Nothing
+        Me.Sup_DISMProc.StartInfo.StandardErrorEncoding = Nothing
+        Me.Sup_DISMProc.StartInfo.StandardOutputEncoding = Nothing
+        Me.Sup_DISMProc.StartInfo.UserName = ""
+        Me.Sup_DISMProc.SynchronizingObject = Me
+        '
         'PleaseWaitDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -102,5 +114,6 @@ Partial Class PleaseWaitDialog
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents Sup_DISMProc As System.Diagnostics.Process
 
 End Class
