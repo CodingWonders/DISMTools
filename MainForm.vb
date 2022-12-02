@@ -73,6 +73,9 @@ Public Class MainForm
     Public ScratchDir As String
     Public EnglishOutput As Boolean
     Public ReportView As Integer
+    ' 0.1.1 settings
+    Public LogFontIsBold As Boolean
+    Public LogFontSize As Integer
 
     ' These are the variables that need to change when testing setting validity
     Public isExeProblematic As Boolean
@@ -84,10 +87,22 @@ Public Class MainForm
     ' Detect whether project is a SQL Server project or a DISMTools project
     Public isSqlServerDTProj As Boolean
 
-    ' Set branch name
+    ' Set branch name and codenames
     Public dtBranch As String = "stable"
 
+    ' Arrays and other variables used on background processes
+    Public imgPackageNames(65535) As String
+    Public imgPackageState(65535) As String
+    Public imgFeatureNames(65535) As String
+    Public imgFeatureState(65535) As String
+
+    ' Perform image unmount operations when pressing on buttons
+    Public imgCommitOperation As Integer = -1 ' 0: commit; 1: discard
+
+    Dim DismVersionChecker As FileVersionInfo
+
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Control.CheckForIllegalCrossThreadCalls = False
         BranchTSMI.Text = dtBranch
         If Debugger.IsAttached Then
             BranchTSMI.Visible = True
@@ -96,6 +111,9 @@ Public Class MainForm
         LoadDTSettings(1)
         imgStatus = 0
         ChangeImgStatus()
+        If DismExe <> "" Then
+            DismVersionChecker = FileVersionInfo.GetVersionInfo(DismExe)
+        End If
     End Sub
 
     Sub ChangeImgStatus()
@@ -107,6 +125,328 @@ Public Class MainForm
             LinkLabel1.Visible = False
         End If
     End Sub
+
+    ''' <summary>
+    ''' Set colors on any surface with the "Professional" RenderMode in dark mode
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Class DarkModeColorTable
+        Inherits ProfessionalColorTable
+
+        Public Overrides ReadOnly Property ToolStripBorder As Color
+            Get
+                Return Color.FromArgb(32, 32, 32)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ToolStripDropDownBackground As Color
+            Get
+                Return Color.FromArgb(32, 32, 32)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ToolStripGradientBegin As Color
+            Get
+                Return Color.FromArgb(32, 32, 32)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ToolStripGradientMiddle As Color
+            Get
+                Return Color.FromArgb(32, 32, 32)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ToolStripGradientEnd As Color
+            Get
+                Return Color.FromArgb(32, 32, 32)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property MenuItemSelected As Color
+            Get
+                Return Color.FromArgb(39, 39, 39)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property MenuItemBorder As Color
+            Get
+                Return Color.FromArgb(39, 39, 39)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property MenuBorder As Color
+            Get
+                Return Color.FromArgb(39, 39, 39)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property MenuItemSelectedGradientBegin As Color
+            Get
+                Return Color.FromArgb(62, 62, 64)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property MenuItemSelectedGradientEnd As Color
+            Get
+                Return Color.FromArgb(62, 62, 64)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property MenuItemPressedGradientBegin As Color
+            Get
+                Return Color.FromArgb(27, 27, 28)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property MenuItemPressedGradientEnd As Color
+            Get
+                Return Color.FromArgb(27, 27, 28)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property MenuItemPressedGradientMiddle As Color
+            Get
+                Return Color.FromArgb(27, 27, 28)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ToolStripContentPanelGradientBegin As Color
+            Get
+                Return Color.FromArgb(27, 27, 28)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ToolStripContentPanelGradientEnd As Color
+            Get
+                Return Color.FromArgb(27, 27, 28)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ImageMarginGradientBegin As Color
+            Get
+                Return Color.FromArgb(27, 27, 28)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ImageMarginGradientEnd As Color
+            Get
+                Return Color.FromArgb(27, 27, 28)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ImageMarginGradientMiddle As Color
+            Get
+                Return Color.FromArgb(27, 27, 28)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ToolStripPanelGradientBegin As Color
+            Get
+                Return Color.FromArgb(48, 48, 48)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ButtonSelectedGradientBegin As Color
+            Get
+                Return Color.FromArgb(62, 62, 64)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ButtonSelectedGradientMiddle As Color
+            Get
+                Return Color.FromArgb(62, 62, 64)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ButtonSelectedGradientEnd As Color
+            Get
+                Return Color.FromArgb(62, 62, 64)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ButtonSelectedBorder As Color
+            Get
+                Return Color.FromArgb(62, 62, 64)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ButtonPressedGradientBegin As Color
+            Get
+                Return Color.FromArgb(0, 122, 204)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ButtonPressedGradientMiddle As Color
+            Get
+                Return Color.FromArgb(0, 122, 204)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ButtonPressedGradientEnd As Color
+            Get
+                Return Color.FromArgb(0, 122, 204)
+            End Get
+        End Property
+    End Class
+
+    ''' <summary>
+    ''' Set colors on any surface with the "Professional" RenderMode in light mode
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Class LightModeColorTable
+        Inherits ProfessionalColorTable
+
+        Public Overrides ReadOnly Property ToolStripBorder As Color
+            Get
+                Return Color.FromArgb(239, 239, 242)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ToolStripDropDownBackground As Color
+            Get
+                Return Color.FromArgb(239, 239, 242)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ToolStripGradientBegin As Color
+            Get
+                Return Color.FromArgb(239, 239, 242)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ToolStripGradientMiddle As Color
+            Get
+                Return Color.FromArgb(239, 239, 242)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ToolStripGradientEnd As Color
+            Get
+                Return Color.FromArgb(239, 239, 242)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property MenuItemSelected As Color
+            Get
+                Return Color.FromArgb(254, 254, 254)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property MenuItemBorder As Color
+            Get
+                Return Color.FromArgb(239, 239, 239)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property MenuBorder As Color
+            Get
+                Return Color.FromArgb(239, 239, 239)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property MenuItemSelectedGradientBegin As Color
+            Get
+                Return Color.FromArgb(254, 254, 254)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property MenuItemSelectedGradientEnd As Color
+            Get
+                Return Color.FromArgb(254, 254, 254)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property MenuItemPressedGradientBegin As Color
+            Get
+                Return Color.FromArgb(231, 232, 236)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property MenuItemPressedGradientEnd As Color
+            Get
+                Return Color.FromArgb(231, 232, 236)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property MenuItemPressedGradientMiddle As Color
+            Get
+                Return Color.FromArgb(231, 232, 236)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ToolStripContentPanelGradientBegin As Color
+            Get
+                Return Color.FromArgb(231, 232, 236)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ToolStripContentPanelGradientEnd As Color
+            Get
+                Return Color.FromArgb(231, 232, 236)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ImageMarginGradientBegin As Color
+            Get
+                Return Color.FromArgb(231, 232, 236)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ImageMarginGradientEnd As Color
+            Get
+                Return Color.FromArgb(231, 232, 236)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ImageMarginGradientMiddle As Color
+            Get
+                Return Color.FromArgb(231, 232, 236)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ButtonSelectedGradientBegin As Color
+            Get
+                Return Color.FromArgb(254, 254, 254)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ButtonSelectedGradientMiddle As Color
+            Get
+                Return Color.FromArgb(254, 254, 254)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ButtonSelectedGradientEnd As Color
+            Get
+                Return Color.FromArgb(254, 254, 254)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ButtonSelectedBorder As Color
+            Get
+                Return Color.FromArgb(254, 254, 254)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ButtonPressedGradientBegin As Color
+            Get
+                Return Color.FromArgb(0, 122, 204)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ButtonPressedGradientMiddle As Color
+            Get
+                Return Color.FromArgb(0, 122, 204)
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property ButtonPressedGradientEnd As Color
+            Get
+                Return Color.FromArgb(0, 122, 204)
+            End Get
+        End Property
+    End Class
 
     Sub LoadDTSettings(LoadMode As Integer)
         Debug.WriteLine("DISMTools, version " & My.Application.Info.Version.ToString() & " (" & dtBranch & ")" & CrLf & _
@@ -165,8 +505,14 @@ Public Class MainForm
                 ' Detect log font setting. Do note that, if a system does not contain the font set in this program,
                 ' it will revert to "Courier New"
                 LogFont = DTSettingForm.RichTextBox1.Lines(10).Replace("LogFont=", "").Trim().Replace(Quote, "").Trim()
+                LogFontSize = CInt(DTSettingForm.RichTextBox1.Lines(11).Replace("LogFontSi=", "").Trim())
+                If DTSettingForm.RichTextBox1.Text.Contains("LogFontBold=0") Then
+                    LogFontIsBold = False
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("LogFontBold=1") Then
+                    LogFontIsBold = True
+                End If
                 ' Detect log file path. If file does not exist, create one
-                LogFile = DTSettingForm.RichTextBox1.Lines(13).Replace("LogFile=", "").Trim().Replace(Quote, "").Trim()
+                LogFile = DTSettingForm.RichTextBox1.Lines(15).Replace("LogFile=", "").Trim().Replace(Quote, "").Trim()
                 ' Detect log file level: 1 - Errors only
                 '                        2 - Errors and warnings
                 '                        3 - Errors, warnings and informations
@@ -235,6 +581,8 @@ Public Class MainForm
                             "ColorMode            =    " & ColorMode & CrLf & _
                             "Language             =    " & Language & CrLf & _
                             "LogFont              =    " & Quote & LogFont & Quote & CrLf & _
+                            "LogFontSize          =    " & LogFontSize & CrLf & _
+                            "LogFontIsBold        =    " & LogFontIsBold & CrLf & _
                             "LogLevel             =    " & LogLevel & CrLf & _
                             "ImgOperationMode     =    " & ImgOperationMode & CrLf & _
                             "QuietOperations      =    " & QuietOperations & CrLf & _
@@ -284,6 +632,105 @@ Public Class MainForm
         End If
     End Sub
 
+#Region "Background Processes"  ' These will be called later on
+
+    ''' <summary>
+    ''' Gets installed packages in an image and puts them in separate arrays
+    ''' </summary>
+    Sub GetImagePackages()
+        ' Get image packages and their state
+        File.WriteAllText(".\bin\exthelpers\pkginfo.bat", _
+                          "@echo off" & CrLf & _
+                          "dism /English /image=" & MountDir & " /get-packages | findstr /c:" & Quote & "Package Identity : " & Quote & " > .\imgpkgnames" & CrLf & _
+                          "dism /English /image=" & MountDir & " /get-packages | findstr /c:" & Quote & "State : " & Quote & " > .\imgpkgstate")
+        ImgProcesses.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
+        ImgProcesses.StartInfo.Arguments = "/c " & Directory.GetCurrentDirectory() & "\bin\exthelpers\pkginfo.bat"
+        ImgProcesses.StartInfo.CreateNoWindow = True
+        ImgProcesses.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+        ImgProcesses.Start()
+        Do Until ImgProcesses.HasExited
+            If ImgProcesses.HasExited Then
+                Exit Do
+            End If
+        Loop
+        If ImgProcesses.ExitCode = 0 Then
+            Dim pkgNameRTB As New RichTextBox With {
+                .Text = My.Computer.FileSystem.ReadAllText(".\imgpkgnames")
+            }
+            Dim pkgStateRTB As New RichTextBox With {
+                .Text = My.Computer.FileSystem.ReadAllText(".\imgpkgstate")
+            }
+            For x = 0 To pkgNameRTB.Lines.Count - 1
+                imgPackageNames(x) = pkgNameRTB.Lines(x).ToString()
+            Next
+            For x = 0 To pkgStateRTB.Lines.Count - 1
+                imgPackageState(x) = pkgStateRTB.Lines(x).ToString()
+            Next
+        Else
+
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Gets present features in an image and puts them in separate arrays
+    ''' </summary>
+    Sub GetImageFeatures()
+        ' Get image features and their state
+        File.WriteAllText(".\bin\exthelpers\featinfo.bat", _
+                          "@echo off" & CrLf & _
+                          "dism /English /image=" & MountDir & " /get-features | findstr /c:" & Quote & "Feature Name : " & Quote & " > .\imgfeatnames" & CrLf & _
+                          "dism /English /image=" & MountDir & " /get-features | findstr /c:" & Quote & "State : " & Quote & " > .\imgfeatstate")
+        ImgProcesses.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
+        ImgProcesses.StartInfo.Arguments = "/c " & Directory.GetCurrentDirectory() & "\bin\exthelpers\featinfo.bat"
+        ImgProcesses.StartInfo.CreateNoWindow = True
+        ImgProcesses.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+        ImgProcesses.Start()
+        Do Until ImgProcesses.HasExited
+            If ImgProcesses.HasExited Then
+                Exit Do
+            End If
+        Loop
+        If ImgProcesses.ExitCode = 0 Then
+            Dim featureNameRTB As New RichTextBox With {
+                .Text = My.Computer.FileSystem.ReadAllText(".\imgfeatnames")
+            }
+            Dim featureStateRTB As New RichTextBox With {
+                .Text = My.Computer.FileSystem.ReadAllText(".\imgfeatstate")
+            }
+            For x = 0 To featureNameRTB.Lines.Count - 1
+                imgFeatureNames(x) = featureNameRTB.Lines(x).ToString()
+            Next
+            For x = 0 To featureStateRTB.Lines.Count - 1
+                imgFeatureState(x) = featureStateRTB.Lines(x).ToString()
+            Next
+        Else
+
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Gets installed provisioned APPX packages in an image and puts them in separate arrays. This is only for Windows 8 and newer
+    ''' </summary>
+    Sub GetImageAppxPackages()
+
+    End Sub
+
+    ''' <summary>
+    ''' Gets installed Features on Demand (capabilities) in an image and puts them in separate arrays. This is only for Windows 10 or newer
+    ''' </summary>
+    Sub GetImageCapabilities()
+
+    End Sub
+
+    ''' <summary>
+    ''' Gets installed drivers in an image and puts them in separate arrays
+    ''' </summary>
+    Sub GetImageDrivers()
+
+    End Sub
+
+#End Region
+
     Sub GenerateDTSettings()
         DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.1) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & "\Windows\system32\dism.exe" & Quote)
@@ -293,6 +740,8 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText("ColorMode=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "Language=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFont=" & Quote & "Courier New" & Quote)
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontSi=10")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontBold=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & "\Windows\Logs\DISM\DISM.log" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=3")
@@ -342,6 +791,12 @@ Public Class MainForm
                 ' This version does not support additional languages
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "Language=1")
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFont=" & Quote & LogFont & Quote)
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontSi=" & LogFontSize)
+                If LogFontIsBold Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontBold=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontBold=0")
+                End If
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
                 DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & LogFile & Quote)
                 Select Case LogLevel
@@ -409,6 +864,11 @@ Public Class MainForm
 
     End Sub
 
+    ''' <summary>
+    ''' Change program colors accordingly. Due to developer's preference, match those of VS2012
+    ''' </summary>
+    ''' <param name="ColorCode"></param>
+    ''' <remarks></remarks>
     Sub ChangePrgColors(ColorCode As Integer)
         Select Case ColorCode
             Case 0
@@ -417,47 +877,57 @@ Public Class MainForm
                     Dim ColorMode As String = ColorModeRk.GetValue("AppsUseLightTheme").ToString()
                     ColorModeRk.Close()
                     If ColorMode = "0" Then
-                        BackColor = Color.Black
+                        BackColor = Color.FromArgb(48, 48, 48)
                         ForeColor = Color.White
-                        HomePanel.BackColor = Color.Black
+                        HomePanel.BackColor = Color.FromArgb(40, 40, 43)
                         HomePanel.ForeColor = Color.White
-                        SidePanel.BackColor = Color.Black
+                        SidePanel.BackColor = Color.FromArgb(31, 31, 34)
                         SidePanel.ForeColor = Color.White
-                        WelcomePanel.BackColor = Color.Black
+                        WelcomePanel.BackColor = Color.FromArgb(40, 40, 43)
                         WelcomePanel.ForeColor = Color.White
-                        PrjPanel.BackColor = Color.Black
+                        PrjPanel.BackColor = Color.FromArgb(40, 40, 43)
                         PrjPanel.ForeColor = Color.White
-                        MenuStrip1.BackColor = Color.Black
+                        MenuStrip1.BackColor = Color.FromArgb(48, 48, 48)
                         MenuStrip1.ForeColor = Color.White
-                        StatusStrip.BackColor = Color.Black
+                        For Each item As ToolStripDropDownItem In MenuStrip1.Items
+                            item.DropDown.BackColor = Color.FromArgb(27, 27, 28)
+                            item.DropDown.ForeColor = Color.White
+                            Try
+                                For Each dropDownItem As ToolStripDropDownItem In item.DropDownItems
+                                    dropDownItem.DropDown.BackColor = Color.FromArgb(27, 27, 28)
+                                    dropDownItem.DropDown.ForeColor = Color.White
+                                Next
+                            Catch ex As Exception
+                                Continue For
+                            End Try
+                        Next
+                        StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
                         StatusStrip.ForeColor = Color.White
-                        TabPage1.BackColor = Color.Black
+                        TabPage1.BackColor = Color.FromArgb(40, 40, 43)
                         TabPage1.ForeColor = Color.White
-                        TabPage2.BackColor = Color.Black
+                        TabPage2.BackColor = Color.FromArgb(40, 40, 43)
                         TabPage2.ForeColor = Color.White
-                        TabPage3.BackColor = Color.Black
+                        TabPage3.BackColor = Color.FromArgb(40, 40, 43)
                         TabPage3.ForeColor = Color.White
-                        WelcomeTab.BackColor = Color.Black
+                        WelcomeTab.BackColor = Color.FromArgb(40, 40, 43)
                         WelcomeTab.ForeColor = Color.White
-                        NewsFeedTab.BackColor = Color.Black
+                        NewsFeedTab.BackColor = Color.FromArgb(40, 40, 43)
                         NewsFeedTab.ForeColor = Color.White
-                        VideosTab.BackColor = Color.Black
+                        VideosTab.BackColor = Color.FromArgb(40, 40, 43)
                         VideosTab.ForeColor = Color.White
                         PictureBox5.Image = New Bitmap(My.Resources.logo_mainscr_dark)
-                        ToolStrip1.BackColor = Color.Black
+                        ToolStrip1.BackColor = Color.FromArgb(48, 48, 48)
                         ToolStrip1.ForeColor = Color.White
-                        ToolStrip2.BackColor = Color.Black
+                        ToolStrip2.BackColor = Color.FromArgb(48, 48, 48)
                         ToolStrip2.ForeColor = Color.White
-                        prjTreeView.BackColor = Color.Black
+                        prjTreeView.BackColor = Color.FromArgb(37, 37, 38)
                         prjTreeView.ForeColor = Color.White
-                        GroupBox1.BackColor = Color.Black
+                        GroupBox1.BackColor = Color.FromArgb(40, 40, 43)
                         GroupBox1.ForeColor = Color.White
-                        GroupBox2.BackColor = Color.Black
+                        GroupBox2.BackColor = Color.FromArgb(40, 40, 43)
                         GroupBox2.ForeColor = Color.White
-                        GroupBox3.BackColor = Color.Black
+                        GroupBox3.BackColor = Color.FromArgb(40, 40, 43)
                         GroupBox3.ForeColor = Color.White
-                        ProjActions.BackColor = Color.Black
-                        ProjActions.ForeColor = Color.White
                         Button1.FlatStyle = FlatStyle.Flat
                         Button2.FlatStyle = FlatStyle.Flat
                         Button3.FlatStyle = FlatStyle.Flat
@@ -484,59 +954,248 @@ Public Class MainForm
                         Catch ex As Exception
                             ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
                         End Try
-                        MenuStrip1.RenderMode = ToolStripRenderMode.System
+                        MenuStrip1.RenderMode = ToolStripRenderMode.Professional
+                        MenuStrip1.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                        ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                        ToolStrip2.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                        PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                        FeatureInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                        PkgInfoCMS.ForeColor = Color.White
+                        FeatureInfoCMS.ForeColor = Color.White
                         InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph_dark)
                         BranchTSMI.Image = New Bitmap(My.Resources.branch_dark)
                     ElseIf ColorMode = "1" Then
-
+                        BackColor = Color.FromArgb(239, 239, 242)
+                        ForeColor = Color.Black
+                        HomePanel.BackColor = Color.White
+                        HomePanel.ForeColor = Color.Black
+                        SidePanel.BackColor = Color.FromArgb(230, 230, 230)
+                        SidePanel.ForeColor = Color.Black
+                        WelcomePanel.BackColor = Color.White
+                        WelcomePanel.ForeColor = Color.Black
+                        PrjPanel.BackColor = Color.FromArgb(240, 240, 240)
+                        PrjPanel.ForeColor = Color.Black
+                        MenuStrip1.BackColor = Color.FromArgb(239, 239, 242)
+                        MenuStrip1.ForeColor = Color.Black
+                        For Each item As ToolStripDropDownItem In MenuStrip1.Items
+                            item.DropDown.BackColor = Color.FromArgb(231, 232, 236)
+                            item.DropDown.ForeColor = Color.Black
+                            Try
+                                For Each dropDownItem As ToolStripDropDownItem In item.DropDownItems
+                                    dropDownItem.DropDown.BackColor = Color.FromArgb(231, 232, 236)
+                                    dropDownItem.DropDown.ForeColor = Color.Black
+                                Next
+                            Catch ex As Exception
+                                Continue For
+                            End Try
+                        Next
+                        StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
+                        StatusStrip.ForeColor = Color.White
+                        TabPage1.BackColor = Color.White
+                        TabPage1.ForeColor = Color.Black
+                        TabPage2.BackColor = Color.White
+                        TabPage2.ForeColor = Color.Black
+                        TabPage3.BackColor = Color.White
+                        TabPage3.ForeColor = Color.Black
+                        WelcomeTab.BackColor = Color.White
+                        WelcomeTab.ForeColor = Color.Black
+                        NewsFeedTab.BackColor = Color.White
+                        NewsFeedTab.ForeColor = Color.Black
+                        VideosTab.BackColor = Color.White
+                        VideosTab.ForeColor = Color.Black
+                        PictureBox5.Image = New Bitmap(My.Resources.logo_mainscr_light)
+                        ToolStrip1.BackColor = Color.FromArgb(239, 239, 242)
+                        ToolStrip1.ForeColor = Color.Black
+                        ToolStrip2.BackColor = Color.FromArgb(239, 239, 242)
+                        ToolStrip2.ForeColor = Color.Black
+                        prjTreeView.BackColor = Color.FromArgb(246, 246, 246)
+                        prjTreeView.ForeColor = Color.Black
+                        GroupBox1.BackColor = Color.White
+                        GroupBox1.ForeColor = Color.Black
+                        GroupBox2.BackColor = Color.White
+                        GroupBox2.ForeColor = Color.Black
+                        GroupBox3.BackColor = Color.White
+                        GroupBox3.ForeColor = Color.Black
+                        Button1.FlatStyle = FlatStyle.Standard
+                        Button2.FlatStyle = FlatStyle.Standard
+                        Button3.FlatStyle = FlatStyle.Standard
+                        Button4.FlatStyle = FlatStyle.Standard
+                        Button5.FlatStyle = FlatStyle.Standard
+                        Button6.FlatStyle = FlatStyle.Standard
+                        Button7.FlatStyle = FlatStyle.Standard
+                        Button8.FlatStyle = FlatStyle.Standard
+                        Button9.FlatStyle = FlatStyle.Standard
+                        Button10.FlatStyle = FlatStyle.Standard
+                        Button11.FlatStyle = FlatStyle.Standard
+                        Button12.FlatStyle = FlatStyle.Standard
+                        Button13.FlatStyle = FlatStyle.Standard
+                        ToolStripButton2.Image = New Bitmap(My.Resources.save_glyph)
+                        ToolStripButton3.Image = New Bitmap(My.Resources.prj_unload_glyph)
+                        ToolStripButton4.Image = New Bitmap(My.Resources.progress_window)
+                        RefreshViewTSB.Image = New Bitmap(My.Resources.refresh_glyph)
+                        Try
+                            If prjTreeView.SelectedNode.IsExpanded Then
+                                ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph)
+                            Else
+                                ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph)
+                            End If
+                        Catch ex As Exception
+                            ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph)
+                        End Try
+                        MenuStrip1.RenderMode = ToolStripRenderMode.Professional
+                        MenuStrip1.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                        ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                        ToolStrip2.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                        PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                        FeatureInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                        PkgInfoCMS.ForeColor = Color.Black
+                        FeatureInfoCMS.ForeColor = Color.Black
+                        InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph)
+                        BranchTSMI.Image = New Bitmap(My.Resources.branch)
                     End If
                 Catch ex As Exception
-
+                    ChangePrgColors(1)
                 End Try
             Case 1
-
-            Case 2
-                BackColor = Color.Black
-                ForeColor = Color.White
-                HomePanel.BackColor = Color.Black
-                HomePanel.ForeColor = Color.White
-                SidePanel.BackColor = Color.Black
-                SidePanel.ForeColor = Color.White
-                WelcomePanel.BackColor = Color.Black
-                WelcomePanel.ForeColor = Color.White
-                PrjPanel.BackColor = Color.Black
-                PrjPanel.ForeColor = Color.White
-                MenuStrip1.BackColor = Color.Black
-                MenuStrip1.ForeColor = Color.White
-                StatusStrip.BackColor = Color.Black
+                BackColor = Color.FromArgb(239, 239, 242)
+                ForeColor = Color.Black
+                HomePanel.BackColor = Color.White
+                HomePanel.ForeColor = Color.Black
+                SidePanel.BackColor = Color.FromArgb(230, 230, 230)
+                SidePanel.ForeColor = Color.Black
+                WelcomePanel.BackColor = Color.White
+                WelcomePanel.ForeColor = Color.Black
+                PrjPanel.BackColor = Color.FromArgb(240, 240, 240)
+                PrjPanel.ForeColor = Color.Black
+                MenuStrip1.BackColor = Color.FromArgb(239, 239, 242)
+                MenuStrip1.ForeColor = Color.Black
+                For Each item As ToolStripDropDownItem In MenuStrip1.Items
+                    item.DropDown.BackColor = Color.FromArgb(231, 232, 236)
+                    item.DropDown.ForeColor = Color.Black
+                    Try
+                        For Each dropDownItem As ToolStripDropDownItem In item.DropDownItems
+                            dropDownItem.DropDown.BackColor = Color.FromArgb(231, 232, 236)
+                            dropDownItem.DropDown.ForeColor = Color.Black
+                        Next
+                    Catch ex As Exception
+                        Continue For
+                    End Try
+                Next
+                StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
                 StatusStrip.ForeColor = Color.White
-                TabPage1.BackColor = Color.Black
+                TabPage1.BackColor = Color.White
+                TabPage1.ForeColor = Color.Black
+                TabPage2.BackColor = Color.White
+                TabPage2.ForeColor = Color.Black
+                TabPage3.BackColor = Color.White
+                TabPage3.ForeColor = Color.Black
+                WelcomeTab.BackColor = Color.White
+                WelcomeTab.ForeColor = Color.Black
+                NewsFeedTab.BackColor = Color.White
+                NewsFeedTab.ForeColor = Color.Black
+                VideosTab.BackColor = Color.White
+                VideosTab.ForeColor = Color.Black
+                PictureBox5.Image = New Bitmap(My.Resources.logo_mainscr_light)
+                ToolStrip1.BackColor = Color.FromArgb(239, 239, 242)
+                ToolStrip1.ForeColor = Color.Black
+                ToolStrip2.BackColor = Color.FromArgb(239, 239, 242)
+                ToolStrip2.ForeColor = Color.Black
+                prjTreeView.BackColor = Color.FromArgb(246, 246, 246)
+                prjTreeView.ForeColor = Color.Black
+                GroupBox1.BackColor = Color.White
+                GroupBox1.ForeColor = Color.Black
+                GroupBox2.BackColor = Color.White
+                GroupBox2.ForeColor = Color.Black
+                GroupBox3.BackColor = Color.White
+                GroupBox3.ForeColor = Color.Black
+                Button1.FlatStyle = FlatStyle.Standard
+                Button2.FlatStyle = FlatStyle.Standard
+                Button3.FlatStyle = FlatStyle.Standard
+                Button4.FlatStyle = FlatStyle.Standard
+                Button5.FlatStyle = FlatStyle.Standard
+                Button6.FlatStyle = FlatStyle.Standard
+                Button7.FlatStyle = FlatStyle.Standard
+                Button8.FlatStyle = FlatStyle.Standard
+                Button9.FlatStyle = FlatStyle.Standard
+                Button10.FlatStyle = FlatStyle.Standard
+                Button11.FlatStyle = FlatStyle.Standard
+                Button12.FlatStyle = FlatStyle.Standard
+                Button13.FlatStyle = FlatStyle.Standard
+                ToolStripButton2.Image = New Bitmap(My.Resources.save_glyph)
+                ToolStripButton3.Image = New Bitmap(My.Resources.prj_unload_glyph)
+                ToolStripButton4.Image = New Bitmap(My.Resources.progress_window)
+                RefreshViewTSB.Image = New Bitmap(My.Resources.refresh_glyph)
+                Try
+                    If prjTreeView.SelectedNode.IsExpanded Then
+                        ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph)
+                    Else
+                        ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph)
+                    End If
+                Catch ex As Exception
+                    ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph)
+                End Try
+                MenuStrip1.RenderMode = ToolStripRenderMode.Professional
+                MenuStrip1.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                ToolStrip2.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                FeatureInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                PkgInfoCMS.ForeColor = Color.Black
+                FeatureInfoCMS.ForeColor = Color.Black
+                InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph)
+                BranchTSMI.Image = New Bitmap(My.Resources.branch)
+            Case 2
+                BackColor = Color.FromArgb(48, 48, 48)
+                ForeColor = Color.White
+                HomePanel.BackColor = Color.FromArgb(40, 40, 43)
+                HomePanel.ForeColor = Color.White
+                SidePanel.BackColor = Color.FromArgb(31, 31, 34)
+                SidePanel.ForeColor = Color.White
+                WelcomePanel.BackColor = Color.FromArgb(40, 40, 43)
+                WelcomePanel.ForeColor = Color.White
+                PrjPanel.BackColor = Color.FromArgb(40, 40, 43)
+                PrjPanel.ForeColor = Color.White
+                MenuStrip1.BackColor = Color.FromArgb(48, 48, 48)
+                MenuStrip1.ForeColor = Color.White
+                For Each item As ToolStripDropDownItem In MenuStrip1.Items
+                    item.DropDown.BackColor = Color.FromArgb(27, 27, 28)
+                    item.DropDown.ForeColor = Color.White
+                    Try
+                        For Each dropDownItem As ToolStripDropDownItem In item.DropDownItems
+                            dropDownItem.DropDown.BackColor = Color.FromArgb(27, 27, 28)
+                            dropDownItem.DropDown.ForeColor = Color.White
+                        Next
+                    Catch ex As Exception
+                        Continue For
+                    End Try
+                Next
+                StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
+                StatusStrip.ForeColor = Color.White
+                TabPage1.BackColor = Color.FromArgb(40, 40, 43)
                 TabPage1.ForeColor = Color.White
-                TabPage2.BackColor = Color.Black
+                TabPage2.BackColor = Color.FromArgb(40, 40, 43)
                 TabPage2.ForeColor = Color.White
-                TabPage3.BackColor = Color.Black
+                TabPage3.BackColor = Color.FromArgb(40, 40, 43)
                 TabPage3.ForeColor = Color.White
-                WelcomeTab.BackColor = Color.Black
+                WelcomeTab.BackColor = Color.FromArgb(40, 40, 43)
                 WelcomeTab.ForeColor = Color.White
-                NewsFeedTab.BackColor = Color.Black
+                NewsFeedTab.BackColor = Color.FromArgb(40, 40, 43)
                 NewsFeedTab.ForeColor = Color.White
-                VideosTab.BackColor = Color.Black
+                VideosTab.BackColor = Color.FromArgb(40, 40, 43)
                 VideosTab.ForeColor = Color.White
                 PictureBox5.Image = New Bitmap(My.Resources.logo_mainscr_dark)
-                ToolStrip1.BackColor = Color.Black
+                ToolStrip1.BackColor = Color.FromArgb(48, 48, 48)
                 ToolStrip1.ForeColor = Color.White
-                ToolStrip2.BackColor = Color.Black
+                ToolStrip2.BackColor = Color.FromArgb(48, 48, 48)
                 ToolStrip2.ForeColor = Color.White
-                prjTreeView.BackColor = Color.Black
+                prjTreeView.BackColor = Color.FromArgb(37, 37, 38)
                 prjTreeView.ForeColor = Color.White
-                GroupBox1.BackColor = Color.Black
+                GroupBox1.BackColor = Color.FromArgb(40, 40, 43)
                 GroupBox1.ForeColor = Color.White
-                GroupBox2.BackColor = Color.Black
+                GroupBox2.BackColor = Color.FromArgb(40, 40, 43)
                 GroupBox2.ForeColor = Color.White
-                GroupBox3.BackColor = Color.Black
+                GroupBox3.BackColor = Color.FromArgb(40, 40, 43)
                 GroupBox3.ForeColor = Color.White
-                ProjActions.BackColor = Color.Black
-                ProjActions.ForeColor = Color.White
                 Button1.FlatStyle = FlatStyle.Flat
                 Button2.FlatStyle = FlatStyle.Flat
                 Button3.FlatStyle = FlatStyle.Flat
@@ -563,7 +1222,14 @@ Public Class MainForm
                 Catch ex As Exception
                     ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
                 End Try
-                MenuStrip1.RenderMode = ToolStripRenderMode.System
+                MenuStrip1.RenderMode = ToolStripRenderMode.Professional
+                MenuStrip1.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                ToolStrip2.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                FeatureInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                PkgInfoCMS.ForeColor = Color.White
+                FeatureInfoCMS.ForeColor = Color.White
                 InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph_dark)
                 BranchTSMI.Image = New Bitmap(My.Resources.branch_dark)
         End Select
@@ -907,6 +1573,25 @@ Public Class MainForm
     End Sub
 
     Sub UnloadDTProj(IsBeingClosed As Boolean, SaveProject As Boolean, UnmountImg As Boolean)
+        If imgCommitOperation = 0 Then
+            ProgressPanel.OperationNum = 21
+            ProgressPanel.UMountLocalDir = True
+            ProgressPanel.RandomMountDir = ""   ' Hope there isn't anything to set here
+            ProgressPanel.UMountImgIndex = ImgIndex
+            ProgressPanel.MountDir = MountDir
+            ProgressPanel.UMountOp = 0
+            ProgressPanel.ShowDialog()
+            Exit Sub
+        ElseIf imgCommitOperation = 1 Then
+            ProgressPanel.OperationNum = 21
+            ProgressPanel.UMountLocalDir = True
+            ProgressPanel.RandomMountDir = ""   ' Hope there isn't anything to set here
+            ProgressPanel.UMountImgIndex = ImgIndex
+            ProgressPanel.MountDir = MountDir
+            ProgressPanel.UMountOp = 1
+            ProgressPanel.ShowDialog()
+            Exit Sub
+        End If
         If SaveProject Then
             SaveDTProj()
         End If
@@ -997,16 +1682,44 @@ Public Class MainForm
                 Dim KeVerInfo As FileVersionInfo = FileVersionInfo.GetVersionInfo(ProgressPanel.MountDir & "\Windows\system32\ntoskrnl.exe")    ' Get version info from ntoskrnl.exe
                 Dim KeVerStr As String = KeVerInfo.ProductVersion
                 Label17.Text = KeVerStr
-                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " > imgname", _
-                                  ASCII)
+                Select Case DismVersionChecker.ProductMajorPart
+                    Case 6
+                        Select Case DismVersionChecker.ProductMinorPart
+                            Case 1
+                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " > imgname", _
+                                                  ASCII)
+                            Case Is >= 2
+                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " > imgname", _
+                                                  ASCII)
+                        End Select
+                    Case 10
+                        File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " > imgname", _
+                                          ASCII)
+                End Select
                 Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
                 Label18.Text = My.Computer.FileSystem.ReadAllText(".\imgname").Replace("Name : ", "").Trim()
                 File.Delete(".\imgname")
                 File.Delete(".\bin\exthelpers\temp.bat")
-                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
-                                  ASCII)
+                Select Case DismVersionChecker.ProductMajorPart
+                    Case 6
+                        Select Case DismVersionChecker.ProductMinorPart
+                            Case 1
+                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
+                                                  ASCII)
+                            Case Is >= 2
+                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
+                                                  ASCII)
+                        End Select
+                    Case 10
+                        File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
+                                          ASCII)
+                End Select
                 Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
                 Label20.Text = My.Computer.FileSystem.ReadAllText(".\imgdesc").Replace("Description : ", "").Trim()
                 File.Delete(".\imgdesc")
@@ -1022,16 +1735,44 @@ Public Class MainForm
                 Dim KeVerInfo As FileVersionInfo = FileVersionInfo.GetVersionInfo(MountDir & "\Windows\system32\ntoskrnl.exe")    ' Get version info from ntoskrnl.exe
                 Dim KeVerStr As String = KeVerInfo.ProductVersion
                 Label17.Text = KeVerStr
-                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Name" & Quote & " > imgname", _
-                                  ASCII)
+                Select Case DismVersionChecker.ProductMajorPart
+                    Case 6
+                        Select Case DismVersionChecker.ProductMinorPart
+                            Case 1
+                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Name" & Quote & " > imgname", _
+                                                  ASCII)
+                            Case Is >= 2
+                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Name" & Quote & " > imgname", _
+                                                  ASCII)
+                        End Select
+                    Case 10
+                        File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Name" & Quote & " > imgname", _
+                                          ASCII)
+                End Select
                 Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
                 Label18.Text = My.Computer.FileSystem.ReadAllText(".\imgname").Replace("Name : ", "").Trim()
                 File.Delete(".\imgname")
                 File.Delete(".\bin\exthelpers\temp.bat")
-                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
-                                  ASCII)
+                Select Case DismVersionChecker.ProductMajorPart
+                    Case 6
+                        Select Case DismVersionChecker.ProductMinorPart
+                            Case 1
+                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
+                                                  ASCII)
+                            Case Is >= 2
+                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
+                                                  ASCII)
+                        End Select
+                    Case 10
+                        File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
+                                          ASCII)
+                End Select
                 Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
                 Label20.Text = My.Computer.FileSystem.ReadAllText(".\imgdesc").Replace("Description : ", "").Trim()
                 File.Delete(".\imgdesc")
@@ -1047,15 +1788,43 @@ Public Class MainForm
         End Try
         ' Detect whether the image needs a servicing session reload
         Directory.CreateDirectory(projPath & "\tempinfo")
-        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
-                          "@echo off" & CrLf & _
-                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus", ASCII)
+        Select Case DismVersionChecker.ProductMajorPart
+            Case 6
+                Select Case DismVersionChecker.ProductMinorPart
+                    Case 1
+                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                                          "@echo off" & CrLf & _
+                                          "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus", ASCII)
+                    Case Is >= 2
+                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                                          "@echo off" & CrLf & _
+                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus", ASCII)
+                End Select
+            Case 10
+                File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                                  "@echo off" & CrLf & _
+                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus", ASCII)
+        End Select
         Process.Start(".\bin\exthelpers\imginfo.bat").WaitForExit()
         mountedImgStatus = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgmountedstatus", ASCII).Replace("Status : ", "").Trim()
         File.Delete(".\bin\exthelpers\imginfo.bat")
-        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
-                          "@echo off" & CrLf & _
-                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " | find /c " & Quote & "Index" & Quote & " > " & projPath & "\tempinfo\indexcount", ASCII)
+        Select Case DismVersionChecker.ProductMajorPart
+            Case 6
+                Select Case DismVersionChecker.ProductMinorPart
+                    Case 1
+                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                                          "@echo off" & CrLf & _
+                                          "dism /English /get-wiminfo /wimfile=" & SourceImg & " | find /c " & Quote & "Index" & Quote & " > " & projPath & "\tempinfo\indexcount", ASCII)
+                    Case Is >= 2
+                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                                          "@echo off" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " | find /c " & Quote & "Index" & Quote & " > " & projPath & "\tempinfo\indexcount", ASCII)
+                End Select
+            Case 10
+                File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                                  "@echo off" & CrLf & _
+                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " | find /c " & Quote & "Index" & Quote & " > " & projPath & "\tempinfo\indexcount", ASCII)
+        End Select
         Process.Start(".\bin\exthelpers\imginfo.bat").WaitForExit()
         imgIndexCount = CInt(My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\indexcount", ASCII))
         File.Delete(".\bin\exthelpers\imginfo.bat")
@@ -1088,31 +1857,90 @@ Public Class MainForm
                 If Not Directory.Exists(projPath & "\tempinfo") Then
                     Directory.CreateDirectory(projPath & "\tempinfo").Attributes = FileAttributes.Hidden
                 End If
-                File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
-                                  "@echo off" & CrLf & _
-                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf & _
-                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf & _
-                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image Index" & Quote & " /b > " & projPath & "\tempinfo\imgindex" & CrLf & _
-                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mounted Read/Write" & Quote & " /b > " & projPath & "\tempinfo\imgrw" & CrLf & _
-                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & projPath & "\tempinfo\imgmountedname" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & projPath & "\tempinfo\imgmounteddesc" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & projPath & "\tempinfo\imgsize" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & projPath & "\tempinfo\imgarch" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & projPath & "\tempinfo\imghal" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & projPath & "\tempinfo\imgspbuild" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & projPath & "\tempinfo\imgsplevel" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & projPath & "\tempinfo\imgedition" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & projPath & "\tempinfo\imginst" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & projPath & "\tempinfo\imgptype" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & projPath & "\tempinfo\imgpsuite" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & projPath & "\tempinfo\imgsysroot" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & projPath & "\tempinfo\imgdirs" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & projPath & "\tempinfo\imgfiles" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & projPath & "\tempinfo\imgcreation" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & projPath & "\tempinfo\imgmodification" & CrLf & _
-                                  "dism /English /image=" & MountDir & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & projPath & "\tempinfo\imglangs", ASCII)
+                Select Case DismVersionChecker.ProductMajorPart
+                    Case 6
+                        Select Case DismVersionChecker.ProductMinorPart
+                            Case 1
+                                File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                                                  "@echo off" & CrLf & _
+                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf & _
+                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf & _
+                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Image Index" & Quote & " /b > " & projPath & "\tempinfo\imgindex" & CrLf & _
+                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Mounted Read/Write" & Quote & " /b > " & projPath & "\tempinfo\imgrw" & CrLf & _
+                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & projPath & "\tempinfo\imgmountedname" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & projPath & "\tempinfo\imgmounteddesc" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & projPath & "\tempinfo\imgsize" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & projPath & "\tempinfo\imgarch" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & projPath & "\tempinfo\imghal" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & projPath & "\tempinfo\imgspbuild" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & projPath & "\tempinfo\imgsplevel" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & projPath & "\tempinfo\imgedition" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & projPath & "\tempinfo\imginst" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & projPath & "\tempinfo\imgptype" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & projPath & "\tempinfo\imgpsuite" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & projPath & "\tempinfo\imgsysroot" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & projPath & "\tempinfo\imgdirs" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & projPath & "\tempinfo\imgfiles" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & projPath & "\tempinfo\imgcreation" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & projPath & "\tempinfo\imgmodification" & CrLf & _
+                                                  "dism /English /image=" & MountDir & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & projPath & "\tempinfo\imglangs", ASCII)
+                            Case Is >= 2
+                                File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                                                  "@echo off" & CrLf & _
+                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf & _
+                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf & _
+                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image Index" & Quote & " /b > " & projPath & "\tempinfo\imgindex" & CrLf & _
+                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mounted Read/Write" & Quote & " /b > " & projPath & "\tempinfo\imgrw" & CrLf & _
+                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & projPath & "\tempinfo\imgmountedname" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & projPath & "\tempinfo\imgmounteddesc" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & projPath & "\tempinfo\imgsize" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & projPath & "\tempinfo\imgarch" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & projPath & "\tempinfo\imghal" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & projPath & "\tempinfo\imgspbuild" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & projPath & "\tempinfo\imgsplevel" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & projPath & "\tempinfo\imgedition" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & projPath & "\tempinfo\imginst" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & projPath & "\tempinfo\imgptype" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & projPath & "\tempinfo\imgpsuite" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & projPath & "\tempinfo\imgsysroot" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & projPath & "\tempinfo\imgdirs" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & projPath & "\tempinfo\imgfiles" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & projPath & "\tempinfo\imgcreation" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & projPath & "\tempinfo\imgmodification" & CrLf & _
+                                                  "dism /English /image=" & MountDir & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & projPath & "\tempinfo\imglangs", ASCII)
+                        End Select
+                    Case 10
+                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                                          "@echo off" & CrLf & _
+                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf & _
+                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf & _
+                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image Index" & Quote & " /b > " & projPath & "\tempinfo\imgindex" & CrLf & _
+                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mounted Read/Write" & Quote & " /b > " & projPath & "\tempinfo\imgrw" & CrLf & _
+                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & projPath & "\tempinfo\imgmountedname" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & projPath & "\tempinfo\imgmounteddesc" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & projPath & "\tempinfo\imgsize" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & projPath & "\tempinfo\imgarch" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & projPath & "\tempinfo\imghal" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & projPath & "\tempinfo\imgspbuild" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & projPath & "\tempinfo\imgsplevel" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & projPath & "\tempinfo\imgedition" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & projPath & "\tempinfo\imginst" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & projPath & "\tempinfo\imgptype" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & projPath & "\tempinfo\imgpsuite" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & projPath & "\tempinfo\imgsysroot" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & projPath & "\tempinfo\imgdirs" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & projPath & "\tempinfo\imgfiles" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & projPath & "\tempinfo\imgcreation" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & projPath & "\tempinfo\imgmodification" & CrLf & _
+                                          "dism /English /image=" & MountDir & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & projPath & "\tempinfo\imglangs", ASCII)
+                End Select
+
                 If Debugger.IsAttached Then
                     Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\imginfo.bat").WaitForExit()
                 End If
@@ -2264,14 +3092,14 @@ Public Class MainForm
         Try
             If prjTreeView.SelectedNode.IsExpanded Then
                 ExpandCollapseTSB.Text = "Collapse"
-                If BackColor = Color.Black Then
+                If BackColor = Color.FromArgb(48, 48, 48) Then
                     ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph_dark)
                 ElseIf BackColor = Color.White Then
                     ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph)
                 End If
             Else
                 ExpandCollapseTSB.Text = "Expand"
-                If BackColor = Color.Black Then
+                If BackColor = Color.FromArgb(48, 48, 48) Then
                     ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
                 ElseIf BackColor = Color.White Then
                     ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph)
@@ -2284,34 +3112,43 @@ Public Class MainForm
     End Sub
 
     Private Sub prjTreeView_AfterCollapse(sender As Object, e As TreeViewEventArgs) Handles prjTreeView.AfterCollapse
-        If prjTreeView.SelectedNode.IsExpanded Then
-            ExpandCollapseTSB.Text = "Collapse"
-            If BackColor = Color.Black Then
-                ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph_dark)
-            ElseIf BackColor = Color.White Then
-                ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph)
+        Try
+            If prjTreeView.SelectedNode.IsExpanded Then
+                ExpandCollapseTSB.Text = "Collapse"
+                If BackColor = Color.FromArgb(48, 48, 48) Then
+                    ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph_dark)
+                ElseIf BackColor = Color.White Then
+                    ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph)
+                End If
+            Else
+                ExpandCollapseTSB.Text = "Expand"
+                If BackColor = Color.FromArgb(48, 48, 48) Then
+                    ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
+                ElseIf BackColor = Color.White Then
+                    ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph)
+                End If
             End If
-        Else
+        Catch ex As Exception
             ExpandCollapseTSB.Text = "Expand"
-            If BackColor = Color.Black Then
+            If BackColor = Color.FromArgb(48, 48, 48) Then
                 ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
             ElseIf BackColor = Color.White Then
                 ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph)
             End If
-        End If
+        End Try
     End Sub
 
     Private Sub prjTreeView_AfterSelect(sender As Object, e As TreeViewEventArgs) Handles prjTreeView.AfterSelect
         If prjTreeView.SelectedNode.IsExpanded Then
             ExpandCollapseTSB.Text = "Collapse"
-            If BackColor = Color.Black Then
+            If BackColor = Color.FromArgb(48, 48, 48) Then
                 ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph_dark)
             ElseIf BackColor = Color.White Then
                 ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph)
             End If
         Else
             ExpandCollapseTSB.Text = "Expand"
-            If BackColor = Color.Black Then
+            If BackColor = Color.FromArgb(48, 48, 48) Then
                 ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
             ElseIf BackColor = Color.White Then
                 ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph)
@@ -2383,5 +3220,73 @@ Public Class MainForm
 
     Private Sub SaveProjectToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaveProjectToolStripMenuItem.Click
         SaveDTProj()
+    End Sub
+
+    Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
+        ProgressPanel.OperationNum = 993
+        PleaseWaitDialog.pkgSourceImgStr = MountDir
+        PleaseWaitDialog.Label2.Text = "Getting package names..."
+        PleaseWaitDialog.ShowDialog(Me)
+        RemPackage.ShowDialog()
+    End Sub
+
+    Private Sub ImgBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ImgBW.DoWork
+
+    End Sub
+
+    Private Sub Button10_Click(sender As Object, e As EventArgs) Handles Button10.Click
+        ProgressPanel.OperationNum = 994
+        PleaseWaitDialog.featOpType = 0
+        PleaseWaitDialog.featSourceImg = MountDir
+        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+        PleaseWaitDialog.ShowDialog(Me)
+        EnableFeat.ShowDialog()
+    End Sub
+
+    Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
+        ProgressPanel.OperationNum = 994
+        PleaseWaitDialog.featOpType = 1
+        PleaseWaitDialog.featSourceImg = MountDir
+        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+        PleaseWaitDialog.ShowDialog(Me)
+        DisableFeat.ShowDialog()
+    End Sub
+
+    Private Sub SplitPanels_SplitterMoved(sender As Object, e As SplitterEventArgs) Handles SplitPanels.SplitterMoved
+        If SplitPanels.SplitterDistance >= 384 And GroupBox1.Left >= 0 Then
+            SplitPanels.SplitterDistance = 384
+        ElseIf GroupBox1.Left < 0 Then
+            SplitPanels.SplitterDistance = 264
+        End If
+    End Sub
+
+    Private Sub MainForm_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged
+        If GroupBox1.Left < 0 Then
+            SplitPanels.SplitterDistance = 264
+        End If
+    End Sub
+
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        imgCommitOperation = 0
+        UnloadDTProj(False, True, True)
+    End Sub
+
+    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+        imgCommitOperation = 1
+        UnloadDTProj(False, True, True)
+    End Sub
+
+    Private Sub Button13_Click(sender As Object, e As EventArgs) Handles Button13.Click
+        ProgressPanel.OperationNum = 995
+        PleaseWaitDialog.indexesSourceImg = SourceImg
+        PleaseWaitDialog.Label2.Text = "Getting image indexes..."
+        PleaseWaitDialog.ShowDialog(Me)
+        If PleaseWaitDialog.imgIndexes > 1 Then
+            ImgIndexSwitch.ShowDialog()
+        End If
+    End Sub
+
+    Private Sub UnloadBtn_Click(sender As Object, e As EventArgs) Handles UnloadBtn.Click
+        ToolStripButton3.PerformClick()
     End Sub
 End Class
