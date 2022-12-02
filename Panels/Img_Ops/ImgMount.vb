@@ -16,9 +16,23 @@ Public Class ImgMount
     Public isReadOnly As Boolean
     Public isOptimized As Boolean
     Public isIntegrityTested As Boolean
+    Dim IndexOperationMode As Integer       ' 0: Get-ImageInfo (Win8+); 1: Get-WimInfo (Win7)
+    Dim DismVerChecker As FileVersionInfo
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
-
+        If Not Directory.Exists(TextBox2.Text) Then
+            MountOpDirCreationDialog.ShowDialog()
+            If MountOpDirCreationDialog.DialogResult = Windows.Forms.DialogResult.Yes Then
+                Try
+                    Directory.CreateDirectory(TextBox2.Text)
+                Catch ex As Exception
+                    MsgBox("Could not create mount directory. Reason: " & ex.ToString() & "; " & ex.Message, MsgBoxStyle.OkOnly + vbCritical, "Mount an image")
+                    Exit Sub
+                End Try
+            ElseIf MountOpDirCreationDialog.DialogResult = Windows.Forms.DialogResult.No Then
+                Exit Sub
+            End If
+        End If
         TextBox1.Text = ProgressPanel.SourceImg
         NumericUpDown1.Value = ImgIndex
         TextBox2.Text = ProgressPanel.MountDir
@@ -53,6 +67,19 @@ Public Class ImgMount
     End Sub
 
     Private Sub ImgMount_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        DismVerChecker = FileVersionInfo.GetVersionInfo(MainForm.DismExe)
+        Select Case DismVerChecker.ProductMajorPart
+            Case 6
+                Select Case DismVerChecker.ProductMinorPart
+                    Case 1
+                        IndexOperationMode = 1
+                        FileSpecDialog.Filter = "WIM files|*.wim"
+                    Case Is >= 2
+                        IndexOperationMode = 0
+                End Select
+            Case 10
+                IndexOperationMode = 0
+        End Select
         If My.Computer.Info.OSFullName.Contains("Windows 10") Or My.Computer.Info.OSFullName.Contains("Windows 11") Then
             Text = ""
             Win10Title.Visible = True
@@ -72,7 +99,11 @@ Public Class ImgMount
             Button1.PerformClick()
         End If
         If File.Exists(TextBox1.Text) Then
-            File.WriteAllText(".\bin\exthelpers\temp.bat", "dism /English /get-imageinfo /imagefile=" & TextBox1.Text & " > dismtools.txt", ASCII)
+            If IndexOperationMode = 0 Then
+                File.WriteAllText(".\bin\exthelpers\temp.bat", "dism /English /get-imageinfo /imagefile=" & TextBox1.Text & " > dismtools.txt", ASCII)
+            ElseIf IndexOperationMode = 1 Then
+                File.WriteAllText(".\bin\exthelpers\temp.bat", "dism /English /get-wiminfo /wimfile=" & TextBox1.Text & " > dismtools.txt", ASCII)
+            End If
             Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
             Width = 800
             Indexes.Text = My.Computer.FileSystem.ReadAllText(".\dismtools.txt")
@@ -102,9 +133,15 @@ Public Class ImgMount
     End Sub
 
     Sub GetMaxIndexCount(ImgFile As String)
-        File.WriteAllText(".\bin\exthelpers\temp.bat", _
-                          "@echo off" & CrLf & _
-                          "dism /English /get-imageinfo /imagefile=" & ImgFile & " | find /c " & Quote & "Index" & Quote & " > .\indexcount", ASCII)
+        If IndexOperationMode = 0 Then
+            File.WriteAllText(".\bin\exthelpers\temp.bat", _
+                              "@echo off" & CrLf & _
+                              "dism /English /get-imageinfo /imagefile=" & ImgFile & " | find /c " & Quote & "Index" & Quote & " > .\indexcount", ASCII)
+        ElseIf IndexOperationMode = 1 Then
+            File.WriteAllText(".\bin\exthelpers\temp.bat", _
+                              "@echo off" & CrLf & _
+                              "dism /English /get-wiminfo /wimfile=" & ImgFile & " | find /c " & Quote & "Index" & Quote & " > .\indexcount", ASCII)
+        End If
         Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
         MainForm.imgIndexCount = CInt(My.Computer.FileSystem.ReadAllText(".\indexcount"))
         NumericUpDown1.Maximum = MainForm.imgIndexCount
@@ -139,13 +176,6 @@ Public Class ImgMount
             If Directory.Exists(TextBox2.Text) Then
                 IsReqField2Valid = True
                 ProgressPanel.MountDir = TextBox2.Text
-            Else
-                Try
-                    Directory.CreateDirectory(TextBox2.Text)
-                    IsReqField2Valid = True
-                Catch ex As Exception
-                    IsReqField2Valid = False
-                End Try
             End If
         End If
         If IsReqField1Valid And IsReqField2Valid And IsReqField3Valid Then

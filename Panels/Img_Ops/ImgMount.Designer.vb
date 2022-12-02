@@ -214,7 +214,7 @@ Partial Class ImgMount
         'Button5
         '
         Me.Button5.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button5.Location = New System.Drawing.Point(663, 23)
+        Me.Button5.Location = New System.Drawing.Point(663, 24)
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(91, 23)
         Me.Button5.TabIndex = 4
@@ -224,7 +224,7 @@ Partial Class ImgMount
         'Button2
         '
         Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button2.Location = New System.Drawing.Point(582, 23)
+        Me.Button2.Location = New System.Drawing.Point(582, 24)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 4
