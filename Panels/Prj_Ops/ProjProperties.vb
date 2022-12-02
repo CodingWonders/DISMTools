@@ -8,6 +8,7 @@ Public Class ProjProperties
     Public GuidStr As String
     Public PublicImgSize As String
     Dim ImgSizeStr As String
+    Dim DismVersionChecker As FileVersionInfo
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
@@ -20,6 +21,7 @@ Public Class ProjProperties
     End Sub
 
     Private Sub ProjProperties_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        DismVersionChecker = FileVersionInfo.GetVersionInfo(MainForm.DismExe)
         imgMountDir.Text = ""
         imgIndex.Text = ""
         imgName.Text = ""
@@ -60,31 +62,90 @@ Public Class ProjProperties
                 If Not Directory.Exists(MainForm.projPath & "\tempinfo") Then
                     Directory.CreateDirectory(MainForm.projPath & "\tempinfo").Attributes = FileAttributes.Hidden
                 End If
-                File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
-                                  "@echo off" & CrLf & _
-                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & MainForm.projPath & "\tempinfo\mountdir" & CrLf & _
-                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgfile" & CrLf & _
-                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image Index" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgindex" & CrLf & _
-                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mounted Read/Write" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgrw" & CrLf & _
-                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmountedstatus" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmountedname" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmounteddesc" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgsize" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgarch" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imghal" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgspbuild" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgsplevel" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgedition" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imginst" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgptype" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgpsuite" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgsysroot" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgdirs" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgfiles" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgcreation" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmodification" & CrLf & _
-                                  "dism /English /image=" & MainForm.MountDir & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imglangs", ASCII)
+                Select Case DismVersionChecker.ProductMajorPart
+                    Case 6
+                        Select Case DismVersionChecker.ProductMinorPart
+                            Case 1
+                                File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                                                  "@echo off" & CrLf & _
+                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & MainForm.projPath & "\tempinfo\mountdir" & CrLf & _
+                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgfile" & CrLf & _
+                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Image Index" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgindex" & CrLf & _
+                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Mounted Read/Write" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgrw" & CrLf & _
+                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmountedstatus" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmountedname" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmounteddesc" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgsize" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgarch" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imghal" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgspbuild" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgsplevel" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgedition" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imginst" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgptype" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgpsuite" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgsysroot" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgdirs" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgfiles" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgcreation" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmodification" & CrLf & _
+                                                  "dism /English /image=" & MainForm.MountDir & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imglangs", ASCII)
+                            Case Is >= 2
+                                File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                                                  "@echo off" & CrLf & _
+                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & MainForm.projPath & "\tempinfo\mountdir" & CrLf & _
+                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgfile" & CrLf & _
+                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image Index" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgindex" & CrLf & _
+                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mounted Read/Write" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgrw" & CrLf & _
+                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmountedstatus" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmountedname" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmounteddesc" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgsize" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgarch" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imghal" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgspbuild" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgsplevel" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgedition" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imginst" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgptype" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgpsuite" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgsysroot" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgdirs" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgfiles" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgcreation" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmodification" & CrLf & _
+                                                  "dism /English /image=" & MainForm.MountDir & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imglangs", ASCII)
+                        End Select
+                    Case 10
+                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                                          "@echo off" & CrLf & _
+                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & MainForm.projPath & "\tempinfo\mountdir" & CrLf & _
+                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgfile" & CrLf & _
+                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image Index" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgindex" & CrLf & _
+                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mounted Read/Write" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgrw" & CrLf & _
+                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmountedstatus" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmountedname" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmounteddesc" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgsize" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgarch" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imghal" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgspbuild" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgsplevel" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgedition" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imginst" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgptype" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgpsuite" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgsysroot" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgdirs" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgfiles" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgcreation" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmodification" & CrLf & _
+                                          "dism /English /image=" & MainForm.MountDir & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imglangs", ASCII)
+                End Select
+
                 If Debugger.IsAttached Then
                     Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\imginfo.bat").WaitForExit()
                 End If
