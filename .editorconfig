@@ -1,0 +1,4 @@
+﻿[*.vb]
+
+# IDE1006: Naming conventions
+dotnet_diagnostic.IDE1006.severity = none
