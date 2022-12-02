@@ -156,6 +156,24 @@
     <Compile Include="Panels\Img_Ops\Conversion\ImgWim2Esd.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Img_Ops\Features\DisableFeat.Designer.vb">
+      <DependentUpon>DisableFeat.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Features\DisableFeat.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Features\EnableFeat.Designer.vb">
+      <DependentUpon>EnableFeat.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Features\EnableFeat.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Features\PkgParentNames\PkgParentNameLookupDlg.Designer.vb">
+      <DependentUpon>PkgParentNameLookupDlg.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Features\PkgParentNames\PkgParentNameLookupDlg.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\ImgAppend.Designer.vb">
       <DependentUpon>ImgAppend.vb</DependentUpon>
     </Compile>
@@ -198,10 +216,22 @@
     <Compile Include="Panels\Img_Ops\Pkgs\AddPackage.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Img_Ops\Pkgs\RemPackage.Designer.vb">
+      <DependentUpon>RemPackage.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Pkgs\RemPackage.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\Switch\ImgIndexSwitch.Designer.vb">
       <DependentUpon>ImgIndexSwitch.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\Img_Ops\Switch\ImgIndexSwitch.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Internal\Feats\FeatErrorText.Designer.vb">
+      <DependentUpon>FeatErrorText.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Internal\Feats\FeatErrorText.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Internal\Pkgs\PkgErrorText.Designer.vb">
@@ -274,6 +304,12 @@
       <DependentUpon>ImgWinVistaIncompatibilityDialog.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\Questions\ImgWinVistaIncompatibilityDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Questions\MountOpDirCreationDialog.Designer.vb">
+      <DependentUpon>MountOpDirCreationDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Questions\MountOpDirCreationDialog.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Questions\OrphanedMountedImgDialog.Designer.vb">
@@ -359,6 +395,15 @@
     <EmbeddedResource Include="Panels\Img_Ops\Conversion\ImgWim2Esd.resx">
       <DependentUpon>ImgWim2Esd.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Features\DisableFeat.resx">
+      <DependentUpon>DisableFeat.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Features\EnableFeat.resx">
+      <DependentUpon>EnableFeat.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Features\PkgParentNames\PkgParentNameLookupDlg.resx">
+      <DependentUpon>PkgParentNameLookupDlg.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\ImgAppend.resx">
       <DependentUpon>ImgAppend.vb</DependentUpon>
     </EmbeddedResource>
@@ -380,8 +425,14 @@
     <EmbeddedResource Include="Panels\Img_Ops\Pkgs\AddPackage.resx">
       <DependentUpon>AddPackage.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Pkgs\RemPackage.resx">
+      <DependentUpon>RemPackage.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Switch\ImgIndexSwitch.resx">
       <DependentUpon>ImgIndexSwitch.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Internal\Feats\FeatErrorText.resx">
+      <DependentUpon>FeatErrorText.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Internal\Pkgs\PkgErrorText.resx">
       <DependentUpon>PkgErrorText.vb</DependentUpon>
@@ -419,6 +470,9 @@
     <EmbeddedResource Include="Panels\Questions\ImgWinVistaIncompatibilityDialog.resx">
       <DependentUpon>ImgWinVistaIncompatibilityDialog.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Questions\MountOpDirCreationDialog.resx">
+      <DependentUpon>MountOpDirCreationDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Questions\OrphanedMountedImgDialog.resx">
       <DependentUpon>OrphanedMountedImgDialog.vb</DependentUpon>
     </EmbeddedResource>
@@ -445,6 +499,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include=".editorconfig" />
     <None Include="app.config" />
     <None Include="Helpers\dthelper.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -525,6 +580,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo.ico" />
+    <None Include="Resources\bold_font.png" />
+    <None Include="Resources\warning_16px.png" />
+    <None Include="Resources\error_16px.png" />
     <None Include="Resources\prg_logo_32px.png" />
     <None Include="Resources\sqlserver_32px.png" />
     <None Include="Resources\vs_32px.png" />
@@ -716,7 +774,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\Debug\" />
-    <Folder Include="Panels\Img_Ops\Features\" />
     <Folder Include="Panels\Set_Ops\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

@@ -730,4 +730,13 @@
   <data name="vs_32px" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\vs_32px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="error_16px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\error_16px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="warning_16px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\warning_16px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bold_font" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\bold_font.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
