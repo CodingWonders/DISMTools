@@ -32,6 +32,19 @@ Public Class PkgParentNameLookupDlg
     End Sub
 
     Private Sub PkgParentNameLookupDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
+            BackColor = Color.FromArgb(31, 31, 31)
+            ForeColor = Color.White
+            ListBox1.BackColor = Color.FromArgb(31, 31, 31)
+            TextBox1.BackColor = Color.FromArgb(31, 31, 31)
+        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
+            BackColor = Color.FromArgb(238, 238, 242)
+            ForeColor = Color.Black
+            ListBox1.BackColor = Color.FromArgb(238, 238, 242)
+            TextBox1.BackColor = Color.FromArgb(238, 238, 242)
+        End If
+        ListBox1.ForeColor = ForeColor
+        TextBox1.ForeColor = ForeColor
         Control.CheckForIllegalCrossThreadCalls = False
         Label3.Visible = True
         OK_Button.Enabled = False
