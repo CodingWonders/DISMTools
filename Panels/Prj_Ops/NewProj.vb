@@ -24,6 +24,23 @@ Public Class NewProj
             Text = ""
             Win10Title.Visible = True
         End If
+        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
+            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
+            BackColor = Color.FromArgb(31, 31, 31)
+            ForeColor = Color.White
+            TextBox1.BackColor = Color.FromArgb(31, 31, 31)
+            TextBox2.BackColor = Color.FromArgb(31, 31, 31)
+            GroupBox1.ForeColor = Color.White
+        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
+            Win10Title.BackColor = Color.White
+            BackColor = Color.FromArgb(238, 238, 242)
+            ForeColor = Color.Black
+            TextBox1.BackColor = Color.FromArgb(238, 238, 242)
+            TextBox2.BackColor = Color.FromArgb(238, 238, 242)
+            GroupBox1.ForeColor = Color.Black
+        End If
+        TextBox1.ForeColor = ForeColor
+        TextBox2.ForeColor = ForeColor
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click

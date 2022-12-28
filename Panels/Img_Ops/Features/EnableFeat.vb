@@ -70,6 +70,28 @@ Public Class EnableFeat
     End Sub
 
     Private Sub EnableFeature_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
+            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
+            BackColor = Color.FromArgb(31, 31, 31)
+            ForeColor = Color.White
+            GroupBox1.ForeColor = Color.White
+            GroupBox2.ForeColor = Color.White
+            ListView1.BackColor = Color.FromArgb(31, 31, 31)
+            TextBox1.BackColor = Color.FromArgb(31, 31, 31)
+            TextBox2.BackColor = Color.FromArgb(31, 31, 31)
+        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
+            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
+            BackColor = Color.FromArgb(31, 31, 31)
+            ForeColor = Color.White
+            GroupBox1.ForeColor = Color.White
+            GroupBox2.ForeColor = Color.White
+            ListView1.BackColor = Color.FromArgb(31, 31, 31)
+            TextBox1.BackColor = Color.FromArgb(31, 31, 31)
+            TextBox2.BackColor = Color.FromArgb(31, 31, 31)
+        End If
+        ListView1.ForeColor = ForeColor
+        TextBox1.ForeColor = ForeColor
+        TextBox2.ForeColor = ForeColor
         If My.Computer.Info.OSFullName.Contains("Windows 10") Or My.Computer.Info.OSFullName.Contains("Windows 11") Then
             Text = ""
             Win10Title.Visible = True

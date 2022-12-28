@@ -74,11 +74,30 @@ Public Class RemPackage
     End Sub
 
     Private Sub RemPackage_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
+            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
+            BackColor = Color.FromArgb(31, 31, 31)
+            ForeColor = Color.White
+            GroupBox1.ForeColor = Color.White
+            TextBox1.BackColor = Color.FromArgb(31, 31, 31)
+            CheckedListBox1.BackColor = Color.FromArgb(31, 31, 31)
+            CheckedListBox2.BackColor = Color.FromArgb(31, 31, 31)
+        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
+            Win10Title.BackColor = Color.White
+            BackColor = Color.FromArgb(238, 238, 242)
+            ForeColor = Color.White
+            GroupBox1.ForeColor = Color.Black
+            TextBox1.BackColor = Color.FromArgb(238, 238, 242)
+            CheckedListBox1.BackColor = Color.FromArgb(238, 238, 242)
+            CheckedListBox2.BackColor = Color.FromArgb(238, 238, 242)
+        End If
+        TextBox1.ForeColor = ForeColor
+        CheckedListBox1.ForeColor = ForeColor
+        CheckedListBox2.ForeColor = ForeColor
         If My.Computer.Info.OSFullName.Contains("Windows 10") Or My.Computer.Info.OSFullName.Contains("Windows 11") Then
             Text = ""
             Win10Title.Visible = True
         End If
-        Label2.Text = "This image contains " & CheckedListBox1.Items.Count & " packages"
     End Sub
 
     Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged

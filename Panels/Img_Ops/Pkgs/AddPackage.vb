@@ -142,6 +142,25 @@ Public Class AddPackageDlg
     End Sub
 
     Private Sub AddPackageDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
+            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
+            BackColor = Color.FromArgb(31, 31, 31)
+            ForeColor = Color.White
+            TextBox1.BackColor = Color.FromArgb(31, 31, 31)
+            GroupBox1.ForeColor = Color.White
+            GroupBox2.ForeColor = Color.White
+            CheckedListBox1.BackColor = Color.FromArgb(31, 31, 31)
+        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
+            Win10Title.BackColor = Color.White
+            BackColor = Color.FromArgb(238, 238, 242)
+            ForeColor = Color.Black
+            TextBox1.BackColor = Color.FromArgb(238, 238, 242)
+            GroupBox1.ForeColor = Color.Black
+            GroupBox2.ForeColor = Color.Black
+            CheckedListBox1.BackColor = Color.FromArgb(238, 238, 242)
+        End If
+        CheckedListBox1.ForeColor = ForeColor
+        TextBox1.ForeColor = ForeColor
         Control.CheckForIllegalCrossThreadCalls = False
         If My.Computer.Info.OSFullName.Contains("Windows 10") Or My.Computer.Info.OSFullName.Contains("Windows 11") Then
             Text = ""

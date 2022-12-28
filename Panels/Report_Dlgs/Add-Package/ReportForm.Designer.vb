@@ -70,7 +70,6 @@ Partial Class AddPackageReport
         '
         'Panel1
         '
-        Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel1.Controls.Add(Me.Label2)
         Me.Panel1.Controls.Add(Me.Label1)
         Me.Panel1.Controls.Add(Me.PictureBox1)
@@ -87,7 +86,7 @@ Partial Class AddPackageReport
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(442, 13)
         Me.Label2.TabIndex = 3
-        Me.Label2.Text = "This is an automatically generated report using the data obtained from the action" & _
+        Me.Label2.Text = "This is an automatically generated report using the data obtained from the action" &
     "'s results."
         '
         'Label1

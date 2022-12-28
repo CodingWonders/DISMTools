@@ -79,6 +79,37 @@ Public Class ImgCapture
     End Sub
 
     Private Sub ImgCapture_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
+            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
+            BackColor = Color.FromArgb(31, 31, 31)
+            ForeColor = Color.White
+            TextBox1.BackColor = Color.FromArgb(31, 31, 31)
+            TextBox2.BackColor = Color.FromArgb(31, 31, 31)
+            TextBox3.BackColor = Color.FromArgb(31, 31, 31)
+            TextBox4.BackColor = Color.FromArgb(31, 31, 31)
+            TextBox5.BackColor = Color.FromArgb(31, 31, 31)
+            ComboBox1.BackColor = Color.FromArgb(31, 31, 31)
+            GroupBox1.ForeColor = Color.White
+            GroupBox2.ForeColor = Color.White
+        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
+            Win10Title.BackColor = Color.White
+            BackColor = Color.FromArgb(238, 238, 242)
+            ForeColor = Color.Black
+            TextBox1.BackColor = Color.FromArgb(238, 238, 242)
+            TextBox2.BackColor = Color.FromArgb(238, 238, 242)
+            TextBox3.BackColor = Color.FromArgb(238, 238, 242)
+            TextBox4.BackColor = Color.FromArgb(238, 238, 242)
+            TextBox5.BackColor = Color.FromArgb(238, 238, 242)
+            ComboBox1.BackColor = Color.FromArgb(238, 238, 242)
+            GroupBox1.ForeColor = Color.Black
+            GroupBox2.ForeColor = Color.Black
+        End If
+        ComboBox1.ForeColor = ForeColor
+        TextBox1.ForeColor = ForeColor
+        TextBox2.ForeColor = ForeColor
+        TextBox3.ForeColor = ForeColor
+        TextBox4.ForeColor = ForeColor
+        TextBox5.ForeColor = ForeColor
         If My.Computer.Info.OSFullName.Contains("Windows 10") Or My.Computer.Info.OSFullName.Contains("Windows 11") Then
             Text = ""
             Win10Title.Visible = True

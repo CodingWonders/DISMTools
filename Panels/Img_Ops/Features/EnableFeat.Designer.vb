@@ -148,6 +148,7 @@ Partial Class EnableFeat
         '
         Me.ListView1.CheckBoxes = True
         Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
+        Me.ListView1.HideSelection = False
         Me.ListView1.Location = New System.Drawing.Point(7, 21)
         Me.ListView1.Name = "ListView1"
         Me.ListView1.Size = New System.Drawing.Size(747, 177)

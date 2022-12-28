@@ -34,6 +34,21 @@ Public Class ImgSwmToWim
     End Sub
 
     Private Sub ImgSwmToWim_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
+            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
+            BackColor = Color.FromArgb(31, 31, 31)
+            ForeColor = Color.White
+            TextBox1.BackColor = Color.FromArgb(31, 31, 31)
+            TextBox2.BackColor = Color.FromArgb(31, 31, 31)
+        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
+            Win10Title.BackColor = Color.White
+            BackColor = Color.FromArgb(238, 238, 242)
+            ForeColor = Color.Black
+            TextBox1.BackColor = Color.FromArgb(238, 238, 242)
+            TextBox2.BackColor = Color.FromArgb(238, 238, 242)
+        End If
+        TextBox1.ForeColor = ForeColor
+        TextBox2.ForeColor = ForeColor
         If My.Computer.Info.OSFullName.Contains("Windows 10") Or My.Computer.Info.OSFullName.Contains("Windows 11") Then
             Text = ""
             Win10Title.Visible = True

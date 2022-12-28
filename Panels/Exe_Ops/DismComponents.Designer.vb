@@ -57,7 +57,7 @@ Partial Class DismComponents
         '
         Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
         Me.ListView1.FullRowSelect = True
-        Me.ListView1.GridLines = True
+        Me.ListView1.HideSelection = False
         Me.ListView1.Location = New System.Drawing.Point(13, 13)
         Me.ListView1.Name = "ListView1"
         Me.ListView1.Size = New System.Drawing.Size(519, 321)

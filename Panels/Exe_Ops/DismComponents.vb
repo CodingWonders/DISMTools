@@ -11,6 +11,16 @@ Public Class DismComponents
     End Sub
 
     Private Sub DismComponents_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
+            BackColor = Color.FromArgb(31, 31, 31)
+            ForeColor = Color.White
+            ListView1.BackColor = Color.FromArgb(31, 31, 31)
+        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
+            BackColor = Color.FromArgb(238, 238, 242)
+            ForeColor = Color.Black
+            ListView1.BackColor = Color.FromArgb(238, 238, 242)
+        End If
+        ListView1.ForeColor = ForeColor
         ListView1.Items.Clear()
         Visible = True
         For Each DismComponent In My.Computer.FileSystem.GetFiles(Path.GetDirectoryName(Options.TextBox1.Text) & "\dism", FileIO.SearchOption.SearchTopLevelOnly)

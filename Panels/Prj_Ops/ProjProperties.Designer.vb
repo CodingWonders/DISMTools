@@ -284,7 +284,6 @@ Partial Class ProjProperties
         '
         'Panel1
         '
-        Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel1.Controls.Add(Me.Label2)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel1.Location = New System.Drawing.Point(3, 3)
@@ -444,7 +443,6 @@ Partial Class ProjProperties
         '
         'Panel3
         '
-        Me.Panel3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel3.Controls.Add(Me.PictureBox2)
         Me.Panel3.Controls.Add(Me.LinkLabel2)
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Bottom
@@ -458,7 +456,7 @@ Partial Class ProjProperties
         '
         Me.PictureBox2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.PictureBox2.Image = Global.DISMTools.My.Resources.Resources.caution
-        Me.PictureBox2.Location = New System.Drawing.Point(6, 6)
+        Me.PictureBox2.Location = New System.Drawing.Point(10, 6)
         Me.PictureBox2.Name = "PictureBox2"
         Me.PictureBox2.Size = New System.Drawing.Size(32, 32)
         Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
@@ -470,7 +468,7 @@ Partial Class ProjProperties
         Me.LinkLabel2.LinkArea = New System.Windows.Forms.LinkArea(134, 28)
         Me.LinkLabel2.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel2.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel2.Location = New System.Drawing.Point(44, 6)
+        Me.LinkLabel2.Location = New System.Drawing.Point(48, 6)
         Me.LinkLabel2.Name = "LinkLabel2"
         Me.LinkLabel2.Size = New System.Drawing.Size(919, 32)
         Me.LinkLabel2.TabIndex = 16
@@ -887,7 +885,6 @@ Partial Class ProjProperties
         '
         'Panel2
         '
-        Me.Panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel2.Controls.Add(Me.Label3)
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel2.Location = New System.Drawing.Point(3, 3)

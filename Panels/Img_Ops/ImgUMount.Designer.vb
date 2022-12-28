@@ -178,10 +178,9 @@ Partial Class ImgUMount
         'RadioButton2
         '
         Me.RadioButton2.AutoSize = True
-        Me.RadioButton2.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.RadioButton2.Location = New System.Drawing.Point(32, 72)
         Me.RadioButton2.Name = "RadioButton2"
-        Me.RadioButton2.Size = New System.Drawing.Size(156, 18)
+        Me.RadioButton2.Size = New System.Drawing.Size(150, 17)
         Me.RadioButton2.TabIndex = 4
         Me.RadioButton2.TabStop = True
         Me.RadioButton2.Text = "is located somewhere else"
@@ -190,10 +189,9 @@ Partial Class ImgUMount
         'RadioButton1
         '
         Me.RadioButton1.AutoSize = True
-        Me.RadioButton1.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.RadioButton1.Location = New System.Drawing.Point(32, 48)
         Me.RadioButton1.Name = "RadioButton1"
-        Me.RadioButton1.Size = New System.Drawing.Size(140, 18)
+        Me.RadioButton1.Size = New System.Drawing.Size(134, 17)
         Me.RadioButton1.TabIndex = 4
         Me.RadioButton1.TabStop = True
         Me.RadioButton1.Text = "is loaded in the project"
@@ -216,7 +214,6 @@ Partial Class ImgUMount
         Me.GroupBox2.Controls.Add(Me.Label6)
         Me.GroupBox2.Controls.Add(Me.Label5)
         Me.GroupBox2.Controls.Add(Me.Label7)
-        Me.GroupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.GroupBox2.Location = New System.Drawing.Point(12, 215)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(600, 179)
@@ -237,10 +234,9 @@ Partial Class ImgUMount
         'CheckBox2
         '
         Me.CheckBox2.AutoSize = True
-        Me.CheckBox2.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CheckBox2.Location = New System.Drawing.Point(305, 73)
         Me.CheckBox2.Name = "CheckBox2"
-        Me.CheckBox2.Size = New System.Drawing.Size(195, 18)
+        Me.CheckBox2.Size = New System.Drawing.Size(189, 17)
         Me.CheckBox2.TabIndex = 0
         Me.CheckBox2.Text = "Append changes to another index"
         Me.CheckBox2.UseVisualStyleBackColor = True
@@ -248,10 +244,9 @@ Partial Class ImgUMount
         'CheckBox1
         '
         Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CheckBox1.Location = New System.Drawing.Point(48, 73)
         Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(135, 18)
+        Me.CheckBox1.Size = New System.Drawing.Size(129, 17)
         Me.CheckBox1.TabIndex = 0
         Me.CheckBox1.Text = "Check image integrity"
         Me.CheckBox1.UseVisualStyleBackColor = True
@@ -270,7 +265,7 @@ Partial Class ImgUMount
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(232, 48)
         Me.Label5.TabIndex = 3
-        Me.Label5.Text = "Verify file corruption. Do note that the process will stop if corruption is detec" & _
+        Me.Label5.Text = "Verify file corruption. Do note that the process will stop if corruption is detec" &
     "ted."
         '
         'Label7
@@ -285,6 +280,7 @@ Partial Class ImgUMount
         'Button3
         '
         Me.Button3.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button3.Location = New System.Drawing.Point(12, 403)
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(100, 23)
