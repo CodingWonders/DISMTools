@@ -30,6 +30,7 @@ Partial Class ImgApply
         Me.Label1 = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.Button1 = New System.Windows.Forms.Button()
+        Me.UseMountedImgBtn = New System.Windows.Forms.Button()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
@@ -54,6 +55,14 @@ Partial Class ImgApply
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
         Me.SWMFilePanelContainer = New System.Windows.Forms.Panel()
         Me.SWMFilePanel = New System.Windows.Forms.Panel()
+        Me.ListBox1 = New System.Windows.Forms.ListBox()
+        Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
+        Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.TextBox4 = New System.Windows.Forms.TextBox()
+        Me.Button5 = New System.Windows.Forms.Button()
+        Me.Button4 = New System.Windows.Forms.Button()
+        Me.Label4 = New System.Windows.Forms.Label()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
@@ -64,6 +73,9 @@ Partial Class ImgApply
         Me.GroupBox3.SuspendLayout()
         Me.GroupBox4.SuspendLayout()
         Me.SWMFilePanelContainer.SuspendLayout()
+        Me.SWMFilePanel.SuspendLayout()
+        Me.StatusStrip1.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -138,6 +150,7 @@ Partial Class ImgApply
         'GroupBox1
         '
         Me.GroupBox1.Controls.Add(Me.Button1)
+        Me.GroupBox1.Controls.Add(Me.UseMountedImgBtn)
         Me.GroupBox1.Controls.Add(Me.TextBox1)
         Me.GroupBox1.Controls.Add(Me.Label2)
         Me.GroupBox1.Location = New System.Drawing.Point(12, 55)
@@ -150,18 +163,28 @@ Partial Class ImgApply
         'Button1
         '
         Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button1.Location = New System.Drawing.Point(568, 21)
+        Me.Button1.Location = New System.Drawing.Point(448, 21)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 2
         Me.Button1.Text = "Browse..."
         Me.Button1.UseVisualStyleBackColor = True
         '
+        'UseMountedImgBtn
+        '
+        Me.UseMountedImgBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.UseMountedImgBtn.Location = New System.Drawing.Point(529, 21)
+        Me.UseMountedImgBtn.Name = "UseMountedImgBtn"
+        Me.UseMountedImgBtn.Size = New System.Drawing.Size(114, 23)
+        Me.UseMountedImgBtn.TabIndex = 2
+        Me.UseMountedImgBtn.Text = "Use mounted image"
+        Me.UseMountedImgBtn.UseVisualStyleBackColor = True
+        '
         'TextBox1
         '
         Me.TextBox1.Location = New System.Drawing.Point(120, 22)
         Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(442, 21)
+        Me.TextBox1.Size = New System.Drawing.Size(322, 21)
         Me.TextBox1.TabIndex = 1
         '
         'Label2
@@ -253,7 +276,6 @@ Partial Class ImgApply
         'CheckBox4
         '
         Me.CheckBox4.AutoSize = True
-        Me.CheckBox4.Enabled = False
         Me.CheckBox4.Location = New System.Drawing.Point(19, 102)
         Me.CheckBox4.Name = "CheckBox4"
         Me.CheckBox4.Size = New System.Drawing.Size(125, 17)
@@ -392,11 +414,89 @@ Partial Class ImgApply
         '
         'SWMFilePanel
         '
+        Me.SWMFilePanel.Controls.Add(Me.ListBox1)
+        Me.SWMFilePanel.Controls.Add(Me.StatusStrip1)
+        Me.SWMFilePanel.Controls.Add(Me.Panel1)
         Me.SWMFilePanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SWMFilePanel.Enabled = False
         Me.SWMFilePanel.Location = New System.Drawing.Point(0, 0)
         Me.SWMFilePanel.Name = "SWMFilePanel"
         Me.SWMFilePanel.Size = New System.Drawing.Size(313, 319)
         Me.SWMFilePanel.TabIndex = 1
+        '
+        'ListBox1
+        '
+        Me.ListBox1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ListBox1.FormattingEnabled = True
+        Me.ListBox1.IntegralHeight = False
+        Me.ListBox1.Location = New System.Drawing.Point(0, 64)
+        Me.ListBox1.Name = "ListBox1"
+        Me.ListBox1.Size = New System.Drawing.Size(313, 233)
+        Me.ListBox1.TabIndex = 2
+        '
+        'StatusStrip1
+        '
+        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel1})
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 297)
+        Me.StatusStrip1.Name = "StatusStrip1"
+        Me.StatusStrip1.Size = New System.Drawing.Size(313, 22)
+        Me.StatusStrip1.SizingGrip = False
+        Me.StatusStrip1.TabIndex = 1
+        Me.StatusStrip1.Text = "StatusStrip1"
+        '
+        'ToolStripStatusLabel1
+        '
+        Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
+        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(119, 17)
+        Me.ToolStripStatusLabel1.Text = "ToolStripStatusLabel1"
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.TextBox4)
+        Me.Panel1.Controls.Add(Me.Button5)
+        Me.Panel1.Controls.Add(Me.Button4)
+        Me.Panel1.Controls.Add(Me.Label4)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel1.Location = New System.Drawing.Point(0, 0)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(313, 64)
+        Me.Panel1.TabIndex = 0
+        '
+        'TextBox4
+        '
+        Me.TextBox4.Location = New System.Drawing.Point(101, 6)
+        Me.TextBox4.Name = "TextBox4"
+        Me.TextBox4.Size = New System.Drawing.Size(204, 21)
+        Me.TextBox4.TabIndex = 1
+        '
+        'Button5
+        '
+        Me.Button5.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button5.Location = New System.Drawing.Point(161, 33)
+        Me.Button5.Name = "Button5"
+        Me.Button5.Size = New System.Drawing.Size(145, 23)
+        Me.Button5.TabIndex = 2
+        Me.Button5.Text = "Scan pattern"
+        Me.Button5.UseVisualStyleBackColor = True
+        '
+        'Button4
+        '
+        Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button4.Location = New System.Drawing.Point(10, 33)
+        Me.Button4.Name = "Button4"
+        Me.Button4.Size = New System.Drawing.Size(145, 23)
+        Me.Button4.TabIndex = 2
+        Me.Button4.Text = "Use name of the image"
+        Me.Button4.UseVisualStyleBackColor = True
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(8, 8)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(87, 13)
+        Me.Label4.TabIndex = 0
+        Me.Label4.Text = "Namimg pattern:"
         '
         'FolderBrowserDialog1
         '
@@ -437,6 +537,12 @@ Partial Class ImgApply
         Me.GroupBox3.PerformLayout()
         Me.GroupBox4.ResumeLayout(False)
         Me.SWMFilePanelContainer.ResumeLayout(False)
+        Me.SWMFilePanel.ResumeLayout(False)
+        Me.SWMFilePanel.PerformLayout()
+        Me.StatusStrip1.ResumeLayout(False)
+        Me.StatusStrip1.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -447,7 +553,7 @@ Partial Class ImgApply
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
-    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents UseMountedImgBtn As System.Windows.Forms.Button
     Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
@@ -473,5 +579,14 @@ Partial Class ImgApply
     Friend WithEvents NumericUpDown1 As System.Windows.Forms.NumericUpDown
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
+    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents StatusStrip1 As System.Windows.Forms.StatusStrip
+    Friend WithEvents ToolStripStatusLabel1 As System.Windows.Forms.ToolStripStatusLabel
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents TextBox4 As System.Windows.Forms.TextBox
+    Friend WithEvents Button5 As System.Windows.Forms.Button
+    Friend WithEvents Button4 As System.Windows.Forms.Button
+    Friend WithEvents Label4 As System.Windows.Forms.Label
+    Friend WithEvents ListBox1 As System.Windows.Forms.ListBox
 
 End Class
