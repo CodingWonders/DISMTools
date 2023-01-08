@@ -72,6 +72,7 @@ Public Class ImgMount
             BackColor = Color.FromArgb(31, 31, 31)
             ForeColor = Color.White
             TextBox1.BackColor = Color.FromArgb(31, 31, 31)
+            TextBox2.BackColor = Color.FromArgb(31, 31, 31)
             NumericUpDown1.BackColor = Color.FromArgb(31, 31, 31)
             GroupBox1.ForeColor = Color.White
             GroupBox2.ForeColor = Color.White
@@ -81,6 +82,7 @@ Public Class ImgMount
             BackColor = Color.FromArgb(238, 238, 242)
             ForeColor = Color.Black
             TextBox1.BackColor = Color.FromArgb(238, 238, 242)
+            TextBox2.BackColor = Color.FromArgb(238, 238, 242)
             NumericUpDown1.BackColor = Color.FromArgb(238, 238, 242)
             GroupBox1.ForeColor = Color.Black
             GroupBox2.ForeColor = Color.Black
@@ -88,6 +90,7 @@ Public Class ImgMount
         End If
         NumericUpDown1.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
+        TextBox2.ForeColor = ForeColor
         DismVerChecker = FileVersionInfo.GetVersionInfo(MainForm.DismExe)
         Select Case DismVerChecker.ProductMajorPart
             Case 6

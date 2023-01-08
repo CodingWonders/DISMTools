@@ -288,10 +288,9 @@ Partial Class ImgMount
         'CheckBox4
         '
         Me.CheckBox4.AutoSize = True
-        Me.CheckBox4.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CheckBox4.Location = New System.Drawing.Point(403, 84)
         Me.CheckBox4.Name = "CheckBox4"
-        Me.CheckBox4.Size = New System.Drawing.Size(135, 18)
+        Me.CheckBox4.Size = New System.Drawing.Size(129, 17)
         Me.CheckBox4.TabIndex = 0
         Me.CheckBox4.Text = "Check image integrity"
         Me.CheckBox4.UseVisualStyleBackColor = True
@@ -299,10 +298,9 @@ Partial Class ImgMount
         'CheckBox3
         '
         Me.CheckBox3.AutoSize = True
-        Me.CheckBox3.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CheckBox3.Location = New System.Drawing.Point(16, 84)
         Me.CheckBox3.Name = "CheckBox3"
-        Me.CheckBox3.Size = New System.Drawing.Size(73, 18)
+        Me.CheckBox3.Size = New System.Drawing.Size(67, 17)
         Me.CheckBox3.TabIndex = 0
         Me.CheckBox3.Text = "Optimize"
         Me.CheckBox3.UseVisualStyleBackColor = True
@@ -310,10 +308,9 @@ Partial Class ImgMount
         'CheckBox1
         '
         Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.CheckBox1.Location = New System.Drawing.Point(403, 28)
         Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(80, 18)
+        Me.CheckBox1.Size = New System.Drawing.Size(74, 17)
         Me.CheckBox1.TabIndex = 0
         Me.CheckBox1.Text = "Read only"
         Me.CheckBox1.UseVisualStyleBackColor = True
@@ -365,6 +362,7 @@ Partial Class ImgMount
         'Button3
         '
         Me.Button3.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button3.Location = New System.Drawing.Point(12, 403)
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(100, 23)
