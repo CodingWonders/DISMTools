@@ -55,6 +55,9 @@
     <ApplicationIcon>logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ScintillaNET, Version=3.6.3.0, Culture=neutral, PublicKeyToken=d42c48f11a620156, processorArchitecture=MSIL">
+      <HintPath>packages\jacobslusser.ScintillaNET.Signed.3.6.3\lib\net40\ScintillaNET.dll</HintPath>
+    </Reference>
     <Reference Include="System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
@@ -150,6 +153,30 @@
     <Compile Include="Panels\Img_Ops\ApplicationDriveSpecifier.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Img_Ops\AppxPkgs\AddProvAppxPackage.Designer.vb">
+      <DependentUpon>AddProvAppxPackage.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\AppxPkgs\AddProvAppxPackage.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\AppxPkgs\RemProvAppxPackage.Designer.vb">
+      <DependentUpon>RemProvAppxPackage.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\AppxPkgs\RemProvAppxPackage.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Bg_Processes\BGProcDetails.Designer.vb">
+      <DependentUpon>BGProcDetails.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Bg_Processes\BGProcDetails.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Bg_Processes\BGProcNotify.Designer.vb">
+      <DependentUpon>BGProcNotify.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Bg_Processes\BGProcNotify.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\Conversion\ImgWim2Esd.Designer.vb">
       <DependentUpon>ImgWim2Esd.vb</DependentUpon>
     </Compile>
@@ -226,6 +253,12 @@
       <DependentUpon>ImgIndexSwitch.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\Img_Ops\Switch\ImgIndexSwitch.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Switch\SingleImageIndexError.Designer.vb">
+      <DependentUpon>SingleImageIndexError.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Switch\SingleImageIndexError.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Internal\Feats\FeatErrorText.Designer.vb">
@@ -392,6 +425,18 @@
     <EmbeddedResource Include="Panels\Img_Ops\ApplicationDriveSpecifier.resx">
       <DependentUpon>ApplicationDriveSpecifier.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\AppxPkgs\AddProvAppxPackage.resx">
+      <DependentUpon>AddProvAppxPackage.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\AppxPkgs\RemProvAppxPackage.resx">
+      <DependentUpon>RemProvAppxPackage.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Bg_Processes\BGProcDetails.resx">
+      <DependentUpon>BGProcDetails.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Bg_Processes\BGProcNotify.resx">
+      <DependentUpon>BGProcNotify.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Conversion\ImgWim2Esd.resx">
       <DependentUpon>ImgWim2Esd.vb</DependentUpon>
     </EmbeddedResource>
@@ -430,6 +475,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Switch\ImgIndexSwitch.resx">
       <DependentUpon>ImgIndexSwitch.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Switch\SingleImageIndexError.resx">
+      <DependentUpon>SingleImageIndexError.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Internal\Feats\FeatErrorText.resx">
       <DependentUpon>FeatErrorText.vb</DependentUpon>
@@ -522,6 +570,7 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
+    <None Include="packages.config" />
     <None Include="settings.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -580,6 +629,24 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo.ico" />
+    <None Include="Resources\menus\wordwrap_dark.png" />
+    <None Include="Resources\menus\wordwrap.png" />
+    <None Include="Resources\menus\openfile_dark.png" />
+    <None Include="Resources\menus\openfile.png" />
+    <None Include="Resources\menus\newfile_dark.png" />
+    <None Include="Resources\menus\newfile.png" />
+    <None Include="Resources\menus\help_glyph_dark.png" />
+    <None Include="Resources\menus\help_glyph.png" />
+    <None Include="Resources\rem_appxpkg.png" />
+    <None Include="Resources\add_appxpkg.png" />
+    <None Include="Resources\menus\dlg_unpin_dark.png" />
+    <None Include="Resources\menus\dlg_unpin.png" />
+    <None Include="Resources\menus\dlg_pin_dark.png" />
+    <None Include="Resources\menus\dlg_pin.png" />
+    <None Include="Resources\bgproc_notify.png" />
+    <None Include="Resources\progress\bg_ops_gif\bg_ops_complete.png" />
+    <None Include="Resources\progress\bg_ops_gif\bg_ops.gif" />
+    <None Include="Resources\menus\close_glyph_dark.png" />
     <None Include="Resources\bold_font.png" />
     <None Include="Resources\warning_16px.png" />
     <None Include="Resources\error_16px.png" />
@@ -775,6 +842,7 @@
   <ItemGroup>
     <Folder Include="bin\Debug\" />
     <Folder Include="Panels\Set_Ops\" />
+    <Folder Include="wimlib\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
