@@ -22,6 +22,19 @@ Public Class ApplicationDriveSpecifier
     End Sub
 
     Private Sub ApplicationDriveSpecifier_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
+            BackColor = Color.FromArgb(31, 31, 31)
+            ForeColor = Color.White
+            TextBox1.BackColor = Color.FromArgb(31, 31, 31)
+            RichTextBox1.BackColor = Color.FromArgb(31, 31, 31)
+        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
+            BackColor = Color.FromArgb(238, 238, 242)
+            ForeColor = Color.Black
+            TextBox1.BackColor = Color.FromArgb(238, 238, 242)
+            RichTextBox1.BackColor = Color.FromArgb(238, 238, 242)
+        End If
+        TextBox1.ForeColor = ForeColor
+        RichTextBox1.ForeColor = ForeColor
         Dim WmicProc As Process = Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe", "/c .\bin\dthelper.bat /drinfo")
         Do Until WmicProc.HasExited
             If WmicProc.HasExited Then
@@ -50,5 +63,9 @@ Public Class ApplicationDriveSpecifier
         Catch ex As Exception
 
         End Try
+    End Sub
+
+    Private Sub RichTextBox1_LinkClicked(sender As Object, e As LinkClickedEventArgs) Handles RichTextBox1.LinkClicked
+        TextBox1.Text = e.LinkText
     End Sub
 End Class
