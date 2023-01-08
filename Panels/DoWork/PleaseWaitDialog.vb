@@ -135,109 +135,125 @@ Public Class PleaseWaitDialog
                 MainForm.MountDir = ProjectValueLoadForm.RichTextBox7.Text
             End If
         ElseIf ProgressPanel.OperationNum = 993 Then
-            File.WriteAllText(".\temp.bat",
-                              "@echo off" & CrLf &
-                              "dism /English /image=" & pkgSourceImgStr & " /get-packages | findstr /c:" & Quote & "Package Identity : " & Quote & " > .\pkgnames")
-            Sup_DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
-            Sup_CommandArgs = "/c " & Directory.GetCurrentDirectory() & "\temp.bat"
-            Sup_DISMProc.StartInfo.Arguments = Sup_CommandArgs
-            Sup_DISMProc.StartInfo.CreateNoWindow = True
-            Sup_DISMProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-            Sup_DISMProc.Start()
-            Do Until Sup_DISMProc.HasExited
-                If Sup_DISMProc.HasExited Then
-                    Exit Do
-                End If
-            Loop
-            If Decimal.ToInt32(Sup_DISMProc.ExitCode) = 0 Then
-                RemPackage.CheckedListBox1.Items.Clear()
-                RemPackage.CheckedListBox2.Items.Clear()
-                If Debugger.IsAttached Then
-                    Debug.WriteLine("[INFO] Package names were successfully gathered. The program should return to normal state")
-                    Debug.WriteLine("Listing package names:" & CrLf & My.Computer.FileSystem.ReadAllText(".\pkgnames"))
-                End If
-                Dim pkgNames As New RichTextBox
-                pkgNames.Text = My.Computer.FileSystem.ReadAllText(".\pkgnames")
-                For x = 0 To pkgNames.Lines.Count - 1
-                    If pkgNames.Lines(x) = "" Then
-                        Continue For
+            If MainForm.expBackgroundProcesses Then
+                Do Until MainForm.areBackgroundProcessesDone
+                    If MainForm.areBackgroundProcessesDone Then
+                        Exit Do
                     End If
-                    RemPackage.CheckedListBox1.Items.Add(pkgNames.Lines(x).Replace("Package Identity : ", "").Trim())
-                Next
-                File.Delete(".\temp.bat")
-                File.Delete(".\pkgnames")
+                Loop
             Else
-                Debug.WriteLine("[FAIL] Package names were not gathered. Please verify everything's working")
+                File.WriteAllText(".\temp.bat",
+                                  "@echo off" & CrLf &
+                                  "dism /English /image=" & pkgSourceImgStr & " /get-packages | findstr /c:" & Quote & "Package Identity : " & Quote & " > .\pkgnames")
+                Sup_DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
+                Sup_CommandArgs = "/c " & Directory.GetCurrentDirectory() & "\temp.bat"
+                Sup_DISMProc.StartInfo.Arguments = Sup_CommandArgs
+                Sup_DISMProc.StartInfo.CreateNoWindow = True
+                Sup_DISMProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+                Sup_DISMProc.Start()
+                Do Until Sup_DISMProc.HasExited
+                    If Sup_DISMProc.HasExited Then
+                        Exit Do
+                    End If
+                Loop
+                If Decimal.ToInt32(Sup_DISMProc.ExitCode) = 0 Then
+                    RemPackage.CheckedListBox1.Items.Clear()
+                    RemPackage.CheckedListBox2.Items.Clear()
+                    If Debugger.IsAttached Then
+                        Debug.WriteLine("[INFO] Package names were successfully gathered. The program should return to normal state")
+                        Debug.WriteLine("Listing package names:" & CrLf & My.Computer.FileSystem.ReadAllText(".\pkgnames"))
+                    End If
+                    Dim pkgNames As New RichTextBox
+                    pkgNames.Text = My.Computer.FileSystem.ReadAllText(".\pkgnames")
+                    For x = 0 To pkgNames.Lines.Count - 1
+                        If pkgNames.Lines(x) = "" Then
+                            Continue For
+                        End If
+                        RemPackage.CheckedListBox1.Items.Add(pkgNames.Lines(x).Replace("Package Identity : ", "").Trim())
+                    Next
+                    File.Delete(".\temp.bat")
+                    File.Delete(".\pkgnames")
+                Else
+                    Debug.WriteLine("[FAIL] Package names were not gathered. Please verify everything's working")
+                End If
             End If
         ElseIf ProgressPanel.OperationNum = 994 Then
-            File.WriteAllText(".\temp.bat",
-                              "@echo off" & CrLf &
-                              "dism /English /image=" & featSourceImg & " /get-features | findstr /c:" & Quote & "Feature Name : " & Quote & " > .\featnames" & CrLf & _
-                              "dism /English /image=" & featSourceImg & " /get-features | findstr /c:" & Quote & "State : " & Quote & " > .\featstate")
-            Sup_DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
-            Sup_DISMProc.StartInfo.Arguments = "/c " & Directory.GetCurrentDirectory() & "\temp.bat"
-            Sup_DISMProc.StartInfo.CreateNoWindow = True
-            Sup_DISMProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-            Sup_DISMProc.Start()
-            Do Until Sup_DISMProc.HasExited
-                If Sup_DISMProc.HasExited Then
-                    Exit Do
-                End If
-            Loop
-            If Decimal.ToInt32(Sup_DISMProc.ExitCode) = 0 Then
-                EnableFeat.ListView1.Items.Clear()
-                DisableFeat.ListView1.Items.Clear()
-                Debug.WriteLine("[INFO] Feature names and their states were successfully gathered. The program should return to normal state")
-                Debug.WriteLine("Listing feature names and their states:")
-                Dim featNameRTB As New RichTextBox With {
-                    .Text = My.Computer.FileSystem.ReadAllText(".\featnames")
-                }
-                Dim featStateRTB As New RichTextBox With {
-                    .Text = My.Computer.FileSystem.ReadAllText(".\featstate")
-                }
-                Select Case featOpType
-                    Case 0
-                        If Debugger.IsAttached Then
-                            For x = 0 To featNameRTB.Lines.Count - 1
-                                If featNameRTB.Lines(x) = "" Then
-                                    Continue For
-                                End If
-                                Debug.WriteLine("Feature: " & featNameRTB.Lines(x).Replace("Feature Name : ", "").Trim().ToString() & " (" & featStateRTB.Lines(x).Replace("State : ", "").Trim().ToString() & ")")
-                            Next
-                        End If
-                        For x = 0 To featNameRTB.Lines.Count - 1
-                            If featNameRTB.Lines(x) = "" Or featStateRTB.Lines(x).Contains("Enable") Then
-                                Continue For
-                            End If
-                            EnableFeat.ListView1.Items.Add(featNameRTB.Lines(x).Replace("Feature Name : ", "").Trim().ToString()).SubItems.Add(featStateRTB.Lines(x).Replace("State : ", "").Trim().ToString())
-                        Next
-                        File.Delete(".\temp.bat")
-                        File.Delete(".\featnames")
-                        File.Delete(".\featstate")
-                        EnableFeat.Label2.Text = "This image contains " & featNameRTB.Lines.Count & " features."
-                    Case 1
-                        If Debugger.IsAttached Then
-                            For x = 0 To featNameRTB.Lines.Count - 1
-                                If featNameRTB.Lines(x) = "" Then
-                                    Continue For
-                                End If
-                                Debug.WriteLine("Feature: " & featNameRTB.Lines(x).Replace("Feature Name : ", "").Trim().ToString() & " (" & featStateRTB.Lines(x).Replace("State : ", "").Trim().ToString() & ")")
-                            Next
-                        End If
-                        For x = 0 To featNameRTB.Lines.Count - 1
-                            If featNameRTB.Lines(x) = "" Or featStateRTB.Lines(x).Contains("Disable") Then
-                                Continue For
-                            End If
-                            DisableFeat.ListView1.Items.Add(featNameRTB.Lines(x).Replace("Feature Name : ", "").Trim().ToString()).SubItems.Add(featStateRTB.Lines(x).Replace("State : ", "").Trim().ToString())
-                        Next
-                        File.Delete(".\temp.bat")
-                        File.Delete(".\featnames")
-                        File.Delete(".\featstate")
-                        DisableFeat.Label2.Text = "This image contains " & featNameRTB.Lines.Count & " features."
-                End Select
-
+            If MainForm.expBackgroundProcesses Then
+                Do Until MainForm.areBackgroundProcessesDone
+                    If MainForm.areBackgroundProcessesDone Then
+                        Exit Do
+                    End If
+                Loop
             Else
+                File.WriteAllText(".\temp.bat",
+                                  "@echo off" & CrLf &
+                                  "dism /English /image=" & featSourceImg & " /get-features | findstr /c:" & Quote & "Feature Name : " & Quote & " > .\featnames" & CrLf & _
+                                  "dism /English /image=" & featSourceImg & " /get-features | findstr /c:" & Quote & "State : " & Quote & " > .\featstate")
+                Sup_DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
+                Sup_DISMProc.StartInfo.Arguments = "/c " & Directory.GetCurrentDirectory() & "\temp.bat"
+                Sup_DISMProc.StartInfo.CreateNoWindow = True
+                Sup_DISMProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+                Sup_DISMProc.Start()
+                Do Until Sup_DISMProc.HasExited
+                    If Sup_DISMProc.HasExited Then
+                        Exit Do
+                    End If
+                Loop
+                If Decimal.ToInt32(Sup_DISMProc.ExitCode) = 0 Then
+                    EnableFeat.ListView1.Items.Clear()
+                    DisableFeat.ListView1.Items.Clear()
+                    Debug.WriteLine("[INFO] Feature names and their states were successfully gathered. The program should return to normal state")
+                    Debug.WriteLine("Listing feature names and their states:")
+                    Dim featNameRTB As New RichTextBox With {
+                        .Text = My.Computer.FileSystem.ReadAllText(".\featnames")
+                    }
+                    Dim featStateRTB As New RichTextBox With {
+                        .Text = My.Computer.FileSystem.ReadAllText(".\featstate")
+                    }
+                    Select Case featOpType
+                        Case 0
+                            If Debugger.IsAttached Then
+                                For x = 0 To featNameRTB.Lines.Count - 1
+                                    If featNameRTB.Lines(x) = "" Then
+                                        Continue For
+                                    End If
+                                    Debug.WriteLine("Feature: " & featNameRTB.Lines(x).Replace("Feature Name : ", "").Trim().ToString() & " (" & featStateRTB.Lines(x).Replace("State : ", "").Trim().ToString() & ")")
+                                Next
+                            End If
+                            For x = 0 To featNameRTB.Lines.Count - 1
+                                If featNameRTB.Lines(x) = "" Or featStateRTB.Lines(x).Contains("Enable") Then
+                                    Continue For
+                                End If
+                                EnableFeat.ListView1.Items.Add(featNameRTB.Lines(x).Replace("Feature Name : ", "").Trim().ToString()).SubItems.Add(featStateRTB.Lines(x).Replace("State : ", "").Trim().ToString())
+                            Next
+                            File.Delete(".\temp.bat")
+                            File.Delete(".\featnames")
+                            File.Delete(".\featstate")
+                            EnableFeat.Label2.Text = "This image contains " & featNameRTB.Lines.Count & " features."
+                        Case 1
+                            If Debugger.IsAttached Then
+                                For x = 0 To featNameRTB.Lines.Count - 1
+                                    If featNameRTB.Lines(x) = "" Then
+                                        Continue For
+                                    End If
+                                    Debug.WriteLine("Feature: " & featNameRTB.Lines(x).Replace("Feature Name : ", "").Trim().ToString() & " (" & featStateRTB.Lines(x).Replace("State : ", "").Trim().ToString() & ")")
+                                Next
+                            End If
+                            For x = 0 To featNameRTB.Lines.Count - 1
+                                If featNameRTB.Lines(x) = "" Or featStateRTB.Lines(x).Contains("Disable") Then
+                                    Continue For
+                                End If
+                                DisableFeat.ListView1.Items.Add(featNameRTB.Lines(x).Replace("Feature Name : ", "").Trim().ToString()).SubItems.Add(featStateRTB.Lines(x).Replace("State : ", "").Trim().ToString())
+                            Next
+                            File.Delete(".\temp.bat")
+                            File.Delete(".\featnames")
+                            File.Delete(".\featstate")
+                            DisableFeat.Label2.Text = "This image contains " & featNameRTB.Lines.Count & " features."
+                    End Select
 
+                Else
+
+                End If
             End If
         ElseIf ProgressPanel.OperationNum = 995 Then
             Dim DismExe As String = MainForm.DismExe
@@ -280,10 +296,11 @@ Public Class PleaseWaitDialog
                 ' Set values
                 imgIndexes = CInt(My.Computer.FileSystem.ReadAllText(".\indexcount"))
                 If imgIndexes = 1 Then
-                    MsgBox("This image seems to have only 1 index, so you can't switch to other indexes. You can get the image indexes by going to Commands > Image management > Get image information... on the menu", vbOKOnly + vbExclamation, "Switch indexes")
+                    SingleImageIndexError.ShowDialog(MainForm)
                     If Not IsDisposed Then
                         Dispose()
                     End If
+                    File.Delete(".\temp.bat")
                     Exit Sub
                 End If
                 Dim indexNameRTB As New RichTextBox With {
@@ -308,6 +325,7 @@ Public Class PleaseWaitDialog
                 ImgIndexSwitch.NumericUpDown1.Maximum = imgIndexes
                 File.Delete(".\indexcount")
                 File.Delete(".\indexnames")
+                File.Delete(".\temp.bat")
             End If
         End If
         Close()
