@@ -124,6 +124,11 @@ Public Class ImgApply
             Win10Title.Visible = True
         End If
         ToolStripStatusLabel1.Text = "Please specify the naming pattern of the SWM files"
+        If MainForm.SourceImg = "N/A" Then
+            UseMountedImgBtn.Enabled = False
+        Else
+            UseMountedImgBtn.Enabled = True
+        End If
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
