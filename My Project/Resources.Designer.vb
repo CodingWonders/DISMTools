@@ -343,6 +343,16 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property delete_imgindex() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("delete_imgindex", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property disable_feature() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("disable_feature", resourceCulture)
@@ -691,11 +701,13 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or at your option any later version.
+        '''  Busca una cadena traducida similar a - DISMTools
+        '''
+        '''This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or at your option any later version.
         '''
         '''This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
         '''
-        '''You should have received a copy of [resto de la cadena truncado]&quot;;.
+        '''You should have rec [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property LicenseOverview() As String
             Get
