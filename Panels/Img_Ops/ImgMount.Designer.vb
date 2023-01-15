@@ -381,7 +381,7 @@ Partial Class ImgMount
         '
         'FileSpecDialog
         '
-        Me.FileSpecDialog.Filter = "WIM files|*.wim|VHD(X) files|*.vhd,*.vhdx,*.VHD,*.VHDX"
+        Me.FileSpecDialog.Filter = "WIM files|*.wim|VHD(X) files|*.vhd;*.vhdx;"
         '
         'IndexesPanel
         '
