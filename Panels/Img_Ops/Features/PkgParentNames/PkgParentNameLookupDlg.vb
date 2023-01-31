@@ -50,7 +50,22 @@ Public Class PkgParentNameLookupDlg
         OK_Button.Enabled = False
         Cancel_Button.Enabled = False
         ListBox1.Items.Clear()
-        PackageListerBW.RunWorkerAsync()
+        If MainForm.expBackgroundProcesses Then
+            For x = 0 To MainForm.imgPackageNames.Length - 1
+                If MainForm.imgPackageNames(x) = "" Then
+                    Continue For
+                ElseIf MainForm.imgPackageNames(x) = Nothing Then
+                    Exit For
+                Else
+                    ListBox1.Items.Add(MainForm.imgPackageNames(x))
+                End If
+            Next
+            Label3.Visible = False
+            OK_Button.Enabled = True
+            Cancel_Button.Enabled = True
+        Else
+            PackageListerBW.RunWorkerAsync()
+        End If
     End Sub
 
     Private Sub PackageListerBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles PackageListerBW.DoWork
