@@ -49,4 +49,8 @@ Public Class PrgAbout
     Private Sub LinkLabel9_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel9.LinkClicked
         Process.Start("https://github.com/jacobslusser/ScintillaNET")
     End Sub
+
+    Private Sub RichTextBox1_LinkClicked(sender As Object, e As LinkClickedEventArgs) Handles RichTextBox1.LinkClicked
+        Process.Start(e.LinkText)
+    End Sub
 End Class
