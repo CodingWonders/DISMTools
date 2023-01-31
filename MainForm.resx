@@ -413,4 +413,10 @@ These options, and the program information, can be found by opening the Help men
         AAD///////8AAP///////wAA////////AAA=
 </value>
   </data>
+  <metadata name="LocalMountDirFBD.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>1190, 17</value>
+  </metadata>
+  <metadata name="MountedImageDetectorBW.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 56</value>
+  </metadata>
 </root>

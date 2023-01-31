@@ -76,6 +76,20 @@ Public Class MainForm
     ' 0.1.1 settings
     Public LogFontIsBold As Boolean
     Public LogFontSize As Integer
+    ' 0.2 settings
+    Public expBackgroundProcesses As Boolean = True     ' Experimental setting used during development. Everything now depends on it. This WILL be removed in the future
+    Public NotificationShow As Boolean
+    Public NotificationFrequency As Integer
+    Public NotificationTimes As Integer = 0
+
+    ' Background process initiator settings
+    Public bwBackgroundProcessAction As Integer
+    Public bwAllBackgroundProcesses As Boolean
+    Public bwGetImageInfo As Boolean
+    Public bwGetAdvImgInfo As Boolean
+
+    ' Background process variables
+    Public imgCanGetAppxPkgs As Boolean            ' Windows 8 introduced AppX packages (Metro-style apps). The AppX format is still used in Windows 10 and 11
 
     ' These are the variables that need to change when testing setting validity
     Public isExeProblematic As Boolean
@@ -93,8 +107,55 @@ Public Class MainForm
     ' Arrays and other variables used on background processes
     Public imgPackageNames(65535) As String
     Public imgPackageState(65535) As String
+    Public imgPackageRelType(65535) As String
+    Public imgPackageInstTime(65535) As String
+
     Public imgFeatureNames(65535) As String
     Public imgFeatureState(65535) As String
+
+    Public imgAppxDisplayNames(65535) As String
+    Public imgAppxPackageNames(65535) As String
+    Public imgAppxVersions(65535) As String
+    Public imgAppxArchitectures(65535) As String
+    Public imgAppxResourceIds(65535) As String
+    Public imgAppxRegions(65535) As String
+
+    Public imgCapabilityIds(65535) As String
+    Public imgCapabilityState(65535) As String
+
+    Public imgDrvPublishedNames(65535) As String
+    Public imgDrvOGFileNames(65535) As String
+    Public imgDrvInbox(65535) As String
+    Public imgDrvClassNames(65535) As String
+    Public imgDrvProviderNames(65535) As String
+    Public imgDrvDates(65535) As String
+    Public imgDrvVersions(65535) As String
+
+    Public imgPackageNameLastEntry As String
+
+    Public areBackgroundProcessesDone As Boolean
+
+    Dim pbOpNums As Integer
+    Dim progressMax As Integer = 100
+    Dim progressMin As Integer = 0
+    Dim progressDivs As Double
+    Dim progressLabel As String
+    Dim regJumps As Boolean
+    Dim irregVal As Integer = 0
+
+    Dim ElementCount As Integer = 0
+
+    Public pinState As Integer
+
+    Public MountedImageImgFiles(65535) As String
+    Public MountedImageMountDirs(65535) As String
+    Public MountedImageImgIndexes(65535) As String
+    Public MountedImageMountedReWr(65535) As String
+    Public MountedImageImgStatuses(65535) As String
+    ' Private lists for DetectMountedImages function
+    Dim MountedImageImgFileList As New List(Of String)
+    Dim MountedImageImgIndexList As New List(Of String)
+    Dim MountedImageMountDirList As New List(Of String)
 
     ' Perform image unmount operations when pressing on buttons
     Public imgCommitOperation As Integer = -1 ' 0: commit; 1: discard
@@ -102,9 +163,15 @@ Public Class MainForm
     Dim DismVersionChecker As FileVersionInfo
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Debug.WriteLine("DISMTools, version " & My.Application.Info.Version.ToString() & " (" & dtBranch & ")" & CrLf & _
+                        "Loading program settings..." & CrLf)
+        ' Detect mounted images
+        DetectMountedImages(True, True, True)
+        Debug.WriteLine(CrLf & "Finished detecting mounted images. Continuing program startup..." & CrLf)
         Control.CheckForIllegalCrossThreadCalls = False
         BranchTSMI.Text = dtBranch
         If Debugger.IsAttached Then
+            expBackgroundProcesses = True
             BranchTSMI.Visible = True
             Text &= " (debug mode)"
         End If
@@ -114,6 +181,176 @@ Public Class MainForm
         If DismExe <> "" Then
             DismVersionChecker = FileVersionInfo.GetVersionInfo(DismExe)
         End If
+        MountedImageDetectorBW.RunWorkerAsync()
+    End Sub
+
+    ''' <summary>
+    ''' Detects all mounted images and their state. Calls dism /English /get-mountedimageinfo at program startup
+    ''' </summary>
+    ''' <remarks>This yields results for the MountedImageImgFiles, MountedImageMountDirs, MountedImageImgIndexes, MountedImageMountedRewr and MountedImageImgStatuses string arrays in code</remarks>
+    Sub DetectMountedImages(DebugLog As Boolean, DeleteTempInfo As Boolean, GetAdditionalInfo As Boolean)
+        If MountedImageImgFileList IsNot Nothing And MountedImageImgIndexList IsNot Nothing And MountedImageMountDirList IsNot Nothing Then
+            MountedImageImgFileList.Clear()
+            MountedImageImgIndexList.Clear()
+            MountedImageMountDirList.Clear()
+        End If
+        If GetAdditionalInfo Then
+            Directory.CreateDirectory(".\tempinfo").Attributes = FileAttributes.Hidden
+            If DebugLog Then Debug.WriteLine("[DetectMountedImages] Running function...")
+            If DebugLog Then Debug.WriteLine("[DetectMountedImages] Determining whether there are mounted images...")
+            ' Write getter script to determine number of mounted images
+            Try
+                File.WriteAllText(".\bin\exthelpers\imgnums.bat", _
+                                  "@echo off" & CrLf & _
+                                  "dism /English /get-mountedimageinfo | find /c " & Quote & "Image File : " & Quote & " > .\tempinfo\imgcount", _
+                                  ASCII)
+            Catch ex As Exception
+                Debug.WriteLine("[DetectMountedImages] Failed writing getter scripts. Reason: " & ex.Message)
+                If DeleteTempInfo Then Directory.Delete(".\tempinfo", True)
+                Exit Sub
+            End Try
+            ' Initialize process
+            Dim MountedImgProc As New Process()
+            MountedImgProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
+            MountedImgProc.StartInfo.Arguments = "/c " & Directory.GetCurrentDirectory() & "\bin\exthelpers\imgnums.bat"
+            MountedImgProc.StartInfo.CreateNoWindow = True
+            MountedImgProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+            MountedImgProc.Start()
+            Do Until MountedImgProc.HasExited
+                If MountedImgProc.HasExited Then
+                    Exit Do
+                End If
+            Loop
+            ' Get number of mounted images
+            File.Delete(".\bin\exthelpers\imgnums.bat")
+            If MountedImgProc.ExitCode = 0 Then
+                Dim imgCount As Integer = CInt(My.Computer.FileSystem.ReadAllText(".\tempinfo\imgcount"))
+                File.Delete(".\tempinfo\imgcount")
+                If imgCount = 0 Then
+                    If DebugLog Then Debug.WriteLine("[DetectMountedImages] There are no mounted images. Exiting function...")
+                    If DeleteTempInfo Then Directory.Delete(".\tempinfo", True)
+                    ' Keep the "exthelpers" folder in case background processes need to be run again
+                    If DeleteTempInfo Then
+                        For Each TempFile In My.Computer.FileSystem.GetFiles(".\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly)
+                            File.Delete(TempFile)
+                        Next
+                    End If
+                    Exit Sub
+                End If
+            End If
+            ' Write other getter scripts
+            If DebugLog Then Debug.WriteLine("[DetectMountedImages] Writing getter scripts...")
+            Try
+                File.WriteAllText(".\bin\exthelpers\imgmountedrw.bat", _
+                                  "@echo off" & CrLf & _
+                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mounted Read/Write : " & Quote & " > .\tempinfo\imgmountedrw", _
+                                  ASCII)
+                File.WriteAllText(".\bin\exthelpers\imgstatus.bat", _
+                                  "@echo off" & CrLf & _
+                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status : " & Quote & " > .\tempinfo\imgstatus", _
+                                  ASCII)
+            Catch ex As Exception
+                Debug.WriteLine("[DetectMountedImages] Failed writing getter scripts. Reason: " & ex.Message)
+                If DeleteTempInfo Then Directory.Delete(".\tempinfo", True)
+                ' Keep the "exthelpers" folder in case background processes need to be run again
+                If DeleteTempInfo Then
+                    For Each TempFile In My.Computer.FileSystem.GetFiles(".\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly)
+                        File.Delete(TempFile)
+                    Next
+                End If
+                Exit Sub
+            End Try
+            If DebugLog Then Debug.WriteLine("[DetectMountedImages] Finished writing getter scripts. Executing them...")
+            For Each imgScript In My.Computer.FileSystem.GetFiles(".\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly, "*.bat")
+                If Path.GetFileName(imgScript).StartsWith("img") Then
+                    If DebugLog Then Debug.WriteLine("[DetectMountedImages] RunCommand -> " & Path.GetFileName(imgScript))
+                    MountedImgProc.StartInfo.Arguments = "/c " & imgScript
+                    MountedImgProc.Start()
+                    Do Until MountedImgProc.HasExited
+                        If MountedImgProc.HasExited Then
+                            Exit Do
+                        End If
+                    Loop
+                    If MountedImgProc.ExitCode = 0 Then
+                        Continue For
+                    End If
+                Else
+                    Continue For
+                End If
+            Next
+            If DebugLog Then Debug.WriteLine("[DetectMountedImages] Finished running getter scripts. Filling arrays...")
+            Dim FileGetterRTB As New RichTextBox()
+            Dim TypeLookups() As String = New String(4) {"Mount Dir : ", "Image File : ", "Image Index : ", "Mounted Read/Write : ", "Status : "}
+            Dim lineToAppend As String = ""
+            For Each imgFile In My.Computer.FileSystem.GetFiles(".\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
+                If Path.GetFileName(imgFile).StartsWith("img") Then
+                    If DebugLog Then Debug.WriteLine("[DetectMountedImages] FillArray -> (values_from: " & Path.GetFileName(imgFile) & ")")
+                    FileGetterRTB.Clear()
+                    FileGetterRTB.Text = My.Computer.FileSystem.ReadAllText(imgFile)
+                    For x = 0 To FileGetterRTB.Lines.Count - 1
+                        If FileGetterRTB.Lines(x) = "" Then
+                            Continue For
+                        Else
+                            If FileGetterRTB.Lines(x).StartsWith(TypeLookups(0)) Then
+                                lineToAppend = FileGetterRTB.Lines(x).Replace("Mount Dir : ", "").Trim()
+                                If lineToAppend = "" Then lineToAppend = "Nothing"
+                                MountedImageMountDirs(x) = lineToAppend
+                            ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(1)) Then
+                                lineToAppend = FileGetterRTB.Lines(x).Replace("Image File : ", "").Trim()
+                                If lineToAppend = "" Then lineToAppend = "Nothing"
+                                MountedImageImgFiles(x) = lineToAppend
+                            ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(2)) Then
+                                lineToAppend = FileGetterRTB.Lines(x).Replace("Image Index : ", "").Trim()
+                                If lineToAppend = "" Then lineToAppend = "Nothing"
+                                MountedImageImgIndexes(x) = lineToAppend
+                            ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(3)) Then
+                                lineToAppend = FileGetterRTB.Lines(x).Replace("Mounted Read/Write : ", "").Trim()
+                                If lineToAppend = "" Then lineToAppend = "Nothing"
+                                MountedImageMountedReWr(x) = lineToAppend
+                            ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(4)) Then
+                                lineToAppend = FileGetterRTB.Lines(x).Replace("Status : ", "").Trim()
+                                If lineToAppend = "" Then lineToAppend = "Nothing"
+                                MountedImageImgStatuses(x) = lineToAppend
+                            End If
+                        End If
+                    Next
+                Else
+                    Continue For
+                End If
+            Next
+            Try
+                If DeleteTempInfo Then Directory.Delete(".\tempinfo", True)
+                ' Keep the "exthelpers" folder in case background processes need to be run again
+                If DeleteTempInfo Then
+                    For Each TempFile In My.Computer.FileSystem.GetFiles(".\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly)
+                        File.Delete(TempFile)
+                    Next
+                End If
+            Catch ex As Exception
+                Debug.WriteLine("[DetectMountedImages] Could not delete temporary files. Reason: " & ex.Message)
+            End Try
+        End If
+        Const REGISTRY_ROOT As String = "SOFTWARE\Microsoft\WIMMount\Mounted Images"
+        If DebugLog Then Debug.WriteLine("[DetectMountedImages] Getting additional information from registry key " & Quote & REGISTRY_ROOT & Quote & "...")
+        Using imgRegistry As RegistryKey = Registry.LocalMachine.OpenSubKey(REGISTRY_ROOT)
+            If imgRegistry IsNot Nothing Then
+                For Each key In imgRegistry.GetSubKeyNames()
+                    If DebugLog Then Debug.WriteLine("[DetectMountedImages] Getting information from image... (GUID: " & key & ")")
+                    Dim MountedWim As RegistryKey = Registry.LocalMachine.OpenSubKey(REGISTRY_ROOT & "\" & key)
+                    If DebugLog Then Debug.WriteLine("  Image file : " & MountedWim.GetValue("WIM Path").ToString())
+                    If DebugLog Then Debug.WriteLine("  Image index : " & MountedWim.GetValue("Image Index").ToString())
+                    If DebugLog Then Debug.WriteLine("  Mount directory : " & MountedWim.GetValue("Mount Path").ToString())
+                    MountedImageImgFileList.Add(MountedWim.GetValue("WIM Path").ToString())
+                    MountedImageImgIndexList.Add(MountedWim.GetValue("Image Index").ToString())
+                    MountedImageMountDirList.Add(MountedWim.GetValue("Mount Path").ToString())
+                    MountedWim.Close()
+                Next
+                imgRegistry.Close()
+            End If
+        End Using
+        MountedImageImgFiles = MountedImageImgFileList.ToArray()
+        MountedImageImgIndexes = MountedImageImgIndexList.ToArray()
+        MountedImageMountDirs = MountedImageMountDirList.ToArray()
     End Sub
 
     Sub ChangeImgStatus()
@@ -449,8 +686,6 @@ Public Class MainForm
     End Class
 
     Sub LoadDTSettings(LoadMode As Integer)
-        Debug.WriteLine("DISMTools, version " & My.Application.Info.Version.ToString() & " (" & dtBranch & ")" & CrLf & _
-                        "Loading program settings..." & CrLf)
         ' LoadMode = 0; load from registry
         ' LoadMode = 1; load from INI file
         If LoadMode = 0 Then
@@ -567,6 +802,18 @@ Public Class MainForm
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("ReportView=1") Then
                     ReportView = 1
                 End If
+                ' Show notification: 1 - True
+                '                    0 - False
+                If DTSettingForm.RichTextBox1.Text.Contains("ShowNotification=1") Then
+                    NotificationShow = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("ShowNotification=0") Then
+                    NotificationShow = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("NotifyFrequency=0") Then
+                    NotificationFrequency = 0
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("NotifyFrequency=1") Then
+                    NotificationFrequency = 1
+                End If
             Else
                 GenerateDTSettings()
                 LoadDTSettings(1)
@@ -590,7 +837,9 @@ Public Class MainForm
                             "UseScratch           =    " & UseScratch & CrLf & _
                             "ScratchDir           =    " & Quote & ScratchDir & Quote & CrLf & _
                             "EnglishOutput        =    " & EnglishOutput & CrLf & _
-                            "ReportView           =    " & ReportView)
+                            "ReportView           =    " & ReportView & CrLf & _
+                            "NotificationShow     =    " & NotificationShow & CrLf & _
+                            "NotificationFrequency=    " & NotificationFrequency)
         End If
         ' Test setting validity
         If Not File.Exists(DismExe) Then
@@ -635,104 +884,1171 @@ Public Class MainForm
 #Region "Background Processes"  ' These will be called later on
 
     ''' <summary>
+    ''' Runs specified background processes. The program refers to the processes that gather image information as "background processes", due to the way they are run (in the background ;))
+    ''' </summary>
+    ''' <param name="bgProcOptn"></param>
+    ''' <param name="GatherBasicInfo"></param>
+    ''' <remarks>Depending on the parameter of bgProcOptn, and on the power of the system, the background processes may take a longer time to finish</remarks>
+    Sub RunBackgroundProcesses(bgProcOptn As Integer, GatherBasicInfo As Boolean, GatherAdvancedInfo As Boolean)
+        areBackgroundProcessesDone = False
+        regJumps = False
+        irregVal = 0
+        pbOpNums = 0
+        ' Determine which actions are being done
+        If GatherBasicInfo Then
+            If GatherAdvancedInfo Then
+                pbOpNums = 2
+            Else
+                pbOpNums = 1
+            End If
+        End If
+        Select Case bgProcOptn
+            Case 0
+                pbOpNums += 3
+            Case 1
+                pbOpNums += 1
+            Case 2
+                pbOpNums += 1
+            Case 3
+                pbOpNums += 1
+            Case 4
+                pbOpNums += 1
+            Case 5
+                pbOpNums += 1
+        End Select
+        progressDivs = 100 / pbOpNums
+        progressLabel = "Running processes"
+        ImgBW.ReportProgress(0)
+        ' Let user know things are working
+        BackgroundProcessesButton.Visible = False
+        BackgroundProcessesButton.Image = My.Resources.bg_ops
+        BackgroundProcessesButton.Visible = True
+        If GatherBasicInfo Then
+            progressLabel = "Getting basic image information..."
+            ImgBW.ReportProgress(progressMin + progressDivs)
+            GetBasicImageInfo()
+            If isOrphaned Then
+                Exit Sub
+            End If
+            If ImgBW.CancellationPending Then
+                Exit Sub
+            End If
+            DetectNTVersion(MountDir & "\Windows\system32\ntoskrnl.exe")
+            If GatherAdvancedInfo Then
+                progressLabel = "Getting advanced image information..."
+                ImgBW.ReportProgress(progressMin + progressDivs)
+                GetAdvancedImageInfo()
+            End If
+        End If
+        Directory.CreateDirectory(".\tempinfo")
+        ' Parameters for bgProcOptn:
+        ' 0 (meta-optn): run every background process
+        ' 1: run package background processes
+        ' 2: run feature background processes
+        ' 3: run AppX package background processes
+        ' 4: run FoD background processes
+        ' 5: run driver background processes
+        regJumps = True
+        progressMin = 20
+        Select Case bgProcOptn
+            Case 0
+                progressLabel = "Getting image packages..."
+                ImgBW.ReportProgress(20)
+                GetImagePackages()
+                progressLabel = "Getting image features..."
+                ImgBW.ReportProgress(progressMin + progressDivs)
+                GetImageFeatures()
+                If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") = True Then
+                    Debug.WriteLine("[IsWindows8OrHigher] Returned True")
+                    pbOpNums += 1
+                    progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
+                    ImgBW.ReportProgress(progressMin + progressDivs)
+                    GetImageAppxPackages()
+                Else
+                    Debug.WriteLine("[IsWindows8OrHigher] Returned False")
+                End If
+                If IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") = True Then
+                    Debug.WriteLine("[IsWindows10OrHigher] Returned True")
+                    pbOpNums += 1
+                    progressLabel = "Getting image Features on Demand (capabilities)..."
+                    ImgBW.ReportProgress(progressMin + progressDivs)
+                    GetImageCapabilities()
+                Else
+                    Debug.WriteLine("[IsWindows10OrHigher] Returned False")
+                End If
+                progressLabel = "Getting image third-party drivers..."
+                ImgBW.ReportProgress(progressMin + progressDivs)
+                GetImageDrivers()
+            Case 1
+                progressLabel = "Getting image packages..."
+                ImgBW.ReportProgress(20)
+                GetImagePackages()
+            Case 2
+                progressLabel = "Getting image features..."
+                ImgBW.ReportProgress(progressMin + progressDivs)
+                GetImageFeatures()
+            Case 3
+                If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") = True Then
+                    Debug.WriteLine("[IsWindows8OrHigher] Returned True")
+                    pbOpNums += 1
+                    progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
+                    ImgBW.ReportProgress(progressMin + progressDivs)
+                    GetImageAppxPackages()
+                Else
+                    Debug.WriteLine("[IsWindows8OrHigher] Returned False")
+                End If
+            Case 4
+                If IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") = True Then
+                    Debug.WriteLine("[IsWindows10OrHigher] Returned True")
+                    pbOpNums += 1
+                    progressLabel = "Getting image Features on Demand (capabilities)..."
+                    ImgBW.ReportProgress(progressMin + progressDivs)
+                    GetImageCapabilities()
+                Else
+                    Debug.WriteLine("[IsWindows10OrHigher] Returned False")
+                End If
+            Case 5
+                progressLabel = "Getting image third-party drivers..."
+                ImgBW.ReportProgress(progressMin + progressDivs)
+                GetImageDrivers()
+        End Select
+        DeleteTempFiles()
+        areBackgroundProcessesDone = True
+        BackgroundProcessesButton.Image = New Bitmap(My.Resources.bg_ops_complete)
+    End Sub
+
+    ''' <summary>
+    ''' Gets basic image information, such as its index, its file path, or its mount dir
+    ''' </summary>
+    ''' <remarks>Depending on the GatherBasicInfo flag in RunBackgroundProcesses, this function will run or not</remarks>
+    Sub GetBasicImageInfo()
+        ' Set image properties
+        Label14.Text = ProgressPanel.ImgIndex
+        Label12.Text = ProgressPanel.MountDir
+        ' Loading the project directly with an image already mounted makes the two labels above be wrong.
+        ' Check them and use local vars
+        If Label14.Text = "0" Or Label12.Text = "" Then     ' Label14 (index preview label) returns 0 and Label12 (mount dir preview) returns blank
+            Label14.Text = ImgIndex
+            Label12.Text = MountDir
+        End If
+        Try
+            If ProgressPanel.MountDir = "" Then
+                Throw New Exception
+            Else
+                Dim KeVerInfo As FileVersionInfo = FileVersionInfo.GetVersionInfo(ProgressPanel.MountDir & "\Windows\system32\ntoskrnl.exe")    ' Get version info from ntoskrnl.exe
+                Dim KeVerStr As String = KeVerInfo.ProductVersion
+                Label17.Text = KeVerStr
+                Select Case DismVersionChecker.ProductMajorPart
+                    Case 6
+                        Select Case DismVersionChecker.ProductMinorPart
+                            Case 1
+                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " > imgname", _
+                                                  ASCII)
+                            Case Is >= 2
+                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " > imgname", _
+                                                  ASCII)
+                        End Select
+                    Case 10
+                        File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " > imgname", _
+                                          ASCII)
+                End Select
+                Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
+                Label18.Text = My.Computer.FileSystem.ReadAllText(".\imgname").Replace("Name : ", "").Trim()
+                File.Delete(".\imgname")
+                File.Delete(".\bin\exthelpers\temp.bat")
+                Select Case DismVersionChecker.ProductMajorPart
+                    Case 6
+                        Select Case DismVersionChecker.ProductMinorPart
+                            Case 1
+                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
+                                                  ASCII)
+                            Case Is >= 2
+                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
+                                                  ASCII)
+                        End Select
+                    Case 10
+                        File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
+                                          ASCII)
+                End Select
+                Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
+                Label20.Text = My.Computer.FileSystem.ReadAllText(".\imgdesc").Replace("Description : ", "").Trim()
+                File.Delete(".\imgdesc")
+                File.Delete(".\bin\exthelpers\temp.bat")
+                If Label18.Text = "" Or Label20.Text = "" Then
+                    Label18.Text = imgMountedName
+                    Label20.Text = imgMountedDesc
+                End If
+            End If
+        Catch ex As Exception
+            ' Maybe it was loaded directly. Check local vars
+            Try
+                Dim KeVerInfo As FileVersionInfo = FileVersionInfo.GetVersionInfo(MountDir & "\Windows\system32\ntoskrnl.exe")    ' Get version info from ntoskrnl.exe
+                Dim KeVerStr As String = KeVerInfo.ProductVersion
+                Label17.Text = KeVerStr
+                Select Case DismVersionChecker.ProductMajorPart
+                    Case 6
+                        Select Case DismVersionChecker.ProductMinorPart
+                            Case 1
+                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Name" & Quote & " > imgname", _
+                                                  ASCII)
+                            Case Is >= 2
+                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Name" & Quote & " > imgname", _
+                                                  ASCII)
+                        End Select
+                    Case 10
+                        File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Name" & Quote & " > imgname", _
+                                          ASCII)
+                End Select
+                Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
+                Label18.Text = My.Computer.FileSystem.ReadAllText(".\imgname").Replace("Name : ", "").Trim()
+                File.Delete(".\imgname")
+                File.Delete(".\bin\exthelpers\temp.bat")
+                Select Case DismVersionChecker.ProductMajorPart
+                    Case 6
+                        Select Case DismVersionChecker.ProductMinorPart
+                            Case 1
+                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
+                                                  ASCII)
+                            Case Is >= 2
+                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
+                                                  ASCII)
+                        End Select
+                    Case 10
+                        File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
+                                          ASCII)
+                End Select
+                Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
+                Label20.Text = My.Computer.FileSystem.ReadAllText(".\imgdesc").Replace("Description : ", "").Trim()
+                File.Delete(".\imgdesc")
+                File.Delete(".\bin\exthelpers\temp.bat")
+                If Label18.Text = "" Or Label20.Text = "" Then
+                    Label18.Text = imgMountedName
+                    Label20.Text = imgMountedDesc
+                End If
+            Catch ex2 As Exception      ' It is clear that something went seriously wrong. Assume the image was unmounted before loading the proj in first place
+                UpdateImgProps()        ' and exit the sub (a.k.a., give up)
+                Exit Sub
+            End Try
+        End Try
+        DetectNTVersion(MountDir & "\Windows\system32\ntoskrnl.exe")
+        ' Detect whether the image needs a servicing session reload
+        Directory.CreateDirectory(projPath & "\tempinfo")
+        Select Case DismVersionChecker.ProductMajorPart
+            Case 6
+                Select Case DismVersionChecker.ProductMinorPart
+                    Case 1
+                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                                          "@echo off" & CrLf & _
+                                          "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus", ASCII)
+                    Case Is >= 2
+                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                                          "@echo off" & CrLf & _
+                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus", ASCII)
+                End Select
+            Case 10
+                File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                                  "@echo off" & CrLf & _
+                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus", ASCII)
+        End Select
+        Process.Start(".\bin\exthelpers\imginfo.bat").WaitForExit()
+        mountedImgStatus = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgmountedstatus", ASCII).Replace("Status : ", "").Trim()
+        File.Delete(".\bin\exthelpers\imginfo.bat")
+        Select Case DismVersionChecker.ProductMajorPart
+            Case 6
+                Select Case DismVersionChecker.ProductMinorPart
+                    Case 1
+                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                                          "@echo off" & CrLf & _
+                                          "dism /English /get-wiminfo /wimfile=" & SourceImg & " | find /c " & Quote & "Index" & Quote & " > " & projPath & "\tempinfo\indexcount", ASCII)
+                    Case Is >= 2
+                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                                          "@echo off" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " | find /c " & Quote & "Index" & Quote & " > " & projPath & "\tempinfo\indexcount", ASCII)
+                End Select
+            Case 10
+                File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                                  "@echo off" & CrLf & _
+                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " | find /c " & Quote & "Index" & Quote & " > " & projPath & "\tempinfo\indexcount", ASCII)
+        End Select
+        Process.Start(".\bin\exthelpers\imginfo.bat").WaitForExit()
+        imgIndexCount = CInt(My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\indexcount", ASCII))
+        File.Delete(".\bin\exthelpers\imginfo.bat")
+        For Each FoundFile In My.Computer.FileSystem.GetFiles(projPath & "\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
+            File.Delete(FoundFile)
+        Next
+        Directory.Delete(projPath & "\tempinfo")
+        If mountedImgStatus = "Ok" Then
+            isOrphaned = False
+        ElseIf mountedImgStatus = "Needs Remount" Then
+            isOrphaned = True
+        End If
+        If isOrphaned Then
+            Exit Sub
+        End If
+        irregVal = 5
+        'ImgBW.ReportProgress(irregVal)
+    End Sub
+
+    ''' <summary>
+    ''' Gets advanced image information, such as number of files and directories, image name, and more
+    ''' </summary>
+    ''' <remarks>This is called when bgGetAdvImgInfo is True</remarks>
+    Sub GetAdvancedImageInfo()
+        If IsImageMounted Then
+            Try     ' Try getting image properties
+                If Not Directory.Exists(projPath & "\tempinfo") Then
+                    Directory.CreateDirectory(projPath & "\tempinfo").Attributes = FileAttributes.Hidden
+                End If
+                Select Case DismVersionChecker.ProductMajorPart
+                    Case 6
+                        Select Case DismVersionChecker.ProductMinorPart
+                            Case 1
+                                File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                                                  "@echo off" & CrLf & _
+                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf & _
+                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf & _
+                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Image Index" & Quote & " /b > " & projPath & "\tempinfo\imgindex" & CrLf & _
+                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Mounted Read/Write" & Quote & " /b > " & projPath & "\tempinfo\imgrw" & CrLf & _
+                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & projPath & "\tempinfo\imgmountedname" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & projPath & "\tempinfo\imgmounteddesc" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & projPath & "\tempinfo\imgsize" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & projPath & "\tempinfo\imgarch" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & projPath & "\tempinfo\imghal" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & projPath & "\tempinfo\imgspbuild" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & projPath & "\tempinfo\imgsplevel" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & projPath & "\tempinfo\imgedition" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & projPath & "\tempinfo\imginst" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & projPath & "\tempinfo\imgptype" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & projPath & "\tempinfo\imgpsuite" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & projPath & "\tempinfo\imgsysroot" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & projPath & "\tempinfo\imgdirs" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & projPath & "\tempinfo\imgfiles" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & projPath & "\tempinfo\imgcreation" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & projPath & "\tempinfo\imgmodification" & CrLf & _
+                                                  "dism /English /image=" & MountDir & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & projPath & "\tempinfo\imglangs", ASCII)
+                            Case Is >= 2
+                                File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                                                  "@echo off" & CrLf & _
+                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf & _
+                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf & _
+                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image Index" & Quote & " /b > " & projPath & "\tempinfo\imgindex" & CrLf & _
+                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mounted Read/Write" & Quote & " /b > " & projPath & "\tempinfo\imgrw" & CrLf & _
+                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & projPath & "\tempinfo\imgmountedname" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & projPath & "\tempinfo\imgmounteddesc" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & projPath & "\tempinfo\imgsize" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & projPath & "\tempinfo\imgarch" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & projPath & "\tempinfo\imghal" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & projPath & "\tempinfo\imgspbuild" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & projPath & "\tempinfo\imgsplevel" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & projPath & "\tempinfo\imgedition" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & projPath & "\tempinfo\imginst" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & projPath & "\tempinfo\imgptype" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & projPath & "\tempinfo\imgpsuite" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & projPath & "\tempinfo\imgsysroot" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & projPath & "\tempinfo\imgdirs" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & projPath & "\tempinfo\imgfiles" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & projPath & "\tempinfo\imgcreation" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & projPath & "\tempinfo\imgmodification" & CrLf & _
+                                                  "dism /English /image=" & MountDir & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & projPath & "\tempinfo\imglangs", ASCII)
+                        End Select
+                    Case 10
+                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                                          "@echo off" & CrLf & _
+                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf & _
+                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf & _
+                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image Index" & Quote & " /b > " & projPath & "\tempinfo\imgindex" & CrLf & _
+                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mounted Read/Write" & Quote & " /b > " & projPath & "\tempinfo\imgrw" & CrLf & _
+                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & projPath & "\tempinfo\imgmountedname" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & projPath & "\tempinfo\imgmounteddesc" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & projPath & "\tempinfo\imgsize" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & projPath & "\tempinfo\imgarch" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & projPath & "\tempinfo\imghal" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & projPath & "\tempinfo\imgspbuild" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & projPath & "\tempinfo\imgsplevel" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & projPath & "\tempinfo\imgedition" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & projPath & "\tempinfo\imginst" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & projPath & "\tempinfo\imgptype" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & projPath & "\tempinfo\imgpsuite" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & projPath & "\tempinfo\imgsysroot" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & projPath & "\tempinfo\imgdirs" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & projPath & "\tempinfo\imgfiles" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & projPath & "\tempinfo\imgcreation" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & projPath & "\tempinfo\imgmodification" & CrLf & _
+                                          "dism /English /image=" & MountDir & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & projPath & "\tempinfo\imglangs", ASCII)
+                End Select
+
+                If Debugger.IsAttached Then
+                    Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\imginfo.bat").WaitForExit()
+                End If
+                Process.Start(".\bin\exthelpers\imginfo.bat").WaitForExit()
+                'imgName = SourceImg
+                'ImgIndex = ImgIndex
+                'imgMountDir = MountDir
+                imgMountedStatus = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgmountedstatus", ASCII).Replace("Status : ", "").Trim()
+                Try
+                    Dim KeVerInfo As FileVersionInfo = FileVersionInfo.GetVersionInfo(MountDir & "\Windows\system32\ntoskrnl.exe")
+                    Dim KeVerStr As String = KeVerInfo.ProductVersion
+                    imgVersion = KeVerStr
+                    imgMountedName = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgmountedname", ASCII).Replace("Name : ", "").Trim()
+                    imgMountedDesc = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgmounteddesc", ASCII).Replace("Description : ", "").Trim()
+                    Dim ImgSizeDbl As Double
+                    ImgSizeDbl = CDbl(My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgsize", ASCII).Replace("Size : ", "").Trim().Replace(" bytes", "").Trim().Replace(".", "").Trim()) / (1024 ^ 3)
+                    Dim ImgSizeStr As String
+                    ImgSizeStr = Math.Round(ImgSizeDbl, 2)
+                    imgSize = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgsize", ASCII).Replace("Size : ", "").Trim()
+                    imgWimBootStatus = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgwimboot", ASCII).Replace("WIM Bootable : ", "").Trim()
+                    imgArch = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgarch", ASCII).Replace("Architecture : ", "").Trim()
+                    imgHal = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imghal", ASCII).Replace("Hal : ", "").Trim()
+                    imgSPBuild = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgspbuild", ASCII).Replace("ServicePack Build : ", "").Trim()
+                    imgSPLvl = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgsplevel", ASCII).Replace("ServicePack Level : ", "").Trim()
+                    imgEdition = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgedition", ASCII).Replace("Edition : ", "").Trim()
+                    imgPType = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgptype", ASCII).Replace("ProductType : ", "").Trim()
+                    imgPSuite = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgpsuite", ASCII).Replace("ProductSuite : ", "").Trim()
+                    imgSysRoot = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgsysroot", ASCII).Replace("System Root : ", "").Trim()
+                    imgDirs = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgdirs", ASCII).Replace("Directories : ", "").Trim()
+                    imgFiles = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgfiles", ASCII).Replace("Files : ", "").Trim()
+                    imgCreation = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgcreation", ASCII).Replace("Created : ", "").Trim()
+                    imgModification = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgmodification", ASCII).Replace("Modified : ", "").Trim()
+                    imgLangs = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imglangs", ASCII).Replace("Installed language(s): ", "").Trim()
+                    imgFormat = Path.GetExtension(SourceImg).Replace(".", "").Trim().ToUpper() & " file"
+                    imgRW = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgrw", ASCII).Replace("Mounted Read/Write : ", "").Trim()
+                    'If imgRW = "Yes" Then
+                    '    RWRemountBtn.Visible = False
+                    'ElseIf imgRW = "No" Then
+                    '    RWRemountBtn.Visible = True
+                    'End If
+                    For Each foundFile In My.Computer.FileSystem.GetFiles(projPath & "\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
+                        File.Delete(foundFile)
+                    Next
+                    Directory.Delete(projPath & "\tempinfo")
+                    File.Delete(".\bin\exthelpers\imginfo.bat")
+                Catch ex As Exception
+
+                End Try
+                imgVersion = imgVersion
+                imgMountedStatus = imgMountedStatus
+                imgMountedName = imgMountedName
+                imgMountedDesc = imgMountedDesc
+                imgWimBootStatus = imgWimBootStatus
+                imgArch = imgArch
+                imgHal = imgHal
+                imgSPBuild = imgSPBuild
+                imgSPLvl = imgSPLvl
+                imgEdition = imgEdition
+                imgPType = imgPType
+                imgPSuite = imgPSuite
+                imgSysRoot = imgSysRoot
+                imgDirs = CInt(imgDirs)
+                imgFiles = CInt(imgFiles)
+                imgCreation = imgCreation
+                CreationTime = imgCreation.Replace(" - ", " ")
+                imgModification = imgModification
+                ModifyTime = imgModification.Replace(" - ", " ")
+                'imgLangs = imgLangText
+                imgRW = imgRW
+                Button1.Enabled = False
+                Button2.Enabled = True
+                Button3.Enabled = True
+                Button4.Enabled = True
+                Button5.Enabled = True
+                Button6.Enabled = True
+                Button7.Enabled = True
+                Button8.Enabled = True
+                Button9.Enabled = True
+                Button10.Enabled = True
+                Button11.Enabled = True
+                Button12.Enabled = True
+                Button13.Enabled = True
+                DetectNTVersion(MountDir & "\Windows\system32\ntoskrnl.exe")
+            Catch ex As Exception
+
+            End Try
+            irregVal = 10
+            'ImgBW.ReportProgress(irregVal)
+            'Label4.Visible = False
+        Else
+            MountDir = "N/A"
+            'Label19 = "No"
+            'imgMountDir = "Not available"
+            'ImgIndex = "Not available"
+            'imgName = "Not available"
+            'imgMountedStatus = "Not available"
+            'imgVersion = "Not available"
+            'imgMountedName = "Not available"
+            'imgMountedDesc = "Not available"
+            'imgSize = "Not available"
+            'imgWimBootStatus = "Not available"
+            'imgArch = "Not available"
+            'imgHal = "Not available"
+            'imgSPBuild = "Not available"
+            'imgSPLvl = "Not available"
+            'imgEdition = "Not available"
+            'imgPType = "Not available"
+            'imgPSuite = "Not available"
+            'imgSysRoot = "Not available"
+            'imgDirs = "Not available"
+            'imgFiles = "Not available"
+            'imgCreation = "Not available"
+            'imgModification = "Not available"
+            'imgFormat = "Not available"
+            'imgRW = "Not available"
+            'Panel3.Visible = True
+            'Label4.Visible = False
+            Button1.Enabled = True
+            Button2.Enabled = False
+            Button3.Enabled = False
+            Button4.Enabled = False
+            Button5.Enabled = False
+            Button6.Enabled = False
+            Button7.Enabled = False
+            Button8.Enabled = False
+            Button9.Enabled = False
+            Button10.Enabled = False
+            Button11.Enabled = False
+            Button12.Enabled = False
+            Button13.Enabled = False
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Detects the image's version by gathering the product version from its "ntoskrnl.exe" file in MountDir\Windows\System32
+    ''' </summary>
+    ''' <param name="NTKeExe">The path of the "NT Kernel &amp; System" (ntoskrnl.exe) file</param>
+    ''' <remarks>The program, depending on the NT version of the image, will enable and disable certain features. This happens because the image may not be applicable for such actions. Also, it is called to detect whether a Windows Vista/Server 2008 image has been mounted; as DISM can mount Vista (NT 6.0) images, but cannot service them. In that case, you would need to use separate tools, like ImageX</remarks>
+    Sub DetectNTVersion(NTKeExe As String)
+        Try
+            Dim NTKeVerInfo As FileVersionInfo
+            NTKeVerInfo = FileVersionInfo.GetVersionInfo(NTKeExe)
+            If NTKeVerInfo.ProductMajorPart = 6 Then
+                If NTKeVerInfo.ProductMinorPart = 0 Then        ' Windows Vista / WinPE 2.x
+                    ' Let the user know the incompatibility
+                    If Not ProgressPanel.IsDisposed Then
+                        ToolStripButton4.Visible = False
+                        ProgressPanel.Dispose()
+                        ProgressPanel.Close()
+                    End If
+                    ImgWinVistaIncompatibilityDialog.ShowDialog(Me)
+                    If ImgWinVistaIncompatibilityDialog.DialogResult = Windows.Forms.DialogResult.OK Then
+                        ' Disable every option
+
+                    ElseIf ImgWinVistaIncompatibilityDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
+                        ' Unmount the image
+                        ProgressPanel.UMountLocalDir = True
+                        ProgressPanel.RandomMountDir = ""   ' Hope there isn't anything to set here
+                        ProgressPanel.MountDir = MountDir
+                        ProgressPanel.UMountOp = 1
+                        ProgressPanel.CheckImgIntegrity = False
+                        ProgressPanel.SaveToNewIndex = False
+                        ProgressPanel.UMountImgIndex = ImgIndex
+                        ProgressPanel.OperationNum = 21
+                        ProgressPanel.ShowDialog()
+                    End If
+                ElseIf NTKeVerInfo.ProductMinorPart = 1 Then    ' Windows 7 / WinPE 3.x
+
+                ElseIf NTKeVerInfo.ProductMinorPart = 2 Then    ' Windows 8 / WinPE 4.0
+
+                ElseIf NTKeVerInfo.ProductMinorPart = 3 Then    ' Windows 8.1 / WinPE 5.x
+
+                ElseIf NTKeVerInfo.ProductMinorPart = 4 Then    ' Windows 10 (Technical Preview)
+
+                End If
+            ElseIf NTKeVerInfo.ProductMajorPart = 10 Then
+                Select Case NTKeVerInfo.ProductBuildPart
+                    Case 9888 To 21390                          ' Windows 10 / Server 2016,2019,2022 / Cobalt_SunValley / Win10X / WinPE 10.0
+
+                    Case Is >= 21996                            ' Windows 11 / Cobalt_Refresh / Nickel / Copper / WinPE 10.0
+
+                End Select
+            End If
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' Determines whether the loaded image is running a Windows version newer than Windows 8
+    ''' </summary>
+    ''' <param name="NTKeExe">The path of the "NT Kernel &amp; System" file</param>
+    ''' <returns>The function returns True when image is running Windows 8 or newer (Image >= 6.2)</returns>
+    ''' <remarks>This is done to determine whether to scan for AppX packages</remarks>
+    Function IsWindows8OrHigher(NTKeExe As String) As Boolean
+        Debug.WriteLine("[IsWindows8OrHigher] Running function...")
+        Dim KeFVI As FileVersionInfo = FileVersionInfo.GetVersionInfo(NTKeExe)
+        Select Case KeFVI.ProductMajorPart
+            Case 6
+                Select Case KeFVI.ProductMinorPart
+                    Case 1
+                        Debug.WriteLine("[IsWindows8OrHigher] 6.1 >= 6.2 -> False" & CrLf & _
+                                        "                     Image is running a Windows version older than Windows 8")
+                        Return False
+                    Case Is >= 2
+                        Debug.WriteLine("[IsWindows8OrHigher] 6.2 >= 6.2 -> True" & CrLf & _
+                                        "                     Image is running Windows 8")
+                        Return True
+                End Select
+            Case 10
+                Debug.WriteLine("[IsWindows8OrHigher] " & KeFVI.ProductMajorPart & "." & KeFVI.ProductMinorPart & " >= 6.2 -> True" & CrLf & _
+                                "                     Image is running a Windows version newer than Windows 8")
+                Return True
+            Case Else
+                Return False
+        End Select
+    End Function
+
+    ''' <summary>
+    ''' Determines whether the loaded image is running a Windows version newer than Windows 10
+    ''' </summary>
+    ''' <param name="NTKeExe">The path of the "NT Kernel &amp; System" file</param>
+    ''' <returns>The function returns True when image is running Windows 10 or newer (Image = 10.0)</returns>
+    ''' <remarks></remarks>
+    Function IsWindows10OrHigher(NTKeExe As String) As Boolean
+        Dim KeFVI As FileVersionInfo = FileVersionInfo.GetVersionInfo(NTKeExe)
+        Select Case KeFVI.ProductMajorPart
+            Case Is <= 6
+                Debug.WriteLine("[IsWindows8OrHigher] 6.x == 10.0 => False" & CrLf & _
+                                "                     Image is running a Windows version older than Windows 10")
+                Return False
+            Case 10
+                Debug.WriteLine("[IsWindows8OrHigher] 10.0 == 10.0 => False" & CrLf & _
+                                "                     Image is running Windows 10 or Windows 11")
+                Return True
+        End Select
+    End Function
+
+    ''' <summary>
     ''' Gets installed packages in an image and puts them in separate arrays
     ''' </summary>
     Sub GetImagePackages()
-        ' Get image packages and their state
-        File.WriteAllText(".\bin\exthelpers\pkginfo.bat", _
-                          "@echo off" & CrLf & _
-                          "dism /English /image=" & MountDir & " /get-packages | findstr /c:" & Quote & "Package Identity : " & Quote & " > .\imgpkgnames" & CrLf & _
-                          "dism /English /image=" & MountDir & " /get-packages | findstr /c:" & Quote & "State : " & Quote & " > .\imgpkgstate")
+        Debug.WriteLine("[GetImagePackages] Running function...")
+        Debug.WriteLine("[GetImagePackages] Writing getter scripts...")
+        Try
+            File.WriteAllText(".\bin\exthelpers\pkgnames.bat", _
+                              "@echo off" & CrLf & _
+                              "dism /English /image=" & MountDir & " /get-packages | findstr /c:" & Quote & "Package Identity : " & Quote & " > .\tempinfo\pkgnames", _
+                              ASCII)
+            File.WriteAllText(".\bin\exthelpers\pkgstate.bat", _
+                              "@echo off" & CrLf & _
+                              "dism /English /image=" & MountDir & " /get-packages | findstr /c:" & Quote & "State : " & Quote & " > .\tempinfo\pkgstate", _
+                              ASCII)
+            File.WriteAllText(".\bin\exthelpers\pkgreltype.bat", _
+                              "@echo off" & CrLf & _
+                              "dism /English /image=" & MountDir & " /get-packages | findstr /c:" & Quote & "Release Type : " & Quote & " > .\tempinfo\pkgreltype", _
+                              ASCII)
+            File.WriteAllText(".\bin\exthelpers\pkginsttime.bat", _
+                              "@echo off" & CrLf & _
+                              "dism /English /image=" & MountDir & " /get-packages | findstr /c:" & Quote & "Install Time : " & Quote & " > .\tempinfo\pkginsttime", _
+                              ASCII)
+        Catch ex As Exception
+            Debug.WriteLine("[GetImagePackages] Failed writing getter scripts. Reason: " & ex.Message)
+            Exit Sub
+        End Try
+        Debug.WriteLine("[GetImagePackages] Finished writing getter scripts. Executing them...")
         ImgProcesses.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
-        ImgProcesses.StartInfo.Arguments = "/c " & Directory.GetCurrentDirectory() & "\bin\exthelpers\pkginfo.bat"
         ImgProcesses.StartInfo.CreateNoWindow = True
         ImgProcesses.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-        ImgProcesses.Start()
-        Do Until ImgProcesses.HasExited
-            If ImgProcesses.HasExited Then
-                Exit Do
+        For Each pkgScript In My.Computer.FileSystem.GetFiles(".\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly, "*.bat")
+            If Path.GetFileName(pkgScript).StartsWith("pkg") Then
+                Debug.WriteLine("[GetImagePackages] RunCommand -> " & Path.GetFileName(pkgScript))
+                ImgProcesses.StartInfo.Arguments = "/c " & pkgScript
+                ImgProcesses.Start()
+                Do Until ImgProcesses.HasExited
+                    If ImgProcesses.HasExited Then
+                        Exit Do
+                    End If
+                Loop
+                If ImgProcesses.ExitCode = 0 Then
+                    Continue For
+                End If
+            Else
+                Continue For
             End If
-        Loop
-        If ImgProcesses.ExitCode = 0 Then
-            Dim pkgNameRTB As New RichTextBox With {
-                .Text = My.Computer.FileSystem.ReadAllText(".\imgpkgnames")
-            }
-            Dim pkgStateRTB As New RichTextBox With {
-                .Text = My.Computer.FileSystem.ReadAllText(".\imgpkgstate")
-            }
-            For x = 0 To pkgNameRTB.Lines.Count - 1
-                imgPackageNames(x) = pkgNameRTB.Lines(x).ToString()
-            Next
-            For x = 0 To pkgStateRTB.Lines.Count - 1
-                imgPackageState(x) = pkgStateRTB.Lines(x).ToString()
-            Next
-        Else
-
-        End If
+        Next
+        Debug.WriteLine("[GetImagePackages] Finished running getter scripts. Filling arrays...")
+        Dim FileGetterRTB As New RichTextBox()
+        Dim TypeLookups() As String = New String(3) {"Package Identity : ", "State : ", "Release Type : ", "Install Time : "}
+        Dim lineToAppend As String = ""
+        For Each pkgFile In My.Computer.FileSystem.GetFiles(".\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
+            If Path.GetFileName(pkgFile).StartsWith("pkg") Then
+                Debug.WriteLine("[GetImagePackages] FillArray -> (values_from: " & Path.GetFileName(pkgFile) & ")")
+                FileGetterRTB.Clear()
+                FileGetterRTB.Text = My.Computer.FileSystem.ReadAllText(pkgFile)
+                For x = 0 To FileGetterRTB.Lines.Count - 1
+                    If FileGetterRTB.Lines(x) = "" Then
+                        Continue For
+                    Else
+                        If FileGetterRTB.Lines(x).StartsWith(TypeLookups(0)) Then
+                            lineToAppend = FileGetterRTB.Lines(x).Replace("Package Identity : ", "").Trim()
+                            If lineToAppend = "" Then lineToAppend = "Nothing"
+                            imgPackageNames(x) = lineToAppend
+                        ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(1)) Then
+                            lineToAppend = FileGetterRTB.Lines(x).Replace("State : ", "").Trim()
+                            If lineToAppend = "" Then lineToAppend = "Nothing"
+                            imgPackageState(x) = lineToAppend
+                        ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(2)) Then
+                            lineToAppend = FileGetterRTB.Lines(x).Replace("Release Type : ", "").Trim()
+                            If lineToAppend = "" Then lineToAppend = "Nothing"
+                            imgPackageRelType(x) = lineToAppend
+                        ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(3)) Then
+                            lineToAppend = FileGetterRTB.Lines(x).Replace("Install Time : ", "").Trim()
+                            If lineToAppend = "" Then lineToAppend = "Nothing"
+                            imgPackageInstTime(x) = lineToAppend
+                        End If
+                    End If
+                Next
+            Else
+                Continue For
+            End If
+        Next
+        'imgPackageNameLastEntry = UBound(imgPackageNames)
+        'ImgBW.ReportProgress(progressMin + progressDivs)
     End Sub
 
     ''' <summary>
     ''' Gets present features in an image and puts them in separate arrays
     ''' </summary>
     Sub GetImageFeatures()
-        ' Get image features and their state
-        File.WriteAllText(".\bin\exthelpers\featinfo.bat", _
-                          "@echo off" & CrLf & _
-                          "dism /English /image=" & MountDir & " /get-features | findstr /c:" & Quote & "Feature Name : " & Quote & " > .\imgfeatnames" & CrLf & _
-                          "dism /English /image=" & MountDir & " /get-features | findstr /c:" & Quote & "State : " & Quote & " > .\imgfeatstate")
+        Debug.WriteLine("[GetImageFeatures] Running function...")
+        Debug.WriteLine("[GetImageFeatures] Writing getter scripts...")
+        Try
+            File.WriteAllText(".\bin\exthelpers\featnames.bat", _
+                              "@echo off" & CrLf & _
+                              "dism /English /image=" & MountDir & " /get-features | findstr /c:" & Quote & "Feature Name : " & Quote & " > .\tempinfo\featnames", _
+                              ASCII)
+            File.WriteAllText(".\bin\exthelpers\featstate.bat", _
+                              "@echo off" & CrLf & _
+                              "dism /English /image=" & MountDir & " /get-features | findstr /c:" & Quote & "State : " & Quote & " > .\tempinfo\featstate", _
+                              ASCII)
+        Catch ex As Exception
+            Debug.WriteLine("[GetImageFeatures] Failed writing getter scripts. Reason: " & ex.Message)
+            Exit Sub
+        End Try
+        Debug.WriteLine("[GetImageFeatures] Finished writing getter scripts. Executing them...")
         ImgProcesses.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
-        ImgProcesses.StartInfo.Arguments = "/c " & Directory.GetCurrentDirectory() & "\bin\exthelpers\featinfo.bat"
         ImgProcesses.StartInfo.CreateNoWindow = True
         ImgProcesses.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+        For Each featScript In My.Computer.FileSystem.GetFiles(".\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly, "*.bat")
+            If Path.GetFileName(featScript).StartsWith("feat") Then
+                Debug.WriteLine("[GetImageFeatures] RunCommand -> " & Path.GetFileName(featScript))
+                ImgProcesses.StartInfo.Arguments = "/c " & featScript
+                ImgProcesses.Start()
+                Do Until ImgProcesses.HasExited
+                    If ImgProcesses.HasExited Then
+                        Exit Do
+                    End If
+                Loop
+                If ImgProcesses.ExitCode = 0 Then
+                    Continue For
+                End If
+            Else
+                Continue For
+            End If
+        Next
+        Debug.WriteLine("[GetImageFeatures] Finished running getter scripts. Filling arrays...")
+        Dim FileGetterRTB As New RichTextBox()
+        Dim TypeLookups() As String = New String(1) {"Feature Name : ", "State : "}
+        Dim lineToAppend As String = ""
+        For Each featFile In My.Computer.FileSystem.GetFiles(".\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
+            If Path.GetFileName(featFile).StartsWith("feat") Then
+                Debug.WriteLine("[GetImageFeatures] FillArray -> (values_from: " & Path.GetFileName(featFile) & ")")
+                FileGetterRTB.Clear()
+                FileGetterRTB.Text = My.Computer.FileSystem.ReadAllText(featFile)
+                For x = 0 To FileGetterRTB.Lines.Count - 1
+                    If FileGetterRTB.Lines(x) = "" Then
+                        Continue For
+                    Else
+                        If FileGetterRTB.Lines(x).StartsWith(TypeLookups(0)) Then
+                            lineToAppend = FileGetterRTB.Lines(x).Replace("Feature Name : ", "").Trim()
+                            If lineToAppend = "" Then lineToAppend = "Nothing"
+                            imgFeatureNames(x) = lineToAppend
+                        ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(1)) Then
+                            lineToAppend = FileGetterRTB.Lines(x).Replace("State : ", "").Trim()
+                            If lineToAppend = "" Then lineToAppend = "Nothing"
+                            imgFeatureState(x) = lineToAppend
+                        Else
+                            Continue For
+                        End If
+                    End If
+                Next
+            Else
+                Continue For
+            End If
+        Next
+        'ImgBW.ReportProgress(progressMin + progressDivs)
+    End Sub
+
+    ''' <summary>
+    ''' Gets installed provisioned APPX packages in an image and puts them in separate arrays
+    ''' </summary>
+    ''' <remarks>This is only for Windows 8 and newer</remarks>
+    Sub GetImageAppxPackages()
+        Debug.WriteLine("[GetImageAppxPackages] Running function...")
+        ' The mounted image may be Windows 8 or later, but DISM may be from Windows 7. Get this information before running this procedure
+        Dim FileVersion As FileVersionInfo = FileVersionInfo.GetVersionInfo(DismExe)
+        Select Case FileVersion.ProductMajorPart
+            Case 6
+                ' Detect if it is Windows 7
+                Select Case FileVersion.ProductMinorPart
+                    Case 1
+                        Debug.WriteLine("[GetImageAppxPackages] The image is Windows 8 or later, but this version of DISM does not support this command. Exiting...")
+                        Exit Sub
+                End Select
+        End Select
+        Debug.WriteLine("[GetImageAppxPackages] Writing getter scripts...")
+        Try
+            File.WriteAllText(".\bin\exthelpers\appxnames.bat", _
+                              "@echo off" & CrLf & _
+                              "dism /English /image=" & MountDir & " /get-provisionedappxpackages | findstr /c:" & Quote & "DisplayName : " & Quote & " > .\tempinfo\appxdisplaynames" & CrLf & _
+                              "dism /English /image=" & MountDir & " /get-provisionedappxpackages | findstr /c:" & Quote & "PackageName : " & Quote & " > .\tempinfo\appxpackagenames", _
+                              ASCII)
+            File.WriteAllText(".\bin\exthelpers\appxversions.bat", _
+                              "dism /English /image=" & MountDir & " /get-provisionedappxpackages | findstr /c:" & Quote & "Version : " & Quote & " > .\tempinfo\appxversions", _
+                              ASCII)
+            File.WriteAllText(".\bin\exthelpers\appxarches.bat", _
+                              "dism /English /image=" & MountDir & " /get-provisionedappxpackages | findstr /c:" & Quote & "Architecture : " & Quote & " > .\tempinfo\appxarchitectures", _
+                              ASCII)
+            File.WriteAllText(".\bin\exthelpers\appxresids.bat", _
+                              "dism /English /image=" & MountDir & " /get-provisionedappxpackages | findstr /c:" & Quote & "ResourceId : " & Quote & " > .\tempinfo\appxresids", _
+                              ASCII)
+            File.WriteAllText(".\bin\exthelpers\appxregions.bat", _
+                              "dism /English /image=" & MountDir & " /get-provisionedappxpackages | findstr /c:" & Quote & "Regions : " & Quote & " > .\tempinfo\appxregions", _
+                              ASCII)
+        Catch ex As Exception
+            Debug.WriteLine("[GetImageAppxPackages] Failed writing getter scripts. Reason: " & ex.Message)
+            Exit Sub
+        End Try
+        Debug.WriteLine("[GetImageAppxPackages] Finished writing getter scripts. Executing them...")
+        ImgProcesses.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
+        ImgProcesses.StartInfo.CreateNoWindow = True
+        ImgProcesses.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+        For Each appxScript In My.Computer.FileSystem.GetFiles(".\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly, "*.bat")
+            If Path.GetFileName(appxScript).StartsWith("appx") Then
+                Debug.WriteLine("[GetImageAppxPackages] RunCommand -> " & Path.GetFileName(appxScript))
+                ImgProcesses.StartInfo.Arguments = "/c " & appxScript
+                ImgProcesses.Start()
+                Do Until ImgProcesses.HasExited
+                    If ImgProcesses.HasExited Then
+                        Exit Do
+                    End If
+                Loop
+                If ImgProcesses.ExitCode = 0 Then
+                    Continue For
+                End If
+            Else
+                Continue For
+            End If
+        Next
+        Debug.WriteLine("[GetImageAppxPackages] Finished running getter scripts. Filling arrays...")
+        Dim FileGetterRTB As New RichTextBox()
+        Dim TypeLookups() As String = New String(5) {"DisplayName : ", "PackageName : ", "Version : ", "Architecture : ", "ResourceId : ", "Regions : "}
+        Dim lineToAppend As String = ""
+        For Each appxFile In My.Computer.FileSystem.GetFiles(".\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
+            If Path.GetFileName(appxFile).StartsWith("appx") Then
+                Debug.WriteLine("[GetImageAppxPackages] FillArray -> (values_from: " & Path.GetFileName(appxFile) & ")")
+                FileGetterRTB.Clear()
+                FileGetterRTB.Text = My.Computer.FileSystem.ReadAllText(appxFile)
+                For x = 0 To FileGetterRTB.Lines.Count - 1
+                    If FileGetterRTB.Lines(x) = "" Then
+                        Continue For
+                    Else
+                        If FileGetterRTB.Lines(x).StartsWith(TypeLookups(0)) Then
+                            lineToAppend = FileGetterRTB.Lines(x).Replace("DisplayName : ", "").Trim()
+                            If lineToAppend = "" Then lineToAppend = "Nothing"
+                            imgAppxDisplayNames(x) = lineToAppend
+                        ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(1)) Then
+                            lineToAppend = FileGetterRTB.Lines(x).Replace("PackageName : ", "").Trim()
+                            If lineToAppend = "" Then lineToAppend = "Nothing"
+                            imgAppxPackageNames(x) = lineToAppend
+                        ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(2)) Then
+                            lineToAppend = FileGetterRTB.Lines(x).Replace("Version : ", "").Trim()
+                            If lineToAppend = "" Then lineToAppend = "Nothing"
+                            imgAppxVersions(x) = lineToAppend
+                        ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(3)) Then
+                            lineToAppend = FileGetterRTB.Lines(x).Replace("Architecture : ", "").Trim()
+                            If lineToAppend = "" Then lineToAppend = "Nothing"
+                            imgAppxArchitectures(x) = lineToAppend
+                        ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(4)) Then
+                            lineToAppend = FileGetterRTB.Lines(x).Replace("ResourceId : ", "").Trim()
+                            If lineToAppend = "" Then lineToAppend = "Nothing"
+                            imgAppxResourceIds(x) = lineToAppend
+                        ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(5)) Then
+                            lineToAppend = FileGetterRTB.Lines(x).Replace("Regions : ", "").Trim()
+                            If lineToAppend = "" Then lineToAppend = "Nothing"
+                            imgAppxRegions(x) = lineToAppend
+                        Else
+                            Continue For
+                        End If
+                    End If
+                Next
+            Else
+                Continue For
+            End If
+        Next
+        'ImgBW.ReportProgress(progressMin + progressDivs)
+    End Sub
+
+    ''' <summary>
+    ''' Gets installed Features on Demand (capabilities) in an image and puts them in separate arrays
+    ''' </summary>
+    ''' <remarks>This is only for Windows 10 or newer</remarks>
+    Sub GetImageCapabilities()
+        Debug.WriteLine("[GetImageCapabilities] Running function...")
+        ' The image may be Windows 10/11, but DISM may not be from Windows 10/11. Get this information before running this procedure
+        Dim FileVersion As FileVersionInfo = FileVersionInfo.GetVersionInfo(DismExe)
+        Select Case FileVersion.ProductMajorPart
+            Case 6
+                ' Exit procedure
+                Debug.WriteLine("[GetImageCapabilities] The image is Windows 10 or 11, but this version of DISM does not support this command. Exiting...")
+        End Select
+        Debug.WriteLine("[GetImageCapabilities] Writing getter scripts...")
+        Try
+            File.WriteAllText(".\bin\exthelpers\capids.bat", _
+                              "@echo off" & CrLf & _
+                              "dism /English /image=" & MountDir & " /get-capabilities | findstr /c:" & Quote & "Capability Identity : " & Quote & " > .\tempinfo\capids", _
+                              ASCII)
+            File.WriteAllText(".\bin\exthelpers\capstate.bat", _
+                              "@echo off" & CrLf & _
+                              "dism /English /image=" & MountDir & " /get-capabilities | findstr /c:" & Quote & "State : " & Quote & " > .\tempinfo\capstate", _
+                              ASCII)
+        Catch ex As Exception
+            Debug.WriteLine("[GetImageCapabilities] Failed writing getter scripts. Reason: " & ex.Message)
+            Exit Sub
+        End Try
+        Debug.WriteLine("[GetImageCapabilities] Finished writing getter scripts. Executing them...")
+        ImgProcesses.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
+        ImgProcesses.StartInfo.CreateNoWindow = True
+        ImgProcesses.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+        For Each capScript In My.Computer.FileSystem.GetFiles(".\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly, "*.bat")
+            If Path.GetFileName(capScript).StartsWith("cap") Then
+                Debug.WriteLine("[GetImageCapabilities] RunCommand -> " & Path.GetFileName(capScript))
+                ImgProcesses.StartInfo.Arguments = "/c " & capScript
+                ImgProcesses.Start()
+                Do Until ImgProcesses.HasExited
+                    If ImgProcesses.HasExited Then
+                        Exit Do
+                    End If
+                Loop
+                If ImgProcesses.ExitCode = 0 Then
+                    Continue For
+                End If
+            Else
+                Continue For
+            End If
+        Next
+        Debug.WriteLine("[GetImageCapabilities] Finished running getter scripts. Filling arrays...")
+        Dim FileGetterRTB As New RichTextBox()
+        Dim TypeLookups() As String = New String(1) {"Capability Identity : ", "State : "}
+        Dim lineToAppend As String = ""
+        For Each capFile In My.Computer.FileSystem.GetFiles(".\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
+            If Path.GetFileName(capFile).StartsWith("cap") Then
+                Debug.WriteLine("[GetImageCapabilities] FillArray -> (values_from: " & Path.GetFileName(capFile) & ")")
+                FileGetterRTB.Clear()
+                FileGetterRTB.Text = My.Computer.FileSystem.ReadAllText(capFile)
+                For x = 0 To FileGetterRTB.Lines.Count - 1
+                    If FileGetterRTB.Lines(x) = "" Then
+                        Continue For
+                    Else
+                        If FileGetterRTB.Lines(x).StartsWith(TypeLookups(0)) Then
+                            lineToAppend = FileGetterRTB.Lines(x).Replace("Capability Identity : ", "").Trim()
+                            If lineToAppend = "" Then lineToAppend = "Nothing"
+                            imgCapabilityIds(x) = lineToAppend
+                        ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(1)) Then
+                            lineToAppend = FileGetterRTB.Lines(x).Replace("State : ", "").Trim()
+                            If lineToAppend = "" Then lineToAppend = "Nothing"
+                            imgCapabilityState(x) = lineToAppend
+                        Else
+                            Continue For
+                        End If
+                    End If
+                Next
+            Else
+                Continue For
+            End If
+        Next
+        'ImgBW.ReportProgress(progressMin + progressDivs)
+    End Sub
+
+    ''' <summary>
+    ''' Gets installed third-party drivers in an image and puts them in separate arrays
+    ''' </summary>
+    ''' <remarks>This procedure will detect the number of third-party drivers. If the image contains none, this procedure will end</remarks>
+    Sub GetImageDrivers()
+        Debug.WriteLine("[GetImageDrivers] Running function...")
+        Debug.WriteLine("[GetImageDrivers] Determining whether there are third-party drivers in image...")
+        Try
+            File.WriteAllText(".\bin\exthelpers\drvnums.bat", _
+                              "@echo off" & CrLf & _
+                              "dism /English /image=" & MountDir & " /get-drivers | find /c " & Quote & "Published Name : " & Quote & " > .\tempinfo\drvnums", _
+                              ASCII)
+        Catch ex As Exception
+            Debug.WriteLine("[GetImageDrivers] Failed writing getter scripts. Reason: " & ex.Message)
+            Exit Sub
+        End Try
+        ImgProcesses.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
+        ImgProcesses.StartInfo.CreateNoWindow = True
+        ImgProcesses.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+        ImgProcesses.StartInfo.Arguments = "/c " & Directory.GetCurrentDirectory() & "\bin\exthelpers\drvnums.bat"
         ImgProcesses.Start()
         Do Until ImgProcesses.HasExited
             If ImgProcesses.HasExited Then
                 Exit Do
             End If
         Loop
+        File.Delete(".\bin\exthelpers\drvnums.bat")
         If ImgProcesses.ExitCode = 0 Then
-            Dim featureNameRTB As New RichTextBox With {
-                .Text = My.Computer.FileSystem.ReadAllText(".\imgfeatnames")
-            }
-            Dim featureStateRTB As New RichTextBox With {
-                .Text = My.Computer.FileSystem.ReadAllText(".\imgfeatstate")
-            }
-            For x = 0 To featureNameRTB.Lines.Count - 1
-                imgFeatureNames(x) = featureNameRTB.Lines(x).ToString()
-            Next
-            For x = 0 To featureStateRTB.Lines.Count - 1
-                imgFeatureState(x) = featureStateRTB.Lines(x).ToString()
-            Next
-        Else
-
+            Dim drvCount As Integer = CInt(My.Computer.FileSystem.ReadAllText(".\tempinfo\drvnums"))
+            If drvCount = 0 Then
+                Debug.WriteLine("[GetImageDrivers] There are no available third-party drivers in this image. Exiting function...")
+                Exit Sub
+            End If
         End If
+        Debug.WriteLine("[GetImageDrivers] Writing getter scripts...")
+        Try
+            File.WriteAllText(".\bin\exthelpers\drvpublishednames.bat", _
+                              "@echo off" & CrLf & _
+                              "dism /English /image=" & MountDir & " /get-drivers | findstr /c:" & Quote & "Published Name : " & Quote & " > .\tempinfo\drvpublishednames", _
+                              ASCII)
+            File.WriteAllText(".\bin\exthelpers\drvogfilenames.bat", _
+                              "@echo off" & CrLf & _
+                              "dism /English /image=" & MountDir & " /get-drivers | findstr /c:" & Quote & "Original File Name : " & Quote & " > .\tempinfo\drvogfilenames", _
+                              ASCII)
+            File.WriteAllText(".\bin\exthelpers\drvinbox.bat", _
+                              "@echo off" & CrLf & _
+                              "dism /English /image=" & MountDir & " /get-drivers | findstr /c:" & Quote & "Inbox : " & Quote & " > .\tempinfo\drvinbox", _
+                              ASCII)
+            File.WriteAllText(".\bin\exthelpers\drvclassnames.bat", _
+                              "@echo off" & CrLf & _
+                              "dism /English /image=" & MountDir & " /get-drivers | findstr /c:" & Quote & "Class Name : " & Quote & " > .\tempinfo\drvclassnames", _
+                              ASCII)
+            File.WriteAllText(".\bin\exthelpers\drvprovnames.bat", _
+                              "@echo off" & CrLf & _
+                              "dism /English /image=" & MountDir & " /get-drivers | findstr /c:" & Quote & "Provider Name : " & Quote & " > .\tempinfo\drvprovnames", _
+                              ASCII)
+            File.WriteAllText(".\bin\exthelpers\drvdates.bat", _
+                              "@echo off" & CrLf & _
+                              "dism /English /image=" & MountDir & " /get-drivers | findstr /c:" & Quote & "Date : " & Quote & " > .\tempinfo\drvdates", _
+                              ASCII)
+            File.WriteAllText(".\bin\exthelpers\drvversions.bat", _
+                              "@echo off" & CrLf & _
+                              "dism /English /image=" & MountDir & " /get-drivers | findstr /c:" & Quote & "Version : " & Quote & " > .\tempinfo\drvversions", _
+                              ASCII)
+        Catch ex As Exception
+            Debug.WriteLine("[GetImageDrivers] Failed writing getter scripts. Reason: " & ex.Message)
+            Exit Sub
+        End Try
+        Debug.WriteLine("[GetImageDrivers] Finished writing getter scripts. Executing them...")
+        ImgProcesses.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
+        ImgProcesses.StartInfo.CreateNoWindow = True
+        ImgProcesses.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+        For Each drvScript In My.Computer.FileSystem.GetFiles(".\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly, "*.bat")
+            If Path.GetFileName(drvScript).StartsWith("drv") Then
+                Debug.WriteLine("[GetImageDrivers] RunCommand -> " & Path.GetFileName(drvScript))
+                ImgProcesses.StartInfo.Arguments = "/c " & drvScript
+                ImgProcesses.Start()
+                Do Until ImgProcesses.HasExited
+                    If ImgProcesses.HasExited Then
+                        Exit Do
+                    End If
+                Loop
+                If ImgProcesses.ExitCode = 0 Then
+                    Continue For
+                End If
+            Else
+                Continue For
+            End If
+        Next
+        Debug.WriteLine("[GetImageDrivers] Finished running getter scripts. Filling arrays...")
+        Dim FileGetterRTB As New RichTextBox()
+        Dim TypeLookups() As String = New String(6) {"Published Name : ", "Original File Name : ", "Inbox : ", "Class Name : ", "Provider Name : ", "Date : ", "Version : "}
+        Dim lineToAppend As String = ""
+        For Each drvFile In My.Computer.FileSystem.GetFiles(".\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
+            If Path.GetFileName(drvFile).StartsWith("drv") Then
+                Debug.WriteLine("[GetImageDrivers] FillArray -> (values_from: " & Path.GetFileName(drvFile) & ")")
+                FileGetterRTB.Clear()
+                FileGetterRTB.Text = My.Computer.FileSystem.ReadAllText(drvFile)
+                For x = 0 To FileGetterRTB.Lines.Count - 1
+                    If FileGetterRTB.Lines(x) = "" Then
+                        Continue For
+                    Else
+                        If FileGetterRTB.Lines(x).StartsWith(TypeLookups(0)) Then
+                            lineToAppend = FileGetterRTB.Lines(x).Replace("Published Name : ", "").Trim()
+                            If lineToAppend = "" Then lineToAppend = "Nothing"
+                            imgDrvPublishedNames(x) = lineToAppend
+                        ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(1)) Then
+                            lineToAppend = FileGetterRTB.Lines(x).Replace("Original File Name : ", "").Trim()
+                            If lineToAppend = "" Then lineToAppend = "Nothing"
+                            imgDrvOGFileNames(x) = lineToAppend
+                        ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(2)) Then
+                            lineToAppend = FileGetterRTB.Lines(x).Replace("Inbox : ", "").Trim()
+                            If lineToAppend = "" Then lineToAppend = "Nothing"
+                            imgDrvInbox(x) = lineToAppend
+                        ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(3)) Then
+                            lineToAppend = FileGetterRTB.Lines(x).Replace("Class Name : ", "").Trim()
+                            If lineToAppend = "" Then lineToAppend = "Nothing"
+                            imgDrvClassNames(x) = lineToAppend
+                        ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(4)) Then
+                            lineToAppend = FileGetterRTB.Lines(x).Replace("Provider Name : ", "").Trim()
+                            If lineToAppend = "" Then lineToAppend = "Nothing"
+                            imgDrvProviderNames(x) = lineToAppend
+                        ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(5)) Then
+                            lineToAppend = FileGetterRTB.Lines(x).Replace("Date : ", "").Trim()
+                            If lineToAppend = "" Then lineToAppend = "Nothing"
+                            imgDrvDates(x) = lineToAppend
+                        ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(6)) Then
+                            lineToAppend = FileGetterRTB.Lines(x).Replace("Version : ", "").Trim()
+                            If lineToAppend = "" Then lineToAppend = "Nothing"
+                            imgDrvVersions(x) = lineToAppend
+                        Else
+                            Continue For
+                        End If
+                    End If
+                Next
+            Else
+                Continue For
+            End If
+        Next
+        'ImgBW.ReportProgress(progressMin + progressDivs)
     End Sub
 
     ''' <summary>
-    ''' Gets installed provisioned APPX packages in an image and puts them in separate arrays. This is only for Windows 8 and newer
+    ''' Deletes temporary files created by the background processes
     ''' </summary>
-    Sub GetImageAppxPackages()
-
-    End Sub
-
-    ''' <summary>
-    ''' Gets installed Features on Demand (capabilities) in an image and puts them in separate arrays. This is only for Windows 10 or newer
-    ''' </summary>
-    Sub GetImageCapabilities()
-
-    End Sub
-
-    ''' <summary>
-    ''' Gets installed drivers in an image and puts them in separate arrays
-    ''' </summary>
-    Sub GetImageDrivers()
-
+    Sub DeleteTempFiles()
+        If MountedImageDetectorBW.IsBusy Then
+            Exit Sub
+        End If
+        Try
+            Directory.Delete(".\tempinfo", True)
+            ' Keep the "exthelpers" folder in case background processes need to be run again
+            For Each TempFile In My.Computer.FileSystem.GetFiles(".\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly)
+                File.Delete(TempFile)
+            Next
+        Catch ex As Exception
+            Debug.WriteLine("[DeleteTempFiles] Could not delete temporary files. Reason: " & ex.Message)
+        End Try
     End Sub
 
 #End Region
 
     Sub GenerateDTSettings()
-        DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.1) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.2) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & "\Windows\system32\dism.exe" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "Volatile=0")
@@ -755,6 +2071,9 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Output]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("EnglishOutput=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "ReportView=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[BgProcesses]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("ShowNotification=1")
+        DTSettingForm.RichTextBox2.AppendText("NotifyFrequency=0")
         File.WriteAllText(".\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
     End Sub
 
@@ -767,7 +2086,7 @@ Public Class MainForm
                     File.Delete(".\settings.ini")
                 End If
                 DTSettingForm.RichTextBox2.Clear()
-                DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.1) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
+                DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.2) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
                 DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & DismExe & Quote)
                 If SaveOnSettingsIni Then
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=1")
@@ -844,6 +2163,18 @@ Public Class MainForm
                         DTSettingForm.RichTextBox2.AppendText(CrLf & "ReportView=0")
                     Case 1
                         DTSettingForm.RichTextBox2.AppendText(CrLf & "ReportView=1")
+                End Select
+                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[BgProcesses]" & CrLf)
+                If NotificationShow Then
+                    DTSettingForm.RichTextBox2.AppendText("ShowNotification=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText("ShowNotification=0")
+                End If
+                Select Case NotificationFrequency
+                    Case 0
+                        DTSettingForm.RichTextBox2.AppendText(CrLf & "NotifyFrequency=0")
+                    Case 1
+                        DTSettingForm.RichTextBox2.AppendText(CrLf & "NotifyFrequency=1")
                 End Select
                 File.WriteAllText(".\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
             Else
@@ -1387,6 +2718,12 @@ Public Class MainForm
                     imgLangs = ProjectValueLoadForm.RichTextBox24.Text
                     imgRW = ProjectValueLoadForm.RichTextBox25.Text
 
+                    ' Set initial settings for background processes
+                    bwAllBackgroundProcesses = True
+                    bwGetImageInfo = True
+                    bwGetAdvImgInfo = True
+                    bwBackgroundProcessAction = 0
+
                     ' Detect individual stuff
                     If Directory.Exists(projPath & "\mount" & "\Windows") Then
                         ' Detect whether image is mounted by checking its Windows directory.
@@ -1447,6 +2784,20 @@ Public Class MainForm
                     End If
                 End If
             End If
+            If IsImageMounted Then BGProcNotify.Label2.Visible = True Else BGProcNotify.Label2.Visible = False
+            BGProcNotify.Opacity = 100
+            If NotificationShow Then
+                Select Case NotificationFrequency
+                    Case 0
+                        BGProcNotify.Show()
+                    Case 1
+                        If NotificationTimes < 1 Then
+                            NotificationTimes += 1
+                            BGProcNotify.Show()
+                        End If
+                End Select
+            End If
+            BackgroundProcessesButton.Image = New Bitmap(My.Resources.bg_ops_complete)
         Else
             MessageBox.Show("Cannot load the project. Reason: the project was not found. It may have been moved or its folder may have been deleted.", "Project load error", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1)
             If DialogResult.OK Then
@@ -1667,6 +3018,10 @@ Public Class MainForm
         End If
 
         ' Set image properties
+        If WasImageMounted And expBackgroundProcesses Then
+            ImgBW.RunWorkerAsync()
+            Exit Sub
+        End If
         Label14.Text = ProgressPanel.ImgIndex
         Label12.Text = ProgressPanel.MountDir
         ' Loading the project directly with an image already mounted makes the two labels above be wrong.
@@ -1847,6 +3202,7 @@ Public Class MainForm
             ElseIf OrphanedMountedImgDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
                 UnloadDTProj(False, True, False)
             End If
+            Exit Sub
         End If
         UpdateImgProps()
     End Sub
@@ -2072,55 +3428,7 @@ Public Class MainForm
         End If
     End Sub
 
-    Sub DetectNTVersion(NTKeExe As String)
-        Try
-            Dim NTKeVerInfo As FileVersionInfo
-            NTKeVerInfo = FileVersionInfo.GetVersionInfo(NTKeExe)
-            If NTKeVerInfo.ProductMajorPart = 6 Then
-                If NTKeVerInfo.ProductMinorPart = 0 Then        ' Windows Vista / WinPE 2.x
-                    ' Let the user know the incompatibility
-                    If Not ProgressPanel.IsDisposed Then
-                        ToolStripButton4.Visible = False
-                        ProgressPanel.Dispose()
-                        ProgressPanel.Close()
-                    End If
-                    ImgWinVistaIncompatibilityDialog.ShowDialog(Me)
-                    If ImgWinVistaIncompatibilityDialog.DialogResult = Windows.Forms.DialogResult.OK Then
-                        ' Disable every option
 
-                    ElseIf ImgWinVistaIncompatibilityDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
-                        ' Unmount the image
-                        ProgressPanel.UMountLocalDir = True
-                        ProgressPanel.RandomMountDir = ""   ' Hope there isn't anything to set here
-                        ProgressPanel.MountDir = MountDir
-                        ProgressPanel.UMountOp = 1
-                        ProgressPanel.CheckImgIntegrity = False
-                        ProgressPanel.SaveToNewIndex = False
-                        ProgressPanel.UMountImgIndex = ImgIndex
-                        ProgressPanel.OperationNum = 21
-                        ProgressPanel.ShowDialog()
-                    End If
-                ElseIf NTKeVerInfo.ProductMinorPart = 1 Then    ' Windows 7 / WinPE 3.x
-
-                ElseIf NTKeVerInfo.ProductMinorPart = 2 Then    ' Windows 8 / WinPE 4.0
-
-                ElseIf NTKeVerInfo.ProductMinorPart = 3 Then    ' Windows 8.1 / WinPE 5.x
-
-                ElseIf NTKeVerInfo.ProductMinorPart = 4 Then    ' Windows 10 (Technical Preview)
-
-                End If
-            ElseIf NTKeVerInfo.ProductMajorPart = 10 Then
-                Select Case NTKeVerInfo.ProductBuildPart
-                    Case 9888 To 21390                          ' Windows 10 / Server 2016,2019,2022 / Cobalt_SunValley / Win10X / WinPE 10.0
-
-                    Case Is >= 21996                            ' Windows 11 / Cobalt_Refresh / Nickel / Copper / WinPE 10.0
-
-                End Select
-            End If
-        Catch ex As Exception
-
-        End Try
-    End Sub
 
     Sub PopulateProjectTree(MainProjNameNode As String)
         prjTreeStatus.Visible = True
@@ -3028,6 +4336,7 @@ Public Class MainForm
         If Not VolatileMode Then
             SaveDTSettings()
         End If
+        MountedImageDetectorBW.CancelAsync()
     End Sub
 
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
@@ -3223,32 +4532,189 @@ Public Class MainForm
     End Sub
 
     Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
+        ElementCount = 0
+        RemPackage.CheckedListBox1.Items.Clear()
         ProgressPanel.OperationNum = 993
         PleaseWaitDialog.pkgSourceImgStr = MountDir
         PleaseWaitDialog.Label2.Text = "Getting package names..."
-        PleaseWaitDialog.ShowDialog(Me)
+        If Not areBackgroundProcessesDone Then
+            PleaseWaitDialog.ShowDialog(Me)
+        End If
+        Try
+            For x = 0 To Array.LastIndexOf(imgPackageNames, imgPackageNames.Last)
+                If imgPackageNames(x) = "" Then
+                    Continue For
+                End If
+                RemPackage.CheckedListBox1.Items.Add(imgPackageNames(x))
+            Next
+        Catch ex As Exception
+            ' We should have enough with the entries already added.
+            Exit Try
+        End Try
+        Try
+            For x = 0 To Array.LastIndexOf(imgPackageNames, imgPackageNames.Last)
+                If imgPackageNames(x) = "" Then
+                    Exit For
+                End If
+                ElementCount += 1
+            Next
+        Catch ex As Exception
+            ' We should have enough with the entries already added.
+            Exit Try
+        End Try
+        RemPackage.Label2.Text = "This image contains " & ElementCount & " packages"
         RemPackage.ShowDialog()
     End Sub
 
-    Private Sub ImgBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ImgBW.DoWork
+    Sub RefreshInfo()
+        ImgBW.RunWorkerAsync()
+    End Sub
 
+    Private Sub ImgBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ImgBW.DoWork
+        MountedImageDetectorBW.CancelAsync()
+        If bwAllBackgroundProcesses Then
+            If bwGetImageInfo Then
+                If bwGetAdvImgInfo Then
+                    RunBackgroundProcesses(bwBackgroundProcessAction, True, True)
+                Else
+                    RunBackgroundProcesses(bwBackgroundProcessAction, True, False)
+                End If
+            Else
+                RunBackgroundProcesses(bwBackgroundProcessAction, False, False)
+            End If
+        Else
+
+        End If
     End Sub
 
     Private Sub Button10_Click(sender As Object, e As EventArgs) Handles Button10.Click
+        ElementCount = 0
+        EnableFeat.ListView1.Items.Clear()
+        DisableFeat.ListView1.Items.Clear()
         ProgressPanel.OperationNum = 994
         PleaseWaitDialog.featOpType = 0
         PleaseWaitDialog.featSourceImg = MountDir
         PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
-        PleaseWaitDialog.ShowDialog(Me)
+        If Not areBackgroundProcessesDone Then
+            PleaseWaitDialog.ShowDialog(Me)
+        End If
+        Select Case PleaseWaitDialog.featOpType
+            Case 0
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureState(x).Contains("Enable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
+                            Continue For
+                        End If
+                        EnableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
+                    Next
+                Catch ex As Exception
+                    ' We should have enough with the entries already added.
+                    Exit Try
+                End Try
+                ' Get number of available elements
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureNames(x) = "" Then
+                            Exit For
+                        End If
+                        ElementCount += 1
+                    Next
+                Catch ex As Exception
+                    Exit Try
+                End Try
+                EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+            Case 1
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureState(x).Contains("Disable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
+                            Continue For
+                        End If
+                        DisableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
+                    Next
+                Catch ex As Exception
+                    ' We should have enough with the entries already added.
+                    Exit Try
+                End Try
+                ' Get number of available elements
+                Dim ElementCount As Integer
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureNames(x) = "" Then
+                            Exit For
+                        End If
+                        ElementCount += 1
+                    Next
+                Catch ex As Exception
+                    Exit Try
+                End Try
+                DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+        End Select
         EnableFeat.ShowDialog()
     End Sub
 
     Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
+        ElementCount = 0
+        EnableFeat.ListView1.Items.Clear()
+        DisableFeat.ListView1.Items.Clear()
         ProgressPanel.OperationNum = 994
         PleaseWaitDialog.featOpType = 1
         PleaseWaitDialog.featSourceImg = MountDir
         PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
-        PleaseWaitDialog.ShowDialog(Me)
+        If Not areBackgroundProcessesDone Then
+            PleaseWaitDialog.ShowDialog(Me)
+        End If
+        Select Case PleaseWaitDialog.featOpType
+            Case 0
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureState(x).Contains("Enable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
+                            Continue For
+                        End If
+                        EnableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
+                    Next
+                Catch ex As Exception
+                    ' We should have enough with the entries already added.
+                    Exit Try
+                End Try
+                ' Get number of available elements
+                Dim ElementCount As Integer = 0
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureNames(x) = "" Then
+                            Exit For
+                        End If
+                        ElementCount += 1
+                    Next
+                Catch ex As Exception
+                    Exit Try
+                End Try
+                EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+            Case 1
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureState(x).Contains("Disable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
+                            Continue For
+                        End If
+                        DisableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
+                    Next
+                Catch ex As Exception
+                    ' We should have enough with the entries already added.
+                    Exit Try
+                End Try
+                ' Get number of available elements
+                Dim ElementCount As Integer
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureNames(x) = "" Then
+                            Exit For
+                        End If
+                        ElementCount += 1
+                    Next
+                Catch ex As Exception
+                    Exit Try
+                End Try
+                DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+        End Select
         DisableFeat.ShowDialog()
     End Sub
 
@@ -3263,6 +4729,27 @@ Public Class MainForm
     Private Sub MainForm_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged
         If GroupBox1.Left < 0 Then
             SplitPanels.SplitterDistance = 264
+        End If
+        If BGProcNotify.Visible Then
+            If Environment.OSVersion.Version.Major = 10 Then    ' The Left property also includes the window shadows on Windows 10 and 11
+                BGProcNotify.Location = New Point(Left + 8, Top + StatusStrip.Top - (7 + StatusStrip.Height))
+            ElseIf Environment.OSVersion.Version.Major = 6 Then
+                If Environment.OSVersion.Version.Minor = 1 Then ' The same also applies to Windows 7
+                    BGProcNotify.Location = New Point(Left + 8, Top + StatusStrip.Top - (7 + StatusStrip.Height))
+                Else
+                    BGProcNotify.Location = New Point(Left, Top + StatusStrip.Top - StatusStrip.Height)
+                End If
+            End If
+        ElseIf BGProcDetails.Visible And pinState = 0 Then
+            If Environment.OSVersion.Version.Major = 10 Then    ' The Left property also includes the window shadows on Windows 10 and 11
+                BGProcDetails.Location = New Point(Left + 8, Top + StatusStrip.Top - (75 + StatusStrip.Height))
+            ElseIf Environment.OSVersion.Version.Major = 6 Then
+                If Environment.OSVersion.Version.Minor = 1 Then ' The same also applies to Windows 7
+                    BGProcDetails.Location = New Point(Left + 8, Top + StatusStrip.Top - (75 + StatusStrip.Height))
+                Else
+                    BGProcDetails.Location = New Point(Left, Top + StatusStrip.Top - StatusStrip.Height)
+                End If
+            End If
         End If
     End Sub
 
@@ -3288,5 +4775,347 @@ Public Class MainForm
 
     Private Sub UnloadBtn_Click(sender As Object, e As EventArgs) Handles UnloadBtn.Click
         ToolStripButton3.PerformClick()
+    End Sub
+
+    Private Sub MainForm_Move(sender As Object, e As EventArgs) Handles MyBase.Move
+        If BGProcNotify.Visible Then
+            If Environment.OSVersion.Version.Major = 10 Then    ' The Left property also includes the window shadows on Windows 10 and 11
+                BGProcNotify.Location = New Point(Left + 8, Top + StatusStrip.Top - (7 + StatusStrip.Height))
+            ElseIf Environment.OSVersion.Version.Major = 6 Then
+                If Environment.OSVersion.Version.Minor = 1 Then ' The same also applies to Windows 7
+                    BGProcNotify.Location = New Point(Left + 8, Top + StatusStrip.Top - (7 + StatusStrip.Height))
+                Else
+                    BGProcNotify.Location = New Point(Left, Top + StatusStrip.Top - StatusStrip.Height)
+                End If
+            End If
+        ElseIf BGProcDetails.Visible And pinState = 0 Then
+            If Environment.OSVersion.Version.Major = 10 Then    ' The Left property also includes the window shadows on Windows 10 and 11
+                BGProcDetails.Location = New Point(Left + 8, Top + StatusStrip.Top - (75 + StatusStrip.Height))
+            ElseIf Environment.OSVersion.Version.Major = 6 Then
+                If Environment.OSVersion.Version.Minor = 1 Then ' The same also applies to Windows 7
+                    BGProcDetails.Location = New Point(Left + 8, Top + StatusStrip.Top - (75 + StatusStrip.Height))
+                Else
+                    BGProcDetails.Location = New Point(Left, Top + StatusStrip.Top - StatusStrip.Height)
+                End If
+            End If
+        End If
+    End Sub
+
+    Private Sub BackgroundProcessesButton_Click(sender As Object, e As EventArgs) Handles BackgroundProcessesButton.Click
+        If BGProcDetails.Visible Then
+            BGProcDetails.Hide()
+        Else
+            BGProcDetails.Show()
+        End If
+    End Sub
+
+    Private Sub ImgBW_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles ImgBW.ProgressChanged
+        BGProcDetails.Label2.Text = progressLabel
+        If regJumps Then
+            BGProcDetails.ProgressBar1.Value = e.ProgressPercentage
+        Else
+            BGProcDetails.ProgressBar1.Value = irregVal
+        End If
+        progressMin = BGProcDetails.ProgressBar1.Value
+    End Sub
+
+    Private Sub ImgBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ImgBW.RunWorkerCompleted
+        If Not MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.RunWorkerAsync()
+        progressLabel = "Image processes have completed"
+        BGProcDetails.Label2.Text = progressLabel
+        BGProcDetails.ProgressBar1.Value = BGProcDetails.ProgressBar1.Maximum
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+        If isOrphaned Then
+            If BGProcDetails.Visible Then
+                BGProcDetails.ProgressBar1.Value = 0
+            End If
+            OrphanedMountedImgDialog.ShowDialog(Me)
+            If OrphanedMountedImgDialog.DialogResult = Windows.Forms.DialogResult.OK Then
+                ProgressPanel.Validate()
+                ProgressPanel.MountDir = MountDir
+                ProgressPanel.OperationNum = 18
+                ProgressPanel.ShowDialog(Me)
+            ElseIf OrphanedMountedImgDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
+                UnloadDTProj(False, False, False)
+                ImgBW.CancelAsync()
+            End If
+        End If
+    End Sub
+
+    Private Sub RemovePackage_Click(sender As Object, e As EventArgs) Handles RemovePackage.Click
+        ElementCount = 0
+        RemPackage.CheckedListBox1.Items.Clear()
+        ProgressPanel.OperationNum = 993
+        PleaseWaitDialog.pkgSourceImgStr = MountDir
+        PleaseWaitDialog.Label2.Text = "Getting package names..."
+        If Not areBackgroundProcessesDone Then
+            PleaseWaitDialog.ShowDialog(Me)
+        End If
+        Try
+            For x = 0 To Array.LastIndexOf(imgPackageNames, imgPackageNames.Last)
+                If imgPackageNames(x) = "" Then
+                    Continue For
+                End If
+                RemPackage.CheckedListBox1.Items.Add(imgPackageNames(x))
+            Next
+        Catch ex As Exception
+            ' We should have enough with the entries already added.
+            Exit Try
+        End Try
+        Try
+            For x = 0 To Array.LastIndexOf(imgPackageNames, imgPackageNames.Last)
+                If imgPackageNames(x) = "" Then
+                    Exit For
+                End If
+                ElementCount += 1
+            Next
+        Catch ex As Exception
+            ' We should have enough with the entries already added.
+            Exit Try
+        End Try
+        RemPackage.Label2.Text = "This image contains " & ElementCount & " packages"
+        RemPackage.ShowDialog()
+    End Sub
+
+    Private Sub EnableFeature_Click(sender As Object, e As EventArgs) Handles EnableFeature.Click
+        ElementCount = 0
+        EnableFeat.ListView1.Items.Clear()
+        DisableFeat.ListView1.Items.Clear()
+        ProgressPanel.OperationNum = 994
+        PleaseWaitDialog.featOpType = 0
+        PleaseWaitDialog.featSourceImg = MountDir
+        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+        If Not areBackgroundProcessesDone Then
+            PleaseWaitDialog.ShowDialog(Me)
+        End If
+        Select Case PleaseWaitDialog.featOpType
+            Case 0
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureState(x).Contains("Enable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
+                            Continue For
+                        End If
+                        EnableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
+                    Next
+                Catch ex As Exception
+                    ' We should have enough with the entries already added.
+                    Exit Try
+                End Try
+                ' Get number of available elements
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureNames(x) = "" Then
+                            Exit For
+                        End If
+                        ElementCount += 1
+                    Next
+                Catch ex As Exception
+                    Exit Try
+                End Try
+                EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+            Case 1
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureState(x).Contains("Disable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
+                            Continue For
+                        End If
+                        DisableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
+                    Next
+                Catch ex As Exception
+                    ' We should have enough with the entries already added.
+                    Exit Try
+                End Try
+                ' Get number of available elements
+                Dim ElementCount As Integer
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureNames(x) = "" Then
+                            Exit For
+                        End If
+                        ElementCount += 1
+                    Next
+                Catch ex As Exception
+                    Exit Try
+                End Try
+                DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+        End Select
+        EnableFeat.ShowDialog()
+    End Sub
+
+    Private Sub DisableFeature_Click(sender As Object, e As EventArgs) Handles DisableFeature.Click
+        ElementCount = 0
+        EnableFeat.ListView1.Items.Clear()
+        DisableFeat.ListView1.Items.Clear()
+        ProgressPanel.OperationNum = 994
+        PleaseWaitDialog.featOpType = 1
+        PleaseWaitDialog.featSourceImg = MountDir
+        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+        If Not areBackgroundProcessesDone Then
+            PleaseWaitDialog.ShowDialog(Me)
+        End If
+        Select Case PleaseWaitDialog.featOpType
+            Case 0
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureState(x).Contains("Enable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
+                            Continue For
+                        End If
+                        EnableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
+                    Next
+                Catch ex As Exception
+                    ' We should have enough with the entries already added.
+                    Exit Try
+                End Try
+                ' Get number of available elements
+                Dim ElementCount As Integer = 0
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureNames(x) = "" Then
+                            Exit For
+                        End If
+                        ElementCount += 1
+                    Next
+                Catch ex As Exception
+                    Exit Try
+                End Try
+                EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+            Case 1
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureState(x).Contains("Disable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
+                            Continue For
+                        End If
+                        DisableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
+                    Next
+                Catch ex As Exception
+                    ' We should have enough with the entries already added.
+                    Exit Try
+                End Try
+                ' Get number of available elements
+                Dim ElementCount As Integer
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureNames(x) = "" Then
+                            Exit For
+                        End If
+                        ElementCount += 1
+                    Next
+                Catch ex As Exception
+                    Exit Try
+                End Try
+                DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+        End Select
+        DisableFeat.ShowDialog()
+    End Sub
+
+    Private Sub AddProvisionedAppxPackage_Click(sender As Object, e As EventArgs) Handles AddProvisionedAppxPackage.Click
+        AddProvAppxPackage.ShowDialog()
+    End Sub
+
+    Private Sub RemoveProvisionedAppxPackage_Click(sender As Object, e As EventArgs) Handles RemoveProvisionedAppxPackage.Click
+        ElementCount = 0
+        RemProvAppxPackage.ListView1.Items.Clear()
+        PleaseWaitDialog.Label2.Text = "Getting provisioned AppX packages..."
+        ProgressPanel.OperationNum = 994
+        PleaseWaitDialog.ShowDialog()
+        If Not areBackgroundProcessesDone Then
+            PleaseWaitDialog.ShowDialog(Me)
+        End If
+        Try
+            For x = 0 To Array.LastIndexOf(imgAppxPackageNames, imgAppxPackageNames.Last)
+                If imgAppxPackageNames(x) = "" Or imgAppxPackageNames(x) = "Nothing" Then
+                    Continue For
+                ElseIf imgAppxPackageNames(x).Contains("549981C3F5F10") Then
+                    If Directory.Exists(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x)) Then
+                        If My.Computer.FileSystem.GetFiles(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
+                            RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x) & " (Cortana)", imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxRegions(x), imgAppxVersions(x), "No"}))
+                        Else
+                            RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x) & " (Cortana)", imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxRegions(x), imgAppxVersions(x), "Yes"}))
+                        End If
+                    Else
+                        RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x) & " (Cortana)", imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxRegions(x), imgAppxVersions(x), "No"}))
+                    End If
+                Else
+                    If Directory.Exists(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x)) Then
+                        If My.Computer.FileSystem.GetFiles(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
+                            RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxRegions(x), imgAppxVersions(x), "No"}))
+                        Else
+                            RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxRegions(x), imgAppxVersions(x), "Yes"}))
+                        End If
+                    Else
+                        RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxRegions(x), imgAppxVersions(x), "No"}))
+                    End If
+                End If
+            Next
+        Catch ex As Exception
+            ' We should have enough with the entries already added.
+            Exit Try
+        End Try
+        ' Begin counting
+        Try
+            For x = 0 To Array.LastIndexOf(imgAppxPackageNames, imgAppxPackageNames.Last)
+                If imgAppxPackageNames(x) = "" Then
+                    Exit For
+                End If
+                ElementCount += 1
+            Next
+        Catch ex As Exception
+            Exit Try
+        End Try
+        RemProvAppxPackage.Label2.Text = "This image contains " & ElementCount & " AppX packages."
+        RemProvAppxPackage.ShowDialog()
+    End Sub
+
+    Private Sub DeleteImage_Click(sender As Object, e As EventArgs) Handles DeleteImage.Click
+        ImgIndexDelete.ShowDialog()
+    End Sub
+
+    Private Sub LinkLabel3_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel3.LinkClicked
+        If LocalMountDirFBD.ShowDialog() = Windows.Forms.DialogResult.OK And LocalMountDirFBD.SelectedPath <> "" Then
+            If MountedImageMountDirs.Contains(LocalMountDirFBD.SelectedPath) Then
+                MountDir = LocalMountDirFBD.SelectedPath
+                Try
+                    For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
+                        If MountedImageMountDirs(x) = MountDir Then
+                            ImgIndex = MountedImageImgIndexes(x)
+                            SourceImg = MountedImageImgFiles(x)
+                            IIf(MountedImageMountedReWr(x) = "Yes", isReadOnly = False, isReadOnly = True)
+                        End If
+                    Next
+                Catch ex As Exception
+                    Exit Try
+                End Try
+                UpdateProjProperties(True, If(isReadOnly, True, False))
+                SaveDTProj()
+            Else
+                MsgBox("The selected directory doesn't contain a mounted Windows image. Please specify a mount directory and try again.", vbOKOnly + vbCritical, Text)
+                Exit Sub
+            End If
+        End If
+    End Sub
+
+    Private Sub MountedImageDetectorBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles MountedImageDetectorBW.DoWork
+        Dim timer As New Stopwatch
+        Do
+            timer.Start()
+            Do
+                If MountedImageDetectorBW.CancellationPending Then
+                    timer.Stop()
+                    timer.Reset()
+                    Exit Sub
+                End If
+                If timer.ElapsedMilliseconds >= 100 Then
+                    timer.Stop()
+                    DetectMountedImages(False, False, False)
+                    timer.Reset()
+                    Exit Do
+                End If
+            Loop
+        Loop
+    End Sub
+
+    Private Sub MountedImageDetectorBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles MountedImageDetectorBW.RunWorkerCompleted
+        Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "running", "stopped")
+        Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Stop", "Start")
     End Sub
 End Class

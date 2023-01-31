@@ -229,6 +229,10 @@ Partial Class MainForm
         Me.TabPageTitle1 = New System.Windows.Forms.Label()
         Me.projNameText = New System.Windows.Forms.TextBox()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
+        Me.ImageNotMountedPanel = New System.Windows.Forms.Panel()
+        Me.LinkLabel3 = New System.Windows.Forms.LinkLabel()
+        Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
+        Me.Label23 = New System.Windows.Forms.Label()
         Me.ImagePanel = New System.Windows.Forms.Panel()
         Me.TabTitleSummary2 = New System.Windows.Forms.Panel()
         Me.TabPageIcon2 = New System.Windows.Forms.PictureBox()
@@ -246,20 +250,13 @@ Partial Class MainForm
         Me.Label12 = New System.Windows.Forms.Label()
         Me.Button16 = New System.Windows.Forms.Button()
         Me.Button15 = New System.Windows.Forms.Button()
-        Me.ImageNotMountedPanel = New System.Windows.Forms.Panel()
-        Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
-        Me.Label23 = New System.Windows.Forms.Label()
         Me.TabControl2 = New System.Windows.Forms.TabControl()
         Me.TabPage3 = New System.Windows.Forms.TabPage()
+        Me.OldActionPanel = New System.Windows.Forms.Panel()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.Button8 = New System.Windows.Forms.Button()
         Me.Button9 = New System.Windows.Forms.Button()
         Me.Button10 = New System.Windows.Forms.Button()
-        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.Button6 = New System.Windows.Forms.Button()
-        Me.Button7 = New System.Windows.Forms.Button()
-        Me.Button5 = New System.Windows.Forms.Button()
-        Me.Button12 = New System.Windows.Forms.Button()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.Button13 = New System.Windows.Forms.Button()
         Me.Button11 = New System.Windows.Forms.Button()
@@ -267,6 +264,14 @@ Partial Class MainForm
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.Button4 = New System.Windows.Forms.Button()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.Button6 = New System.Windows.Forms.Button()
+        Me.Button7 = New System.Windows.Forms.Button()
+        Me.Button5 = New System.Windows.Forms.Button()
+        Me.Button12 = New System.Windows.Forms.Button()
+        Me.NewActionPanel = New System.Windows.Forms.Panel()
+        Me.NewActions_Header = New System.Windows.Forms.Panel()
+        Me.Label6 = New System.Windows.Forms.Label()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
@@ -284,6 +289,7 @@ Partial Class MainForm
         Me.ToolStripStatusLabel2 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolStripProgressBar1 = New System.Windows.Forms.ToolStripProgressBar()
         Me.StatusStrip = New System.Windows.Forms.StatusStrip()
+        Me.BackgroundProcessesButton = New System.Windows.Forms.ToolStripSplitButton()
         Me.MenuDesc = New System.Windows.Forms.ToolStripStatusLabel()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.PkgInfoCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
@@ -294,6 +300,8 @@ Partial Class MainForm
         Me.FeatureDetailedInfo = New System.Windows.Forms.ToolStripMenuItem()
         Me.ImgBW = New System.ComponentModel.BackgroundWorker()
         Me.ImgProcesses = New System.Diagnostics.Process()
+        Me.LocalMountDirFBD = New System.Windows.Forms.FolderBrowserDialog()
+        Me.MountedImageDetectorBW = New System.ComponentModel.BackgroundWorker()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -316,15 +324,18 @@ Partial Class MainForm
         Me.TabTitleSummary1.SuspendLayout()
         CType(Me.TabPageIcon1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabPage2.SuspendLayout()
+        Me.ImageNotMountedPanel.SuspendLayout()
         Me.ImagePanel.SuspendLayout()
         Me.TabTitleSummary2.SuspendLayout()
         CType(Me.TabPageIcon2, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.ImageNotMountedPanel.SuspendLayout()
         Me.TabControl2.SuspendLayout()
         Me.TabPage3.SuspendLayout()
+        Me.OldActionPanel.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
-        Me.GroupBox2.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
+        Me.GroupBox2.SuspendLayout()
+        Me.NewActionPanel.SuspendLayout()
+        Me.NewActions_Header.SuspendLayout()
         Me.ToolStrip1.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.ToolStrip2.SuspendLayout()
@@ -1626,7 +1637,7 @@ Partial Class MainForm
         '
         Me.SplitPanels.Panel2.Controls.Add(Me.TabControl2)
         Me.SplitPanels.Panel2MinSize = 384
-        Me.SplitPanels.Size = New System.Drawing.Size(752, 490)
+        Me.SplitPanels.Size = New System.Drawing.Size(752, 486)
         Me.SplitPanels.SplitterDistance = 264
         Me.SplitPanels.SplitterWidth = 2
         Me.SplitPanels.TabIndex = 1
@@ -1641,7 +1652,7 @@ Partial Class MainForm
         Me.TabControl1.Multiline = True
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(264, 490)
+        Me.TabControl1.Size = New System.Drawing.Size(264, 486)
         Me.TabControl1.TabIndex = 0
         '
         'TabPage1
@@ -1662,7 +1673,7 @@ Partial Class MainForm
         Me.TabPage1.Location = New System.Drawing.Point(4, 22)
         Me.TabPage1.Name = "TabPage1"
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(256, 464)
+        Me.TabPage1.Size = New System.Drawing.Size(256, 460)
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Project"
         Me.TabPage1.UseVisualStyleBackColor = True
@@ -1672,7 +1683,7 @@ Partial Class MainForm
         Me.UnloadBtn.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.UnloadBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.UnloadBtn.Location = New System.Drawing.Point(36, 422)
+        Me.UnloadBtn.Location = New System.Drawing.Point(36, 418)
         Me.UnloadBtn.Name = "UnloadBtn"
         Me.UnloadBtn.Size = New System.Drawing.Size(185, 28)
         Me.UnloadBtn.TabIndex = 1
@@ -1694,7 +1705,7 @@ Partial Class MainForm
         Me.ExplorerView.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ExplorerView.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.ExplorerView.Location = New System.Drawing.Point(36, 388)
+        Me.ExplorerView.Location = New System.Drawing.Point(36, 384)
         Me.ExplorerView.Name = "ExplorerView"
         Me.ExplorerView.Size = New System.Drawing.Size(185, 28)
         Me.ExplorerView.TabIndex = 1
@@ -1729,7 +1740,7 @@ Partial Class MainForm
         Me.Button14.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button14.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button14.Location = New System.Drawing.Point(36, 354)
+        Me.Button14.Location = New System.Drawing.Point(36, 350)
         Me.Button14.Name = "Button14"
         Me.Button14.Size = New System.Drawing.Size(185, 28)
         Me.Button14.TabIndex = 1
@@ -1753,7 +1764,7 @@ Partial Class MainForm
         Me.Label3.AutoEllipsis = True
         Me.Label3.Location = New System.Drawing.Point(81, 116)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(152, 28)
+        Me.Label3.Size = New System.Drawing.Size(152, 24)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "projPath"
         '
@@ -1844,10 +1855,66 @@ Partial Class MainForm
         Me.TabPage2.Location = New System.Drawing.Point(4, 22)
         Me.TabPage2.Name = "TabPage2"
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(256, 464)
+        Me.TabPage2.Size = New System.Drawing.Size(256, 460)
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "Image"
         Me.TabPage2.UseVisualStyleBackColor = True
+        '
+        'ImageNotMountedPanel
+        '
+        Me.ImageNotMountedPanel.Controls.Add(Me.LinkLabel3)
+        Me.ImageNotMountedPanel.Controls.Add(Me.LinkLabel2)
+        Me.ImageNotMountedPanel.Controls.Add(Me.Label23)
+        Me.ImageNotMountedPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ImageNotMountedPanel.Location = New System.Drawing.Point(3, 3)
+        Me.ImageNotMountedPanel.Name = "ImageNotMountedPanel"
+        Me.ImageNotMountedPanel.Size = New System.Drawing.Size(250, 454)
+        Me.ImageNotMountedPanel.TabIndex = 0
+        '
+        'LinkLabel3
+        '
+        Me.LinkLabel3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.LinkLabel3.LinkArea = New System.Windows.Forms.LinkArea(33, 32)
+        Me.LinkLabel3.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel3.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel3.Location = New System.Drawing.Point(21, 401)
+        Me.LinkLabel3.Name = "LinkLabel3"
+        Me.LinkLabel3.Size = New System.Drawing.Size(210, 44)
+        Me.LinkLabel3.TabIndex = 2
+        Me.LinkLabel3.TabStop = True
+        Me.LinkLabel3.Text = "Or, if you have a mounted image, open an existing mount directory"
+        Me.LinkLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.LinkLabel3.UseCompatibleTextRendering = True
+        '
+        'LinkLabel2
+        '
+        Me.LinkLabel2.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.LinkLabel2.ForeColor = System.Drawing.Color.Crimson
+        Me.LinkLabel2.LinkArea = New System.Windows.Forms.LinkArea(72, 4)
+        Me.LinkLabel2.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel2.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel2.Location = New System.Drawing.Point(21, 231)
+        Me.LinkLabel2.Name = "LinkLabel2"
+        Me.LinkLabel2.Size = New System.Drawing.Size(210, 44)
+        Me.LinkLabel2.TabIndex = 1
+        Me.LinkLabel2.TabStop = True
+        Me.LinkLabel2.Text = "You need to mount an image in order to view its information here. Click here to m" & _
+    "ount an image."
+        Me.LinkLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.LinkLabel2.UseCompatibleTextRendering = True
+        '
+        'Label23
+        '
+        Me.Label23.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.Label23.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label23.ForeColor = System.Drawing.Color.Crimson
+        Me.Label23.Location = New System.Drawing.Point(20, 180)
+        Me.Label23.Name = "Label23"
+        Me.Label23.Size = New System.Drawing.Size(211, 51)
+        Me.Label23.TabIndex = 0
+        Me.Label23.Text = "No image has been mounted"
+        Me.Label23.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'ImagePanel
         '
@@ -1867,7 +1934,7 @@ Partial Class MainForm
         Me.ImagePanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ImagePanel.Location = New System.Drawing.Point(3, 3)
         Me.ImagePanel.Name = "ImagePanel"
-        Me.ImagePanel.Size = New System.Drawing.Size(250, 458)
+        Me.ImagePanel.Size = New System.Drawing.Size(250, 454)
         Me.ImagePanel.TabIndex = 9
         '
         'TabTitleSummary2
@@ -1971,7 +2038,7 @@ Partial Class MainForm
         Me.Label20.AutoEllipsis = True
         Me.Label20.Location = New System.Drawing.Point(97, 345)
         Me.Label20.Name = "Label20"
-        Me.Label20.Size = New System.Drawing.Size(139, 32)
+        Me.Label20.Size = New System.Drawing.Size(139, 28)
         Me.Label20.TabIndex = 6
         Me.Label20.Text = "imgDesc"
         '
@@ -2010,7 +2077,7 @@ Partial Class MainForm
         Me.Label12.AutoEllipsis = True
         Me.Label12.Location = New System.Drawing.Point(101, 111)
         Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(135, 54)
+        Me.Label12.Size = New System.Drawing.Size(135, 50)
         Me.Label12.TabIndex = 5
         Me.Label12.Text = "mountPoint"
         '
@@ -2019,7 +2086,7 @@ Partial Class MainForm
         Me.Button16.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button16.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button16.Location = New System.Drawing.Point(33, 419)
+        Me.Button16.Location = New System.Drawing.Point(33, 415)
         Me.Button16.Name = "Button16"
         Me.Button16.Size = New System.Drawing.Size(185, 28)
         Me.Button16.TabIndex = 8
@@ -2031,51 +2098,12 @@ Partial Class MainForm
         Me.Button15.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button15.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button15.Location = New System.Drawing.Point(33, 385)
+        Me.Button15.Location = New System.Drawing.Point(33, 381)
         Me.Button15.Name = "Button15"
         Me.Button15.Size = New System.Drawing.Size(185, 28)
         Me.Button15.TabIndex = 8
         Me.Button15.Text = "View image properties"
         Me.Button15.UseVisualStyleBackColor = True
-        '
-        'ImageNotMountedPanel
-        '
-        Me.ImageNotMountedPanel.Controls.Add(Me.LinkLabel2)
-        Me.ImageNotMountedPanel.Controls.Add(Me.Label23)
-        Me.ImageNotMountedPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ImageNotMountedPanel.Location = New System.Drawing.Point(3, 3)
-        Me.ImageNotMountedPanel.Name = "ImageNotMountedPanel"
-        Me.ImageNotMountedPanel.Size = New System.Drawing.Size(250, 458)
-        Me.ImageNotMountedPanel.TabIndex = 0
-        '
-        'LinkLabel2
-        '
-        Me.LinkLabel2.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.LinkLabel2.ForeColor = System.Drawing.Color.Crimson
-        Me.LinkLabel2.LinkArea = New System.Windows.Forms.LinkArea(72, 4)
-        Me.LinkLabel2.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel2.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel2.Location = New System.Drawing.Point(21, 233)
-        Me.LinkLabel2.Name = "LinkLabel2"
-        Me.LinkLabel2.Size = New System.Drawing.Size(210, 44)
-        Me.LinkLabel2.TabIndex = 1
-        Me.LinkLabel2.TabStop = True
-        Me.LinkLabel2.Text = "You need to mount an image in order to view its information here. Click here to m" & _
-    "ount an image."
-        Me.LinkLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.LinkLabel2.UseCompatibleTextRendering = True
-        '
-        'Label23
-        '
-        Me.Label23.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.Label23.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label23.ForeColor = System.Drawing.Color.Crimson
-        Me.Label23.Location = New System.Drawing.Point(20, 182)
-        Me.Label23.Name = "Label23"
-        Me.Label23.Size = New System.Drawing.Size(211, 51)
-        Me.Label23.TabIndex = 0
-        Me.Label23.Text = "No image has been mounted"
-        Me.Label23.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'TabControl2
         '
@@ -2084,21 +2112,31 @@ Partial Class MainForm
         Me.TabControl2.Location = New System.Drawing.Point(0, 0)
         Me.TabControl2.Name = "TabControl2"
         Me.TabControl2.SelectedIndex = 0
-        Me.TabControl2.Size = New System.Drawing.Size(486, 490)
+        Me.TabControl2.Size = New System.Drawing.Size(486, 486)
         Me.TabControl2.TabIndex = 3
         '
         'TabPage3
         '
-        Me.TabPage3.Controls.Add(Me.GroupBox3)
-        Me.TabPage3.Controls.Add(Me.GroupBox2)
-        Me.TabPage3.Controls.Add(Me.GroupBox1)
+        Me.TabPage3.Controls.Add(Me.OldActionPanel)
+        Me.TabPage3.Controls.Add(Me.NewActionPanel)
         Me.TabPage3.Location = New System.Drawing.Point(4, 22)
         Me.TabPage3.Name = "TabPage3"
         Me.TabPage3.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage3.Size = New System.Drawing.Size(478, 464)
+        Me.TabPage3.Size = New System.Drawing.Size(478, 460)
         Me.TabPage3.TabIndex = 0
         Me.TabPage3.Text = "Actions"
         Me.TabPage3.UseVisualStyleBackColor = True
+        '
+        'OldActionPanel
+        '
+        Me.OldActionPanel.Controls.Add(Me.GroupBox3)
+        Me.OldActionPanel.Controls.Add(Me.GroupBox1)
+        Me.OldActionPanel.Controls.Add(Me.GroupBox2)
+        Me.OldActionPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.OldActionPanel.Location = New System.Drawing.Point(3, 3)
+        Me.OldActionPanel.Name = "OldActionPanel"
+        Me.OldActionPanel.Size = New System.Drawing.Size(472, 454)
+        Me.OldActionPanel.TabIndex = 3
         '
         'GroupBox3
         '
@@ -2106,7 +2144,7 @@ Partial Class MainForm
         Me.GroupBox3.Controls.Add(Me.Button8)
         Me.GroupBox3.Controls.Add(Me.Button9)
         Me.GroupBox3.Controls.Add(Me.Button10)
-        Me.GroupBox3.Location = New System.Drawing.Point(9, 332)
+        Me.GroupBox3.Location = New System.Drawing.Point(6, 327)
         Me.GroupBox3.Name = "GroupBox3"
         Me.GroupBox3.Size = New System.Drawing.Size(460, 92)
         Me.GroupBox3.TabIndex = 2
@@ -2149,69 +2187,6 @@ Partial Class MainForm
         Me.Button10.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button10.UseVisualStyleBackColor = True
         '
-        'GroupBox2
-        '
-        Me.GroupBox2.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.GroupBox2.Controls.Add(Me.Button6)
-        Me.GroupBox2.Controls.Add(Me.Button7)
-        Me.GroupBox2.Controls.Add(Me.Button5)
-        Me.GroupBox2.Controls.Add(Me.Button12)
-        Me.GroupBox2.Location = New System.Drawing.Point(9, 205)
-        Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(460, 121)
-        Me.GroupBox2.TabIndex = 2
-        Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "Package operations"
-        '
-        'Button6
-        '
-        Me.Button6.Enabled = False
-        Me.Button6.Image = Global.DISMTools.My.Resources.Resources.get_pkg_info
-        Me.Button6.Location = New System.Drawing.Point(118, 20)
-        Me.Button6.Name = "Button6"
-        Me.Button6.Size = New System.Drawing.Size(201, 63)
-        Me.Button6.TabIndex = 1
-        Me.Button6.Text = "Get package information..."
-        Me.Button6.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.Button6.UseVisualStyleBackColor = True
-        '
-        'Button7
-        '
-        Me.Button7.Enabled = False
-        Me.Button7.Image = Global.DISMTools.My.Resources.Resources.rem_pkg
-        Me.Button7.Location = New System.Drawing.Point(325, 20)
-        Me.Button7.Name = "Button7"
-        Me.Button7.Size = New System.Drawing.Size(129, 63)
-        Me.Button7.TabIndex = 1
-        Me.Button7.Text = "Remove package..."
-        Me.Button7.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.Button7.UseVisualStyleBackColor = True
-        '
-        'Button5
-        '
-        Me.Button5.Enabled = False
-        Me.Button5.Image = Global.DISMTools.My.Resources.Resources.add_pkg
-        Me.Button5.Location = New System.Drawing.Point(6, 20)
-        Me.Button5.Name = "Button5"
-        Me.Button5.Size = New System.Drawing.Size(106, 63)
-        Me.Button5.TabIndex = 1
-        Me.Button5.Text = "Add package..."
-        Me.Button5.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.Button5.UseVisualStyleBackColor = True
-        '
-        'Button12
-        '
-        Me.Button12.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button12.Enabled = False
-        Me.Button12.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button12.Location = New System.Drawing.Point(6, 87)
-        Me.Button12.Name = "Button12"
-        Me.Button12.Size = New System.Drawing.Size(448, 28)
-        Me.Button12.TabIndex = 1
-        Me.Button12.Text = "Perform component cleanup and/or repair..."
-        Me.Button12.UseVisualStyleBackColor = True
-        '
         'GroupBox1
         '
         Me.GroupBox1.Anchor = System.Windows.Forms.AnchorStyles.None
@@ -2221,7 +2196,7 @@ Partial Class MainForm
         Me.GroupBox1.Controls.Add(Me.Button2)
         Me.GroupBox1.Controls.Add(Me.Button3)
         Me.GroupBox1.Controls.Add(Me.Button4)
-        Me.GroupBox1.Location = New System.Drawing.Point(9, 40)
+        Me.GroupBox1.Location = New System.Drawing.Point(6, 35)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(460, 159)
         Me.GroupBox1.TabIndex = 2
@@ -2301,6 +2276,97 @@ Partial Class MainForm
         Me.Button4.Text = "Unmount image discarding changes"
         Me.Button4.UseVisualStyleBackColor = True
         '
+        'GroupBox2
+        '
+        Me.GroupBox2.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.GroupBox2.Controls.Add(Me.Button6)
+        Me.GroupBox2.Controls.Add(Me.Button7)
+        Me.GroupBox2.Controls.Add(Me.Button5)
+        Me.GroupBox2.Controls.Add(Me.Button12)
+        Me.GroupBox2.Location = New System.Drawing.Point(6, 200)
+        Me.GroupBox2.Name = "GroupBox2"
+        Me.GroupBox2.Size = New System.Drawing.Size(460, 121)
+        Me.GroupBox2.TabIndex = 2
+        Me.GroupBox2.TabStop = False
+        Me.GroupBox2.Text = "Package operations"
+        '
+        'Button6
+        '
+        Me.Button6.Enabled = False
+        Me.Button6.Image = Global.DISMTools.My.Resources.Resources.get_pkg_info
+        Me.Button6.Location = New System.Drawing.Point(118, 20)
+        Me.Button6.Name = "Button6"
+        Me.Button6.Size = New System.Drawing.Size(201, 63)
+        Me.Button6.TabIndex = 1
+        Me.Button6.Text = "Get package information..."
+        Me.Button6.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button6.UseVisualStyleBackColor = True
+        '
+        'Button7
+        '
+        Me.Button7.Enabled = False
+        Me.Button7.Image = Global.DISMTools.My.Resources.Resources.rem_pkg
+        Me.Button7.Location = New System.Drawing.Point(325, 20)
+        Me.Button7.Name = "Button7"
+        Me.Button7.Size = New System.Drawing.Size(129, 63)
+        Me.Button7.TabIndex = 1
+        Me.Button7.Text = "Remove package..."
+        Me.Button7.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button7.UseVisualStyleBackColor = True
+        '
+        'Button5
+        '
+        Me.Button5.Enabled = False
+        Me.Button5.Image = Global.DISMTools.My.Resources.Resources.add_pkg
+        Me.Button5.Location = New System.Drawing.Point(6, 20)
+        Me.Button5.Name = "Button5"
+        Me.Button5.Size = New System.Drawing.Size(106, 63)
+        Me.Button5.TabIndex = 1
+        Me.Button5.Text = "Add package..."
+        Me.Button5.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button5.UseVisualStyleBackColor = True
+        '
+        'Button12
+        '
+        Me.Button12.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button12.Enabled = False
+        Me.Button12.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button12.Location = New System.Drawing.Point(6, 87)
+        Me.Button12.Name = "Button12"
+        Me.Button12.Size = New System.Drawing.Size(448, 28)
+        Me.Button12.TabIndex = 1
+        Me.Button12.Text = "Perform component cleanup and/or repair..."
+        Me.Button12.UseVisualStyleBackColor = True
+        '
+        'NewActionPanel
+        '
+        Me.NewActionPanel.Controls.Add(Me.NewActions_Header)
+        Me.NewActionPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.NewActionPanel.Location = New System.Drawing.Point(3, 3)
+        Me.NewActionPanel.Name = "NewActionPanel"
+        Me.NewActionPanel.Size = New System.Drawing.Size(472, 454)
+        Me.NewActionPanel.TabIndex = 3
+        '
+        'NewActions_Header
+        '
+        Me.NewActions_Header.Controls.Add(Me.Label6)
+        Me.NewActions_Header.Dock = System.Windows.Forms.DockStyle.Top
+        Me.NewActions_Header.Location = New System.Drawing.Point(0, 0)
+        Me.NewActions_Header.Name = "NewActions_Header"
+        Me.NewActions_Header.Size = New System.Drawing.Size(472, 96)
+        Me.NewActions_Header.TabIndex = 0
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label6.Location = New System.Drawing.Point(16, 16)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(323, 30)
+        Me.Label6.TabIndex = 0
+        Me.Label6.Text = "Welcome to this servicing session"
+        '
         'ToolStrip1
         '
         Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripSeparator14, Me.ToolStripButton3, Me.ToolStripSeparator15, Me.ToolStripButton4})
@@ -2369,7 +2435,7 @@ Partial Class MainForm
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Right
         Me.Panel2.Location = New System.Drawing.Point(752, 0)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(256, 515)
+        Me.Panel2.Size = New System.Drawing.Size(256, 511)
         Me.Panel2.TabIndex = 1
         '
         'prjTreeView
@@ -2377,7 +2443,7 @@ Partial Class MainForm
         Me.prjTreeView.Dock = System.Windows.Forms.DockStyle.Fill
         Me.prjTreeView.Location = New System.Drawing.Point(0, 25)
         Me.prjTreeView.Name = "prjTreeView"
-        Me.prjTreeView.Size = New System.Drawing.Size(256, 490)
+        Me.prjTreeView.Size = New System.Drawing.Size(256, 486)
         Me.prjTreeView.TabIndex = 3
         '
         'ToolStrip2
@@ -2439,18 +2505,29 @@ Partial Class MainForm
         'StatusStrip
         '
         Me.StatusStrip.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.StatusStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MenuDesc})
-        Me.StatusStrip.Location = New System.Drawing.Point(0, 515)
+        Me.StatusStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BackgroundProcessesButton, Me.MenuDesc})
+        Me.StatusStrip.Location = New System.Drawing.Point(0, 511)
         Me.StatusStrip.Name = "StatusStrip"
-        Me.StatusStrip.Size = New System.Drawing.Size(1008, 22)
+        Me.StatusStrip.Size = New System.Drawing.Size(1008, 26)
         Me.StatusStrip.TabIndex = 0
         Me.StatusStrip.Text = "Status"
+        '
+        'BackgroundProcessesButton
+        '
+        Me.BackgroundProcessesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BackgroundProcessesButton.DropDownButtonWidth = 0
+        Me.BackgroundProcessesButton.Image = Global.DISMTools.My.Resources.Resources.bg_ops_complete
+        Me.BackgroundProcessesButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
+        Me.BackgroundProcessesButton.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BackgroundProcessesButton.Name = "BackgroundProcessesButton"
+        Me.BackgroundProcessesButton.Size = New System.Drawing.Size(25, 24)
+        Me.BackgroundProcessesButton.ToolTipText = "View background processes"
         '
         'MenuDesc
         '
         Me.MenuDesc.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.MenuDesc.Name = "MenuDesc"
-        Me.MenuDesc.Size = New System.Drawing.Size(39, 17)
+        Me.MenuDesc.Size = New System.Drawing.Size(39, 21)
         Me.MenuDesc.Text = "Ready"
         '
         'OpenFileDialog1
@@ -2502,6 +2579,8 @@ Partial Class MainForm
         '
         'ImgBW
         '
+        Me.ImgBW.WorkerReportsProgress = True
+        Me.ImgBW.WorkerSupportsCancellation = True
         '
         'ImgProcesses
         '
@@ -2512,6 +2591,16 @@ Partial Class MainForm
         Me.ImgProcesses.StartInfo.StandardOutputEncoding = Nothing
         Me.ImgProcesses.StartInfo.UserName = ""
         Me.ImgProcesses.SynchronizingObject = Me
+        '
+        'LocalMountDirFBD
+        '
+        Me.LocalMountDirFBD.Description = "Please specify the mount directory you want to load into this project:"
+        Me.LocalMountDirFBD.RootFolder = System.Environment.SpecialFolder.MyComputer
+        Me.LocalMountDirFBD.ShowNewFolderButton = False
+        '
+        'MountedImageDetectorBW
+        '
+        Me.MountedImageDetectorBW.WorkerSupportsCancellation = True
         '
         'MainForm
         '
@@ -2556,17 +2645,21 @@ Partial Class MainForm
         Me.TabTitleSummary1.PerformLayout()
         CType(Me.TabPageIcon1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TabPage2.ResumeLayout(False)
+        Me.ImageNotMountedPanel.ResumeLayout(False)
         Me.ImagePanel.ResumeLayout(False)
         Me.ImagePanel.PerformLayout()
         Me.TabTitleSummary2.ResumeLayout(False)
         Me.TabTitleSummary2.PerformLayout()
         CType(Me.TabPageIcon2, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.ImageNotMountedPanel.ResumeLayout(False)
         Me.TabControl2.ResumeLayout(False)
         Me.TabPage3.ResumeLayout(False)
+        Me.OldActionPanel.ResumeLayout(False)
         Me.GroupBox3.ResumeLayout(False)
-        Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
+        Me.GroupBox2.ResumeLayout(False)
+        Me.NewActionPanel.ResumeLayout(False)
+        Me.NewActions_Header.ResumeLayout(False)
+        Me.NewActions_Header.PerformLayout()
         Me.ToolStrip1.ResumeLayout(False)
         Me.ToolStrip1.PerformLayout()
         Me.Panel2.ResumeLayout(False)
@@ -2853,4 +2946,12 @@ Partial Class MainForm
     Friend WithEvents ReportFeedbackToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ImgBW As System.ComponentModel.BackgroundWorker
     Friend WithEvents ImgProcesses As Process
+    Friend WithEvents BackgroundProcessesButton As System.Windows.Forms.ToolStripSplitButton
+    Friend WithEvents OldActionPanel As System.Windows.Forms.Panel
+    Friend WithEvents NewActionPanel As System.Windows.Forms.Panel
+    Friend WithEvents NewActions_Header As System.Windows.Forms.Panel
+    Friend WithEvents Label6 As System.Windows.Forms.Label
+    Friend WithEvents LinkLabel3 As System.Windows.Forms.LinkLabel
+    Friend WithEvents LocalMountDirFBD As System.Windows.Forms.FolderBrowserDialog
+    Friend WithEvents MountedImageDetectorBW As System.ComponentModel.BackgroundWorker
 End Class
