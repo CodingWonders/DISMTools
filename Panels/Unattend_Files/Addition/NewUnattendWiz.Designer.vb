@@ -22,28 +22,28 @@ Partial Class NewUnattendWiz
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim TreeNode1 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Before beginning")
-        Dim TreeNode2 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Target operating system selection")
-        Dim TreeNode3 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product activation")
-        Dim TreeNode4 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("License agreement")
-        Dim TreeNode5 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Computer personalization")
-        Dim TreeNode6 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Partitioning settings")
-        Dim TreeNode7 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Operating system setup", New System.Windows.Forms.TreeNode() {TreeNode3, TreeNode4, TreeNode5, TreeNode6})
-        Dim TreeNode8 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional settings")
-        Dim TreeNode9 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("End-user License Agreement")
-        Dim TreeNode10 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("OOBE skips")
-        Dim TreeNode11 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Network security")
-        Dim TreeNode12 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless configuration")
-        Dim TreeNode13 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Computer protection")
-        Dim TreeNode14 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Control Panel")
-        Dim TreeNode15 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Out-of-box experience", New System.Windows.Forms.TreeNode() {TreeNode9, TreeNode10, TreeNode11, TreeNode12, TreeNode13, TreeNode14})
-        Dim TreeNode16 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Account personalization")
-        Dim TreeNode17 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Account security")
-        Dim TreeNode18 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Customer Experience Improvement Program")
-        Dim TreeNode19 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("User account settings", New System.Windows.Forms.TreeNode() {TreeNode16, TreeNode17, TreeNode18})
-        Dim TreeNode20 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Ready to begin")
-        Dim TreeNode21 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Creation in progress")
-        Dim TreeNode22 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
+        Dim TreeNode45 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Before beginning")
+        Dim TreeNode46 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Target operating system selection")
+        Dim TreeNode47 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product activation")
+        Dim TreeNode48 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("License agreement")
+        Dim TreeNode49 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Computer personalization")
+        Dim TreeNode50 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Partitioning settings")
+        Dim TreeNode51 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Operating system setup", New System.Windows.Forms.TreeNode() {TreeNode47, TreeNode48, TreeNode49, TreeNode50})
+        Dim TreeNode52 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional settings")
+        Dim TreeNode53 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("End-user License Agreement")
+        Dim TreeNode54 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("OOBE skips")
+        Dim TreeNode55 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Network security")
+        Dim TreeNode56 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless configuration")
+        Dim TreeNode57 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Computer protection")
+        Dim TreeNode58 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Control Panel")
+        Dim TreeNode59 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Out-of-box experience", New System.Windows.Forms.TreeNode() {TreeNode53, TreeNode54, TreeNode55, TreeNode56, TreeNode57, TreeNode58})
+        Dim TreeNode60 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Account personalization")
+        Dim TreeNode61 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Account security")
+        Dim TreeNode62 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Customer Experience Improvement Program")
+        Dim TreeNode63 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("User account settings", New System.Windows.Forms.TreeNode() {TreeNode60, TreeNode61, TreeNode62})
+        Dim TreeNode64 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Ready to begin")
+        Dim TreeNode65 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Creation in progress")
+        Dim TreeNode66 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewUnattendWiz))
         Me.SidePanel = New System.Windows.Forms.Panel()
         Me.ExpressModeSteps = New System.Windows.Forms.Panel()
@@ -292,6 +292,18 @@ Partial Class NewUnattendWiz
         Me.Label88 = New System.Windows.Forms.Label()
         Me.PictureBox23 = New System.Windows.Forms.PictureBox()
         Me.EditorPanelContainer = New System.Windows.Forms.Panel()
+        Me.Scintilla1 = New ScintillaNET.Scintilla()
+        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
+        Me.NewTSB = New System.Windows.Forms.ToolStripButton()
+        Me.OpenTSB = New System.Windows.Forms.ToolStripButton()
+        Me.SaveTSB = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripComboBox1 = New System.Windows.Forms.ToolStripComboBox()
+        Me.ToolStripComboBox2 = New System.Windows.Forms.ToolStripComboBox()
+        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
+        Me.HelpTSB = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.HeaderPanel = New System.Windows.Forms.Panel()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
@@ -394,6 +406,8 @@ Partial Class NewUnattendWiz
         CType(Me.PictureBox22, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SettingRecapPanel.SuspendLayout()
         CType(Me.PictureBox23, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.EditorPanelContainer.SuspendLayout()
+        Me.ToolStrip1.SuspendLayout()
         Me.HeaderPanel.SuspendLayout()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.FooterContainer.SuspendLayout()
@@ -431,51 +445,51 @@ Partial Class NewUnattendWiz
         Me.StepsTreeView.ItemHeight = 24
         Me.StepsTreeView.Location = New System.Drawing.Point(0, 0)
         Me.StepsTreeView.Name = "StepsTreeView"
-        TreeNode1.Name = "StartNode"
-        TreeNode1.Text = "Before beginning"
-        TreeNode2.Name = "TargetOSNode"
-        TreeNode2.Text = "Target operating system selection"
-        TreeNode3.Name = "Activation"
-        TreeNode3.Text = "Product activation"
-        TreeNode4.Name = "License"
-        TreeNode4.Text = "License agreement"
-        TreeNode5.Name = "CompPersonalize"
-        TreeNode5.Text = "Computer personalization"
-        TreeNode6.Name = "Partitioning"
-        TreeNode6.Text = "Partitioning settings"
-        TreeNode7.Name = "OSSetup"
-        TreeNode7.Text = "Operating system setup"
-        TreeNode8.Name = "Region"
-        TreeNode8.Text = "Regional settings"
-        TreeNode9.Name = "EULA"
-        TreeNode9.Text = "End-user License Agreement"
-        TreeNode10.Name = "OOBESkip"
-        TreeNode10.Text = "OOBE skips"
-        TreeNode11.Name = "OOBENet"
-        TreeNode11.Text = "Network security"
-        TreeNode12.Name = "Wireless"
-        TreeNode12.Text = "Wireless configuration"
-        TreeNode13.Name = "CompProtect"
-        TreeNode13.Text = "Computer protection"
-        TreeNode14.Name = "CPL"
-        TreeNode14.Text = "Control Panel"
-        TreeNode15.Name = "OOBE"
-        TreeNode15.Text = "Out-of-box experience"
-        TreeNode16.Name = "User"
-        TreeNode16.Text = "Account personalization"
-        TreeNode17.Name = "UserSec"
-        TreeNode17.Text = "Account security"
-        TreeNode18.Name = "CEIP"
-        TreeNode18.Text = "Customer Experience Improvement Program"
-        TreeNode19.Name = "UserAccount"
-        TreeNode19.Text = "User account settings"
-        TreeNode20.Name = "Prepare"
-        TreeNode20.Text = "Ready to begin"
-        TreeNode21.Name = "Progress"
-        TreeNode21.Text = "Creation in progress"
-        TreeNode22.Name = "Finish"
-        TreeNode22.Text = "Finish"
-        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode1, TreeNode2, TreeNode7, TreeNode8, TreeNode15, TreeNode19, TreeNode20, TreeNode21, TreeNode22})
+        TreeNode45.Name = "StartNode"
+        TreeNode45.Text = "Before beginning"
+        TreeNode46.Name = "TargetOSNode"
+        TreeNode46.Text = "Target operating system selection"
+        TreeNode47.Name = "Activation"
+        TreeNode47.Text = "Product activation"
+        TreeNode48.Name = "License"
+        TreeNode48.Text = "License agreement"
+        TreeNode49.Name = "CompPersonalize"
+        TreeNode49.Text = "Computer personalization"
+        TreeNode50.Name = "Partitioning"
+        TreeNode50.Text = "Partitioning settings"
+        TreeNode51.Name = "OSSetup"
+        TreeNode51.Text = "Operating system setup"
+        TreeNode52.Name = "Region"
+        TreeNode52.Text = "Regional settings"
+        TreeNode53.Name = "EULA"
+        TreeNode53.Text = "End-user License Agreement"
+        TreeNode54.Name = "OOBESkip"
+        TreeNode54.Text = "OOBE skips"
+        TreeNode55.Name = "OOBENet"
+        TreeNode55.Text = "Network security"
+        TreeNode56.Name = "Wireless"
+        TreeNode56.Text = "Wireless configuration"
+        TreeNode57.Name = "CompProtect"
+        TreeNode57.Text = "Computer protection"
+        TreeNode58.Name = "CPL"
+        TreeNode58.Text = "Control Panel"
+        TreeNode59.Name = "OOBE"
+        TreeNode59.Text = "Out-of-box experience"
+        TreeNode60.Name = "User"
+        TreeNode60.Text = "Account personalization"
+        TreeNode61.Name = "UserSec"
+        TreeNode61.Text = "Account security"
+        TreeNode62.Name = "CEIP"
+        TreeNode62.Text = "Customer Experience Improvement Program"
+        TreeNode63.Name = "UserAccount"
+        TreeNode63.Text = "User account settings"
+        TreeNode64.Name = "Prepare"
+        TreeNode64.Text = "Ready to begin"
+        TreeNode65.Name = "Progress"
+        TreeNode65.Text = "Creation in progress"
+        TreeNode66.Name = "Finish"
+        TreeNode66.Text = "Finish"
+        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode45, TreeNode46, TreeNode51, TreeNode52, TreeNode59, TreeNode63, TreeNode64, TreeNode65, TreeNode66})
         Me.StepsTreeView.ShowLines = False
         Me.StepsTreeView.ShowPlusMinus = False
         Me.StepsTreeView.ShowRootLines = False
@@ -693,7 +707,7 @@ Partial Class NewUnattendWiz
         '
         Me.ComboBox1.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {"Windows 7", "Windows Server 2008 R2", "Windows 8", "Windows Server 2012", "Windows 8.1", "Windows Server 2012 R2", "Windows 10/11", "Windows Server 2016", "Windows Server 2019", "Windows Server 2022"})
+        Me.ComboBox1.Items.AddRange(New Object() {"Windows 7", "Windows Server 2008 R2", "Windows 8", "Windows Server 2012", "Windows 8.1", "Windows Server 2012 R2", "Windows 10", "Windows 11", "Windows Server 2016", "Windows Server 2019"})
         Me.ComboBox1.Location = New System.Drawing.Point(272, 220)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(343, 21)
@@ -1668,7 +1682,8 @@ Partial Class NewUnattendWiz
         Me.Label46.Name = "Label46"
         Me.Label46.Size = New System.Drawing.Size(525, 33)
         Me.Label46.TabIndex = 6
-        Me.Label46.Text = "The unattended answer file will contain the following regional information:"
+        Me.Label46.Text = "The unattended answer file will contain the following regional information (not a" & _
+    "vailable at this time):"
         '
         'Label54
         '
@@ -3086,8 +3101,8 @@ Partial Class NewUnattendWiz
         Me.Label87.Name = "Label87"
         Me.Label87.Size = New System.Drawing.Size(682, 55)
         Me.Label87.TabIndex = 5
-        Me.Label87.Text = "For those privacy conscious, you might want to leave this option unchecked; becaus" & _
-    "e of telemetry (data collection) added by Microsoft that might be excessive."
+        Me.Label87.Text = "For those privacy conscious, you might want to leave this option unchecked; becau" & _
+    "se of telemetry (data collection) added by Microsoft that might be excessive."
         '
         'Label86
         '
@@ -3169,12 +3184,112 @@ Partial Class NewUnattendWiz
         '
         'EditorPanelContainer
         '
+        Me.EditorPanelContainer.Controls.Add(Me.Scintilla1)
+        Me.EditorPanelContainer.Controls.Add(Me.ToolStrip1)
         Me.EditorPanelContainer.Dock = System.Windows.Forms.DockStyle.Fill
         Me.EditorPanelContainer.Location = New System.Drawing.Point(256, 104)
         Me.EditorPanelContainer.Name = "EditorPanelContainer"
         Me.EditorPanelContainer.Size = New System.Drawing.Size(752, 417)
         Me.EditorPanelContainer.TabIndex = 1
         Me.EditorPanelContainer.Visible = False
+        '
+        'Scintilla1
+        '
+        Me.Scintilla1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Scintilla1.IndentationGuides = ScintillaNET.IndentView.LookBoth
+        Me.Scintilla1.Location = New System.Drawing.Point(0, 25)
+        Me.Scintilla1.Name = "Scintilla1"
+        Me.Scintilla1.Size = New System.Drawing.Size(752, 392)
+        Me.Scintilla1.TabIndex = 2
+        Me.Scintilla1.Text = "<?xml version=""1.0"" encoding=""utf-8""?>" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "<unattend xmlns=""urn:schemas-microsoft-co" & _
+    "m:unattend"">" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "</unattend>"
+        '
+        'ToolStrip1
+        '
+        Me.ToolStrip1.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewTSB, Me.OpenTSB, Me.SaveTSB, Me.ToolStripSeparator1, Me.ToolStripComboBox1, Me.ToolStripComboBox2, Me.ToolStripSeparator2, Me.ToolStripButton1, Me.HelpTSB, Me.ToolStripSeparator3})
+        Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.ToolStrip1.Name = "ToolStrip1"
+        Me.ToolStrip1.Size = New System.Drawing.Size(752, 25)
+        Me.ToolStrip1.TabIndex = 0
+        Me.ToolStrip1.Text = "ToolStrip1"
+        '
+        'NewTSB
+        '
+        Me.NewTSB.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.NewTSB.Image = Global.DISMTools.My.Resources.Resources.newfile
+        Me.NewTSB.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.NewTSB.Name = "NewTSB"
+        Me.NewTSB.Size = New System.Drawing.Size(23, 22)
+        Me.NewTSB.Text = "&Nuevo"
+        '
+        'OpenTSB
+        '
+        Me.OpenTSB.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.OpenTSB.Image = Global.DISMTools.My.Resources.Resources.openfile
+        Me.OpenTSB.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.OpenTSB.Name = "OpenTSB"
+        Me.OpenTSB.Size = New System.Drawing.Size(23, 22)
+        Me.OpenTSB.Text = "&Abrir"
+        '
+        'SaveTSB
+        '
+        Me.SaveTSB.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.SaveTSB.Image = Global.DISMTools.My.Resources.Resources.save_glyph
+        Me.SaveTSB.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.SaveTSB.Name = "SaveTSB"
+        Me.SaveTSB.Size = New System.Drawing.Size(23, 22)
+        Me.SaveTSB.Text = "&Guardar"
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 25)
+        '
+        'ToolStripComboBox1
+        '
+        Me.ToolStripComboBox1.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ToolStripComboBox1.Name = "ToolStripComboBox1"
+        Me.ToolStripComboBox1.Size = New System.Drawing.Size(121, 25)
+        Me.ToolStripComboBox1.Text = "Courier New"
+        '
+        'ToolStripComboBox2
+        '
+        Me.ToolStripComboBox2.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ToolStripComboBox2.Items.AddRange(New Object() {"8", "9", "10", "11", "12", "14", "16", "18", "20", "24", "28", "36", "48", "72", "96"})
+        Me.ToolStripComboBox2.Name = "ToolStripComboBox2"
+        Me.ToolStripComboBox2.Size = New System.Drawing.Size(75, 25)
+        Me.ToolStripComboBox2.Text = "10"
+        '
+        'ToolStripSeparator2
+        '
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 25)
+        '
+        'ToolStripButton1
+        '
+        Me.ToolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton1.Image = Global.DISMTools.My.Resources.Resources.wordwrap
+        Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton1.Name = "ToolStripButton1"
+        Me.ToolStripButton1.Size = New System.Drawing.Size(23, 22)
+        Me.ToolStripButton1.Text = "ToolStripButton1"
+        '
+        'HelpTSB
+        '
+        Me.HelpTSB.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.HelpTSB.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.HelpTSB.Image = Global.DISMTools.My.Resources.Resources.help_glyph
+        Me.HelpTSB.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.HelpTSB.Name = "HelpTSB"
+        Me.HelpTSB.Size = New System.Drawing.Size(23, 22)
+        Me.HelpTSB.Text = "Ay&uda"
+        '
+        'ToolStripSeparator3
+        '
+        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 25)
         '
         'HeaderPanel
         '
@@ -3477,6 +3592,10 @@ Partial Class NewUnattendWiz
         Me.SettingRecapPanel.ResumeLayout(False)
         Me.SettingRecapPanel.PerformLayout()
         CType(Me.PictureBox23, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.EditorPanelContainer.ResumeLayout(False)
+        Me.EditorPanelContainer.PerformLayout()
+        Me.ToolStrip1.ResumeLayout(False)
+        Me.ToolStrip1.PerformLayout()
         Me.HeaderPanel.ResumeLayout(False)
         Me.HeaderPanel.PerformLayout()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()
@@ -3750,4 +3869,16 @@ Partial Class NewUnattendWiz
     Friend WithEvents KeyInputBox3 As System.Windows.Forms.TextBox
     Friend WithEvents KeyInputBox2 As System.Windows.Forms.TextBox
     Friend WithEvents KeyInputBox1 As System.Windows.Forms.TextBox
+    Friend WithEvents ToolStrip1 As System.Windows.Forms.ToolStrip
+    Friend WithEvents NewTSB As System.Windows.Forms.ToolStripButton
+    Friend WithEvents OpenTSB As System.Windows.Forms.ToolStripButton
+    Friend WithEvents SaveTSB As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents HelpTSB As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripComboBox1 As System.Windows.Forms.ToolStripComboBox
+    Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents ToolStripButton1 As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents Scintilla1 As ScintillaNET.Scintilla
+    Friend WithEvents ToolStripComboBox2 As System.Windows.Forms.ToolStripComboBox
 End Class

@@ -2,6 +2,7 @@
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.Text.Encoding
 Imports System.Threading
+Imports ScintillaNET
 
 Public Class NewUnattendWiz
 
@@ -10,9 +11,168 @@ Public Class NewUnattendWiz
     Dim ExpressPage As Integer = 1
     Dim OSWiki As String
     Dim ColoredMode As Integer = 0      ' 0: Windows 8; 1: Windows 8.1
+    Dim IsWindows8 As Boolean
     Dim KeyString As String
+    Dim CanGatherImgVersion As Boolean
+    Dim WinVersion As String
+    Dim SkipEula As Boolean
+    Dim ComputerName As String
+    Dim OrgName As String
+    Dim SetupLang As Integer
+    Dim WipeDisk As Boolean
+    Dim TargetDiskNum As Integer
+    Dim UseNtfs As Boolean
+    Dim MakeActive As Boolean
+    Dim TargetDrLetter As String
+    Dim TargetDrLabel As String
+    Dim UseMbr As Boolean
+    Dim PartOrder As Integer
+    Dim InputMethod As Integer
+    Dim Currency As Integer
+    Dim TZData As Integer
+    Dim UILang As Integer
+    Dim HideEula As Boolean
+    Dim SkipMachineOobe As Boolean
+    Dim SkipUserOobe As Boolean
+    Dim NetLocation As Integer
+    Dim HideWirelessChooser As Boolean
+    Dim ProtectionLevel As Integer
+    Dim WULevel As Integer
+    Dim IsInCategoryView As Boolean
+    Dim IconSize As Integer
+    Dim UserName As String
+    Dim UserDesc As String
+    Dim ColorMode As Integer
+    Dim UserPass As String
+    Dim UserGroup As String
+    Dim ShowHiddenGroups As Boolean
+    Dim EnableUAC As Boolean
+    Dim EnableFirewall As Boolean
+    Dim Autologin As Boolean
+    Dim PasswordExpiry As Boolean
+    Dim JoinCeip As Boolean
 
     Private Sub NewUnattendWiz_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ' Initialize Scintilla editor
+        Scintilla1.StyleResetDefault()
+        ' Use VS's selection color, as I find it the most natural
+        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
+            Scintilla1.SetSelectionBackColor(True, Color.FromArgb(38, 79, 120))
+        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
+            Scintilla1.SetSelectionBackColor(True, Color.FromArgb(153, 201, 239))
+        End If
+        Scintilla1.Styles(Style.Default).Font = "Courier New"
+        Scintilla1.Styles(Style.Default).Size = 10
+
+        ' Set background and foreground colors (from Visual Studio)
+        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
+            Scintilla1.Styles(Style.Default).BackColor = Color.FromArgb(30, 30, 30)
+            Scintilla1.Styles(Style.Default).ForeColor = Color.White
+            Scintilla1.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
+        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
+            Scintilla1.Styles(Style.Default).BackColor = Color.White
+            Scintilla1.Styles(Style.Default).ForeColor = Color.Black
+            Scintilla1.Styles(Style.LineNumber).BackColor = Color.White
+        End If
+        Scintilla1.StyleClearAll()
+
+        ' Use Notepad++'s lexer style colors
+        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
+            Scintilla1.Styles(Style.Xml.XmlStart).ForeColor = Color.FromArgb(127, 159, 127)
+            Scintilla1.Styles(Style.Xml.XmlEnd).ForeColor = Color.FromArgb(127, 159, 127)
+            Scintilla1.Styles(Style.Xml.Default).ForeColor = Color.FromArgb(220, 220, 204)
+            Scintilla1.Styles(Style.Xml.Comment).ForeColor = Color.FromArgb(127, 159, 127)
+            Scintilla1.Styles(Style.Xml.Number).ForeColor = Color.FromArgb(140, 208, 211)
+            Scintilla1.Styles(Style.Xml.DoubleString).ForeColor = Color.FromArgb(200, 145, 145)
+            Scintilla1.Styles(Style.Xml.SingleString).ForeColor = Color.FromArgb(200, 145, 145)
+            Scintilla1.Styles(Style.Xml.Tag).ForeColor = Color.FromArgb(227, 206, 171)
+            Scintilla1.Styles(Style.Xml.TagEnd).ForeColor = Color.FromArgb(227, 206, 171)
+            Scintilla1.Styles(Style.Xml.TagUnknown).ForeColor = Color.FromArgb(237, 214, 237)
+            Scintilla1.Styles(Style.Xml.Attribute).ForeColor = Color.FromArgb(190, 200, 158)
+            Scintilla1.Styles(Style.Xml.AttributeUnknown).ForeColor = Color.FromArgb(223, 223, 223)
+            Scintilla1.Styles(Style.Xml.CData).ForeColor = Color.FromArgb(200, 145, 145)
+            Scintilla1.Styles(Style.Xml.Entity).ForeColor = Color.FromArgb(207, 191, 175)
+        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
+            Scintilla1.Styles(Style.Xml.XmlStart).ForeColor = Color.Red
+            Scintilla1.Styles(Style.Xml.XmlEnd).ForeColor = Color.Red
+            Scintilla1.Styles(Style.Xml.Default).ForeColor = Color.Black
+            Scintilla1.Styles(Style.Xml.Comment).ForeColor = Color.FromArgb(0, 128, 0)
+            Scintilla1.Styles(Style.Xml.Number).ForeColor = Color.Red
+            Scintilla1.Styles(Style.Xml.DoubleString).ForeColor = Color.FromArgb(128, 0, 255)
+            Scintilla1.Styles(Style.Xml.SingleString).ForeColor = Color.FromArgb(128, 0, 255)
+            Scintilla1.Styles(Style.Xml.Tag).ForeColor = Color.Blue
+            Scintilla1.Styles(Style.Xml.TagEnd).ForeColor = Color.Blue
+            Scintilla1.Styles(Style.Xml.TagUnknown).ForeColor = Color.Blue
+            Scintilla1.Styles(Style.Xml.Attribute).ForeColor = Color.Red
+            Scintilla1.Styles(Style.Xml.AttributeUnknown).ForeColor = Color.Red
+            Scintilla1.Styles(Style.Xml.CData).ForeColor = Color.FromArgb(255, 128, 0)
+            Scintilla1.Styles(Style.Xml.Entity).ForeColor = Color.Black
+        End If
+        ' Set lexer
+        Scintilla1.Lexer = Lexer.Xml
+
+        ' Set line number margin properties
+        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
+            Scintilla1.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
+        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
+            Scintilla1.Styles(Style.LineNumber).BackColor = Color.White
+        End If
+        Scintilla1.Styles(Style.LineNumber).ForeColor = Color.FromArgb(165, 165, 165)
+        Dim Margin = Scintilla1.Margins(1)
+        Margin.Width = 30
+        Margin.Type = MarginType.Number
+        Margin.Sensitive = True
+        Margin.Mask = 0
+
+        ' Initialize code folding
+        Scintilla1.SetFoldMarginColor(True, Scintilla1.Styles(Style.Default).BackColor)
+        Scintilla1.SetFoldMarginColor(True, Scintilla1.Styles(Style.Default).BackColor)
+        Scintilla1.SetProperty("fold", "1")
+        Scintilla1.SetProperty("fold.compact", "1")
+
+        ' Configure bookmark margins
+        Dim Bookmarks = Scintilla1.Margins(2)
+        Bookmarks.Width = 20
+        Bookmarks.Sensitive = True
+        Bookmarks.Type = MarginType.Symbol
+        Bookmarks.Mask = (1 << 2)
+        Dim Marker = Scintilla1.Markers(2)
+        Marker.Symbol = MarkerSymbol.Circle
+        Marker.SetBackColor(Color.FromArgb(255, 0, 59))
+        Marker.SetForeColor(Color.Black)
+        Marker.SetAlpha(100)
+
+
+        ' Configure code folding margins
+        Scintilla1.Margins(3).Type = MarginType.Symbol
+        Scintilla1.Margins(3).Mask = Marker.MaskFolders
+        Scintilla1.Margins(3).Sensitive = True
+        Scintilla1.Margins(3).Width = 1
+
+        ' Set colors for all folding markers
+        For x = 25 To 31
+            Scintilla1.Markers(x).SetForeColor(Scintilla1.Styles(Style.Default).BackColor)
+            Scintilla1.Markers(x).SetBackColor(Scintilla1.Styles(Style.Default).ForeColor)
+        Next
+
+        ' Folding marker configuration
+        Scintilla1.Markers(Marker.Folder).Symbol = MarkerSymbol.BoxPlus
+        Scintilla1.Markers(Marker.FolderOpen).Symbol = MarkerSymbol.BoxMinus
+        Scintilla1.Markers(Marker.FolderEnd).Symbol = MarkerSymbol.BoxPlusConnected
+        Scintilla1.Markers(Marker.FolderMidTail).Symbol = MarkerSymbol.TCorner
+        Scintilla1.Markers(Marker.FolderOpenMid).Symbol = MarkerSymbol.BoxMinusConnected
+        Scintilla1.Markers(Marker.FolderSub).Symbol = MarkerSymbol.VLine
+        Scintilla1.Markers(Marker.FolderTail).Symbol = MarkerSymbol.LCorner
+
+        ' Enable folding
+        Scintilla1.AutomaticFold = (AutomaticFold.Show Or AutomaticFold.Click Or AutomaticFold.Show)
+
+        ' Fill in font combinations
+        ToolStripComboBox1.Items.Clear()
+        For Each fntFamily As FontFamily In FontFamily.Families
+            ToolStripComboBox1.Items.Add(fntFamily.Name)
+        Next
+
         StepsTreeView.ExpandAll()
     End Sub
 
@@ -63,6 +223,10 @@ Public Class NewUnattendWiz
         EditorPanelTrigger.BackColor = SidePanel.BackColor
         EditorPanelTrigger.ForeColor = Color.Black
         PictureBox2.Image = New Bitmap(My.Resources.editor_mode)
+        LocationPanel.Visible = True
+        PictureBox3.Image = New Bitmap(My.Resources.express_mode_fc)
+        Label3.Text = "Express mode"
+        Label4.Text = "If you haven't created unattended answer files before, use this wizard to create one"
     End Sub
 
     Private Sub EditorPanelTrigger_MouseEnter(sender As Object, e As EventArgs) Handles EditorPanelTrigger.MouseEnter
@@ -108,6 +272,10 @@ Public Class NewUnattendWiz
         EditorPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.Highlight)
         EditorPanelTrigger.ForeColor = Color.White
         PictureBox2.Image = New Bitmap(My.Resources.editor_mode_select)
+        LocationPanel.Visible = False
+        PictureBox3.Image = New Bitmap(My.Resources.editor_mode_fc)
+        Label3.Text = "Editor mode"
+        Label4.Text = "Create your unattended answer files from scratch and save them anywhere"
     End Sub
 
     Private Sub Back_Button_Click(sender As Object, e As EventArgs) Handles Back_Button.Click
@@ -129,8 +297,93 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub Next_Button_Click(sender As Object, e As EventArgs) Handles Next_Button.Click
-        If ExpressPage = 2 Then
+        If ExpressPage = 1 Then
+            If RadioButton1.Checked Then
+                If CanGatherImgVersion Then
+                    Next_Button.Enabled = True
+                Else
+                    Next_Button.Enabled = False
+                End If
+            End If
+        ElseIf ExpressPage = 2 Then
             TailorWizardToTargetOS()
+            If RadioButton3.Checked Then
+                If ComboBox2.SelectedItem = "" Then
+                    Next_Button.Enabled = False
+                Else
+                    Next_Button.Enabled = True
+                End If
+            Else
+                KeyString = KeyInputBox1.Text & "-" & KeyInputBox2.Text & "-" & KeyInputBox3.Text & "-" & KeyInputBox4.Text & "-" & KeyInputBox5.Text
+                If KeyString.Length < 29 Then
+                    Next_Button.Enabled = False
+                Else
+                    Next_Button.Enabled = True
+                End If
+            End If
+        ElseIf ExpressPage = 3 Then
+            If RadioButton3.Checked Then
+                KeyString = GenericBox1.Text & "-" & GenericBox2.Text & "-" & GenericBox3.Text & "-" & GenericBox4.Text & "-" & GenericBox5.Text
+            Else
+                KeyString = KeyInputBox1.Text & "-" & KeyInputBox2.Text & "-" & KeyInputBox3.Text & "-" & KeyInputBox4.Text & "-" & KeyInputBox5.Text
+            End If
+        ElseIf ExpressPage = 4 Then
+            If TextBox1.Text = "" Then
+                Next_Button.Enabled = False
+            Else
+                If TextBox1.Text.Contains(".") Or _
+                    TextBox1.Text.Contains("\") Or _
+                    TextBox1.Text.Contains("/") Or _
+                    TextBox1.Text.Contains(":") Or _
+                    TextBox1.Text.Contains("*") Or _
+                    TextBox1.Text.Contains("?") Or _
+                    TextBox1.Text.Contains(Quote) Or _
+                    TextBox1.Text.Contains("<") Or _
+                    TextBox1.Text.Contains(">") Or _
+                    TextBox1.Text.Contains("|") Or _
+                    TextBox1.Text.Contains(",") Or _
+                    TextBox1.Text.Contains("~") Or _
+                    TextBox1.Text.Contains("!") Or _
+                    TextBox1.Text.Contains("@") Or _
+                    TextBox1.Text.Contains("#") Or _
+                    TextBox1.Text.Contains("$") Or _
+                    TextBox1.Text.Contains("%") Or _
+                    TextBox1.Text.Contains("^") Or _
+                    TextBox1.Text.Contains("&") Or _
+                    TextBox1.Text.Contains("`") Or _
+                    TextBox1.Text.Contains("(") Or TextBox1.Text.Contains(")") Or _
+                    TextBox1.Text.Contains("{") Or TextBox1.Text.Contains("}") Or _
+                    TextBox1.Text.Contains("_") Then
+                    Next_Button.Enabled = False
+                Else
+                    Next_Button.Enabled = True
+                End If
+            End If
+        ElseIf ExpressPage = 6 Then
+            If ComboBox5.SelectedItem = "" Or ComboBox6.SelectedItem = "" Or ComboBox7.SelectedItem = "" Or ComboBox8.SelectedItem = "" Then
+                Next_Button.Enabled = False
+            Else
+                Next_Button.Enabled = True
+            End If
+        ElseIf ExpressPage = 13 Then
+            If TextBox4.Text = "" Then
+                Next_Button.Enabled = False
+            Else
+                Next_Button.Enabled = True
+            End If
+        ElseIf ExpressPage = 14 Then
+            UserNameLabel.Text = TextBox4.Text
+        ElseIf ExpressPage = 15 Then
+            If PasswordBox.Text = "" And PasswordRepeatBox.Text = "" Then
+                If MsgBox("Continuing without a password might leave the unattended system more vulnerable. Do you still want to continue?", vbYesNo + vbExclamation, "Unattended answer file creation wizard") = MsgBoxResult.No Then
+                    Exit Sub
+                End If
+            Else
+                If Not PasswordRepeatBox.Text.Equals(PasswordBox.Text, StringComparison.Ordinal) Then
+                    MsgBox("The passwords provided don't match. Make sure you typed the password correctly on both fields and try again", vbOKOnly + vbCritical, "Unattended answer file creation wizard")
+                    Exit Sub
+                End If
+            End If
         End If
         ExpressPage += 1
         Back_Button.Enabled = True
@@ -512,6 +765,11 @@ Public Class NewUnattendWiz
             CheckBox2.Enabled = False
             GroupBox1.Enabled = False
             DetectTargetOS()
+            If CanGatherImgVersion Then
+                Next_Button.Enabled = True
+            ElseIf CanGatherImgVersion = False Then
+                Next_Button.Enabled = False
+            End If
         Else
             Label7.Enabled = False
             Label8.Enabled = False
@@ -521,6 +779,7 @@ Public Class NewUnattendWiz
             ComboBox1.Enabled = True
             CheckBox2.Enabled = True
             GroupBox1.Enabled = True
+            Next_Button.Enabled = True
         End If
     End Sub
 
@@ -633,9 +892,11 @@ Public Class NewUnattendWiz
                         End If
                 End Select
             End If
+            CanGatherImgVersion = True
         Catch ex As Exception
             Label9.Text = "Could not get version from mounted image"
             Label10.Text = "Could not get target operating system version"
+            CanGatherImgVersion = False
         End Try
     End Sub
 
@@ -676,10 +937,14 @@ Public Class NewUnattendWiz
             Label13.Text = "18/10/2013"
             Label15.Text = "6.3"
             OSWiki = "https://en.wikipedia.org/wiki/Windows_Server_2012_R2"
-        ElseIf ComboBox1.SelectedItem = "Windows 10/11" Then
-            Label13.Text = "29/07/2015 / 05/10/2021"
+        ElseIf ComboBox1.SelectedItem = "Windows 10" Then
+            Label13.Text = "29/07/2015"
             Label15.Text = "10.0"
             OSWiki = "https://en.wikipedia.org/wiki/Windows_10"
+        ElseIf ComboBox1.SelectedItem = "Windows 11" Then
+            Label13.Text = "05/10/2021"
+            Label15.Text = "10.0"
+            OSWiki = "https://en.wikipedia.org/wiki/Windows_11"
         ElseIf ComboBox1.SelectedItem = "Windows Server 2016" Then
             Label13.Text = "12/10/2016"
             Label15.Text = "10.0"
@@ -688,10 +953,6 @@ Public Class NewUnattendWiz
             Label13.Text = "02/10/2018"
             Label15.Text = "10.0"
             OSWiki = "https://en.wikipedia.org/wiki/Windows_Server_2019"
-        ElseIf ComboBox1.SelectedItem = "Windows Server 2022" Then
-            Label13.Text = "18/08/2021"
-            Label15.Text = "10.0"
-            OSWiki = "https://en.wikipedia.org/wiki/Windows_Server_2022"
         End If
     End Sub
 
@@ -833,11 +1094,99 @@ Public Class NewUnattendWiz
                     End Select
             End Select
         Else
-            'If ComboBox1.SelectedItem = "Windows Vista" Then
-
-            'ElseIf ComboBox1.SelectedItem = "Windows Server 2008 R2" Then
-
-            'End If
+            Select Case ComboBox1.SelectedIndex
+                Case 0
+                    ComboBox2.Items.Add("Windows 7 Starter")
+                    ComboBox2.Items.Add("Windows 7 Home Basic")
+                    ComboBox2.Items.Add("Windows 7 Home Premium")
+                    ComboBox2.Items.Add("Windows 7 Professional")
+                    ComboBox2.Items.Add("Windows 7 Ultimate")
+                    ComboBox2.Items.Add("Windows 7 Enterprise")
+                    ComboBox2.Items.Add("Windows 7 Starter N")
+                    ComboBox2.Items.Add("Windows 7 Home Basic N")
+                    ComboBox2.Items.Add("Windows 7 Home Premium N")
+                    ComboBox2.Items.Add("Windows 7 Professional N")
+                    ComboBox2.Items.Add("Windows 7 Ultimate N")
+                    ComboBox2.Items.Add("Windows 7 Enterprise N")
+                    ComboBox2.Items.Add("Windows 7 Starter E")
+                    ComboBox2.Items.Add("Windows 7 Home Basic E")
+                    ComboBox2.Items.Add("Windows 7 Home Premium E")
+                    ComboBox2.Items.Add("Windows 7 Professional E")
+                    ComboBox2.Items.Add("Windows 7 Ultimate E")
+                    ComboBox2.Items.Add("Windows 7 Enterprise E")
+                Case 1
+                    ComboBox2.Items.Add("Windows Server 2008 R2 Foundation")
+                    ComboBox2.Items.Add("Windows Server 2008 R2 Standard")
+                    ComboBox2.Items.Add("Windows Server 2008 R2 Web")
+                    ComboBox2.Items.Add("Windows Server 2008 R2 for High Performance Computing")
+                    ComboBox2.Items.Add("Windows Server 2008 R2 Enterprise")
+                    ComboBox2.Items.Add("Windows Server 2008 R2 for Intel(R) Itanium (TM)")
+                    ComboBox2.Items.Add("Windows Server 2008 R2 Datacenter")
+                    ComboBox2.Items.Add("Microsoft Hyper-V Server 2008 R2")
+                    ComboBox2.Items.Add("Windows MultiPoint Server 2010")
+                Case 2
+                    ComboBox2.Items.Add("Windows 8")
+                    ComboBox2.Items.Add("Windows RT 8")
+                    ComboBox2.Items.Add("Windows 8 with Bing")
+                    ComboBox2.Items.Add("Windows 8 Single Language")
+                    ComboBox2.Items.Add("Windows 8 Pro")
+                    ComboBox2.Items.Add("Windows 8 Pro with Windows Media Center")
+                    ComboBox2.Items.Add("Windows 8 Enterprise")
+                    ComboBox2.Items.Add("Windows 8 N")
+                    ComboBox2.Items.Add("Windows 8 Pro N")
+                    ComboBox2.Items.Add("Windows 8 Enterprise N")
+                Case 3
+                    ComboBox2.Items.Add("Windows Server 2012 Foundation")
+                    ComboBox2.Items.Add("Windows Server 2012 Standard")
+                    ComboBox2.Items.Add("Windows Server 2012 Datacenter")
+                    ComboBox2.Items.Add("Windows Server 2012 Storage Server")
+                    ComboBox2.Items.Add("Windows MultiPoint Server 2012 Standard")
+                    ComboBox2.Items.Add("Windows MultiPoint Server 2012 Premium")
+                    ComboBox2.Items.Add("Windows Server 2012 Standard Core")
+                    ComboBox2.Items.Add("Windows Server 2012 Datacenter Core")
+                Case 4
+                    ComboBox2.Items.Add("Windows 8.1")
+                    ComboBox2.Items.Add("Windows RT 8.1")
+                    ComboBox2.Items.Add("Windows 8.1 with Bing")
+                    ComboBox2.Items.Add("Windows 8.1 Single Language")
+                    ComboBox2.Items.Add("Windows 8.1 Pro")
+                    ComboBox2.Items.Add("Windows 8.1 Pro with Windows Media Center")
+                    ComboBox2.Items.Add("Windows 8.1 Enterprise")
+                    ComboBox2.Items.Add("Windows 8.1 N")
+                    ComboBox2.Items.Add("Windows 8.1 Pro N")
+                    ComboBox2.Items.Add("Windows 8.1 Enterprise N")
+                Case 5
+                    ComboBox2.Items.Add("Windows Server 2012 R2 Essentials")
+                    ComboBox2.Items.Add("Windows Server 2012 R2 Foundation")
+                    ComboBox2.Items.Add("Windows Server 2012 R2 Standard")
+                    ComboBox2.Items.Add("Windows Server 2012 R2 Datacenter")
+                    ComboBox2.Items.Add("Windows Server 2012 R2 Storage Server Standard")
+                    ComboBox2.Items.Add("Windows Server 2012 R2 Storage Server Workgroup")
+                    ComboBox2.Items.Add("Microsoft Hyper-V Server 2012 R2")
+                    ComboBox2.Items.Add("Windows Server 2012 R2 Essentials Core")
+                    ComboBox2.Items.Add("Windows Server 2012 R2 Foundation Core")
+                    ComboBox2.Items.Add("Windows Server 2012 R2 Standard Core")
+                    ComboBox2.Items.Add("Windows Server 2012 R2 Datacenter Core")
+                    ComboBox2.Items.Add("Windows Server 2012 R2 Storage Server Standard Core")
+                    ComboBox2.Items.Add("Windows Server 2012 R2 Storage Server Workgroup Core")
+                Case 6
+                    ComboBox2.Items.Add("Windows 10 Home")
+                    ComboBox2.Items.Add("Windows 10 Pro")
+                    ComboBox2.Items.Add("Windows 10 Education")
+                    ComboBox2.Items.Add("Windows 10 Enterprise")
+                Case 7
+                    ComboBox2.Items.Add("Windows 11 Home")
+                    ComboBox2.Items.Add("Windows 11 Pro")
+                    ComboBox2.Items.Add("Windows 11 Education")
+                    ComboBox2.Items.Add("Windows 11 Enterprise")
+                Case 8
+                    ComboBox2.Items.Add("Windows Server 2016 Essentials")
+                    ComboBox2.Items.Add("Windows Server 2016 Standard")
+                    ComboBox2.Items.Add("Windows Server 2016 Datacenter")
+                Case 9
+                    ComboBox2.Items.Add("Windows Server 2019 Standard")
+                    ComboBox2.Items.Add("Windows Server 2019 Datacenter")
+            End Select
         End If
         Thread.Sleep(2000)
         ExpressStatusLbl.Visible = False
@@ -1728,6 +2077,11 @@ Public Class NewUnattendWiz
             KeyDash4.Enabled = False
             Label20.Enabled = False
             Label21.Enabled = False
+            If ComboBox2.SelectedItem = "" Then
+                Next_Button.Enabled = False
+            Else
+                Next_Button.Enabled = True
+            End If
         Else
             Label17.Enabled = False
             ComboBox2.Enabled = False
@@ -1753,10 +2107,87 @@ Public Class NewUnattendWiz
             KeyDash4.Enabled = True
             Label20.Enabled = True
             Label21.Enabled = True
+            ' Concatenate key boxes
+            KeyString = KeyInputBox1.Text & "-" & KeyInputBox2.Text & "-" & KeyInputBox3.Text & "-" & KeyInputBox4.Text & "-" & KeyInputBox5.Text
+            If KeyString.Length < 29 Then
+                Next_Button.Enabled = False
+            Else
+                Next_Button.Enabled = True
+            End If
         End If
     End Sub
 
     Private Sub ComboBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox2.SelectedIndexChanged
+        If ComboBox2.SelectedItem = "" Then
+            Next_Button.Enabled = False
+        Else
+            Next_Button.Enabled = True
+        End If
         ChangeGenericKey()
+    End Sub
+
+    Private Sub FontChange(sender As Object, e As EventArgs) Handles ToolStripComboBox1.SelectedIndexChanged, ToolStripComboBox2.SelectedIndexChanged
+        ' Change Scintilla editor font
+        Scintilla1.Styles(Style.Default).Font = ToolStripComboBox1.SelectedItem
+        Scintilla1.Styles(Style.Default).Size = ToolStripComboBox2.SelectedItem
+    End Sub
+
+    Private Sub ProductKeyChanged(sender As Object, e As EventArgs) Handles KeyInputBox1.TextChanged, KeyInputBox2.TextChanged, KeyInputBox3.TextChanged, KeyInputBox4.TextChanged, KeyInputBox5.TextChanged
+        KeyString = KeyInputBox1.Text & "-" & KeyInputBox2.Text & "-" & KeyInputBox3.Text & "-" & KeyInputBox4.Text & "-" & KeyInputBox5.Text
+        If KeyString.Length < 29 Then
+            Next_Button.Enabled = False
+        Else
+            Next_Button.Enabled = True
+        End If
+    End Sub
+
+    Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
+        If TextBox1.Text = "" Then
+            Next_Button.Enabled = False
+        Else
+            If TextBox1.Text.Contains(".") Or _
+                TextBox1.Text.Contains("\") Or _
+                TextBox1.Text.Contains("/") Or _
+                TextBox1.Text.Contains(":") Or _
+                TextBox1.Text.Contains("*") Or _
+                TextBox1.Text.Contains("?") Or _
+                TextBox1.Text.Contains(Quote) Or _
+                TextBox1.Text.Contains("<") Or _
+                TextBox1.Text.Contains(">") Or _
+                TextBox1.Text.Contains("|") Or _
+                TextBox1.Text.Contains(",") Or _
+                TextBox1.Text.Contains("~") Or _
+                TextBox1.Text.Contains("!") Or _
+                TextBox1.Text.Contains("@") Or _
+                TextBox1.Text.Contains("#") Or _
+                TextBox1.Text.Contains("$") Or _
+                TextBox1.Text.Contains("%") Or _
+                TextBox1.Text.Contains("^") Or _
+                TextBox1.Text.Contains("&") Or _
+                TextBox1.Text.Contains("`") Or _
+                TextBox1.Text.Contains("(") Or TextBox1.Text.Contains(")") Or _
+                TextBox1.Text.Contains("{") Or TextBox1.Text.Contains("}") Or _
+                TextBox1.Text.Contains("_") Then
+                Next_Button.Enabled = False
+            Else
+                Next_Button.Enabled = True
+            End If
+        End If
+    End Sub
+
+    Private Sub RegionalSettingsChanged(sender As Object, e As EventArgs) Handles ComboBox5.SelectedIndexChanged, ComboBox6.SelectedIndexChanged, ComboBox7.SelectedIndexChanged, ComboBox8.SelectedIndexChanged
+        If ComboBox5.SelectedItem = "" Or ComboBox6.SelectedItem = "" Or ComboBox7.SelectedItem = "" Or ComboBox8.SelectedItem = "" Then
+            Next_Button.Enabled = False
+        Else
+            Next_Button.Enabled = True
+        End If
+    End Sub
+
+    Private Sub TextBox4_TextChanged(sender As Object, e As EventArgs) Handles TextBox4.TextChanged
+        If TextBox4.Text = "" Then
+            Next_Button.Enabled = False
+        Else
+            Next_Button.Enabled = True
+        End If
     End Sub
 End Class
