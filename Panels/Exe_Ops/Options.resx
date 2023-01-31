@@ -164,6 +164,11 @@ State : Disabled
 Feature Name : NetFx3
 State : Enabled</value>
   </data>
+  <data name="Label39.Text" xml:space="preserve">
+    <value>Keep in mind that this process will start once an action has finished, but will stop automatically unless the action is not image related (like mounting, unmounting or reloading servicing)
+
+To disable this process entirely, uncheck the "Detect mounted images at all times" check box</value>
+  </data>
   <metadata name="LogSFD.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>233, 17</value>
   </metadata>

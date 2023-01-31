@@ -109,9 +109,28 @@ Public Class Options
         Else
             MainForm.EnglishOutput = False
         End If
+        If CheckBox9.Checked Then
+            MainForm.FileToolStripMenuItem.Text = MainForm.FileToolStripMenuItem.Text.ToUpper()
+            MainForm.ProjectToolStripMenuItem.Text = MainForm.ProjectToolStripMenuItem.Text.ToUpper()
+            MainForm.CommandsToolStripMenuItem.Text = MainForm.CommandsToolStripMenuItem.Text.ToUpper()
+            MainForm.ToolsToolStripMenuItem.Text = MainForm.ToolsToolStripMenuItem.Text.ToUpper()
+            MainForm.HelpToolStripMenuItem.Text = MainForm.HelpToolStripMenuItem.Text.ToUpper()
+        Else
+            MainForm.FileToolStripMenuItem.Text = "File"
+            MainForm.ProjectToolStripMenuItem.Text = "Project"
+            MainForm.CommandsToolStripMenuItem.Text = "Commands"
+            MainForm.ToolsToolStripMenuItem.Text = "Tools"
+            MainForm.HelpToolStripMenuItem.Text = "Help"
+        End If
         MainForm.ReportView = ComboBox5.SelectedIndex
         MainForm.ChangePrgColors(MainForm.ColorMode)
         MainForm.ChangeLangs(MainForm.Language)
+        If CheckBox6.Checked Then
+            MainForm.NotificationShow = True
+        Else
+            MainForm.NotificationShow = False
+        End If
+        MainForm.NotificationFrequency = ComboBox6.SelectedIndex
         If MainForm.VolatileMode Then
             MainForm.SaveDTSettings()
         End If
@@ -169,6 +188,7 @@ Public Class Options
             TabPage6.BackColor = Color.FromArgb(31, 31, 31)
             TabPage7.BackColor = Color.FromArgb(31, 31, 31)
             TabPage8.BackColor = Color.FromArgb(31, 31, 31)
+            TabPage9.BackColor = Color.FromArgb(31, 31, 31)
             TextBox1.BackColor = Color.FromArgb(31, 31, 31)
             TextBox1.ForeColor = Color.White
             TextBox2.BackColor = Color.FromArgb(31, 31, 31)
@@ -196,6 +216,7 @@ Public Class Options
             GroupBox1.ForeColor = Color.White
             GroupBox2.ForeColor = Color.White
             GroupBox3.ForeColor = Color.White
+            GroupBox4.ForeColor = Color.White
             TrackBar1.BackColor = Color.FromArgb(31, 31, 31)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Win10Title.BackColor = Color.White
@@ -209,6 +230,7 @@ Public Class Options
             TabPage6.BackColor = Color.FromArgb(238, 238, 242)
             TabPage7.BackColor = Color.FromArgb(238, 238, 242)
             TabPage8.BackColor = Color.FromArgb(238, 238, 242)
+            TabPage9.BackColor = Color.FromArgb(238, 238, 242)
             TextBox1.BackColor = Color.FromArgb(238, 238, 242)
             TextBox1.ForeColor = Color.Black
             TextBox2.BackColor = Color.FromArgb(238, 238, 242)
@@ -236,8 +258,11 @@ Public Class Options
             GroupBox1.ForeColor = Color.Black
             GroupBox2.ForeColor = Color.Black
             GroupBox3.ForeColor = Color.Black
+            GroupBox4.ForeColor = Color.Black
             TrackBar1.BackColor = Color.FromArgb(238, 238, 242)
         End If
+        Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "running", "stopped")
+        Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Stop", "Start")
     End Sub
 
     Sub GetSystemFonts()
@@ -314,6 +339,17 @@ Public Class Options
                 ComboBox5.SelectedIndex = 0
             Case 1
                 ComboBox5.SelectedIndex = 1
+        End Select
+        If MainForm.NotificationShow Then
+            CheckBox6.Checked = True
+        Else
+            CheckBox6.Checked = False
+        End If
+        Select Case MainForm.NotificationFrequency
+            Case 0
+                ComboBox6.SelectedIndex = 0
+            Case 1
+                ComboBox6.SelectedIndex = 1
         End Select
         GetRootSpace(TextBox3.Text)
     End Sub
@@ -491,6 +527,36 @@ Public Class Options
             LogPreview.Font = New Font(ComboBox4.Text, NumericUpDown1.Value, FontStyle.Bold)
         Else
             LogPreview.Font = New Font(ComboBox4.Text, NumericUpDown1.Value, FontStyle.Regular)
+        End If
+    End Sub
+
+    Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
+        If Button8.Text = "Stop" Then
+            MainForm.MountedImageDetectorBW.CancelAsync()
+        ElseIf Button8.Text = "Start" Then
+            Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+        End If
+        Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "running", "stopped")
+        Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Stop", "Start")
+    End Sub
+
+    Private Sub CheckBox10_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox10.CheckedChanged
+        If CheckBox10.Checked Then
+            Label12.Enabled = False
+            TextBox2.Enabled = False
+            Button3.Enabled = False
+        Else
+            Label12.Enabled = True
+            TextBox2.Enabled = True
+            Button3.Enabled = True
+        End If
+    End Sub
+
+    Private Sub CheckBox6_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox6.CheckedChanged
+        If CheckBox6.Checked Then
+            GroupBox2.Enabled = True
+        Else
+            GroupBox2.Enabled = False
         End If
     End Sub
 End Class
