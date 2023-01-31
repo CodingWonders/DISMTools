@@ -73,7 +73,12 @@ Public Class ProjProperties
         Label9.Text = MainForm.projName.Text
         Label10.Text = MainForm.projPath
         Label11.Text = File.GetCreationTime(MainForm.projPath)
-        ' Support for reading project GUID will be added later
+        Dim rtb As New RichTextBox With {
+            .Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\" & MainForm.projName.Text & ".dtproj")
+        }
+        If rtb.Lines(6).StartsWith("ProjGuid") Then
+            Label12.Text = rtb.Lines(6).Replace("ProjGuid=", "").Trim()
+        End If
         If MainForm.IsImageMounted Then
             Label19.Text = "Yes"
             Try     ' Try getting image properties
