@@ -174,6 +174,8 @@ Public Class ProgressPanel
     Public DismVersionChecker As FileVersionInfo
     Public DismProgram As String
 
+    Dim dateStr As String = "DISMTools-"
+
     ' OperationNum: 0
     Public projName As String
     Public projPath As String
@@ -207,6 +209,14 @@ Public Class ProgressPanel
     Public CaptureUseWimBoot As Boolean         ' Determine whether to append image with WIMBoot configuration
     Public CaptureExtendedAttributes As Boolean ' Determine whether to capture extended attributes (Win10 1607+ only)
     Public CaptureMountDestImg As Boolean       ' Determine whether to unmount the source VHD(X) file and mount the destination image (still experimental)
+
+    ' OperationNum: 9
+    Public imgIndexDeletionNames(65535) As String   ' Remove volume images by name (it can be a bit confusing by index number. Index 6: 1, 1, 1, 1, 1, 2, 2, 2, 2...)
+    Public imgIndexDeletionSourceImg As String  ' Source image to remove volume images from
+    Public imgIndexDeletionIntCheck As Boolean  ' Determine whether to check image integrity before removing volume images
+    Public imgIndexDeletionUnmount As Boolean   ' Determine whether to unmount source image if it is mounted
+    Public imgIndexDeletionLastName As String   ' Last name of index checked
+    Public imgIndexDeletionCount As Integer     ' Volume image removal count
 
     ' OperationNum: 11
     Public GetFromMountedImg As Boolean         ' Get information from mounted image
@@ -297,6 +307,30 @@ Public Class ProgressPanel
     Dim featSuccessfulDisablements As Integer   ' Successful feature disablement count
     Dim featFailedDisablements As Integer       ' Failed feature disablement count
 
+    ' OperationNum: 37
+    Public appxAdditionPackages(65535) As String    ' Array used to store AppX packages to add
+    Public appxAdditionDependencies(65535) As String    ' Array used to store dependencies of AppX packages
+    Public appxAdditionUseLicenseFile As Boolean    ' Determine whether to use a license file
+    Public appxAdditionLicenseFile As String        ' License file to use on AppX packages (program limitation: it uses the same license on all AppX packages)
+    Public appxAdditionUseCustomDataFile As Boolean ' Determine whether to use a custom data file for AppX provisioning
+    Public appxAdditionCustomDataFile As String     ' Custom data file applied on AppX packages
+    Public appxAdditionUseAllRegions As Boolean     ' Determine whether to use all regions for all AppX packages
+    Public appxAdditionRegions As String            ' Regions to apply on AppX packages
+    Public appxAdditionCommit As Boolean            ' Determine whether to commit the image after adding AppX packages
+    Public appxAdditionCount As Integer             ' Count number of AppX packages to add
+    Public appxAdditionLastPackage As String        ' Last package entry selected
+    Public appxAdditionLastDependency As String     ' Last dependency entry
+    Dim appxSuccessfulAdditions As Integer          ' Successful AppX package addition count
+    Dim appxFailedAdditions As Integer              ' Failed AppX package addition count
+
+    ' OperationNum: 38
+    Public appxRemovalPackages(65535) As String ' Array used to store AppX packages to remove
+    Public appxRemovalPkgNames(65535) As String ' Array used to store AppX friendly names
+    Public appxRemovalLastPackage As String     ' Last package entry selected
+    Public appxRemovalCount As Integer          ' Count number of AppX packages to remove
+    Dim appxSuccessfulRemovals As Integer       ' Successful AppX package removal count
+    Dim appxFailedRemovals As Integer           ' Failed AppX package addition count
+
     ' <Space for other OperationNums>
     ' OperationNum: 87
     Public osUninstDayCount As Integer          ' Number of days the user has to uninstall an OS upgrade
@@ -321,8 +355,6 @@ Public Class ProgressPanel
 
     ' OperationNum: 997
     Public RWRemountSourceImg As String         ' Source image to remount with R/W permissions
-
-
 
     Private Sub Cancel_Button_Click(sender As Object, e As EventArgs) Handles Cancel_Button.Click
         If Cancel_Button.Text = "Cancel" Then
@@ -359,6 +391,12 @@ Public Class ProgressPanel
             End If
         ElseIf opNum = 8 Then
             taskCount = 1
+        ElseIf opNum = 9 Then
+            If imgIndexDeletionUnmount Then
+                taskCount = 2
+            Else
+                taskCount = 1
+            End If
         ElseIf opNum = 15 Then
             taskCount = 1
         ElseIf opNum = 18 Then
@@ -381,6 +419,14 @@ Public Class ProgressPanel
             End If
         ElseIf opNum = 31 Then
             taskCount = 1
+        ElseIf opNum = 37 Then
+            If appxAdditionCommit Then
+                taskCount = 2
+            Else
+                taskCount = 1
+            End If
+        ElseIf opNum = 38 Then
+            taskCount = 1
         ElseIf opNum = 87 Then
             taskCount = 1
         ElseIf opNum = 991 Then
@@ -399,13 +445,28 @@ Public Class ProgressPanel
         ' This procedure is not yet called. Use default settings for now
     End Sub
 
-    Sub ChangeLogViewFont(Font As String)
-        ' This procedure is not yet called. Use default font for now
-    End Sub
+    ''' <summary>
+    ''' Sets the name of the log file using the current date and time
+    ''' </summary>
+    ''' <param name="CurrentDate">The date to add. It is always "Now"</param>
+    ''' <returns>This function returns a file name that can be used in log files, file-system friendly on both Unix and Windows</returns>
+    ''' <remarks></remarks>
+    Function GetCurrentDateAndTime(CurrentDate As Date) As String
+        dateStr &= CurrentDate.ToString()
+        ' Make sure the file with the name is file-system friendly
+        If dateStr.Contains("/") Or dateStr.Contains(":") Then
+            dateStr = dateStr.Replace("/", "-").Trim().Replace(":", "-").Trim()
+        End If
+        dateStr &= ".log"
+        Return dateStr
+    End Function
 
     Sub RunOps(opNum As Integer)
+        If DismProgram = "" Then DismProgram = MainForm.DismExe
         DismVersionChecker = FileVersionInfo.GetVersionInfo(DismProgram)
         CurrentPB.Value = 0
+        PkgErrorText.RichTextBox1.Clear()
+        FeatErrorText.RichTextBox1.Clear()
         If opNum = 0 Then
             allTasks.Text = "Creating project: " & Quote & projName & Quote
             currentTask.Text = "Creating DISMTools project structure..."
@@ -522,10 +583,10 @@ Public Class ProgressPanel
                         Case 1
                             ' It seems like it's not available :(
                         Case Is >= 2
-                            CommandArgs = "/english /apply-image /imagefile=" & ApplicationSourceImg & " /index=" & ApplicationIndex
+                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /apply-image /imagefile=" & ApplicationSourceImg & " /index=" & ApplicationIndex
                     End Select
                 Case 10
-                    CommandArgs = "/english /apply-image /imagefile=" & ApplicationSourceImg & " /index=" & ApplicationIndex
+                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /apply-image /imagefile=" & ApplicationSourceImg & " /index=" & ApplicationIndex
             End Select
             ' Detect additional options and set CommandArgs
             If ApplicationDestDrive = "" Then
@@ -615,10 +676,10 @@ Public Class ProgressPanel
                         Case 1
                             ' Not available
                         Case Is >= 2
-                            CommandArgs = "/English /capture-image /imagefile=" & CaptureDestinationImage & " /capturedir=" & CaptureSourceDir & " /name=" & Quote & CaptureName & Quote
+                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /capture-image /imagefile=" & CaptureDestinationImage & " /capturedir=" & CaptureSourceDir & " /name=" & Quote & CaptureName & Quote
                     End Select
                 Case 10
-                    CommandArgs = "/English /capture-image /imagefile=" & CaptureDestinationImage & " /capturedir=" & CaptureSourceDir & " /name=" & Quote & CaptureName & Quote
+                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /capture-image /imagefile=" & CaptureDestinationImage & " /capturedir=" & CaptureSourceDir & " /name=" & Quote & CaptureName & Quote
             End Select
             ' Get additional options
             If CaptureDescription = "" Then
@@ -727,12 +788,12 @@ Public Class ProgressPanel
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
                         Case 1
-                            CommandArgs = "/english /commit-wim /mountdir=" & MountDir
+                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /commit-wim /mountdir=" & MountDir
                         Case Is >= 2
-                            CommandArgs = "/english /commit-image /mountdir=" & MountDir
+                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /commit-image /mountdir=" & MountDir
                     End Select
                 Case 10
-                    CommandArgs = "/english /commit-image /mountdir=" & MountDir
+                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /commit-image /mountdir=" & MountDir
             End Select
             ' TODO: Add additional options later
             DISMProc.StartInfo.Arguments = CommandArgs
@@ -750,8 +811,55 @@ Public Class ProgressPanel
             Else
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
+        ElseIf opNum = 9 Then
+            If imgIndexDeletionUnmount Then
+                RunOps(21)
+                AllPB.Value = AllPB.Maximum / taskCount
+                currentTCont += 1
+                taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
+            End If
+            allTasks.Text = "Deleting images..."
+            currentTask.Text = "Preparing to remove volume images..."
+            LogView.AppendText(CrLf & "Removing volume images from file..." & CrLf & _
+                               "Options:" & CrLf & _
+                               "- Source image: " & imgIndexDeletionSourceImg & CrLf)
+            If imgIndexDeletionIntCheck Then
+                LogView.AppendText("- Check image integrity? Yes")
+            Else
+                LogView.AppendText("- Check image integrity? No")
+            End If
+            CurrentPB.Maximum = imgIndexDeletionCount
+            ' Removing volume images
+            LogView.AppendText(CrLf & _
+                               "Removing volume images..." & CrLf)
+            For x = 0 To Array.LastIndexOf(imgIndexDeletionNames, imgIndexDeletionLastName)
+                CurrentPB.Value = x + 1
+                currentTask.Text = "Removing volume image " & Quote & imgIndexDeletionNames(x) & Quote & "..."
+                LogView.AppendText(CrLf & _
+                                   "- " & imgIndexDeletionNames(x) & "...")
+                DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /delete-image /imagefile=" & imgIndexDeletionSourceImg & " /name=" & Quote & imgIndexDeletionNames(x) & Quote
+                If imgIndexDeletionIntCheck Then
+                    CommandArgs &= " /checkintegrity"
+                End If
+                DISMProc.StartInfo.Arguments = CommandArgs
+                DISMProc.Start()
+                Do Until DISMProc.HasExited
+                    If DISMProc.HasExited Then
+                        Exit Do
+                    End If
+                Loop
+                If Hex(DISMProc.ExitCode).Length < 8 Then
+                    LogView.AppendText(" Error level : " & DISMProc.ExitCode)
+                Else
+                    LogView.AppendText(" Error level : 0x" & Hex(DISMProc.ExitCode))
+                End If
+            Next
+            CurrentPB.Value = CurrentPB.Maximum
+            AllPB.Value = 100
+            GetErrorCode(False)
         ElseIf opNum = 11 Then
-            CommandArgs = "/English /Get-ImageInfo"
+            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /Get-ImageInfo"
             allTasks.Text = "Getting information..."
             currentTask.Text = "Getting image information..."
             LogView.AppendText(CrLf & "Getting information from image..." & CrLf & "Options:" & CrLf)
@@ -799,12 +907,12 @@ Public Class ProgressPanel
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
                         Case 1
-                            CommandArgs = "/English /mount-wim /wimfile=" & SourceImg & " /index=" & ImgIndex & " /mountdir=" & MountDir
+                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-wim /wimfile=" & SourceImg & " /index=" & ImgIndex & " /mountdir=" & MountDir
                         Case Is >= 2
-                            CommandArgs = "/English /mount-image /imagefile=" & SourceImg & " /index=" & ImgIndex & " /mountdir=" & MountDir
+                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-image /imagefile=" & SourceImg & " /index=" & ImgIndex & " /mountdir=" & MountDir
                     End Select
                 Case 10
-                    CommandArgs = "/English /mount-image /imagefile=" & SourceImg & " /index=" & ImgIndex & " /mountdir=" & MountDir
+                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-image /imagefile=" & SourceImg & " /index=" & ImgIndex & " /mountdir=" & MountDir
             End Select
             If isReadOnly Then
                 LogView.AppendText(CrLf & "- Mount image with read-only permissions? Yes")
@@ -849,12 +957,12 @@ Public Class ProgressPanel
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
                         Case 1
-                            CommandArgs = "/English /remount-wim /mountdir=" & MountDir
+                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /remount-wim /mountdir=" & MountDir
                         Case Is >= 2
-                            CommandArgs = "/English /remount-image /mountdir=" & MountDir
+                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /remount-image /mountdir=" & MountDir
                     End Select
                 Case 10
-                    CommandArgs = "/English /remount-image /mountdir=" & MountDir
+                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /remount-image /mountdir=" & MountDir
             End Select
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
@@ -898,12 +1006,12 @@ Public Class ProgressPanel
                         Case 6
                             Select Case DismVersionChecker.ProductMinorPart
                                 Case 1
-                                    CommandArgs = "/English /unmount-wim /mountdir=" & MountDir & " /commit"
+                                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & MountDir & " /commit"
                                 Case Is >= 2
-                                    CommandArgs = "/English /unmount-image /mountdir=" & MountDir & " /commit"
+                                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & MountDir & " /commit"
                             End Select
                         Case 10
-                            CommandArgs = "/English /unmount-image /mountdir=" & MountDir & " /commit"
+                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & MountDir & " /commit"
                     End Select
                     DISMProc.StartInfo.Arguments = CommandArgs
                     DISMProc.Start()
@@ -920,12 +1028,12 @@ Public Class ProgressPanel
                             Case 6
                                 Select Case DismVersionChecker.ProductMinorPart
                                     Case 1
-                                        CommandArgs = "/English /unmount-wim /mountdir=" & MountDir & " /discard"
+                                        CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & MountDir & " /discard"
                                     Case Is >= 2
-                                        CommandArgs = "/English /unmount-image /mountdir=" & MountDir & " /discard"
+                                        CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & MountDir & " /discard"
                                 End Select
                             Case 10
-                                CommandArgs = "/English /unmount-image /mountdir=" & MountDir & " /discard"
+                                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & MountDir & " /discard"
                         End Select
                         DISMProc.StartInfo.Arguments = CommandArgs
                         DISMProc.Start()
@@ -958,22 +1066,22 @@ Public Class ProgressPanel
                             Select Case DismVersionChecker.ProductMinorPart
                                 Case 1
                                     If UMountLocalDir Then
-                                        CommandArgs = "/English /unmount-wim /mountdir=" & MountDir
+                                        CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & MountDir
                                     Else
-                                        CommandArgs = "/English /unmount-wim /mountdir=" & RandomMountDir
+                                        CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & RandomMountDir
                                     End If
                                 Case Is >= 2
                                     If UMountLocalDir Then
-                                        CommandArgs = "/English /unmount-image /mountdir=" & MountDir
+                                        CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & MountDir
                                     Else
-                                        CommandArgs = "/English /unmount-image /mountdir=" & RandomMountDir
+                                        CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & RandomMountDir
                                     End If
                             End Select
                         Case 10
                             If UMountLocalDir Then
-                                CommandArgs = "/English /unmount-image /mountdir=" & MountDir
+                                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & MountDir
                             Else
-                                CommandArgs = "/English /unmount-image /mountdir=" & RandomMountDir
+                                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & RandomMountDir
                             End If
                     End Select
                     If UMountOp = 0 Then
@@ -1081,7 +1189,7 @@ Public Class ProgressPanel
                                "Processing " & pkgCount & " packages..." & CrLf)
             If pkgAdditionOp = 0 Then
                 DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                CommandArgs = "/English /image=" & MountDir & " /add-package /packagepath=" & pkgSource
+                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & MountDir & " /add-package /packagepath=" & pkgSource
                 If pkgIgnoreApplicabilityChecks Then
                     CommandArgs &= " /ignorecheck"
                 End If
@@ -1165,7 +1273,7 @@ Public Class ProgressPanel
                         Else
                             LogView.AppendText(CrLf & "Processing package...")
                             DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                            CommandArgs = "/English /image=" & MountDir & " /add-package /packagepath=" & pkgs(x)
+                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & MountDir & " /add-package /packagepath=" & pkgs(x)
                             If pkgIgnoreApplicabilityChecks Then
                                 CommandArgs &= " /ignorecheck"
                             End If
@@ -1192,7 +1300,7 @@ Public Class ProgressPanel
                         If pkgIgnoreApplicabilityChecks Then
                             LogView.AppendText(CrLf & "Trying to process package...")
                             DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                            CommandArgs = "/English /image=" & MountDir & " /add-package /packagepath=" & pkgs(x) & " /ignorecheck"
+                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & MountDir & " /add-package /packagepath=" & pkgs(x) & " /ignorecheck"
                             If pkgPreventIfPendingOnline Then
                                 CommandArgs &= " /preventpending"
                             End If
@@ -1305,7 +1413,7 @@ Public Class ProgressPanel
                     If pkgIsReadyForRemoval Then
                         LogView.AppendText(CrLf & "Processing package removal...")
                         DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                        CommandArgs = "/English /image=" & MountDir & " /remove-package /packagename=" & pkgRemovalNames(x)
+                        CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & MountDir & " /remove-package /packagename=" & pkgRemovalNames(x)
                         DISMProc.StartInfo.Arguments = CommandArgs
                         DISMProc.Start()
                         Do Until DISMProc.HasExited
@@ -1314,7 +1422,13 @@ Public Class ProgressPanel
                             End If
                         Loop
                         LogView.AppendText(CrLf & "Getting error level...")
-                        GetPkgErrorLevel()
+                        errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
+                        If DISMProc.ExitCode = 0 Then
+                            pkgSuccessfulRemovals += 1
+                        Else
+                            pkgFailedRemovals += 1
+                        End If
+                        'GetPkgErrorLevel()
                         If errCode.Length >= 8 Then
                             LogView.AppendText(CrLf & CrLf & " Error level : 0x" & errCode)
                         Else
@@ -1379,7 +1493,7 @@ Public Class ProgressPanel
                     If pkgIsReadyForRemoval Then
                         LogView.AppendText(CrLf & "Processing package removal...")
                         DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                        CommandArgs = "/English /image=" & MountDir & " /remove-package /packagepath=" & pkgRemovalFiles(x)
+                        CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & MountDir & " /remove-package /packagepath=" & pkgRemovalFiles(x)
                         DISMProc.StartInfo.Arguments = CommandArgs
                         DISMProc.Start()
                         Do Until DISMProc.HasExited
@@ -1388,7 +1502,13 @@ Public Class ProgressPanel
                             End If
                         Loop
                         LogView.AppendText(CrLf & "Getting error level...")
-                        GetPkgErrorLevel()
+                        errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
+                        If DISMProc.ExitCode = 0 Then
+                            pkgSuccessfulRemovals += 1
+                        Else
+                            pkgFailedRemovals += 1
+                        End If
+                        'GetPkgErrorLevel()
                         If errCode.Length >= 8 Then
                             LogView.AppendText(CrLf & CrLf & " Error level : 0x" & errCode)
                         Else
@@ -1426,9 +1546,9 @@ Public Class ProgressPanel
             Next
             Thread.Sleep(2000)
             AllPB.Value = 100
-            If pkgFailedAdditions > 0 Then
+            If pkgSuccessfulRemovals > 0 Then
                 GetErrorCode(True)
-            ElseIf pkgFailedAdditions <= 0 Then
+            ElseIf pkgSuccessfulRemovals <= 0 Then
                 GetErrorCode(False)
             End If
         ElseIf opNum = 30 Then
@@ -1502,7 +1622,7 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf &
                                    "- Feature name: " & featName & CrLf &
                                    "- Feature description: " & featDesc & CrLf)
-                CommandArgs = "/English /image=" & MountDir & " /enable-feature /featurename=" & featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
+                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & MountDir & " /enable-feature /featurename=" & featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
                 If featisParentPkgNameUsed And featParentPkgName <> "" Then
                     CommandArgs &= " /packagename=" & featParentPkgName
                 End If
@@ -1583,9 +1703,9 @@ Public Class ProgressPanel
             Else
                 LogView.AppendText(CrLf & "- Remove feature manifest? No")
             End If
-            LogView.AppendText(CrLf & CrLf & "Enumerating features to enable...")
+            LogView.AppendText(CrLf & CrLf & "Enumerating features to disable...")
             Thread.Sleep(500)
-            LogView.AppendText(CrLf & "Total number of features to enable: " & featDisablementCount)
+            LogView.AppendText(CrLf & "Total number of features to disable: " & featDisablementCount)
             ' Get command ready
             DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
             currentTask.Text = "Disabling features..."
@@ -1610,7 +1730,7 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf &
                                    "- Feature name: " & featName & CrLf &
                                    "- Feature description: " & featDesc & CrLf)
-                CommandArgs = "/English /image=" & MountDir & " /disable-feature /featurename=" & featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
+                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & MountDir & " /disable-feature /featurename=" & featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
                 If featDisablementParentPkgUsed And featDisablementParentPkg <> "" Then
                     CommandArgs &= " /packagename=" & featParentPkgName
                 End If
@@ -1625,7 +1745,13 @@ Public Class ProgressPanel
                     End If
                 Loop
                 LogView.AppendText(CrLf & "Getting error level...")
-                GetFeatErrorLevel()
+                'GetFeatErrorLevel()
+                errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
+                If DISMProc.ExitCode = 0 Then
+                    featSuccessfulDisablements += 1
+                Else
+                    featFailedDisablements += 1
+                End If
                 If errCode.Length >= 8 Then
                     LogView.AppendText(" Error level : 0x" & errCode)
                 Else
@@ -1657,13 +1783,254 @@ Public Class ProgressPanel
             ElseIf featSuccessfulDisablements <= 0 Then
                 GetErrorCode(False)
             End If
+        ElseIf opNum = 37 Then
+            allTasks.Text = "Adding AppX packages..."
+            currentTask.Text = "Preparing to add provisioned AppX packages..."
+            LogView.AppendText(CrLf & "Adding provisioned AppX packages..." & CrLf & _
+                               "Options:" & CrLf)
+            If appxAdditionUseLicenseFile Then
+                LogView.AppendText("- Use a license file for AppX packages? Yes" & CrLf & _
+                                   "- License file: " & appxAdditionLicenseFile & CrLf)
+            Else
+                LogView.AppendText("- Use a license file for AppX packages? No" & CrLf & _
+                                   "- License file: not using" & CrLf)
+            End If
+            If appxAdditionUseCustomDataFile Then
+                LogView.AppendText("- Use a custom data file for AppX packages? Yes" & CrLf & _
+                                   "- Custom data file: " & appxAdditionCustomDataFile & CrLf)
+            Else
+                LogView.AppendText("- Use a custom data file for AppX packages? No" & CrLf & _
+                                   "- Custom data file: not using" & CrLf)
+            End If
+            If appxAdditionUseAllRegions Then
+                LogView.AppendText("- Use all regions for AppX packages? Yes" & CrLf & _
+                                   "- Package regions: all" & CrLf)
+            Else
+                LogView.AppendText("- Use all regions for AppX packages? No" & CrLf & _
+                                   "- Package regions: " & Quote & appxAdditionRegions & Quote & CrLf)
+            End If
+            If appxAdditionCommit Then
+                LogView.AppendText("- Commit image after adding AppX packages? Yes")
+            Else
+                LogView.AppendText("- Commit image after adding AppX packages? No")
+            End If
+            LogView.AppendText(CrLf & CrLf & "Enumerating AppX packages to add...")
+            Thread.Sleep(500)
+            LogView.AppendText(CrLf & "Total number of packages to add: " & appxAdditionCount)
+            currentTask.Text = "Adding AppX packages..."
+            CurrentPB.Maximum = appxAdditionCount
+            For x = 0 To Array.LastIndexOf(appxAdditionPackages, appxAdditionLastPackage)
+                currentTask.Text = "Adding package " & (x + 1) & " of " & appxAdditionCount & "..."
+                LogView.AppendText(CrLf & _
+                                   "Package " & (x + 1) & " of " & appxAdditionCount)
+                CurrentPB.Value = x + 1
+                If File.GetAttributes(appxAdditionPackages(x)) = FileAttributes.Directory Then
+                    ScanAppxPackage(True, appxAdditionPackages(x))
+                Else
+                    ScanAppxPackage(False, appxAdditionPackages(x))
+                End If
+                ' Initialize command
+                DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & MountDir & " /add-provisionedappxpackage "
+                If File.GetAttributes(appxAdditionPackages(x)) = FileAttributes.Directory Then
+                    CommandArgs &= "/folderpath=" & appxAdditionPackages(x)
+                Else
+                    CommandArgs &= "/packagepath=" & appxAdditionPackages(x)
+                End If
+                If appxAdditionUseLicenseFile And Not appxAdditionLicenseFile = "" And File.Exists(appxAdditionLicenseFile) Then
+                    CommandArgs &= " /licensefile=" & appxAdditionLicenseFile
+                Else
+                    If appxAdditionLicenseFile <> "" Then
+                        LogView.AppendText(CrLf & _
+                                           "Warning: the license file does not exist. Continuing without one..." & CrLf & _
+                                           "         Do note that, if this app requires a license file, it may fail addition." & CrLf & _
+                                           "         Also, this may compromise the image.")
+                    End If
+                    CommandArgs &= " /skiplicense"
+                End If
+                ' Add dependencies
+                For y = 0 To Array.LastIndexOf(appxAdditionDependencies, appxAdditionLastDependency)
+                    If appxAdditionDependencies(y) = "" Or appxAdditionDependencies(y) = Nothing Then
+                        Exit For
+                    Else
+                        If File.Exists(appxAdditionDependencies(y)) Then
+                            CommandArgs &= " /dependencypackagepath=" & appxAdditionDependencies(y)
+                        Else
+                            LogView.AppendText(CrLf & _
+                                               "Warning: the dependency" & CrLf & _
+                                               Quote & appxAdditionDependencies(y) & Quote & CrLf & _
+                                               "does not exist in the file system. Skipping dependency...")
+                            Continue For
+                        End If
+                    End If
+                Next
+                If appxAdditionUseCustomDataFile And Not appxAdditionCustomDataFile = "" And File.Exists(appxAdditionCustomDataFile) Then
+                    CommandArgs &= " /customdatapath=" & appxAdditionCustomDataFile
+                Else
+                    If appxAdditionUseCustomDataFile Then
+                        If Not File.Exists(appxAdditionCustomDataFile) Then
+                            LogView.AppendText(CrLf & _
+                                               "Warning: the custom data file does not exist. Continuing without one...")
+                        End If
+                    End If
+                End If
+                If appxAdditionUseAllRegions Then
+                    CommandArgs &= " /region:all"
+                Else
+                    CommandArgs &= " /region:" & Quote & appxAdditionRegions & Quote
+                End If
+                DISMProc.StartInfo.Arguments = CommandArgs
+                DISMProc.Start()
+                Do Until DISMProc.HasExited
+                    If DISMProc.HasExited Then
+                        Exit Do
+                    End If
+                Loop
+                LogView.AppendText(CrLf & "Getting error level...")
+                If Hex(DISMProc.ExitCode).Length < 8 Then
+                    errCode = DISMProc.ExitCode
+                Else
+                    errCode = Hex(DISMProc.ExitCode)
+                End If
+                If DISMProc.ExitCode = 0 Then
+                    appxSuccessfulAdditions += 1
+                Else
+                    appxFailedAdditions += 1
+                End If
+                If errCode.Length >= 8 Then
+                    LogView.AppendText(" Error level : 0x" & errCode)
+                Else
+                    LogView.AppendText(" Error level : " & errCode)
+                End If
+                If PkgErrorText.RichTextBox1.Text = "" Then
+                    If errCode.Length >= 8 Then
+                        PkgErrorText.RichTextBox1.AppendText("0x" & errCode)
+                    Else
+                        PkgErrorText.RichTextBox1.AppendText(errCode)
+                    End If
+                Else
+                    If errCode.Length >= 8 Then
+                        PkgErrorText.RichTextBox1.AppendText(CrLf & "0x" & errCode)
+                    Else
+                        PkgErrorText.RichTextBox1.AppendText(CrLf & errCode)
+                    End If
+                End If
+            Next
+            CurrentPB.Value = CurrentPB.Maximum
+            LogView.AppendText(CrLf & "Gathering error level for selected AppX packages..." & CrLf)
+            For x = 0 To PkgErrorText.RichTextBox1.Lines.Count - 1
+                LogView.AppendText(CrLf & "- Package no. " & (x + 1) & ": " & PkgErrorText.RichTextBox1.Lines(x))
+            Next
+            Thread.Sleep(2000)
+            If appxAdditionCommit Then
+                AllPB.Value = AllPB.Maximum / taskCount
+                currentTCont += 1
+                taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
+                RunOps(8)
+            Else
+                AllPB.Value = 100
+            End If
+            If appxSuccessfulAdditions > 0 Then
+                GetErrorCode(True)
+            ElseIf appxSuccessfulAdditions <= 0 Then
+                GetErrorCode(False)
+            End If
+        ElseIf opNum = 38 Then
+            allTasks.Text = "Removing AppX packages..."
+            currentTask.Text = "Preparing to remove provisioned AppX packages..."
+            LogView.AppendText(CrLf & "Removing provisioned AppX packages..." & CrLf & CrLf & _
+                               "Enumerating AppX packages to remove...")
+            Thread.Sleep(500)
+            LogView.AppendText(CrLf & "Total number of packages to remove: " & appxRemovalCount)
+            currentTask.Text = "Removing AppX packages..."
+            CurrentPB.Maximum = appxRemovalCount
+            For x = 0 To Array.LastIndexOf(appxRemovalPackages, appxRemovalLastPackage)
+                currentTask.Text = "Removing package " & (x + 1) & " of " & appxRemovalCount & "..."
+                LogView.AppendText(CrLf & _
+                                   "Package " & (x + 1) & " of " & appxRemovalCount)
+                CurrentPB.Value = x + 1
+                ' Display package name and DisplayName
+                LogView.AppendText(CrLf & _
+                                   "- Package name: " & appxRemovalPackages(x) & CrLf & _
+                                   "- Display name: " & appxRemovalPkgNames(x))
+                ' Display whether an application is registered to a user
+                If Directory.Exists(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxRemovalPackages(x)) Then
+                    If My.Computer.FileSystem.GetFiles(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxRemovalPackages(x), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
+                        ' Application is not registered to any user
+                        LogView.AppendText(CrLf & _
+                                           "- Application is registered to a user? No")
+                    Else
+                        ' Application is registered to a user
+                        LogView.AppendText(CrLf & _
+                                           "- Application is registered to a user? Yes" & CrLf & _
+                                           "  The removal of this application may require you to use PowerShell to completely remove it")
+                    End If
+                Else
+                    ' Application is not registered to any user
+                    LogView.AppendText(CrLf & _
+                                       "- Application is registered to a user? No")
+                End If
+                ' Initialize command. Its syntax is simple, so don't spend too much time determining options
+                LogView.AppendText(CrLf & CrLf & _
+                                   "Processing package...")
+                DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & MountDir & " /remove-provisionedappxpackage /packagename=" & appxRemovalPackages(x)
+                DISMProc.StartInfo.Arguments = CommandArgs
+                DISMProc.Start()
+                Do Until DISMProc.HasExited
+                    If DISMProc.HasExited Then
+                        Exit Do
+                    End If
+                Loop
+                LogView.AppendText(CrLf & "Getting error level...")
+                If Hex(DISMProc.ExitCode).Length < 8 Then
+                    errCode = DISMProc.ExitCode
+                Else
+                    errCode = Hex(DISMProc.ExitCode)
+                End If
+                If DISMProc.ExitCode = 0 Then
+                    appxSuccessfulRemovals += 1
+                Else
+                    appxFailedRemovals += 1
+                End If
+                If errCode.Length >= 8 Then
+                    LogView.AppendText(" Error level : 0x" & errCode)
+                Else
+                    LogView.AppendText(" Error level : " & errCode)
+                End If
+                If PkgErrorText.RichTextBox1.Text = "" Then
+                    If errCode.Length >= 8 Then
+                        PkgErrorText.RichTextBox1.AppendText("0x" & errCode)
+                    Else
+                        PkgErrorText.RichTextBox1.AppendText(errCode)
+                    End If
+                Else
+                    If errCode.Length >= 8 Then
+                        PkgErrorText.RichTextBox1.AppendText(CrLf & "0x" & errCode)
+                    Else
+                        PkgErrorText.RichTextBox1.AppendText(CrLf & errCode)
+                    End If
+                End If
+            Next
+            CurrentPB.Value = CurrentPB.Maximum
+            LogView.AppendText(CrLf & "Gathering error level for selected AppX packages..." & CrLf)
+            For x = 0 To PkgErrorText.RichTextBox1.Lines.Count - 1
+                LogView.AppendText(CrLf & "- Package no. " & (x + 1) & ": " & PkgErrorText.RichTextBox1.Lines(x))
+            Next
+            Thread.Sleep(2000)
+            AllPB.Value = 100
+            If appxSuccessfulRemovals > 0 Then
+                GetErrorCode(True)
+            ElseIf appxSuccessfulRemovals <= 0 Then
+                GetErrorCode(False)
+            End If
         ElseIf opNum = 87 Then
             allTasks.Text = "Setting the uninstall window..."
             currentTask.Text = "Setting the amount of days an uninstall can happen..."
             LogView.AppendText(CrLf & "Setting the amount of days an uninstall can happen..." & CrLf &
                                "Number of days: " & osUninstDayCount)
             DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-            CommandArgs = "/English /online /set-osuninstallwindow /value:" & osUninstDayCount
+            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /online /set-osuninstallwindow /value:" & osUninstDayCount
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
             Do Until DISMProc.HasExited
@@ -1688,7 +2055,7 @@ Public Class ProgressPanel
 
             ' Gather options
             LogView.AppendText("- Source image file: " & imgSrcFile & CrLf &
-                               "- Destination image file: " & imgDestFile & CrLf)
+                                   "- Destination image file: " & imgDestFile & CrLf)
             If imgConversionMode = 0 Then
                 LogView.AppendText("- Image conversion mode: Windows Imaging (WIM) --> Electronic Software Distribution (ESD)")
             ElseIf imgConversionMode = 1 Then
@@ -1703,10 +2070,10 @@ Public Class ProgressPanel
                         Case 1
                             ' Not available
                         Case Is >= 2
-                            CommandArgs = "/English /export-image /sourceimagefile=" & imgSrcFile & " /sourceindex=1 /destinationimagefile=" & imgDestFile
+                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & imgSrcFile & " /sourceindex=1 /destinationimagefile=" & imgDestFile
                     End Select
                 Case 10
-                    CommandArgs = "/English /export-image /sourceimagefile=" & imgSrcFile & " /sourceindex=1 /destinationimagefile=" & imgDestFile
+                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & imgSrcFile & " /sourceindex=1 /destinationimagefile=" & imgDestFile
             End Select
             If imgConversionMode = 0 Then
                 CommandArgs &= " /compress:recovery"
@@ -1745,10 +2112,10 @@ Public Class ProgressPanel
                         Case 1
                             ' Not available
                         Case Is >= 2
-                            CommandArgs = "/English /export-image /sourceimagefile=" & imgSwmSource & " /swmfile=" & Path.GetDirectoryName(imgSwmSource) & "\" & Path.GetFileNameWithoutExtension(imgSwmSource) & "*.swm /sourceindex=1 /destinationimagefile=" & imgWimDestination & " /compress=max /checkintegrity"
+                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & imgSwmSource & " /swmfile=" & Path.GetDirectoryName(imgSwmSource) & "\" & Path.GetFileNameWithoutExtension(imgSwmSource) & "*.swm /sourceindex=1 /destinationimagefile=" & imgWimDestination & " /compress=max /checkintegrity"
                     End Select
                 Case 10
-                    CommandArgs = "/English /export-image /sourceimagefile=" & imgSwmSource & " /swmfile=" & Path.GetDirectoryName(imgSwmSource) & "\" & Path.GetFileNameWithoutExtension(imgSwmSource) & "*.swm /sourceindex=1 /destinationimagefile=" & imgWimDestination & " /compress=max /checkintegrity"
+                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & imgSwmSource & " /swmfile=" & Path.GetDirectoryName(imgSwmSource) & "\" & Path.GetFileNameWithoutExtension(imgSwmSource) & "*.swm /sourceindex=1 /destinationimagefile=" & imgWimDestination & " /compress=max /checkintegrity"
             End Select
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
@@ -1785,12 +2152,12 @@ Public Class ProgressPanel
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
                         Case 1
-                            CommandArgs = "/English /unmount-wim /mountdir=" & SwitchTarget
+                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & SwitchTarget
                         Case Is >= 2
-                            CommandArgs = "/English /unmount-image /mountdir=" & SwitchTarget
+                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & SwitchTarget
                     End Select
                 Case 10
-                    CommandArgs = "/English /unmount-image /mountdir=" & SwitchTarget
+                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & SwitchTarget
             End Select
             If SwitchCommitSourceIndex Then
                 CommandArgs &= " /commit"
@@ -1819,12 +2186,12 @@ Public Class ProgressPanel
                     Case 6
                         Select Case DismVersionChecker.ProductMinorPart
                             Case 1
-                                CommandArgs = "/English /unmount-wim /mountdir=" & SwitchTarget & " /discard"
+                                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & SwitchTarget & " /discard"
                             Case Is >= 2
-                                CommandArgs = "/English /unmount-image /mountdir=" & SwitchTarget & " /discard"
+                                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & SwitchTarget & " /discard"
                         End Select
                     Case 10
-                        CommandArgs = "/English /unmount-image /mountdir=" & SwitchTarget & " /discard"
+                        CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & SwitchTarget & " /discard"
                 End Select
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
@@ -1854,12 +2221,12 @@ Public Class ProgressPanel
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
                         Case 1
-                            CommandArgs = "/English /mount-wim /wimfile=" & SwitchSourceImg & " /index=" & SwitchTargetIndex & " /mountdir=" & SwitchTarget
+                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-wim /wimfile=" & SwitchSourceImg & " /index=" & SwitchTargetIndex & " /mountdir=" & SwitchTarget
                         Case Is >= 2
-                            CommandArgs = "/English /mount-image /imagefile=" & SwitchSourceImg & " /index=" & SwitchTargetIndex & " /mountdir=" & SwitchTarget
+                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-image /imagefile=" & SwitchSourceImg & " /index=" & SwitchTargetIndex & " /mountdir=" & SwitchTarget
                     End Select
                 Case 10
-                    CommandArgs = "/English /mount-image /imagefile=" & SwitchSourceImg & " /index=" & SwitchTargetIndex & " /mountdir=" & SwitchTarget
+                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-image /imagefile=" & SwitchSourceImg & " /index=" & SwitchTargetIndex & " /mountdir=" & SwitchTarget
             End Select
             If SwitchMountAsReadOnly Then
                 CommandArgs &= " /readonly"
@@ -2000,7 +2367,7 @@ Public Class ProgressPanel
             Else
                 LogView.AppendText(CrLf & "Processing package...")
                 DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                CommandArgs = "/English /image=" & MountDir & " /add-package /packagepath=" & pkgToAdd
+                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & MountDir & " /add-package /packagepath=" & pkgToAdd
                 If pkgIgnoreApplicabilityChecks Then
                     CommandArgs &= " /ignorecheck"
                 End If
@@ -2027,7 +2394,7 @@ Public Class ProgressPanel
             If pkgIgnoreApplicabilityChecks Then
                 LogView.AppendText(CrLf & "Trying to process package...")
                 DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                CommandArgs = "/English /image=" & MountDir & " /add-package /packagepath=" & pkgToAdd & " /ignorecheck"
+                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & MountDir & " /add-package /packagepath=" & pkgToAdd & " /ignorecheck"
                 If pkgPreventIfPendingOnline Then
                     CommandArgs &= " /preventpending"
                 End If
@@ -2080,6 +2447,514 @@ Public Class ProgressPanel
         End Select
     End Sub
 
+    ' Procedure ported from AddProvAppxPackage.ScanAppxPackage
+    Sub ScanAppxPackage(IsFolder As Boolean, Package As String)
+        Dim AppxScanner As New Process
+        Dim Stepper As Integer = 2
+        Dim QuoteCount As Integer = 0
+        Dim ScannerRTB As New RichTextBox()
+        Dim currentAppxName As String = ""
+        Dim currentAppxPublisher As String = ""
+        Dim currentAppxVersion As String = ""
+        If IsFolder Then
+            If File.Exists(Package & "\AppxMetadata\AppxBundleManifest.xml") Then
+                ' AppXBundle file
+                ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Package & "\AppxMetadata\AppxBundleManifest.xml")
+                If ScannerRTB.Lines(2).EndsWith("<!--") Then
+                    ' XML comment
+                    Dim IdScanner As String = ScannerRTB.Lines(9)
+                    Dim CharIndex As Integer = 0
+                    Dim CharNext As Integer
+                    For Each Character As Char In ScannerRTB.Lines(9)
+                        CharNext = CharIndex + 1
+                        If Not IdScanner(CharIndex) = Quote Then
+                            CharIndex += 1
+                            Continue For
+                        ElseIf IdScanner(CharIndex) = Quote And IdScanner(CharNext) = " " Then
+                            CharIndex += 1
+                            Continue For
+                        Else
+                            Character = IdScanner(CharIndex + 1)
+                            If Not IdScanner(CharIndex + Stepper) = " " Then
+                                If QuoteCount = 0 Then
+                                    QuoteCount += 1
+                                    Do
+                                        If Character = Quote Then
+                                            CharIndex += Stepper - 1
+                                            Character = IdScanner(CharIndex - 1)
+                                            QuoteCount += 1
+                                            Stepper = 2
+                                            Exit Do
+                                        Else
+                                            currentAppxName &= Character.ToString()
+                                            Character = IdScanner(CharIndex + Stepper)
+                                            Stepper += 1
+                                        End If
+                                    Loop
+                                ElseIf QuoteCount = 2 Then
+                                    QuoteCount += 1
+                                    Do
+                                        If Character = Quote Then
+                                            CharIndex += Stepper - 1
+                                            Character = IdScanner(CharIndex - 1)
+                                            QuoteCount += 1
+                                            Stepper = 2
+                                            Exit Do
+                                        Else
+                                            currentAppxPublisher &= Character.ToString()
+                                            Character = IdScanner(CharIndex + Stepper)
+                                            Stepper += 1
+                                        End If
+                                    Loop
+                                ElseIf QuoteCount = 4 Then
+                                    QuoteCount += 1
+                                    Do
+                                        If Character = Quote Then
+                                            CharIndex += Stepper - 1
+                                            Character = IdScanner(CharIndex - 1)
+                                            QuoteCount += 1
+                                            Stepper = 2
+                                            Exit Do
+                                        Else
+                                            currentAppxVersion &= Character.ToString()
+                                            Character = IdScanner(CharIndex + Stepper)
+                                            Stepper += 1
+                                        End If
+                                    Loop
+                                End If
+                            End If
+                        End If
+                    Next
+                ElseIf ScannerRTB.Lines(2).Contains("<Identity Name=") Then
+                    Dim IdScanner As String = ScannerRTB.Lines(2)
+                    Dim CharIndex As Integer = 0
+                    Dim CharNext As Integer
+                    For Each Character As Char In ScannerRTB.Lines(2)
+                        CharNext = CharIndex + 1
+                        If Not IdScanner(CharIndex) = Quote Then
+                            CharIndex += 1
+                            Continue For
+                        ElseIf IdScanner(CharIndex) = Quote And IdScanner(CharNext) = " " Then
+                            CharIndex += 1
+                            Continue For
+                        Else
+                            Character = IdScanner(CharIndex + 1)
+                            If Not IdScanner(CharIndex + Stepper) = " " Then
+                                If QuoteCount = 0 Then
+                                    QuoteCount += 1
+                                    Do
+                                        If Character = Quote Then
+                                            CharIndex += Stepper - 1
+                                            Character = IdScanner(CharIndex - 1)
+                                            QuoteCount += 1
+                                            Stepper = 2
+                                            Exit Do
+                                        Else
+                                            currentAppxName &= Character.ToString()
+                                            Character = IdScanner(CharIndex + Stepper)
+                                            Stepper += 1
+                                        End If
+                                    Loop
+                                ElseIf QuoteCount = 2 Then
+                                    QuoteCount += 1
+                                    Do
+                                        If Character = Quote Then
+                                            CharIndex += Stepper - 1
+                                            Character = IdScanner(CharIndex - 1)
+                                            QuoteCount += 1
+                                            Stepper = 2
+                                            Exit Do
+                                        Else
+                                            currentAppxPublisher &= Character.ToString()
+                                            Character = IdScanner(CharIndex + Stepper)
+                                            Stepper += 1
+                                        End If
+                                    Loop
+                                ElseIf QuoteCount = 4 Then
+                                    QuoteCount += 1
+                                    Do
+                                        If Character = Quote Then
+                                            CharIndex += Stepper - 1
+                                            Character = IdScanner(CharIndex - 1)
+                                            QuoteCount += 1
+                                            Stepper = 2
+                                            Exit Do
+                                        Else
+                                            currentAppxVersion &= Character.ToString()
+                                            Character = IdScanner(CharIndex + Stepper)
+                                            Stepper += 1
+                                        End If
+                                    Loop
+                                End If
+                            End If
+                        End If
+                    Next
+                End If
+            ElseIf File.Exists(Package & "\AppxManifest.xml") Then
+                ' AppX file
+                ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Package & "\AppxManifest.xml")
+                If ScannerRTB.Lines(2).EndsWith("<!--") Then
+                    Dim IdScanner As String = ScannerRTB.Lines(9)
+                    Dim CharIndex As Integer = 0
+                    Dim CharNext As Integer
+                    For Each Character As Char In ScannerRTB.Lines(9)
+                        CharNext = CharIndex + 1
+                        If Not IdScanner(CharIndex) = Quote Then
+                            CharIndex += 1
+                            Continue For
+                        ElseIf IdScanner(CharIndex) = Quote And IdScanner(CharNext) = " " Then
+                            CharIndex += 1
+                            Continue For
+                        Else
+                            Character = IdScanner(CharIndex + 1)
+                            If Not IdScanner(CharIndex + Stepper) = " " Then
+                                If QuoteCount = 0 Then
+                                    QuoteCount += 1
+                                    Do
+                                        If Character = Quote Then
+                                            CharIndex += Stepper - 1
+                                            Character = IdScanner(CharIndex - 1)
+                                            QuoteCount += 1
+                                            Stepper = 2
+                                            Exit Do
+                                        Else
+                                            currentAppxName &= Character.ToString()
+                                            Character = IdScanner(CharIndex + Stepper)
+                                            Stepper += 1
+                                        End If
+                                    Loop
+                                ElseIf QuoteCount = 2 Then
+                                    QuoteCount += 1
+                                    Do
+                                        If Character = Quote Then
+                                            CharIndex += Stepper - 1
+                                            Character = IdScanner(CharIndex - 1)
+                                            QuoteCount += 1
+                                            Stepper = 2
+                                            Exit Do
+                                        Else
+                                            currentAppxPublisher &= Character.ToString()
+                                            Character = IdScanner(CharIndex + Stepper)
+                                            Stepper += 1
+                                        End If
+                                    Loop
+                                ElseIf QuoteCount = 4 Then
+                                    QuoteCount += 1
+                                    Do
+                                        If Character = Quote Then
+                                            CharIndex += Stepper - 1
+                                            Character = IdScanner(CharIndex - 1)
+                                            QuoteCount += 1
+                                            Stepper = 2
+                                            Exit Do
+                                        Else
+                                            currentAppxVersion &= Character.ToString()
+                                            Character = IdScanner(CharIndex + Stepper)
+                                            Stepper += 1
+                                        End If
+                                    Loop
+                                End If
+                            End If
+                        End If
+                    Next
+                Else
+                    ' Unrecognized type
+                    MsgBox("This folder doesn't seem to contain an AppX package structure. It will not be added to the list", vbOKOnly + vbExclamation, "Add provisioned AppX packages")
+                    Exit Sub
+                End If
+            End If
+        Else
+            If Directory.Exists(".\appxscan") Then Directory.Delete(".\appxscan", True)
+            Directory.CreateDirectory(".\appxscan")
+            AppxScanner.StartInfo.FileName = ".\bin\utils\7z.exe"
+            AppxScanner.StartInfo.Arguments = "x " & Quote & Package & Quote & " -o.\appxscan"
+            AppxScanner.StartInfo.CreateNoWindow = True
+            AppxScanner.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+            AppxScanner.Start()
+            Do Until AppxScanner.HasExited
+                If AppxScanner.HasExited Then
+                    Exit Do
+                End If
+            Loop
+            If AppxScanner.ExitCode = 0 Then
+                If Path.GetExtension(Package).EndsWith("bundle") Then
+                    ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(".\appxscan\AppxMetadata\AppxBundleManifest.xml")
+                    If ScannerRTB.Lines(2).EndsWith("<!--") Then
+                        ' XML comment
+                        Dim IdScanner As String = ScannerRTB.Lines(9)
+                        Dim CharIndex As Integer = 0
+                        Dim CharNext As Integer
+                        For Each Character As Char In ScannerRTB.Lines(9)
+                            CharNext = CharIndex + 1
+                            If Not IdScanner(CharIndex) = Quote Then
+                                CharIndex += 1
+                                Continue For
+                            ElseIf IdScanner(CharIndex) = Quote And IdScanner(CharNext) = " " Then
+                                CharIndex += 1
+                                Continue For
+                            Else
+                                Character = IdScanner(CharIndex + 1)
+                                If Not IdScanner(CharIndex + Stepper) = " " Then
+                                    If QuoteCount = 0 Then
+                                        QuoteCount += 1
+                                        Do
+                                            If Character = Quote Then
+                                                CharIndex += Stepper - 1
+                                                Character = IdScanner(CharIndex - 1)
+                                                QuoteCount += 1
+                                                Stepper = 2
+                                                Exit Do
+                                            Else
+                                                currentAppxName &= Character.ToString()
+                                                Character = IdScanner(CharIndex + Stepper)
+                                                Stepper += 1
+                                            End If
+                                        Loop
+                                    ElseIf QuoteCount = 2 Then
+                                        QuoteCount += 1
+                                        Do
+                                            If Character = Quote Then
+                                                CharIndex += Stepper - 1
+                                                Character = IdScanner(CharIndex - 1)
+                                                QuoteCount += 1
+                                                Stepper = 2
+                                                Exit Do
+                                            Else
+                                                currentAppxPublisher &= Character.ToString()
+                                                Character = IdScanner(CharIndex + Stepper)
+                                                Stepper += 1
+                                            End If
+                                        Loop
+                                    ElseIf QuoteCount = 4 Then
+                                        QuoteCount += 1
+                                        Do
+                                            If Character = Quote Then
+                                                CharIndex += Stepper - 1
+                                                Character = IdScanner(CharIndex - 1)
+                                                QuoteCount += 1
+                                                Stepper = 2
+                                                Exit Do
+                                            Else
+                                                currentAppxVersion &= Character.ToString()
+                                                Character = IdScanner(CharIndex + Stepper)
+                                                Stepper += 1
+                                            End If
+                                        Loop
+                                    End If
+                                End If
+                            End If
+                        Next
+                    ElseIf ScannerRTB.Lines(2).Contains("<Identity Name=") Then
+                        Dim IdScanner As String = ScannerRTB.Lines(2)
+                        Dim CharIndex As Integer = 0
+                        Dim CharNext As Integer
+                        For Each Character As Char In ScannerRTB.Lines(2)
+                            CharNext = CharIndex + 1
+                            If Not IdScanner(CharIndex) = Quote Then
+                                CharIndex += 1
+                                Continue For
+                            ElseIf IdScanner(CharIndex) = Quote And IdScanner(CharNext) = " " Then
+                                CharIndex += 1
+                                Continue For
+                            Else
+                                Character = IdScanner(CharIndex + 1)
+                                If Not IdScanner(CharIndex + Stepper) = " " Then
+                                    If QuoteCount = 0 Then
+                                        QuoteCount += 1
+                                        Do
+                                            If Character = Quote Then
+                                                CharIndex += Stepper - 1
+                                                Character = IdScanner(CharIndex - 1)
+                                                QuoteCount += 1
+                                                Stepper = 2
+                                                Exit Do
+                                            Else
+                                                currentAppxName &= Character.ToString()
+                                                Character = IdScanner(CharIndex + Stepper)
+                                                Stepper += 1
+                                            End If
+                                        Loop
+                                    ElseIf QuoteCount = 2 Then
+                                        QuoteCount += 1
+                                        Do
+                                            If Character = Quote Then
+                                                CharIndex += Stepper - 1
+                                                Character = IdScanner(CharIndex - 1)
+                                                QuoteCount += 1
+                                                Stepper = 2
+                                                Exit Do
+                                            Else
+                                                currentAppxPublisher &= Character.ToString()
+                                                Character = IdScanner(CharIndex + Stepper)
+                                                Stepper += 1
+                                            End If
+                                        Loop
+                                    ElseIf QuoteCount = 4 Then
+                                        QuoteCount += 1
+                                        Do
+                                            If Character = Quote Then
+                                                CharIndex += Stepper - 1
+                                                Character = IdScanner(CharIndex - 1)
+                                                QuoteCount += 1
+                                                Stepper = 2
+                                                Exit Do
+                                            Else
+                                                currentAppxVersion &= Character.ToString()
+                                                Character = IdScanner(CharIndex + Stepper)
+                                                Stepper += 1
+                                            End If
+                                        Loop
+                                    End If
+                                End If
+                            End If
+                        Next
+                    End If
+                Else
+                    ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(".\appxscan\AppxManifest.xml")
+                    If ScannerRTB.Lines(2).EndsWith("<!--") Then
+                        Dim IdScanner As String = ScannerRTB.Lines(9)
+                        Dim CharIndex As Integer = 0
+                        Dim CharNext As Integer
+                        For Each Character As Char In ScannerRTB.Lines(9)
+                            CharNext = CharIndex + 1
+                            If Not IdScanner(CharIndex) = Quote Then
+                                CharIndex += 1
+                                Continue For
+                            ElseIf IdScanner(CharIndex) = Quote And IdScanner(CharNext) = " " Then
+                                CharIndex += 1
+                                Continue For
+                            Else
+                                Character = IdScanner(CharIndex + 1)
+                                If Not IdScanner(CharIndex + Stepper) = " " Then
+                                    If QuoteCount = 0 Then
+                                        QuoteCount += 1
+                                        Do
+                                            If Character = Quote Then
+                                                CharIndex += Stepper - 1
+                                                Character = IdScanner(CharIndex - 1)
+                                                QuoteCount += 1
+                                                Stepper = 2
+                                                Exit Do
+                                            Else
+                                                currentAppxName &= Character.ToString()
+                                                Character = IdScanner(CharIndex + Stepper)
+                                                Stepper += 1
+                                            End If
+                                        Loop
+                                    ElseIf QuoteCount = 2 Then
+                                        QuoteCount += 1
+                                        Do
+                                            If Character = Quote Then
+                                                CharIndex += Stepper - 1
+                                                Character = IdScanner(CharIndex - 1)
+                                                QuoteCount += 1
+                                                Stepper = 2
+                                                Exit Do
+                                            Else
+                                                currentAppxPublisher &= Character.ToString()
+                                                Character = IdScanner(CharIndex + Stepper)
+                                                Stepper += 1
+                                            End If
+                                        Loop
+                                    ElseIf QuoteCount = 4 Then
+                                        QuoteCount += 1
+                                        Do
+                                            If Character = Quote Then
+                                                CharIndex += Stepper - 1
+                                                Character = IdScanner(CharIndex - 1)
+                                                QuoteCount += 1
+                                                Stepper = 2
+                                                Exit Do
+                                            Else
+                                                currentAppxVersion &= Character.ToString()
+                                                Character = IdScanner(CharIndex + Stepper)
+                                                Stepper += 1
+                                            End If
+                                        Loop
+                                    End If
+                                End If
+                            End If
+                        Next
+                    ElseIf ScannerRTB.Lines(2).Contains("<Identity Name=") Then
+                        Dim IdScanner As String = ScannerRTB.Lines(2)
+                        Dim CharIndex As Integer = 0
+                        Dim CharNext As Integer
+                        For Each Character As Char In ScannerRTB.Lines(2)
+                            CharNext = CharIndex + 1
+                            If Not IdScanner(CharIndex) = Quote Then
+                                CharIndex += 1
+                                Continue For
+                            ElseIf IdScanner(CharIndex) = Quote And IdScanner(CharNext) = " " Then
+                                CharIndex += 1
+                                Continue For
+                            Else
+                                Character = IdScanner(CharIndex + 1)
+                                If Not IdScanner(CharIndex + Stepper) = " " Then
+                                    If QuoteCount = 0 Then
+                                        QuoteCount += 1
+                                        Do
+                                            If Character = Quote Then
+                                                CharIndex += Stepper - 1
+                                                Character = IdScanner(CharIndex - 1)
+                                                QuoteCount += 1
+                                                Stepper = 2
+                                                Exit Do
+                                            Else
+                                                currentAppxName &= Character.ToString()
+                                                Character = IdScanner(CharIndex + Stepper)
+                                                Stepper += 1
+                                            End If
+                                        Loop
+                                    ElseIf QuoteCount = 2 Then
+                                        QuoteCount += 1
+                                        Do
+                                            If Character = Quote Then
+                                                CharIndex += Stepper - 1
+                                                Character = IdScanner(CharIndex - 1)
+                                                QuoteCount += 1
+                                                Stepper = 2
+                                                Exit Do
+                                            Else
+                                                currentAppxPublisher &= Character.ToString()
+                                                Character = IdScanner(CharIndex + Stepper)
+                                                Stepper += 1
+                                            End If
+                                        Loop
+                                    ElseIf QuoteCount = 4 Then
+                                        QuoteCount += 1
+                                        Do
+                                            If Character = Quote Then
+                                                CharIndex += Stepper - 1
+                                                Character = IdScanner(CharIndex - 1)
+                                                QuoteCount += 1
+                                                Stepper = 2
+                                                Exit Do
+                                            Else
+                                                currentAppxVersion &= Character.ToString()
+                                                Character = IdScanner(CharIndex + Stepper)
+                                                Stepper += 1
+                                            End If
+                                        Loop
+                                    End If
+                                End If
+                            End If
+                        Next
+                    End If
+                End If
+            Else
+
+            End If
+        End If
+        LogView.AppendText(CrLf & _
+                           "- AppX package file: " & Package & CrLf & _
+                           "- Application name: " & currentAppxName & CrLf & _
+                           "- Application publisher: " & currentAppxPublisher & CrLf & _
+                           "- Application version: " & currentAppxVersion & CrLf)
+        If Directory.Exists(".\appxscan") Then
+            Directory.Delete(".\appxscan", True)
+        End If
+    End Sub
+
     Private Sub ProgressBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ProgressBW.DoWork
         RunOps(OperationNum)
     End Sub
@@ -2114,10 +2989,29 @@ Public Class ProgressPanel
                 End If
             ElseIf OperationNum = 8 Then
                 MainForm.SaveDTProj()
+            ElseIf OperationNum = 9 Then
+                LogView.AppendText(CrLf & _
+                                   "The volume images have been deleted. If you want to remount this image into a DISMTools project, choose the " & Quote & "Mount image" & Quote & " option, or use this command if you want to mount it elsewhere:" & CrLf & _
+                                   "  dism /mount-image /imagefile:" & Quote & imgIndexDeletionSourceImg & Quote & " /index:<preferred index> /mountdir:<preferred mountpoint>")
+                If imgIndexDeletionUnmount Then
+                    ' Detect mounted images if the program needed to unmount the source image
+                    MainForm.DetectMountedImages(False, True, True)
+                    If UMountLocalDir Then
+                        MainForm.UpdateProjProperties(False, False)
+                        MainForm.MountDir = "N/A"
+                        ' This is a crucial change, so save things immediately
+                        MainForm.SaveDTProj()
+                        ImgMount.TextBox1.Text = ""     ' The program has a bug where mounting the same image after doing this results in the image file being ""
+                        If MainForm.imgCommitOperation <> -1 Then
+                            MainForm.imgCommitOperation = -1    ' Let program close on later occassions
+                        End If
+                    End If
+                End If
             ElseIf OperationNum = 15 Then
                 MainForm.SourceImg = SourceImg
                 MainForm.ImgIndex = ImgIndex
                 MainForm.MountDir = MountDir
+                MainForm.DetectMountedImages(False, True, True)
                 If isReadOnly Then
                     MainForm.UpdateProjProperties(True, True)
                 Else
@@ -2126,6 +3020,7 @@ Public Class ProgressPanel
                 ' This is a crucial change, so save things immediately
                 MainForm.SaveDTProj()
             ElseIf OperationNum = 18 Then
+                MainForm.DetectMountedImages(False, False, True)
                 If ProjProperties.Visible Then
                     isTriggeredByPropertyDialog = True
                     ProjProperties.Close()
@@ -2149,6 +3044,7 @@ Public Class ProgressPanel
                 If MainForm.imgCommitOperation <> -1 Then
                     MainForm.imgCommitOperation = -1    ' Let program close on later occassions
                 End If
+                MainForm.DetectMountedImages(False, True, True)
             ElseIf OperationNum = 26 Then
                 MainForm.UpdateProjProperties(True, False)
                 AddPackageReport.Label4.Text = MountDir
@@ -2179,6 +3075,11 @@ Public Class ProgressPanel
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 31 Then
                 MainForm.UpdateProjProperties(True, False)
+            ElseIf OperationNum = 37 Then
+                MainForm.SaveDTProj()
+                MainForm.UpdateProjProperties(True, False)
+            ElseIf OperationNum = 38 Then
+                MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 991 Then
                 Visible = False
                 ImgConversionSuccessDialog.ShowDialog(MainForm)
@@ -2199,6 +3100,7 @@ Public Class ProgressPanel
             MainForm.MenuDesc.Text = "Ready"
             MainForm.StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
             MainForm.ToolStripButton4.Visible = False
+            Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
             Dispose()
             Close()
         Else
@@ -2250,6 +3152,21 @@ Public Class ProgressPanel
             ElseIf OperationNum = 31 Then
                 ' No features have been disabled successfully
                 LogView.AppendText(CrLf & "No features have been disabled successfully. Try looking up the error codes on the Internet")
+            ElseIf errCode = "00000001" Then
+
+            ElseIf errCode = "C000013A" Then
+                ' Keyboard interrupt (Ctrl-C) or forced program closure. The former may not trigger this error, as it may trigger error 1223
+                LogView.AppendText(CrLf & "The program has suffered a keyboard interrupt, or a forced program closure. The operation has been cancelled. If you have done it accidentally, you may run it again")
+            ElseIf errCode = "C2FE0101" Then
+                ' This happens on operation numbers 90, 91, and 92; related to Microsoft Edge servicing, if the components have already been installed.
+                ' Since these operation numbers are meant for different things, detect them
+                If OperationNum = 90 Then
+                    LogView.AppendText(CrLf & "The Microsoft Edge components have already been installed in this image. There isn't anything to do here.")
+                ElseIf OperationNum = 91 Then
+                    LogView.AppendText(CrLf & "The Microsoft Edge browser has already been installed in this image. There isn't anything to do here.")
+                ElseIf OperationNum = 92 Then
+                    LogView.AppendText(CrLf & "The Microsoft Edge WebView2 component has already been installed in this image. There isn't anything to do here.")
+                End If
             Else
                 ' Errors that weren't added to the database
                 LogView.AppendText(CrLf & "This error has not yet been added to the database, so a useful description can't be shown now. Try running the command manually and, if you see the same error, try looking it up on the Internet.")
@@ -2274,7 +3191,10 @@ Public Class ProgressPanel
     End Sub
 
     Private Sub ProgressPanel_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ' Cancel detector background worker which can interfere with image operations
+        MainForm.MountedImageDetectorBW.CancelAsync()
         DismProgram = MainForm.DismExe
+        If MountDir = "" Then MountDir = MainForm.MountDir
         DISMProc.StartInfo.CreateNoWindow = False
         BodyPanel.BorderStyle = BorderStyle.None
         ' Determine program colors
@@ -2293,11 +3213,15 @@ Public Class ProgressPanel
             LogView.BackColor = Color.FromArgb(246, 246, 246)
             LogView.ForeColor = Color.Black
         End If
-        If MainForm.LogFontIsBold Then
-            LogView.Font = New Font(MainForm.LogFont, MainForm.LogFontSize, FontStyle.Bold)
-        Else
-            LogView.Font = New Font(MainForm.LogFont, MainForm.LogFontSize)
-        End If
+        Try
+            If MainForm.LogFontIsBold Then
+                LogView.Font = New Font(MainForm.LogFont, MainForm.LogFontSize, FontStyle.Bold)
+            Else
+                LogView.Font = New Font(MainForm.LogFont, MainForm.LogFontSize)
+            End If
+        Catch ex As Exception
+            LogView.Font = New Font("Courier New", 9.75)
+        End Try
         MainForm.MenuDesc.Text = "Performing image operations. Please wait..."
         MainForm.StatusStrip.BackColor = Color.FromArgb(14, 99, 156)
         If Debugger.IsAttached Then
@@ -2313,7 +3237,9 @@ Public Class ProgressPanel
     End Sub
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
-        Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\notepad.exe", Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\Logs\DISM\DISM.log")
+        If File.Exists(Directory.GetCurrentDirectory() & "\logs\" & dateStr) Then
+            Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\notepad.exe", Directory.GetCurrentDirectory() & "\logs\" & dateStr)
+        End If
     End Sub
 
     Private Sub BodyPanel_Paint(sender As Object, e As PaintEventArgs) Handles BodyPanel.Paint
