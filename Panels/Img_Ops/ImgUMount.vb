@@ -47,7 +47,9 @@ Public Class ImgUMount
         Else
             ProgressPanel.SaveToNewIndex = False
         End If
-        ProgressPanel.UMountImgIndex = MainForm.ImgIndex
+        If MainForm.isProjectLoaded Then
+            ProgressPanel.UMountImgIndex = MainForm.ImgIndex
+        End If
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         ProgressPanel.OperationNum = 21
         Visible = False
@@ -83,6 +85,15 @@ Public Class ImgUMount
         If My.Computer.Info.OSFullName.Contains("Windows 10") Or My.Computer.Info.OSFullName.Contains("Windows 11") Then
             Text = ""
             Win10Title.Visible = True
+        End If
+        If RadioButton1.Checked Then
+            Label4.Enabled = False
+            TextBox1.Enabled = False
+            Button1.Enabled = False
+        Else
+            Label4.Enabled = True
+            TextBox1.Enabled = True
+            Button1.Enabled = True
         End If
     End Sub
 
