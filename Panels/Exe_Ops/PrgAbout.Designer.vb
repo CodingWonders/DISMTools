@@ -49,12 +49,18 @@ Partial Class PrgAbout
         Me.Label12 = New System.Windows.Forms.Label()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
         Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
+        Me.PreviewPanel = New System.Windows.Forms.Panel()
+        Me.Label14 = New System.Windows.Forms.Label()
+        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
+        Me.Label15 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
         Me.TabPage2.SuspendLayout()
+        Me.PreviewPanel.SuspendLayout()
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -393,15 +399,54 @@ Partial Class PrgAbout
         Me.RichTextBox1.TabIndex = 0
         Me.RichTextBox1.Text = ""
         '
+        'PreviewPanel
+        '
+        Me.PreviewPanel.Controls.Add(Me.Label14)
+        Me.PreviewPanel.Controls.Add(Me.PictureBox2)
+        Me.PreviewPanel.Location = New System.Drawing.Point(12, 255)
+        Me.PreviewPanel.Name = "PreviewPanel"
+        Me.PreviewPanel.Size = New System.Drawing.Size(388, 72)
+        Me.PreviewPanel.TabIndex = 7
+        Me.PreviewPanel.Visible = False
+        '
+        'Label14
+        '
+        Me.Label14.Location = New System.Drawing.Point(39, 8)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(332, 64)
+        Me.Label14.TabIndex = 1
+        Me.Label14.Text = "You are currently using a preview build, which may not be ready for production ye" & _
+    "t. You may encounter more bugs along the way." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Use at your own risk."
+        '
+        'PictureBox2
+        '
+        Me.PictureBox2.Image = Global.DISMTools.My.Resources.Resources.preview_light
+        Me.PictureBox2.Location = New System.Drawing.Point(8, 8)
+        Me.PictureBox2.Name = "PictureBox2"
+        Me.PictureBox2.Size = New System.Drawing.Size(24, 24)
+        Me.PictureBox2.TabIndex = 0
+        Me.PictureBox2.TabStop = False
+        '
+        'Label15
+        '
+        Me.Label15.AutoSize = True
+        Me.Label15.Location = New System.Drawing.Point(23, 348)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(121, 13)
+        Me.Label15.TabIndex = 4
+        Me.Label15.Text = "DISMTools - version {0}"
+        '
         'PrgAbout
         '
         Me.AcceptButton = Me.OK_Button
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(784, 381)
+        Me.Controls.Add(Me.PreviewPanel)
         Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.Label2)
+        Me.Controls.Add(Me.Label15)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -419,6 +464,8 @@ Partial Class PrgAbout
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.TableLayoutPanel2.PerformLayout()
         Me.TabPage2.ResumeLayout(False)
+        Me.PreviewPanel.ResumeLayout(False)
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -450,5 +497,9 @@ Partial Class PrgAbout
     Friend WithEvents Label12 As System.Windows.Forms.Label
     Friend WithEvents Label13 As System.Windows.Forms.Label
     Friend WithEvents RichTextBox1 As System.Windows.Forms.RichTextBox
+    Friend WithEvents PreviewPanel As System.Windows.Forms.Panel
+    Friend WithEvents PictureBox2 As System.Windows.Forms.PictureBox
+    Friend WithEvents Label14 As System.Windows.Forms.Label
+    Friend WithEvents Label15 As System.Windows.Forms.Label
 
 End Class
