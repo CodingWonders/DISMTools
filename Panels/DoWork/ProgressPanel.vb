@@ -1189,7 +1189,7 @@ Public Class ProgressPanel
                                "Processing " & pkgCount & " packages..." & CrLf)
             If pkgAdditionOp = 0 Then
                 DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & MountDir & " /add-package /packagepath=" & pkgSource
+                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & MountDir & " /add-package /packagepath=" & Quote & pkgSource & Quote
                 If pkgIgnoreApplicabilityChecks Then
                     CommandArgs &= " /ignorecheck"
                 End If
@@ -1223,10 +1223,10 @@ Public Class ProgressPanel
                     End If
                     File.WriteAllText(".\bin\exthelpers\pkginfo.bat",
                                       "@echo off" & CrLf &
-                                      "dism /English /image=" & MountDir & " /get-packageinfo /packagepath=" & pkgs(x) & " | findstr /c:" & Quote & "Package Identity" & Quote & " > .\tempinfo\pkgname" & CrLf &
-                                      "dism /English /image=" & MountDir & " /get-packageinfo /packagepath=" & pkgs(x) & " | findstr /c:" & Quote & "Description" & Quote & " > .\tempinfo\pkgdesc" & CrLf &
-                                      "dism /English /image=" & MountDir & " /get-packageinfo /packagepath=" & pkgs(x) & " | findstr /c:" & Quote & "Applicable" & Quote & " > .\tempinfo\pkgapplicability" & CrLf &
-                                      "dism /English /image=" & MountDir & " /get-packageinfo /packagepath=" & pkgs(x) & " | findstr /c:" & Quote & "State" & Quote & " > .\tempinfo\pkgstate",
+                                      "dism /English /image=" & MountDir & " /get-packageinfo /packagepath=" & Quote & pkgs(x) & Quote & " | findstr /c:" & Quote & "Package Identity" & Quote & " > .\tempinfo\pkgname" & CrLf &
+                                      "dism /English /image=" & MountDir & " /get-packageinfo /packagepath=" & Quote & pkgs(x) & Quote & " | findstr /c:" & Quote & "Description" & Quote & " > .\tempinfo\pkgdesc" & CrLf &
+                                      "dism /English /image=" & MountDir & " /get-packageinfo /packagepath=" & Quote & pkgs(x) & Quote & " | findstr /c:" & Quote & "Applicable" & Quote & " > .\tempinfo\pkgapplicability" & CrLf &
+                                      "dism /English /image=" & MountDir & " /get-packageinfo /packagepath=" & Quote & pkgs(x) & Quote & " | findstr /c:" & Quote & "State" & Quote & " > .\tempinfo\pkgstate",
                                       ASCII)
                     If IsDebugged Then
                         Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\pkginfo.bat").WaitForExit()
@@ -1273,7 +1273,7 @@ Public Class ProgressPanel
                         Else
                             LogView.AppendText(CrLf & "Processing package...")
                             DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & MountDir & " /add-package /packagepath=" & pkgs(x)
+                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & MountDir & " /add-package /packagepath=" & Quote & pkgs(x) & Quote
                             If pkgIgnoreApplicabilityChecks Then
                                 CommandArgs &= " /ignorecheck"
                             End If
@@ -1300,7 +1300,7 @@ Public Class ProgressPanel
                         If pkgIgnoreApplicabilityChecks Then
                             LogView.AppendText(CrLf & "Trying to process package...")
                             DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & MountDir & " /add-package /packagepath=" & pkgs(x) & " /ignorecheck"
+                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & MountDir & " /add-package /packagepath=" & Quote & pkgs(x) & Quote & " /ignorecheck"
                             If pkgPreventIfPendingOnline Then
                                 CommandArgs &= " /preventpending"
                             End If
@@ -3021,28 +3021,32 @@ Public Class ProgressPanel
                 MainForm.SaveDTProj()
             ElseIf OperationNum = 18 Then
                 MainForm.DetectMountedImages(False, False, True)
-                If ProjProperties.Visible Then
-                    isTriggeredByPropertyDialog = True
-                    ProjProperties.Close()
+                If MainForm.isProjectLoaded Then
+                    If ProjProperties.Visible Then
+                        isTriggeredByPropertyDialog = True
+                        ProjProperties.Close()
+                    End If
+                    If remountisReadOnly Then
+                        MainForm.UpdateProjProperties(True, True)
+                    Else
+                        MainForm.UpdateProjProperties(True, False)
+                    End If
+                    If isTriggeredByPropertyDialog Then
+                        ProjProperties.TabControl1.SelectedIndex = 1
+                        ProjProperties.ShowDialog(MainForm)
+                    End If
+                    MainForm.isModified = False
                 End If
-                If remountisReadOnly Then
-                    MainForm.UpdateProjProperties(True, True)
-                Else
-                    MainForm.UpdateProjProperties(True, False)
-                End If
-                If isTriggeredByPropertyDialog Then
-                    ProjProperties.TabControl1.SelectedIndex = 1
-                    ProjProperties.ShowDialog(MainForm)
-                End If
-                MainForm.isModified = False
             ElseIf OperationNum = 21 Then
-                MainForm.UpdateProjProperties(False, False)
-                MainForm.MountDir = "N/A"
-                ' This is a crucial change, so save things immediately
-                MainForm.SaveDTProj()
-                ImgMount.TextBox1.Text = ""     ' The program has a bug where mounting the same image after doing this results in the image file being ""
-                If MainForm.imgCommitOperation <> -1 Then
-                    MainForm.imgCommitOperation = -1    ' Let program close on later occassions
+                If MainForm.isProjectLoaded Then
+                    MainForm.UpdateProjProperties(False, False)
+                    MainForm.MountDir = "N/A"
+                    ' This is a crucial change, so save things immediately
+                    MainForm.SaveDTProj()
+                    ImgMount.TextBox1.Text = ""     ' The program has a bug where mounting the same image after doing this results in the image file being ""
+                    If MainForm.imgCommitOperation <> -1 Then
+                        MainForm.imgCommitOperation = -1    ' Let program close on later occassions
+                    End If
                 End If
                 MainForm.DetectMountedImages(False, True, True)
             ElseIf OperationNum = 26 Then
