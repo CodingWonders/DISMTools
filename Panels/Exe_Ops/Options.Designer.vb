@@ -130,6 +130,7 @@ Partial Class Options
         Me.Label35 = New System.Windows.Forms.Label()
         Me.PrefReset = New System.Windows.Forms.Button()
         Me.LogSFD = New System.Windows.Forms.SaveFileDialog()
+        Me.ListBox1 = New System.Windows.Forms.ListBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -1062,7 +1063,7 @@ Partial Class Options
         Me.TabPage8.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage8.Size = New System.Drawing.Size(751, 433)
         Me.TabPage8.TabIndex = 7
-        Me.TabPage8.Text = "wimlib module"
+        Me.TabPage8.Text = "Modules"
         Me.TabPage8.UseVisualStyleBackColor = True
         '
         'wimlib
@@ -1070,13 +1071,15 @@ Partial Class Options
         Me.wimlib.Controls.Add(Me.GroupBox3)
         Me.wimlib.Controls.Add(Me.CheckBox7)
         Me.wimlib.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.wimlib.Location = New System.Drawing.Point(3, 51)
+        Me.wimlib.Location = New System.Drawing.Point(199, 3)
         Me.wimlib.Name = "wimlib"
-        Me.wimlib.Size = New System.Drawing.Size(745, 379)
+        Me.wimlib.Size = New System.Drawing.Size(549, 427)
         Me.wimlib.TabIndex = 1
         '
         'GroupBox3
         '
+        Me.GroupBox3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox3.Controls.Add(Me.Button7)
         Me.GroupBox3.Controls.Add(Me.Button6)
         Me.GroupBox3.Controls.Add(Me.Button5)
@@ -1084,18 +1087,19 @@ Partial Class Options
         Me.GroupBox3.Controls.Add(Me.Label32)
         Me.GroupBox3.Controls.Add(Me.Label33)
         Me.GroupBox3.Controls.Add(Me.Label31)
-        Me.GroupBox3.Location = New System.Drawing.Point(22, 270)
+        Me.GroupBox3.Location = New System.Drawing.Point(21, 310)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(700, 90)
+        Me.GroupBox3.Size = New System.Drawing.Size(506, 90)
         Me.GroupBox3.TabIndex = 1
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Module details"
         '
         'Button7
         '
+        Me.Button7.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button7.Enabled = False
         Me.Button7.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button7.Location = New System.Drawing.Point(605, 48)
+        Me.Button7.Location = New System.Drawing.Point(411, 48)
         Me.Button7.Name = "Button7"
         Me.Button7.Size = New System.Drawing.Size(75, 23)
         Me.Button7.TabIndex = 3
@@ -1104,9 +1108,10 @@ Partial Class Options
         '
         'Button6
         '
+        Me.Button6.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button6.Enabled = False
         Me.Button6.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button6.Location = New System.Drawing.Point(476, 48)
+        Me.Button6.Location = New System.Drawing.Point(282, 48)
         Me.Button6.Name = "Button6"
         Me.Button6.Size = New System.Drawing.Size(123, 23)
         Me.Button6.TabIndex = 2
@@ -1115,8 +1120,9 @@ Partial Class Options
         '
         'Button5
         '
+        Me.Button5.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button5.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button5.Location = New System.Drawing.Point(605, 22)
+        Me.Button5.Location = New System.Drawing.Point(411, 22)
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(75, 23)
         Me.Button5.TabIndex = 1
@@ -1166,18 +1172,19 @@ Partial Class Options
         Me.CheckBox7.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBox7.Location = New System.Drawing.Point(22, 22)
         Me.CheckBox7.Name = "CheckBox7"
-        Me.CheckBox7.Size = New System.Drawing.Size(181, 17)
+        Me.CheckBox7.Size = New System.Drawing.Size(149, 17)
         Me.CheckBox7.TabIndex = 0
-        Me.CheckBox7.Text = "Use wimlib-imagex when needed"
+        Me.CheckBox7.Text = "Use module when needed"
         Me.CheckBox7.UseVisualStyleBackColor = True
         '
         'wimlib_prev
         '
+        Me.wimlib_prev.Controls.Add(Me.ListBox1)
         Me.wimlib_prev.Controls.Add(Me.Label30)
-        Me.wimlib_prev.Dock = System.Windows.Forms.DockStyle.Top
+        Me.wimlib_prev.Dock = System.Windows.Forms.DockStyle.Left
         Me.wimlib_prev.Location = New System.Drawing.Point(3, 3)
         Me.wimlib_prev.Name = "wimlib_prev"
-        Me.wimlib_prev.Size = New System.Drawing.Size(745, 48)
+        Me.wimlib_prev.Size = New System.Drawing.Size(196, 427)
         Me.wimlib_prev.TabIndex = 0
         '
         'Label30
@@ -1185,10 +1192,9 @@ Partial Class Options
         Me.Label30.AutoSize = True
         Me.Label30.Location = New System.Drawing.Point(8, 8)
         Me.Label30.Name = "Label30"
-        Me.Label30.Size = New System.Drawing.Size(685, 13)
+        Me.Label30.Size = New System.Drawing.Size(134, 13)
         Me.Label30.TabIndex = 0
-        Me.Label30.Text = "This page is a vision of a feature coming in a later update, and will not modify " & _
-    "any settings. The contents of this page may vary at some point"
+        Me.Label30.Text = "Manage program modules:"
         '
         'TabPage9
         '
@@ -1299,6 +1305,17 @@ Partial Class Options
         '
         Me.LogSFD.Filter = "All files|*.*"
         Me.LogSFD.Title = "Specify the location of the log file"
+        '
+        'ListBox1
+        '
+        Me.ListBox1.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.ListBox1.FormattingEnabled = True
+        Me.ListBox1.IntegralHeight = False
+        Me.ListBox1.Items.AddRange(New Object() {"wimlib", "Assessment and Deployment Kit"})
+        Me.ListBox1.Location = New System.Drawing.Point(0, 31)
+        Me.ListBox1.Name = "ListBox1"
+        Me.ListBox1.Size = New System.Drawing.Size(196, 396)
+        Me.ListBox1.TabIndex = 1
         '
         'Options
         '
@@ -1472,5 +1489,6 @@ Partial Class Options
     Friend WithEvents Label37 As System.Windows.Forms.Label
     Friend WithEvents Label36 As System.Windows.Forms.Label
     Friend WithEvents CheckBox10 As System.Windows.Forms.CheckBox
+    Friend WithEvents ListBox1 As System.Windows.Forms.ListBox
 
 End Class

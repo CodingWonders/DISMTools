@@ -211,6 +211,8 @@ Public Class Options
             ComboBox5.ForeColor = Color.White
             ComboBox6.BackColor = Color.FromArgb(31, 31, 31)
             ComboBox6.ForeColor = Color.White
+            ListBox1.BackColor = Color.FromArgb(31, 31, 31)
+            ListBox1.ForeColor = Color.White
             NumericUpDown1.BackColor = Color.FromArgb(31, 31, 31)
             NumericUpDown1.ForeColor = Color.White
             GroupBox1.ForeColor = Color.White
@@ -253,6 +255,8 @@ Public Class Options
             ComboBox5.ForeColor = Color.Black
             ComboBox6.BackColor = Color.FromArgb(238, 238, 242)
             ComboBox6.ForeColor = Color.Black
+            ListBox1.BackColor = Color.FromArgb(238, 238, 242)
+            ListBox1.ForeColor = Color.Black
             NumericUpDown1.BackColor = Color.FromArgb(238, 238, 242)
             NumericUpDown1.ForeColor = Color.Black
             GroupBox1.ForeColor = Color.Black
