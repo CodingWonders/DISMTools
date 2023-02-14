@@ -165,6 +165,7 @@ Partial Class MainForm
         Me.ToolStripSeparator16 = New System.Windows.Forms.ToolStripSeparator()
         Me.UnattendedAnswerFileManagerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ReportManagerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MountedImageManagerTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -302,6 +303,11 @@ Partial Class MainForm
         Me.ImgProcesses = New System.Diagnostics.Process()
         Me.LocalMountDirFBD = New System.Windows.Forms.FolderBrowserDialog()
         Me.MountedImageDetectorBW = New System.ComponentModel.BackgroundWorker()
+        Me.ImgUMountPopupCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.CommitAndUnmountTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DiscardAndUnmountTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator20 = New System.Windows.Forms.ToolStripSeparator()
+        Me.UnmountSettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -343,6 +349,7 @@ Partial Class MainForm
         Me.StatusStrip.SuspendLayout()
         Me.PkgInfoCMS.SuspendLayout()
         Me.FeatureInfoCMS.SuspendLayout()
+        Me.ImgUMountPopupCMS.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
@@ -1138,7 +1145,7 @@ Partial Class MainForm
         '
         'ToolsToolStripMenuItem
         '
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImageConversionToolStripMenuItem, Me.ToolStripSeparator12, Me.MergeSWM, Me.ToolStripSeparator18, Me.RemountImageWithWritePermissionsToolStripMenuItem, Me.ToolStripSeparator13, Me.CommandShellToolStripMenuItem, Me.ToolStripSeparator16, Me.UnattendedAnswerFileManagerToolStripMenuItem, Me.ReportManagerToolStripMenuItem, Me.ToolStripSeparator9, Me.OptionsToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImageConversionToolStripMenuItem, Me.ToolStripSeparator12, Me.MergeSWM, Me.ToolStripSeparator18, Me.RemountImageWithWritePermissionsToolStripMenuItem, Me.ToolStripSeparator13, Me.CommandShellToolStripMenuItem, Me.ToolStripSeparator16, Me.UnattendedAnswerFileManagerToolStripMenuItem, Me.ReportManagerToolStripMenuItem, Me.MountedImageManagerTSMI, Me.ToolStripSeparator9, Me.OptionsToolStripMenuItem})
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(46, 20)
         Me.ToolsToolStripMenuItem.Text = "&Tools"
@@ -1206,6 +1213,12 @@ Partial Class MainForm
         Me.ReportManagerToolStripMenuItem.Name = "ReportManagerToolStripMenuItem"
         Me.ReportManagerToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
         Me.ReportManagerToolStripMenuItem.Text = "Report manager"
+        '
+        'MountedImageManagerTSMI
+        '
+        Me.MountedImageManagerTSMI.Name = "MountedImageManagerTSMI"
+        Me.MountedImageManagerTSMI.Size = New System.Drawing.Size(280, 22)
+        Me.MountedImageManagerTSMI.Text = "Mounted image manager"
         '
         'ToolStripSeparator9
         '
@@ -2602,6 +2615,36 @@ Partial Class MainForm
         '
         Me.MountedImageDetectorBW.WorkerSupportsCancellation = True
         '
+        'ImgUMountPopupCMS
+        '
+        Me.ImgUMountPopupCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CommitAndUnmountTSMI, Me.DiscardAndUnmountTSMI, Me.ToolStripSeparator20, Me.UnmountSettingsToolStripMenuItem})
+        Me.ImgUMountPopupCMS.Name = "ImgUMountPopupCMS"
+        Me.ImgUMountPopupCMS.ShowImageMargin = False
+        Me.ImgUMountPopupCMS.Size = New System.Drawing.Size(253, 98)
+        '
+        'CommitAndUnmountTSMI
+        '
+        Me.CommitAndUnmountTSMI.Name = "CommitAndUnmountTSMI"
+        Me.CommitAndUnmountTSMI.Size = New System.Drawing.Size(252, 22)
+        Me.CommitAndUnmountTSMI.Text = "Commit changes and unmount image"
+        '
+        'DiscardAndUnmountTSMI
+        '
+        Me.DiscardAndUnmountTSMI.Name = "DiscardAndUnmountTSMI"
+        Me.DiscardAndUnmountTSMI.Size = New System.Drawing.Size(252, 22)
+        Me.DiscardAndUnmountTSMI.Text = "Discard changes and unmount image"
+        '
+        'ToolStripSeparator20
+        '
+        Me.ToolStripSeparator20.Name = "ToolStripSeparator20"
+        Me.ToolStripSeparator20.Size = New System.Drawing.Size(249, 6)
+        '
+        'UnmountSettingsToolStripMenuItem
+        '
+        Me.UnmountSettingsToolStripMenuItem.Name = "UnmountSettingsToolStripMenuItem"
+        Me.UnmountSettingsToolStripMenuItem.Size = New System.Drawing.Size(252, 22)
+        Me.UnmountSettingsToolStripMenuItem.Text = "Unmount settings..."
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -2672,6 +2715,7 @@ Partial Class MainForm
         Me.StatusStrip.PerformLayout()
         Me.PkgInfoCMS.ResumeLayout(False)
         Me.FeatureInfoCMS.ResumeLayout(False)
+        Me.ImgUMountPopupCMS.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -2954,4 +2998,10 @@ Partial Class MainForm
     Friend WithEvents LinkLabel3 As System.Windows.Forms.LinkLabel
     Friend WithEvents LocalMountDirFBD As System.Windows.Forms.FolderBrowserDialog
     Friend WithEvents MountedImageDetectorBW As System.ComponentModel.BackgroundWorker
+    Friend WithEvents MountedImageManagerTSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ImgUMountPopupCMS As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents CommitAndUnmountTSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents DiscardAndUnmountTSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator20 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents UnmountSettingsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class
