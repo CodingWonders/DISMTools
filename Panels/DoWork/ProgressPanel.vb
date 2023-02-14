@@ -2995,7 +2995,7 @@ Public Class ProgressPanel
                                    "  dism /mount-image /imagefile:" & Quote & imgIndexDeletionSourceImg & Quote & " /index:<preferred index> /mountdir:<preferred mountpoint>")
                 If imgIndexDeletionUnmount Then
                     ' Detect mounted images if the program needed to unmount the source image
-                    MainForm.DetectMountedImages(False, True, True)
+                    MainForm.DetectMountedImages(False)
                     If UMountLocalDir Then
                         MainForm.UpdateProjProperties(False, False)
                         MainForm.MountDir = "N/A"
@@ -3011,7 +3011,7 @@ Public Class ProgressPanel
                 MainForm.SourceImg = SourceImg
                 MainForm.ImgIndex = ImgIndex
                 MainForm.MountDir = MountDir
-                MainForm.DetectMountedImages(False, True, True)
+                MainForm.DetectMountedImages(False)
                 If isReadOnly Then
                     MainForm.UpdateProjProperties(True, True)
                 Else
@@ -3020,7 +3020,7 @@ Public Class ProgressPanel
                 ' This is a crucial change, so save things immediately
                 MainForm.SaveDTProj()
             ElseIf OperationNum = 18 Then
-                MainForm.DetectMountedImages(False, False, True)
+                MainForm.DetectMountedImages(False)
                 If MainForm.isProjectLoaded Then
                     If ProjProperties.Visible Then
                         isTriggeredByPropertyDialog = True
@@ -3048,7 +3048,7 @@ Public Class ProgressPanel
                         MainForm.imgCommitOperation = -1    ' Let program close on later occassions
                     End If
                 End If
-                MainForm.DetectMountedImages(False, True, True)
+                MainForm.DetectMountedImages(False)
             ElseIf OperationNum = 26 Then
                 MainForm.UpdateProjProperties(True, False)
                 AddPackageReport.Label4.Text = MountDir
