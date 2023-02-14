@@ -57,6 +57,9 @@
     <ApplicationIcon>logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Dism, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5bba90053b345501, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Dism.2.5.2\lib\net40\Microsoft.Dism.dll</HintPath>
+    </Reference>
     <Reference Include="ScintillaNET, Version=3.6.3.0, Culture=neutral, PublicKeyToken=d42c48f11a620156, processorArchitecture=MSIL">
       <HintPath>packages\jacobslusser.ScintillaNET.Signed.3.6.3\lib\net40\ScintillaNET.dll</HintPath>
     </Reference>
@@ -243,6 +246,12 @@
       <DependentUpon>ImgSwmToWim.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\Img_Ops\Merger\ImgSwmToWim.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\MountedImgMgr.Designer.vb">
+      <DependentUpon>MountedImgMgr.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\MountedImgMgr.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Img_Ops\Pkgs\AddPackage.Designer.vb">
@@ -478,6 +487,9 @@
     <EmbeddedResource Include="Panels\Img_Ops\Merger\ImgSwmToWim.resx">
       <DependentUpon>ImgSwmToWim.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\MountedImgMgr.resx">
+      <DependentUpon>MountedImgMgr.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Pkgs\AddPackage.resx">
       <DependentUpon>AddPackage.vb</DependentUpon>
     </EmbeddedResource>
@@ -640,6 +652,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo.ico" />
+    <None Include="Resources\copytoclip.png" />
+    <None Include="Resources\preview_light.png" />
+    <None Include="Resources\preview_dark.png" />
     <None Include="Resources\delete_imgindex.png" />
     <None Include="Resources\menus\wordwrap_dark.png" />
     <None Include="Resources\menus\wordwrap.png" />
@@ -859,6 +874,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
     <PostBuildEvent>SET DELETELOGDIR="Yes"
+SET ISPREVIEW="Yes"
 ECHO Generating program structure...
 IF NOT EXIST bin (
 	md bin
@@ -887,6 +903,9 @@ IF NOT EXIST logs (
 		echo A log directory already exists
 		echo If you want to delete log files, set the DELETELOGDIR post-build variable to "Yes"
 	)
+)
+IF %25ISPREVIEW%25=="Yes" (
+	echo You will be running a preview release, which may not be ready for production. You may experience more bugs and less stability. Please switch to a stable release whenever possible.
 )</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
