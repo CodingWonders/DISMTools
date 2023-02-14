@@ -52,7 +52,7 @@ Public Class NewUnattendWiz
     Dim PasswordExpiry As Boolean
     Dim JoinCeip As Boolean
 
-    Private Sub NewUnattendWiz_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Sub InitScintilla(fntName As String, fntSize As Integer)
         ' Initialize Scintilla editor
         Scintilla1.StyleResetDefault()
         ' Use VS's selection color, as I find it the most natural
@@ -61,8 +61,8 @@ Public Class NewUnattendWiz
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Scintilla1.SetSelectionBackColor(True, Color.FromArgb(153, 201, 239))
         End If
-        Scintilla1.Styles(Style.Default).Font = "Courier New"
-        Scintilla1.Styles(Style.Default).Size = 10
+        Scintilla1.Styles(Style.Default).Font = fntName
+        Scintilla1.Styles(Style.Default).Size = fntSize
 
         ' Set background and foreground colors (from Visual Studio)
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
@@ -166,13 +166,15 @@ Public Class NewUnattendWiz
 
         ' Enable folding
         Scintilla1.AutomaticFold = (AutomaticFold.Show Or AutomaticFold.Click Or AutomaticFold.Show)
+    End Sub
 
+    Private Sub NewUnattendWiz_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Fill in font combinations
         ToolStripComboBox1.Items.Clear()
         For Each fntFamily As FontFamily In FontFamily.Families
             ToolStripComboBox1.Items.Add(fntFamily.Name)
         Next
-
+        InitScintilla("Courier New", 10)
         StepsTreeView.ExpandAll()
     End Sub
 
@@ -2128,8 +2130,7 @@ Public Class NewUnattendWiz
 
     Private Sub FontChange(sender As Object, e As EventArgs) Handles ToolStripComboBox1.SelectedIndexChanged, ToolStripComboBox2.SelectedIndexChanged
         ' Change Scintilla editor font
-        Scintilla1.Styles(Style.Default).Font = ToolStripComboBox1.SelectedItem
-        Scintilla1.Styles(Style.Default).Size = ToolStripComboBox2.SelectedItem
+        InitScintilla(ToolStripComboBox1.SelectedItem, ToolStripComboBox2.SelectedItem)
     End Sub
 
     Private Sub ProductKeyChanged(sender As Object, e As EventArgs) Handles KeyInputBox1.TextChanged, KeyInputBox2.TextChanged, KeyInputBox3.TextChanged, KeyInputBox4.TextChanged, KeyInputBox5.TextChanged
@@ -2188,6 +2189,20 @@ Public Class NewUnattendWiz
             Next_Button.Enabled = False
         Else
             Next_Button.Enabled = True
+        End If
+    End Sub
+
+    Private Sub KeyCopyButton_Click(sender As Object, e As EventArgs) Handles KeyCopyButton.Click
+        If KeyString.Length >= 29 Then
+            Dim data As New DataObject()
+            data.SetText(KeyString, TextDataFormat.Text)
+            Clipboard.SetDataObject(data, True)
+            Dim notify As New NotifyIcon()
+            notify.Visible = True
+            notify.Icon = MainForm.Icon
+            notify.BalloonTipText = "To paste this key in a virtual machine, use the keyboard shortcut provided by the VM solution"
+            notify.BalloonTipTitle = "The key has been copied to the clipboard"
+            notify.ShowBalloonTip(3000)
         End If
     End Sub
 End Class

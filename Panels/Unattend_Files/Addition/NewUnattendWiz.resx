@@ -117,11 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Label82.Text" xml:space="preserve">
-    <value>The unattended answer file can make the first account more secure and, if you store important data, more private if you share the target system with multiple people.
-
-Please configure the necessary account security options and click Next:</value>
-  </data>
   <data name="Label5.Text" xml:space="preserve">
     <value>The creation wizard is still being worked on. This means that the creation process may not work as expected.
 
@@ -181,14 +176,16 @@ In addition, some Windows features may not work when this option is checked. Be 
 - A wireless network is available and detected
 - A wireless network has not been already established previously</value>
   </data>
+  <data name="Label82.Text" xml:space="preserve">
+    <value>The unattended answer file can make the first account more secure and, if you store important data, more private if you share the target system with multiple people.
+
+Please configure the necessary account security options and click Next:</value>
+  </data>
   <data name="Label86.Text" xml:space="preserve">
     <value>Joining the Customer Experience Improvement Program (CEIP) will let Microsoft improve Windows. Depending on the target OS, Microsoft will collect more or less information; so this option is unchecked by default.
 
 What do you want to do?</value>
   </data>
-  <metadata name="ToolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
   <metadata name="ToolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
