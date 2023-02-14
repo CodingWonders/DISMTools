@@ -4,6 +4,7 @@ Imports System.Threading
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.Text.Encoding
 Imports Microsoft.Win32
+Imports Microsoft.Dism
 
 Public Class MainForm
 
@@ -102,7 +103,7 @@ Public Class MainForm
     Public isSqlServerDTProj As Boolean
 
     ' Set branch name and codenames
-    Public dtBranch As String = "stable"
+    Public dtBranch As String = "dt_preview"
 
     ' Arrays and other variables used on background processes
     Public imgPackageNames(65535) As String
@@ -156,6 +157,8 @@ Public Class MainForm
     Dim MountedImageImgFileList As New List(Of String)
     Dim MountedImageImgIndexList As New List(Of String)
     Dim MountedImageMountDirList As New List(Of String)
+    Dim MountedImageImgStatusList As New List(Of String)
+    Dim MountedImageReWrList As New List(Of String)
 
     ' Perform image unmount operations when pressing on buttons
     Public imgCommitOperation As Integer = -1 ' 0: commit; 1: discard
@@ -163,10 +166,15 @@ Public Class MainForm
     Dim DismVersionChecker As FileVersionInfo
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ' I once tested this on a computer which didn't require me to ask for admin privileges. This is a requirement of DISM. Check this
+        If Not My.User.IsInRole(ApplicationServices.BuiltInRole.Administrator) Then
+            MsgBox("This program must be run as an administrator." & CrLf & "There are certain software configurations in which Windows will run this program without admin privileges, so you must ask for them manually." & CrLf & CrLf & "Right-click the executable, and select " & Quote & "Run as administrator" & Quote, vbOKOnly + vbCritical, "DISMTools")
+            Environment.Exit(1)
+        End If
         Debug.WriteLine("DISMTools, version " & My.Application.Info.Version.ToString() & " (" & dtBranch & ")" & CrLf & _
                         "Loading program settings..." & CrLf)
         ' Detect mounted images
-        DetectMountedImages(True, True, True)
+        DetectMountedImages(True)
         Debug.WriteLine(CrLf & "Finished detecting mounted images. Continuing program startup..." & CrLf)
         Control.CheckForIllegalCrossThreadCalls = False
         BranchTSMI.Text = dtBranch
@@ -185,172 +193,40 @@ Public Class MainForm
     End Sub
 
     ''' <summary>
-    ''' Detects all mounted images and their state. Calls dism /English /get-mountedimageinfo at program startup
+    ''' Detects all mounted images and their state. Calls the DISM API at program startup
     ''' </summary>
+    ''' <param name="DebugLog">Check if the program should output debug information. This is always called at program startup, but never after</param>
     ''' <remarks>This yields results for the MountedImageImgFiles, MountedImageMountDirs, MountedImageImgIndexes, MountedImageMountedRewr and MountedImageImgStatuses string arrays in code</remarks>
-    Sub DetectMountedImages(DebugLog As Boolean, DeleteTempInfo As Boolean, GetAdditionalInfo As Boolean)
-        If MountedImageImgFileList IsNot Nothing And MountedImageImgIndexList IsNot Nothing And MountedImageMountDirList IsNot Nothing Then
+    Sub DetectMountedImages(DebugLog As Boolean)
+        If DebugLog Then Debug.WriteLine("[DetectMountedImages] Running function...")
+        If MountedImageImgFileList IsNot Nothing And MountedImageImgIndexList IsNot Nothing And MountedImageMountDirList IsNot Nothing And MountedImageImgStatuses IsNot Nothing And MountedImageMountedReWr IsNot Nothing Then
             MountedImageImgFileList.Clear()
             MountedImageImgIndexList.Clear()
             MountedImageMountDirList.Clear()
+            MountedImageImgStatusList.Clear()
+            MountedImageReWrList.Clear()
         End If
-        If GetAdditionalInfo Then
-            Directory.CreateDirectory(".\tempinfo").Attributes = FileAttributes.Hidden
-            If DebugLog Then Debug.WriteLine("[DetectMountedImages] Running function...")
-            If DebugLog Then Debug.WriteLine("[DetectMountedImages] Determining whether there are mounted images...")
-            ' Write getter script to determine number of mounted images
-            Try
-                File.WriteAllText(".\bin\exthelpers\imgnums.bat", _
-                                  "@echo off" & CrLf & _
-                                  "dism /English /get-mountedimageinfo | find /c " & Quote & "Image File : " & Quote & " > .\tempinfo\imgcount", _
-                                  ASCII)
-            Catch ex As Exception
-                Debug.WriteLine("[DetectMountedImages] Failed writing getter scripts. Reason: " & ex.Message)
-                If DeleteTempInfo Then Directory.Delete(".\tempinfo", True)
-                Exit Sub
-            End Try
-            ' Initialize process
-            Dim MountedImgProc As New Process()
-            MountedImgProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
-            MountedImgProc.StartInfo.Arguments = "/c " & Directory.GetCurrentDirectory() & "\bin\exthelpers\imgnums.bat"
-            MountedImgProc.StartInfo.CreateNoWindow = True
-            MountedImgProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-            MountedImgProc.Start()
-            Do Until MountedImgProc.HasExited
-                If MountedImgProc.HasExited Then
-                    Exit Do
-                End If
-            Loop
-            ' Get number of mounted images
-            File.Delete(".\bin\exthelpers\imgnums.bat")
-            If MountedImgProc.ExitCode = 0 Then
-                Dim imgCount As Integer = CInt(My.Computer.FileSystem.ReadAllText(".\tempinfo\imgcount"))
-                File.Delete(".\tempinfo\imgcount")
-                If imgCount = 0 Then
-                    If DebugLog Then Debug.WriteLine("[DetectMountedImages] There are no mounted images. Exiting function...")
-                    If DeleteTempInfo Then Directory.Delete(".\tempinfo", True)
-                    ' Keep the "exthelpers" folder in case background processes need to be run again
-                    If DeleteTempInfo Then
-                        For Each TempFile In My.Computer.FileSystem.GetFiles(".\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly)
-                            File.Delete(TempFile)
-                        Next
-                    End If
-                    Exit Sub
-                End If
-            End If
-            ' Write other getter scripts
-            If DebugLog Then Debug.WriteLine("[DetectMountedImages] Writing getter scripts...")
-            Try
-                File.WriteAllText(".\bin\exthelpers\imgmountedrw.bat", _
-                                  "@echo off" & CrLf & _
-                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mounted Read/Write : " & Quote & " > .\tempinfo\imgmountedrw", _
-                                  ASCII)
-                File.WriteAllText(".\bin\exthelpers\imgstatus.bat", _
-                                  "@echo off" & CrLf & _
-                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status : " & Quote & " > .\tempinfo\imgstatus", _
-                                  ASCII)
-            Catch ex As Exception
-                Debug.WriteLine("[DetectMountedImages] Failed writing getter scripts. Reason: " & ex.Message)
-                If DeleteTempInfo Then Directory.Delete(".\tempinfo", True)
-                ' Keep the "exthelpers" folder in case background processes need to be run again
-                If DeleteTempInfo Then
-                    For Each TempFile In My.Computer.FileSystem.GetFiles(".\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly)
-                        File.Delete(TempFile)
-                    Next
-                End If
-                Exit Sub
-            End Try
-            If DebugLog Then Debug.WriteLine("[DetectMountedImages] Finished writing getter scripts. Executing them...")
-            For Each imgScript In My.Computer.FileSystem.GetFiles(".\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly, "*.bat")
-                If Path.GetFileName(imgScript).StartsWith("img") Then
-                    If DebugLog Then Debug.WriteLine("[DetectMountedImages] RunCommand -> " & Path.GetFileName(imgScript))
-                    MountedImgProc.StartInfo.Arguments = "/c " & imgScript
-                    MountedImgProc.Start()
-                    Do Until MountedImgProc.HasExited
-                        If MountedImgProc.HasExited Then
-                            Exit Do
-                        End If
-                    Loop
-                    If MountedImgProc.ExitCode = 0 Then
-                        Continue For
-                    End If
-                Else
-                    Continue For
-                End If
-            Next
-            If DebugLog Then Debug.WriteLine("[DetectMountedImages] Finished running getter scripts. Filling arrays...")
-            Dim FileGetterRTB As New RichTextBox()
-            Dim TypeLookups() As String = New String(4) {"Mount Dir : ", "Image File : ", "Image Index : ", "Mounted Read/Write : ", "Status : "}
-            Dim lineToAppend As String = ""
-            For Each imgFile In My.Computer.FileSystem.GetFiles(".\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
-                If Path.GetFileName(imgFile).StartsWith("img") Then
-                    If DebugLog Then Debug.WriteLine("[DetectMountedImages] FillArray -> (values_from: " & Path.GetFileName(imgFile) & ")")
-                    FileGetterRTB.Clear()
-                    FileGetterRTB.Text = My.Computer.FileSystem.ReadAllText(imgFile)
-                    For x = 0 To FileGetterRTB.Lines.Count - 1
-                        If FileGetterRTB.Lines(x) = "" Then
-                            Continue For
-                        Else
-                            If FileGetterRTB.Lines(x).StartsWith(TypeLookups(0)) Then
-                                lineToAppend = FileGetterRTB.Lines(x).Replace("Mount Dir : ", "").Trim()
-                                If lineToAppend = "" Then lineToAppend = "Nothing"
-                                MountedImageMountDirs(x) = lineToAppend
-                            ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(1)) Then
-                                lineToAppend = FileGetterRTB.Lines(x).Replace("Image File : ", "").Trim()
-                                If lineToAppend = "" Then lineToAppend = "Nothing"
-                                MountedImageImgFiles(x) = lineToAppend
-                            ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(2)) Then
-                                lineToAppend = FileGetterRTB.Lines(x).Replace("Image Index : ", "").Trim()
-                                If lineToAppend = "" Then lineToAppend = "Nothing"
-                                MountedImageImgIndexes(x) = lineToAppend
-                            ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(3)) Then
-                                lineToAppend = FileGetterRTB.Lines(x).Replace("Mounted Read/Write : ", "").Trim()
-                                If lineToAppend = "" Then lineToAppend = "Nothing"
-                                MountedImageMountedReWr(x) = lineToAppend
-                            ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(4)) Then
-                                lineToAppend = FileGetterRTB.Lines(x).Replace("Status : ", "").Trim()
-                                If lineToAppend = "" Then lineToAppend = "Nothing"
-                                MountedImageImgStatuses(x) = lineToAppend
-                            End If
-                        End If
-                    Next
-                Else
-                    Continue For
-                End If
-            Next
-            Try
-                If DeleteTempInfo Then Directory.Delete(".\tempinfo", True)
-                ' Keep the "exthelpers" folder in case background processes need to be run again
-                If DeleteTempInfo Then
-                    For Each TempFile In My.Computer.FileSystem.GetFiles(".\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly)
-                        File.Delete(TempFile)
-                    Next
-                End If
-            Catch ex As Exception
-                Debug.WriteLine("[DetectMountedImages] Could not delete temporary files. Reason: " & ex.Message)
-            End Try
-        End If
-        Const REGISTRY_ROOT As String = "SOFTWARE\Microsoft\WIMMount\Mounted Images"
-        If DebugLog Then Debug.WriteLine("[DetectMountedImages] Getting additional information from registry key " & Quote & REGISTRY_ROOT & Quote & "...")
-        Using imgRegistry As RegistryKey = Registry.LocalMachine.OpenSubKey(REGISTRY_ROOT)
-            If imgRegistry IsNot Nothing Then
-                For Each key In imgRegistry.GetSubKeyNames()
-                    If DebugLog Then Debug.WriteLine("[DetectMountedImages] Getting information from image... (GUID: " & key & ")")
-                    Dim MountedWim As RegistryKey = Registry.LocalMachine.OpenSubKey(REGISTRY_ROOT & "\" & key)
-                    If DebugLog Then Debug.WriteLine("  Image file : " & MountedWim.GetValue("WIM Path").ToString())
-                    If DebugLog Then Debug.WriteLine("  Image index : " & MountedWim.GetValue("Image Index").ToString())
-                    If DebugLog Then Debug.WriteLine("  Mount directory : " & MountedWim.GetValue("Mount Path").ToString())
-                    MountedImageImgFileList.Add(MountedWim.GetValue("WIM Path").ToString())
-                    MountedImageImgIndexList.Add(MountedWim.GetValue("Image Index").ToString())
-                    MountedImageMountDirList.Add(MountedWim.GetValue("Mount Path").ToString())
-                    MountedWim.Close()
-                Next
-                imgRegistry.Close()
-            End If
-        End Using
+        DismApi.Initialize(DismLogLevel.LogErrors)
+        Dim MountedImgs As DismMountedImageInfoCollection = DismApi.GetMountedImages()
+        For Each imageInfo As DismMountedImageInfo In MountedImgs
+            If DebugLog Then Debug.WriteLine("- Image file : " & imageInfo.ImageFilePath)
+            If DebugLog Then Debug.WriteLine("- Image index : " & imageInfo.ImageIndex)
+            If DebugLog Then Debug.WriteLine("- Mount directory : " & imageInfo.MountPath)
+            If DebugLog Then Debug.WriteLine("- Mount status : " & imageInfo.MountStatus & If(imageInfo.MountStatus = DismMountStatus.Ok, " (OK)", If(imageInfo.MountStatus = DismMountStatus.NeedsRemount, " (Orphaned)", " (Invalid)")))
+            If DebugLog Then Debug.WriteLine("- Mount mode : " & imageInfo.MountMode & If(imageInfo.MountMode = DismMountMode.ReadWrite, " (Write permissions enabled)", "(Write permissions disabled)"))
+            If DebugLog Then Debug.WriteLineIf(MountedImgs.Count > 1, "---------------------------------------------------")
+            MountedImageImgFileList.Add(imageInfo.ImageFilePath)
+            MountedImageImgIndexList.Add(imageInfo.ImageIndex)
+            MountedImageMountDirList.Add(imageInfo.MountPath)
+            MountedImageImgStatusList.Add(imageInfo.MountStatus)
+            MountedImageReWrList.Add(imageInfo.MountMode)
+        Next
+        DismApi.Shutdown()
         MountedImageImgFiles = MountedImageImgFileList.ToArray()
         MountedImageImgIndexes = MountedImageImgIndexList.ToArray()
         MountedImageMountDirs = MountedImageMountDirList.ToArray()
+        MountedImageImgStatuses = MountedImageImgStatusList.ToArray()
+        MountedImageMountedReWr = MountedImageReWrList.ToArray()
     End Sub
 
     Sub ChangeImgStatus()
@@ -2291,8 +2167,10 @@ Public Class MainForm
                         ToolStrip2.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         FeatureInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                        ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         PkgInfoCMS.ForeColor = Color.White
                         FeatureInfoCMS.ForeColor = Color.White
+                        ImgUMountPopupCMS.ForeColor = Color.White
                         InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph_dark)
                         BranchTSMI.Image = New Bitmap(My.Resources.branch_dark)
                     ElseIf ColorMode = "1" Then
@@ -2379,8 +2257,10 @@ Public Class MainForm
                         ToolStrip2.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         FeatureInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                        ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         PkgInfoCMS.ForeColor = Color.Black
                         FeatureInfoCMS.ForeColor = Color.Black
+                        ImgUMountPopupCMS.ForeColor = Color.Black
                         InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph)
                         BranchTSMI.Image = New Bitmap(My.Resources.branch)
                     End If
@@ -2471,8 +2351,10 @@ Public Class MainForm
                 ToolStrip2.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 FeatureInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 PkgInfoCMS.ForeColor = Color.Black
                 FeatureInfoCMS.ForeColor = Color.Black
+                ImgUMountPopupCMS.ForeColor = Color.Black
                 InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph)
                 BranchTSMI.Image = New Bitmap(My.Resources.branch)
             Case 2
@@ -2559,8 +2441,10 @@ Public Class MainForm
                 ToolStrip2.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 FeatureInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 PkgInfoCMS.ForeColor = Color.White
                 FeatureInfoCMS.ForeColor = Color.White
+                ImgUMountPopupCMS.ForeColor = Color.White
                 InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph_dark)
                 BranchTSMI.Image = New Bitmap(My.Resources.branch_dark)
         End Select
@@ -3717,15 +3601,19 @@ Public Class MainForm
                 Case 16
                     MenuDesc.Text = "Lets you manage project reports"
                 Case 17
-                    MenuDesc.Text = "Configures settings for the program"
+                    MenuDesc.Text = "Shows an overview of the mounted images"
                 Case 18
-                    MenuDesc.Text = "Opens the help topics for this program"
+                    MenuDesc.Text = "Configures settings for the program"
                 Case 19
-                    MenuDesc.Text = "Opens the glossary, if you don't understand a concept"
+                    MenuDesc.Text = "Opens the help topics for this program"
                 Case 20
-                    MenuDesc.Text = "Shows the Command Help, letting you use commands to perform the same actions"
+                    MenuDesc.Text = "Opens the glossary, if you don't understand a concept"
                 Case 21
+                    MenuDesc.Text = "Shows the Command Help, letting you use commands to perform the same actions"
+                Case 22
                     MenuDesc.Text = "Shows program information"
+                Case 23
+                    MenuDesc.Text = "Lets you report feedback through a new GitHub issue (a GitHub account is needed)"
             End Select
         End If
     End Sub
@@ -3782,7 +3670,7 @@ Public Class MainForm
         ShowChildDescs(True, 1)
     End Sub
 
-    Private Sub HideChildDescsTrigger(sender As Object, e As EventArgs) Handles AppendImage.MouseLeave, ApplyFFU.MouseLeave, ApplyImage.MouseLeave, CaptureCustomImage.MouseLeave, CaptureFFU.MouseLeave, CaptureImage.MouseLeave, CleanupMountpoints.MouseLeave, CommitImage.MouseLeave, DeleteImage.MouseLeave, ExportImage.MouseLeave, GetImageInfo.MouseLeave, GetMountedImageInfo.MouseLeave, GetWIMBootEntry.MouseLeave, ListImage.MouseLeave, MountImage.MouseLeave, OptimizeFFU.MouseLeave, OptimizeImage.MouseLeave, RemountImage.MouseLeave, SplitFFU.MouseLeave, SplitImage.MouseLeave, UnmountImage.MouseLeave, UpdateWIMBootEntry.MouseLeave, ApplySiloedPackage.MouseLeave, GetPackages.MouseLeave, GetPackageInfo.MouseLeave, AddPackage.MouseLeave, RemovePackage.MouseLeave, GetFeatures.MouseLeave, GetFeatureInfo.MouseLeave, EnableFeature.MouseLeave, DisableFeature.MouseLeave, CleanupImage.MouseLeave, AddProvisionedAppxPackage.MouseLeave, GetProvisioningPackageInfo.MouseLeave, ApplyCustomDataImage.MouseLeave, GetProvisionedAppxPackages.MouseLeave, AddProvisionedAppxPackage.MouseLeave, RemoveProvisionedAppxPackage.MouseLeave, OptimizeProvisionedAppxPackages.MouseLeave, SetProvisionedAppxDataFile.MouseLeave, CheckAppPatch.MouseLeave, GetAppPatchInfo.MouseLeave, GetAppPatches.MouseLeave, GetAppInfo.MouseLeave, GetApps.MouseLeave, ExportDefaultAppAssociations.MouseLeave, GetDefaultAppAssociations.MouseLeave, ImportDefaultAppAssociations.MouseLeave, RemoveDefaultAppAssociations.MouseLeave, GetIntl.MouseLeave, SetUILangFallback.MouseLeave, SetSysUILang.MouseLeave, SetSysLocale.MouseLeave, SetUserLocale.MouseLeave, SetInputLocale.MouseLeave, SetAllIntl.MouseLeave, SetTimeZone.MouseLeave, SetSKUIntlDefaults.MouseLeave, SetLayeredDriver.MouseLeave, GenLangINI.MouseLeave, SetSetupUILang.MouseLeave, AddCapability.MouseLeave, ExportSource.MouseLeave, GetCapabilities.MouseLeave, GetCapabilityInfo.MouseLeave, RemoveCapability.MouseLeave, GetCurrentEdition.MouseLeave, GetTargetEditions.MouseLeave, SetEdition.MouseLeave, SetProductKey.MouseLeave, GetDrivers.MouseLeave, GetDriverInfo.MouseLeave, AddDriver.MouseLeave, RemoveDriver.MouseLeave, ExportDriver.MouseLeave, ApplyUnattend.MouseLeave, GetPESettings.MouseLeave, GetTargetPath.MouseLeave, GetScratchSpace.MouseLeave, SetScratchSpace.MouseLeave, SetTargetPath.MouseLeave, GetOSUninstallWindow.MouseLeave, InitiateOSUninstall.MouseLeave, RemoveOSUninstall.MouseLeave, SetOSUninstallWindow.MouseLeave, SetReservedStorageState.MouseLeave, GetReservedStorageState.MouseLeave, NewProjectToolStripMenuItem.MouseLeave, OpenExistingProjectToolStripMenuItem.MouseLeave, SaveProjectToolStripMenuItem.MouseLeave, SaveProjectasToolStripMenuItem.MouseLeave, ExitToolStripMenuItem.MouseLeave, ViewProjectFilesInFileExplorerToolStripMenuItem.MouseLeave, UnloadProjectToolStripMenuItem.MouseLeave, SwitchImageIndexesToolStripMenuItem.MouseLeave, ProjectPropertiesToolStripMenuItem.MouseLeave, ImagePropertiesToolStripMenuItem.MouseLeave, ImageManagementToolStripMenuItem.MouseLeave, OSPackagesToolStripMenuItem.MouseLeave, ProvisioningPackagesToolStripMenuItem.MouseLeave, AppPackagesToolStripMenuItem.MouseLeave, AppPatchesToolStripMenuItem.MouseLeave, DefaultAppAssociationsToolStripMenuItem.MouseLeave, LanguagesAndRegionSettingsToolStripMenuItem.MouseLeave, CapabilitiesToolStripMenuItem.MouseLeave, WindowsEditionsToolStripMenuItem.MouseLeave, DriversToolStripMenuItem.MouseLeave, UnattendedAnswerFilesToolStripMenuItem.MouseLeave, WindowsPEServicingToolStripMenuItem.MouseLeave, OSUninstallToolStripMenuItem.MouseLeave, ReservedStorageToolStripMenuItem.MouseLeave, ImageConversionToolStripMenuItem.MouseLeave, WIMESDToolStripMenuItem.MouseLeave, RemountImageWithWritePermissionsToolStripMenuItem.MouseLeave, CommandShellToolStripMenuItem.MouseLeave, OptionsToolStripMenuItem.MouseLeave, HelpTopicsToolStripMenuItem.MouseLeave, GlossaryToolStripMenuItem.MouseLeave, CommandHelpToolStripMenuItem.MouseLeave, AboutDISMToolsToolStripMenuItem.MouseLeave, UnattendedAnswerFileManagerToolStripMenuItem.MouseLeave, AddEdge.MouseLeave, AddEdgeBrowser.MouseLeave, AddEdgeWebView.MouseLeave, ReportManagerToolStripMenuItem.MouseLeave, MergeSWM.MouseLeave
+    Private Sub HideChildDescsTrigger(sender As Object, e As EventArgs) Handles AppendImage.MouseLeave, ApplyFFU.MouseLeave, ApplyImage.MouseLeave, CaptureCustomImage.MouseLeave, CaptureFFU.MouseLeave, CaptureImage.MouseLeave, CleanupMountpoints.MouseLeave, CommitImage.MouseLeave, DeleteImage.MouseLeave, ExportImage.MouseLeave, GetImageInfo.MouseLeave, GetMountedImageInfo.MouseLeave, GetWIMBootEntry.MouseLeave, ListImage.MouseLeave, MountImage.MouseLeave, OptimizeFFU.MouseLeave, OptimizeImage.MouseLeave, RemountImage.MouseLeave, SplitFFU.MouseLeave, SplitImage.MouseLeave, UnmountImage.MouseLeave, UpdateWIMBootEntry.MouseLeave, ApplySiloedPackage.MouseLeave, GetPackages.MouseLeave, GetPackageInfo.MouseLeave, AddPackage.MouseLeave, RemovePackage.MouseLeave, GetFeatures.MouseLeave, GetFeatureInfo.MouseLeave, EnableFeature.MouseLeave, DisableFeature.MouseLeave, CleanupImage.MouseLeave, AddProvisionedAppxPackage.MouseLeave, GetProvisioningPackageInfo.MouseLeave, ApplyCustomDataImage.MouseLeave, GetProvisionedAppxPackages.MouseLeave, AddProvisionedAppxPackage.MouseLeave, RemoveProvisionedAppxPackage.MouseLeave, OptimizeProvisionedAppxPackages.MouseLeave, SetProvisionedAppxDataFile.MouseLeave, CheckAppPatch.MouseLeave, GetAppPatchInfo.MouseLeave, GetAppPatches.MouseLeave, GetAppInfo.MouseLeave, GetApps.MouseLeave, ExportDefaultAppAssociations.MouseLeave, GetDefaultAppAssociations.MouseLeave, ImportDefaultAppAssociations.MouseLeave, RemoveDefaultAppAssociations.MouseLeave, GetIntl.MouseLeave, SetUILangFallback.MouseLeave, SetSysUILang.MouseLeave, SetSysLocale.MouseLeave, SetUserLocale.MouseLeave, SetInputLocale.MouseLeave, SetAllIntl.MouseLeave, SetTimeZone.MouseLeave, SetSKUIntlDefaults.MouseLeave, SetLayeredDriver.MouseLeave, GenLangINI.MouseLeave, SetSetupUILang.MouseLeave, AddCapability.MouseLeave, ExportSource.MouseLeave, GetCapabilities.MouseLeave, GetCapabilityInfo.MouseLeave, RemoveCapability.MouseLeave, GetCurrentEdition.MouseLeave, GetTargetEditions.MouseLeave, SetEdition.MouseLeave, SetProductKey.MouseLeave, GetDrivers.MouseLeave, GetDriverInfo.MouseLeave, AddDriver.MouseLeave, RemoveDriver.MouseLeave, ExportDriver.MouseLeave, ApplyUnattend.MouseLeave, GetPESettings.MouseLeave, GetTargetPath.MouseLeave, GetScratchSpace.MouseLeave, SetScratchSpace.MouseLeave, SetTargetPath.MouseLeave, GetOSUninstallWindow.MouseLeave, InitiateOSUninstall.MouseLeave, RemoveOSUninstall.MouseLeave, SetOSUninstallWindow.MouseLeave, SetReservedStorageState.MouseLeave, GetReservedStorageState.MouseLeave, NewProjectToolStripMenuItem.MouseLeave, OpenExistingProjectToolStripMenuItem.MouseLeave, SaveProjectToolStripMenuItem.MouseLeave, SaveProjectasToolStripMenuItem.MouseLeave, ExitToolStripMenuItem.MouseLeave, ViewProjectFilesInFileExplorerToolStripMenuItem.MouseLeave, UnloadProjectToolStripMenuItem.MouseLeave, SwitchImageIndexesToolStripMenuItem.MouseLeave, ProjectPropertiesToolStripMenuItem.MouseLeave, ImagePropertiesToolStripMenuItem.MouseLeave, ImageManagementToolStripMenuItem.MouseLeave, OSPackagesToolStripMenuItem.MouseLeave, ProvisioningPackagesToolStripMenuItem.MouseLeave, AppPackagesToolStripMenuItem.MouseLeave, AppPatchesToolStripMenuItem.MouseLeave, DefaultAppAssociationsToolStripMenuItem.MouseLeave, LanguagesAndRegionSettingsToolStripMenuItem.MouseLeave, CapabilitiesToolStripMenuItem.MouseLeave, WindowsEditionsToolStripMenuItem.MouseLeave, DriversToolStripMenuItem.MouseLeave, UnattendedAnswerFilesToolStripMenuItem.MouseLeave, WindowsPEServicingToolStripMenuItem.MouseLeave, OSUninstallToolStripMenuItem.MouseLeave, ReservedStorageToolStripMenuItem.MouseLeave, ImageConversionToolStripMenuItem.MouseLeave, WIMESDToolStripMenuItem.MouseLeave, RemountImageWithWritePermissionsToolStripMenuItem.MouseLeave, CommandShellToolStripMenuItem.MouseLeave, OptionsToolStripMenuItem.MouseLeave, HelpTopicsToolStripMenuItem.MouseLeave, GlossaryToolStripMenuItem.MouseLeave, CommandHelpToolStripMenuItem.MouseLeave, AboutDISMToolsToolStripMenuItem.MouseLeave, UnattendedAnswerFileManagerToolStripMenuItem.MouseLeave, AddEdge.MouseLeave, AddEdgeBrowser.MouseLeave, AddEdgeWebView.MouseLeave, ReportManagerToolStripMenuItem.MouseLeave, MergeSWM.MouseLeave, MountedImageManagerTSMI.MouseLeave, ReportFeedbackToolStripMenuItem.MouseLeave
         HideChildDescs()
     End Sub
 
@@ -4210,24 +4098,32 @@ Public Class MainForm
         ShowChildDescs(False, 16)
     End Sub
 
-    Private Sub ProgSettings_MouseEnter(sender As Object, e As EventArgs) Handles OptionsToolStripMenuItem.MouseEnter
+    Private Sub MountedImageManagerTSMI_MouseEnter(sender As Object, e As EventArgs) Handles MountedImageManagerTSMI.MouseEnter
         ShowChildDescs(False, 17)
     End Sub
 
-    Private Sub HelpTopics_MouseEnter(sender As Object, e As EventArgs) Handles HelpTopicsToolStripMenuItem.MouseEnter
+    Private Sub ProgSettings_MouseEnter(sender As Object, e As EventArgs) Handles OptionsToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 18)
     End Sub
 
-    Private Sub Glossary_MouseEnter(sender As Object, e As EventArgs) Handles GlossaryToolStripMenuItem.MouseEnter
+    Private Sub HelpTopics_MouseEnter(sender As Object, e As EventArgs) Handles HelpTopicsToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 19)
     End Sub
 
-    Private Sub CmdHelp_MouseEnter(sender As Object, e As EventArgs) Handles CommandHelpToolStripMenuItem.MouseEnter
+    Private Sub Glossary_MouseEnter(sender As Object, e As EventArgs) Handles GlossaryToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 20)
     End Sub
 
-    Private Sub ProgInfo_MouseEnter(sender As Object, e As EventArgs) Handles AboutDISMToolsToolStripMenuItem.MouseEnter
+    Private Sub CmdHelp_MouseEnter(sender As Object, e As EventArgs) Handles CommandHelpToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 21)
+    End Sub
+
+    Private Sub ProgInfo_MouseEnter(sender As Object, e As EventArgs) Handles AboutDISMToolsToolStripMenuItem.MouseEnter
+        ShowChildDescs(False, 22)
+    End Sub
+
+    Private Sub ReportFeedbackToolStripMenuItem_MouseEnter(sender As Object, e As EventArgs) Handles ReportFeedbackToolStripMenuItem.MouseEnter
+        ShowChildDescs(False, 23)
     End Sub
 #End Region
 
@@ -4337,6 +4233,7 @@ Public Class MainForm
             SaveDTSettings()
         End If
         MountedImageDetectorBW.CancelAsync()
+        If MountedImgMgr.DetectorBW.IsBusy Then MountedImgMgr.DetectorBW.CancelAsync()
     End Sub
 
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
@@ -4375,6 +4272,7 @@ Public Class MainForm
     End Sub
 
     Private Sub OptionsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OptionsToolStripMenuItem.Click
+        Options.TabControl1.SelectedIndex = 0
         Options.ShowDialog()
     End Sub
 
@@ -5106,7 +5004,7 @@ Public Class MainForm
                 End If
                 If timer.ElapsedMilliseconds >= 100 Then
                     timer.Stop()
-                    DetectMountedImages(False, False, False)
+                    DetectMountedImages(False)
                     timer.Reset()
                     Exit Do
                 End If
@@ -5117,5 +5015,47 @@ Public Class MainForm
     Private Sub MountedImageDetectorBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles MountedImageDetectorBW.RunWorkerCompleted
         Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "running", "stopped")
         Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Stop", "Start")
+    End Sub
+
+    Private Sub MountedImageManagerTSMI_Click(sender As Object, e As EventArgs) Handles MountedImageManagerTSMI.Click
+        MountedImgMgr.Show()
+    End Sub
+
+    Private Sub ReportFeedbackToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ReportFeedbackToolStripMenuItem.Click
+        Process.Start("https://github.com/CodingWonders/DISMTools/issues/new")
+    End Sub
+
+    Private Sub UnmountImage_Click(sender As Object, e As EventArgs) Handles UnmountImage.Click, UnmountSettingsToolStripMenuItem.Click
+        If isProjectLoaded Then
+            ImgUMount.RadioButton1.Checked = True
+            ImgUMount.RadioButton2.Checked = False
+            ImgUMount.TextBox1.Text = ""
+        Else
+            ImgUMount.RadioButton1.Checked = False
+            ImgUMount.RadioButton2.Checked = True
+            ImgUMount.TextBox1.Text = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text
+            ProgressPanel.UMountImgIndex = MountedImgMgr.ListView1.FocusedItem.SubItems(1).Text
+        End If
+        ImgUMount.ShowDialog()
+    End Sub
+
+    Private Sub CommitAndUnmountTSMI_Click(sender As Object, e As EventArgs) Handles CommitAndUnmountTSMI.Click
+        ProgressPanel.OperationNum = 21
+        ProgressPanel.UMountLocalDir = False
+        ProgressPanel.RandomMountDir = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text   ' Hope there isn't anything to set here
+        ProgressPanel.UMountImgIndex = MountedImgMgr.ListView1.FocusedItem.SubItems(1).Text
+        ProgressPanel.MountDir = ""
+        ProgressPanel.UMountOp = 0
+        ProgressPanel.ShowDialog()
+    End Sub
+
+    Private Sub DiscardAndUnmountTSMI_Click(sender As Object, e As EventArgs) Handles DiscardAndUnmountTSMI.Click
+        ProgressPanel.OperationNum = 21
+        ProgressPanel.UMountLocalDir = False
+        ProgressPanel.RandomMountDir = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text   ' Hope there isn't anything to set here
+        ProgressPanel.UMountImgIndex = MountedImgMgr.ListView1.FocusedItem.SubItems(1).Text
+        ProgressPanel.MountDir = ""
+        ProgressPanel.UMountOp = 1
+        ProgressPanel.ShowDialog()
     End Sub
 End Class
