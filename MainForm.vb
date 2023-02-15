@@ -5058,4 +5058,8 @@ Public Class MainForm
         ProgressPanel.UMountOp = 1
         ProgressPanel.ShowDialog()
     End Sub
+
+    Private Sub CleanupImage_Click(sender As Object, e As EventArgs) Handles CleanupImage.Click
+        ImgCleanup.ShowDialog()
+    End Sub
 End Class
