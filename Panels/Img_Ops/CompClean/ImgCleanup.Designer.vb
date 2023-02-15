@@ -426,7 +426,7 @@ Partial Class ImgCleanup
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(675, 60)
         Me.Label3.TabIndex = 20
-        Me.Label3.Text = "Label3"
+        Me.Label3.Text = "Choose a task to see its description"
         '
         'ImgCleanup
         '
