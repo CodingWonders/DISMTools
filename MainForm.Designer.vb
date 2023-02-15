@@ -2620,7 +2620,7 @@ Partial Class MainForm
         Me.ImgUMountPopupCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CommitAndUnmountTSMI, Me.DiscardAndUnmountTSMI, Me.ToolStripSeparator20, Me.UnmountSettingsToolStripMenuItem})
         Me.ImgUMountPopupCMS.Name = "ImgUMountPopupCMS"
         Me.ImgUMountPopupCMS.ShowImageMargin = False
-        Me.ImgUMountPopupCMS.Size = New System.Drawing.Size(253, 98)
+        Me.ImgUMountPopupCMS.Size = New System.Drawing.Size(253, 76)
         '
         'CommitAndUnmountTSMI
         '
