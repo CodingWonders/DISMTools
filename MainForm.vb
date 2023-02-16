@@ -5062,4 +5062,8 @@ Public Class MainForm
     Private Sub CleanupImage_Click(sender As Object, e As EventArgs) Handles CleanupImage.Click
         ImgCleanup.ShowDialog()
     End Sub
+
+    Private Sub Button12_Click(sender As Object, e As EventArgs) Handles Button12.Click
+        ImgCleanup.ShowDialog()
+    End Sub
 End Class
