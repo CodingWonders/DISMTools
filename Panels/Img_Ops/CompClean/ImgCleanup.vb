@@ -48,7 +48,7 @@ Public Class ImgCleanup
                 Dim LastResetBase_UTC As String = regKey.GetValue("LastResetBase_UTC", "Could not get last base reset date").ToString()
                 regKey.Close()
                 Dim charArray() As Char = LastResetBase_UTC.ToCharArray()
-                charArray(10) = " "
+                If LastResetBase_UTC.Contains("/") Then charArray(10) = " "
                 LastResetBase_UTC = New String(charArray)
                 Label6.Text = LastResetBase_UTC
                 reg.StartInfo.Arguments = "unload HKLM\MountedSoft"
