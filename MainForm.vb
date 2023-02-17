@@ -227,6 +227,16 @@ Public Class MainForm
         MountedImageMountDirs = MountedImageMountDirList.ToArray()
         MountedImageImgStatuses = MountedImageImgStatusList.ToArray()
         MountedImageMountedReWr = MountedImageReWrList.ToArray()
+        ' Fill mounted image manager list
+        MountedImgMgr.ListView1.Items.Clear()
+        Try
+            For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
+                MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "OK", If(MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MountedImageMountedReWr(x) = 0, "Yes", "No"), If(File.Exists(MountedImageMountDirs(x) & "\Windows\System32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion, "Could not get version info")}))
+            Next
+        Catch ex As Exception
+            Exit Try
+        End Try
+        MountedImgMgr.Refresh()
     End Sub
 
     Sub ChangeImgStatus()
@@ -4171,7 +4181,8 @@ Public Class MainForm
         ProjProperties.ShowDialog()
     End Sub
 
-    Private Sub Button15_Click(sender As Object, e As EventArgs) Handles Button15.Click, ImagePropertiesToolStripMenuItem.Click
+    Private Sub Button15_Click(sender As Object, e As EventArgs) Handles ImagePropertiesToolStripMenuItem.Click, Button15.Click
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         ProjProperties.TabControl1.SelectedIndex = 1
         ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
         If My.Computer.Info.OSFullName.Contains("Windows 10") Or My.Computer.Info.OSFullName.Contains("Windows 11") Then
@@ -4997,7 +5008,7 @@ Public Class MainForm
         Do
             timer.Start()
             Do
-                If MountedImageDetectorBW.CancellationPending Then
+                If MountedImageDetectorBW.CancellationPending Or ImgBW.IsBusy Then
                     timer.Stop()
                     timer.Reset()
                     Exit Sub
