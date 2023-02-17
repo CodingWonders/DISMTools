@@ -47,7 +47,6 @@ Partial Class ProjProperties
         Me.imgLangText = New System.Windows.Forms.TextBox()
         Me.Label62 = New System.Windows.Forms.Label()
         Me.imgRW = New System.Windows.Forms.Label()
-        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
@@ -308,7 +307,6 @@ Partial Class ProjProperties
         Me.TabPage2.Controls.Add(Me.imgLangText)
         Me.TabPage2.Controls.Add(Me.Label62)
         Me.TabPage2.Controls.Add(Me.imgRW)
-        Me.TabPage2.Controls.Add(Me.LinkLabel1)
         Me.TabPage2.Controls.Add(Me.Panel3)
         Me.TabPage2.Controls.Add(Me.Label13)
         Me.TabPage2.Controls.Add(Me.Label58)
@@ -428,18 +426,6 @@ Partial Class ProjProperties
         Me.imgRW.Size = New System.Drawing.Size(106, 13)
         Me.imgRW.TabIndex = 10
         Me.imgRW.Text = "imgRW"
-        '
-        'LinkLabel1
-        '
-        Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel1.Location = New System.Drawing.Point(423, 86)
-        Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(181, 13)
-        Me.LinkLabel1.TabIndex = 16
-        Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "What is a HAL?"
-        Me.LinkLabel1.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Panel3
         '
@@ -972,7 +958,6 @@ Partial Class ProjProperties
     Friend WithEvents imgLangText As System.Windows.Forms.TextBox
     Friend WithEvents Label62 As System.Windows.Forms.Label
     Friend WithEvents imgRW As System.Windows.Forms.Label
-    Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
     Friend WithEvents Panel3 As System.Windows.Forms.Panel
     Friend WithEvents PictureBox2 As System.Windows.Forms.PictureBox
     Friend WithEvents LinkLabel2 As System.Windows.Forms.LinkLabel
