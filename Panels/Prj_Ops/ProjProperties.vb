@@ -20,10 +20,11 @@ Public Class ProjProperties
     End Sub
 
     ''' <summary>
-    ''' Detects the properties of the image using the DISM API
+    ''' Detects the properties of the image using the DISM API and, later, the DISM executable
     ''' </summary>
     ''' <remarks></remarks>
     Sub DetectImageProperties()
+        If MainForm.MountedImageDetectorBW.IsBusy Then MainForm.MountedImageDetectorBW.CancelAsync()
         DismApi.Initialize(DismLogLevel.LogErrors)
         ' Detect mounted images to find the loaded one
         Dim MountedImgs As DismMountedImageInfoCollection = DismApi.GetMountedImages()
@@ -56,19 +57,47 @@ Public Class ProjProperties
                         Dim infoCollection As DismImageInfoCollection = DismApi.GetImageInfo(MainForm.MountedImageImgFiles(x))
                         For Each info As DismImageInfo In infoCollection
                             imgVersion.Text = info.ProductVersion.ToString()
+                            DetectFeatureUpdate(info.ProductVersion)
                             imgMountedName.Text = info.ImageName
                             imgMountedDesc.Text = info.ImageDescription
-                            imgSize.Text = info.ImageSize
-                            imgArch.Text = info.Architecture
-                            imgHal.Text = info.Hal
+                            imgSize.Text = info.ImageSize.ToString("N0") & " bytes (~" & Math.Round(info.ImageSize / (1024 ^ 3), 2) & " GB)"
+                            If info.Architecture = DismProcessorArchitecture.None Then
+                                imgArch.Text = "Unknown"
+                            ElseIf info.Architecture = DismProcessorArchitecture.Neutral Then
+                                imgArch.Text = "Neutral"
+                            ElseIf info.Architecture = DismProcessorArchitecture.Intel Then
+                                imgArch.Text = "x86"
+                            ElseIf info.Architecture = DismProcessorArchitecture.IA64 Then
+                                ' I'm not sure what systems run Itanium versions of Windows, but still
+                                imgArch.Text = "Itanium (64-bit)"
+                            ElseIf info.Architecture = DismProcessorArchitecture.ARM64 Then
+                                imgArch.Text = "ARM64"
+                            ElseIf info.Architecture = DismProcessorArchitecture.ARM Then
+                                ' This must be the case on Windows RT images
+                                imgArch.Text = "ARM"
+                            ElseIf info.Architecture = DismProcessorArchitecture.AMD64 Then
+                                imgArch.Text = "x64"
+                            End If
+                            imgHal.Text = If(Not info.Hal = "", info.Hal, "Undefined by the image")
                             imgSPBuild.Text = info.ProductVersion.Revision
                             imgSPLvl.Text = info.SpLevel
                             imgEdition.Text = info.EditionId
                             imgPType.Text = info.ProductType
                             imgPSuite.Text = info.ProductSuite
                             imgSysRoot.Text = info.SystemRoot
-                            imgLangText.Text = info.Languages.ToString() & CrLf & _
-                                "Default language: " & info.DefaultLanguage.ToString()
+                            imgLangText.Clear()
+                            For Each language In info.Languages
+                                If imgLangText.Text = "" Then
+                                    imgLangText.Text = language.Name & ", "
+                                Else
+                                    imgLangText.AppendText(language.Name & ", ")
+                                End If
+                            Next
+                            Dim langarr() As Char = imgLangText.Text.ToCharArray()
+                            langarr(langarr.Count - 2) = ""
+                            imgLangText.Text = New String(langarr)
+                            imgLangText.AppendText(CrLf & _
+                                                   "Default language: " & info.DefaultLanguage.Name)
                             imgFormat.Text = Path.GetExtension(MainForm.MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper() & " file"
                             imgRW.Text = If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No")
                             If MainForm.MountedImageMountedReWr(x) = 0 Then
@@ -86,6 +115,63 @@ Public Class ProjProperties
             End Try
         Next
         DismApi.Shutdown()
+        ' The DISM API part is over. Switch to regular DISM.exe mode for missing details
+        Try     ' Try getting image properties
+            If Not Directory.Exists(MainForm.projPath & "\tempinfo") Then
+                Directory.CreateDirectory(MainForm.projPath & "\tempinfo").Attributes = FileAttributes.Hidden
+            End If
+            Select Case DismVersionChecker.ProductMajorPart
+                Case 6
+                    Select Case DismVersionChecker.ProductMinorPart
+                        Case 1
+                            File.WriteAllText(".\bin\exthelpers\imginfo.bat",
+                                              "@echo off" & CrLf &
+                                              "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot" & CrLf &
+                                              "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgdirs" & CrLf &
+                                              "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgfiles" & CrLf &
+                                              "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgcreation" & CrLf &
+                                              "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmodification", ASCII)
+                        Case Is >= 2
+                            File.WriteAllText(".\bin\exthelpers\imginfo.bat",
+                                              "@echo off" & CrLf &
+                                              "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot" & CrLf &
+                                              "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgdirs" & CrLf &
+                                              "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgfiles" & CrLf &
+                                              "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgcreation" & CrLf &
+                                              "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmodification", ASCII)
+                    End Select
+                Case 10
+                    File.WriteAllText(".\bin\exthelpers\imginfo.bat",
+                                      "@echo off" & CrLf &
+                                      "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot" & CrLf &
+                                      "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgdirs" & CrLf &
+                                      "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgfiles" & CrLf &
+                                      "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgcreation" & CrLf &
+                                      "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmodification", ASCII)
+            End Select
+            If Debugger.IsAttached Then
+                Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\imginfo.bat").WaitForExit()
+            End If
+            Process.Start(".\bin\exthelpers\imginfo.bat").WaitForExit()
+            Try
+                imgWimBootStatus.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgwimboot", ASCII).Replace("WIM Bootable : ", "").Trim()
+                imgDirs.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgdirs", ASCII).Replace("Directories : ", "").Trim()
+                imgFiles.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgfiles", ASCII).Replace("Files : ", "").Trim()
+                imgCreation.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgcreation", ASCII).Replace("Created : ", "").Trim()
+                imgModification.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgmodification", ASCII).Replace("Modified : ", "").Trim()
+                If Not MainForm.ImgBW.IsBusy Then
+                    For Each foundFile In My.Computer.FileSystem.GetFiles(MainForm.projPath & "\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
+                        File.Delete(foundFile)
+                    Next
+                    Directory.Delete(MainForm.projPath & "\tempinfo")
+                End If
+                File.Delete(".\bin\exthelpers\imginfo.bat")
+            Catch ex As Exception
+
+            End Try
+        Catch ex As Exception
+
+        End Try
     End Sub
 
     Private Sub ProjProperties_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -147,176 +233,36 @@ Public Class ProjProperties
             Label12.Text = rtb.Lines(6).Replace("ProjGuid=", "").Trim()
         End If
         If MainForm.IsImageMounted Then
-            If Debugger.IsAttached Then DetectImageProperties()
             Label19.Text = "Yes"
-            If Not Debugger.IsAttached Then
-                Try     ' Try getting image properties
-                    If Not Directory.Exists(MainForm.projPath & "\tempinfo") Then
-                        Directory.CreateDirectory(MainForm.projPath & "\tempinfo").Attributes = FileAttributes.Hidden
-                    End If
-                    Select Case DismVersionChecker.ProductMajorPart
-                        Case 6
-                            Select Case DismVersionChecker.ProductMinorPart
-                                Case 1
-                                    File.WriteAllText(".\bin\exthelpers\imginfo.bat",
-                                                      "@echo off" & CrLf &
-                                                      "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & MainForm.projPath & "\tempinfo\mountdir" & CrLf &
-                                                      "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgfile" & CrLf &
-                                                      "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Image Index" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgindex" & CrLf &
-                                                      "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Mounted Read/Write" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgrw" & CrLf &
-                                                      "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmountedstatus" & CrLf &
-                                                      "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmountedname" & CrLf &
-                                                      "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmounteddesc" & CrLf &
-                                                      "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgsize" & CrLf &
-                                                      "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot" & CrLf &
-                                                      "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgarch" & CrLf &
-                                                      "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imghal" & CrLf &
-                                                      "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgspbuild" & CrLf &
-                                                      "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgsplevel" & CrLf &
-                                                      "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgedition" & CrLf &
-                                                      "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imginst" & CrLf &
-                                                      "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgptype" & CrLf &
-                                                      "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgpsuite" & CrLf &
-                                                      "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgsysroot" & CrLf &
-                                                      "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgdirs" & CrLf &
-                                                      "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgfiles" & CrLf &
-                                                      "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgcreation" & CrLf &
-                                                      "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmodification" & CrLf &
-                                                      "dism /English /image=" & MainForm.MountDir & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imglangs", ASCII)
-                                Case Is >= 2
-                                    File.WriteAllText(".\bin\exthelpers\imginfo.bat",
-                                                      "@echo off" & CrLf &
-                                                      "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & MainForm.projPath & "\tempinfo\mountdir" & CrLf &
-                                                      "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgfile" & CrLf &
-                                                      "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image Index" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgindex" & CrLf &
-                                                      "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mounted Read/Write" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgrw" & CrLf &
-                                                      "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmountedstatus" & CrLf &
-                                                      "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmountedname" & CrLf &
-                                                      "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmounteddesc" & CrLf &
-                                                      "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgsize" & CrLf &
-                                                      "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot" & CrLf &
-                                                      "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgarch" & CrLf &
-                                                      "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imghal" & CrLf &
-                                                      "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgspbuild" & CrLf &
-                                                      "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgsplevel" & CrLf &
-                                                      "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgedition" & CrLf &
-                                                      "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imginst" & CrLf &
-                                                      "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgptype" & CrLf &
-                                                      "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgpsuite" & CrLf &
-                                                      "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgsysroot" & CrLf &
-                                                      "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgdirs" & CrLf &
-                                                      "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgfiles" & CrLf &
-                                                      "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgcreation" & CrLf &
-                                                      "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmodification" & CrLf &
-                                                      "dism /English /image=" & MainForm.MountDir & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imglangs", ASCII)
-                            End Select
-                        Case 10
-                            File.WriteAllText(".\bin\exthelpers\imginfo.bat",
-                                              "@echo off" & CrLf &
-                                              "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & MainForm.projPath & "\tempinfo\mountdir" & CrLf &
-                                              "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgfile" & CrLf &
-                                              "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image Index" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgindex" & CrLf &
-                                              "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mounted Read/Write" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgrw" & CrLf &
-                                              "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmountedstatus" & CrLf &
-                                              "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmountedname" & CrLf &
-                                              "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmounteddesc" & CrLf &
-                                              "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgsize" & CrLf &
-                                              "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot" & CrLf &
-                                              "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgarch" & CrLf &
-                                              "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imghal" & CrLf &
-                                              "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgspbuild" & CrLf &
-                                              "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgsplevel" & CrLf &
-                                              "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgedition" & CrLf &
-                                              "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imginst" & CrLf &
-                                              "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgptype" & CrLf &
-                                              "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgpsuite" & CrLf &
-                                              "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgsysroot" & CrLf &
-                                              "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgdirs" & CrLf &
-                                              "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgfiles" & CrLf &
-                                              "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgcreation" & CrLf &
-                                              "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmodification" & CrLf &
-                                              "dism /English /image=" & MainForm.MountDir & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imglangs", ASCII)
-                    End Select
+            Try
+                If Not Directory.Exists(MainForm.projPath & "\tempinfo") Then
+                    Directory.CreateDirectory(MainForm.projPath & "\tempinfo").Attributes = FileAttributes.Hidden
+                End If
+                DetectImageProperties()
+                MainForm.imgVersion = imgVersion.Text
+                MainForm.imgMountedStatus = imgMountedStatus.Text
+                MainForm.imgMountedName = imgMountedName.Text
+                MainForm.imgMountedDesc = imgMountedDesc.Text
+                MainForm.imgWimBootStatus = imgWimBootStatus.Text
+                MainForm.imgArch = imgArch.Text
+                MainForm.imgHal = imgHal.Text
+                MainForm.imgSPBuild = imgSPBuild.Text
+                MainForm.imgSPLvl = imgSPLvl.Text
+                MainForm.imgEdition = imgEdition.Text
+                MainForm.imgPType = imgPType.Text
+                MainForm.imgPSuite = imgPSuite.Text
+                MainForm.imgSysRoot = imgSysRoot.Text
+                MainForm.imgDirs = CInt(imgDirs.Text)
+                MainForm.imgFiles = CInt(imgFiles.Text)
+                MainForm.imgCreation = imgCreation.Text
+                MainForm.CreationTime = MainForm.imgCreation.Replace(" - ", " ")
+                MainForm.imgModification = imgModification.Text
+                MainForm.ModifyTime = MainForm.imgModification.Replace(" - ", " ")
+                MainForm.imgLangs = imgLangText.Text
+                MainForm.imgRW = imgRW.Text
+            Catch ex As Exception
 
-                    If Debugger.IsAttached Then
-                        Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\imginfo.bat").WaitForExit()
-                    End If
-                    Process.Start(".\bin\exthelpers\imginfo.bat").WaitForExit()
-                    imgName.Text = MainForm.SourceImg
-                    imgIndex.Text = MainForm.ImgIndex
-                    imgMountDir.Text = MainForm.MountDir
-                    imgMountedStatus.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgmountedstatus", ASCII).Replace("Status : ", "").Trim()
-                    If imgMountedStatus.Text = "Invalid" Then
-                        RecoverButton.Visible = True
-                    ElseIf imgMountedStatus.Text = "Needs Remount" Then
-                        RemountImgBtn.Visible = True
-                    End If
-                    Try
-                        Dim KeVerInfo As FileVersionInfo = FileVersionInfo.GetVersionInfo(MainForm.MountDir & "\Windows\system32\ntoskrnl.exe")
-                        Dim KeVerStr As String = KeVerInfo.ProductVersion
-                        imgVersion.Text = KeVerStr
-                        imgMountedName.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgmountedname", ASCII).Replace("Name : ", "").Trim()
-                        imgMountedDesc.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgmounteddesc", ASCII).Replace("Description : ", "").Trim()
-                        Dim ImgSizeDbl As Double
-                        ImgSizeDbl = CDbl(My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgsize", ASCII).Replace("Size : ", "").Trim().Replace(" bytes", "").Trim().Replace(".", "").Trim()) / (1024 ^ 3)
-                        ImgSizeStr = Math.Round(ImgSizeDbl, 2)
-                        imgSize.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgsize", ASCII).Replace("Size : ", "").Trim() & " (~" & ImgSizeStr & " GB)"
-                        imgWimBootStatus.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgwimboot", ASCII).Replace("WIM Bootable : ", "").Trim()
-                        imgArch.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgarch", ASCII).Replace("Architecture : ", "").Trim()
-                        imgHal.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imghal", ASCII).Replace("Hal : ", "").Trim()
-                        imgSPBuild.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgspbuild", ASCII).Replace("ServicePack Build : ", "").Trim()
-                        imgSPLvl.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgsplevel", ASCII).Replace("ServicePack Level : ", "").Trim()
-                        imgEdition.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgedition", ASCII).Replace("Edition : ", "").Trim()
-                        imgPType.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgptype", ASCII).Replace("ProductType : ", "").Trim()
-                        imgPSuite.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgpsuite", ASCII).Replace("ProductSuite : ", "").Trim()
-                        imgSysRoot.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgsysroot", ASCII).Replace("System Root : ", "").Trim()
-                        imgDirs.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgdirs", ASCII).Replace("Directories : ", "").Trim()
-                        imgFiles.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgfiles", ASCII).Replace("Files : ", "").Trim()
-                        imgCreation.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgcreation", ASCII).Replace("Created : ", "").Trim()
-                        imgModification.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgmodification", ASCII).Replace("Modified : ", "").Trim()
-                        imgLangText.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imglangs", ASCII).Replace("Installed language(s): ", "").Trim()
-                        imgFormat.Text = Path.GetExtension(MainForm.SourceImg).Replace(".", "").Trim().ToUpper() & " file"
-                        imgRW.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgrw", ASCII).Replace("Mounted Read/Write : ", "").Trim()
-                        If imgRW.Text = "Yes" Then
-                            RWRemountBtn.Visible = False
-                        ElseIf imgRW.Text = "No" Then
-                            RWRemountBtn.Visible = True
-                        End If
-                        For Each foundFile In My.Computer.FileSystem.GetFiles(MainForm.projPath & "\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
-                            File.Delete(foundFile)
-                        Next
-                        Directory.Delete(MainForm.projPath & "\tempinfo")
-                        File.Delete(".\bin\exthelpers\imginfo.bat")
-                    Catch ex As Exception
-
-                    End Try
-                    MainForm.imgVersion = imgVersion.Text
-                    MainForm.imgMountedStatus = imgMountedStatus.Text
-                    MainForm.imgMountedName = imgMountedName.Text
-                    MainForm.imgMountedDesc = imgMountedDesc.Text
-                    MainForm.imgWimBootStatus = imgWimBootStatus.Text
-                    MainForm.imgArch = imgArch.Text
-                    MainForm.imgHal = imgHal.Text
-                    MainForm.imgSPBuild = imgSPBuild.Text
-                    MainForm.imgSPLvl = imgSPLvl.Text
-                    MainForm.imgEdition = imgEdition.Text
-                    MainForm.imgPType = imgPType.Text
-                    MainForm.imgPSuite = imgPSuite.Text
-                    MainForm.imgSysRoot = imgSysRoot.Text
-                    MainForm.imgDirs = CInt(imgDirs.Text)
-                    MainForm.imgFiles = CInt(imgFiles.Text)
-                    MainForm.imgCreation = imgCreation.Text
-                    MainForm.CreationTime = MainForm.imgCreation.Replace(" - ", " ")
-                    MainForm.imgModification = imgModification.Text
-                    MainForm.ModifyTime = MainForm.imgModification.Replace(" - ", " ")
-                    MainForm.imgLangs = imgLangText.Text
-                    MainForm.imgRW = imgRW.Text
-                    DetectFeatureUpdate(MainForm.MountDir & "\Windows\system32\ntoskrnl.exe")
-                Catch ex As Exception
-
-                End Try
-            End If
-
+            End Try
             If imgMountedName.Text = "<undefined>" Then
                 ' Determine name. Do this for both Windows 10 and 11, as this seems to occur with VHDX images (for Windows-on-ARM)
                 ' Begin by determining Windows version
@@ -427,64 +373,115 @@ Public Class ProjProperties
     ''' <summary>
     ''' Detects the feature update the mounted image contains
     ''' </summary>
-    ''' <param name="KeExe">The path of the "ntoskrnl.exe" file</param>
+    ''' <param name="SysVer">The image version detected by the DISM API</param>
     ''' <remarks>Feature updates are only applicable to Windows 10 and 11. If this function detects an earlier version, it will leave</remarks>
-    Sub DetectFeatureUpdate(KeExe As String)
-        Try
-            Dim KeVerInfo As FileVersionInfo = FileVersionInfo.GetVersionInfo(KeExe)
-            Dim FeatUpd As String = ""
-            Select Case KeVerInfo.ProductMajorPart
-                Case 10
-                    Select Case KeVerInfo.ProductBuildPart
-                        Case 9650 To 10240
-                            FeatUpd = "1507 (Threshold 1)"
-                        Case 10525 To 10587     ' 10587 is a Post-RTM build of Windows 10 November Update
-                            FeatUpd = "1511 (Threshold 2)"
-                        Case 11065 To 14393
-                            FeatUpd = "1607 (Redstone 1)"
-                        Case 14832 To 15063
-                            FeatUpd = "1703 (Redstone 2)"
-                        Case 15140 To 16299
-                            FeatUpd = "1709 (Redstone 3)"
-                        Case 16251 To 17134
-                            FeatUpd = "1803 (Redstone 4)"
-                        Case 17604 To 17763
-                            FeatUpd = "1809 (Redstone 5)"
-                        Case 18204 To 18362
-                            FeatUpd = "1903 (Titanium)"
-                        Case Is = 18362
-                            If KeVerInfo.ProductPrivatePart >= 10000 Then
-                                FeatUpd = "1909 (Vanadium)"
-                            Else
-                                FeatUpd = "1903 (Titanium)"
-                            End If
-                        Case Is = 18363
+    Sub DetectFeatureUpdate(SysVer As Version)
+        Dim FeatUpd As String = ""
+        Select Case SysVer.Major
+            Case 10
+                Select Case SysVer.Build
+                    Case 9650 To 10240
+                        FeatUpd = "1507 (Threshold 1)"
+                    Case 10525 To 10587     ' 10587 is a Post-RTM build of Windows 10 November Update
+                        FeatUpd = "1511 (Threshold 2)"
+                    Case 11065 To 14393
+                        FeatUpd = "1607 (Redstone 1)"
+                    Case 14832 To 15063
+                        FeatUpd = "1703 (Redstone 2)"
+                    Case 15140 To 16299
+                        FeatUpd = "1709 (Redstone 3)"
+                    Case 16251 To 17134
+                        FeatUpd = "1803 (Redstone 4)"
+                    Case 17604 To 17763
+                        FeatUpd = "1809 (Redstone 5)"
+                    Case 18204 To 18362
+                        FeatUpd = "1903 (Titanium)"
+                    Case Is = 18362
+                        If SysVer.Revision >= 10000 Then
                             FeatUpd = "1909 (Vanadium)"
-                        Case 18826 To 19041
-                            FeatUpd = "2004 (Vibranium"
-                        Case 19041 To 19489
-                            FeatUpd = "2004+ (Vibranium)"
-                        Case 19489 To 19645
-                            FeatUpd = "2004 (Manganese)"
-                        Case 20124 To 20279
-                            FeatUpd = "21H1 (Iron)"
-                        Case 20282 To 20348
-                            FeatUpd = "21H2 (Iron)"
-                        Case 21242 To 22000     ' Also includes Windows 11 Cobalt (21H2)
-                            FeatUpd = "21H2 (Cobalt)"
-                        Case 22350 To 22623
-                            FeatUpd = "22H2 (Nickel)"
-                        Case 25057 To 25238
-                            FeatUpd = "22H2 (Copper)"
-                        Case 25240 To 26000     ' 26000 is a relative number. We still don't know Zinc's final build
-                            FeatUpd = "23H2 (Zinc)"
-                    End Select
-                Case Else
-                    Exit Sub
-            End Select
-            imgVersion.Text &= CrLf & "(feature update: " & FeatUpd & ")"
-        Catch ex As Exception
-            Exit Sub
-        End Try
+                        Else
+                            FeatUpd = "1903 (Titanium)"
+                        End If
+                    Case Is = 18363
+                        FeatUpd = "1909 (Vanadium)"
+                    Case 18826 To 19041
+                        FeatUpd = "2004 (Vibranium"
+                    Case 19041 To 19489
+                        FeatUpd = "2004+ (Vibranium)"
+                    Case 19489 To 19645
+                        FeatUpd = "2004 (Manganese)"
+                    Case 20124 To 20279
+                        FeatUpd = "21H1 (Iron)"
+                    Case 20282 To 20348
+                        FeatUpd = "21H2 (Iron)"
+                    Case 21242 To 22000     ' Also includes Windows 11 Cobalt (21H2)
+                        FeatUpd = "21H2 (Cobalt)"
+                    Case 22350 To 22623
+                        FeatUpd = "22H2 (Nickel)"
+                    Case 25057 To 25238
+                        FeatUpd = "22H2 (Copper)"
+                    Case 25240 To 26000     ' 26000 is a relative number. We still don't know Zinc's final build
+                        FeatUpd = "23H2 (Zinc)"
+                End Select
+            Case Else
+                Exit Sub
+        End Select
+        imgVersion.Text &= CrLf & "(feature update: " & FeatUpd & ")"
+        'Try
+        '    Dim KeVerInfo As FileVersionInfo = FileVersionInfo.GetVersionInfo(KeExe)
+        '    Dim FeatUpd As String = ""
+        '    Select Case KeVerInfo.ProductMajorPart
+        '        Case 10
+        '            Select Case KeVerInfo.ProductBuildPart
+        '                Case 9650 To 10240
+        '                    FeatUpd = "1507 (Threshold 1)"
+        '                Case 10525 To 10587     ' 10587 is a Post-RTM build of Windows 10 November Update
+        '                    FeatUpd = "1511 (Threshold 2)"
+        '                Case 11065 To 14393
+        '                    FeatUpd = "1607 (Redstone 1)"
+        '                Case 14832 To 15063
+        '                    FeatUpd = "1703 (Redstone 2)"
+        '                Case 15140 To 16299
+        '                    FeatUpd = "1709 (Redstone 3)"
+        '                Case 16251 To 17134
+        '                    FeatUpd = "1803 (Redstone 4)"
+        '                Case 17604 To 17763
+        '                    FeatUpd = "1809 (Redstone 5)"
+        '                Case 18204 To 18362
+        '                    FeatUpd = "1903 (Titanium)"
+        '                Case Is = 18362
+        '                    If KeVerInfo.ProductPrivatePart >= 10000 Then
+        '                        FeatUpd = "1909 (Vanadium)"
+        '                    Else
+        '                        FeatUpd = "1903 (Titanium)"
+        '                    End If
+        '                Case Is = 18363
+        '                    FeatUpd = "1909 (Vanadium)"
+        '                Case 18826 To 19041
+        '                    FeatUpd = "2004 (Vibranium"
+        '                Case 19041 To 19489
+        '                    FeatUpd = "2004+ (Vibranium)"
+        '                Case 19489 To 19645
+        '                    FeatUpd = "2004 (Manganese)"
+        '                Case 20124 To 20279
+        '                    FeatUpd = "21H1 (Iron)"
+        '                Case 20282 To 20348
+        '                    FeatUpd = "21H2 (Iron)"
+        '                Case 21242 To 22000     ' Also includes Windows 11 Cobalt (21H2)
+        '                    FeatUpd = "21H2 (Cobalt)"
+        '                Case 22350 To 22623
+        '                    FeatUpd = "22H2 (Nickel)"
+        '                Case 25057 To 25238
+        '                    FeatUpd = "22H2 (Copper)"
+        '                Case 25240 To 26000     ' 26000 is a relative number. We still don't know Zinc's final build
+        '                    FeatUpd = "23H2 (Zinc)"
+        '            End Select
+        '        Case Else
+        '            Exit Sub
+        '    End Select
+        '    imgVersion.Text &= CrLf & "(feature update: " & FeatUpd & ")"
+        'Catch ex As Exception
+        '    Exit Sub
+        'End Try
     End Sub
 End Class
