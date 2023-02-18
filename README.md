@@ -35,7 +35,7 @@ The following actions are supported by DISMTools:
   
 ## Unsupported actions
 
-- Getting any kind of information from packages or features
+- Getting any kind of information from packages or features (on demand)
 - Driver management
 - Capability (Features on Demand) management
 - Regional settings
