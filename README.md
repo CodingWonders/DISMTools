@@ -14,6 +14,7 @@ DISMTools is a front-end for DISM which lets you manage your Windows Imaging (WI
 The following actions are supported by DISMTools:
 
   > This program is **still in Alpha stages**, so not every possible action is implemented. Check the "Unsupported actions" for more details
+
 - Image management
   - WIM/SWM/ESD file application
   - Image capture
@@ -34,7 +35,7 @@ The following actions are supported by DISMTools:
   
 ## Unsupported actions
 
-- Getting any kind of information from packages or features (on demand)
+- Getting any kind of information from packages or features
 - Driver management
 - Capability (Features on Demand) management
 - Regional settings
