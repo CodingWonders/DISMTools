@@ -141,6 +141,10 @@ Public Class ImgApply
 
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
         GetMaxIndexCount(TextBox1.Text)
+        If TextBox1.Text.EndsWith("*.swm") Then
+            CheckBox4.Checked = True
+            Button4.PerformClick()
+        End If
     End Sub
 
     Sub GetMaxIndexCount(ImgFile As String)
