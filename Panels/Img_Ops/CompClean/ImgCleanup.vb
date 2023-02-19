@@ -45,7 +45,7 @@ Public Class ImgCleanup
             Loop
             If reg.ExitCode = 0 Then
                 Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("MountedSoft\Microsoft\Windows\CurrentVersion\Component Based Servicing", False)
-                Dim LastResetBase_UTC As String = regKey.GetValue("LastResetBase_UTC", "Could not get last base reset date").ToString()
+                Dim LastResetBase_UTC As String = regKey.GetValue("LastResetBase_UTC", "Could not get last base reset date. It is possible that no base resets were made").ToString()
                 regKey.Close()
                 Dim charArray() As Char = LastResetBase_UTC.ToCharArray()
                 If LastResetBase_UTC.Contains("/") Then charArray(10) = " "
