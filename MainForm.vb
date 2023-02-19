@@ -4288,7 +4288,6 @@ Public Class MainForm
     End Sub
 
     Private Sub OptionsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OptionsToolStripMenuItem.Click
-        Options.TabControl1.SelectedIndex = 0
         Options.ShowDialog()
     End Sub
 
