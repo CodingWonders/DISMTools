@@ -88,16 +88,14 @@ Public Class ProjProperties
                             imgLangText.Clear()
                             For Each language In info.Languages
                                 If imgLangText.Text = "" Then
-                                    imgLangText.Text = language.Name & ", "
+                                    imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (default)", "") & ", "
                                 Else
-                                    imgLangText.AppendText(language.Name & ", ")
+                                    imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (default)", "") & ", ")
                                 End If
                             Next
                             Dim langarr() As Char = imgLangText.Text.ToCharArray()
                             langarr(langarr.Count - 2) = ""
                             imgLangText.Text = New String(langarr)
-                            imgLangText.AppendText(CrLf & _
-                                                   "Default language: " & info.DefaultLanguage.Name)
                             imgFormat.Text = Path.GetExtension(MainForm.MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper() & " file"
                             imgRW.Text = If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No")
                             If MainForm.MountedImageMountedReWr(x) = 0 Then
@@ -105,6 +103,10 @@ Public Class ProjProperties
                             Else
                                 RWRemountBtn.Visible = True
                             End If
+                            imgDirs.Text = info.CustomizedInfo.DirectoryCount
+                            imgFiles.Text = info.CustomizedInfo.FileCount
+                            imgCreation.Text = info.CustomizedInfo.CreatedTime
+                            imgModification.Text = info.CustomizedInfo.ModifiedTime
                             Exit For
                         Next
                     End If
@@ -126,28 +128,16 @@ Public Class ProjProperties
                         Case 1
                             File.WriteAllText(".\bin\exthelpers\imginfo.bat",
                                               "@echo off" & CrLf &
-                                              "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot" & CrLf &
-                                              "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgdirs" & CrLf &
-                                              "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgfiles" & CrLf &
-                                              "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgcreation" & CrLf &
-                                              "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmodification", ASCII)
+                                              "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot", ASCII)
                         Case Is >= 2
                             File.WriteAllText(".\bin\exthelpers\imginfo.bat",
                                               "@echo off" & CrLf &
-                                              "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot" & CrLf &
-                                              "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgdirs" & CrLf &
-                                              "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgfiles" & CrLf &
-                                              "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgcreation" & CrLf &
-                                              "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmodification", ASCII)
+                                              "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot", ASCII)
                     End Select
                 Case 10
                     File.WriteAllText(".\bin\exthelpers\imginfo.bat",
                                       "@echo off" & CrLf &
-                                      "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot" & CrLf &
-                                      "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgdirs" & CrLf &
-                                      "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgfiles" & CrLf &
-                                      "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgcreation" & CrLf &
-                                      "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgmodification", ASCII)
+                                      "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot", ASCII)
             End Select
             If Debugger.IsAttached Then
                 Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\imginfo.bat").WaitForExit()
@@ -155,10 +145,6 @@ Public Class ProjProperties
             Process.Start(".\bin\exthelpers\imginfo.bat").WaitForExit()
             Try
                 imgWimBootStatus.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgwimboot", ASCII).Replace("WIM Bootable : ", "").Trim()
-                imgDirs.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgdirs", ASCII).Replace("Directories : ", "").Trim()
-                imgFiles.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgfiles", ASCII).Replace("Files : ", "").Trim()
-                imgCreation.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgcreation", ASCII).Replace("Created : ", "").Trim()
-                imgModification.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgmodification", ASCII).Replace("Modified : ", "").Trim()
                 If Not MainForm.ImgBW.IsBusy Then
                     For Each foundFile In My.Computer.FileSystem.GetFiles(MainForm.projPath & "\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
                         File.Delete(foundFile)
