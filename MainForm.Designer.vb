@@ -183,6 +183,14 @@ Partial Class MainForm
         Me.ISHelp = New System.Windows.Forms.ToolStripMenuItem()
         Me.HomePanel = New System.Windows.Forms.Panel()
         Me.WelcomePanel = New System.Windows.Forms.Panel()
+        Me.StartPanel = New System.Windows.Forms.Panel()
+        Me.Label22 = New System.Windows.Forms.Label()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.Panel4 = New System.Windows.Forms.Panel()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.Button18 = New System.Windows.Forms.Button()
+        Me.Button17 = New System.Windows.Forms.Button()
         Me.WelcomeTabControl = New System.Windows.Forms.TabControl()
         Me.WelcomeTab = New System.Windows.Forms.TabPage()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
@@ -308,9 +316,36 @@ Partial Class MainForm
         Me.DiscardAndUnmountTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator20 = New System.Windows.Forms.ToolStripSeparator()
         Me.UnmountSettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.StartPanelPContainer = New System.Windows.Forms.Panel()
+        Me.GetStartedPanel = New System.Windows.Forms.Panel()
+        Me.TutorialVideoPanel = New System.Windows.Forms.Panel()
+        Me.LatestNewsPanel = New System.Windows.Forms.Panel()
+        Me.Panel5 = New System.Windows.Forms.Panel()
+        Me.Label34 = New System.Windows.Forms.Label()
+        Me.Label35 = New System.Windows.Forms.Label()
+        Me.GetStartedContainer = New System.Windows.Forms.Panel()
+        Me.Panel6 = New System.Windows.Forms.Panel()
+        Me.Panel7 = New System.Windows.Forms.Panel()
+        Me.PictureBox6 = New System.Windows.Forms.PictureBox()
+        Me.Label36 = New System.Windows.Forms.Label()
+        Me.LinkLabel4 = New System.Windows.Forms.LinkLabel()
+        Me.LinkLabel5 = New System.Windows.Forms.LinkLabel()
+        Me.PictureBox7 = New System.Windows.Forms.PictureBox()
+        Me.Label37 = New System.Windows.Forms.Label()
+        Me.LinkLabel6 = New System.Windows.Forms.LinkLabel()
+        Me.LinkLabel7 = New System.Windows.Forms.LinkLabel()
+        Me.LinkLabel8 = New System.Windows.Forms.LinkLabel()
+        Me.PictureBox8 = New System.Windows.Forms.PictureBox()
+        Me.Label38 = New System.Windows.Forms.Label()
+        Me.LinkLabel9 = New System.Windows.Forms.LinkLabel()
+        Me.LinkLabel10 = New System.Windows.Forms.LinkLabel()
+        Me.LinkLabel11 = New System.Windows.Forms.LinkLabel()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
+        Me.StartPanel.SuspendLayout()
+        Me.Panel4.SuspendLayout()
         Me.WelcomeTabControl.SuspendLayout()
         Me.WelcomeTab.SuspendLayout()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -350,6 +385,15 @@ Partial Class MainForm
         Me.PkgInfoCMS.SuspendLayout()
         Me.FeatureInfoCMS.SuspendLayout()
         Me.ImgUMountPopupCMS.SuspendLayout()
+        Me.Panel1.SuspendLayout()
+        Me.StartPanelPContainer.SuspendLayout()
+        Me.GetStartedPanel.SuspendLayout()
+        Me.Panel5.SuspendLayout()
+        Me.GetStartedContainer.SuspendLayout()
+        Me.Panel6.SuspendLayout()
+        CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox7, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox8, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'MenuStrip1
@@ -1334,6 +1378,8 @@ Partial Class MainForm
         '
         'WelcomePanel
         '
+        Me.WelcomePanel.Controls.Add(Me.StartPanel)
+        Me.WelcomePanel.Controls.Add(Me.Button17)
         Me.WelcomePanel.Controls.Add(Me.WelcomeTabControl)
         Me.WelcomePanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.WelcomePanel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -1341,6 +1387,95 @@ Partial Class MainForm
         Me.WelcomePanel.Name = "WelcomePanel"
         Me.WelcomePanel.Size = New System.Drawing.Size(752, 537)
         Me.WelcomePanel.TabIndex = 1
+        '
+        'StartPanel
+        '
+        Me.StartPanel.Controls.Add(Me.StartPanelPContainer)
+        Me.StartPanel.Controls.Add(Me.Panel1)
+        Me.StartPanel.Controls.Add(Me.Panel4)
+        Me.StartPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.StartPanel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.StartPanel.Location = New System.Drawing.Point(0, 0)
+        Me.StartPanel.Name = "StartPanel"
+        Me.StartPanel.Size = New System.Drawing.Size(752, 537)
+        Me.StartPanel.TabIndex = 2
+        Me.StartPanel.Visible = False
+        '
+        'Label22
+        '
+        Me.Label22.AutoSize = True
+        Me.Label22.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label22.ForeColor = System.Drawing.Color.FromArgb(CType(CType(153, Byte), Integer), CType(CType(153, Byte), Integer), CType(CType(153, Byte), Integer))
+        Me.Label22.Location = New System.Drawing.Point(234, 12)
+        Me.Label22.Name = "Label22"
+        Me.Label22.Size = New System.Drawing.Size(84, 15)
+        Me.Label22.TabIndex = 3
+        Me.Label22.Text = "LATEST NEWS"
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label9.ForeColor = System.Drawing.Color.FromArgb(CType(CType(153, Byte), Integer), CType(CType(153, Byte), Integer), CType(CType(153, Byte), Integer))
+        Me.Label9.Location = New System.Drawing.Point(110, 12)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(111, 15)
+        Me.Label9.TabIndex = 3
+        Me.Label9.Text = "TUTORIAL VIDEOS"
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label8.ForeColor = System.Drawing.Color.FromArgb(CType(CType(85, Byte), Integer), CType(CType(85, Byte), Integer), CType(CType(85, Byte), Integer))
+        Me.Label8.Location = New System.Drawing.Point(14, 12)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(83, 15)
+        Me.Label8.TabIndex = 3
+        Me.Label8.Text = "GET STARTED"
+        '
+        'Panel4
+        '
+        Me.Panel4.Controls.Add(Me.Label7)
+        Me.Panel4.Controls.Add(Me.Button18)
+        Me.Panel4.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel4.Location = New System.Drawing.Point(0, 0)
+        Me.Panel4.Name = "Panel4"
+        Me.Panel4.Size = New System.Drawing.Size(752, 38)
+        Me.Panel4.TabIndex = 2
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Location = New System.Drawing.Point(11, 11)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(512, 15)
+        Me.Label7.TabIndex = 2
+        Me.Label7.Text = "You are using a preview design of the Start Panel. You can go back to the old des" & _
+    "ign at any time."
+        '
+        'Button18
+        '
+        Me.Button18.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button18.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button18.Location = New System.Drawing.Point(554, 7)
+        Me.Button18.Name = "Button18"
+        Me.Button18.Size = New System.Drawing.Size(187, 23)
+        Me.Button18.TabIndex = 1
+        Me.Button18.Text = "Go back to previous design"
+        Me.Button18.UseVisualStyleBackColor = True
+        '
+        'Button17
+        '
+        Me.Button17.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button17.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button17.Location = New System.Drawing.Point(554, 7)
+        Me.Button17.Name = "Button17"
+        Me.Button17.Size = New System.Drawing.Size(187, 23)
+        Me.Button17.TabIndex = 1
+        Me.Button17.Text = "Switch to the preview version"
+        Me.Button17.UseVisualStyleBackColor = True
+        Me.Button17.Visible = False
         '
         'WelcomeTabControl
         '
@@ -2496,9 +2631,9 @@ Partial Class MainForm
         Me.prjTreeStatus.BackColor = System.Drawing.SystemColors.Control
         Me.prjTreeStatus.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.prjTreeStatus.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel2, Me.ToolStripProgressBar1})
-        Me.prjTreeStatus.Location = New System.Drawing.Point(0, 400)
+        Me.prjTreeStatus.Location = New System.Drawing.Point(0, 489)
         Me.prjTreeStatus.Name = "prjTreeStatus"
-        Me.prjTreeStatus.Size = New System.Drawing.Size(252, 22)
+        Me.prjTreeStatus.Size = New System.Drawing.Size(256, 22)
         Me.prjTreeStatus.SizingGrip = False
         Me.prjTreeStatus.TabIndex = 0
         Me.prjTreeStatus.Text = "StatusStrip1"
@@ -2645,6 +2780,282 @@ Partial Class MainForm
         Me.UnmountSettingsToolStripMenuItem.Size = New System.Drawing.Size(252, 22)
         Me.UnmountSettingsToolStripMenuItem.Text = "Unmount settings..."
         '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.Label8)
+        Me.Panel1.Controls.Add(Me.Label9)
+        Me.Panel1.Controls.Add(Me.Label22)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel1.Location = New System.Drawing.Point(0, 38)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(752, 38)
+        Me.Panel1.TabIndex = 4
+        '
+        'StartPanelPContainer
+        '
+        Me.StartPanelPContainer.Controls.Add(Me.GetStartedPanel)
+        Me.StartPanelPContainer.Controls.Add(Me.TutorialVideoPanel)
+        Me.StartPanelPContainer.Controls.Add(Me.LatestNewsPanel)
+        Me.StartPanelPContainer.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.StartPanelPContainer.Location = New System.Drawing.Point(0, 76)
+        Me.StartPanelPContainer.Name = "StartPanelPContainer"
+        Me.StartPanelPContainer.Size = New System.Drawing.Size(752, 461)
+        Me.StartPanelPContainer.TabIndex = 5
+        '
+        'GetStartedPanel
+        '
+        Me.GetStartedPanel.Controls.Add(Me.GetStartedContainer)
+        Me.GetStartedPanel.Controls.Add(Me.Panel5)
+        Me.GetStartedPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.GetStartedPanel.Location = New System.Drawing.Point(0, 0)
+        Me.GetStartedPanel.Name = "GetStartedPanel"
+        Me.GetStartedPanel.Size = New System.Drawing.Size(752, 461)
+        Me.GetStartedPanel.TabIndex = 0
+        '
+        'TutorialVideoPanel
+        '
+        Me.TutorialVideoPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TutorialVideoPanel.Location = New System.Drawing.Point(0, 0)
+        Me.TutorialVideoPanel.Name = "TutorialVideoPanel"
+        Me.TutorialVideoPanel.Size = New System.Drawing.Size(752, 461)
+        Me.TutorialVideoPanel.TabIndex = 0
+        '
+        'LatestNewsPanel
+        '
+        Me.LatestNewsPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.LatestNewsPanel.Location = New System.Drawing.Point(0, 0)
+        Me.LatestNewsPanel.Name = "LatestNewsPanel"
+        Me.LatestNewsPanel.Size = New System.Drawing.Size(752, 461)
+        Me.LatestNewsPanel.TabIndex = 0
+        '
+        'Panel5
+        '
+        Me.Panel5.Controls.Add(Me.Label34)
+        Me.Panel5.Controls.Add(Me.Label35)
+        Me.Panel5.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel5.Location = New System.Drawing.Point(0, 0)
+        Me.Panel5.Name = "Panel5"
+        Me.Panel5.Size = New System.Drawing.Size(752, 38)
+        Me.Panel5.TabIndex = 5
+        '
+        'Label34
+        '
+        Me.Label34.AutoSize = True
+        Me.Label34.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label34.ForeColor = System.Drawing.Color.FromArgb(CType(CType(85, Byte), Integer), CType(CType(85, Byte), Integer), CType(CType(85, Byte), Integer))
+        Me.Label34.Location = New System.Drawing.Point(14, 8)
+        Me.Label34.Name = "Label34"
+        Me.Label34.Size = New System.Drawing.Size(71, 20)
+        Me.Label34.TabIndex = 3
+        Me.Label34.Text = "Welcome"
+        '
+        'Label35
+        '
+        Me.Label35.AutoSize = True
+        Me.Label35.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label35.ForeColor = System.Drawing.Color.FromArgb(CType(CType(153, Byte), Integer), CType(CType(153, Byte), Integer), CType(CType(153, Byte), Integer))
+        Me.Label35.Location = New System.Drawing.Point(98, 8)
+        Me.Label35.Name = "Label35"
+        Me.Label35.Size = New System.Drawing.Size(122, 20)
+        Me.Label35.TabIndex = 3
+        Me.Label35.Text = "Windows images"
+        '
+        'GetStartedContainer
+        '
+        Me.GetStartedContainer.Controls.Add(Me.Panel6)
+        Me.GetStartedContainer.Controls.Add(Me.Panel7)
+        Me.GetStartedContainer.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.GetStartedContainer.Location = New System.Drawing.Point(0, 38)
+        Me.GetStartedContainer.Name = "GetStartedContainer"
+        Me.GetStartedContainer.Size = New System.Drawing.Size(752, 423)
+        Me.GetStartedContainer.TabIndex = 6
+        '
+        'Panel6
+        '
+        Me.Panel6.Controls.Add(Me.LinkLabel11)
+        Me.Panel6.Controls.Add(Me.LinkLabel8)
+        Me.Panel6.Controls.Add(Me.LinkLabel10)
+        Me.Panel6.Controls.Add(Me.LinkLabel7)
+        Me.Panel6.Controls.Add(Me.LinkLabel5)
+        Me.Panel6.Controls.Add(Me.LinkLabel9)
+        Me.Panel6.Controls.Add(Me.LinkLabel6)
+        Me.Panel6.Controls.Add(Me.LinkLabel4)
+        Me.Panel6.Controls.Add(Me.Label38)
+        Me.Panel6.Controls.Add(Me.Label37)
+        Me.Panel6.Controls.Add(Me.Label36)
+        Me.Panel6.Controls.Add(Me.PictureBox8)
+        Me.Panel6.Controls.Add(Me.PictureBox7)
+        Me.Panel6.Controls.Add(Me.PictureBox6)
+        Me.Panel6.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel6.Location = New System.Drawing.Point(0, 0)
+        Me.Panel6.Name = "Panel6"
+        Me.Panel6.Size = New System.Drawing.Size(752, 423)
+        Me.Panel6.TabIndex = 0
+        '
+        'Panel7
+        '
+        Me.Panel7.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel7.Location = New System.Drawing.Point(0, 0)
+        Me.Panel7.Name = "Panel7"
+        Me.Panel7.Size = New System.Drawing.Size(752, 423)
+        Me.Panel7.TabIndex = 1
+        '
+        'PictureBox6
+        '
+        Me.PictureBox6.Location = New System.Drawing.Point(16, 16)
+        Me.PictureBox6.Name = "PictureBox6"
+        Me.PictureBox6.Size = New System.Drawing.Size(48, 48)
+        Me.PictureBox6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox6.TabIndex = 0
+        Me.PictureBox6.TabStop = False
+        '
+        'Label36
+        '
+        Me.Label36.AutoSize = True
+        Me.Label36.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label36.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label36.Location = New System.Drawing.Point(80, 16)
+        Me.Label36.Name = "Label36"
+        Me.Label36.Size = New System.Drawing.Size(84, 20)
+        Me.Label36.TabIndex = 3
+        Me.Label36.Text = "What's new"
+        '
+        'LinkLabel4
+        '
+        Me.LinkLabel4.AutoSize = True
+        Me.LinkLabel4.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel4.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel4.Location = New System.Drawing.Point(81, 39)
+        Me.LinkLabel4.Name = "LinkLabel4"
+        Me.LinkLabel4.Size = New System.Drawing.Size(139, 15)
+        Me.LinkLabel4.TabIndex = 4
+        Me.LinkLabel4.TabStop = True
+        Me.LinkLabel4.Text = "What's new in DISMTools"
+        '
+        'LinkLabel5
+        '
+        Me.LinkLabel5.AutoSize = True
+        Me.LinkLabel5.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel5.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel5.Location = New System.Drawing.Point(81, 57)
+        Me.LinkLabel5.Name = "LinkLabel5"
+        Me.LinkLabel5.Size = New System.Drawing.Size(171, 15)
+        Me.LinkLabel5.TabIndex = 4
+        Me.LinkLabel5.TabStop = True
+        Me.LinkLabel5.Text = "Key features of image servicing"
+        '
+        'PictureBox7
+        '
+        Me.PictureBox7.Location = New System.Drawing.Point(16, 84)
+        Me.PictureBox7.Name = "PictureBox7"
+        Me.PictureBox7.Size = New System.Drawing.Size(48, 48)
+        Me.PictureBox7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox7.TabIndex = 0
+        Me.PictureBox7.TabStop = False
+        '
+        'Label37
+        '
+        Me.Label37.AutoSize = True
+        Me.Label37.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label37.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label37.Location = New System.Drawing.Point(80, 84)
+        Me.Label37.Name = "Label37"
+        Me.Label37.Size = New System.Drawing.Size(108, 20)
+        Me.Label37.TabIndex = 3
+        Me.Label37.Text = "Getting started"
+        '
+        'LinkLabel6
+        '
+        Me.LinkLabel6.AutoSize = True
+        Me.LinkLabel6.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel6.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel6.Location = New System.Drawing.Point(81, 107)
+        Me.LinkLabel6.Name = "LinkLabel6"
+        Me.LinkLabel6.Size = New System.Drawing.Size(197, 15)
+        Me.LinkLabel6.TabIndex = 4
+        Me.LinkLabel6.TabStop = True
+        Me.LinkLabel6.Text = "Getting started with image servicing"
+        '
+        'LinkLabel7
+        '
+        Me.LinkLabel7.AutoSize = True
+        Me.LinkLabel7.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel7.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel7.Location = New System.Drawing.Point(81, 125)
+        Me.LinkLabel7.Name = "LinkLabel7"
+        Me.LinkLabel7.Size = New System.Drawing.Size(169, 15)
+        Me.LinkLabel7.TabIndex = 4
+        Me.LinkLabel7.TabStop = True
+        Me.LinkLabel7.Text = "Getting started with DISMTools"
+        '
+        'LinkLabel8
+        '
+        Me.LinkLabel8.AutoSize = True
+        Me.LinkLabel8.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel8.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel8.Location = New System.Drawing.Point(81, 143)
+        Me.LinkLabel8.Name = "LinkLabel8"
+        Me.LinkLabel8.Size = New System.Drawing.Size(169, 15)
+        Me.LinkLabel8.TabIndex = 4
+        Me.LinkLabel8.TabStop = True
+        Me.LinkLabel8.Text = "Coming from other front-ends"
+        '
+        'PictureBox8
+        '
+        Me.PictureBox8.Location = New System.Drawing.Point(16, 167)
+        Me.PictureBox8.Name = "PictureBox8"
+        Me.PictureBox8.Size = New System.Drawing.Size(48, 48)
+        Me.PictureBox8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox8.TabIndex = 0
+        Me.PictureBox8.TabStop = False
+        '
+        'Label38
+        '
+        Me.Label38.AutoSize = True
+        Me.Label38.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label38.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label38.Location = New System.Drawing.Point(80, 167)
+        Me.Label38.Name = "Label38"
+        Me.Label38.Size = New System.Drawing.Size(108, 20)
+        Me.Label38.TabIndex = 3
+        Me.Label38.Text = "Getting started"
+        '
+        'LinkLabel9
+        '
+        Me.LinkLabel9.AutoSize = True
+        Me.LinkLabel9.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel9.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel9.Location = New System.Drawing.Point(81, 190)
+        Me.LinkLabel9.Name = "LinkLabel9"
+        Me.LinkLabel9.Size = New System.Drawing.Size(197, 15)
+        Me.LinkLabel9.TabIndex = 4
+        Me.LinkLabel9.TabStop = True
+        Me.LinkLabel9.Text = "Getting started with image servicing"
+        '
+        'LinkLabel10
+        '
+        Me.LinkLabel10.AutoSize = True
+        Me.LinkLabel10.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel10.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel10.Location = New System.Drawing.Point(81, 208)
+        Me.LinkLabel10.Name = "LinkLabel10"
+        Me.LinkLabel10.Size = New System.Drawing.Size(169, 15)
+        Me.LinkLabel10.TabIndex = 4
+        Me.LinkLabel10.TabStop = True
+        Me.LinkLabel10.Text = "Getting started with DISMTools"
+        '
+        'LinkLabel11
+        '
+        Me.LinkLabel11.AutoSize = True
+        Me.LinkLabel11.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel11.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel11.Location = New System.Drawing.Point(81, 226)
+        Me.LinkLabel11.Name = "LinkLabel11"
+        Me.LinkLabel11.Size = New System.Drawing.Size(169, 15)
+        Me.LinkLabel11.TabIndex = 4
+        Me.LinkLabel11.TabStop = True
+        Me.LinkLabel11.Text = "Coming from other front-ends"
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -2663,6 +3074,9 @@ Partial Class MainForm
         Me.MenuStrip1.PerformLayout()
         Me.HomePanel.ResumeLayout(False)
         Me.WelcomePanel.ResumeLayout(False)
+        Me.StartPanel.ResumeLayout(False)
+        Me.Panel4.ResumeLayout(False)
+        Me.Panel4.PerformLayout()
         Me.WelcomeTabControl.ResumeLayout(False)
         Me.WelcomeTab.ResumeLayout(False)
         Me.WelcomeTab.PerformLayout()
@@ -2716,6 +3130,18 @@ Partial Class MainForm
         Me.PkgInfoCMS.ResumeLayout(False)
         Me.FeatureInfoCMS.ResumeLayout(False)
         Me.ImgUMountPopupCMS.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
+        Me.StartPanelPContainer.ResumeLayout(False)
+        Me.GetStartedPanel.ResumeLayout(False)
+        Me.Panel5.ResumeLayout(False)
+        Me.Panel5.PerformLayout()
+        Me.GetStartedContainer.ResumeLayout(False)
+        Me.Panel6.ResumeLayout(False)
+        Me.Panel6.PerformLayout()
+        CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox7, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox8, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -3004,4 +3430,37 @@ Partial Class MainForm
     Friend WithEvents DiscardAndUnmountTSMI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator20 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents UnmountSettingsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents StartPanel As System.Windows.Forms.Panel
+    Friend WithEvents Panel4 As System.Windows.Forms.Panel
+    Friend WithEvents Label7 As System.Windows.Forms.Label
+    Friend WithEvents Button18 As System.Windows.Forms.Button
+    Friend WithEvents Button17 As System.Windows.Forms.Button
+    Friend WithEvents Label22 As System.Windows.Forms.Label
+    Friend WithEvents Label9 As System.Windows.Forms.Label
+    Friend WithEvents Label8 As System.Windows.Forms.Label
+    Friend WithEvents StartPanelPContainer As System.Windows.Forms.Panel
+    Friend WithEvents GetStartedPanel As System.Windows.Forms.Panel
+    Friend WithEvents GetStartedContainer As System.Windows.Forms.Panel
+    Friend WithEvents Panel6 As System.Windows.Forms.Panel
+    Friend WithEvents LinkLabel11 As System.Windows.Forms.LinkLabel
+    Friend WithEvents LinkLabel8 As System.Windows.Forms.LinkLabel
+    Friend WithEvents LinkLabel10 As System.Windows.Forms.LinkLabel
+    Friend WithEvents LinkLabel7 As System.Windows.Forms.LinkLabel
+    Friend WithEvents LinkLabel5 As System.Windows.Forms.LinkLabel
+    Friend WithEvents LinkLabel9 As System.Windows.Forms.LinkLabel
+    Friend WithEvents LinkLabel6 As System.Windows.Forms.LinkLabel
+    Friend WithEvents LinkLabel4 As System.Windows.Forms.LinkLabel
+    Friend WithEvents Label38 As System.Windows.Forms.Label
+    Friend WithEvents Label37 As System.Windows.Forms.Label
+    Friend WithEvents Label36 As System.Windows.Forms.Label
+    Friend WithEvents PictureBox8 As System.Windows.Forms.PictureBox
+    Friend WithEvents PictureBox7 As System.Windows.Forms.PictureBox
+    Friend WithEvents PictureBox6 As System.Windows.Forms.PictureBox
+    Friend WithEvents Panel7 As System.Windows.Forms.Panel
+    Friend WithEvents Panel5 As System.Windows.Forms.Panel
+    Friend WithEvents Label34 As System.Windows.Forms.Label
+    Friend WithEvents Label35 As System.Windows.Forms.Label
+    Friend WithEvents TutorialVideoPanel As System.Windows.Forms.Panel
+    Friend WithEvents LatestNewsPanel As System.Windows.Forms.Panel
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
 End Class
