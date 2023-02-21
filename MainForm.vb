@@ -4447,6 +4447,7 @@ Public Class MainForm
         PleaseWaitDialog.Label2.Text = "Getting package names..."
         If Not areBackgroundProcessesDone Then
             PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
         End If
         Try
             For x = 0 To Array.LastIndexOf(imgPackageNames, imgPackageNames.Last)
@@ -4505,6 +4506,7 @@ Public Class MainForm
         PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
         If Not areBackgroundProcessesDone Then
             PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
         End If
         Select Case PleaseWaitDialog.featOpType
             Case 0
@@ -4570,6 +4572,7 @@ Public Class MainForm
         PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
         If Not areBackgroundProcessesDone Then
             PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
         End If
         Select Case PleaseWaitDialog.featOpType
             Case 0
@@ -4758,6 +4761,7 @@ Public Class MainForm
         PleaseWaitDialog.Label2.Text = "Getting package names..."
         If Not areBackgroundProcessesDone Then
             PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
         End If
         Try
             For x = 0 To Array.LastIndexOf(imgPackageNames, imgPackageNames.Last)
@@ -4795,6 +4799,7 @@ Public Class MainForm
         PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
         If Not areBackgroundProcessesDone Then
             PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
         End If
         Select Case PleaseWaitDialog.featOpType
             Case 0
@@ -4860,6 +4865,7 @@ Public Class MainForm
         PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
         If Not areBackgroundProcessesDone Then
             PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
         End If
         Select Case PleaseWaitDialog.featOpType
             Case 0
@@ -4925,9 +4931,9 @@ Public Class MainForm
         RemProvAppxPackage.ListView1.Items.Clear()
         PleaseWaitDialog.Label2.Text = "Getting provisioned AppX packages..."
         ProgressPanel.OperationNum = 994
-        PleaseWaitDialog.ShowDialog()
         If Not areBackgroundProcessesDone Then
             PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
         End If
         Try
             For x = 0 To Array.LastIndexOf(imgAppxPackageNames, imgAppxPackageNames.Last)
