@@ -136,11 +136,8 @@ Public Class PleaseWaitDialog
             End If
         ElseIf ProgressPanel.OperationNum = 993 Then
             If MainForm.expBackgroundProcesses Then
-                Do Until MainForm.areBackgroundProcessesDone
-                    If MainForm.areBackgroundProcessesDone Then
-                        Exit Do
-                    End If
-                Loop
+                Visible = False
+                BGProcsBusyDialog.ShowDialog(MainForm)
             Else
                 File.WriteAllText(".\temp.bat",
                                   "@echo off" & CrLf &
@@ -179,11 +176,8 @@ Public Class PleaseWaitDialog
             End If
         ElseIf ProgressPanel.OperationNum = 994 Then
             If MainForm.expBackgroundProcesses Then
-                Do Until MainForm.areBackgroundProcessesDone
-                    If MainForm.areBackgroundProcessesDone Then
-                        Exit Do
-                    End If
-                Loop
+                Visible = False
+                BGProcsBusyDialog.ShowDialog(MainForm)
             Else
                 File.WriteAllText(".\temp.bat",
                                   "@echo off" & CrLf &
