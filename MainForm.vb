@@ -777,14 +777,32 @@ Public Class MainForm
     ''' <summary>
     ''' Runs specified background processes. The program refers to the processes that gather image information as "background processes", due to the way they are run (in the background ;))
     ''' </summary>
-    ''' <param name="bgProcOptn"></param>
-    ''' <param name="GatherBasicInfo"></param>
+    ''' <param name="bgProcOptn">Which processes are run to get image information</param>
+    ''' <param name="GatherBasicInfo">When true, this procedure gets the basic image information (image file, index, mountpoint and status)</param>
+    ''' <param name="GatherAdvancedInfo">When true, this procedure gets all image information unrelated to packages, features, capabilities, or drivers</param>
+    ''' <param name="UseApi">(Optional) Uses the DISM API to get image information and to reduce the time these processes take</param>
     ''' <remarks>Depending on the parameter of bgProcOptn, and on the power of the system, the background processes may take a longer time to finish</remarks>
-    Sub RunBackgroundProcesses(bgProcOptn As Integer, GatherBasicInfo As Boolean, GatherAdvancedInfo As Boolean)
+    Sub RunBackgroundProcesses(bgProcOptn As Integer, GatherBasicInfo As Boolean, GatherAdvancedInfo As Boolean, Optional UseApi As Boolean = False)
+        If DismApi.DISMAPI_E_DISMAPI_NOT_INITIALIZED Then DismApi.Initialize(DismLogLevel.LogErrors)
         areBackgroundProcessesDone = False
         regJumps = False
         irregVal = 0
         pbOpNums = 0
+        Dim session As DismSession = Nothing
+        If UseApi Then
+            Try
+                For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
+                    If MountedImageMountDirs(x) = MountDir Then
+                        progressLabel = "Creating session for this image..."
+                        ImgBW.ReportProgress(0)
+                        session = DismApi.OpenOfflineSession(MountedImageMountDirs(x))
+                        Exit For
+                    End If
+                Next
+            Catch ex As Exception
+
+            End Try
+        End If
         ' Determine which actions are being done
         If GatherBasicInfo Then
             If GatherAdvancedInfo Then
@@ -845,10 +863,10 @@ Public Class MainForm
             Case 0
                 progressLabel = "Getting image packages..."
                 ImgBW.ReportProgress(20)
-                GetImagePackages()
+                GetImagePackages(If(session IsNot Nothing, True, False), If(session IsNot Nothing, session, Nothing))
                 progressLabel = "Getting image features..."
                 ImgBW.ReportProgress(progressMin + progressDivs)
-                GetImageFeatures()
+                GetImageFeatures(If(session IsNot Nothing, True, False), If(session IsNot Nothing, session, Nothing))
                 If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") = True Then
                     Debug.WriteLine("[IsWindows8OrHigher] Returned True")
                     pbOpNums += 1
@@ -863,13 +881,13 @@ Public Class MainForm
                     pbOpNums += 1
                     progressLabel = "Getting image Features on Demand (capabilities)..."
                     ImgBW.ReportProgress(progressMin + progressDivs)
-                    GetImageCapabilities()
+                    GetImageCapabilities(If(session IsNot Nothing, True, False), If(session IsNot Nothing, session, Nothing))
                 Else
                     Debug.WriteLine("[IsWindows10OrHigher] Returned False")
                 End If
                 progressLabel = "Getting image third-party drivers..."
                 ImgBW.ReportProgress(progressMin + progressDivs)
-                GetImageDrivers()
+                GetImageDrivers(If(session IsNot Nothing, True, False), If(session IsNot Nothing, session, Nothing))
             Case 1
                 progressLabel = "Getting image packages..."
                 ImgBW.ReportProgress(20)
@@ -906,13 +924,16 @@ Public Class MainForm
         DeleteTempFiles()
         areBackgroundProcessesDone = True
         BackgroundProcessesButton.Image = New Bitmap(My.Resources.bg_ops_complete)
+        If UseApi And session IsNot Nothing Then
+            DismApi.CloseSession(session)
+        End If
     End Sub
 
     ''' <summary>
     ''' Gets basic image information, such as its index, its file path, or its mount dir
     ''' </summary>
     ''' <remarks>Depending on the GatherBasicInfo flag in RunBackgroundProcesses, this function will run or not</remarks>
-    Sub GetBasicImageInfo()
+    Sub GetBasicImageInfo(Optional UseApi As Boolean = False)
         ' Set image properties
         Label14.Text = ProgressPanel.ImgIndex
         Label12.Text = ProgressPanel.MountDir
@@ -1096,7 +1117,7 @@ Public Class MainForm
     ''' Gets advanced image information, such as number of files and directories, image name, and more
     ''' </summary>
     ''' <remarks>This is called when bgGetAdvImgInfo is True</remarks>
-    Sub GetAdvancedImageInfo()
+    Sub GetAdvancedImageInfo(Optional UseApi As Boolean = False)
         If IsImageMounted Then
             Try     ' Try getting image properties
                 If Not Directory.Exists(projPath & "\tempinfo") Then
@@ -1427,7 +1448,29 @@ Public Class MainForm
     ''' <summary>
     ''' Gets installed packages in an image and puts them in separate arrays
     ''' </summary>
-    Sub GetImagePackages()
+    Sub GetImagePackages(Optional UseApi As Boolean = False, Optional session As DismSession = Nothing)
+        If UseApi Then
+            If session IsNot Nothing Then
+                Dim imgPackageNameList As New List(Of String)
+                Dim imgPackageStateList As New List(Of String)
+                Dim imgPackageRelTypeList As New List(Of String)
+                Dim imgPackageInstTimeList As New List(Of String)
+                Dim PackageCollection As DismPackageCollection = DismApi.GetPackages(session)
+                For Each package As DismPackage In PackageCollection
+                    imgPackageNameList.Add(package.PackageName)
+                    imgPackageStateList.Add(package.PackageState)
+                    imgPackageRelTypeList.Add(package.ReleaseType)
+                    imgPackageInstTimeList.Add(package.InstallTime.ToString())
+                Next
+                imgPackageNames = imgPackageNameList.ToArray()
+                imgPackageState = imgPackageStateList.ToArray()
+                imgPackageRelType = imgPackageRelTypeList.ToArray()
+                imgPackageInstTime = imgPackageInstTimeList.ToArray()
+            Else
+                Throw New Exception("No valid DISM sesion has been provided")
+            End If
+            Exit Sub
+        End If
         Debug.WriteLine("[GetImagePackages] Running function...")
         Debug.WriteLine("[GetImagePackages] Writing getter scripts...")
         Try
@@ -1515,7 +1558,23 @@ Public Class MainForm
     ''' <summary>
     ''' Gets present features in an image and puts them in separate arrays
     ''' </summary>
-    Sub GetImageFeatures()
+    Sub GetImageFeatures(Optional UseApi As Boolean = False, Optional session As DismSession = Nothing)
+        If UseApi Then
+            If session IsNot Nothing Then
+                Dim imgFeatureNameList As New List(Of String)
+                Dim imgFeatureStateList As New List(Of String)
+                Dim FeatureCollection As DismFeatureCollection = DismApi.GetFeatures(session)
+                For Each feature As DismFeature In FeatureCollection
+                    imgFeatureNameList.Add(feature.FeatureName)
+                    imgFeatureStateList.Add(feature.State)
+                Next
+                imgFeatureNames = imgFeatureNameList.ToArray()
+                imgFeatureState = imgFeatureStateList.ToArray()
+            Else
+                Throw New Exception("No valid DISM session has been provided")
+            End If
+            Exit Sub
+        End If
         Debug.WriteLine("[GetImageFeatures] Running function...")
         Debug.WriteLine("[GetImageFeatures] Writing getter scripts...")
         Try
@@ -1699,7 +1758,23 @@ Public Class MainForm
     ''' Gets installed Features on Demand (capabilities) in an image and puts them in separate arrays
     ''' </summary>
     ''' <remarks>This is only for Windows 10 or newer</remarks>
-    Sub GetImageCapabilities()
+    Sub GetImageCapabilities(Optional UseApi As Boolean = False, Optional session As DismSession = Nothing)
+        If UseApi Then
+            If session IsNot Nothing Then
+                Dim imgCapabilityNameList As New List(Of String)
+                Dim imgCapabilityStateList As New List(Of String)
+                Dim CapabilityCollection As DismCapabilityCollection = DismApi.GetCapabilities(session)
+                For Each capability As DismCapability In CapabilityCollection
+                    imgCapabilityNameList.Add(capability.Name)
+                    imgCapabilityStateList.Add(capability.State)
+                Next
+                imgCapabilityIds = imgCapabilityNameList.ToArray()
+                imgCapabilityState = imgCapabilityStateList.ToArray()
+            Else
+                Throw New Exception("No valid DISM session has been provided")
+            End If
+            Exit Sub
+        End If
         Debug.WriteLine("[GetImageCapabilities] Running function...")
         ' The image may be Windows 10/11, but DISM may not be from Windows 10/11. Get this information before running this procedure
         Dim FileVersion As FileVersionInfo = FileVersionInfo.GetVersionInfo(DismExe)
@@ -1780,7 +1855,38 @@ Public Class MainForm
     ''' Gets installed third-party drivers in an image and puts them in separate arrays
     ''' </summary>
     ''' <remarks>This procedure will detect the number of third-party drivers. If the image contains none, this procedure will end</remarks>
-    Sub GetImageDrivers()
+    Sub GetImageDrivers(Optional UseApi As Boolean = False, Optional session As DismSession = Nothing)
+        If UseApi Then
+            If session IsNot Nothing Then
+                Dim imgDrvPublishedNameList As New List(Of String)
+                Dim imgDrvOGFileNameList As New List(Of String)
+                Dim imgDrvInboxList As New List(Of String)
+                Dim imgDrvClassNameList As New List(Of String)
+                Dim imgDrvProviderNameList As New List(Of String)
+                Dim imgDrvDateList As New List(Of String)
+                Dim imgDrvVersionList As New List(Of String)
+                Dim DriverCollection As DismDriverPackageCollection = DismApi.GetDrivers(session, True)
+                For Each driver As DismDriverPackage In DriverCollection
+                    imgDrvPublishedNameList.Add(driver.PublishedName)
+                    imgDrvOGFileNameList.Add(driver.OriginalFileName)
+                    imgDrvInboxList.Add(driver.InBox)
+                    imgDrvClassNameList.Add(driver.ClassName)
+                    imgDrvProviderNameList.Add(driver.ProviderName)
+                    imgDrvDateList.Add(driver.Date.ToString())
+                    imgDrvVersionList.Add(driver.Version.ToString())
+                Next
+                imgDrvPublishedNames = imgDrvPublishedNameList.ToArray()
+                imgDrvOGFileNames = imgDrvOGFileNameList.ToArray()
+                imgDrvInbox = imgDrvInboxList.ToArray()
+                imgDrvClassNames = imgDrvClassNameList.ToArray()
+                imgDrvProviderNames = imgDrvProviderNameList.ToArray()
+                imgDrvDates = imgDrvDateList.ToArray()
+                imgDrvVersions = imgDrvVersionList.ToArray()
+            Else
+                Throw New Exception("No valid DISM session has been provided")
+            End If
+            Exit Sub
+        End If
         Debug.WriteLine("[GetImageDrivers] Running function...")
         Debug.WriteLine("[GetImageDrivers] Determining whether there are third-party drivers in image...")
         Try
@@ -4489,12 +4595,12 @@ Public Class MainForm
         If bwAllBackgroundProcesses Then
             If bwGetImageInfo Then
                 If bwGetAdvImgInfo Then
-                    RunBackgroundProcesses(bwBackgroundProcessAction, True, True)
+                    RunBackgroundProcesses(bwBackgroundProcessAction, True, True, If(Debugger.IsAttached, True, False))
                 Else
-                    RunBackgroundProcesses(bwBackgroundProcessAction, True, False)
+                    RunBackgroundProcesses(bwBackgroundProcessAction, True, False, If(Debugger.IsAttached, True, False))
                 End If
             Else
-                RunBackgroundProcesses(bwBackgroundProcessAction, False, False)
+                RunBackgroundProcesses(bwBackgroundProcessAction, False, False, If(Debugger.IsAttached, True, False))
             End If
         Else
 
