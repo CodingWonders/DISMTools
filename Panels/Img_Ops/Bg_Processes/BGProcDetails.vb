@@ -4,6 +4,7 @@
     Private mouseOffset As Point
 
     Private Sub BGProcDetails_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If BGProcNotify.Visible Then BGProcNotify.Close()
         Control.CheckForIllegalCrossThreadCalls = False
         If Environment.OSVersion.Version.Major = 10 Then    ' The Left property also includes the window shadows on Windows 10 and 11
             Location = New Point(MainForm.Left + 8, MainForm.Top + MainForm.StatusStrip.Top - (75 + MainForm.StatusStrip.Height))
