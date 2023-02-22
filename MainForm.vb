@@ -4995,6 +4995,8 @@ Public Class MainForm
 
     Private Sub ImgBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ImgBW.RunWorkerCompleted
         If Not MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.RunWorkerAsync()
+        areBackgroundProcessesDone = True
+        BackgroundProcessesButton.Image = New Bitmap(My.Resources.bg_ops_complete)
         progressLabel = "Image processes have completed"
         BGProcDetails.Label2.Text = progressLabel
         BGProcDetails.ProgressBar1.Value = BGProcDetails.ProgressBar1.Maximum
