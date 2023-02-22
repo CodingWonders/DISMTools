@@ -42,8 +42,10 @@ Partial Class PrgAbout
         Me.LinkLabel5 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel6 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel9 = New System.Windows.Forms.LinkLabel()
+        Me.LinkLabel10 = New System.Windows.Forms.LinkLabel()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.Label13 = New System.Windows.Forms.Label()
+        Me.Label16 = New System.Windows.Forms.Label()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.LinkLabel7 = New System.Windows.Forms.LinkLabel()
         Me.Label12 = New System.Windows.Forms.Label()
@@ -142,7 +144,7 @@ Partial Class PrgAbout
         Me.TableLayoutPanel2.ColumnCount = 2
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
-        Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel8, 0, 11)
+        Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel8, 0, 12)
         Me.TableLayoutPanel2.Controls.Add(Me.Label9, 0, 6)
         Me.TableLayoutPanel2.Controls.Add(Me.Label3, 0, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.Label4, 0, 1)
@@ -154,11 +156,13 @@ Partial Class PrgAbout
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel5, 1, 5)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel6, 1, 6)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel9, 1, 7)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label10, 0, 8)
+        Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel10, 1, 8)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label10, 0, 9)
         Me.TableLayoutPanel2.Controls.Add(Me.Label13, 0, 7)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label11, 0, 9)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label16, 0, 8)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label11, 0, 10)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel7, 1, 9)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label12, 0, 10)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label12, 0, 11)
         Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel2.Location = New System.Drawing.Point(3, 3)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
@@ -187,9 +191,9 @@ Partial Class PrgAbout
         Me.LinkLabel8.LinkArea = New System.Windows.Forms.LinkArea(59, 29)
         Me.LinkLabel8.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel8.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel8.Location = New System.Drawing.Point(3, 216)
+        Me.LinkLabel8.Location = New System.Drawing.Point(3, 231)
         Me.LinkLabel8.Name = "LinkLabel8"
-        Me.LinkLabel8.Size = New System.Drawing.Size(342, 37)
+        Me.LinkLabel8.Size = New System.Drawing.Size(342, 57)
         Me.LinkLabel8.TabIndex = 7
         Me.LinkLabel8.TabStop = True
         Me.LinkLabel8.Text = "The Unattended answer file creation wizard is based on the Windows Answer File Ge" & _
@@ -323,11 +327,26 @@ Partial Class PrgAbout
         Me.LinkLabel9.Text = "Visit website"
         Me.LinkLabel9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
+        'LinkLabel10
+        '
+        Me.LinkLabel10.AutoSize = True
+        Me.LinkLabel10.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.LinkLabel10.LinkArea = New System.Windows.Forms.LinkArea(0, 13)
+        Me.LinkLabel10.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel10.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel10.Location = New System.Drawing.Point(273, 159)
+        Me.LinkLabel10.Name = "LinkLabel10"
+        Me.LinkLabel10.Size = New System.Drawing.Size(72, 15)
+        Me.LinkLabel10.TabIndex = 8
+        Me.LinkLabel10.TabStop = True
+        Me.LinkLabel10.Text = "Visit website"
+        Me.LinkLabel10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'Label10
         '
         Me.Label10.AutoSize = True
         Me.Label10.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label10.Location = New System.Drawing.Point(3, 159)
+        Me.Label10.Location = New System.Drawing.Point(3, 174)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(168, 21)
         Me.Label10.TabIndex = 1
@@ -342,10 +361,19 @@ Partial Class PrgAbout
         Me.Label13.TabIndex = 1
         Me.Label13.Text = "Scintila.NET (NuGet package)"
         '
+        'Label16
+        '
+        Me.Label16.AutoSize = True
+        Me.Label16.Location = New System.Drawing.Point(3, 159)
+        Me.Label16.Name = "Label16"
+        Me.Label16.Size = New System.Drawing.Size(176, 15)
+        Me.Label16.TabIndex = 5
+        Me.Label16.Text = "ManagedDism (NuGet package)"
+        '
         'Label11
         '
         Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(3, 180)
+        Me.Label11.Location = New System.Drawing.Point(3, 195)
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(130, 15)
         Me.Label11.TabIndex = 6
@@ -357,9 +385,9 @@ Partial Class PrgAbout
         Me.LinkLabel7.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel7.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel7.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel7.Location = New System.Drawing.Point(273, 180)
+        Me.LinkLabel7.Location = New System.Drawing.Point(273, 174)
         Me.LinkLabel7.Name = "LinkLabel7"
-        Me.LinkLabel7.Size = New System.Drawing.Size(72, 15)
+        Me.LinkLabel7.Size = New System.Drawing.Size(72, 21)
         Me.LinkLabel7.TabIndex = 4
         Me.LinkLabel7.TabStop = True
         Me.LinkLabel7.Text = "Microsoft"
@@ -370,7 +398,7 @@ Partial Class PrgAbout
         Me.Label12.AutoSize = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label12, 2)
         Me.Label12.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label12.Location = New System.Drawing.Point(3, 195)
+        Me.Label12.Location = New System.Drawing.Point(3, 210)
         Me.Label12.Name = "Label12"
         Me.Label12.Size = New System.Drawing.Size(310, 21)
         Me.Label12.TabIndex = 1
@@ -494,8 +522,10 @@ Partial Class PrgAbout
     Friend WithEvents Label11 As System.Windows.Forms.Label
     Friend WithEvents LinkLabel7 As System.Windows.Forms.LinkLabel
     Friend WithEvents LinkLabel9 As System.Windows.Forms.LinkLabel
+    Friend WithEvents LinkLabel10 As System.Windows.Forms.LinkLabel
     Friend WithEvents Label12 As System.Windows.Forms.Label
     Friend WithEvents Label13 As System.Windows.Forms.Label
+    Friend WithEvents Label16 As System.Windows.Forms.Label
     Friend WithEvents RichTextBox1 As System.Windows.Forms.RichTextBox
     Friend WithEvents PreviewPanel As System.Windows.Forms.Panel
     Friend WithEvents PictureBox2 As System.Windows.Forms.PictureBox
