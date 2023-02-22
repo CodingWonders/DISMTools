@@ -27,95 +27,92 @@ Public Class ProjProperties
         If MainForm.MountedImageDetectorBW.IsBusy Then MainForm.MountedImageDetectorBW.CancelAsync()
         DismApi.Initialize(DismLogLevel.LogErrors)
         ' Detect mounted images to find the loaded one
-        Dim MountedImgs As DismMountedImageInfoCollection = DismApi.GetMountedImages()
-        For Each MImg As DismMountedImageInfo In MountedImgs
-            Try
-                For x = 0 To Array.LastIndexOf(MainForm.MountedImageImgFiles, MainForm.MountedImageImgFiles.Last)
-                    If MainForm.MountedImageMountDirs(x) = MainForm.MountDir Then
-                        Debug.WriteLine("- Image file : " & MainForm.MountedImageImgFiles(x))
-                        Debug.WriteLine("- Image index : " & MainForm.MountedImageImgIndexes(x))
-                        Debug.WriteLine("- Mount directory : " & MainForm.MountedImageMountDirs(x))
-                        Debug.WriteLine("- Mount status : " & MainForm.MountedImageImgStatuses(x) & If(MainForm.MountedImageImgStatuses(x) = 0, " (OK)", If(MainForm.MountedImageImgStatuses(x) = 1, " (Orphaned)", " (Invalid)")))
-                        Debug.WriteLine("- Mount mode : " & MainForm.MountedImageMountedReWr(x) & If(MainForm.MountedImageMountedReWr(x) = 0, " (Write permissions enabled)", "(Write permissions disabled)"))
-                        imgName.Text = MainForm.MountedImageImgFiles(x)
-                        imgIndex.Text = MainForm.MountedImageImgIndexes(x)
-                        imgMountDir.Text = MainForm.MountedImageMountDirs(x)
-                        Select Case MainForm.MountedImageImgStatuses(x)
-                            Case 0
-                                imgMountedStatus.Text = "OK"
-                                RecoverButton.Visible = False
-                                RemountImgBtn.Visible = False
-                            Case 1
-                                imgMountedStatus.Text = "Needs Remount"
-                                RecoverButton.Visible = False
-                                RemountImgBtn.Visible = True
-                            Case 2
-                                imgMountedStatus.Text = "Invalid"
-                                RecoverButton.Visible = True
-                                RemountImgBtn.Visible = False
-                        End Select
-                        Dim infoCollection As DismImageInfoCollection = DismApi.GetImageInfo(MainForm.MountedImageImgFiles(x))
-                        For Each info As DismImageInfo In infoCollection
-                            imgVersion.Text = info.ProductVersion.ToString()
-                            DetectFeatureUpdate(info.ProductVersion)
-                            imgMountedName.Text = info.ImageName
-                            imgMountedDesc.Text = info.ImageDescription
-                            imgSize.Text = info.ImageSize.ToString("N0") & " bytes (~" & Math.Round(info.ImageSize / (1024 ^ 3), 2) & " GB)"
-                            If info.Architecture = DismProcessorArchitecture.None Then
-                                imgArch.Text = "Unknown"
-                            ElseIf info.Architecture = DismProcessorArchitecture.Neutral Then
-                                imgArch.Text = "Neutral"
-                            ElseIf info.Architecture = DismProcessorArchitecture.Intel Then
-                                imgArch.Text = "x86"
-                            ElseIf info.Architecture = DismProcessorArchitecture.IA64 Then
-                                ' I'm not sure what systems run Itanium versions of Windows, but still
-                                imgArch.Text = "Itanium (64-bit)"
-                            ElseIf info.Architecture = DismProcessorArchitecture.ARM64 Then
-                                imgArch.Text = "ARM64"
-                            ElseIf info.Architecture = DismProcessorArchitecture.ARM Then
-                                ' This must be the case on Windows RT images
-                                imgArch.Text = "ARM"
-                            ElseIf info.Architecture = DismProcessorArchitecture.AMD64 Then
-                                imgArch.Text = "x64"
-                            End If
-                            imgHal.Text = If(Not info.Hal = "", info.Hal, "Undefined by the image")
-                            imgSPBuild.Text = info.ProductVersion.Revision
-                            imgSPLvl.Text = info.SpLevel
-                            imgEdition.Text = info.EditionId
-                            imgPType.Text = info.ProductType
-                            imgPSuite.Text = info.ProductSuite
-                            imgSysRoot.Text = info.SystemRoot
-                            imgLangText.Clear()
-                            For Each language In info.Languages
-                                If imgLangText.Text = "" Then
-                                    imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (default)", "") & ", "
-                                Else
-                                    imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (default)", "") & ", ")
-                                End If
-                            Next
-                            Dim langarr() As Char = imgLangText.Text.ToCharArray()
-                            langarr(langarr.Count - 2) = ""
-                            imgLangText.Text = New String(langarr)
-                            imgFormat.Text = Path.GetExtension(MainForm.MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper() & " file"
-                            imgRW.Text = If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No")
-                            If MainForm.MountedImageMountedReWr(x) = 0 Then
-                                RWRemountBtn.Visible = False
+        Try
+            For x = 0 To Array.LastIndexOf(MainForm.MountedImageImgFiles, MainForm.MountedImageImgFiles.Last)
+                If MainForm.MountedImageMountDirs(x) = MainForm.MountDir Then
+                    Debug.WriteLine("- Image file : " & MainForm.MountedImageImgFiles(x))
+                    Debug.WriteLine("- Image index : " & MainForm.MountedImageImgIndexes(x))
+                    Debug.WriteLine("- Mount directory : " & MainForm.MountedImageMountDirs(x))
+                    Debug.WriteLine("- Mount status : " & MainForm.MountedImageImgStatuses(x) & If(MainForm.MountedImageImgStatuses(x) = 0, " (OK)", If(MainForm.MountedImageImgStatuses(x) = 1, " (Orphaned)", " (Invalid)")))
+                    Debug.WriteLine("- Mount mode : " & MainForm.MountedImageMountedReWr(x) & If(MainForm.MountedImageMountedReWr(x) = 0, " (Write permissions enabled)", "(Write permissions disabled)"))
+                    imgName.Text = MainForm.MountedImageImgFiles(x)
+                    imgIndex.Text = MainForm.MountedImageImgIndexes(x)
+                    imgMountDir.Text = MainForm.MountedImageMountDirs(x)
+                    Select Case MainForm.MountedImageImgStatuses(x)
+                        Case 0
+                            imgMountedStatus.Text = "OK"
+                            RecoverButton.Visible = False
+                            RemountImgBtn.Visible = False
+                        Case 1
+                            imgMountedStatus.Text = "Needs Remount"
+                            RecoverButton.Visible = False
+                            RemountImgBtn.Visible = True
+                        Case 2
+                            imgMountedStatus.Text = "Invalid"
+                            RecoverButton.Visible = True
+                            RemountImgBtn.Visible = False
+                    End Select
+                    Dim infoCollection As DismImageInfoCollection = DismApi.GetImageInfo(MainForm.MountedImageImgFiles(x))
+                    For Each info As DismImageInfo In infoCollection
+                        imgVersion.Text = info.ProductVersion.ToString()
+                        DetectFeatureUpdate(info.ProductVersion)
+                        imgMountedName.Text = info.ImageName
+                        imgMountedDesc.Text = info.ImageDescription
+                        imgSize.Text = info.ImageSize.ToString("N0") & " bytes (~" & Math.Round(info.ImageSize / (1024 ^ 3), 2) & " GB)"
+                        If info.Architecture = DismProcessorArchitecture.None Then
+                            imgArch.Text = "Unknown"
+                        ElseIf info.Architecture = DismProcessorArchitecture.Neutral Then
+                            imgArch.Text = "Neutral"
+                        ElseIf info.Architecture = DismProcessorArchitecture.Intel Then
+                            imgArch.Text = "x86"
+                        ElseIf info.Architecture = DismProcessorArchitecture.IA64 Then
+                            ' I'm not sure what systems run Itanium versions of Windows, but still
+                            imgArch.Text = "Itanium (64-bit)"
+                        ElseIf info.Architecture = DismProcessorArchitecture.ARM64 Then
+                            imgArch.Text = "ARM64"
+                        ElseIf info.Architecture = DismProcessorArchitecture.ARM Then
+                            ' This must be the case on Windows RT images
+                            imgArch.Text = "ARM"
+                        ElseIf info.Architecture = DismProcessorArchitecture.AMD64 Then
+                            imgArch.Text = "x64"
+                        End If
+                        imgHal.Text = If(Not info.Hal = "", info.Hal, "Undefined by the image")
+                        imgSPBuild.Text = info.ProductVersion.Revision
+                        imgSPLvl.Text = info.SpLevel
+                        imgEdition.Text = info.EditionId
+                        imgPType.Text = info.ProductType
+                        imgPSuite.Text = info.ProductSuite
+                        imgSysRoot.Text = info.SystemRoot
+                        imgLangText.Clear()
+                        For Each language In info.Languages
+                            If imgLangText.Text = "" Then
+                                imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (default)", "") & ", "
                             Else
-                                RWRemountBtn.Visible = True
+                                imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (default)", "") & ", ")
                             End If
-                            imgDirs.Text = info.CustomizedInfo.DirectoryCount
-                            imgFiles.Text = info.CustomizedInfo.FileCount
-                            imgCreation.Text = info.CustomizedInfo.CreatedTime
-                            imgModification.Text = info.CustomizedInfo.ModifiedTime
-                            Exit For
                         Next
-                    End If
-                    Exit For
-                Next
-            Catch ex As Exception
-                Exit Try
-            End Try
-        Next
+                        Dim langarr() As Char = imgLangText.Text.ToCharArray()
+                        langarr(langarr.Count - 2) = ""
+                        imgLangText.Text = New String(langarr)
+                        imgFormat.Text = Path.GetExtension(MainForm.MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper() & " file"
+                        imgRW.Text = If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No")
+                        If MainForm.MountedImageMountedReWr(x) = 0 Then
+                            RWRemountBtn.Visible = False
+                        Else
+                            RWRemountBtn.Visible = True
+                        End If
+                        imgDirs.Text = info.CustomizedInfo.DirectoryCount
+                        imgFiles.Text = info.CustomizedInfo.FileCount
+                        imgCreation.Text = info.CustomizedInfo.CreatedTime
+                        imgModification.Text = info.CustomizedInfo.ModifiedTime
+                        Exit For
+                    Next
+                End If
+                Exit For
+            Next
+        Catch ex As Exception
+            Exit Try
+        End Try
         DismApi.Shutdown()
         ' The DISM API part is over. Switch to regular DISM.exe mode for missing details
         Try     ' Try getting image properties
