@@ -1,4 +1,6 @@
 ﻿Imports System.Windows.Forms
+Imports System.IO
+Imports Microsoft.VisualBasic.ControlChars
 
 Public Class EnableFeat
 
@@ -23,6 +25,19 @@ Public Class EnableFeat
             Catch ex As Exception
 
             End Try
+            For x = 0 To featEnablementCount - 1
+                If ListView1.CheckedItems(x).SubItems(1).Text = "Removed" Then
+                    If CheckBox2.Checked And TextBox2.Text = "" Or Not Directory.Exists(TextBox2.Text) Then
+                        If MsgBox("Some features in this image require specifying a source for them to be enabled. The specified source is not valid for this operation." & CrLf & CrLf & If(TextBox2.Text = "", "Please specify a valid source and try again.", "Please make sure the source exists in the file system and try again."), vbOKOnly + vbCritical, "Enable features") = MsgBoxResult.Ok Then
+                            CheckBox2.Checked = True
+                            Button2.PerformClick()
+                        End If
+                    Else
+
+                    End If
+                    Exit For
+                End If
+            Next
             ProgressPanel.featEnablementLastName = ListView1.CheckedItems(featEnablementCount - 1).ToString()
             If CheckBox1.Checked Then
                 ProgressPanel.featisParentPkgNameUsed = True
@@ -33,7 +48,12 @@ Public Class EnableFeat
             End If
             If CheckBox2.Checked Then
                 ProgressPanel.featisSourceSpecified = True
-                ProgressPanel.featSource = TextBox2.Text
+                If TextBox2.Text = "" Or Not Directory.Exists(TextBox2.Text) Then
+                    MsgBox("The specified source is not valid. Please specify a valid source and try again", vbOKOnly + vbCritical, "Enable features")
+                    Exit Sub
+                Else
+                    ProgressPanel.featSource = TextBox2.Text
+                End If
             Else
                 ProgressPanel.featisSourceSpecified = True
                 ProgressPanel.featSource = ""
