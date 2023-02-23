@@ -475,9 +475,9 @@ Partial Class ProjProperties
         '
         'Label58
         '
-        Me.Label58.Location = New System.Drawing.Point(423, 264)
+        Me.Label58.Location = New System.Drawing.Point(446, 264)
         Me.Label58.Name = "Label58"
-        Me.Label58.Size = New System.Drawing.Size(181, 13)
+        Me.Label58.Size = New System.Drawing.Size(158, 13)
         Me.Label58.TabIndex = 7
         Me.Label58.Text = "Installed languages:"
         Me.Label58.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -830,7 +830,7 @@ Partial Class ProjProperties
         '
         Me.imgVersion.Location = New System.Drawing.Point(222, 264)
         Me.imgVersion.Name = "imgVersion"
-        Me.imgVersion.Size = New System.Drawing.Size(172, 28)
+        Me.imgVersion.Size = New System.Drawing.Size(218, 28)
         Me.imgVersion.TabIndex = 11
         Me.imgVersion.Text = "imgVersion"
         '
