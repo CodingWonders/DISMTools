@@ -924,8 +924,6 @@ Public Class MainForm
                 GetImageDrivers()
         End Select
         DeleteTempFiles()
-        areBackgroundProcessesDone = True
-        BackgroundProcessesButton.Image = New Bitmap(My.Resources.bg_ops_complete)
         If UseApi And session IsNot Nothing Then
             DismApi.CloseSession(session)
         End If
@@ -3131,6 +3129,7 @@ Public Class MainForm
         isProjectLoaded = False
         SaveProjectToolStripMenuItem.Enabled = False
         SaveProjectasToolStripMenuItem.Enabled = False
+        BGProcDetails.Hide()
     End Sub
 
     Sub UpdateProjProperties(WasImageMounted As Boolean, IsReadOnly As Boolean)
