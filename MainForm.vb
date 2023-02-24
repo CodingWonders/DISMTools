@@ -772,7 +772,7 @@ Public Class MainForm
         End If
     End Sub
 
-#Region "Background Processes"  ' These will be called later on
+#Region "Background Processes"
 
     ''' <summary>
     ''' Runs specified background processes. The program refers to the processes that gather image information as "background processes", due to the way they are run (in the background ;))
@@ -874,7 +874,7 @@ Public Class MainForm
                     pbOpNums += 1
                     progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
                     ImgBW.ReportProgress(progressMin + progressDivs)
-                    GetImageAppxPackages()
+                    GetImageAppxPackages(If(session IsNot Nothing, True, False), If(session IsNot Nothing, session, Nothing))
                 Else
                     Debug.WriteLine("[IsWindows8OrHigher] Returned False")
                 End If
@@ -1798,7 +1798,48 @@ Public Class MainForm
     ''' Gets installed provisioned APPX packages in an image and puts them in separate arrays
     ''' </summary>
     ''' <remarks>This is only for Windows 8 and newer</remarks>
-    Sub GetImageAppxPackages()
+    Sub GetImageAppxPackages(Optional UseApi As Boolean = False, Optional session As DismSession = Nothing)
+        If UseApi Then
+            If session IsNot Nothing Then
+                Dim imgAppxDisplayNameList As New List(Of String)
+                Dim imgAppxPackageNameList As New List(Of String)
+                Dim imgAppxVersionList As New List(Of String)
+                Dim imgAppxArchitectureList As New List(Of String)
+                Dim imgAppxResourceIdList As New List(Of String)
+                Dim imgAppxRegionList As New List(Of String)
+                Dim AppxPackageCollection As DismAppxPackageCollection = DismApi.GetProvisionedAppxPackages(session)
+                For Each AppxPackage As DismAppxPackage In AppxPackageCollection
+                    Select Case AppxPackage.Architecture
+                        Case DismProcessorArchitecture.None
+                            imgAppxArchitectureList.Add("Unknown")
+                        Case DismProcessorArchitecture.Intel
+                            imgAppxArchitectureList.Add("x86")
+                        Case DismProcessorArchitecture.ARM
+                            imgAppxArchitectureList.Add("ARM")
+                        Case DismProcessorArchitecture.IA64
+                            imgAppxArchitectureList.Add("IA64")
+                        Case DismProcessorArchitecture.AMD64
+                            imgAppxArchitectureList.Add("x64")
+                        Case DismProcessorArchitecture.Neutral
+                            imgAppxArchitectureList.Add("Neutral")
+                        Case DismProcessorArchitecture.ARM64
+                            imgAppxArchitectureList.Add("ARM64")
+                    End Select
+                    imgAppxDisplayNameList.Add(AppxPackage.DisplayName)
+                    imgAppxPackageNameList.Add(AppxPackage.PackageName)
+                    imgAppxResourceIdList.Add(AppxPackage.ResourceId)
+                    imgAppxVersionList.Add(AppxPackage.Version.ToString())
+                Next
+                imgAppxArchitectures = imgAppxArchitectureList.ToArray()
+                imgAppxDisplayNames = imgAppxDisplayNameList.ToArray()
+                imgAppxPackageNames = imgAppxPackageNameList.ToArray()
+                imgAppxResourceIds = imgAppxResourceIdList.ToArray()
+                imgAppxVersions = imgAppxVersionList.ToArray()
+            Else
+                Throw New Exception("No valid DISM session has been provided")
+            End If
+            Exit Sub
+        End If
         Debug.WriteLine("[GetImageAppxPackages] Running function...")
         ' The mounted image may be Windows 8 or later, but DISM may be from Windows 7. Get this information before running this procedure
         Dim FileVersion As FileVersionInfo = FileVersionInfo.GetVersionInfo(DismExe)
@@ -5206,22 +5247,22 @@ Public Class MainForm
                 ElseIf imgAppxPackageNames(x).Contains("549981C3F5F10") Then
                     If Directory.Exists(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x)) Then
                         If My.Computer.FileSystem.GetFiles(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
-                            RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x) & " (Cortana)", imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxRegions(x), imgAppxVersions(x), "No"}))
+                            RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x) & " (Cortana)", imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "No"}))
                         Else
-                            RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x) & " (Cortana)", imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxRegions(x), imgAppxVersions(x), "Yes"}))
+                            RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x) & " (Cortana)", imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "Yes"}))
                         End If
                     Else
-                        RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x) & " (Cortana)", imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxRegions(x), imgAppxVersions(x), "No"}))
+                        RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x) & " (Cortana)", imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "No"}))
                     End If
                 Else
                     If Directory.Exists(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x)) Then
                         If My.Computer.FileSystem.GetFiles(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
-                            RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxRegions(x), imgAppxVersions(x), "No"}))
+                            RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "No"}))
                         Else
-                            RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxRegions(x), imgAppxVersions(x), "Yes"}))
+                            RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "Yes"}))
                         End If
                     Else
-                        RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxRegions(x), imgAppxVersions(x), "No"}))
+                        RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "No"}))
                     End If
                 End If
             Next

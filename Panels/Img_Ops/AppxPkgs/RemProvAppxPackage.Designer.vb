@@ -39,7 +39,6 @@ Partial Class RemProvAppxPackage
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.ColumnHeader7 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
@@ -121,7 +120,7 @@ Partial Class RemProvAppxPackage
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ListView1.CheckBoxes = True
-        Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3, Me.ColumnHeader4, Me.ColumnHeader5, Me.ColumnHeader6, Me.ColumnHeader7})
+        Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3, Me.ColumnHeader4, Me.ColumnHeader5, Me.ColumnHeader6})
         Me.ListView1.FullRowSelect = True
         Me.ListView1.Location = New System.Drawing.Point(12, 58)
         Me.ListView1.Name = "ListView1"
@@ -152,12 +151,13 @@ Partial Class RemProvAppxPackage
         '
         'ColumnHeader5
         '
-        Me.ColumnHeader5.Text = "Regions"
+        Me.ColumnHeader5.Text = "Version"
+        Me.ColumnHeader5.Width = 80
         '
         'ColumnHeader6
         '
-        Me.ColumnHeader6.Text = "Version"
-        Me.ColumnHeader6.Width = 80
+        Me.ColumnHeader6.Text = "Registered to any user?"
+        Me.ColumnHeader6.Width = 130
         '
         'Label3
         '
@@ -199,11 +199,6 @@ Partial Class RemProvAppxPackage
         Me.Label2.Size = New System.Drawing.Size(262, 13)
         Me.Label2.TabIndex = 7
         Me.Label2.Text = "This image contains <ElementCount> AppX packages"
-        '
-        'ColumnHeader7
-        '
-        Me.ColumnHeader7.Text = "Registered to any user?"
-        Me.ColumnHeader7.Width = 130
         '
         'LinkLabel1
         '
@@ -260,12 +255,11 @@ Partial Class RemProvAppxPackage
     Friend WithEvents ColumnHeader3 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader4 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader5 As System.Windows.Forms.ColumnHeader
-    Friend WithEvents ColumnHeader6 As System.Windows.Forms.ColumnHeader
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents ColumnHeader7 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader6 As System.Windows.Forms.ColumnHeader
     Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
 
 End Class
