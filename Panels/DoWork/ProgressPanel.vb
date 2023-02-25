@@ -170,7 +170,7 @@ Public Class ProgressPanel
 
     Public errCode As String
 
-    Public CommandArgs As String = ""           ' Ubiquitous accross OperationNums. DO NOT DELETE !!!
+    Public CommandArgs As String = ""                       ' Ubiquitous accross OperationNums. DO NOT DELETE !!!
     Public DismVersionChecker As FileVersionInfo
     Public DismProgram As String
 
@@ -182,179 +182,191 @@ Public Class ProgressPanel
     Public MountAfterCreation As Boolean
 
     ' OperationNum: 3
-    Public ApplicationSourceImg As String       ' String which determines which image to apply
-    Public ApplicationIndex As Integer          ' Index to apply to destination
-    Public ApplicationDestDir As String         ' Destination directory to apply image to
-    Public ApplicationCheckInt As Boolean       ' Determine whether to check image corruption before applying
-    Public ApplicationVerify As Boolean         ' Determine whether to check for file duplication and errors
-    Public ApplicationReparsePt As Boolean      ' Determine whether to use reparse points
-    Public ApplicationSWMPattern As String      ' Spanned/Split WIM (SWM) file pattern string. Usually "install*.swm", so don't use an array
-    Public ApplicationValidateForTD As Boolean  ' Determine whether to validate image for Trusted Desktop (WinPE 4.0+ only)
-    Public ApplicationUseWimBoot As Boolean     ' Determine whether to append image with WIMBoot configuration
-    Public ApplicationCompactMode As Boolean    ' Determine whether to apply image in Compact mode (Win10+ only)
-    Public ApplicationUseExtAttr As Boolean     ' Determine whether to apply extended attributes (Win10 1607+ only)
-    Public ApplicationDestDrive As String       ' Gather destination disk ID
+    Public ApplicationSourceImg As String                   ' String which determines which image to apply
+    Public ApplicationIndex As Integer                      ' Index to apply to destination
+    Public ApplicationDestDir As String                     ' Destination directory to apply image to
+    Public ApplicationCheckInt As Boolean                   ' Determine whether to check image corruption before applying
+    Public ApplicationVerify As Boolean                     ' Determine whether to check for file duplication and errors
+    Public ApplicationReparsePt As Boolean                  ' Determine whether to use reparse points
+    Public ApplicationSWMPattern As String                  ' Spanned/Split WIM (SWM) file pattern string. Usually "install*.swm", so don't use an array
+    Public ApplicationValidateForTD As Boolean              ' Determine whether to validate image for Trusted Desktop (WinPE 4.0+ only)
+    Public ApplicationUseWimBoot As Boolean                 ' Determine whether to append image with WIMBoot configuration
+    Public ApplicationCompactMode As Boolean                ' Determine whether to apply image in Compact mode (Win10+ only)
+    Public ApplicationUseExtAttr As Boolean                 ' Determine whether to apply extended attributes (Win10 1607+ only)
+    Public ApplicationDestDrive As String                   ' Gather destination disk ID
 
     ' OperationNum: 6
-    Public CaptureSourceDir As String           ' Source directory to be captured
-    Public CaptureDestinationImage As String    ' Destination image
-    Public CaptureName As String                ' Captured image name
-    Public CaptureDescription As String         ' Captured image description (optional)
-    Public CaptureWimScriptConfig As String     ' Path for WimScript.ini
-    Public CaptureCompressType As Integer       ' Compression used for the capture (0: none; 1: fast; 2: max)
-    Public CaptureBootable As Boolean           ' Make captured image bootable (WinPE only)
-    Public CaptureCheckIntegrity As Boolean     ' Check integrity of WIM file
-    Public CaptureVerify As Boolean             ' Check for errors and file duplication
-    Public CaptureReparsePt As Boolean          ' Determine whether to use the reparse point tag fix
-    Public CaptureUseWimBoot As Boolean         ' Determine whether to append image with WIMBoot configuration
-    Public CaptureExtendedAttributes As Boolean ' Determine whether to capture extended attributes (Win10 1607+ only)
-    Public CaptureMountDestImg As Boolean       ' Determine whether to unmount the source VHD(X) file and mount the destination image (still experimental)
+    Public CaptureSourceDir As String                       ' Source directory to be captured
+    Public CaptureDestinationImage As String                ' Destination image
+    Public CaptureName As String                            ' Captured image name
+    Public CaptureDescription As String                     ' Captured image description (optional)
+    Public CaptureWimScriptConfig As String                 ' Path for WimScript.ini
+    Public CaptureCompressType As Integer                   ' Compression used for the capture (0: none; 1: fast; 2: max)
+    Public CaptureBootable As Boolean                       ' Make captured image bootable (WinPE only)
+    Public CaptureCheckIntegrity As Boolean                 ' Check integrity of WIM file
+    Public CaptureVerify As Boolean                         ' Check for errors and file duplication
+    Public CaptureReparsePt As Boolean                      ' Determine whether to use the reparse point tag fix
+    Public CaptureUseWimBoot As Boolean                     ' Determine whether to append image with WIMBoot configuration
+    Public CaptureExtendedAttributes As Boolean             ' Determine whether to capture extended attributes (Win10 1607+ only)
+    Public CaptureMountDestImg As Boolean                   ' Determine whether to unmount the source VHD(X) file and mount the destination image (still experimental)
 
     ' OperationNum: 9
-    Public imgIndexDeletionNames(65535) As String   ' Remove volume images by name (it can be a bit confusing by index number. Index 6: 1, 1, 1, 1, 1, 2, 2, 2, 2...)
-    Public imgIndexDeletionSourceImg As String  ' Source image to remove volume images from
-    Public imgIndexDeletionIntCheck As Boolean  ' Determine whether to check image integrity before removing volume images
-    Public imgIndexDeletionUnmount As Boolean   ' Determine whether to unmount source image if it is mounted
-    Public imgIndexDeletionLastName As String   ' Last name of index checked
-    Public imgIndexDeletionCount As Integer     ' Volume image removal count
+    Public imgIndexDeletionNames(65535) As String           ' Remove volume images by name (it can be a bit confusing by index number. Index 6: 1, 1, 1, 1, 1, 2, 2, 2, 2...)
+    Public imgIndexDeletionSourceImg As String              ' Source image to remove volume images from
+    Public imgIndexDeletionIntCheck As Boolean              ' Determine whether to check image integrity before removing volume images
+    Public imgIndexDeletionUnmount As Boolean               ' Determine whether to unmount source image if it is mounted
+    Public imgIndexDeletionLastName As String               ' Last name of index checked
+    Public imgIndexDeletionCount As Integer                 ' Volume image removal count
 
     ' OperationNum: 11
-    Public GetFromMountedImg As Boolean         ' Get information from mounted image
-    Public GetSpecificIndexInfo As Boolean      ' Get information from specific image index
-    Public GetFromMountedIndex As Boolean       ' Get information from mounted image index
-    Public InfoFromSourceImg As String          ' Source image information string
-    Public InfoFromSpecificImg As String        ' Specific image information string
-    Public InfoFromSourceIndex As Integer       ' Source image index information int
-    Public InfoFromSpecificIndex As Integer     ' Specific image index information int
+    Public GetFromMountedImg As Boolean                     ' Get information from mounted image
+    Public GetSpecificIndexInfo As Boolean                  ' Get information from specific image index
+    Public GetFromMountedIndex As Boolean                   ' Get information from mounted image index
+    Public InfoFromSourceImg As String                      ' Source image information string
+    Public InfoFromSpecificImg As String                    ' Specific image information string
+    Public InfoFromSourceIndex As Integer                   ' Source image index information int
+    Public InfoFromSpecificIndex As Integer                 ' Specific image index information int
 
     ' OperationNum: 15
-    Public SourceImg As String                  ' Mandatory
-    Public ImgIndex As Integer                  ' Mandatory
-    Public MountDir As String                   ' Mandatory
-    Public isReadOnly As Boolean                ' Determine whether image will be mounted with read-only permissions
-    Public isOptimized As Boolean               ' Determine whether image will be optimized to mount in a shorter time
-    Public isIntegrityTested As Boolean         ' Determine whether the integrity of the image should be tested before mounting the image
+    Public SourceImg As String                              ' Mandatory
+    Public ImgIndex As Integer                              ' Mandatory
+    Public MountDir As String                               ' Mandatory
+    Public isReadOnly As Boolean                            ' Determine whether image will be mounted with read-only permissions
+    Public isOptimized As Boolean                           ' Determine whether image will be optimized to mount in a shorter time
+    Public isIntegrityTested As Boolean                     ' Determine whether the integrity of the image should be tested before mounting the image
 
     ' OperationNum: 18
-    Public remountisReadOnly As Boolean         ' Determine whether the remount happened because of a read-only mounted image
+    Public remountisReadOnly As Boolean                     ' Determine whether the remount happened because of a read-only mounted image
     Public isTriggeredByPropertyDialog As Boolean = False
 
     ' OperationNum: 21
     Public UMountImgIndex As Integer
     Public ProgramIsBeingClosed As Boolean
     Public UMountLocalDir As Boolean
-    Public UMountOp As Integer                  ' 0: commit, then unmount; 1: unmount without saving
-    Public RandomMountDir As String             ' Don't know about that mount dir, other that it was not loaded
+    Public UMountOp As Integer                              ' 0: commit, then unmount; 1: unmount without saving
+    Public RandomMountDir As String                         ' Don't know about that mount dir, other that it was not loaded
     Public CheckImgIntegrity As Boolean
     Public SaveToNewIndex As Boolean
 
     ' OperationNum: 26
-    Public pkgSource As String                  ' Determine where the packages came from
-    Dim pkgName As String                       ' Determine how the package is called
-    Dim pkgDesc As String                       ' Determine package description (e.g., "Fix for KB5014113")
-    Dim pkgApplicabilityStatus As String        ' Determine whether or not package is applicable
-    Dim pkgInstallationState As String          ' Determine whether or not package was installed
-    Dim pkgPossibleMsuFile As String            ' Determine whether package is a MSU file
-    Public pkgs(65535) As String                ' Array used to determine package locations. DO NOT DELETE !!!
-    Public pkgLastCheckedPackageName As String  ' Last index name of the aforementioned array. DO NOT DELETE !!!
-    Public pkgIsApplicable As Boolean           ' Using data from pkgApplicabilityStatus, determine whether package is applicable
-    Public pkgIsAlreadyAdded As Boolean         ' Using data from pkgInstallationState, determine whether package is installed
-    Public pkgIgnoreApplicabilityChecks As Boolean ' If option is checked, ignore applicability checks
-    Public pkgPreventIfPendingOnline As Boolean ' If option is checked, ignore package if online actions are required on the image
-    Public imgCommitAfterOps As Boolean         ' If option is checked, commit image after operations are done
-    Public pkgAdditionOp As Integer             ' 0: recursive operation; 1: selective operation
-    Public pkgCount As Integer                  ' Gather package count
-    Public pkgCurrentNum As Integer             ' Current package number
-    Public pkgSuccessfulAdditions As Integer    ' Determine successful package additions
-    Public pkgFailedAdditions As Integer        ' Determine failed package additions
+    Public pkgSource As String                              ' Determine where the packages came from
+    Dim pkgName As String                                   ' Determine how the package is called
+    Dim pkgDesc As String                                   ' Determine package description (e.g., "Fix for KB5014113")
+    Dim pkgApplicabilityStatus As String                    ' Determine whether or not package is applicable
+    Dim pkgInstallationState As String                      ' Determine whether or not package was installed
+    Dim pkgPossibleMsuFile As String                        ' Determine whether package is a MSU file
+    Public pkgs(65535) As String                            ' Array used to determine package locations. DO NOT DELETE !!!
+    Public pkgLastCheckedPackageName As String              ' Last index name of the aforementioned array. DO NOT DELETE !!!
+    Public pkgIsApplicable As Boolean                       ' Using data from pkgApplicabilityStatus, determine whether package is applicable
+    Public pkgIsAlreadyAdded As Boolean                     ' Using data from pkgInstallationState, determine whether package is installed
+    Public pkgIgnoreApplicabilityChecks As Boolean          ' If option is checked, ignore applicability checks
+    Public pkgPreventIfPendingOnline As Boolean             ' If option is checked, ignore package if online actions are required on the image
+    Public imgCommitAfterOps As Boolean                     ' If option is checked, commit image after operations are done
+    Public pkgAdditionOp As Integer                         ' 0: recursive operation; 1: selective operation
+    Public pkgCount As Integer                              ' Gather package count
+    Public pkgCurrentNum As Integer                         ' Current package number
+    Public pkgSuccessfulAdditions As Integer                ' Determine successful package additions
+    Public pkgFailedAdditions As Integer                    ' Determine failed package additions
 
     ' OperationNum: 27
-    Public pkgRemovalSource As String           ' Set this variable if a removal source is used
-    Public pkgRemovalNames(65535) As String     ' Array used to determine package names for removal
-    Public pkgRemovalFiles(65535) As String     ' Array used to determine package files for removal
-    Public pkgIsReadyForRemoval As Boolean      ' Determine whether package is ready for removal (whether package is added or not)
-    Public pkgSuccessfulRemovals As Integer     ' Determine successful package removals
-    Public pkgFailedRemovals As Integer         ' Determine failed package removals
-    Public pkgRemovalOp As Integer              ' 0: package names; 1: package files
-    Public pkgRemovalLastName As String         ' Last package name checked
-    Public pkgRemovalLastFile As String         ' Last package file checked
-    Public pkgRemovalCount As Integer           ' Selected package {name | file} count
-    Public pkgRemovalState As String            ' State the package is at
-    Public pkgRemovalName As String             ' Name of package to be removed
+    Public pkgRemovalSource As String                       ' Set this variable if a removal source is used
+    Public pkgRemovalNames(65535) As String                 ' Array used to determine package names for removal
+    Public pkgRemovalFiles(65535) As String                 ' Array used to determine package files for removal
+    Public pkgIsReadyForRemoval As Boolean                  ' Determine whether package is ready for removal (whether package is added or not)
+    Public pkgSuccessfulRemovals As Integer                 ' Determine successful package removals
+    Public pkgFailedRemovals As Integer                     ' Determine failed package removals
+    Public pkgRemovalOp As Integer                          ' 0: package names; 1: package files
+    Public pkgRemovalLastName As String                     ' Last package name checked
+    Public pkgRemovalLastFile As String                     ' Last package file checked
+    Public pkgRemovalCount As Integer                       ' Selected package {name | file} count
+    Public pkgRemovalState As String                        ' State the package is at
+    Public pkgRemovalName As String                         ' Name of package to be removed
 
     ' OperationNum: 30
-    Public featEnablementNames(65535) As String ' Array used to determine which features need to be enabled
-    Public featEnablementLastName As String     ' Last feature entry checked
-    Public featisParentPkgNameUsed As Boolean   ' Determine whether to specify the parent package name for the features
-    Public featParentPkgName As String          ' Parent package name to use when enabling features
-    Public featisSourceSpecified As Boolean     ' Determine whether to use a feature source
-    Public featSource As String                 ' Feature source
-    Public featParentIsEnabled As Boolean       ' Determine whether all parent features need to be enabled
-    Public featContactWindowsUpdate As Boolean  ' Determine whether to contact Windows Update (WU) for online images
-    Public featCommitAfterEnablement As Boolean ' Determine whether to commit image after enabling features
-    Public featEnablementCount As Integer       ' Count number of features to enable
-    Public featCanContactWU As Boolean          ' Determine whether program can contact Windows Update
-    Dim featSuccessfulEnablements As Integer    ' Successful feature enablement count
-    Dim featFailedEnablements As Integer        ' Failed feature enablement count
+    Public featEnablementNames(65535) As String             ' Array used to determine which features need to be enabled
+    Public featEnablementLastName As String                 ' Last feature entry checked
+    Public featisParentPkgNameUsed As Boolean               ' Determine whether to specify the parent package name for the features
+    Public featParentPkgName As String                      ' Parent package name to use when enabling features
+    Public featisSourceSpecified As Boolean                 ' Determine whether to use a feature source
+    Public featSource As String                             ' Feature source
+    Public featParentIsEnabled As Boolean                   ' Determine whether all parent features need to be enabled
+    Public featContactWindowsUpdate As Boolean              ' Determine whether to contact Windows Update (WU) for online images
+    Public featCommitAfterEnablement As Boolean             ' Determine whether to commit image after enabling features
+    Public featEnablementCount As Integer                   ' Count number of features to enable
+    Public featCanContactWU As Boolean                      ' Determine whether program can contact Windows Update
+    Dim featSuccessfulEnablements As Integer                ' Successful feature enablement count
+    Dim featFailedEnablements As Integer                    ' Failed feature enablement count
 
     ' OperationNum: 31
-    Public featDisablementNames(65535) As String ' Array used to determine which features need to be disabled
-    Public featDisablementLastName As String    ' Last feature entry checked
-    Public featDisablementParentPkgUsed As Boolean ' Determine whether to specify the parent package name for the features
-    Public featDisablementParentPkg As String   ' Parent package name to use when disabling features
-    Public featRemoveManifest As Boolean        ' Remove feature without removing manifest
-    Public featDisablementCount As Integer      ' Count number of features to disable
-    Dim featSuccessfulDisablements As Integer   ' Successful feature disablement count
-    Dim featFailedDisablements As Integer       ' Failed feature disablement count
+    Public featDisablementNames(65535) As String            ' Array used to determine which features need to be disabled
+    Public featDisablementLastName As String                ' Last feature entry checked
+    Public featDisablementParentPkgUsed As Boolean          ' Determine whether to specify the parent package name for the features
+    Public featDisablementParentPkg As String               ' Parent package name to use when disabling features
+    Public featRemoveManifest As Boolean                    ' Remove feature without removing manifest
+    Public featDisablementCount As Integer                  ' Count number of features to disable
+    Dim featSuccessfulDisablements As Integer               ' Successful feature disablement count
+    Dim featFailedDisablements As Integer                   ' Failed feature disablement count
+
+    ' OperationNum: 32
+    Public CleanupTask As Integer                           ' The task that will be performed on component cleanup, ranging from 0 to 6
+    ' CleanupTask = 1
+    Public CleanupHideSP As Boolean                         ' Determines whether to hide Service Pack installations from the Installed Updates list
+    ' CleanupTask = 2
+    Public ResetCompBase As Boolean                         ' Determines whether to perform a component base reset
+    Public DeferCleanupOps As Boolean                       ' Determines whether to defer long-running cleanup operations (those that take more than 30 mins)
+    ' CleanupTask = 6
+    Public UseCompRepairSource As Boolean                   ' Determines whether to use a custom component store repair source
+    Public ComponentRepairSource As String                  ' A custom source that will be used for component store repair
+    Public LimitWUAccess As Boolean                         ' Determines whether to limit access to Windows Update and strictly use the custom source (only for online images)
 
     ' OperationNum: 37
-    Public appxAdditionPackages(65535) As String    ' Array used to store AppX packages to add
-    Public appxAdditionDependencies(65535) As String    ' Array used to store dependencies of AppX packages
-    Public appxAdditionUseLicenseFile As Boolean    ' Determine whether to use a license file
-    Public appxAdditionLicenseFile As String        ' License file to use on AppX packages (program limitation: it uses the same license on all AppX packages)
-    Public appxAdditionUseCustomDataFile As Boolean ' Determine whether to use a custom data file for AppX provisioning
-    Public appxAdditionCustomDataFile As String     ' Custom data file applied on AppX packages
-    Public appxAdditionUseAllRegions As Boolean     ' Determine whether to use all regions for all AppX packages
-    Public appxAdditionRegions As String            ' Regions to apply on AppX packages
-    Public appxAdditionCommit As Boolean            ' Determine whether to commit the image after adding AppX packages
-    Public appxAdditionCount As Integer             ' Count number of AppX packages to add
-    Public appxAdditionLastPackage As String        ' Last package entry selected
-    Public appxAdditionLastDependency As String     ' Last dependency entry
-    Dim appxSuccessfulAdditions As Integer          ' Successful AppX package addition count
-    Dim appxFailedAdditions As Integer              ' Failed AppX package addition count
+    Public appxAdditionPackages(65535) As String            ' Array used to store AppX packages to add
+    Public appxAdditionDependencies(65535) As String        ' Array used to store dependencies of AppX packages
+    Public appxAdditionUseLicenseFile As Boolean            ' Determine whether to use a license file
+    Public appxAdditionLicenseFile As String                ' License file to use on AppX packages (program limitation: it uses the same license on all AppX packages)
+    Public appxAdditionUseCustomDataFile As Boolean         ' Determine whether to use a custom data file for AppX provisioning
+    Public appxAdditionCustomDataFile As String             ' Custom data file applied on AppX packages
+    Public appxAdditionUseAllRegions As Boolean             ' Determine whether to use all regions for all AppX packages
+    Public appxAdditionRegions As String                    ' Regions to apply on AppX packages
+    Public appxAdditionCommit As Boolean                    ' Determine whether to commit the image after adding AppX packages
+    Public appxAdditionCount As Integer                     ' Count number of AppX packages to add
+    Public appxAdditionLastPackage As String                ' Last package entry selected
+    Public appxAdditionLastDependency As String             ' Last dependency entry
+    Dim appxSuccessfulAdditions As Integer                  ' Successful AppX package addition count
+    Dim appxFailedAdditions As Integer                      ' Failed AppX package addition count
 
     ' OperationNum: 38
-    Public appxRemovalPackages(65535) As String ' Array used to store AppX packages to remove
-    Public appxRemovalPkgNames(65535) As String ' Array used to store AppX friendly names
-    Public appxRemovalLastPackage As String     ' Last package entry selected
-    Public appxRemovalCount As Integer          ' Count number of AppX packages to remove
-    Dim appxSuccessfulRemovals As Integer       ' Successful AppX package removal count
-    Dim appxFailedRemovals As Integer           ' Failed AppX package addition count
+    Public appxRemovalPackages(65535) As String             ' Array used to store AppX packages to remove
+    Public appxRemovalPkgNames(65535) As String             ' Array used to store AppX friendly names
+    Public appxRemovalLastPackage As String                 ' Last package entry selected
+    Public appxRemovalCount As Integer                      ' Count number of AppX packages to remove
+    Dim appxSuccessfulRemovals As Integer                   ' Successful AppX package removal count
+    Dim appxFailedRemovals As Integer                       ' Failed AppX package addition count
 
     ' <Space for other OperationNums>
     ' OperationNum: 87
-    Public osUninstDayCount As Integer          ' Number of days the user has to uninstall an OS upgrade
+    Public osUninstDayCount As Integer                      ' Number of days the user has to uninstall an OS upgrade
 
     ' OperationNum: 991
-    Public imgSrcFile As String                 ' Source image file for conversion
-    Public imgDestFile As String                ' Destination image file for conversion
-    Public imgConversionMode As Integer         ' 0: WIM -> ESD; 1: WIM <- ESD
+    Public imgSrcFile As String                             ' Source image file for conversion
+    Public imgDestFile As String                            ' Destination image file for conversion
+    Public imgConversionMode As Integer                     ' 0: WIM -> ESD; 1: WIM <- ESD
 
     ' OperationNum: 992
-    Public imgSwmSource As String               ' Source SWM file to merge its pattern to WIM
-    Public imgWimDestination As String          ' Destination WIM file to merge SWM files to
+    Public imgSwmSource As String                           ' Source SWM file to merge its pattern to WIM
+    Public imgWimDestination As String                      ' Destination WIM file to merge SWM files to
 
     ' OperationNum: 996
-    Public SwitchTarget As String               ' Target to switch indexes from
-    Public SwitchSourceIndex As Integer         ' Source image index
-    Public SwitchTargetIndex As Integer         ' Target image index
-    Public SwitchTargetIndexName As String      ' Target index name
-    Public SwitchCommitSourceIndex As Boolean   ' Determine whether to commit source index
-    Public SwitchMountAsReadOnly As Boolean     ' Determine whether to mount target index with read-only permissions
-    Public SwitchSourceImg As String            ' Source image
+    Public SwitchTarget As String                           ' Target to switch indexes from
+    Public SwitchSourceIndex As Integer                     ' Source image index
+    Public SwitchTargetIndex As Integer                     ' Target image index
+    Public SwitchTargetIndexName As String                  ' Target index name
+    Public SwitchCommitSourceIndex As Boolean               ' Determine whether to commit source index
+    Public SwitchMountAsReadOnly As Boolean                 ' Determine whether to mount target index with read-only permissions
+    Public SwitchSourceImg As String                        ' Source image
 
     ' OperationNum: 997
-    Public RWRemountSourceImg As String         ' Source image to remount with R/W permissions
+    Public RWRemountSourceImg As String                     ' Source image to remount with R/W permissions
 
     Private Sub Cancel_Button_Click(sender As Object, e As EventArgs) Handles Cancel_Button.Click
         If Cancel_Button.Text = "Cancel" Then
@@ -418,6 +430,8 @@ Public Class ProgressPanel
                 taskCount = 1
             End If
         ElseIf opNum = 31 Then
+            taskCount = 1
+        ElseIf opNum = 32 Then
             taskCount = 1
         ElseIf opNum = 37 Then
             If appxAdditionCommit Then
@@ -1782,6 +1796,70 @@ Public Class ProgressPanel
                 GetErrorCode(True)
             ElseIf featSuccessfulDisablements <= 0 Then
                 GetErrorCode(False)
+            End If
+        ElseIf opNum = 32 Then
+            allTasks.Text = "Cleaning up the image..."
+            ' Initialize command
+            DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & MountDir & " /cleanup-image"
+            Select Case CleanupTask
+                Case 0
+                    currentTask.Text = "Reverting pending servicing actions..."
+                    LogView.AppendText(CrLf & _
+                                       "Reverting pending servicing actions...")
+                    CommandArgs &= " /revertpendingactions"
+                Case 1
+                    currentTask.Text = "Cleaning up Service Pack backup files..."
+                    LogView.AppendText(CrLf & _
+                                       "Cleaning up Service Pack backup files..." & CrLf & _
+                                       "Options:" & CrLf & _
+                                       "- Hide Service Packs from the Installed Updates list? " & If(CleanupHideSP, "Yes", "No"))
+                    CommandArgs &= " /spsuperseded" & If(CleanupHideSP, " /hidesp", "")
+                Case 2
+                    currentTask.Text = "Cleaning up the component store..."
+                    LogView.AppendText(CrLf & _
+                                       "Cleaning up the component store..." & CrLf & _
+                                       "Options:" & CrLf & _
+                                       "- Perform superseded component base reset? " & If(ResetCompBase, "Yes", "No") & CrLf & _
+                                       "- Defer long-running operations? " & If(DeferCleanupOps, "Yes", "No"))
+                    CommandArgs &= " /startcomponentcleanup" & If(ResetCompBase, " /resetbase", "") & If(ResetCompBase And DeferCleanupOps, " /defer", "")
+                Case 3
+                    currentTask.Text = "Analyzing the component store..."
+                    LogView.AppendText(CrLf & _
+                                       "Analyzing the component store...")
+                    CommandArgs &= " /analyzecomponentstore"
+                Case 4
+                    currentTask.Text = "Checking the component store health..."
+                    LogView.AppendText(CrLf & _
+                                       "Checking the component store health...")
+                    CommandArgs &= " /checkhealth"
+                Case 5
+                    currentTask.Text = "Scanning the component store..."
+                    LogView.AppendText(CrLf & _
+                                       "Scanning the component store...")
+                    CommandArgs &= " /scanhealth"
+                Case 6
+                    ' The most known thing about DISM : dism /online /cleanup-image /restorehealth
+                    currentTask.Text = "Repairing the component store..."
+                    LogView.AppendText(CrLf & _
+                                       "Repairing the component store..." & CrLf & _
+                                       "Options:" & CrLf & _
+                                       "- Use different source? " & If(UseCompRepairSource, "Yes (" & Quote & ComponentRepairSource & Quote & ")", "No") & CrLf & _
+                                       "- Limit Windows Update access? " & If(LimitWUAccess, "Yes", "No"))
+                    CommandArgs &= " /restorehealth" & If(UseCompRepairSource And File.Exists(ComponentRepairSource), " /source=" & Quote & ComponentRepairSource & Quote, "") & If(LimitWUAccess, " /limitaccess", "")
+            End Select
+            DISMProc.StartInfo.Arguments = CommandArgs
+            DISMProc.Start()
+            Do Until DISMProc.HasExited
+                If DISMProc.HasExited Then Exit Do
+            Loop
+            currentTask.Text = "Gathering error level..."
+            LogView.AppendText(CrLf & "Gathering error level...")
+            GetErrorCode(False)
+            If errCode.Length >= 8 Then
+                LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            Else
+                LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 37 Then
             allTasks.Text = "Adding AppX packages..."
