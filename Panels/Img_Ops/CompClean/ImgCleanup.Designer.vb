@@ -56,6 +56,7 @@ Partial Class ImgCleanup
         Me.CheckBox4 = New System.Windows.Forms.CheckBox()
         Me.Label12 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
+        Me.HealthRestoreSourceOFD = New System.Windows.Forms.OpenFileDialog()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -428,6 +429,12 @@ Partial Class ImgCleanup
         Me.Label3.TabIndex = 20
         Me.Label3.Text = "Choose a task to see its description"
         '
+        'HealthRestoreSourceOFD
+        '
+        Me.HealthRestoreSourceOFD.Filter = "WIM files|*.wim|ESD files|*.esd"
+        Me.HealthRestoreSourceOFD.SupportMultiDottedExtensions = True
+        Me.HealthRestoreSourceOFD.Title = "Specify the source from which we will restore the component store health"
+        '
         'ImgCleanup
         '
         Me.AcceptButton = Me.OK_Button
@@ -503,5 +510,6 @@ Partial Class ImgCleanup
     Friend WithEvents CheckBox4 As System.Windows.Forms.CheckBox
     Friend WithEvents Label12 As System.Windows.Forms.Label
     Friend WithEvents Label3 As System.Windows.Forms.Label
+    Friend WithEvents HealthRestoreSourceOFD As System.Windows.Forms.OpenFileDialog
 
 End Class

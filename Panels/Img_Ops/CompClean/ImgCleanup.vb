@@ -1,11 +1,31 @@
 ﻿Imports System.Windows.Forms
 Imports Microsoft.Win32
 Imports Microsoft.VisualBasic.ControlChars
+Imports System.IO
 
 Public Class ImgCleanup
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        ProgressPanel.CleanupTask = ComboBox1.SelectedIndex
+        Select Case ComboBox1.SelectedIndex
+            Case 1
+                ProgressPanel.CleanupHideSP = CheckBox1.Checked = True
+            Case 2
+                ProgressPanel.ResetCompBase = CheckBox2.Checked = True
+                ProgressPanel.DeferCleanupOps = If(CheckBox2.Checked And CheckBox3.Checked, True, False)
+            Case 6
+                ProgressPanel.UseCompRepairSource = CheckBox4.Checked = True
+                If CheckBox4.Checked And TextBox1.Text = "" Or Not File.Exists(TextBox1.Text) Then
+                    MsgBox("No valid source has been provided for component store repair." & CrLf & CrLf & If(TextBox1.Text = "", "Please provide a source and try again.", "Please make sure the specified source exists in the file system and try again."), vbOKOnly + vbCritical, "Image cleanup")
+                    Exit Sub
+                End If
+                ProgressPanel.ComponentRepairSource = TextBox1.Text
+                ProgressPanel.LimitWUAccess = CheckBox5.Checked = True
+        End Select
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
+        ProgressPanel.OperationNum = 32
+        Visible = False
+        ProgressPanel.ShowDialog(MainForm)
         Me.Close()
     End Sub
 
@@ -145,5 +165,13 @@ Public Class ImgCleanup
         Label11.Enabled = CheckBox4.Checked = True
         TextBox1.Enabled = CheckBox4.Checked = True
         Button1.Enabled = CheckBox4.Checked = True
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        HealthRestoreSourceOFD.ShowDialog()
+    End Sub
+
+    Private Sub HealthRestoreSourceOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles HealthRestoreSourceOFD.FileOk
+        TextBox1.Text = HealthRestoreSourceOFD.FileName
     End Sub
 End Class
