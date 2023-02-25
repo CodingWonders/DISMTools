@@ -3,8 +3,5 @@
 # IDE1006: Naming conventions
 dotnet_diagnostic.IDE1006.severity = none
 
-# BC42353: Function does not return a value on all code paths. Skip warning for conditional Returns
-dotnet_diagnostic.BC42353.severity = none
-
 # BC42104: Variable is used before it has been assigned a value
 dotnet_diagnostic.BC42104.severity = none

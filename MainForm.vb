@@ -1556,6 +1556,7 @@ Public Class MainForm
             Case Else
                 Return False
         End Select
+        Return False
     End Function
 
     ''' <summary>
@@ -1576,6 +1577,7 @@ Public Class MainForm
                                 "                     Image is running Windows 10 or Windows 11")
                 Return True
         End Select
+        Return False
     End Function
 
     ''' <summary>
