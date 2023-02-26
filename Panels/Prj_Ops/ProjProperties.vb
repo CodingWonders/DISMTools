@@ -139,7 +139,16 @@ Public Class ProjProperties
             If Debugger.IsAttached Then
                 Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\imginfo.bat").WaitForExit()
             End If
-            Process.Start(".\bin\exthelpers\imginfo.bat").WaitForExit()
+            Using WIMBootProc As New Process()
+                WIMBootProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
+                WIMBootProc.StartInfo.Arguments = "/c " & Quote & Directory.GetCurrentDirectory() & "\bin\exthelpers\imginfo.bat" & Quote
+                WIMBootProc.StartInfo.CreateNoWindow = True
+                WIMBootProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+                WIMBootProc.Start()
+                Do Until WIMBootProc.HasExited
+                    If WIMBootProc.HasExited Then Exit Do
+                Loop
+            End Using
             Try
                 imgWimBootStatus.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgwimboot", ASCII).Replace("WIM Bootable : ", "").Trim()
                 If Not MainForm.ImgBW.IsBusy Then
