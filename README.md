@@ -58,4 +58,4 @@ If you want to grab a copy straight from the source code, follow these instructi
 
 ## Testing the latest
 
-We continue development of the next version in the Preview branch. To go to it, select "dt_preview" from the branch list. Commits are done every day, and new builds are released every Sunday starting tomorrow.
+We continue development of the next version in the Preview branch. To go to it, select "dt_preview" from the branch list. Commits are done every day, and new builds are released every Sunday.
