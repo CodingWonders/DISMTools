@@ -253,6 +253,16 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property closebox() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("closebox", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property collapse_glyph() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("collapse_glyph", resourceCulture)
@@ -416,6 +426,16 @@ Namespace My.Resources
         Friend ReadOnly Property dlg_unpin_dark() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("dlg_unpin_dark", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property dt_bgbranding() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("dt_bgbranding", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -781,6 +801,36 @@ Namespace My.Resources
         Friend ReadOnly Property merge_swm() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("merge_swm", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property minBox() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("minBox", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property minBox_down() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("minBox_down", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property minBox_focus() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("minBox_focus", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -2341,6 +2391,16 @@ Namespace My.Resources
         Friend ReadOnly Property wireless() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("wireless", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property wndPanel_Backdrop() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("wndPanel_Backdrop", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property

@@ -841,4 +841,22 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <data name="cleanup_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\cleanup_img.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="closebox" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FirstUse\closebox.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="dt_bgbranding" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\dt_bgbranding.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="minBox" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FirstUse\minBox.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="minBox_down" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FirstUse\minBox_down.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="minBox_focus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FirstUse\minBox_focus.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wndPanel_Backdrop" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FirstUse\wndPanel_Backdrop.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
