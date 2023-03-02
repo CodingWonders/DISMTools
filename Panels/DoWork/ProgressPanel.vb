@@ -3249,6 +3249,9 @@ Public Class ProgressPanel
                 ElseIf OperationNum = 92 Then
                     LogView.AppendText(CrLf & "The Microsoft Edge WebView2 component has already been installed in this image. There isn't anything to do here.")
                 End If
+            ElseIf errCode = "800F0806" Then
+                ' There are pending image operations
+                LogView.AppendText(CrLf & "The operation could not be performed because this image has pending operations. Applying and booting up the image might fix this issue.")
             Else
                 ' Errors that weren't added to the database
                 LogView.AppendText(CrLf & "This error has not yet been added to the database, so a useful description can't be shown now. Try running the command manually and, if you see the same error, try looking it up on the Internet.")
