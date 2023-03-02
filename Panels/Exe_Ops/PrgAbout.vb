@@ -18,21 +18,6 @@ Public Class PrgAbout
         End If
         Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString()
         Label15.Text = "Built on " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " by msbuild"
-        'If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-        '    BackColor = Color.FromArgb(31, 31, 31)
-        '    ForeColor = Color.White
-        '    TabPage1.BackColor = Color.FromArgb(31, 31, 31)
-        '    TabPage2.BackColor = Color.FromArgb(31, 31, 31)
-        '    RichTextBox1.BackColor = Color.FromArgb(31, 31, 31)
-        '    PictureBox1.Image = My.Resources.logo_aboutdlg_dark
-        '    PictureBox2.Image = My.Resources.preview_dark
-        'ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-        '    BackColor = Color.FromArgb(238, 238, 242)
-        '    ForeColor = Color.Black
-        '    RichTextBox1.BackColor = Color.FromArgb(238, 238, 242)
-        '    PictureBox1.Image = My.Resources.logo_aboutdlg_light
-        '    PictureBox2.Image = My.Resources.preview_light
-        'End If
         ForeColor = Color.White
         PictureBox1.Image = My.Resources.logo_aboutdlg_dark
         PictureBox2.Image = My.Resources.preview_dark
