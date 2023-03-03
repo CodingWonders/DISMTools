@@ -183,6 +183,25 @@ Partial Class MainForm
         Me.ISHelp = New System.Windows.Forms.ToolStripMenuItem()
         Me.HomePanel = New System.Windows.Forms.Panel()
         Me.WelcomePanel = New System.Windows.Forms.Panel()
+        Me.Button17 = New System.Windows.Forms.Button()
+        Me.WelcomeTabControl = New System.Windows.Forms.TabControl()
+        Me.WelcomeTab = New System.Windows.Forms.TabPage()
+        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
+        Me.PictureBox4 = New System.Windows.Forms.PictureBox()
+        Me.PictureBox3 = New System.Windows.Forms.PictureBox()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.Label29 = New System.Windows.Forms.Label()
+        Me.Label33 = New System.Windows.Forms.Label()
+        Me.Label31 = New System.Windows.Forms.Label()
+        Me.Label27 = New System.Windows.Forms.Label()
+        Me.Label28 = New System.Windows.Forms.Label()
+        Me.Label25 = New System.Windows.Forms.Label()
+        Me.Label32 = New System.Windows.Forms.Label()
+        Me.Label30 = New System.Windows.Forms.Label()
+        Me.Label26 = New System.Windows.Forms.Label()
+        Me.Label24 = New System.Windows.Forms.Label()
+        Me.NewsFeedTab = New System.Windows.Forms.TabPage()
+        Me.VideosTab = New System.Windows.Forms.TabPage()
         Me.StartPanel = New System.Windows.Forms.Panel()
         Me.StartPanelPContainer = New System.Windows.Forms.Panel()
         Me.GetStartedPanel = New System.Windows.Forms.Panel()
@@ -215,25 +234,6 @@ Partial Class MainForm
         Me.Panel4 = New System.Windows.Forms.Panel()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.Button18 = New System.Windows.Forms.Button()
-        Me.Button17 = New System.Windows.Forms.Button()
-        Me.WelcomeTabControl = New System.Windows.Forms.TabControl()
-        Me.WelcomeTab = New System.Windows.Forms.TabPage()
-        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
-        Me.PictureBox4 = New System.Windows.Forms.PictureBox()
-        Me.PictureBox3 = New System.Windows.Forms.PictureBox()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
-        Me.Label29 = New System.Windows.Forms.Label()
-        Me.Label33 = New System.Windows.Forms.Label()
-        Me.Label31 = New System.Windows.Forms.Label()
-        Me.Label27 = New System.Windows.Forms.Label()
-        Me.Label28 = New System.Windows.Forms.Label()
-        Me.Label25 = New System.Windows.Forms.Label()
-        Me.Label32 = New System.Windows.Forms.Label()
-        Me.Label30 = New System.Windows.Forms.Label()
-        Me.Label26 = New System.Windows.Forms.Label()
-        Me.Label24 = New System.Windows.Forms.Label()
-        Me.NewsFeedTab = New System.Windows.Forms.TabPage()
-        Me.VideosTab = New System.Windows.Forms.TabPage()
         Me.SidePanel = New System.Windows.Forms.Panel()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.ExistingProjLink = New System.Windows.Forms.LinkLabel()
@@ -263,27 +263,28 @@ Partial Class MainForm
         Me.TabPageTitle1 = New System.Windows.Forms.Label()
         Me.projNameText = New System.Windows.Forms.TextBox()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
-        Me.ImageNotMountedPanel = New System.Windows.Forms.Panel()
-        Me.LinkLabel3 = New System.Windows.Forms.LinkLabel()
-        Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
-        Me.Label23 = New System.Windows.Forms.Label()
         Me.ImagePanel = New System.Windows.Forms.Panel()
         Me.TabTitleSummary2 = New System.Windows.Forms.Panel()
         Me.TabPageIcon2 = New System.Windows.Forms.PictureBox()
         Me.TabPageDescription2 = New System.Windows.Forms.Label()
         Me.TabPageTitle2 = New System.Windows.Forms.Label()
+        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.Label15 = New System.Windows.Forms.Label()
-        Me.Label14 = New System.Windows.Forms.Label()
-        Me.Label17 = New System.Windows.Forms.Label()
-        Me.Label18 = New System.Windows.Forms.Label()
-        Me.Label13 = New System.Windows.Forms.Label()
-        Me.Label20 = New System.Windows.Forms.Label()
-        Me.Label16 = New System.Windows.Forms.Label()
-        Me.Label19 = New System.Windows.Forms.Label()
-        Me.Label21 = New System.Windows.Forms.Label()
-        Me.Label12 = New System.Windows.Forms.Label()
         Me.Button16 = New System.Windows.Forms.Button()
+        Me.Label21 = New System.Windows.Forms.Label()
         Me.Button15 = New System.Windows.Forms.Button()
+        Me.Label14 = New System.Windows.Forms.Label()
+        Me.Label19 = New System.Windows.Forms.Label()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.Label16 = New System.Windows.Forms.Label()
+        Me.Label18 = New System.Windows.Forms.Label()
+        Me.Label20 = New System.Windows.Forms.Label()
+        Me.Label17 = New System.Windows.Forms.Label()
+        Me.ImageNotMountedPanel = New System.Windows.Forms.Panel()
+        Me.LinkLabel3 = New System.Windows.Forms.LinkLabel()
+        Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
+        Me.Label23 = New System.Windows.Forms.Label()
         Me.TabControl2 = New System.Windows.Forms.TabControl()
         Me.TabPage3 = New System.Windows.Forms.TabPage()
         Me.OldActionPanel = New System.Windows.Forms.Panel()
@@ -341,9 +342,18 @@ Partial Class MainForm
         Me.DiscardAndUnmountTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator20 = New System.Windows.Forms.ToolStripSeparator()
         Me.UnmountSettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Panel8 = New System.Windows.Forms.Panel()
+        Me.Panel9 = New System.Windows.Forms.Panel()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
+        Me.WelcomeTabControl.SuspendLayout()
+        Me.WelcomeTab.SuspendLayout()
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.StartPanel.SuspendLayout()
         Me.StartPanelPContainer.SuspendLayout()
         Me.GetStartedPanel.SuspendLayout()
@@ -355,12 +365,6 @@ Partial Class MainForm
         Me.Panel5.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.Panel4.SuspendLayout()
-        Me.WelcomeTabControl.SuspendLayout()
-        Me.WelcomeTab.SuspendLayout()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SidePanel.SuspendLayout()
         Me.Panel3.SuspendLayout()
         CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -374,10 +378,11 @@ Partial Class MainForm
         Me.TabTitleSummary1.SuspendLayout()
         CType(Me.TabPageIcon1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabPage2.SuspendLayout()
-        Me.ImageNotMountedPanel.SuspendLayout()
         Me.ImagePanel.SuspendLayout()
         Me.TabTitleSummary2.SuspendLayout()
         CType(Me.TabPageIcon2, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.TableLayoutPanel1.SuspendLayout()
+        Me.ImageNotMountedPanel.SuspendLayout()
         Me.TabControl2.SuspendLayout()
         Me.TabPage3.SuspendLayout()
         Me.OldActionPanel.SuspendLayout()
@@ -394,6 +399,9 @@ Partial Class MainForm
         Me.PkgInfoCMS.SuspendLayout()
         Me.FeatureInfoCMS.SuspendLayout()
         Me.ImgUMountPopupCMS.SuspendLayout()
+        Me.TableLayoutPanel2.SuspendLayout()
+        Me.Panel8.SuspendLayout()
+        Me.Panel9.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
@@ -1388,6 +1396,210 @@ Partial Class MainForm
         Me.WelcomePanel.Size = New System.Drawing.Size(752, 537)
         Me.WelcomePanel.TabIndex = 1
         '
+        'Button17
+        '
+        Me.Button17.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button17.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button17.Location = New System.Drawing.Point(554, 7)
+        Me.Button17.Name = "Button17"
+        Me.Button17.Size = New System.Drawing.Size(187, 23)
+        Me.Button17.TabIndex = 1
+        Me.Button17.Text = "Switch to the preview version"
+        Me.Button17.UseVisualStyleBackColor = True
+        Me.Button17.Visible = False
+        '
+        'WelcomeTabControl
+        '
+        Me.WelcomeTabControl.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.WelcomeTabControl.Controls.Add(Me.WelcomeTab)
+        Me.WelcomeTabControl.Controls.Add(Me.NewsFeedTab)
+        Me.WelcomeTabControl.Controls.Add(Me.VideosTab)
+        Me.WelcomeTabControl.Location = New System.Drawing.Point(10, 12)
+        Me.WelcomeTabControl.Name = "WelcomeTabControl"
+        Me.WelcomeTabControl.SelectedIndex = 0
+        Me.WelcomeTabControl.Size = New System.Drawing.Size(733, 513)
+        Me.WelcomeTabControl.TabIndex = 0
+        '
+        'WelcomeTab
+        '
+        Me.WelcomeTab.Controls.Add(Me.PictureBox2)
+        Me.WelcomeTab.Controls.Add(Me.PictureBox4)
+        Me.WelcomeTab.Controls.Add(Me.PictureBox3)
+        Me.WelcomeTab.Controls.Add(Me.PictureBox1)
+        Me.WelcomeTab.Controls.Add(Me.Label29)
+        Me.WelcomeTab.Controls.Add(Me.Label33)
+        Me.WelcomeTab.Controls.Add(Me.Label31)
+        Me.WelcomeTab.Controls.Add(Me.Label27)
+        Me.WelcomeTab.Controls.Add(Me.Label28)
+        Me.WelcomeTab.Controls.Add(Me.Label25)
+        Me.WelcomeTab.Controls.Add(Me.Label32)
+        Me.WelcomeTab.Controls.Add(Me.Label30)
+        Me.WelcomeTab.Controls.Add(Me.Label26)
+        Me.WelcomeTab.Controls.Add(Me.Label24)
+        Me.WelcomeTab.Location = New System.Drawing.Point(4, 24)
+        Me.WelcomeTab.Name = "WelcomeTab"
+        Me.WelcomeTab.Padding = New System.Windows.Forms.Padding(3)
+        Me.WelcomeTab.Size = New System.Drawing.Size(725, 485)
+        Me.WelcomeTab.TabIndex = 0
+        Me.WelcomeTab.Text = "Welcome"
+        Me.WelcomeTab.UseVisualStyleBackColor = True
+        '
+        'PictureBox2
+        '
+        Me.PictureBox2.Image = Global.DISMTools.My.Resources.Resources.icons8_code_32px
+        Me.PictureBox2.Location = New System.Drawing.Point(32, 176)
+        Me.PictureBox2.Name = "PictureBox2"
+        Me.PictureBox2.Size = New System.Drawing.Size(32, 32)
+        Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox2.TabIndex = 4
+        Me.PictureBox2.TabStop = False
+        '
+        'PictureBox4
+        '
+        Me.PictureBox4.Image = Global.DISMTools.My.Resources.Resources.getting_started
+        Me.PictureBox4.Location = New System.Drawing.Point(32, 359)
+        Me.PictureBox4.Name = "PictureBox4"
+        Me.PictureBox4.Size = New System.Drawing.Size(32, 32)
+        Me.PictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox4.TabIndex = 4
+        Me.PictureBox4.TabStop = False
+        '
+        'PictureBox3
+        '
+        Me.PictureBox3.Image = Global.DISMTools.My.Resources.Resources.caution
+        Me.PictureBox3.Location = New System.Drawing.Point(32, 265)
+        Me.PictureBox3.Name = "PictureBox3"
+        Me.PictureBox3.Size = New System.Drawing.Size(32, 32)
+        Me.PictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox3.TabIndex = 4
+        Me.PictureBox3.TabStop = False
+        '
+        'PictureBox1
+        '
+        Me.PictureBox1.Image = Global.DISMTools.My.Resources.Resources.ver_stability
+        Me.PictureBox1.Location = New System.Drawing.Point(32, 83)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(32, 32)
+        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox1.TabIndex = 4
+        Me.PictureBox1.TabStop = False
+        '
+        'Label29
+        '
+        Me.Label29.Location = New System.Drawing.Point(75, 211)
+        Me.Label29.Name = "Label29"
+        Me.Label29.Size = New System.Drawing.Size(631, 48)
+        Me.Label29.TabIndex = 3
+        Me.Label29.Text = "This program is open-source, meaning you can take a look at how it works and unde" & _
+    "rstand it better."
+        '
+        'Label33
+        '
+        Me.Label33.Location = New System.Drawing.Point(75, 394)
+        Me.Label33.Name = "Label33"
+        Me.Label33.Size = New System.Drawing.Size(631, 75)
+        Me.Label33.TabIndex = 3
+        Me.Label33.Text = resources.GetString("Label33.Text")
+        '
+        'Label31
+        '
+        Me.Label31.Location = New System.Drawing.Point(75, 300)
+        Me.Label31.Name = "Label31"
+        Me.Label31.Size = New System.Drawing.Size(631, 52)
+        Me.Label31.TabIndex = 3
+        Me.Label31.Text = resources.GetString("Label31.Text")
+        '
+        'Label27
+        '
+        Me.Label27.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.Label27.Location = New System.Drawing.Point(75, 118)
+        Me.Label27.Name = "Label27"
+        Me.Label27.Size = New System.Drawing.Size(631, 52)
+        Me.Label27.TabIndex = 3
+        Me.Label27.Text = "Currently, this program is in alpha. This means lots of things will not work as e" & _
+    "xpected. There will also be lots of bugs, and, generally, the program is incompl" & _
+    "ete (as you can see right now)"
+        '
+        'Label28
+        '
+        Me.Label28.AutoSize = True
+        Me.Label28.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label28.Location = New System.Drawing.Point(70, 176)
+        Me.Label28.Name = "Label28"
+        Me.Label28.Size = New System.Drawing.Size(277, 30)
+        Me.Label28.TabIndex = 1
+        Me.Label28.Text = "This program is open-source"
+        '
+        'Label25
+        '
+        Me.Label25.Location = New System.Drawing.Point(16, 48)
+        Me.Label25.Name = "Label25"
+        Me.Label25.Size = New System.Drawing.Size(690, 21)
+        Me.Label25.TabIndex = 3
+        Me.Label25.Text = "The graphical front-end to perform DISM operations."
+        '
+        'Label32
+        '
+        Me.Label32.AutoSize = True
+        Me.Label32.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label32.Location = New System.Drawing.Point(70, 359)
+        Me.Label32.Name = "Label32"
+        Me.Label32.Size = New System.Drawing.Size(151, 30)
+        Me.Label32.TabIndex = 1
+        Me.Label32.Text = "Getting started"
+        '
+        'Label30
+        '
+        Me.Label30.AutoSize = True
+        Me.Label30.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label30.Location = New System.Drawing.Point(70, 265)
+        Me.Label30.Name = "Label30"
+        Me.Label30.Size = New System.Drawing.Size(346, 30)
+        Me.Label30.TabIndex = 1
+        Me.Label30.Text = "Be sure to know what you are doing"
+        '
+        'Label26
+        '
+        Me.Label26.AutoSize = True
+        Me.Label26.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Bold)
+        Me.Label26.Location = New System.Drawing.Point(70, 83)
+        Me.Label26.Name = "Label26"
+        Me.Label26.Size = New System.Drawing.Size(225, 30)
+        Me.Label26.TabIndex = 1
+        Me.Label26.Text = "This is alpha software"
+        '
+        'Label24
+        '
+        Me.Label24.AutoSize = True
+        Me.Label24.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label24.Location = New System.Drawing.Point(14, 14)
+        Me.Label24.Name = "Label24"
+        Me.Label24.Size = New System.Drawing.Size(228, 30)
+        Me.Label24.TabIndex = 1
+        Me.Label24.Text = "Welcome to DISMTools"
+        '
+        'NewsFeedTab
+        '
+        Me.NewsFeedTab.Location = New System.Drawing.Point(4, 24)
+        Me.NewsFeedTab.Name = "NewsFeedTab"
+        Me.NewsFeedTab.Padding = New System.Windows.Forms.Padding(3)
+        Me.NewsFeedTab.Size = New System.Drawing.Size(725, 485)
+        Me.NewsFeedTab.TabIndex = 1
+        Me.NewsFeedTab.Text = "Latest news"
+        Me.NewsFeedTab.UseVisualStyleBackColor = True
+        '
+        'VideosTab
+        '
+        Me.VideosTab.Location = New System.Drawing.Point(4, 24)
+        Me.VideosTab.Name = "VideosTab"
+        Me.VideosTab.Padding = New System.Windows.Forms.Padding(3)
+        Me.VideosTab.Size = New System.Drawing.Size(725, 485)
+        Me.VideosTab.TabIndex = 2
+        Me.VideosTab.Text = "Tutorial videos"
+        Me.VideosTab.UseVisualStyleBackColor = True
+        '
         'StartPanel
         '
         Me.StartPanel.Controls.Add(Me.StartPanelPContainer)
@@ -1741,210 +1953,6 @@ Partial Class MainForm
         Me.Button18.Text = "Go back to previous design"
         Me.Button18.UseVisualStyleBackColor = True
         '
-        'Button17
-        '
-        Me.Button17.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button17.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button17.Location = New System.Drawing.Point(554, 7)
-        Me.Button17.Name = "Button17"
-        Me.Button17.Size = New System.Drawing.Size(187, 23)
-        Me.Button17.TabIndex = 1
-        Me.Button17.Text = "Switch to the preview version"
-        Me.Button17.UseVisualStyleBackColor = True
-        Me.Button17.Visible = False
-        '
-        'WelcomeTabControl
-        '
-        Me.WelcomeTabControl.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.WelcomeTabControl.Controls.Add(Me.WelcomeTab)
-        Me.WelcomeTabControl.Controls.Add(Me.NewsFeedTab)
-        Me.WelcomeTabControl.Controls.Add(Me.VideosTab)
-        Me.WelcomeTabControl.Location = New System.Drawing.Point(10, 12)
-        Me.WelcomeTabControl.Name = "WelcomeTabControl"
-        Me.WelcomeTabControl.SelectedIndex = 0
-        Me.WelcomeTabControl.Size = New System.Drawing.Size(733, 513)
-        Me.WelcomeTabControl.TabIndex = 0
-        '
-        'WelcomeTab
-        '
-        Me.WelcomeTab.Controls.Add(Me.PictureBox2)
-        Me.WelcomeTab.Controls.Add(Me.PictureBox4)
-        Me.WelcomeTab.Controls.Add(Me.PictureBox3)
-        Me.WelcomeTab.Controls.Add(Me.PictureBox1)
-        Me.WelcomeTab.Controls.Add(Me.Label29)
-        Me.WelcomeTab.Controls.Add(Me.Label33)
-        Me.WelcomeTab.Controls.Add(Me.Label31)
-        Me.WelcomeTab.Controls.Add(Me.Label27)
-        Me.WelcomeTab.Controls.Add(Me.Label28)
-        Me.WelcomeTab.Controls.Add(Me.Label25)
-        Me.WelcomeTab.Controls.Add(Me.Label32)
-        Me.WelcomeTab.Controls.Add(Me.Label30)
-        Me.WelcomeTab.Controls.Add(Me.Label26)
-        Me.WelcomeTab.Controls.Add(Me.Label24)
-        Me.WelcomeTab.Location = New System.Drawing.Point(4, 24)
-        Me.WelcomeTab.Name = "WelcomeTab"
-        Me.WelcomeTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.WelcomeTab.Size = New System.Drawing.Size(725, 485)
-        Me.WelcomeTab.TabIndex = 0
-        Me.WelcomeTab.Text = "Welcome"
-        Me.WelcomeTab.UseVisualStyleBackColor = True
-        '
-        'PictureBox2
-        '
-        Me.PictureBox2.Image = Global.DISMTools.My.Resources.Resources.icons8_code_32px
-        Me.PictureBox2.Location = New System.Drawing.Point(32, 176)
-        Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(32, 32)
-        Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.PictureBox2.TabIndex = 4
-        Me.PictureBox2.TabStop = False
-        '
-        'PictureBox4
-        '
-        Me.PictureBox4.Image = Global.DISMTools.My.Resources.Resources.getting_started
-        Me.PictureBox4.Location = New System.Drawing.Point(32, 359)
-        Me.PictureBox4.Name = "PictureBox4"
-        Me.PictureBox4.Size = New System.Drawing.Size(32, 32)
-        Me.PictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.PictureBox4.TabIndex = 4
-        Me.PictureBox4.TabStop = False
-        '
-        'PictureBox3
-        '
-        Me.PictureBox3.Image = Global.DISMTools.My.Resources.Resources.caution
-        Me.PictureBox3.Location = New System.Drawing.Point(32, 265)
-        Me.PictureBox3.Name = "PictureBox3"
-        Me.PictureBox3.Size = New System.Drawing.Size(32, 32)
-        Me.PictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.PictureBox3.TabIndex = 4
-        Me.PictureBox3.TabStop = False
-        '
-        'PictureBox1
-        '
-        Me.PictureBox1.Image = Global.DISMTools.My.Resources.Resources.ver_stability
-        Me.PictureBox1.Location = New System.Drawing.Point(32, 83)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(32, 32)
-        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.PictureBox1.TabIndex = 4
-        Me.PictureBox1.TabStop = False
-        '
-        'Label29
-        '
-        Me.Label29.Location = New System.Drawing.Point(75, 211)
-        Me.Label29.Name = "Label29"
-        Me.Label29.Size = New System.Drawing.Size(631, 48)
-        Me.Label29.TabIndex = 3
-        Me.Label29.Text = "This program is open-source, meaning you can take a look at how it works and unde" & _
-    "rstand it better."
-        '
-        'Label33
-        '
-        Me.Label33.Location = New System.Drawing.Point(75, 394)
-        Me.Label33.Name = "Label33"
-        Me.Label33.Size = New System.Drawing.Size(631, 75)
-        Me.Label33.TabIndex = 3
-        Me.Label33.Text = resources.GetString("Label33.Text")
-        '
-        'Label31
-        '
-        Me.Label31.Location = New System.Drawing.Point(75, 300)
-        Me.Label31.Name = "Label31"
-        Me.Label31.Size = New System.Drawing.Size(631, 52)
-        Me.Label31.TabIndex = 3
-        Me.Label31.Text = resources.GetString("Label31.Text")
-        '
-        'Label27
-        '
-        Me.Label27.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
-        Me.Label27.Location = New System.Drawing.Point(75, 118)
-        Me.Label27.Name = "Label27"
-        Me.Label27.Size = New System.Drawing.Size(631, 52)
-        Me.Label27.TabIndex = 3
-        Me.Label27.Text = "Currently, this program is in alpha. This means lots of things will not work as e" & _
-    "xpected. There will also be lots of bugs, and, generally, the program is incompl" & _
-    "ete (as you can see right now)"
-        '
-        'Label28
-        '
-        Me.Label28.AutoSize = True
-        Me.Label28.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label28.Location = New System.Drawing.Point(70, 176)
-        Me.Label28.Name = "Label28"
-        Me.Label28.Size = New System.Drawing.Size(277, 30)
-        Me.Label28.TabIndex = 1
-        Me.Label28.Text = "This program is open-source"
-        '
-        'Label25
-        '
-        Me.Label25.Location = New System.Drawing.Point(16, 48)
-        Me.Label25.Name = "Label25"
-        Me.Label25.Size = New System.Drawing.Size(690, 21)
-        Me.Label25.TabIndex = 3
-        Me.Label25.Text = "The graphical front-end to perform DISM operations."
-        '
-        'Label32
-        '
-        Me.Label32.AutoSize = True
-        Me.Label32.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label32.Location = New System.Drawing.Point(70, 359)
-        Me.Label32.Name = "Label32"
-        Me.Label32.Size = New System.Drawing.Size(151, 30)
-        Me.Label32.TabIndex = 1
-        Me.Label32.Text = "Getting started"
-        '
-        'Label30
-        '
-        Me.Label30.AutoSize = True
-        Me.Label30.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label30.Location = New System.Drawing.Point(70, 265)
-        Me.Label30.Name = "Label30"
-        Me.Label30.Size = New System.Drawing.Size(346, 30)
-        Me.Label30.TabIndex = 1
-        Me.Label30.Text = "Be sure to know what you are doing"
-        '
-        'Label26
-        '
-        Me.Label26.AutoSize = True
-        Me.Label26.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Bold)
-        Me.Label26.Location = New System.Drawing.Point(70, 83)
-        Me.Label26.Name = "Label26"
-        Me.Label26.Size = New System.Drawing.Size(225, 30)
-        Me.Label26.TabIndex = 1
-        Me.Label26.Text = "This is alpha software"
-        '
-        'Label24
-        '
-        Me.Label24.AutoSize = True
-        Me.Label24.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label24.Location = New System.Drawing.Point(14, 14)
-        Me.Label24.Name = "Label24"
-        Me.Label24.Size = New System.Drawing.Size(228, 30)
-        Me.Label24.TabIndex = 1
-        Me.Label24.Text = "Welcome to DISMTools"
-        '
-        'NewsFeedTab
-        '
-        Me.NewsFeedTab.Location = New System.Drawing.Point(4, 24)
-        Me.NewsFeedTab.Name = "NewsFeedTab"
-        Me.NewsFeedTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.NewsFeedTab.Size = New System.Drawing.Size(725, 485)
-        Me.NewsFeedTab.TabIndex = 1
-        Me.NewsFeedTab.Text = "Latest news"
-        Me.NewsFeedTab.UseVisualStyleBackColor = True
-        '
-        'VideosTab
-        '
-        Me.VideosTab.Location = New System.Drawing.Point(4, 24)
-        Me.VideosTab.Name = "VideosTab"
-        Me.VideosTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.VideosTab.Size = New System.Drawing.Size(725, 485)
-        Me.VideosTab.TabIndex = 2
-        Me.VideosTab.Text = "Tutorial videos"
-        Me.VideosTab.UseVisualStyleBackColor = True
-        '
         'SidePanel
         '
         Me.SidePanel.BackColor = System.Drawing.Color.White
@@ -2082,18 +2090,10 @@ Partial Class MainForm
         'TabPage1
         '
         Me.TabPage1.Controls.Add(Me.UnloadBtn)
-        Me.TabPage1.Controls.Add(Me.ProjNameEditBtn)
         Me.TabPage1.Controls.Add(Me.ExplorerView)
-        Me.TabPage1.Controls.Add(Me.LinkLabel1)
-        Me.TabPage1.Controls.Add(Me.Label5)
         Me.TabPage1.Controls.Add(Me.Button14)
-        Me.TabPage1.Controls.Add(Me.Label4)
-        Me.TabPage1.Controls.Add(Me.Label3)
-        Me.TabPage1.Controls.Add(Me.Label2)
-        Me.TabPage1.Controls.Add(Me.projName)
-        Me.TabPage1.Controls.Add(Me.Label1)
         Me.TabPage1.Controls.Add(Me.TabTitleSummary1)
-        Me.TabPage1.Controls.Add(Me.projNameText)
+        Me.TabPage1.Controls.Add(Me.TableLayoutPanel2)
         Me.TabPage1.Location = New System.Drawing.Point(4, 22)
         Me.TabPage1.Name = "TabPage1"
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
@@ -2118,7 +2118,7 @@ Partial Class MainForm
         '
         Me.ProjNameEditBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ProjNameEditBtn.Image = Global.DISMTools.My.Resources.Resources.proj_name_edit
-        Me.ProjNameEditBtn.Location = New System.Drawing.Point(209, 81)
+        Me.ProjNameEditBtn.Location = New System.Drawing.Point(229, 3)
         Me.ProjNameEditBtn.Name = "ProjNameEditBtn"
         Me.ProjNameEditBtn.Size = New System.Drawing.Size(24, 23)
         Me.ProjNameEditBtn.TabIndex = 7
@@ -2138,13 +2138,13 @@ Partial Class MainForm
         '
         'LinkLabel1
         '
-        Me.LinkLabel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TableLayoutPanel2.SetColumnSpan(Me.LinkLabel1, 2)
+        Me.LinkLabel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel1.Location = New System.Drawing.Point(122, 193)
+        Me.LinkLabel1.Location = New System.Drawing.Point(114, 146)
         Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(111, 32)
+        Me.LinkLabel1.Size = New System.Drawing.Size(139, 134)
         Me.LinkLabel1.TabIndex = 5
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "Click here to mount an image"
@@ -2153,9 +2153,11 @@ Partial Class MainForm
         '
         Me.Label5.AutoEllipsis = True
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(122, 180)
+        Me.TableLayoutPanel2.SetColumnSpan(Me.Label5, 2)
+        Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label5.Location = New System.Drawing.Point(114, 131)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(54, 13)
+        Me.Label5.Size = New System.Drawing.Size(139, 15)
         Me.Label5.TabIndex = 2
         Me.Label5.Text = "imgStatus"
         '
@@ -2174,11 +2176,14 @@ Partial Class MainForm
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(24, 180)
+        Me.Label4.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label4.Location = New System.Drawing.Point(3, 131)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(92, 13)
+        Me.TableLayoutPanel2.SetRowSpan(Me.Label4, 2)
+        Me.Label4.Size = New System.Drawing.Size(105, 149)
         Me.Label4.TabIndex = 1
         Me.Label4.Text = "Images mounted?"
+        Me.Label4.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label3
         '
@@ -2186,41 +2191,44 @@ Partial Class MainForm
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label3.AutoEllipsis = True
-        Me.Label3.Location = New System.Drawing.Point(81, 116)
+        Me.TableLayoutPanel2.SetColumnSpan(Me.Label3, 2)
+        Me.Label3.Location = New System.Drawing.Point(114, 29)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(152, 24)
+        Me.Label3.Size = New System.Drawing.Size(139, 102)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "projPath"
         '
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(24, 116)
+        Me.Label2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label2.Location = New System.Drawing.Point(3, 29)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(51, 13)
+        Me.Label2.Size = New System.Drawing.Size(105, 102)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "Location:"
+        Me.Label2.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'projName
         '
-        Me.projName.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.projName.AutoEllipsis = True
-        Me.projName.Location = New System.Drawing.Point(68, 80)
+        Me.projName.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.projName.Location = New System.Drawing.Point(0, 0)
         Me.projName.Name = "projName"
-        Me.projName.Size = New System.Drawing.Size(135, 24)
+        Me.projName.Size = New System.Drawing.Size(108, 23)
         Me.projName.TabIndex = 2
         Me.projName.Text = "projName"
         Me.projName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label1
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(24, 86)
+        Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label1.Location = New System.Drawing.Point(0, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(38, 13)
+        Me.Label1.Size = New System.Drawing.Size(105, 23)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Name:"
+        Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'TabTitleSummary1
         '
@@ -2265,9 +2273,10 @@ Partial Class MainForm
         '
         'projNameText
         '
-        Me.projNameText.Location = New System.Drawing.Point(68, 83)
+        Me.projNameText.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.projNameText.Location = New System.Drawing.Point(0, 0)
         Me.projNameText.Name = "projNameText"
-        Me.projNameText.Size = New System.Drawing.Size(135, 21)
+        Me.projNameText.Size = New System.Drawing.Size(108, 21)
         Me.projNameText.TabIndex = 4
         Me.projNameText.Text = "projName"
         Me.projNameText.Visible = False
@@ -2283,6 +2292,214 @@ Partial Class MainForm
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "Image"
         Me.TabPage2.UseVisualStyleBackColor = True
+        '
+        'ImagePanel
+        '
+        Me.ImagePanel.Controls.Add(Me.Button16)
+        Me.ImagePanel.Controls.Add(Me.TabTitleSummary2)
+        Me.ImagePanel.Controls.Add(Me.Button15)
+        Me.ImagePanel.Controls.Add(Me.TableLayoutPanel1)
+        Me.ImagePanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ImagePanel.Location = New System.Drawing.Point(3, 3)
+        Me.ImagePanel.Name = "ImagePanel"
+        Me.ImagePanel.Size = New System.Drawing.Size(250, 454)
+        Me.ImagePanel.TabIndex = 9
+        '
+        'TabTitleSummary2
+        '
+        Me.TabTitleSummary2.Controls.Add(Me.TabPageIcon2)
+        Me.TabTitleSummary2.Controls.Add(Me.TabPageDescription2)
+        Me.TabTitleSummary2.Controls.Add(Me.TabPageTitle2)
+        Me.TabTitleSummary2.Dock = System.Windows.Forms.DockStyle.Top
+        Me.TabTitleSummary2.Location = New System.Drawing.Point(0, 0)
+        Me.TabTitleSummary2.Name = "TabTitleSummary2"
+        Me.TabTitleSummary2.Size = New System.Drawing.Size(250, 64)
+        Me.TabTitleSummary2.TabIndex = 1
+        '
+        'TabPageIcon2
+        '
+        Me.TabPageIcon2.Image = Global.DISMTools.My.Resources.Resources.image
+        Me.TabPageIcon2.Location = New System.Drawing.Point(8, 8)
+        Me.TabPageIcon2.Name = "TabPageIcon2"
+        Me.TabPageIcon2.Size = New System.Drawing.Size(48, 48)
+        Me.TabPageIcon2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.TabPageIcon2.TabIndex = 1
+        Me.TabPageIcon2.TabStop = False
+        '
+        'TabPageDescription2
+        '
+        Me.TabPageDescription2.AutoSize = True
+        Me.TabPageDescription2.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TabPageDescription2.Location = New System.Drawing.Point(63, 37)
+        Me.TabPageDescription2.Name = "TabPageDescription2"
+        Me.TabPageDescription2.Size = New System.Drawing.Size(117, 13)
+        Me.TabPageDescription2.TabIndex = 0
+        Me.TabPageDescription2.Text = "View image information"
+        '
+        'TabPageTitle2
+        '
+        Me.TabPageTitle2.AutoSize = True
+        Me.TabPageTitle2.Font = New System.Drawing.Font("Tahoma", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TabPageTitle2.Location = New System.Drawing.Point(62, 14)
+        Me.TabPageTitle2.Name = "TabPageTitle2"
+        Me.TabPageTitle2.Size = New System.Drawing.Size(64, 23)
+        Me.TabPageTitle2.TabIndex = 0
+        Me.TabPageTitle2.Text = "Image"
+        '
+        'TableLayoutPanel1
+        '
+        Me.TableLayoutPanel1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TableLayoutPanel1.ColumnCount = 2
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 39.2!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60.8!))
+        Me.TableLayoutPanel1.Controls.Add(Me.Label15, 0, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label21, 0, 4)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label14, 1, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label19, 0, 3)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label13, 0, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label12, 1, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label16, 0, 2)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label18, 1, 3)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label20, 1, 4)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label17, 1, 2)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 64)
+        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
+        Me.TableLayoutPanel1.RowCount = 5
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 74.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 84.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 121.0!))
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(250, 314)
+        Me.TableLayoutPanel1.TabIndex = 9
+        '
+        'Label15
+        '
+        Me.Label15.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label15.Location = New System.Drawing.Point(3, 0)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(92, 23)
+        Me.Label15.TabIndex = 4
+        Me.Label15.Text = "Image index:"
+        Me.Label15.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'Button16
+        '
+        Me.Button16.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button16.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button16.Location = New System.Drawing.Point(33, 415)
+        Me.Button16.Name = "Button16"
+        Me.Button16.Size = New System.Drawing.Size(185, 28)
+        Me.Button16.TabIndex = 8
+        Me.Button16.Text = "Unmount image..."
+        Me.Button16.UseVisualStyleBackColor = True
+        '
+        'Label21
+        '
+        Me.Label21.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label21.Location = New System.Drawing.Point(3, 201)
+        Me.Label21.Name = "Label21"
+        Me.Label21.Size = New System.Drawing.Size(92, 121)
+        Me.Label21.TabIndex = 3
+        Me.Label21.Text = "Description:"
+        Me.Label21.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'Button15
+        '
+        Me.Button15.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button15.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button15.Location = New System.Drawing.Point(33, 384)
+        Me.Button15.Name = "Button15"
+        Me.Button15.Size = New System.Drawing.Size(185, 28)
+        Me.Button15.TabIndex = 8
+        Me.Button15.Text = "View image properties"
+        Me.Button15.UseVisualStyleBackColor = True
+        '
+        'Label14
+        '
+        Me.Label14.AutoEllipsis = True
+        Me.Label14.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label14.Location = New System.Drawing.Point(101, 0)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(146, 23)
+        Me.Label14.TabIndex = 6
+        Me.Label14.Text = "imgIndex"
+        Me.Label14.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Label19
+        '
+        Me.Label19.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label19.Location = New System.Drawing.Point(3, 117)
+        Me.Label19.Name = "Label19"
+        Me.Label19.Size = New System.Drawing.Size(92, 84)
+        Me.Label19.TabIndex = 3
+        Me.Label19.Text = "Name:"
+        Me.Label19.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'Label13
+        '
+        Me.Label13.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label13.Location = New System.Drawing.Point(3, 23)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(92, 74)
+        Me.Label13.TabIndex = 3
+        Me.Label13.Text = "Mount point:"
+        Me.Label13.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'Label12
+        '
+        Me.Label12.AutoEllipsis = True
+        Me.Label12.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label12.Location = New System.Drawing.Point(101, 23)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(146, 74)
+        Me.Label12.TabIndex = 5
+        Me.Label12.Text = "mountPoint"
+        '
+        'Label16
+        '
+        Me.Label16.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label16.Location = New System.Drawing.Point(3, 97)
+        Me.Label16.Name = "Label16"
+        Me.Label16.Size = New System.Drawing.Size(92, 20)
+        Me.Label16.TabIndex = 3
+        Me.Label16.Text = "Version:"
+        Me.Label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'Label18
+        '
+        Me.Label18.AutoEllipsis = True
+        Me.Label18.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label18.Location = New System.Drawing.Point(101, 117)
+        Me.Label18.Name = "Label18"
+        Me.Label18.Size = New System.Drawing.Size(146, 84)
+        Me.Label18.TabIndex = 6
+        Me.Label18.Text = "imgName"
+        '
+        'Label20
+        '
+        Me.Label20.AutoEllipsis = True
+        Me.Label20.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label20.Location = New System.Drawing.Point(101, 201)
+        Me.Label20.Name = "Label20"
+        Me.Label20.Size = New System.Drawing.Size(146, 121)
+        Me.Label20.TabIndex = 6
+        Me.Label20.Text = "imgDesc"
+        '
+        'Label17
+        '
+        Me.Label17.AutoEllipsis = True
+        Me.Label17.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label17.Location = New System.Drawing.Point(101, 97)
+        Me.Label17.Name = "Label17"
+        Me.Label17.Size = New System.Drawing.Size(146, 20)
+        Me.Label17.TabIndex = 6
+        Me.Label17.Text = "imgVersion"
+        Me.Label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'ImageNotMountedPanel
         '
@@ -2339,195 +2556,6 @@ Partial Class MainForm
         Me.Label23.TabIndex = 0
         Me.Label23.Text = "No image has been mounted"
         Me.Label23.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'ImagePanel
-        '
-        Me.ImagePanel.Controls.Add(Me.TabTitleSummary2)
-        Me.ImagePanel.Controls.Add(Me.Label15)
-        Me.ImagePanel.Controls.Add(Me.Label14)
-        Me.ImagePanel.Controls.Add(Me.Label17)
-        Me.ImagePanel.Controls.Add(Me.Label18)
-        Me.ImagePanel.Controls.Add(Me.Label13)
-        Me.ImagePanel.Controls.Add(Me.Label20)
-        Me.ImagePanel.Controls.Add(Me.Label16)
-        Me.ImagePanel.Controls.Add(Me.Label19)
-        Me.ImagePanel.Controls.Add(Me.Label21)
-        Me.ImagePanel.Controls.Add(Me.Label12)
-        Me.ImagePanel.Controls.Add(Me.Button16)
-        Me.ImagePanel.Controls.Add(Me.Button15)
-        Me.ImagePanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ImagePanel.Location = New System.Drawing.Point(3, 3)
-        Me.ImagePanel.Name = "ImagePanel"
-        Me.ImagePanel.Size = New System.Drawing.Size(250, 454)
-        Me.ImagePanel.TabIndex = 9
-        '
-        'TabTitleSummary2
-        '
-        Me.TabTitleSummary2.Controls.Add(Me.TabPageIcon2)
-        Me.TabTitleSummary2.Controls.Add(Me.TabPageDescription2)
-        Me.TabTitleSummary2.Controls.Add(Me.TabPageTitle2)
-        Me.TabTitleSummary2.Dock = System.Windows.Forms.DockStyle.Top
-        Me.TabTitleSummary2.Location = New System.Drawing.Point(0, 0)
-        Me.TabTitleSummary2.Name = "TabTitleSummary2"
-        Me.TabTitleSummary2.Size = New System.Drawing.Size(250, 64)
-        Me.TabTitleSummary2.TabIndex = 1
-        '
-        'TabPageIcon2
-        '
-        Me.TabPageIcon2.Image = Global.DISMTools.My.Resources.Resources.image
-        Me.TabPageIcon2.Location = New System.Drawing.Point(8, 8)
-        Me.TabPageIcon2.Name = "TabPageIcon2"
-        Me.TabPageIcon2.Size = New System.Drawing.Size(48, 48)
-        Me.TabPageIcon2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.TabPageIcon2.TabIndex = 1
-        Me.TabPageIcon2.TabStop = False
-        '
-        'TabPageDescription2
-        '
-        Me.TabPageDescription2.AutoSize = True
-        Me.TabPageDescription2.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TabPageDescription2.Location = New System.Drawing.Point(63, 37)
-        Me.TabPageDescription2.Name = "TabPageDescription2"
-        Me.TabPageDescription2.Size = New System.Drawing.Size(117, 13)
-        Me.TabPageDescription2.TabIndex = 0
-        Me.TabPageDescription2.Text = "View image information"
-        '
-        'TabPageTitle2
-        '
-        Me.TabPageTitle2.AutoSize = True
-        Me.TabPageTitle2.Font = New System.Drawing.Font("Tahoma", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TabPageTitle2.Location = New System.Drawing.Point(62, 14)
-        Me.TabPageTitle2.Name = "TabPageTitle2"
-        Me.TabPageTitle2.Size = New System.Drawing.Size(64, 23)
-        Me.TabPageTitle2.TabIndex = 0
-        Me.TabPageTitle2.Text = "Image"
-        '
-        'Label15
-        '
-        Me.Label15.AutoSize = True
-        Me.Label15.Location = New System.Drawing.Point(27, 81)
-        Me.Label15.Name = "Label15"
-        Me.Label15.Size = New System.Drawing.Size(70, 13)
-        Me.Label15.TabIndex = 4
-        Me.Label15.Text = "Image index:"
-        '
-        'Label14
-        '
-        Me.Label14.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label14.AutoEllipsis = True
-        Me.Label14.Location = New System.Drawing.Point(103, 75)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(103, 24)
-        Me.Label14.TabIndex = 6
-        Me.Label14.Text = "imgIndex"
-        Me.Label14.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'Label17
-        '
-        Me.Label17.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label17.AutoEllipsis = True
-        Me.Label17.Location = New System.Drawing.Point(79, 218)
-        Me.Label17.Name = "Label17"
-        Me.Label17.Size = New System.Drawing.Size(157, 56)
-        Me.Label17.TabIndex = 6
-        Me.Label17.Text = "imgVersion"
-        '
-        'Label18
-        '
-        Me.Label18.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label18.AutoEllipsis = True
-        Me.Label18.Location = New System.Drawing.Point(71, 283)
-        Me.Label18.Name = "Label18"
-        Me.Label18.Size = New System.Drawing.Size(165, 56)
-        Me.Label18.TabIndex = 6
-        Me.Label18.Text = "imgName"
-        '
-        'Label13
-        '
-        Me.Label13.AutoSize = True
-        Me.Label13.Location = New System.Drawing.Point(27, 111)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(68, 13)
-        Me.Label13.TabIndex = 3
-        Me.Label13.Text = "Mount point:"
-        '
-        'Label20
-        '
-        Me.Label20.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label20.AutoEllipsis = True
-        Me.Label20.Location = New System.Drawing.Point(97, 345)
-        Me.Label20.Name = "Label20"
-        Me.Label20.Size = New System.Drawing.Size(139, 28)
-        Me.Label20.TabIndex = 6
-        Me.Label20.Text = "imgDesc"
-        '
-        'Label16
-        '
-        Me.Label16.AutoSize = True
-        Me.Label16.Location = New System.Drawing.Point(27, 218)
-        Me.Label16.Name = "Label16"
-        Me.Label16.Size = New System.Drawing.Size(46, 13)
-        Me.Label16.TabIndex = 3
-        Me.Label16.Text = "Version:"
-        '
-        'Label19
-        '
-        Me.Label19.AutoSize = True
-        Me.Label19.Location = New System.Drawing.Point(27, 283)
-        Me.Label19.Name = "Label19"
-        Me.Label19.Size = New System.Drawing.Size(38, 13)
-        Me.Label19.TabIndex = 3
-        Me.Label19.Text = "Name:"
-        '
-        'Label21
-        '
-        Me.Label21.AutoSize = True
-        Me.Label21.Location = New System.Drawing.Point(27, 345)
-        Me.Label21.Name = "Label21"
-        Me.Label21.Size = New System.Drawing.Size(64, 13)
-        Me.Label21.TabIndex = 3
-        Me.Label21.Text = "Description:"
-        '
-        'Label12
-        '
-        Me.Label12.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label12.AutoEllipsis = True
-        Me.Label12.Location = New System.Drawing.Point(101, 111)
-        Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(135, 50)
-        Me.Label12.TabIndex = 5
-        Me.Label12.Text = "mountPoint"
-        '
-        'Button16
-        '
-        Me.Button16.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button16.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button16.Location = New System.Drawing.Point(33, 415)
-        Me.Button16.Name = "Button16"
-        Me.Button16.Size = New System.Drawing.Size(185, 28)
-        Me.Button16.TabIndex = 8
-        Me.Button16.Text = "Unmount image..."
-        Me.Button16.UseVisualStyleBackColor = True
-        '
-        'Button15
-        '
-        Me.Button15.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button15.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button15.Location = New System.Drawing.Point(33, 381)
-        Me.Button15.Name = "Button15"
-        Me.Button15.Size = New System.Drawing.Size(185, 28)
-        Me.Button15.TabIndex = 8
-        Me.Button15.Text = "View image properties"
-        Me.Button15.UseVisualStyleBackColor = True
         '
         'TabControl2
         '
@@ -3056,6 +3084,52 @@ Partial Class MainForm
         Me.UnmountSettingsToolStripMenuItem.Size = New System.Drawing.Size(252, 22)
         Me.UnmountSettingsToolStripMenuItem.Text = "Unmount settings..."
         '
+        'TableLayoutPanel2
+        '
+        Me.TableLayoutPanel2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TableLayoutPanel2.ColumnCount = 3
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.33333!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.66667!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
+        Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label5, 1, 2)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label2, 0, 1)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label3, 1, 1)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label4, 0, 2)
+        Me.TableLayoutPanel2.Controls.Add(Me.Panel9, 0, 0)
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(0, 64)
+        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
+        Me.TableLayoutPanel2.RowCount = 4
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 102.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8.0!))
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(256, 280)
+        Me.TableLayoutPanel2.TabIndex = 8
+        '
+        'Panel8
+        '
+        Me.Panel8.Controls.Add(Me.projName)
+        Me.Panel8.Controls.Add(Me.projNameText)
+        Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel8.Location = New System.Drawing.Point(114, 3)
+        Me.Panel8.Name = "Panel8"
+        Me.Panel8.Size = New System.Drawing.Size(108, 23)
+        Me.Panel8.TabIndex = 8
+        '
+        'Panel9
+        '
+        Me.Panel9.Controls.Add(Me.Label1)
+        Me.Panel9.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel9.Location = New System.Drawing.Point(3, 3)
+        Me.Panel9.Name = "Panel9"
+        Me.Panel9.Size = New System.Drawing.Size(105, 23)
+        Me.Panel9.TabIndex = 9
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -3074,6 +3148,13 @@ Partial Class MainForm
         Me.MenuStrip1.PerformLayout()
         Me.HomePanel.ResumeLayout(False)
         Me.WelcomePanel.ResumeLayout(False)
+        Me.WelcomeTabControl.ResumeLayout(False)
+        Me.WelcomeTab.ResumeLayout(False)
+        Me.WelcomeTab.PerformLayout()
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.StartPanel.ResumeLayout(False)
         Me.StartPanelPContainer.ResumeLayout(False)
         Me.GetStartedPanel.ResumeLayout(False)
@@ -3089,13 +3170,6 @@ Partial Class MainForm
         Me.Panel1.PerformLayout()
         Me.Panel4.ResumeLayout(False)
         Me.Panel4.PerformLayout()
-        Me.WelcomeTabControl.ResumeLayout(False)
-        Me.WelcomeTab.ResumeLayout(False)
-        Me.WelcomeTab.PerformLayout()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SidePanel.ResumeLayout(False)
         Me.SidePanel.PerformLayout()
         Me.Panel3.ResumeLayout(False)
@@ -3109,17 +3183,16 @@ Partial Class MainForm
         Me.SplitPanels.ResumeLayout(False)
         Me.TabControl1.ResumeLayout(False)
         Me.TabPage1.ResumeLayout(False)
-        Me.TabPage1.PerformLayout()
         Me.TabTitleSummary1.ResumeLayout(False)
         Me.TabTitleSummary1.PerformLayout()
         CType(Me.TabPageIcon1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TabPage2.ResumeLayout(False)
-        Me.ImageNotMountedPanel.ResumeLayout(False)
         Me.ImagePanel.ResumeLayout(False)
-        Me.ImagePanel.PerformLayout()
         Me.TabTitleSummary2.ResumeLayout(False)
         Me.TabTitleSummary2.PerformLayout()
         CType(Me.TabPageIcon2, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.TableLayoutPanel1.ResumeLayout(False)
+        Me.ImageNotMountedPanel.ResumeLayout(False)
         Me.TabControl2.ResumeLayout(False)
         Me.TabPage3.ResumeLayout(False)
         Me.OldActionPanel.ResumeLayout(False)
@@ -3142,6 +3215,11 @@ Partial Class MainForm
         Me.PkgInfoCMS.ResumeLayout(False)
         Me.FeatureInfoCMS.ResumeLayout(False)
         Me.ImgUMountPopupCMS.ResumeLayout(False)
+        Me.TableLayoutPanel2.ResumeLayout(False)
+        Me.TableLayoutPanel2.PerformLayout()
+        Me.Panel8.ResumeLayout(False)
+        Me.Panel8.PerformLayout()
+        Me.Panel9.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -3463,4 +3541,8 @@ Partial Class MainForm
     Friend WithEvents TutorialVideoPanel As System.Windows.Forms.Panel
     Friend WithEvents LatestNewsPanel As System.Windows.Forms.Panel
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents Panel8 As System.Windows.Forms.Panel
+    Friend WithEvents Panel9 As System.Windows.Forms.Panel
 End Class
