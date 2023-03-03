@@ -1175,7 +1175,6 @@ Public Class MainForm
                                 Exit For
                             Next
                         End If
-                        Exit For
                     Next
                 Catch ex As Exception
                     Exit Try
