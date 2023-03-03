@@ -3251,7 +3251,7 @@ Public Class ProgressPanel
                 End If
             ElseIf errCode = "800F0806" Then
                 ' There are pending image operations
-                LogView.AppendText(CrLf & "The operation could not be performed because this image has pending operations. Applying and booting up the image might fix this issue.")
+                LogView.AppendText(CrLf & "The operation could not be performed because this image has pending online operations. Applying and booting up the image might fix this issue.")
             Else
                 ' Errors that weren't added to the database
                 LogView.AppendText(CrLf & "This error has not yet been added to the database, so a useful description can't be shown now. Try running the command manually and, if you see the same error, try looking it up on the Internet.")
