@@ -32,10 +32,9 @@ Public Class BGProcNotify
     End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
-        For Me.opacityFade = 1 To 0 Step -0.01
+        For Me.opacityFade = 1 To 0 Step -0.005
             Opacity = opacityFade
             Refresh()
-            Thread.Sleep(10)
         Next opacityFade
         Timer1.Enabled = False
         Timer1.Stop()
