@@ -100,4 +100,18 @@
             Location = mousePos
         End If
     End Sub
+
+    Private Sub BGProcDetails_VisibleChanged(sender As Object, e As EventArgs) Handles MyBase.VisibleChanged
+        If Visible Then
+            If Environment.OSVersion.Version.Major = 10 Then    ' The Left property also includes the window shadows on Windows 10 and 11
+                Location = New Point(MainForm.Left + 8, MainForm.Top + MainForm.StatusStrip.Top - (75 + MainForm.StatusStrip.Height))
+            ElseIf Environment.OSVersion.Version.Major = 6 Then
+                If Environment.OSVersion.Version.Minor = 1 Then ' The same also applies to Windows 7
+                    Location = New Point(MainForm.Left + 8, MainForm.Top + MainForm.StatusStrip.Top - (75 + MainForm.StatusStrip.Height))
+                Else
+                    Location = New Point(MainForm.Left, MainForm.Top + MainForm.StatusStrip.Top - MainForm.StatusStrip.Height)
+                End If
+            End If
+        End If
+    End Sub
 End Class
