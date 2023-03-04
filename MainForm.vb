@@ -5127,6 +5127,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Button14_Click(sender As Object, e As EventArgs) Handles Button14.Click, ProjectPropertiesToolStripMenuItem.Click
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         ProjProperties.TabControl1.SelectedIndex = 0
         ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
         If My.Computer.Info.OSFullName.Contains("Windows 10") Or My.Computer.Info.OSFullName.Contains("Windows 11") Then
