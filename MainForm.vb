@@ -622,9 +622,11 @@ Public Class MainForm
                 ' "Language=2" or something else, it will ignore it and use English
                 If DTSettingForm.RichTextBox1.Text.Contains("Language=0") Then
                     ' The note above also applies to the Automatic language setting
+                    Language = 0
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Language=1") Then
                     Language = 1
-                Else
-                    Language = 1
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Language=2") Then
+                    Language = 2
                 End If
                 ' Apply language settings immediately
                 ChangeLangs(Language)
@@ -2776,11 +2778,651 @@ Public Class MainForm
     Sub ChangeLangs(LangCode As Integer)
         Select Case LangCode
             Case 0
-
+                If My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "ENG" Then
+                    ' Top-level menu items
+                    FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&File".ToUpper(), "&File")
+                    ProjectToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Project".ToUpper(), "&Project")
+                    CommandsToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "Com&mands".ToUpper(), "Com&mands")
+                    ToolsToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Tools".ToUpper(), "&Tools")
+                    HelpToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Help".ToUpper(), "&Help")
+                    InvalidSettingsTSMI.Text = "Invalid settings have been detected"
+                    ' Submenu items
+                    ' Menu - File
+                    NewProjectToolStripMenuItem.Text = "&New project..."
+                    OpenExistingProjectToolStripMenuItem.Text = "&Open existing project"
+                    SaveProjectToolStripMenuItem.Text = "&Save project..."
+                    SaveProjectasToolStripMenuItem.Text = "Save project &as..."
+                    ExitToolStripMenuItem.Text = "E&xit"
+                    ' Menu - Project
+                    ViewProjectFilesInFileExplorerToolStripMenuItem.Text = "View project files in File Explorer"
+                    UnloadProjectToolStripMenuItem.Text = "Unload project..."
+                    SwitchImageIndexesToolStripMenuItem.Text = "Switch image indexes..."
+                    ProjectPropertiesToolStripMenuItem.Text = "Project properties"
+                    ImagePropertiesToolStripMenuItem.Text = "Image properties"
+                    ' Menu - Commands
+                    ImageManagementToolStripMenuItem.Text = "Image management"
+                    OSPackagesToolStripMenuItem.Text = "OS packages"
+                    ProvisioningPackagesToolStripMenuItem.Text = "Provisioning packages"
+                    AppPackagesToolStripMenuItem.Text = "App packages"
+                    AppPatchesToolStripMenuItem.Text = "App (MSP) servicing"
+                    DefaultAppAssociationsToolStripMenuItem.Text = "Default app associations"
+                    LanguagesAndRegionSettingsToolStripMenuItem.Text = "Languages and regional settings"
+                    CapabilitiesToolStripMenuItem.Text = "Capabilities"
+                    WindowsEditionsToolStripMenuItem.Text = "Windows editions"
+                    DriversToolStripMenuItem.Text = "Drivers"
+                    UnattendedAnswerFilesToolStripMenuItem.Text = "Unattended answer files"
+                    WindowsPEServicingToolStripMenuItem.Text = "Windows PE servicing"
+                    OSUninstallToolStripMenuItem.Text = "OS uninstall"
+                    ReservedStorageToolStripMenuItem.Text = "Reserved storage"
+                    ' Menu - Commands - Image management
+                    AppendImage.Text = "Append capture directory to image..."
+                    ApplyFFU.Text = "Apply FFU or SFU file..."
+                    ApplyImage.Text = "Apply WIM or SWM file..."
+                    CaptureCustomImage.Text = "Capture incremental changes to file..."
+                    CaptureFFU.Text = "Capture partitions to FFU file..."
+                    CaptureImage.Text = "Capture image of a drive to WIM file..."
+                    CleanupMountpoints.Text = "Delete resources from corrupted image..."
+                    CommitImage.Text = "Apply changes to image..."
+                    DeleteImage.Text = "Delete volume images from WIM file..."
+                    ExportImage.Text = "Export image..."
+                    GetImageInfo.Text = "Get image information..."
+                    GetMountedImageInfo.Text = "Get currently mounted image information..."
+                    GetWIMBootEntry.Text = "Get WIMBoot configuration entries..."
+                    ListImage.Text = "List files and directories in image..."
+                    MountImage.Text = "Mount image..."
+                    OptimizeFFU.Text = "Optimize FFU file..."
+                    OptimizeImage.Text = "Optimize image..."
+                    RemountImage.Text = "Remount image for servicing..."
+                    SplitFFU.Text = "Split FFU file into SFU files..."
+                    SplitImage.Text = "Split WIM file into SWM files..."
+                    UnmountImage.Text = "Unmount image..."
+                    UpdateWIMBootEntry.Text = "Update WIMBoot configuration entry..."
+                    ApplySiloedPackage.Text = "Apply siloed provisioning package..."
+                    ' Menu - Commands - OS packages
+                    GetPackages.Text = "Get basic package information..."
+                    GetPackageInfo.Text = "Get detailed package information..."
+                    AddPackage.Text = "Add package..."
+                    RemovePackage.Text = "Remove package..."
+                    GetFeatures.Text = "Get basic feature information..."
+                    GetFeatureInfo.Text = "Get detailed feature information..."
+                    EnableFeature.Text = "Enable feature..."
+                    DisableFeature.Text = "Disable feature..."
+                    CleanupImage.Text = "Perform cleanup or recovery operations..."
+                    ' Menu - Commands - Provisioning packages
+                    AddProvisioningPackage.Text = "Add provisioning package..."
+                    GetProvisioningPackageInfo.Text = "Get provisioning package information..."
+                    ApplyCustomDataImage.Text = "Apply custom data image..."
+                    ' Menu - Commands - App packages
+                    GetProvisionedAppxPackages.Text = "Get app package information..."
+                    AddProvisionedAppxPackage.Text = "Add provisioned app package..."
+                    RemoveProvisionedAppxPackage.Text = "Remove provisioning for app package..."
+                    OptimizeProvisionedAppxPackages.Text = "Optimize provisioned packages..."
+                    SetProvisionedAppxDataFile.Text = "Add custom data file into app package..."
+                    ' Menu - Commands - App (MSP) servicing
+                    CheckAppPatch.Text = "Get application patch information..."
+                    GetAppPatchInfo.Text = "Get detailed application patch information..."
+                    GetAppPatches.Text = "Get basic installed application patch information..."
+                    GetAppInfo.Text = "Get detailed Windows Installer (*.msi) application information..."
+                    GetApps.Text = "Get basic Windows Installer (*.msi) application information..."
+                    ' Menu - Commands - Default app associations
+                    ExportDefaultAppAssociations.Text = "Export default application associations..."
+                    GetDefaultAppAssociations.Text = "Get default application association information..."
+                    ImportDefaultAppAssociations.Text = "Import default application associations..."
+                    RemoveDefaultAppAssociations.Text = "Remove default application associations..."
+                    ' Menu - Commands - Languages and regional settings
+                    GetIntl.Text = "Get international settings and languages..."
+                    SetUILang.Text = "Set UI language..."
+                    SetUILangFallback.Text = "Set default UI fallback language..."
+                    SetSysUILang.Text = "Set system preferred UI language..."
+                    SetSysLocale.Text = "Set system locale..."
+                    SetUserLocale.Text = "Set user locale..."
+                    SetInputLocale.Text = "Set input locale..."
+                    SetAllIntl.Text = "Set UI language and locales..."
+                    SetTimeZone.Text = "Set default time zone..."
+                    SetSKUIntlDefaults.Text = "Set default languages and locales..."
+                    SetLayeredDriver.Text = "Set layered driver..."
+                    GenLangINI.Text = "Generate Lang.ini file..."
+                    SetSetupUILang.Text = "Set default Setup language..."
+                    ' Menu - Commands - Capabilities
+                    AddCapability.Text = "Add capability..."
+                    ExportSource.Text = "Export capabilities into repository..."
+                    GetCapabilities.Text = "Get basic capability information..."
+                    GetCapabilityInfo.Text = "Get detailed capability information..."
+                    RemoveCapability.Text = "Remove capability..."
+                    ' Menu - Commands - Windows editions
+                    GetCurrentEdition.Text = "Get current edition..."
+                    GetTargetEditions.Text = "Get upgrade targets..."
+                    SetEdition.Text = "Upgrade image..."
+                    SetProductKey.Text = "Set product key..."
+                    ' Menu - Commands - Drivers
+                    GetDrivers.Text = "Get basic driver information..."
+                    GetDriverInfo.Text = "Get detailed driver information..."
+                    AddDriver.Text = "Add driver..."
+                    RemoveDriver.Text = "Remove driver..."
+                    ExportDriver.Text = "Export driver packages..."
+                    ' Menu - Commands - Unattended answer files
+                    ApplyUnattend.Text = "Apply unattended answer file..."
+                    ' Menu - Commands - Windows PE servicing
+                    GetPESettings.Text = "Get settings..."
+                    GetScratchSpace.Text = "Get scratch space..."
+                    GetTargetPath.Text = "Get target path..."
+                    SetScratchSpace.Text = "Set scratch space..."
+                    SetTargetPath.Text = "Set target path..."
+                    ' Menu - Commands - OS uninstall
+                    GetOSUninstallWindow.Text = "Get uninstall window..."
+                    InitiateOSUninstall.Text = "Initiate uninstall..."
+                    RemoveOSUninstall.Text = "Remove roll back ability..."
+                    SetOSUninstallWindow.Text = "Set uninstall window..."
+                    ' Menu - Commands - Reserved storage
+                    SetReservedStorageState.Text = "Set reserved storage state..."
+                    GetReservedStorageState.Text = "Get reserved storage state..."
+                    ' Menu - Commands - Microsoft Edge
+                    AddEdge.Text = "Add Edge..."
+                    AddEdgeBrowser.Text = "Add Edge browser..."
+                    AddEdgeWebView.Text = "Add Edge WebView..."
+                    ' Menu - Tools
+                    ImageConversionToolStripMenuItem.Text = "Image conversion"
+                    MergeSWM.Text = "Merge SWM files..."
+                    RemountImageWithWritePermissionsToolStripMenuItem.Text = "Remount image with write permissions"
+                    CommandShellToolStripMenuItem.Text = "Command Console"
+                    UnattendedAnswerFileManagerToolStripMenuItem.Text = "Unattended answer file manager"
+                    ReportManagerToolStripMenuItem.Text = "Report manager"
+                    MountedImageManagerTSMI.Text = "Mounted image manager"
+                    OptionsToolStripMenuItem.Text = "Options"
+                    ' Menu - Help
+                    HelpTopicsToolStripMenuItem.Text = "Help Topics"
+                    GlossaryToolStripMenuItem.Text = "Glossary"
+                    CommandHelpToolStripMenuItem.Text = "Command help..."
+                    AboutDISMToolsToolStripMenuItem.Text = "About DISMTools"
+                    ' Menu - Invalid settings
+                    ISFix.Text = "Fix..."
+                    ISHelp.Text = "What's this?"
+                    ' Menu - DevState
+                    ReportFeedbackToolStripMenuItem.Text = "Report feedback (opens in web browser)"
+                ElseIf My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "ESN" Then
+                    ' Top-level menu items
+                    FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
+                    ProjectToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Proyecto".ToUpper(), "&Proyecto")
+                    CommandsToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "Co&mandos".ToUpper(), "Co&mandos")
+                    ToolsToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "Her&ramientas".ToUpper(), "Her&ramientas")
+                    HelpToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "Ay&uda".ToUpper(), "Ay&uda")
+                    InvalidSettingsTSMI.Text = "Se han detectado configuraciones inválidas"
+                    ' Submenu items
+                    ' Menu - File
+                    NewProjectToolStripMenuItem.Text = "&Nuevo proyecto..."
+                    OpenExistingProjectToolStripMenuItem.Text = "&Abrir proyecto existente"
+                    SaveProjectToolStripMenuItem.Text = "&Guardar proyecto..."
+                    SaveProjectasToolStripMenuItem.Text = "Guardar proyecto &como..."
+                    ExitToolStripMenuItem.Text = "Sa&lir"
+                    ' Menu - Project
+                    ViewProjectFilesInFileExplorerToolStripMenuItem.Text = "Ver archivos del proyecto en el Explorador de archivos"
+                    UnloadProjectToolStripMenuItem.Text = "Descargar proyecto..."
+                    SwitchImageIndexesToolStripMenuItem.Text = "Cambiar índices de imagen..."
+                    ProjectPropertiesToolStripMenuItem.Text = "Propiedades del proyecto"
+                    ImagePropertiesToolStripMenuItem.Text = "Propiedades de la imagen"
+                    ' Menu - Commands
+                    ImageManagementToolStripMenuItem.Text = "Administración de la imagen"
+                    OSPackagesToolStripMenuItem.Text = "Paquetes del sistema operativo"
+                    ProvisioningPackagesToolStripMenuItem.Text = "Paquetes de aprovisionamiento"
+                    AppPackagesToolStripMenuItem.Text = "Paquetes de aplicación"
+                    AppPatchesToolStripMenuItem.Text = "Servicio de aplicaciones (MSP)"
+                    DefaultAppAssociationsToolStripMenuItem.Text = "Asociaciones predeterminadas de aplicaciones"
+                    LanguagesAndRegionSettingsToolStripMenuItem.Text = "Configuración de idiomas y regiones"
+                    CapabilitiesToolStripMenuItem.Text = "Capacidades"
+                    WindowsEditionsToolStripMenuItem.Text = "Ediciones de Windows"
+                    DriversToolStripMenuItem.Text = "Controladores"
+                    UnattendedAnswerFilesToolStripMenuItem.Text = "Archivos de respuesta desatendida"
+                    WindowsPEServicingToolStripMenuItem.Text = "Servicio de Windows PE"
+                    OSUninstallToolStripMenuItem.Text = "Desinstalación del sistema operativo"
+                    ReservedStorageToolStripMenuItem.Text = "Almacenamiento reservado"
+                    ' Menu - Commands - Image management
+                    AppendImage.Text = "Anexar directorio de captura a imagen..."
+                    ApplyFFU.Text = "Aplicar archivo FFU o SFU..."
+                    ApplyImage.Text = "Aplicar archivo WIM o SWM..."
+                    CaptureCustomImage.Text = "Capturar cambios incrementales a un archivo..."
+                    CaptureFFU.Text = "Capturar particiones a un archivo FFU..."
+                    CaptureImage.Text = "Capturar imagen de un disco a un archivo WIM..."
+                    CleanupMountpoints.Text = "Eliminar recursos de una imagen corrupta..."
+                    CommitImage.Text = "Aplicar cambios a la imagen..."
+                    DeleteImage.Text = "Eliminar imágenes de volumen de un archivo WIM..."
+                    ExportImage.Text = "Exportar imagen..."
+                    GetImageInfo.Text = "Obtener información de imagen..."
+                    GetMountedImageInfo.Text = "Obtener información de imágenes montadas actualmente..."
+                    GetWIMBootEntry.Text = "Obtener entradas de configuración WIMBoot..."
+                    ListImage.Text = "Enumerar archivos y directorios de un archivo WIM..."
+                    MountImage.Text = "Montar imagen..."
+                    OptimizeFFU.Text = "Optimizar archivo FFU..."
+                    OptimizeImage.Text = "Optimizar imagen..."
+                    RemountImage.Text = "Remontar imagen para su servicio..."
+                    SplitFFU.Text = "Dividir archivo FFU en archivos SFU..."
+                    SplitImage.Text = "Dividir archivo WIM en archivos SWM..."
+                    UnmountImage.Text = "Desmontar imagen..."
+                    UpdateWIMBootEntry.Text = "Actualizar entradas de configuración WIMBoot..."
+                    ApplySiloedPackage.Text = "Aplicar paquete de aprovisionamiento en silos..."
+                    ' Menu - Commands - OS packages
+                    GetPackages.Text = "Obtener información básica de paquetes..."
+                    GetPackageInfo.Text = "Obtener información detallada de paquetes..."
+                    AddPackage.Text = "Añadir paquete..."
+                    RemovePackage.Text = "Eliminar paquete..."
+                    GetFeatures.Text = "Obtener información básica de características..."
+                    GetFeatureInfo.Text = "Obtener información detallada de características..."
+                    EnableFeature.Text = "Habilitar característica..."
+                    DisableFeature.Text = "Deshabilitar característica..."
+                    CleanupImage.Text = "Realizar operaciones de limpieza o recuperación..."
+                    ' Menu - Commands - Provisioning packages
+                    AddProvisioningPackage.Text = "Añadir paquete de aprovisionamiento..."
+                    GetProvisioningPackageInfo.Text = "Obtener información de paquete de aprovisionamiento..."
+                    ApplyCustomDataImage.Text = "Aplicar imagen de datos personalizada..."
+                    ' Menu - Commands - App packages
+                    GetProvisionedAppxPackages.Text = "Obtener información de paquete de aplicación..."
+                    AddProvisionedAppxPackage.Text = "Añadir paquete de aplicación aprovisionada..."
+                    RemoveProvisionedAppxPackage.Text = "Eliminar aprovisionamiento para un paquete de aplicación..."
+                    OptimizeProvisionedAppxPackages.Text = "Optimizar paquete de aprovisionamiento..."
+                    SetProvisionedAppxDataFile.Text = "Añadir archivo de datos personalizado en paquete de aplicación..."
+                    ' Menu - Commands - App (MSP) servicing
+                    CheckAppPatch.Text = "Obtener información de parche de aplicación..."
+                    GetAppPatchInfo.Text = "Obtener información detallada de parches de aplicación instalados..."
+                    GetAppPatches.Text = "Obtener información básica de parches de aplicación instalados..."
+                    GetAppInfo.Text = "Obtener información detallada de aplicaciones de Windows Installer (*.msi)..."
+                    GetApps.Text = "Obtener información básica de aplicaciones de Windows Installer (*.msi)..."
+                    ' Menu - Commands - Default app associations
+                    ExportDefaultAppAssociations.Text = "Exportar asociaciones de aplicaciones predeterminadas..."
+                    GetDefaultAppAssociations.Text = "Obtener información de asociaciones de aplicaciones predeterminadas..."
+                    ImportDefaultAppAssociations.Text = "Importar asociaciones de aplicaciones predeterminadas..."
+                    RemoveDefaultAppAssociations.Text = "Eliminar asociaciones de aplicaciones predeterminadas..."
+                    ' Menu - Commands - Languages and regional settings
+                    GetIntl.Text = "Obtener configuraciones e idiomas internacionales..."
+                    SetUILang.Text = "Establecer idioma de la interfaz de usuario..."
+                    SetUILangFallback.Text = "Establecer idioma predeterminado de la interfaz de usuario de último recurso..."
+                    SetSysUILang.Text = "Estabñecer idioma de la interfaz de usuario preferido para el sistema..."
+                    SetSysLocale.Text = "Establecer zona del sistema..."
+                    SetUserLocale.Text = "Establecer zona del usuario..."
+                    SetInputLocale.Text = "Establecer zona de entrada..."
+                    SetAllIntl.Text = "Establecer idioma de la interfaz de usuario y zonas..."
+                    SetTimeZone.Text = "Establecer zona horaria predeterminada..."
+                    SetSKUIntlDefaults.Text = "Establecer lenguajes y zonas predeterminadas..."
+                    SetLayeredDriver.Text = "Establecer controlador en capas..."
+                    GenLangINI.Text = "Generar archivo Lang.ini..."
+                    SetSetupUILang.Text = "Establecer idioma predeterminado del programa de instalación..."
+                    ' Menu - Commands - Capabilities
+                    AddCapability.Text = "Añadir funcionalidad..."
+                    ExportSource.Text = "Exportar funcionalidades en un repositorio..."
+                    GetCapabilities.Text = "Obtener información básica de funcionalidades..."
+                    GetCapabilityInfo.Text = "Obtener información detallada de funcionalidades..."
+                    RemoveCapability.Text = "Eliminar funcionalidad..."
+                    ' Menu - Commands - Windows editions
+                    GetCurrentEdition.Text = "Obtener edición actual..."
+                    GetTargetEditions.Text = "Obtener destinos de actualización..."
+                    SetEdition.Text = "Actualizar imagen..."
+                    SetProductKey.Text = "Establecer clave de producto..."
+                    ' Menu - Commands - Drivers
+                    GetDrivers.Text = "Obtener información básica de controladores..."
+                    GetDriverInfo.Text = "Obtener información detallada de controladores..."
+                    AddDriver.Text = "Añadir controlador..."
+                    RemoveDriver.Text = "Eliminar controlador..."
+                    ExportDriver.Text = "Exportar paquetes de controlador..."
+                    ' Menu - Commands - Unattended answer files
+                    ApplyUnattend.Text = "Aplicar archivo de respuesta desatendida..."
+                    ' Menu - Commands - Windows PE servicing
+                    GetPESettings.Text = "Obtener configuración..."
+                    GetScratchSpace.Text = "Obtener espacio temporal..."
+                    GetTargetPath.Text = "Obtener ruta de destino..."
+                    SetScratchSpace.Text = "Establecer espacio temporal..."
+                    SetTargetPath.Text = "Establecer ruta de destino..."
+                    ' Menu - Commands - OS uninstall
+                    GetOSUninstallWindow.Text = "Obtener margen de desinstalación..."
+                    InitiateOSUninstall.Text = "Iniciar desinstalación..."
+                    RemoveOSUninstall.Text = "Eliminar abilidad de desinstalación..."
+                    SetOSUninstallWindow.Text = "Establecer margen de desinstalación..."
+                    ' Menu - Commands - Reserved storage
+                    SetReservedStorageState.Text = "Establecer estado de almacenamiento reservado..."
+                    GetReservedStorageState.Text = "Obtener estado de almacenamiento reservado..."
+                    ' Menu - Commands - Microsoft Edge
+                    AddEdge.Text = "Añadir Edge..."
+                    AddEdgeBrowser.Text = "Añadir navegador Edge..."
+                    AddEdgeWebView.Text = "Añadir Edge WebView..."
+                    ' Menu - Tools
+                    ImageConversionToolStripMenuItem.Text = "Conversión de imágenes"
+                    MergeSWM.Text = "Combinar archivos SWM..."
+                    RemountImageWithWritePermissionsToolStripMenuItem.Text = "Remontar imagen con permisos de escritura"
+                    CommandShellToolStripMenuItem.Text = "Consola de comandos"
+                    UnattendedAnswerFileManagerToolStripMenuItem.Text = "Administrador de archivos de respuesta desatendida"
+                    ReportManagerToolStripMenuItem.Text = "Administrador de informes"
+                    MountedImageManagerTSMI.Text = "Administrador de imágenes montadas"
+                    OptionsToolStripMenuItem.Text = "Opciones"
+                    ' Menu - Help
+                    HelpTopicsToolStripMenuItem.Text = "Ver la ayuda"
+                    GlossaryToolStripMenuItem.Text = "Glosario"
+                    CommandHelpToolStripMenuItem.Text = "Ayuda de comandos..."
+                    AboutDISMToolsToolStripMenuItem.Text = "Acerca de DISMTools"
+                    ' Menu - Invalid settings
+                    ISFix.Text = "Corregir..."
+                    ISHelp.Text = "¿Qué es esto?"
+                    ' Menu - DevState
+                    ReportFeedbackToolStripMenuItem.Text = "Enviar comentarios (se abre en navegador web)"
+                End If
             Case 1
-
+                ' Top-level menu items
+                FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&File".ToUpper(), "&File")
+                ProjectToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Project".ToUpper(), "&Project")
+                CommandsToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "Com&mands".ToUpper(), "Com&mands")
+                ToolsToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Tools".ToUpper(), "&Tools")
+                HelpToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Help".ToUpper(), "&Help")
+                InvalidSettingsTSMI.Text = "Invalid settings have been detected"
+                ' Submenu items
+                ' Menu - File
+                NewProjectToolStripMenuItem.Text = "&New project..."
+                OpenExistingProjectToolStripMenuItem.Text = "&Open existing project"
+                SaveProjectToolStripMenuItem.Text = "&Save project..."
+                SaveProjectasToolStripMenuItem.Text = "Save project &as..."
+                ExitToolStripMenuItem.Text = "E&xit"
+                ' Menu - Project
+                ViewProjectFilesInFileExplorerToolStripMenuItem.Text = "View project files in File Explorer"
+                UnloadProjectToolStripMenuItem.Text = "Unload project..."
+                SwitchImageIndexesToolStripMenuItem.Text = "Switch image indexes..."
+                ProjectPropertiesToolStripMenuItem.Text = "Project properties"
+                ImagePropertiesToolStripMenuItem.Text = "Image properties"
+                ' Menu - Commands
+                ImageManagementToolStripMenuItem.Text = "Image management"
+                OSPackagesToolStripMenuItem.Text = "OS packages"
+                ProvisioningPackagesToolStripMenuItem.Text = "Provisioning packages"
+                AppPackagesToolStripMenuItem.Text = "App packages"
+                AppPatchesToolStripMenuItem.Text = "App (MSP) servicing"
+                DefaultAppAssociationsToolStripMenuItem.Text = "Default app associations"
+                LanguagesAndRegionSettingsToolStripMenuItem.Text = "Languages and regional settings"
+                CapabilitiesToolStripMenuItem.Text = "Capabilities"
+                WindowsEditionsToolStripMenuItem.Text = "Windows editions"
+                DriversToolStripMenuItem.Text = "Drivers"
+                UnattendedAnswerFilesToolStripMenuItem.Text = "Unattended answer files"
+                WindowsPEServicingToolStripMenuItem.Text = "Windows PE servicing"
+                OSUninstallToolStripMenuItem.Text = "OS uninstall"
+                ReservedStorageToolStripMenuItem.Text = "Reserved storage"
+                ' Menu - Commands - Image management
+                AppendImage.Text = "Append capture directory to image..."
+                ApplyFFU.Text = "Apply FFU or SFU file..."
+                ApplyImage.Text = "Apply WIM or SWM file..."
+                CaptureCustomImage.Text = "Capture incremental changes to file..."
+                CaptureFFU.Text = "Capture partitions to FFU file..."
+                CaptureImage.Text = "Capture image of a drive to WIM file..."
+                CleanupMountpoints.Text = "Delete resources from corrupted image..."
+                CommitImage.Text = "Apply changes to image..."
+                DeleteImage.Text = "Delete volume images from WIM file..."
+                ExportImage.Text = "Export image..."
+                GetImageInfo.Text = "Get image information..."
+                GetMountedImageInfo.Text = "Get currently mounted image information..."
+                GetWIMBootEntry.Text = "Get WIMBoot configuration entries..."
+                ListImage.Text = "List files and directories in image..."
+                MountImage.Text = "Mount image..."
+                OptimizeFFU.Text = "Optimize FFU file..."
+                OptimizeImage.Text = "Optimize image..."
+                RemountImage.Text = "Remount image for servicing..."
+                SplitFFU.Text = "Split FFU file into SFU files..."
+                SplitImage.Text = "Split WIM file into SWM files..."
+                UnmountImage.Text = "Unmount image..."
+                UpdateWIMBootEntry.Text = "Update WIMBoot configuration entry..."
+                ApplySiloedPackage.Text = "Apply siloed provisioning package..."
+                ' Menu - Commands - OS packages
+                GetPackages.Text = "Get basic package information..."
+                GetPackageInfo.Text = "Get detailed package information..."
+                AddPackage.Text = "Add package..."
+                RemovePackage.Text = "Remove package..."
+                GetFeatures.Text = "Get basic feature information..."
+                GetFeatureInfo.Text = "Get detailed feature information..."
+                EnableFeature.Text = "Enable feature..."
+                DisableFeature.Text = "Disable feature..."
+                CleanupImage.Text = "Perform cleanup or recovery operations..."
+                ' Menu - Commands - Provisioning packages
+                AddProvisioningPackage.Text = "Add provisioning package..."
+                GetProvisioningPackageInfo.Text = "Get provisioning package information..."
+                ApplyCustomDataImage.Text = "Apply custom data image..."
+                ' Menu - Commands - App packages
+                GetProvisionedAppxPackages.Text = "Get app package information..."
+                AddProvisionedAppxPackage.Text = "Add provisioned app package..."
+                RemoveProvisionedAppxPackage.Text = "Remove provisioning for app package..."
+                OptimizeProvisionedAppxPackages.Text = "Optimize provisioned packages..."
+                SetProvisionedAppxDataFile.Text = "Add custom data file into app package..."
+                ' Menu - Commands - App (MSP) servicing
+                CheckAppPatch.Text = "Get application patch information..."
+                GetAppPatchInfo.Text = "Get detailed application patch information..."
+                GetAppPatches.Text = "Get basic installed application patch information..."
+                GetAppInfo.Text = "Get detailed Windows Installer (*.msi) application information..."
+                GetApps.Text = "Get basic Windows Installer (*.msi) application information..."
+                ' Menu - Commands - Default app associations
+                ExportDefaultAppAssociations.Text = "Export default application associations..."
+                GetDefaultAppAssociations.Text = "Get default application association information..."
+                ImportDefaultAppAssociations.Text = "Import default application associations..."
+                RemoveDefaultAppAssociations.Text = "Remove default application associations..."
+                ' Menu - Commands - Languages and regional settings
+                GetIntl.Text = "Get international settings and languages..."
+                SetUILang.Text = "Set UI language..."
+                SetUILangFallback.Text = "Set default UI fallback language..."
+                SetSysUILang.Text = "Set system preferred UI language..."
+                SetSysLocale.Text = "Set system locale..."
+                SetUserLocale.Text = "Set user locale..."
+                SetInputLocale.Text = "Set input locale..."
+                SetAllIntl.Text = "Set UI language and locales..."
+                SetTimeZone.Text = "Set default time zone..."
+                SetSKUIntlDefaults.Text = "Set default languages and locales..."
+                SetLayeredDriver.Text = "Set layered driver..."
+                GenLangINI.Text = "Generate Lang.ini file..."
+                SetSetupUILang.Text = "Set default Setup language..."
+                ' Menu - Commands - Capabilities
+                AddCapability.Text = "Add capability..."
+                ExportSource.Text = "Export capabilities into repository..."
+                GetCapabilities.Text = "Get basic capability information..."
+                GetCapabilityInfo.Text = "Get detailed capability information..."
+                RemoveCapability.Text = "Remove capability..."
+                ' Menu - Commands - Windows editions
+                GetCurrentEdition.Text = "Get current edition..."
+                GetTargetEditions.Text = "Get upgrade targets..."
+                SetEdition.Text = "Upgrade image..."
+                SetProductKey.Text = "Set product key..."
+                ' Menu - Commands - Drivers
+                GetDrivers.Text = "Get basic driver information..."
+                GetDriverInfo.Text = "Get detailed driver information..."
+                AddDriver.Text = "Add driver..."
+                RemoveDriver.Text = "Remove driver..."
+                ExportDriver.Text = "Export driver packages..."
+                ' Menu - Commands - Unattended answer files
+                ApplyUnattend.Text = "Apply unattended answer file..."
+                ' Menu - Commands - Windows PE servicing
+                GetPESettings.Text = "Get settings..."
+                GetScratchSpace.Text = "Get scratch space..."
+                GetTargetPath.Text = "Get target path..."
+                SetScratchSpace.Text = "Set scratch space..."
+                SetTargetPath.Text = "Set target path..."
+                ' Menu - Commands - OS uninstall
+                GetOSUninstallWindow.Text = "Get uninstall window..."
+                InitiateOSUninstall.Text = "Initiate uninstall..."
+                RemoveOSUninstall.Text = "Remove roll back ability..."
+                SetOSUninstallWindow.Text = "Set uninstall window..."
+                ' Menu - Commands - Reserved storage
+                SetReservedStorageState.Text = "Set reserved storage state..."
+                GetReservedStorageState.Text = "Get reserved storage state..."
+                ' Menu - Commands - Microsoft Edge
+                AddEdge.Text = "Add Edge..."
+                AddEdgeBrowser.Text = "Add Edge browser..."
+                AddEdgeWebView.Text = "Add Edge WebView..."
+                ' Menu - Tools
+                ImageConversionToolStripMenuItem.Text = "Image conversion"
+                MergeSWM.Text = "Merge SWM files..."
+                RemountImageWithWritePermissionsToolStripMenuItem.Text = "Remount image with write permissions"
+                CommandShellToolStripMenuItem.Text = "Command Console"
+                UnattendedAnswerFileManagerToolStripMenuItem.Text = "Unattended answer file manager"
+                ReportManagerToolStripMenuItem.Text = "Report manager"
+                MountedImageManagerTSMI.Text = "Mounted image manager"
+                OptionsToolStripMenuItem.Text = "Options"
+                ' Menu - Help
+                HelpTopicsToolStripMenuItem.Text = "Help Topics"
+                GlossaryToolStripMenuItem.Text = "Glossary"
+                CommandHelpToolStripMenuItem.Text = "Command help..."
+                AboutDISMToolsToolStripMenuItem.Text = "About DISMTools"
+                ' Menu - Invalid settings
+                ISFix.Text = "Fix..."
+                ISHelp.Text = "What's this?"
+                ' Menu - DevState
+                ReportFeedbackToolStripMenuItem.Text = "Report feedback (opens in web browser)"
             Case 2
-
+                ' Top-level menu items
+                FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
+                ProjectToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Proyecto".ToUpper(), "&Proyecto")
+                CommandsToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "Co&mandos".ToUpper(), "Co&mandos")
+                ToolsToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "Her&ramientas".ToUpper(), "Her&ramientas")
+                HelpToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "Ay&uda".ToUpper(), "Ay&uda")
+                InvalidSettingsTSMI.Text = "Se han detectado configuraciones inválidas"
+                ' Submenu items
+                ' Menu - File
+                NewProjectToolStripMenuItem.Text = "&Nuevo proyecto..."
+                OpenExistingProjectToolStripMenuItem.Text = "&Abrir proyecto existente"
+                SaveProjectToolStripMenuItem.Text = "&Guardar proyecto..."
+                SaveProjectasToolStripMenuItem.Text = "Guardar proyecto &como..."
+                ExitToolStripMenuItem.Text = "Sa&lir"
+                ' Menu - Project
+                ViewProjectFilesInFileExplorerToolStripMenuItem.Text = "Ver archivos del proyecto en el Explorador de archivos"
+                UnloadProjectToolStripMenuItem.Text = "Descargar proyecto..."
+                SwitchImageIndexesToolStripMenuItem.Text = "Cambiar índices de imagen..."
+                ProjectPropertiesToolStripMenuItem.Text = "Propiedades del proyecto"
+                ImagePropertiesToolStripMenuItem.Text = "Propiedades de la imagen"
+                ' Menu - Commands
+                ImageManagementToolStripMenuItem.Text = "Administración de la imagen"
+                OSPackagesToolStripMenuItem.Text = "Paquetes del sistema operativo"
+                ProvisioningPackagesToolStripMenuItem.Text = "Paquetes de aprovisionamiento"
+                AppPackagesToolStripMenuItem.Text = "Paquetes de aplicación"
+                AppPatchesToolStripMenuItem.Text = "Servicio de aplicaciones (MSP)"
+                DefaultAppAssociationsToolStripMenuItem.Text = "Asociaciones predeterminadas de aplicaciones"
+                LanguagesAndRegionSettingsToolStripMenuItem.Text = "Configuración de idiomas y regiones"
+                CapabilitiesToolStripMenuItem.Text = "Capacidades"
+                WindowsEditionsToolStripMenuItem.Text = "Ediciones de Windows"
+                DriversToolStripMenuItem.Text = "Controladores"
+                UnattendedAnswerFilesToolStripMenuItem.Text = "Archivos de respuesta desatendida"
+                WindowsPEServicingToolStripMenuItem.Text = "Servicio de Windows PE"
+                OSUninstallToolStripMenuItem.Text = "Desinstalación del sistema operativo"
+                ReservedStorageToolStripMenuItem.Text = "Almacenamiento reservado"
+                ' Menu - Commands - Image management
+                AppendImage.Text = "Anexar directorio de captura a imagen..."
+                ApplyFFU.Text = "Aplicar archivo FFU o SFU..."
+                ApplyImage.Text = "Aplicar archivo WIM o SWM..."
+                CaptureCustomImage.Text = "Capturar cambios incrementales a un archivo..."
+                CaptureFFU.Text = "Capturar particiones a un archivo FFU..."
+                CaptureImage.Text = "Capturar imagen de un disco a un archivo WIM..."
+                CleanupMountpoints.Text = "Eliminar recursos de una imagen corrupta..."
+                CommitImage.Text = "Aplicar cambios a la imagen..."
+                DeleteImage.Text = "Eliminar imágenes de volumen de un archivo WIM..."
+                ExportImage.Text = "Exportar imagen..."
+                GetImageInfo.Text = "Obtener información de imagen..."
+                GetMountedImageInfo.Text = "Obtener información de imágenes montadas actualmente..."
+                GetWIMBootEntry.Text = "Obtener entradas de configuración WIMBoot..."
+                ListImage.Text = "Enumerar archivos y directorios de un archivo WIM..."
+                MountImage.Text = "Montar imagen..."
+                OptimizeFFU.Text = "Optimizar archivo FFU..."
+                OptimizeImage.Text = "Optimizar imagen..."
+                RemountImage.Text = "Remontar imagen para su servicio..."
+                SplitFFU.Text = "Dividir archivo FFU en archivos SFU..."
+                SplitImage.Text = "Dividir archivo WIM en archivos SWM..."
+                UnmountImage.Text = "Desmontar imagen..."
+                UpdateWIMBootEntry.Text = "Actualizar entradas de configuración WIMBoot..."
+                ApplySiloedPackage.Text = "Aplicar paquete de aprovisionamiento en silos..."
+                ' Menu - Commands - OS packages
+                GetPackages.Text = "Obtener información básica de paquetes..."
+                GetPackageInfo.Text = "Obtener información detallada de paquetes..."
+                AddPackage.Text = "Añadir paquete..."
+                RemovePackage.Text = "Eliminar paquete..."
+                GetFeatures.Text = "Obtener información básica de características..."
+                GetFeatureInfo.Text = "Obtener información detallada de características..."
+                EnableFeature.Text = "Habilitar característica..."
+                DisableFeature.Text = "Deshabilitar característica..."
+                CleanupImage.Text = "Realizar operaciones de limpieza o recuperación..."
+                ' Menu - Commands - Provisioning packages
+                AddProvisioningPackage.Text = "Añadir paquete de aprovisionamiento..."
+                GetProvisioningPackageInfo.Text = "Obtener información de paquete de aprovisionamiento..."
+                ApplyCustomDataImage.Text = "Aplicar imagen de datos personalizada..."
+                ' Menu - Commands - App packages
+                GetProvisionedAppxPackages.Text = "Obtener información de paquete de aplicación..."
+                AddProvisionedAppxPackage.Text = "Añadir paquete de aplicación aprovisionada..."
+                RemoveProvisionedAppxPackage.Text = "Eliminar aprovisionamiento para un paquete de aplicación..."
+                OptimizeProvisionedAppxPackages.Text = "Optimizar paquete de aprovisionamiento..."
+                SetProvisionedAppxDataFile.Text = "Añadir archivo de datos personalizado en paquete de aplicación..."
+                ' Menu - Commands - App (MSP) servicing
+                CheckAppPatch.Text = "Obtener información de parche de aplicación..."
+                GetAppPatchInfo.Text = "Obtener información detallada de parches de aplicación instalados..."
+                GetAppPatches.Text = "Obtener información básica de parches de aplicación instalados..."
+                GetAppInfo.Text = "Obtener información detallada de aplicaciones de Windows Installer (*.msi)..."
+                GetApps.Text = "Obtener información básica de aplicaciones de Windows Installer (*.msi)..."
+                ' Menu - Commands - Default app associations
+                ExportDefaultAppAssociations.Text = "Exportar asociaciones de aplicaciones predeterminadas..."
+                GetDefaultAppAssociations.Text = "Obtener información de asociaciones de aplicaciones predeterminadas..."
+                ImportDefaultAppAssociations.Text = "Importar asociaciones de aplicaciones predeterminadas..."
+                RemoveDefaultAppAssociations.Text = "Eliminar asociaciones de aplicaciones predeterminadas..."
+                ' Menu - Commands - Languages and regional settings
+                GetIntl.Text = "Obtener configuraciones e idiomas internacionales..."
+                SetUILang.Text = "Establecer idioma de la interfaz de usuario..."
+                SetUILangFallback.Text = "Establecer idioma predeterminado de la interfaz de usuario de último recurso..."
+                SetSysUILang.Text = "Estabñecer idioma de la interfaz de usuario preferido para el sistema..."
+                SetSysLocale.Text = "Establecer zona del sistema..."
+                SetUserLocale.Text = "Establecer zona del usuario..."
+                SetInputLocale.Text = "Establecer zona de entrada..."
+                SetAllIntl.Text = "Establecer idioma de la interfaz de usuario y zonas..."
+                SetTimeZone.Text = "Establecer zona horaria predeterminada..."
+                SetSKUIntlDefaults.Text = "Establecer lenguajes y zonas predeterminadas..."
+                SetLayeredDriver.Text = "Establecer controlador en capas..."
+                GenLangINI.Text = "Generar archivo Lang.ini..."
+                SetSetupUILang.Text = "Establecer idioma predeterminado del programa de instalación..."
+                ' Menu - Commands - Capabilities
+                AddCapability.Text = "Añadir funcionalidad..."
+                ExportSource.Text = "Exportar funcionalidades en un repositorio..."
+                GetCapabilities.Text = "Obtener información básica de funcionalidades..."
+                GetCapabilityInfo.Text = "Obtener información detallada de funcionalidades..."
+                RemoveCapability.Text = "Eliminar funcionalidad..."
+                ' Menu - Commands - Windows editions
+                GetCurrentEdition.Text = "Obtener edición actual..."
+                GetTargetEditions.Text = "Obtener destinos de actualización..."
+                SetEdition.Text = "Actualizar imagen..."
+                SetProductKey.Text = "Establecer clave de producto..."
+                ' Menu - Commands - Drivers
+                GetDrivers.Text = "Obtener información básica de controladores..."
+                GetDriverInfo.Text = "Obtener información detallada de controladores..."
+                AddDriver.Text = "Añadir controlador..."
+                RemoveDriver.Text = "Eliminar controlador..."
+                ExportDriver.Text = "Exportar paquetes de controlador..."
+                ' Menu - Commands - Unattended answer files
+                ApplyUnattend.Text = "Aplicar archivo de respuesta desatendida..."
+                ' Menu - Commands - Windows PE servicing
+                GetPESettings.Text = "Obtener configuración..."
+                GetScratchSpace.Text = "Obtener espacio temporal..."
+                GetTargetPath.Text = "Obtener ruta de destino..."
+                SetScratchSpace.Text = "Establecer espacio temporal..."
+                SetTargetPath.Text = "Establecer ruta de destino..."
+                ' Menu - Commands - OS uninstall
+                GetOSUninstallWindow.Text = "Obtener margen de desinstalación..."
+                InitiateOSUninstall.Text = "Iniciar desinstalación..."
+                RemoveOSUninstall.Text = "Eliminar abilidad de desinstalación..."
+                SetOSUninstallWindow.Text = "Establecer margen de desinstalación..."
+                ' Menu - Commands - Reserved storage
+                SetReservedStorageState.Text = "Establecer estado de almacenamiento reservado..."
+                GetReservedStorageState.Text = "Obtener estado de almacenamiento reservado..."
+                ' Menu - Commands - Microsoft Edge
+                AddEdge.Text = "Añadir Edge..."
+                AddEdgeBrowser.Text = "Añadir navegador Edge..."
+                AddEdgeWebView.Text = "Añadir Edge WebView..."
+                ' Menu - Tools
+                ImageConversionToolStripMenuItem.Text = "Conversión de imágenes"
+                MergeSWM.Text = "Combinar archivos SWM..."
+                RemountImageWithWritePermissionsToolStripMenuItem.Text = "Remontar imagen con permisos de escritura"
+                CommandShellToolStripMenuItem.Text = "Consola de comandos"
+                UnattendedAnswerFileManagerToolStripMenuItem.Text = "Administrador de archivos de respuesta desatendida"
+                ReportManagerToolStripMenuItem.Text = "Administrador de informes"
+                MountedImageManagerTSMI.Text = "Administrador de imágenes montadas"
+                OptionsToolStripMenuItem.Text = "Opciones"
+                ' Menu - Help
+                HelpTopicsToolStripMenuItem.Text = "Ver la ayuda"
+                GlossaryToolStripMenuItem.Text = "Glosario"
+                CommandHelpToolStripMenuItem.Text = "Ayuda de comandos..."
+                AboutDISMToolsToolStripMenuItem.Text = "Acerca de DISMTools"
+                ' Menu - Invalid settings
+                ISFix.Text = "Corregir..."
+                ISHelp.Text = "¿Qué es esto?"
+                ' Menu - DevState
+                ReportFeedbackToolStripMenuItem.Text = "Enviar comentarios (se abre en navegador web)"
         End Select
     End Sub
 
@@ -5350,7 +5992,16 @@ Public Class MainForm
     End Sub
 
     Private Sub MountedImageManagerTSMI_Click(sender As Object, e As EventArgs) Handles MountedImageManagerTSMI.Click
-        MountedImgMgr.Show()
+        If MountedImgMgr.Visible Then
+            If MountedImgMgr.WindowState = FormWindowState.Minimized Then
+                MountedImgMgr.WindowState = FormWindowState.Normal
+            Else
+                MountedImgMgr.BringToFront()
+            End If
+            MountedImgMgr.Focus()
+        Else
+            MountedImgMgr.Show()
+        End If
     End Sub
 
     Private Sub ReportFeedbackToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ReportFeedbackToolStripMenuItem.Click
