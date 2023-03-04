@@ -1,6 +1,7 @@
 ﻿Imports System.Windows.Forms
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
+Imports System.Globalization
 
 Public Class Options
 
@@ -73,7 +74,7 @@ Public Class Options
             MainForm.VolatileMode = False
         End If
         MainForm.ColorMode = ComboBox2.SelectedIndex
-        MainForm.Language = 1       ' This version doesn't support languages
+        MainForm.Language = ComboBox3.SelectedIndex
         MainForm.LogFont = ComboBox4.Text
         MainForm.LogFontSize = NumericUpDown1.Value
         If Toggle1.Checked Then
@@ -109,6 +110,7 @@ Public Class Options
         Else
             MainForm.EnglishOutput = False
         End If
+        Dim ti As TextInfo = New CultureInfo("en-US", False).TextInfo
         If CheckBox9.Checked Then
             MainForm.FileToolStripMenuItem.Text = MainForm.FileToolStripMenuItem.Text.ToUpper()
             MainForm.ProjectToolStripMenuItem.Text = MainForm.ProjectToolStripMenuItem.Text.ToUpper()
@@ -116,11 +118,11 @@ Public Class Options
             MainForm.ToolsToolStripMenuItem.Text = MainForm.ToolsToolStripMenuItem.Text.ToUpper()
             MainForm.HelpToolStripMenuItem.Text = MainForm.HelpToolStripMenuItem.Text.ToUpper()
         Else
-            MainForm.FileToolStripMenuItem.Text = "File"
-            MainForm.ProjectToolStripMenuItem.Text = "Project"
-            MainForm.CommandsToolStripMenuItem.Text = "Commands"
-            MainForm.ToolsToolStripMenuItem.Text = "Tools"
-            MainForm.HelpToolStripMenuItem.Text = "Help"
+            MainForm.FileToolStripMenuItem.Text = ti.ToTitleCase(MainForm.FileToolStripMenuItem.Text.ToLower())
+            MainForm.ProjectToolStripMenuItem.Text = ti.ToTitleCase(MainForm.ProjectToolStripMenuItem.Text.ToLower())
+            MainForm.CommandsToolStripMenuItem.Text = ti.ToTitleCase(MainForm.CommandsToolStripMenuItem.Text.ToLower())
+            MainForm.ToolsToolStripMenuItem.Text = ti.ToTitleCase(MainForm.ToolsToolStripMenuItem.Text.ToLower())
+            MainForm.HelpToolStripMenuItem.Text = ti.ToTitleCase(MainForm.HelpToolStripMenuItem.Text.ToLower())
         End If
         MainForm.ReportView = ComboBox5.SelectedIndex
         MainForm.ChangePrgColors(MainForm.ColorMode)
@@ -298,7 +300,7 @@ Public Class Options
             Case 2
                 ComboBox2.SelectedIndex = 2
         End Select
-        ComboBox3.SelectedIndex = 1
+        ComboBox3.SelectedIndex = MainForm.Language
         ComboBox4.Text = MainForm.LogFont
         NumericUpDown1.Value = MainForm.LogFontSize
         If MainForm.LogFontIsBold Then

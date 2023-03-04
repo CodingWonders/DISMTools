@@ -118,6 +118,7 @@ Partial Class Options
         Me.Label31 = New System.Windows.Forms.Label()
         Me.CheckBox7 = New System.Windows.Forms.CheckBox()
         Me.wimlib_prev = New System.Windows.Forms.Panel()
+        Me.ListBox1 = New System.Windows.Forms.ListBox()
         Me.Label30 = New System.Windows.Forms.Label()
         Me.TabPage9 = New System.Windows.Forms.TabPage()
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
@@ -130,7 +131,6 @@ Partial Class Options
         Me.Label35 = New System.Windows.Forms.Label()
         Me.PrefReset = New System.Windows.Forms.Button()
         Me.LogSFD = New System.Windows.Forms.SaveFileDialog()
-        Me.ListBox1 = New System.Windows.Forms.ListBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -521,7 +521,7 @@ Partial Class Options
         'ComboBox3
         '
         Me.ComboBox3.FormattingEnabled = True
-        Me.ComboBox3.Items.AddRange(New Object() {"Use system language", "English"})
+        Me.ComboBox3.Items.AddRange(New Object() {"Use system language", "English", "Spanish"})
         Me.ComboBox3.Location = New System.Drawing.Point(441, 19)
         Me.ComboBox3.Name = "ComboBox3"
         Me.ComboBox3.Size = New System.Drawing.Size(287, 21)
@@ -1187,6 +1187,17 @@ Partial Class Options
         Me.wimlib_prev.Size = New System.Drawing.Size(196, 427)
         Me.wimlib_prev.TabIndex = 0
         '
+        'ListBox1
+        '
+        Me.ListBox1.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.ListBox1.FormattingEnabled = True
+        Me.ListBox1.IntegralHeight = False
+        Me.ListBox1.Items.AddRange(New Object() {"wimlib", "Assessment and Deployment Kit"})
+        Me.ListBox1.Location = New System.Drawing.Point(0, 31)
+        Me.ListBox1.Name = "ListBox1"
+        Me.ListBox1.Size = New System.Drawing.Size(196, 396)
+        Me.ListBox1.TabIndex = 1
+        '
         'Label30
         '
         Me.Label30.AutoSize = True
@@ -1305,17 +1316,6 @@ Partial Class Options
         '
         Me.LogSFD.Filter = "All files|*.*"
         Me.LogSFD.Title = "Specify the location of the log file"
-        '
-        'ListBox1
-        '
-        Me.ListBox1.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.ListBox1.FormattingEnabled = True
-        Me.ListBox1.IntegralHeight = False
-        Me.ListBox1.Items.AddRange(New Object() {"wimlib", "Assessment and Deployment Kit"})
-        Me.ListBox1.Location = New System.Drawing.Point(0, 31)
-        Me.ListBox1.Name = "ListBox1"
-        Me.ListBox1.Size = New System.Drawing.Size(196, 396)
-        Me.ListBox1.TabIndex = 1
         '
         'Options
         '
