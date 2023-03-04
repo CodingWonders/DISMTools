@@ -3501,6 +3501,21 @@ Public Class MainForm
                 End If
                 PopulateProjectTree(prjName)
                 isProjectLoaded = True
+                IsImageMounted = False
+                UpdateProjProperties(False, False)
+                Button1.Enabled = True
+                Button2.Enabled = False
+                Button3.Enabled = False
+                Button4.Enabled = False
+                Button5.Enabled = False
+                Button6.Enabled = False
+                Button7.Enabled = False
+                Button8.Enabled = False
+                Button9.Enabled = False
+                Button10.Enabled = False
+                Button11.Enabled = False
+                Button12.Enabled = False
+                Button13.Enabled = False
             Else
                 If OpenFileDialog1.FileName = "" Then
                     If BypassFileDialog = False Then
