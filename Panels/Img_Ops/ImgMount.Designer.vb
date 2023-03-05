@@ -54,11 +54,13 @@ Partial Class ImgMount
         Me.Label11 = New System.Windows.Forms.Label()
         Me.FileSpecDialog = New System.Windows.Forms.OpenFileDialog()
         Me.IndexesPanel = New System.Windows.Forms.Panel()
-        Me.Indexes = New System.Windows.Forms.TextBox()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripLabel1 = New System.Windows.Forms.ToolStripLabel()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
+        Me.ListView1 = New System.Windows.Forms.ListView()
+        Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -385,23 +387,12 @@ Partial Class ImgMount
         '
         'IndexesPanel
         '
-        Me.IndexesPanel.Controls.Add(Me.Indexes)
+        Me.IndexesPanel.Controls.Add(Me.ListView1)
         Me.IndexesPanel.Controls.Add(Me.ToolStrip1)
         Me.IndexesPanel.Location = New System.Drawing.Point(800, 47)
         Me.IndexesPanel.Name = "IndexesPanel"
         Me.IndexesPanel.Size = New System.Drawing.Size(332, 394)
         Me.IndexesPanel.TabIndex = 5
-        '
-        'Indexes
-        '
-        Me.Indexes.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Indexes.Location = New System.Drawing.Point(0, 25)
-        Me.Indexes.Multiline = True
-        Me.Indexes.Name = "Indexes"
-        Me.Indexes.ReadOnly = True
-        Me.Indexes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.Indexes.Size = New System.Drawing.Size(332, 369)
-        Me.Indexes.TabIndex = 1
         '
         'ToolStrip1
         '
@@ -429,6 +420,27 @@ Partial Class ImgMount
         Me.ToolStripLabel1.Name = "ToolStripLabel1"
         Me.ToolStripLabel1.Size = New System.Drawing.Size(124, 22)
         Me.ToolStripLabel1.Text = "List of indexes of image:"
+        '
+        'ListView1
+        '
+        Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
+        Me.ListView1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ListView1.Location = New System.Drawing.Point(0, 25)
+        Me.ListView1.Name = "ListView1"
+        Me.ListView1.Size = New System.Drawing.Size(332, 369)
+        Me.ListView1.TabIndex = 1
+        Me.ListView1.UseCompatibleStateImageBehavior = False
+        Me.ListView1.View = System.Windows.Forms.View.Details
+        '
+        'ColumnHeader1
+        '
+        Me.ColumnHeader1.Text = "Index"
+        Me.ColumnHeader1.Width = 44
+        '
+        'ColumnHeader2
+        '
+        Me.ColumnHeader2.Text = "Image name"
+        Me.ColumnHeader2.Width = 263
         '
         'ImgMount
         '
@@ -503,12 +515,14 @@ Partial Class ImgMount
     Friend WithEvents FileSpecDialog As System.Windows.Forms.OpenFileDialog
     Friend WithEvents Button4 As System.Windows.Forms.Button
     Friend WithEvents IndexesPanel As System.Windows.Forms.Panel
-    Friend WithEvents Indexes As System.Windows.Forms.TextBox
     Friend WithEvents ToolStrip1 As System.Windows.Forms.ToolStrip
     Friend WithEvents ToolStripButton1 As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripLabel1 As System.Windows.Forms.ToolStripLabel
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
     Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
     Friend WithEvents Button5 As System.Windows.Forms.Button
+    Friend WithEvents ListView1 As System.Windows.Forms.ListView
+    Friend WithEvents ColumnHeader1 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader2 As System.Windows.Forms.ColumnHeader
 
 End Class

@@ -2,6 +2,7 @@
 Imports System.Windows.Forms
 Imports System.Text.Encoding
 Imports Microsoft.VisualBasic.ControlChars
+Imports Microsoft.Dism
 
 Public Class ImgMount
 
@@ -77,6 +78,8 @@ Public Class ImgMount
             GroupBox1.ForeColor = Color.White
             GroupBox2.ForeColor = Color.White
             GroupBox3.ForeColor = Color.White
+            ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New MainForm.DarkModeColorTable())
+            ToolStripButton1.Image = My.Resources.clear_glyph_dark
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Win10Title.BackColor = Color.White
             BackColor = Color.FromArgb(238, 238, 242)
@@ -87,6 +90,8 @@ Public Class ImgMount
             GroupBox1.ForeColor = Color.Black
             GroupBox2.ForeColor = Color.Black
             GroupBox3.ForeColor = Color.Black
+            ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New MainForm.LightModeColorTable())
+            ToolStripButton1.Image = My.Resources.clear_glyph
         End If
         NumericUpDown1.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
@@ -123,16 +128,12 @@ Public Class ImgMount
             Button1.PerformClick()
         End If
         If File.Exists(TextBox1.Text) Then
-            If IndexOperationMode = 0 Then
-                File.WriteAllText(".\bin\exthelpers\temp.bat", "dism /English /get-imageinfo /imagefile=" & TextBox1.Text & " > dismtools.txt", ASCII)
-            ElseIf IndexOperationMode = 1 Then
-                File.WriteAllText(".\bin\exthelpers\temp.bat", "dism /English /get-wiminfo /wimfile=" & TextBox1.Text & " > dismtools.txt", ASCII)
-            End If
-            Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
-            Width = 800
-            Indexes.Text = My.Computer.FileSystem.ReadAllText(".\dismtools.txt")
-            File.Delete(".\bin\exthelpers\temp.bat")
-            File.Delete(".\dismtools.txt")
+            DismApi.Initialize(DismLogLevel.LogErrors)
+            Dim imgIndexInfo As DismImageInfoCollection = DismApi.GetImageInfo(TextBox1.Text)
+            For Each info As DismImageInfo In imgIndexInfo
+                ListView1.Items.Add(New ListViewItem(New String() {info.ImageIndex, info.ImageName}))
+            Next
+            DismApi.Shutdown()
         Else
             Exit Sub
         End If
@@ -141,7 +142,7 @@ Public Class ImgMount
     End Sub
 
     Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
-        Indexes.Clear()
+        ListView1.Items.Clear()
         Width = 800
         CenterToParent()
     End Sub
