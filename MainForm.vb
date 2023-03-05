@@ -963,6 +963,7 @@ Public Class MainForm
                             Label20.Text = imageInfo.ImageDescription
                             Exit For
                         Next
+                        RemountImageWithWritePermissionsToolStripMenuItem.Enabled = If(MountedImageMountedReWr(x) = 0, False, True)
                         Exit For
                     End If
                 Next
@@ -3600,7 +3601,7 @@ Public Class MainForm
                             UpdateProjProperties(True, True)
                         Else
                             ' Assume it has read-write permissions
-                            UpdateProjProperties(True, True)
+                            UpdateProjProperties(True, False)
                         End If
                     ElseIf Directory.Exists(MountDir & "\Windows") Then
                         ' This is for these cases where image was mounted to outside the project
@@ -3611,7 +3612,7 @@ Public Class MainForm
                             UpdateProjProperties(True, True)
                         Else
                             ' Assume it has read-write permissions
-                            UpdateProjProperties(True, True)
+                            UpdateProjProperties(True, False)
                         End If
                     Else
                         IsImageMounted = False
