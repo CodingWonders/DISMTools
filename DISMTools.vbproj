@@ -679,6 +679,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo.ico" />
+    <None Include="Resources\menus\clear_glyph_dark.png" />
     <None Include="Resources\aboutscr_bg.png" />
     <None Include="Resources\FirstUse\minBox_focus.png" />
     <None Include="Resources\FirstUse\minBox_down.png" />
