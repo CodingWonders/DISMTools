@@ -254,15 +254,15 @@ Partial Class MainForm
         Me.TabPageDescription1 = New System.Windows.Forms.Label()
         Me.TabPageTitle1 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
-        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
         Me.ProjNameEditBtn = New System.Windows.Forms.Button()
+        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.Panel8 = New System.Windows.Forms.Panel()
         Me.projName = New System.Windows.Forms.Label()
         Me.projNameText = New System.Windows.Forms.TextBox()
+        Me.Label5 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
         Me.Panel9 = New System.Windows.Forms.Panel()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
@@ -523,7 +523,7 @@ Partial Class MainForm
         '
         Me.ImageManagementToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AppendImage, Me.ApplyFFU, Me.ApplyImage, Me.CaptureCustomImage, Me.CaptureFFU, Me.CaptureImage, Me.CleanupMountpoints, Me.CommitImage, Me.DeleteImage, Me.ExportImage, Me.GetImageInfo, Me.GetMountedImageInfo, Me.GetWIMBootEntry, Me.ListImage, Me.MountImage, Me.OptimizeFFU, Me.OptimizeImage, Me.RemountImage, Me.SplitFFU, Me.SplitImage, Me.UnmountImage, Me.UpdateWIMBootEntry, Me.ApplySiloedPackage})
         Me.ImageManagementToolStripMenuItem.Name = "ImageManagementToolStripMenuItem"
-        Me.ImageManagementToolStripMenuItem.Size = New System.Drawing.Size(235, 22)
+        Me.ImageManagementToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
         Me.ImageManagementToolStripMenuItem.Text = "Image management"
         '
         'AppendImage
@@ -668,7 +668,7 @@ Partial Class MainForm
         '
         Me.OSPackagesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GetPackages, Me.GetPackageInfo, Me.AddPackage, Me.RemovePackage, Me.GetFeatures, Me.GetFeatureInfo, Me.EnableFeature, Me.DisableFeature, Me.ToolStripSeparator4, Me.CleanupImage})
         Me.OSPackagesToolStripMenuItem.Name = "OSPackagesToolStripMenuItem"
-        Me.OSPackagesToolStripMenuItem.Size = New System.Drawing.Size(235, 22)
+        Me.OSPackagesToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
         Me.OSPackagesToolStripMenuItem.Text = "OS packages"
         '
         'GetPackages
@@ -734,7 +734,7 @@ Partial Class MainForm
         '
         Me.ProvisioningPackagesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddProvisioningPackage, Me.GetProvisioningPackageInfo, Me.ApplyCustomDataImage})
         Me.ProvisioningPackagesToolStripMenuItem.Name = "ProvisioningPackagesToolStripMenuItem"
-        Me.ProvisioningPackagesToolStripMenuItem.Size = New System.Drawing.Size(235, 22)
+        Me.ProvisioningPackagesToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
         Me.ProvisioningPackagesToolStripMenuItem.Text = "Provisioning packages"
         '
         'AddProvisioningPackage
@@ -759,7 +759,7 @@ Partial Class MainForm
         '
         Me.AppPackagesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GetProvisionedAppxPackages, Me.AddProvisionedAppxPackage, Me.RemoveProvisionedAppxPackage, Me.OptimizeProvisionedAppxPackages, Me.SetProvisionedAppxDataFile})
         Me.AppPackagesToolStripMenuItem.Name = "AppPackagesToolStripMenuItem"
-        Me.AppPackagesToolStripMenuItem.Size = New System.Drawing.Size(235, 22)
+        Me.AppPackagesToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
         Me.AppPackagesToolStripMenuItem.Text = "App packages"
         '
         'GetProvisionedAppxPackages
@@ -796,7 +796,7 @@ Partial Class MainForm
         '
         Me.AppPatchesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CheckAppPatch, Me.GetAppPatchInfo, Me.GetAppPatches, Me.GetAppInfo, Me.GetApps})
         Me.AppPatchesToolStripMenuItem.Name = "AppPatchesToolStripMenuItem"
-        Me.AppPatchesToolStripMenuItem.Size = New System.Drawing.Size(235, 22)
+        Me.AppPatchesToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
         Me.AppPatchesToolStripMenuItem.Text = "App (MSP) servicing"
         '
         'CheckAppPatch
@@ -833,7 +833,7 @@ Partial Class MainForm
         '
         Me.DefaultAppAssociationsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExportDefaultAppAssociations, Me.GetDefaultAppAssociations, Me.ImportDefaultAppAssociations, Me.RemoveDefaultAppAssociations})
         Me.DefaultAppAssociationsToolStripMenuItem.Name = "DefaultAppAssociationsToolStripMenuItem"
-        Me.DefaultAppAssociationsToolStripMenuItem.Size = New System.Drawing.Size(235, 22)
+        Me.DefaultAppAssociationsToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
         Me.DefaultAppAssociationsToolStripMenuItem.Text = "Default app associations"
         '
         'ExportDefaultAppAssociations
@@ -969,7 +969,7 @@ Partial Class MainForm
         '
         Me.CapabilitiesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddCapability, Me.ExportSource, Me.GetCapabilities, Me.GetCapabilityInfo, Me.RemoveCapability})
         Me.CapabilitiesToolStripMenuItem.Name = "CapabilitiesToolStripMenuItem"
-        Me.CapabilitiesToolStripMenuItem.Size = New System.Drawing.Size(235, 22)
+        Me.CapabilitiesToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
         Me.CapabilitiesToolStripMenuItem.Text = "Capabilities"
         '
         'AddCapability
@@ -1006,7 +1006,7 @@ Partial Class MainForm
         '
         Me.WindowsEditionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GetCurrentEdition, Me.GetTargetEditions, Me.SetEdition, Me.SetProductKey})
         Me.WindowsEditionsToolStripMenuItem.Name = "WindowsEditionsToolStripMenuItem"
-        Me.WindowsEditionsToolStripMenuItem.Size = New System.Drawing.Size(235, 22)
+        Me.WindowsEditionsToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
         Me.WindowsEditionsToolStripMenuItem.Text = "Windows editions"
         '
         'GetCurrentEdition
@@ -1037,7 +1037,7 @@ Partial Class MainForm
         '
         Me.DriversToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GetDrivers, Me.GetDriverInfo, Me.AddDriver, Me.RemoveDriver, Me.ExportDriver})
         Me.DriversToolStripMenuItem.Name = "DriversToolStripMenuItem"
-        Me.DriversToolStripMenuItem.Size = New System.Drawing.Size(235, 22)
+        Me.DriversToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
         Me.DriversToolStripMenuItem.Text = "Drivers"
         '
         'GetDrivers
@@ -1074,7 +1074,7 @@ Partial Class MainForm
         '
         Me.UnattendedAnswerFilesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ApplyUnattend})
         Me.UnattendedAnswerFilesToolStripMenuItem.Name = "UnattendedAnswerFilesToolStripMenuItem"
-        Me.UnattendedAnswerFilesToolStripMenuItem.Size = New System.Drawing.Size(235, 22)
+        Me.UnattendedAnswerFilesToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
         Me.UnattendedAnswerFilesToolStripMenuItem.Text = "Unattended answer files"
         '
         'ApplyUnattend
@@ -1087,7 +1087,7 @@ Partial Class MainForm
         '
         Me.WindowsPEServicingToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GetPESettings, Me.GetScratchSpace, Me.GetTargetPath, Me.SetScratchSpace, Me.SetTargetPath})
         Me.WindowsPEServicingToolStripMenuItem.Name = "WindowsPEServicingToolStripMenuItem"
-        Me.WindowsPEServicingToolStripMenuItem.Size = New System.Drawing.Size(235, 22)
+        Me.WindowsPEServicingToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
         Me.WindowsPEServicingToolStripMenuItem.Text = "Windows PE servicing"
         '
         'GetPESettings
@@ -1124,7 +1124,7 @@ Partial Class MainForm
         '
         Me.OSUninstallToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GetOSUninstallWindow, Me.InitiateOSUninstall, Me.RemoveOSUninstall, Me.SetOSUninstallWindow})
         Me.OSUninstallToolStripMenuItem.Name = "OSUninstallToolStripMenuItem"
-        Me.OSUninstallToolStripMenuItem.Size = New System.Drawing.Size(235, 22)
+        Me.OSUninstallToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
         Me.OSUninstallToolStripMenuItem.Text = "OS uninstall"
         '
         'GetOSUninstallWindow
@@ -1155,7 +1155,7 @@ Partial Class MainForm
         '
         Me.ReservedStorageToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SetReservedStorageState, Me.GetReservedStorageState})
         Me.ReservedStorageToolStripMenuItem.Name = "ReservedStorageToolStripMenuItem"
-        Me.ReservedStorageToolStripMenuItem.Size = New System.Drawing.Size(235, 22)
+        Me.ReservedStorageToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
         Me.ReservedStorageToolStripMenuItem.Text = "Reserved storage"
         '
         'SetReservedStorageState
@@ -1360,18 +1360,18 @@ Partial Class MainForm
         'ISFix
         '
         Me.ISFix.Name = "ISFix"
-        Me.ISFix.Size = New System.Drawing.Size(140, 22)
+        Me.ISFix.Size = New System.Drawing.Size(137, 22)
         Me.ISFix.Text = "Fix..."
         '
         'ToolStripSeparator19
         '
         Me.ToolStripSeparator19.Name = "ToolStripSeparator19"
-        Me.ToolStripSeparator19.Size = New System.Drawing.Size(137, 6)
+        Me.ToolStripSeparator19.Size = New System.Drawing.Size(134, 6)
         '
         'ISHelp
         '
         Me.ISHelp.Name = "ISHelp"
-        Me.ISHelp.Size = New System.Drawing.Size(152, 22)
+        Me.ISHelp.Size = New System.Drawing.Size(137, 22)
         Me.ISHelp.Text = "What's this?"
         '
         'HomePanel
@@ -2187,7 +2187,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.33333!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.66667!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 31.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 33.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -2206,6 +2206,16 @@ Partial Class MainForm
         Me.TableLayoutPanel2.Size = New System.Drawing.Size(256, 280)
         Me.TableLayoutPanel2.TabIndex = 8
         '
+        'ProjNameEditBtn
+        '
+        Me.ProjNameEditBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ProjNameEditBtn.Image = Global.DISMTools.My.Resources.Resources.proj_name_edit
+        Me.ProjNameEditBtn.Location = New System.Drawing.Point(229, 3)
+        Me.ProjNameEditBtn.Name = "ProjNameEditBtn"
+        Me.ProjNameEditBtn.Size = New System.Drawing.Size(24, 23)
+        Me.ProjNameEditBtn.TabIndex = 7
+        Me.ProjNameEditBtn.UseVisualStyleBackColor = True
+        '
         'LinkLabel1
         '
         Me.TableLayoutPanel2.SetColumnSpan(Me.LinkLabel1, 2)
@@ -2219,6 +2229,37 @@ Partial Class MainForm
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "Click here to mount an image"
         '
+        'Panel8
+        '
+        Me.Panel8.Controls.Add(Me.projName)
+        Me.Panel8.Controls.Add(Me.projNameText)
+        Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel8.Location = New System.Drawing.Point(113, 3)
+        Me.Panel8.Name = "Panel8"
+        Me.Panel8.Size = New System.Drawing.Size(106, 23)
+        Me.Panel8.TabIndex = 8
+        '
+        'projName
+        '
+        Me.projName.AutoEllipsis = True
+        Me.projName.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.projName.Location = New System.Drawing.Point(0, 0)
+        Me.projName.Name = "projName"
+        Me.projName.Size = New System.Drawing.Size(106, 23)
+        Me.projName.TabIndex = 2
+        Me.projName.Text = "projName"
+        Me.projName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'projNameText
+        '
+        Me.projNameText.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.projNameText.Location = New System.Drawing.Point(0, 0)
+        Me.projNameText.Name = "projNameText"
+        Me.projNameText.Size = New System.Drawing.Size(106, 21)
+        Me.projNameText.TabIndex = 4
+        Me.projNameText.Text = "projName"
+        Me.projNameText.Visible = False
+        '
         'Label5
         '
         Me.Label5.AutoEllipsis = True
@@ -2231,17 +2272,16 @@ Partial Class MainForm
         Me.Label5.TabIndex = 2
         Me.Label5.Text = "imgStatus"
         '
-        'Label4
+        'Label2
         '
-        Me.Label4.AutoSize = True
-        Me.Label4.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label4.Location = New System.Drawing.Point(3, 131)
-        Me.Label4.Name = "Label4"
-        Me.TableLayoutPanel2.SetRowSpan(Me.Label4, 2)
-        Me.Label4.Size = New System.Drawing.Size(104, 149)
-        Me.Label4.TabIndex = 1
-        Me.Label4.Text = "Images mounted?"
-        Me.Label4.TextAlign = System.Drawing.ContentAlignment.TopRight
+        Me.Label2.AutoSize = True
+        Me.Label2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label2.Location = New System.Drawing.Point(3, 29)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(104, 102)
+        Me.Label2.TabIndex = 1
+        Me.Label2.Text = "Location:"
+        Me.Label2.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label3
         '
@@ -2256,57 +2296,17 @@ Partial Class MainForm
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "projPath"
         '
-        'ProjNameEditBtn
+        'Label4
         '
-        Me.ProjNameEditBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ProjNameEditBtn.Image = Global.DISMTools.My.Resources.Resources.proj_name_edit
-        Me.ProjNameEditBtn.Location = New System.Drawing.Point(229, 3)
-        Me.ProjNameEditBtn.Name = "ProjNameEditBtn"
-        Me.ProjNameEditBtn.Size = New System.Drawing.Size(24, 23)
-        Me.ProjNameEditBtn.TabIndex = 7
-        Me.ProjNameEditBtn.UseVisualStyleBackColor = True
-        '
-        'Panel8
-        '
-        Me.Panel8.Controls.Add(Me.projName)
-        Me.Panel8.Controls.Add(Me.projNameText)
-        Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel8.Location = New System.Drawing.Point(113, 3)
-        Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(108, 23)
-        Me.Panel8.TabIndex = 8
-        '
-        'projName
-        '
-        Me.projName.AutoEllipsis = True
-        Me.projName.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.projName.Location = New System.Drawing.Point(0, 0)
-        Me.projName.Name = "projName"
-        Me.projName.Size = New System.Drawing.Size(108, 23)
-        Me.projName.TabIndex = 2
-        Me.projName.Text = "projName"
-        Me.projName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'projNameText
-        '
-        Me.projNameText.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.projNameText.Location = New System.Drawing.Point(0, 0)
-        Me.projNameText.Name = "projNameText"
-        Me.projNameText.Size = New System.Drawing.Size(108, 21)
-        Me.projNameText.TabIndex = 4
-        Me.projNameText.Text = "projName"
-        Me.projNameText.Visible = False
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label2.Location = New System.Drawing.Point(3, 29)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(104, 102)
-        Me.Label2.TabIndex = 1
-        Me.Label2.Text = "Location:"
-        Me.Label2.TextAlign = System.Drawing.ContentAlignment.TopRight
+        Me.Label4.AutoSize = True
+        Me.Label4.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label4.Location = New System.Drawing.Point(3, 131)
+        Me.Label4.Name = "Label4"
+        Me.TableLayoutPanel2.SetRowSpan(Me.Label4, 2)
+        Me.Label4.Size = New System.Drawing.Size(104, 149)
+        Me.Label4.TabIndex = 1
+        Me.Label4.Text = "Images mounted?"
+        Me.Label4.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Panel9
         '
