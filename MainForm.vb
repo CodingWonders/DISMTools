@@ -258,7 +258,7 @@ Public Class MainForm
     ''' Set colors on any surface with the "Professional" RenderMode in dark mode
     ''' </summary>
     ''' <remarks></remarks>
-    Private Class DarkModeColorTable
+    Public Class DarkModeColorTable
         Inherits ProfessionalColorTable
 
         Public Overrides ReadOnly Property ToolStripBorder As Color
@@ -422,7 +422,7 @@ Public Class MainForm
     ''' Set colors on any surface with the "Professional" RenderMode in light mode
     ''' </summary>
     ''' <remarks></remarks>
-    Private Class LightModeColorTable
+    Public Class LightModeColorTable
         Inherits ProfessionalColorTable
 
         Public Overrides ReadOnly Property ToolStripBorder As Color
