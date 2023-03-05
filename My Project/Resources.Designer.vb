@@ -1386,6 +1386,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Busca una cadena traducida similar a For release notes of previous versions, check the &quot;Releases&quot; section in the project&apos;s repository.
+        '''</summary>
+        Friend ReadOnly Property WhatsNew() As String
+            Get
+                Return ResourceManager.GetString("WhatsNew", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
         Friend ReadOnly Property win8_0() As System.Drawing.Bitmap

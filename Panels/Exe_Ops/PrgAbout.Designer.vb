@@ -60,6 +60,7 @@ Partial Class PrgAbout
         Me.LinkLabel3 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
+        Me.RichTextBox2 = New System.Windows.Forms.RichTextBox()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PreviewPanel.SuspendLayout()
@@ -68,6 +69,7 @@ Partial Class PrgAbout
         Me.CreditsPanel.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
         Me.LicensesPanel.SuspendLayout()
+        Me.WhatsNewPanel.SuspendLayout()
         Me.TableLayoutPanel3.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -487,6 +489,7 @@ Partial Class PrgAbout
         '
         'WhatsNewPanel
         '
+        Me.WhatsNewPanel.Controls.Add(Me.RichTextBox2)
         Me.WhatsNewPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.WhatsNewPanel.Location = New System.Drawing.Point(0, 28)
         Me.WhatsNewPanel.Name = "WhatsNewPanel"
@@ -560,6 +563,19 @@ Partial Class PrgAbout
         Me.LinkLabel1.Text = "CREDITS"
         Me.LinkLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
+        'RichTextBox2
+        '
+        Me.RichTextBox2.BackColor = System.Drawing.Color.FromArgb(CType(CType(7, Byte), Integer), CType(CType(28, Byte), Integer), CType(CType(73, Byte), Integer))
+        Me.RichTextBox2.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.RichTextBox2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.RichTextBox2.Location = New System.Drawing.Point(0, 0)
+        Me.RichTextBox2.Name = "RichTextBox2"
+        Me.RichTextBox2.ReadOnly = True
+        Me.RichTextBox2.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical
+        Me.RichTextBox2.Size = New System.Drawing.Size(420, 354)
+        Me.RichTextBox2.TabIndex = 2
+        Me.RichTextBox2.Text = ""
+        '
         'PrgAbout
         '
         Me.AcceptButton = Me.OK_Button
@@ -591,6 +607,7 @@ Partial Class PrgAbout
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.TableLayoutPanel2.PerformLayout()
         Me.LicensesPanel.ResumeLayout(False)
+        Me.WhatsNewPanel.ResumeLayout(False)
         Me.TableLayoutPanel3.ResumeLayout(False)
         Me.TableLayoutPanel3.PerformLayout()
         Me.ResumeLayout(False)
@@ -635,5 +652,6 @@ Partial Class PrgAbout
     Friend WithEvents Label11 As System.Windows.Forms.Label
     Friend WithEvents LinkLabel7 As System.Windows.Forms.LinkLabel
     Friend WithEvents Label12 As System.Windows.Forms.Label
+    Friend WithEvents RichTextBox2 As System.Windows.Forms.RichTextBox
 
 End Class

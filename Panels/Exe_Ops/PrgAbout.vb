@@ -11,6 +11,7 @@ Public Class PrgAbout
 
     Private Sub PrgAbout_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         RichTextBox1.Text = My.Resources.LicenseOverview
+        RichTextBox2.Text = My.Resources.WhatsNew
         If MainForm.dtBranch.Contains("preview") Then
             PreviewPanel.Visible = True
         Else
@@ -36,6 +37,7 @@ Public Class PrgAbout
         End If
         CreditsPanel.ForeColor = Color.White
         RichTextBox1.ForeColor = ForeColor
+        RichTextBox2.ForeColor = ForeColor
     End Sub
 
     Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel4.LinkClicked
