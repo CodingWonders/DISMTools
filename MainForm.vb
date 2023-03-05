@@ -2968,7 +2968,7 @@ Public Class MainForm
                     AppPatchesToolStripMenuItem.Text = "Servicio de aplicaciones (MSP)"
                     DefaultAppAssociationsToolStripMenuItem.Text = "Asociaciones predeterminadas de aplicaciones"
                     LanguagesAndRegionSettingsToolStripMenuItem.Text = "Configuración de idiomas y regiones"
-                    CapabilitiesToolStripMenuItem.Text = "Capacidades"
+                    CapabilitiesToolStripMenuItem.Text = "Funcionalidades"
                     WindowsEditionsToolStripMenuItem.Text = "Ediciones de Windows"
                     DriversToolStripMenuItem.Text = "Controladores"
                     UnattendedAnswerFilesToolStripMenuItem.Text = "Archivos de respuesta desatendida"
@@ -3291,7 +3291,7 @@ Public Class MainForm
                 AppPatchesToolStripMenuItem.Text = "Servicio de aplicaciones (MSP)"
                 DefaultAppAssociationsToolStripMenuItem.Text = "Asociaciones predeterminadas de aplicaciones"
                 LanguagesAndRegionSettingsToolStripMenuItem.Text = "Configuración de idiomas y regiones"
-                CapabilitiesToolStripMenuItem.Text = "Capacidades"
+                CapabilitiesToolStripMenuItem.Text = "Funcionalidades"
                 WindowsEditionsToolStripMenuItem.Text = "Ediciones de Windows"
                 DriversToolStripMenuItem.Text = "Controladores"
                 UnattendedAnswerFilesToolStripMenuItem.Text = "Archivos de respuesta desatendida"
@@ -5703,7 +5703,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ImgBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ImgBW.RunWorkerCompleted
-        If Not MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.RunWorkerAsync()
+        If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
         areBackgroundProcessesDone = True
         BackgroundProcessesButton.Image = New Bitmap(My.Resources.bg_ops_complete)
         progressLabel = "Image processes have completed"
