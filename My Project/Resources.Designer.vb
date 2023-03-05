@@ -1386,7 +1386,11 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a For release notes of previous versions, check the &quot;Releases&quot; section in the project&apos;s repository.
+        '''  Busca una cadena traducida similar a Bugfixes:
+        '''- Fixed an issue where the program would not get image properties if multiple images were mounted
+        '''- Fixed an issue with the background process details window where, if the main window was moved before opening it, it would open in the wrong location
+        '''- Fixed an issue where the Settings window would appear in the corner of the screen when launching image detection settings with the main window minimized
+        '''- Fixed a critical issue where the program would crash when clicking &quot;Project properties&quot; if t [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

@@ -863,6 +863,17 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <value>..\Resources\aboutscr_bg.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>For release notes of previous versions, check the "Releases" section in the project's repository</value>
+    <value>Bugfixes:
+- Fixed an issue where the program would not get image properties if multiple images were mounted
+- Fixed an issue with the background process details window where, if the main window was moved before opening it, it would open in the wrong location
+- Fixed an issue where the Settings window would appear in the corner of the screen when launching image detection settings with the main window minimized
+- Fixed a critical issue where the program would crash when clicking "Project properties" if the image detector background process was running
+- Fixed an issue where the program assumed there was an image mounted on a newly created project
+
+New features
+- Redesigned the About screen to make it more modern
+- Language support is being added, beginning with Spanish. With this change, the program can now set the language according to the system language
+
+For release notes of previous versions, check the "Releases" section in the project's repository</value>
   </data>
 </root>
