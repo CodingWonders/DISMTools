@@ -3099,7 +3099,7 @@ Public Class ProgressPanel
                 MainForm.SaveDTProj()
             ElseIf OperationNum = 18 Then
                 MainForm.DetectMountedImages(False)
-                If MainForm.isProjectLoaded Then
+                If MainForm.isProjectLoaded And MountDir = MainForm.MountDir Then
                     If ProjProperties.Visible Then
                         isTriggeredByPropertyDialog = True
                         ProjProperties.Close()
