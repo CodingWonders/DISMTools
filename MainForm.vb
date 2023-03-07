@@ -2940,6 +2940,30 @@ Public Class MainForm
                     ISHelp.Text = "What's this?"
                     ' Menu - DevState
                     ReportFeedbackToolStripMenuItem.Text = "Report feedback (opens in web browser)"
+                    ' Start Panel
+                    LabelHeader1.Text = "Begin"
+                    Label10.Text = "Recent projects"
+                    Label11.Text = "Coming soon!"
+                    NewProjLink.Text = "New project..."
+                    ExistingProjLink.Text = "Open existing project..."
+                    ' Start Panel tabs
+                    WelcomeTab.Text = "Welcome"
+                    NewsFeedTab.Text = "Latest news"
+                    VideosTab.Text = "Tutorial videos"
+                    ' Welcome tab contents
+                    Label24.Text = "Welcome to DISMTools"
+                    Label25.Text = "The graphical front-end to perform DISM operations."
+                    Label26.Text = "This is alpha software"
+                    Label27.Text = "Currently, this program is in alpha. This means lots of things will not work as expected. There will also be lots of bugs, and, generally, the program is incomplete (as you can see right now)"
+                    Label28.Text = "This program is open-source"
+                    Label29.Text = "This program is open-source, meaning you can take a look at how it works and understand it better."
+                    Label30.Text = "Be sure to know what you are doing"
+                    Label31.Text = "Please be careful over what you do in this program. Although it may look simple and easy to use, it is targeted to system administrators and people in the IT department. If you carelessly perform operations to an image or an active installation, it may not work correctly or may refuse to work."
+                    Label32.Text = "Getting started"
+                    Label33.Text = "- Did you get lost in this program? We recommend checking the help topics to get around" & CrLf & _
+                        "- Don't understand a specific term? We recommend checking the glossary. The terms are alphabetically sorted and provide explanations as detailed as possible" & CrLf & _
+                        "- Want to know how to do it in the command line? We recommmend checking the command help" & CrLf & _
+                        "These options, and the program information, can be found by opening the Help menu."
                 ElseIf My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "ESN" Then
                     ' Top-level menu items
                     FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -3101,6 +3125,30 @@ Public Class MainForm
                     ISHelp.Text = "¿Qué es esto?"
                     ' Menu - DevState
                     ReportFeedbackToolStripMenuItem.Text = "Enviar comentarios (se abre en navegador web)"
+                    ' Start Panel
+                    LabelHeader1.Text = "Comenzar"
+                    Label10.Text = "Proyectos recientes"
+                    Label11.Text = "¡Próximamente!"
+                    NewProjLink.Text = "Nuevo proyecto..."
+                    ExistingProjLink.Text = "Abrir proyecto existente..."
+                    ' Start Panel tabs
+                    WelcomeTab.Text = "Bienvenido"
+                    NewsFeedTab.Text = "Últimas noticias"
+                    VideosTab.Text = "Tutoriales"
+                    ' Welcome tab contents
+                    Label24.Text = "Bienvenido a DISMTools"
+                    Label25.Text = "La interfaz gráfica para realizar operaciones de DISM."
+                    Label26.Text = "Este es un software en alpha"
+                    Label27.Text = "Ahora mismo este programa está en alpha. Esto significa que muchas cosas no funcionarán como esperado. También habrán muchos errores y, en general, este programa no está completo (como puede ver ahora mismo)"
+                    Label28.Text = "Este programa es de código abierto"
+                    Label29.Text = "Este programa es de código abierto, lo que le permite observar cómo funciona y entenderlo mejor."
+                    Label30.Text = "Asegúrese de saber lo que hace"
+                    Label31.Text = "Por favor, tenga cuidado con lo que hace en este programa. Aunque parezca simple y fácil de usar, está destinado a administradores del sistema y gente en el departamento de TI. Si realiza operaciones sin cuidado a una imagen o instalación activa, podría no funcionar correctamente o dejar de funcionar."
+                    Label32.Text = "Comencemos"
+                    Label33.Text = "- ¿Está perdido en este programa? Le recomendamos que vea la ayuda para manejarse" & CrLf & _
+                        "- ¿No entiende un término en específico? Le recomendamos comprobar el glosario. Los términos están ordenados alfabéticamente y ofrecen explicaciones lo más detalladas posible" & CrLf & _
+                        "- ¿Desea saber cómo hacerlo en la línea de comandos? Le recomendamos comprobar la ayuda de comandos" & CrLf & _
+                        "Estas opciones, y la información del programa, pueden ser encontradas en el menú Ayuda."
                 End If
             Case 1
                 ' Top-level menu items
@@ -3263,6 +3311,31 @@ Public Class MainForm
                 ISHelp.Text = "What's this?"
                 ' Menu - DevState
                 ReportFeedbackToolStripMenuItem.Text = "Report feedback (opens in web browser)"
+                ' Start Panel
+                LabelHeader1.Text = "Begin"
+                Label10.Text = "Recent projects"
+                Label11.Text = "Coming soon!"
+                NewProjLink.Text = "New project..."
+                ExistingProjLink.Text = "Open existing project..."
+                ' Start Panel tabs
+                WelcomeTab.Text = "Welcome"
+                NewsFeedTab.Text = "Latest news"
+                VideosTab.Text = "Tutorial videos"
+                ' Welcome tab contents
+                Label24.Text = "Welcome to DISMTools"
+                Label25.Text = "The graphical front-end to perform DISM operations."
+                Label26.Text = "This is alpha software"
+                Label27.Text = "Currently, this program is in alpha. This means lots of things will not work as expected. There will also be lots of bugs, and, generally, the program is incomplete (as you can see right now)"
+                Label28.Text = "This program is open-source"
+                Label29.Text = "This program is open-source, meaning you can take a look at how it works and understand it better."
+                Label30.Text = "Be sure to know what you are doing"
+                Label31.Text = "Please be careful over what you do in this program. Although it may look simple and easy to use, it is targeted to system administrators and people in the IT department. If you carelessly perform operations to an image or an active installation, it may not work correctly or may refuse to work."
+                Label32.Text = "Getting started"
+                Label33.Text = "- Did you get lost in this program? We recommend checking the help topics to get around" & CrLf & _
+                    "- Don't understand a specific term? We recommend checking the glossary. The terms are alphabetically sorted and provide explanations as detailed as possible" & CrLf & _
+                    "- Want to know how to do it in the command line? We recommmend checking the command help" & CrLf & _
+                    "These options, and the program information, can be found by opening the Help menu."
+                '
             Case 2
                 ' Top-level menu items
                 FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -3424,6 +3497,30 @@ Public Class MainForm
                 ISHelp.Text = "¿Qué es esto?"
                 ' Menu - DevState
                 ReportFeedbackToolStripMenuItem.Text = "Enviar comentarios (se abre en navegador web)"
+                ' Start Panel
+                LabelHeader1.Text = "Comenzar"
+                Label10.Text = "Proyectos recientes"
+                Label11.Text = "¡Próximamente!"
+                NewProjLink.Text = "Nuevo proyecto..."
+                ExistingProjLink.Text = "Abrir proyecto existente..."
+                ' Start Panel tabs
+                WelcomeTab.Text = "Bienvenido"
+                NewsFeedTab.Text = "Últimas noticias"
+                VideosTab.Text = "Tutoriales"
+                ' Welcome tab contents
+                Label24.Text = "Bienvenido a DISMTools"
+                Label25.Text = "La interfaz gráfica para realizar operaciones de DISM."
+                Label26.Text = "Este es un software en alpha"
+                Label27.Text = "Ahora mismo este programa está en alpha. Esto significa que muchas cosas no funcionarán como esperado. También habrán muchos errores y, en general, este programa no está completo (como puede ver ahora mismo)"
+                Label28.Text = "Este programa es de código abierto"
+                Label29.Text = "Este programa es de código abierto, lo que le permite observar cómo funciona y entenderlo mejor."
+                Label30.Text = "Asegúrese de saber lo que hace"
+                Label31.Text = "Por favor, tenga cuidado con lo que hace en este programa. Aunque parezca simple y fácil de usar, está destinado a administradores del sistema y gente en el departamento de TI. Si realiza operaciones sin cuidado a una imagen o instalación activa, podría no funcionar correctamente o dejar de funcionar."
+                Label32.Text = "Comencemos"
+                Label33.Text = "- ¿Está perdido en este programa? Le recomendamos que vea la ayuda para manejarse" & CrLf & _
+                    "- ¿No entiende un término en específico? Le recomendamos comprobar el glosario. Los términos están ordenados alfabéticamente y ofrecen explicaciones lo más detalladas posible" & CrLf & _
+                    "- ¿Desea saber cómo hacerlo en la línea de comandos? Le recomendamos comprobar la ayuda de comandos" & CrLf & _
+                    "Estas opciones, y la información del programa, pueden ser encontradas en el menú Ayuda."
         End Select
     End Sub
 
