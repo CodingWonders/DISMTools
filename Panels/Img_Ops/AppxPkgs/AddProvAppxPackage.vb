@@ -441,7 +441,7 @@ Public Class AddProvAppxPackage
             If Directory.Exists(".\appxscan") Then Directory.Delete(".\appxscan", True)
             Directory.CreateDirectory(".\appxscan")
             AppxScanner.StartInfo.FileName = ".\bin\utils\7z.exe"
-            AppxScanner.StartInfo.Arguments = "x " & Quote & Package & Quote & " -o.\appxscan"
+            AppxScanner.StartInfo.Arguments = "e " & Quote & Package & Quote & " " & Quote & If(Path.GetExtension(Package).EndsWith("bundle"), "appxmetadata\appxbundlemanifest.xml", "appxmanifest.xml") & Quote & " -o.\appxscan"
             AppxScanner.StartInfo.CreateNoWindow = True
             AppxScanner.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
             AppxScanner.Start()
@@ -452,7 +452,7 @@ Public Class AddProvAppxPackage
             Loop
             If AppxScanner.ExitCode = 0 Then
                 If Path.GetExtension(Package).EndsWith("bundle") Then
-                    ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(".\appxscan\AppxMetadata\AppxBundleManifest.xml")
+                    ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(".\appxscan\AppxBundleManifest.xml")
                     If ScannerRTB.Lines(2).EndsWith("<!--") Then
                         ' XML comment
                         Dim IdScanner As String = ScannerRTB.Lines(9)
