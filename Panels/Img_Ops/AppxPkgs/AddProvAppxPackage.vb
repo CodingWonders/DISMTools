@@ -200,7 +200,7 @@ Public Class AddProvAppxPackage
     End Sub
 
     ''' <summary>
-    ''' DISMTools AppX header scanner component: version 0.2
+    ''' DISMTools AppX header scanner component: version 0.2.2
     ''' </summary>
     ''' <param name="IsFolder">Determines whether the given value for "Package" is a folder</param>
     ''' <param name="Package">The name of the packed or unpacked AppX file. It may be a file containing the full structure, or a folder containing all AppX files</param>
@@ -453,6 +453,51 @@ Public Class AddProvAppxPackage
             If AppxScanner.ExitCode = 0 Then
                 If Path.GetExtension(Package).EndsWith("bundle") Then
                     ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(".\appxscan\AppxBundleManifest.xml")
+                    If Debugger.IsAttached Then
+                        Dim IdScanner As String = ScannerRTB.Lines(If(ScannerRTB.Lines(2).EndsWith("<!--"), 10, 4))
+                        Dim CharIndex As Integer = 0
+                        Dim CharNext As Integer
+                        Dim pkgName As String = ""
+                        For Each Character As Char In ScannerRTB.Lines(If(ScannerRTB.Lines(2).EndsWith("<!--"), 10, 4))
+                            CharNext = CharIndex + 1
+                            If Not IdScanner(CharIndex) = Quote Then
+                                CharIndex += 1
+                                Continue For
+                            ElseIf IdScanner(CharIndex) = Quote And IdScanner(CharNext) = " " Then
+                                CharIndex += 1
+                                Continue For
+                            Else
+                                Character = IdScanner(CharIndex + 1)
+                                If Not IdScanner(CharIndex + Stepper) = " " Then
+                                    If QuoteCount = 3 Then
+                                        QuoteCount += 1
+                                        Do
+                                            If Character = Quote Then
+                                                CharIndex += Stepper - 1
+                                                Character = IdScanner(CharIndex - 1)
+                                                QuoteCount += 1
+                                                Stepper = 2
+                                                Exit For
+                                            Else
+                                                pkgName &= Character.ToString()
+                                                Character = IdScanner(CharIndex + Stepper)
+                                                Stepper += 1
+                                            End If
+                                        Loop
+                                    Else
+                                        QuoteCount += 1
+                                        CharIndex += Stepper - 1
+                                        Character = IdScanner(CharIndex + Stepper)
+                                        'Stepper += 1
+                                    End If
+                                End If
+                            End If
+                        Next
+                        pkgName = pkgName.Replace(" ", "%20").Trim()
+                        GetApplicationStoreLogos(pkgName)
+                        QuoteCount = 0
+                        Stepper = 2
+                    End If
                     If ScannerRTB.Lines(2).EndsWith("<!--") Then
                         ' XML comment
                         Dim IdScanner As String = ScannerRTB.Lines(9)
@@ -752,6 +797,12 @@ Public Class AddProvAppxPackage
         If Directory.Exists(".\appxscan") Then
             Directory.Delete(".\appxscan", True)
         End If
+    End Sub
+
+    Sub GetApplicationStoreLogos(PackageName As String)
+        ' The assets from the main package are enough for us. The current AppX XML schema also puts these in the Assets folder, so
+        ' getting them should be a breeze
+
     End Sub
 
     Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
