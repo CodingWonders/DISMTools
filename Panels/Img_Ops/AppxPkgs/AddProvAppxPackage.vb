@@ -212,6 +212,7 @@ Public Class AddProvAppxPackage
         Dim currentAppxName As String = ""
         Dim currentAppxPublisher As String = ""
         Dim currentAppxVersion As String = ""
+        Dim pkgName As String = ""
         If IsFolder Then
             If File.Exists(Package & "\AppxMetadata\AppxBundleManifest.xml") Then
                 ' AppXBundle file
@@ -453,56 +454,52 @@ Public Class AddProvAppxPackage
             If AppxScanner.ExitCode = 0 Then
                 If Path.GetExtension(Package).EndsWith("bundle") Then
                     ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(".\appxscan\AppxBundleManifest.xml")
-                    If Debugger.IsAttached Then
-                        Dim IdScanner As String = ScannerRTB.Lines(If(ScannerRTB.Lines(2).EndsWith("<!--"), 10, 4))
-                        Dim CharIndex As Integer = 0
-                        Dim CharNext As Integer
-                        Dim pkgName As String = ""
-                        For Each Character As Char In ScannerRTB.Lines(If(ScannerRTB.Lines(2).EndsWith("<!--"), 10, 4))
-                            CharNext = CharIndex + 1
-                            If Not IdScanner(CharIndex) = Quote Then
-                                CharIndex += 1
-                                Continue For
-                            ElseIf IdScanner(CharIndex) = Quote And IdScanner(CharNext) = " " Then
-                                CharIndex += 1
-                                Continue For
-                            Else
-                                Character = IdScanner(CharIndex + 1)
-                                If Not IdScanner(CharIndex + Stepper) = " " Then
-                                    If QuoteCount = 3 Then
-                                        QuoteCount += 1
-                                        Do
-                                            If Character = Quote Then
-                                                CharIndex += Stepper - 1
-                                                Character = IdScanner(CharIndex - 1)
-                                                QuoteCount += 1
-                                                Stepper = 2
-                                                Exit For
-                                            Else
-                                                pkgName &= Character.ToString()
-                                                Character = IdScanner(CharIndex + Stepper)
-                                                Stepper += 1
-                                            End If
-                                        Loop
-                                    Else
-                                        QuoteCount += 1
-                                        CharIndex += Stepper - 1
-                                        Character = IdScanner(CharIndex + Stepper)
-                                        'Stepper += 1
-                                    End If
+                    Dim IdScanner As String = ScannerRTB.Lines(If(ScannerRTB.Lines(2).EndsWith("<!--"), 10, 4))
+                    Dim CharIndex As Integer = 0
+                    Dim CharNext As Integer
+                    For Each Character As Char In ScannerRTB.Lines(If(ScannerRTB.Lines(2).EndsWith("<!--"), 10, 4))
+                        CharNext = CharIndex + 1
+                        If Not IdScanner(CharIndex) = Quote Then
+                            CharIndex += 1
+                            Continue For
+                        ElseIf IdScanner(CharIndex) = Quote And IdScanner(CharNext) = " " Then
+                            CharIndex += 1
+                            Continue For
+                        Else
+                            Character = IdScanner(CharIndex + 1)
+                            If Not IdScanner(CharIndex + Stepper) = " " Then
+                                If QuoteCount = 3 Then
+                                    QuoteCount += 1
+                                    Do
+                                        If Character = Quote Then
+                                            CharIndex += Stepper - 1
+                                            Character = IdScanner(CharIndex - 1)
+                                            QuoteCount += 1
+                                            Stepper = 2
+                                            Exit For
+                                        Else
+                                            pkgName &= Character.ToString()
+                                            Character = IdScanner(CharIndex + Stepper)
+                                            Stepper += 1
+                                        End If
+                                    Loop
+                                Else
+                                    QuoteCount += 1
+                                    CharIndex += Stepper - 1
+                                    Character = IdScanner(CharIndex + Stepper)
+                                    'Stepper += 1
                                 End If
                             End If
-                        Next
-                        pkgName = pkgName.Replace(" ", "%20").Trim()
-                        GetApplicationStoreLogos(pkgName)
-                        QuoteCount = 0
-                        Stepper = 2
-                    End If
+                        End If
+                    Next
+                    pkgName = pkgName.Replace(" ", "%20").Trim()
+                    QuoteCount = 0
+                    Stepper = 2
                     If ScannerRTB.Lines(2).EndsWith("<!--") Then
                         ' XML comment
-                        Dim IdScanner As String = ScannerRTB.Lines(9)
-                        Dim CharIndex As Integer = 0
-                        Dim CharNext As Integer
+                        IdScanner = ScannerRTB.Lines(9)
+                        CharIndex = 0
+                        CharNext = 0
                         For Each Character As Char In ScannerRTB.Lines(9)
                             CharNext = CharIndex + 1
                             If Not IdScanner(CharIndex) = Quote Then
@@ -570,9 +567,9 @@ Public Class AddProvAppxPackage
                         AppxPublishers = AppxPublisherList.ToArray()
                         AppxVersion = AppxVersionList.ToArray()
                     ElseIf ScannerRTB.Lines(2).Contains("<Identity Name=") Then
-                        Dim IdScanner As String = ScannerRTB.Lines(2)
-                        Dim CharIndex As Integer = 0
-                        Dim CharNext As Integer
+                        IdScanner = ScannerRTB.Lines(2)
+                        CharIndex = 0
+                        CharNext = 0
                         For Each Character As Char In ScannerRTB.Lines(2)
                             CharNext = CharIndex + 1
                             If Not IdScanner(CharIndex) = Quote Then
@@ -784,6 +781,7 @@ Public Class AddProvAppxPackage
                         AppxVersion = AppxVersionList.ToArray()
                     End If
                 End If
+                GetApplicationStoreLogoAssets(pkgName, If(Path.GetExtension(AppxFileOFD.FileName).EndsWith("bundle"), True, False), Package, currentAppxName)
             Else
 
             End If
@@ -799,10 +797,52 @@ Public Class AddProvAppxPackage
         End If
     End Sub
 
-    Sub GetApplicationStoreLogos(PackageName As String)
+    ''' <summary>
+    ''' Gets the application store logo assets from APPX or APPXBUNDLE packages (also from MSIX and MSIXBUNDLE packages)
+    ''' </summary>
+    ''' <param name="PackageName">The name of the package. Packages with names containing spaces will replace those with &quot;%20&quot;</param>
+    ''' <param name="IsBundlePackage">Determines if the package given is an APPXBUNDLE or MSIXBUNDLE package</param>
+    ''' <param name="SourcePackage">The path of the source package</param>
+    ''' <param name="AppxPackageName">The name of the AppX package, used for storing logo assets in an organized way</param>
+    ''' <remarks>If the package processed is an APPXBUNDLE or MSIXBUNDLE package, this procedure will extract the asset contents from the package with the given name. Otherwise, it will directly extract them from the &quot;Assets&quot; folder</remarks>
+    Sub GetApplicationStoreLogoAssets(PackageName As String, IsBundlePackage As Boolean, SourcePackage As String, AppxPackageName As String)
         ' The assets from the main package are enough for us. The current AppX XML schema also puts these in the Assets folder, so
         ' getting them should be a breeze
-
+        If IsBundlePackage Then
+            AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & PackageName & Quote & " -o.\appxscan"
+            AppxScanner.Start()
+            Do Until AppxScanner.HasExited
+                If AppxScanner.HasExited Then
+                    Exit Do
+                End If
+            Loop
+            If Not Directory.Exists(Directory.GetCurrentDirectory() & "\temp\storeassets") Then Directory.CreateDirectory(Directory.GetCurrentDirectory() & "\temp\storeassets")
+            If AppxScanner.ExitCode = 0 Then
+                Directory.CreateDirectory(Directory.GetCurrentDirectory() & "\temp\storeassets\" & AppxPackageName)
+                ' Try extracting small, store and large assets
+                AppxScanner.StartInfo.Arguments = "e " & Quote & Directory.GetCurrentDirectory() & "\appxscan\" & PackageName & Quote & " " & Quote & "Assets\small*" & Quote & " -o" & Quote & ".\temp\storeassets\" & AppxPackageName & Quote
+                AppxScanner.Start()
+                Do Until AppxScanner.HasExited
+                    If AppxScanner.HasExited Then
+                        Exit Do
+                    End If
+                Loop
+                AppxScanner.StartInfo.Arguments = "e " & Quote & Directory.GetCurrentDirectory() & "\appxscan\" & PackageName & Quote & " " & Quote & "Assets\store*" & Quote & " -o" & Quote & ".\temp\storeassets\" & AppxPackageName & Quote
+                AppxScanner.Start()
+                Do Until AppxScanner.HasExited
+                    If AppxScanner.HasExited Then
+                        Exit Do
+                    End If
+                Loop
+                AppxScanner.StartInfo.Arguments = "e " & Quote & Directory.GetCurrentDirectory() & "\appxscan\" & PackageName & Quote & " " & Quote & "Assets\large*" & Quote & " -o" & Quote & ".\temp\storeassets\" & AppxPackageName & Quote
+                AppxScanner.Start()
+                Do Until AppxScanner.HasExited
+                    If AppxScanner.HasExited Then
+                        Exit Do
+                    End If
+                Loop
+            End If
+        End If
     End Sub
 
     Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click

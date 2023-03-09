@@ -948,6 +948,9 @@ IF %25ISPREVIEW%25=="Yes" (
     <PreBuildEvent>ECHO Deleting bin folder...
 IF EXIST bin (
 	rd bin /s /q
+)
+IF EXIST temp (
+	rd temp /s /q
 )</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
