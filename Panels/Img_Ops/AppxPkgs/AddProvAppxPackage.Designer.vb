@@ -199,8 +199,7 @@ Partial Class AddProvAppxPackage
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(495, 30)
         Me.Label6.TabIndex = 0
-        Me.Label6.Text = "Select an entry in the list view to show the details of an app" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(currently not av" & _
-    "ailable)"
+        Me.Label6.Text = "Select an entry in the list view to show the details of an app"
         Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'AppxFilePanel
@@ -221,36 +220,37 @@ Partial Class AddProvAppxPackage
         Me.PictureBox2.Location = New System.Drawing.Point(422, 4)
         Me.PictureBox2.Name = "PictureBox2"
         Me.PictureBox2.Size = New System.Drawing.Size(76, 76)
+        Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.PictureBox2.TabIndex = 1
         Me.PictureBox2.TabStop = False
         '
         'Label9
         '
-        Me.Label9.AutoSize = True
+        Me.Label9.AutoEllipsis = True
         Me.Label9.Font = New System.Drawing.Font("Tahoma", 8.25!)
         Me.Label9.Location = New System.Drawing.Point(8, 44)
         Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(67, 13)
+        Me.Label9.Size = New System.Drawing.Size(408, 13)
         Me.Label9.TabIndex = 0
         Me.Label9.Text = "AppxVersion"
         '
         'Label8
         '
-        Me.Label8.AutoSize = True
+        Me.Label8.AutoEllipsis = True
         Me.Label8.Font = New System.Drawing.Font("Tahoma", 8.25!)
         Me.Label8.Location = New System.Drawing.Point(8, 30)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(75, 13)
+        Me.Label8.Size = New System.Drawing.Size(408, 13)
         Me.Label8.TabIndex = 0
         Me.Label8.Text = "AppxPublisher"
         '
         'Label7
         '
-        Me.Label7.AutoSize = True
+        Me.Label7.AutoEllipsis = True
         Me.Label7.Font = New System.Drawing.Font("Tahoma", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label7.Location = New System.Drawing.Point(8, 8)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(89, 19)
+        Me.Label7.Size = New System.Drawing.Size(408, 19)
         Me.Label7.TabIndex = 0
         Me.Label7.Text = "AppxTitle"
         '
@@ -691,7 +691,6 @@ Partial Class AddProvAppxPackage
         Me.AppxDetailsPanel.ResumeLayout(False)
         Me.NoAppxFilePanel.ResumeLayout(False)
         Me.AppxFilePanel.ResumeLayout(False)
-        Me.AppxFilePanel.PerformLayout()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.GroupBox2.ResumeLayout(False)

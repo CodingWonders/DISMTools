@@ -816,31 +816,33 @@ Public Class AddProvAppxPackage
                     Exit Do
                 End If
             Loop
-            If Not Directory.Exists(Directory.GetCurrentDirectory() & "\temp\storeassets") Then Directory.CreateDirectory(Directory.GetCurrentDirectory() & "\temp\storeassets")
+            If Not Directory.Exists(Directory.GetCurrentDirectory() & "\temp\storeassets") Then Directory.CreateDirectory(Directory.GetCurrentDirectory() & "\temp\storeassets").Attributes = FileAttributes.Hidden
             If AppxScanner.ExitCode = 0 Then
                 Directory.CreateDirectory(Directory.GetCurrentDirectory() & "\temp\storeassets\" & AppxPackageName)
-                ' Try extracting small, store and large assets
-                AppxScanner.StartInfo.Arguments = "e " & Quote & Directory.GetCurrentDirectory() & "\appxscan\" & PackageName & Quote & " " & Quote & "Assets\small*" & Quote & " -o" & Quote & ".\temp\storeassets\" & AppxPackageName & Quote
-                AppxScanner.Start()
-                Do Until AppxScanner.HasExited
-                    If AppxScanner.HasExited Then
-                        Exit Do
-                    End If
-                Loop
-                AppxScanner.StartInfo.Arguments = "e " & Quote & Directory.GetCurrentDirectory() & "\appxscan\" & PackageName & Quote & " " & Quote & "Assets\store*" & Quote & " -o" & Quote & ".\temp\storeassets\" & AppxPackageName & Quote
-                AppxScanner.Start()
-                Do Until AppxScanner.HasExited
-                    If AppxScanner.HasExited Then
-                        Exit Do
-                    End If
-                Loop
-                AppxScanner.StartInfo.Arguments = "e " & Quote & Directory.GetCurrentDirectory() & "\appxscan\" & PackageName & Quote & " " & Quote & "Assets\large*" & Quote & " -o" & Quote & ".\temp\storeassets\" & AppxPackageName & Quote
-                AppxScanner.Start()
-                Do Until AppxScanner.HasExited
-                    If AppxScanner.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                If My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & AppxPackageName).Count <= 0 Then
+                    ' Try extracting small, store and large assets
+                    AppxScanner.StartInfo.Arguments = "e " & Quote & Directory.GetCurrentDirectory() & "\appxscan\" & PackageName & Quote & " " & Quote & "Assets\small*" & Quote & " -o" & Quote & ".\temp\storeassets\" & AppxPackageName & Quote
+                    AppxScanner.Start()
+                    Do Until AppxScanner.HasExited
+                        If AppxScanner.HasExited Then
+                            Exit Do
+                        End If
+                    Loop
+                    AppxScanner.StartInfo.Arguments = "e " & Quote & Directory.GetCurrentDirectory() & "\appxscan\" & PackageName & Quote & " " & Quote & "Assets\store*" & Quote & " -o" & Quote & ".\temp\storeassets\" & AppxPackageName & Quote
+                    AppxScanner.Start()
+                    Do Until AppxScanner.HasExited
+                        If AppxScanner.HasExited Then
+                            Exit Do
+                        End If
+                    Loop
+                    AppxScanner.StartInfo.Arguments = "e " & Quote & Directory.GetCurrentDirectory() & "\appxscan\" & PackageName & Quote & " " & Quote & "Assets\large*" & Quote & " -o" & Quote & ".\temp\storeassets\" & AppxPackageName & Quote
+                    AppxScanner.Start()
+                    Do Until AppxScanner.HasExited
+                        If AppxScanner.HasExited Then
+                            Exit Do
+                        End If
+                    Loop
+                End If
             End If
         End If
     End Sub
@@ -892,6 +894,26 @@ Public Class AddProvAppxPackage
             Button9.Enabled = False
         Else
             Button9.Enabled = True
+        End If
+        NoAppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, True, False)
+        AppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, False, True)
+        If ListView1.SelectedItems.Count > 0 Then
+            Label7.Text = ListView1.FocusedItem.SubItems(2).Text
+            Label8.Text = "Publisher: " & ListView1.FocusedItem.SubItems(3).Text
+            Label9.Text = "Version: " & ListView1.FocusedItem.SubItems(4).Text
+        End If
+        If Directory.Exists(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text) And My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count > 0 Then
+            Dim asset As Image = Nothing
+            For Each StoreAsset In My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text)
+                If Path.GetExtension(StoreAsset).EndsWith("png") Then
+                    asset = Image.FromFile(StoreAsset)
+                    If asset.Width / asset.Height = 1 Then      ' Determine if the image's aspect ratio is 1:1
+                        If asset.Width <= 100 And asset.Height <= 100 Then      ' Determine if it is a "small" or "store" asset
+                            PictureBox2.Image = asset
+                        End If
+                    End If
+                End If
+            Next
         End If
     End Sub
 
