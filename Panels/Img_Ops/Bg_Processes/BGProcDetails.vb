@@ -112,6 +112,23 @@
                     Location = New Point(MainForm.Left, MainForm.Top + MainForm.StatusStrip.Top - MainForm.StatusStrip.Height)
                 End If
             End If
+            If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
+                BackColor = Color.FromArgb(37, 37, 38)
+                ForeColor = Color.White
+                If MainForm.pinState = 0 Then
+                    PictureBox1.Image = My.Resources.dlg_unpin_dark
+                ElseIf MainForm.pinState = 1 Then
+                    PictureBox1.Image = My.Resources.dlg_pin_dark
+                End If
+            ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
+                BackColor = Color.White
+                ForeColor = Color.Black
+                If MainForm.pinState = 0 Then
+                    PictureBox1.Image = My.Resources.dlg_unpin
+                ElseIf MainForm.pinState = 1 Then
+                    PictureBox1.Image = My.Resources.dlg_pin
+                End If
+            End If
         End If
     End Sub
 End Class
