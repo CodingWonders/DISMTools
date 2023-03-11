@@ -890,31 +890,43 @@ Public Class AddProvAppxPackage
     End Sub
 
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
-        If ListView1.FocusedItem.Text = "" Then
-            Button9.Enabled = False
-        Else
+        Try
+            If ListView1.SelectedItems.Count <> 1 Then
+                Button9.Enabled = False
+            Else
+                Button9.Enabled = True
+            End If
+        Catch ex As NullReferenceException
             Button9.Enabled = True
-        End If
+        End Try
         NoAppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, True, False)
         AppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, False, True)
         If ListView1.SelectedItems.Count > 0 Then
-            Label7.Text = ListView1.FocusedItem.SubItems(2).Text
-            Label8.Text = "Publisher: " & ListView1.FocusedItem.SubItems(3).Text
-            Label9.Text = "Version: " & ListView1.FocusedItem.SubItems(4).Text
+            Try
+                Label7.Text = ListView1.FocusedItem.SubItems(2).Text
+                Label8.Text = "Publisher: " & ListView1.FocusedItem.SubItems(3).Text
+                Label9.Text = "Version: " & ListView1.FocusedItem.SubItems(4).Text
+            Catch ex As NullReferenceException
+
+            End Try
         End If
-        If Directory.Exists(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text) And My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count > 0 Then
-            Dim asset As Image = Nothing
-            For Each StoreAsset In My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text)
-                If Path.GetExtension(StoreAsset).EndsWith("png") Then
-                    asset = Image.FromFile(StoreAsset)
-                    If asset.Width / asset.Height = 1 Then      ' Determine if the image's aspect ratio is 1:1
-                        If asset.Width <= 100 And asset.Height <= 100 Then      ' Determine if it is a "small" or "store" asset
-                            PictureBox2.Image = asset
+        Try
+            If Directory.Exists(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text) And My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count > 0 Then
+                Dim asset As Image = Nothing
+                For Each StoreAsset In My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text)
+                    If Path.GetExtension(StoreAsset).EndsWith("png") Then
+                        asset = Image.FromFile(StoreAsset)
+                        If asset.Width / asset.Height = 1 Then      ' Determine if the image's aspect ratio is 1:1
+                            If asset.Width <= 100 And asset.Height <= 100 Then      ' Determine if it is a "small" or "store" asset
+                                PictureBox2.Image = asset
+                            End If
                         End If
                     End If
-                End If
-            Next
-        End If
+                Next
+            End If
+        Catch ex As NullReferenceException
+
+        End Try
     End Sub
 
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged
