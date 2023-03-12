@@ -158,6 +158,8 @@ Public Class AddProvAppxPackage
         ListView1.Items.Clear()
         Button3.Enabled = False
         Button9.Enabled = False
+        NoAppxFilePanel.Visible = True
+        AppxFilePanel.Visible = False
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
