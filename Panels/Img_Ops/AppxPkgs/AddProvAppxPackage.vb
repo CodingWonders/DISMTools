@@ -20,6 +20,9 @@ Public Class AddProvAppxPackage
     Public AppxAdditionCount As Integer
     Public AppxDependencyCount As Integer
 
+    Dim LogoAssetPopupForm As New Form()
+    Dim LogoAssetPreview As New PictureBox()
+
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         AppxAdditionCount = ListView1.Items.Count
         AppxDependencyCount = ListBox1.Items.Count
@@ -937,5 +940,55 @@ Public Class AddProvAppxPackage
         Else
             Button5.Enabled = True
         End If
+    End Sub
+
+    Private Sub PictureBox2_Click(sender As Object, e As EventArgs) Handles PictureBox2.Click
+        With LogoAssetPopupForm
+            .BackColor = BackColor
+            .ForeColor = ForeColor
+            .ShowIcon = False
+            .ShowInTaskbar = False
+            .ControlBox = False
+            .FormBorderStyle = Windows.Forms.FormBorderStyle.None
+            .Size = New Size(152, 152)
+            Dim ctrlLoc As Point = PictureBox2.PointToScreen(Point.Empty)
+            .StartPosition = FormStartPosition.Manual
+            .Location = ctrlLoc
+            .Text = "Preview"
+            With LogoAssetPreview
+                .Parent = LogoAssetPopupForm
+                .Dock = DockStyle.Fill
+                .SizeMode = PictureBoxSizeMode.Zoom
+                Try
+                    If Directory.Exists(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text) And My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count > 0 Then
+                        Dim asset As Image = Nothing
+                        For Each StoreAsset In My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text)
+                            If Path.GetExtension(StoreAsset).EndsWith("png") Then
+                                asset = Image.FromFile(StoreAsset)
+                                If asset.Width / asset.Height = 1 Then      ' Determine if the image's aspect ratio is 1:1
+                                    If asset.Width > 100 And asset.Width <= 200 And asset.Height > 100 And asset.Height <= 200 Then      ' Determine if it is a "large" asset
+                                        .Image = asset
+                                        Exit For
+                                    Else
+                                        .SizeMode = PictureBoxSizeMode.CenterImage
+                                        .Image = PictureBox2.Image
+                                    End If
+                                End If
+                            End If
+                        Next
+                    End If
+                Catch ex As Exception
+
+                End Try
+                '.Image = My.Resources.add_appxpkg
+            End With
+            .Controls.Add(LogoAssetPreview)
+            AddHandler LogoAssetPreview.Click, AddressOf HidePopupForm
+            .Show()
+        End With
+    End Sub
+
+    Sub HidePopupForm()
+        LogoAssetPopupForm.Hide()
     End Sub
 End Class
