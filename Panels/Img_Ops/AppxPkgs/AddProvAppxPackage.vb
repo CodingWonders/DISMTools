@@ -22,6 +22,7 @@ Public Class AddProvAppxPackage
 
     Dim LogoAssetPopupForm As New Form()
     Dim LogoAssetPreview As New PictureBox()
+    Dim previewer As New ToolTip()
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         AppxAdditionCount = ListView1.Items.Count
@@ -980,7 +981,6 @@ Public Class AddProvAppxPackage
                 Catch ex As Exception
 
                 End Try
-                '.Image = My.Resources.add_appxpkg
             End With
             .Controls.Add(LogoAssetPreview)
             AddHandler LogoAssetPreview.Click, AddressOf HidePopupForm
@@ -990,5 +990,26 @@ Public Class AddProvAppxPackage
 
     Sub HidePopupForm()
         LogoAssetPopupForm.Hide()
+    End Sub
+
+    Private Sub PictureBox2_MouseHover(sender As Object, e As EventArgs) Handles PictureBox2.MouseHover
+        previewer.SetToolTip(sender, "Click here to enlarge the view")
+    End Sub
+
+    Private Sub ListView1_DragEnter(sender As Object, e As DragEventArgs) Handles ListView1.DragEnter
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            e.Effect = DragDropEffects.Copy
+        End If
+    End Sub
+
+    Private Sub ListView1_DragDrop(sender As Object, e As DragEventArgs) Handles ListView1.DragDrop
+        Dim PackageFiles() As String = e.Data.GetData(DataFormats.FileDrop)
+        For Each PackageFile In PackageFiles
+            If Path.GetExtension(PackageFile).StartsWith(".appx") Or Path.GetExtension(PackageFile).StartsWith(".msix") Then
+                ScanAppxPackage(False, PackageFile)
+            Else
+                MsgBox("The file that has been dropped here isn't an application package.", vbOKOnly + vbCritical, "Add provisioned AppX packages")
+            End If
+        Next
     End Sub
 End Class
