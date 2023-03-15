@@ -407,7 +407,7 @@ Public Class ProjProperties
                         FeatUpd = "21H2 (Iron)"
                     Case 21242 To 22000     ' Also includes Windows 11 Cobalt (21H2)
                         FeatUpd = "21H2 (Cobalt)"
-                    Case 22350 To 22623
+                    Case 22350 To 25000     ' 25000 is a relative number. This is because of the structural changes in Windows Insider channels, where 23xxx builds are the new Dev builds, and the Zinc development builds since 25314 are the new Canary builds
                         FeatUpd = "22H2 (Nickel)"
                     Case 25057 To 25238
                         FeatUpd = "22H2 (Copper)"
@@ -418,62 +418,6 @@ Public Class ProjProperties
                 Exit Sub
         End Select
         imgVersion.Text &= CrLf & "(feature update: " & FeatUpd & ")"
-        'Try
-        '    Dim KeVerInfo As FileVersionInfo = FileVersionInfo.GetVersionInfo(KeExe)
-        '    Dim FeatUpd As String = ""
-        '    Select Case KeVerInfo.ProductMajorPart
-        '        Case 10
-        '            Select Case KeVerInfo.ProductBuildPart
-        '                Case 9650 To 10240
-        '                    FeatUpd = "1507 (Threshold 1)"
-        '                Case 10525 To 10587     ' 10587 is a Post-RTM build of Windows 10 November Update
-        '                    FeatUpd = "1511 (Threshold 2)"
-        '                Case 11065 To 14393
-        '                    FeatUpd = "1607 (Redstone 1)"
-        '                Case 14832 To 15063
-        '                    FeatUpd = "1703 (Redstone 2)"
-        '                Case 15140 To 16299
-        '                    FeatUpd = "1709 (Redstone 3)"
-        '                Case 16251 To 17134
-        '                    FeatUpd = "1803 (Redstone 4)"
-        '                Case 17604 To 17763
-        '                    FeatUpd = "1809 (Redstone 5)"
-        '                Case 18204 To 18362
-        '                    FeatUpd = "1903 (Titanium)"
-        '                Case Is = 18362
-        '                    If KeVerInfo.ProductPrivatePart >= 10000 Then
-        '                        FeatUpd = "1909 (Vanadium)"
-        '                    Else
-        '                        FeatUpd = "1903 (Titanium)"
-        '                    End If
-        '                Case Is = 18363
-        '                    FeatUpd = "1909 (Vanadium)"
-        '                Case 18826 To 19041
-        '                    FeatUpd = "2004 (Vibranium"
-        '                Case 19041 To 19489
-        '                    FeatUpd = "2004+ (Vibranium)"
-        '                Case 19489 To 19645
-        '                    FeatUpd = "2004 (Manganese)"
-        '                Case 20124 To 20279
-        '                    FeatUpd = "21H1 (Iron)"
-        '                Case 20282 To 20348
-        '                    FeatUpd = "21H2 (Iron)"
-        '                Case 21242 To 22000     ' Also includes Windows 11 Cobalt (21H2)
-        '                    FeatUpd = "21H2 (Cobalt)"
-        '                Case 22350 To 22623
-        '                    FeatUpd = "22H2 (Nickel)"
-        '                Case 25057 To 25238
-        '                    FeatUpd = "22H2 (Copper)"
-        '                Case 25240 To 26000     ' 26000 is a relative number. We still don't know Zinc's final build
-        '                    FeatUpd = "23H2 (Zinc)"
-        '            End Select
-        '        Case Else
-        '            Exit Sub
-        '    End Select
-        '    imgVersion.Text &= CrLf & "(feature update: " & FeatUpd & ")"
-        'Catch ex As Exception
-        '    Exit Sub
-        'End Try
     End Sub
 
     Private Sub ProjProperties_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
