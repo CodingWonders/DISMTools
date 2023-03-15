@@ -85,7 +85,7 @@ Public Class RemPackage
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Win10Title.BackColor = Color.White
             BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.White
+            ForeColor = Color.Black
             GroupBox1.ForeColor = Color.Black
             TextBox1.BackColor = Color.FromArgb(238, 238, 242)
             CheckedListBox1.BackColor = Color.FromArgb(238, 238, 242)
