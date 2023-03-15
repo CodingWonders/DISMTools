@@ -787,7 +787,7 @@ Public Class AddProvAppxPackage
                         AppxVersion = AppxVersionList.ToArray()
                     End If
                 End If
-                GetApplicationStoreLogoAssets(pkgName, If(Path.GetExtension(AppxFileOFD.FileName).EndsWith("bundle"), True, False), Package, currentAppxName)
+                GetApplicationStoreLogoAssets(pkgName, If(Path.GetExtension(Package).EndsWith("bundle"), True, False), Package, currentAppxName)
             Else
 
             End If
@@ -1005,7 +1005,8 @@ Public Class AddProvAppxPackage
     Private Sub ListView1_DragDrop(sender As Object, e As DragEventArgs) Handles ListView1.DragDrop
         Dim PackageFiles() As String = e.Data.GetData(DataFormats.FileDrop)
         For Each PackageFile In PackageFiles
-            If Path.GetExtension(PackageFile).StartsWith(".appx") Or Path.GetExtension(PackageFile).StartsWith(".msix") Then
+            If Path.GetExtension(PackageFile).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".msix", StringComparison.OrdinalIgnoreCase) Or _
+                Path.GetExtension(PackageFile).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".msixbundle", StringComparison.OrdinalIgnoreCase) Then
                 ScanAppxPackage(False, PackageFile)
             Else
                 MsgBox("The file that has been dropped here isn't an application package.", vbOKOnly + vbCritical, "Add provisioned AppX packages")
