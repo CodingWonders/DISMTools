@@ -850,6 +850,33 @@ Public Class AddProvAppxPackage
                     Loop
                 End If
             End If
+        Else
+            If Not Directory.Exists(Directory.GetCurrentDirectory() & "\temp\storeassets") Then Directory.CreateDirectory(Directory.GetCurrentDirectory() & "\temp\storeassets").Attributes = FileAttributes.Hidden
+            Directory.CreateDirectory(Directory.GetCurrentDirectory() & "\temp\storeassets\" & AppxPackageName)
+            If My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & AppxPackageName).Count <= 0 Then
+                ' Try extracting small, store and large assets
+                AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & "Assets\small*" & Quote & " -o" & Quote & ".\temp\storeassets\" & AppxPackageName & Quote
+                AppxScanner.Start()
+                Do Until AppxScanner.HasExited
+                    If AppxScanner.HasExited Then
+                        Exit Do
+                    End If
+                Loop
+                AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & "Assets\store*" & Quote & " -o" & Quote & ".\temp\storeassets\" & AppxPackageName & Quote
+                AppxScanner.Start()
+                Do Until AppxScanner.HasExited
+                    If AppxScanner.HasExited Then
+                        Exit Do
+                    End If
+                Loop
+                AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & "Assets\large*" & Quote & " -o" & Quote & ".\temp\storeassets\" & AppxPackageName & Quote
+                AppxScanner.Start()
+                Do Until AppxScanner.HasExited
+                    If AppxScanner.HasExited Then
+                        Exit Do
+                    End If
+                Loop
+            End If
         End If
     End Sub
 
@@ -918,6 +945,7 @@ Public Class AddProvAppxPackage
         End If
         Try
             If Directory.Exists(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text) And My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count > 0 Then
+                PictureBox2.SizeMode = PictureBoxSizeMode.Zoom
                 Dim asset As Image = Nothing
                 For Each StoreAsset In My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text)
                     If Path.GetExtension(StoreAsset).EndsWith("png") Then
@@ -929,6 +957,9 @@ Public Class AddProvAppxPackage
                         End If
                     End If
                 Next
+            Else
+                PictureBox2.SizeMode = PictureBoxSizeMode.CenterImage
+                PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.preview_unavail_dark, My.Resources.preview_unavail_light)
             End If
         Catch ex As NullReferenceException
 
@@ -944,6 +975,7 @@ Public Class AddProvAppxPackage
     End Sub
 
     Private Sub PictureBox2_Click(sender As Object, e As EventArgs) Handles PictureBox2.Click
+        If My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0 Then Exit Sub
         With LogoAssetPopupForm
             .BackColor = BackColor
             .ForeColor = ForeColor
@@ -993,7 +1025,7 @@ Public Class AddProvAppxPackage
     End Sub
 
     Private Sub PictureBox2_MouseHover(sender As Object, e As EventArgs) Handles PictureBox2.MouseHover
-        previewer.SetToolTip(sender, "Click here to enlarge the view")
+        previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "The logo assets for this file could not be detected", "Click here to enlarge the view"))
     End Sub
 
     Private Sub ListView1_DragEnter(sender As Object, e As DragEventArgs) Handles ListView1.DragEnter
