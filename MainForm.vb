@@ -1814,7 +1814,7 @@ Public Class MainForm
     ''' <remarks>This is only for Windows 8 and newer</remarks>
     Sub GetImageAppxPackages(Optional UseApi As Boolean = False, Optional session As DismSession = Nothing)
         If UseApi Then
-            If session IsNot Nothing Then
+            If session IsNot Nothing And Environment.OSVersion.Version.Major > 6 Then
                 Dim imgAppxDisplayNameList As New List(Of String)
                 Dim imgAppxPackageNameList As New List(Of String)
                 Dim imgAppxVersionList As New List(Of String)
@@ -1849,10 +1849,14 @@ Public Class MainForm
                 imgAppxPackageNames = imgAppxPackageNameList.ToArray()
                 imgAppxResourceIds = imgAppxResourceIdList.ToArray()
                 imgAppxVersions = imgAppxVersionList.ToArray()
+                Exit Sub
             Else
-                Throw New Exception("No valid DISM session has been provided")
+                Try
+                    Throw New Exception("No valid DISM session has been provided")
+                Catch ex As Exception
+                    DismApi.CloseSession(session)
+                End Try
             End If
-            Exit Sub
         End If
         Debug.WriteLine("[GetImageAppxPackages] Running function...")
         ' The mounted image may be Windows 8 or later, but DISM may be from Windows 7. Get this information before running this procedure
