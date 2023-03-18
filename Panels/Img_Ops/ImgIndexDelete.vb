@@ -2,6 +2,7 @@
 Imports System.IO
 Imports System.Text.Encoding
 Imports Microsoft.VisualBasic.ControlChars
+Imports Microsoft.Dism
 
 Public Class ImgIndexDelete
 
@@ -107,93 +108,24 @@ Public Class ImgIndexDelete
         ListView1.Items.Clear()
         ListView2.Items.Clear()
         Label4.Visible = True
-        Dim IndexGetter As New Process
-        IndexGetter.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
-        IndexGetter.StartInfo.CreateNoWindow = True
-        IndexGetter.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-        Directory.CreateDirectory(".\tempinfo")
-        ' First, detect if the image has more than 1 index
+        Dim infoCollection As DismImageInfoCollection = Nothing
         Try
-            File.WriteAllText(".\bin\exthelpers\indexnumbers.bat", _
-                              "@echo off" & CrLf & _
-                              "dism /english /get-imageinfo /imagefile=" & SourceImage & " | find /c " & Quote & "Index : " & Quote & " > .\tempinfo\indexcount")
-        Catch ex As Exception
-            MsgBox("Could not get image indexes. Reason: " & ex.Message, vbOKOnly + vbCritical, "Remove a volume image")
+            infoCollection = DismApi.GetImageInfo(SourceImage)
+        Catch ex As DismNotInitializedException
+            DismApi.Initialize(DismLogLevel.LogErrors)
+            infoCollection = DismApi.GetImageInfo(SourceImage)
+        End Try
+        If infoCollection.Count <= 1 Then
+            MsgBox("This image only contains 1 index. You can't remove volume images from this file", vbOKOnly + vbExclamation, "Remove a volume image")
             Label4.Visible = False
             Exit Sub
-        End Try
-        IndexGetter.StartInfo.Arguments = "/c " & Directory.GetCurrentDirectory() & "\bin\exthelpers\indexnumbers.bat"
-        IndexGetter.Start()
-        Do Until IndexGetter.HasExited
-            If IndexGetter.HasExited Then
-                Exit Do
-            End If
-        Loop
-        If IndexGetter.ExitCode = 0 Then
-            Dim IndexCount As Integer = CInt(My.Computer.FileSystem.ReadAllText(".\tempinfo\indexcount"))
-            File.Delete(".\bin\exthelpers\indexnumbers.bat")
-            File.Delete(".\tempinfo\indexcount")
-            If IndexCount = 1 Then
-                MsgBox("This image only contains 1 index. You can't remove volume images from this file", vbOKOnly + vbExclamation, "Remove a volume image")
-                Label4.Visible = False
-                Exit Sub
-            End If
-        End If
-        Try
-            File.WriteAllText(".\bin\exthelpers\indexes.bat", _
-                              "@echo off" & CrLf & _
-                              "dism /english /get-imageinfo /imagefile=" & SourceImage & " | findstr /c:" & Quote & "Index : " & Quote & " > .\tempinfo\indexnums" & CrLf & _
-                              "dism /english /get-imageinfo /imagefile=" & SourceImage & " | findstr /c:" & Quote & "Name : " & Quote & " > .\tempinfo\indexnames", _
-                              ASCII)
-        Catch ex As Exception
-            MsgBox("Could not get image indexes. Reason: " & ex.Message, vbOKOnly + vbCritical, "Remove a volume image")
-            Label4.Visible = False
-            Exit Sub
-        End Try
-        IndexGetter.StartInfo.Arguments = "/c " & Directory.GetCurrentDirectory() & "\bin\exthelpers\indexes.bat"
-        IndexGetter.Start()
-        Do Until IndexGetter.HasExited
-            If IndexGetter.HasExited Then
-                Exit Do
-            End If
-        Loop
-        Dim FileGetterRTB As New RichTextBox()
-        Dim TypeLookups() As String = New String(1) {"Index : ", "Name : "}
-        Dim lineToAppend As String = ""
-        If IndexGetter.ExitCode = 0 Then
-            For Each indexFile In My.Computer.FileSystem.GetFiles(".\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
-                FileGetterRTB.Clear()
-                If Path.GetFileName(indexFile).StartsWith("index") Then
-                    FileGetterRTB.Text = My.Computer.FileSystem.ReadAllText(indexFile)
-                    For x = 0 To FileGetterRTB.Lines.Count - 1
-                        If FileGetterRTB.Lines(x) = "" Then
-                            Continue For
-                        Else
-                            If FileGetterRTB.Lines(x).StartsWith(TypeLookups(0)) Then
-                                lineToAppend = FileGetterRTB.Lines(x).Replace(TypeLookups(0), "").Trim()
-                                IndexPositions(x) = CInt(lineToAppend)
-                            ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(1)) Then
-                                lineToAppend = FileGetterRTB.Lines(x).Replace(TypeLookups(1), "").Trim()
-                                IndexNames(x) = lineToAppend
-                            End If
-                        End If
-                    Next
-                End If
+        Else
+            For Each indexInfo As DismImageInfo In infoCollection
+                ListView1.Items.Add(New ListViewItem(New String() {indexInfo.ImageIndex, indexInfo.ImageName}))
+                ListView2.Items.Add(New ListViewItem(New String() {indexInfo.ImageIndex, indexInfo.ImageName}))
             Next
         End If
-        ' IndexPositions and IndexNames go hand in hand
-        Try
-            For x = 0 To Array.LastIndexOf(IndexPositions, IndexPositions.Last)
-                If IndexPositions(x) = "" Or IndexPositions(x) = Nothing Then
-                    Exit For
-                Else
-                    ListView1.Items.Add(New ListViewItem(New String() {IndexPositions(x), IndexNames(x)}))
-                    ListView2.Items.Add(New ListViewItem(New String() {IndexPositions(x), IndexNames(x)}))
-                End If
-            Next
-        Catch ex As Exception
-            Exit Sub
-        End Try
+        DismApi.Shutdown()
         Label4.Visible = False
         AddHandler ListView1.ItemChecked, AddressOf ListView1_ItemChecked
     End Sub
