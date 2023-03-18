@@ -126,7 +126,7 @@
   <data name="LogPreview.Text" xml:space="preserve">
     <value>Adding packages to the mounted image...
 - Package source: C:\w100-glb
-- Addition operation: recursive
+- Addition operation: selective
 - Ignore applicability checks? No
 - Prevent package addition if online actions need to be performed? No
 - Commit image after operations are done? Yes
