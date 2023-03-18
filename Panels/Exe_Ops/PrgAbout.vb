@@ -12,11 +12,6 @@ Public Class PrgAbout
     Private Sub PrgAbout_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         RichTextBox1.Text = My.Resources.LicenseOverview
         RichTextBox2.Text = My.Resources.WhatsNew
-        'If MainForm.dtBranch.Contains("preview") Then
-        '    PreviewPanel.Visible = True
-        'Else
-        '    PreviewPanel.Visible = False
-        'End If
         Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString()
         Label15.Text = "Built on " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " by msbuild"
         ForeColor = Color.White
@@ -38,23 +33,6 @@ Public Class PrgAbout
         CreditsPanel.ForeColor = Color.White
         RichTextBox1.ForeColor = ForeColor
         RichTextBox2.ForeColor = ForeColor
-        ApplyWndLayout()
-    End Sub
-
-    Sub ApplyWndLayout()
-        If MainForm.dtBranch.Contains("preview") Then
-            PictureBox1.Width = 454
-            Label2.Width = 454
-            PreviewPanel.Width = 468
-            ModernPanelContainer.Width = 346
-            ModernPanelContainer.Left = 486
-        Else
-            PictureBox1.Width = 377
-            Label2.Width = 377
-            PreviewPanel.Width = 388
-            ModernPanelContainer.Width = 420
-            ModernPanelContainer.Left = 412
-        End If
     End Sub
 
     Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel4.LinkClicked
