@@ -976,6 +976,7 @@ Public Class AddProvAppxPackage
 
     Private Sub PictureBox2_Click(sender As Object, e As EventArgs) Handles PictureBox2.Click
         If My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0 Then Exit Sub
+        HidePopupForm()
         With LogoAssetPopupForm
             .BackColor = BackColor
             .ForeColor = ForeColor
@@ -1017,10 +1018,11 @@ Public Class AddProvAppxPackage
             .Controls.Add(LogoAssetPreview)
             AddHandler LogoAssetPreview.Click, AddressOf HidePopupForm
             .Show()
+            .BringToFront()
         End With
     End Sub
 
-    Sub HidePopupForm()
+    Sub HidePopupForm() Handles MyBase.FormClosing, MyBase.VisibleChanged
         LogoAssetPopupForm.Hide()
     End Sub
 
