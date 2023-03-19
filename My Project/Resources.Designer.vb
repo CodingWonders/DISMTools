@@ -1427,10 +1427,12 @@ Namespace My.Resources
         
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
-        '''- Fixed an issue where the program would not get image properties if multiple images were mounted
-        '''- Fixed an issue with the background process details window where, if the main window was moved before opening it, it would open in the wrong location
-        '''- Fixed an issue where the Settings window would appear in the corner of the screen when launching image detection settings with the main window minimized
-        '''- Fixed a critical issue where the program would crash when clicking &quot;Project properties&quot; if t [resto de la cadena truncado]&quot;;.
+        '''- Fixed an issue where the mounted image detector would not start after loading the project and image properties dialog
+        '''
+        '''New features:
+        '''- The program now gets the correct feature update/development semester of Windows 11 2022 Update Moments since Moment 3 and the new Dev builds (23xxx build range)
+        '''- The store logo asset previewer now supports APPX and MSIX files. It also supports showing a larger preview, and the dialog now supports drag and drop
+        '''- The volume image removal dialog now uses the [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
