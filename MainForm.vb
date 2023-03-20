@@ -2982,7 +2982,7 @@ Public Class MainForm
                     ToolStripButton3.ToolTipText = "Unload project from this program"
                     ToolStripButton4.Text = "Show progress window"
                     RefreshViewTSB.Text = "Refresh view"
-                    ExpandCollapseTSB.Text = If(prjTreeView.SelectedNode.IsExpanded, "Collapse", "Expand")
+                    ExpandCollapseTSB.Text = "Expand"
                     ' TabPages
                     TabPage1.Text = "Project"
                     TabPage2.Text = "Image"
@@ -2993,6 +2993,39 @@ Public Class MainForm
                     Button14.Text = "View project properties"
                     Button15.Text = "View image properties"
                     Button16.Text = "Unmount image..."
+                    TabPageTitle1.Text = "Project"
+                    TabPageTitle2.Text = "Image"
+                    TabPageDescription1.Text = "View project information"
+                    TabPageDescription2.Text = "View image information"
+                    Label1.Text = "Name:"
+                    Label2.Text = "Location:"
+                    Label4.Text = "Images mounted?"
+                    LinkLabel1.Text = "Click here to mount an image"
+                    Label23.Text = "No image has been mounted"
+                    LinkLabel2.Text = "You need to mount an image in order to view its information here. Click here to mount an image."
+                    LinkLabel3.Text = "Or, if you have a mounted image, open an existing mount directory"
+                    Label15.Text = "Image index:"
+                    Label13.Text = "Mount point:"
+                    Label16.Text = "Version:"
+                    Label19.Text = "Name:"
+                    Label21.Text = "Description:"
+                    ' Actions
+                    GroupBox1.Text = "Image operations"
+                    GroupBox2.Text = "Package operations"
+                    GroupBox3.Text = "Feature operations"
+                    Button1.Text = "Mount image..."
+                    Button2.Text = "Commit current changes"
+                    Button3.Text = "Commit and unmount image"
+                    Button4.Text = "Unmount image discarding changes"
+                    Button5.Text = "Add package..."
+                    Button6.Text = "Get package information..."
+                    Button7.Text = "Remove package..."
+                    Button8.Text = "Get feature information..."
+                    Button9.Text = "Disable feature..."
+                    Button10.Text = "Enable feature..."
+                    Button11.Text = "Reload servicing session..."
+                    Button12.Text = "Perform component cleanup and/or repair..."
+                    Button13.Text = "Switch indexes..."
                 ElseIf My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "ESN" Then
                     ' Top-level menu items
                     FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -3178,6 +3211,57 @@ Public Class MainForm
                         "- ¿No entiende un término en específico? Le recomendamos comprobar el glosario. Los términos están ordenados alfabéticamente y ofrecen explicaciones lo más detalladas posible" & CrLf & _
                         "- ¿Desea saber cómo hacerlo en la línea de comandos? Le recomendamos comprobar la ayuda de comandos" & CrLf & _
                         "Estas opciones, y la información del programa, pueden ser encontradas en el menú Ayuda."
+                    ' ToolStrip buttons
+                    ToolStripButton1.Text = "Cerrar pestaña"
+                    ToolStripButton2.Text = "Guardar proyecto"
+                    ToolStripButton3.Text = "Descargar proyecto"
+                    ToolStripButton3.ToolTipText = "Descargar proyecto de este programa"
+                    ToolStripButton4.Text = "Mostrar ventana de progreso"
+                    RefreshViewTSB.Text = "Actualizar vista"
+                    ExpandCollapseTSB.Text = "Expandir"
+                    ' TabPages
+                    TabPage1.Text = "Proyecto"
+                    TabPage2.Text = "Imagen"
+                    TabPage3.Text = "Acciones"
+                    ' TabPage controls
+                    UnloadBtn.Text = "Descargar proyecto"
+                    ExplorerView.Text = "Ver en Explorador de archivos"
+                    Button14.Text = "Ver propiedades del proyecto"
+                    Button15.Text = "Ver propiedades de la imagen"
+                    Button16.Text = "Desmontar imagen..."
+                    TabPageTitle1.Text = "Proyecto"
+                    TabPageTitle2.Text = "Imagen"
+                    TabPageDescription1.Text = "Ver información del proyecto"
+                    TabPageDescription2.Text = "Ver información de la imagen"
+                    Label1.Text = "Nombre:"
+                    Label2.Text = "Ubicación:"
+                    Label4.Text = "¿Hay imágenes montadas?"
+                    LinkLabel1.Text = "Haga clic aquí para montar una imagen"
+                    Label23.Text = "No se ha montado una imagen"
+                    LinkLabel2.Text = "Necesita montar una imagen para ver su información aquí. Haga clic aquí para montar una imagen."
+                    LinkLabel3.Text = "O, si tiene una imagen montada, abra un directorio de montaje existente"
+                    Label15.Text = "Índice de imagen:"
+                    Label13.Text = "Punto de montaje:"
+                    Label16.Text = "Versión:"
+                    Label19.Text = "Nombre:"
+                    Label21.Text = "Descripción:"
+                    ' Actions
+                    GroupBox1.Text = "Operaciones de la imagen"
+                    GroupBox2.Text = "Operaciones de paquetes"
+                    GroupBox3.Text = "Operaciones de características"
+                    Button1.Text = "Montar imagen..."
+                    Button2.Text = "Guardar cambios"
+                    Button3.Text = "Guardar y desmontar imagen"
+                    Button4.Text = "Descartar y desmontar imagen"
+                    Button5.Text = "Añadir paquete..."
+                    Button6.Text = "Obtener información de paquetes..."
+                    Button7.Text = "Eliminar paquete..."
+                    Button8.Text = "Obtener información de características..."
+                    Button9.Text = "Deshabilitar característica..."
+                    Button10.Text = "Habilitar característica..."
+                    Button11.Text = "Recargar sesión de servicio..."
+                    Button12.Text = "Realizar limpieza y/o reparación de componentes..."
+                    Button13.Text = "Cambiar índices..."
                 End If
             Case 1
                 ' Top-level menu items
@@ -3364,6 +3448,57 @@ Public Class MainForm
                     "- Don't understand a specific term? We recommend checking the glossary. The terms are alphabetically sorted and provide explanations as detailed as possible" & CrLf & _
                     "- Want to know how to do it in the command line? We recommmend checking the command help" & CrLf & _
                     "These options, and the program information, can be found by opening the Help menu."
+                ' ToolStrip buttons
+                ToolStripButton1.Text = "Close tab"
+                ToolStripButton2.Text = "Save project"
+                ToolStripButton3.Text = "Unload project"
+                ToolStripButton3.ToolTipText = "Unload project from this program"
+                ToolStripButton4.Text = "Show progress window"
+                RefreshViewTSB.Text = "Refresh view"
+                ExpandCollapseTSB.Text = "Expand"
+                ' TabPages
+                TabPage1.Text = "Project"
+                TabPage2.Text = "Image"
+                TabPage3.Text = "Actions"
+                ' TabPage controls
+                UnloadBtn.Text = "Unload project"
+                ExplorerView.Text = "View in File Explorer"
+                Button14.Text = "View project properties"
+                Button15.Text = "View image properties"
+                Button16.Text = "Unmount image..."
+                TabPageTitle1.Text = "Project"
+                TabPageTitle2.Text = "Image"
+                TabPageDescription1.Text = "View project information"
+                TabPageDescription2.Text = "View image information"
+                Label1.Text = "Name:"
+                Label2.Text = "Location:"
+                Label4.Text = "Images mounted?"
+                LinkLabel1.Text = "Click here to mount an image"
+                Label23.Text = "No image has been mounted"
+                LinkLabel2.Text = "You need to mount an image in order to view its information here. Click here to mount an image."
+                LinkLabel3.Text = "Or, if you have a mounted image, open an existing mount directory"
+                Label15.Text = "Image index:"
+                Label13.Text = "Mount point:"
+                Label16.Text = "Version:"
+                Label19.Text = "Name:"
+                Label21.Text = "Description:"
+                ' Actions
+                GroupBox1.Text = "Image operations"
+                GroupBox2.Text = "Package operations"
+                GroupBox3.Text = "Feature operations"
+                Button1.Text = "Mount image..."
+                Button2.Text = "Commit current changes"
+                Button3.Text = "Commit and unmount image"
+                Button4.Text = "Unmount image discarding changes"
+                Button5.Text = "Add package..."
+                Button6.Text = "Get package information..."
+                Button7.Text = "Remove package..."
+                Button8.Text = "Get feature information..."
+                Button9.Text = "Disable feature..."
+                Button10.Text = "Enable feature..."
+                Button11.Text = "Reload servicing session..."
+                Button12.Text = "Perform component cleanup and/or repair..."
+                Button13.Text = "Switch indexes..."
                 '
             Case 2
                 ' Top-level menu items
@@ -3550,6 +3685,57 @@ Public Class MainForm
                     "- ¿No entiende un término en específico? Le recomendamos comprobar el glosario. Los términos están ordenados alfabéticamente y ofrecen explicaciones lo más detalladas posible" & CrLf & _
                     "- ¿Desea saber cómo hacerlo en la línea de comandos? Le recomendamos comprobar la ayuda de comandos" & CrLf & _
                     "Estas opciones, y la información del programa, pueden ser encontradas en el menú Ayuda."
+                ' ToolStrip buttons
+                ToolStripButton1.Text = "Cerrar pestaña"
+                ToolStripButton2.Text = "Guardar proyecto"
+                ToolStripButton3.Text = "Descargar proyecto"
+                ToolStripButton3.ToolTipText = "Descargar proyecto de este programa"
+                ToolStripButton4.Text = "Mostrar ventana de progreso"
+                RefreshViewTSB.Text = "Actualizar vista"
+                ExpandCollapseTSB.Text = "Expandir"
+                ' TabPages
+                TabPage1.Text = "Proyecto"
+                TabPage2.Text = "Imagen"
+                TabPage3.Text = "Acciones"
+                ' TabPage controls
+                UnloadBtn.Text = "Descargar proyecto"
+                ExplorerView.Text = "Ver en Explorador de archivos"
+                Button14.Text = "Ver propiedades del proyecto"
+                Button15.Text = "Ver propiedades de la imagen"
+                Button16.Text = "Desmontar imagen..."
+                TabPageTitle1.Text = "Proyecto"
+                TabPageTitle2.Text = "Imagen"
+                TabPageDescription1.Text = "Ver información del proyecto"
+                TabPageDescription2.Text = "Ver información de la imagen"
+                Label1.Text = "Nombre:"
+                Label2.Text = "Ubicación:"
+                Label4.Text = "¿Hay imágenes montadas?"
+                LinkLabel1.Text = "Haga clic aquí para montar una imagen"
+                Label23.Text = "No se ha montado una imagen"
+                LinkLabel2.Text = "Necesita montar una imagen para ver su información aquí. Haga clic aquí para montar una imagen."
+                LinkLabel3.Text = "O, si tiene una imagen montada, abra un directorio de montaje existente"
+                Label15.Text = "Índice de imagen:"
+                Label13.Text = "Punto de montaje:"
+                Label16.Text = "Versión:"
+                Label19.Text = "Nombre:"
+                Label21.Text = "Descripción:"
+                ' Actions
+                GroupBox1.Text = "Operaciones de la imagen"
+                GroupBox2.Text = "Operaciones de paquetes"
+                GroupBox3.Text = "Operaciones de características"
+                Button1.Text = "Montar imagen..."
+                Button2.Text = "Guardar cambios"
+                Button3.Text = "Guardar y desmontar imagen"
+                Button4.Text = "Descartar y desmontar imagen"
+                Button5.Text = "Añadir paquete..."
+                Button6.Text = "Obtener información de paquetes..."
+                Button7.Text = "Eliminar paquete..."
+                Button8.Text = "Obtener información de características..."
+                Button9.Text = "Deshabilitar característica..."
+                Button10.Text = "Habilitar característica..."
+                Button11.Text = "Recargar sesión de servicio..."
+                Button12.Text = "Realizar limpieza y/o reparación de componentes..."
+                Button13.Text = "Cambiar índices..."
         End Select
     End Sub
 
@@ -5430,14 +5616,38 @@ Public Class MainForm
     Private Sub prjTreeView_AfterCollapse(sender As Object, e As TreeViewEventArgs) Handles prjTreeView.AfterCollapse
         Try
             If prjTreeView.SelectedNode.IsExpanded Then
-                ExpandCollapseTSB.Text = "Collapse"
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                ExpandCollapseTSB.Text = "Collapse"
+                            Case "ESN"
+                                ExpandCollapseTSB.Text = "Contraer"
+                        End Select
+                    Case 1
+                        ExpandCollapseTSB.Text = "Collapse"
+                    Case 2
+                        ExpandCollapseTSB.Text = "Contraer"
+                End Select
                 If BackColor = Color.FromArgb(48, 48, 48) Then
                     ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph_dark)
                 ElseIf BackColor = Color.White Then
                     ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph)
                 End If
             Else
-                ExpandCollapseTSB.Text = "Expand"
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                ExpandCollapseTSB.Text = "Expand"
+                            Case "ESN"
+                                ExpandCollapseTSB.Text = "Expandir"
+                        End Select
+                    Case 1
+                        ExpandCollapseTSB.Text = "Expand"
+                    Case 2
+                        ExpandCollapseTSB.Text = "Expandir"
+                End Select
                 If BackColor = Color.FromArgb(48, 48, 48) Then
                     ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
                 ElseIf BackColor = Color.White Then
@@ -5445,7 +5655,19 @@ Public Class MainForm
                 End If
             End If
         Catch ex As Exception
-            ExpandCollapseTSB.Text = "Expand"
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            ExpandCollapseTSB.Text = "Expand"
+                        Case "ESN"
+                            ExpandCollapseTSB.Text = "Expandir"
+                    End Select
+                Case 1
+                    ExpandCollapseTSB.Text = "Expand"
+                Case 2
+                    ExpandCollapseTSB.Text = "Expandir"
+            End Select
             If BackColor = Color.FromArgb(48, 48, 48) Then
                 ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
             ElseIf BackColor = Color.White Then
@@ -5456,14 +5678,38 @@ Public Class MainForm
 
     Private Sub prjTreeView_AfterSelect(sender As Object, e As TreeViewEventArgs) Handles prjTreeView.AfterSelect
         If prjTreeView.SelectedNode.IsExpanded Then
-            ExpandCollapseTSB.Text = "Collapse"
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            ExpandCollapseTSB.Text = "Collapse"
+                        Case "ESN"
+                            ExpandCollapseTSB.Text = "Contraer"
+                    End Select
+                Case 1
+                    ExpandCollapseTSB.Text = "Collapse"
+                Case 2
+                    ExpandCollapseTSB.Text = "Contraer"
+            End Select
             If BackColor = Color.FromArgb(48, 48, 48) Then
                 ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph_dark)
             ElseIf BackColor = Color.White Then
                 ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph)
             End If
         Else
-            ExpandCollapseTSB.Text = "Expand"
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            ExpandCollapseTSB.Text = "Expand"
+                        Case "ESN"
+                            ExpandCollapseTSB.Text = "Expandir"
+                    End Select
+                Case 1
+                    ExpandCollapseTSB.Text = "Expand"
+                Case 2
+                    ExpandCollapseTSB.Text = "Expandir"
+            End Select
             If BackColor = Color.FromArgb(48, 48, 48) Then
                 ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
             ElseIf BackColor = Color.White Then
@@ -5478,13 +5724,13 @@ Public Class MainForm
     End Sub
 
     Private Sub ExpandCollapseTSB_Click(sender As Object, e As EventArgs) Handles ExpandCollapseTSB.Click
-        If ExpandCollapseTSB.Text = "Expand" Then
+        If ExpandCollapseTSB.Text = "Expand" Or ExpandCollapseTSB.Text = "Expandir" Then
             Try
                 prjTreeView.SelectedNode.Expand()
             Catch ex As Exception
 
             End Try
-        ElseIf ExpandCollapseTSB.Text = "Collapse" Then
+        ElseIf ExpandCollapseTSB.Text = "Collapse" Or ExpandCollapseTSB.Text = "Contraer" Then
             Try
                 prjTreeView.SelectedNode.Collapse()
             Catch ex As Exception
@@ -5774,10 +6020,24 @@ Public Class MainForm
     End Sub
 
     Private Sub Button13_Click(sender As Object, e As EventArgs) Handles Button13.Click
+        MountedImageDetectorBW.CancelAsync()
         ProgressPanel.OperationNum = 995
         PleaseWaitDialog.indexesSourceImg = SourceImg
-        PleaseWaitDialog.Label2.Text = "Getting image indexes..."
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting image indexes..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting image indexes..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
+        End Select
         PleaseWaitDialog.ShowDialog(Me)
+        Call MountedImageDetectorBW.RunWorkerAsync()
         If PleaseWaitDialog.imgIndexes > 1 Then
             ImgIndexSwitch.ShowDialog()
         End If
