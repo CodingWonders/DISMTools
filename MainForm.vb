@@ -2254,12 +2254,19 @@ Public Class MainForm
 #End Region
 
     Sub GenerateDTSettings()
-        DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.2.1) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.2.2) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & "\Windows\system32\dism.exe" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "Volatile=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Personalization]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("ColorMode=1")
+        Try
+            Dim ColorModeRk As RegistryKey = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", False)
+            Dim ColorMode As String = ColorModeRk.GetValue("AppsUseLightTheme").ToString()
+            DTSettingForm.RichTextBox2.AppendText("ColorMode=0")
+        Catch ex As Exception
+            ' Rollback to light theme
+            DTSettingForm.RichTextBox2.AppendText("ColorMode=1")
+        End Try
         DTSettingForm.RichTextBox2.AppendText(CrLf & "Language=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFont=" & Quote & "Courier New" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontSi=10")
@@ -2968,6 +2975,24 @@ Public Class MainForm
                         "- Don't understand a specific term? We recommend checking the glossary. The terms are alphabetically sorted and provide explanations as detailed as possible" & CrLf & _
                         "- Want to know how to do it in the command line? We recommmend checking the command help" & CrLf & _
                         "These options, and the program information, can be found by opening the Help menu."
+                    ' ToolStrip buttons
+                    ToolStripButton1.Text = "Close tab"
+                    ToolStripButton2.Text = "Save project"
+                    ToolStripButton3.Text = "Unload project"
+                    ToolStripButton3.ToolTipText = "Unload project from this program"
+                    ToolStripButton4.Text = "Show progress window"
+                    RefreshViewTSB.Text = "Refresh view"
+                    ExpandCollapseTSB.Text = If(prjTreeView.SelectedNode.IsExpanded, "Collapse", "Expand")
+                    ' TabPages
+                    TabPage1.Text = "Project"
+                    TabPage2.Text = "Image"
+                    TabPage3.Text = "Actions"
+                    ' TabPage controls
+                    UnloadBtn.Text = "Unload project"
+                    ExplorerView.Text = "View in File Explorer"
+                    Button14.Text = "View project properties"
+                    Button15.Text = "View image properties"
+                    Button16.Text = "Unmount image..."
                 ElseIf My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "ESN" Then
                     ' Top-level menu items
                     FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
