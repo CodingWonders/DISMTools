@@ -94,6 +94,12 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\Actions.MainForm.Designer.vb">
+      <DependentUpon>Actions.MainForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\Actions.MainForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="MainForm.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -430,6 +436,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Actions\Actions.MainForm.resx">
+      <DependentUpon>Actions.MainForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.vb</DependentUpon>
     </EmbeddedResource>
