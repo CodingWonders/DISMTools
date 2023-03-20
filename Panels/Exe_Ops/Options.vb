@@ -127,6 +127,10 @@ Public Class Options
         MainForm.ReportView = ComboBox5.SelectedIndex
         MainForm.ChangePrgColors(MainForm.ColorMode)
         MainForm.ChangeLangs(MainForm.Language)
+        If MainForm.isProjectLoaded Then
+            MainForm.UnpopulateProjectTree()
+            MainForm.PopulateProjectTree(MainForm.prjName)
+        End If
         If CheckBox6.Checked Then
             MainForm.NotificationShow = True
         Else

@@ -249,7 +249,19 @@ Public Class MainForm
             Label5.Text = "No"
             LinkLabel1.Visible = True
         Else
-            Label5.Text = "Yes"
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            Label5.Text = "Yes"
+                        Case "ESN"
+                            Label5.Text = "Sí"
+                    End Select
+                Case 1
+                    Label5.Text = "Yes"
+                Case 2
+                    Label5.Text = "Sí"
+            End Select
             LinkLabel1.Visible = False
         End If
     End Sub
@@ -3003,7 +3015,9 @@ Public Class MainForm
                     LinkLabel1.Text = "Click here to mount an image"
                     Label23.Text = "No image has been mounted"
                     LinkLabel2.Text = "You need to mount an image in order to view its information here. Click here to mount an image."
+                    LinkLabel2.LinkArea = New LinkArea(72, 4)
                     LinkLabel3.Text = "Or, if you have a mounted image, open an existing mount directory"
+                    LinkLabel3.LinkArea = New LinkArea(33, 32)
                     Label15.Text = "Image index:"
                     Label13.Text = "Mount point:"
                     Label16.Text = "Version:"
@@ -3239,8 +3253,10 @@ Public Class MainForm
                     LinkLabel1.Text = "Haga clic aquí para montar una imagen"
                     Label23.Text = "No se ha montado una imagen"
                     LinkLabel2.Text = "Necesita montar una imagen para ver su información aquí. Haga clic aquí para montar una imagen."
+                    LinkLabel2.LinkArea = New LinkArea(67, 4)
                     LinkLabel3.Text = "O, si tiene una imagen montada, abra un directorio de montaje existente"
-                    Label15.Text = "Índice de imagen:"
+                    LinkLabel3.LinkArea = New LinkArea(32, 40)
+                    Label15.Text = "Índice:"
                     Label13.Text = "Punto de montaje:"
                     Label16.Text = "Versión:"
                     Label19.Text = "Nombre:"
@@ -3476,7 +3492,9 @@ Public Class MainForm
                 LinkLabel1.Text = "Click here to mount an image"
                 Label23.Text = "No image has been mounted"
                 LinkLabel2.Text = "You need to mount an image in order to view its information here. Click here to mount an image."
+                LinkLabel2.LinkArea = New LinkArea(72, 4)
                 LinkLabel3.Text = "Or, if you have a mounted image, open an existing mount directory"
+                LinkLabel3.LinkArea = New LinkArea(33, 32)
                 Label15.Text = "Image index:"
                 Label13.Text = "Mount point:"
                 Label16.Text = "Version:"
@@ -3713,8 +3731,10 @@ Public Class MainForm
                 LinkLabel1.Text = "Haga clic aquí para montar una imagen"
                 Label23.Text = "No se ha montado una imagen"
                 LinkLabel2.Text = "Necesita montar una imagen para ver su información aquí. Haga clic aquí para montar una imagen."
+                LinkLabel2.LinkArea = New LinkArea(67, 4)
                 LinkLabel3.Text = "O, si tiene una imagen montada, abra un directorio de montaje existente"
-                Label15.Text = "Índice de imagen:"
+                LinkLabel3.LinkArea = New LinkArea(32, 40)
+                Label15.Text = "Índice:"
                 Label13.Text = "Punto de montaje:"
                 Label16.Text = "Versión:"
                 Label19.Text = "Nombre:"
@@ -4156,7 +4176,19 @@ Public Class MainForm
 
     Sub UpdateProjProperties(WasImageMounted As Boolean, IsReadOnly As Boolean)
         If WasImageMounted Then
-            Label5.Text = "Yes"
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            Label5.Text = "Yes"
+                        Case "ESN"
+                            Label5.Text = "Sí"
+                    End Select
+                Case 1
+                    Label5.Text = "Yes"
+                Case 2
+                    Label5.Text = "Sí"
+            End Select
             LinkLabel1.Visible = False
             ImageNotMountedPanel.Visible = False
             ImagePanel.Visible = True
@@ -4606,21 +4638,58 @@ Public Class MainForm
         End If
     End Sub
 
-
-
     Sub PopulateProjectTree(MainProjNameNode As String)
         prjTreeStatus.Visible = True
         Try
-            prjTreeView.Nodes.Add("parent", "Project: " & Quote & MainProjNameNode & Quote)
-            prjTreeView.Nodes("parent").Nodes.Add("dandi", "ADK Deployment Tools")
-            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_x86", "Deployment Tools (x86)")
-            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_amd64", "Deployment Tools (AMD64)")
-            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm", "Deployment Tools (ARM)")
-            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm64", "Deployment Tools (ARM64)")
-            prjTreeView.Nodes("parent").Nodes.Add("mount", "Mount point")
-            prjTreeView.Nodes("parent").Nodes.Add("unattend_xml", "Unattended answer files")
-            prjTreeView.Nodes("parent").Nodes.Add("scr_temp", "Scratch directory")
-            prjTreeView.Nodes("parent").Nodes.Add("reports", "Project reports")
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            prjTreeView.Nodes.Add("parent", "Project: " & Quote & MainProjNameNode & Quote)
+                            prjTreeView.Nodes("parent").Nodes.Add("dandi", "ADK Deployment Tools")
+                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_x86", "Deployment Tools (x86)")
+                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_amd64", "Deployment Tools (AMD64)")
+                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm", "Deployment Tools (ARM)")
+                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm64", "Deployment Tools (ARM64)")
+                            prjTreeView.Nodes("parent").Nodes.Add("mount", "Mount point")
+                            prjTreeView.Nodes("parent").Nodes.Add("unattend_xml", "Unattended answer files")
+                            prjTreeView.Nodes("parent").Nodes.Add("scr_temp", "Scratch directory")
+                            prjTreeView.Nodes("parent").Nodes.Add("reports", "Project reports")
+                        Case "ESN"
+                            prjTreeView.Nodes.Add("parent", "Proyecto: " & Quote & MainProjNameNode & Quote)
+                            prjTreeView.Nodes("parent").Nodes.Add("dandi", "Herramientas de implementación KEI")
+                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_x86", "Herramientas de implementación (x86)")
+                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_amd64", "Herramientas de implementación (AMD64)")
+                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm", "Herramientas de implementación (ARM)")
+                            prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm64", "Herramientas de implementación (ARM64)")
+                            prjTreeView.Nodes("parent").Nodes.Add("mount", "Punto de montaje")
+                            prjTreeView.Nodes("parent").Nodes.Add("unattend_xml", "Archivos de respuesta desatendida")
+                            prjTreeView.Nodes("parent").Nodes.Add("scr_temp", "Directorio temporal")
+                            prjTreeView.Nodes("parent").Nodes.Add("reports", "Informes del proyecto")
+                    End Select
+                Case 1
+                    prjTreeView.Nodes.Add("parent", "Project: " & Quote & MainProjNameNode & Quote)
+                    prjTreeView.Nodes("parent").Nodes.Add("dandi", "ADK Deployment Tools")
+                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_x86", "Deployment Tools (x86)")
+                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_amd64", "Deployment Tools (AMD64)")
+                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm", "Deployment Tools (ARM)")
+                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm64", "Deployment Tools (ARM64)")
+                    prjTreeView.Nodes("parent").Nodes.Add("mount", "Mount point")
+                    prjTreeView.Nodes("parent").Nodes.Add("unattend_xml", "Unattended answer files")
+                    prjTreeView.Nodes("parent").Nodes.Add("scr_temp", "Scratch directory")
+                    prjTreeView.Nodes("parent").Nodes.Add("reports", "Project reports")
+                Case 2
+                    prjTreeView.Nodes.Add("parent", "Proyecto: " & Quote & MainProjNameNode & Quote)
+                    prjTreeView.Nodes("parent").Nodes.Add("dandi", "Herramientas de implementación KEI")
+                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_x86", "Herramientas de implementación para x86")
+                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_amd64", "Herramientas de implementación para AMD64")
+                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm", "Herramientas de implementación para ARM")
+                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm64", "Herramientas de implementación para ARM64")
+                    prjTreeView.Nodes("parent").Nodes.Add("mount", "Punto de montaje")
+                    prjTreeView.Nodes("parent").Nodes.Add("unattend_xml", "Archivos de respuesta desatendida")
+                    prjTreeView.Nodes("parent").Nodes.Add("scr_temp", "Directorio temporal")
+                    prjTreeView.Nodes("parent").Nodes.Add("reports", "Informes del proyecto")
+            End Select
             prjTreeView.ExpandAll()
         Catch ex As Exception
 
