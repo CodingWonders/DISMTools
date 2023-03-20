@@ -3,6 +3,7 @@ Imports System.IO
 Imports System.Text.Encoding
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.Threading
+Imports Microsoft.Dism
 
 Public Class PleaseWaitDialog
 
@@ -250,77 +251,28 @@ Public Class PleaseWaitDialog
                 End If
             End If
         ElseIf ProgressPanel.OperationNum = 995 Then
-            Dim DismExe As String = MainForm.DismExe
-            Dim DismFileVer As FileVersionInfo = FileVersionInfo.GetVersionInfo(DismExe)
-            Select Case DismFileVer.ProductMajorPart
-                Case 6
-                    Select Case DismFileVer.ProductMinorPart
-                        Case 1
-                            File.WriteAllText(".\temp.bat", _
-                                              "@echo off" & CrLf & _
-                                              "dism /English /get-wiminfo /wimfile=" & indexesSourceImg & " | find /c " & Quote & "Index : " & Quote & " > .\indexcount" & CrLf & _
-                                              "dism /English /get-wiminfo /wimfile=" & indexesSourceImg & " | findstr /c:" & Quote & "Name : " & Quote & " > .\indexnames", _
-                                              ASCII)
-                        Case Is >= 2
-                            File.WriteAllText(".\temp.bat", _
-                                              "@echo off" & CrLf & _
-                                              "dism /English /get-imageinfo /imagefile=" & indexesSourceImg & " | find /c " & Quote & "Index : " & Quote & " > .\indexcount" & CrLf & _
-                                              "dism /English /get-imageinfo /imagefile=" & indexesSourceImg & " | findstr /c:" & Quote & "Name : " & Quote & " > .\indexnames", _
-                                              ASCII)
-                    End Select
-                Case 10
-                    File.WriteAllText(".\temp.bat", _
-                                      "@echo off" & CrLf & _
-                                      "dism /English /get-imageinfo /imagefile=" & indexesSourceImg & " | find /c " & Quote & "Index : " & Quote & " > .\indexcount" & CrLf & _
-                                      "dism /English /get-imageinfo /imagefile=" & indexesSourceImg & " | findstr /c:" & Quote & "Name : " & Quote & " > .\indexnames", _
-                                      ASCII)
-
-            End Select
-            Sup_DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
-            Sup_DISMProc.StartInfo.Arguments = "/c " & Directory.GetCurrentDirectory() & "\temp.bat"
-            Sup_DISMProc.StartInfo.CreateNoWindow = True
-            Sup_DISMProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-            Sup_DISMProc.Start()
-            Do Until Sup_DISMProc.HasExited
-                If Sup_DISMProc.HasExited Then
-                    Exit Do
-                End If
-            Loop
-            If Decimal.ToInt32(Sup_DISMProc.ExitCode) = 0 Then
-                ' Set values
-                imgIndexes = CInt(My.Computer.FileSystem.ReadAllText(".\indexcount"))
-                If imgIndexes = 1 Then
-                    SingleImageIndexError.ShowDialog(MainForm)
-                    If Not IsDisposed Then
-                        Dispose()
-                    End If
-                    File.Delete(".\temp.bat")
-                    Exit Sub
-                End If
-                Dim indexNameRTB As New RichTextBox With {
-                    .Text = My.Computer.FileSystem.ReadAllText(".\indexnames")
-                }
-                For x = 0 To indexNameRTB.Lines.Count - 1
-                    indexStr(x) = indexNameRTB.Lines(x).Replace("Name : ", "").Trim()
+            Dim imgInfoCollection As DismImageInfoCollection = Nothing
+            Try
+                imgInfoCollection = DismApi.GetImageInfo(indexesSourceImg)
+            Catch ex As DismNotInitializedException
+                DismApi.Initialize(DismLogLevel.LogErrors)
+                imgInfoCollection = DismApi.GetImageInfo(indexesSourceImg)
+            End Try
+            If imgInfoCollection.Count <= 1 Then
+                SingleImageIndexError.ShowDialog(MainForm)
+                DismApi.Shutdown()
+                Close()
+            Else
+                Dim indexNames As New List(Of String)
+                For Each imgInfo As DismImageInfo In imgInfoCollection
+                    indexNames.Add(imgInfo.ImageName)
                 Next
-                For x = 0 To indexStr.Length
-                    Try
-                        If indexStr(x) = "" Then
-                            Continue For
-                        Else
-                            ImgIndexSwitch.indexNames(x) = indexStr(x)
-                        End If
-                    Catch ex As Exception
-                        Continue For
-                    End Try
-                Next
-                ' Load form
+                ImgIndexSwitch.indexNames = indexNames.ToArray()
                 ImgIndexSwitch.TextBox1.Text = indexesSourceImg
-                ImgIndexSwitch.NumericUpDown1.Maximum = imgIndexes
-                File.Delete(".\indexcount")
-                File.Delete(".\indexnames")
-                File.Delete(".\temp.bat")
+                ImgIndexSwitch.NumericUpDown1.Maximum = imgInfoCollection.Count
             End If
+            imgIndexes = imgInfoCollection.Count
+            DismApi.Shutdown()
         End If
         Close()
     End Sub
