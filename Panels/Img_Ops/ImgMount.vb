@@ -80,6 +80,7 @@ Public Class ImgMount
             GroupBox3.ForeColor = Color.White
             ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New MainForm.DarkModeColorTable())
             ToolStripButton1.Image = My.Resources.clear_glyph_dark
+            ListView1.BackColor = Color.FromArgb(31, 31, 31)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Win10Title.BackColor = Color.White
             BackColor = Color.FromArgb(238, 238, 242)
@@ -92,10 +93,12 @@ Public Class ImgMount
             GroupBox3.ForeColor = Color.Black
             ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New MainForm.LightModeColorTable())
             ToolStripButton1.Image = My.Resources.clear_glyph
+            ListView1.BackColor = Color.FromArgb(238, 238, 242)
         End If
         NumericUpDown1.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
         TextBox2.ForeColor = ForeColor
+        ListView1.ForeColor = ForeColor
         DismVerChecker = FileVersionInfo.GetVersionInfo(MainForm.DismExe)
         Select Case DismVerChecker.ProductMajorPart
             Case 6
@@ -158,19 +161,26 @@ Public Class ImgMount
     End Sub
 
     Sub GetMaxIndexCount(ImgFile As String)
-        If IndexOperationMode = 0 Then
-            File.WriteAllText(".\bin\exthelpers\temp.bat", _
-                              "@echo off" & CrLf & _
-                              "dism /English /get-imageinfo /imagefile=" & ImgFile & " | find /c " & Quote & "Index" & Quote & " > .\indexcount", ASCII)
-        ElseIf IndexOperationMode = 1 Then
-            File.WriteAllText(".\bin\exthelpers\temp.bat", _
-                              "@echo off" & CrLf & _
-                              "dism /English /get-wiminfo /wimfile=" & ImgFile & " | find /c " & Quote & "Index" & Quote & " > .\indexcount", ASCII)
-        End If
-        Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
-        MainForm.imgIndexCount = CInt(My.Computer.FileSystem.ReadAllText(".\indexcount"))
-        NumericUpDown1.Maximum = MainForm.imgIndexCount
-        File.Delete(".\indexcount")
+        Try
+            DismApi.Initialize(DismLogLevel.LogErrors)
+            Dim imgInfoCollection As DismImageInfoCollection = DismApi.GetImageInfo(ImgFile)
+            NumericUpDown1.Maximum = imgInfoCollection.Count
+            DismApi.Shutdown()
+        Catch ex As AccessViolationException
+            If IndexOperationMode = 0 Then
+                File.WriteAllText(".\bin\exthelpers\temp.bat", _
+                                  "@echo off" & CrLf & _
+                                  "dism /English /get-imageinfo /imagefile=" & ImgFile & " | find /c " & Quote & "Index" & Quote & " > .\indexcount", ASCII)
+            ElseIf IndexOperationMode = 1 Then
+                File.WriteAllText(".\bin\exthelpers\temp.bat", _
+                                  "@echo off" & CrLf & _
+                                  "dism /English /get-wiminfo /wimfile=" & ImgFile & " | find /c " & Quote & "Index" & Quote & " > .\indexcount", ASCII)
+            End If
+            Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
+            MainForm.imgIndexCount = CInt(My.Computer.FileSystem.ReadAllText(".\indexcount"))
+            NumericUpDown1.Maximum = MainForm.imgIndexCount
+            File.Delete(".\indexcount")
+        End Try
     End Sub
 
     Sub GetFields()
@@ -233,5 +243,9 @@ Public Class ImgMount
     Private Sub NumericUpDown1_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown1.ValueChanged
         ImgIndex = NumericUpDown1.Value
         ProgressPanel.ImgIndex = NumericUpDown1.Value
+    End Sub
+
+    Private Sub ImgMount_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
     End Sub
 End Class
