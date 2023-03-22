@@ -3040,6 +3040,14 @@ Public Class MainForm
                     Button11.Text = "Reload servicing session..."
                     Button12.Text = "Perform component cleanup and/or repair..."
                     Button13.Text = "Switch indexes..."
+                    ' Pop-up context menus
+                    PkgBasicInfo.Text = "Get basic information (all packages)"
+                    PkgDetailedInfo.Text = "Get detailed information (specific package)"
+                    FeatureBasicInfo.Text = "Get basic feature info (all features)"
+                    FeatureDetailedInfo.Text = "Get detailed feature info (specific feature)"
+                    CommitAndUnmountTSMI.Text = "Commit changes and unmount image"
+                    DiscardAndUnmountTSMI.Text = "Discard changes and unmount image"
+                    UnmountSettingsToolStripMenuItem.Text = "Unmount settings..."
                 ElseIf My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "ESN" Then
                     ' Top-level menu items
                     FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -3278,6 +3286,14 @@ Public Class MainForm
                     Button11.Text = "Recargar sesión de servicio..."
                     Button12.Text = "Realizar limpieza y/o reparación de componentes..."
                     Button13.Text = "Cambiar índices..."
+                    ' Pop-up context menus
+                    PkgBasicInfo.Text = "Obtener información básica (todos los paquetes)"
+                    PkgDetailedInfo.Text = "Obtener información detallada (paquete específico)"
+                    FeatureBasicInfo.Text = "Obtener información básica de características (todas)"
+                    FeatureDetailedInfo.Text = "Obtener información detallada de características (específica)"
+                    CommitAndUnmountTSMI.Text = "Guardar cambios y desmontar imagen"
+                    DiscardAndUnmountTSMI.Text = "Descartar cambios y desmontar imagen"
+                    UnmountSettingsToolStripMenuItem.Text = "Configuración de desmontaje..."
                 End If
             Case 1
                 ' Top-level menu items
@@ -3517,7 +3533,14 @@ Public Class MainForm
                 Button11.Text = "Reload servicing session..."
                 Button12.Text = "Perform component cleanup and/or repair..."
                 Button13.Text = "Switch indexes..."
-                '
+                ' Pop-up context menus
+                PkgBasicInfo.Text = "Get basic information (all packages)"
+                PkgDetailedInfo.Text = "Get detailed information (specific package)"
+                FeatureBasicInfo.Text = "Get basic feature info (all features)"
+                FeatureDetailedInfo.Text = "Get detailed feature info (specific feature)"
+                CommitAndUnmountTSMI.Text = "Commit changes and unmount image"
+                DiscardAndUnmountTSMI.Text = "Discard changes and unmount image"
+                UnmountSettingsToolStripMenuItem.Text = "Unmount settings..."
             Case 2
                 ' Top-level menu items
                 FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -3756,6 +3779,14 @@ Public Class MainForm
                 Button11.Text = "Recargar sesión de servicio..."
                 Button12.Text = "Realizar limpieza y/o reparación de componentes..."
                 Button13.Text = "Cambiar índices..."
+                ' Pop-up context menus
+                PkgBasicInfo.Text = "Obtener información básica (todos los paquetes)"
+                PkgDetailedInfo.Text = "Obtener información detallada (paquete específico)"
+                FeatureBasicInfo.Text = "Obtener información básica de características (todas)"
+                FeatureDetailedInfo.Text = "Obtener información detallada de características (específica)"
+                CommitAndUnmountTSMI.Text = "Guardar cambios y desmontar imagen"
+                DiscardAndUnmountTSMI.Text = "Descartar cambios y desmontar imagen"
+                UnmountSettingsToolStripMenuItem.Text = "Configuración de desmontaje..."
         End Select
     End Sub
 

@@ -126,6 +126,9 @@ Public Class Options
         End If
         MainForm.ReportView = ComboBox5.SelectedIndex
         MainForm.ChangePrgColors(MainForm.ColorMode)
+        If ComboBox3.SelectedIndex <> 1 Then
+            MsgBox("Support for languages is partial, so this program isn't fully translated yet. Please wait until the next version to experience full language support." & CrLf & CrLf & "El soporte para idiomas es parcial, así que este programa aún no está traducido completamente. Espere hasta la próxima versión para experimentar soporte completo de idiomas.", vbOKOnly + vbInformation, "Options/Opciones")
+        End If
         MainForm.ChangeLangs(MainForm.Language)
         If MainForm.isProjectLoaded Then
             MainForm.UnpopulateProjectTree()
