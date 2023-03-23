@@ -155,28 +155,28 @@ Partial Class NewProj
         '
         'TextBox1
         '
-        Me.TextBox1.Location = New System.Drawing.Point(93, 29)
+        Me.TextBox1.Location = New System.Drawing.Point(106, 29)
         Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(574, 21)
+        Me.TextBox1.Size = New System.Drawing.Size(561, 21)
         Me.TextBox1.TabIndex = 8
         '
         'Label4
         '
-        Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(43, 60)
+        Me.Label4.Location = New System.Drawing.Point(6, 60)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(57, 13)
+        Me.Label4.Size = New System.Drawing.Size(94, 13)
         Me.Label4.TabIndex = 7
         Me.Label4.Text = "Location*:"
+        Me.Label4.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label3
         '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(43, 32)
+        Me.Label3.Location = New System.Drawing.Point(6, 32)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(44, 13)
+        Me.Label3.Size = New System.Drawing.Size(94, 13)
         Me.Label3.TabIndex = 7
         Me.Label3.Text = "Name*:"
+        Me.Label3.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'FolderBrowserDialog1
         '
