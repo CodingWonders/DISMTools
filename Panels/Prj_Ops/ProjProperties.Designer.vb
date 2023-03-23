@@ -228,7 +228,7 @@ Partial Class ProjProperties
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(196, 13)
         Me.Label7.TabIndex = 5
-        Me.Label7.Text = "Creation time and date:"
+        Me.Label7.Text = "Creation date:"
         Me.Label7.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label6
@@ -497,7 +497,7 @@ Partial Class ProjProperties
         Me.Label57.Name = "Label57"
         Me.Label57.Size = New System.Drawing.Size(181, 13)
         Me.Label57.TabIndex = 7
-        Me.Label57.Text = "Modification time and date:"
+        Me.Label57.Text = "Modification date:"
         Me.Label57.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label55
@@ -506,7 +506,7 @@ Partial Class ProjProperties
         Me.Label55.Name = "Label55"
         Me.Label55.Size = New System.Drawing.Size(181, 13)
         Me.Label55.TabIndex = 7
-        Me.Label55.Text = "Creation time and date:"
+        Me.Label55.Text = "Creation date:"
         Me.Label55.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label53
@@ -862,9 +862,9 @@ Partial Class ProjProperties
         'Label20
         '
         Me.Label20.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold)
-        Me.Label20.Location = New System.Drawing.Point(308, 48)
+        Me.Label20.Location = New System.Drawing.Point(225, 48)
         Me.Label20.Name = "Label20"
-        Me.Label20.Size = New System.Drawing.Size(196, 13)
+        Me.Label20.Size = New System.Drawing.Size(279, 13)
         Me.Label20.TabIndex = 13
         Me.Label20.Text = "Image present on project?"
         Me.Label20.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -885,7 +885,7 @@ Partial Class ProjProperties
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(334, 13)
         Me.Label3.TabIndex = 1
-        Me.Label3.Text = "View mounted image properties, such as name, description; or index"
+        Me.Label3.Text = "View mounted image properties, such as name, description, or index"
         '
         'Label4
         '

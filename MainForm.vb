@@ -3294,6 +3294,10 @@ Public Class MainForm
                     CommitAndUnmountTSMI.Text = "Guardar cambios y desmontar imagen"
                     DiscardAndUnmountTSMI.Text = "Descartar cambios y desmontar imagen"
                     UnmountSettingsToolStripMenuItem.Text = "Configuración de desmontaje..."
+                Else
+                    Language = 1
+                    ChangeLangs(Language)
+                    Exit Sub
                 End If
             Case 1
                 ' Top-level menu items
@@ -5557,7 +5561,19 @@ Public Class MainForm
     Private Sub Button14_Click(sender As Object, e As EventArgs) Handles Button14.Click, ProjectPropertiesToolStripMenuItem.Click
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         ProjProperties.TabControl1.SelectedIndex = 0
-        ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
+                    Case "ESN"
+                        ProjProperties.Label1.Text = "Propiedades de " & ProjProperties.TabControl1.SelectedTab.Text.ToLower()
+                End Select
+            Case 1
+                ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
+            Case 2
+                ProjProperties.Label1.Text = "Propiedades de " & ProjProperties.TabControl1.SelectedTab.Text.ToLower()
+        End Select
         If My.Computer.Info.OSFullName.Contains("Windows 10") Or My.Computer.Info.OSFullName.Contains("Windows 11") Then
             ProjProperties.Text = ""
         Else
@@ -5569,7 +5585,19 @@ Public Class MainForm
     Private Sub Button15_Click(sender As Object, e As EventArgs) Handles ImagePropertiesToolStripMenuItem.Click, Button15.Click
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         ProjProperties.TabControl1.SelectedIndex = 1
-        ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
+                    Case "ESN"
+                        ProjProperties.Label1.Text = "Propiedades de " & ProjProperties.TabControl1.SelectedTab.Text.ToLower()
+                End Select
+            Case 1
+                ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
+            Case 2
+                ProjProperties.Label1.Text = "Propiedades de " & ProjProperties.TabControl1.SelectedTab.Text.ToLower()
+        End Select
         If My.Computer.Info.OSFullName.Contains("Windows 10") Or My.Computer.Info.OSFullName.Contains("Windows 11") Then
             ProjProperties.Text = ""
         Else
@@ -6138,7 +6166,7 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
         End Select
         PleaseWaitDialog.ShowDialog(Me)
-        Call MountedImageDetectorBW.RunWorkerAsync()
+        If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
         If PleaseWaitDialog.imgIndexes > 1 Then
             ImgIndexSwitch.ShowDialog()
         End If
