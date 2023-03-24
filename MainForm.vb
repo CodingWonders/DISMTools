@@ -5872,6 +5872,8 @@ Public Class MainForm
     End Sub
 
     Private Sub Button16_Click(sender As Object, e As EventArgs) Handles Button16.Click
+        ImgUMount.RadioButton1.Checked = True
+        ImgUMount.RadioButton2.Checked = False
         ImgUMount.ShowDialog()
     End Sub
 
@@ -6733,7 +6735,7 @@ Public Class MainForm
     End Sub
 
     Private Sub UnmountImage_Click(sender As Object, e As EventArgs) Handles UnmountImage.Click, UnmountSettingsToolStripMenuItem.Click
-        If isProjectLoaded Then
+        If isProjectLoaded And MountDir = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text Then
             ImgUMount.RadioButton1.Checked = True
             ImgUMount.RadioButton2.Checked = False
             ImgUMount.TextBox1.Text = ""

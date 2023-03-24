@@ -48,7 +48,6 @@ Partial Class ImgMount
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.Label7 = New System.Windows.Forms.Label()
-        Me.Button3 = New System.Windows.Forms.Button()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.FileSpecDialog = New System.Windows.Forms.OpenFileDialog()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
@@ -323,22 +322,10 @@ Partial Class ImgMount
         Me.Label7.Text = "Index*:"
         Me.Label7.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
-        'Button3
-        '
-        Me.Button3.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button3.AutoEllipsis = True
-        Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button3.Location = New System.Drawing.Point(12, 403)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(154, 23)
-        Me.Button3.TabIndex = 4
-        Me.Button3.Text = "Command help"
-        Me.Button3.UseVisualStyleBackColor = True
-        '
         'Label11
         '
         Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(172, 408)
+        Me.Label11.Location = New System.Drawing.Point(12, 408)
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(179, 13)
         Me.Label11.TabIndex = 2
@@ -355,7 +342,6 @@ Partial Class ImgMount
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(784, 441)
-        Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.Label11)
@@ -407,7 +393,6 @@ Partial Class ImgMount
     Friend WithEvents CheckBox3 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
     Friend WithEvents Label7 As System.Windows.Forms.Label
-    Friend WithEvents Button3 As System.Windows.Forms.Button
     Friend WithEvents Label11 As System.Windows.Forms.Label
     Friend WithEvents FileSpecDialog As System.Windows.Forms.OpenFileDialog
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox

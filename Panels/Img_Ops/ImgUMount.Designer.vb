@@ -40,11 +40,7 @@ Partial Class ImgUMount
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.Label5 = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
-        Me.Button3 = New System.Windows.Forms.Button()
-        Me.Label11 = New System.Windows.Forms.Label()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
@@ -167,13 +163,14 @@ Partial Class ImgUMount
         '
         'Label4
         '
-        Me.Label4.AutoSize = True
+        Me.Label4.AutoEllipsis = True
         Me.Label4.Enabled = False
-        Me.Label4.Location = New System.Drawing.Point(49, 96)
+        Me.Label4.Location = New System.Drawing.Point(19, 96)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(87, 13)
+        Me.Label4.Size = New System.Drawing.Size(117, 13)
         Me.Label4.TabIndex = 5
         Me.Label4.Text = "Mount directory:"
+        Me.Label4.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'RadioButton2
         '
@@ -211,8 +208,6 @@ Partial Class ImgUMount
         Me.GroupBox2.Controls.Add(Me.ComboBox1)
         Me.GroupBox2.Controls.Add(Me.CheckBox2)
         Me.GroupBox2.Controls.Add(Me.CheckBox1)
-        Me.GroupBox2.Controls.Add(Me.Label6)
-        Me.GroupBox2.Controls.Add(Me.Label5)
         Me.GroupBox2.Controls.Add(Me.Label7)
         Me.GroupBox2.Location = New System.Drawing.Point(12, 215)
         Me.GroupBox2.Name = "GroupBox2"
@@ -225,16 +220,16 @@ Partial Class ImgUMount
         '
         Me.ComboBox1.FormattingEnabled = True
         Me.ComboBox1.Items.AddRange(New Object() {"Save changes and unmount", "Discard changes and unmount"})
-        Me.ComboBox1.Location = New System.Drawing.Point(137, 34)
+        Me.ComboBox1.Location = New System.Drawing.Point(169, 34)
         Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(436, 21)
+        Me.ComboBox1.Size = New System.Drawing.Size(403, 21)
         Me.ComboBox1.TabIndex = 4
         Me.ComboBox1.Text = "Save changes and unmount"
         '
         'CheckBox2
         '
         Me.CheckBox2.AutoSize = True
-        Me.CheckBox2.Location = New System.Drawing.Point(305, 73)
+        Me.CheckBox2.Location = New System.Drawing.Point(48, 96)
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(189, 17)
         Me.CheckBox2.TabIndex = 0
@@ -251,51 +246,15 @@ Partial Class ImgUMount
         Me.CheckBox1.Text = "Check image integrity"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
-        'Label6
-        '
-        Me.Label6.Location = New System.Drawing.Point(320, 97)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(232, 48)
-        Me.Label6.TabIndex = 3
-        Me.Label6.Text = "Add the modified image to the existing one without overwriting it."
-        '
-        'Label5
-        '
-        Me.Label5.Location = New System.Drawing.Point(65, 97)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(232, 48)
-        Me.Label5.TabIndex = 3
-        Me.Label5.Text = "Verify file corruption. Do note that the process will stop if corruption is detec" &
-    "ted."
-        '
         'Label7
         '
-        Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(28, 37)
+        Me.Label7.AutoEllipsis = True
+        Me.Label7.Location = New System.Drawing.Point(19, 37)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(103, 13)
+        Me.Label7.Size = New System.Drawing.Size(144, 13)
         Me.Label7.TabIndex = 3
         Me.Label7.Text = "Unmount operation:"
-        '
-        'Button3
-        '
-        Me.Button3.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button3.Location = New System.Drawing.Point(12, 403)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(100, 23)
-        Me.Button3.TabIndex = 6
-        Me.Button3.Text = "Command help"
-        Me.Button3.UseVisualStyleBackColor = True
-        '
-        'Label11
-        '
-        Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(118, 408)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(179, 13)
-        Me.Label11.TabIndex = 5
-        Me.Label11.Text = "The fields that end in * are required"
+        Me.Label7.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'FolderBrowserDialog1
         '
@@ -309,8 +268,6 @@ Partial Class ImgUMount
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(624, 441)
-        Me.Controls.Add(Me.Button3)
-        Me.Controls.Add(Me.Label11)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.Label2)
@@ -353,12 +310,8 @@ Partial Class ImgUMount
     Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
     Friend WithEvents CheckBox2 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
-    Friend WithEvents Label6 As System.Windows.Forms.Label
-    Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents ComboBox1 As System.Windows.Forms.ComboBox
     Friend WithEvents Label7 As System.Windows.Forms.Label
-    Friend WithEvents Button3 As System.Windows.Forms.Button
-    Friend WithEvents Label11 As System.Windows.Forms.Label
     Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
 
 End Class

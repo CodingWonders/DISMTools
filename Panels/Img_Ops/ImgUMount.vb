@@ -1,7 +1,10 @@
 ﻿Imports System.Windows.Forms
 Imports System.IO
+Imports Microsoft.VisualBasic.ControlChars
 
 Public Class ImgUMount
+
+    Dim UMountOperations() As String = New String(1) {"Save changes and unmount", "Discard changes and unmount"}
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         If RadioButton1.Checked = True Then
@@ -63,6 +66,86 @@ Public Class ImgUMount
     End Sub
 
     Private Sub ImgUMount_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ComboBox1.SelectedText = ""
+        ComboBox1.Items.Clear()
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Text = "Unmount an image"
+                        Label1.Text = Text
+                        Label2.Text = "Please specify the options to unmount this image:"
+                        Label3.Text = "The mount directory:"
+                        Label4.Text = "Mount directory:"
+                        Label7.Text = "Unmount operation:"
+                        CheckBox1.Text = "Check image integrity"
+                        CheckBox2.Text = "Append changes to another index"
+                        Button1.Text = "Browse..."
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Cancel"
+                        FolderBrowserDialog1.Description = "Please specify a mount directory:"
+                        RadioButton1.Text = "is loaded in the project"
+                        RadioButton2.Text = "is located somewhere else"
+                        UMountOperations(0) = "Save changes and unmount"
+                        UMountOperations(1) = "Discard changes and unmount"
+                        ComboBox1.Items.AddRange(UMountOperations)
+                    Case "ESN"
+                        Text = "Desmontar una imagen"
+                        Label1.Text = Text
+                        Label2.Text = "Especifique las opciones para desmontar esta imagen:"
+                        Label3.Text = "El directorio de montaje:"
+                        Label4.Text = "Directorio de montaje:"
+                        Label7.Text = "Operación de desmontaje:"
+                        CheckBox1.Text = "Comprobar integridad de la imagen"
+                        CheckBox2.Text = "Anexar los cambios en otro índice"
+                        Button1.Text = "Examinar..."
+                        OK_Button.Text = "Aceptar"
+                        Cancel_Button.Text = "Cancelar"
+                        FolderBrowserDialog1.Description = "Especifique un directorio de montaje:"
+                        RadioButton1.Text = "está cargado en el proyecto"
+                        RadioButton2.Text = "se ubica en otro lugar"
+                        UMountOperations(0) = "Guardar cambios y desmontar"
+                        UMountOperations(1) = "Descartar cambios y desmontar"
+                        ComboBox1.Items.AddRange(UMountOperations)
+                End Select
+            Case 1
+                Text = "Unmount an image"
+                Label1.Text = Text
+                Label2.Text = "Please specify the options to unmount this image:"
+                Label3.Text = "The mount directory:"
+                Label4.Text = "Mount directory:"
+                Label7.Text = "Unmount operation:"
+                CheckBox1.Text = "Check image integrity"
+                CheckBox2.Text = "Append changes to another index"
+                Button1.Text = "Browse..."
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Cancel"
+                FolderBrowserDialog1.Description = "Please specify a mount directory:"
+                RadioButton1.Text = "is loaded in the project"
+                RadioButton2.Text = "is located somewhere else"
+                UMountOperations(0) = "Save changes and unmount"
+                UMountOperations(1) = "Discard changes and unmount"
+                ComboBox1.Items.AddRange(UMountOperations)
+            Case 2
+                Text = "Desmontar una imagen"
+                Label1.Text = Text
+                Label2.Text = "Especifique las opciones para desmontar esta imagen:"
+                Label3.Text = "El directorio de montaje:"
+                Label4.Text = "Directorio de montaje:"
+                Label7.Text = "Operación de desmontaje:"
+                CheckBox1.Text = "Comprobar integridad de la imagen"
+                CheckBox2.Text = "Anexar los cambios en otro índice"
+                Button1.Text = "Examinar..."
+                OK_Button.Text = "Aceptar"
+                Cancel_Button.Text = "Cancelar"
+                FolderBrowserDialog1.Description = "Especifique un directorio de montaje:"
+                RadioButton1.Text = "está cargado en el proyecto"
+                RadioButton2.Text = "se ubica en otro lugar"
+                UMountOperations(0) = "Guardar cambios y desmontar"
+                UMountOperations(1) = "Descartar cambios y desmontar"
+                ComboBox1.Items.AddRange(UMountOperations)
+        End Select
+        ComboBox1.SelectedIndex = 0
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
             BackColor = Color.FromArgb(31, 31, 31)
@@ -110,11 +193,45 @@ Public Class ImgUMount
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        FolderBrowserDialog1.ShowDialog()
-        If DialogResult.OK Then
-            TextBox1.Text = FolderBrowserDialog1.SelectedPath
-        Else
-            TextBox1.Text = ""
+        If FolderBrowserDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If MainForm.MountedImageMountDirs.Contains(FolderBrowserDialog1.SelectedPath) Then
+                TextBox1.Text = FolderBrowserDialog1.SelectedPath
+            Else
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                MsgBox("The directory specified isn't a valid mount directory. Please select a valid directory and try again." & CrLf & CrLf & "You can get some help finding a valid mount directory with the mounted image manager, which is located in " & Quote & "Tools > Mounted image manager" & Quote, vbOKOnly + vbCritical, "Unmount an image")
+                                Exit Sub
+                            Case "ESN"
+                                MsgBox("El directorio especificado no es un directorio de montaje válido. Seleccione uno válido e inténtelo de nuevo." & CrLf & CrLf & "El administrador de imágenes montadas, que está ubicado en " & Quote & "Herramientas > Administrador de imágenes montadas" & Quote & ", le puede ayudar a encontrar un directorio de montaje válido", vbOKOnly + vbCritical, "Desmontar una imagen")
+                                Exit Sub
+                        End Select
+                    Case 1
+                        MsgBox("The directory specified isn't a valid mount directory. Please select a valid directory and try again." & CrLf & CrLf & "You can get some help finding a valid mount directory with the mounted image manager, which is located in " & Quote & "Tools > Mounted image manager" & Quote, vbOKOnly + vbCritical, "Unmount an image")
+                        Exit Sub
+                    Case 2
+                        MsgBox("El directorio especificado no es un directorio de montaje válido. Seleccione uno válido e inténtelo de nuevo." & CrLf & CrLf & "El administrador de imágenes montadas, que está ubicado en " & Quote & "Herramientas > Administrador de imágenes montadas" & Quote & ", le puede ayudar a encontrar un directorio de montaje válido", vbOKOnly + vbCritical, "Desmontar una imagen")
+                        Exit Sub
+                End Select
+            End If
         End If
+        'FolderBrowserDialog1.ShowDialog()
+        'If DialogResult.OK Then
+        '    TextBox1.Text = FolderBrowserDialog1.SelectedPath
+        'Else
+        '    TextBox1.Text = ""
+        'End If
+    End Sub
+
+    Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
+        Select Case ComboBox1.SelectedIndex
+            Case 0
+                CheckBox1.Enabled = True
+                CheckBox2.Enabled = True
+            Case 1
+                CheckBox1.Enabled = False
+                CheckBox2.Enabled = False
+        End Select
     End Sub
 End Class
