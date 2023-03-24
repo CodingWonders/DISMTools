@@ -3048,6 +3048,9 @@ Public Class MainForm
                     CommitAndUnmountTSMI.Text = "Commit changes and unmount image"
                     DiscardAndUnmountTSMI.Text = "Discard changes and unmount image"
                     UnmountSettingsToolStripMenuItem.Text = "Unmount settings..."
+                    ' OpenFileDialogs and FolderBrowsers
+                    OpenFileDialog1.Title = "Specify the project file to load"
+                    LocalMountDirFBD.Description = "Please specify the mount directory you want to load into this project:"
                 ElseIf My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "ESN" Then
                     ' Top-level menu items
                     FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -3294,6 +3297,9 @@ Public Class MainForm
                     CommitAndUnmountTSMI.Text = "Guardar cambios y desmontar imagen"
                     DiscardAndUnmountTSMI.Text = "Descartar cambios y desmontar imagen"
                     UnmountSettingsToolStripMenuItem.Text = "Configuración de desmontaje..."
+                    ' OpenFileDialogs and FolderBrowsers
+                    OpenFileDialog1.Title = "Especifique el archivo de proyecto a cargar"
+                    LocalMountDirFBD.Description = "Especifique el directorio de montaje que desea cargar en este proyecto:"
                 Else
                     Language = 1
                     ChangeLangs(Language)
@@ -3545,6 +3551,9 @@ Public Class MainForm
                 CommitAndUnmountTSMI.Text = "Commit changes and unmount image"
                 DiscardAndUnmountTSMI.Text = "Discard changes and unmount image"
                 UnmountSettingsToolStripMenuItem.Text = "Unmount settings..."
+                ' OpenFileDialogs and FolderBrowsers
+                OpenFileDialog1.Title = "Specify the project file to load"
+                LocalMountDirFBD.Description = "Please specify the mount directory you want to load into this project:"
             Case 2
                 ' Top-level menu items
                 FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -3791,6 +3800,9 @@ Public Class MainForm
                 CommitAndUnmountTSMI.Text = "Guardar cambios y desmontar imagen"
                 DiscardAndUnmountTSMI.Text = "Descartar cambios y desmontar imagen"
                 UnmountSettingsToolStripMenuItem.Text = "Configuración de desmontaje..."
+                ' OpenFileDialogs and FolderBrowsers
+                OpenFileDialog1.Title = "Especifique el archivo de proyecto a cargar"
+                LocalMountDirFBD.Description = "Especifique el directorio de montaje que desea cargar en este proyecto:"
         End Select
     End Sub
 
