@@ -4,6 +4,79 @@ Public Class MountedImgMgr
     Public ignoreRepeats As Boolean = False
 
     Private Sub MountedImgMgr_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Text = "Mounted image manager"
+                        Label1.Text = "Here is an overview of the images that have been mounted on this system. You can look up information about them, and perform some basic tasks. To fully perform image actions with this program though, you need to load the mount directory into a project:"
+                        ListView1.Columns(0).Text = "Image file"
+                        ListView1.Columns(1).Text = "Index"
+                        ListView1.Columns(2).Text = "Mount directory"
+                        ListView1.Columns(3).Text = "Status"
+                        ListView1.Columns(4).Text = "Read/write permissions?"
+                        ListView1.Columns(5).Text = "Version"
+                        Button1.Text = "Unmount image"
+                        Button2.Text = "Reload servicing"
+                        Button3.Text = "Enable write permissions"
+                        Button4.Text = "Open mount directory"
+                        Button5.Text = "Remove volume images..."
+                        Button6.Text = "Load into project"
+                        LinkLabel1.Text = "This view is being updated in real time, which may cause a higher CPU usage. Change image detection settings..."
+                        LinkLabel1.LinkArea = New LinkArea(77, 34)
+                    Case "ESN"
+                        Text = "Administrador de imágenes montadas"
+                        Label1.Text = "Este es un resumen de las imágenes que se han montado en este sistema. Puede consultar información sobre ellas, y realizar algunas tareas básicas. En cambio, si desea realizar todas las operaciones posibles con este programa, necesita cargar el directorio de montaje en un proyecto:"
+                        ListView1.Columns(0).Text = "Archivo de imagen"
+                        ListView1.Columns(1).Text = "Índice"
+                        ListView1.Columns(2).Text = "Directorio de montaje"
+                        ListView1.Columns(3).Text = "Estado"
+                        ListView1.Columns(4).Text = "¿Permisos de lectura y escritura?"
+                        ListView1.Columns(5).Text = "Versión"
+                        Button1.Text = "Desmontar imagen"
+                        Button2.Text = "Recargar servicio"
+                        Button3.Text = "Habilitar escritura"
+                        Button4.Text = "Abrir directorio de montaje"
+                        Button5.Text = "Eliminar imágenes de volumen..."
+                        Button6.Text = "Cargar en proyecto"
+                        LinkLabel1.Text = "Esta vista está siendo actualizada en tiempo real, lo que podría significar un aumento en el uso de CPU. Cambiar configuraciones de detección de imágenes..."
+                        LinkLabel1.LinkArea = New LinkArea(105, 51)
+                End Select
+            Case 1
+                Text = "Mounted image manager"
+                Label1.Text = "Here is an overview of the images that have been mounted on this system. You can look up information about them, and perform some basic tasks. To fully perform image actions with this program though, you need to load the mount directory into a project:"
+                ListView1.Columns(0).Text = "Image file"
+                ListView1.Columns(1).Text = "Index"
+                ListView1.Columns(2).Text = "Mount directory"
+                ListView1.Columns(3).Text = "Status"
+                ListView1.Columns(4).Text = "Read/write permissions?"
+                ListView1.Columns(5).Text = "Version"
+                Button1.Text = "Unmount image"
+                Button2.Text = "Reload servicing"
+                Button3.Text = "Enable write permissions"
+                Button4.Text = "Open mount directory"
+                Button5.Text = "Remove volume images..."
+                Button6.Text = "Load into project"
+                LinkLabel1.Text = "This view is being updated in real time, which may cause a higher CPU usage. Change image detection settings..."
+                LinkLabel1.LinkArea = New LinkArea(77, 34)
+            Case 2
+                Text = "Administrador de imágenes montadas"
+                Label1.Text = "Este es un resumen de las imágenes que se han montado en este sistema. Puede consultar información sobre ellas, y realizar algunas tareas básicas. En cambio, si desea realizar todas las operaciones posibles con este programa, necesita cargar el directorio de montaje en un proyecto:"
+                ListView1.Columns(0).Text = "Archivo de imagen"
+                ListView1.Columns(1).Text = "Índice"
+                ListView1.Columns(2).Text = "Directorio de montaje"
+                ListView1.Columns(3).Text = "Estado"
+                ListView1.Columns(4).Text = "¿Permisos de lectura y escritura?"
+                ListView1.Columns(5).Text = "Versión"
+                Button1.Text = "Desmontar imagen"
+                Button2.Text = "Recargar servicio"
+                Button3.Text = "Habilitar escritura"
+                Button4.Text = "Abrir directorio de montaje"
+                Button5.Text = "Eliminar imágenes de volumen..."
+                Button6.Text = "Cargar en proyecto"
+                LinkLabel1.Text = "Esta vista está siendo actualizada en tiempo real, lo que podría significar un aumento en el uso de CPU. Cambiar configuraciones de detección de imágenes..."
+                LinkLabel1.LinkArea = New LinkArea(105, 51)
+        End Select
         Control.CheckForIllegalCrossThreadCalls = False
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)
@@ -32,9 +105,33 @@ Public Class MountedImgMgr
                 Button2.Enabled = True
                 Select Case MainForm.MountedImageImgStatuses(ListView1.FocusedItem.Index)
                     Case 1
-                        Button2.Text = "Reload servicing"
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        Button2.Text = "Reload servicing"
+                                    Case "ESN"
+                                        Button2.Text = "Recargar servicio"
+                                End Select
+                            Case 1
+                                Button2.Text = "Reload servicing"
+                            Case 2
+                                Button2.Text = "Recargar servicio"
+                        End Select
                     Case 2
-                        Button2.Text = "Repair component store"
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        Button2.Text = "Repair component store"
+                                    Case "ESN"
+                                        Button2.Text = "Reparar almacén de componentes"
+                                End Select
+                            Case 1
+                                Button2.Text = "Repair component store"
+                            Case 2
+                                Button2.Text = "Reparar almacén de componentes"
+                        End Select
                 End Select
             Else
                 Button2.Enabled = False
@@ -147,11 +244,35 @@ Public Class MountedImgMgr
                     ' Thanks ChatGPT for providing a little help on this
                     For Each item As ListViewItem In ListView1.Items
                         If Not MainForm.MountedImageImgFiles.Contains(item.Text) Then
-                            ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No"), If(File.Exists(MainForm.MountedImageMountDirs(x) & "\Windows\System32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(MainForm.MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion, "Could not get version info")}))
+                            Select Case MainForm.Language
+                                Case 0
+                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                        Case "ENG"
+                                            ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No"), If(File.Exists(MainForm.MountedImageMountDirs(x) & "\Windows\System32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(MainForm.MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion, "Could not get version info")}))
+                                        Case "ESN"
+                                            ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "Correcto", If(MainForm.MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sí", "No"), If(File.Exists(MainForm.MountedImageMountDirs(x) & "\Windows\System32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(MainForm.MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion, "No se pudo obtener información de la versión")}))
+                                    End Select
+                                Case 1
+                                    ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No"), If(File.Exists(MainForm.MountedImageMountDirs(x) & "\Windows\System32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(MainForm.MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion, "Could not get version info")}))
+                                Case 2
+                                    ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "Correcto", If(MainForm.MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sí", "No"), If(File.Exists(MainForm.MountedImageMountDirs(x) & "\Windows\System32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(MainForm.MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion, "No se pudo obtener información de la versión")}))
+                            End Select
                         End If
                     Next
                 End If
-                If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No"), If(File.Exists(MainForm.MountedImageMountDirs(x) & "\Windows\System32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(MainForm.MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion, "Could not get version info")}))
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No"), If(File.Exists(MainForm.MountedImageMountDirs(x) & "\Windows\System32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(MainForm.MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion, "Could not get version info")}))
+                            Case "ESN"
+                                If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "Correcto", If(MainForm.MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sí", "No"), If(File.Exists(MainForm.MountedImageMountDirs(x) & "\Windows\System32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(MainForm.MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion, "No se pudo obtener información de la versión")}))
+                        End Select
+                    Case 1
+                        If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No"), If(File.Exists(MainForm.MountedImageMountDirs(x) & "\Windows\System32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(MainForm.MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion, "Could not get version info")}))
+                    Case 2
+                        If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "Correcto", If(MainForm.MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sí", "No"), If(File.Exists(MainForm.MountedImageMountDirs(x) & "\Windows\System32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(MainForm.MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion, "No se pudo obtener información de la versión")}))
+                End Select
             Next
             ignoreRepeats = True
         Catch ex As Exception

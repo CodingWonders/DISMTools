@@ -130,6 +130,10 @@ Public Class Options
             MsgBox("Support for languages is partial, so this program isn't fully translated yet. Please wait until the next version to experience full language support." & CrLf & CrLf & "El soporte para idiomas es parcial, así que este programa aún no está traducido completamente. Espere hasta la próxima versión para experimentar soporte completo de idiomas.", vbOKOnly + vbInformation, "Options/Opciones")
         End If
         MainForm.ChangeLangs(MainForm.Language)
+        If MountedImgMgr.Visible Then
+            MountedImgMgr.Close()
+            MountedImgMgr.Show()
+        End If
         If MainForm.isProjectLoaded Then
             MainForm.UnpopulateProjectTree()
             MainForm.PopulateProjectTree(MainForm.prjName)
