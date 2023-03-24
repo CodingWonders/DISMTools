@@ -1,4 +1,5 @@
 ﻿Imports System.Windows.Forms
+Imports Microsoft.VisualBasic.ControlChars
 
 Public Class BGProcsBusyDialog
 
@@ -8,6 +9,31 @@ Public Class BGProcsBusyDialog
     End Sub
 
     Private Sub BGProcsBusyDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Label1.Text = "We're still gathering image information"
+                        Label2.Text = "Once we finish this process, you can begin performing image tasks. This usually takes a couple of minutes, but this can depend on the image and the speed of your computer." & CrLf & CrLf & _
+                            "You can check the status of this background process at any time by clicking the icon on the bottom left."
+                        OK_Button.Text = "OK"
+                    Case "ESN"
+                        Label1.Text = "Aún estamos recopilando información de la imagen"
+                        Label2.Text = "Cuando terminemos este proceso, puede comenzar a realizar operaciones con la imagen. Esto suele tardar unos minutos, pero esto puede depender en la imagen y el rendimiento de su equipo." & CrLf & CrLf & _
+                            "Puede comprobar el estado de este proceso en segundo plano en cualquier momento haciendo clic en el icono en la parte inferior izquierda."
+                        OK_Button.Text = "Aceptar"
+                End Select
+            Case 1
+                Label1.Text = "We're still gathering image information"
+                Label2.Text = "Once we finish this process, you can begin performing image tasks. This usually takes a couple of minutes, but this can depend on the image and the speed of your computer." & CrLf & CrLf & _
+                    "You can check the status of this background process at any time by clicking the icon on the bottom left."
+                OK_Button.Text = "OK"
+            Case 2
+                Label1.Text = "Aún estamos recopilando información de la imagen"
+                Label2.Text = "Cuando terminemos este proceso, puede comenzar a realizar operaciones con la imagen. Esto suele tardar unos minutos, pero esto puede depender en la imagen y el rendimiento de su equipo." & CrLf & CrLf & _
+                    "Puede comprobar el estado de este proceso en segundo plano en cualquier momento haciendo clic en el icono en la parte inferior izquierda."
+                OK_Button.Text = "Aceptar"
+        End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)
             ForeColor = Color.White

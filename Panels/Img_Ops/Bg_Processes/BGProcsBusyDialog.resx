@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Label2.Text" xml:space="preserve">
-    <value>Once we finish this process, you can begin performing image tasks. This usually takes a couple of minutes, but this can depend on the image and the speed of the computer.
+    <value>Once we finish this process, you can begin performing image tasks. This usually takes a couple of minutes, but this can depend on the image and the speed of your computer.
 
 You can check the status of this background process at any time by clicking the icon on the bottom left.</value>
   </data>

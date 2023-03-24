@@ -811,7 +811,19 @@ Public Class MainForm
             Try
                 For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
                     If MountedImageMountDirs(x) = MountDir Then
-                        progressLabel = "Creating session for this image..."
+                        Select Case Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        progressLabel = "Creating session for this image..."
+                                    Case "ESN"
+                                        progressLabel = "Creando sesión para esta imagen..."
+                                End Select
+                            Case 1
+                                progressLabel = "Creating session for this image..."
+                            Case 2
+                                progressLabel = "Creando sesión para esta imagen..."
+                        End Select
                         ImgBW.ReportProgress(0)
                         session = DismApi.OpenOfflineSession(MountedImageMountDirs(x))
                         Exit For
@@ -844,10 +856,34 @@ Public Class MainForm
                 pbOpNums += 1
         End Select
         progressDivs = 100 / pbOpNums
-        progressLabel = "Running processes"
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        progressLabel = "Running processes"
+                    Case "ESN"
+                        progressLabel = "Ejecutando procesos"
+                End Select
+            Case 1
+                progressLabel = "Running processes"
+            Case 2
+                progressLabel = "Ejecutando procesos"
+        End Select
         ImgBW.ReportProgress(0)
         If GatherBasicInfo Then
-            progressLabel = "Getting basic image information..."
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            progressLabel = "Getting basic image information..."
+                        Case "ESN"
+                            progressLabel = "Obteniendo información básica de la imagen..."
+                    End Select
+                Case 1
+                    progressLabel = "Getting basic image information..."
+                Case 2
+                    progressLabel = "Obteniendo información básica de la imagen..."
+            End Select
             ImgBW.ReportProgress(progressMin + progressDivs)
             GetBasicImageInfo(True)
             If isOrphaned Then
@@ -860,7 +896,19 @@ Public Class MainForm
             End If
             DetectNTVersion(MountDir & "\Windows\system32\ntoskrnl.exe")
             If GatherAdvancedInfo Then
-                progressLabel = "Getting advanced image information..."
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                progressLabel = "Getting advanced image information..."
+                            Case "ESN"
+                                progressLabel = "Obteniendo información avanzada de la imagen..."
+                        End Select
+                    Case 1
+                        progressLabel = "Getting advanced image information..."
+                    Case 2
+                        progressLabel = "Obteniendo información avanzada de la imagen..."
+                End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetAdvancedImageInfo(True)
             End If
@@ -877,16 +925,52 @@ Public Class MainForm
         progressMin = 20
         Select Case bgProcOptn
             Case 0
-                progressLabel = "Getting image packages..."
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                progressLabel = "Getting image packages..."
+                            Case "ESN"
+                                progressLabel = "Obteniendo paquetes de la imagen..."
+                        End Select
+                    Case 1
+                        progressLabel = "Getting image packages..."
+                    Case 2
+                        progressLabel = "Obteniendo paquetes de la imagen..."
+                End Select
                 ImgBW.ReportProgress(20)
                 GetImagePackages(If(session IsNot Nothing, True, False), If(session IsNot Nothing, session, Nothing))
-                progressLabel = "Getting image features..."
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                progressLabel = "Getting image features..."
+                            Case "ESN"
+                                progressLabel = "Obteniendo características de la imagen..."
+                        End Select
+                    Case 1
+                        progressLabel = "Getting image features..."
+                    Case 2
+                        progressLabel = "Obteniendo características de la imagen..."
+                End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetImageFeatures(If(session IsNot Nothing, True, False), If(session IsNot Nothing, session, Nothing))
                 If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") = True Then
                     Debug.WriteLine("[IsWindows8OrHigher] Returned True")
                     pbOpNums += 1
-                    progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
+                    Select Case Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
+                                Case "ESN"
+                                    progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
+                            End Select
+                        Case 1
+                            progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
+                        Case 2
+                            progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
+                    End Select
                     ImgBW.ReportProgress(progressMin + progressDivs)
                     GetImageAppxPackages(If(session IsNot Nothing, True, False), If(session IsNot Nothing, session, Nothing))
                 Else
@@ -895,28 +979,88 @@ Public Class MainForm
                 If IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") = True Then
                     Debug.WriteLine("[IsWindows10OrHigher] Returned True")
                     pbOpNums += 1
-                    progressLabel = "Getting image Features on Demand (capabilities)..."
+                    Select Case Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    progressLabel = "Getting image Features on Demand (capabilities)..."
+                                Case "ESN"
+                                    progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
+                            End Select
+                        Case 1
+                            progressLabel = "Getting image Features on Demand (capabilities)..."
+                        Case 2
+                            progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
+                    End Select
                     ImgBW.ReportProgress(progressMin + progressDivs)
                     GetImageCapabilities(If(session IsNot Nothing, True, False), If(session IsNot Nothing, session, Nothing))
                 Else
                     Debug.WriteLine("[IsWindows10OrHigher] Returned False")
                 End If
-                progressLabel = "Getting image third-party drivers..."
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                progressLabel = "Getting image third-party drivers..."
+                            Case "ESN"
+                                progressLabel = "Obteniendo controladores de terceros de la imagen..."
+                        End Select
+                    Case 1
+                        progressLabel = "Getting image third-party drivers..."
+                    Case 2
+                        progressLabel = "Obteniendo controladores de terceros de la imagen..."
+                End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetImageDrivers(If(session IsNot Nothing, True, False), If(session IsNot Nothing, session, Nothing))
             Case 1
-                progressLabel = "Getting image packages..."
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                progressLabel = "Getting image packages..."
+                            Case "ESN"
+                                progressLabel = "Obteniendo paquetes de la imagen..."
+                        End Select
+                    Case 1
+                        progressLabel = "Getting image packages..."
+                    Case 2
+                        progressLabel = "Obteniendo paquetes de la imagen..."
+                End Select
                 ImgBW.ReportProgress(20)
                 GetImagePackages()
             Case 2
-                progressLabel = "Getting image features..."
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                progressLabel = "Getting image features..."
+                            Case "ESN"
+                                progressLabel = "Obteniendo características de la imagen..."
+                        End Select
+                    Case 1
+                        progressLabel = "Getting image features..."
+                    Case 2
+                        progressLabel = "Obteniendo características de la imagen..."
+                End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetImageFeatures()
             Case 3
                 If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") = True Then
                     Debug.WriteLine("[IsWindows8OrHigher] Returned True")
                     pbOpNums += 1
-                    progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
+                    Select Case Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
+                                Case "ESN"
+                                    progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
+                            End Select
+                        Case 1
+                            progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
+                        Case 2
+                            progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
+                    End Select
                     ImgBW.ReportProgress(progressMin + progressDivs)
                     GetImageAppxPackages()
                 Else
@@ -926,14 +1070,38 @@ Public Class MainForm
                 If IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") = True Then
                     Debug.WriteLine("[IsWindows10OrHigher] Returned True")
                     pbOpNums += 1
-                    progressLabel = "Getting image Features on Demand (capabilities)..."
+                    Select Case Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    progressLabel = "Getting image Features on Demand (capabilities)..."
+                                Case "ESN"
+                                    progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
+                            End Select
+                        Case 1
+                            progressLabel = "Getting image Features on Demand (capabilities)..."
+                        Case 2
+                            progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
+                    End Select
                     ImgBW.ReportProgress(progressMin + progressDivs)
                     GetImageCapabilities()
                 Else
                     Debug.WriteLine("[IsWindows10OrHigher] Returned False")
                 End If
             Case 5
-                progressLabel = "Getting image third-party drivers..."
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                progressLabel = "Getting image third-party drivers..."
+                            Case "ESN"
+                                progressLabel = "Obteniendo controladores de terceros de la imagen..."
+                        End Select
+                    Case 1
+                        progressLabel = "Getting image third-party drivers..."
+                    Case 2
+                        progressLabel = "Obteniendo controladores de terceros de la imagen..."
+                End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetImageDrivers()
         End Select
@@ -6234,7 +6402,19 @@ Public Class MainForm
         If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
         areBackgroundProcessesDone = True
         BackgroundProcessesButton.Image = New Bitmap(My.Resources.bg_ops_complete)
-        progressLabel = "Image processes have completed"
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        progressLabel = "Image processes have completed"
+                    Case "ESN"
+                        progressLabel = "Los procesos de la imagen han completado"
+                End Select
+            Case 1
+                progressLabel = "Image processes have completed"
+            Case 2
+                progressLabel = "Los procesos de la imagen han completado"
+        End Select
         BGProcDetails.Label2.Text = progressLabel
         BGProcDetails.ProgressBar1.Value = BGProcDetails.ProgressBar1.Maximum
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
