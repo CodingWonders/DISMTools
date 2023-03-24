@@ -68,6 +68,103 @@ Public Class ImgMount
     End Sub
 
     Private Sub ImgMount_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Text = "Mount an image"
+                        Label1.Text = Text
+                        Label2.Text = "Please specify the options to mount an image:"
+                        Label3.Text = "Image file*:"
+                        Label4.Text = "NOTE: if you want to mount an ESD file, you need to convert it to a WIM file first"
+                        Label6.Text = "Mount directory*:"
+                        Label7.Text = "Index*:"
+                        Label11.Text = "The fields that end in * are required"
+                        GroupBox1.Text = "Source"
+                        GroupBox2.Text = "Destination"
+                        GroupBox3.Text = "Options"
+                        Button1.Text = "Browse..."
+                        Button2.Text = "Browse..."
+                        Button3.Text = "Command help"
+                        Button5.Text = "Use defaults"
+                        Cancel_Button.Text = "Cancel"
+                        OK_Button.Text = "OK"
+                        ListView1.Columns(0).Text = "Index"
+                        ListView1.Columns(1).Text = "Image name"
+                        CheckBox1.Text = "Mount with read only permissions"
+                        CheckBox3.Text = "Optimize mount times"
+                        CheckBox4.Text = "Check image integrity"
+                    Case "ESN"
+                        Text = "Montar una imagen"
+                        Label1.Text = Text
+                        Label2.Text = "Especifique las opciones para montar una imagen:"
+                        Label3.Text = "Archivo de imagen*:"
+                        Label4.Text = "NOTA: si desea montar un archivo ESD, necesita convertirlo a un archivo WIM en primer lugar"
+                        Label6.Text = "Directorio de montaje*:"
+                        Label7.Text = "Índice*:"
+                        Label11.Text = "Los campos que terminen en * son necesarios"
+                        GroupBox1.Text = "Origen"
+                        GroupBox2.Text = "Destino"
+                        GroupBox3.Text = "Opciones"
+                        Button1.Text = "Examinar..."
+                        Button2.Text = "Examinar..."
+                        Button3.Text = "Ayuda de comandos"
+                        Button5.Text = "Predeterminados"
+                        Cancel_Button.Text = "Cancelar"
+                        OK_Button.Text = "Aceptar"
+                        ListView1.Columns(0).Text = "Índice"
+                        ListView1.Columns(1).Text = "Nombre de imagen"
+                        CheckBox1.Text = "Montar con permisos de solo lectura"
+                        CheckBox3.Text = "Optimizar tiempos de montaje"
+                        CheckBox4.Text = "Comprobar integridad de la imagen"
+                End Select
+            Case 1
+                Text = "Mount an image"
+                Label1.Text = Text
+                Label2.Text = "Please specify the options to mount an image:"
+                Label3.Text = "Image file*:"
+                Label4.Text = "NOTE: if you want to mount an ESD file, you need to convert it to a WIM file first"
+                Label6.Text = "Mount directory*:"
+                Label7.Text = "Index*:"
+                Label11.Text = "The fields that end in * are required"
+                GroupBox1.Text = "Source"
+                GroupBox2.Text = "Destination"
+                GroupBox3.Text = "Options"
+                Button1.Text = "Browse..."
+                Button2.Text = "Browse..."
+                Button3.Text = "Command help"
+                Button5.Text = "Use defaults"
+                Cancel_Button.Text = "Cancel"
+                OK_Button.Text = "OK"
+                ListView1.Columns(0).Text = "Index"
+                ListView1.Columns(1).Text = "Image name"
+                CheckBox1.Text = "Mount with read only permissions"
+                CheckBox3.Text = "Optimize mount times"
+                CheckBox4.Text = "Check image integrity"
+            Case 2
+                Text = "Montar una imagen"
+                Label1.Text = Text
+                Label2.Text = "Especifique las opciones para montar una imagen:"
+                Label3.Text = "Archivo de imagen*:"
+                Label4.Text = "NOTA: si desea montar un archivo ESD, necesita convertirlo a un archivo WIM en primer lugar"
+                Label6.Text = "Directorio de montaje*:"
+                Label7.Text = "Índice*:"
+                Label11.Text = "Los campos que terminen en * son necesarios"
+                GroupBox1.Text = "Origen"
+                GroupBox2.Text = "Destino"
+                GroupBox3.Text = "Opciones"
+                Button1.Text = "Examinar..."
+                Button2.Text = "Examinar..."
+                Button3.Text = "Ayuda de comandos"
+                Button5.Text = "Predeterminados"
+                Cancel_Button.Text = "Cancelar"
+                OK_Button.Text = "Aceptar"
+                ListView1.Columns(0).Text = "Índice"
+                ListView1.Columns(1).Text = "Nombre de imagen"
+                CheckBox1.Text = "Montar con permisos de solo lectura"
+                CheckBox3.Text = "Optimizar tiempos de montaje"
+                CheckBox4.Text = "Comprobar integridad de la imagen"
+        End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
             BackColor = Color.FromArgb(31, 31, 31)
@@ -78,8 +175,6 @@ Public Class ImgMount
             GroupBox1.ForeColor = Color.White
             GroupBox2.ForeColor = Color.White
             GroupBox3.ForeColor = Color.White
-            ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New MainForm.DarkModeColorTable())
-            ToolStripButton1.Image = My.Resources.clear_glyph_dark
             ListView1.BackColor = Color.FromArgb(31, 31, 31)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Win10Title.BackColor = Color.White
@@ -91,8 +186,6 @@ Public Class ImgMount
             GroupBox1.ForeColor = Color.Black
             GroupBox2.ForeColor = Color.Black
             GroupBox3.ForeColor = Color.Black
-            ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New MainForm.LightModeColorTable())
-            ToolStripButton1.Image = My.Resources.clear_glyph
             ListView1.BackColor = Color.FromArgb(238, 238, 242)
         End If
         NumericUpDown1.ForeColor = ForeColor
@@ -126,25 +219,7 @@ Public Class ImgMount
         TextBox1.Text = FileSpecDialog.FileName
     End Sub
 
-    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
-        If TextBox1.Text = "" Then
-            Button1.PerformClick()
-        End If
-        If File.Exists(TextBox1.Text) Then
-            DismApi.Initialize(DismLogLevel.LogErrors)
-            Dim imgIndexInfo As DismImageInfoCollection = DismApi.GetImageInfo(TextBox1.Text)
-            For Each info As DismImageInfo In imgIndexInfo
-                ListView1.Items.Add(New ListViewItem(New String() {info.ImageIndex, info.ImageName}))
-            Next
-            DismApi.Shutdown()
-        Else
-            Exit Sub
-        End If
-        Width = 1148
-        CenterToParent()
-    End Sub
-
-    Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
+    Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs)
         ListView1.Items.Clear()
         Width = 800
         CenterToParent()
@@ -160,11 +235,15 @@ Public Class ImgMount
         GetFields()
     End Sub
 
-    Sub GetMaxIndexCount(ImgFile As String)
+    Sub GetIndexes(ImgFile As String)
         Try
+            ListView1.Items.Clear()
             DismApi.Initialize(DismLogLevel.LogErrors)
             Dim imgInfoCollection As DismImageInfoCollection = DismApi.GetImageInfo(ImgFile)
             NumericUpDown1.Maximum = imgInfoCollection.Count
+            For Each imgInfo As DismImageInfo In imgInfoCollection
+                ListView1.Items.Add(New ListViewItem(New String() {imgInfo.ImageIndex, imgInfo.ImageName}))
+            Next
             DismApi.Shutdown()
         Catch ex As AccessViolationException
             If IndexOperationMode = 0 Then
@@ -195,7 +274,7 @@ Public Class ImgMount
             If File.Exists(TextBox1.Text) Then
                 IsReqField1Valid = True
                 ProgressPanel.SourceImg = TextBox1.Text
-                GetMaxIndexCount(TextBox1.Text)
+                GetIndexes(TextBox1.Text)
             Else
                 IsReqField1Valid = False
             End If
