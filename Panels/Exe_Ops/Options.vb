@@ -668,8 +668,23 @@ Public Class Options
             GroupBox4.ForeColor = Color.Black
             TrackBar1.BackColor = Color.FromArgb(238, 238, 242)
         End If
-        Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "running", "stopped")
-        Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Stop", "Start")
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "running", "stopped")
+                        Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Stop", "Start")
+                    Case "ESN"
+                        Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "iniciado", "detenido")
+                        Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Detener", "Iniciar")
+                End Select
+            Case 1
+                Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "running", "stopped")
+                Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Stop", "Start")
+            Case 2
+                Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "iniciado", "detenido")
+                Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Detener", "Iniciar")
+        End Select
     End Sub
 
     Sub GetSystemFonts()
@@ -834,19 +849,70 @@ Public Class Options
     End Sub
 
     Private Sub TrackBar1_Scroll(sender As Object, e As EventArgs) Handles TrackBar1.Scroll
-        Select Case TrackBar1.Value
+        Select Case MainForm.Language
             Case 0
-                Label15.Text = "Errors (Log level 1)"
-                Label16.Text = "The log file should only display errors after performing an image operation."
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Select Case TrackBar1.Value
+                            Case 0
+                                Label15.Text = "Errors (Log level 1)"
+                                Label16.Text = "The log file should only display errors after performing an image operation."
+                            Case 1
+                                Label15.Text = "Errors and warnings (Log level 2)"
+                                Label16.Text = "The log file should display errors and warnings after performing an image operation."
+                            Case 2
+                                Label15.Text = "Errors, warnings and information messages (Log level 3)"
+                                Label16.Text = "The log file should display errors, warnings and information messages after performing an image operation."
+                            Case 3
+                                Label15.Text = "Errors, warnings, information and debug messages (Log level 4)"
+                                Label16.Text = "The log file should display errors, warnings, information and debug messages after performing an image operation."
+                        End Select
+                    Case "ESN"
+                        Select Case TrackBar1.Value
+                            Case 0
+                                Label15.Text = "Errores (Nivel 1)"
+                                Label16.Text = "El archivo de registro solo debe mostrar errores tras realizar una operación."
+                            Case 1
+                                Label15.Text = "Errores y advertencias (Nivel 2)"
+                                Label16.Text = "El archivo de registro debe mostrar errores y advertencias tras realizar una operación."
+                            Case 2
+                                Label15.Text = "Errores, advertencias y mensajes de información (Nivel 3)"
+                                Label16.Text = "El archivo de registro debe mostrar errores, advertencias y mensajes de información tras realizar una operación."
+                            Case 3
+                                Label15.Text = "Errores, advertencias, mensajes de información y de depuración (Nivel 4)"
+                                Label16.Text = "El archivo de registro debe mostrar errores, advertencias, mensajes de información y de depuración tras realizar una operación."
+                        End Select
+                End Select
             Case 1
-                Label15.Text = "Errors and warnings (Log level 2)"
-                Label16.Text = "The log file should display errors and warnings after performing an image operation."
+                Select Case TrackBar1.Value
+                    Case 0
+                        Label15.Text = "Errors (Log level 1)"
+                        Label16.Text = "The log file should only display errors after performing an image operation."
+                    Case 1
+                        Label15.Text = "Errors and warnings (Log level 2)"
+                        Label16.Text = "The log file should display errors and warnings after performing an image operation."
+                    Case 2
+                        Label15.Text = "Errors, warnings and information messages (Log level 3)"
+                        Label16.Text = "The log file should display errors, warnings and information messages after performing an image operation."
+                    Case 3
+                        Label15.Text = "Errors, warnings, information and debug messages (Log level 4)"
+                        Label16.Text = "The log file should display errors, warnings, information and debug messages after performing an image operation."
+                End Select
             Case 2
-                Label15.Text = "Errors, warnings and information messages (Log level 3)"
-                Label16.Text = "The log file should display errors, warnings and information messages after performing an image operation."
-            Case 3
-                Label15.Text = "Errors, warnings, information and debug messages (Log level 4)"
-                Label16.Text = "The log file should display errors, warnings, information and debug messages after performing an image operation."
+                Select Case TrackBar1.Value
+                    Case 0
+                        Label15.Text = "Errores (Nivel 1)"
+                        Label16.Text = "El archivo de registro solo debe mostrar errores tras realizar una operación."
+                    Case 1
+                        Label15.Text = "Errores y advertencias (Nivel 2)"
+                        Label16.Text = "El archivo de registro debe mostrar errores y advertencias tras realizar una operación."
+                    Case 2
+                        Label15.Text = "Errores, advertencias y mensajes de información (Nivel 3)"
+                        Label16.Text = "El archivo de registro debe mostrar errores, advertencias y mensajes de información tras realizar una operación."
+                    Case 3
+                        Label15.Text = "Errores, advertencias, mensajes de información y de depuración (Nivel 4)"
+                        Label16.Text = "El archivo de registro debe mostrar errores, advertencias, mensajes de información y de depuración tras realizar una operación."
+                End Select
         End Select
     End Sub
 
@@ -879,46 +945,166 @@ Public Class Options
     ''' <summary>
     ''' Gets the space of the drive which contains the scratch directory (referred to as the root drive)
     ''' </summary>
-    ''' <param name="SourceDir"></param>
+    ''' <param name="SourceDir">The source scratch directory</param>
     ''' <remarks></remarks>
     Sub GetRootSpace(SourceDir As String)
-        If SourceDir = "" Then
-            Label23.Text = "Please specify a scratch directory."
-            Label24.Visible = False
-            PictureBox5.Visible = False
-            PictureBox5.Image = New Bitmap(My.Resources.info_16px)
-            Label24.Text = "You have enough space on the selected scratch directory"
-        Else
-            Try
-                Dim drInfo As New DriveInfo(Path.GetPathRoot(SourceDir))
-                Dim FreeSpace As Double = drInfo.AvailableFreeSpace / (1024 ^ 3)
-                Label23.Text = Math.Round(FreeSpace, 2) & " GB"
-                Select Case Math.Round(FreeSpace, 0)
-                    Case Is < 5
-                        Label24.Visible = True
-                        PictureBox5.Visible = True
-                        PictureBox5.Image = New Bitmap(My.Resources.error_16px)
-                        Label24.Text = "You don't have enough space on the selected scratch directory to perform image operations. Try freeing some space from the drive"
-                    Case 5 To 19.99
-                        Label24.Visible = True
-                        PictureBox5.Visible = True
-                        PictureBox5.Image = New Bitmap(My.Resources.warning_16px)
-                        Label24.Text = "You may not have enough space on the selected scratch directory for some operations."
-                    Case Is >= 20
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        If SourceDir = "" Then
+                            Label23.Text = "Please specify a scratch directory."
+                            Label24.Visible = False
+                            PictureBox5.Visible = False
+                            PictureBox5.Image = New Bitmap(My.Resources.info_16px)
+                            Label24.Text = "You have enough space on the selected scratch directory"
+                        Else
+                            Try
+                                Dim drInfo As New DriveInfo(Path.GetPathRoot(SourceDir))
+                                Dim FreeSpace As Double = drInfo.AvailableFreeSpace / (1024 ^ 3)
+                                Label23.Text = Math.Round(FreeSpace, 2) & " GB"
+                                Select Case Math.Round(FreeSpace, 0)
+                                    Case Is < 5
+                                        Label24.Visible = True
+                                        PictureBox5.Visible = True
+                                        PictureBox5.Image = New Bitmap(My.Resources.error_16px)
+                                        Label24.Text = "You don't have enough space on the selected scratch directory to perform image operations. Try freeing some space from the drive"
+                                    Case 5 To 19.99
+                                        Label24.Visible = True
+                                        PictureBox5.Visible = True
+                                        PictureBox5.Image = New Bitmap(My.Resources.warning_16px)
+                                        Label24.Text = "You may not have enough space on the selected scratch directory for some operations."
+                                    Case Is >= 20
+                                        Label24.Visible = False
+                                        PictureBox5.Visible = False
+                                        PictureBox5.Image = New Bitmap(My.Resources.info_16px)
+                                        Label24.Text = "You have enough space on the selected scratch directory"
+                                End Select
+                            Catch ex As Exception
+                                Label23.Text = "Could not get available free space. Continue at your own risk"
+                                Label24.Visible = False
+                                PictureBox5.Visible = False
+                                PictureBox5.Image = New Bitmap(My.Resources.info_16px)
+                                Label24.Text = "You have enough space on the selected scratch directory"
+                                Exit Sub
+                            End Try
+                        End If
+                    Case "ESN"
+                        If SourceDir = "" Then
+                            Label23.Text = "Especifique un directorio temporal."
+                            Label24.Visible = False
+                            PictureBox5.Visible = False
+                            PictureBox5.Image = New Bitmap(My.Resources.info_16px)
+                            Label24.Text = "Hay espacio suficiente en el directorio temporal seleccionado"
+                        Else
+                            Try
+                                Dim drInfo As New DriveInfo(Path.GetPathRoot(SourceDir))
+                                Dim FreeSpace As Double = drInfo.AvailableFreeSpace / (1024 ^ 3)
+                                Label23.Text = Math.Round(FreeSpace, 2) & " GB"
+                                Select Case Math.Round(FreeSpace, 0)
+                                    Case Is < 5
+                                        Label24.Visible = True
+                                        PictureBox5.Visible = True
+                                        PictureBox5.Image = New Bitmap(My.Resources.error_16px)
+                                        Label24.Text = "No hay espacio suficiente en el directorio temporal seleccionado para realizar operaciones con la imagen. Intente liberar algo de espacio en el disco"
+                                    Case 5 To 19.99
+                                        Label24.Visible = True
+                                        PictureBox5.Visible = True
+                                        PictureBox5.Image = New Bitmap(My.Resources.warning_16px)
+                                        Label24.Text = "Podría no tener espacio suficiente en el directorio temporal seleccionado para algunas operaciones."
+                                    Case Is >= 20
+                                        Label24.Visible = False
+                                        PictureBox5.Visible = False
+                                        PictureBox5.Image = New Bitmap(My.Resources.info_16px)
+                                        Label24.Text = "Tiene espacio suficiente en el directorio temporal seleccionado"
+                                End Select
+                            Catch ex As Exception
+                                Label23.Text = "No pudimos obtener el espacio libre disponible. Continúe bajo su propio riesgo"
+                                Label24.Visible = False
+                                PictureBox5.Visible = False
+                                PictureBox5.Image = New Bitmap(My.Resources.info_16px)
+                                Label24.Text = "Tiene espacio suficiente en el directorio temporal seleccionado"
+                                Exit Sub
+                            End Try
+                        End If
+                End Select
+            Case 1
+                If SourceDir = "" Then
+                    Label23.Text = "Please specify a scratch directory."
+                    Label24.Visible = False
+                    PictureBox5.Visible = False
+                    PictureBox5.Image = New Bitmap(My.Resources.info_16px)
+                    Label24.Text = "You have enough space on the selected scratch directory"
+                Else
+                    Try
+                        Dim drInfo As New DriveInfo(Path.GetPathRoot(SourceDir))
+                        Dim FreeSpace As Double = drInfo.AvailableFreeSpace / (1024 ^ 3)
+                        Label23.Text = Math.Round(FreeSpace, 2) & " GB"
+                        Select Case Math.Round(FreeSpace, 0)
+                            Case Is < 5
+                                Label24.Visible = True
+                                PictureBox5.Visible = True
+                                PictureBox5.Image = New Bitmap(My.Resources.error_16px)
+                                Label24.Text = "You don't have enough space on the selected scratch directory to perform image operations. Try freeing some space from the drive"
+                            Case 5 To 19.99
+                                Label24.Visible = True
+                                PictureBox5.Visible = True
+                                PictureBox5.Image = New Bitmap(My.Resources.warning_16px)
+                                Label24.Text = "You may not have enough space on the selected scratch directory for some operations."
+                            Case Is >= 20
+                                Label24.Visible = False
+                                PictureBox5.Visible = False
+                                PictureBox5.Image = New Bitmap(My.Resources.info_16px)
+                                Label24.Text = "You have enough space on the selected scratch directory"
+                        End Select
+                    Catch ex As Exception
+                        Label23.Text = "Could not get available free space. Continue at your own risk"
                         Label24.Visible = False
                         PictureBox5.Visible = False
                         PictureBox5.Image = New Bitmap(My.Resources.info_16px)
                         Label24.Text = "You have enough space on the selected scratch directory"
-                End Select
-            Catch ex As Exception
-                Label23.Text = "Could not get available free space. Continue at your own risk"
-                Label24.Visible = False
-                PictureBox5.Visible = False
-                PictureBox5.Image = New Bitmap(My.Resources.info_16px)
-                Label24.Text = "You have enough space on the selected scratch directory"
-                Exit Sub
-            End Try
-        End If
+                        Exit Sub
+                    End Try
+                End If
+            Case 2
+                If SourceDir = "" Then
+                    Label23.Text = "Especifique un directorio temporal."
+                    Label24.Visible = False
+                    PictureBox5.Visible = False
+                    PictureBox5.Image = New Bitmap(My.Resources.info_16px)
+                    Label24.Text = "Hay espacio suficiente en el directorio temporal seleccionado"
+                Else
+                    Try
+                        Dim drInfo As New DriveInfo(Path.GetPathRoot(SourceDir))
+                        Dim FreeSpace As Double = drInfo.AvailableFreeSpace / (1024 ^ 3)
+                        Label23.Text = Math.Round(FreeSpace, 2) & " GB"
+                        Select Case Math.Round(FreeSpace, 0)
+                            Case Is < 5
+                                Label24.Visible = True
+                                PictureBox5.Visible = True
+                                PictureBox5.Image = New Bitmap(My.Resources.error_16px)
+                                Label24.Text = "No hay espacio suficiente en el directorio temporal seleccionado para realizar operaciones con la imagen. Intente liberar algo de espacio en el disco"
+                            Case 5 To 19.99
+                                Label24.Visible = True
+                                PictureBox5.Visible = True
+                                PictureBox5.Image = New Bitmap(My.Resources.warning_16px)
+                                Label24.Text = "Podría no tener espacio suficiente en el directorio temporal seleccionado para algunas operaciones."
+                            Case Is >= 20
+                                Label24.Visible = False
+                                PictureBox5.Visible = False
+                                PictureBox5.Image = New Bitmap(My.Resources.info_16px)
+                                Label24.Text = "Tiene espacio suficiente en el directorio temporal seleccionado"
+                        End Select
+                    Catch ex As Exception
+                        Label23.Text = "No pudimos obtener el espacio libre disponible. Continúe bajo su propio riesgo"
+                        Label24.Visible = False
+                        PictureBox5.Visible = False
+                        PictureBox5.Image = New Bitmap(My.Resources.info_16px)
+                        Label24.Text = "Tiene espacio suficiente en el directorio temporal seleccionado"
+                        Exit Sub
+                    End Try
+                End If
+        End Select
     End Sub
 
     Private Sub Toggle1_CheckedChanged(sender As Object, e As EventArgs) Handles Toggle1.CheckedChanged
@@ -938,13 +1124,43 @@ Public Class Options
     End Sub
 
     Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
-        If Button8.Text = "Stop" Then
-            MainForm.MountedImageDetectorBW.CancelAsync()
-        ElseIf Button8.Text = "Start" Then
-            Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
-        End If
-        Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "running", "stopped")
-        Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Stop", "Start")
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        If Button8.Text = "Stop" Then
+                            MainForm.MountedImageDetectorBW.CancelAsync()
+                        ElseIf Button8.Text = "Start" Then
+                            Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+                        End If
+                        Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "running", "stopped")
+                        Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Stop", "Start")
+                    Case "ESN"
+                        If Button8.Text = "Detener" Then
+                            MainForm.MountedImageDetectorBW.CancelAsync()
+                        ElseIf Button8.Text = "Iniciar" Then
+                            Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+                        End If
+                        Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "iniciado", "detenido")
+                        Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Detener", "Iniciar")
+                End Select
+            Case 1
+                If Button8.Text = "Stop" Then
+                    MainForm.MountedImageDetectorBW.CancelAsync()
+                ElseIf Button8.Text = "Start" Then
+                    Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+                End If
+                Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "running", "stopped")
+                Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Stop", "Start")
+            Case 2
+                If Button8.Text = "Detener" Then
+                    MainForm.MountedImageDetectorBW.CancelAsync()
+                ElseIf Button8.Text = "Iniciar" Then
+                    Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+                End If
+                Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "iniciado", "detenido")
+                Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Detener", "Iniciar")
+        End Select
     End Sub
 
     Private Sub CheckBox10_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox10.CheckedChanged

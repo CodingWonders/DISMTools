@@ -6725,8 +6725,23 @@ Public Class MainForm
     End Sub
 
     Private Sub MountedImageDetectorBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles MountedImageDetectorBW.RunWorkerCompleted
-        Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "running", "stopped")
-        Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Stop", "Start")
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "running", "stopped")
+                        Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Stop", "Start")
+                    Case "ESN"
+                        Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "iniciado", "detenido")
+                        Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Detener", "Iniciar")
+                End Select
+            Case 1
+                Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "running", "stopped")
+                Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Stop", "Start")
+            Case 2
+                Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "iniciado", "detenido")
+                Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Detener", "Iniciar")
+        End Select
     End Sub
 
     Private Sub MountedImageManagerTSMI_Click(sender As Object, e As EventArgs) Handles MountedImageManagerTSMI.Click
