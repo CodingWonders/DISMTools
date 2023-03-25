@@ -369,9 +369,9 @@ Public Class ProgressPanel
     Public RWRemountSourceImg As String                     ' Source image to remount with R/W permissions
 
     Private Sub Cancel_Button_Click(sender As Object, e As EventArgs) Handles Cancel_Button.Click
-        If Cancel_Button.Text = "Cancel" Then
+        If Cancel_Button.Text = "Cancel" Or Cancel_Button.Text = "Cancelar" Then
             ProgressBW.CancelAsync()
-        ElseIf Cancel_Button.Text = "OK" Then
+        ElseIf Cancel_Button.Text = "OK" Or Cancel_Button.Text = "Aceptar" Then
             MainForm.ToolStripButton4.Visible = False
             Dispose()
             Close()
@@ -379,11 +379,35 @@ Public Class ProgressPanel
     End Sub
 
     Private Sub LogButton_Click(sender As Object, e As EventArgs) Handles LogButton.Click
-        If LogButton.Text = "Show log" Then
-            LogButton.Text = "Hide log"
+        If Height = 240 Then
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            LogButton.Text = "Hide log"
+                        Case "ESN"
+                            LogButton.Text = "Ocultar registro"
+                    End Select
+                Case 1
+                    LogButton.Text = "Hide log"
+                Case 2
+                    LogButton.Text = "Ocultar registro"
+            End Select
             Height = 420
-        ElseIf LogButton.Text = "Hide log" Then
-            LogButton.Text = "Show log"
+        ElseIf Height = 420 Then
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            LogButton.Text = "Show log"
+                        Case "ESN"
+                            LogButton.Text = "Mostrar registro"
+                    End Select
+                Case 1
+                    LogButton.Text = "Show log"
+                Case 2
+                    LogButton.Text = "Mostrar registro"
+            End Select
             Height = 240
         End If
         BodyPanel.Refresh()
@@ -451,7 +475,19 @@ Public Class ProgressPanel
             taskCount = 2
         End If
         AllPB.Maximum = taskCount * 100
-        taskCountLbl.Text = "Tasks: 1/" & taskCount
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        taskCountLbl.Text = "Tasks: 1/" & taskCount
+                    Case "ESN"
+                        taskCountLbl.Text = "Tareas: 1/" & taskCount
+                End Select
+            Case 1
+                taskCountLbl.Text = "Tasks: 1/" & taskCount
+            Case 2
+                taskCountLbl.Text = "Tareas: 1/" & taskCount
+        End Select
         CenterToParent()
     End Sub
 
@@ -482,8 +518,23 @@ Public Class ProgressPanel
         PkgErrorText.RichTextBox1.Clear()
         FeatErrorText.RichTextBox1.Clear()
         If opNum = 0 Then
-            allTasks.Text = "Creating project: " & Quote & projName & Quote
-            currentTask.Text = "Creating DISMTools project structure..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Creating project: " & Quote & projName & Quote
+                            currentTask.Text = "Creating DISMTools project structure..."
+                        Case "ESN"
+                            allTasks.Text = "Creando proyecto: " & Quote & projName & Quote
+                            currentTask.Text = "Creando estructura del proyecto de DISMTools..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Creating project: " & Quote & projName & Quote
+                    currentTask.Text = "Creating DISMTools project structure..."
+                Case 2
+                    allTasks.Text = "Creando proyecto: " & Quote & projName & Quote
+                    currentTask.Text = "Creando estructura del proyecto de DISMTools..."
+            End Select
             LogView.AppendText(CrLf & "Creating project structure...")
             Try
                 Directory.CreateDirectory(projPath & "\" & projName)
@@ -584,8 +635,23 @@ Public Class ProgressPanel
         ElseIf opNum = 3 Then
             ' My love with DISM came from this very YouTube video:
             ' https://www.youtube.com/watch?v=JxJ6a-PY1KA (Enderman - Manually installing Windows 10)
-            allTasks.Text = "Applying image..."
-            currentTask.Text = "Applying specified image to the specified destination..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Applying image..."
+                            currentTask.Text = "Applying specified image to the specified destination..."
+                        Case "ESN"
+                            allTasks.Text = "Aplicando imagen..."
+                            currentTask.Text = "Aplicando imagen especificada al destino especificado..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Applying image..."
+                    currentTask.Text = "Applying specified image to the specified destination..."
+                Case 2
+                    allTasks.Text = "Aplicando imagen..."
+                    currentTask.Text = "Aplicando imagen especificada al destino especificado..."
+            End Select
             LogView.AppendText(CrLf & "Applying image..." & CrLf & "Options:" & CrLf & _
                                "- Source image file: " & ApplicationSourceImg & CrLf & _
                                "- Index to apply: " & ApplicationIndex & CrLf & _
@@ -668,7 +734,19 @@ Public Class ProgressPanel
                     Exit Do
                 End If
             Loop
-            currentTask.Text = "Gathering error level..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            currentTask.Text = "Gathering error level..."
+                        Case "ESN"
+                            currentTask.Text = "Recopilando nivel de error..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Gathering error level..."
+                Case 2
+                    currentTask.Text = "Recopilando nivel de error..."
+            End Select
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
             If errCode.Length >= 8 Then
@@ -677,8 +755,23 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 6 Then
-            allTasks.Text = "Capturing image..."
-            currentTask.Text = "Capturing specified directory into a new image..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Capturing image..."
+                            currentTask.Text = "Capturing specified directory into a new image..."
+                        Case "ESN"
+                            allTasks.Text = "Capturando imagen..."
+                            currentTask.Text = "Capturando directorio especificado en una nueva imagen..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Capturing image..."
+                    currentTask.Text = "Capturing specified directory into a new image..."
+                Case 2
+                    allTasks.Text = "Capturando imagen..."
+                    currentTask.Text = "Capturando directorio especificado en una nueva imagen..."
+            End Select
             LogView.AppendText(CrLf & "Capturing directory..." & CrLf & "Options:" & CrLf &
                                "- Source directory: " & CaptureSourceDir & CrLf &
                                "- Destination image: " & CaptureDestinationImage & CrLf &
@@ -767,7 +860,19 @@ Public Class ProgressPanel
                     Exit Do
                 End If
             Loop
-            currentTask.Text = "Gathering error level..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            currentTask.Text = "Gathering error level..."
+                        Case "ESN"
+                            currentTask.Text = "Recopilando nivel de error..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Gathering error level..."
+                Case 2
+                    currentTask.Text = "Recopilando nivel de error..."
+            End Select
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
             If errCode.Length >= 8 Then
@@ -792,8 +897,23 @@ Public Class ProgressPanel
                 'MainForm.SaveDTProj()
             End If
         ElseIf opNum = 8 Then
-            allTasks.Text = "Committing image..."
-            currentTask.Text = "Saving changes to the image..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Committing image..."
+                            currentTask.Text = "Saving changes to the image..."
+                        Case "ESN"
+                            allTasks.Text = "Guardando imagen..."
+                            currentTask.Text = "Guardando cambios en la imagen..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Committing image..."
+                    currentTask.Text = "Saving changes to the image..."
+                Case 2
+                    allTasks.Text = "Guardando imagen..."
+                    currentTask.Text = "Guardando cambios en la imagen..."
+            End Select
             LogView.AppendText(CrLf & "Saving changes..." & CrLf & "Options:" & CrLf &
                                "- Mount directory: " & MountDir)
 
@@ -817,7 +937,19 @@ Public Class ProgressPanel
                     Exit Do
                 End If
             Loop
-            currentTask.Text = "Gathering error level..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            currentTask.Text = "Gathering error level..."
+                        Case "ESN"
+                            currentTask.Text = "Recopilando nivel de error..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Gathering error level..."
+                Case 2
+                    currentTask.Text = "Recopilando nivel de error..."
+            End Select
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
             If errCode.Length >= 8 Then
@@ -830,10 +962,37 @@ Public Class ProgressPanel
                 RunOps(21)
                 AllPB.Value = AllPB.Maximum / taskCount
                 currentTCont += 1
-                taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
+                            Case "ESN"
+                                taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                        End Select
+                    Case 1
+                        taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
+                    Case 2
+                        taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                End Select
             End If
-            allTasks.Text = "Deleting images..."
-            currentTask.Text = "Preparing to remove volume images..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Deleting images..."
+                            currentTask.Text = "Preparing to remove volume images..."
+                        Case "ESN"
+                            allTasks.Text = "Eliminando imágenes..."
+                            currentTask.Text = "Preparando para eliminar imágenes de volumen..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Deleting images..."
+                    currentTask.Text = "Preparing to remove volume images..."
+                Case 2
+                    allTasks.Text = "Eliminando imágenes..."
+                    currentTask.Text = "Preparando para eliminar imágenes de volumen..."
+            End Select
             LogView.AppendText(CrLf & "Removing volume images from file..." & CrLf & _
                                "Options:" & CrLf & _
                                "- Source image: " & imgIndexDeletionSourceImg & CrLf)
@@ -848,7 +1007,19 @@ Public Class ProgressPanel
                                "Removing volume images..." & CrLf)
             For x = 0 To Array.LastIndexOf(imgIndexDeletionNames, imgIndexDeletionLastName)
                 CurrentPB.Value = x + 1
-                currentTask.Text = "Removing volume image " & Quote & imgIndexDeletionNames(x) & Quote & "..."
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                currentTask.Text = "Removing volume image " & Quote & imgIndexDeletionNames(x) & Quote & "..."
+                            Case "ESN"
+                                currentTask.Text = "Eliminando imagen de volumen " & Quote & imgIndexDeletionNames(x) & Quote & "..."
+                        End Select
+                    Case 1
+                        currentTask.Text = "Removing volume image " & Quote & imgIndexDeletionNames(x) & Quote & "..."
+                    Case 2
+                        currentTask.Text = "Eliminando imagen de volumen " & Quote & imgIndexDeletionNames(x) & Quote & "..."
+                End Select
                 LogView.AppendText(CrLf & _
                                    "- " & imgIndexDeletionNames(x) & "...")
                 DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
@@ -910,8 +1081,23 @@ Public Class ProgressPanel
                               "dism " & CommandArgs & " > ",
                               ASCII)
         ElseIf opNum = 15 Then
-            allTasks.Text = "Mounting image..."
-            currentTask.Text = "Mounting specified image..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Mounting image..."
+                            currentTask.Text = "Mounting specified image..."
+                        Case "ESN"
+                            allTasks.Text = "Montando imagen..."
+                            currentTask.Text = "Montando imagen especificada..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Mounting image..."
+                    currentTask.Text = "Mounting specified image..."
+                Case 2
+                    allTasks.Text = "Montando imagen..."
+                    currentTask.Text = "Montando imagen especificada..."
+            End Select
             LogView.AppendText(CrLf & "Mounting image..." & CrLf & "Options:" & CrLf &
                                "- Image file: " & SourceImg & CrLf &
                                "- Image index: " & ImgIndex & CrLf &
@@ -953,7 +1139,19 @@ Public Class ProgressPanel
                     Exit Do
                 End If
             Loop
-            currentTask.Text = "Gathering error level..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            currentTask.Text = "Gathering error level..."
+                        Case "ESN"
+                            currentTask.Text = "Recopilando nivel de error..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Gathering error level..."
+                Case 2
+                    currentTask.Text = "Recopilando nivel de error..."
+            End Select
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
             If errCode.Length >= 8 Then
@@ -962,8 +1160,23 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 18 Then
-            allTasks.Text = "Remounting image..."
-            currentTask.Text = "Reloading servicing session for mounted image..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Remounting image..."
+                            currentTask.Text = "Reloading servicing session for mounted image..."
+                        Case "ESN"
+                            allTasks.Text = "Remontando imagen..."
+                            currentTask.Text = "Recargando sesión de servicio para la imagen montada..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Remounting image..."
+                    currentTask.Text = "Reloading servicing session for mounted image..."
+                Case 2
+                    allTasks.Text = "Remontando imagen..."
+                    currentTask.Text = "Recargando sesión de servicio para la imagen montada..."
+            End Select
             LogView.AppendText(CrLf & "Reloading servicing session..." & CrLf &
                                "- Mount directory: " & MountDir)
             DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
@@ -987,7 +1200,19 @@ Public Class ProgressPanel
             Loop
             CurrentPB.Value = 50
             AllPB.Value = CurrentPB.Value
-            currentTask.Text = "Gathering error level..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            currentTask.Text = "Gathering error level..."
+                        Case "ESN"
+                            currentTask.Text = "Recopilando nivel de error..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Gathering error level..."
+                Case 2
+                    currentTask.Text = "Recopilando nivel de error..."
+            End Select
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
             If errCode.Length >= 8 Then
@@ -996,17 +1221,29 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 21 Then
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Unmounting image..."
+                            currentTask.Text = "Unmounting image file..."
+                        Case "ESN"
+                            allTasks.Text = "Desmontando imagen..."
+                            currentTask.Text = "Desmontando archivo de imagen..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Unmounting image..."
+                    currentTask.Text = "Unmounting image file..."
+                Case 2
+                    allTasks.Text = "Desmontando imagen..."
+                    currentTask.Text = "Desmontando archivo de imagen..."
+            End Select
             If UMountLocalDir Then
-                'MountDir = MainForm.MountDir
-                allTasks.Text = "Unmounting image..."
-                currentTask.Text = "Unmounting image file..."
                 LogView.AppendText(CrLf & "Unmounting image file from mount point..." & CrLf &
                                    "- Mount directory: " & MountDir & CrLf &
                                    "- Image index: " & UMountImgIndex)
             Else
                 MountDir = RandomMountDir
-                allTasks.Text = "Unmountimg image..."
-                currentTask.Text = "Unmounting image file..."
                 LogView.AppendText(CrLf & "Unmounting image file from mount point..." & CrLf &
                                    "- Mount directory: " & MountDir & CrLf &
                                    "- Image index: " & UMountImgIndex)
@@ -1064,7 +1301,19 @@ Public Class ProgressPanel
                                       ASCII)
                     Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
                 End Try
-                currentTask.Text = "Gathering error level..."
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                currentTask.Text = "Gathering error level..."
+                            Case "ESN"
+                                currentTask.Text = "Recopilando nivel de error..."
+                        End Select
+                    Case 1
+                        currentTask.Text = "Gathering error level..."
+                    Case 2
+                        currentTask.Text = "Recopilando nivel de error..."
+                End Select
                 LogView.AppendText(CrLf & "Gathering error level...")
                 GetErrorCode(False)
                 If errCode.Length >= 8 Then
@@ -1127,7 +1376,19 @@ Public Class ProgressPanel
                 Catch ex As Exception
                     ' Let's try this before setting things up here
                 End Try
-                currentTask.Text = "Gathering error level..."
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                currentTask.Text = "Gathering error level..."
+                            Case "ESN"
+                                currentTask.Text = "Recopilando nivel de error..."
+                        End Select
+                    Case 1
+                        currentTask.Text = "Gathering error level..."
+                    Case 2
+                        currentTask.Text = "Recopilando nivel de error..."
+                End Select
                 LogView.AppendText(CrLf & "Gathering error level...")
                 GetErrorCode(False)
                 If errCode.Length >= 8 Then
@@ -1144,8 +1405,23 @@ Public Class ProgressPanel
             'End If
             ' Reset internal integers
             pkgCurrentNum = 0
-            allTasks.Text = "Adding packages..."
-            currentTask.Text = "Preparing to add packages..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Adding packages..."
+                            currentTask.Text = "Preparing to add packages..."
+                        Case "ESN"
+                            allTasks.Text = "Añadiendo paquetes..."
+                            currentTask.Text = "Preparándonos para añadir paquetes..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Adding packages..."
+                    currentTask.Text = "Preparing to add packages..."
+                Case 2
+                    allTasks.Text = "Añadiendo paquetes..."
+                    currentTask.Text = "Preparándonos para añadir paquetes..."
+            End Select
             LogView.AppendText(CrLf & "Adding packages to mounted image..." & CrLf &
                                "- Package source: " & pkgSource & CrLf)
             If pkgAdditionOp = 0 Then
@@ -1197,7 +1473,19 @@ Public Class ProgressPanel
             Thread.Sleep(2000)      ' Sleep to prevent thrashing
 
             ' Begin package addition
-            currentTask.Text = "Adding " & pkgCount & " packages..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            currentTask.Text = "Adding " & pkgCount & " packages..."
+                        Case "ESN"
+                            currentTask.Text = "Añadiendo " & pkgCount & " paquetes..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Adding " & pkgCount & " packages..."
+                Case 2
+                    currentTask.Text = "Añadiendo " & pkgCount & " paquetes..."
+            End Select
             CurrentPB.Style = ProgressBarStyle.Blocks
             LogView.AppendText(CrLf & CrLf &
                                "Processing " & pkgCount & " packages..." & CrLf)
@@ -1217,14 +1505,38 @@ Public Class ProgressPanel
                         Exit Do
                     End If
                 Loop
-                currentTask.Text = "Gathering error level..."
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                currentTask.Text = "Gathering error level..."
+                            Case "ESN"
+                                currentTask.Text = "Recopilando nivel de error..."
+                        End Select
+                    Case 1
+                        currentTask.Text = "Gathering error level..."
+                    Case 2
+                        currentTask.Text = "Recopilando nivel de error..."
+                End Select
                 LogView.AppendText(CrLf & "Gathering error level...")
                 GetErrorCode(False)
                 LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
             ElseIf pkgAdditionOp = 1 Then
                 CurrentPB.Maximum = pkgCount
                 For x = 0 To Array.LastIndexOf(pkgs, pkgLastCheckedPackageName)
-                    currentTask.Text = "Adding package " & (x + 1) & " of " & pkgCount & "..."
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    currentTask.Text = "Adding package " & (x + 1) & " of " & pkgCount & "..."
+                                Case "ESN"
+                                    currentTask.Text = "Añadiendo paquete " & (x + 1) & " de " & pkgCount & "..."
+                            End Select
+                        Case 1
+                            currentTask.Text = "Adding package " & (x + 1) & " of " & pkgCount & "..."
+                        Case 2
+                            currentTask.Text = "Añadiendo paquete " & (x + 1) & " de " & pkgCount & "..."
+                    End Select
                     CurrentPB.Value = x + 1
                     LogView.AppendText(CrLf &
                                        "Package " & (x + 1) & " of " & pkgCount)        ' You don't want to see "Package 0 of 407", right?
@@ -1369,7 +1681,19 @@ Public Class ProgressPanel
             If imgCommitAfterOps Then
                 AllPB.Value = AllPB.Maximum / taskCount
                 currentTCont += 1
-                taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
+                            Case "ESN"
+                                taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                        End Select
+                    Case 1
+                        taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
+                    Case 2
+                        taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                End Select
                 RunOps(8)
             Else
                 AllPB.Value = 100
@@ -1382,19 +1706,58 @@ Public Class ProgressPanel
                 GetErrorCode(False)
             End If
         ElseIf opNum = 27 Then
-            allTasks.Text = "Removing packages..."
-            currentTask.Text = "Preparing to remove packages..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Removing packages..."
+                            currentTask.Text = "Preparing to remove packages..."
+                        Case "ESN"
+                            allTasks.Text = "Eliminando paquetes..."
+                            currentTask.Text = "Preparándonos para eliminar paquetes..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Removing packages..."
+                    currentTask.Text = "Preparing to remove packages..."
+                Case 2
+                    allTasks.Text = "Eliminando paquetes..."
+                    currentTask.Text = "Preparándonos para eliminar paquetes..."
+            End Select
             LogView.AppendText(CrLf & "Removing packages from mounted image..." & CrLf &
                                "Enumerating packages to remove. Please wait...")
             Thread.Sleep(1000)
             LogView.AppendText(CrLf & "Amount of packages to remove: " & pkgRemovalCount)
 
             ' Begin package removal
-            currentTask.Text = "Removing packages..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            currentTask.Text = "Removing packages..."
+                        Case "ESN"
+                            currentTask.Text = "Eliminando paquetes..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Removing packages..."
+                Case 2
+                    currentTask.Text = "Eliminando paquetes..."
+            End Select
             CurrentPB.Maximum = pkgRemovalCount
             If pkgRemovalOp = 0 Then
                 For x = 0 To Array.LastIndexOf(pkgRemovalNames, pkgRemovalLastName)
-                    currentTask.Text = "Removing package " & (x + 1) & " of " & pkgRemovalCount & "..."
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    currentTask.Text = "Removing package " & (x + 1) & " of " & pkgRemovalCount & "..."
+                                Case "ESN"
+                                    currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & pkgRemovalCount & "..."
+                            End Select
+                        Case 1
+                            currentTask.Text = "Removing package " & (x + 1) & " of " & pkgRemovalCount & "..."
+                        Case 2
+                            currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & pkgRemovalCount & "..."
+                    End Select
                     LogView.AppendText(CrLf &
                                        "Package " & (x + 1) & " of " & pkgRemovalCount)
                     CurrentPB.Value = x + 1
@@ -1474,7 +1837,19 @@ Public Class ProgressPanel
                 Next
             ElseIf pkgRemovalOp = 1 Then
                 For x = 0 To Array.LastIndexOf(pkgRemovalFiles, pkgRemovalLastFile)
-                    currentTask.Text = "Removing package " & (x + 1) & " of " & pkgRemovalCount & "..."
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    currentTask.Text = "Removing package " & (x + 1) & " of " & pkgRemovalCount & "..."
+                                Case "ESN"
+                                    currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & pkgRemovalCount & "..."
+                            End Select
+                        Case 1
+                            currentTask.Text = "Removing package " & (x + 1) & " of " & pkgRemovalCount & "..."
+                        Case 2
+                            currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & pkgRemovalCount & "..."
+                    End Select
                     LogView.AppendText(CrLf &
                                        "Package " & (x + 1) & " of " & pkgRemovalCount)
                     CurrentPB.Value = x + 1
@@ -1566,8 +1941,23 @@ Public Class ProgressPanel
                 GetErrorCode(False)
             End If
         ElseIf opNum = 30 Then
-            allTasks.Text = "Enabling features..."
-            currentTask.Text = "Preparing to enable features..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Enabling features..."
+                            currentTask.Text = "Preparing to enable features..."
+                        Case "ESN"
+                            allTasks.Text = "Habilitando características..."
+                            currentTask.Text = "Preparándonos para habilitar características..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Enabling features..."
+                    currentTask.Text = "Preparing to enable features..."
+                Case 2
+                    allTasks.Text = "Habilitando características..."
+                    currentTask.Text = "Preparándonos para habilitar características..."
+            End Select
             LogView.AppendText(CrLf & "Enabling features..." & CrLf &
                                "Options:" & CrLf)
             If featisParentPkgNameUsed Then
@@ -1614,10 +2004,34 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & "Total number of features to enable: " & featEnablementCount)
             ' Get command ready
             DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-            currentTask.Text = "Enabling features..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            currentTask.Text = "Enabling features..."
+                        Case "ESN"
+                            currentTask.Text = "Habilitando características..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Enabling features..."
+                Case 2
+                    currentTask.Text = "Habilitando características..."
+            End Select
             CurrentPB.Maximum = featEnablementCount
             For x = 0 To Array.LastIndexOf(featEnablementNames, featEnablementLastName)
-                currentTask.Text = "Enabling feature " & (x + 1) & " of " & featEnablementCount & "..."
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                currentTask.Text = "Enabling feature " & (x + 1) & " of " & featEnablementCount & "..."
+                            Case "ESN"
+                                currentTask.Text = "Habilitando característica " & (x + 1) & " de " & featEnablementCount & "..."
+                        End Select
+                    Case 1
+                        currentTask.Text = "Enabling feature " & (x + 1) & " of " & featEnablementCount & "..."
+                    Case 2
+                        currentTask.Text = "Habilitando característica " & (x + 1) & " de " & featEnablementCount & "..."
+                End Select
                 LogView.AppendText(CrLf &
                                    "Feature " & (x + 1) & " of " & featEnablementCount)
                 CurrentPB.Value = x + 1
@@ -1698,8 +2112,23 @@ Public Class ProgressPanel
                 GetErrorCode(False)
             End If
         ElseIf opNum = 31 Then
-            allTasks.Text = "Disabling features..."
-            currentTask.Text = "Preparing to disable features..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Disabling features..."
+                            currentTask.Text = "Preparing to disable features..."
+                        Case "ESN"
+                            allTasks.Text = "Deshabilitando características..."
+                            currentTask.Text = "Preparándonos para deshabilitar características..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Disabling features..."
+                    currentTask.Text = "Preparing to disable features..."
+                Case 2
+                    allTasks.Text = "Deshabilitando características..."
+                    currentTask.Text = "Preparándonos para deshabilitar características..."
+            End Select
             LogView.AppendText(CrLf & "Disabling features..." & CrLf &
                                "Options:" & CrLf)
             If featDisablementParentPkgUsed Then
@@ -1722,10 +2151,34 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & "Total number of features to disable: " & featDisablementCount)
             ' Get command ready
             DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-            currentTask.Text = "Disabling features..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            currentTask.Text = "Disabling features..."
+                        Case "ESN"
+                            currentTask.Text = "Deshabilitando características..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Disabling features..."
+                Case 2
+                    currentTask.Text = "Deshabilitando características..."
+            End Select
             CurrentPB.Maximum = featDisablementCount
             For x = 0 To Array.LastIndexOf(featDisablementNames, featDisablementLastName)
-                currentTask.Text = "Disabling feature " & (x + 1) & " of " & featDisablementCount & "..."
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                currentTask.Text = "Disabling feature " & (x + 1) & " of " & featDisablementCount & "..."
+                            Case "ESN"
+                                currentTask.Text = "Deshabilitando característica " & (x + 1) & " de " & featDisablementCount & "..."
+                        End Select
+                    Case 1
+                        currentTask.Text = "Disabling feature " & (x + 1) & " of " & featDisablementCount & "..."
+                    Case 2
+                        currentTask.Text = "Deshabilitando característica " & (x + 1) & " de " & featDisablementCount & "..."
+                End Select
                 LogView.AppendText(CrLf &
                                    "Feature " & (x + 1) & " of " & featDisablementCount)
                 CurrentPB.Value = x + 1
@@ -1798,25 +2251,73 @@ Public Class ProgressPanel
                 GetErrorCode(False)
             End If
         ElseIf opNum = 32 Then
-            allTasks.Text = "Cleaning up the image..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Cleaning up the image..."
+                        Case "ESN"
+                            allTasks.Text = "Limpiando la imagen..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Cleaning up the image..."
+                Case 2
+                    allTasks.Text = "Limpiando la imagen..."
+            End Select
             ' Initialize command
             DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
             CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & MountDir & " /cleanup-image"
             Select Case CleanupTask
                 Case 0
-                    currentTask.Text = "Reverting pending servicing actions..."
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    currentTask.Text = "Reverting pending servicing actions..."
+                                Case "ESN"
+                                    currentTask.Text = "Revirtiendo acciones de servicio pendientes..."
+                            End Select
+                        Case 1
+                            currentTask.Text = "Reverting pending servicing actions..."
+                        Case 2
+                            currentTask.Text = "Revirtiendo acciones de servicio pendientes..."
+                    End Select
                     LogView.AppendText(CrLf & _
                                        "Reverting pending servicing actions...")
                     CommandArgs &= " /revertpendingactions"
                 Case 1
-                    currentTask.Text = "Cleaning up Service Pack backup files..."
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    currentTask.Text = "Cleaning up Service Pack backup files..."
+                                Case "ESN"
+                                    currentTask.Text = "Limpiando archivos de copia de seguridad del Service Pack..."
+                            End Select
+                        Case 1
+                            currentTask.Text = "Cleaning up Service Pack backup files..."
+                        Case 2
+                            currentTask.Text = "Limpiando archivos de copia de seguridad del Service Pack..."
+                    End Select
                     LogView.AppendText(CrLf & _
                                        "Cleaning up Service Pack backup files..." & CrLf & _
                                        "Options:" & CrLf & _
                                        "- Hide Service Packs from the Installed Updates list? " & If(CleanupHideSP, "Yes", "No"))
                     CommandArgs &= " /spsuperseded" & If(CleanupHideSP, " /hidesp", "")
                 Case 2
-                    currentTask.Text = "Cleaning up the component store..."
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    currentTask.Text = "Cleaning up the component store..."
+                                Case "ESN"
+                                    currentTask.Text = "Limpiando el almacén de componentes..."
+                            End Select
+                        Case 1
+                            currentTask.Text = "Cleaning up the component store..."
+                        Case 2
+                            currentTask.Text = "Limpiando el almacén de componentes..."
+                    End Select
                     LogView.AppendText(CrLf & _
                                        "Cleaning up the component store..." & CrLf & _
                                        "Options:" & CrLf & _
@@ -1824,23 +2325,71 @@ Public Class ProgressPanel
                                        "- Defer long-running operations? " & If(DeferCleanupOps, "Yes", "No"))
                     CommandArgs &= " /startcomponentcleanup" & If(ResetCompBase, " /resetbase", "") & If(ResetCompBase And DeferCleanupOps, " /defer", "")
                 Case 3
-                    currentTask.Text = "Analyzing the component store..."
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    currentTask.Text = "Analyzing the component store..."
+                                Case "ESN"
+                                    currentTask.Text = "Analizando el almacén de componentes..."
+                            End Select
+                        Case 1
+                            currentTask.Text = "Analyzing the component store..."
+                        Case 2
+                            currentTask.Text = "Analizando el almacén de componentes..."
+                    End Select
                     LogView.AppendText(CrLf & _
                                        "Analyzing the component store...")
                     CommandArgs &= " /analyzecomponentstore"
                 Case 4
-                    currentTask.Text = "Checking the component store health..."
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    currentTask.Text = "Checking the component store health..."
+                                Case "ESN"
+                                    currentTask.Text = "Comprobando la salud del almacén de componentes..."
+                            End Select
+                        Case 1
+                            currentTask.Text = "Checking the component store health..."
+                        Case 2
+                            currentTask.Text = "Comprobando la salud del almacén de componentes..."
+                    End Select
                     LogView.AppendText(CrLf & _
                                        "Checking the component store health...")
                     CommandArgs &= " /checkhealth"
                 Case 5
-                    currentTask.Text = "Scanning the component store..."
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    currentTask.Text = "Scanning the component store..."
+                                Case "ESN"
+                                    currentTask.Text = "Escaneando el almacén de componentes..."
+                            End Select
+                        Case 1
+                            currentTask.Text = "Scanning the component store..."
+                        Case 2
+                            currentTask.Text = "Escaneando el almacén de componentes..."
+                    End Select
                     LogView.AppendText(CrLf & _
                                        "Scanning the component store...")
                     CommandArgs &= " /scanhealth"
                 Case 6
                     ' The most known thing about DISM : dism /online /cleanup-image /restorehealth
-                    currentTask.Text = "Repairing the component store..."
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    currentTask.Text = "Repairing the component store..."
+                                Case "ESN"
+                                    currentTask.Text = "Reparando el almacén de componentes..."
+                            End Select
+                        Case 1
+                            currentTask.Text = "Repairing the component store..."
+                        Case 2
+                            currentTask.Text = "Reparando el almacén de componentes..."
+                    End Select
                     LogView.AppendText(CrLf & _
                                        "Repairing the component store..." & CrLf & _
                                        "Options:" & CrLf & _
@@ -1853,7 +2402,19 @@ Public Class ProgressPanel
             Do Until DISMProc.HasExited
                 If DISMProc.HasExited Then Exit Do
             Loop
-            currentTask.Text = "Gathering error level..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            currentTask.Text = "Gathering error level..."
+                        Case "ESN"
+                            currentTask.Text = "Recopilando nivel de error..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Gathering error level..."
+                Case 2
+                    currentTask.Text = "Recopilando nivel de error..."
+            End Select
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
             If errCode.Length >= 8 Then
@@ -1862,8 +2423,23 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 37 Then
-            allTasks.Text = "Adding AppX packages..."
-            currentTask.Text = "Preparing to add provisioned AppX packages..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Adding AppX packages..."
+                            currentTask.Text = "Preparing to add provisioned AppX packages..."
+                        Case "ESN"
+                            allTasks.Text = "Añadiendo paquetes aprovisionados AppX..."
+                            currentTask.Text = "Preparándonos para añadir paquetes aprovisionados AppX..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Adding AppX packages..."
+                    currentTask.Text = "Preparing to add provisioned AppX packages..."
+                Case 2
+                    allTasks.Text = "Añadiendo paquetes aprovisionados AppX..."
+                    currentTask.Text = "Preparándonos para añadir paquetes aprovisionados AppX..."
+            End Select
             LogView.AppendText(CrLf & "Adding provisioned AppX packages..." & CrLf & _
                                "Options:" & CrLf)
             If appxAdditionUseLicenseFile Then
@@ -1895,10 +2471,34 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & CrLf & "Enumerating AppX packages to add...")
             Thread.Sleep(500)
             LogView.AppendText(CrLf & "Total number of packages to add: " & appxAdditionCount)
-            currentTask.Text = "Adding AppX packages..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            currentTask.Text = "Adding AppX packages..."
+                        Case "ESN"
+                            currentTask.Text = "Añadiendo paquetes AppX..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Adding AppX packages..."
+                Case 2
+                    currentTask.Text = "Añadiendo paquetes AppX..."
+            End Select
             CurrentPB.Maximum = appxAdditionCount
             For x = 0 To Array.LastIndexOf(appxAdditionPackages, appxAdditionLastPackage)
-                currentTask.Text = "Adding package " & (x + 1) & " of " & appxAdditionCount & "..."
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                currentTask.Text = "Adding package " & (x + 1) & " of " & appxAdditionCount & "..."
+                            Case "ESN"
+                                currentTask.Text = "Añadiendo paquete " & (x + 1) & " de " & appxAdditionCount & "..."
+                        End Select
+                    Case 1
+                        currentTask.Text = "Adding package " & (x + 1) & " of " & appxAdditionCount & "..."
+                    Case 2
+                        currentTask.Text = "Añadiendo paquete " & (x + 1) & " de " & appxAdditionCount & "..."
+                End Select
                 LogView.AppendText(CrLf & _
                                    "Package " & (x + 1) & " of " & appxAdditionCount)
                 CurrentPB.Value = x + 1
@@ -2003,7 +2603,19 @@ Public Class ProgressPanel
             If appxAdditionCommit Then
                 AllPB.Value = AllPB.Maximum / taskCount
                 currentTCont += 1
-                taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
+                            Case "ESN"
+                                taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                        End Select
+                    Case 1
+                        taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
+                    Case 2
+                        taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                End Select
                 RunOps(8)
             Else
                 AllPB.Value = 100
@@ -2014,16 +2626,55 @@ Public Class ProgressPanel
                 GetErrorCode(False)
             End If
         ElseIf opNum = 38 Then
-            allTasks.Text = "Removing AppX packages..."
-            currentTask.Text = "Preparing to remove provisioned AppX packages..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Removing AppX packages..."
+                            currentTask.Text = "Preparing to remove provisioned AppX packages..."
+                        Case "ESN"
+                            allTasks.Text = "Eliminando paquetes AppX..."
+                            currentTask.Text = "Preparándonos para eliminar paquetes aprovisionados AppX..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Removing AppX packages..."
+                    currentTask.Text = "Preparing to remove provisioned AppX packages..."
+                Case 2
+                    allTasks.Text = "Eliminando paquetes AppX..."
+                    currentTask.Text = "Preparándonos para eliminar paquetes aprovisionados AppX..."
+            End Select
             LogView.AppendText(CrLf & "Removing provisioned AppX packages..." & CrLf & CrLf & _
                                "Enumerating AppX packages to remove...")
             Thread.Sleep(500)
             LogView.AppendText(CrLf & "Total number of packages to remove: " & appxRemovalCount)
-            currentTask.Text = "Removing AppX packages..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            currentTask.Text = "Removing AppX packages..."
+                        Case "ESN"
+                            currentTask.Text = "Eliminando paquetes AppX..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Removing AppX packages..."
+                Case 2
+                    currentTask.Text = "Eliminando paquetes AppX..."
+            End Select
             CurrentPB.Maximum = appxRemovalCount
             For x = 0 To Array.LastIndexOf(appxRemovalPackages, appxRemovalLastPackage)
-                currentTask.Text = "Removing package " & (x + 1) & " of " & appxRemovalCount & "..."
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                currentTask.Text = "Removing package " & (x + 1) & " of " & appxRemovalCount & "..."
+                            Case "ESN"
+                                currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & appxRemovalCount & "..."
+                        End Select
+                    Case 1
+                        currentTask.Text = "Removing package " & (x + 1) & " of " & appxRemovalCount & "..."
+                    Case 2
+                        currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & appxRemovalCount & "..."
+                End Select
                 LogView.AppendText(CrLf & _
                                    "Package " & (x + 1) & " of " & appxRemovalCount)
                 CurrentPB.Value = x + 1
@@ -2126,8 +2777,23 @@ Public Class ProgressPanel
             End If
         ElseIf opNum = 991 Then
             ' Convert image formats. Right now, only index 1 will be converted (exported) to a WIM/ESD file
-            allTasks.Text = "Converting image..."
-            currentTask.Text = "Converting specified image..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Converting image..."
+                            currentTask.Text = "Converting specified image..."
+                        Case "ESN"
+                            allTasks.Text = "Convirtiendo imagen..."
+                            currentTask.Text = "Convirtiendo imagen especificada"
+                    End Select
+                Case 1
+                    allTasks.Text = "Converting image..."
+                    currentTask.Text = "Converting specified image..."
+                Case 2
+                    allTasks.Text = "Convirtiendo imagen..."
+                    currentTask.Text = "Convirtiendo imagen especificada"
+            End Select
             LogView.AppendText(CrLf & "Converting image..." & CrLf &
                                "Options:" & CrLf)
 
@@ -2165,7 +2831,19 @@ Public Class ProgressPanel
                     Exit Do
                 End If
             Loop
-            currentTask.Text = "Gathering error level..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            currentTask.Text = "Gathering error level..."
+                        Case "ESN"
+                            currentTask.Text = "Recopilando nivel de error..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Gathering error level..."
+                Case 2
+                    currentTask.Text = "Recopilando nivel de error..."
+            End Select
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
             If errCode.Length >= 8 Then
@@ -2174,8 +2852,23 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 992 Then
-            allTasks.Text = "Merging SWM files..."
-            currentTask.Text = "Merging SWM files into a WIM file..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Merging SWM files..."
+                            currentTask.Text = "Merging SWM files into a WIM file..."
+                        Case "ESN"
+                            allTasks.Text = "Combinando archivos SWM..."
+                            currentTask.Text = "Combinando archivos SWM en un archivo WIM..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Merging SWM files..."
+                    currentTask.Text = "Merging SWM files into a WIM file..."
+                Case 2
+                    allTasks.Text = "Combinando archivos SWM..."
+                    currentTask.Text = "Combinando archivos SWM en un archivo WIM..."
+            End Select
             LogView.AppendText(CrLf & "Merging SWM files into a WIM file..." & CrLf & _
                                "Options:" & CrLf)
             ' Gather options
@@ -2202,7 +2895,19 @@ Public Class ProgressPanel
                     Exit Do
                 End If
             Loop
-            currentTask.Text = "Gathering error level..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            currentTask.Text = "Gathering error level..."
+                        Case "ESN"
+                            currentTask.Text = "Recopilando nivel de error..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Gathering error level..."
+                Case 2
+                    currentTask.Text = "Recopilando nivel de error..."
+            End Select
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
             If errCode.Length >= 8 Then
@@ -2211,8 +2916,23 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 996 Then
-            allTasks.Text = "Switching image indexes..."
-            currentTask.Text = "Unmounting source index..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Switching image indexes..."
+                            currentTask.Text = "Unmounting source index..."
+                        Case "ESN"
+                            allTasks.Text = "Cambiando índices de imagen..."
+                            currentTask.Text = "Desmontando índice de origen..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Switching image indexes..."
+                    currentTask.Text = "Unmounting source index..."
+                Case 2
+                    allTasks.Text = "Cambiando índices de imagen..."
+                    currentTask.Text = "Desmontando índice de origen..."
+            End Select
             LogView.AppendText(CrLf & "Switching image indexes..." & CrLf & _
                                "Options:" & CrLf)
             ' Gather options
@@ -2249,7 +2969,19 @@ Public Class ProgressPanel
                     Exit Do
                 End If
             Loop
-            currentTask.Text = "Gathering error level..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            currentTask.Text = "Gathering error level..."
+                        Case "ESN"
+                            currentTask.Text = "Recopilando nivel de error..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Gathering error level..."
+                Case 2
+                    currentTask.Text = "Recopilando nivel de error..."
+            End Select
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
             If errCode.Length >= 8 Then
@@ -2259,7 +2991,19 @@ Public Class ProgressPanel
             End If
             If Decimal.ToInt32(DISMProc.ExitCode) <> 0 Then
                 LogView.AppendText(CrLf & CrLf & "Could not commit changes to the image. Discarding changes...")
-                currentTask.Text = "Unmounting source index..."
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                currentTask.Text = "Unmounting source index..."
+                            Case "ESN"
+                                currentTask.Text = "Desmontando índice de origen..."
+                        End Select
+                    Case 1
+                        currentTask.Text = "Unmounting source index..."
+                    Case 2
+                        currentTask.Text = "Desmontando índice de origen..."
+                End Select
                 Select Case DismVersionChecker.ProductMajorPart
                     Case 6
                         Select Case DismVersionChecker.ProductMinorPart
@@ -2278,7 +3022,19 @@ Public Class ProgressPanel
                         Exit Do
                     End If
                 Loop
-                currentTask.Text = "Gathering error level..."
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                currentTask.Text = "Gathering error level..."
+                            Case "ESN"
+                                currentTask.Text = "Recopilando nivel de error..."
+                        End Select
+                    Case 1
+                        currentTask.Text = "Gathering error level..."
+                    Case 2
+                        currentTask.Text = "Recopilando nivel de error..."
+                End Select
                 LogView.AppendText(CrLf & "Gathering error level...")
                 GetErrorCode(False)
                 If errCode.Length >= 8 Then
@@ -2292,8 +3048,23 @@ Public Class ProgressPanel
             End If
             AllPB.Value = AllPB.Maximum / taskCount
             currentTCont += 1
-            taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
-            currentTask.Text = "Mounting target index..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
+                            currentTask.Text = "Mounting target index..."
+                        Case "ESN"
+                            taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                            currentTask.Text = "Montando índice de destino..."
+                    End Select
+                Case 1
+                    taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
+                    currentTask.Text = "Mounting target index..."
+                Case 2
+                    taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                    currentTask.Text = "Montando índice de destino..."
+            End Select
             LogView.AppendText(CrLf & "Mounting image (index: " & SwitchTargetIndex & ")...")
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
@@ -2316,7 +3087,19 @@ Public Class ProgressPanel
                     Exit Do
                 End If
             Loop
-            currentTask.Text = "Gathering error level..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            currentTask.Text = "Gathering error level..."
+                        Case "ESN"
+                            currentTask.Text = "Recopilando nivel de error..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Gathering error level..."
+                Case 2
+                    currentTask.Text = "Recopilando nivel de error..."
+            End Select
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
             If errCode.Length >= 8 Then
@@ -3179,7 +3962,19 @@ Public Class ProgressPanel
                 ' This is a crucial change, so save things immediately
                 MainForm.SaveDTProj()
             End If
-            MainForm.MenuDesc.Text = "Ready"
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MainForm.MenuDesc.Text = "Ready"
+                        Case "ESN"
+                            MainForm.MenuDesc.Text = "Listo"
+                    End Select
+                Case 1
+                    MainForm.MenuDesc.Text = "Ready"
+                Case 2
+                    MainForm.MenuDesc.Text = "Listo"
+            End Select
             MainForm.StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
             MainForm.ToolStripButton4.Visible = False
             Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
@@ -3187,14 +3982,41 @@ Public Class ProgressPanel
             Close()
         Else
             MainForm.ToolStripButton4.Visible = False
-            Label1.Text = "Could not perform image operations"
-            Label2.Text = "An error has occurred, which stopped the image operations. Please read the log below for more information."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            Label1.Text = "Could not perform image operations"
+                            Label2.Text = "An error has occurred, which stopped the image operations. Please read the log below for more information."
+                        Case "ESN"
+                            Label1.Text = "No se pudieron realizar las operaciones"
+                            Label2.Text = "Ha ocurrido un error, el cual detuvo las operaciones. Lea el registro debajo para más información."
+                    End Select
+                Case 1
+                    Label1.Text = "Could not perform image operations"
+                    Label2.Text = "An error has occurred, which stopped the image operations. Please read the log below for more information."
+                Case 2
+                    Label1.Text = "No se pudieron realizar las operaciones"
+                    Label2.Text = "Ha ocurrido un error, el cual detuvo las operaciones. Lea el registro debajo para más información."
+            End Select
             CurrentPB.Value = CurrentPB.Maximum
             AllPB.Value = AllPB.Maximum
             If Height <> 420 Then
                 LogButton.PerformClick()
             End If
-            Cancel_Button.Text = "OK"
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            Cancel_Button.Text = "OK"
+                        Case "ESN"
+                            Cancel_Button.Text = "Aceptar"
+                    End Select
+                Case 1
+                    Cancel_Button.Text = "OK"
+                Case 2
+                    Cancel_Button.Text = "Aceptar"
+            End Select
             LinkLabel1.Visible = True
             ' Add details for error codes
             If errCode = "C1420126" Then
@@ -3256,7 +4078,19 @@ Public Class ProgressPanel
                 ' Errors that weren't added to the database
                 LogView.AppendText(CrLf & "This error has not yet been added to the database, so a useful description can't be shown now. Try running the command manually and, if you see the same error, try looking it up on the Internet.")
             End If
-            MainForm.MenuDesc.Text = "Ready"
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MainForm.MenuDesc.Text = "Ready"
+                        Case "ESN"
+                            MainForm.MenuDesc.Text = "Listo"
+                    End Select
+                Case 1
+                    MainForm.MenuDesc.Text = "Ready"
+                Case 2
+                    MainForm.MenuDesc.Text = "Listo"
+            End Select
             MainForm.StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
         End If
     End Sub
@@ -3276,6 +4110,43 @@ Public Class ProgressPanel
     End Sub
 
     Private Sub ProgressPanel_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Text = "Progress"
+                        Label1.Text = "Image operations in progress..."
+                        Label2.Text = "Please wait while the following tasks are done. This may take some time."
+                        Cancel_Button.Text = "Cancel"
+                        LogButton.Text = If(Height = 240, "Show log", "Hide log")
+                        LinkLabel1.Text = "Show DISM log file (advanced)"
+                        GroupBox1.Text = "Log"
+                    Case "ESN"
+                        Text = "Progreso"
+                        Label1.Text = "Operaciones en progreso..."
+                        Label2.Text = "Espere mientras las siguientes tareas se realizan. Esto puede llevar algo de tiempo."
+                        Cancel_Button.Text = "Cancelar"
+                        LogButton.Text = If(Height = 240, "Mostrar registro", "Ocultar registro")
+                        LinkLabel1.Text = "Mostrar archivo de registro de DISM (avanzado)"
+                        GroupBox1.Text = "Registro"
+                End Select
+            Case 1
+                Text = "Progress"
+                Label1.Text = "Image operations in progress..."
+                Label2.Text = "Please wait while the following tasks are done. This may take some time."
+                Cancel_Button.Text = "Cancel"
+                LogButton.Text = If(Height = 240, "Show log", "Hide log")
+                LinkLabel1.Text = "Show DISM log file (advanced)"
+                GroupBox1.Text = "Log"
+            Case 2
+                Text = "Progreso"
+                Label1.Text = "Operaciones en progreso..."
+                Label2.Text = "Espere mientras las siguientes tareas se realizan. Esto puede llevar algo de tiempo."
+                Cancel_Button.Text = "Cancelar"
+                LogButton.Text = If(Height = 240, "Mostrar registro", "Ocultar registro")
+                LinkLabel1.Text = "Mostrar archivo de registro de DISM (avanzado)"
+                GroupBox1.Text = "Registro"
+        End Select
         ' Cancel detector background worker which can interfere with image operations
         MainForm.MountedImageDetectorBW.CancelAsync()
         DismProgram = MainForm.DismExe

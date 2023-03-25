@@ -155,7 +155,7 @@ Partial Class ProgressPanel
         Me.LogButton.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.LogButton.Location = New System.Drawing.Point(56, 205)
         Me.LogButton.Name = "LogButton"
-        Me.LogButton.Size = New System.Drawing.Size(75, 23)
+        Me.LogButton.Size = New System.Drawing.Size(116, 23)
         Me.LogButton.TabIndex = 3
         Me.LogButton.Text = "Show log"
         Me.LogButton.UseVisualStyleBackColor = True
@@ -192,7 +192,7 @@ Partial Class ProgressPanel
         Me.LinkLabel1.AutoSize = True
         Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel1.Location = New System.Drawing.Point(137, 210)
+        Me.LinkLabel1.Location = New System.Drawing.Point(178, 210)
         Me.LinkLabel1.Name = "LinkLabel1"
         Me.LinkLabel1.Size = New System.Drawing.Size(153, 13)
         Me.LinkLabel1.TabIndex = 7
