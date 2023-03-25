@@ -23,6 +23,19 @@ Public Class PleaseWaitDialog
     Public indexStr(1024) As String
 
     Private Sub PleaseWaitDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Label1.Text = "Please wait..."
+                    Case "ESN"
+                        Label1.Text = "Espere..."
+                End Select
+            Case 1
+                Label1.Text = "Please wait..."
+            Case 2
+                Label1.Text = "Espere..."
+        End Select
         Visible = True
         Panel1.BorderStyle = BorderStyle.None
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then

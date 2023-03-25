@@ -4049,7 +4049,19 @@ Public Class MainForm
                 If Debugger.IsAttached Then
                     Text &= " (debug mode)"
                 End If
-                PleaseWaitDialog.Label2.Text = "Loading project: " & Quote & prjName & Quote
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                PleaseWaitDialog.Label2.Text = "Loading project: " & Quote & prjName & Quote
+                            Case "ESN"
+                                PleaseWaitDialog.Label2.Text = "Cargando proyecto: " & Quote & prjName & Quote
+                        End Select
+                    Case 1
+                        PleaseWaitDialog.Label2.Text = "Loading project: " & Quote & prjName & Quote
+                    Case 2
+                        PleaseWaitDialog.Label2.Text = "Cargando proyecto: " & Quote & prjName & Quote
+                End Select
                 PleaseWaitDialog.ShowDialog(Me)
                 projName.Text = prjName
                 Label3.Text = DTProjPath
@@ -4090,7 +4102,20 @@ Public Class MainForm
                     Label3.Text = DTProjPath
                     projPath = DTProjPath
                     projPath = projPath.Replace("\" & DTProjFileName & ".dtproj", "").Trim()
-                    PleaseWaitDialog.Label2.Text = "Loading project: " & Quote & prjName & Quote
+                    Select Case Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    PleaseWaitDialog.Label2.Text = "Loading project: " & Quote & prjName & Quote
+                                Case "ESN"
+                                    PleaseWaitDialog.Label2.Text = "Cargando proyecto: " & Quote & prjName & Quote
+                            End Select
+                        Case 1
+                            PleaseWaitDialog.Label2.Text = "Loading project: " & Quote & prjName & Quote
+                        Case 2
+                            PleaseWaitDialog.Label2.Text = "Cargando proyecto: " & Quote & prjName & Quote
+                    End Select
+                    'PleaseWaitDialog.Label2.Text = "Loading project: " & Quote & prjName & Quote
                     PleaseWaitDialog.ShowDialog(Me)
                     projName.Text = prjName
                     If IsImageMounted Then
@@ -6112,7 +6137,19 @@ Public Class MainForm
         RemPackage.CheckedListBox1.Items.Clear()
         ProgressPanel.OperationNum = 993
         PleaseWaitDialog.pkgSourceImgStr = MountDir
-        PleaseWaitDialog.Label2.Text = "Getting package names..."
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting package names..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting package names..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
+        End Select
         If Not areBackgroundProcessesDone Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
@@ -6171,7 +6208,19 @@ Public Class MainForm
         ProgressPanel.OperationNum = 994
         PleaseWaitDialog.featOpType = 0
         PleaseWaitDialog.featSourceImg = MountDir
-        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
+        End Select
         If Not areBackgroundProcessesDone Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
@@ -6237,7 +6286,19 @@ Public Class MainForm
         ProgressPanel.OperationNum = 994
         PleaseWaitDialog.featOpType = 1
         PleaseWaitDialog.featSourceImg = MountDir
-        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
+        End Select
         If Not areBackgroundProcessesDone Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
@@ -6454,7 +6515,19 @@ Public Class MainForm
         RemPackage.CheckedListBox1.Items.Clear()
         ProgressPanel.OperationNum = 993
         PleaseWaitDialog.pkgSourceImgStr = MountDir
-        PleaseWaitDialog.Label2.Text = "Getting package names..."
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting package names..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting package names..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
+        End Select
         If Not areBackgroundProcessesDone Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
@@ -6492,7 +6565,19 @@ Public Class MainForm
         ProgressPanel.OperationNum = 994
         PleaseWaitDialog.featOpType = 0
         PleaseWaitDialog.featSourceImg = MountDir
-        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
+        End Select
         If Not areBackgroundProcessesDone Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
@@ -6558,7 +6643,19 @@ Public Class MainForm
         ProgressPanel.OperationNum = 994
         PleaseWaitDialog.featOpType = 1
         PleaseWaitDialog.featSourceImg = MountDir
-        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
+        End Select
         If Not areBackgroundProcessesDone Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
@@ -6625,7 +6722,19 @@ Public Class MainForm
     Private Sub RemoveProvisionedAppxPackage_Click(sender As Object, e As EventArgs) Handles RemoveProvisionedAppxPackage.Click
         ElementCount = 0
         RemProvAppxPackage.ListView1.Items.Clear()
-        PleaseWaitDialog.Label2.Text = "Getting provisioned AppX packages..."
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting provisioned AppX packages..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo paquetes aprovisionados AppX..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting provisioned AppX packages..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo paquetes aprovisionados AppX..."
+        End Select
         ProgressPanel.OperationNum = 994
         If Not areBackgroundProcessesDone Then
             PleaseWaitDialog.ShowDialog(Me)
