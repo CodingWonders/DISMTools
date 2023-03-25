@@ -39,20 +39,72 @@ Public Class ProjProperties
                     imgName.Text = MainForm.MountedImageImgFiles(x)
                     imgIndex.Text = MainForm.MountedImageImgIndexes(x)
                     imgMountDir.Text = MainForm.MountedImageMountDirs(x)
-                    Select Case MainForm.MountedImageImgStatuses(x)
+                    Select Case MainForm.Language
                         Case 0
-                            imgMountedStatus.Text = "OK"
-                            RecoverButton.Visible = False
-                            RemountImgBtn.Visible = False
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    Select Case MainForm.MountedImageImgStatuses(x)
+                                        Case 0
+                                            imgMountedStatus.Text = "OK"
+                                            RecoverButton.Visible = False
+                                            RemountImgBtn.Visible = False
+                                        Case 1
+                                            imgMountedStatus.Text = "Needs Remount"
+                                            RecoverButton.Visible = False
+                                            RemountImgBtn.Visible = True
+                                        Case 2
+                                            imgMountedStatus.Text = "Invalid"
+                                            RecoverButton.Visible = True
+                                            RemountImgBtn.Visible = False
+                                    End Select
+                                Case "ESN"
+                                    Select Case MainForm.MountedImageImgStatuses(x)
+                                        Case 0
+                                            imgMountedStatus.Text = "Correcto"
+                                            RecoverButton.Visible = False
+                                            RemountImgBtn.Visible = False
+                                        Case 1
+                                            imgMountedStatus.Text = "Necesita recarga"
+                                            RecoverButton.Visible = False
+                                            RemountImgBtn.Visible = True
+                                        Case 2
+                                            imgMountedStatus.Text = "Inválido"
+                                            RecoverButton.Visible = True
+                                            RemountImgBtn.Visible = False
+                                    End Select
+                            End Select
                         Case 1
-                            imgMountedStatus.Text = "Needs Remount"
-                            RecoverButton.Visible = False
-                            RemountImgBtn.Visible = True
+                            Select Case MainForm.MountedImageImgStatuses(x)
+                                Case 0
+                                    imgMountedStatus.Text = "OK"
+                                    RecoverButton.Visible = False
+                                    RemountImgBtn.Visible = False
+                                Case 1
+                                    imgMountedStatus.Text = "Needs Remount"
+                                    RecoverButton.Visible = False
+                                    RemountImgBtn.Visible = True
+                                Case 2
+                                    imgMountedStatus.Text = "Invalid"
+                                    RecoverButton.Visible = True
+                                    RemountImgBtn.Visible = False
+                            End Select
                         Case 2
-                            imgMountedStatus.Text = "Invalid"
-                            RecoverButton.Visible = True
-                            RemountImgBtn.Visible = False
+                            Select Case MainForm.MountedImageImgStatuses(x)
+                                Case 0
+                                    imgMountedStatus.Text = "Correcto"
+                                    RecoverButton.Visible = False
+                                    RemountImgBtn.Visible = False
+                                Case 1
+                                    imgMountedStatus.Text = "Necesita recarga"
+                                    RecoverButton.Visible = False
+                                    RemountImgBtn.Visible = True
+                                Case 2
+                                    imgMountedStatus.Text = "Inválido"
+                                    RecoverButton.Visible = True
+                                    RemountImgBtn.Visible = False
+                            End Select
                     End Select
+
                     Dim infoCollection As DismImageInfoCollection = DismApi.GetImageInfo(MainForm.MountedImageImgFiles(x))
                     For Each info As DismImageInfo In infoCollection
                         imgVersion.Text = info.ProductVersion.ToString()
@@ -77,7 +129,19 @@ Public Class ProjProperties
                         ElseIf info.Architecture = DismProcessorArchitecture.AMD64 Then
                             imgArch.Text = "x64"
                         End If
-                        imgHal.Text = If(Not info.Hal = "", info.Hal, "Undefined by the image")
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        imgHal.Text = If(Not info.Hal = "", info.Hal, "Undefined by the image")
+                                    Case "ESN"
+                                        imgHal.Text = If(Not info.Hal = "", info.Hal, "No definida por la imagen")
+                                End Select
+                            Case 1
+                                imgHal.Text = If(Not info.Hal = "", info.Hal, "Undefined by the image")
+                            Case 2
+                                imgHal.Text = If(Not info.Hal = "", info.Hal, "No definida por la imagen")
+                        End Select
                         imgSPBuild.Text = info.ProductVersion.Revision
                         imgSPLvl.Text = info.SpLevel
                         imgEdition.Text = info.EditionId
@@ -87,16 +151,64 @@ Public Class ProjProperties
                         imgLangText.Clear()
                         For Each language In info.Languages
                             If imgLangText.Text = "" Then
-                                imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (default)", "") & ", "
+                                Select Case MainForm.Language
+                                    Case 0
+                                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                            Case "ENG"
+                                                imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (default)", "") & ", "
+                                            Case "ESN"
+                                                imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (predeterminado)", "") & ", "
+                                        End Select
+                                    Case 1
+                                        imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (default)", "") & ", "
+                                    Case 2
+                                        imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (predeterminado)", "") & ", "
+                                End Select
                             Else
-                                imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (default)", "") & ", ")
+                                Select Case MainForm.Language
+                                    Case 0
+                                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                            Case "ENG"
+                                                imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (default)", "") & ", ")
+                                            Case "ESN"
+                                                imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (predeterminado)", "") & ", ")
+                                        End Select
+                                    Case 1
+                                        imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (default)", "") & ", ")
+                                    Case 2
+                                        imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (predeterminado)", "") & ", ")
+                                End Select
                             End If
                         Next
                         Dim langarr() As Char = imgLangText.Text.ToCharArray()
                         langarr(langarr.Count - 2) = ""
                         imgLangText.Text = New String(langarr)
-                        imgFormat.Text = Path.GetExtension(MainForm.MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper() & " file"
-                        imgRW.Text = If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No")
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        imgFormat.Text = Path.GetExtension(MainForm.MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper() & " file"
+                                    Case "ESN"
+                                        imgFormat.Text = "Archivo " & Path.GetExtension(MainForm.MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper()
+                                End Select
+                            Case 1
+                                imgFormat.Text = Path.GetExtension(MainForm.MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper() & " file"
+                            Case 2
+                                imgFormat.Text = "Archivo " & Path.GetExtension(MainForm.MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper()
+                        End Select
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        imgRW.Text = If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No")
+                                    Case "ESN"
+                                        imgRW.Text = If(MainForm.MountedImageMountedReWr(x) = 0, "Sí", "No")
+                                End Select
+                            Case 1
+                                imgRW.Text = If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No")
+                            Case 2
+                                imgRW.Text = If(MainForm.MountedImageMountedReWr(x) = 0, "Sí", "No")
+                        End Select
                         If MainForm.MountedImageMountedReWr(x) = 0 Then
                             RWRemountBtn.Visible = False
                         Else

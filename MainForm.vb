@@ -3219,6 +3219,9 @@ Public Class MainForm
                     ' OpenFileDialogs and FolderBrowsers
                     OpenFileDialog1.Title = "Specify the project file to load"
                     LocalMountDirFBD.Description = "Please specify the mount directory you want to load into this project:"
+                    If Not ImgBW.IsBusy And areBackgroundProcessesDone Then
+                        BGProcDetails.Label2.Text = "Image processes have completed"
+                    End If
                 ElseIf My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "ESN" Then
                     ' Top-level menu items
                     FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -3468,6 +3471,9 @@ Public Class MainForm
                     ' OpenFileDialogs and FolderBrowsers
                     OpenFileDialog1.Title = "Especifique el archivo de proyecto a cargar"
                     LocalMountDirFBD.Description = "Especifique el directorio de montaje que desea cargar en este proyecto:"
+                    If Not ImgBW.IsBusy And areBackgroundProcessesDone Then
+                        BGProcDetails.Label2.Text = "Los procesos de la imagen han completado"
+                    End If
                 Else
                     Language = 1
                     ChangeLangs(Language)
@@ -3722,6 +3728,9 @@ Public Class MainForm
                 ' OpenFileDialogs and FolderBrowsers
                 OpenFileDialog1.Title = "Specify the project file to load"
                 LocalMountDirFBD.Description = "Please specify the mount directory you want to load into this project:"
+                If Not ImgBW.IsBusy And areBackgroundProcessesDone Then
+                    BGProcDetails.Label2.Text = "Image processes have completed"
+                End If
             Case 2
                 ' Top-level menu items
                 FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -3971,6 +3980,9 @@ Public Class MainForm
                 ' OpenFileDialogs and FolderBrowsers
                 OpenFileDialog1.Title = "Especifique el archivo de proyecto a cargar"
                 LocalMountDirFBD.Description = "Especifique el directorio de montaje que desea cargar en este proyecto:"
+                If Not ImgBW.IsBusy And areBackgroundProcessesDone Then
+                    BGProcDetails.Label2.Text = "Los procesos de la imagen han completado"
+                End If
         End Select
     End Sub
 

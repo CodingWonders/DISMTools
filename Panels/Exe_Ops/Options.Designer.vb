@@ -295,9 +295,9 @@ Partial Class Options
         '
         Me.ComboBox1.FormattingEnabled = True
         Me.ComboBox1.Items.AddRange(New Object() {"Settings file", "Registry"})
-        Me.ComboBox1.Location = New System.Drawing.Point(119, 124)
+        Me.ComboBox1.Location = New System.Drawing.Point(145, 124)
         Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(610, 21)
+        Me.ComboBox1.Size = New System.Drawing.Size(584, 21)
         Me.ComboBox1.TabIndex = 5
         Me.ComboBox1.Text = "Settings file"
         '
@@ -313,7 +313,7 @@ Partial Class Options
         '
         'LinkLabel1
         '
-        Me.LinkLabel1.LinkArea = New System.Windows.Forms.LinkArea(100, 100)
+        Me.LinkLabel1.LinkArea = New System.Windows.Forms.LinkArea(97, 100)
         Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
         Me.LinkLabel1.Location = New System.Drawing.Point(48, 79)
@@ -321,9 +321,9 @@ Partial Class Options
         Me.LinkLabel1.Size = New System.Drawing.Size(681, 37)
         Me.LinkLabel1.TabIndex = 4
         Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "The program will enable or disable certain features according to what the program" & _
-    " version supports. How is it going to affect my usage of this program, and which" & _
-    " features will be disabled accordingly?"
+        Me.LinkLabel1.Text = "The program will enable or disable certain features according to what the DISM ve" & _
+    "rsion supports. How is it going to affect my usage of this program, and which fe" & _
+    "atures will be disabled accordingly?"
         Me.LinkLabel1.UseCompatibleTextRendering = True
         '
         'PictureBox2
@@ -374,10 +374,10 @@ Partial Class Options
         '
         'Label5
         '
-        Me.Label5.AutoSize = True
+        Me.Label5.AutoEllipsis = True
         Me.Label5.Location = New System.Drawing.Point(22, 127)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(91, 13)
+        Me.Label5.Size = New System.Drawing.Size(117, 13)
         Me.Label5.TabIndex = 0
         Me.Label5.Text = "Save settings on:"
         '
@@ -400,7 +400,7 @@ Partial Class Options
         '
         'Label2
         '
-        Me.Label2.AutoSize = True
+        Me.Label2.AutoEllipsis = True
         Me.Label2.Location = New System.Drawing.Point(22, 22)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(117, 13)
@@ -532,9 +532,9 @@ Partial Class Options
         '
         Me.ComboBox2.FormattingEnabled = True
         Me.ComboBox2.Items.AddRange(New Object() {"Use system setting", "Light mode", "Dark mode"})
-        Me.ComboBox2.Location = New System.Drawing.Point(93, 19)
+        Me.ComboBox2.Location = New System.Drawing.Point(104, 19)
         Me.ComboBox2.Name = "ComboBox2"
-        Me.ComboBox2.Size = New System.Drawing.Size(278, 21)
+        Me.ComboBox2.Size = New System.Drawing.Size(267, 21)
         Me.ComboBox2.TabIndex = 3
         Me.ComboBox2.Text = "Use system setting"
         '
@@ -549,10 +549,10 @@ Partial Class Options
         '
         'Label7
         '
-        Me.Label7.AutoSize = True
+        Me.Label7.AutoEllipsis = True
         Me.Label7.Location = New System.Drawing.Point(22, 22)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(65, 13)
+        Me.Label7.Size = New System.Drawing.Size(76, 13)
         Me.Label7.TabIndex = 2
         Me.Label7.Text = "Color mode:"
         '
@@ -679,9 +679,9 @@ Partial Class Options
         Me.CheckBox10.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBox10.Location = New System.Drawing.Point(22, 22)
         Me.CheckBox10.Name = "CheckBox10"
-        Me.CheckBox10.Size = New System.Drawing.Size(267, 17)
+        Me.CheckBox10.Size = New System.Drawing.Size(291, 17)
         Me.CheckBox10.TabIndex = 10
-        Me.CheckBox10.Text = "Automatically create logs for each operation made"
+        Me.CheckBox10.Text = "Automatically create logs for each operation performed"
         Me.CheckBox10.UseVisualStyleBackColor = True
         '
         'TabPage4
@@ -1241,6 +1241,7 @@ Partial Class Options
         Me.Label39.Size = New System.Drawing.Size(621, 56)
         Me.Label39.TabIndex = 2
         Me.Label39.Text = resources.GetString("Label39.Text")
+        Me.Label39.Visible = False
         '
         'Button8
         '
