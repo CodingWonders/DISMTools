@@ -63,6 +63,10 @@ Public Class PrgAbout
         Process.Start("https://github.com/jeffkl/ManagedDism")
     End Sub
 
+    Private Sub LinkLabel11_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel11.LinkClicked
+        Process.Start("https://web.archive.org/web/20210907191944/https://twitter.com/prsymatic/status/1435317646346522628")
+    End Sub
+
     Private Sub RichTextBox1_LinkClicked(sender As Object, e As LinkClickedEventArgs) Handles RichTextBox1.LinkClicked
         Process.Start(e.LinkText)
     End Sub
