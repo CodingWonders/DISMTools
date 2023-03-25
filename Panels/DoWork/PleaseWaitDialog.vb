@@ -273,7 +273,11 @@ Public Class PleaseWaitDialog
             End Try
             If imgInfoCollection.Count <= 1 Then
                 SingleImageIndexError.ShowDialog(MainForm)
-                DismApi.Shutdown()
+                Try
+                    DismApi.Shutdown()
+                Catch ex As DismOpenSessionsException
+                    ' Leave session open
+                End Try
                 Close()
             Else
                 Dim indexNames As New List(Of String)
@@ -285,7 +289,11 @@ Public Class PleaseWaitDialog
                 ImgIndexSwitch.NumericUpDown1.Maximum = imgInfoCollection.Count
             End If
             imgIndexes = imgInfoCollection.Count
-            DismApi.Shutdown()
+            Try
+                DismApi.Shutdown()
+            Catch ex As DismOpenSessionsException
+                ' Leave session open
+            End Try
         End If
         Close()
     End Sub
