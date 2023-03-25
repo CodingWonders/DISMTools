@@ -23,9 +23,8 @@ Partial Class SingleImageIndexError
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.Bevel1 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
+        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.OK_Button = New System.Windows.Forms.Button()
@@ -39,29 +38,13 @@ Partial Class SingleImageIndexError
         'Panel1
         '
         Me.Panel1.BackColor = System.Drawing.Color.FromArgb(CType(CType(238, Byte), Integer), CType(CType(238, Byte), Integer), CType(CType(238, Byte), Integer))
-        Me.Panel1.Controls.Add(Me.LinkLabel1)
         Me.Panel1.Controls.Add(Me.Bevel1)
-        Me.Panel1.Controls.Add(Me.Label3)
+        Me.Panel1.Controls.Add(Me.LinkLabel1)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.Panel1.Location = New System.Drawing.Point(0, 161)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(624, 84)
         Me.Panel1.TabIndex = 5
-        '
-        'LinkLabel1
-        '
-        Me.LinkLabel1.AutoSize = True
-        Me.LinkLabel1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LinkLabel1.LinkArea = New System.Windows.Forms.LinkArea(9, 4)
-        Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel1.Location = New System.Drawing.Point(13, 47)
-        Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(71, 21)
-        Me.LinkLabel1.TabIndex = 12
-        Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "or click here"
-        Me.LinkLabel1.UseCompatibleTextRendering = True
         '
         'Bevel1
         '
@@ -72,15 +55,20 @@ Partial Class SingleImageIndexError
         Me.Bevel1.Size = New System.Drawing.Size(624, 2)
         Me.Bevel1.TabIndex = 11
         '
-        'Label3
+        'LinkLabel1
         '
-        Me.Label3.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(12, 17)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(600, 33)
-        Me.Label3.TabIndex = 11
-        Me.Label3.Text = "To know more about the indexes of an image, or some of its specific properties, g" & _
-    "o to ""Commands > Image management > Get image information"","
+        Me.LinkLabel1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LinkLabel1.LinkArea = New System.Windows.Forms.LinkArea(150, 4)
+        Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel1.Location = New System.Drawing.Point(13, 17)
+        Me.LinkLabel1.Name = "LinkLabel1"
+        Me.LinkLabel1.Size = New System.Drawing.Size(599, 42)
+        Me.LinkLabel1.TabIndex = 12
+        Me.LinkLabel1.TabStop = True
+        Me.LinkLabel1.Text = "To know more about the indexes of an image, or some of its specific properties, g" & _
+    "o to ""Commands > Image management > Get image information"", or click here"
+        Me.LinkLabel1.UseCompatibleTextRendering = True
         '
         'Panel2
         '
@@ -155,7 +143,6 @@ Partial Class SingleImageIndexError
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "DISMTools"
         Me.Panel1.ResumeLayout(False)
-        Me.Panel1.PerformLayout()
         Me.Panel2.ResumeLayout(False)
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.ResumeLayout(False)
@@ -168,7 +155,6 @@ Partial Class SingleImageIndexError
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
-    Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents Bevel1 As System.Windows.Forms.Label
 
 End Class
