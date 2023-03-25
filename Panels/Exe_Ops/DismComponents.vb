@@ -11,6 +11,31 @@ Public Class DismComponents
     End Sub
 
     Private Sub DismComponents_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Text = "DISM Components"
+                        ListView1.Columns(0).Text = "Component"
+                        ListView1.Columns(1).Text = "Version"
+                        OK_Button.Text = "OK"
+                    Case "ESN"
+                        Text = "Componentes de DISM"
+                        ListView1.Columns(0).Text = "Componente"
+                        ListView1.Columns(1).Text = "Versión"
+                        OK_Button.Text = "Aceptar"
+                End Select
+            Case 1
+                Text = "DISM Components"
+                ListView1.Columns(0).Text = "Component"
+                ListView1.Columns(1).Text = "Version"
+                OK_Button.Text = "OK"
+            Case 2
+                Text = "Componentes de DISM"
+                ListView1.Columns(0).Text = "Componente"
+                ListView1.Columns(1).Text = "Versión"
+                OK_Button.Text = "Aceptar"
+        End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)
             ForeColor = Color.White

@@ -13,6 +13,28 @@ Public Class MountOpDirCreationDialog
     End Sub
 
     Private Sub MountOpDirCreationDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Text = ImgMount.Label1.Text
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Label1.Text = "Do you want to create the mount directory?"
+                        OK_Button.Text = "Yes"
+                        Cancel_Button.Text = "No"
+                    Case "ESN"
+                        Label1.Text = "¿Desea crear el directorio de montaje?"
+                        OK_Button.Text = "Sí"
+                        Cancel_Button.Text = "No"
+                End Select
+            Case 1
+                Label1.Text = "Do you want to create the mount directory?"
+                OK_Button.Text = "Yes"
+                Cancel_Button.Text = "No"
+            Case 2
+                Label1.Text = "¿Desea crear el directorio de montaje?"
+                OK_Button.Text = "Sí"
+                Cancel_Button.Text = "No"
+        End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)
             ForeColor = Color.White

@@ -1,4 +1,5 @@
 ﻿Imports System.Windows.Forms
+Imports Microsoft.VisualBasic.ControlChars
 
 Public Class OrphanedMountedImgDialog
 
@@ -13,6 +14,31 @@ Public Class OrphanedMountedImgDialog
     End Sub
 
     Private Sub OrphanedMountedImgDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Label1.Text = "This image needs a servicing session reload"
+                        Label2.Text = "The project that has been loaded contains an orphaned image (an image which needs to be remounted)" & CrLf & "The image will be remounted when you click " & Quote & "OK" & Quote & ". This should not affect your modifications to the image, and should also not take a long time." & CrLf & CrLf & "NOTE: if you click " & Quote & "Cancel" & Quote & ", the project will be unloaded"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Cancel"
+                    Case "ESN"
+                        Label1.Text = "Esta imagen necesita una recarga de la sesión de servicio"
+                        Label2.Text = "El proyecto que ha sido cargado contiene una imagen huérfana (una imagen que debe ser remontada)" & CrLf & "La imagen será remontada al hacer clic en " & Quote & "Aceptar" & Quote & ". Esto no debería afectar las modificaciones a la imagen, y no debería tardar mucho tiempo." & CrLf & CrLf & "NOTA: si hace clic en " & Quote & "Cancelar" & Quote & ", el proyecto será descargado"
+                        OK_Button.Text = "Aceptar"
+                        Cancel_Button.Text = "Cancelar"
+                End Select
+            Case 1
+                Label1.Text = "This image needs a servicing session reload"
+                Label2.Text = "The project that has been loaded contains an orphaned image (an image which needs to be remounted)" & CrLf & "The image will be remounted when you click " & Quote & "OK" & Quote & ". This should not affect your modifications to the image, and should also not take a long time." & CrLf & CrLf & "NOTE: if you click " & Quote & "Cancel" & Quote & ", the project will be unloaded"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Cancel"
+            Case 2
+                Label1.Text = "Esta imagen necesita una recarga de la sesión de servicio"
+                Label2.Text = "El proyecto que ha sido cargado contiene una imagen huérfana (una imagen que debe ser remontada)" & CrLf & "La imagen será remontada al hacer clic en " & Quote & "Aceptar" & Quote & ". Esto no debería afectar las modificaciones a la imagen, y no debería tardar mucho tiempo." & CrLf & CrLf & "NOTA: si hace clic en " & Quote & "Cancelar" & Quote & ", el proyecto será descargado"
+                OK_Button.Text = "Aceptar"
+                Cancel_Button.Text = "Cancelar"
+        End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)
             ForeColor = Color.White

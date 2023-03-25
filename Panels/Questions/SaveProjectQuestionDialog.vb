@@ -18,6 +18,39 @@ Public Class SaveProjectQuestionDialog
     End Sub
 
     Private Sub SaveProjectQuestionDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Label1.Text = "Do you want to save the changes of this project?"
+                        Label2.Text = "If you shut down or restart your system without unmounting the images, you will need to reload the servicing session."
+                        CheckBox1.Text = "Save changes and unmount image"
+                        Yes_Button.Text = "Yes"
+                        No_Button.Text = "No"
+                        Cancel_Button.Text = "Cancel"
+                    Case "ESN"
+                        Label1.Text = "¿Desea guardar los cambios de este proyecto?"
+                        Label2.Text = "Si apaga o reinicia su sistema sin desmontar las imágenes, necesitará recargar la sesión de servicio."
+                        CheckBox1.Text = "Guardar cambios y desmontar imagen"
+                        Yes_Button.Text = "Sí"
+                        No_Button.Text = "No"
+                        Cancel_Button.Text = "Cancelar"
+                End Select
+            Case 1
+                Label1.Text = "Do you want to save the changes of this project?"
+                Label2.Text = "If you shut down or restart your system without unmounting the images, you will need to reload the servicing session."
+                CheckBox1.Text = "Save changes and unmount image"
+                Yes_Button.Text = "Yes"
+                No_Button.Text = "No"
+                Cancel_Button.Text = "Cancel"
+            Case 2
+                Label1.Text = "¿Desea guardar los cambios de este proyecto?"
+                Label2.Text = "Si apaga o reinicia su sistema sin desmontar las imágenes, necesitará recargar la sesión de servicio."
+                CheckBox1.Text = "Guardar cambios y desmontar imagen"
+                Yes_Button.Text = "Sí"
+                No_Button.Text = "No"
+                Cancel_Button.Text = "Cancelar"
+        End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)
             ForeColor = Color.White
