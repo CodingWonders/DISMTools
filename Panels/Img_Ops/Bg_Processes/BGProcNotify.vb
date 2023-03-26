@@ -13,14 +13,14 @@ Public Class BGProcNotify
                         Label1.Text = "This project has been loaded successfully"
                         Label2.Text = "The program is now gathering image information in the background. This may take some time."
                     Case "ESN"
-                        Label1.Text = "Este proyecto ha sido cargado"
+                        Label1.Text = "Este proyecto ha sido cargado satisfactoriamente"
                         Label2.Text = "El programa está recopilando información de la imagen en segundo plano. Esto podría llevar algo de tiempo."
                 End Select
             Case 1
                 Label1.Text = "This project has been loaded successfully"
                 Label2.Text = "The program is now gathering image information in the background. This may take some time."
             Case 2
-                Label1.Text = "Este proyecto ha sido cargado"
+                Label1.Text = "Este proyecto ha sido cargado satisfactoriamente"
                 Label2.Text = "El programa está recopilando información de la imagen en segundo plano. Esto podría llevar algo de tiempo."
         End Select
         If Environment.OSVersion.Version.Major = 10 Then    ' The Left property also includes the window shadows on Windows 10 and 11

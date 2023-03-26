@@ -99,7 +99,7 @@ Public Class MountedImgMgr
 
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
         ' Enable buttons according to the image conditions
-        If ListView1.FocusedItem.Text <> "" Then
+        If ListView1.SelectedItems.Count > 0 Then
             Button1.Enabled = True
             If MainForm.MountedImageImgStatuses(ListView1.FocusedItem.Index) > 0 Then
                 Button2.Enabled = True
