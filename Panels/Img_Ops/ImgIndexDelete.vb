@@ -119,6 +119,7 @@ Public Class ImgIndexDelete
         If infoCollection.Count <= 1 Then
             MsgBox("This image only contains 1 index. You can't remove volume images from this file", vbOKOnly + vbExclamation, "Remove a volume image")
             Label4.Visible = False
+            OK_Button.Enabled = False
             Exit Sub
         Else
             For Each indexInfo As DismImageInfo In infoCollection
@@ -126,6 +127,7 @@ Public Class ImgIndexDelete
                 ListView2.Items.Add(New ListViewItem(New String() {indexInfo.ImageIndex, indexInfo.ImageName}))
             Next
         End If
+        OK_Button.Enabled = True
         DismApi.Shutdown()
         Label4.Visible = False
         AddHandler ListView1.ItemChecked, AddressOf ListView1_ItemChecked
