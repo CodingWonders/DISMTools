@@ -112,6 +112,163 @@ Public Class AddProvAppxPackage
     End Sub
 
     Private Sub AddProvAppxPackage_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Text = "Add provisioned AppX packages"
+                        Label1.Text = Text
+                        Label2.Text = "Please add packed or unpacked AppX packages by using the buttons below, or by dropping them to the list view below:"
+                        Label3.Text = "An AppX package may need some dependencies for it to be installed correctly. If so, you can specify a list of dependencies now:"
+                        Label4.Text = "The dependencies specified will be used on all selected AppX packages"
+                        Label5.Text = "To specify multiple app regions, separate them with a semicolon (;)"
+                        Label6.Text = "Select an entry in the list view to show the details of an app"
+                        Button1.Text = "Add file"
+                        Button2.Text = "Add folder"
+                        Button3.Text = "Remove all entries"
+                        Button4.Text = "Remove all dependencies"
+                        Button5.Text = "Remove dependency"
+                        Button6.Text = "Add dependency..."
+                        Button7.Text = "Browse..."
+                        Button8.Text = "Browse..."
+                        Button9.Text = "Remove selected entry"
+                        Cancel_Button.Text = "Cancel"
+                        OK_Button.Text = "OK"
+                        CheckBox1.Text = "Provide a custom data file:"
+                        CheckBox2.Text = "Commit image after adding AppX packages"
+                        CustomDataFileOFD.Title = "Specify a custom data file"
+                        GroupBox1.Text = "Source AppX files*"
+                        GroupBox2.Text = "AppX dependencies"
+                        GroupBox3.Text = "AppX regions"
+                        LicenseFileOFD.Title = "Specify a license file"
+                        LinkLabel1.Text = "App regions need to be in the form of ISO 3166-1 Alpha 2 or Alpha-3 codes. To learn more about these codes, click here"
+                        LinkLabel1.LinkArea = New LinkArea(108, 10)
+                        ListView1.Columns(0).Text = "File/Folder"
+                        ListView1.Columns(1).Text = "Type"
+                        ListView1.Columns(2).Text = "Application name"
+                        ListView1.Columns(3).Text = "Application publisher"
+                        ListView1.Columns(4).Text = "Application version"
+                        RadioButton1.Text = "License file*:"
+                        RadioButton2.Text = "Skip license file"
+                        RadioButton3.Text = "Make apps available for all regions"
+                        RadioButton4.Text = "Specify app regions"
+                        UnpackedAppxFolderFBD.Description = "Please specify a folder containing unpacked AppX files:"
+                    Case "ESN"
+                        Text = "Añadir paquetes aprovisionados AppX"
+                        Label1.Text = Text
+                        Label2.Text = "Añada archivos AppX empaquetados o desempaquetados usando los botones de abajo, o soltándolos en la lista de abajo:"
+                        Label3.Text = "Un paquete AppX podría necesitar algunas dependencias para que sea instalado correctamente. Si es así, puede especificarlas ahora:"
+                        Label4.Text = "Las dependencias especificadas serán usadas en todos los paquetes AppX seleccionados"
+                        Label5.Text = "Para especificar regiones de aplicación múltiples, sepáralos con un punto y coma (;)"
+                        Label6.Text = "Seleccione una entrada en la lista para mostrar los detalles de una aplicación"
+                        Button1.Text = "Añadir archivo"
+                        Button2.Text = "Añadir carpeta"
+                        Button3.Text = "Eliminar todas las entradas"
+                        Button4.Text = "Eliminar todas las dependencias"
+                        Button5.Text = "Eliminar dependencia"
+                        Button6.Text = "Añadir dependencia..."
+                        Button7.Text = "Examinar..."
+                        Button8.Text = "Examinar..."
+                        Button9.Text = "Eliminar entrada seleccionada"
+                        Cancel_Button.Text = "Cancelar"
+                        OK_Button.Text = "Aceptar"
+                        CheckBox1.Text = "Proporcionar un archivo de datos:"
+                        CheckBox2.Text = "Guardar imagen tras añadir paquetes AppX"
+                        CustomDataFileOFD.Title = "Especificar un archivo de datos personalizados"
+                        GroupBox1.Text = "Archivos AppX de origen*"
+                        GroupBox2.Text = "Dependencias de aplicaciones"
+                        GroupBox3.Text = "Regiones de aplicaciones"
+                        LicenseFileOFD.Title = "Especificar un archivo de licencia"
+                        LinkLabel1.Text = "Las regiones de aplicaciones deben estar en el formato de códigos ISO 3166-1 Alpha 2 o Alpha 3. Saber más acerca de estos códigos"
+                        LinkLabel1.LinkArea = New LinkArea(96, 33)
+                        ListView1.Columns(0).Text = "Archivo/Carpeta"
+                        ListView1.Columns(1).Text = "Tipo"
+                        ListView1.Columns(2).Text = "Nombre de aplicación"
+                        ListView1.Columns(3).Text = "Publicador de aplicación"
+                        ListView1.Columns(4).Text = "Versión de aplicación"
+                        RadioButton1.Text = "Archivo de licencia*:"
+                        RadioButton2.Text = "Omitir archivo de licencia"
+                        RadioButton3.Text = "Hacer aplicaciones disponibles para todas las regiones"
+                        RadioButton4.Text = "Especificar regiones de aplicaciones"
+                        UnpackedAppxFolderFBD.Description = "Especifique un directorio contenedor de archivos de una aplicación AppX:"
+                End Select
+            Case 1
+                Text = "Add provisioned AppX packages"
+                Label1.Text = Text
+                Label2.Text = "Please add packed or unpacked AppX packages by using the buttons below, or by dropping them to the list view below:"
+                Label3.Text = "An AppX package may need some dependencies for it to be installed correctly. If so, you can specify a list of dependencies now:"
+                Label4.Text = "The dependencies specified will be used on all selected AppX packages"
+                Label5.Text = "To specify multiple app regions, separate them with a semicolon (;)"
+                Label6.Text = "Select an entry in the list view to show the details of an app"
+                Button1.Text = "Add file"
+                Button2.Text = "Add folder"
+                Button3.Text = "Remove all entries"
+                Button4.Text = "Remove all dependencies"
+                Button5.Text = "Remove dependency"
+                Button6.Text = "Add dependency..."
+                Button7.Text = "Browse..."
+                Button8.Text = "Browse..."
+                Button9.Text = "Remove selected entry"
+                Cancel_Button.Text = "Cancel"
+                OK_Button.Text = "OK"
+                CheckBox1.Text = "Provide a custom data file:"
+                CheckBox2.Text = "Commit image after adding AppX packages"
+                CustomDataFileOFD.Title = "Specify a custom data file"
+                GroupBox1.Text = "Source AppX files*"
+                GroupBox2.Text = "AppX dependencies"
+                GroupBox3.Text = "AppX regions"
+                LicenseFileOFD.Title = "Specify a license file"
+                LinkLabel1.Text = "App regions need to be in the form of ISO 3166-1 Alpha 2 or Alpha-3 codes. To learn more about these codes, click here"
+                LinkLabel1.LinkArea = New LinkArea(108, 10)
+                ListView1.Columns(0).Text = "File/Folder"
+                ListView1.Columns(1).Text = "Type"
+                ListView1.Columns(2).Text = "Application name"
+                ListView1.Columns(3).Text = "Application publisher"
+                ListView1.Columns(4).Text = "Application version"
+                RadioButton1.Text = "License file*:"
+                RadioButton2.Text = "Skip license file"
+                RadioButton3.Text = "Make apps available for all regions"
+                RadioButton4.Text = "Specify app regions"
+                UnpackedAppxFolderFBD.Description = "Please specify a folder containing unpacked AppX files:"
+            Case 2
+                Text = "Añadir paquetes aprovisionados AppX"
+                Label1.Text = Text
+                Label2.Text = "Añada archivos AppX empaquetados o desempaquetados usando los botones de abajo, o soltándolos en la lista de abajo:"
+                Label3.Text = "Un paquete AppX podría necesitar algunas dependencias para que sea instalado correctamente. Si es así, puede especificarlas ahora:"
+                Label4.Text = "Las dependencias especificadas serán usadas en todos los paquetes AppX seleccionados"
+                Label5.Text = "Para especificar regiones de aplicación múltiples, sepáralos con un punto y coma (;)"
+                Label6.Text = "Seleccione una entrada en la lista para mostrar los detalles de una aplicación"
+                Button1.Text = "Añadir archivo"
+                Button2.Text = "Añadir carpeta"
+                Button3.Text = "Eliminar todas las entradas"
+                Button4.Text = "Eliminar todas las dependencias"
+                Button5.Text = "Eliminar dependencia"
+                Button6.Text = "Añadir dependencia..."
+                Button7.Text = "Examinar..."
+                Button8.Text = "Examinar..."
+                Button9.Text = "Eliminar entrada seleccionada"
+                Cancel_Button.Text = "Cancelar"
+                OK_Button.Text = "Aceptar"
+                CheckBox1.Text = "Proporcionar un archivo de datos:"
+                CheckBox2.Text = "Guardar imagen tras añadir paquetes AppX"
+                CustomDataFileOFD.Title = "Especificar un archivo de datos personalizados"
+                GroupBox1.Text = "Archivos AppX de origen*"
+                GroupBox2.Text = "Dependencias de aplicaciones"
+                GroupBox3.Text = "Regiones de aplicaciones"
+                LicenseFileOFD.Title = "Especificar un archivo de licencia"
+                LinkLabel1.Text = "Las regiones de aplicaciones deben estar en el formato de códigos ISO 3166-1 Alpha 2 o Alpha 3. Saber más acerca de estos códigos"
+                LinkLabel1.LinkArea = New LinkArea(96, 33)
+                ListView1.Columns(0).Text = "Archivo/Carpeta"
+                ListView1.Columns(1).Text = "Tipo"
+                ListView1.Columns(2).Text = "Nombre de aplicación"
+                ListView1.Columns(3).Text = "Publicador de aplicación"
+                ListView1.Columns(4).Text = "Versión de aplicación"
+                RadioButton1.Text = "Archivo de licencia*:"
+                RadioButton2.Text = "Omitir archivo de licencia"
+                RadioButton3.Text = "Hacer aplicaciones disponibles para todas las regiones"
+                RadioButton4.Text = "Especificar regiones de aplicaciones"
+                UnpackedAppxFolderFBD.Description = "Especifique un directorio contenedor de archivos de una aplicación AppX:"
+        End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
             BackColor = Color.FromArgb(31, 31, 31)
@@ -832,11 +989,35 @@ Public Class AddProvAppxPackage
 
             End If
         End If
-        If IsFolder Then
-            ListView1.Items.Add(New ListViewItem(New String() {Package, "Unpacked", currentAppxName, currentAppxPublisher, currentAppxVersion}))
-        Else
-            ListView1.Items.Add(New ListViewItem(New String() {Package, "Packed", currentAppxName, currentAppxPublisher, currentAppxVersion}))
-        End If
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        If IsFolder Then
+                            ListView1.Items.Add(New ListViewItem(New String() {Package, "Unpacked", currentAppxName, currentAppxPublisher, currentAppxVersion}))
+                        Else
+                            ListView1.Items.Add(New ListViewItem(New String() {Package, "Packed", currentAppxName, currentAppxPublisher, currentAppxVersion}))
+                        End If
+                    Case "ESN"
+                        If IsFolder Then
+                            ListView1.Items.Add(New ListViewItem(New String() {Package, "Desempaquetado", currentAppxName, currentAppxPublisher, currentAppxVersion}))
+                        Else
+                            ListView1.Items.Add(New ListViewItem(New String() {Package, "Empaquetado", currentAppxName, currentAppxPublisher, currentAppxVersion}))
+                        End If
+                End Select
+            Case 1
+                If IsFolder Then
+                    ListView1.Items.Add(New ListViewItem(New String() {Package, "Unpacked", currentAppxName, currentAppxPublisher, currentAppxVersion}))
+                Else
+                    ListView1.Items.Add(New ListViewItem(New String() {Package, "Packed", currentAppxName, currentAppxPublisher, currentAppxVersion}))
+                End If
+            Case 2
+                If IsFolder Then
+                    ListView1.Items.Add(New ListViewItem(New String() {Package, "Desempaquetado", currentAppxName, currentAppxPublisher, currentAppxVersion}))
+                Else
+                    ListView1.Items.Add(New ListViewItem(New String() {Package, "Empaquetado", currentAppxName, currentAppxPublisher, currentAppxVersion}))
+                End If
+        End Select
         Button3.Enabled = True
         If Directory.Exists(".\appxscan") Then
             Directory.Delete(".\appxscan", True)
@@ -1023,8 +1204,23 @@ Public Class AddProvAppxPackage
         If ListView1.SelectedItems.Count > 0 Then
             Try
                 Label7.Text = ListView1.FocusedItem.SubItems(2).Text
-                Label8.Text = "Publisher: " & ListView1.FocusedItem.SubItems(3).Text
-                Label9.Text = "Version: " & ListView1.FocusedItem.SubItems(4).Text
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                Label8.Text = "Publisher: " & ListView1.FocusedItem.SubItems(3).Text
+                                Label9.Text = "Version: " & ListView1.FocusedItem.SubItems(4).Text
+                            Case "ESN"
+                                Label8.Text = "Publicador: " & ListView1.FocusedItem.SubItems(3).Text
+                                Label9.Text = "Versión: " & ListView1.FocusedItem.SubItems(4).Text
+                        End Select
+                    Case 1
+                        Label8.Text = "Publisher: " & ListView1.FocusedItem.SubItems(3).Text
+                        Label9.Text = "Version: " & ListView1.FocusedItem.SubItems(4).Text
+                    Case 2
+                        Label8.Text = "Publicador: " & ListView1.FocusedItem.SubItems(3).Text
+                        Label9.Text = "Versión: " & ListView1.FocusedItem.SubItems(4).Text
+                End Select
             Catch ex As NullReferenceException
 
             End Try
@@ -1113,7 +1309,19 @@ Public Class AddProvAppxPackage
     End Sub
 
     Private Sub PictureBox2_MouseHover(sender As Object, e As EventArgs) Handles PictureBox2.MouseHover
-        previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "The logo assets for this file could not be detected", "Click here to enlarge the view"))
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "The logo assets for this file could not be detected", "Click here to enlarge the view"))
+                    Case "ESN"
+                        previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Los recursos de este archivo no pudieron ser detectados", "Haga clic para agrandar la vista"))
+                End Select
+            Case 1
+                previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "The logo assets for this file could not be detected", "Click here to enlarge the view"))
+            Case 2
+                previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Los recursos de este archivo no pudieron ser detectados", "Haga clic para agrandar la vista"))
+        End Select
     End Sub
 
     Private Sub ListView1_DragEnter(sender As Object, e As DragEventArgs) Handles ListView1.DragEnter
@@ -1153,5 +1361,13 @@ Public Class AddProvAppxPackage
             End If
         Next
         Cursor = Cursors.Arrow
+    End Sub
+
+    Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
+        LicenseFileOFD.ShowDialog()
+    End Sub
+
+    Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
+        CustomDataFileOFD.ShowDialog()
     End Sub
 End Class

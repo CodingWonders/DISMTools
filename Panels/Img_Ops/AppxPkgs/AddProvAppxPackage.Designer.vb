@@ -470,7 +470,7 @@ Partial Class AddProvAppxPackage
         '
         'RadioButton1
         '
-        Me.RadioButton1.AutoSize = True
+        Me.RadioButton1.AutoEllipsis = True
         Me.RadioButton1.Checked = True
         Me.RadioButton1.Location = New System.Drawing.Point(548, 304)
         Me.RadioButton1.Name = "RadioButton1"
@@ -492,7 +492,7 @@ Partial Class AddProvAppxPackage
         '
         'CheckBox1
         '
-        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.AutoEllipsis = True
         Me.CheckBox1.Location = New System.Drawing.Point(548, 355)
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(154, 17)
@@ -598,10 +598,9 @@ Partial Class AddProvAppxPackage
         '
         Me.Label5.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label5.AutoSize = True
         Me.Label5.Location = New System.Drawing.Point(46, 102)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(327, 13)
+        Me.Label5.Size = New System.Drawing.Size(455, 13)
         Me.Label5.TabIndex = 0
         Me.Label5.Text = "To specify multiple app regions, separate them with a semicolon (;)"
         '
