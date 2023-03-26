@@ -59,7 +59,7 @@ Public Class NewProj
                     End If
             End Select
         End If
-        ProgressPanel.projName = TextBox2.Text
+        ProgressPanel.projName = TextBox1.Text
         ProgressPanel.projPath = TextBox2.Text
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
