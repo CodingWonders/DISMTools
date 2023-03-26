@@ -101,6 +101,7 @@ Public Class ImgIndexDelete
     End Sub
 
     Sub GetImageIndexInfo(SourceImage As String)
+        If MainForm.MountedImageDetectorBW.IsBusy Then MainForm.MountedImageDetectorBW.CancelAsync()
         RemoveHandler ListView1.ItemChecked, AddressOf ListView1_ItemChecked
         ' Clear arrays
         Array.Clear(IndexNames, 0, IndexNames.Length)
@@ -128,6 +129,7 @@ Public Class ImgIndexDelete
         DismApi.Shutdown()
         Label4.Visible = False
         AddHandler ListView1.ItemChecked, AddressOf ListView1_ItemChecked
+        If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
     End Sub
 
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
