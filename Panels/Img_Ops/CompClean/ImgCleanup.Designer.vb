@@ -241,10 +241,10 @@ Partial Class ImgCleanup
         '
         'Label6
         '
-        Me.Label6.AutoSize = True
+        Me.Label6.AutoEllipsis = True
         Me.Label6.Location = New System.Drawing.Point(337, 46)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(104, 13)
+        Me.Label6.Size = New System.Drawing.Size(392, 13)
         Me.Label6.TabIndex = 1
         Me.Label6.Text = "LastResetBase_UTC"
         '
@@ -260,7 +260,7 @@ Partial Class ImgCleanup
         '
         'Label5
         '
-        Me.Label5.AutoSize = True
+        Me.Label5.AutoEllipsis = True
         Me.Label5.Location = New System.Drawing.Point(52, 46)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(279, 13)

@@ -236,7 +236,19 @@ Public Class MainForm
         MountedImgMgr.ListView1.Items.Clear()
         Try
             For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
-                MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "OK", If(MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MountedImageMountedReWr(x) = 0, "Yes", "No"), If(File.Exists(MountedImageMountDirs(x) & "\Windows\System32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion, "Could not get version info")}))
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "OK", If(MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MountedImageMountedReWr(x) = 0, "Yes", "No"), If(File.Exists(MountedImageMountDirs(x) & "\Windows\System32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion, "Could not get version info")}))
+                            Case "ESN"
+                                MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "Correcto", If(MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MountedImageMountedReWr(x) = 0, "Sí", "No"), If(File.Exists(MountedImageMountDirs(x) & "\Windows\System32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion, "No se pudo obtener información de la versión")}))
+                        End Select
+                    Case 1
+                        MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "OK", If(MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MountedImageMountedReWr(x) = 0, "Yes", "No"), If(File.Exists(MountedImageMountDirs(x) & "\Windows\System32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion, "Could not get version info")}))
+                    Case 2
+                        MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "Correcto", If(MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MountedImageMountedReWr(x) = 0, "Sí", "No"), If(File.Exists(MountedImageMountDirs(x) & "\Windows\System32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion, "No se pudo obtener información de la versión")}))
+                End Select
             Next
         Catch ex As Exception
             Exit Try
@@ -6353,7 +6365,19 @@ Public Class MainForm
                 Catch ex As Exception
                     Exit Try
                 End Try
-                DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                            Case "ESN"
+                                DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
+                        End Select
+                    Case 1
+                        DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                    Case 2
+                        DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
+                End Select
         End Select
         DisableFeat.ShowDialog()
     End Sub
@@ -6554,7 +6578,20 @@ Public Class MainForm
             ' We should have enough with the entries already added.
             Exit Try
         End Try
-        RemPackage.Label2.Text = "This image contains " & ElementCount & " packages"
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        RemPackage.Label2.Text = "This image contains " & ElementCount & " packages"
+                    Case "ESN"
+                        RemPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes"
+                End Select
+            Case 1
+                RemPackage.Label2.Text = "This image contains " & ElementCount & " packages"
+            Case 2
+
+        End Select
+
         RemPackage.ShowDialog()
     End Sub
 
@@ -6606,7 +6643,19 @@ Public Class MainForm
                 Catch ex As Exception
                     Exit Try
                 End Try
-                EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                            Case "ESN"
+                                EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
+                        End Select
+                    Case 1
+                        EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                    Case 2
+                        EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
+                End Select
             Case 1
                 Try
                     For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
@@ -6631,7 +6680,19 @@ Public Class MainForm
                 Catch ex As Exception
                     Exit Try
                 End Try
-                DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                            Case "ESN"
+                                DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
+                        End Select
+                    Case 1
+                        DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                    Case 2
+                        DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
+                End Select
         End Select
         EnableFeat.ShowDialog()
     End Sub
@@ -6685,7 +6746,19 @@ Public Class MainForm
                 Catch ex As Exception
                     Exit Try
                 End Try
-                EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                            Case "ESN"
+                                EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
+                        End Select
+                    Case 1
+                        EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                    Case 2
+                        EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
+                End Select
             Case 1
                 Try
                     For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
@@ -6710,7 +6783,19 @@ Public Class MainForm
                 Catch ex As Exception
                     Exit Try
                 End Try
-                DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                            Case "ESN"
+                                DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
+                        End Select
+                    Case 1
+                        DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                    Case 2
+                        DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
+                End Select
         End Select
         DisableFeat.ShowDialog()
     End Sub
@@ -6781,7 +6866,19 @@ Public Class MainForm
         Catch ex As Exception
             Exit Try
         End Try
-        RemProvAppxPackage.Label2.Text = "This image contains " & ElementCount & " AppX packages."
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        RemProvAppxPackage.Label2.Text = "This image contains " & ElementCount & " AppX packages."
+                    Case "ESN"
+                        RemProvAppxPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes AppX."
+                End Select
+            Case 1
+                RemProvAppxPackage.Label2.Text = "This image contains " & ElementCount & " AppX packages."
+            Case 2
+                RemProvAppxPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes AppX."
+        End Select
         RemProvAppxPackage.ShowDialog()
     End Sub
 
@@ -6807,7 +6904,19 @@ Public Class MainForm
                 UpdateProjProperties(True, If(isReadOnly, True, False))
                 SaveDTProj()
             Else
-                MsgBox("The selected directory doesn't contain a mounted Windows image. Please specify a mount directory and try again.", vbOKOnly + vbCritical, Text)
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                MsgBox("The selected directory doesn't contain a mounted Windows image. Please specify a mount directory and try again.", vbOKOnly + vbCritical, Text)
+                            Case "ESN"
+                                MsgBox("El directorio seleccionado no contiene una imagen de Windows montada. Especifique un directorio de montaje e inténtelo de nuevo.", vbOKOnly + vbCritical, Text)
+                        End Select
+                    Case 1
+                        MsgBox("The selected directory doesn't contain a mounted Windows image. Please specify a mount directory and try again.", vbOKOnly + vbCritical, Text)
+                    Case 2
+                        MsgBox("El directorio seleccionado no contiene una imagen de Windows montada. Especifique un directorio de montaje e inténtelo de nuevo.", vbOKOnly + vbCritical, Text)
+                End Select
                 Exit Sub
             End If
         End If

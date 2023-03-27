@@ -10,10 +10,34 @@ Public Class PkgParentNameLookupDlg
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         If TextBox1.Text = "" Then
-            MsgBox("Please specify a package name, and try again.", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Installed package names")
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MsgBox("Please specify a package name, and try again.", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Installed package names")
+                        Case "ESN"
+                            MsgBox("Especifique un nombre de paquete, e inténtelo de nuevo.", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Nombres de paquetes instalados")
+                    End Select
+                Case 1
+                    MsgBox("Please specify a package name, and try again.", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Installed package names")
+                Case 2
+                    MsgBox("Especifique un nombre de paquete, e inténtelo de nuevo.", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Nombres de paquetes instalados")
+            End Select
             Exit Sub
         ElseIf Not ListBox1.Items.Contains(TextBox1.Text) Then
-            MsgBox("The specified package name does not seem to be in the image. Please specify an available entry, and try again", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Installed package names")
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MsgBox("The specified package name does not seem to be in the image. Please specify an available entry, and try again", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Installed package names")
+                        Case "ESN"
+                            MsgBox("El paquete especificado no parece estar en la imagen. Especifique una entrada disponible, e inténtelo de nuevo", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Nombres de paquetes instalados")
+                    End Select
+                Case 1
+                    MsgBox("The specified package name does not seem to be in the image. Please specify an available entry, and try again", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Installed package names")
+                Case 2
+                    MsgBox("El paquete especificado no parece estar en la imagen. Especifique una entrada disponible, e inténtelo de nuevo", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Nombres de paquetes instalados")
+            End Select
             Exit Sub
         Else
             EnableFeat.TextBox1.Text = TextBox1.Text
@@ -32,6 +56,39 @@ Public Class PkgParentNameLookupDlg
     End Sub
 
     Private Sub PkgParentNameLookupDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Text = "Installed package names"
+                        Label1.Text = "Names of installed packages in the mounted image:"
+                        Label2.Text = "Name of parent package:"
+                        Label3.Text = "Getting package names. Please wait..."
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Cancel"
+                    Case "ESN"
+                        Text = "Nombres de paquetes instalados"
+                        Label1.Text = "Nombres de paquetes instalados en la imagen montada:"
+                        Label2.Text = "Paquete principal:"
+                        Label3.Text = "Obteniendo nombres de paquetes. Espere..."
+                        OK_Button.Text = "Aceptar"
+                        Cancel_Button.Text = "Cancelar"
+                End Select
+            Case 1
+                Text = "Installed package names"
+                Label1.Text = "Names of installed packages in the mounted image:"
+                Label2.Text = "Name of parent package:"
+                Label3.Text = "Getting package names. Please wait..."
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Cancel"
+            Case 2
+                Text = "Nombres de paquetes instalados"
+                Label1.Text = "Nombres de paquetes instalados en la imagen montada:"
+                Label2.Text = "Paquete principal:"
+                Label3.Text = "Obteniendo nombres de paquetes. Espere..."
+                OK_Button.Text = "Aceptar"
+                Cancel_Button.Text = "Cancelar"
+        End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)
             ForeColor = Color.White

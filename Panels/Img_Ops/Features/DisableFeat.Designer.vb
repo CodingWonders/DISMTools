@@ -25,8 +25,6 @@ Partial Class DisableFeat
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.OK_Button = New System.Windows.Forms.Button()
         Me.Cancel_Button = New System.Windows.Forms.Button()
-        Me.Button4 = New System.Windows.Forms.Button()
-        Me.Label11 = New System.Windows.Forms.Label()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
@@ -83,26 +81,6 @@ Partial Class DisableFeat
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
         Me.Cancel_Button.TabIndex = 1
         Me.Cancel_Button.Text = "Cancel"
-        '
-        'Button4
-        '
-        Me.Button4.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button4.Location = New System.Drawing.Point(12, 523)
-        Me.Button4.Name = "Button4"
-        Me.Button4.Size = New System.Drawing.Size(100, 23)
-        Me.Button4.TabIndex = 19
-        Me.Button4.Text = "Command help"
-        Me.Button4.UseVisualStyleBackColor = True
-        '
-        'Label11
-        '
-        Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(118, 528)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(179, 13)
-        Me.Label11.TabIndex = 18
-        Me.Label11.Text = "The fields that end in * are required"
         '
         'GroupBox2
         '
@@ -248,8 +226,6 @@ Partial Class DisableFeat
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(784, 561)
-        Me.Controls.Add(Me.Button4)
-        Me.Controls.Add(Me.Label11)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.Win10Title)
@@ -271,14 +247,11 @@ Partial Class DisableFeat
         Me.Win10Title.PerformLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents OK_Button As System.Windows.Forms.Button
     Friend WithEvents Cancel_Button As System.Windows.Forms.Button
-    Friend WithEvents Button4 As System.Windows.Forms.Button
-    Friend WithEvents Label11 As System.Windows.Forms.Label
     Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
     Friend WithEvents Button1 As System.Windows.Forms.Button
     Friend WithEvents TextBox1 As System.Windows.Forms.TextBox

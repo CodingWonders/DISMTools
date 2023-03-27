@@ -10,7 +10,19 @@ Public Class DisableFeat
         featDisablementCount = ListView1.CheckedItems.Count
         ProgressPanel.featDisablementCount = featDisablementCount
         If ListView1.CheckedItems.Count <= 0 Then
-            MessageBox.Show(MainForm, "Please select features to disable, and try again.", "No features selected", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MessageBox.Show(MainForm, "Please select features to disable, and try again.", "No features selected", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        Case "ESN"
+                            MessageBox.Show(MainForm, "Seleccione las características a deshabilitar, e inténtelo de nuevo", "No hay características seleccionadas", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End Select
+                Case 1
+                    MessageBox.Show(MainForm, "Please select features to disable, and try again.", "No features selected", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Case 2
+                    MessageBox.Show(MainForm, "Seleccione las características a deshabilitar, e inténtelo de nuevo", "No hay características seleccionadas", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Select
             Exit Sub
         Else
             Try
@@ -50,6 +62,63 @@ Public Class DisableFeat
     End Sub
 
     Private Sub DisableFeat_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Text = "Disable features"
+                        Label1.Text = Text
+                        Label3.Text = "Package name:"
+                        GroupBox1.Text = "Features"
+                        GroupBox2.Text = "Options"
+                        Button1.Text = "Lookup..."
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Cancel"
+                        ListView1.Columns(0).Text = "Feature name"
+                        ListView1.Columns(1).Text = "State"
+                        CheckBox1.Text = "Specify parent package name for features"
+                        CheckBox2.Text = "Remove feature without removing manifest"
+                    Case "ESN"
+                        Text = "Deshabilitar características"
+                        Label1.Text = Text
+                        Label3.Text = "Paquete:"
+                        GroupBox1.Text = "Características"
+                        GroupBox2.Text = "Opciones"
+                        Button1.Text = "Consultar"
+                        OK_Button.Text = "Aceptar"
+                        Cancel_Button.Text = "Cancelar"
+                        ListView1.Columns(0).Text = "Nombre de característica"
+                        ListView1.Columns(1).Text = "Estado"
+                        CheckBox1.Text = "Especificar nombre de paquete principal para las características"
+                        CheckBox2.Text = "Eliminar característica sin eliminar manifiesto"
+                End Select
+            Case 1
+                Text = "Disable features"
+                Label1.Text = Text
+                Label3.Text = "Package name:"
+                GroupBox1.Text = "Features"
+                GroupBox2.Text = "Options"
+                Button1.Text = "Lookup..."
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Cancel"
+                ListView1.Columns(0).Text = "Feature name"
+                ListView1.Columns(1).Text = "State"
+                CheckBox1.Text = "Specify parent package name for features"
+                CheckBox2.Text = "Remove feature without removing manifest"
+            Case 2
+                Text = "Deshabilitar características"
+                Label1.Text = Text
+                Label3.Text = "Paquete:"
+                GroupBox1.Text = "Características"
+                GroupBox2.Text = "Opciones"
+                Button1.Text = "Consultar"
+                OK_Button.Text = "Aceptar"
+                Cancel_Button.Text = "Cancelar"
+                ListView1.Columns(0).Text = "Nombre de característica"
+                ListView1.Columns(1).Text = "Estado"
+                CheckBox1.Text = "Especificar nombre de paquete principal para las características"
+                CheckBox2.Text = "Eliminar característica sin eliminar manifiesto"
+        End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
             BackColor = Color.FromArgb(31, 31, 31)
@@ -73,7 +142,19 @@ Public Class DisableFeat
             Text = ""
             Win10Title.Visible = True
         End If
-        Label2.Text &= " Only enabled features (" & ListView1.Items.Count & ") are shown"
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Label2.Text &= " Only enabled features (" & ListView1.Items.Count & ") are shown"
+                    Case "ESN"
+                        Label2.Text &= " Solo las características habilitadas (" & ListView1.Items.Count & ") son mostradas"
+                End Select
+            Case 1
+                Label2.Text &= " Only enabled features (" & ListView1.Items.Count & ") are shown"
+            Case 2
+                Label2.Text &= " Solo las características habilitadas (" & ListView1.Items.Count & ") son mostradas"
+        End Select
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
