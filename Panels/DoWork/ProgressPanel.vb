@@ -176,6 +176,8 @@ Public Class ProgressPanel
 
     Dim dateStr As String = "DISMTools-"
 
+    Dim Language As Integer = 0                             ' Form language, taken from MainForm
+
     ' OperationNum: 0
     Public projName As String
     Public projPath As String
@@ -518,7 +520,7 @@ Public Class ProgressPanel
         PkgErrorText.RichTextBox1.Clear()
         FeatErrorText.RichTextBox1.Clear()
         If opNum = 0 Then
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -635,7 +637,7 @@ Public Class ProgressPanel
         ElseIf opNum = 3 Then
             ' My love with DISM came from this very YouTube video:
             ' https://www.youtube.com/watch?v=JxJ6a-PY1KA (Enderman - Manually installing Windows 10)
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -734,7 +736,7 @@ Public Class ProgressPanel
                     Exit Do
                 End If
             Loop
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -755,7 +757,7 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 6 Then
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -860,7 +862,7 @@ Public Class ProgressPanel
                     Exit Do
                 End If
             Loop
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -897,7 +899,7 @@ Public Class ProgressPanel
                 'MainForm.SaveDTProj()
             End If
         ElseIf opNum = 8 Then
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -937,7 +939,7 @@ Public Class ProgressPanel
                     Exit Do
                 End If
             Loop
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -962,7 +964,7 @@ Public Class ProgressPanel
                 RunOps(21)
                 AllPB.Value = AllPB.Maximum / taskCount
                 currentTCont += 1
-                Select Case MainForm.Language
+                Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENG"
@@ -976,7 +978,7 @@ Public Class ProgressPanel
                         taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
                 End Select
             End If
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -1007,7 +1009,7 @@ Public Class ProgressPanel
                                "Removing volume images..." & CrLf)
             For x = 0 To Array.LastIndexOf(imgIndexDeletionNames, imgIndexDeletionLastName)
                 CurrentPB.Value = x + 1
-                Select Case MainForm.Language
+                Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENG"
@@ -1081,7 +1083,7 @@ Public Class ProgressPanel
                               "dism " & CommandArgs & " > ",
                               ASCII)
         ElseIf opNum = 15 Then
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -1139,7 +1141,7 @@ Public Class ProgressPanel
                     Exit Do
                 End If
             Loop
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -1160,7 +1162,7 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 18 Then
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -1200,7 +1202,7 @@ Public Class ProgressPanel
             Loop
             CurrentPB.Value = 50
             AllPB.Value = CurrentPB.Value
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -1221,7 +1223,7 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 21 Then
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -1301,7 +1303,7 @@ Public Class ProgressPanel
                                       ASCII)
                     Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
                 End Try
-                Select Case MainForm.Language
+                Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENG"
@@ -1376,7 +1378,7 @@ Public Class ProgressPanel
                 Catch ex As Exception
                     ' Let's try this before setting things up here
                 End Try
-                Select Case MainForm.Language
+                Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENG"
@@ -1405,7 +1407,7 @@ Public Class ProgressPanel
             'End If
             ' Reset internal integers
             pkgCurrentNum = 0
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -1473,7 +1475,7 @@ Public Class ProgressPanel
             Thread.Sleep(2000)      ' Sleep to prevent thrashing
 
             ' Begin package addition
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -1505,7 +1507,7 @@ Public Class ProgressPanel
                         Exit Do
                     End If
                 Loop
-                Select Case MainForm.Language
+                Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENG"
@@ -1524,7 +1526,7 @@ Public Class ProgressPanel
             ElseIf pkgAdditionOp = 1 Then
                 CurrentPB.Maximum = pkgCount
                 For x = 0 To Array.LastIndexOf(pkgs, pkgLastCheckedPackageName)
-                    Select Case MainForm.Language
+                    Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                 Case "ENG"
@@ -1681,7 +1683,7 @@ Public Class ProgressPanel
             If imgCommitAfterOps Then
                 AllPB.Value = AllPB.Maximum / taskCount
                 currentTCont += 1
-                Select Case MainForm.Language
+                Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENG"
@@ -1706,7 +1708,7 @@ Public Class ProgressPanel
                 GetErrorCode(False)
             End If
         ElseIf opNum = 27 Then
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -1729,7 +1731,7 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & "Amount of packages to remove: " & pkgRemovalCount)
 
             ' Begin package removal
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -1745,7 +1747,7 @@ Public Class ProgressPanel
             CurrentPB.Maximum = pkgRemovalCount
             If pkgRemovalOp = 0 Then
                 For x = 0 To Array.LastIndexOf(pkgRemovalNames, pkgRemovalLastName)
-                    Select Case MainForm.Language
+                    Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                 Case "ENG"
@@ -1837,7 +1839,7 @@ Public Class ProgressPanel
                 Next
             ElseIf pkgRemovalOp = 1 Then
                 For x = 0 To Array.LastIndexOf(pkgRemovalFiles, pkgRemovalLastFile)
-                    Select Case MainForm.Language
+                    Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                 Case "ENG"
@@ -1941,7 +1943,7 @@ Public Class ProgressPanel
                 GetErrorCode(False)
             End If
         ElseIf opNum = 30 Then
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -2004,7 +2006,7 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & "Total number of features to enable: " & featEnablementCount)
             ' Get command ready
             DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -2019,7 +2021,7 @@ Public Class ProgressPanel
             End Select
             CurrentPB.Maximum = featEnablementCount
             For x = 0 To Array.LastIndexOf(featEnablementNames, featEnablementLastName)
-                Select Case MainForm.Language
+                Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENG"
@@ -2112,7 +2114,7 @@ Public Class ProgressPanel
                 GetErrorCode(False)
             End If
         ElseIf opNum = 31 Then
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -2151,7 +2153,7 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & "Total number of features to disable: " & featDisablementCount)
             ' Get command ready
             DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -2166,7 +2168,7 @@ Public Class ProgressPanel
             End Select
             CurrentPB.Maximum = featDisablementCount
             For x = 0 To Array.LastIndexOf(featDisablementNames, featDisablementLastName)
-                Select Case MainForm.Language
+                Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENG"
@@ -2251,7 +2253,7 @@ Public Class ProgressPanel
                 GetErrorCode(False)
             End If
         ElseIf opNum = 32 Then
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -2269,7 +2271,7 @@ Public Class ProgressPanel
             CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & MountDir & " /cleanup-image"
             Select Case CleanupTask
                 Case 0
-                    Select Case MainForm.Language
+                    Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                 Case "ENG"
@@ -2286,7 +2288,7 @@ Public Class ProgressPanel
                                        "Reverting pending servicing actions...")
                     CommandArgs &= " /revertpendingactions"
                 Case 1
-                    Select Case MainForm.Language
+                    Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                 Case "ENG"
@@ -2305,7 +2307,7 @@ Public Class ProgressPanel
                                        "- Hide Service Packs from the Installed Updates list? " & If(CleanupHideSP, "Yes", "No"))
                     CommandArgs &= " /spsuperseded" & If(CleanupHideSP, " /hidesp", "")
                 Case 2
-                    Select Case MainForm.Language
+                    Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                 Case "ENG"
@@ -2325,7 +2327,7 @@ Public Class ProgressPanel
                                        "- Defer long-running operations? " & If(DeferCleanupOps, "Yes", "No"))
                     CommandArgs &= " /startcomponentcleanup" & If(ResetCompBase, " /resetbase", "") & If(ResetCompBase And DeferCleanupOps, " /defer", "")
                 Case 3
-                    Select Case MainForm.Language
+                    Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                 Case "ENG"
@@ -2342,7 +2344,7 @@ Public Class ProgressPanel
                                        "Analyzing the component store...")
                     CommandArgs &= " /analyzecomponentstore"
                 Case 4
-                    Select Case MainForm.Language
+                    Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                 Case "ENG"
@@ -2359,7 +2361,7 @@ Public Class ProgressPanel
                                        "Checking the component store health...")
                     CommandArgs &= " /checkhealth"
                 Case 5
-                    Select Case MainForm.Language
+                    Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                 Case "ENG"
@@ -2377,7 +2379,7 @@ Public Class ProgressPanel
                     CommandArgs &= " /scanhealth"
                 Case 6
                     ' The most known thing about DISM : dism /online /cleanup-image /restorehealth
-                    Select Case MainForm.Language
+                    Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                 Case "ENG"
@@ -2402,7 +2404,7 @@ Public Class ProgressPanel
             Do Until DISMProc.HasExited
                 If DISMProc.HasExited Then Exit Do
             Loop
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -2423,7 +2425,7 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 37 Then
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -2471,7 +2473,7 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & CrLf & "Enumerating AppX packages to add...")
             Thread.Sleep(500)
             LogView.AppendText(CrLf & "Total number of packages to add: " & appxAdditionCount)
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -2486,7 +2488,7 @@ Public Class ProgressPanel
             End Select
             CurrentPB.Maximum = appxAdditionCount
             For x = 0 To Array.LastIndexOf(appxAdditionPackages, appxAdditionLastPackage)
-                Select Case MainForm.Language
+                Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENG"
@@ -2603,7 +2605,7 @@ Public Class ProgressPanel
             If appxAdditionCommit Then
                 AllPB.Value = AllPB.Maximum / taskCount
                 currentTCont += 1
-                Select Case MainForm.Language
+                Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENG"
@@ -2626,7 +2628,7 @@ Public Class ProgressPanel
                 GetErrorCode(False)
             End If
         ElseIf opNum = 38 Then
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -2647,7 +2649,7 @@ Public Class ProgressPanel
                                "Enumerating AppX packages to remove...")
             Thread.Sleep(500)
             LogView.AppendText(CrLf & "Total number of packages to remove: " & appxRemovalCount)
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -2662,7 +2664,7 @@ Public Class ProgressPanel
             End Select
             CurrentPB.Maximum = appxRemovalCount
             For x = 0 To Array.LastIndexOf(appxRemovalPackages, appxRemovalLastPackage)
-                Select Case MainForm.Language
+                Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENG"
@@ -2777,7 +2779,7 @@ Public Class ProgressPanel
             End If
         ElseIf opNum = 991 Then
             ' Convert image formats. Right now, only index 1 will be converted (exported) to a WIM/ESD file
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -2831,7 +2833,7 @@ Public Class ProgressPanel
                     Exit Do
                 End If
             Loop
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -2852,7 +2854,7 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 992 Then
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -2895,7 +2897,7 @@ Public Class ProgressPanel
                     Exit Do
                 End If
             Loop
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -2916,7 +2918,7 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 996 Then
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -2969,7 +2971,7 @@ Public Class ProgressPanel
                     Exit Do
                 End If
             Loop
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -2991,7 +2993,7 @@ Public Class ProgressPanel
             End If
             If Decimal.ToInt32(DISMProc.ExitCode) <> 0 Then
                 LogView.AppendText(CrLf & CrLf & "Could not commit changes to the image. Discarding changes...")
-                Select Case MainForm.Language
+                Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENG"
@@ -3022,7 +3024,7 @@ Public Class ProgressPanel
                         Exit Do
                     End If
                 Loop
-                Select Case MainForm.Language
+                Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENG"
@@ -3048,7 +3050,7 @@ Public Class ProgressPanel
             End If
             AllPB.Value = AllPB.Maximum / taskCount
             currentTCont += 1
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -3087,7 +3089,7 @@ Public Class ProgressPanel
                     Exit Do
                 End If
             Loop
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -4147,6 +4149,7 @@ Public Class ProgressPanel
                 LinkLabel1.Text = "Mostrar archivo de registro de DISM (avanzado)"
                 GroupBox1.Text = "Registro"
         End Select
+        Language = MainForm.Language
         ' Cancel detector background worker which can interfere with image operations
         MainForm.MountedImageDetectorBW.CancelAsync()
         DismProgram = MainForm.DismExe
