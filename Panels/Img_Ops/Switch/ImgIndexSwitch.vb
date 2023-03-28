@@ -33,6 +33,59 @@ Public Class ImgIndexSwitch
     End Sub
 
     Private Sub ImgIndexSwitch_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Text = "Switch image indexes"
+                        Label1.Text = Text
+                        Label2.Text = "Image:"
+                        Label3.Text = "When unmounting source index, what to do?"
+                        Label4.Text = "Destination index to mount:"
+                        Label6.Text = "This index has already been mounted"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Cancel"
+                        GroupBox1.Text = "Indexes"
+                        RadioButton1.Text = "Save changes to index"
+                        RadioButton2.Text = "Unmount discarding changes"
+                    Case "ESN"
+                        Text = "Cambiar índices de imagen"
+                        Label1.Text = Text
+                        Label2.Text = "Imagen:"
+                        Label3.Text = "Al desmontar índice de origen, ¿qué hacer?"
+                        Label4.Text = "Índice de destino a montar:"
+                        Label6.Text = "Este índice ya está montado"
+                        OK_Button.Text = "Aceptar"
+                        Cancel_Button.Text = "Cancelar"
+                        GroupBox1.Text = "Índice"
+                        RadioButton1.Text = "Guardar cambios en el índice"
+                        RadioButton2.Text = "Desmontar descartando cambios"
+                End Select
+            Case 1
+                Text = "Switch image indexes"
+                Label1.Text = Text
+                Label2.Text = "Image:"
+                Label3.Text = "When unmounting source index, what to do?"
+                Label4.Text = "Destination index to mount:"
+                Label6.Text = "This index has already been mounted"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Cancel"
+                GroupBox1.Text = "Indexes"
+                RadioButton1.Text = "Save changes to index"
+                RadioButton2.Text = "Unmount discarding changes"
+            Case 2
+                Text = "Cambiar índices de imagen"
+                Label1.Text = Text
+                Label2.Text = "Imagen:"
+                Label3.Text = "Al desmontar índice de origen, ¿qué hacer?"
+                Label4.Text = "Índice de destino a montar:"
+                Label6.Text = "Este índice ya está montado"
+                OK_Button.Text = "Aceptar"
+                Cancel_Button.Text = "Cancelar"
+                GroupBox1.Text = "Índice"
+                RadioButton1.Text = "Guardar cambios en el índice"
+                RadioButton2.Text = "Desmontar descartando cambios"
+        End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
             BackColor = Color.FromArgb(31, 31, 31)
