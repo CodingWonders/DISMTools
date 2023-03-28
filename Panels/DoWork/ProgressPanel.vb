@@ -4191,6 +4191,7 @@ Public Class ProgressPanel
         MainForm.ToolStripButton4.Visible = True
         Control.CheckForIllegalCrossThreadCalls = False
         LinkLabel1.Visible = False
+        If Not Directory.Exists(Directory.GetCurrentDirectory() & "\logs") Then Directory.CreateDirectory(Directory.GetCurrentDirectory() & "\logs")
         GetTasks(OperationNum)
         ProgressBW.RunWorkerAsync()
     End Sub
