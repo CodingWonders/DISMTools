@@ -2,10 +2,27 @@
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.Text.Encoding
+Imports Microsoft.Dism
 
 Public Class ImgApply
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        If TextBox1.Text = "" Or Not File.Exists(TextBox1.Text) Then
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MsgBox("The specified image file is not valid. Please specify a valid image and try again.", vbOKOnly + vbCritical, Label1.Text)
+                        Case "ESN"
+                            MsgBox("El archivo de imagen especificado no es válido. Especifique una imagen válida e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
+                    End Select
+                Case 1
+                    MsgBox("The specified image file is not valid. Please specify a valid image and try again.", vbOKOnly + vbCritical, Label1.Text)
+                Case 2
+                    MsgBox("El archivo de imagen especificado no es válido. Especifique una imagen válida e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
+            End Select
+            Exit Sub
+        End If
         ProgressPanel.ApplicationSourceImg = TextBox1.Text
         ProgressPanel.ApplicationIndex = NumericUpDown1.Value
         If RadioButton1.Checked Then
@@ -84,6 +101,123 @@ Public Class ImgApply
     End Sub
 
     Private Sub ImgApply_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Text = "Apply an image"
+                        Label1.Text = Text
+                        Label2.Text = "Source image file:"
+                        Label3.Text = "Image index:"
+                        Label4.Text = "Naming pattern:"
+                        CheckBox1.Text = "Check image integrity"
+                        CheckBox2.Text = "Verify"
+                        CheckBox3.Text = "Use the reparse point tag fix"
+                        CheckBox4.Text = "Reference SWM files"
+                        CheckBox5.Text = "Validate image for Trusted Desktop"
+                        CheckBox6.Text = "Append image with WIMBoot configuration"
+                        CheckBox7.Text = "Apply image in compact mode"
+                        CheckBox8.Text = "Apply extended attributes"
+                        Button1.Text = "Browse..."
+                        Button2.Text = "Browse..."
+                        Button3.Text = "Specify..."
+                        Button4.Text = "Use name of the image"
+                        Button5.Text = "Scan pattern"
+                        UseMountedImgBtn.Text = "Use mounted image"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Cancel"
+                        RadioButton1.Text = "Destination directory:"
+                        RadioButton2.Text = "Destination drive:"
+                        GroupBox1.Text = "Source"
+                        GroupBox2.Text = "Options"
+                        GroupBox3.Text = "Destination"
+                        GroupBox4.Text = "SWM file pattern"
+                    Case "ESN"
+                        Text = "Aplicar una imagen"
+                        Label1.Text = Text
+                        Label2.Text = "Imagen de origen:"
+                        Label3.Text = "Índice:"
+                        Label4.Text = "Nomenclatura:"
+                        CheckBox1.Text = "Comprobar integridad de imagen"
+                        CheckBox2.Text = "Verificar"
+                        CheckBox3.Text = "Utilizar corrección de etiquetas de puntos de repetición de análisis"
+                        CheckBox4.Text = "Hacer referencia a archivos SWM"
+                        CheckBox5.Text = "Validar imagen de Trusted Desktop"
+                        CheckBox6.Text = "Aplicar imagen con configuración WIMBoot"
+                        CheckBox7.Text = "Aplicar imagen en modo compacto"
+                        CheckBox8.Text = "Aplicar atributos extendidos"
+                        Button1.Text = "Examinar..."
+                        Button2.Text = "Examinar..."
+                        Button3.Text = "Especificar"
+                        Button4.Text = "Usar nombre de imagen"
+                        Button5.Text = "Escanear patrón"
+                        UseMountedImgBtn.Text = "Usar imagen montada"
+                        OK_Button.Text = "Aceptar"
+                        Cancel_Button.Text = "Cancelar"
+                        RadioButton1.Text = "Directorio de destino:"
+                        RadioButton2.Text = "Disco de destino:"
+                        GroupBox1.Text = "Origen"
+                        GroupBox2.Text = "Opciones"
+                        GroupBox3.Text = "Destino"
+                        GroupBox4.Text = "Patrón de archivos SWM"
+                End Select
+            Case 1
+                Text = "Apply an image"
+                Label1.Text = Text
+                Label2.Text = "Source image file:"
+                Label3.Text = "Image index:"
+                Label4.Text = "Naming pattern:"
+                CheckBox1.Text = "Check image integrity"
+                CheckBox2.Text = "Verify"
+                CheckBox3.Text = "Use the reparse point tag fix"
+                CheckBox4.Text = "Reference SWM files"
+                CheckBox5.Text = "Validate image for Trusted Desktop"
+                CheckBox6.Text = "Append image with WIMBoot configuration"
+                CheckBox7.Text = "Apply image in compact mode"
+                CheckBox8.Text = "Apply extended attributes"
+                Button1.Text = "Browse..."
+                Button2.Text = "Browse..."
+                Button3.Text = "Specify..."
+                Button4.Text = "Use name of the image"
+                Button5.Text = "Scan pattern"
+                UseMountedImgBtn.Text = "Use mounted image"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Cancel"
+                RadioButton1.Text = "Destination directory:"
+                RadioButton2.Text = "Destination drive:"
+                GroupBox1.Text = "Source"
+                GroupBox2.Text = "Options"
+                GroupBox3.Text = "Destination"
+                GroupBox4.Text = "SWM file pattern"
+            Case 2
+                Text = "Aplicar una imagen"
+                Label1.Text = Text
+                Label2.Text = "Imagen de origen:"
+                Label3.Text = "Índice:"
+                Label4.Text = "Nomenclatura:"
+                CheckBox1.Text = "Comprobar integridad de imagen"
+                CheckBox2.Text = "Verificar"
+                CheckBox3.Text = "Utilizar corrección de etiquetas de puntos de repetición de análisis"
+                CheckBox4.Text = "Hacer referencia a archivos SWM"
+                CheckBox5.Text = "Validar imagen de Trusted Desktop"
+                CheckBox6.Text = "Aplicar imagen con configuración WIMBoot"
+                CheckBox7.Text = "Aplicar imagen en modo compacto"
+                CheckBox8.Text = "Aplicar atributos extendidos"
+                Button1.Text = "Examinar..."
+                Button2.Text = "Examinar..."
+                Button3.Text = "Especificar"
+                Button4.Text = "Usar nombre de imagen"
+                Button5.Text = "Escanear patrón"
+                UseMountedImgBtn.Text = "Usar imagen montada"
+                OK_Button.Text = "Aceptar"
+                Cancel_Button.Text = "Cancelar"
+                RadioButton1.Text = "Directorio de destino:"
+                RadioButton2.Text = "Disco de destino:"
+                GroupBox1.Text = "Origen"
+                GroupBox2.Text = "Opciones"
+                GroupBox3.Text = "Destino"
+                GroupBox4.Text = "Patrón de archivos SWM"
+        End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
             BackColor = Color.FromArgb(31, 31, 31)
@@ -123,7 +257,19 @@ Public Class ImgApply
             Text = ""
             Win10Title.Visible = True
         End If
-        ToolStripStatusLabel1.Text = "Please specify the naming pattern of the SWM files"
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        ToolStripStatusLabel1.Text = "Please specify the naming pattern of the SWM files"
+                    Case "ESN"
+                        ToolStripStatusLabel1.Text = "Especifique la nomenclatura del patrón de los archivos SWM"
+                End Select
+            Case 1
+                ToolStripStatusLabel1.Text = "Please specify the naming pattern of the SWM files"
+            Case 2
+                ToolStripStatusLabel1.Text = "Especifique la nomenclatura del patrón de los archivos SWM"
+        End Select
         If MainForm.SourceImg = "N/A" Then
             UseMountedImgBtn.Enabled = False
         Else
@@ -140,7 +286,7 @@ Public Class ImgApply
     End Sub
 
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
-        GetMaxIndexCount(TextBox1.Text)
+        If TextBox1.Text <> "" And File.Exists(TextBox1.Text) Then GetMaxIndexCount(TextBox1.Text) Else Exit Sub
         If TextBox1.Text.EndsWith(".swm") Then
             CheckBox4.Checked = True
             Button4.PerformClick()
@@ -148,13 +294,17 @@ Public Class ImgApply
     End Sub
 
     Sub GetMaxIndexCount(ImgFile As String)
-        File.WriteAllText(".\bin\exthelpers\temp.bat", _
-                          "@echo off" & CrLf & _
-                          "dism /English /get-imageinfo /imagefile=" & ImgFile & " | find /c " & Quote & "Index" & Quote & " > .\indexcount", ASCII)
-        Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
-        MainForm.imgIndexCount = CInt(My.Computer.FileSystem.ReadAllText(".\indexcount"))
-        NumericUpDown1.Maximum = MainForm.imgIndexCount
-        File.Delete(".\indexcount")
+        If MainForm.MountedImageDetectorBW.IsBusy Then MainForm.MountedImageDetectorBW.CancelAsync()
+        Dim imgInfo As DismImageInfoCollection = Nothing
+        Try
+            imgInfo = DismApi.GetImageInfo(TextBox1.Text)
+        Catch ex As DismNotInitializedException
+            DismApi.Initialize(DismLogLevel.LogErrors)
+            imgInfo = DismApi.GetImageInfo(TextBox1.Text)
+        End Try
+        NumericUpDown1.Maximum = imgInfo.Count
+        DismApi.Shutdown()
+        If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
@@ -182,8 +332,23 @@ Public Class ImgApply
     Sub ScanSwmPattern(PatternName As String)
         ListBox1.Items.Clear()
         If TextBox1.Text = "" Or PatternName = "" Then
-            MsgBox("Please specify a source WIM file. This will let you use the SWM files for later image application", vbOKOnly + vbCritical, "Apply an image")
-            ToolStripStatusLabel1.Text = "This naming pattern returns " & ListBox1.Items.Count & " SWM files"
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MsgBox("Please specify a source WIM file. This will let you use the SWM files for later image application", vbOKOnly + vbCritical, "Apply an image")
+                            ToolStripStatusLabel1.Text = "This naming pattern returns " & ListBox1.Items.Count & " SWM files"
+                        Case "ESN"
+                            MsgBox("Especifique el arhivo WIM de origen. Esto le permitirá usar los archivos SWM para la aplicación posterior de la imagen", vbOKOnly + vbCritical, "Aplicar una imagen")
+                            ToolStripStatusLabel1.Text = "Esta nomenclatura de patrón devuelve " & ListBox1.Items.Count & " archivos SWM"
+                    End Select
+                Case 1
+                    MsgBox("Please specify a source WIM file. This will let you use the SWM files for later image application", vbOKOnly + vbCritical, "Apply an image")
+                    ToolStripStatusLabel1.Text = "This naming pattern returns " & ListBox1.Items.Count & " SWM files"
+                Case 2
+                    MsgBox("Especifique el arhivo WIM de origen. Esto le permitirá usar los archivos SWM para la aplicación posterior de la imagen", vbOKOnly + vbCritical, "Aplicar una imagen")
+                    ToolStripStatusLabel1.Text = "Esta nomenclatura de patrón devuelve " & ListBox1.Items.Count & " archivos SWM"
+            End Select
             Beep()
             Exit Sub
         End If
@@ -192,7 +357,19 @@ Public Class ImgApply
                 ListBox1.Items.Add(Path.GetFileName(swmFile))
             End If
         Next
-        ToolStripStatusLabel1.Text = "This naming pattern returns " & ListBox1.Items.Count & " SWM files"
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        ToolStripStatusLabel1.Text = "This naming pattern returns " & ListBox1.Items.Count & " SWM files"
+                    Case "ESN"
+                        ToolStripStatusLabel1.Text = "Esta nomenclatura de patrón devuelve " & ListBox1.Items.Count & " archivos SWM"
+                End Select
+            Case 1
+                ToolStripStatusLabel1.Text = "This naming pattern returns " & ListBox1.Items.Count & " SWM files"
+            Case 2
+                ToolStripStatusLabel1.Text = "Esta nomenclatura de patrón devuelve " & ListBox1.Items.Count & " archivos SWM"
+        End Select
         If ListBox1.Items.Count <= 0 Then Beep()
     End Sub
 

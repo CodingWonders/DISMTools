@@ -192,9 +192,9 @@ Partial Class ImgApply
         Me.Label2.AutoSize = True
         Me.Label2.Location = New System.Drawing.Point(16, 25)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(98, 13)
+        Me.Label2.Size = New System.Drawing.Size(92, 13)
         Me.Label2.TabIndex = 0
-        Me.Label2.Text = "Source image file*:"
+        Me.Label2.Text = "Source image file:"
         '
         'GroupBox2
         '
@@ -249,9 +249,9 @@ Partial Class ImgApply
         Me.Label3.AutoSize = True
         Me.Label3.Location = New System.Drawing.Point(298, 80)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(76, 13)
+        Me.Label3.Size = New System.Drawing.Size(70, 13)
         Me.Label3.TabIndex = 0
-        Me.Label3.Text = "Image index*:"
+        Me.Label3.Text = "Image index:"
         '
         'CheckBox6
         '
@@ -285,12 +285,12 @@ Partial Class ImgApply
         '
         'CheckBox3
         '
-        Me.CheckBox3.AutoSize = True
+        Me.CheckBox3.AutoEllipsis = True
         Me.CheckBox3.Checked = True
         Me.CheckBox3.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBox3.Location = New System.Drawing.Point(19, 79)
         Me.CheckBox3.Name = "CheckBox3"
-        Me.CheckBox3.Size = New System.Drawing.Size(164, 17)
+        Me.CheckBox3.Size = New System.Drawing.Size(273, 17)
         Me.CheckBox3.TabIndex = 0
         Me.CheckBox3.Text = "Use the reparse point tag fix"
         Me.CheckBox3.UseVisualStyleBackColor = True
@@ -335,9 +335,9 @@ Partial Class ImgApply
         Me.RadioButton2.AutoSize = True
         Me.RadioButton2.Location = New System.Drawing.Point(19, 51)
         Me.RadioButton2.Name = "RadioButton2"
-        Me.RadioButton2.Size = New System.Drawing.Size(116, 17)
+        Me.RadioButton2.Size = New System.Drawing.Size(110, 17)
         Me.RadioButton2.TabIndex = 3
-        Me.RadioButton2.Text = "Destination drive*:"
+        Me.RadioButton2.Text = "Destination drive:"
         Me.RadioButton2.UseVisualStyleBackColor = True
         '
         'RadioButton1
@@ -346,10 +346,10 @@ Partial Class ImgApply
         Me.RadioButton1.Checked = True
         Me.RadioButton1.Location = New System.Drawing.Point(19, 24)
         Me.RadioButton1.Name = "RadioButton1"
-        Me.RadioButton1.Size = New System.Drawing.Size(135, 17)
+        Me.RadioButton1.Size = New System.Drawing.Size(129, 17)
         Me.RadioButton1.TabIndex = 3
         Me.RadioButton1.TabStop = True
-        Me.RadioButton1.Text = "Destination directory*:"
+        Me.RadioButton1.Text = "Destination directory:"
         Me.RadioButton1.UseVisualStyleBackColor = True
         '
         'Button3
