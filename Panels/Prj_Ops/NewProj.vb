@@ -17,7 +17,7 @@ Public Class NewProj
                                 Try
                                     Directory.CreateDirectory(TextBox2.Text)
                                 Catch ex As Exception
-                                    MsgBox("We could not create the project directory for you due to: " & CrLf & ex.Message, vbOKOnly + vbCritical, "Create a new project")
+                                    MsgBox("We could not create the project directory for you due to: " & CrLf & ex.ToString() & "; " & ex.Message, vbOKOnly + vbCritical, "Create a new project")
                                     Exit Sub
                                 End Try
                             Else
@@ -28,7 +28,7 @@ Public Class NewProj
                                 Try
                                     Directory.CreateDirectory(TextBox2.Text)
                                 Catch ex As Exception
-                                    MsgBox("No pudimos crear el directorio del proyecto porque: " & CrLf & ex.Message, vbOKOnly + vbCritical, "Crear un nuevo proyecto")
+                                    MsgBox("No pudimos crear el directorio del proyecto porque: " & CrLf & ex.ToString() & "; " & ex.Message, vbOKOnly + vbCritical, "Crear un nuevo proyecto")
                                     Exit Sub
                                 End Try
                             Else
@@ -40,7 +40,7 @@ Public Class NewProj
                         Try
                             Directory.CreateDirectory(TextBox2.Text)
                         Catch ex As Exception
-                            MsgBox("We could not create the project directory for you due to: " & CrLf & ex.Message, vbOKOnly + vbCritical, "Create a new project")
+                            MsgBox("We could not create the project directory for you due to: " & CrLf & ex.ToString() & "; " & ex.Message, vbOKOnly + vbCritical, "Create a new project")
                             Exit Sub
                         End Try
                     Else
@@ -51,7 +51,7 @@ Public Class NewProj
                         Try
                             Directory.CreateDirectory(TextBox2.Text)
                         Catch ex As Exception
-                            MsgBox("No pudimos crear el directorio del proyecto porque: " & CrLf & ex.Message, vbOKOnly + vbCritical, "Crear un nuevo proyecto")
+                            MsgBox("No pudimos crear el directorio del proyecto porque: " & CrLf & ex.ToString() & "; " & ex.Message, vbOKOnly + vbCritical, "Crear un nuevo proyecto")
                             Exit Sub
                         End Try
                     Else
