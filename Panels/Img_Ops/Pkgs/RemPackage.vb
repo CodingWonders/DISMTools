@@ -15,7 +15,19 @@ Public Class RemPackage
             ProgressPanel.pkgRemovalOp = 0
             ProgressPanel.pkgRemovalCount = pkgRemovalCount
             If CheckedListBox1.CheckedItems.Count <= 0 Then
-                MessageBox.Show(MainForm, "Please select packages to remove, and try again.", "No packages selected", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                MessageBox.Show(MainForm, "Please select packages to remove, and try again.", "No packages selected", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                            Case "ESN"
+                                MessageBox.Show(MainForm, "Seleccione paquetes a eliminar, e inténtelo de nuevo.", "No se han seleccionado paquetes", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        End Select
+                    Case 1
+                        MessageBox.Show(MainForm, "Please select packages to remove, and try again.", "No packages selected", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    Case 2
+                        MessageBox.Show(MainForm, "Seleccione paquetes a eliminar, e inténtelo de nuevo.", "No se han seleccionado paquetes", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Select
                 Exit Sub
             Else
                 If pkgRemovalCount > 65535 Then
@@ -40,7 +52,19 @@ Public Class RemPackage
             ProgressPanel.pkgRemovalOp = 1
             ProgressPanel.pkgRemovalCount = pkgRemovalCount
             If CheckedListBox2.CheckedItems.Count < 0 Then
-                MessageBox.Show(MainForm, "Please select packages to remove, and try again.", "No packages selected", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                MessageBox.Show(MainForm, "Please select packages to remove, and try again.", "No packages selected", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                            Case "ESN"
+                                MessageBox.Show(MainForm, "Seleccione paquetes a eliminar, e inténtelo de nuevo.", "No se han seleccionado paquetes", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        End Select
+                    Case 1
+                        MessageBox.Show(MainForm, "Please select packages to remove, and try again.", "No packages selected", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    Case 2
+                        MessageBox.Show(MainForm, "Seleccione paquetes a eliminar, e inténtelo de nuevo.", "No se han seleccionado paquetes", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Select
                 Exit Sub
             Else
                 If pkgRemovalCount > 65535 Then
@@ -74,6 +98,59 @@ Public Class RemPackage
     End Sub
 
     Private Sub RemPackage_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Text = "Remove packages"
+                        Label1.Text = Text
+                        Label3.Text = "Package source:"
+                        Label4.Text = "NOTE: the program may show packages that weren't added in the first place. However, if a package is not added, the program will skip it."
+                        GroupBox1.Text = "Package removal"
+                        RadioButton1.Text = "Specify package names:"
+                        RadioButton2.Text = "Specify package files:"
+                        Button1.Text = "Browse..."
+                        Cancel_Button.Text = "Cancel"
+                        OK_Button.Text = "OK"
+                        FolderBrowserDialog1.Description = "Please specify a package source:"
+                    Case "ESN"
+                        Text = "Eliminar paquetes"
+                        Label1.Text = Text
+                        Label3.Text = "Origen:"
+                        Label4.Text = "NOTA: el programa podría mostrar paquetes que no se hayan añadido en primer lugar. Si un paquete no se ha añadido, el programa lo omitirá."
+                        GroupBox1.Text = "Eliminación de paquetes"
+                        RadioButton1.Text = "Especificar nombres de paquetes:"
+                        RadioButton2.Text = "Especificar archivos de paquetes:"
+                        Button1.Text = "Examinar..."
+                        Cancel_Button.Text = "Cancelar"
+                        OK_Button.Text = "Aceptar"
+                        FolderBrowserDialog1.Description = "Especifique un origen de paquetes:"
+                End Select
+            Case 1
+                Text = "Remove packages"
+                Label1.Text = Text
+                Label3.Text = "Package source:"
+                Label4.Text = "NOTE: the program may show packages that weren't added in the first place. However, if a package is not added, the program will skip it."
+                GroupBox1.Text = "Package removal"
+                RadioButton1.Text = "Specify package names:"
+                RadioButton2.Text = "Specify package files:"
+                Button1.Text = "Browse..."
+                Cancel_Button.Text = "Cancel"
+                OK_Button.Text = "OK"
+                FolderBrowserDialog1.Description = "Please specify a package source:"
+            Case 2
+                Text = "Eliminar paquetes"
+                Label1.Text = Text
+                Label3.Text = "Origen:"
+                Label4.Text = "NOTA: el programa podría mostrar paquetes que no se hayan añadido en primer lugar. Si un paquete no se ha añadido, el programa lo omitirá."
+                GroupBox1.Text = "Eliminación de paquetes"
+                RadioButton1.Text = "Especificar nombres de paquetes:"
+                RadioButton2.Text = "Especificar archivos de paquetes:"
+                Button1.Text = "Examinar..."
+                Cancel_Button.Text = "Cancelar"
+                OK_Button.Text = "Aceptar"
+                FolderBrowserDialog1.Description = "Especifique un origen de paquetes:"
+        End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
             BackColor = Color.FromArgb(31, 31, 31)
@@ -144,7 +221,19 @@ Public Class RemPackage
             End Try
         End Try
         If CheckedListBox2.Items.Count <= 0 Then
-            MsgBox("We couldn't scan the package source for CAB files. Please try again.", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "DISMTools")
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MsgBox("We couldn't scan the package source for CAB files. Please try again.", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "DISMTools")
+                        Case "ESN"
+                            MsgBox("No pudimos escanear el origen de paquetes por archivos CAB. Inténtelo de nuevo.", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "DISMTools")
+                    End Select
+                Case 1
+                    MsgBox("We couldn't scan the package source for CAB files. Please try again.", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "DISMTools")
+                Case 2
+                    MsgBox("No pudimos escanear el origen de paquetes por archivos CAB. Inténtelo de nuevo.", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "DISMTools")
+            End Select
         End If
     End Sub
 End Class

@@ -12,7 +12,19 @@ Public Class EnableFeat
         featEnablementCount = ListView1.CheckedItems.Count
         ProgressPanel.featEnablementCount = featEnablementCount
         If ListView1.CheckedItems.Count <= 0 Then
-            MessageBox.Show(MainForm, "Please select features to enable, and try again.", "No features selected", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MessageBox.Show(MainForm, "Please select features to enable, and try again.", "No features selected", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        Case "ESN"
+                            MessageBox.Show(MainForm, "Seleccione las características a habilitar, e inténtelo de nuevo.", "No se ha seleccionado ninguna característica", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End Select
+                Case 1
+                    MessageBox.Show(MainForm, "Please select features to enable, and try again.", "No features selected", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Case 2
+                    MessageBox.Show(MainForm, "Seleccione las características a habilitar, e inténtelo de nuevo.", "No se ha seleccionado ninguna característica", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Select
             Exit Sub
         Else
             Try
@@ -28,10 +40,31 @@ Public Class EnableFeat
             For x = 0 To featEnablementCount - 1
                 If ListView1.CheckedItems(x).SubItems(1).Text = "Removed" Then
                     If CheckBox2.Checked And TextBox2.Text = "" Or Not Directory.Exists(TextBox2.Text) Then
-                        If MsgBox("Some features in this image require specifying a source for them to be enabled. The specified source is not valid for this operation." & CrLf & CrLf & If(TextBox2.Text = "", "Please specify a valid source and try again.", "Please make sure the source exists in the file system and try again."), vbOKOnly + vbCritical, "Enable features") = MsgBoxResult.Ok Then
-                            CheckBox2.Checked = True
-                            Button2.PerformClick()
-                        End If
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        If MsgBox("Some features in this image require specifying a source for them to be enabled. The specified source is not valid for this operation." & CrLf & CrLf & If(TextBox2.Text = "", "Please specify a valid source and try again.", "Please make sure the source exists in the file system and try again."), vbOKOnly + vbCritical, "Enable features") = MsgBoxResult.Ok Then
+                                            CheckBox2.Checked = True
+                                            Button2.PerformClick()
+                                        End If
+                                    Case "ESN"
+                                        If MsgBox("Algunas características en esta imagen requieren especificar un origen para ser habilitadas. El origen especificado no es válido para esta operación" & CrLf & CrLf & If(TextBox2.Text = "", "Especifique un origen válido e inténtelo de nuevo.", "Asegúrese de que el origen exista en el sistema de archivos e inténtelo de nuevo."), vbOKOnly + vbCritical, "Habilitar características") = MsgBoxResult.Ok Then
+                                            CheckBox2.Checked = True
+                                            Button2.PerformClick()
+                                        End If
+                                End Select
+                            Case 1
+                                If MsgBox("Some features in this image require specifying a source for them to be enabled. The specified source is not valid for this operation." & CrLf & CrLf & If(TextBox2.Text = "", "Please specify a valid source and try again.", "Please make sure the source exists in the file system and try again."), vbOKOnly + vbCritical, "Enable features") = MsgBoxResult.Ok Then
+                                    CheckBox2.Checked = True
+                                    Button2.PerformClick()
+                                End If
+                            Case 2
+                                If MsgBox("Algunas características en esta imagen requieren especificar un origen para ser habilitadas. El origen especificado no es válido para esta operación" & CrLf & CrLf & If(TextBox2.Text = "", "Especifique un origen válido e inténtelo de nuevo.", "Asegúrese de que el origen exista en el sistema de archivos e inténtelo de nuevo."), vbOKOnly + vbCritical, "Habilitar características") = MsgBoxResult.Ok Then
+                                    CheckBox2.Checked = True
+                                    Button2.PerformClick()
+                                End If
+                        End Select
                     Else
 
                     End If
@@ -49,7 +82,19 @@ Public Class EnableFeat
             If CheckBox2.Checked Then
                 ProgressPanel.featisSourceSpecified = True
                 If TextBox2.Text = "" Or Not Directory.Exists(TextBox2.Text) Then
-                    MsgBox("The specified source is not valid. Please specify a valid source and try again", vbOKOnly + vbCritical, "Enable features")
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    MsgBox("The specified source is not valid. Please specify a valid source and try again", vbOKOnly + vbCritical, "Enable features")
+                                Case "ESN"
+                                    MsgBox("El origen especificado no es válido. Especifique uno válido e inténtelo de nuevo", vbOKOnly + vbCritical, "Habilitar características")
+                            End Select
+                        Case 1
+                            MsgBox("The specified source is not valid. Please specify a valid source and try again", vbOKOnly + vbCritical, "Enable features")
+                        Case 2
+                            MsgBox("El origen especificado no es válido. Especifique uno válido e inténtelo de nuevo", vbOKOnly + vbCritical, "Habilitar características")
+                    End Select
                     Exit Sub
                 Else
                     ProgressPanel.featSource = TextBox2.Text
@@ -90,6 +135,87 @@ Public Class EnableFeat
     End Sub
 
     Private Sub EnableFeature_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Text = "Enable features"
+                        Label1.Text = Text
+                        Label3.Text = "Package name:"
+                        Label4.Text = "Feature source:"
+                        Button1.Text = "Lookup..."
+                        Button2.Text = "Browse..."
+                        Cancel_Button.Text = "Cancel"
+                        OK_Button.Text = "OK"
+                        GroupBox1.Text = "Features"
+                        GroupBox2.Text = "Options"
+                        CheckBox1.Text = "Specify parent package name for features"
+                        CheckBox2.Text = "Specify feature source"
+                        CheckBox3.Text = "Enable all parent features"
+                        CheckBox4.Text = "Contact Windows Update for online images"
+                        CheckBox5.Text = "Commit image after enabling features"
+                        ListView1.Columns(0).Text = "Feature name"
+                        ListView1.Columns(1).Text = "State"
+                        FolderBrowserDialog1.Description = "Specify a folder which will act as the feature source:"
+                    Case "ESN"
+                        Text = "Habilitar característica"
+                        Label1.Text = Text
+                        Label3.Text = "Paquete:"
+                        Label4.Text = "Origen:"
+                        Button1.Text = "Consultar"
+                        Button2.Text = "Examinar..."
+                        Cancel_Button.Text = "Cancelar"
+                        OK_Button.Text = "Aceptar"
+                        GroupBox1.Text = "Características"
+                        GroupBox2.Text = "Opciones"
+                        CheckBox1.Text = "Especificar nombre de paquete principal para características"
+                        CheckBox2.Text = "Especificar origen de características"
+                        CheckBox3.Text = "Habilitar todas las características principales"
+                        CheckBox4.Text = "Contactar Windows Update para instalaciones activas"
+                        CheckBox5.Text = "Guardar imagen tras habilitar características"
+                        ListView1.Columns(0).Text = "Nombre de característica"
+                        ListView1.Columns(1).Text = "Estado"
+                        FolderBrowserDialog1.Description = "Especifique una carpeta que actuará como origen de las características:"
+                End Select
+            Case 1
+                Text = "Enable features"
+                Label1.Text = Text
+                Label3.Text = "Package name:"
+                Label4.Text = "Feature source:"
+                Button1.Text = "Lookup..."
+                Button2.Text = "Browse..."
+                Cancel_Button.Text = "Cancel"
+                OK_Button.Text = "OK"
+                GroupBox1.Text = "Features"
+                GroupBox2.Text = "Options"
+                CheckBox1.Text = "Specify parent package name for features"
+                CheckBox2.Text = "Specify feature source"
+                CheckBox3.Text = "Enable all parent features"
+                CheckBox4.Text = "Contact Windows Update for online images"
+                CheckBox5.Text = "Commit image after enabling features"
+                ListView1.Columns(0).Text = "Feature name"
+                ListView1.Columns(1).Text = "State"
+                FolderBrowserDialog1.Description = "Specify a folder which will act as the feature source:"
+            Case 2
+                Text = "Habilitar característica"
+                Label1.Text = Text
+                Label3.Text = "Paquete:"
+                Label4.Text = "Origen:"
+                Button1.Text = "Consultar"
+                Button2.Text = "Examinar..."
+                Cancel_Button.Text = "Cancelar"
+                OK_Button.Text = "Aceptar"
+                GroupBox1.Text = "Características"
+                GroupBox2.Text = "Opciones"
+                CheckBox1.Text = "Especificar nombre de paquete principal para características"
+                CheckBox2.Text = "Especificar origen de características"
+                CheckBox3.Text = "Habilitar todas las características principales"
+                CheckBox4.Text = "Contactar Windows Update para instalaciones activas"
+                CheckBox5.Text = "Guardar imagen tras habilitar características"
+                ListView1.Columns(0).Text = "Nombre de característica"
+                ListView1.Columns(1).Text = "Estado"
+                FolderBrowserDialog1.Description = "Especifique una carpeta que actuará como origen de las características:"
+        End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
             BackColor = Color.FromArgb(31, 31, 31)
@@ -116,7 +242,19 @@ Public Class EnableFeat
             Text = ""
             Win10Title.Visible = True
         End If
-        Label2.Text &= " Only disabled features (" & ListView1.Items.Count & ") are shown"
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Label2.Text &= " Only disabled features (" & ListView1.Items.Count & ") are shown"
+                    Case "ESN"
+                        Label2.Text &= " Solo las características deshabilitadas (" & ListView1.Items.Count & ") son mostradas"
+                End Select
+            Case 1
+                Label2.Text &= " Only disabled features (" & ListView1.Items.Count & ") are shown"
+            Case 2
+                Label2.Text &= " Solo las características deshabilitadas (" & ListView1.Items.Count & ") son mostradas"
+        End Select
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged

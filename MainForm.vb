@@ -54,8 +54,6 @@ Public Class MainForm
 
     Public imgIndexCount As Integer
 
-    Public reloadDlg As Boolean = False
-
     ' Program settings
     ' This is the initial batch of settings for this version (0.1). As the program continues development,
     ' more settings will be added below this initial batch
@@ -6101,9 +6099,6 @@ Public Class MainForm
 
     Private Sub AddPackage_Click(sender As Object, e As EventArgs) Handles AddPackage.Click
         AddPackageDlg.ShowDialog()
-        Do Until reloadDlg = False
-            AddPackageDlg.ShowDialog()
-        Loop
     End Sub
 
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
@@ -6188,7 +6183,19 @@ Public Class MainForm
             ' We should have enough with the entries already added.
             Exit Try
         End Try
-        RemPackage.Label2.Text = "This image contains " & ElementCount & " packages"
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        RemPackage.Label2.Text = "This image contains " & ElementCount & " packages"
+                    Case "ESN"
+                        RemPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes"
+                End Select
+            Case 1
+                RemPackage.Label2.Text = "This image contains " & ElementCount & " packages"
+            Case 2
+                RemPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes"
+        End Select
         RemPackage.ShowDialog()
     End Sub
 
@@ -6261,7 +6268,19 @@ Public Class MainForm
                 Catch ex As Exception
                     Exit Try
                 End Try
-                EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                            Case "ESN"
+                                EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
+                        End Select
+                    Case 1
+                        EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                    Case 2
+                        EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
+                End Select
             Case 1
                 Try
                     For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
@@ -6286,7 +6305,19 @@ Public Class MainForm
                 Catch ex As Exception
                     Exit Try
                 End Try
-                DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                            Case "ESN"
+                                DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
+                        End Select
+                    Case 1
+                        DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                    Case 2
+                        DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
+                End Select
         End Select
         EnableFeat.ShowDialog()
     End Sub
@@ -6589,9 +6620,8 @@ Public Class MainForm
             Case 1
                 RemPackage.Label2.Text = "This image contains " & ElementCount & " packages"
             Case 2
-
+                RemPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes"
         End Select
-
         RemPackage.ShowDialog()
     End Sub
 

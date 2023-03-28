@@ -34,7 +34,19 @@ Public Class AddPackageDlg
         End If
         If ProgressPanel.pkgAdditionOp = 1 Then
             If CheckedListBox1.CheckedItems.Count <= 0 Then
-                MessageBox.Show(MainForm, "Please select packages to add, and try again. You can also continue with letting DISM scan applicable packages", "No packages selected", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                MessageBox.Show(MainForm, "Please select packages to add, and try again. You can also continue with letting DISM scan applicable packages", "No packages selected", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                            Case "ESN"
+                                MessageBox.Show(MainForm, "Seleccione paquetes a añadir, e inténtelo de nuevo. También puede continuar dejando que DISM escanee paquetes aplicables", "No hay paquetes seleccionados", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        End Select
+                    Case 1
+                        MessageBox.Show(MainForm, "Please select packages to add, and try again. You can also continue with letting DISM scan applicable packages", "No packages selected", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    Case 2
+                        MessageBox.Show(MainForm, "Seleccione paquetes a añadir, e inténtelo de nuevo. También puede continuar dejando que DISM escanee paquetes aplicables", "No hay paquetes seleccionados", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Select
             Else
                 If pkgCount > 65535 Then
                     MessageBox.Show(MainForm, "Right now, due to program limitations, you can select 65535 packages or less.", "Current program limitation", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -66,7 +78,6 @@ Public Class AddPackageDlg
             Me.DialogResult = System.Windows.Forms.DialogResult.OK
             Me.Close()
         End If
-
     End Sub
 
     Private Sub Cancel_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Cancel_Button.Click
@@ -85,7 +96,19 @@ Public Class AddPackageDlg
     Sub GatherPackages(FolderToScan As String)
         CheckedListBox1.Items.Clear()
         Cursor = Cursors.WaitCursor
-        Label4.Text = "Scanning directory for packages. Please wait..."
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Label4.Text = "Scanning directory for packages. Please wait..."
+                    Case "ESN"
+                        Label4.Text = "Escaneando directorio por paquetes. Espere..."
+                End Select
+            Case 1
+                Label4.Text = "Scanning directory for packages. Please wait..."
+            Case 2
+                Label4.Text = "Escaneando directorio por paquetes. Espere..."
+        End Select
         Refresh()
         ' TODO: show CheckedListBox items without full path
         Try
@@ -126,19 +149,115 @@ Public Class AddPackageDlg
             Loop
         End If
         If CheckedListBox1.Items.Count = 0 Then
-            Label4.Text = "This folder does not contain any packages. Please use a different source and try again"
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            Label4.Text = "This folder does not contain any packages. Please use a different source and try again"
+                        Case "ESN"
+                            Label4.Text = "Esta carpeta no contiene ningún paquete. Utilice un origen diferente e inténtelo de nuevo"
+                    End Select
+                Case 1
+                    Label4.Text = "This folder does not contain any packages. Please use a different source and try again"
+                Case 2
+                    Label4.Text = "Esta carpeta no contiene ningún paquete. Utilice un origen diferente e inténtelo de nuevo"
+            End Select
             Beep()
         Else
-            Select Case CheckedListBox1.Items.Count
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            Label4.Text = "This folder contains " & CheckedListBox1.Items.Count & " package" & If(CheckedListBox1.Items.Count = 1, ".", "s.")
+                        Case "ESN"
+                            Label4.Text = "Esta carpeta contiene " & CheckedListBox1.Items.Count & " paquete" & If(CheckedListBox1.Items.Count = 1, ".", "s.")
+                    End Select
                 Case 1
-                    Label4.Text = "This folder contains " & CheckedListBox1.Items.Count & " package."
-                Case Else
-                    Label4.Text = "This folder contains " & CheckedListBox1.Items.Count & " packages."
+                    Label4.Text = "This folder contains " & CheckedListBox1.Items.Count & " package" & If(CheckedListBox1.Items.Count = 1, ".", "s.")
+                Case 2
+                    Label4.Text = "Esta carpeta contiene " & CheckedListBox1.Items.Count & " paquete" & If(CheckedListBox1.Items.Count = 1, ".", "s.")
             End Select
         End If
     End Sub
 
     Private Sub AddPackageDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Text = "Add packages"
+                        Label1.Text = Text
+                        Label2.Text = "Package source:"
+                        Label3.Text = "Package operation:"
+                        Button1.Text = "Browse..."
+                        Button2.Text = "Select all"
+                        Button3.Text = "Select none"
+                        Cancel_Button.Text = "Cancel"
+                        OK_Button.Text = "OK"
+                        RadioButton1.Text = "Scan folder recursively for packages"
+                        RadioButton2.Text = "Choose which packages to add:"
+                        CheckBox1.Text = "Ignore applicability checks (not recommended)"
+                        CheckBox2.Text = "Skip package installation if online operations are pending"
+                        CheckBox3.Text = "Commit image after adding packages"
+                        FolderBrowserDialog1.Description = "Specify the folder containing CAB or MSU packages:"
+                        GroupBox1.Text = "Packages"
+                        GroupBox2.Text = "Options"
+                    Case "ESN"
+                        Text = "Añadir paquetes"
+                        Label1.Text = Text
+                        Label2.Text = "Origen:"
+                        Label3.Text = "Operación de paquetes:"
+                        Button1.Text = "Examinar..."
+                        Button2.Text = "Todos los paquetes"
+                        Button3.Text = "Ningún paquete"
+                        Cancel_Button.Text = "Cancelar"
+                        OK_Button.Text = "Aceptar"
+                        RadioButton1.Text = "Escanear carpeta de forma recursiva por paquetes"
+                        RadioButton2.Text = "Elegir qué paquetes añadir:"
+                        CheckBox1.Text = "Ignorar comprobaciones de aplicabilidad (no recomendado)"
+                        CheckBox2.Text = "Omitir instalación de paquetes si operaciones en línea deben realizarse"
+                        CheckBox3.Text = "Guardar imagen tras añadir paquetes"
+                        FolderBrowserDialog1.Description = "Especifique la carpeta que contenga paquetes CAB o MSU:"
+                        GroupBox1.Text = "Paquetes"
+                        GroupBox2.Text = "Opciones"
+                End Select
+            Case 1
+                Text = "Add packages"
+                Label1.Text = Text
+                Label2.Text = "Package source:"
+                Label3.Text = "Package operation:"
+                Button1.Text = "Browse..."
+                Button2.Text = "Select all"
+                Button3.Text = "Select none"
+                Cancel_Button.Text = "Cancel"
+                OK_Button.Text = "OK"
+                RadioButton1.Text = "Scan folder recursively for packages"
+                RadioButton2.Text = "Choose which packages to add:"
+                CheckBox1.Text = "Ignore applicability checks (not recommended)"
+                CheckBox2.Text = "Skip package installation if online operations are pending"
+                CheckBox3.Text = "Commit image after adding packages"
+                FolderBrowserDialog1.Description = "Specify the folder containing CAB or MSU packages:"
+                GroupBox1.Text = "Packages"
+                GroupBox2.Text = "Options"
+            Case 2
+                Text = "Añadir paquetes"
+                Label1.Text = Text
+                Label2.Text = "Origen:"
+                Label3.Text = "Operación de paquetes:"
+                Button1.Text = "Examinar..."
+                Button2.Text = "Todos los paquetes"
+                Button3.Text = "Ningún paquete"
+                Cancel_Button.Text = "Cancelar"
+                OK_Button.Text = "Aceptar"
+                RadioButton1.Text = "Escanear carpeta de forma recursiva por paquetes"
+                RadioButton2.Text = "Elegir qué paquetes añadir:"
+                CheckBox1.Text = "Ignorar comprobaciones de aplicabilidad (no recomendado)"
+                CheckBox2.Text = "Omitir instalación de paquetes si operaciones en línea deben realizarse"
+                CheckBox3.Text = "Guardar imagen tras añadir paquetes"
+                FolderBrowserDialog1.Description = "Especifique la carpeta que contenga paquetes CAB o MSU:"
+                GroupBox1.Text = "Paquetes"
+                GroupBox2.Text = "Opciones"
+        End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
             BackColor = Color.FromArgb(31, 31, 31)
@@ -164,7 +283,19 @@ Public Class AddPackageDlg
             Win10Title.Visible = True
         End If
         If CheckedListBox1.Items.Count = 0 Then
-            Label4.Text = "Please specify a directory where CAB or MSU files are located."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            Label4.Text = "Please specify a directory where CAB or MSU files are located."
+                        Case "ESN"
+                            Label4.Text = "Especifique el directorio donde se encuentran archivos CAB o MSU."
+                    End Select
+                Case 1
+                    Label4.Text = "Please specify a directory where CAB or MSU files are located."
+                Case 2
+                    Label4.Text = "Especifique el directorio donde se encuentran archivos CAB o MSU."
+            End Select
         End If
     End Sub
 

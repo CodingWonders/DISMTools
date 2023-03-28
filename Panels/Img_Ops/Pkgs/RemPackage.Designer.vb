@@ -29,17 +29,15 @@ Partial Class RemPackage
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.RadioButton1 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton2 = New System.Windows.Forms.RadioButton()
-        Me.CheckedListBox1 = New System.Windows.Forms.CheckedListBox()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Button1 = New System.Windows.Forms.Button()
-        Me.CheckedListBox2 = New System.Windows.Forms.CheckedListBox()
+        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.Label2 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
-        Me.Button4 = New System.Windows.Forms.Button()
-        Me.Label11 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.CheckedListBox2 = New System.Windows.Forms.CheckedListBox()
+        Me.CheckedListBox1 = New System.Windows.Forms.CheckedListBox()
+        Me.RadioButton2 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton1 = New System.Windows.Forms.RadioButton()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
@@ -134,64 +132,6 @@ Partial Class RemPackage
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Package removal"
         '
-        'RadioButton1
-        '
-        Me.RadioButton1.AutoSize = True
-        Me.RadioButton1.Checked = True
-        Me.RadioButton1.Location = New System.Drawing.Point(24, 32)
-        Me.RadioButton1.Name = "RadioButton1"
-        Me.RadioButton1.Size = New System.Drawing.Size(147, 17)
-        Me.RadioButton1.TabIndex = 0
-        Me.RadioButton1.TabStop = True
-        Me.RadioButton1.Text = "Specify package names*:"
-        Me.RadioButton1.UseVisualStyleBackColor = True
-        '
-        'RadioButton2
-        '
-        Me.RadioButton2.AutoSize = True
-        Me.RadioButton2.Location = New System.Drawing.Point(24, 232)
-        Me.RadioButton2.Name = "RadioButton2"
-        Me.RadioButton2.Size = New System.Drawing.Size(129, 17)
-        Me.RadioButton2.TabIndex = 0
-        Me.RadioButton2.Text = "Specify package files:"
-        Me.RadioButton2.UseVisualStyleBackColor = True
-        '
-        'CheckedListBox1
-        '
-        Me.CheckedListBox1.FormattingEnabled = True
-        Me.CheckedListBox1.IntegralHeight = False
-        Me.CheckedListBox1.Location = New System.Drawing.Point(42, 55)
-        Me.CheckedListBox1.Name = "CheckedListBox1"
-        Me.CheckedListBox1.Size = New System.Drawing.Size(684, 148)
-        Me.CheckedListBox1.TabIndex = 1
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Enabled = False
-        Me.Label3.Location = New System.Drawing.Point(42, 259)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(92, 13)
-        Me.Label3.TabIndex = 2
-        Me.Label3.Text = "Package source*:"
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(42, 208)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(205, 13)
-        Me.Label2.TabIndex = 2
-        Me.Label2.Text = "This image contains <pkgNum> packages"
-        '
-        'TextBox1
-        '
-        Me.TextBox1.Enabled = False
-        Me.TextBox1.Location = New System.Drawing.Point(140, 256)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(505, 21)
-        Me.TextBox1.TabIndex = 3
-        '
         'Button1
         '
         Me.Button1.Enabled = False
@@ -203,15 +143,22 @@ Partial Class RemPackage
         Me.Button1.Text = "Browse..."
         Me.Button1.UseVisualStyleBackColor = True
         '
-        'CheckedListBox2
+        'TextBox1
         '
-        Me.CheckedListBox2.Enabled = False
-        Me.CheckedListBox2.FormattingEnabled = True
-        Me.CheckedListBox2.IntegralHeight = False
-        Me.CheckedListBox2.Location = New System.Drawing.Point(42, 284)
-        Me.CheckedListBox2.Name = "CheckedListBox2"
-        Me.CheckedListBox2.Size = New System.Drawing.Size(684, 115)
-        Me.CheckedListBox2.TabIndex = 1
+        Me.TextBox1.Enabled = False
+        Me.TextBox1.Location = New System.Drawing.Point(140, 256)
+        Me.TextBox1.Name = "TextBox1"
+        Me.TextBox1.Size = New System.Drawing.Size(505, 21)
+        Me.TextBox1.TabIndex = 3
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(42, 208)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(205, 13)
+        Me.Label2.TabIndex = 2
+        Me.Label2.Text = "This image contains <pkgNum> packages"
         '
         'Label4
         '
@@ -223,25 +170,56 @@ Partial Class RemPackage
         Me.Label4.Text = "NOTE: the program may show packages that weren't added in the first place. Howeve" & _
     "r, if a package is not added, the program will skip it."
         '
-        'Button4
+        'Label3
         '
-        Me.Button4.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button4.Location = New System.Drawing.Point(12, 523)
-        Me.Button4.Name = "Button4"
-        Me.Button4.Size = New System.Drawing.Size(100, 23)
-        Me.Button4.TabIndex = 14
-        Me.Button4.Text = "Command help"
-        Me.Button4.UseVisualStyleBackColor = True
+        Me.Label3.AutoSize = True
+        Me.Label3.Enabled = False
+        Me.Label3.Location = New System.Drawing.Point(42, 259)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(86, 13)
+        Me.Label3.TabIndex = 2
+        Me.Label3.Text = "Package source:"
         '
-        'Label11
+        'CheckedListBox2
         '
-        Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(118, 528)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(179, 13)
-        Me.Label11.TabIndex = 13
-        Me.Label11.Text = "The fields that end in * are required"
+        Me.CheckedListBox2.Enabled = False
+        Me.CheckedListBox2.FormattingEnabled = True
+        Me.CheckedListBox2.IntegralHeight = False
+        Me.CheckedListBox2.Location = New System.Drawing.Point(42, 284)
+        Me.CheckedListBox2.Name = "CheckedListBox2"
+        Me.CheckedListBox2.Size = New System.Drawing.Size(684, 115)
+        Me.CheckedListBox2.TabIndex = 1
+        '
+        'CheckedListBox1
+        '
+        Me.CheckedListBox1.FormattingEnabled = True
+        Me.CheckedListBox1.IntegralHeight = False
+        Me.CheckedListBox1.Location = New System.Drawing.Point(42, 55)
+        Me.CheckedListBox1.Name = "CheckedListBox1"
+        Me.CheckedListBox1.Size = New System.Drawing.Size(684, 148)
+        Me.CheckedListBox1.TabIndex = 1
+        '
+        'RadioButton2
+        '
+        Me.RadioButton2.AutoSize = True
+        Me.RadioButton2.Location = New System.Drawing.Point(24, 232)
+        Me.RadioButton2.Name = "RadioButton2"
+        Me.RadioButton2.Size = New System.Drawing.Size(129, 17)
+        Me.RadioButton2.TabIndex = 0
+        Me.RadioButton2.Text = "Specify package files:"
+        Me.RadioButton2.UseVisualStyleBackColor = True
+        '
+        'RadioButton1
+        '
+        Me.RadioButton1.AutoSize = True
+        Me.RadioButton1.Checked = True
+        Me.RadioButton1.Location = New System.Drawing.Point(24, 32)
+        Me.RadioButton1.Name = "RadioButton1"
+        Me.RadioButton1.Size = New System.Drawing.Size(141, 17)
+        Me.RadioButton1.TabIndex = 0
+        Me.RadioButton1.TabStop = True
+        Me.RadioButton1.Text = "Specify package names:"
+        Me.RadioButton1.UseVisualStyleBackColor = True
         '
         'FolderBrowserDialog1
         '
@@ -256,8 +234,6 @@ Partial Class RemPackage
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(784, 561)
-        Me.Controls.Add(Me.Button4)
-        Me.Controls.Add(Me.Label11)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.Win10Title)
         Me.Controls.Add(Me.TableLayoutPanel1)
@@ -276,7 +252,6 @@ Partial Class RemPackage
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
@@ -295,8 +270,6 @@ Partial Class RemPackage
     Friend WithEvents CheckedListBox1 As System.Windows.Forms.CheckedListBox
     Friend WithEvents RadioButton2 As System.Windows.Forms.RadioButton
     Friend WithEvents RadioButton1 As System.Windows.Forms.RadioButton
-    Friend WithEvents Button4 As System.Windows.Forms.Button
-    Friend WithEvents Label11 As System.Windows.Forms.Label
     Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
 
 End Class

@@ -41,14 +41,10 @@ Partial Class AddPackageDlg
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.Label5 = New System.Windows.Forms.Label()
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
         Me.CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
-        Me.Button4 = New System.Windows.Forms.Button()
-        Me.Label11 = New System.Windows.Forms.Label()
         Me.ScanBW = New System.ComponentModel.BackgroundWorker()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
@@ -140,7 +136,7 @@ Partial Class AddPackageDlg
         Me.GroupBox1.Controls.Add(Me.Label2)
         Me.GroupBox1.Location = New System.Drawing.Point(12, 54)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(760, 305)
+        Me.GroupBox1.Size = New System.Drawing.Size(760, 349)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Packages"
@@ -150,7 +146,7 @@ Partial Class AddPackageDlg
         Me.Label4.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label4.AutoEllipsis = True
         Me.Label4.Enabled = False
-        Me.Label4.Location = New System.Drawing.Point(45, 250)
+        Me.Label4.Location = New System.Drawing.Point(45, 294)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(495, 32)
         Me.Label4.TabIndex = 8
@@ -164,10 +160,11 @@ Partial Class AddPackageDlg
         Me.CheckedListBox1.Enabled = False
         Me.CheckedListBox1.FormattingEnabled = True
         Me.CheckedListBox1.HorizontalScrollbar = True
+        Me.CheckedListBox1.IntegralHeight = False
         Me.CheckedListBox1.Location = New System.Drawing.Point(48, 120)
         Me.CheckedListBox1.Name = "CheckedListBox1"
         Me.CheckedListBox1.ScrollAlwaysVisible = True
-        Me.CheckedListBox1.Size = New System.Drawing.Size(706, 116)
+        Me.CheckedListBox1.Size = New System.Drawing.Size(706, 160)
         Me.CheckedListBox1.TabIndex = 7
         Me.CheckedListBox1.ThreeDCheckBoxes = True
         '
@@ -180,7 +177,7 @@ Partial Class AddPackageDlg
         Me.TableLayoutPanel2.Controls.Add(Me.Button2, 0, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.Button3, 1, 0)
         Me.TableLayoutPanel2.Enabled = False
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(546, 242)
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(546, 286)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
         Me.TableLayoutPanel2.RowCount = 1
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
@@ -206,16 +203,16 @@ Partial Class AddPackageDlg
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(98, 23)
         Me.Button3.TabIndex = 1
-        Me.Button3.Text = "Cancel selection"
+        Me.Button3.Text = "Select none"
         '
         'RadioButton2
         '
         Me.RadioButton2.AutoSize = True
         Me.RadioButton2.Location = New System.Drawing.Point(32, 96)
         Me.RadioButton2.Name = "RadioButton2"
-        Me.RadioButton2.Size = New System.Drawing.Size(183, 17)
+        Me.RadioButton2.Size = New System.Drawing.Size(177, 17)
         Me.RadioButton2.TabIndex = 6
-        Me.RadioButton2.Text = "Choose which packages to add*:"
+        Me.RadioButton2.Text = "Choose which packages to add:"
         Me.RadioButton2.UseVisualStyleBackColor = True
         '
         'RadioButton1
@@ -252,57 +249,35 @@ Partial Class AddPackageDlg
         Me.Label3.AutoSize = True
         Me.Label3.Location = New System.Drawing.Point(7, 48)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(106, 13)
+        Me.Label3.Size = New System.Drawing.Size(100, 13)
         Me.Label3.TabIndex = 0
-        Me.Label3.Text = "Package operation*:"
+        Me.Label3.Text = "Package operation:"
         '
         'Label2
         '
         Me.Label2.AutoSize = True
         Me.Label2.Location = New System.Drawing.Point(7, 24)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(92, 13)
+        Me.Label2.Size = New System.Drawing.Size(86, 13)
         Me.Label2.TabIndex = 0
-        Me.Label2.Text = "Package source*:"
+        Me.Label2.Text = "Package source:"
         '
         'GroupBox2
         '
-        Me.GroupBox2.Controls.Add(Me.Label6)
-        Me.GroupBox2.Controls.Add(Me.Label5)
         Me.GroupBox2.Controls.Add(Me.CheckBox3)
         Me.GroupBox2.Controls.Add(Me.CheckBox2)
         Me.GroupBox2.Controls.Add(Me.CheckBox1)
-        Me.GroupBox2.Location = New System.Drawing.Point(12, 365)
+        Me.GroupBox2.Location = New System.Drawing.Point(12, 409)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(760, 149)
+        Me.GroupBox2.Size = New System.Drawing.Size(760, 105)
         Me.GroupBox2.TabIndex = 4
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Options"
         '
-        'Label6
-        '
-        Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(47, 92)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(614, 13)
-        Me.Label6.TabIndex = 8
-        Me.Label6.Text = "If the package or mounted image has pending online actions, installation will be " & _
-    "skipped. Do note that this will still be successful"
-        '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(47, 50)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(565, 13)
-        Me.Label5.TabIndex = 8
-        Me.Label5.Text = "Check this option to try to add the selected packages without checking whether it" & _
-    "s dependencies are installed or not"
-        '
         'CheckBox3
         '
         Me.CheckBox3.AutoSize = True
-        Me.CheckBox3.Location = New System.Drawing.Point(32, 112)
+        Me.CheckBox3.Location = New System.Drawing.Point(32, 74)
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(191, 17)
         Me.CheckBox3.TabIndex = 0
@@ -312,7 +287,7 @@ Partial Class AddPackageDlg
         'CheckBox2
         '
         Me.CheckBox2.AutoSize = True
-        Me.CheckBox2.Location = New System.Drawing.Point(32, 70)
+        Me.CheckBox2.Location = New System.Drawing.Point(32, 51)
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(296, 17)
         Me.CheckBox2.TabIndex = 0
@@ -335,26 +310,6 @@ Partial Class AddPackageDlg
         Me.FolderBrowserDialog1.RootFolder = System.Environment.SpecialFolder.MyComputer
         Me.FolderBrowserDialog1.ShowNewFolderButton = False
         '
-        'Button4
-        '
-        Me.Button4.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button4.Location = New System.Drawing.Point(12, 523)
-        Me.Button4.Name = "Button4"
-        Me.Button4.Size = New System.Drawing.Size(100, 23)
-        Me.Button4.TabIndex = 12
-        Me.Button4.Text = "Command help"
-        Me.Button4.UseVisualStyleBackColor = True
-        '
-        'Label11
-        '
-        Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(118, 528)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(179, 13)
-        Me.Label11.TabIndex = 11
-        Me.Label11.Text = "The fields that end in * are required"
-        '
         'ScanBW
         '
         '
@@ -365,8 +320,6 @@ Partial Class AddPackageDlg
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(784, 561)
-        Me.Controls.Add(Me.Button4)
-        Me.Controls.Add(Me.Label11)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.Win10Title)
@@ -389,7 +342,6 @@ Partial Class AddPackageDlg
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
@@ -411,13 +363,9 @@ Partial Class AddPackageDlg
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents Button3 As System.Windows.Forms.Button
     Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
-    Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents CheckBox2 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
-    Friend WithEvents Label6 As System.Windows.Forms.Label
     Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
-    Friend WithEvents Button4 As System.Windows.Forms.Button
-    Friend WithEvents Label11 As System.Windows.Forms.Label
     Friend WithEvents ScanBW As System.ComponentModel.BackgroundWorker
     Friend WithEvents CheckBox3 As System.Windows.Forms.CheckBox
 
