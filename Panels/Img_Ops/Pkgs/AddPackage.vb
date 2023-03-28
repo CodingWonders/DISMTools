@@ -57,7 +57,6 @@ Public Class AddPackageDlg
                 Visible = False
                 ProgressPanel.ShowDialog(MainForm)
                 Me.DialogResult = System.Windows.Forms.DialogResult.OK
-                MainForm.reloadDlg = False
                 Me.Close()
             End If
         ElseIf ProgressPanel.pkgAdditionOp = 0 Then
@@ -65,7 +64,6 @@ Public Class AddPackageDlg
             Visible = False
             ProgressPanel.ShowDialog(MainForm)
             Me.DialogResult = System.Windows.Forms.DialogResult.OK
-            MainForm.reloadDlg = False
             Me.Close()
         End If
 
@@ -73,7 +71,6 @@ Public Class AddPackageDlg
 
     Private Sub Cancel_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Cancel_Button.Click
         Me.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        MainForm.reloadDlg = False
         Me.Close()
     End Sub
 
@@ -200,7 +197,7 @@ Public Class AddPackageDlg
             CheckedCount -= 1
             CountItems()
         Next
-        MainForm.reloadDlg = True
+        DialogResult = Windows.Forms.DialogResult.None
     End Sub
 
     Private Sub ScanBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ScanBW.DoWork
