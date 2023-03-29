@@ -6350,7 +6350,7 @@ Public Class MainForm
             Case 0
                 Try
                     For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureState(x).Contains("Enable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
+                        If imgFeatureState(x).Contains("Enable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Or imgFeatureState(x) = "Removed" Then
                             Continue For
                         End If
                         EnableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
