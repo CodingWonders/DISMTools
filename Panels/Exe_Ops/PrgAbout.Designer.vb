@@ -225,7 +225,7 @@ Partial Class PrgAbout
         Me.TableLayoutPanel2.Controls.Add(Me.Label13, 0, 7)
         Me.TableLayoutPanel2.Controls.Add(Me.Label16, 0, 8)
         Me.TableLayoutPanel2.Controls.Add(Me.Label11, 0, 10)
-        Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel7, 1, 9)
+        Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel7, 1, 10)
         Me.TableLayoutPanel2.Controls.Add(Me.Label12, 0, 11)
         Me.TableLayoutPanel2.Controls.Add(Me.Label17, 0, 13)
         Me.TableLayoutPanel2.Controls.Add(Me.Label18, 0, 14)
