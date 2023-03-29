@@ -59,9 +59,15 @@ Public Class NewProj
                     End If
             End Select
         End If
+        ProgressPanel.OperationNum = 0
         ProgressPanel.projName = TextBox1.Text
         ProgressPanel.projPath = TextBox2.Text
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
+        If MainForm.isProjectLoaded Then
+            MainForm.UnloadDTProj(False, True, False)
+        End If
+        Visible = False
+        ProgressPanel.ShowDialog(MainForm)
         Me.Close()
     End Sub
 

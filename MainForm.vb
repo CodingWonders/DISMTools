@@ -4382,6 +4382,13 @@ Public Class MainForm
         isModified = False
     End Sub
 
+    ''' <summary>
+    ''' Unloads the DISMTools project
+    ''' </summary>
+    ''' <param name="IsBeingClosed">Determines whether the program is being closed</param>
+    ''' <param name="SaveProject">Determines whether the program should save the project</param>
+    ''' <param name="UnmountImg">Determines whether the program should unmount the image before unloading the project</param>
+    ''' <remarks>The program, attending to the parameters shown above, will unload the project</remarks>
     Sub UnloadDTProj(IsBeingClosed As Boolean, SaveProject As Boolean, UnmountImg As Boolean)
         If imgCommitOperation = 0 Then
             ProgressPanel.OperationNum = 21
@@ -5754,10 +5761,6 @@ Public Class MainForm
 
     Private Sub NewProjLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles NewProjLink.LinkClicked
         NewProj.ShowDialog()
-        If NewProj.DialogResult = Windows.Forms.DialogResult.OK Then
-            ProgressPanel.OperationNum = 0
-            ProgressPanel.ShowDialog()
-        End If
     End Sub
 
     Private Sub ExistingProjLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles ExistingProjLink.LinkClicked
@@ -7049,5 +7052,19 @@ Public Class MainForm
 
     Private Sub Button12_Click(sender As Object, e As EventArgs) Handles Button12.Click
         ImgCleanup.ShowDialog()
+    End Sub
+
+    Private Sub NewProjectToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles NewProjectToolStripMenuItem.Click
+        NewProj.ShowDialog()
+    End Sub
+
+    Private Sub OpenExistingProjectToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OpenExistingProjectToolStripMenuItem.Click
+        If OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If File.Exists(OpenFileDialog1.FileName) Then
+                If isProjectLoaded Then UnloadDTProj(False, True, False)
+                ProgressPanel.OperationNum = 990
+                LoadDTProj(OpenFileDialog1.FileName, Path.GetFileNameWithoutExtension(OpenFileDialog1.FileName), False)
+            End If
+        End If
     End Sub
 End Class
