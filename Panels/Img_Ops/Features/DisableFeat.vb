@@ -146,14 +146,14 @@ Public Class DisableFeat
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENG"
-                        Label2.Text &= " Only enabled features (" & ListView1.Items.Count & ") are shown"
+                        Label2.Text &= " Only enabled features (" & ListView1.Items.Count - 1 & ") are shown"
                     Case "ESN"
-                        Label2.Text &= " Solo las características habilitadas (" & ListView1.Items.Count & ") son mostradas"
+                        Label2.Text &= " Solo las características habilitadas (" & ListView1.Items.Count - 1 & ") son mostradas"
                 End Select
             Case 1
-                Label2.Text &= " Only enabled features (" & ListView1.Items.Count & ") are shown"
+                Label2.Text &= " Only enabled features (" & ListView1.Items.Count - 1 & ") are shown"
             Case 2
-                Label2.Text &= " Solo las características habilitadas (" & ListView1.Items.Count & ") son mostradas"
+                Label2.Text &= " Solo las características habilitadas (" & ListView1.Items.Count - 1 & ") son mostradas"
         End Select
     End Sub
 
