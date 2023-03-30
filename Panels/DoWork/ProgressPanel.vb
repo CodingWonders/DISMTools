@@ -4176,7 +4176,19 @@ Public Class ProgressPanel
         Catch ex As Exception
             LogView.Font = New Font("Courier New", 9.75)
         End Try
-        MainForm.MenuDesc.Text = "Performing image operations. Please wait..."
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        MainForm.MenuDesc.Text = "Performing image operations. Please wait..."
+                    Case "ESN"
+                        MainForm.MenuDesc.Text = "Realizando operaciones con la imagen. Espere..."
+                End Select
+            Case 1
+                MainForm.MenuDesc.Text = "Performing image operations. Please wait..."
+            Case 2
+                MainForm.MenuDesc.Text = "Realizando operaciones con la imagen. Espere..."
+        End Select
         MainForm.StatusStrip.BackColor = Color.FromArgb(14, 99, 156)
         If Debugger.IsAttached Then
             IsDebugged = True

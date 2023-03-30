@@ -1426,13 +1426,13 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Bugfixes:
-        '''- Fixed an issue where the mounted image detector would not start after loading the project and image properties dialog
-        '''
-        '''New features:
-        '''- The program now gets the correct feature update/development semester of Windows 11 2022 Update Moments since Moment 3 and the new Dev builds (23xxx build range)
-        '''- The store logo asset previewer now supports APPX and MSIX files. It also supports showing a larger preview, and the dialog now supports drag and drop
-        '''- The volume image removal dialog now uses the [resto de la cadena truncado]&quot;;.
+        '''  Busca una cadena traducida similar a Changes from last preview
+        '''- Fixed an issue where the progress panel would not update the language settings properly
+        '''- Enhanced language support
+        '''- Fixed an issue which kept operations from performing when the log file directory was deleted
+        '''- Fixed an issue which showed removed (already-disabled) features in the feature disablement dialog
+        '''- Fixed an issue where the program would not perform operations with any operation value containing spaces
+        '''- The &quot;New project...&quot; and &quot;Open existing project...&quot; menu e [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
