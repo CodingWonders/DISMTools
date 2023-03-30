@@ -1383,16 +1383,16 @@ Public Class MainForm
                                 Case 1
                                     File.WriteAllText(".\bin\exthelpers\imginfo.bat",
                                                       "@echo off" & CrLf &
-                                                      "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot", ASCII)
+                                                      "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot", ASCII)
                                 Case Is >= 2
                                     File.WriteAllText(".\bin\exthelpers\imginfo.bat",
                                                       "@echo off" & CrLf &
-                                                      "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot", ASCII)
+                                                      "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot", ASCII)
                             End Select
                         Case 10
                             File.WriteAllText(".\bin\exthelpers\imginfo.bat",
                                               "@echo off" & CrLf &
-                                              "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot", ASCII)
+                                              "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot", ASCII)
                     End Select
                     If Debugger.IsAttached Then
                         Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\imginfo.bat").WaitForExit()
@@ -2064,20 +2064,20 @@ Public Class MainForm
         Try
             File.WriteAllText(".\bin\exthelpers\appxnames.bat", _
                               "@echo off" & CrLf & _
-                              "dism /English /image=" & MountDir & " /get-provisionedappxpackages | findstr /c:" & Quote & "DisplayName : " & Quote & " > .\tempinfo\appxdisplaynames" & CrLf & _
-                              "dism /English /image=" & MountDir & " /get-provisionedappxpackages | findstr /c:" & Quote & "PackageName : " & Quote & " > .\tempinfo\appxpackagenames", _
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-provisionedappxpackages | findstr /c:" & Quote & "DisplayName : " & Quote & " > .\tempinfo\appxdisplaynames" & CrLf & _
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-provisionedappxpackages | findstr /c:" & Quote & "PackageName : " & Quote & " > .\tempinfo\appxpackagenames", _
                               ASCII)
             File.WriteAllText(".\bin\exthelpers\appxversions.bat", _
-                              "dism /English /image=" & MountDir & " /get-provisionedappxpackages | findstr /c:" & Quote & "Version : " & Quote & " > .\tempinfo\appxversions", _
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-provisionedappxpackages | findstr /c:" & Quote & "Version : " & Quote & " > .\tempinfo\appxversions", _
                               ASCII)
             File.WriteAllText(".\bin\exthelpers\appxarches.bat", _
-                              "dism /English /image=" & MountDir & " /get-provisionedappxpackages | findstr /c:" & Quote & "Architecture : " & Quote & " > .\tempinfo\appxarchitectures", _
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-provisionedappxpackages | findstr /c:" & Quote & "Architecture : " & Quote & " > .\tempinfo\appxarchitectures", _
                               ASCII)
             File.WriteAllText(".\bin\exthelpers\appxresids.bat", _
-                              "dism /English /image=" & MountDir & " /get-provisionedappxpackages | findstr /c:" & Quote & "ResourceId : " & Quote & " > .\tempinfo\appxresids", _
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-provisionedappxpackages | findstr /c:" & Quote & "ResourceId : " & Quote & " > .\tempinfo\appxresids", _
                               ASCII)
             File.WriteAllText(".\bin\exthelpers\appxregions.bat", _
-                              "dism /English /image=" & MountDir & " /get-provisionedappxpackages | findstr /c:" & Quote & "Regions : " & Quote & " > .\tempinfo\appxregions", _
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-provisionedappxpackages | findstr /c:" & Quote & "Regions : " & Quote & " > .\tempinfo\appxregions", _
                               ASCII)
         Catch ex As Exception
             Debug.WriteLine("[GetImageAppxPackages] Failed writing getter scripts. Reason: " & ex.Message)
@@ -5251,11 +5251,35 @@ Public Class MainForm
     End Sub
 
     Sub HideParentDesc()
-        MenuDesc.Text = "Ready"
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        MenuDesc.Text = "Ready"
+                    Case "ESN"
+                        MenuDesc.Text = "Listo"
+                End Select
+            Case 1
+                MenuDesc.Text = "Ready"
+            Case 2
+                MenuDesc.Text = "Listo"
+        End Select
     End Sub
 
     Sub HideChildDescs()
-        MenuDesc.Text = "Ready"
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        MenuDesc.Text = "Ready"
+                    Case "ESN"
+                        MenuDesc.Text = "Listo"
+                End Select
+            Case 1
+                MenuDesc.Text = "Ready"
+            Case 2
+                MenuDesc.Text = "Listo"
+        End Select
     End Sub
 
     Private Sub FileToolStripMenuItem_MouseEnter(sender As Object, e As EventArgs) Handles FileToolStripMenuItem.MouseEnter
