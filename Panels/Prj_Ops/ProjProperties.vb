@@ -237,16 +237,16 @@ Public Class ProjProperties
                         Case 1
                             File.WriteAllText(".\bin\exthelpers\imginfo.bat",
                                               "@echo off" & CrLf &
-                                              "dism /English /get-wiminfo /wimfile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot", ASCII)
+                                              "dism /English /get-wiminfo /wimfile=" & Quote & MainForm.SourceImg & Quote & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot", ASCII)
                         Case Is >= 2
                             File.WriteAllText(".\bin\exthelpers\imginfo.bat",
                                               "@echo off" & CrLf &
-                                              "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot", ASCII)
+                                              "dism /English /get-imageinfo /imagefile=" & Quote & MainForm.SourceImg & Quote & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot", ASCII)
                     End Select
                 Case 10
                     File.WriteAllText(".\bin\exthelpers\imginfo.bat",
                                       "@echo off" & CrLf &
-                                      "dism /English /get-imageinfo /imagefile=" & MainForm.SourceImg & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot", ASCII)
+                                      "dism /English /get-imageinfo /imagefile=" & Quote & MainForm.SourceImg & Quote & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot", ASCII)
             End Select
             If Debugger.IsAttached Then
                 Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\imginfo.bat").WaitForExit()
