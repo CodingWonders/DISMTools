@@ -193,6 +193,11 @@ Public Class MainForm
             DismVersionChecker = FileVersionInfo.GetVersionInfo(DismExe)
         End If
         MountedImageDetectorBW.RunWorkerAsync()
+        If dtBranch.Contains("preview") And Not Debugger.IsAttached Then
+            VersionTSMI.Visible = True
+        Else
+            VersionTSMI.Visible = False
+        End If
     End Sub
 
     ''' <summary>
@@ -1686,7 +1691,7 @@ Public Class MainForm
             NTKeVerInfo = FileVersionInfo.GetVersionInfo(NTKeExe)
             If NTKeVerInfo.ProductMajorPart = 6 Then
                 If NTKeVerInfo.ProductMinorPart = 0 Then        ' Windows Vista / WinPE 2.x
-                    ' Let the user know the incompatibility
+                    ' Let the user know about the incompatibility
                     If Not ProgressPanel.IsDisposed Then
                         ToolStripButton4.Visible = False
                         ProgressPanel.Dispose()
@@ -1695,7 +1700,20 @@ Public Class MainForm
                     ImgWinVistaIncompatibilityDialog.ShowDialog(Me)
                     If ImgWinVistaIncompatibilityDialog.DialogResult = Windows.Forms.DialogResult.OK Then
                         ' Disable every option
-
+                        Button1.Enabled = False
+                        Button2.Enabled = False
+                        Button3.Enabled = False
+                        Button4.Enabled = True
+                        Button5.Enabled = False
+                        Button6.Enabled = False
+                        Button7.Enabled = False
+                        Button8.Enabled = False
+                        Button9.Enabled = False
+                        Button10.Enabled = False
+                        Button11.Enabled = False
+                        Button12.Enabled = False
+                        Button13.Enabled = False
+                        Exit Sub
                     ElseIf ImgWinVistaIncompatibilityDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
                         ' Unmount the image
                         ProgressPanel.UMountLocalDir = True
@@ -1717,6 +1735,7 @@ Public Class MainForm
                 ElseIf NTKeVerInfo.ProductMinorPart = 4 Then    ' Windows 10 (Technical Preview)
 
                 End If
+
             ElseIf NTKeVerInfo.ProductMajorPart = 10 Then
                 Select Case NTKeVerInfo.ProductBuildPart
                     Case 9888 To 21390                          ' Windows 10 / Server 2016,2019,2022 / Cobalt_SunValley / Win10X / WinPE 10.0
@@ -1728,6 +1747,19 @@ Public Class MainForm
         Catch ex As Exception
 
         End Try
+        Button1.Enabled = False
+        Button2.Enabled = True
+        Button3.Enabled = True
+        Button4.Enabled = True
+        Button5.Enabled = True
+        Button6.Enabled = True
+        Button7.Enabled = True
+        Button8.Enabled = True
+        Button9.Enabled = True
+        Button10.Enabled = True
+        Button11.Enabled = True
+        Button12.Enabled = True
+        Button13.Enabled = True
     End Sub
 
     ''' <summary>
@@ -3154,8 +3186,8 @@ Public Class MainForm
                     ' Welcome tab contents
                     Label24.Text = "Welcome to DISMTools"
                     Label25.Text = "The graphical front-end to perform DISM operations."
-                    Label26.Text = "This is alpha software"
-                    Label27.Text = "Currently, this program is in alpha. This means lots of things will not work as expected. There will also be lots of bugs, and, generally, the program is incomplete (as you can see right now)"
+                    Label26.Text = "This is beta software"
+                    Label27.Text = "Currently, this program is in beta. This means lots of things will not work as expected. There will also be lots of bugs, and, generally, the program is incomplete (as you can see right now)"
                     Label28.Text = "This program is open-source"
                     Label29.Text = "This program is open-source, meaning you can take a look at how it works and understand it better."
                     Label30.Text = "Be sure to know what you are doing"
@@ -3232,6 +3264,7 @@ Public Class MainForm
                     If Not ImgBW.IsBusy And areBackgroundProcessesDone Then
                         BGProcDetails.Label2.Text = "Image processes have completed"
                     End If
+                    MenuDesc.Text = "Ready"
                 ElseIf My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "ESN" Then
                     ' Top-level menu items
                     FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -3406,8 +3439,8 @@ Public Class MainForm
                     ' Welcome tab contents
                     Label24.Text = "Bienvenido a DISMTools"
                     Label25.Text = "La interfaz gráfica para realizar operaciones de DISM."
-                    Label26.Text = "Este es un software en alpha"
-                    Label27.Text = "Ahora mismo este programa está en alpha. Esto significa que muchas cosas no funcionarán como esperado. También habrán muchos errores y, en general, este programa no está completo (como puede ver ahora mismo)"
+                    Label26.Text = "Este es un software en beta"
+                    Label27.Text = "Ahora mismo este programa está en beta. Esto significa que muchas cosas no funcionarán como esperado. También habrán muchos errores y, en general, este programa no está completo (como puede ver ahora mismo)"
                     Label28.Text = "Este programa es de código abierto"
                     Label29.Text = "Este programa es de código abierto, lo que le permite observar cómo funciona y entenderlo mejor."
                     Label30.Text = "Asegúrese de saber lo que hace"
@@ -3484,6 +3517,7 @@ Public Class MainForm
                     If Not ImgBW.IsBusy And areBackgroundProcessesDone Then
                         BGProcDetails.Label2.Text = "Los procesos de la imagen han completado"
                     End If
+                    MenuDesc.Text = "Listo"
                 Else
                     Language = 1
                     ChangeLangs(Language)
@@ -3663,8 +3697,8 @@ Public Class MainForm
                 ' Welcome tab contents
                 Label24.Text = "Welcome to DISMTools"
                 Label25.Text = "The graphical front-end to perform DISM operations."
-                Label26.Text = "This is alpha software"
-                Label27.Text = "Currently, this program is in alpha. This means lots of things will not work as expected. There will also be lots of bugs, and, generally, the program is incomplete (as you can see right now)"
+                Label26.Text = "This is beta software"
+                Label27.Text = "Currently, this program is in beta. This means lots of things will not work as expected. There will also be lots of bugs, and, generally, the program is incomplete (as you can see right now)"
                 Label28.Text = "This program is open-source"
                 Label29.Text = "This program is open-source, meaning you can take a look at how it works and understand it better."
                 Label30.Text = "Be sure to know what you are doing"
@@ -3741,6 +3775,7 @@ Public Class MainForm
                 If Not ImgBW.IsBusy And areBackgroundProcessesDone Then
                     BGProcDetails.Label2.Text = "Image processes have completed"
                 End If
+                MenuDesc.Text = "Ready"
             Case 2
                 ' Top-level menu items
                 FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -3915,8 +3950,8 @@ Public Class MainForm
                 ' Welcome tab contents
                 Label24.Text = "Bienvenido a DISMTools"
                 Label25.Text = "La interfaz gráfica para realizar operaciones de DISM."
-                Label26.Text = "Este es un software en alpha"
-                Label27.Text = "Ahora mismo este programa está en alpha. Esto significa que muchas cosas no funcionarán como esperado. También habrán muchos errores y, en general, este programa no está completo (como puede ver ahora mismo)"
+                Label26.Text = "Este es un software en beta"
+                Label27.Text = "Ahora mismo este programa está en beta. Esto significa que muchas cosas no funcionarán como esperado. También habrán muchos errores y, en general, este programa no está completo (como puede ver ahora mismo)"
                 Label28.Text = "Este programa es de código abierto"
                 Label29.Text = "Este programa es de código abierto, lo que le permite observar cómo funciona y entenderlo mejor."
                 Label30.Text = "Asegúrese de saber lo que hace"
@@ -3993,6 +4028,7 @@ Public Class MainForm
                 If Not ImgBW.IsBusy And areBackgroundProcessesDone Then
                     BGProcDetails.Label2.Text = "Los procesos de la imagen han completado"
                 End If
+                MenuDesc.Text = "Listo"
         End Select
     End Sub
 
@@ -6132,7 +6168,7 @@ Public Class MainForm
         AddPackageDlg.ShowDialog()
     End Sub
 
-    Private Sub AboutDISMToolsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AboutDISMToolsToolStripMenuItem.Click
+    Private Sub AboutDISMToolsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AboutDISMToolsToolStripMenuItem.Click, VersionTSMI.Click
         PrgAbout.ShowDialog()
     End Sub
 

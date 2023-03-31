@@ -916,6 +916,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\Debug\" />
+    <Folder Include="Panels\Img_Ops\Capabilities\" />
     <Folder Include="Panels\Set_Ops\" />
     <Folder Include="wimlib\" />
   </ItemGroup>
