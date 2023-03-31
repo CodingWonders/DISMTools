@@ -101,7 +101,7 @@ Public Class MainForm
     Public isSqlServerDTProj As Boolean
 
     ' Set branch name and codenames
-    Public dtBranch As String = "stable"
+    Public dtBranch As String = "dt_preview"
 
     ' Arrays and other variables used on background processes
     Public imgPackageNames(65535) As String
