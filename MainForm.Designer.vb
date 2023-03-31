@@ -412,7 +412,7 @@ Partial Class MainForm
         Me.MenuStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(1008, 24)
+        Me.MenuStrip1.Size = New System.Drawing.Size(1264, 24)
         Me.MenuStrip1.TabIndex = 1
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -1388,7 +1388,7 @@ Partial Class MainForm
         Me.HomePanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.HomePanel.Location = New System.Drawing.Point(0, 24)
         Me.HomePanel.Name = "HomePanel"
-        Me.HomePanel.Size = New System.Drawing.Size(1008, 537)
+        Me.HomePanel.Size = New System.Drawing.Size(1264, 657)
         Me.HomePanel.TabIndex = 3
         '
         'WelcomePanel
@@ -1400,14 +1400,14 @@ Partial Class MainForm
         Me.WelcomePanel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.WelcomePanel.Location = New System.Drawing.Point(256, 0)
         Me.WelcomePanel.Name = "WelcomePanel"
-        Me.WelcomePanel.Size = New System.Drawing.Size(752, 537)
+        Me.WelcomePanel.Size = New System.Drawing.Size(1008, 657)
         Me.WelcomePanel.TabIndex = 1
         '
         'Button17
         '
         Me.Button17.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button17.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button17.Location = New System.Drawing.Point(554, 7)
+        Me.Button17.Location = New System.Drawing.Point(810, 7)
         Me.Button17.Name = "Button17"
         Me.Button17.Size = New System.Drawing.Size(187, 23)
         Me.Button17.TabIndex = 1
@@ -1426,7 +1426,7 @@ Partial Class MainForm
         Me.WelcomeTabControl.Location = New System.Drawing.Point(10, 12)
         Me.WelcomeTabControl.Name = "WelcomeTabControl"
         Me.WelcomeTabControl.SelectedIndex = 0
-        Me.WelcomeTabControl.Size = New System.Drawing.Size(733, 513)
+        Me.WelcomeTabControl.Size = New System.Drawing.Size(989, 633)
         Me.WelcomeTabControl.TabIndex = 0
         '
         'WelcomeTab
@@ -1448,7 +1448,7 @@ Partial Class MainForm
         Me.WelcomeTab.Location = New System.Drawing.Point(4, 24)
         Me.WelcomeTab.Name = "WelcomeTab"
         Me.WelcomeTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.WelcomeTab.Size = New System.Drawing.Size(725, 485)
+        Me.WelcomeTab.Size = New System.Drawing.Size(981, 605)
         Me.WelcomeTab.TabIndex = 0
         Me.WelcomeTab.Text = "Welcome"
         Me.WelcomeTab.UseVisualStyleBackColor = True
@@ -1616,7 +1616,7 @@ Partial Class MainForm
         Me.StartPanel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.StartPanel.Location = New System.Drawing.Point(0, 0)
         Me.StartPanel.Name = "StartPanel"
-        Me.StartPanel.Size = New System.Drawing.Size(752, 537)
+        Me.StartPanel.Size = New System.Drawing.Size(1008, 657)
         Me.StartPanel.TabIndex = 2
         Me.StartPanel.Visible = False
         '
@@ -1628,7 +1628,7 @@ Partial Class MainForm
         Me.StartPanelPContainer.Dock = System.Windows.Forms.DockStyle.Fill
         Me.StartPanelPContainer.Location = New System.Drawing.Point(0, 76)
         Me.StartPanelPContainer.Name = "StartPanelPContainer"
-        Me.StartPanelPContainer.Size = New System.Drawing.Size(752, 461)
+        Me.StartPanelPContainer.Size = New System.Drawing.Size(1008, 581)
         Me.StartPanelPContainer.TabIndex = 5
         '
         'GetStartedPanel
@@ -1638,7 +1638,7 @@ Partial Class MainForm
         Me.GetStartedPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GetStartedPanel.Location = New System.Drawing.Point(0, 0)
         Me.GetStartedPanel.Name = "GetStartedPanel"
-        Me.GetStartedPanel.Size = New System.Drawing.Size(752, 461)
+        Me.GetStartedPanel.Size = New System.Drawing.Size(1008, 581)
         Me.GetStartedPanel.TabIndex = 0
         '
         'GetStartedContainer
@@ -1648,7 +1648,7 @@ Partial Class MainForm
         Me.GetStartedContainer.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GetStartedContainer.Location = New System.Drawing.Point(0, 38)
         Me.GetStartedContainer.Name = "GetStartedContainer"
-        Me.GetStartedContainer.Size = New System.Drawing.Size(752, 423)
+        Me.GetStartedContainer.Size = New System.Drawing.Size(1008, 543)
         Me.GetStartedContainer.TabIndex = 6
         '
         'Panel6
@@ -1670,7 +1670,7 @@ Partial Class MainForm
         Me.Panel6.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel6.Location = New System.Drawing.Point(0, 0)
         Me.Panel6.Name = "Panel6"
-        Me.Panel6.Size = New System.Drawing.Size(752, 423)
+        Me.Panel6.Size = New System.Drawing.Size(1008, 543)
         Me.Panel6.TabIndex = 0
         '
         'LinkLabel11
@@ -1834,7 +1834,7 @@ Partial Class MainForm
         Me.Panel7.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel7.Location = New System.Drawing.Point(0, 0)
         Me.Panel7.Name = "Panel7"
-        Me.Panel7.Size = New System.Drawing.Size(752, 423)
+        Me.Panel7.Size = New System.Drawing.Size(1008, 543)
         Me.Panel7.TabIndex = 1
         '
         'Panel5
@@ -1844,7 +1844,7 @@ Partial Class MainForm
         Me.Panel5.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel5.Location = New System.Drawing.Point(0, 0)
         Me.Panel5.Name = "Panel5"
-        Me.Panel5.Size = New System.Drawing.Size(752, 38)
+        Me.Panel5.Size = New System.Drawing.Size(1008, 38)
         Me.Panel5.TabIndex = 5
         '
         'Label34
@@ -1874,7 +1874,7 @@ Partial Class MainForm
         Me.TutorialVideoPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TutorialVideoPanel.Location = New System.Drawing.Point(0, 0)
         Me.TutorialVideoPanel.Name = "TutorialVideoPanel"
-        Me.TutorialVideoPanel.Size = New System.Drawing.Size(752, 461)
+        Me.TutorialVideoPanel.Size = New System.Drawing.Size(1008, 581)
         Me.TutorialVideoPanel.TabIndex = 0
         '
         'LatestNewsPanel
@@ -1882,7 +1882,7 @@ Partial Class MainForm
         Me.LatestNewsPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LatestNewsPanel.Location = New System.Drawing.Point(0, 0)
         Me.LatestNewsPanel.Name = "LatestNewsPanel"
-        Me.LatestNewsPanel.Size = New System.Drawing.Size(752, 461)
+        Me.LatestNewsPanel.Size = New System.Drawing.Size(1008, 581)
         Me.LatestNewsPanel.TabIndex = 0
         '
         'Panel1
@@ -1893,7 +1893,7 @@ Partial Class MainForm
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel1.Location = New System.Drawing.Point(0, 38)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(752, 38)
+        Me.Panel1.Size = New System.Drawing.Size(1008, 38)
         Me.Panel1.TabIndex = 4
         '
         'Label8
@@ -1936,7 +1936,7 @@ Partial Class MainForm
         Me.Panel4.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel4.Location = New System.Drawing.Point(0, 0)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(752, 38)
+        Me.Panel4.Size = New System.Drawing.Size(1008, 38)
         Me.Panel4.TabIndex = 2
         '
         'Label7
@@ -1953,7 +1953,7 @@ Partial Class MainForm
         '
         Me.Button18.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button18.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button18.Location = New System.Drawing.Point(554, 7)
+        Me.Button18.Location = New System.Drawing.Point(810, 7)
         Me.Button18.Name = "Button18"
         Me.Button18.Size = New System.Drawing.Size(187, 23)
         Me.Button18.TabIndex = 1
@@ -1974,7 +1974,7 @@ Partial Class MainForm
         Me.SidePanel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.SidePanel.Location = New System.Drawing.Point(0, 0)
         Me.SidePanel.Name = "SidePanel"
-        Me.SidePanel.Size = New System.Drawing.Size(256, 537)
+        Me.SidePanel.Size = New System.Drawing.Size(256, 657)
         Me.SidePanel.TabIndex = 0
         '
         'Label11
@@ -2081,7 +2081,7 @@ Partial Class MainForm
         Me.PrjPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PrjPanel.Location = New System.Drawing.Point(0, 24)
         Me.PrjPanel.Name = "PrjPanel"
-        Me.PrjPanel.Size = New System.Drawing.Size(1008, 537)
+        Me.PrjPanel.Size = New System.Drawing.Size(1264, 657)
         Me.PrjPanel.TabIndex = 4
         '
         'SplitPanels
@@ -2100,7 +2100,7 @@ Partial Class MainForm
         '
         Me.SplitPanels.Panel2.Controls.Add(Me.TabControl2)
         Me.SplitPanels.Panel2MinSize = 384
-        Me.SplitPanels.Size = New System.Drawing.Size(752, 486)
+        Me.SplitPanels.Size = New System.Drawing.Size(1008, 606)
         Me.SplitPanels.SplitterDistance = 264
         Me.SplitPanels.SplitterWidth = 2
         Me.SplitPanels.TabIndex = 1
@@ -2115,7 +2115,7 @@ Partial Class MainForm
         Me.TabControl1.Multiline = True
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(264, 486)
+        Me.TabControl1.Size = New System.Drawing.Size(264, 606)
         Me.TabControl1.TabIndex = 0
         '
         'TabPage1
@@ -2128,7 +2128,7 @@ Partial Class MainForm
         Me.TabPage1.Location = New System.Drawing.Point(4, 22)
         Me.TabPage1.Name = "TabPage1"
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(256, 460)
+        Me.TabPage1.Size = New System.Drawing.Size(256, 580)
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Project"
         Me.TabPage1.UseVisualStyleBackColor = True
@@ -2138,7 +2138,7 @@ Partial Class MainForm
         Me.UnloadBtn.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.UnloadBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.UnloadBtn.Location = New System.Drawing.Point(36, 418)
+        Me.UnloadBtn.Location = New System.Drawing.Point(36, 538)
         Me.UnloadBtn.Name = "UnloadBtn"
         Me.UnloadBtn.Size = New System.Drawing.Size(185, 28)
         Me.UnloadBtn.TabIndex = 1
@@ -2150,7 +2150,7 @@ Partial Class MainForm
         Me.ExplorerView.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ExplorerView.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.ExplorerView.Location = New System.Drawing.Point(36, 384)
+        Me.ExplorerView.Location = New System.Drawing.Point(36, 504)
         Me.ExplorerView.Name = "ExplorerView"
         Me.ExplorerView.Size = New System.Drawing.Size(185, 28)
         Me.ExplorerView.TabIndex = 1
@@ -2162,7 +2162,7 @@ Partial Class MainForm
         Me.Button14.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button14.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button14.Location = New System.Drawing.Point(36, 350)
+        Me.Button14.Location = New System.Drawing.Point(36, 470)
         Me.Button14.Name = "Button14"
         Me.Button14.Size = New System.Drawing.Size(185, 28)
         Me.Button14.TabIndex = 1
@@ -2218,7 +2218,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.33333!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.66667!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 64.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 65.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -2234,7 +2234,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 102.0!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15.0!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(256, 280)
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(256, 400)
         Me.TableLayoutPanel2.TabIndex = 8
         '
         'ProjNameEditBtn
@@ -2255,7 +2255,7 @@ Partial Class MainForm
         Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
         Me.LinkLabel1.Location = New System.Drawing.Point(97, 146)
         Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(156, 134)
+        Me.LinkLabel1.Size = New System.Drawing.Size(156, 254)
         Me.LinkLabel1.TabIndex = 5
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "Click here to mount an image"
@@ -2267,7 +2267,7 @@ Partial Class MainForm
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel8.Location = New System.Drawing.Point(97, 3)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(91, 23)
+        Me.Panel8.Size = New System.Drawing.Size(90, 23)
         Me.Panel8.TabIndex = 8
         '
         'projName
@@ -2276,7 +2276,7 @@ Partial Class MainForm
         Me.projName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projName.Location = New System.Drawing.Point(0, 0)
         Me.projName.Name = "projName"
-        Me.projName.Size = New System.Drawing.Size(91, 23)
+        Me.projName.Size = New System.Drawing.Size(90, 23)
         Me.projName.TabIndex = 2
         Me.projName.Text = "projName"
         Me.projName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -2286,7 +2286,7 @@ Partial Class MainForm
         Me.projNameText.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projNameText.Location = New System.Drawing.Point(0, 0)
         Me.projNameText.Name = "projNameText"
-        Me.projNameText.Size = New System.Drawing.Size(91, 21)
+        Me.projNameText.Size = New System.Drawing.Size(90, 21)
         Me.projNameText.TabIndex = 4
         Me.projNameText.Text = "projName"
         Me.projNameText.Visible = False
@@ -2332,7 +2332,7 @@ Partial Class MainForm
         Me.Label4.Location = New System.Drawing.Point(3, 131)
         Me.Label4.Name = "Label4"
         Me.TableLayoutPanel2.SetRowSpan(Me.Label4, 2)
-        Me.Label4.Size = New System.Drawing.Size(88, 149)
+        Me.Label4.Size = New System.Drawing.Size(88, 269)
         Me.Label4.TabIndex = 1
         Me.Label4.Text = "Images mounted?"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2639,7 +2639,7 @@ Partial Class MainForm
         Me.TabControl2.Location = New System.Drawing.Point(0, 0)
         Me.TabControl2.Name = "TabControl2"
         Me.TabControl2.SelectedIndex = 0
-        Me.TabControl2.Size = New System.Drawing.Size(486, 486)
+        Me.TabControl2.Size = New System.Drawing.Size(742, 606)
         Me.TabControl2.TabIndex = 3
         '
         'TabPage3
@@ -2649,7 +2649,7 @@ Partial Class MainForm
         Me.TabPage3.Location = New System.Drawing.Point(4, 22)
         Me.TabPage3.Name = "TabPage3"
         Me.TabPage3.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage3.Size = New System.Drawing.Size(478, 460)
+        Me.TabPage3.Size = New System.Drawing.Size(734, 580)
         Me.TabPage3.TabIndex = 0
         Me.TabPage3.Text = "Actions"
         Me.TabPage3.UseVisualStyleBackColor = True
@@ -2662,7 +2662,7 @@ Partial Class MainForm
         Me.OldActionPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.OldActionPanel.Location = New System.Drawing.Point(3, 3)
         Me.OldActionPanel.Name = "OldActionPanel"
-        Me.OldActionPanel.Size = New System.Drawing.Size(472, 454)
+        Me.OldActionPanel.Size = New System.Drawing.Size(728, 574)
         Me.OldActionPanel.TabIndex = 3
         '
         'GroupBox3
@@ -2671,7 +2671,7 @@ Partial Class MainForm
         Me.GroupBox3.Controls.Add(Me.Button8)
         Me.GroupBox3.Controls.Add(Me.Button9)
         Me.GroupBox3.Controls.Add(Me.Button10)
-        Me.GroupBox3.Location = New System.Drawing.Point(6, 327)
+        Me.GroupBox3.Location = New System.Drawing.Point(134, 387)
         Me.GroupBox3.Name = "GroupBox3"
         Me.GroupBox3.Size = New System.Drawing.Size(460, 92)
         Me.GroupBox3.TabIndex = 2
@@ -2723,7 +2723,7 @@ Partial Class MainForm
         Me.GroupBox1.Controls.Add(Me.Button2)
         Me.GroupBox1.Controls.Add(Me.Button3)
         Me.GroupBox1.Controls.Add(Me.Button4)
-        Me.GroupBox1.Location = New System.Drawing.Point(6, 35)
+        Me.GroupBox1.Location = New System.Drawing.Point(134, 95)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(460, 159)
         Me.GroupBox1.TabIndex = 2
@@ -2810,7 +2810,7 @@ Partial Class MainForm
         Me.GroupBox2.Controls.Add(Me.Button7)
         Me.GroupBox2.Controls.Add(Me.Button5)
         Me.GroupBox2.Controls.Add(Me.Button12)
-        Me.GroupBox2.Location = New System.Drawing.Point(6, 200)
+        Me.GroupBox2.Location = New System.Drawing.Point(134, 260)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(460, 121)
         Me.GroupBox2.TabIndex = 2
@@ -2872,7 +2872,7 @@ Partial Class MainForm
         Me.NewActionPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.NewActionPanel.Location = New System.Drawing.Point(3, 3)
         Me.NewActionPanel.Name = "NewActionPanel"
-        Me.NewActionPanel.Size = New System.Drawing.Size(472, 454)
+        Me.NewActionPanel.Size = New System.Drawing.Size(728, 574)
         Me.NewActionPanel.TabIndex = 3
         '
         'NewActions_Header
@@ -2881,7 +2881,7 @@ Partial Class MainForm
         Me.NewActions_Header.Dock = System.Windows.Forms.DockStyle.Top
         Me.NewActions_Header.Location = New System.Drawing.Point(0, 0)
         Me.NewActions_Header.Name = "NewActions_Header"
-        Me.NewActions_Header.Size = New System.Drawing.Size(472, 96)
+        Me.NewActions_Header.Size = New System.Drawing.Size(728, 96)
         Me.NewActions_Header.TabIndex = 0
         '
         'Label6
@@ -2899,7 +2899,7 @@ Partial Class MainForm
         Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripSeparator14, Me.ToolStripButton3, Me.ToolStripSeparator15, Me.ToolStripButton4})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.Size = New System.Drawing.Size(752, 25)
+        Me.ToolStrip1.Size = New System.Drawing.Size(1008, 25)
         Me.ToolStrip1.TabIndex = 2
         Me.ToolStrip1.Text = "ToolStrip1"
         '
@@ -2960,9 +2960,9 @@ Partial Class MainForm
         Me.Panel2.Controls.Add(Me.ToolStrip2)
         Me.Panel2.Controls.Add(Me.prjTreeStatus)
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Panel2.Location = New System.Drawing.Point(752, 0)
+        Me.Panel2.Location = New System.Drawing.Point(1008, 0)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(256, 511)
+        Me.Panel2.Size = New System.Drawing.Size(256, 631)
         Me.Panel2.TabIndex = 1
         '
         'prjTreeView
@@ -2970,7 +2970,7 @@ Partial Class MainForm
         Me.prjTreeView.Dock = System.Windows.Forms.DockStyle.Fill
         Me.prjTreeView.Location = New System.Drawing.Point(0, 25)
         Me.prjTreeView.Name = "prjTreeView"
-        Me.prjTreeView.Size = New System.Drawing.Size(256, 486)
+        Me.prjTreeView.Size = New System.Drawing.Size(256, 606)
         Me.prjTreeView.TabIndex = 3
         '
         'ToolStrip2
@@ -3033,9 +3033,9 @@ Partial Class MainForm
         '
         Me.StatusStrip.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.StatusStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BackgroundProcessesButton, Me.MenuDesc})
-        Me.StatusStrip.Location = New System.Drawing.Point(0, 511)
+        Me.StatusStrip.Location = New System.Drawing.Point(0, 631)
         Me.StatusStrip.Name = "StatusStrip"
-        Me.StatusStrip.Size = New System.Drawing.Size(1008, 26)
+        Me.StatusStrip.Size = New System.Drawing.Size(1264, 26)
         Me.StatusStrip.TabIndex = 0
         Me.StatusStrip.Text = "Status"
         '
@@ -3163,12 +3163,13 @@ Partial Class MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1008, 561)
+        Me.ClientSize = New System.Drawing.Size(1264, 681)
         Me.Controls.Add(Me.HomePanel)
         Me.Controls.Add(Me.PrjPanel)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.MaximumSize = New System.Drawing.Size(4096, 4096)
         Me.MinimumSize = New System.Drawing.Size(1024, 600)
         Me.Name = "MainForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
