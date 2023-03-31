@@ -688,6 +688,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo.ico" />
+    <None Include="Resources\about\subreddit.png" />
+    <None Include="Resources\about\gh_repo.png" />
     <None Include="Resources\logo_preview.png" />
     <None Include="Resources\StoreLogoAssetPreviewer\preview_unavail_dark.png" />
     <None Include="Resources\StoreLogoAssetPreviewer\preview_unavail_light.png" />

@@ -4,6 +4,8 @@ Imports Microsoft.VisualBasic.ControlChars
 
 Public Class PrgAbout
 
+    Dim PictureToolTip As New ToolTip()
+
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
@@ -148,7 +150,6 @@ Public Class PrgAbout
 
         ForeColor = Color.White
         PictureBox1.Image = If(MainForm.dtBranch.Contains("preview"), My.Resources.logo_preview, My.Resources.logo_aboutdlg_dark)
-        PictureBox2.Image = My.Resources.preview_dark
         If CreditsPanel.Visible Then
             LinkLabel1.LinkColor = Color.FromArgb(241, 241, 241)
             LinkLabel2.LinkColor = Color.FromArgb(153, 153, 153)
@@ -308,4 +309,52 @@ Public Class PrgAbout
         LinkLabel3.LinkColor = Color.FromArgb(241, 241, 241)
     End Sub
 #End Region
+
+    Private Sub Picture_MouseEnter(sender As Object, e As EventArgs) Handles PictureBox3.MouseEnter, PictureBox2.MouseEnter
+        Cursor = Cursors.Hand
+    End Sub
+
+    Private Sub Picture_MouseLeave(sender As Object, e As EventArgs) Handles PictureBox3.MouseLeave, PictureBox2.MouseLeave
+        Cursor = Cursors.Arrow
+    End Sub
+
+    Private Sub PictureBox2_Click(sender As Object, e As EventArgs) Handles PictureBox2.Click
+        Process.Start("https://github.com/CodingWonders/DISMTools")
+    End Sub
+
+    Private Sub PictureBox3_Click(sender As Object, e As EventArgs) Handles PictureBox3.Click
+        Process.Start("https://reddit.com/r/DISMTools")
+    End Sub
+
+    Private Sub PictureBox2_MouseHover(sender As Object, e As EventArgs) Handles PictureBox2.MouseHover
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PictureToolTip.SetToolTip(sender, "Check the project's repository on GitHub")
+                    Case "ESN"
+                        PictureToolTip.SetToolTip(sender, "Consulte el repositorio del proyecto en GitHub")
+                End Select
+            Case 1
+                PictureToolTip.SetToolTip(sender, "Check the project's repository on GitHub")
+            Case 2
+                PictureToolTip.SetToolTip(sender, "Consulte el repositorio del proyecto en GitHub")
+        End Select
+    End Sub
+
+    Private Sub PictureBox3_MouseHover(sender As Object, e As EventArgs) Handles PictureBox3.MouseHover
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PictureToolTip.SetToolTip(sender, "Check the project's official subreddit")
+                    Case "ESN"
+                        PictureToolTip.SetToolTip(sender, "Consulte el subreddit oficial del proyecto")
+                End Select
+            Case 1
+                PictureToolTip.SetToolTip(sender, "Check the project's official subreddit")
+            Case 2
+                PictureToolTip.SetToolTip(sender, "Consulte el subreddit oficial del proyecto")
+        End Select
+    End Sub
 End Class

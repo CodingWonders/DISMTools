@@ -27,9 +27,6 @@ Partial Class PrgAbout
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.PreviewPanel = New System.Windows.Forms.Panel()
-        Me.Label14 = New System.Windows.Forms.Label()
-        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.Label15 = New System.Windows.Forms.Label()
         Me.ModernPanelContainer = New System.Windows.Forms.Panel()
         Me.CreditsPanel = New System.Windows.Forms.Panel()
@@ -64,16 +61,18 @@ Partial Class PrgAbout
         Me.LinkLabel3 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
+        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
+        Me.PictureBox3 = New System.Windows.Forms.PictureBox()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.PreviewPanel.SuspendLayout()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ModernPanelContainer.SuspendLayout()
         Me.CreditsPanel.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
         Me.LicensesPanel.SuspendLayout()
         Me.WhatsNewPanel.SuspendLayout()
         Me.TableLayoutPanel3.SuspendLayout()
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -131,39 +130,6 @@ Partial Class PrgAbout
         Me.Label2.Text = "DISMTools lets you deploy, manage, and service Windows images with ease, thanks t" & _
     "o a GUI."
         '
-        'PreviewPanel
-        '
-        Me.PreviewPanel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.PreviewPanel.BackColor = System.Drawing.Color.Transparent
-        Me.PreviewPanel.Controls.Add(Me.Label14)
-        Me.PreviewPanel.Controls.Add(Me.PictureBox2)
-        Me.PreviewPanel.Location = New System.Drawing.Point(12, 315)
-        Me.PreviewPanel.Name = "PreviewPanel"
-        Me.PreviewPanel.Size = New System.Drawing.Size(388, 72)
-        Me.PreviewPanel.TabIndex = 7
-        Me.PreviewPanel.Visible = False
-        '
-        'Label14
-        '
-        Me.Label14.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label14.Location = New System.Drawing.Point(39, 8)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(332, 64)
-        Me.Label14.TabIndex = 1
-        Me.Label14.Text = "You are currently using a preview build, which may not be ready for production ye" & _
-    "t. You may encounter more bugs along the way." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Use at your own risk."
-        '
-        'PictureBox2
-        '
-        Me.PictureBox2.Image = Global.DISMTools.My.Resources.Resources.preview_light
-        Me.PictureBox2.Location = New System.Drawing.Point(8, 8)
-        Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(24, 24)
-        Me.PictureBox2.TabIndex = 0
-        Me.PictureBox2.TabStop = False
-        '
         'Label15
         '
         Me.Label15.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
@@ -171,9 +137,9 @@ Partial Class PrgAbout
         Me.Label15.BackColor = System.Drawing.Color.Transparent
         Me.Label15.Location = New System.Drawing.Point(23, 408)
         Me.Label15.Name = "Label15"
-        Me.Label15.Size = New System.Drawing.Size(121, 13)
+        Me.Label15.Size = New System.Drawing.Size(105, 13)
         Me.Label15.TabIndex = 4
-        Me.Label15.Text = "DISMTools - version {0}"
+        Me.Label15.Text = "Build date goes here"
         '
         'ModernPanelContainer
         '
@@ -468,9 +434,9 @@ Partial Class PrgAbout
         Me.LinkLabel7.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel7.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel7.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel7.Location = New System.Drawing.Point(337, 174)
+        Me.LinkLabel7.Location = New System.Drawing.Point(337, 195)
         Me.LinkLabel7.Name = "LinkLabel7"
-        Me.LinkLabel7.Size = New System.Drawing.Size(80, 21)
+        Me.LinkLabel7.Size = New System.Drawing.Size(80, 15)
         Me.LinkLabel7.TabIndex = 4
         Me.LinkLabel7.TabStop = True
         Me.LinkLabel7.Text = "Microsoft"
@@ -618,6 +584,28 @@ Partial Class PrgAbout
         Me.LinkLabel1.Text = "CREDITS"
         Me.LinkLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
+        'PictureBox2
+        '
+        Me.PictureBox2.BackColor = System.Drawing.Color.Transparent
+        Me.PictureBox2.Image = Global.DISMTools.My.Resources.Resources.gh_repo
+        Me.PictureBox2.Location = New System.Drawing.Point(26, 370)
+        Me.PictureBox2.Name = "PictureBox2"
+        Me.PictureBox2.Size = New System.Drawing.Size(24, 24)
+        Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox2.TabIndex = 9
+        Me.PictureBox2.TabStop = False
+        '
+        'PictureBox3
+        '
+        Me.PictureBox3.BackColor = System.Drawing.Color.Transparent
+        Me.PictureBox3.Image = Global.DISMTools.My.Resources.Resources.subreddit
+        Me.PictureBox3.Location = New System.Drawing.Point(56, 370)
+        Me.PictureBox3.Name = "PictureBox3"
+        Me.PictureBox3.Size = New System.Drawing.Size(24, 24)
+        Me.PictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox3.TabIndex = 9
+        Me.PictureBox3.TabStop = False
+        '
         'PrgAbout
         '
         Me.AcceptButton = Me.OK_Button
@@ -625,7 +613,8 @@ Partial Class PrgAbout
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackgroundImage = Global.DISMTools.My.Resources.Resources.aboutscr_bg
         Me.ClientSize = New System.Drawing.Size(844, 441)
-        Me.Controls.Add(Me.PreviewPanel)
+        Me.Controls.Add(Me.PictureBox3)
+        Me.Controls.Add(Me.PictureBox2)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label15)
@@ -642,8 +631,6 @@ Partial Class PrgAbout
         Me.Text = "About this program"
         Me.TableLayoutPanel1.ResumeLayout(False)
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.PreviewPanel.ResumeLayout(False)
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ModernPanelContainer.ResumeLayout(False)
         Me.CreditsPanel.ResumeLayout(False)
         Me.TableLayoutPanel2.ResumeLayout(False)
@@ -652,6 +639,8 @@ Partial Class PrgAbout
         Me.WhatsNewPanel.ResumeLayout(False)
         Me.TableLayoutPanel3.ResumeLayout(False)
         Me.TableLayoutPanel3.PerformLayout()
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -661,9 +650,6 @@ Partial Class PrgAbout
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents PreviewPanel As System.Windows.Forms.Panel
-    Friend WithEvents PictureBox2 As System.Windows.Forms.PictureBox
-    Friend WithEvents Label14 As System.Windows.Forms.Label
     Friend WithEvents Label15 As System.Windows.Forms.Label
     Friend WithEvents ModernPanelContainer As System.Windows.Forms.Panel
     Friend WithEvents LicensesPanel As System.Windows.Forms.Panel
@@ -698,5 +684,7 @@ Partial Class PrgAbout
     Friend WithEvents LinkLabel11 As System.Windows.Forms.LinkLabel
     Friend WithEvents Label17 As System.Windows.Forms.Label
     Friend WithEvents Label18 As System.Windows.Forms.Label
+    Friend WithEvents PictureBox2 As System.Windows.Forms.PictureBox
+    Friend WithEvents PictureBox3 As System.Windows.Forms.PictureBox
 
 End Class
