@@ -3891,7 +3891,7 @@ Public Class ProgressPanel
                     MainForm.isModified = False
                 End If
             ElseIf OperationNum = 21 Then
-                If MainForm.isProjectLoaded Then
+                If MainForm.isProjectLoaded And MountDir = MainForm.MountDir Or RandomMountDir = MainForm.MountDir Then
                     MainForm.UpdateProjProperties(False, False)
                     MainForm.MountDir = "N/A"
                     ' This is a crucial change, so save things immediately
