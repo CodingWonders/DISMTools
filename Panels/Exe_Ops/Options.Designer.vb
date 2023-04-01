@@ -606,6 +606,7 @@ Partial Class Options
         'TrackBar1
         '
         Me.TrackBar1.BackColor = System.Drawing.Color.White
+        Me.TrackBar1.LargeChange = 1
         Me.TrackBar1.Location = New System.Drawing.Point(34, 147)
         Me.TrackBar1.Maximum = 3
         Me.TrackBar1.Name = "TrackBar1"

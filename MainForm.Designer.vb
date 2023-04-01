@@ -1592,7 +1592,7 @@ Partial Class MainForm
         Me.NewsFeedTab.Location = New System.Drawing.Point(4, 24)
         Me.NewsFeedTab.Name = "NewsFeedTab"
         Me.NewsFeedTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.NewsFeedTab.Size = New System.Drawing.Size(725, 485)
+        Me.NewsFeedTab.Size = New System.Drawing.Size(981, 605)
         Me.NewsFeedTab.TabIndex = 1
         Me.NewsFeedTab.Text = "Latest news"
         Me.NewsFeedTab.UseVisualStyleBackColor = True
@@ -1602,7 +1602,7 @@ Partial Class MainForm
         Me.VideosTab.Location = New System.Drawing.Point(4, 24)
         Me.VideosTab.Name = "VideosTab"
         Me.VideosTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.VideosTab.Size = New System.Drawing.Size(725, 485)
+        Me.VideosTab.Size = New System.Drawing.Size(981, 605)
         Me.VideosTab.TabIndex = 2
         Me.VideosTab.Text = "Tutorial videos"
         Me.VideosTab.UseVisualStyleBackColor = True
@@ -2218,7 +2218,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.33333!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.66667!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 65.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 68.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -2253,9 +2253,9 @@ Partial Class MainForm
         Me.LinkLabel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel1.Location = New System.Drawing.Point(97, 146)
+        Me.LinkLabel1.Location = New System.Drawing.Point(95, 146)
         Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(156, 254)
+        Me.LinkLabel1.Size = New System.Drawing.Size(158, 254)
         Me.LinkLabel1.TabIndex = 5
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "Click here to mount an image"
@@ -2265,9 +2265,9 @@ Partial Class MainForm
         Me.Panel8.Controls.Add(Me.projName)
         Me.Panel8.Controls.Add(Me.projNameText)
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel8.Location = New System.Drawing.Point(97, 3)
+        Me.Panel8.Location = New System.Drawing.Point(95, 3)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(90, 23)
+        Me.Panel8.Size = New System.Drawing.Size(89, 23)
         Me.Panel8.TabIndex = 8
         '
         'projName
@@ -2276,7 +2276,7 @@ Partial Class MainForm
         Me.projName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projName.Location = New System.Drawing.Point(0, 0)
         Me.projName.Name = "projName"
-        Me.projName.Size = New System.Drawing.Size(90, 23)
+        Me.projName.Size = New System.Drawing.Size(89, 23)
         Me.projName.TabIndex = 2
         Me.projName.Text = "projName"
         Me.projName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -2286,7 +2286,7 @@ Partial Class MainForm
         Me.projNameText.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projNameText.Location = New System.Drawing.Point(0, 0)
         Me.projNameText.Name = "projNameText"
-        Me.projNameText.Size = New System.Drawing.Size(90, 21)
+        Me.projNameText.Size = New System.Drawing.Size(89, 21)
         Me.projNameText.TabIndex = 4
         Me.projNameText.Text = "projName"
         Me.projNameText.Visible = False
@@ -2297,9 +2297,9 @@ Partial Class MainForm
         Me.Label5.AutoSize = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label5, 2)
         Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label5.Location = New System.Drawing.Point(97, 131)
+        Me.Label5.Location = New System.Drawing.Point(95, 131)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(156, 15)
+        Me.Label5.Size = New System.Drawing.Size(158, 15)
         Me.Label5.TabIndex = 2
         Me.Label5.Text = "imgStatus"
         '
@@ -2309,7 +2309,7 @@ Partial Class MainForm
         Me.Label2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label2.Location = New System.Drawing.Point(3, 29)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(88, 102)
+        Me.Label2.Size = New System.Drawing.Size(86, 102)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "Location:"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2319,9 +2319,9 @@ Partial Class MainForm
         Me.Label3.AutoEllipsis = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label3, 2)
         Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label3.Location = New System.Drawing.Point(97, 29)
+        Me.Label3.Location = New System.Drawing.Point(95, 29)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(156, 102)
+        Me.Label3.Size = New System.Drawing.Size(158, 102)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "projPath"
         '
@@ -2332,7 +2332,7 @@ Partial Class MainForm
         Me.Label4.Location = New System.Drawing.Point(3, 131)
         Me.Label4.Name = "Label4"
         Me.TableLayoutPanel2.SetRowSpan(Me.Label4, 2)
-        Me.Label4.Size = New System.Drawing.Size(88, 269)
+        Me.Label4.Size = New System.Drawing.Size(86, 269)
         Me.Label4.TabIndex = 1
         Me.Label4.Text = "Images mounted?"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2343,7 +2343,7 @@ Partial Class MainForm
         Me.Panel9.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel9.Location = New System.Drawing.Point(3, 3)
         Me.Panel9.Name = "Panel9"
-        Me.Panel9.Size = New System.Drawing.Size(88, 23)
+        Me.Panel9.Size = New System.Drawing.Size(86, 23)
         Me.Panel9.TabIndex = 9
         '
         'Label1
@@ -2351,7 +2351,7 @@ Partial Class MainForm
         Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label1.Location = New System.Drawing.Point(0, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(88, 23)
+        Me.Label1.Size = New System.Drawing.Size(86, 23)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Name:"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -2363,7 +2363,7 @@ Partial Class MainForm
         Me.TabPage2.Location = New System.Drawing.Point(4, 22)
         Me.TabPage2.Name = "TabPage2"
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(256, 460)
+        Me.TabPage2.Size = New System.Drawing.Size(256, 580)
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "Image"
         Me.TabPage2.UseVisualStyleBackColor = True
@@ -2376,7 +2376,7 @@ Partial Class MainForm
         Me.ImageNotMountedPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ImageNotMountedPanel.Location = New System.Drawing.Point(3, 3)
         Me.ImageNotMountedPanel.Name = "ImageNotMountedPanel"
-        Me.ImageNotMountedPanel.Size = New System.Drawing.Size(250, 454)
+        Me.ImageNotMountedPanel.Size = New System.Drawing.Size(250, 574)
         Me.ImageNotMountedPanel.TabIndex = 0
         '
         'LinkLabel3
@@ -2386,7 +2386,7 @@ Partial Class MainForm
         Me.LinkLabel3.LinkArea = New System.Windows.Forms.LinkArea(33, 32)
         Me.LinkLabel3.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel3.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel3.Location = New System.Drawing.Point(21, 401)
+        Me.LinkLabel3.Location = New System.Drawing.Point(21, 521)
         Me.LinkLabel3.Name = "LinkLabel3"
         Me.LinkLabel3.Size = New System.Drawing.Size(210, 44)
         Me.LinkLabel3.TabIndex = 2
@@ -2402,7 +2402,7 @@ Partial Class MainForm
         Me.LinkLabel2.LinkArea = New System.Windows.Forms.LinkArea(72, 4)
         Me.LinkLabel2.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel2.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel2.Location = New System.Drawing.Point(21, 231)
+        Me.LinkLabel2.Location = New System.Drawing.Point(21, 291)
         Me.LinkLabel2.Name = "LinkLabel2"
         Me.LinkLabel2.Size = New System.Drawing.Size(210, 44)
         Me.LinkLabel2.TabIndex = 1
@@ -2417,7 +2417,7 @@ Partial Class MainForm
         Me.Label23.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label23.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label23.ForeColor = System.Drawing.Color.Crimson
-        Me.Label23.Location = New System.Drawing.Point(20, 180)
+        Me.Label23.Location = New System.Drawing.Point(20, 240)
         Me.Label23.Name = "Label23"
         Me.Label23.Size = New System.Drawing.Size(211, 51)
         Me.Label23.TabIndex = 0
@@ -2433,7 +2433,7 @@ Partial Class MainForm
         Me.ImagePanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ImagePanel.Location = New System.Drawing.Point(3, 3)
         Me.ImagePanel.Name = "ImagePanel"
-        Me.ImagePanel.Size = New System.Drawing.Size(250, 454)
+        Me.ImagePanel.Size = New System.Drawing.Size(250, 574)
         Me.ImagePanel.TabIndex = 9
         '
         'Button16
@@ -2441,7 +2441,7 @@ Partial Class MainForm
         Me.Button16.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button16.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button16.Location = New System.Drawing.Point(33, 415)
+        Me.Button16.Location = New System.Drawing.Point(33, 535)
         Me.Button16.Name = "Button16"
         Me.Button16.Size = New System.Drawing.Size(185, 28)
         Me.Button16.TabIndex = 8
@@ -2494,7 +2494,7 @@ Partial Class MainForm
         Me.Button15.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button15.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button15.Location = New System.Drawing.Point(33, 384)
+        Me.Button15.Location = New System.Drawing.Point(33, 504)
         Me.Button15.Name = "Button15"
         Me.Button15.Size = New System.Drawing.Size(185, 28)
         Me.Button15.TabIndex = 8
@@ -2527,7 +2527,7 @@ Partial Class MainForm
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 84.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 121.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(250, 314)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(250, 434)
         Me.TableLayoutPanel1.TabIndex = 9
         '
         'Label15
@@ -2545,7 +2545,7 @@ Partial Class MainForm
         Me.Label21.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label21.Location = New System.Drawing.Point(3, 201)
         Me.Label21.Name = "Label21"
-        Me.Label21.Size = New System.Drawing.Size(92, 121)
+        Me.Label21.Size = New System.Drawing.Size(92, 233)
         Me.Label21.TabIndex = 3
         Me.Label21.Text = "Description:"
         Me.Label21.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2617,7 +2617,7 @@ Partial Class MainForm
         Me.Label20.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label20.Location = New System.Drawing.Point(101, 201)
         Me.Label20.Name = "Label20"
-        Me.Label20.Size = New System.Drawing.Size(146, 121)
+        Me.Label20.Size = New System.Drawing.Size(146, 233)
         Me.Label20.TabIndex = 6
         Me.Label20.Text = "imgDesc"
         '

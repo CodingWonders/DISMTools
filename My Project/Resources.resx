@@ -918,6 +918,18 @@ AppX package addition
 Image mounting
 - You don't need to click "List indexes" to get a glance of all indexes of an image anymore. They are now automatically shown as soon as you specify an existing image</value>
   </data>
+  <data name="action_testing_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\menus\action_testing_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="action_testing_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\menus\action_testing_light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="edit_action_props_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\menus\edit_action_props_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="edit_action_props_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\menus\edit_action_props_light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="gh_repo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\about\gh_repo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

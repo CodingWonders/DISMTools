@@ -117,4 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="TextBox1.Text" xml:space="preserve">
+    <value>Adding packages to the mounted image...
+- Package source: C:\w100-glb
+- Addition operation: selective
+- Ignore applicability checks? No
+- Prevent package addition if online actions need to be performed? No
+- Commit image after operations are done? Yes
+Enumerating packages to add. Please wait...
+Total number of packages: 128
+
+Processing 128 packages...
+Package 1 of 128</value>
+  </data>
+  <data name="Label13.Text" xml:space="preserve">
+    <value>Specify the log settings and click Next. Depending on the content level you specify, we will log more or less information. This setting can be configured at any time in the "Logs" section in Tools &gt; Options</value>
+  </data>
+  <data name="Label17.Text" xml:space="preserve">
+    <value>If a module you want to install isn't listed here, it may not be compatible with the version of this software, and updating might help.
+
+You can perform module management at any time in the "Modules" section in Tools &gt; Options, and configure more of modules' settings.</value>
+  </data>
 </root>

@@ -688,6 +688,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo.ico" />
+    <None Include="Resources\menus\edit_action_props_dark.png" />
+    <None Include="Resources\menus\edit_action_props_light.png" />
+    <None Include="Resources\menus\action_testing_light.png" />
+    <None Include="Resources\menus\action_testing_dark.png" />
     <None Include="Resources\about\subreddit.png" />
     <None Include="Resources\about\gh_repo.png" />
     <None Include="Resources\logo_preview.png" />
