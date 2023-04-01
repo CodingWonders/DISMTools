@@ -1153,10 +1153,11 @@ Public Class MainForm
                         End If
                         Dim ImageInfoCollection As DismImageInfoCollection = DismApi.GetImageInfo(MountedImageImgFiles(x))
                         For Each imageInfo As DismImageInfo In ImageInfoCollection
-                            Label17.Text = imageInfo.ProductVersion.ToString()
-                            Label18.Text = imageInfo.ImageName
-                            Label20.Text = imageInfo.ImageDescription
-                            Exit For
+                            If imageInfo.ImageIndex = MountedImageImgIndexes(x) Then
+                                Label17.Text = imageInfo.ProductVersion.ToString()
+                                Label18.Text = imageInfo.ImageName
+                                Label20.Text = imageInfo.ImageDescription
+                            End If
                         Next
                         RemountImageWithWritePermissionsToolStripMenuItem.Enabled = If(MountedImageMountedReWr(x) = 0, False, True)
                         Exit For
@@ -1349,28 +1350,29 @@ Public Class MainForm
                         If MountedImageImgFiles(x) = MountDir Then
                             Dim ImageInfoCollection As DismImageInfoCollection = DismApi.GetImageInfo(MountedImageImgFiles(x))
                             For Each imageInfo As DismImageInfo In ImageInfoCollection
-                                imgMountedName = imageInfo.ImageName
-                                imgMountedDesc = imageInfo.ImageDescription
-                                imgHal = If(Not imageInfo.Hal = "", imageInfo.Hal, "Undefined by the image")
-                                imgSPBuild = imageInfo.ProductVersion.Revision
-                                imgSPLvl = imageInfo.SpLevel
-                                imgEdition = imageInfo.EditionId
-                                imgPType = imageInfo.ProductType
-                                imgPSuite = imageInfo.ProductSuite
-                                imgSysRoot = imageInfo.SystemRoot
-                                For Each imageLang In imageInfo.Languages
-                                    imgLangs &= imageLang.Name & If(imageInfo.DefaultLanguage.Name = imageLang.Name, " (default)", "") & ", "
-                                Next
-                                Dim langArr() As Char = imgLangs.ToCharArray()
-                                langArr(langArr.Count - 2) = ""
-                                imgLangs = New String(langArr)
-                                imgFormat = Path.GetExtension(MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper() & " file"
-                                imgRW = If(MountedImageMountedReWr(x) = 0, "Yes", "No")
-                                imgDirs = imageInfo.CustomizedInfo.DirectoryCount
-                                imgFiles = imageInfo.CustomizedInfo.FileCount
-                                imgCreation = imageInfo.CustomizedInfo.CreatedTime
-                                imgModification = imageInfo.CustomizedInfo.ModifiedTime
-                                Exit For
+                                If imageInfo.ImageIndex = MountedImageImgIndexes(x) Then
+                                    imgMountedName = imageInfo.ImageName
+                                    imgMountedDesc = imageInfo.ImageDescription
+                                    imgHal = If(Not imageInfo.Hal = "", imageInfo.Hal, "Undefined by the image")
+                                    imgSPBuild = imageInfo.ProductVersion.Revision
+                                    imgSPLvl = imageInfo.SpLevel
+                                    imgEdition = imageInfo.EditionId
+                                    imgPType = imageInfo.ProductType
+                                    imgPSuite = imageInfo.ProductSuite
+                                    imgSysRoot = imageInfo.SystemRoot
+                                    For Each imageLang In imageInfo.Languages
+                                        imgLangs &= imageLang.Name & If(imageInfo.DefaultLanguage.Name = imageLang.Name, " (default)", "") & ", "
+                                    Next
+                                    Dim langArr() As Char = imgLangs.ToCharArray()
+                                    langArr(langArr.Count - 2) = ""
+                                    imgLangs = New String(langArr)
+                                    imgFormat = Path.GetExtension(MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper() & " file"
+                                    imgRW = If(MountedImageMountedReWr(x) = 0, "Yes", "No")
+                                    imgDirs = imageInfo.CustomizedInfo.DirectoryCount
+                                    imgFiles = imageInfo.CustomizedInfo.FileCount
+                                    imgCreation = imageInfo.CustomizedInfo.CreatedTime
+                                    imgModification = imageInfo.CustomizedInfo.ModifiedTime
+                                End If
                             Next
                         End If
                     Next
