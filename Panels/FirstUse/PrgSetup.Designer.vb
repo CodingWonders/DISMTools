@@ -37,53 +37,53 @@ Partial Class PrgSetup
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.CustomizationPanel = New System.Windows.Forms.Panel()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.Label6 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.ComboBox2 = New System.Windows.Forms.ComboBox()
+        Me.Label8 = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.ComboBox2 = New System.Windows.Forms.ComboBox()
-        Me.Label9 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Panel3 = New System.Windows.Forms.Panel()
-        Me.ComboBox3 = New System.Windows.Forms.ComboBox()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.ComboBox3 = New System.Windows.Forms.ComboBox()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.Label6 = New System.Windows.Forms.Label()
         Me.LogsPanel = New System.Windows.Forms.Panel()
-        Me.Label13 = New System.Windows.Forms.Label()
-        Me.Label14 = New System.Windows.Forms.Label()
+        Me.Panel4 = New System.Windows.Forms.Panel()
+        Me.Label16 = New System.Windows.Forms.Label()
+        Me.TrackBar1 = New System.Windows.Forms.TrackBar()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.Button2 = New System.Windows.Forms.Button()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.Label10 = New System.Windows.Forms.Label()
-        Me.TextBox2 = New System.Windows.Forms.TextBox()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.Button2 = New System.Windows.Forms.Button()
-        Me.TrackBar1 = New System.Windows.Forms.TrackBar()
-        Me.Panel4 = New System.Windows.Forms.Panel()
-        Me.Label11 = New System.Windows.Forms.Label()
-        Me.Label16 = New System.Windows.Forms.Label()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.Label14 = New System.Windows.Forms.Label()
         Me.ModulesPanel = New System.Windows.Forms.Panel()
-        Me.Label18 = New System.Windows.Forms.Label()
-        Me.Label19 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Label15 = New System.Windows.Forms.Label()
         Me.Label12 = New System.Windows.Forms.Label()
         Me.Button3 = New System.Windows.Forms.Button()
-        Me.Label15 = New System.Windows.Forms.Label()
         Me.Button4 = New System.Windows.Forms.Button()
         Me.Label17 = New System.Windows.Forms.Label()
+        Me.Label18 = New System.Windows.Forms.Label()
+        Me.Label19 = New System.Windows.Forms.Label()
         Me.FinishPanel = New System.Windows.Forms.Panel()
-        Me.Label23 = New System.Windows.Forms.Label()
-        Me.Label24 = New System.Windows.Forms.Label()
-        Me.Label20 = New System.Windows.Forms.Label()
-        Me.Label21 = New System.Windows.Forms.Label()
-        Me.Button5 = New System.Windows.Forms.Button()
-        Me.Label25 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
         Me.Label26 = New System.Windows.Forms.Label()
         Me.Label27 = New System.Windows.Forms.Label()
         Me.Button6 = New System.Windows.Forms.Button()
         Me.Button7 = New System.Windows.Forms.Button()
+        Me.Button5 = New System.Windows.Forms.Button()
+        Me.Label25 = New System.Windows.Forms.Label()
+        Me.Label20 = New System.Windows.Forms.Label()
         Me.Label22 = New System.Windows.Forms.Label()
+        Me.Label21 = New System.Windows.Forms.Label()
+        Me.Label23 = New System.Windows.Forms.Label()
+        Me.Label24 = New System.Windows.Forms.Label()
         Me.wndControlPanel.SuspendLayout()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -93,11 +93,11 @@ Partial Class PrgSetup
         Me.CustomizationPanel.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Panel1.SuspendLayout()
-        Me.Panel2.SuspendLayout()
         Me.Panel3.SuspendLayout()
+        Me.Panel2.SuspendLayout()
         Me.LogsPanel.SuspendLayout()
-        CType(Me.TrackBar1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel4.SuspendLayout()
+        CType(Me.TrackBar1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ModulesPanel.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
         Me.FinishPanel.SuspendLayout()
@@ -259,27 +259,6 @@ Partial Class PrgSetup
         Me.CustomizationPanel.Size = New System.Drawing.Size(960, 616)
         Me.CustomizationPanel.TabIndex = 1
         '
-        'Label5
-        '
-        Me.Label5.AutoEllipsis = True
-        Me.Label5.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(56, 76)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(798, 68)
-        Me.Label5.TabIndex = 1
-        Me.Label5.Text = "Make it yours. Customize this program to your liking and click Next. These settin" & _
-    "gs can be configured later in the ""Personalization"" section in Tools > Options"
-        '
-        'Label6
-        '
-        Me.Label6.AutoSize = True
-        Me.Label6.Font = New System.Drawing.Font("Segoe UI Variable Display Semib", 18.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.Location = New System.Drawing.Point(24, 24)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(276, 32)
-        Me.Label6.TabIndex = 0
-        Me.Label6.Text = "Customize this program"
-        '
         'TableLayoutPanel1
         '
         Me.TableLayoutPanel1.ColumnCount = 2
@@ -299,6 +278,44 @@ Partial Class PrgSetup
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 82.7957!))
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(818, 372)
         Me.TableLayoutPanel1.TabIndex = 2
+        '
+        'Label9
+        '
+        Me.Label9.AutoEllipsis = True
+        Me.Label9.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label9.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label9.Location = New System.Drawing.Point(3, 64)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(176, 308)
+        Me.Label9.TabIndex = 5
+        Me.Label9.Text = "Log window font:"
+        Me.Label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'ComboBox2
+        '
+        Me.ComboBox2.BackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(49, Byte), Integer))
+        Me.ComboBox2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ComboBox2.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ComboBox2.ForeColor = System.Drawing.Color.White
+        Me.ComboBox2.FormattingEnabled = True
+        Me.ComboBox2.Items.AddRange(New Object() {"Use system setting", "English", "Spanish"})
+        Me.ComboBox2.Location = New System.Drawing.Point(185, 35)
+        Me.ComboBox2.Name = "ComboBox2"
+        Me.ComboBox2.Size = New System.Drawing.Size(630, 28)
+        Me.ComboBox2.TabIndex = 4
+        Me.ComboBox2.Text = "Use system setting"
+        '
+        'Label8
+        '
+        Me.Label8.AutoEllipsis = True
+        Me.Label8.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label8.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label8.Location = New System.Drawing.Point(3, 32)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(176, 32)
+        Me.Label8.TabIndex = 3
+        Me.Label8.Text = "Language:"
+        Me.Label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'Label7
         '
@@ -326,44 +343,6 @@ Partial Class PrgSetup
         Me.ComboBox1.TabIndex = 2
         Me.ComboBox1.Text = "Use system setting"
         '
-        'Label8
-        '
-        Me.Label8.AutoEllipsis = True
-        Me.Label8.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label8.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label8.Location = New System.Drawing.Point(3, 32)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(176, 32)
-        Me.Label8.TabIndex = 3
-        Me.Label8.Text = "Language:"
-        Me.Label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'ComboBox2
-        '
-        Me.ComboBox2.BackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(49, Byte), Integer))
-        Me.ComboBox2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ComboBox2.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ComboBox2.ForeColor = System.Drawing.Color.White
-        Me.ComboBox2.FormattingEnabled = True
-        Me.ComboBox2.Items.AddRange(New Object() {"Use system setting", "English", "Spanish"})
-        Me.ComboBox2.Location = New System.Drawing.Point(185, 35)
-        Me.ComboBox2.Name = "ComboBox2"
-        Me.ComboBox2.Size = New System.Drawing.Size(630, 28)
-        Me.ComboBox2.TabIndex = 4
-        Me.ComboBox2.Text = "Use system setting"
-        '
-        'Label9
-        '
-        Me.Label9.AutoEllipsis = True
-        Me.Label9.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label9.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label9.Location = New System.Drawing.Point(3, 64)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(176, 308)
-        Me.Label9.TabIndex = 5
-        Me.Label9.Text = "Log window font:"
-        Me.Label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
         'Panel1
         '
         Me.Panel1.Controls.Add(Me.Panel3)
@@ -374,15 +353,6 @@ Partial Class PrgSetup
         Me.Panel1.Size = New System.Drawing.Size(630, 302)
         Me.Panel1.TabIndex = 6
         '
-        'Panel2
-        '
-        Me.Panel2.Controls.Add(Me.ComboBox3)
-        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel2.Location = New System.Drawing.Point(0, 0)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(630, 33)
-        Me.Panel2.TabIndex = 0
-        '
         'Panel3
         '
         Me.Panel3.Controls.Add(Me.TextBox1)
@@ -391,18 +361,6 @@ Partial Class PrgSetup
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Size = New System.Drawing.Size(630, 269)
         Me.Panel3.TabIndex = 1
-        '
-        'ComboBox3
-        '
-        Me.ComboBox3.BackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(49, Byte), Integer))
-        Me.ComboBox3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ComboBox3.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ComboBox3.ForeColor = System.Drawing.Color.White
-        Me.ComboBox3.FormattingEnabled = True
-        Me.ComboBox3.Location = New System.Drawing.Point(0, 0)
-        Me.ComboBox3.Name = "ComboBox3"
-        Me.ComboBox3.Size = New System.Drawing.Size(630, 28)
-        Me.ComboBox3.TabIndex = 5
         '
         'TextBox1
         '
@@ -417,6 +375,48 @@ Partial Class PrgSetup
         Me.TextBox1.Size = New System.Drawing.Size(630, 269)
         Me.TextBox1.TabIndex = 0
         Me.TextBox1.Text = resources.GetString("TextBox1.Text")
+        '
+        'Panel2
+        '
+        Me.Panel2.Controls.Add(Me.ComboBox3)
+        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel2.Location = New System.Drawing.Point(0, 0)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(630, 33)
+        Me.Panel2.TabIndex = 0
+        '
+        'ComboBox3
+        '
+        Me.ComboBox3.BackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(49, Byte), Integer))
+        Me.ComboBox3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ComboBox3.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ComboBox3.ForeColor = System.Drawing.Color.White
+        Me.ComboBox3.FormattingEnabled = True
+        Me.ComboBox3.Location = New System.Drawing.Point(0, 0)
+        Me.ComboBox3.Name = "ComboBox3"
+        Me.ComboBox3.Size = New System.Drawing.Size(630, 28)
+        Me.ComboBox3.TabIndex = 5
+        '
+        'Label5
+        '
+        Me.Label5.AutoEllipsis = True
+        Me.Label5.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label5.Location = New System.Drawing.Point(56, 76)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(798, 68)
+        Me.Label5.TabIndex = 1
+        Me.Label5.Text = "Make it yours. Customize this program to your liking and click Next. These settin" & _
+    "gs can be configured later in the ""Personalization"" section in Tools > Options"
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Font = New System.Drawing.Font("Segoe UI Variable Display Semib", 18.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label6.Location = New System.Drawing.Point(24, 24)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(276, 32)
+        Me.Label6.TabIndex = 0
+        Me.Label6.Text = "Customize this program"
         '
         'LogsPanel
         '
@@ -434,25 +434,81 @@ Partial Class PrgSetup
         Me.LogsPanel.Size = New System.Drawing.Size(960, 616)
         Me.LogsPanel.TabIndex = 2
         '
-        'Label13
+        'Panel4
         '
-        Me.Label13.AutoEllipsis = True
-        Me.Label13.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label13.Location = New System.Drawing.Point(56, 76)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(798, 68)
-        Me.Label13.TabIndex = 1
-        Me.Label13.Text = resources.GetString("Label13.Text")
+        Me.Panel4.Controls.Add(Me.Label16)
+        Me.Panel4.Controls.Add(Me.TrackBar1)
+        Me.Panel4.Controls.Add(Me.Label11)
+        Me.Panel4.Location = New System.Drawing.Point(56, 285)
+        Me.Panel4.Name = "Panel4"
+        Me.Panel4.Size = New System.Drawing.Size(811, 104)
+        Me.Panel4.TabIndex = 6
         '
-        'Label14
+        'Label16
         '
-        Me.Label14.AutoSize = True
-        Me.Label14.Font = New System.Drawing.Font("Segoe UI Variable Display Semib", 18.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label14.Location = New System.Drawing.Point(24, 24)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(589, 32)
-        Me.Label14.TabIndex = 0
-        Me.Label14.Text = "What should we log when you perform an operation?"
+        Me.Label16.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label16.Location = New System.Drawing.Point(62, 36)
+        Me.Label16.Name = "Label16"
+        Me.Label16.Size = New System.Drawing.Size(736, 57)
+        Me.Label16.TabIndex = 6
+        Me.Label16.Text = "The log file should display errors, warnings and information messages after perfo" & _
+    "rming an image operation."
+        '
+        'TrackBar1
+        '
+        Me.TrackBar1.BackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(49, Byte), Integer))
+        Me.TrackBar1.LargeChange = 1
+        Me.TrackBar1.Location = New System.Drawing.Point(0, 0)
+        Me.TrackBar1.Maximum = 3
+        Me.TrackBar1.Name = "TrackBar1"
+        Me.TrackBar1.Orientation = System.Windows.Forms.Orientation.Vertical
+        Me.TrackBar1.Size = New System.Drawing.Size(45, 104)
+        Me.TrackBar1.TabIndex = 5
+        Me.TrackBar1.TickStyle = System.Windows.Forms.TickStyle.Both
+        Me.TrackBar1.Value = 2
+        '
+        'Label11
+        '
+        Me.Label11.AutoEllipsis = True
+        Me.Label11.AutoSize = True
+        Me.Label11.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label11.Location = New System.Drawing.Point(51, 6)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(378, 20)
+        Me.Label11.TabIndex = 1
+        Me.Label11.Text = "Errors, warnings and information messages (Log level 3)"
+        '
+        'Button2
+        '
+        Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.Button2.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button2.Location = New System.Drawing.Point(572, 237)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(295, 27)
+        Me.Button2.TabIndex = 4
+        Me.Button2.Text = "Use default log directory"
+        Me.Button2.UseVisualStyleBackColor = True
+        '
+        'Button1
+        '
+        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.Button1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button1.Location = New System.Drawing.Point(792, 204)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(75, 27)
+        Me.Button1.TabIndex = 4
+        Me.Button1.Text = "Browse..."
+        Me.Button1.UseVisualStyleBackColor = True
+        '
+        'TextBox2
+        '
+        Me.TextBox2.BackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(49, Byte), Integer))
+        Me.TextBox2.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TextBox2.ForeColor = System.Drawing.Color.White
+        Me.TextBox2.Location = New System.Drawing.Point(77, 204)
+        Me.TextBox2.Name = "TextBox2"
+        Me.TextBox2.Size = New System.Drawing.Size(709, 27)
+        Me.TextBox2.TabIndex = 3
         '
         'CheckBox1
         '
@@ -478,81 +534,25 @@ Partial Class PrgSetup
         Me.Label10.TabIndex = 1
         Me.Label10.Text = "Log directory:"
         '
-        'TextBox2
+        'Label13
         '
-        Me.TextBox2.BackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(49, Byte), Integer))
-        Me.TextBox2.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox2.ForeColor = System.Drawing.Color.White
-        Me.TextBox2.Location = New System.Drawing.Point(77, 204)
-        Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(709, 27)
-        Me.TextBox2.TabIndex = 3
+        Me.Label13.AutoEllipsis = True
+        Me.Label13.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label13.Location = New System.Drawing.Point(56, 76)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(798, 68)
+        Me.Label13.TabIndex = 1
+        Me.Label13.Text = resources.GetString("Label13.Text")
         '
-        'Button1
+        'Label14
         '
-        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.Button1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button1.Location = New System.Drawing.Point(792, 204)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 27)
-        Me.Button1.TabIndex = 4
-        Me.Button1.Text = "Browse..."
-        Me.Button1.UseVisualStyleBackColor = True
-        '
-        'Button2
-        '
-        Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.Button2.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button2.Location = New System.Drawing.Point(572, 237)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(295, 27)
-        Me.Button2.TabIndex = 4
-        Me.Button2.Text = "Use default log directory"
-        Me.Button2.UseVisualStyleBackColor = True
-        '
-        'TrackBar1
-        '
-        Me.TrackBar1.BackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(49, Byte), Integer))
-        Me.TrackBar1.LargeChange = 1
-        Me.TrackBar1.Location = New System.Drawing.Point(0, 0)
-        Me.TrackBar1.Maximum = 3
-        Me.TrackBar1.Name = "TrackBar1"
-        Me.TrackBar1.Orientation = System.Windows.Forms.Orientation.Vertical
-        Me.TrackBar1.Size = New System.Drawing.Size(45, 104)
-        Me.TrackBar1.TabIndex = 5
-        Me.TrackBar1.TickStyle = System.Windows.Forms.TickStyle.Both
-        Me.TrackBar1.Value = 2
-        '
-        'Panel4
-        '
-        Me.Panel4.Controls.Add(Me.Label16)
-        Me.Panel4.Controls.Add(Me.TrackBar1)
-        Me.Panel4.Controls.Add(Me.Label11)
-        Me.Panel4.Location = New System.Drawing.Point(56, 285)
-        Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(811, 104)
-        Me.Panel4.TabIndex = 6
-        '
-        'Label11
-        '
-        Me.Label11.AutoEllipsis = True
-        Me.Label11.AutoSize = True
-        Me.Label11.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label11.Location = New System.Drawing.Point(51, 6)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(378, 20)
-        Me.Label11.TabIndex = 1
-        Me.Label11.Text = "Errors, warnings and information messages (Log level 3)"
-        '
-        'Label16
-        '
-        Me.Label16.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label16.Location = New System.Drawing.Point(62, 36)
-        Me.Label16.Name = "Label16"
-        Me.Label16.Size = New System.Drawing.Size(736, 57)
-        Me.Label16.TabIndex = 6
-        Me.Label16.Text = "The log file should display errors, warnings and information messages after perfo" & _
-    "rming an image operation."
+        Me.Label14.AutoSize = True
+        Me.Label14.Font = New System.Drawing.Font("Segoe UI Variable Display Semib", 18.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label14.Location = New System.Drawing.Point(24, 24)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(589, 32)
+        Me.Label14.TabIndex = 0
+        Me.Label14.Text = "What should we log when you perform an operation?"
         '
         'ModulesPanel
         '
@@ -565,6 +565,82 @@ Partial Class PrgSetup
         Me.ModulesPanel.Name = "ModulesPanel"
         Me.ModulesPanel.Size = New System.Drawing.Size(960, 616)
         Me.ModulesPanel.TabIndex = 3
+        '
+        'TableLayoutPanel2
+        '
+        Me.TableLayoutPanel2.ColumnCount = 2
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 83.94608!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.05392!))
+        Me.TableLayoutPanel2.Controls.Add(Me.Label15, 0, 1)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label12, 0, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.Button3, 1, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.Button4, 1, 1)
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(56, 149)
+        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
+        Me.TableLayoutPanel2.RowCount = 2
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(816, 65)
+        Me.TableLayoutPanel2.TabIndex = 2
+        '
+        'Label15
+        '
+        Me.Label15.AutoEllipsis = True
+        Me.Label15.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label15.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label15.Location = New System.Drawing.Point(3, 32)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(679, 33)
+        Me.Label15.TabIndex = 4
+        Me.Label15.Text = "Module for Windows Assessment and Deployment Kit (ADK) compatibility"
+        Me.Label15.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Label12
+        '
+        Me.Label12.AutoEllipsis = True
+        Me.Label12.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label12.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label12.Location = New System.Drawing.Point(3, 0)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(679, 32)
+        Me.Label12.TabIndex = 2
+        Me.Label12.Text = "Module for wimlib-imagex compatibility"
+        Me.Label12.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Button3
+        '
+        Me.Button3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.Button3.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button3.Location = New System.Drawing.Point(688, 3)
+        Me.Button3.Name = "Button3"
+        Me.Button3.Size = New System.Drawing.Size(125, 26)
+        Me.Button3.TabIndex = 3
+        Me.Button3.Text = "Install"
+        Me.Button3.UseVisualStyleBackColor = True
+        '
+        'Button4
+        '
+        Me.Button4.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.Button4.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button4.Location = New System.Drawing.Point(688, 35)
+        Me.Button4.Name = "Button4"
+        Me.Button4.Size = New System.Drawing.Size(125, 27)
+        Me.Button4.TabIndex = 3
+        Me.Button4.Text = "Install"
+        Me.Button4.UseVisualStyleBackColor = True
+        '
+        'Label17
+        '
+        Me.Label17.AutoEllipsis = True
+        Me.Label17.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label17.Location = New System.Drawing.Point(56, 424)
+        Me.Label17.Name = "Label17"
+        Me.Label17.Size = New System.Drawing.Size(798, 130)
+        Me.Label17.TabIndex = 1
+        Me.Label17.Text = resources.GetString("Label17.Text")
         '
         'Label18
         '
@@ -587,82 +663,6 @@ Partial Class PrgSetup
         Me.Label19.TabIndex = 0
         Me.Label19.Text = "Extend this program"
         '
-        'TableLayoutPanel2
-        '
-        Me.TableLayoutPanel2.ColumnCount = 2
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 83.94608!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.05392!))
-        Me.TableLayoutPanel2.Controls.Add(Me.Label15, 0, 1)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label12, 0, 0)
-        Me.TableLayoutPanel2.Controls.Add(Me.Button3, 1, 0)
-        Me.TableLayoutPanel2.Controls.Add(Me.Button4, 1, 1)
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(56, 149)
-        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
-        Me.TableLayoutPanel2.RowCount = 2
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(816, 65)
-        Me.TableLayoutPanel2.TabIndex = 2
-        '
-        'Label12
-        '
-        Me.Label12.AutoEllipsis = True
-        Me.Label12.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label12.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label12.Location = New System.Drawing.Point(3, 0)
-        Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(678, 32)
-        Me.Label12.TabIndex = 2
-        Me.Label12.Text = "Module for wimlib-imagex compatibility"
-        Me.Label12.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'Button3
-        '
-        Me.Button3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.Button3.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button3.Location = New System.Drawing.Point(687, 3)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(126, 26)
-        Me.Button3.TabIndex = 3
-        Me.Button3.Text = "Install"
-        Me.Button3.UseVisualStyleBackColor = True
-        '
-        'Label15
-        '
-        Me.Label15.AutoEllipsis = True
-        Me.Label15.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label15.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label15.Location = New System.Drawing.Point(3, 32)
-        Me.Label15.Name = "Label15"
-        Me.Label15.Size = New System.Drawing.Size(678, 33)
-        Me.Label15.TabIndex = 4
-        Me.Label15.Text = "Module for Windows Assessment and Deployment Kit (ADK) compatibility"
-        Me.Label15.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'Button4
-        '
-        Me.Button4.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.Button4.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button4.Location = New System.Drawing.Point(687, 35)
-        Me.Button4.Name = "Button4"
-        Me.Button4.Size = New System.Drawing.Size(126, 27)
-        Me.Button4.TabIndex = 3
-        Me.Button4.Text = "Install"
-        Me.Button4.UseVisualStyleBackColor = True
-        '
-        'Label17
-        '
-        Me.Label17.AutoEllipsis = True
-        Me.Label17.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label17.Location = New System.Drawing.Point(56, 424)
-        Me.Label17.Name = "Label17"
-        Me.Label17.Size = New System.Drawing.Size(798, 130)
-        Me.Label17.TabIndex = 1
-        Me.Label17.Text = resources.GetString("Label17.Text")
-        '
         'FinishPanel
         '
         Me.FinishPanel.Controls.Add(Me.TableLayoutPanel3)
@@ -678,70 +678,6 @@ Partial Class PrgSetup
         Me.FinishPanel.Name = "FinishPanel"
         Me.FinishPanel.Size = New System.Drawing.Size(960, 616)
         Me.FinishPanel.TabIndex = 4
-        '
-        'Label23
-        '
-        Me.Label23.AutoEllipsis = True
-        Me.Label23.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label23.Location = New System.Drawing.Point(56, 76)
-        Me.Label23.Name = "Label23"
-        Me.Label23.Size = New System.Drawing.Size(798, 68)
-        Me.Label23.TabIndex = 1
-        Me.Label23.Text = "You have finished setting up the basics to use DISMTools the way you wanted. Clic" & _
-    "k ""Finish"", and we'll make your settings persistent."
-        '
-        'Label24
-        '
-        Me.Label24.AutoSize = True
-        Me.Label24.Font = New System.Drawing.Font("Segoe UI Variable Display Semib", 18.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label24.Location = New System.Drawing.Point(24, 24)
-        Me.Label24.Name = "Label24"
-        Me.Label24.Size = New System.Drawing.Size(211, 32)
-        Me.Label24.TabIndex = 0
-        Me.Label24.Text = "Setup is complete"
-        '
-        'Label20
-        '
-        Me.Label20.AutoEllipsis = True
-        Me.Label20.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label20.Location = New System.Drawing.Point(56, 148)
-        Me.Label20.Name = "Label20"
-        Me.Label20.Size = New System.Drawing.Size(798, 24)
-        Me.Label20.TabIndex = 1
-        Me.Label20.Text = "Is there anything else you would like to configure?"
-        '
-        'Label21
-        '
-        Me.Label21.AutoEllipsis = True
-        Me.Label21.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label21.Location = New System.Drawing.Point(56, 176)
-        Me.Label21.Name = "Label21"
-        Me.Label21.Size = New System.Drawing.Size(798, 55)
-        Me.Label21.TabIndex = 1
-        Me.Label21.Text = "The settings are more than what you've configured until now. If you wish to chang" & _
-    "e more settings, click the button below. We'll also make those settings persiste" & _
-    "nt."
-        '
-        'Button5
-        '
-        Me.Button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.Button5.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button5.Location = New System.Drawing.Point(345, 244)
-        Me.Button5.Name = "Button5"
-        Me.Button5.Size = New System.Drawing.Size(270, 36)
-        Me.Button5.TabIndex = 2
-        Me.Button5.Text = "Configure more settings"
-        Me.Button5.UseVisualStyleBackColor = True
-        '
-        'Label25
-        '
-        Me.Label25.AutoEllipsis = True
-        Me.Label25.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label25.Location = New System.Drawing.Point(56, 296)
-        Me.Label25.Name = "Label25"
-        Me.Label25.Size = New System.Drawing.Size(798, 24)
-        Me.Label25.TabIndex = 1
-        Me.Label25.Text = "Now that you've set things up, we recommend you do the following things:"
         '
         'TableLayoutPanel3
         '
@@ -809,6 +745,37 @@ Partial Class PrgSetup
         Me.Button7.Text = "Check for updates"
         Me.Button7.UseVisualStyleBackColor = True
         '
+        'Button5
+        '
+        Me.Button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.Button5.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button5.Location = New System.Drawing.Point(345, 244)
+        Me.Button5.Name = "Button5"
+        Me.Button5.Size = New System.Drawing.Size(270, 36)
+        Me.Button5.TabIndex = 2
+        Me.Button5.Text = "Configure more settings"
+        Me.Button5.UseVisualStyleBackColor = True
+        '
+        'Label25
+        '
+        Me.Label25.AutoEllipsis = True
+        Me.Label25.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label25.Location = New System.Drawing.Point(56, 296)
+        Me.Label25.Name = "Label25"
+        Me.Label25.Size = New System.Drawing.Size(798, 24)
+        Me.Label25.TabIndex = 1
+        Me.Label25.Text = "Now that you've set things up, we recommend you do the following things:"
+        '
+        'Label20
+        '
+        Me.Label20.AutoEllipsis = True
+        Me.Label20.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label20.Location = New System.Drawing.Point(56, 148)
+        Me.Label20.Name = "Label20"
+        Me.Label20.Size = New System.Drawing.Size(798, 24)
+        Me.Label20.TabIndex = 1
+        Me.Label20.Text = "Is there anything else you would like to configure?"
+        '
         'Label22
         '
         Me.Label22.AutoEllipsis = True
@@ -818,6 +785,39 @@ Partial Class PrgSetup
         Me.Label22.Size = New System.Drawing.Size(798, 55)
         Me.Label22.TabIndex = 1
         Me.Label22.Text = "You can perform these steps at any time."
+        '
+        'Label21
+        '
+        Me.Label21.AutoEllipsis = True
+        Me.Label21.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label21.Location = New System.Drawing.Point(56, 176)
+        Me.Label21.Name = "Label21"
+        Me.Label21.Size = New System.Drawing.Size(798, 55)
+        Me.Label21.TabIndex = 1
+        Me.Label21.Text = "The settings are more than what you've configured until now. If you wish to chang" & _
+    "e more settings, click the button below. We'll also make those settings persiste" & _
+    "nt."
+        '
+        'Label23
+        '
+        Me.Label23.AutoEllipsis = True
+        Me.Label23.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label23.Location = New System.Drawing.Point(56, 76)
+        Me.Label23.Name = "Label23"
+        Me.Label23.Size = New System.Drawing.Size(798, 68)
+        Me.Label23.TabIndex = 1
+        Me.Label23.Text = "You have finished setting up the basics to use DISMTools the way you wanted. Clic" & _
+    "k ""Finish"", and we'll make your settings persistent."
+        '
+        'Label24
+        '
+        Me.Label24.AutoSize = True
+        Me.Label24.Font = New System.Drawing.Font("Segoe UI Variable Display Semib", 18.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label24.Location = New System.Drawing.Point(24, 24)
+        Me.Label24.Name = "Label24"
+        Me.Label24.Size = New System.Drawing.Size(211, 32)
+        Me.Label24.TabIndex = 0
+        Me.Label24.Text = "Setup is complete"
         '
         'PrgSetup
         '
@@ -848,14 +848,14 @@ Partial Class PrgSetup
         Me.CustomizationPanel.PerformLayout()
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
-        Me.Panel2.ResumeLayout(False)
         Me.Panel3.ResumeLayout(False)
         Me.Panel3.PerformLayout()
+        Me.Panel2.ResumeLayout(False)
         Me.LogsPanel.ResumeLayout(False)
         Me.LogsPanel.PerformLayout()
-        CType(Me.TrackBar1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel4.ResumeLayout(False)
         Me.Panel4.PerformLayout()
+        CType(Me.TrackBar1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ModulesPanel.ResumeLayout(False)
         Me.ModulesPanel.PerformLayout()
         Me.TableLayoutPanel2.ResumeLayout(False)
