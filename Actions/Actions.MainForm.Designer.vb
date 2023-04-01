@@ -23,18 +23,254 @@ Partial Class Actions
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Actions))
+        Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
+        Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ViewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TestingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ActionToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.HelpTopicsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ActionsReferenceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.AboutDISMToolsActionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Scintilla1 = New ScintillaNET.Scintilla()
+        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
+        Me.TreeView1 = New System.Windows.Forms.TreeView()
+        Me.ActionNotSelected = New System.Windows.Forms.Panel()
+        Me.ActionProperties = New System.Windows.Forms.Panel()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
+        Me.MenuStrip1.SuspendLayout()
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer1.Panel1.SuspendLayout()
+        Me.SplitContainer1.Panel2.SuspendLayout()
+        Me.SplitContainer1.SuspendLayout()
+        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer2.Panel1.SuspendLayout()
+        Me.SplitContainer2.Panel2.SuspendLayout()
+        Me.SplitContainer2.SuspendLayout()
+        Me.ActionNotSelected.SuspendLayout()
         Me.SuspendLayout()
+        '
+        'MenuStrip1
+        '
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.EditToolStripMenuItem, Me.ViewToolStripMenuItem, Me.ActionToolStripMenuItem, Me.TestingToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.HelpToolStripMenuItem})
+        Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.MenuStrip1.Name = "MenuStrip1"
+        Me.MenuStrip1.Size = New System.Drawing.Size(1264, 24)
+        Me.MenuStrip1.TabIndex = 0
+        Me.MenuStrip1.Text = "MenuStrip1"
+        '
+        'FileToolStripMenuItem
+        '
+        Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
+        Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
+        Me.FileToolStripMenuItem.Text = "File"
+        '
+        'EditToolStripMenuItem
+        '
+        Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
+        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(39, 20)
+        Me.EditToolStripMenuItem.Text = "Edit"
+        '
+        'ViewToolStripMenuItem
+        '
+        Me.ViewToolStripMenuItem.Name = "ViewToolStripMenuItem"
+        Me.ViewToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
+        Me.ViewToolStripMenuItem.Text = "View"
+        '
+        'TestingToolStripMenuItem
+        '
+        Me.TestingToolStripMenuItem.Name = "TestingToolStripMenuItem"
+        Me.TestingToolStripMenuItem.Size = New System.Drawing.Size(56, 20)
+        Me.TestingToolStripMenuItem.Text = "Testing"
+        '
+        'ToolsToolStripMenuItem
+        '
+        Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
+        Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(46, 20)
+        Me.ToolsToolStripMenuItem.Text = "Tools"
+        '
+        'HelpToolStripMenuItem
+        '
+        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HelpTopicsToolStripMenuItem, Me.ActionsReferenceToolStripMenuItem, Me.ToolStripSeparator1, Me.AboutDISMToolsActionsToolStripMenuItem})
+        Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
+        Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
+        Me.HelpToolStripMenuItem.Text = "Help"
+        '
+        'ActionToolStripMenuItem
+        '
+        Me.ActionToolStripMenuItem.Name = "ActionToolStripMenuItem"
+        Me.ActionToolStripMenuItem.Size = New System.Drawing.Size(54, 20)
+        Me.ActionToolStripMenuItem.Text = "Action"
+        '
+        'HelpTopicsToolStripMenuItem
+        '
+        Me.HelpTopicsToolStripMenuItem.Name = "HelpTopicsToolStripMenuItem"
+        Me.HelpTopicsToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1
+        Me.HelpTopicsToolStripMenuItem.Size = New System.Drawing.Size(215, 22)
+        Me.HelpTopicsToolStripMenuItem.Text = "Help Topics"
+        '
+        'ActionsReferenceToolStripMenuItem
+        '
+        Me.ActionsReferenceToolStripMenuItem.Name = "ActionsReferenceToolStripMenuItem"
+        Me.ActionsReferenceToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.F1), System.Windows.Forms.Keys)
+        Me.ActionsReferenceToolStripMenuItem.Size = New System.Drawing.Size(215, 22)
+        Me.ActionsReferenceToolStripMenuItem.Text = "Actions Reference"
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(212, 6)
+        '
+        'AboutDISMToolsActionsToolStripMenuItem
+        '
+        Me.AboutDISMToolsActionsToolStripMenuItem.Name = "AboutDISMToolsActionsToolStripMenuItem"
+        Me.AboutDISMToolsActionsToolStripMenuItem.Size = New System.Drawing.Size(215, 22)
+        Me.AboutDISMToolsActionsToolStripMenuItem.Text = "About DISMTools Actions"
+        '
+        'Scintilla1
+        '
+        Me.Scintilla1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Scintilla1.IndentationGuides = ScintillaNET.IndentView.LookBoth
+        Me.Scintilla1.Lexer = ScintillaNET.Lexer.Vb
+        Me.Scintilla1.Location = New System.Drawing.Point(0, 0)
+        Me.Scintilla1.Name = "Scintilla1"
+        Me.Scintilla1.Size = New System.Drawing.Size(1004, 632)
+        Me.Scintilla1.TabIndex = 3
+        Me.Scintilla1.UseTabs = True
+        '
+        'SplitContainer1
+        '
+        Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1
+        Me.SplitContainer1.Location = New System.Drawing.Point(0, 49)
+        Me.SplitContainer1.Name = "SplitContainer1"
+        '
+        'SplitContainer1.Panel1
+        '
+        Me.SplitContainer1.Panel1.Controls.Add(Me.SplitContainer2)
+        '
+        'SplitContainer1.Panel2
+        '
+        Me.SplitContainer1.Panel2.Controls.Add(Me.Scintilla1)
+        Me.SplitContainer1.Size = New System.Drawing.Size(1264, 632)
+        Me.SplitContainer1.SplitterDistance = 256
+        Me.SplitContainer1.TabIndex = 5
+        '
+        'SplitContainer2
+        '
+        Me.SplitContainer2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer2.Location = New System.Drawing.Point(0, 0)
+        Me.SplitContainer2.Name = "SplitContainer2"
+        Me.SplitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal
+        '
+        'SplitContainer2.Panel1
+        '
+        Me.SplitContainer2.Panel1.Controls.Add(Me.TreeView1)
+        '
+        'SplitContainer2.Panel2
+        '
+        Me.SplitContainer2.Panel2.Controls.Add(Me.ActionNotSelected)
+        Me.SplitContainer2.Panel2.Controls.Add(Me.ActionProperties)
+        Me.SplitContainer2.Size = New System.Drawing.Size(256, 632)
+        Me.SplitContainer2.SplitterDistance = 315
+        Me.SplitContainer2.TabIndex = 0
+        '
+        'TreeView1
+        '
+        Me.TreeView1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TreeView1.Location = New System.Drawing.Point(0, 0)
+        Me.TreeView1.Name = "TreeView1"
+        Me.TreeView1.Size = New System.Drawing.Size(256, 315)
+        Me.TreeView1.TabIndex = 0
+        '
+        'ActionNotSelected
+        '
+        Me.ActionNotSelected.Controls.Add(Me.Label1)
+        Me.ActionNotSelected.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ActionNotSelected.Location = New System.Drawing.Point(0, 0)
+        Me.ActionNotSelected.Name = "ActionNotSelected"
+        Me.ActionNotSelected.Size = New System.Drawing.Size(256, 313)
+        Me.ActionNotSelected.TabIndex = 0
+        '
+        'ActionProperties
+        '
+        Me.ActionProperties.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ActionProperties.Location = New System.Drawing.Point(0, 0)
+        Me.ActionProperties.Name = "ActionProperties"
+        Me.ActionProperties.Size = New System.Drawing.Size(256, 313)
+        Me.ActionProperties.TabIndex = 0
+        '
+        'Label1
+        '
+        Me.Label1.AutoEllipsis = True
+        Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label1.Location = New System.Drawing.Point(0, 0)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(256, 313)
+        Me.Label1.TabIndex = 0
+        Me.Label1.Text = "Select an action file to show its details."
+        Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'ToolStrip1
+        '
+        Me.ToolStrip1.Location = New System.Drawing.Point(0, 24)
+        Me.ToolStrip1.Name = "ToolStrip1"
+        Me.ToolStrip1.Size = New System.Drawing.Size(1264, 25)
+        Me.ToolStrip1.TabIndex = 1
+        Me.ToolStrip1.Text = "ToolStrip1"
         '
         'Actions
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1008, 561)
+        Me.ClientSize = New System.Drawing.Size(1264, 681)
+        Me.Controls.Add(Me.SplitContainer1)
+        Me.Controls.Add(Me.ToolStrip1)
+        Me.Controls.Add(Me.MenuStrip1)
+        Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.MainMenuStrip = Me.MenuStrip1
         Me.MinimumSize = New System.Drawing.Size(1024, 600)
         Me.Name = "Actions"
         Me.Text = "DISMTools action editor"
+        Me.MenuStrip1.ResumeLayout(False)
+        Me.MenuStrip1.PerformLayout()
+        Me.SplitContainer1.Panel1.ResumeLayout(False)
+        Me.SplitContainer1.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer1.ResumeLayout(False)
+        Me.SplitContainer2.Panel1.ResumeLayout(False)
+        Me.SplitContainer2.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer2.ResumeLayout(False)
+        Me.ActionNotSelected.ResumeLayout(False)
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
+    Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
+    Friend WithEvents FileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents EditToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ViewToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ActionToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents TestingToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents HelpToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents HelpTopicsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ActionsReferenceToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents AboutDISMToolsActionsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents Scintilla1 As ScintillaNET.Scintilla
+    Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
+    Friend WithEvents SplitContainer2 As System.Windows.Forms.SplitContainer
+    Friend WithEvents TreeView1 As System.Windows.Forms.TreeView
+    Friend WithEvents ActionNotSelected As System.Windows.Forms.Panel
+    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents ActionProperties As System.Windows.Forms.Panel
+    Friend WithEvents ToolStrip1 As System.Windows.Forms.ToolStrip
 End Class
