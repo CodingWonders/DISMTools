@@ -955,6 +955,10 @@ Public Class MainForm
                 End Select
                 ImgBW.ReportProgress(20)
                 GetImagePackages(If(session IsNot Nothing, True, False), If(session IsNot Nothing, session, Nothing))
+                If ImgBW.CancellationPending Then
+                    If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                    Exit Sub
+                End If
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -970,6 +974,10 @@ Public Class MainForm
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetImageFeatures(If(session IsNot Nothing, True, False), If(session IsNot Nothing, session, Nothing))
+                If ImgBW.CancellationPending Then
+                    If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                    Exit Sub
+                End If
                 If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") = True Then
                     Debug.WriteLine("[IsWindows8OrHigher] Returned True")
                     pbOpNums += 1
@@ -988,6 +996,10 @@ Public Class MainForm
                     End Select
                     ImgBW.ReportProgress(progressMin + progressDivs)
                     GetImageAppxPackages(If(session IsNot Nothing, True, False), If(session IsNot Nothing, session, Nothing))
+                    If ImgBW.CancellationPending Then
+                        If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                        Exit Sub
+                    End If
                 Else
                     Debug.WriteLine("[IsWindows8OrHigher] Returned False")
                 End If
@@ -1009,6 +1021,10 @@ Public Class MainForm
                     End Select
                     ImgBW.ReportProgress(progressMin + progressDivs)
                     GetImageCapabilities(If(session IsNot Nothing, True, False), If(session IsNot Nothing, session, Nothing))
+                    If ImgBW.CancellationPending Then
+                        If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                        Exit Sub
+                    End If
                 Else
                     Debug.WriteLine("[IsWindows10OrHigher] Returned False")
                 End If
@@ -1027,6 +1043,10 @@ Public Class MainForm
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetImageDrivers(If(session IsNot Nothing, True, False), If(session IsNot Nothing, session, Nothing))
+                If ImgBW.CancellationPending Then
+                    If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                    Exit Sub
+                End If
             Case 1
                 Select Case Language
                     Case 0
@@ -1828,6 +1848,10 @@ Public Class MainForm
                 Dim imgPackageInstTimeList As New List(Of String)
                 Dim PackageCollection As DismPackageCollection = DismApi.GetPackages(session)
                 For Each package As DismPackage In PackageCollection
+                    If ImgBW.CancellationPending Then
+                        If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                        Exit Sub
+                    End If
                     imgPackageNameList.Add(package.PackageName)
                     imgPackageStateList.Add(package.PackageState)
                     imgPackageRelTypeList.Add(package.ReleaseType)
@@ -1936,6 +1960,10 @@ Public Class MainForm
                 Dim imgFeatureStateList As New List(Of String)
                 Dim FeatureCollection As DismFeatureCollection = DismApi.GetFeatures(session)
                 For Each feature As DismFeature In FeatureCollection
+                    If ImgBW.CancellationPending Then
+                        If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                        Exit Sub
+                    End If
                     imgFeatureNameList.Add(feature.FeatureName)
                     Select Case feature.State
                         Case DismPackageFeatureState.NotPresent
@@ -2047,6 +2075,10 @@ Public Class MainForm
                 Dim imgAppxRegionList As New List(Of String)
                 Dim AppxPackageCollection As DismAppxPackageCollection = DismApi.GetProvisionedAppxPackages(session)
                 For Each AppxPackage As DismAppxPackage In AppxPackageCollection
+                    If ImgBW.CancellationPending Then
+                        If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                        Exit Sub
+                    End If
                     Select Case AppxPackage.Architecture
                         Case DismProcessorArchitecture.None
                             imgAppxArchitectureList.Add("Unknown")
@@ -2198,6 +2230,10 @@ Public Class MainForm
                 Dim imgCapabilityStateList As New List(Of String)
                 Dim CapabilityCollection As DismCapabilityCollection = DismApi.GetCapabilities(session)
                 For Each capability As DismCapability In CapabilityCollection
+                    If ImgBW.CancellationPending Then
+                        If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                        Exit Sub
+                    End If
                     imgCapabilityNameList.Add(capability.Name)
                     imgCapabilityStateList.Add(capability.State)
                 Next
@@ -2300,6 +2336,10 @@ Public Class MainForm
                 Dim imgDrvVersionList As New List(Of String)
                 Dim DriverCollection As DismDriverPackageCollection = DismApi.GetDrivers(session, True)
                 For Each driver As DismDriverPackage In DriverCollection
+                    If ImgBW.CancellationPending Then
+                        If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                        Exit Sub
+                    End If
                     imgDrvPublishedNameList.Add(driver.PublishedName)
                     imgDrvOGFileNameList.Add(driver.OriginalFileName)
                     imgDrvInboxList.Add(driver.InBox)
@@ -4428,6 +4468,54 @@ Public Class MainForm
     ''' <param name="UnmountImg">Determines whether the program should unmount the image before unloading the project</param>
     ''' <remarks>The program, attending to the parameters shown above, will unload the project</remarks>
     Sub UnloadDTProj(IsBeingClosed As Boolean, SaveProject As Boolean, UnmountImg As Boolean)
+        If ImgBW.IsBusy Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            If MsgBox("Background processes are still gathering information about this image. Do you want to cancel them?", vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
+                                ImgBW.CancelAsync()
+                            Else
+                                Exit Sub
+                            End If
+                        Case "ESN"
+                            If MsgBox("Procesos en segundo plano todavía están recopilando información de esta imagen. ¿Desea cancelarlos?", vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
+                                ImgBW.CancelAsync()
+                            Else
+                                Exit Sub
+                            End If
+                    End Select
+                Case 1
+                    If MsgBox("Background processes are still gathering information about this image. Do you want to cancel them?", vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
+                        ImgBW.CancelAsync()
+                    Else
+                        Exit Sub
+                    End If
+                Case 2
+                    If MsgBox("Procesos en segundo plano todavía están recopilando información de esta imagen. ¿Desea cancelarlos?", vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
+                        ImgBW.CancelAsync()
+                    Else
+                        Exit Sub
+                    End If
+            End Select
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MenuDesc.Text = "Cancelling background processes. Please wait..."
+                        Case "ESN"
+                            MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
+                    End Select
+                Case 1
+                    MenuDesc.Text = "Cancelling background processes. Please wait..."
+                Case 2
+                    MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
+            End Select
+            While ImgBW.IsBusy()
+                Application.DoEvents()
+                Thread.Sleep(100)
+            End While
+        End If
         If imgCommitOperation = 0 Then
             ProgressPanel.OperationNum = 21
             ProgressPanel.UMountLocalDir = True
@@ -5944,6 +6032,11 @@ Public Class MainForm
             Else
                 UnloadDTProj(True, False, False)
             End If
+        End If
+        If ImgBW.IsBusy Then
+            e.Cancel = True
+            Beep()
+            Exit Sub
         End If
         If Not VolatileMode Then
             SaveDTSettings()
