@@ -4512,9 +4512,26 @@ Public Class MainForm
                     MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
             End Select
             While ImgBW.IsBusy()
+                ToolStripButton3.Enabled = False
+                UnloadBtn.Enabled = False
                 Application.DoEvents()
                 Thread.Sleep(100)
             End While
+            ToolStripButton3.Enabled = True
+            UnloadBtn.Enabled = True
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MenuDesc.Text = "Ready"
+                        Case "ESN"
+                            MenuDesc.Text = "Listo"
+                    End Select
+                Case 1
+                    MenuDesc.Text = "Ready"
+                Case 2
+                    MenuDesc.Text = "Listo"
+            End Select
         End If
         If imgCommitOperation = 0 Then
             ProgressPanel.OperationNum = 21
@@ -5390,6 +5407,21 @@ Public Class MainForm
             Case 2
                 MenuDesc.Text = "Listo"
         End Select
+        If ImgBW.CancellationPending Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MenuDesc.Text = "Cancelling background processes. Please wait..."
+                        Case "ESN"
+                            MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
+                    End Select
+                Case 1
+                    MenuDesc.Text = "Cancelling background processes. Please wait..."
+                Case 2
+                    MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
+            End Select
+        End If
     End Sub
 
     Sub HideChildDescs()
@@ -5406,6 +5438,21 @@ Public Class MainForm
             Case 2
                 MenuDesc.Text = "Listo"
         End Select
+        If ImgBW.CancellationPending Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MenuDesc.Text = "Cancelling background processes. Please wait..."
+                        Case "ESN"
+                            MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
+                    End Select
+                Case 1
+                    MenuDesc.Text = "Cancelling background processes. Please wait..."
+                Case 2
+                    MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
+            End Select
+        End If
     End Sub
 
     Private Sub FileToolStripMenuItem_MouseEnter(sender As Object, e As EventArgs) Handles FileToolStripMenuItem.MouseEnter

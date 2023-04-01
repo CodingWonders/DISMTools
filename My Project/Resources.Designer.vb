@@ -1486,13 +1486,14 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Changes from last preview
-        '''- Fixed an issue where the progress panel would not update the language settings properly
-        '''- Enhanced language support
-        '''- Fixed an issue which kept operations from performing when the log file directory was deleted
-        '''- Fixed an issue which showed removed (already-disabled) features in the feature disablement dialog
-        '''- Fixed an issue where the program would not perform operations with any operation value containing spaces
-        '''- The &quot;New project...&quot; and &quot;Open existing project...&quot; menu e [resto de la cadena truncado]&quot;;.
+        '''  Busca una cadena traducida similar a Bugfixes
+        '''- Fixed an issue where the program always gathered information from the first image index
+        '''- Fixed an issue where the program would think a project with an image mounted didn&apos;t have one when an image was unmounted with the mounted image manager
+        '''- Fixed an issue where background processes would continue running when a project was unloaded
+        '''
+        '''New features
+        '''- Increased default window size to 1280x720
+        '''- Feature manipulation now uses the DISM API to gather information from a feature.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

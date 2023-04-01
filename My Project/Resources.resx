@@ -875,48 +875,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <value>..\Resources\StoreLogoAssetPreviewer\preview_unavail_light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Changes from last preview
-- Fixed an issue where the progress panel would not update the language settings properly
-- Enhanced language support
-- Fixed an issue which kept operations from performing when the log file directory was deleted
-- Fixed an issue which showed removed (already-disabled) features in the feature disablement dialog
-- Fixed an issue where the program would not perform operations with any operation value containing spaces
-- The "New project..." and "Open existing project..." menu entries are now functional, and the latter now allows for fast project switching
+    <value>Bugfixes
+- Fixed an issue where the program always gathered information from the first image index
+- Fixed an issue where the program would think a project with an image mounted didn't have one when an image was unmounted with the mounted image manager
+- Fixed an issue where background processes would continue running when a project was unloaded
 
-Preview release feature recap
-
-Overall bugfixes
-- Fixed an issue where the program would not get image properties if multiple images were mounted
-- Fixed an issue with the background processes window where, if the main window was moved before opening it, it would show in the wrong location
-- Fixed an issue where the Settings window would appear in the top-left corner of the screen when showing image detection settings with the main window minimized
-- Fixed a critical issue where the program would crash when clicking "Project properties" if the mounted image detector was running 
-- Fixed an issue where the program assumed there was an image mounted on a newly created project
-- Fixed an issue where the background processes would start when a servicing session of an image not loaded was reloaded from the mounted image manager
-- Fixed an issue where the program always assumed every image loaded had read-only permissions
-- Fixed an issue where the mounted image detector would not start after loading the Project/Image properties dialog
-- Fixed an issue where the image unmount dialog assumed every directory was a mount directory
-- Fixed a critical issue where the program would crash when loading the image index removal dialog (Preview 3 -&gt; Preview 4)
-- Fixed an issue that didn't disable the actions in the mounted image manager when no item was selected
-- Added exception control for Windows 8 hosts when getting AppX packages of an image
-
-Overall new features
-
-Language support
-- Added almost-complete language support
-- Added options to detect system language
-
-Project creation
-- Project creation doesn't require the target directory to exist before proceeding, as it can now be created automatically, if you so choose
-
-DISM API
-- This API is now used in more places, such as the volume image removal dialog, the image index switcher, or image mounting
-
-AppX package addition
-- Added the store logo asset previewer, which completes the properties panel and gives you a chance to view a higher-res version of an application's store logo asset
-- Added support for drag-and-drop, compatible with all application package types (APPX/MSIX/APPXBUNDLE/MSIXBUNDLE, whether packed or unpacked)
-
-Image mounting
-- You don't need to click "List indexes" to get a glance of all indexes of an image anymore. They are now automatically shown as soon as you specify an existing image</value>
+New features
+- Increased default window size to 1280x720
+- Feature manipulation now uses the DISM API to gather information from a feature</value>
   </data>
   <data name="action_testing_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\action_testing_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
