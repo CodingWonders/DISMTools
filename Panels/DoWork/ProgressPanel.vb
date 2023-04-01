@@ -157,7 +157,7 @@ Imports System.Threading
 Imports System.IO
 Imports System.Net
 Imports System.Text.Encoding
-
+Imports Microsoft.Dism
 
 Public Class ProgressPanel
 
@@ -170,13 +170,16 @@ Public Class ProgressPanel
 
     Public errCode As String
 
-    Public CommandArgs As String = ""                       ' Ubiquitous accross OperationNums. DO NOT DELETE !!!
+    Public CommandArgs As String = ""                       ' Ubiquitous across OperationNums. DO NOT DELETE !!!
     Public DismVersionChecker As FileVersionInfo
     Public DismProgram As String
 
     Dim dateStr As String = "DISMTools-"
 
     Dim Language As Integer = 0                             ' Form language, taken from MainForm
+
+    Dim imgSession As DismSession = Nothing                 ' Image session for the DISM API
+    Dim mntString As String = ""                            ' Mount directory, necessary for the DISM API
 
     ' OperationNum: 0
     Public projName As String
@@ -2032,21 +2035,18 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf &
                                    "Feature " & (x + 1) & " of " & featEnablementCount)
                 CurrentPB.Value = x + 1
-                Directory.CreateDirectory(".\tempinfo")
-                File.WriteAllText(".\bin\exthelpers\featinfo.bat",
-                                  "@echo off" & CrLf &
-                                  "dism /English /image=" & Quote & MountDir & Quote & " /get-featureinfo /featurename=" & featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim() & " | findstr /c:" & Quote & "Feature Name" & Quote & " > .\tempinfo\featname" & CrLf &
-                                  "dism /English /image=" & Quote & MountDir & Quote & " /get-featureinfo /featurename=" & featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim() & " | findstr /c:" & Quote & "Description" & Quote & " > .\tempinfo\featdesc",
-                                  ASCII)
-                If IsDebugged Then
-                    Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\featinfo.bat").WaitForExit()
-                End If
-                Process.Start(".\bin\exthelpers\featinfo.bat").WaitForExit()
-                Dim featName As String = My.Computer.FileSystem.ReadAllText(".\tempinfo\featname").Replace("Feature Name : ", "").Trim()
-                Dim featDesc As String = My.Computer.FileSystem.ReadAllText(".\tempinfo\featdesc").Replace("Description : ", "").Trim()
+                Try
+                    imgSession = DismApi.OpenOfflineSession(mntString)
+                Catch ex As DismNotInitializedException
+                    DismApi.Initialize(DismLogLevel.LogErrors)
+                    imgSession = DismApi.OpenOfflineSession(mntString)
+                End Try
+                Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim())
                 LogView.AppendText(CrLf & CrLf &
-                                   "- Feature name: " & featName & CrLf &
-                                   "- Feature description: " & featDesc & CrLf)
+                                   "- Feature name: " & featInfo.FeatureName & CrLf &
+                                   "- Feature description: " & featInfo.Description & CrLf)
+                DismApi.CloseSession(imgSession)
+                DismApi.Shutdown()
                 CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /enable-feature /featurename=" & featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
                 If featisParentPkgNameUsed And featParentPkgName <> "" Then
                     CommandArgs &= " /packagename=" & featParentPkgName
@@ -2088,7 +2088,6 @@ Public Class ProgressPanel
                     End If
                 End If
             Next
-            Directory.Delete(".\tempinfo", True)
             CurrentPB.Value = CurrentPB.Maximum
             LogView.AppendText(CrLf & "Gathering error level for selected features..." & CrLf)
             For x = 0 To FeatErrorText.RichTextBox1.Lines.Count - 1
@@ -2179,21 +2178,18 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf &
                                    "Feature " & (x + 1) & " of " & featDisablementCount)
                 CurrentPB.Value = x + 1
-                Directory.CreateDirectory(".\tempinfo")
-                File.WriteAllText(".\bin\exthelpers\featinfo.bat",
-                                  "@echo off" & CrLf &
-                                  "dism /English /image=" & Quote & MountDir & Quote & " /get-featureinfo /featurename=" & featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim() & " | findstr /c:" & Quote & "Feature Name" & Quote & " > .\tempinfo\featname" & CrLf &
-                                  "dism /English /image=" & Quote & MountDir & Quote & " /get-featureinfo /featurename=" & featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim() & " | findstr /c:" & Quote & "Description" & Quote & " > .\tempinfo\featdesc",
-                                  ASCII)
-                If IsDebugged Then
-                    Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\featinfo.bat").WaitForExit()
-                End If
-                Process.Start(".\bin\exthelpers\featinfo.bat").WaitForExit()
-                Dim featName As String = My.Computer.FileSystem.ReadAllText(".\tempinfo\featname").Replace("Feature Name : ", "").Trim()
-                Dim featDesc As String = My.Computer.FileSystem.ReadAllText(".\tempinfo\featdesc").Replace("Description : ", "").Trim()
+                Try
+                    imgSession = DismApi.OpenOfflineSession(mntString)
+                Catch ex As DismNotInitializedException
+                    DismApi.Initialize(DismLogLevel.LogErrors)
+                    imgSession = DismApi.OpenOfflineSession(mntString)
+                End Try
+                Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim())
                 LogView.AppendText(CrLf & CrLf &
-                                   "- Feature name: " & featName & CrLf &
-                                   "- Feature description: " & featDesc & CrLf)
+                                   "- Feature name: " & featInfo.FeatureName & CrLf &
+                                   "- Feature description: " & featInfo.Description & CrLf)
+                DismApi.CloseSession(imgSession)
+                DismApi.Shutdown()
                 CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /disable-feature /featurename=" & featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
                 If featDisablementParentPkgUsed And featDisablementParentPkg <> "" Then
                     CommandArgs &= " /packagename=" & featParentPkgName
@@ -2235,7 +2231,6 @@ Public Class ProgressPanel
                     End If
                 End If
             Next
-            Directory.Delete(".\tempinfo", True)
             CurrentPB.Value = CurrentPB.Maximum
             LogView.AppendText(CrLf & "Gathering error level for selected features..." & CrLf)
             For x = 0 To FeatErrorText.RichTextBox1.Lines.Count - 1
@@ -4145,8 +4140,17 @@ Public Class ProgressPanel
                 GroupBox1.Text = "Registro"
         End Select
         Language = MainForm.Language
-        ' Cancel detector background worker which can interfere with image operations
+        ' Cancel detector background worker which can interfere with image operations and cause crashes due to access violations
         MainForm.MountedImageDetectorBW.CancelAsync()
+        ' Go through all mounted images to determine which one to get info from with the DISM API,
+        ' if a project has been loaded and if that project has a mounted image
+        If MainForm.isProjectLoaded And MainForm.IsImageMounted Then
+            For x = 0 To Array.LastIndexOf(MainForm.MountedImageMountDirs, MainForm.MountedImageMountDirs.Last)
+                If MainForm.MountedImageMountDirs(x) = MainForm.MountDir Then
+                    mntString = MainForm.MountedImageMountDirs(x)
+                End If
+            Next
+        End If
         DismProgram = MainForm.DismExe
         If MountDir = "" Then MountDir = MainForm.MountDir
         DISMProc.StartInfo.CreateNoWindow = False
