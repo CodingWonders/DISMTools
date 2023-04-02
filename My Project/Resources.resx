@@ -879,6 +879,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 - Fixed an issue where the program always gathered information from the first image index
 - Fixed an issue where the program would think a project with an image mounted didn't have one when an image was unmounted with the mounted image manager
 - Fixed an issue where background processes would continue running when a project was unloaded
+- Added exception control for other parts of background processes
 
 New features
 - Increased default window size to 1280x720

@@ -1490,10 +1490,11 @@ Namespace My.Resources
         '''- Fixed an issue where the program always gathered information from the first image index
         '''- Fixed an issue where the program would think a project with an image mounted didn&apos;t have one when an image was unmounted with the mounted image manager
         '''- Fixed an issue where background processes would continue running when a project was unloaded
+        '''- Added exception control for other parts of background processes
         '''
         '''New features
         '''- Increased default window size to 1280x720
-        '''- Feature manipulation now uses the DISM API to gather information from a feature.
+        '''- Feature manipulation now uses  [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
