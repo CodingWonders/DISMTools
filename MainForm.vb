@@ -1841,30 +1841,36 @@ Public Class MainForm
     ''' </summary>
     Sub GetImagePackages(Optional UseApi As Boolean = False, Optional session As DismSession = Nothing)
         If UseApi Then
-            If session IsNot Nothing Then
-                Dim imgPackageNameList As New List(Of String)
-                Dim imgPackageStateList As New List(Of String)
-                Dim imgPackageRelTypeList As New List(Of String)
-                Dim imgPackageInstTimeList As New List(Of String)
-                Dim PackageCollection As DismPackageCollection = DismApi.GetPackages(session)
-                For Each package As DismPackage In PackageCollection
-                    If ImgBW.CancellationPending Then
-                        If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
-                        Exit Sub
-                    End If
-                    imgPackageNameList.Add(package.PackageName)
-                    imgPackageStateList.Add(package.PackageState)
-                    imgPackageRelTypeList.Add(package.ReleaseType)
-                    imgPackageInstTimeList.Add(package.InstallTime.ToString())
-                Next
-                imgPackageNames = imgPackageNameList.ToArray()
-                imgPackageState = imgPackageStateList.ToArray()
-                imgPackageRelType = imgPackageRelTypeList.ToArray()
-                imgPackageInstTime = imgPackageInstTimeList.ToArray()
-            Else
-                Throw New Exception("No valid DISM sesion has been provided")
-            End If
-            Exit Sub
+            Try
+                If session IsNot Nothing Then
+                    Dim imgPackageNameList As New List(Of String)
+                    Dim imgPackageStateList As New List(Of String)
+                    Dim imgPackageRelTypeList As New List(Of String)
+                    Dim imgPackageInstTimeList As New List(Of String)
+                    Dim PackageCollection As DismPackageCollection = DismApi.GetPackages(session)
+                    For Each package As DismPackage In PackageCollection
+                        If ImgBW.CancellationPending Then
+                            If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                            Exit Sub
+                        End If
+                        imgPackageNameList.Add(package.PackageName)
+                        imgPackageStateList.Add(package.PackageState)
+                        imgPackageRelTypeList.Add(package.ReleaseType)
+                        imgPackageInstTimeList.Add(package.InstallTime.ToString())
+                    Next
+                    imgPackageNames = imgPackageNameList.ToArray()
+                    imgPackageState = imgPackageStateList.ToArray()
+                    imgPackageRelType = imgPackageRelTypeList.ToArray()
+                    imgPackageInstTime = imgPackageInstTimeList.ToArray()
+                    Exit Sub
+                Else
+                    Throw New Exception("No valid DISM sesion has been provided")
+                End If
+            Catch ex As Exception
+                DismApi.CloseSession(session)
+                ' Run backup function
+                Exit Try
+            End Try
         End If
         Debug.WriteLine("[GetImagePackages] Running function...")
         Debug.WriteLine("[GetImagePackages] Writing getter scripts...")
@@ -1955,41 +1961,46 @@ Public Class MainForm
     ''' </summary>
     Sub GetImageFeatures(Optional UseApi As Boolean = False, Optional session As DismSession = Nothing)
         If UseApi Then
-            If session IsNot Nothing Then
-                Dim imgFeatureNameList As New List(Of String)
-                Dim imgFeatureStateList As New List(Of String)
-                Dim FeatureCollection As DismFeatureCollection = DismApi.GetFeatures(session)
-                For Each feature As DismFeature In FeatureCollection
-                    If ImgBW.CancellationPending Then
-                        If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
-                        Exit Sub
-                    End If
-                    imgFeatureNameList.Add(feature.FeatureName)
-                    Select Case feature.State
-                        Case DismPackageFeatureState.NotPresent
-                            imgFeatureStateList.Add("Not present")
-                        Case DismPackageFeatureState.UninstallPending
-                            imgFeatureStateList.Add("Disable Pending")
-                        Case DismPackageFeatureState.Staged
-                            imgFeatureStateList.Add("Disabled")
-                        Case DismPackageFeatureState.Removed Or DismPackageFeatureState.Resolved
-                            imgFeatureStateList.Add("Removed")
-                        Case DismPackageFeatureState.Installed
-                            imgFeatureStateList.Add("Enabled")
-                        Case DismPackageFeatureState.InstallPending
-                            imgFeatureStateList.Add("Enable Pending")
-                        Case DismPackageFeatureState.Superseded
-                            imgFeatureStateList.Add("Superseded")
-                        Case DismPackageFeatureState.PartiallyInstalled
-                            imgFeatureStateList.Add("Partially Installed")
-                    End Select
-                Next
-                imgFeatureNames = imgFeatureNameList.ToArray()
-                imgFeatureState = imgFeatureStateList.ToArray()
-            Else
-                Throw New Exception("No valid DISM session has been provided")
-            End If
-            Exit Sub
+            Try
+                If session IsNot Nothing Then
+                    Dim imgFeatureNameList As New List(Of String)
+                    Dim imgFeatureStateList As New List(Of String)
+                    Dim FeatureCollection As DismFeatureCollection = DismApi.GetFeatures(session)
+                    For Each feature As DismFeature In FeatureCollection
+                        If ImgBW.CancellationPending Then
+                            If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                            Exit Sub
+                        End If
+                        imgFeatureNameList.Add(feature.FeatureName)
+                        Select Case feature.State
+                            Case DismPackageFeatureState.NotPresent
+                                imgFeatureStateList.Add("Not present")
+                            Case DismPackageFeatureState.UninstallPending
+                                imgFeatureStateList.Add("Disable Pending")
+                            Case DismPackageFeatureState.Staged
+                                imgFeatureStateList.Add("Disabled")
+                            Case DismPackageFeatureState.Removed Or DismPackageFeatureState.Resolved
+                                imgFeatureStateList.Add("Removed")
+                            Case DismPackageFeatureState.Installed
+                                imgFeatureStateList.Add("Enabled")
+                            Case DismPackageFeatureState.InstallPending
+                                imgFeatureStateList.Add("Enable Pending")
+                            Case DismPackageFeatureState.Superseded
+                                imgFeatureStateList.Add("Superseded")
+                            Case DismPackageFeatureState.PartiallyInstalled
+                                imgFeatureStateList.Add("Partially Installed")
+                        End Select
+                    Next
+                    imgFeatureNames = imgFeatureNameList.ToArray()
+                    imgFeatureState = imgFeatureStateList.ToArray()
+                    Exit Sub
+                Else
+                    Throw New Exception("No valid DISM session has been provided")
+                End If
+            Catch ex As Exception
+                DismApi.CloseSession(session)
+                Exit Try
+            End Try
         End If
         Debug.WriteLine("[GetImageFeatures] Running function...")
         Debug.WriteLine("[GetImageFeatures] Writing getter scripts...")
@@ -2225,24 +2236,28 @@ Public Class MainForm
     ''' <remarks>This is only for Windows 10 or newer</remarks>
     Sub GetImageCapabilities(Optional UseApi As Boolean = False, Optional session As DismSession = Nothing)
         If UseApi Then
-            If session IsNot Nothing Then
-                Dim imgCapabilityNameList As New List(Of String)
-                Dim imgCapabilityStateList As New List(Of String)
-                Dim CapabilityCollection As DismCapabilityCollection = DismApi.GetCapabilities(session)
-                For Each capability As DismCapability In CapabilityCollection
-                    If ImgBW.CancellationPending Then
-                        If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
-                        Exit Sub
-                    End If
-                    imgCapabilityNameList.Add(capability.Name)
-                    imgCapabilityStateList.Add(capability.State)
-                Next
-                imgCapabilityIds = imgCapabilityNameList.ToArray()
-                imgCapabilityState = imgCapabilityStateList.ToArray()
-            Else
-                Throw New Exception("No valid DISM session has been provided")
-            End If
-            Exit Sub
+            Try
+                If session IsNot Nothing Then
+                    Dim imgCapabilityNameList As New List(Of String)
+                    Dim imgCapabilityStateList As New List(Of String)
+                    Dim CapabilityCollection As DismCapabilityCollection = DismApi.GetCapabilities(session)
+                    For Each capability As DismCapability In CapabilityCollection
+                        If ImgBW.CancellationPending Then
+                            If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                            Exit Sub
+                        End If
+                        imgCapabilityNameList.Add(capability.Name)
+                        imgCapabilityStateList.Add(capability.State)
+                    Next
+                    imgCapabilityIds = imgCapabilityNameList.ToArray()
+                    imgCapabilityState = imgCapabilityStateList.ToArray()
+                    Exit Sub
+                Else
+                    Throw New Exception("No valid DISM session has been provided")
+                End If
+            Catch ex As Exception
+                DismApi.CloseSession(session)
+            End Try
         End If
         Debug.WriteLine("[GetImageCapabilities] Running function...")
         ' The image may be Windows 10/11, but DISM may not be from Windows 10/11. Get this information before running this procedure
@@ -2326,39 +2341,44 @@ Public Class MainForm
     ''' <remarks>This procedure will detect the number of third-party drivers. If the image contains none, this procedure will end</remarks>
     Sub GetImageDrivers(Optional UseApi As Boolean = False, Optional session As DismSession = Nothing)
         If UseApi Then
-            If session IsNot Nothing Then
-                Dim imgDrvPublishedNameList As New List(Of String)
-                Dim imgDrvOGFileNameList As New List(Of String)
-                Dim imgDrvInboxList As New List(Of String)
-                Dim imgDrvClassNameList As New List(Of String)
-                Dim imgDrvProviderNameList As New List(Of String)
-                Dim imgDrvDateList As New List(Of String)
-                Dim imgDrvVersionList As New List(Of String)
-                Dim DriverCollection As DismDriverPackageCollection = DismApi.GetDrivers(session, True)
-                For Each driver As DismDriverPackage In DriverCollection
-                    If ImgBW.CancellationPending Then
-                        If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
-                        Exit Sub
-                    End If
-                    imgDrvPublishedNameList.Add(driver.PublishedName)
-                    imgDrvOGFileNameList.Add(driver.OriginalFileName)
-                    imgDrvInboxList.Add(driver.InBox)
-                    imgDrvClassNameList.Add(driver.ClassName)
-                    imgDrvProviderNameList.Add(driver.ProviderName)
-                    imgDrvDateList.Add(driver.Date.ToString())
-                    imgDrvVersionList.Add(driver.Version.ToString())
-                Next
-                imgDrvPublishedNames = imgDrvPublishedNameList.ToArray()
-                imgDrvOGFileNames = imgDrvOGFileNameList.ToArray()
-                imgDrvInbox = imgDrvInboxList.ToArray()
-                imgDrvClassNames = imgDrvClassNameList.ToArray()
-                imgDrvProviderNames = imgDrvProviderNameList.ToArray()
-                imgDrvDates = imgDrvDateList.ToArray()
-                imgDrvVersions = imgDrvVersionList.ToArray()
-            Else
-                Throw New Exception("No valid DISM session has been provided")
-            End If
-            Exit Sub
+            Try
+                If session IsNot Nothing Then
+                    Dim imgDrvPublishedNameList As New List(Of String)
+                    Dim imgDrvOGFileNameList As New List(Of String)
+                    Dim imgDrvInboxList As New List(Of String)
+                    Dim imgDrvClassNameList As New List(Of String)
+                    Dim imgDrvProviderNameList As New List(Of String)
+                    Dim imgDrvDateList As New List(Of String)
+                    Dim imgDrvVersionList As New List(Of String)
+                    Dim DriverCollection As DismDriverPackageCollection = DismApi.GetDrivers(session, True)
+                    For Each driver As DismDriverPackage In DriverCollection
+                        If ImgBW.CancellationPending Then
+                            If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                            Exit Sub
+                        End If
+                        imgDrvPublishedNameList.Add(driver.PublishedName)
+                        imgDrvOGFileNameList.Add(driver.OriginalFileName)
+                        imgDrvInboxList.Add(driver.InBox)
+                        imgDrvClassNameList.Add(driver.ClassName)
+                        imgDrvProviderNameList.Add(driver.ProviderName)
+                        imgDrvDateList.Add(driver.Date.ToString())
+                        imgDrvVersionList.Add(driver.Version.ToString())
+                    Next
+                    imgDrvPublishedNames = imgDrvPublishedNameList.ToArray()
+                    imgDrvOGFileNames = imgDrvOGFileNameList.ToArray()
+                    imgDrvInbox = imgDrvInboxList.ToArray()
+                    imgDrvClassNames = imgDrvClassNameList.ToArray()
+                    imgDrvProviderNames = imgDrvProviderNameList.ToArray()
+                    imgDrvDates = imgDrvDateList.ToArray()
+                    imgDrvVersions = imgDrvVersionList.ToArray()
+                    Exit Sub
+                Else
+                    Throw New Exception("No valid DISM session has been provided")
+                End If
+            Catch ex As Exception
+                DismApi.CloseSession(session)
+                Exit Try
+            End Try
         End If
         Debug.WriteLine("[GetImageDrivers] Running function...")
         Debug.WriteLine("[GetImageDrivers] Determining whether there are third-party drivers in image...")
