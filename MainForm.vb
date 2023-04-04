@@ -64,7 +64,7 @@ Public Class MainForm
     Public Language As Integer
     Public LogFont As String
     Public LogFile As String
-    Public LogLevel As Integer
+    Public LogLevel As Integer = 3
     Public ImgOperationMode As Integer
     Public QuietOperations As Boolean
     Public SysNoRestart As Boolean
@@ -163,14 +163,41 @@ Public Class MainForm
 
     Dim DismVersionChecker As FileVersionInfo
 
+    Dim argProjPath As String = ""                                       ' String used to know which project to load if it's specified in an argument
+
     Sub GetArguments()
         Dim args() As String = Environment.GetCommandLineArgs()
         If args.Length = 1 Then
             Exit Sub
         Else
-            If args.Contains("/setup") Then
-                PrgSetup.ShowDialog()
-            End If
+            'If args.Contains("/setup") Then
+            '    PrgSetup.ShowDialog()
+            'ElseIf args.Contains("/load") Then
+
+            'End If
+            For Each arg In args
+                If arg.StartsWith("/setup", StringComparison.OrdinalIgnoreCase) Then
+                    PrgSetup.ShowDialog()
+                ElseIf arg.StartsWith("/load", StringComparison.OrdinalIgnoreCase) Then
+                    If File.Exists(arg.Replace("/load=", "").Trim()) And Directory.Exists(Path.GetDirectoryName(arg.Replace("/load=", "").Trim())) Then
+                        argProjPath = arg.Replace("/load=", "").Trim()
+                    Else
+                        Select Case Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        MsgBox("An invalid project has been specified", vbOKOnly + vbCritical, Text)
+                                    Case "ESN"
+                                        MsgBox("Se ha especificado un proyecto no válido", vbOKOnly + vbCritical, Text)
+                                End Select
+                            Case 1
+                                MsgBox("An invalid project has been specified", vbOKOnly + vbCritical, Text)
+                            Case 2
+                                MsgBox("Se ha especificado un proyecto no válido", vbOKOnly + vbCritical, Text)
+                        End Select
+                    End If
+                End If
+            Next
         End If
     End Sub
 
@@ -187,7 +214,7 @@ Public Class MainForm
         End If
         Debug.WriteLine("DISMTools, version " & My.Application.Info.Version.ToString() & " (" & dtBranch & ")" & CrLf & _
                         "Loading program settings..." & CrLf)
-        If Debugger.IsAttached Then GetArguments()
+        GetArguments()
         ' Detect mounted images
         DetectMountedImages(True)
         Debug.WriteLine(CrLf & "Finished detecting mounted images. Continuing program startup..." & CrLf)
@@ -209,6 +236,12 @@ Public Class MainForm
             VersionTSMI.Visible = True
         Else
             VersionTSMI.Visible = False
+        End If
+        If argProjPath <> "" Then
+            HomePanel.Visible = False
+            Visible = True
+            ProgressPanel.OperationNum = 990
+            LoadDTProj(argProjPath, Path.GetFileNameWithoutExtension(argProjPath), True)
         End If
     End Sub
 
@@ -4212,6 +4245,144 @@ Public Class MainForm
                 If OpenFileDialog1.FileName = "" Then
                     If BypassFileDialog = False Then
                         Exit Sub
+                    Else
+                        prjName = Path.GetFileNameWithoutExtension(DTProjPath)
+                        Text = prjName & " - DISMTools"
+                        If Debugger.IsAttached Then
+                            Text &= " (debug mode)"
+                        End If
+                        Label3.Text = DTProjPath
+                        projPath = DTProjPath
+                        projPath = projPath.Replace("\" & DTProjFileName & ".dtproj", "").Trim()
+                        Select Case Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        PleaseWaitDialog.Label2.Text = "Loading project: " & Quote & prjName & Quote
+                                    Case "ESN"
+                                        PleaseWaitDialog.Label2.Text = "Cargando proyecto: " & Quote & prjName & Quote
+                                End Select
+                            Case 1
+                                PleaseWaitDialog.Label2.Text = "Loading project: " & Quote & prjName & Quote
+                            Case 2
+                                PleaseWaitDialog.Label2.Text = "Cargando proyecto: " & Quote & prjName & Quote
+                        End Select
+                        'PleaseWaitDialog.Label2.Text = "Loading project: " & Quote & prjName & Quote
+                        PleaseWaitDialog.ShowDialog(Me)
+                        projName.Text = prjName
+                        If IsImageMounted Then
+                            ImageNotMountedPanel.Visible = False
+                            ImagePanel.Visible = True
+                        Else
+                            ImageNotMountedPanel.Visible = True
+                            ImagePanel.Visible = False
+                        End If
+                        PopulateProjectTree(prjName)
+                        isProjectLoaded = True
+
+                        ' Load values (use same code as saving, but reversed)
+                        SourceImg = ProjectValueLoadForm.RichTextBox5.Text
+                        Try
+                            ImgIndex = CInt(ProjectValueLoadForm.RichTextBox6.Text)
+                        Catch ex As Exception
+                            ' The conversion could not be possible. Maybe because it's "N/A" on the RTB?
+                        End Try
+                        MountDir = ProjectValueLoadForm.RichTextBox7.Text
+                        imgVersion = ProjectValueLoadForm.RichTextBox8.Text
+                        imgMountedName = ProjectValueLoadForm.RichTextBox9.Text
+                        imgMountedDesc = ProjectValueLoadForm.RichTextBox10.Text
+                        imgWimBootStatus = ProjectValueLoadForm.RichTextBox11.Text
+                        imgArch = ProjectValueLoadForm.RichTextBox12.Text
+                        imgHal = ProjectValueLoadForm.RichTextBox13.Text
+                        imgSPBuild = ProjectValueLoadForm.RichTextBox14.Text
+                        imgSPLvl = ProjectValueLoadForm.RichTextBox15.Text
+                        imgEdition = ProjectValueLoadForm.RichTextBox16.Text
+                        imgPType = ProjectValueLoadForm.RichTextBox17.Text
+                        imgPSuite = ProjectValueLoadForm.RichTextBox18.Text
+                        imgSysRoot = ProjectValueLoadForm.RichTextBox19.Text
+                        Try
+                            imgDirs = ProjectValueLoadForm.RichTextBox20.Text
+                        Catch ex As Exception
+                            ' Like before, the conversion could not be possible
+                        End Try
+                        Try
+                            imgFiles = ProjectValueLoadForm.RichTextBox21.Text
+                        Catch ex As Exception
+                            ' Like before, the conversion could not be possible
+                        End Try
+                        Try
+                            CreationTime = DateTimeOffset.FromUnixTimeSeconds(CType(ProjectValueLoadForm.RichTextBox22.Text, Long)).ToString().Replace(" +00:00", "").Trim()
+                            ModifyTime = DateTimeOffset.FromUnixTimeSeconds(CType(ProjectValueLoadForm.RichTextBox23.Text, Long)).ToString().Replace(" +00:00", "").Trim()
+                        Catch ex As Exception
+                            ' Like before, the conversion could not be possible
+                        End Try
+                        imgLangs = ProjectValueLoadForm.RichTextBox24.Text
+                        imgRW = ProjectValueLoadForm.RichTextBox25.Text
+
+                        ' Set initial settings for background processes
+                        bwAllBackgroundProcesses = True
+                        bwGetImageInfo = True
+                        bwGetAdvImgInfo = True
+                        bwBackgroundProcessAction = 0
+
+                        ' Detect individual stuff
+                        If Directory.Exists(projPath & "\mount" & "\Windows") Then
+                            ' Detect whether image is mounted by checking its Windows directory.
+                            ' This will be changed in the future but, because this is in alpha, scan
+                            ' whether the image's Windows folder exists
+                            IsImageMounted = True
+                            If imgRW = "Yes" Then
+                                UpdateProjProperties(True, False)
+                            ElseIf imgRW = "No" Then
+                                UpdateProjProperties(True, True)
+                            Else
+                                ' Assume it has read-write permissions
+                                UpdateProjProperties(True, False)
+                            End If
+                        ElseIf Directory.Exists(MountDir & "\Windows") Then
+                            ' This is for these cases where image was mounted to outside the project
+                            IsImageMounted = True
+                            If imgRW = "Yes" Then
+                                UpdateProjProperties(True, False)
+                            ElseIf imgRW = "No" Then
+                                UpdateProjProperties(True, True)
+                            Else
+                                ' Assume it has read-write permissions
+                                UpdateProjProperties(True, False)
+                            End If
+                        Else
+                            IsImageMounted = False
+                            UpdateProjProperties(False, False)
+                        End If
+                        If IsImageMounted Then
+                            Button1.Enabled = False
+                            Button2.Enabled = True
+                            Button3.Enabled = True
+                            Button4.Enabled = True
+                            Button5.Enabled = True
+                            Button6.Enabled = True
+                            Button7.Enabled = True
+                            Button8.Enabled = True
+                            Button9.Enabled = True
+                            Button10.Enabled = True
+                            Button11.Enabled = True
+                            Button12.Enabled = True
+                            Button13.Enabled = True
+                        Else
+                            Button1.Enabled = True
+                            Button2.Enabled = False
+                            Button3.Enabled = False
+                            Button4.Enabled = False
+                            Button5.Enabled = False
+                            Button6.Enabled = False
+                            Button7.Enabled = False
+                            Button8.Enabled = False
+                            Button9.Enabled = False
+                            Button10.Enabled = False
+                            Button11.Enabled = False
+                            Button12.Enabled = False
+                            Button13.Enabled = False
+                        End If
                     End If
                 Else
                     prjName = Path.GetFileNameWithoutExtension(DTProjPath)
