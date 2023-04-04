@@ -725,7 +725,7 @@ Public Class Options
             Toggle1.Checked = False
         End If
         TextBox2.Text = MainForm.LogFile
-        TrackBar1.Value = MainForm.LogLevel - 1
+        TrackBar1.Value = If(MainForm.LogLevel = TrackBar1.Minimum, MainForm.LogLevel, MainForm.LogLevel - 1)
         Select Case MainForm.ImgOperationMode
             Case 0
                 RadioButton1.Checked = True
@@ -829,6 +829,9 @@ Public Class Options
     End Sub
 
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
+        If TextBox1.Text = "" Or Not File.Exists(TextBox1.Text) Then
+            TextBox1.Text = "C:\Windows\system32\dism.exe"
+        End If
         DismVersion = FileVersionInfo.GetVersionInfo(TextBox1.Text)
         Label4.Text = DismVersion.ProductVersion
     End Sub
