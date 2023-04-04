@@ -1128,6 +1128,16 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property product_overview() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("product_overview", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property progress_window() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("progress_window", resourceCulture)
