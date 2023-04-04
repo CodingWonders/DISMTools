@@ -25,8 +25,8 @@ Partial Class PrgSetup
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(PrgSetup))
         Me.wndControlPanel = New System.Windows.Forms.Panel()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.minBox = New System.Windows.Forms.PictureBox()
+        Me.closeBox = New System.Windows.Forms.PictureBox()
         Me.btnControlPanel = New System.Windows.Forms.Panel()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Back_Button = New System.Windows.Forms.Button()
@@ -85,8 +85,8 @@ Partial Class PrgSetup
         Me.Label23 = New System.Windows.Forms.Label()
         Me.Label24 = New System.Windows.Forms.Label()
         Me.wndControlPanel.SuspendLayout()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.minBox, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.closeBox, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.btnControlPanel.SuspendLayout()
         Me.BodyPanelContainer.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -109,8 +109,8 @@ Partial Class PrgSetup
         Me.wndControlPanel.BackColor = System.Drawing.Color.Transparent
         Me.wndControlPanel.BackgroundImage = Global.DISMTools.My.Resources.Resources.wndPanel_Backdrop
         Me.wndControlPanel.Controls.Add(Me.Label1)
-        Me.wndControlPanel.Controls.Add(Me.PictureBox2)
-        Me.wndControlPanel.Controls.Add(Me.PictureBox1)
+        Me.wndControlPanel.Controls.Add(Me.minBox)
+        Me.wndControlPanel.Controls.Add(Me.closeBox)
         Me.wndControlPanel.Dock = System.Windows.Forms.DockStyle.Top
         Me.wndControlPanel.Location = New System.Drawing.Point(0, 0)
         Me.wndControlPanel.Name = "wndControlPanel"
@@ -128,25 +128,25 @@ Partial Class PrgSetup
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "DISMTools"
         '
-        'PictureBox2
+        'minBox
         '
-        Me.PictureBox2.Image = Global.DISMTools.My.Resources.Resources.minBox
-        Me.PictureBox2.Location = New System.Drawing.Point(869, 0)
-        Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(46, 32)
-        Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.PictureBox2.TabIndex = 0
-        Me.PictureBox2.TabStop = False
+        Me.minBox.Image = Global.DISMTools.My.Resources.Resources.minBox
+        Me.minBox.Location = New System.Drawing.Point(869, 0)
+        Me.minBox.Name = "minBox"
+        Me.minBox.Size = New System.Drawing.Size(46, 32)
+        Me.minBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.minBox.TabIndex = 0
+        Me.minBox.TabStop = False
         '
-        'PictureBox1
+        'closeBox
         '
-        Me.PictureBox1.Image = Global.DISMTools.My.Resources.Resources.closebox
-        Me.PictureBox1.Location = New System.Drawing.Point(914, 0)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(46, 32)
-        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.PictureBox1.TabIndex = 0
-        Me.PictureBox1.TabStop = False
+        Me.closeBox.Image = Global.DISMTools.My.Resources.Resources.closebox
+        Me.closeBox.Location = New System.Drawing.Point(914, 0)
+        Me.closeBox.Name = "closeBox"
+        Me.closeBox.Size = New System.Drawing.Size(46, 32)
+        Me.closeBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.closeBox.TabIndex = 0
+        Me.closeBox.TabStop = False
         '
         'btnControlPanel
         '
@@ -175,6 +175,7 @@ Partial Class PrgSetup
         '
         'Back_Button
         '
+        Me.Back_Button.Enabled = False
         Me.Back_Button.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Back_Button.Location = New System.Drawing.Point(711, 13)
         Me.Back_Button.Name = "Back_Button"
@@ -258,12 +259,13 @@ Partial Class PrgSetup
         Me.CustomizationPanel.Name = "CustomizationPanel"
         Me.CustomizationPanel.Size = New System.Drawing.Size(960, 616)
         Me.CustomizationPanel.TabIndex = 1
+        Me.CustomizationPanel.Visible = False
         '
         'TableLayoutPanel1
         '
         Me.TableLayoutPanel1.ColumnCount = 2
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 22.24939!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 77.75061!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 22.2493896!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 77.7506104!))
         Me.TableLayoutPanel1.Controls.Add(Me.Label9, 0, 2)
         Me.TableLayoutPanel1.Controls.Add(Me.ComboBox2, 1, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.Label8, 0, 1)
@@ -273,9 +275,9 @@ Partial Class PrgSetup
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(60, 185)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 3
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.602151!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.602151!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 82.7957!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.60215092!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.60215092!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 82.7957001!))
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(818, 372)
         Me.TableLayoutPanel1.TabIndex = 2
         '
@@ -433,6 +435,7 @@ Partial Class PrgSetup
         Me.LogsPanel.Name = "LogsPanel"
         Me.LogsPanel.Size = New System.Drawing.Size(960, 616)
         Me.LogsPanel.TabIndex = 2
+        Me.LogsPanel.Visible = False
         '
         'Panel4
         '
@@ -565,12 +568,13 @@ Partial Class PrgSetup
         Me.ModulesPanel.Name = "ModulesPanel"
         Me.ModulesPanel.Size = New System.Drawing.Size(960, 616)
         Me.ModulesPanel.TabIndex = 3
+        Me.ModulesPanel.Visible = False
         '
         'TableLayoutPanel2
         '
         Me.TableLayoutPanel2.ColumnCount = 2
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 83.94608!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.05392!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 83.9460831!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.0539207!))
         Me.TableLayoutPanel2.Controls.Add(Me.Label15, 0, 1)
         Me.TableLayoutPanel2.Controls.Add(Me.Label12, 0, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.Button3, 1, 0)
@@ -678,12 +682,13 @@ Partial Class PrgSetup
         Me.FinishPanel.Name = "FinishPanel"
         Me.FinishPanel.Size = New System.Drawing.Size(960, 616)
         Me.FinishPanel.TabIndex = 4
+        Me.FinishPanel.Visible = False
         '
         'TableLayoutPanel3
         '
         Me.TableLayoutPanel3.ColumnCount = 2
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 83.94608!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.05392!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 83.9460831!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.0539207!))
         Me.TableLayoutPanel3.Controls.Add(Me.Label26, 0, 1)
         Me.TableLayoutPanel3.Controls.Add(Me.Label27, 0, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.Button6, 1, 0)
@@ -837,8 +842,8 @@ Partial Class PrgSetup
         Me.Text = "PrgSetup"
         Me.wndControlPanel.ResumeLayout(False)
         Me.wndControlPanel.PerformLayout()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.minBox, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.closeBox, System.ComponentModel.ISupportInitialize).EndInit()
         Me.btnControlPanel.ResumeLayout(False)
         Me.btnControlPanel.PerformLayout()
         Me.BodyPanelContainer.ResumeLayout(False)
@@ -871,8 +876,8 @@ Partial Class PrgSetup
     Friend WithEvents Next_Button As System.Windows.Forms.Button
     Friend WithEvents Cancel_Button As System.Windows.Forms.Button
     Friend WithEvents Label1 As System.Windows.Forms.Label
-    Friend WithEvents PictureBox2 As System.Windows.Forms.PictureBox
-    Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
+    Friend WithEvents minBox As System.Windows.Forms.PictureBox
+    Friend WithEvents closeBox As System.Windows.Forms.PictureBox
     Friend WithEvents BodyPanelContainer As System.Windows.Forms.Panel
     Friend WithEvents WelcomePanel As System.Windows.Forms.Panel
     Friend WithEvents Label3 As System.Windows.Forms.Label
