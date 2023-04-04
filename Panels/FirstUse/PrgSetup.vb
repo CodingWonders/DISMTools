@@ -1,4 +1,6 @@
 ﻿Imports System.Drawing.Drawing2D
+Imports System.IO
+
 Public Class PrgSetup
 
     Dim btnToolTip As New ToolTip()
@@ -80,7 +82,7 @@ Public Class PrgSetup
 
     Private Sub Next_Button_Click(sender As Object, e As EventArgs) Handles Next_Button.Click
         If pageInt = 4 Then
-            ' MainForm.SaveDTSettings()
+            MainForm.SaveDTSettings()
             Close()
         End If
         pageInt += 1
@@ -118,8 +120,12 @@ Public Class PrgSetup
         End Select
         If pageInt = 4 Then
             Next_Button.Text = "Finish"
+            Cancel_Button.Enabled = False
+            closeBox.Enabled = False
         Else
             Next_Button.Text = "Next"
+            Cancel_Button.Enabled = True
+            closeBox.Enabled = True
         End If
         If pageInt = 0 Then
             Back_Button.Enabled = False
@@ -164,8 +170,12 @@ Public Class PrgSetup
         End Select
         If pageInt = 4 Then
             Next_Button.Text = "Finish"
+            Cancel_Button.Enabled = False
+            closeBox.Enabled = False
         Else
             Next_Button.Text = "Next"
+            Cancel_Button.Enabled = True
+            closeBox.Enabled = True
         End If
         If pageInt = 0 Then
             Back_Button.Enabled = False
@@ -185,7 +195,12 @@ Public Class PrgSetup
     End Sub
 
     Private Sub PrgSetup_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ' Generate new settings file and load it
+        MainForm.GenerateDTSettings()
+        MainForm.LoadDTSettings(1)
         GetSystemFonts()
+        TextBox2.Text = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\Logs\DISM\DISM.log"
+        MainForm.LogFile = TextBox2.Text
     End Sub
 
     Sub GetSystemFonts()

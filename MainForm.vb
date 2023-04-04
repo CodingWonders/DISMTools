@@ -170,11 +170,6 @@ Public Class MainForm
         If args.Length = 1 Then
             Exit Sub
         Else
-            'If args.Contains("/setup") Then
-            '    PrgSetup.ShowDialog()
-            'ElseIf args.Contains("/load") Then
-
-            'End If
             For Each arg In args
                 If arg.StartsWith("/setup", StringComparison.OrdinalIgnoreCase) Then
                     PrgSetup.ShowDialog()
@@ -2601,7 +2596,8 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontSi=10")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontBold=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & "\Windows\Logs\DISM\DISM.log" & Quote)
+        'DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & "\Windows\Logs\DISM\DISM.log" & Quote)
+        DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\Logs\DISM\DISM.log" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=3")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ImgOps]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("ImgOperationMode=0")
