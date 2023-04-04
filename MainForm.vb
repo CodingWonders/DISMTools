@@ -163,6 +163,17 @@ Public Class MainForm
 
     Dim DismVersionChecker As FileVersionInfo
 
+    Sub GetArguments()
+        Dim args() As String = Environment.GetCommandLineArgs()
+        If args.Length = 1 Then
+            Exit Sub
+        Else
+            If args.Contains("/setup") Then
+                PrgSetup.ShowDialog()
+            End If
+        End If
+    End Sub
+
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Because of the DISM API, Windows 7 compatibility is out the window (no pun intended)
         If Environment.OSVersion.Version.Major = 6 And Environment.OSVersion.Version.Minor < 2 Then
@@ -176,6 +187,7 @@ Public Class MainForm
         End If
         Debug.WriteLine("DISMTools, version " & My.Application.Info.Version.ToString() & " (" & dtBranch & ")" & CrLf & _
                         "Loading program settings..." & CrLf)
+        If Debugger.IsAttached Then GetArguments()
         ' Detect mounted images
         DetectMountedImages(True)
         Debug.WriteLine(CrLf & "Finished detecting mounted images. Continuing program startup..." & CrLf)
