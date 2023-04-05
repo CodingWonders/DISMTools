@@ -102,7 +102,7 @@ Public Class PrgSetup
             Case 2
                 MainForm.ColorMode = ComboBox1.SelectedIndex
                 MainForm.Language = ComboBox2.SelectedIndex
-                MainForm.LogFont = ComboBox3.SelectedText
+                MainForm.LogFont = ComboBox3.SelectedItem
                 MainForm.LogFontSize = NumericUpDown1.Value
                 MainForm.LogFontIsBold = Toggle1.Checked
                 WelcomePanel.Visible = False
@@ -215,6 +215,7 @@ Public Class PrgSetup
         For Each fntFamily As FontFamily In FontFamily.Families
             ComboBox3.Items.Add(fntFamily.Name)
         Next
+        ComboBox3.SelectedItem = "Courier New"
     End Sub
 
     Private Sub ComboBox3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox3.SelectedIndexChanged

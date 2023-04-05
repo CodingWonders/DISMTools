@@ -692,6 +692,7 @@ Public Class Options
         For Each fntFamily As FontFamily In FontFamily.Families
             ComboBox4.Items.Add(fntFamily.Name)
         Next
+        If ComboBox4.SelectedItem = Nothing Then ComboBox4.SelectedItem = "Courier New"
     End Sub
 
     Sub GatherCustomSettings()
