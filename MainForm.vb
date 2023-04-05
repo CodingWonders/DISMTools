@@ -2644,8 +2644,7 @@ Public Class MainForm
                     Case 2
                         DTSettingForm.RichTextBox2.AppendText("ColorMode=2")
                 End Select
-                ' This version does not support additional languages
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "Language=1")
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "Language=" & Language)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFont=" & Quote & LogFont & Quote)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontSi=" & LogFontSize)
                 If LogFontIsBold Then
