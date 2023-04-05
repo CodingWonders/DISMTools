@@ -100,8 +100,8 @@ Public Class PrgSetup
                 ModulesPanel.Visible = False
                 FinishPanel.Visible = False
             Case 2
-                MainForm.ColorMode = ComboBox1.SelectedItem
-                MainForm.Language = ComboBox2.SelectedItem
+                MainForm.ColorMode = ComboBox1.SelectedIndex
+                MainForm.Language = ComboBox2.SelectedIndex
                 MainForm.LogFont = ComboBox3.SelectedText
                 MainForm.LogFontSize = NumericUpDown1.Value
                 MainForm.LogFontIsBold = Toggle1.Checked
