@@ -100,12 +100,19 @@ Public Class PrgSetup
                 ModulesPanel.Visible = False
                 FinishPanel.Visible = False
             Case 2
+                MainForm.ColorMode = ComboBox1.SelectedItem
+                MainForm.Language = ComboBox2.SelectedItem
+                MainForm.LogFont = ComboBox3.SelectedText
+                MainForm.LogFontSize = NumericUpDown1.Value
+                MainForm.LogFontIsBold = Toggle1.Checked
                 WelcomePanel.Visible = False
                 CustomizationPanel.Visible = False
                 LogsPanel.Visible = True
                 ModulesPanel.Visible = False
                 FinishPanel.Visible = False
             Case 3
+                MainForm.LogFile = TextBox2.Text
+                MainForm.LogLevel = TrackBar1.Value + 1
                 WelcomePanel.Visible = False
                 CustomizationPanel.Visible = False
                 LogsPanel.Visible = False
