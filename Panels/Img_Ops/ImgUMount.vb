@@ -89,6 +89,8 @@ Public Class ImgUMount
                         UMountOperations(0) = "Save changes and unmount"
                         UMountOperations(1) = "Discard changes and unmount"
                         ComboBox1.Items.AddRange(UMountOperations)
+                        GroupBox1.Text = "Mount directory"
+                        GroupBox2.Text = "Additional options"
                     Case "ESN"
                         Text = "Desmontar una imagen"
                         Label1.Text = Text
@@ -107,6 +109,8 @@ Public Class ImgUMount
                         UMountOperations(0) = "Guardar cambios y desmontar"
                         UMountOperations(1) = "Descartar cambios y desmontar"
                         ComboBox1.Items.AddRange(UMountOperations)
+                        GroupBox1.Text = "Directorio de montaje"
+                        GroupBox2.Text = "Opciones adicionales"
                 End Select
             Case 1
                 Text = "Unmount an image"
@@ -126,6 +130,8 @@ Public Class ImgUMount
                 UMountOperations(0) = "Save changes and unmount"
                 UMountOperations(1) = "Discard changes and unmount"
                 ComboBox1.Items.AddRange(UMountOperations)
+                GroupBox1.Text = "Mount directory"
+                GroupBox2.Text = "Additional options"
             Case 2
                 Text = "Desmontar una imagen"
                 Label1.Text = Text
@@ -144,6 +150,8 @@ Public Class ImgUMount
                 UMountOperations(0) = "Guardar cambios y desmontar"
                 UMountOperations(1) = "Descartar cambios y desmontar"
                 ComboBox1.Items.AddRange(UMountOperations)
+                GroupBox1.Text = "Directorio de montaje"
+                GroupBox2.Text = "Opciones adicionales"
         End Select
         ComboBox1.SelectedIndex = 0
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
@@ -165,7 +173,7 @@ Public Class ImgUMount
         End If
         ComboBox1.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
-        If My.Computer.Info.OSFullName.Contains("Windows 10") Or My.Computer.Info.OSFullName.Contains("Windows 11") Then
+        If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True
         End If
