@@ -6198,7 +6198,7 @@ Public Class MainForm
             Case 2
                 ProjProperties.Label1.Text = "Propiedades de " & ProjProperties.TabControl1.SelectedTab.Text.ToLower()
         End Select
-        If My.Computer.Info.OSFullName.Contains("Windows 10") Or My.Computer.Info.OSFullName.Contains("Windows 11") Then
+        If Environment.OSVersion.Version.Major = 10 Then
             ProjProperties.Text = ""
         Else
             ProjProperties.Text = ProjProperties.Label1.Text
@@ -6222,7 +6222,7 @@ Public Class MainForm
             Case 2
                 ProjProperties.Label1.Text = "Propiedades de " & ProjProperties.TabControl1.SelectedTab.Text.ToLower()
         End Select
-        If My.Computer.Info.OSFullName.Contains("Windows 10") Or My.Computer.Info.OSFullName.Contains("Windows 11") Then
+        If Environment.OSVersion.Version.Major = 10 Then
             ProjProperties.Text = ""
         Else
             ProjProperties.Text = ProjProperties.Label1.Text
@@ -7460,5 +7460,9 @@ Public Class MainForm
                 LoadDTProj(OpenFileDialog1.FileName, Path.GetFileNameWithoutExtension(OpenFileDialog1.FileName), False)
             End If
         End If
+    End Sub
+
+    Private Sub AddCapability_Click(sender As Object, e As EventArgs) Handles AddCapability.Click
+        AddCapabilities.ShowDialog()
     End Sub
 End Class
