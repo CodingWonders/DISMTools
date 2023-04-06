@@ -200,6 +200,12 @@
     <Compile Include="Panels\Img_Ops\Bg_Processes\BGProcsBusyDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Img_Ops\Capabilities\AddCapabilities.Designer.vb">
+      <DependentUpon>AddCapabilities.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Capabilities\AddCapabilities.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\CompClean\ImgCleanup.Designer.vb">
       <DependentUpon>ImgCleanup.vb</DependentUpon>
     </Compile>
@@ -486,6 +492,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Bg_Processes\BGProcsBusyDialog.resx">
       <DependentUpon>BGProcsBusyDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Capabilities\AddCapabilities.resx">
+      <DependentUpon>AddCapabilities.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\CompClean\ImgCleanup.resx">
       <DependentUpon>ImgCleanup.vb</DependentUpon>
@@ -925,7 +934,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\Debug\" />
-    <Folder Include="Panels\Img_Ops\Capabilities\" />
     <Folder Include="Panels\Set_Ops\" />
     <Folder Include="wimlib\" />
   </ItemGroup>
