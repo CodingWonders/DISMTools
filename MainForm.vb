@@ -6247,11 +6247,6 @@ Public Class MainForm
         ElseIf SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
             Exit Sub
         End If
-        'If isModified Then
-
-        'Else
-        '    UnloadDTProj(False, False)
-        'End If
     End Sub
 
     Private Sub MainForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
