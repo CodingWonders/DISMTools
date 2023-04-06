@@ -179,7 +179,7 @@ Public Class ImgCleanup
                 CheckBox4.Text = "Usar origen diferente para la reparación de componentes"
                 CheckBox5.Text = "Limitar acceso a Windows Update"
         End Select
-        If My.Computer.Info.OSFullName.Contains("Windows 10") Or My.Computer.Info.OSFullName.Contains("Windows 11") Then
+        If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True
         End If

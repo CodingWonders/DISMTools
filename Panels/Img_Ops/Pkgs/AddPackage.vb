@@ -278,7 +278,7 @@ Public Class AddPackageDlg
         CheckedListBox1.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
         Control.CheckForIllegalCrossThreadCalls = False
-        If My.Computer.Info.OSFullName.Contains("Windows 10") Or My.Computer.Info.OSFullName.Contains("Windows 11") Then
+        If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True
         End If

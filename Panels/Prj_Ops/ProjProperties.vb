@@ -501,7 +501,7 @@ Public Class ProjProperties
         imgRW.Text = ""
         imgLangText.Text = ""
         Visible = True
-        If My.Computer.Info.OSFullName.Contains("Windows 10") Or My.Computer.Info.OSFullName.Contains("Windows 11") Then
+        If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True
         End If
@@ -730,7 +730,7 @@ Public Class ProjProperties
             Case 2
                 Label1.Text = "Propiedades de " & TabControl1.SelectedTab.Text.ToLower()
         End Select
-        If My.Computer.Info.OSFullName.Contains("Windows 10") Or My.Computer.Info.OSFullName.Contains("Windows 11") Then
+        If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
         Else
             Text = Label1.Text

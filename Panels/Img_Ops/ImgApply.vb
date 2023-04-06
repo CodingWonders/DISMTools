@@ -253,7 +253,7 @@ Public Class ImgApply
         TextBox3.ForeColor = ForeColor
         TextBox4.ForeColor = ForeColor
         ListBox1.ForeColor = ForeColor
-        If My.Computer.Info.OSFullName.Contains("Windows 10") Or My.Computer.Info.OSFullName.Contains("Windows 11") Then
+        If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True
         End If
