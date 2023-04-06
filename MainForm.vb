@@ -7463,6 +7463,7 @@ Public Class MainForm
     End Sub
 
     Private Sub AddCapability_Click(sender As Object, e As EventArgs) Handles AddCapability.Click
+        AddCapabilities.ListView1.Items.Clear()
         AddCapabilities.ShowDialog()
     End Sub
 End Class
