@@ -16,23 +16,39 @@ Public Class ImgUMount
             ' Determine if given mount dir exists
             If Directory.Exists(TextBox1.Text) Then
                 ' Detect whether the mount dir has an image mounted (I don't believe on what users claim, just to be sure)
-                If Directory.Exists(TextBox1.Text & "\Windows") Then
-                    ProgressPanel.RandomMountDir = TextBox1.Text    ' Assume it's valid
+                If MainForm.MountedImageMountDirs.Contains(TextBox1.Text) Then
+                    ProgressPanel.RandomMountDir = TextBox1.Text
                 Else
-                    Do Until Directory.Exists(TextBox1.Text) And Directory.Exists(TextBox1.Text & "\Windows")
-                        If Not Directory.Exists(TextBox1.Text) Or Not Directory.Exists(TextBox1.Text & "\Windows") Then
-                            Button1.PerformClick()
-                        End If
-                    Loop
-                    ProgressPanel.RandomMountDir = TextBox1.Text    ' Assume it's valid
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    MsgBox("The specified directory isn't a valid mount directory.", vbOKOnly + vbCritical, Label1.Text)
+                                Case "ESN"
+                                    MsgBox("El directorio especificado no es un directorio de montaje válido.", vbOKOnly + vbCritical, Label1.Text)
+                            End Select
+                        Case 1
+                            MsgBox("The specified directory isn't a valid mount directory.", vbOKOnly + vbCritical, Label1.Text)
+                        Case 2
+                            MsgBox("El directorio especificado no es un directorio de montaje válido.", vbOKOnly + vbCritical, Label1.Text)
+                    End Select
+                    Exit Sub
                 End If
             Else
-                Do Until Directory.Exists(TextBox1.Text) And Directory.Exists(TextBox1.Text & "\Windows")
-                    If Not Directory.Exists(TextBox1.Text) Or Not Directory.Exists(TextBox1.Text & "\Windows") Then
-                        Button1.PerformClick()
-                    End If
-                Loop
-                ProgressPanel.RandomMountDir = TextBox1.Text
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                MsgBox("The mount directory doesn't exist.", vbOKOnly + vbCritical, Label1.Text)
+                            Case "ESN"
+                                MsgBox("El directorio de montaje no existe.", vbOKOnly + vbCritical, Label1.Text)
+                        End Select
+                    Case 1
+                        MsgBox("The mount directory doesn't exist.", vbOKOnly + vbCritical, Label1.Text)
+                    Case 2
+                        MsgBox("El directorio de montaje no existe.", vbOKOnly + vbCritical, Label1.Text)
+                End Select
+                Exit Sub
             End If
         End If
         If ComboBox1.SelectedIndex = 0 Then
@@ -80,7 +96,7 @@ Public Class ImgUMount
                         Label7.Text = "Unmount operation:"
                         CheckBox1.Text = "Check image integrity"
                         CheckBox2.Text = "Append changes to another index"
-                        Button1.Text = "Browse..."
+                        Button1.Text = "Pick..."
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Cancel"
                         FolderBrowserDialog1.Description = "Please specify a mount directory:"
@@ -100,7 +116,7 @@ Public Class ImgUMount
                         Label7.Text = "Operación de desmontaje:"
                         CheckBox1.Text = "Comprobar integridad de la imagen"
                         CheckBox2.Text = "Anexar los cambios en otro índice"
-                        Button1.Text = "Examinar..."
+                        Button1.Text = "Escoger..."
                         OK_Button.Text = "Aceptar"
                         Cancel_Button.Text = "Cancelar"
                         FolderBrowserDialog1.Description = "Especifique un directorio de montaje:"
@@ -121,7 +137,7 @@ Public Class ImgUMount
                 Label7.Text = "Unmount operation:"
                 CheckBox1.Text = "Check image integrity"
                 CheckBox2.Text = "Append changes to another index"
-                Button1.Text = "Browse..."
+                Button1.Text = "Pick..."
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Cancel"
                 FolderBrowserDialog1.Description = "Please specify a mount directory:"
@@ -141,7 +157,7 @@ Public Class ImgUMount
                 Label7.Text = "Operación de desmontaje:"
                 CheckBox1.Text = "Comprobar integridad de la imagen"
                 CheckBox2.Text = "Anexar los cambios en otro índice"
-                Button1.Text = "Examinar..."
+                Button1.Text = "Escoger..."
                 OK_Button.Text = "Aceptar"
                 Cancel_Button.Text = "Cancelar"
                 FolderBrowserDialog1.Description = "Especifique un directorio de montaje:"
@@ -201,35 +217,15 @@ Public Class ImgUMount
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        If FolderBrowserDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
-            If MainForm.MountedImageMountDirs.Contains(FolderBrowserDialog1.SelectedPath) Then
-                TextBox1.Text = FolderBrowserDialog1.SelectedPath
-            Else
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                MsgBox("The directory specified isn't a valid mount directory. Please select a valid directory and try again." & CrLf & CrLf & "You can get some help finding a valid mount directory with the mounted image manager, which is located in " & Quote & "Tools > Mounted image manager" & Quote, vbOKOnly + vbCritical, "Unmount an image")
-                                Exit Sub
-                            Case "ESN"
-                                MsgBox("El directorio especificado no es un directorio de montaje válido. Seleccione uno válido e inténtelo de nuevo." & CrLf & CrLf & "El administrador de imágenes montadas, que está ubicado en " & Quote & "Herramientas > Administrador de imágenes montadas" & Quote & ", le puede ayudar a encontrar un directorio de montaje válido", vbOKOnly + vbCritical, "Desmontar una imagen")
-                                Exit Sub
-                        End Select
-                    Case 1
-                        MsgBox("The directory specified isn't a valid mount directory. Please select a valid directory and try again." & CrLf & CrLf & "You can get some help finding a valid mount directory with the mounted image manager, which is located in " & Quote & "Tools > Mounted image manager" & Quote, vbOKOnly + vbCritical, "Unmount an image")
-                        Exit Sub
-                    Case 2
-                        MsgBox("El directorio especificado no es un directorio de montaje válido. Seleccione uno válido e inténtelo de nuevo." & CrLf & CrLf & "El administrador de imágenes montadas, que está ubicado en " & Quote & "Herramientas > Administrador de imágenes montadas" & Quote & ", le puede ayudar a encontrar un directorio de montaje válido", vbOKOnly + vbCritical, "Desmontar una imagen")
-                        Exit Sub
-                End Select
+        PopupImageManager.Location = Button1.PointToScreen(Point.Empty)
+        If PopupImageManager.ShowDialog() = DialogResult.OK Then
+            TextBox1.Text = PopupImageManager.selectedMntDir
+            If TextBox1.Text = MainForm.MountDir Then
+                TextBox1.Text = ""
+                RadioButton1.Checked = True
+                RadioButton2.Checked = False
             End If
         End If
-        'FolderBrowserDialog1.ShowDialog()
-        'If DialogResult.OK Then
-        '    TextBox1.Text = FolderBrowserDialog1.SelectedPath
-        'Else
-        '    TextBox1.Text = ""
-        'End If
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
