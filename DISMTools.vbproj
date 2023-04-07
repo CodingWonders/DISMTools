@@ -697,6 +697,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo.ico" />
+    <None Include="Resources\image_light.png" />
+    <None Include="Resources\image_dark.png" />
     <None Include="Resources\FirstUse\product_overview.png" />
     <None Include="Resources\FirstUse\closebox_focus.png" />
     <None Include="Resources\FirstUse\closebox_down.png" />

@@ -38,17 +38,31 @@ Partial Class AddCapabilities
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.Button1 = New System.Windows.Forms.Button()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
         Me.CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.Button4 = New System.Windows.Forms.Button()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.TextBoxSourcePanel = New System.Windows.Forms.Panel()
+        Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
+        Me.WimFileSourcePanel = New System.Windows.Forms.Panel()
+        Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Button5 = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
+        Me.Panel1.SuspendLayout()
+        Me.TextBoxSourcePanel.SuspendLayout()
+        Me.WimFileSourcePanel.SuspendLayout()
+        Me.TableLayoutPanel3.SuspendLayout()
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -69,6 +83,7 @@ Partial Class AddCapabilities
         'OK_Button
         '
         Me.OK_Button.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.OK_Button.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.OK_Button.Location = New System.Drawing.Point(3, 3)
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
@@ -79,6 +94,7 @@ Partial Class AddCapabilities
         '
         Me.Cancel_Button.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Cancel_Button.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.Cancel_Button.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Cancel_Button.Location = New System.Drawing.Point(76, 3)
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
@@ -200,11 +216,12 @@ Partial Class AddCapabilities
         'GroupBox2
         '
         Me.GroupBox2.Controls.Add(Me.Button1)
-        Me.GroupBox2.Controls.Add(Me.TextBox1)
         Me.GroupBox2.Controls.Add(Me.Label2)
         Me.GroupBox2.Controls.Add(Me.CheckBox3)
         Me.GroupBox2.Controls.Add(Me.CheckBox2)
         Me.GroupBox2.Controls.Add(Me.CheckBox1)
+        Me.GroupBox2.Controls.Add(Me.Button4)
+        Me.GroupBox2.Controls.Add(Me.Panel1)
         Me.GroupBox2.Location = New System.Drawing.Point(13, 375)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(759, 142)
@@ -215,20 +232,13 @@ Partial Class AddCapabilities
         'Button1
         '
         Me.Button1.Enabled = False
-        Me.Button1.Location = New System.Drawing.Point(652, 53)
+        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button1.Location = New System.Drawing.Point(479, 53)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 9
         Me.Button1.Text = "Browse..."
         Me.Button1.UseVisualStyleBackColor = True
-        '
-        'TextBox1
-        '
-        Me.TextBox1.Enabled = False
-        Me.TextBox1.Location = New System.Drawing.Point(99, 54)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(547, 21)
-        Me.TextBox1.TabIndex = 8
         '
         'Label2
         '
@@ -270,6 +280,117 @@ Partial Class AddCapabilities
         Me.CheckBox1.Text = "Specify different source for capability installs"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
+        'Button4
+        '
+        Me.Button4.Enabled = False
+        Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button4.Location = New System.Drawing.Point(560, 53)
+        Me.Button4.Name = "Button4"
+        Me.Button4.Size = New System.Drawing.Size(175, 23)
+        Me.Button4.TabIndex = 9
+        Me.Button4.Text = "Determine from group policy"
+        Me.Button4.UseVisualStyleBackColor = True
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.TextBoxSourcePanel)
+        Me.Panel1.Controls.Add(Me.WimFileSourcePanel)
+        Me.Panel1.Location = New System.Drawing.Point(99, 51)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(374, 26)
+        Me.Panel1.TabIndex = 10
+        '
+        'TextBoxSourcePanel
+        '
+        Me.TextBoxSourcePanel.Controls.Add(Me.RichTextBox1)
+        Me.TextBoxSourcePanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBoxSourcePanel.Location = New System.Drawing.Point(0, 0)
+        Me.TextBoxSourcePanel.Name = "TextBoxSourcePanel"
+        Me.TextBoxSourcePanel.Size = New System.Drawing.Size(374, 26)
+        Me.TextBoxSourcePanel.TabIndex = 9
+        '
+        'RichTextBox1
+        '
+        Me.RichTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.RichTextBox1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.RichTextBox1.Enabled = False
+        Me.RichTextBox1.Location = New System.Drawing.Point(0, 0)
+        Me.RichTextBox1.Multiline = False
+        Me.RichTextBox1.Name = "RichTextBox1"
+        Me.RichTextBox1.Size = New System.Drawing.Size(374, 26)
+        Me.RichTextBox1.TabIndex = 0
+        Me.RichTextBox1.Text = ""
+        '
+        'WimFileSourcePanel
+        '
+        Me.WimFileSourcePanel.Controls.Add(Me.TableLayoutPanel3)
+        Me.WimFileSourcePanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.WimFileSourcePanel.Location = New System.Drawing.Point(0, 0)
+        Me.WimFileSourcePanel.Name = "WimFileSourcePanel"
+        Me.WimFileSourcePanel.Size = New System.Drawing.Size(374, 26)
+        Me.WimFileSourcePanel.TabIndex = 10
+        Me.WimFileSourcePanel.Visible = False
+        '
+        'TableLayoutPanel3
+        '
+        Me.TableLayoutPanel3.ColumnCount = 4
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 26.0!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 216.0!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 106.0!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 26.0!))
+        Me.TableLayoutPanel3.Controls.Add(Me.Label5, 1, 0)
+        Me.TableLayoutPanel3.Controls.Add(Me.PictureBox2, 0, 0)
+        Me.TableLayoutPanel3.Controls.Add(Me.Label3, 2, 0)
+        Me.TableLayoutPanel3.Controls.Add(Me.Button5, 3, 0)
+        Me.TableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TableLayoutPanel3.Location = New System.Drawing.Point(0, 0)
+        Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
+        Me.TableLayoutPanel3.RowCount = 1
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel3.Size = New System.Drawing.Size(374, 26)
+        Me.TableLayoutPanel3.TabIndex = 0
+        '
+        'Label5
+        '
+        Me.Label5.AutoEllipsis = True
+        Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label5.Location = New System.Drawing.Point(29, 0)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(210, 26)
+        Me.Label5.TabIndex = 8
+        Me.Label5.Text = "Image file"
+        Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'PictureBox2
+        '
+        Me.PictureBox2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PictureBox2.Image = Global.DISMTools.My.Resources.Resources.image_light
+        Me.PictureBox2.Location = New System.Drawing.Point(3, 3)
+        Me.PictureBox2.Name = "PictureBox2"
+        Me.PictureBox2.Size = New System.Drawing.Size(20, 20)
+        Me.PictureBox2.TabIndex = 0
+        Me.PictureBox2.TabStop = False
+        '
+        'Label3
+        '
+        Me.Label3.AutoEllipsis = True
+        Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label3.Location = New System.Drawing.Point(245, 0)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(100, 26)
+        Me.Label3.TabIndex = 7
+        Me.Label3.Text = "Image index"
+        Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'Button5
+        '
+        Me.Button5.Image = Global.DISMTools.My.Resources.Resources.proj_name_edit
+        Me.Button5.Location = New System.Drawing.Point(351, 3)
+        Me.Button5.Name = "Button5"
+        Me.Button5.Size = New System.Drawing.Size(20, 20)
+        Me.Button5.TabIndex = 9
+        Me.Button5.UseVisualStyleBackColor = True
+        '
         'AddCapabilities
         '
         Me.AcceptButton = Me.OK_Button
@@ -297,6 +418,11 @@ Partial Class AddCapabilities
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
+        Me.TextBoxSourcePanel.ResumeLayout(False)
+        Me.WimFileSourcePanel.ResumeLayout(False)
+        Me.TableLayoutPanel3.ResumeLayout(False)
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -316,10 +442,19 @@ Partial Class AddCapabilities
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents Button3 As System.Windows.Forms.Button
     Friend WithEvents Button1 As System.Windows.Forms.Button
-    Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents CheckBox3 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox2 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
+    Friend WithEvents Button4 As System.Windows.Forms.Button
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents WimFileSourcePanel As System.Windows.Forms.Panel
+    Friend WithEvents TableLayoutPanel3 As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents PictureBox2 As System.Windows.Forms.PictureBox
+    Friend WithEvents TextBoxSourcePanel As System.Windows.Forms.Panel
+    Friend WithEvents Label3 As System.Windows.Forms.Label
+    Friend WithEvents Label5 As System.Windows.Forms.Label
+    Friend WithEvents RichTextBox1 As System.Windows.Forms.RichTextBox
+    Friend WithEvents Button5 As System.Windows.Forms.Button
 
 End Class
