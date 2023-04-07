@@ -2287,7 +2287,24 @@ Public Class MainForm
                             Exit Sub
                         End If
                         imgCapabilityNameList.Add(capability.Name)
-                        imgCapabilityStateList.Add(capability.State)
+                        Select Case capability.State
+                            Case DismPackageFeatureState.NotPresent
+                                imgCapabilityStateList.Add("Not present")
+                            Case DismPackageFeatureState.UninstallPending
+                                imgCapabilityStateList.Add("Uninstall pending")
+                            Case DismPackageFeatureState.Staged
+                                imgCapabilityStateList.Add("Uninstalled")
+                            Case DismPackageFeatureState.Removed Or DismPackageFeatureState.Resolved
+                                imgCapabilityStateList.Add("Removed")
+                            Case DismPackageFeatureState.Installed
+                                imgCapabilityStateList.Add("Installed")
+                            Case DismPackageFeatureState.InstallPending
+                                imgCapabilityStateList.Add("Install Pending")
+                            Case DismPackageFeatureState.Superseded
+                                imgCapabilityStateList.Add("Superseded")
+                            Case DismPackageFeatureState.PartiallyInstalled
+                                imgCapabilityStateList.Add("Partially Installed")
+                        End Select
                     Next
                     imgCapabilityIds = imgCapabilityNameList.ToArray()
                     imgCapabilityState = imgCapabilityStateList.ToArray()
@@ -7507,14 +7524,14 @@ Public Class MainForm
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENG"
-                        AddCapabilities.Label4.Text = "This image contains " & ElementCount & " features."
+                        AddCapabilities.Label4.Text = "This image contains " & ElementCount & " capabilities."
                     Case "ESN"
-                        AddCapabilities.Label4.Text = "Esta imagen contiene " & ElementCount & " características."
+                        AddCapabilities.Label4.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
                 End Select
             Case 1
-                AddCapabilities.Label4.Text = "This image contains " & ElementCount & " features."
+                AddCapabilities.Label4.Text = "This image contains " & ElementCount & " capabilities."
             Case 2
-                AddCapabilities.Label4.Text = "Esta imagen contiene " & ElementCount & " características."
+                AddCapabilities.Label4.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
         End Select
         AddCapabilities.ShowDialog()
     End Sub
