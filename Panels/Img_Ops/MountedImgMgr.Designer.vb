@@ -61,7 +61,7 @@ Partial Class MountedImgMgr
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TableLayoutPanel1.ColumnCount = 1
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 63.67347!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 63.6734695!))
         Me.TableLayoutPanel1.Controls.Add(Me.ListView1, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.ActionsTLP, 0, 1)
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(16, 52)
@@ -78,6 +78,7 @@ Partial Class MountedImgMgr
         Me.ListView1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ListView1.FullRowSelect = True
         Me.ListView1.Location = New System.Drawing.Point(3, 3)
+        Me.ListView1.MultiSelect = False
         Me.ListView1.Name = "ListView1"
         Me.ListView1.Size = New System.Drawing.Size(1230, 509)
         Me.ListView1.TabIndex = 0
@@ -116,12 +117,12 @@ Partial Class MountedImgMgr
         'ActionsTLP
         '
         Me.ActionsTLP.ColumnCount = 6
-        Me.ActionsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
-        Me.ActionsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
-        Me.ActionsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
-        Me.ActionsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
-        Me.ActionsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
-        Me.ActionsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
+        Me.ActionsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.6666698!))
+        Me.ActionsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.6666698!))
+        Me.ActionsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.6666698!))
+        Me.ActionsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.6666698!))
+        Me.ActionsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.6666698!))
+        Me.ActionsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.6666698!))
         Me.ActionsTLP.Controls.Add(Me.Button6, 5, 0)
         Me.ActionsTLP.Controls.Add(Me.Button4, 3, 0)
         Me.ActionsTLP.Controls.Add(Me.Button3, 2, 0)
