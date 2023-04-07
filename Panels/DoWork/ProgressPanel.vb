@@ -348,6 +348,17 @@ Public Class ProgressPanel
     Dim appxSuccessfulRemovals As Integer                   ' Successful AppX package removal count
     Dim appxFailedRemovals As Integer                       ' Failed AppX package addition count
 
+    ' OperationNum: 64
+    Public capAdditionIds(65535) As String                  ' Array used to store IDs of capabilities to add
+    Public capAdditionLastId As String                      ' Last capability ID selected
+    Public capAdditionUseSource As Boolean                  ' Determine whether to use a custom source for capability addition
+    Public capAdditionSource As String                      ' Capability addition source
+    Public capAdditionCount As Integer                      ' Total number of capabilities to add
+    Public capAdditionLimitWUAccess As Boolean              ' Determine whether to limit access to Windows Update and stick to the source specified (online images only)
+    Public capAdditionCommit As Boolean                     ' Determine whether to commit image after adding capabilities
+    Public capSuccessfulAdditions As Integer                ' Number of successful capability additions
+    Public capFailedAdditions As Integer                    ' Number of failed capability additions
+
     ' <Space for other OperationNums>
     ' OperationNum: 87
     Public osUninstDayCount As Integer                      ' Number of days the user has to uninstall an OS upgrade
@@ -470,6 +481,12 @@ Public Class ProgressPanel
             End If
         ElseIf opNum = 38 Then
             taskCount = 1
+        ElseIf opNum = 64 Then
+            If capAdditionCommit Then
+                taskCount = 2
+            Else
+                taskCount = 1
+            End If
         ElseIf opNum = 87 Then
             taskCount = 1
         ElseIf opNum = 991 Then
@@ -522,6 +539,7 @@ Public Class ProgressPanel
         CurrentPB.Value = 0
         PkgErrorText.RichTextBox1.Clear()
         FeatErrorText.RichTextBox1.Clear()
+        DismApi.Initialize(DismLogLevel.LogErrors)
         If opNum = 0 Then
             Select Case Language
                 Case 0
@@ -2036,17 +2054,16 @@ Public Class ProgressPanel
                                    "Feature " & (x + 1) & " of " & featEnablementCount)
                 CurrentPB.Value = x + 1
                 Try
-                    imgSession = DismApi.OpenOfflineSession(mntString)
-                Catch ex As DismNotInitializedException
                     DismApi.Initialize(DismLogLevel.LogErrors)
-                    imgSession = DismApi.OpenOfflineSession(mntString)
+                    Using imgSession As DismSession = DismApi.OpenOfflineSession(mntString)
+                        Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim())
+                        LogView.AppendText(CrLf & CrLf &
+                                           "- Feature name: " & featInfo.FeatureName & CrLf &
+                                           "- Feature description: " & featInfo.Description & CrLf)
+                    End Using
+                Finally
+                    DismApi.Shutdown()
                 End Try
-                Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim())
-                LogView.AppendText(CrLf & CrLf &
-                                   "- Feature name: " & featInfo.FeatureName & CrLf &
-                                   "- Feature description: " & featInfo.Description & CrLf)
-                DismApi.CloseSession(imgSession)
-                DismApi.Shutdown()
                 CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /enable-feature /featurename=" & featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
                 If featisParentPkgNameUsed And featParentPkgName <> "" Then
                     CommandArgs &= " /packagename=" & featParentPkgName
@@ -2179,17 +2196,17 @@ Public Class ProgressPanel
                                    "Feature " & (x + 1) & " of " & featDisablementCount)
                 CurrentPB.Value = x + 1
                 Try
-                    imgSession = DismApi.OpenOfflineSession(mntString)
-                Catch ex As DismNotInitializedException
                     DismApi.Initialize(DismLogLevel.LogErrors)
-                    imgSession = DismApi.OpenOfflineSession(mntString)
+                    Using imgSession As DismSession = DismApi.OpenOfflineSession(mntString)
+                        Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim())
+                        LogView.AppendText(CrLf & CrLf &
+                                           "- Feature name: " & featInfo.FeatureName & CrLf &
+                                           "- Feature description: " & featInfo.Description & CrLf)
+
+                    End Using
+                Finally
+                    DismApi.Shutdown()
                 End Try
-                Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim())
-                LogView.AppendText(CrLf & CrLf &
-                                   "- Feature name: " & featInfo.FeatureName & CrLf &
-                                   "- Feature description: " & featInfo.Description & CrLf)
-                DismApi.CloseSession(imgSession)
-                DismApi.Shutdown()
                 CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /disable-feature /featurename=" & featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
                 If featDisablementParentPkgUsed And featDisablementParentPkg <> "" Then
                     CommandArgs &= " /packagename=" & featParentPkgName
@@ -2743,6 +2760,144 @@ Public Class ProgressPanel
             If appxSuccessfulRemovals > 0 Then
                 GetErrorCode(True)
             ElseIf appxSuccessfulRemovals <= 0 Then
+                GetErrorCode(False)
+            End If
+        ElseIf opNum = 64 Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Adding capabilities..."
+                            currentTask.Text = "Preparing to add capabilities..."
+                        Case "ESN"
+                            allTasks.Text = "Añadiendo funcionalidades..."
+                            currentTask.Text = "Preparándonos para añadir funcionalidades..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Adding capabilities..."
+                    currentTask.Text = "Preparing to add capabilities..."
+                Case 2
+                    allTasks.Text = "Añadiendo funcionalidades..."
+                    currentTask.Text = "Preparándonos para añadir funcionalidades..."
+            End Select
+            LogView.AppendText(CrLf & "Adding capabilities to mounted image..." & CrLf & _
+                               "Options:" & CrLf & _
+                               "- Use a source for capability addition? " & If(capAdditionUseSource, "Yes", "No") & CrLf & _
+                               "- Capability source: " & If(capAdditionUseSource, Quote & capAdditionSource & Quote, "No source has been provided") & CrLf & _
+                               "- Limit access to Windows Update? " & If(capAdditionLimitWUAccess, "Yes", "No") & CrLf & _
+                               "- Commit image after adding capabilities? " & If(capAdditionCommit, "Yes", "No") & CrLf)
+            If capAdditionUseSource And Not Directory.Exists(capAdditionSource) Then
+                LogView.AppendText(CrLf & _
+                                   "Warning: the specified source does not exist in the file system, and it will be skipped")
+            End If
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            currentTask.Text = "Adding capabilities..."
+                        Case "ESN"
+                            currentTask.Text = "Añadiendo funcionalidades..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Adding capabilities..."
+                Case 2
+                    currentTask.Text = "Añadiendo funcionalidades..."
+            End Select
+            LogView.AppendText(CrLf & "Enumerating capabilities to add. Please wait..." & CrLf & _
+                               "Total number of capabilities: " & capAdditionCount)
+            CurrentPB.Maximum = capAdditionCount
+            For x = 0 To Array.LastIndexOf(capAdditionIds, capAdditionLastId)
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                currentTask.Text = "Adding capability " & (x + 1) & " of " & capAdditionCount & "..."
+                            Case "ESN"
+                                currentTask.Text = "Añadiendo funcionalidad " & (x + 1) & " de " & capAdditionCount & "..."
+                        End Select
+                    Case 1
+                        currentTask.Text = "Adding capability " & (x + 1) & " of " & capAdditionCount & "..."
+                    Case 2
+                        currentTask.Text = "Añadiendo funcionalidad " & (x + 1) & " de " & capAdditionCount & "..."
+                End Select
+                CurrentPB.Value = x + 1
+                LogView.AppendText(CrLf & _
+                                   "Capability " & (x + 1) & " of " & capAdditionCount)
+                ' Get capability information
+                ' Try opening the session. If API is not initialized, initialize it
+                Try
+                    DismApi.Initialize(DismLogLevel.LogErrors)
+                    Using imgSession As DismSession = DismApi.OpenOfflineSession(mntString)
+                        ' Get capability information
+                        Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, capAdditionIds(x))
+                        LogView.AppendText(CrLf & CrLf & _
+                                           "- Capability identity: " & capInfo.DisplayName & CrLf & _
+                                           "- Capability description: " & capInfo.Description & CrLf)
+                    End Using
+                Finally
+                    DismApi.Shutdown()
+                End Try
+                'Try
+                '    imgSession = DismApi.OpenOfflineSession(mntString)
+                'Catch ex As DismNotInitializedException
+                '    DismApi.Initialize(DismLogLevel.LogErrors)
+                '    imgSession = DismApi.OpenOfflineSession(mntString)
+                'End Try
+                '' Get capability information
+                'Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, capAdditionIds(x))
+                'LogView.AppendText(CrLf & CrLf & _
+                '                   "- Capability identity: " & capInfo.DisplayName & CrLf & _
+                '                   "- Capability description: " & capInfo.Description & CrLf)
+                'DismApi.CloseSession(imgSession)
+                'DismApi.Shutdown()
+                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /add-capability /capabilityname=" & Quote & capAdditionIds(x) & Quote
+                If capAdditionUseSource And Directory.Exists(capAdditionSource) Then
+                    CommandArgs &= " /source=" & Quote & capAdditionSource & Quote
+                End If
+                If capAdditionLimitWUAccess Then CommandArgs &= " /limitaccess"
+                DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+                DISMProc.StartInfo.Arguments = CommandArgs
+                DISMProc.Start()
+                Do Until DISMProc.HasExited
+                    If DISMProc.HasExited Then
+                        Exit Do
+                    End If
+                Loop
+                LogView.AppendText(CrLf & "Getting error level...")
+                errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
+                If DISMProc.ExitCode = 0 Then
+                    capSuccessfulAdditions += 1
+                Else
+                    capFailedAdditions += 1
+                End If
+                If errCode.Length >= 8 Then
+                    LogView.AppendText(" Error level : 0x" & errCode)
+                Else
+                    LogView.AppendText("  Error level : " & errCode)
+                End If
+                If FeatErrorText.RichTextBox1.Text = "" Then
+                    If errCode.Length >= 8 Then
+                        FeatErrorText.RichTextBox1.AppendText("0x" & errCode)
+                    Else
+                        FeatErrorText.RichTextBox1.AppendText(errCode)
+                    End If
+                Else
+                    If errCode.Length >= 8 Then
+                        FeatErrorText.RichTextBox1.AppendText(CrLf & "0x" & errCode)
+                    Else
+                        FeatErrorText.RichTextBox1.AppendText(CrLf & errCode)
+                    End If
+                End If
+            Next
+            CurrentPB.Value = CurrentPB.Maximum
+            LogView.AppendText(CrLf & "Gathering error level for selected features..." & CrLf)
+            For x = 0 To FeatErrorText.RichTextBox1.Lines.Count - 1
+                LogView.AppendText(CrLf & "- Capability no. " & (x + 1) & ": " & FeatErrorText.RichTextBox1.Lines(x))
+            Next
+            Thread.Sleep(2000)
+            If capSuccessfulAdditions > 0 Then
+                GetErrorCode(True)
+            ElseIf capSuccessfulAdditions <= 0 Then
                 GetErrorCode(False)
             End If
         ElseIf opNum = 87 Then
