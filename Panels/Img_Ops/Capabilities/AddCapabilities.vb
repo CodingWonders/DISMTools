@@ -33,6 +33,29 @@ Public Class AddCapabilities
             Case 2
                 Label4.Text &= " Solo las funcionalidades no instaladas (" & ListView1.Items.Count & ") son mostradas"
         End Select
+        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
+            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
+            BackColor = Color.FromArgb(31, 31, 31)
+            ForeColor = Color.White
+            GroupBox1.ForeColor = Color.White
+            GroupBox2.ForeColor = Color.White
+            ListView1.BackColor = Color.FromArgb(31, 31, 31)
+            RichTextBox1.BackColor = Color.FromArgb(31, 31, 31)
+            PictureBox2.Image = My.Resources.image_dark
+        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
+            Win10Title.BackColor = Color.White
+            BackColor = Color.FromArgb(238, 238, 242)
+            ForeColor = Color.Black
+            GroupBox1.ForeColor = Color.Black
+            GroupBox2.ForeColor = Color.Black
+            ListView1.BackColor = Color.FromArgb(238, 238, 242)
+            RichTextBox1.BackColor = Color.FromArgb(238, 238, 242)
+            PictureBox2.Image = My.Resources.image_light
+        End If
+        CheckBox1.ForeColor = ForeColor
+        CheckBox2.ForeColor = ForeColor
+        CheckBox3.ForeColor = ForeColor
+        ListView1.ForeColor = ForeColor
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
@@ -79,5 +102,18 @@ Public Class AddCapabilities
                     MsgBox("No se pudo recopilar el origen de las políticas de grupo. Razón:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, Text)
             End Select
         End Try
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        For i As Integer = 0 To ListView1.Items.Count - 1
+            ListView1.Items(i).Checked = True
+        Next
+    End Sub
+
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        For i As Integer = 0 To ListView1.Items.Count - 1
+            ListView1.Items(i).Checked = False
+        Next
+        DialogResult = Windows.Forms.DialogResult.None
     End Sub
 End Class
