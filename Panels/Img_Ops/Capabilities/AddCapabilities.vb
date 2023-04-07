@@ -5,8 +5,90 @@ Imports Microsoft.VisualBasic.ControlChars
 
 Public Class AddCapabilities
 
+    Dim capCount As Integer
+    Dim capIds(65535) As String
+
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        Dim capIdList As New List(Of String)
+        ProgressPanel.MountDir = MainForm.MountDir
+        capCount = ListView1.CheckedItems.Count
+        If ListView1.CheckedItems.Count >= 1 Then
+            For x = 0 To capCount - 1
+                capIdList.Add(ListView1.CheckedItems(x).SubItems(0).Text)
+            Next
+            capIds = capIdList.ToArray()
+            For x = 0 To capIds.Length - 1
+                ProgressPanel.capAdditionIds(x) = capIds(x)
+            Next
+            ProgressPanel.capAdditionLastId = ListView1.CheckedItems(capCount - 1).SubItems(0).Text
+            If CheckBox1.Checked Then
+                If RichTextBox1.Text <> "" Then
+                    If Directory.Exists(RichTextBox1.Text) Then
+                        ProgressPanel.capAdditionSource = RichTextBox1.Text         ' Don't know if it would work on cases where it begins with "wim:\"
+                    Else
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        MsgBox("The specified source directory does not exist in the file system. Make sure it exists and try again.", vbOKOnly + vbCritical, Label1.Text)
+                                    Case "ESN"
+                                        MsgBox("El directorio de origen especificado no existe en el sistema de archivos. Asegúrese de que existe e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
+                                End Select
+                            Case 1
+                                MsgBox("The specified source directory does not exist in the file system. Make sure it exists and try again.", vbOKOnly + vbCritical, Label1.Text)
+                            Case 2
+                                MsgBox("El directorio de origen especificado no existe en el sistema de archivos. Asegúrese de que existe e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
+                        End Select
+                        Exit Sub
+                    End If
+                Else
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    MsgBox("There is no source specified. Specify a source and try again.", vbOKOnly + vbCritical, Label1.Text)
+                                Case "ESN"
+                                    MsgBox("No se ha especificado un origen. Especifique un origen e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
+                            End Select
+                        Case 1
+                            MsgBox("There is no source specified. Specify a source and try again.", vbOKOnly + vbCritical, Label1.Text)
+                        Case 2
+                            MsgBox("No se ha especificado un origen. Especifique un origen e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
+                    End Select
+                    Exit Sub
+                End If
+            End If
+            If CheckBox2.Checked Then
+                ProgressPanel.capAdditionLimitWUAccess = True
+            Else
+                ProgressPanel.capAdditionLimitWUAccess = False
+            End If
+            If CheckBox3.Checked Then
+                ProgressPanel.capAdditionCommit = True
+            Else
+                ProgressPanel.capAdditionCommit = False
+            End If
+        Else
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MsgBox("There aren't any selected capabilities to install. Please select some capabilities and try again.", vbOKOnly + vbCritical, Label1.Text)
+                        Case "ESN"
+                            MsgBox("No hay funcionalidades seleccionadas para instalar. Seleccione algunas de ellas e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
+                    End Select
+                Case 1
+                    MsgBox("There aren't any selected capabilities to install. Please select some capabilities and try again.", vbOKOnly + vbCritical, Label1.Text)
+                Case 2
+                    MsgBox("No hay funcionalidades seleccionadas para instalar. Seleccione algunas de ellas e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
+            End Select
+            Exit Sub
+        End If
+        ProgressPanel.capAdditionCount = capCount
+        ProgressPanel.OperationNum = 64
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
+        Visible = False
+        ProgressPanel.ShowDialog(MainForm)
         Me.Close()
     End Sub
 
@@ -92,14 +174,14 @@ Public Class AddCapabilities
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
-                            MsgBox("Could not gather source from group policy. Reason:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, Text)
+                            MsgBox("Could not gather source from group policy. Reason:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, Label1.Text)
                         Case "ESN"
-                            MsgBox("No se pudo recopilar el origen de las políticas de grupo. Razón:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, Text)
+                            MsgBox("No se pudo recopilar el origen de las políticas de grupo. Razón:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, Label1.Text)
                     End Select
                 Case 1
-                    MsgBox("Could not gather source from group policy. Reason:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, Text)
+                    MsgBox("Could not gather source from group policy. Reason:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, Label1.Text)
                 Case 2
-                    MsgBox("No se pudo recopilar el origen de las políticas de grupo. Razón:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, Text)
+                    MsgBox("No se pudo recopilar el origen de las políticas de grupo. Razón:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, Label1.Text)
             End Select
         End Try
     End Sub
