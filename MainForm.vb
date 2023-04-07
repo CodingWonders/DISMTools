@@ -165,6 +165,8 @@ Public Class MainForm
 
     Dim argProjPath As String = ""                                       ' String used to know which project to load if it's specified in an argument
 
+    Dim sessionMntDir As String = ""
+
     Sub GetArguments()
         Dim args() As String = Environment.GetCommandLineArgs()
         If args.Length = 1 Then
@@ -856,7 +858,7 @@ Public Class MainForm
         BackgroundProcessesButton.Visible = False
         BackgroundProcessesButton.Image = My.Resources.bg_ops
         BackgroundProcessesButton.Visible = True
-        If DismApi.DISMAPI_E_DISMAPI_NOT_INITIALIZED Then DismApi.Initialize(DismLogLevel.LogErrors)
+        If UseApi Then DismApi.Initialize(DismLogLevel.LogErrors)
         areBackgroundProcessesDone = False
         regJumps = False
         irregVal = 0
@@ -880,7 +882,8 @@ Public Class MainForm
                                 progressLabel = "Creando sesión para esta imagen..."
                         End Select
                         ImgBW.ReportProgress(0)
-                        session = DismApi.OpenOfflineSession(MountedImageMountDirs(x))
+                        sessionMntDir = MountedImageMountDirs(x)
+                        'session = DismApi.OpenOfflineSession(MountedImageMountDirs(x))
                         Exit For
                     End If
                 Next
@@ -942,11 +945,11 @@ Public Class MainForm
             ImgBW.ReportProgress(progressMin + progressDivs)
             GetBasicImageInfo(True)
             If isOrphaned Then
-                If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                'If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                 Exit Sub
             End If
             If ImgBW.CancellationPending Then
-                If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                'If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                 Exit Sub
             End If
             DetectNTVersion(MountDir & "\Windows\system32\ntoskrnl.exe")
@@ -994,7 +997,7 @@ Public Class MainForm
                         progressLabel = "Obteniendo paquetes de la imagen..."
                 End Select
                 ImgBW.ReportProgress(20)
-                GetImagePackages(If(session IsNot Nothing, True, False), If(session IsNot Nothing, session, Nothing))
+                GetImagePackages(True)
                 If ImgBW.CancellationPending Then
                     If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                     Exit Sub
@@ -1013,7 +1016,7 @@ Public Class MainForm
                         progressLabel = "Obteniendo características de la imagen..."
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
-                GetImageFeatures(If(session IsNot Nothing, True, False), If(session IsNot Nothing, session, Nothing))
+                GetImageFeatures(True)
                 If ImgBW.CancellationPending Then
                     If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                     Exit Sub
@@ -1035,7 +1038,7 @@ Public Class MainForm
                             progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
                     End Select
                     ImgBW.ReportProgress(progressMin + progressDivs)
-                    GetImageAppxPackages(If(session IsNot Nothing, True, False), If(session IsNot Nothing, session, Nothing))
+                    GetImageAppxPackages(True)
                     If ImgBW.CancellationPending Then
                         If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                         Exit Sub
@@ -1060,7 +1063,7 @@ Public Class MainForm
                             progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
                     End Select
                     ImgBW.ReportProgress(progressMin + progressDivs)
-                    GetImageCapabilities(If(session IsNot Nothing, True, False), If(session IsNot Nothing, session, Nothing))
+                    GetImageCapabilities(True)
                     If ImgBW.CancellationPending Then
                         If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                         Exit Sub
@@ -1082,7 +1085,7 @@ Public Class MainForm
                         progressLabel = "Obteniendo controladores de terceros de la imagen..."
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
-                GetImageDrivers(If(session IsNot Nothing, True, False), If(session IsNot Nothing, session, Nothing))
+                GetImageDrivers(True)
                 If ImgBW.CancellationPending Then
                     If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                     Exit Sub
@@ -1879,10 +1882,11 @@ Public Class MainForm
     ''' <summary>
     ''' Gets installed packages in an image and puts them in separate arrays
     ''' </summary>
-    Sub GetImagePackages(Optional UseApi As Boolean = False, Optional session As DismSession = Nothing)
+    Sub GetImagePackages(Optional UseApi As Boolean = False)
         If UseApi Then
             Try
-                If session IsNot Nothing Then
+                DismApi.Initialize(DismLogLevel.LogErrors)
+                Using session As DismSession = DismApi.OpenOfflineSession(sessionMntDir)
                     Dim imgPackageNameList As New List(Of String)
                     Dim imgPackageStateList As New List(Of String)
                     Dim imgPackageRelTypeList As New List(Of String)
@@ -1902,15 +1906,42 @@ Public Class MainForm
                     imgPackageState = imgPackageStateList.ToArray()
                     imgPackageRelType = imgPackageRelTypeList.ToArray()
                     imgPackageInstTime = imgPackageInstTimeList.ToArray()
-                    Exit Sub
-                Else
-                    Throw New Exception("No valid DISM sesion has been provided")
-                End If
-            Catch ex As Exception
-                DismApi.CloseSession(session)
-                ' Run backup function
-                Exit Try
+                End Using
+            Finally
+                DismApi.Shutdown()
             End Try
+            Exit Sub
+            'Try
+
+            '    'If session IsNot Nothing Then
+            '    '    Dim imgPackageNameList As New List(Of String)
+            '    '    Dim imgPackageStateList As New List(Of String)
+            '    '    Dim imgPackageRelTypeList As New List(Of String)
+            '    '    Dim imgPackageInstTimeList As New List(Of String)
+            '    '    Dim PackageCollection As DismPackageCollection = DismApi.GetPackages(session)
+            '    '    For Each package As DismPackage In PackageCollection
+            '    '        If ImgBW.CancellationPending Then
+            '    '            If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+            '    '            Exit Sub
+            '    '        End If
+            '    '        imgPackageNameList.Add(package.PackageName)
+            '    '        imgPackageStateList.Add(package.PackageState)
+            '    '        imgPackageRelTypeList.Add(package.ReleaseType)
+            '    '        imgPackageInstTimeList.Add(package.InstallTime.ToString())
+            '    '    Next
+            '    '    imgPackageNames = imgPackageNameList.ToArray()
+            '    '    imgPackageState = imgPackageStateList.ToArray()
+            '    '    imgPackageRelType = imgPackageRelTypeList.ToArray()
+            '    '    imgPackageInstTime = imgPackageInstTimeList.ToArray()
+            '    '    Exit Sub
+            '    'Else
+            '    '    Throw New Exception("No valid DISM sesion has been provided")
+            '    'End If
+            'Catch ex As Exception
+            '    DismApi.CloseSession(session)
+            '    ' Run backup function
+            '    Exit Try
+            'End Try
         End If
         Debug.WriteLine("[GetImagePackages] Running function...")
         Debug.WriteLine("[GetImagePackages] Writing getter scripts...")
@@ -1999,10 +2030,11 @@ Public Class MainForm
     ''' <summary>
     ''' Gets present features in an image and puts them in separate arrays
     ''' </summary>
-    Sub GetImageFeatures(Optional UseApi As Boolean = False, Optional session As DismSession = Nothing)
+    Sub GetImageFeatures(Optional UseApi As Boolean = False)
         If UseApi Then
             Try
-                If session IsNot Nothing Then
+                DismApi.Initialize(DismLogLevel.LogErrors)
+                Using session As DismSession = DismApi.OpenOfflineSession(sessionMntDir)
                     Dim imgFeatureNameList As New List(Of String)
                     Dim imgFeatureStateList As New List(Of String)
                     Dim FeatureCollection As DismFeatureCollection = DismApi.GetFeatures(session)
@@ -2033,14 +2065,22 @@ Public Class MainForm
                     Next
                     imgFeatureNames = imgFeatureNameList.ToArray()
                     imgFeatureState = imgFeatureStateList.ToArray()
-                    Exit Sub
-                Else
-                    Throw New Exception("No valid DISM session has been provided")
-                End If
-            Catch ex As Exception
-                DismApi.CloseSession(session)
-                Exit Try
+                End Using
+            Finally
+                DismApi.Shutdown()
             End Try
+            Exit Sub
+            'Try
+            '    If session IsNot Nothing Then
+
+            '        Exit Sub
+            '    Else
+            '        Throw New Exception("No valid DISM session has been provided")
+            '    End If
+            'Catch ex As Exception
+            '    DismApi.CloseSession(session)
+            '    Exit Try
+            'End Try
         End If
         Debug.WriteLine("[GetImageFeatures] Running function...")
         Debug.WriteLine("[GetImageFeatures] Writing getter scripts...")
@@ -2115,55 +2155,101 @@ Public Class MainForm
     ''' Gets installed provisioned APPX packages in an image and puts them in separate arrays
     ''' </summary>
     ''' <remarks>This is only for Windows 8 and newer</remarks>
-    Sub GetImageAppxPackages(Optional UseApi As Boolean = False, Optional session As DismSession = Nothing)
+    Sub GetImageAppxPackages(Optional UseApi As Boolean = False)
         If UseApi Then
-            If session IsNot Nothing And Environment.OSVersion.Version.Major > 6 Then
-                Dim imgAppxDisplayNameList As New List(Of String)
-                Dim imgAppxPackageNameList As New List(Of String)
-                Dim imgAppxVersionList As New List(Of String)
-                Dim imgAppxArchitectureList As New List(Of String)
-                Dim imgAppxResourceIdList As New List(Of String)
-                Dim imgAppxRegionList As New List(Of String)
-                Dim AppxPackageCollection As DismAppxPackageCollection = DismApi.GetProvisionedAppxPackages(session)
-                For Each AppxPackage As DismAppxPackage In AppxPackageCollection
-                    If ImgBW.CancellationPending Then
-                        If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
-                        Exit Sub
-                    End If
-                    Select Case AppxPackage.Architecture
-                        Case DismProcessorArchitecture.None
-                            imgAppxArchitectureList.Add("Unknown")
-                        Case DismProcessorArchitecture.Intel
-                            imgAppxArchitectureList.Add("x86")
-                        Case DismProcessorArchitecture.ARM
-                            imgAppxArchitectureList.Add("ARM")
-                        Case DismProcessorArchitecture.IA64
-                            imgAppxArchitectureList.Add("IA64")
-                        Case DismProcessorArchitecture.AMD64
-                            imgAppxArchitectureList.Add("x64")
-                        Case DismProcessorArchitecture.Neutral
-                            imgAppxArchitectureList.Add("Neutral")
-                        Case DismProcessorArchitecture.ARM64
-                            imgAppxArchitectureList.Add("ARM64")
-                    End Select
-                    imgAppxDisplayNameList.Add(AppxPackage.DisplayName)
-                    imgAppxPackageNameList.Add(AppxPackage.PackageName)
-                    imgAppxResourceIdList.Add(AppxPackage.ResourceId)
-                    imgAppxVersionList.Add(AppxPackage.Version.ToString())
-                Next
-                imgAppxArchitectures = imgAppxArchitectureList.ToArray()
-                imgAppxDisplayNames = imgAppxDisplayNameList.ToArray()
-                imgAppxPackageNames = imgAppxPackageNameList.ToArray()
-                imgAppxResourceIds = imgAppxResourceIdList.ToArray()
-                imgAppxVersions = imgAppxVersionList.ToArray()
-                Exit Sub
-            Else
-                Try
-                    Throw New Exception("No valid DISM session has been provided")
-                Catch ex As Exception
-                    DismApi.CloseSession(session)
-                End Try
-            End If
+            Try
+                DismApi.Initialize(DismLogLevel.LogErrors)
+                Using session As DismSession = DismApi.OpenOfflineSession(sessionMntDir)
+                    Dim imgAppxDisplayNameList As New List(Of String)
+                    Dim imgAppxPackageNameList As New List(Of String)
+                    Dim imgAppxVersionList As New List(Of String)
+                    Dim imgAppxArchitectureList As New List(Of String)
+                    Dim imgAppxResourceIdList As New List(Of String)
+                    Dim imgAppxRegionList As New List(Of String)
+                    Dim AppxPackageCollection As DismAppxPackageCollection = DismApi.GetProvisionedAppxPackages(session)
+                    For Each AppxPackage As DismAppxPackage In AppxPackageCollection
+                        If ImgBW.CancellationPending Then
+                            If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                            Exit Sub
+                        End If
+                        Select Case AppxPackage.Architecture
+                            Case DismProcessorArchitecture.None
+                                imgAppxArchitectureList.Add("Unknown")
+                            Case DismProcessorArchitecture.Intel
+                                imgAppxArchitectureList.Add("x86")
+                            Case DismProcessorArchitecture.ARM
+                                imgAppxArchitectureList.Add("ARM")
+                            Case DismProcessorArchitecture.IA64
+                                imgAppxArchitectureList.Add("IA64")
+                            Case DismProcessorArchitecture.AMD64
+                                imgAppxArchitectureList.Add("x64")
+                            Case DismProcessorArchitecture.Neutral
+                                imgAppxArchitectureList.Add("Neutral")
+                            Case DismProcessorArchitecture.ARM64
+                                imgAppxArchitectureList.Add("ARM64")
+                        End Select
+                        imgAppxDisplayNameList.Add(AppxPackage.DisplayName)
+                        imgAppxPackageNameList.Add(AppxPackage.PackageName)
+                        imgAppxResourceIdList.Add(AppxPackage.ResourceId)
+                        imgAppxVersionList.Add(AppxPackage.Version.ToString())
+                    Next
+                    imgAppxArchitectures = imgAppxArchitectureList.ToArray()
+                    imgAppxDisplayNames = imgAppxDisplayNameList.ToArray()
+                    imgAppxPackageNames = imgAppxPackageNameList.ToArray()
+                    imgAppxResourceIds = imgAppxResourceIdList.ToArray()
+                    imgAppxVersions = imgAppxVersionList.ToArray()
+                End Using
+            Finally
+                DismApi.Shutdown()
+            End Try
+            Exit Sub
+            'If session IsNot Nothing And Environment.OSVersion.Version.Major > 6 Then
+            '    Dim imgAppxDisplayNameList As New List(Of String)
+            '    Dim imgAppxPackageNameList As New List(Of String)
+            '    Dim imgAppxVersionList As New List(Of String)
+            '    Dim imgAppxArchitectureList As New List(Of String)
+            '    Dim imgAppxResourceIdList As New List(Of String)
+            '    Dim imgAppxRegionList As New List(Of String)
+            '    Dim AppxPackageCollection As DismAppxPackageCollection = DismApi.GetProvisionedAppxPackages(session)
+            '    For Each AppxPackage As DismAppxPackage In AppxPackageCollection
+            '        If ImgBW.CancellationPending Then
+            '            If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+            '            Exit Sub
+            '        End If
+            '        Select Case AppxPackage.Architecture
+            '            Case DismProcessorArchitecture.None
+            '                imgAppxArchitectureList.Add("Unknown")
+            '            Case DismProcessorArchitecture.Intel
+            '                imgAppxArchitectureList.Add("x86")
+            '            Case DismProcessorArchitecture.ARM
+            '                imgAppxArchitectureList.Add("ARM")
+            '            Case DismProcessorArchitecture.IA64
+            '                imgAppxArchitectureList.Add("IA64")
+            '            Case DismProcessorArchitecture.AMD64
+            '                imgAppxArchitectureList.Add("x64")
+            '            Case DismProcessorArchitecture.Neutral
+            '                imgAppxArchitectureList.Add("Neutral")
+            '            Case DismProcessorArchitecture.ARM64
+            '                imgAppxArchitectureList.Add("ARM64")
+            '        End Select
+            '        imgAppxDisplayNameList.Add(AppxPackage.DisplayName)
+            '        imgAppxPackageNameList.Add(AppxPackage.PackageName)
+            '        imgAppxResourceIdList.Add(AppxPackage.ResourceId)
+            '        imgAppxVersionList.Add(AppxPackage.Version.ToString())
+            '    Next
+            '    imgAppxArchitectures = imgAppxArchitectureList.ToArray()
+            '    imgAppxDisplayNames = imgAppxDisplayNameList.ToArray()
+            '    imgAppxPackageNames = imgAppxPackageNameList.ToArray()
+            '    imgAppxResourceIds = imgAppxResourceIdList.ToArray()
+            '    imgAppxVersions = imgAppxVersionList.ToArray()
+            '    Exit Sub
+            'Else
+            '    Try
+            '        Throw New Exception("No valid DISM session has been provided")
+            '    Catch ex As Exception
+            '        DismApi.CloseSession(session)
+            '    End Try
+            'End If
         End If
         Debug.WriteLine("[GetImageAppxPackages] Running function...")
         ' The mounted image may be Windows 8 or later, but DISM may be from Windows 7. Get this information before running this procedure
@@ -2274,10 +2360,11 @@ Public Class MainForm
     ''' Gets installed Features on Demand (capabilities) in an image and puts them in separate arrays
     ''' </summary>
     ''' <remarks>This is only for Windows 10 or newer</remarks>
-    Sub GetImageCapabilities(Optional UseApi As Boolean = False, Optional session As DismSession = Nothing)
+    Sub GetImageCapabilities(Optional UseApi As Boolean = False)
         If UseApi Then
             Try
-                If session IsNot Nothing Then
+                DismApi.Initialize(DismLogLevel.LogErrors)
+                Using session As DismSession = DismApi.OpenOfflineSession(sessionMntDir)
                     Dim imgCapabilityNameList As New List(Of String)
                     Dim imgCapabilityStateList As New List(Of String)
                     Dim CapabilityCollection As DismCapabilityCollection = DismApi.GetCapabilities(session)
@@ -2308,13 +2395,51 @@ Public Class MainForm
                     Next
                     imgCapabilityIds = imgCapabilityNameList.ToArray()
                     imgCapabilityState = imgCapabilityStateList.ToArray()
-                    Exit Sub
-                Else
-                    Throw New Exception("No valid DISM session has been provided")
-                End If
-            Catch ex As Exception
-                DismApi.CloseSession(session)
+                End Using
+            Finally
+                DismApi.Shutdown()
             End Try
+            Exit Sub
+            'Try
+
+            '    If session IsNot Nothing Then
+            '        Dim imgCapabilityNameList As New List(Of String)
+            '        Dim imgCapabilityStateList As New List(Of String)
+            '        Dim CapabilityCollection As DismCapabilityCollection = DismApi.GetCapabilities(session)
+            '        For Each capability As DismCapability In CapabilityCollection
+            '            If ImgBW.CancellationPending Then
+            '                If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+            '                Exit Sub
+            '            End If
+            '            imgCapabilityNameList.Add(capability.Name)
+            '            Select Case capability.State
+            '                Case DismPackageFeatureState.NotPresent
+            '                    imgCapabilityStateList.Add("Not present")
+            '                Case DismPackageFeatureState.UninstallPending
+            '                    imgCapabilityStateList.Add("Uninstall pending")
+            '                Case DismPackageFeatureState.Staged
+            '                    imgCapabilityStateList.Add("Uninstalled")
+            '                Case DismPackageFeatureState.Removed Or DismPackageFeatureState.Resolved
+            '                    imgCapabilityStateList.Add("Removed")
+            '                Case DismPackageFeatureState.Installed
+            '                    imgCapabilityStateList.Add("Installed")
+            '                Case DismPackageFeatureState.InstallPending
+            '                    imgCapabilityStateList.Add("Install Pending")
+            '                Case DismPackageFeatureState.Superseded
+            '                    imgCapabilityStateList.Add("Superseded")
+            '                Case DismPackageFeatureState.PartiallyInstalled
+            '                    imgCapabilityStateList.Add("Partially Installed")
+            '            End Select
+            '        Next
+            '        imgCapabilityIds = imgCapabilityNameList.ToArray()
+            '        imgCapabilityState = imgCapabilityStateList.ToArray()
+            '        Exit Sub
+            '    Else
+            '        Throw New Exception("No valid DISM session has been provided")
+            '    End If
+            'Catch ex As Exception
+            '    DismApi.CloseSession(session)
+            'End Try
         End If
         Debug.WriteLine("[GetImageCapabilities] Running function...")
         ' The image may be Windows 10/11, but DISM may not be from Windows 10/11. Get this information before running this procedure
@@ -2396,10 +2521,11 @@ Public Class MainForm
     ''' Gets installed third-party drivers in an image and puts them in separate arrays
     ''' </summary>
     ''' <remarks>This procedure will detect the number of third-party drivers. If the image contains none, this procedure will end</remarks>
-    Sub GetImageDrivers(Optional UseApi As Boolean = False, Optional session As DismSession = Nothing)
+    Sub GetImageDrivers(Optional UseApi As Boolean = False)
         If UseApi Then
             Try
-                If session IsNot Nothing Then
+                DismApi.Initialize(DismLogLevel.LogErrors)
+                Using session As DismSession = DismApi.OpenOfflineSession(sessionMntDir)
                     Dim imgDrvPublishedNameList As New List(Of String)
                     Dim imgDrvOGFileNameList As New List(Of String)
                     Dim imgDrvInboxList As New List(Of String)
@@ -2428,14 +2554,49 @@ Public Class MainForm
                     imgDrvProviderNames = imgDrvProviderNameList.ToArray()
                     imgDrvDates = imgDrvDateList.ToArray()
                     imgDrvVersions = imgDrvVersionList.ToArray()
-                    Exit Sub
-                Else
-                    Throw New Exception("No valid DISM session has been provided")
-                End If
-            Catch ex As Exception
-                DismApi.CloseSession(session)
-                Exit Try
+                End Using
+            Finally
+                DismApi.Shutdown()
             End Try
+            Exit Sub
+            'Try
+            '    If session IsNot Nothing Then
+            '        Dim imgDrvPublishedNameList As New List(Of String)
+            '        Dim imgDrvOGFileNameList As New List(Of String)
+            '        Dim imgDrvInboxList As New List(Of String)
+            '        Dim imgDrvClassNameList As New List(Of String)
+            '        Dim imgDrvProviderNameList As New List(Of String)
+            '        Dim imgDrvDateList As New List(Of String)
+            '        Dim imgDrvVersionList As New List(Of String)
+            '        Dim DriverCollection As DismDriverPackageCollection = DismApi.GetDrivers(session, True)
+            '        For Each driver As DismDriverPackage In DriverCollection
+            '            If ImgBW.CancellationPending Then
+            '                If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+            '                Exit Sub
+            '            End If
+            '            imgDrvPublishedNameList.Add(driver.PublishedName)
+            '            imgDrvOGFileNameList.Add(driver.OriginalFileName)
+            '            imgDrvInboxList.Add(driver.InBox)
+            '            imgDrvClassNameList.Add(driver.ClassName)
+            '            imgDrvProviderNameList.Add(driver.ProviderName)
+            '            imgDrvDateList.Add(driver.Date.ToString())
+            '            imgDrvVersionList.Add(driver.Version.ToString())
+            '        Next
+            '        imgDrvPublishedNames = imgDrvPublishedNameList.ToArray()
+            '        imgDrvOGFileNames = imgDrvOGFileNameList.ToArray()
+            '        imgDrvInbox = imgDrvInboxList.ToArray()
+            '        imgDrvClassNames = imgDrvClassNameList.ToArray()
+            '        imgDrvProviderNames = imgDrvProviderNameList.ToArray()
+            '        imgDrvDates = imgDrvDateList.ToArray()
+            '        imgDrvVersions = imgDrvVersionList.ToArray()
+            '        Exit Sub
+            '    Else
+            '        Throw New Exception("No valid DISM session has been provided")
+            '    End If
+            'Catch ex As Exception
+            '    DismApi.CloseSession(session)
+            '    Exit Try
+            'End Try
         End If
         Debug.WriteLine("[GetImageDrivers] Running function...")
         Debug.WriteLine("[GetImageDrivers] Determining whether there are third-party drivers in image...")
