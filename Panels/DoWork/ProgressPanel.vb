@@ -359,6 +359,13 @@ Public Class ProgressPanel
     Public capSuccessfulAdditions As Integer                ' Number of successful capability additions
     Public capFailedAdditions As Integer                    ' Number of failed capability additions
 
+    ' OperationNum: 68
+    Public capRemovalIds(65535) As String                   ' Array used to store IDs of capabilities to remove
+    Public capRemovalLastId As String                       ' Last capability ID selected for removal
+    Public capRemovalCount As Integer                       ' Total number of capabilities to remove
+    Public capSuccessfulRemovals As Integer                 ' Number of successful capability removals
+    Public capFailedRemovals As Integer                     ' Number of failed capability removals
+
     ' <Space for other OperationNums>
     ' OperationNum: 87
     Public osUninstDayCount As Integer                      ' Number of days the user has to uninstall an OS upgrade
@@ -524,7 +531,7 @@ Public Class ProgressPanel
     ''' <returns>This function returns a file name that can be used in log files, file-system friendly on both Unix and Windows</returns>
     ''' <remarks></remarks>
     Function GetCurrentDateAndTime(CurrentDate As Date) As String
-        dateStr &= CurrentDate.ToString()
+        dateStr = "DISMTools-" & CurrentDate.ToString()
         ' Make sure the file with the name is file-system friendly
         If dateStr.Contains("/") Or dateStr.Contains(":") Then
             dateStr = dateStr.Replace("/", "-").Trim().Replace(":", "-").Trim()
@@ -2837,20 +2844,7 @@ Public Class ProgressPanel
                 Finally
                     DismApi.Shutdown()
                 End Try
-                'Try
-                '    imgSession = DismApi.OpenOfflineSession(mntString)
-                'Catch ex As DismNotInitializedException
-                '    DismApi.Initialize(DismLogLevel.LogErrors)
-                '    imgSession = DismApi.OpenOfflineSession(mntString)
-                'End Try
-                '' Get capability information
-                'Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, capAdditionIds(x))
-                'LogView.AppendText(CrLf & CrLf & _
-                '                   "- Capability identity: " & capInfo.DisplayName & CrLf & _
-                '                   "- Capability description: " & capInfo.Description & CrLf)
-                'DismApi.CloseSession(imgSession)
-                'DismApi.Shutdown()
-                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /add-capability /capabilityname=" & Quote & capAdditionIds(x) & Quote
+                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /add-capability /capabilityname=" & capAdditionIds(x)
                 If capAdditionUseSource And Directory.Exists(capAdditionSource) Then
                     CommandArgs &= " /source=" & Quote & capAdditionSource & Quote
                 End If
@@ -2873,7 +2867,7 @@ Public Class ProgressPanel
                 If errCode.Length >= 8 Then
                     LogView.AppendText(" Error level : 0x" & errCode)
                 Else
-                    LogView.AppendText("  Error level : " & errCode)
+                    LogView.AppendText(" Error level : " & errCode)
                 End If
                 If FeatErrorText.RichTextBox1.Text = "" Then
                     If errCode.Length >= 8 Then
@@ -2890,14 +2884,141 @@ Public Class ProgressPanel
                 End If
             Next
             CurrentPB.Value = CurrentPB.Maximum
-            LogView.AppendText(CrLf & "Gathering error level for selected features..." & CrLf)
+            LogView.AppendText(CrLf & "Gathering error level for selected capabilities..." & CrLf)
             For x = 0 To FeatErrorText.RichTextBox1.Lines.Count - 1
                 LogView.AppendText(CrLf & "- Capability no. " & (x + 1) & ": " & FeatErrorText.RichTextBox1.Lines(x))
             Next
             Thread.Sleep(2000)
+            If capAdditionCommit Then
+                AllPB.Value = AllPB.Maximum / taskCount
+                currentTCont += 1
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
+                            Case "ESN"
+                                taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                        End Select
+                    Case 1
+                        taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
+                    Case 2
+                        taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                End Select
+                RunOps(8)
+            End If
             If capSuccessfulAdditions > 0 Then
                 GetErrorCode(True)
             ElseIf capSuccessfulAdditions <= 0 Then
+                GetErrorCode(False)
+            End If
+        ElseIf opNum = 68 Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Removing capabilities..."
+                            currentTask.Text = "Preparing to remove capabilities..."
+                        Case "ESN"
+                            allTasks.Text = "Eliminando funcionalidades..."
+                            currentTask.Text = "Preparándonos para eliminar funcionalidades..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Removing capabilities..."
+                    currentTask.Text = "Preparing to remove capabilities..."
+                Case 2
+                    allTasks.Text = "Eliminando funcionalidades..."
+                    currentTask.Text = "Preparándonos para eliminar funcionalidades..."
+            End Select
+            LogView.AppendText(CrLf & "Removing capabilities from mounted image..." & CrLf)
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            currentTask.Text = "Removing capabilities..."
+                        Case "ESN"
+                            currentTask.Text = "Eliminando funcionalidades..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Removing capabilities..."
+                Case 2
+                    currentTask.Text = "Eliminando funcionalidades..."
+            End Select
+            LogView.AppendText(CrLf & "Enumerating capabilities to remove. Please wait..." & CrLf & _
+                               "Total number of capabilities: " & capRemovalCount)
+            CurrentPB.Maximum = capRemovalCount
+            For x = 0 To Array.LastIndexOf(capRemovalIds, capRemovalLastId)
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                currentTask.Text = "Removing capability " & (x + 1) & " of " & capRemovalCount & "..."
+                            Case "ESN"
+                                currentTask.Text = "Eliminando funcionalidad " & (x + 1) & " de " & capRemovalCount & "..."
+                        End Select
+                    Case 1
+                        currentTask.Text = "Removing capability " & (x + 1) & " of " & capRemovalCount & "..."
+                    Case 2
+                        currentTask.Text = "Eliminando funcionalidad " & (x + 1) & " de " & capRemovalCount & "..."
+                End Select
+                CurrentPB.Value = x + 1
+                LogView.AppendText(CrLf & _
+                                   "Capability " & (x + 1) & " of " & capRemovalCount)
+                Try
+                    DismApi.Initialize(DismLogLevel.LogErrors)
+                    Using imgSession As DismSession = DismApi.OpenOfflineSession(mntString)
+                        Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, capRemovalIds(x))
+                        LogView.AppendText(CrLf & CrLf & _
+                                           "- Capability identity: " & capInfo.DisplayName & CrLf & _
+                                           "- Capability description: " & capInfo.Description & CrLf)
+                    End Using
+                Finally
+                    DismApi.Shutdown()
+                End Try
+                DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /remove-capability /capabilityname=" & capRemovalIds(x)
+                DISMProc.StartInfo.Arguments = CommandArgs
+                DISMProc.Start()
+                Do Until DISMProc.HasExited
+                    If DISMProc.HasExited Then
+                        Exit Do
+                    End If
+                Loop
+                LogView.AppendText(CrLf & "Getting error level...")
+                errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
+                If DISMProc.ExitCode = 0 Then
+                    capSuccessfulRemovals += 1
+                Else
+                    capFailedRemovals += 1
+                End If
+                If errCode.Length >= 8 Then
+                    LogView.AppendText(" Error level : 0x" & errCode)
+                Else
+                    LogView.AppendText(" Error level : " & errCode)
+                End If
+                If FeatErrorText.RichTextBox1.Text = "" Then
+                    If errCode.Length >= 8 Then
+                        FeatErrorText.RichTextBox1.AppendText("0x" & errCode)
+                    Else
+                        FeatErrorText.RichTextBox1.AppendText(errCode)
+                    End If
+                Else
+                    If errCode.Length >= 8 Then
+                        FeatErrorText.RichTextBox1.AppendText(CrLf & "0x" & errCode)
+                    Else
+                        FeatErrorText.RichTextBox1.AppendText(CrLf & errCode)
+                    End If
+                End If
+            Next
+            CurrentPB.Value = CurrentPB.Maximum
+            LogView.AppendText(CrLf & "Gathering error level for selected capabilities..." & CrLf)
+            For x = 0 To FeatErrorText.RichTextBox1.Lines.Count - 1
+                LogView.AppendText(CrLf & "- Capability no. " & (x + 1) & ": " & FeatErrorText.RichTextBox1.Lines(x))
+            Next
+            Thread.Sleep(2000)
+            If capSuccessfulRemovals > 0 Then
+                GetErrorCode(True)
+            ElseIf capSuccessfulRemovals <= 0 Then
                 GetErrorCode(False)
             End If
         ElseIf opNum = 87 Then
@@ -4091,6 +4212,10 @@ Public Class ProgressPanel
                 MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 38 Then
+                MainForm.UpdateProjProperties(True, False)
+            ElseIf OperationNum = 64 Then
+                MainForm.UpdateProjProperties(True, False)
+            ElseIf OperationNum = 68 Then
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 991 Then
                 Visible = False
