@@ -163,40 +163,7 @@ Public Class MainForm
 
     Dim DismVersionChecker As FileVersionInfo
 
-    Dim argProjPath As String = ""                                       ' String used to know which project to load if it's specified in an argument
-
     Dim sessionMntDir As String = ""
-
-    Sub GetArguments()
-        Dim args() As String = Environment.GetCommandLineArgs()
-        If args.Length = 1 Then
-            Exit Sub
-        Else
-            For Each arg In args
-                If arg.StartsWith("/setup", StringComparison.OrdinalIgnoreCase) Then
-                    PrgSetup.ShowDialog()
-                ElseIf arg.StartsWith("/load", StringComparison.OrdinalIgnoreCase) Then
-                    If File.Exists(arg.Replace("/load=", "").Trim()) And Directory.Exists(Path.GetDirectoryName(arg.Replace("/load=", "").Trim())) Then
-                        argProjPath = arg.Replace("/load=", "").Trim()
-                    Else
-                        Select Case Language
-                            Case 0
-                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
-                                        MsgBox("An invalid project has been specified", vbOKOnly + vbCritical, Text)
-                                    Case "ESN"
-                                        MsgBox("Se ha especificado un proyecto no válido", vbOKOnly + vbCritical, Text)
-                                End Select
-                            Case 1
-                                MsgBox("An invalid project has been specified", vbOKOnly + vbCritical, Text)
-                            Case 2
-                                MsgBox("Se ha especificado un proyecto no válido", vbOKOnly + vbCritical, Text)
-                        End Select
-                    End If
-                End If
-            Next
-        End If
-    End Sub
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Because of the DISM API, Windows 7 compatibility is out the window (no pun intended)
