@@ -20,24 +20,56 @@ Public Class AddCapabilities
             For x = 0 To capIds.Length - 1
                 ProgressPanel.capAdditionIds(x) = capIds(x)
             Next
+            For x = 0 To capCount - 1
+                If ListView1.CheckedItems(x).SubItems(1).Text = "Not present" Then
+                    If CheckBox1.Checked And RichTextBox1.Text = "" Or Not Directory.Exists(RichTextBox1.Text) Then
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        If MsgBox("Some capabilities in this image require specifying a source for them to be enabled. The specified source is not valid for this operation." & CrLf & CrLf & If(RichTextBox1.Text = "", "Please specify a valid source and try again.", "Please make sure the source exists in the file system and try again."), vbOKOnly + vbCritical, "Enable features") = MsgBoxResult.Ok Then
+                                            CheckBox1.Checked = True
+                                            Button1.PerformClick()
+                                        End If
+                                    Case "ESN"
+                                        If MsgBox("Algunas funcionalidades en esta imagen requieren especificar un origen para ser habilitadas. El origen especificado no es válido para esta operación" & CrLf & CrLf & If(RichTextBox1.Text = "", "Especifique un origen válido e inténtelo de nuevo.", "Asegúrese de que el origen exista en el sistema de archivos e inténtelo de nuevo."), vbOKOnly + vbCritical, "Habilitar características") = MsgBoxResult.Ok Then
+                                            CheckBox1.Checked = True
+                                            Button1.PerformClick()
+                                        End If
+                                End Select
+                            Case 1
+                                If MsgBox("Some capabilities in this image require specifying a source for them to be enabled. The specified source is not valid for this operation." & CrLf & CrLf & If(RichTextBox1.Text = "", "Please specify a valid source and try again.", "Please make sure the source exists in the file system and try again."), vbOKOnly + vbCritical, "Enable features") = MsgBoxResult.Ok Then
+                                    CheckBox1.Checked = True
+                                    Button1.PerformClick()
+                                End If
+                            Case 2
+                                If MsgBox("Algunas funcionalidades en esta imagen requieren especificar un origen para ser habilitadas. El origen especificado no es válido para esta operación" & CrLf & CrLf & If(RichTextBox1.Text = "", "Especifique un origen válido e inténtelo de nuevo.", "Asegúrese de que el origen exista en el sistema de archivos e inténtelo de nuevo."), vbOKOnly + vbCritical, "Habilitar características") = MsgBoxResult.Ok Then
+                                    CheckBox1.Checked = True
+                                    Button1.PerformClick()
+                                End If
+                        End Select
+                    End If
+                End If
+            Next
             ProgressPanel.capAdditionLastId = ListView1.CheckedItems(capCount - 1).SubItems(0).Text
             If CheckBox1.Checked Then
                 If RichTextBox1.Text <> "" Then
                     If Directory.Exists(RichTextBox1.Text) Then
+                        ProgressPanel.capAdditionUseSource = True
                         ProgressPanel.capAdditionSource = RichTextBox1.Text         ' Don't know if it would work on cases where it begins with "wim:\"
                     Else
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                     Case "ENG"
-                                        MsgBox("The specified source directory does not exist in the file system. Make sure it exists and try again.", vbOKOnly + vbCritical, Label1.Text)
+                                        MsgBox("The specified source does not exist in the file system. Make sure it exists and try again.", vbOKOnly + vbCritical, Label1.Text)
                                     Case "ESN"
-                                        MsgBox("El directorio de origen especificado no existe en el sistema de archivos. Asegúrese de que existe e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
+                                        MsgBox("El origen especificado no existe en el sistema de archivos. Asegúrese de que existe e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
                                 End Select
                             Case 1
-                                MsgBox("The specified source directory does not exist in the file system. Make sure it exists and try again.", vbOKOnly + vbCritical, Label1.Text)
+                                MsgBox("The specified source does not exist in the file system. Make sure it exists and try again.", vbOKOnly + vbCritical, Label1.Text)
                             Case 2
-                                MsgBox("El directorio de origen especificado no existe en el sistema de archivos. Asegúrese de que existe e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
+                                MsgBox("El origen especificado no existe en el sistema de archivos. Asegúrese de que existe e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
                         End Select
                         Exit Sub
                     End If
@@ -98,6 +130,79 @@ Public Class AddCapabilities
     End Sub
 
     Private Sub AddCapability_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Text = "Add capabilities"
+                        Label1.Text = Text
+                        Label2.Text = "Source:"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Cancel"
+                        Button1.Text = "Browse..."
+                        Button2.Text = "Select all"
+                        Button3.Text = "Select none"
+                        Button4.Text = "Determine from group policy"
+                        GroupBox1.Text = "Capabilities"
+                        GroupBox2.Text = "Options"
+                        CheckBox1.Text = "Specify different source for capability installs"
+                        CheckBox2.Text = "Limit access to Windows Update"
+                        CheckBox3.Text = "Commit image after adding capabilities"
+                        ListView1.Columns(0).Text = "Capability"
+                        ListView1.Columns(1).Text = "State"
+                    Case "ESN"
+                        Text = "Añadir funcionalidades"
+                        Label1.Text = Text
+                        Label2.Text = "Origen:"
+                        OK_Button.Text = "Aceptar"
+                        Cancel_Button.Text = "Cancelar"
+                        Button1.Text = "Examinar..."
+                        Button2.Text = "Seleccionar todas"
+                        Button3.Text = "Seleccionar ninguna"
+                        Button4.Text = "Determinar de políticas de grupo"
+                        GroupBox1.Text = "Funcionalidades"
+                        GroupBox2.Text = "Opciones"
+                        CheckBox1.Text = "Especificar un origen diferente para la instalación de funcionalidades"
+                        CheckBox2.Text = "Limitar acceso a Windows Update"
+                        CheckBox3.Text = "Guardar imagen tras añadir funcionalidades"
+                        ListView1.Columns(0).Text = "Funcionalidad"
+                        ListView1.Columns(1).Text = "Estado"
+                End Select
+            Case 1
+                Text = "Add capabilities"
+                Label1.Text = Text
+                Label2.Text = "Source:"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Cancel"
+                Button1.Text = "Browse..."
+                Button2.Text = "Select all"
+                Button3.Text = "Select none"
+                Button4.Text = "Determine from group policy"
+                GroupBox1.Text = "Capabilities"
+                GroupBox2.Text = "Options"
+                CheckBox1.Text = "Specify different source for capability installs"
+                CheckBox2.Text = "Limit access to Windows Update"
+                CheckBox3.Text = "Commit image after adding capabilities"
+                ListView1.Columns(0).Text = "Capability"
+                ListView1.Columns(1).Text = "State"
+            Case 2
+                Text = "Añadir funcionalidades"
+                Label1.Text = Text
+                Label2.Text = "Origen:"
+                OK_Button.Text = "Aceptar"
+                Cancel_Button.Text = "Cancelar"
+                Button1.Text = "Examinar..."
+                Button2.Text = "Seleccionar todas"
+                Button3.Text = "Seleccionar ninguna"
+                Button4.Text = "Determinar de políticas de grupo"
+                GroupBox1.Text = "Funcionalidades"
+                GroupBox2.Text = "Opciones"
+                CheckBox1.Text = "Especificar un origen diferente para la instalación de funcionalidades"
+                CheckBox2.Text = "Limitar acceso a Windows Update"
+                CheckBox3.Text = "Guardar imagen tras añadir funcionalidades"
+                ListView1.Columns(0).Text = "Funcionalidad"
+                ListView1.Columns(1).Text = "Estado"
+        End Select
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True
@@ -138,6 +243,7 @@ Public Class AddCapabilities
         CheckBox2.ForeColor = ForeColor
         CheckBox3.ForeColor = ForeColor
         ListView1.ForeColor = ForeColor
+        RichTextBox1.ForeColor = ForeColor
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
@@ -197,5 +303,11 @@ Public Class AddCapabilities
             ListView1.Items(i).Checked = False
         Next
         DialogResult = Windows.Forms.DialogResult.None
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        If FolderBrowserDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            RichTextBox1.Text = FolderBrowserDialog1.SelectedPath
+        End If
     End Sub
 End Class

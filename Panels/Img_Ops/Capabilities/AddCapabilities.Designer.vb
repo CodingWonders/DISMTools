@@ -52,6 +52,7 @@ Partial Class AddCapabilities
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Button5 = New System.Windows.Forms.Button()
+        Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -263,6 +264,7 @@ Partial Class AddCapabilities
         'CheckBox2
         '
         Me.CheckBox2.AutoSize = True
+        Me.CheckBox2.Enabled = False
         Me.CheckBox2.Location = New System.Drawing.Point(32, 81)
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(179, 17)
@@ -391,6 +393,11 @@ Partial Class AddCapabilities
         Me.Button5.TabIndex = 9
         Me.Button5.UseVisualStyleBackColor = True
         '
+        'FolderBrowserDialog1
+        '
+        Me.FolderBrowserDialog1.Description = "Specify the source to use for capability addition:"
+        Me.FolderBrowserDialog1.RootFolder = System.Environment.SpecialFolder.MyComputer
+        '
         'AddCapabilities
         '
         Me.AcceptButton = Me.OK_Button
@@ -456,5 +463,6 @@ Partial Class AddCapabilities
     Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents RichTextBox1 As System.Windows.Forms.RichTextBox
     Friend WithEvents Button5 As System.Windows.Forms.Button
+    Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
 
 End Class
