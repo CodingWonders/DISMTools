@@ -1537,14 +1537,10 @@ Namespace My.Resources
         
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
-        '''- Fixed an issue where the program always gathered information from the first image index
-        '''- Fixed an issue where the program would think a project with an image mounted didn&apos;t have one when an image was unmounted with the mounted image manager
-        '''- Fixed an issue where background processes would continue running when a project was unloaded
-        '''- Added exception control for other parts of background processes
-        '''
-        '''New features
-        '''- Increased default window size to 1280x720
-        '''- Feature manipulation now uses  [resto de la cadena truncado]&quot;;.
+        '''- Fixed an issue that happened in the options dialog where the selected item of the font ComboBox was &quot;&quot; at first
+        '''- Fixed a critical issue where the DISM API would throw an invalid traces exception and fail operations. This occurred on the progress dialog and when background processes were running
+        '''- Fixed an issue where the log file name of the most recent log file would change to append the name of the next log file
+        '''- Fixed an issue which made the program unmount external directories, whether  [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

@@ -876,14 +876,25 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes
-- Fixed an issue where the program always gathered information from the first image index
-- Fixed an issue where the program would think a project with an image mounted didn't have one when an image was unmounted with the mounted image manager
-- Fixed an issue where background processes would continue running when a project was unloaded
-- Added exception control for other parts of background processes
+- Fixed an issue that happened in the options dialog where the selected item of the font ComboBox was "" at first
+- Fixed a critical issue where the DISM API would throw an invalid traces exception and fail operations. This occurred on the progress dialog and when background processes were running
+- Fixed an issue where the log file name of the most recent log file would change to append the name of the next log file
+- Fixed an issue which made the program unmount external directories, whether they were actual mount directories or not
 
 New features
-- Increased default window size to 1280x720
-- Feature manipulation now uses the DISM API to gather information from a feature</value>
+
+Setup and arguments
+- Introduced the initial setup screen, which will be used in the future when you load DISMTools for the first time
+- The program now supports arguments that can be passed at startup
+
+Settings
+- The program now saves appropriate language codes when saving the settings file
+
+Mounted images
+- Introduced a popup mounted image picker, which is now used on the image unmount dialog
+
+Capabilities
+- Introduced image capability (Features on Demand) management, which includes support for getting the source from group policy</value>
   </data>
   <data name="action_testing_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\action_testing_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
