@@ -7696,4 +7696,61 @@ Public Class MainForm
         End Select
         AddCapabilities.ShowDialog()
     End Sub
+
+    Private Sub RemoveCapability_Click(sender As Object, e As EventArgs) Handles RemoveCapability.Click
+        ElementCount = 0
+        AddCapabilities.ListView1.Items.Clear()
+        ProgressPanel.OperationNum = 994
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
+        End Select
+        If Not areBackgroundProcessesDone Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        Try
+            For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
+                If imgCapabilityState(x) = "Removed" Or imgCapabilityState(x) = "Not present" Or imgCapabilityState(x) = "Uninstalled" Then
+                    Continue For
+                End If
+                RemCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapabilityIds(x), imgCapabilityState(x)}))
+            Next
+        Catch ex As Exception
+            Exit Try
+        End Try
+        Try
+            For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
+                If imgCapabilityIds(x) = "" Then
+                    Exit For
+                End If
+                ElementCount += 1
+            Next
+        Catch ex As Exception
+            Exit Try
+        End Try
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        RemCapabilities.Label2.Text = "This image contains " & ElementCount & " capabilities."
+                    Case "ESN"
+                        RemCapabilities.Label2.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
+                End Select
+            Case 1
+                RemCapabilities.Label2.Text = "This image contains " & ElementCount & " capabilities."
+            Case 2
+                RemCapabilities.Label2.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
+        End Select
+        RemCapabilities.ShowDialog()
+    End Sub
 End Class
