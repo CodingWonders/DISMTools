@@ -267,6 +267,7 @@ Public Class AddCapabilities
             Dim capGPOSourceRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Servicing", False)
             Dim capGPOSource As String = capGPOSourceRk.GetValue("LocalSourcePath").ToString()
             capGPOSourceRk.Close()
+            RichTextBox1.Text = capGPOSource
             If capGPOSource.StartsWith("wim:\", StringComparison.OrdinalIgnoreCase) Then
                 TextBoxSourcePanel.Visible = False
                 WimFileSourcePanel.Visible = True

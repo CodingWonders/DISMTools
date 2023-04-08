@@ -55,6 +55,7 @@ Partial Class RemCapabilities
         'OK_Button
         '
         Me.OK_Button.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.OK_Button.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.OK_Button.Location = New System.Drawing.Point(3, 3)
         Me.OK_Button.Name = "OK_Button"
         Me.OK_Button.Size = New System.Drawing.Size(67, 23)
@@ -65,6 +66,7 @@ Partial Class RemCapabilities
         '
         Me.Cancel_Button.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Cancel_Button.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.Cancel_Button.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Cancel_Button.Location = New System.Drawing.Point(76, 3)
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
@@ -115,6 +117,7 @@ Partial Class RemCapabilities
         '
         'ListView1
         '
+        Me.ListView1.CheckBoxes = True
         Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
         Me.ListView1.Location = New System.Drawing.Point(12, 54)
         Me.ListView1.Name = "ListView1"
@@ -126,10 +129,12 @@ Partial Class RemCapabilities
         'ColumnHeader1
         '
         Me.ColumnHeader1.Text = "Capability"
+        Me.ColumnHeader1.Width = 524
         '
         'ColumnHeader2
         '
         Me.ColumnHeader2.Text = "State"
+        Me.ColumnHeader2.Width = 199
         '
         'RemCapabilities
         '

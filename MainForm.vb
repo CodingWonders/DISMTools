@@ -7663,7 +7663,7 @@ Public Class MainForm
         End If
         Try
             For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
-                If imgCapabilityState(x) = "Installed" Then
+                If imgCapabilityState(x) = "Installed" Or imgCapabilityState(x) = "Install Pending" Then
                     Continue For
                 End If
                 AddCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapabilityIds(x), imgCapabilityState(x)}))
@@ -7699,7 +7699,7 @@ Public Class MainForm
 
     Private Sub RemoveCapability_Click(sender As Object, e As EventArgs) Handles RemoveCapability.Click
         ElementCount = 0
-        AddCapabilities.ListView1.Items.Clear()
+        RemCapabilities.ListView1.Items.Clear()
         ProgressPanel.OperationNum = 994
         Select Case Language
             Case 0
