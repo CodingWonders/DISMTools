@@ -7753,4 +7753,8 @@ Public Class MainForm
         End Select
         RemCapabilities.ShowDialog()
     End Sub
+
+    Private Sub AddDriver_Click(sender As Object, e As EventArgs) Handles AddDriver.Click
+        AddDrivers.ShowDialog()
+    End Sub
 End Class

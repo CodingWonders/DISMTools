@@ -224,6 +224,12 @@
     <Compile Include="Panels\Img_Ops\Conversion\ImgWim2Esd.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Img_Ops\Drivers\AddDrivers.Designer.vb">
+      <DependentUpon>AddDrivers.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Drivers\AddDrivers.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\Features\DisableFeat.Designer.vb">
       <DependentUpon>DisableFeat.vb</DependentUpon>
     </Compile>
@@ -517,6 +523,9 @@
     <EmbeddedResource Include="Panels\Img_Ops\Conversion\ImgWim2Esd.resx">
       <DependentUpon>ImgWim2Esd.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Drivers\AddDrivers.resx">
+      <DependentUpon>AddDrivers.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Features\DisableFeat.resx">
       <DependentUpon>DisableFeat.vb</DependentUpon>
     </EmbeddedResource>
@@ -715,6 +724,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo.ico" />
+    <None Include="Resources\rem_drv.png" />
+    <None Include="Resources\add_drv.png" />
     <None Include="Resources\image_light.png" />
     <None Include="Resources\image_dark.png" />
     <None Include="Resources\FirstUse\product_overview.png" />
