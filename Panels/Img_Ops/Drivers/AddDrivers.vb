@@ -96,6 +96,104 @@ Public Class AddDrivers
     End Sub
 
     Private Sub AddDrivers_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Text = "Add drivers"
+                        Label1.Text = Text
+                        Label2.Text = "Please specify the drivers to add by using the buttons below or by dropping them to the list below:"
+                        Label3.Text = "You can let the program scan the driver folders present on the list below recursively and add them as well. To do so, tick the entries you'd like to be scanned:"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Cancel"
+                        Button1.Text = "Add file..."
+                        Button2.Text = "Add folder..."
+                        Button3.Text = "Remove all entries"
+                        Button4.Text = "Remove selected entry"
+                        CheckBox1.Text = "Force installation of unsigned drivers"
+                        CheckBox2.Text = "Commit image after adding drivers"
+                        GroupBox1.Text = "Driver files"
+                        GroupBox2.Text = "Driver folders"
+                        GroupBox3.Text = "Options"
+                        ListView1.Columns(0).Text = "File/Folder"
+                        ListView1.Columns(1).Text = "Type"
+                    Case "ESN"
+                        Text = "Añadir controladores"
+                        Label1.Text = Text
+                        Label2.Text = "Especifique los controladores a añadir usando los botones de abajo o colocándolos en la lista de abajo:"
+                        Label3.Text = "Puede dejar que el programa escanee las carpetas de controladores presentes en la lista de abajo de forma recursiva y añadirlos también. Para hacerlo, marque las entradas que le gustaría que fuesen escaneadas:"
+                        OK_Button.Text = "Aceptar"
+                        Cancel_Button.Text = "Cancelar"
+                        Button1.Text = "Añadir archivo..."
+                        Button2.Text = "Añadir carpeta..."
+                        Button3.Text = "Eliminar todas las entradas"
+                        Button4.Text = "Eliminar entrada seleccionada"
+                        CheckBox1.Text = "Forzar instalación de controladores no firmados"
+                        CheckBox2.Text = "Guardar imagen tras añadir controladores"
+                        GroupBox1.Text = "Archivos de controladores"
+                        GroupBox2.Text = "Carpetas de controladores"
+                        GroupBox3.Text = "Opciones"
+                        ListView1.Columns(0).Text = "Archivo/Carpeta"
+                        ListView1.Columns(1).Text = "Tipo"
+                End Select
+            Case 1
+                Text = "Add drivers"
+                Label1.Text = Text
+                Label2.Text = "Please specify the drivers to add by using the buttons below or by dropping them to the list below:"
+                Label3.Text = "You can let the program scan the driver folders present on the list below recursively and add them as well. To do so, tick the entries you'd like to be scanned:"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Cancel"
+                Button1.Text = "Add file..."
+                Button2.Text = "Add folder..."
+                Button3.Text = "Remove all entries"
+                Button4.Text = "Remove selected entry"
+                CheckBox1.Text = "Force installation of unsigned drivers"
+                CheckBox2.Text = "Commit image after adding drivers"
+                GroupBox1.Text = "Driver files"
+                GroupBox2.Text = "Driver folders"
+                GroupBox3.Text = "Options"
+                ListView1.Columns(0).Text = "File/Folder"
+                ListView1.Columns(1).Text = "Type"
+            Case 2
+                Text = "Añadir controladores"
+                Label1.Text = Text
+                Label2.Text = "Especifique los controladores a añadir usando los botones de abajo o colocándolos en la lista de abajo:"
+                Label3.Text = "Puede dejar que el programa escanee las carpetas de controladores presentes en la lista de abajo de forma recursiva y añadirlos también. Para hacerlo, marque las entradas que le gustaría que fuesen escaneadas:"
+                OK_Button.Text = "Aceptar"
+                Cancel_Button.Text = "Cancelar"
+                Button1.Text = "Añadir archivo..."
+                Button2.Text = "Añadir carpeta..."
+                Button3.Text = "Eliminar todas las entradas"
+                Button4.Text = "Eliminar entrada seleccionada"
+                CheckBox1.Text = "Forzar instalación de controladores no firmados"
+                CheckBox2.Text = "Guardar imagen tras añadir controladores"
+                GroupBox1.Text = "Archivos de controladores"
+                GroupBox2.Text = "Carpetas de controladores"
+                GroupBox3.Text = "Opciones"
+                ListView1.Columns(0).Text = "Archivo/Carpeta"
+                ListView1.Columns(1).Text = "Tipo"
+        End Select
+        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
+            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
+            BackColor = Color.FromArgb(31, 31, 31)
+            ForeColor = Color.White
+            GroupBox1.ForeColor = Color.White
+            GroupBox2.ForeColor = Color.White
+            GroupBox3.ForeColor = Color.White
+            ListView1.BackColor = Color.FromArgb(31, 31, 31)
+            CheckedListBox1.BackColor = Color.FromArgb(31, 31, 31)
+        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
+            Win10Title.BackColor = Color.White
+            BackColor = Color.FromArgb(238, 238, 242)
+            ForeColor = Color.Black
+            GroupBox1.ForeColor = Color.Black
+            GroupBox2.ForeColor = Color.Black
+            GroupBox3.ForeColor = Color.Black
+            ListView1.BackColor = Color.FromArgb(238, 238, 242)
+            CheckedListBox1.BackColor = Color.FromArgb(238, 238, 242)
+        End If
+        ListView1.ForeColor = ForeColor
+        CheckedListBox1.ForeColor = ForeColor
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True
