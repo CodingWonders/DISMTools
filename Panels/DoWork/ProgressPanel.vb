@@ -366,6 +366,23 @@ Public Class ProgressPanel
     Public capSuccessfulRemovals As Integer                 ' Number of successful capability removals
     Public capFailedRemovals As Integer                     ' Number of failed capability removals
 
+    ' OperationNum: 75
+    Public drvAdditionPkgs(65535) As String                 ' Array used to store all drivers to add, whether they are in specified folders or not
+    Public drvAdditionLastPkg As String                     ' Last driver package specified for addition
+    Public drvAdditionFolderRecursiveScan(65535) As String  ' Folders the program needs to scan recursively on
+    Public drvAdditionCount As Integer                      ' Total number of driver packages to add
+    Public drvAdditionForceUnsigned As Boolean              ' Determine whether to add unsigned drivers on 64-bit images
+    Public drvAdditionCommit As Boolean                     ' Determine whether to save image changes after adding driver packages
+    Public drvSuccessfulAdditions As Integer                ' Number of successful driver package additions
+    Public drvFailedAdditions As Integer                    ' Number of failed driver package additions
+
+    ' OperationNum: 76
+    Public drvRemovalPkgs(65535) As String                  ' Array used to store all drivers to remove
+    Public drvRemovalLastPkg As String                      ' Last driver package specified for removal
+    Public drvRemovalCount As Integer                       ' Total number of driver packages to remove
+    Public drvSuccessfulRemovals As Integer                 ' Number of successful driver package removals
+    Public drvFailedRemovals As Integer                     ' Number of failed driver package removals
+
     ' <Space for other OperationNums>
     ' OperationNum: 87
     Public osUninstDayCount As Integer                      ' Number of days the user has to uninstall an OS upgrade
@@ -494,6 +511,14 @@ Public Class ProgressPanel
             Else
                 taskCount = 1
             End If
+        ElseIf opNum = 75 Then
+            If drvAdditionCommit Then
+                taskCount = 2
+            Else
+                taskCount = 1
+            End If
+        ElseIf opNum = 78 Then
+            taskCount = 1
         ElseIf opNum = 87 Then
             taskCount = 1
         ElseIf opNum = 991 Then
@@ -3019,6 +3044,153 @@ Public Class ProgressPanel
             If capSuccessfulRemovals > 0 Then
                 GetErrorCode(True)
             ElseIf capSuccessfulRemovals <= 0 Then
+                GetErrorCode(False)
+            End If
+        ElseIf opNum = 75 Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Adding drivers..."
+                            currentTask.Text = "Preparing to add drivers..."
+                        Case "ESN"
+                            allTasks.Text = "Añadiendo controladores..."
+                            currentTask.Text = "Preparándonos para añadir controladores..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Adding drivers..."
+                    currentTask.Text = "Preparing to add drivers..."
+                Case 2
+                    allTasks.Text = "Añadiendo controladores..."
+                    currentTask.Text = "Preparándonos para añadir controladores..."
+            End Select
+            LogView.AppendText(CrLf & "Adding driver packages to mounted image..." & CrLf & _
+                               "Options:" & CrLf & _
+                               "- Force installation of unsigned drivers? " & If(drvAdditionForceUnsigned, "Yes", "No") & CrLf & _
+                               "- Commit image after adding driver packages? " & If(drvAdditionCommit, "Yes", "No") & CrLf)
+            If drvAdditionForceUnsigned Then
+                LogView.AppendText(CrLf & _
+                                   "Warning: the option to force installation of unsigned drivers has been checked. Do note that unsigned drivers might cause instability on the resulting Windows image.")
+            End If
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            currentTask.Text = "Adding drivers..."
+                        Case "ESN"
+                            currentTask.Text = "Añadiendo controladores..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Adding drivers..."
+                Case 2
+                    currentTask.Text = "Añadiendo controladores..."
+            End Select
+            LogView.AppendText(CrLf & "Enumerating drivers to add. Please wait..." & CrLf & _
+                               "Total number of drivers: " & drvAdditionCount)
+            CurrentPB.Maximum = drvAdditionCount
+            For x = 0 To Array.LastIndexOf(drvAdditionPkgs, drvAdditionLastPkg)
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                currentTask.Text = "Adding driver " & (x + 1) & " of " & drvAdditionCount & "..."
+                            Case "ESN"
+                                currentTask.Text = "Añadiendo controlador " & (x + 1) & " de " & drvAdditionCount & "..."
+                        End Select
+                    Case 1
+                        currentTask.Text = "Adding driver " & (x + 1) & " of " & drvAdditionCount & "..."
+                    Case 2
+                        currentTask.Text = "Añadiendo controlador " & (x + 1) & " de " & drvAdditionCount & "..."
+                End Select
+                CurrentPB.Value = x + 1
+                LogView.AppendText(CrLf & _
+                                   "Driver " & (x + 1) & " of " & drvAdditionCount)
+                ' Get driver information
+                Try
+                    DismApi.Initialize(DismLogLevel.LogErrors)
+                    Using imgSession As DismSession = DismApi.OpenOfflineSession(mntString)
+                        Dim drvInfoCollection As DismDriverCollection = DismApi.GetDriverInfo(imgSession, drvAdditionPkgs(x))
+                        For Each drvInfo As DismDriver In drvInfoCollection
+                            LogView.AppendText(CrLf & CrLf & _
+                                               "- Hardware description: " & drvInfo.HardwareDescription & CrLf & _
+                                               "- Hardware ID: " & drvInfo.HardwareId & CrLf & _
+                                               "- Additional IDs" & CrLf & _
+                                               "  - Compatible IDs: " & drvInfo.CompatibleIds & CrLf & _
+                                               "  - Excluded IDs: " & drvInfo.ExcludeIds & CrLf & _
+                                               "- Hardware manufacturer: " & drvInfo.ManufacturerName)
+                        Next
+                    End Using
+                Finally
+                    DismApi.Shutdown()
+                End Try
+                DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /add-driver /driver=" & Quote & drvAdditionPkgs(x) & Quote
+                If drvAdditionForceUnsigned Then
+                    CommandArgs &= " /forceunsigned"
+                End If
+                If File.GetAttributes(drvAdditionPkgs(x)) = FileAttributes.Directory And drvAdditionFolderRecursiveScan.Contains(drvAdditionPkgs(x)) Then
+                    LogView.AppendText(CrLf & "This folder will be scanned recursively. Driver addition may take a longer time...")
+                End If
+                DISMProc.StartInfo.Arguments = CommandArgs
+                DISMProc.Start()
+                Do Until DISMProc.HasExited
+                    If DISMProc.HasExited Then
+                        Exit Do
+                    End If
+                Loop
+                LogView.AppendText(CrLf & "Getting error level...")
+                errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
+                If DISMProc.ExitCode = 0 Then
+                    drvSuccessfulAdditions += 1
+                Else
+                    drvFailedAdditions += 1
+                End If
+                If errCode.Length >= 8 Then
+                    LogView.AppendText(" Error level : 0x" & errCode)
+                Else
+                    LogView.AppendText(" Error level : " & errCode)
+                End If
+                If FeatErrorText.RichTextBox1.Text = "" Then
+                    If errCode.Length >= 8 Then
+                        PkgErrorText.RichTextBox1.AppendText("0x" & errCode)
+                    Else
+                        PkgErrorText.RichTextBox1.AppendText(errCode)
+                    End If
+                Else
+                    If errCode.Length >= 8 Then
+                        PkgErrorText.RichTextBox1.AppendText(CrLf & "0x" & errCode)
+                    Else
+                        PkgErrorText.RichTextBox1.AppendText(CrLf & errCode)
+                    End If
+                End If
+            Next
+            CurrentPB.Value = CurrentPB.Maximum
+            LogView.AppendText(CrLf & "Gathering error level for selected drivers..." & CrLf)
+            For x = 0 To FeatErrorText.RichTextBox1.Lines.Count - 1
+                LogView.AppendText(CrLf & "- Driver no. " & (x + 1) & ": " & PkgErrorText.RichTextBox1.Lines(x))
+            Next
+            Thread.Sleep(2000)
+            If drvAdditionCommit Then
+                AllPB.Value = AllPB.Maximum / taskCount
+                currentTCont += 1
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
+                            Case "ESN"
+                                taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                        End Select
+                    Case 1
+                        taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
+                    Case 2
+                        taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                End Select
+                RunOps(8)
+            End If
+            If drvSuccessfulAdditions > 0 Then
+                GetErrorCode(True)
+            ElseIf drvSuccessfulAdditions <= 0 Then
                 GetErrorCode(False)
             End If
         ElseIf opNum = 87 Then
