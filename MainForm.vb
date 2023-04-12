@@ -2156,7 +2156,7 @@ Public Class MainForm
     ''' </summary>
     ''' <remarks>This is only for Windows 8 and newer</remarks>
     Sub GetImageAppxPackages(Optional UseApi As Boolean = False)
-        If UseApi Then
+        If UseApi And Environment.OSVersion.Version.Major > 6 Then
             Try
                 DismApi.Initialize(DismLogLevel.LogErrors)
                 Using session As DismSession = DismApi.OpenOfflineSession(sessionMntDir)
