@@ -1,9 +1,72 @@
 ﻿Imports System.Windows.Forms
+Imports System.IO
 
 Public Class AddDrivers
 
+    Dim drvPkgList As New List(Of String)
+    Dim drvPkgs(65535) As String
+    Dim drvRecursiveList As New List(Of String)
+    Dim drvRecursivePkgs(65535) As String
+
+    Dim drvPkgCount As Integer
+
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        'Array.Clear(drvPkgs, 0, drvPkgs.Length)
+        'Array.Clear(drvRecursivePkgs, 0, drvRecursivePkgs.Length)
+        drvPkgList.Clear()
+        drvRecursiveList.Clear()
+        ProgressPanel.MountDir = MainForm.MountDir
+        drvPkgCount = ListView1.Items.Count
+        If ListView1.Items.Count > 0 Then
+            For x = 0 To ListView1.Items.Count - 1
+                drvPkgList.Add(ListView1.Items(x).SubItems(0).Text)
+            Next
+            drvPkgs = drvPkgList.ToArray()
+            For x = 0 To drvPkgs.Length - 1
+                ProgressPanel.drvAdditionPkgs(x) = drvPkgs(x)
+            Next
+            For x = 0 To drvPkgCount - 1
+                If File.GetAttributes(ListView1.Items(x).SubItems(0).Text) = FileAttributes.Directory And CheckedListBox1.CheckedItems.Contains(ListView1.Items(x).SubItems(0).Text) Then
+                    drvRecursiveList.Add(ListView1.Items(x).SubItems(0).Text)
+                End If
+            Next
+            If drvRecursiveList.Count > 0 Then
+                drvRecursivePkgs = drvRecursiveList.ToArray()
+                For x = 0 To drvRecursivePkgs.Length - 1
+                    ProgressPanel.drvAdditionFolderRecursiveScan(x) = drvRecursivePkgs(x)
+                Next
+            End If
+            If CheckBox1.Checked Then
+                ProgressPanel.drvAdditionForceUnsigned = True
+            Else
+                ProgressPanel.drvAdditionForceUnsigned = False
+            End If
+            If CheckBox2.Checked Then
+                ProgressPanel.drvAdditionCommit = True
+            Else
+                ProgressPanel.drvAdditionCommit = False
+            End If
+        Else
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MsgBox("There are no selected driver packages to install. Please specify the driver packages you'd like to install and try again.", vbOKOnly + vbCritical, Label1.Text)
+                        Case "ESN"
+                            MsgBox("No hay paquetes de controladores seleccionados para instalar. Especifique los paquetes de controladores que le gustaría instalar e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
+                    End Select
+                Case 1
+                    MsgBox("There are no selected driver packages to install. Please specify the driver packages you'd like to install and try again.", vbOKOnly + vbCritical, Label1.Text)
+                Case 2
+                    MsgBox("No hay paquetes de controladores seleccionados para instalar. Especifique los paquetes de controladores que le gustaría instalar e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
+            End Select
+            Exit Sub
+        End If
+        ProgressPanel.drvAdditionCount = drvPkgCount
+        ProgressPanel.OperationNum = 75
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
+        Visible = False
+        ProgressPanel.ShowDialog(MainForm)
         Me.Close()
     End Sub
 
