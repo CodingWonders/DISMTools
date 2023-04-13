@@ -180,6 +180,8 @@ Public Class AddDrivers
                         GroupBox3.Text = "Options"
                         ListView1.Columns(0).Text = "File/Folder"
                         ListView1.Columns(1).Text = "Type"
+                        OpenFileDialog1.Title = "Specify the driver package to add"
+                        FolderBrowserDialog1.Description = "Specify the folder containing driver packages. You will then be able to specify if it needs to be scanned recursively:"
                     Case "ESN"
                         Text = "Añadir controladores"
                         Label1.Text = Text
@@ -198,6 +200,8 @@ Public Class AddDrivers
                         GroupBox3.Text = "Opciones"
                         ListView1.Columns(0).Text = "Archivo/Carpeta"
                         ListView1.Columns(1).Text = "Tipo"
+                        OpenFileDialog1.Title = "Especifique el paquete de controlador a añadir"
+                        FolderBrowserDialog1.Description = "Especifique la carpeta que contiene paquetes de controladores. Luego podrá especificar si necesita ser escaneada de forma recursiva:"
                 End Select
             Case 1
                 Text = "Add drivers"
@@ -217,6 +221,8 @@ Public Class AddDrivers
                 GroupBox3.Text = "Options"
                 ListView1.Columns(0).Text = "File/Folder"
                 ListView1.Columns(1).Text = "Type"
+                OpenFileDialog1.Title = "Specify the driver package to add"
+                FolderBrowserDialog1.Description = "Specify the folder containing driver packages. You will then be able to specify if it needs to be scanned recursively:"
             Case 2
                 Text = "Añadir controladores"
                 Label1.Text = Text
@@ -235,6 +241,8 @@ Public Class AddDrivers
                 GroupBox3.Text = "Opciones"
                 ListView1.Columns(0).Text = "Archivo/Carpeta"
                 ListView1.Columns(1).Text = "Tipo"
+                OpenFileDialog1.Title = "Especifique el paquete de controlador a añadir"
+                FolderBrowserDialog1.Description = "Especifique la carpeta que contiene paquetes de controladores. Luego podrá especificar si necesita ser escaneada de forma recursiva:"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
