@@ -230,6 +230,12 @@
     <Compile Include="Panels\Img_Ops\Drivers\AddDrivers.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Img_Ops\Drivers\RemDrivers.Designer.vb">
+      <DependentUpon>RemDrivers.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Drivers\RemDrivers.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\Features\DisableFeat.Designer.vb">
       <DependentUpon>DisableFeat.vb</DependentUpon>
     </Compile>
@@ -525,6 +531,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Drivers\AddDrivers.resx">
       <DependentUpon>AddDrivers.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Drivers\RemDrivers.resx">
+      <DependentUpon>RemDrivers.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Features\DisableFeat.resx">
       <DependentUpon>DisableFeat.vb</DependentUpon>
