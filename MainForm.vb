@@ -129,6 +129,7 @@ Public Class MainForm
     Public imgDrvProviderNames(65535) As String
     Public imgDrvDates(65535) As String
     Public imgDrvVersions(65535) As String
+    Public imgDrvBootCriticalStatus(65535) As Boolean
 
     Public imgPackageNameLastEntry As String
 
@@ -2533,6 +2534,7 @@ Public Class MainForm
                     Dim imgDrvProviderNameList As New List(Of String)
                     Dim imgDrvDateList As New List(Of String)
                     Dim imgDrvVersionList As New List(Of String)
+                    Dim imgDrvBootCriticalStatusList As New List(Of Boolean)
                     Dim DriverCollection As DismDriverPackageCollection = DismApi.GetDrivers(session, True)
                     For Each driver As DismDriverPackage In DriverCollection
                         If ImgBW.CancellationPending Then
@@ -2546,6 +2548,7 @@ Public Class MainForm
                         imgDrvProviderNameList.Add(driver.ProviderName)
                         imgDrvDateList.Add(driver.Date.ToString())
                         imgDrvVersionList.Add(driver.Version.ToString())
+                        imgDrvBootCriticalStatusList.Add(driver.BootCritical)
                     Next
                     imgDrvPublishedNames = imgDrvPublishedNameList.ToArray()
                     imgDrvOGFileNames = imgDrvOGFileNameList.ToArray()
@@ -2554,6 +2557,7 @@ Public Class MainForm
                     imgDrvProviderNames = imgDrvProviderNameList.ToArray()
                     imgDrvDates = imgDrvDateList.ToArray()
                     imgDrvVersions = imgDrvVersionList.ToArray()
+                    imgDrvBootCriticalStatus = imgDrvBootCriticalStatusList.ToArray()
                 End Using
             Finally
                 DismApi.Shutdown()
@@ -7756,5 +7760,53 @@ Public Class MainForm
 
     Private Sub AddDriver_Click(sender As Object, e As EventArgs) Handles AddDriver.Click
         AddDrivers.ShowDialog()
+    End Sub
+
+    Private Sub RemoveDriver_Click(sender As Object, e As EventArgs) Handles RemoveDriver.Click
+        RemDrivers.ListView1.Items.Clear()
+        ProgressPanel.OperationNum = 994
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
+        End Select
+        If Not areBackgroundProcessesDone Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        Try
+            For x = 0 To Array.LastIndexOf(imgDrvPublishedNames, imgDrvPublishedNames.Last)
+                If RemDrivers.CheckBox1.Checked Then
+                    If imgDrvBootCriticalStatus(x) Then Continue For
+                End If
+                If RemDrivers.CheckBox2.Checked Then
+                    If CBool(imgDrvInbox(x)) Then Continue For
+                End If
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), imgDrvOGFileNames(x), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Yes", "No"), If(imgDrvBootCriticalStatus(x), "Yes", "No"), imgDrvVersions(x), imgDrvDates(x)}))
+                            Case "ESN"
+                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), imgDrvOGFileNames(x), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sí", "No"), imgDrvVersions(x), imgDrvDates(x)}))
+                        End Select
+                    Case 1
+                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), imgDrvOGFileNames(x), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Yes", "No"), If(imgDrvBootCriticalStatus(x), "Yes", "No"), imgDrvVersions(x), imgDrvDates(x)}))
+                    Case 2
+                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), imgDrvOGFileNames(x), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sí", "No"), imgDrvVersions(x), imgDrvDates(x)}))
+                End Select
+            Next
+        Catch ex As Exception
+            Exit Try
+        End Try
+        RemDrivers.ShowDialog()
     End Sub
 End Class
