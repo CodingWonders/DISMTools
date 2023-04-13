@@ -1061,6 +1061,7 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & _
                                "Removing volume images..." & CrLf)
             For x = 0 To Array.LastIndexOf(imgIndexDeletionNames, imgIndexDeletionLastName)
+                If x + 1 > CurrentPB.Maximum Then Exit For
                 CurrentPB.Value = x + 1
                 Select Case Language
                     Case 0
@@ -1574,6 +1575,7 @@ Public Class ProgressPanel
             ElseIf pkgAdditionOp = 1 Then
                 CurrentPB.Maximum = pkgCount
                 For x = 0 To Array.LastIndexOf(pkgs, pkgLastCheckedPackageName)
+                    If x + 1 > CurrentPB.Maximum Then Exit For
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1795,6 +1797,7 @@ Public Class ProgressPanel
             CurrentPB.Maximum = pkgRemovalCount
             If pkgRemovalOp = 0 Then
                 For x = 0 To Array.LastIndexOf(pkgRemovalNames, pkgRemovalLastName)
+                    If x + 1 > CurrentPB.Maximum Then Exit For
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1887,6 +1890,7 @@ Public Class ProgressPanel
                 Next
             ElseIf pkgRemovalOp = 1 Then
                 For x = 0 To Array.LastIndexOf(pkgRemovalFiles, pkgRemovalLastFile)
+                    If x + 1 > CurrentPB.Maximum Then Exit For
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2069,6 +2073,7 @@ Public Class ProgressPanel
             End Select
             CurrentPB.Maximum = featEnablementCount
             For x = 0 To Array.LastIndexOf(featEnablementNames, featEnablementLastName)
+                If x + 1 > CurrentPB.Maximum Then Exit For
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2211,6 +2216,7 @@ Public Class ProgressPanel
             End Select
             CurrentPB.Maximum = featDisablementCount
             For x = 0 To Array.LastIndexOf(featDisablementNames, featDisablementLastName)
+                If x + 1 > CurrentPB.Maximum Then Exit For
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2527,6 +2533,7 @@ Public Class ProgressPanel
             End Select
             CurrentPB.Maximum = appxAdditionCount
             For x = 0 To Array.LastIndexOf(appxAdditionPackages, appxAdditionLastPackage)
+                If x + 1 > CurrentPB.Maximum Then Exit For
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2703,6 +2710,7 @@ Public Class ProgressPanel
             End Select
             CurrentPB.Maximum = appxRemovalCount
             For x = 0 To Array.LastIndexOf(appxRemovalPackages, appxRemovalLastPackage)
+                If x + 1 > CurrentPB.Maximum Then Exit For
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2839,6 +2847,7 @@ Public Class ProgressPanel
                                "Total number of capabilities: " & capAdditionCount)
             CurrentPB.Maximum = capAdditionCount
             For x = 0 To Array.LastIndexOf(capAdditionIds, capAdditionLastId)
+                If x + 1 > CurrentPB.Maximum Then Exit For
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2973,6 +2982,7 @@ Public Class ProgressPanel
                                "Total number of capabilities: " & capRemovalCount)
             CurrentPB.Maximum = capRemovalCount
             For x = 0 To Array.LastIndexOf(capRemovalIds, capRemovalLastId)
+                If x + 1 > CurrentPB.Maximum Then Exit For
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3089,6 +3099,7 @@ Public Class ProgressPanel
                                "Total number of drivers: " & drvAdditionCount)
             CurrentPB.Maximum = drvAdditionCount
             For x = 0 To Array.LastIndexOf(drvAdditionPkgs, drvAdditionLastPkg)
+                If x + 1 > CurrentPB.Maximum Then Exit For
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3106,23 +3117,33 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & _
                                    "Driver " & (x + 1) & " of " & drvAdditionCount)
                 ' Get driver information
-                Try
-                    DismApi.Initialize(DismLogLevel.LogErrors)
-                    Using imgSession As DismSession = DismApi.OpenOfflineSession(mntString)
-                        Dim drvInfoCollection As DismDriverCollection = DismApi.GetDriverInfo(imgSession, drvAdditionPkgs(x))
-                        For Each drvInfo As DismDriver In drvInfoCollection
-                            LogView.AppendText(CrLf & CrLf & _
-                                               "- Hardware description: " & drvInfo.HardwareDescription & CrLf & _
-                                               "- Hardware ID: " & drvInfo.HardwareId & CrLf & _
-                                               "- Additional IDs" & CrLf & _
-                                               "  - Compatible IDs: " & drvInfo.CompatibleIds & CrLf & _
-                                               "  - Excluded IDs: " & drvInfo.ExcludeIds & CrLf & _
-                                               "- Hardware manufacturer: " & drvInfo.ManufacturerName)
-                        Next
-                    End Using
-                Finally
-                    DismApi.Shutdown()
-                End Try
+                If Not File.GetAttributes(drvAdditionPkgs(x)) = FileAttributes.Directory Then
+                    Try
+                        DismApi.Initialize(DismLogLevel.LogErrors)
+                        Using imgSession As DismSession = DismApi.OpenOfflineSession(mntString)
+                            Dim drvInfoCollection As DismDriverCollection = DismApi.GetDriverInfo(imgSession, drvAdditionPkgs(x))
+                            If drvInfoCollection.Count > 0 Then
+                                For Each drvInfo As DismDriver In drvInfoCollection
+                                    LogView.AppendText(CrLf & CrLf & _
+                                                       "- Hardware description: " & drvInfo.HardwareDescription & CrLf & _
+                                                       "- Hardware ID: " & drvInfo.HardwareId & CrLf & _
+                                                       "- Additional IDs" & CrLf & _
+                                                       "  - Compatible IDs: " & drvInfo.CompatibleIds & CrLf & _
+                                                       "  - Excluded IDs: " & drvInfo.ExcludeIds & CrLf & _
+                                                       "- Hardware manufacturer: " & drvInfo.ManufacturerName)
+                                Next
+                            Else
+                                LogView.AppendText(CrLf & CrLf & _
+                                                   "We couldn't get information of this driver package. Proceeding anyway...")
+                            End If
+                        End Using
+                    Finally
+                        DismApi.Shutdown()
+                    End Try
+                Else
+                    LogView.AppendText(CrLf & CrLf & _
+                                       "The driver package currently about to be processed is a folder, so information about it can't be obtained. Proceeding anyway...")
+                End If
                 DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
                 CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /add-driver /driver=" & Quote & drvAdditionPkgs(x) & Quote
                 If drvAdditionForceUnsigned Then
@@ -4388,6 +4409,10 @@ Public Class ProgressPanel
             ElseIf OperationNum = 64 Then
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 68 Then
+                MainForm.UpdateProjProperties(True, False)
+            ElseIf OperationNum = 75 Then
+                MainForm.UpdateProjProperties(True, False)
+            ElseIf OperationNum = 76 Then
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 991 Then
                 Visible = False
