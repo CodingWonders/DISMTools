@@ -3171,7 +3171,7 @@ Public Class ProgressPanel
                 Else
                     LogView.AppendText(" Error level : " & errCode)
                 End If
-                If FeatErrorText.RichTextBox1.Text = "" Then
+                If PkgErrorText.RichTextBox1.Text = "" Then
                     If errCode.Length >= 8 Then
                         PkgErrorText.RichTextBox1.AppendText("0x" & errCode)
                     Else
@@ -3187,7 +3187,7 @@ Public Class ProgressPanel
             Next
             CurrentPB.Value = CurrentPB.Maximum
             LogView.AppendText(CrLf & "Gathering error level for selected drivers..." & CrLf)
-            For x = 0 To FeatErrorText.RichTextBox1.Lines.Count - 1
+            For x = 0 To PkgErrorText.RichTextBox1.Lines.Count - 1
                 LogView.AppendText(CrLf & "- Driver no. " & (x + 1) & ": " & PkgErrorText.RichTextBox1.Lines(x))
             Next
             Thread.Sleep(2000)
