@@ -1,9 +1,95 @@
 ﻿Imports System.Windows.Forms
+Imports Microsoft.VisualBasic.ControlChars
 
 Public Class RemDrivers
 
+    Dim drvPkgs(65535) As String
+    Dim drvPkgCount As Integer
+
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        ProgressPanel.MountDir = MainForm.MountDir
+        drvPkgCount = ListView1.CheckedItems.Count
+        If ListView1.CheckedItems.Count > 0 Then
+            Dim drvPkgList As New List(Of String)
+            For x = 0 To ListView1.CheckedItems.Count - 1
+                drvPkgList.Add(ListView1.CheckedItems(x).SubItems(0).Text)
+            Next
+            drvPkgs = drvPkgList.ToArray()
+            ' Detect if there are boot-critical drivers checked
+            For x = 0 To ListView1.CheckedItems.Count - 1
+                If ListView1.CheckedItems(x).SubItems(5).Text = "Yes" Or ListView1.CheckedItems(x).SubItems(5).Text = "Sí" Then
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    If MsgBox("You have selected driver packages that are boot-critical. Proceeding with the removal of such packages may leave the target image unbootable." & CrLf & CrLf & "Do you want to continue?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                                        Exit Sub
+                                    End If
+                                Case "ESN"
+                                    If MsgBox("Ha seleccionado paquetes de controladores que son críticos para el arranque. Continuar con la eliminación de dichos paquetes podría dejar la imagen de destino sin poder arrancar." & CrLf & CrLf & "¿Desea continuar?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                                        Exit Sub
+                                    End If
+                            End Select
+                        Case 1
+                            If MsgBox("You have selected driver packages that are boot-critical. Proceeding with the removal of such packages may leave the target image unbootable." & CrLf & CrLf & "Do you want to continue?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                                Exit Sub
+                            End If
+                        Case 2
+                            If MsgBox("Ha seleccionado paquetes de controladores que son críticos para el arranque. Continuar con la eliminación de dichos paquetes podría dejar la imagen de destino sin poder arrancar." & CrLf & CrLf & "¿Desea continuar?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                                Exit Sub
+                            End If
+                    End Select
+                End If
+                If ListView1.CheckedItems(x).SubItems(4).Text = "Yes" Or ListView1.CheckedItems(x).SubItems(4).Text = "Sí" Then
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    If MsgBox("You have selected driver packages that are part of the Windows distribution. Proceeding may leave certain parts of Windows that depend on these drivers inaccessible." & CrLf & CrLf & "Do you want to continue?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                                        Exit Sub
+                                    End If
+                                Case "ESN"
+                                    If MsgBox("Ha seleccionado paquetes de controladores que son parte de la distribución de Windows. Continuar podría dejar algunas partes de Windows que dependan de estos contoladores inaccesibles." & CrLf & CrLf & "¿Desea continuar?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                                        Exit Sub
+                                    End If
+                            End Select
+                        Case 1
+                            If MsgBox("You have selected driver packages that are part of the Windows distribution. Proceeding may leave certain parts of Windows that depend on these drivers inaccessible." & CrLf & CrLf & "Do you want to continue?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                                Exit Sub
+                            End If
+                        Case 2
+                            If MsgBox("Ha seleccionado paquetes de controladores que son parte de la distribución de Windows. Continuar podría dejar algunas partes de Windows que dependan de estos contoladores inaccesibles." & CrLf & CrLf & "¿Desea continuar?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                                Exit Sub
+                            End If
+                    End Select
+                End If
+                Exit For
+            Next
+            For x = 0 To drvPkgs.Length - 1
+                ProgressPanel.drvRemovalPkgs(x) = drvPkgs(x)
+            Next
+            ProgressPanel.drvRemovalLastPkg = ListView1.CheckedItems(drvPkgCount - 1).SubItems(0).Text
+        Else
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MsgBox("Please specify the driver packages you wish to remove and try again", vbOKOnly + vbCritical, Label1.Text)
+                        Case "ESN"
+                            MsgBox("Especifique los paquetes de controladores que desea eliminar e inténtelo de nuevo", vbOKOnly + vbCritical, Label1.Text)
+                    End Select
+                Case 1
+                    MsgBox("Please specify the driver packages you wish to remove and try again", vbOKOnly + vbCritical, Label1.Text)
+                Case 2
+                    MsgBox("Especifique los paquetes de controladores que desea eliminar e inténtelo de nuevo", vbOKOnly + vbCritical, Label1.Text)
+            End Select
+            Exit Sub
+        End If
+        ProgressPanel.drvRemovalCount = drvPkgCount
+        ProgressPanel.OperationNum = 76
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
+        Visible = False
+        ProgressPanel.ShowDialog(MainForm)
         Me.Close()
     End Sub
 

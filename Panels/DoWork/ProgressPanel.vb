@@ -382,6 +382,7 @@ Public Class ProgressPanel
     Public drvRemovalCount As Integer                       ' Total number of driver packages to remove
     Public drvSuccessfulRemovals As Integer                 ' Number of successful driver package removals
     Public drvFailedRemovals As Integer                     ' Number of failed driver package removals
+    Dim drvCollection As DismDriverPackageCollection        ' Collection of image drivers for driver package removal
 
     ' <Space for other OperationNums>
     ' OperationNum: 87
@@ -517,6 +518,8 @@ Public Class ProgressPanel
             Else
                 taskCount = 1
             End If
+        ElseIf opNum = 76 Then
+            taskCount = 1
         ElseIf opNum = 78 Then
             taskCount = 1
         ElseIf opNum = 87 Then
@@ -3212,6 +3215,148 @@ Public Class ProgressPanel
             If drvSuccessfulAdditions > 0 Then
                 GetErrorCode(True)
             ElseIf drvSuccessfulAdditions <= 0 Then
+                GetErrorCode(False)
+            End If
+        ElseIf opNum = 76 Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Removing drivers..."
+                            currentTask.Text = "Preparing to remove drivers..."
+                        Case "ESN"
+                            allTasks.Text = "Eliminando controladores..."
+                            currentTask.Text = "Preparándonos para eliminar controladores..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Removing drivers..."
+                    currentTask.Text = "Preparing to remove drivers..."
+                Case 2
+                    allTasks.Text = "Eliminando controladores..."
+                    currentTask.Text = "Preparándonos para eliminar controladores..."
+            End Select
+            LogView.AppendText(CrLf & "Removing driver packages from mounted image..." & CrLf)
+            ' Get all driver packages
+            LogView.AppendText(CrLf & "Getting image drivers. This may take some time..." & CrLf)
+            Try
+                DismApi.Initialize(DismLogLevel.LogErrors)
+                Using imgSession As DismSession = DismApi.OpenOfflineSession(mntString)
+                    drvCollection = DismApi.GetDrivers(imgSession, True)
+                End Using
+            Finally
+                DismApi.Shutdown()
+            End Try
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            currentTask.Text = "Removing drivers..."
+                        Case "ESN"
+                            currentTask.Text = "Eliminando controladores..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Removing drivers..."
+                Case 2
+                    currentTask.Text = "Eliminando controladores..."
+            End Select
+            LogView.AppendText(CrLf & "Enumerating drivers to remove. Please wait..." & CrLf & _
+                               "Total number of drivers: " & drvRemovalCount)
+            CurrentPB.Maximum = drvRemovalCount
+            For x = 0 To Array.LastIndexOf(drvRemovalPkgs, drvRemovalLastPkg)
+                If x + 1 > CurrentPB.Maximum Then Exit For
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                currentTask.Text = "Removing driver " & (x + 1) & " of " & drvRemovalCount & "..."
+                            Case "ESN"
+                                currentTask.Text = "Eliminando controlador " & (x + 1) & " de " & drvRemovalCount & "..."
+                        End Select
+                    Case 1
+                        currentTask.Text = "Removing driver " & (x + 1) & " of " & drvRemovalCount & "..."
+                    Case 2
+                        currentTask.Text = "Eliminando controlador " & (x + 1) & " de " & drvRemovalCount & "..."
+                End Select
+                CurrentPB.Value = x + 1
+                LogView.AppendText(CrLf & _
+                                   "Driver " & (x + 1) & " of " & drvRemovalCount)
+                ' Get driver information
+                Try
+                    DismApi.Initialize(DismLogLevel.LogErrors)
+                    Using imgSession As DismSession = DismApi.OpenOfflineSession(mntString)
+                        ' Get drivers first
+                        'drvCollection = DismApi.GetDrivers(imgSession, True)
+                        ' Go through all driver packages until we find the details of the one about to be processed
+                        For Each drv As DismDriverPackage In drvCollection
+                            If drv.PublishedName = drvRemovalPkgs(x) Then
+                                LogView.AppendText(CrLf & CrLf & _
+                                                   "- Published name: " & drv.PublishedName & CrLf & _
+                                                   "- Provider name: " & drv.ProviderName & CrLf & _
+                                                   "- Class name: " & drv.ClassName & CrLf & _
+                                                   "- Class description: " & drv.ClassDescription & CrLf & _
+                                                   "- Class GUID: " & drv.ClassGuid & CrLf & _
+                                                   "- Version and date: " & drv.Version.ToString() & "/" & drv.Date.ToString() & CrLf & _
+                                                   "- Is part of the Windows distribution? " & If(drv.InBox, "Yes", "No") & CrLf & _
+                                                   "- Is critical to the boot process? " & If(drv.BootCritical, "Yes", "No"))
+                                If drv.InBox Then
+                                    LogView.AppendText(CrLf & CrLf & _
+                                                       "Warning: this driver package is part of the Windows distribution. Some areas may no longer work after this driver has been removed")
+                                End If
+                                If drv.BootCritical Then
+                                    LogView.AppendText(CrLf & CrLf & _
+                                                       "Warning: this driver package is critical to the boot process. The target image may no longer boot or work correctly after this driver has been removed")
+                                End If
+                                Exit For
+                            End If
+                        Next
+                    End Using
+                Finally
+                    DismApi.Shutdown()
+                End Try
+                DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /remove-driver /driver=" & Quote & drvRemovalPkgs(x) & Quote
+                DISMProc.StartInfo.Arguments = CommandArgs
+                DISMProc.Start()
+                Do Until DISMProc.HasExited
+                    If DISMProc.HasExited Then
+                        Exit Do
+                    End If
+                Loop
+                LogView.AppendText(CrLf & "Getting error level...")
+                errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
+                If DISMProc.ExitCode = 0 Then
+                    drvSuccessfulRemovals += 1
+                Else
+                    drvFailedRemovals += 1
+                End If
+                If errCode.Length >= 8 Then
+                    LogView.AppendText(" Error level : 0x" & errCode)
+                Else
+                    LogView.AppendText(" Error level : " & errCode)
+                End If
+                If PkgErrorText.RichTextBox1.Text = "" Then
+                    If errCode.Length >= 8 Then
+                        PkgErrorText.RichTextBox1.AppendText("0x" & errCode)
+                    Else
+                        PkgErrorText.RichTextBox1.AppendText(errCode)
+                    End If
+                Else
+                    If errCode.Length >= 8 Then
+                        PkgErrorText.RichTextBox1.AppendText(CrLf & "0x" & errCode)
+                    Else
+                        PkgErrorText.RichTextBox1.AppendText(CrLf & errCode)
+                    End If
+                End If
+            Next
+            CurrentPB.Value = CurrentPB.Maximum
+            LogView.AppendText(CrLf & "Gathering error level for selected drivers..." & CrLf)
+            For x = 0 To PkgErrorText.RichTextBox1.Lines.Count - 1
+                LogView.AppendText(CrLf & "- Driver no. " & (x + 1) & ": " & PkgErrorText.RichTextBox1.Lines(x))
+            Next
+            Thread.Sleep(2000)
+            If drvSuccessfulRemovals > 0 Then
+                GetErrorCode(True)
+            ElseIf drvSuccessfulRemovals <= 0 Then
                 GetErrorCode(False)
             End If
         ElseIf opNum = 87 Then
