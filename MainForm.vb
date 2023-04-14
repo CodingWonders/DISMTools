@@ -1076,14 +1076,14 @@ Public Class MainForm
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENG"
-                                progressLabel = "Getting image third-party drivers..."
+                                progressLabel = "Getting image drivers..."
                             Case "ESN"
-                                progressLabel = "Obteniendo controladores de terceros de la imagen..."
+                                progressLabel = "Obteniendo controladores de la imagen..."
                         End Select
                     Case 1
-                        progressLabel = "Getting image third-party drivers..."
+                        progressLabel = "Getting image drivers..."
                     Case 2
-                        progressLabel = "Obteniendo controladores de terceros de la imagen..."
+                        progressLabel = "Obteniendo controladores de la imagen..."
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetImageDrivers(True)
@@ -1172,14 +1172,14 @@ Public Class MainForm
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENG"
-                                progressLabel = "Getting image third-party drivers..."
+                                progressLabel = "Getting image drivers..."
                             Case "ESN"
-                                progressLabel = "Obteniendo controladores de terceros de la imagen..."
+                                progressLabel = "Obteniendo controladores de la imagen..."
                         End Select
                     Case 1
-                        progressLabel = "Getting image third-party drivers..."
+                        progressLabel = "Getting image drivers..."
                     Case 2
-                        progressLabel = "Obteniendo controladores de terceros de la imagen..."
+                        progressLabel = "Obteniendo controladores de la imagen..."
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetImageDrivers()
