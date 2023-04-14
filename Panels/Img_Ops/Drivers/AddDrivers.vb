@@ -62,6 +62,7 @@ Public Class AddDrivers
             End Select
             Exit Sub
         End If
+        ProgressPanel.drvAdditionLastPkg = ListView1.Items(drvPkgCount - 1).SubItems(0).Text
         ProgressPanel.drvAdditionCount = drvPkgCount
         ProgressPanel.OperationNum = 75
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
@@ -269,5 +270,39 @@ Public Class AddDrivers
             Text = ""
             Win10Title.Visible = True
         End If
+    End Sub
+
+    Private Sub ListView1_DragEnter(sender As Object, e As DragEventArgs) Handles ListView1.DragEnter
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            e.Effect = DragDropEffects.Copy
+        End If
+    End Sub
+
+    Private Sub ListView1_DragDrop(sender As Object, e As DragEventArgs) Handles ListView1.DragDrop
+        Dim PackageFiles() As String = e.Data.GetData(DataFormats.FileDrop)
+        For Each PkgFile In PackageFiles
+            If Not File.GetAttributes(PkgFile) = FileAttributes.Directory And Not Path.GetExtension(PkgFile).EndsWith("inf") Then Continue For
+            If File.GetAttributes(PkgFile) = FileAttributes.Directory Then
+                Cursor = Cursors.WaitCursor
+                If My.Computer.FileSystem.GetFiles(FolderBrowserDialog1.SelectedPath, FileIO.SearchOption.SearchAllSubDirectories, "*.inf").Count < 0 Then
+                    Continue For
+                End If
+                Cursor = Cursors.Arrow
+            End If
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            ListView1.Items.Add(New ListViewItem(New String() {PkgFile, If(File.GetAttributes(PkgFile) = FileAttributes.Directory, "Folder", "File")}))
+                        Case "ESN"
+                            ListView1.Items.Add(New ListViewItem(New String() {PkgFile, If(File.GetAttributes(PkgFile) = FileAttributes.Directory, "Carpeta", "Archivo")}))
+                    End Select
+                Case 1
+                    ListView1.Items.Add(New ListViewItem(New String() {PkgFile, If(File.GetAttributes(PkgFile) = FileAttributes.Directory, "Folder", "File")}))
+                Case 2
+                    ListView1.Items.Add(New ListViewItem(New String() {PkgFile, If(File.GetAttributes(PkgFile) = FileAttributes.Directory, "Carpeta", "Archivo")}))
+            End Select
+            If File.GetAttributes(PkgFile) = FileAttributes.Directory Then CheckedListBox1.Items.Add(PkgFile)
+        Next
     End Sub
 End Class

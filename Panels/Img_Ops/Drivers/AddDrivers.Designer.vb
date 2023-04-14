@@ -29,23 +29,23 @@ Partial Class AddDrivers
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Label2 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.Button4 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.ListView1 = New System.Windows.Forms.ListView()
+        Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.CheckedListBox1 = New System.Windows.Forms.CheckedListBox()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
-        Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
-        Me.Label2 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -136,6 +136,15 @@ Partial Class AddDrivers
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Driver files"
         '
+        'Label2
+        '
+        Me.Label2.Location = New System.Drawing.Point(6, 21)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(536, 32)
+        Me.Label2.TabIndex = 1
+        Me.Label2.Text = "Please specify the drivers to add by using the buttons below or by dropping them " & _
+    "to the list below:"
+        '
         'TableLayoutPanel2
         '
         Me.TableLayoutPanel2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
@@ -204,6 +213,7 @@ Partial Class AddDrivers
         '
         'ListView1
         '
+        Me.ListView1.AllowDrop = True
         Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
         Me.ListView1.Location = New System.Drawing.Point(7, 56)
         Me.ListView1.Name = "ListView1"
@@ -211,6 +221,16 @@ Partial Class AddDrivers
         Me.ListView1.TabIndex = 0
         Me.ListView1.UseCompatibleStateImageBehavior = False
         Me.ListView1.View = System.Windows.Forms.View.Details
+        '
+        'ColumnHeader1
+        '
+        Me.ColumnHeader1.Text = "File/Folder"
+        Me.ColumnHeader1.Width = 350
+        '
+        'ColumnHeader2
+        '
+        Me.ColumnHeader2.Text = "Type"
+        Me.ColumnHeader2.Width = 154
         '
         'GroupBox2
         '
@@ -271,16 +291,6 @@ Partial Class AddDrivers
         Me.CheckBox1.Text = "Force installation of unsigned drivers"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
-        'ColumnHeader1
-        '
-        Me.ColumnHeader1.Text = "File/Folder"
-        Me.ColumnHeader1.Width = 350
-        '
-        'ColumnHeader2
-        '
-        Me.ColumnHeader2.Text = "Type"
-        Me.ColumnHeader2.Width = 154
-        '
         'OpenFileDialog1
         '
         Me.OpenFileDialog1.Filter = "Driver files|*.inf"
@@ -291,15 +301,6 @@ Partial Class AddDrivers
         Me.FolderBrowserDialog1.Description = "Specify the folder containing driver packages. You will then be able to specify i" & _
     "f it needs to be scanned recursively:"
         Me.FolderBrowserDialog1.RootFolder = System.Environment.SpecialFolder.MyComputer
-        '
-        'Label2
-        '
-        Me.Label2.Location = New System.Drawing.Point(6, 21)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(536, 32)
-        Me.Label2.TabIndex = 1
-        Me.Label2.Text = "Please specify the drivers to add by using the buttons below or by dropping them " & _
-    "to the list below:"
         '
         'AddDrivers
         '
