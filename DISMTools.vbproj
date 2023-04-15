@@ -733,6 +733,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo.ico" />
+    <EmbeddedResource Include="Resources\dtproj.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <None Include="Resources\rem_drv.png" />
     <None Include="Resources\add_drv.png" />
     <None Include="Resources\image_light.png" />
