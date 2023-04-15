@@ -1567,10 +1567,15 @@ Namespace My.Resources
         
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
-        '''- Fixed an issue that happened in the options dialog where the selected item of the font ComboBox was &quot;&quot; at first
-        '''- Fixed a critical issue where the DISM API would throw an invalid traces exception and fail operations. This occurred on the progress dialog and when background processes were running
-        '''- Fixed an issue where the log file name of the most recent log file would change to append the name of the next log file
-        '''- Fixed an issue which made the program unmount external directories, whether  [resto de la cadena truncado]&quot;;.
+        '''- Re-added exception control for Windows 8 hosts when getting AppX packages from an image
+        '''
+        '''New features
+        '''
+        '''Drivers
+        '''- Introduced driver package management through simple, intuitive interfaces
+        '''
+        '''Removed features
+        '''- Dropped compability with Windows 7 and Server 2008 R2 from the application manifest.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
