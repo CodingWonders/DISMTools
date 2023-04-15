@@ -656,8 +656,8 @@ Public Class MainForm
 
             End Try
         ElseIf LoadMode = 1 Then
-            If File.Exists(".\settings.ini") Then
-                DTSettingForm.RichTextBox1.Text = My.Computer.FileSystem.ReadAllText(".\settings.ini", UTF8)
+            If File.Exists(Application.StartupPath & "\" & "settings.ini") Then
+                DTSettingForm.RichTextBox1.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)
                 ' Perform the Volatile mode check before applying any settings
                 If DTSettingForm.RichTextBox1.Text.Contains("Volatile=0") Then
                     VolatileMode = False
@@ -2793,7 +2793,7 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[BgProcesses]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("ShowNotification=1")
         DTSettingForm.RichTextBox2.AppendText("NotifyFrequency=0")
-        File.WriteAllText(".\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
+        File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
     End Sub
 
     Sub SaveDTSettings()
@@ -2801,8 +2801,8 @@ Public Class MainForm
             Exit Sub
         Else
             If SaveOnSettingsIni Then
-                If File.Exists(".\settings.ini") Then
-                    File.Delete(".\settings.ini")
+                If File.Exists(Application.StartupPath & "\settings.ini") Then
+                    File.Delete(Application.StartupPath & "\settings.ini")
                 End If
                 DTSettingForm.RichTextBox2.Clear()
                 DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.3) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
@@ -2894,7 +2894,7 @@ Public Class MainForm
                     Case 1
                         DTSettingForm.RichTextBox2.AppendText(CrLf & "NotifyFrequency=1")
                 End Select
-                File.WriteAllText(".\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
+                File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
             Else
                 ' This procedure should not be called yet
                 Try
