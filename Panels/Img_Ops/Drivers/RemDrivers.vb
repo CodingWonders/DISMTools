@@ -39,6 +39,7 @@ Public Class RemDrivers
                                 Exit Sub
                             End If
                     End Select
+                    Exit For
                 End If
                 If ListView1.CheckedItems(x).SubItems(4).Text = "Yes" Or ListView1.CheckedItems(x).SubItems(4).Text = "Sí" Then
                     Select Case MainForm.Language
@@ -62,8 +63,8 @@ Public Class RemDrivers
                                 Exit Sub
                             End If
                     End Select
+                    Exit For
                 End If
-                Exit For
             Next
             For x = 0 To drvPkgs.Length - 1
                 ProgressPanel.drvRemovalPkgs(x) = drvPkgs(x)
