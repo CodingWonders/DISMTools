@@ -7809,4 +7809,8 @@ Public Class MainForm
         End Try
         RemDrivers.ShowDialog()
     End Sub
+
+    Private Sub ActionEditorToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ActionEditorToolStripMenuItem.Click
+        Actions_MainForm.Show()
+    End Sub
 End Class
