@@ -57,6 +57,9 @@
     <ApplicationIcon>logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DarkUI, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\DarkUI.2.0.2\lib\DarkUI.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Dism, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5bba90053b345501, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Dism.2.5.2\lib\net40\Microsoft.Dism.dll</HintPath>
     </Reference>
@@ -66,6 +69,7 @@
     <Reference Include="System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
@@ -464,10 +468,19 @@
     <Compile Include="Panels\Unattend_Files\Management\UnattendMgr.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Actions\DockPanels\ActionProperties.Designer.vb">
+      <DependentUpon>ActionProperties.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\DockPanels\ActionProperties.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Actions\Actions.MainForm.resx">
       <DependentUpon>Actions.MainForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\DockPanels\ActionProperties.resx">
+      <DependentUpon>ActionProperties.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.vb</DependentUpon>
