@@ -22,28 +22,28 @@ Partial Class NewUnattendWiz
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim TreeNode23 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Before beginning")
-        Dim TreeNode24 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Target operating system selection")
-        Dim TreeNode25 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product activation")
-        Dim TreeNode26 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("License agreement")
-        Dim TreeNode27 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Computer personalization")
-        Dim TreeNode28 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Partitioning settings")
-        Dim TreeNode29 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Operating system setup", New System.Windows.Forms.TreeNode() {TreeNode25, TreeNode26, TreeNode27, TreeNode28})
-        Dim TreeNode30 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional settings")
-        Dim TreeNode31 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("End-user License Agreement")
-        Dim TreeNode32 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("OOBE skips")
-        Dim TreeNode33 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Network security")
-        Dim TreeNode34 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless configuration")
-        Dim TreeNode35 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Computer protection")
-        Dim TreeNode36 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Control Panel")
-        Dim TreeNode37 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Out-of-box experience", New System.Windows.Forms.TreeNode() {TreeNode31, TreeNode32, TreeNode33, TreeNode34, TreeNode35, TreeNode36})
-        Dim TreeNode38 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Account personalization")
-        Dim TreeNode39 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Account security")
-        Dim TreeNode40 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Customer Experience Improvement Program")
-        Dim TreeNode41 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("User account settings", New System.Windows.Forms.TreeNode() {TreeNode38, TreeNode39, TreeNode40})
-        Dim TreeNode42 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Ready to begin")
-        Dim TreeNode43 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Creation in progress")
-        Dim TreeNode44 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
+        Dim TreeNode1 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Before beginning")
+        Dim TreeNode2 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Target operating system selection")
+        Dim TreeNode3 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product activation")
+        Dim TreeNode4 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("License agreement")
+        Dim TreeNode5 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Computer personalization")
+        Dim TreeNode6 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Partitioning settings")
+        Dim TreeNode7 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Operating system setup", New System.Windows.Forms.TreeNode() {TreeNode3, TreeNode4, TreeNode5, TreeNode6})
+        Dim TreeNode8 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional settings")
+        Dim TreeNode9 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("End-user License Agreement")
+        Dim TreeNode10 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("OOBE skips")
+        Dim TreeNode11 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Network security")
+        Dim TreeNode12 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless configuration")
+        Dim TreeNode13 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Computer protection")
+        Dim TreeNode14 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Control Panel")
+        Dim TreeNode15 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Out-of-box experience", New System.Windows.Forms.TreeNode() {TreeNode9, TreeNode10, TreeNode11, TreeNode12, TreeNode13, TreeNode14})
+        Dim TreeNode16 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Account personalization")
+        Dim TreeNode17 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Account security")
+        Dim TreeNode18 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Customer Experience Improvement Program")
+        Dim TreeNode19 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("User account settings", New System.Windows.Forms.TreeNode() {TreeNode16, TreeNode17, TreeNode18})
+        Dim TreeNode20 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Ready to begin")
+        Dim TreeNode21 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Creation in progress")
+        Dim TreeNode22 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewUnattendWiz))
         Me.SidePanel = New System.Windows.Forms.Panel()
         Me.ExpressModeSteps = New System.Windows.Forms.Panel()
@@ -294,17 +294,17 @@ Partial Class NewUnattendWiz
         Me.PictureBox23 = New System.Windows.Forms.PictureBox()
         Me.EditorPanelContainer = New System.Windows.Forms.Panel()
         Me.Scintilla1 = New ScintillaNET.Scintilla()
-        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
-        Me.NewTSB = New System.Windows.Forms.ToolStripButton()
-        Me.OpenTSB = New System.Windows.Forms.ToolStripButton()
-        Me.SaveTSB = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripComboBox1 = New System.Windows.Forms.ToolStripComboBox()
-        Me.ToolStripComboBox2 = New System.Windows.Forms.ToolStripComboBox()
-        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
-        Me.HelpTSB = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.DarkToolStrip1 = New DarkUI.Controls.DarkToolStrip()
+        Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripButton3 = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripButton4 = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
+        Me.FontFamilyTSCB = New System.Windows.Forms.ToolStripComboBox()
+        Me.FontSizeTSCB = New System.Windows.Forms.ToolStripComboBox()
+        Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripButton5 = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripButton6 = New System.Windows.Forms.ToolStripButton()
         Me.HeaderPanel = New System.Windows.Forms.Panel()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
@@ -408,7 +408,7 @@ Partial Class NewUnattendWiz
         Me.SettingRecapPanel.SuspendLayout()
         CType(Me.PictureBox23, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.EditorPanelContainer.SuspendLayout()
-        Me.ToolStrip1.SuspendLayout()
+        Me.DarkToolStrip1.SuspendLayout()
         Me.HeaderPanel.SuspendLayout()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.FooterContainer.SuspendLayout()
@@ -447,51 +447,51 @@ Partial Class NewUnattendWiz
         Me.StepsTreeView.ItemHeight = 24
         Me.StepsTreeView.Location = New System.Drawing.Point(0, 0)
         Me.StepsTreeView.Name = "StepsTreeView"
-        TreeNode23.Name = "StartNode"
-        TreeNode23.Text = "Before beginning"
-        TreeNode24.Name = "TargetOSNode"
-        TreeNode24.Text = "Target operating system selection"
-        TreeNode25.Name = "Activation"
-        TreeNode25.Text = "Product activation"
-        TreeNode26.Name = "License"
-        TreeNode26.Text = "License agreement"
-        TreeNode27.Name = "CompPersonalize"
-        TreeNode27.Text = "Computer personalization"
-        TreeNode28.Name = "Partitioning"
-        TreeNode28.Text = "Partitioning settings"
-        TreeNode29.Name = "OSSetup"
-        TreeNode29.Text = "Operating system setup"
-        TreeNode30.Name = "Region"
-        TreeNode30.Text = "Regional settings"
-        TreeNode31.Name = "EULA"
-        TreeNode31.Text = "End-user License Agreement"
-        TreeNode32.Name = "OOBESkip"
-        TreeNode32.Text = "OOBE skips"
-        TreeNode33.Name = "OOBENet"
-        TreeNode33.Text = "Network security"
-        TreeNode34.Name = "Wireless"
-        TreeNode34.Text = "Wireless configuration"
-        TreeNode35.Name = "CompProtect"
-        TreeNode35.Text = "Computer protection"
-        TreeNode36.Name = "CPL"
-        TreeNode36.Text = "Control Panel"
-        TreeNode37.Name = "OOBE"
-        TreeNode37.Text = "Out-of-box experience"
-        TreeNode38.Name = "User"
-        TreeNode38.Text = "Account personalization"
-        TreeNode39.Name = "UserSec"
-        TreeNode39.Text = "Account security"
-        TreeNode40.Name = "CEIP"
-        TreeNode40.Text = "Customer Experience Improvement Program"
-        TreeNode41.Name = "UserAccount"
-        TreeNode41.Text = "User account settings"
-        TreeNode42.Name = "Prepare"
-        TreeNode42.Text = "Ready to begin"
-        TreeNode43.Name = "Progress"
-        TreeNode43.Text = "Creation in progress"
-        TreeNode44.Name = "Finish"
-        TreeNode44.Text = "Finish"
-        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode23, TreeNode24, TreeNode29, TreeNode30, TreeNode37, TreeNode41, TreeNode42, TreeNode43, TreeNode44})
+        TreeNode1.Name = "StartNode"
+        TreeNode1.Text = "Before beginning"
+        TreeNode2.Name = "TargetOSNode"
+        TreeNode2.Text = "Target operating system selection"
+        TreeNode3.Name = "Activation"
+        TreeNode3.Text = "Product activation"
+        TreeNode4.Name = "License"
+        TreeNode4.Text = "License agreement"
+        TreeNode5.Name = "CompPersonalize"
+        TreeNode5.Text = "Computer personalization"
+        TreeNode6.Name = "Partitioning"
+        TreeNode6.Text = "Partitioning settings"
+        TreeNode7.Name = "OSSetup"
+        TreeNode7.Text = "Operating system setup"
+        TreeNode8.Name = "Region"
+        TreeNode8.Text = "Regional settings"
+        TreeNode9.Name = "EULA"
+        TreeNode9.Text = "End-user License Agreement"
+        TreeNode10.Name = "OOBESkip"
+        TreeNode10.Text = "OOBE skips"
+        TreeNode11.Name = "OOBENet"
+        TreeNode11.Text = "Network security"
+        TreeNode12.Name = "Wireless"
+        TreeNode12.Text = "Wireless configuration"
+        TreeNode13.Name = "CompProtect"
+        TreeNode13.Text = "Computer protection"
+        TreeNode14.Name = "CPL"
+        TreeNode14.Text = "Control Panel"
+        TreeNode15.Name = "OOBE"
+        TreeNode15.Text = "Out-of-box experience"
+        TreeNode16.Name = "User"
+        TreeNode16.Text = "Account personalization"
+        TreeNode17.Name = "UserSec"
+        TreeNode17.Text = "Account security"
+        TreeNode18.Name = "CEIP"
+        TreeNode18.Text = "Customer Experience Improvement Program"
+        TreeNode19.Name = "UserAccount"
+        TreeNode19.Text = "User account settings"
+        TreeNode20.Name = "Prepare"
+        TreeNode20.Text = "Ready to begin"
+        TreeNode21.Name = "Progress"
+        TreeNode21.Text = "Creation in progress"
+        TreeNode22.Name = "Finish"
+        TreeNode22.Text = "Finish"
+        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode1, TreeNode2, TreeNode7, TreeNode8, TreeNode15, TreeNode19, TreeNode20, TreeNode21, TreeNode22})
         Me.StepsTreeView.ShowLines = False
         Me.StepsTreeView.ShowPlusMinus = False
         Me.StepsTreeView.ShowRootLines = False
@@ -3197,7 +3197,7 @@ Partial Class NewUnattendWiz
         'EditorPanelContainer
         '
         Me.EditorPanelContainer.Controls.Add(Me.Scintilla1)
-        Me.EditorPanelContainer.Controls.Add(Me.ToolStrip1)
+        Me.EditorPanelContainer.Controls.Add(Me.DarkToolStrip1)
         Me.EditorPanelContainer.Dock = System.Windows.Forms.DockStyle.Fill
         Me.EditorPanelContainer.Location = New System.Drawing.Point(256, 104)
         Me.EditorPanelContainer.Name = "EditorPanelContainer"
@@ -3209,100 +3209,125 @@ Partial Class NewUnattendWiz
         '
         Me.Scintilla1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Scintilla1.IndentationGuides = ScintillaNET.IndentView.LookBoth
-        Me.Scintilla1.Location = New System.Drawing.Point(0, 25)
+        Me.Scintilla1.Location = New System.Drawing.Point(0, 28)
         Me.Scintilla1.Name = "Scintilla1"
-        Me.Scintilla1.Size = New System.Drawing.Size(752, 392)
+        Me.Scintilla1.Size = New System.Drawing.Size(752, 389)
         Me.Scintilla1.TabIndex = 2
         Me.Scintilla1.Text = "<?xml version=""1.0"" encoding=""utf-8""?>" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "<unattend xmlns=""urn:schemas-microsoft-co" & _
     "m:unattend"">" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "</unattend>"
         '
-        'ToolStrip1
+        'DarkToolStrip1
         '
-        Me.ToolStrip1.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewTSB, Me.OpenTSB, Me.SaveTSB, Me.ToolStripSeparator1, Me.ToolStripComboBox1, Me.ToolStripComboBox2, Me.ToolStripSeparator2, Me.ToolStripButton1, Me.HelpTSB, Me.ToolStripSeparator3})
-        Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
-        Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.Size = New System.Drawing.Size(752, 25)
-        Me.ToolStrip1.TabIndex = 0
-        Me.ToolStrip1.Text = "ToolStrip1"
+        Me.DarkToolStrip1.AutoSize = False
+        Me.DarkToolStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(31, Byte), Integer), CType(CType(31, Byte), Integer), CType(CType(31, Byte), Integer))
+        Me.DarkToolStrip1.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.DarkToolStrip1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer))
+        Me.DarkToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
+        Me.DarkToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton2, Me.ToolStripButton3, Me.ToolStripButton4, Me.ToolStripSeparator4, Me.FontFamilyTSCB, Me.FontSizeTSCB, Me.ToolStripSeparator5, Me.ToolStripButton5, Me.ToolStripSeparator6, Me.ToolStripButton6})
+        Me.DarkToolStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.DarkToolStrip1.Name = "DarkToolStrip1"
+        Me.DarkToolStrip1.Padding = New System.Windows.Forms.Padding(5, 0, 1, 0)
+        Me.DarkToolStrip1.Size = New System.Drawing.Size(752, 28)
+        Me.DarkToolStrip1.TabIndex = 3
+        Me.DarkToolStrip1.Text = "DarkToolStrip1"
         '
-        'NewTSB
+        'ToolStripButton2
         '
-        Me.NewTSB.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.NewTSB.Image = Global.DISMTools.My.Resources.Resources.newfile
-        Me.NewTSB.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.NewTSB.Name = "NewTSB"
-        Me.NewTSB.Size = New System.Drawing.Size(23, 22)
-        Me.NewTSB.Text = "&Nuevo"
+        Me.ToolStripButton2.BackColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(63, Byte), Integer), CType(CType(65, Byte), Integer))
+        Me.ToolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer))
+        Me.ToolStripButton2.Image = Global.DISMTools.My.Resources.Resources.newfile_dark
+        Me.ToolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton2.Name = "ToolStripButton2"
+        Me.ToolStripButton2.Size = New System.Drawing.Size(23, 25)
+        Me.ToolStripButton2.Text = "New"
         '
-        'OpenTSB
+        'ToolStripButton3
         '
-        Me.OpenTSB.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.OpenTSB.Image = Global.DISMTools.My.Resources.Resources.openfile
-        Me.OpenTSB.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.OpenTSB.Name = "OpenTSB"
-        Me.OpenTSB.Size = New System.Drawing.Size(23, 22)
-        Me.OpenTSB.Text = "&Abrir"
+        Me.ToolStripButton3.BackColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(63, Byte), Integer), CType(CType(65, Byte), Integer))
+        Me.ToolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton3.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer))
+        Me.ToolStripButton3.Image = Global.DISMTools.My.Resources.Resources.openfile_dark
+        Me.ToolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton3.Name = "ToolStripButton3"
+        Me.ToolStripButton3.Size = New System.Drawing.Size(23, 25)
+        Me.ToolStripButton3.Text = "Open..."
         '
-        'SaveTSB
+        'ToolStripButton4
         '
-        Me.SaveTSB.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.SaveTSB.Image = Global.DISMTools.My.Resources.Resources.save_glyph
-        Me.SaveTSB.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.SaveTSB.Name = "SaveTSB"
-        Me.SaveTSB.Size = New System.Drawing.Size(23, 22)
-        Me.SaveTSB.Text = "&Guardar"
+        Me.ToolStripButton4.BackColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(63, Byte), Integer), CType(CType(65, Byte), Integer))
+        Me.ToolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton4.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer))
+        Me.ToolStripButton4.Image = Global.DISMTools.My.Resources.Resources.save_glyph_dark
+        Me.ToolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton4.Name = "ToolStripButton4"
+        Me.ToolStripButton4.Size = New System.Drawing.Size(23, 25)
+        Me.ToolStripButton4.Text = "Save as..."
         '
-        'ToolStripSeparator1
+        'ToolStripSeparator4
         '
-        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 25)
+        Me.ToolStripSeparator4.BackColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(63, Byte), Integer), CType(CType(65, Byte), Integer))
+        Me.ToolStripSeparator4.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer))
+        Me.ToolStripSeparator4.Margin = New System.Windows.Forms.Padding(0, 0, 2, 0)
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(6, 28)
         '
-        'ToolStripComboBox1
+        'FontFamilyTSCB
         '
-        Me.ToolStripComboBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ToolStripComboBox1.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ToolStripComboBox1.Name = "ToolStripComboBox1"
-        Me.ToolStripComboBox1.Size = New System.Drawing.Size(121, 25)
-        Me.ToolStripComboBox1.Text = "Courier New"
+        Me.FontFamilyTSCB.BackColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(63, Byte), Integer), CType(CType(65, Byte), Integer))
+        Me.FontFamilyTSCB.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.FontFamilyTSCB.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer))
+        Me.FontFamilyTSCB.Name = "FontFamilyTSCB"
+        Me.FontFamilyTSCB.Size = New System.Drawing.Size(121, 28)
         '
-        'ToolStripComboBox2
+        'FontSizeTSCB
         '
-        Me.ToolStripComboBox2.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ToolStripComboBox2.Items.AddRange(New Object() {"8", "9", "10", "11", "12", "14", "16", "18", "20", "24", "28", "36", "48", "72", "96"})
-        Me.ToolStripComboBox2.Name = "ToolStripComboBox2"
-        Me.ToolStripComboBox2.Size = New System.Drawing.Size(75, 25)
-        Me.ToolStripComboBox2.Text = "10"
+        Me.FontSizeTSCB.BackColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(63, Byte), Integer), CType(CType(65, Byte), Integer))
+        Me.FontSizeTSCB.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.FontSizeTSCB.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer))
+        Me.FontSizeTSCB.Items.AddRange(New Object() {"8", "9", "10", "11", "12", "14", "16", "18", "20", "24", "28", "36", "48", "72", "96"})
+        Me.FontSizeTSCB.Name = "FontSizeTSCB"
+        Me.FontSizeTSCB.Size = New System.Drawing.Size(75, 28)
+        Me.FontSizeTSCB.Text = "10"
         '
-        'ToolStripSeparator2
+        'ToolStripSeparator5
         '
-        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 25)
+        Me.ToolStripSeparator5.BackColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(63, Byte), Integer), CType(CType(65, Byte), Integer))
+        Me.ToolStripSeparator5.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer))
+        Me.ToolStripSeparator5.Margin = New System.Windows.Forms.Padding(0, 0, 2, 0)
+        Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(6, 28)
         '
-        'ToolStripButton1
+        'ToolStripButton5
         '
-        Me.ToolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton1.Image = Global.DISMTools.My.Resources.Resources.wordwrap
-        Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton1.Name = "ToolStripButton1"
-        Me.ToolStripButton1.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton1.Text = "ToolStripButton1"
+        Me.ToolStripButton5.BackColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(63, Byte), Integer), CType(CType(65, Byte), Integer))
+        Me.ToolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton5.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer))
+        Me.ToolStripButton5.Image = Global.DISMTools.My.Resources.Resources.wordwrap_dark
+        Me.ToolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton5.Name = "ToolStripButton5"
+        Me.ToolStripButton5.Size = New System.Drawing.Size(23, 25)
+        Me.ToolStripButton5.Text = "Word wrap"
         '
-        'HelpTSB
+        'ToolStripSeparator6
         '
-        Me.HelpTSB.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
-        Me.HelpTSB.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.HelpTSB.Image = Global.DISMTools.My.Resources.Resources.help_glyph
-        Me.HelpTSB.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.HelpTSB.Name = "HelpTSB"
-        Me.HelpTSB.Size = New System.Drawing.Size(23, 22)
-        Me.HelpTSB.Text = "Ay&uda"
+        Me.ToolStripSeparator6.BackColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(63, Byte), Integer), CType(CType(65, Byte), Integer))
+        Me.ToolStripSeparator6.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer))
+        Me.ToolStripSeparator6.Margin = New System.Windows.Forms.Padding(0, 0, 2, 0)
+        Me.ToolStripSeparator6.Name = "ToolStripSeparator6"
+        Me.ToolStripSeparator6.Size = New System.Drawing.Size(6, 28)
         '
-        'ToolStripSeparator3
+        'ToolStripButton6
         '
-        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 25)
+        Me.ToolStripButton6.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.ToolStripButton6.BackColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(63, Byte), Integer), CType(CType(65, Byte), Integer))
+        Me.ToolStripButton6.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton6.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer))
+        Me.ToolStripButton6.Image = Global.DISMTools.My.Resources.Resources.help_glyph_dark
+        Me.ToolStripButton6.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton6.Name = "ToolStripButton6"
+        Me.ToolStripButton6.Size = New System.Drawing.Size(23, 25)
+        Me.ToolStripButton6.Text = "Help"
         '
         'HeaderPanel
         '
@@ -3606,9 +3631,8 @@ Partial Class NewUnattendWiz
         Me.SettingRecapPanel.PerformLayout()
         CType(Me.PictureBox23, System.ComponentModel.ISupportInitialize).EndInit()
         Me.EditorPanelContainer.ResumeLayout(False)
-        Me.EditorPanelContainer.PerformLayout()
-        Me.ToolStrip1.ResumeLayout(False)
-        Me.ToolStrip1.PerformLayout()
+        Me.DarkToolStrip1.ResumeLayout(False)
+        Me.DarkToolStrip1.PerformLayout()
         Me.HeaderPanel.ResumeLayout(False)
         Me.HeaderPanel.PerformLayout()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()
@@ -3882,17 +3906,17 @@ Partial Class NewUnattendWiz
     Friend WithEvents KeyInputBox3 As System.Windows.Forms.TextBox
     Friend WithEvents KeyInputBox2 As System.Windows.Forms.TextBox
     Friend WithEvents KeyInputBox1 As System.Windows.Forms.TextBox
-    Friend WithEvents ToolStrip1 As System.Windows.Forms.ToolStrip
-    Friend WithEvents NewTSB As System.Windows.Forms.ToolStripButton
-    Friend WithEvents OpenTSB As System.Windows.Forms.ToolStripButton
-    Friend WithEvents SaveTSB As System.Windows.Forms.ToolStripButton
-    Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents HelpTSB As System.Windows.Forms.ToolStripButton
-    Friend WithEvents ToolStripComboBox1 As System.Windows.Forms.ToolStripComboBox
-    Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents ToolStripButton1 As System.Windows.Forms.ToolStripButton
-    Friend WithEvents ToolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents Scintilla1 As ScintillaNET.Scintilla
-    Friend WithEvents ToolStripComboBox2 As System.Windows.Forms.ToolStripComboBox
     Friend WithEvents KeyCopyButton As System.Windows.Forms.Button
+    Friend WithEvents DarkToolStrip1 As DarkUI.Controls.DarkToolStrip
+    Friend WithEvents ToolStripButton2 As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripButton3 As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripButton4 As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents FontFamilyTSCB As System.Windows.Forms.ToolStripComboBox
+    Friend WithEvents FontSizeTSCB As System.Windows.Forms.ToolStripComboBox
+    Friend WithEvents ToolStripSeparator5 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents ToolStripButton5 As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripSeparator6 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents ToolStripButton6 As System.Windows.Forms.ToolStripButton
 End Class

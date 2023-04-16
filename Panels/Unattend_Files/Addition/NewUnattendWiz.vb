@@ -52,6 +52,12 @@ Public Class NewUnattendWiz
     Dim PasswordExpiry As Boolean
     Dim JoinCeip As Boolean
 
+    ''' <summary>
+    ''' Initializes the Scintilla editor
+    ''' </summary>
+    ''' <param name="fntName">The name of the font used in the Scintilla editor</param>
+    ''' <param name="fntSize">The size of the font used in the Scintilla editor</param>
+    ''' <remarks></remarks>
     Sub InitScintilla(fntName As String, fntSize As Integer)
         ' Initialize Scintilla editor
         Scintilla1.StyleResetDefault()
@@ -142,6 +148,9 @@ Public Class NewUnattendWiz
         Marker.SetForeColor(Color.Black)
         Marker.SetAlpha(100)
 
+        ' Set editor caret settings
+        Scintilla1.CaretForeColor = ForeColor
+
 
         ' Configure code folding margins
         Scintilla1.Margins(3).Type = MarginType.Symbol
@@ -173,29 +182,24 @@ Public Class NewUnattendWiz
             BackColor = Color.FromArgb(31, 31, 31)
             ForeColor = Color.White
             StepsTreeView.BackColor = Color.FromArgb(31, 31, 31)
-            ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New MainForm.DarkModeColorTable())
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             BackColor = Color.FromArgb(238, 238, 242)
             ForeColor = Color.Black
             StepsTreeView.BackColor = Color.FromArgb(238, 238, 242)
-            ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New MainForm.LightModeColorTable())
         End If
         SidePanel.BackColor = BackColor
         StepsTreeView.ForeColor = ForeColor
         PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.editor_mode_select, My.Resources.editor_mode)
         ' Fill in font combinations
-        ToolStripComboBox1.Items.Clear()
+        FontFamilyTSCB.Items.Clear()
         For Each fntFamily As FontFamily In FontFamily.Families
-            ToolStripComboBox1.Items.Add(fntFamily.Name)
+            FontFamilyTSCB.Items.Add(fntFamily.Name)
         Next
         InitScintilla("Courier New", 10)
         StepsTreeView.ExpandAll()
-        ToolStripComboBox1.BackColor = BackColor
-        ToolStripComboBox1.ForeColor = ForeColor
-        ToolStripComboBox2.BackColor = BackColor
-        ToolStripComboBox2.ForeColor = ForeColor
 
-
+        FontFamilyTSCB.SelectedItem = "Courier New"
+        SetNodeColors(StepsTreeView.Nodes, BackColor, ForeColor)
     End Sub
 
     Private Sub StepsTreeView_AfterSelect(sender As Object, e As TreeViewEventArgs) Handles StepsTreeView.AfterSelect
@@ -2148,9 +2152,9 @@ Public Class NewUnattendWiz
         ChangeGenericKey()
     End Sub
 
-    Private Sub FontChange(sender As Object, e As EventArgs) Handles ToolStripComboBox1.SelectedIndexChanged, ToolStripComboBox2.SelectedIndexChanged
+    Private Sub FontChange(sender As Object, e As EventArgs) Handles FontFamilyTSCB.SelectedIndexChanged, FontSizeTSCB.SelectedIndexChanged
         ' Change Scintilla editor font
-        InitScintilla(ToolStripComboBox1.SelectedItem, ToolStripComboBox2.SelectedItem)
+        InitScintilla(FontFamilyTSCB.SelectedItem, FontSizeTSCB.SelectedItem)
     End Sub
 
     Private Sub ProductKeyChanged(sender As Object, e As EventArgs) Handles KeyInputBox1.TextChanged, KeyInputBox2.TextChanged, KeyInputBox3.TextChanged, KeyInputBox4.TextChanged, KeyInputBox5.TextChanged
@@ -2224,5 +2228,22 @@ Public Class NewUnattendWiz
             notify.BalloonTipTitle = "The key has been copied to the clipboard"
             notify.ShowBalloonTip(3000)
         End If
+    End Sub
+
+    Private Sub ToolStripButton5_Click(sender As Object, e As EventArgs) Handles ToolStripButton5.Click
+        If ToolStripButton5.Checked Then
+            ToolStripButton5.Checked = False
+        Else
+            ToolStripButton5.Checked = True
+        End If
+        Scintilla1.WrapMode = If(ToolStripButton5.Checked, WrapMode.Word, WrapMode.None)
+    End Sub
+
+    Sub SetNodeColors(nodes As TreeNodeCollection, bg As Color, fg As Color)
+        For Each node As TreeNode In nodes
+            node.BackColor = BackColor
+            node.ForeColor = ForeColor
+            SetNodeColors(node.Nodes, BackColor, ForeColor)
+        Next
     End Sub
 End Class
