@@ -1408,6 +1408,16 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property startup_bg() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("startup_bg", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property subreddit() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("subreddit", resourceCulture)
@@ -1541,6 +1551,16 @@ Namespace My.Resources
         Friend ReadOnly Property ver_stability() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("ver_stability", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property version() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("version", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property

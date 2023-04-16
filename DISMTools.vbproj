@@ -104,6 +104,7 @@
     <Compile Include="Actions\Actions.MainForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="ApplicationEvents.vb" />
     <Compile Include="MainForm.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -456,6 +457,12 @@
     <Compile Include="Panels\Report_Dlgs\Get-ImageInfo\ReportForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Startup\SplashScreen.Designer.vb">
+      <DependentUpon>SplashScreen.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Startup\SplashScreen.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Unattend_Files\Addition\NewUnattendWiz.Designer.vb">
       <DependentUpon>NewUnattendWiz.vb</DependentUpon>
     </Compile>
@@ -656,6 +663,9 @@
     <EmbeddedResource Include="Panels\Report_Dlgs\Get-ImageInfo\ReportForm.resx">
       <DependentUpon>ReportForm.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Startup\SplashScreen.resx">
+      <DependentUpon>SplashScreen.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Unattend_Files\Addition\NewUnattendWiz.resx">
       <DependentUpon>NewUnattendWiz.vb</DependentUpon>
     </EmbeddedResource>
@@ -746,6 +756,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo.ico" />
+    <None Include="Resources\startup\version.png" />
+    <None Include="Resources\startup\startup_bg.png" />
     <EmbeddedResource Include="Resources\dtproj.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>

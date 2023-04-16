@@ -205,6 +205,8 @@ Public Class MainForm
             MsgBox("This program is incompatible with Windows 7 and Server 2008 R2." & CrLf & "This program uses the DISM API, which requires files from the Assessment and Deployment Kit (ADK). However, support for Windows 7 is not included." & CrLf & CrLf & "The program will be closed.", vbOKOnly + vbCritical, "DISMTools")
             Environment.Exit(1)
         End If
+        SplashScreen.Show()
+        Thread.Sleep(2000)
         ' I once tested this on a computer which didn't require me to ask for admin privileges. This is a requirement of DISM. Check this
         If Not My.User.IsInRole(ApplicationServices.BuiltInRole.Administrator) Then
             MsgBox("This program must be run as an administrator." & CrLf & "There are certain software configurations in which Windows will run this program without admin privileges, so you must ask for them manually." & CrLf & CrLf & "Right-click the executable, and select " & Quote & "Run as administrator" & Quote, vbOKOnly + vbCritical, "DISMTools")
@@ -235,6 +237,7 @@ Public Class MainForm
         Else
             VersionTSMI.Visible = False
         End If
+        SplashScreen.Close()
         If argProjPath <> "" Then
             HomePanel.Visible = False
             Visible = True
