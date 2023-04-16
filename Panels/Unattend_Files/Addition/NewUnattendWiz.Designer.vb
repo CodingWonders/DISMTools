@@ -22,28 +22,28 @@ Partial Class NewUnattendWiz
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim TreeNode1 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Before beginning")
-        Dim TreeNode2 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Target operating system selection")
-        Dim TreeNode3 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product activation")
-        Dim TreeNode4 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("License agreement")
-        Dim TreeNode5 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Computer personalization")
-        Dim TreeNode6 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Partitioning settings")
-        Dim TreeNode7 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Operating system setup", New System.Windows.Forms.TreeNode() {TreeNode3, TreeNode4, TreeNode5, TreeNode6})
-        Dim TreeNode8 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional settings")
-        Dim TreeNode9 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("End-user License Agreement")
-        Dim TreeNode10 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("OOBE skips")
-        Dim TreeNode11 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Network security")
-        Dim TreeNode12 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless configuration")
-        Dim TreeNode13 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Computer protection")
-        Dim TreeNode14 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Control Panel")
-        Dim TreeNode15 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Out-of-box experience", New System.Windows.Forms.TreeNode() {TreeNode9, TreeNode10, TreeNode11, TreeNode12, TreeNode13, TreeNode14})
-        Dim TreeNode16 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Account personalization")
-        Dim TreeNode17 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Account security")
-        Dim TreeNode18 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Customer Experience Improvement Program")
-        Dim TreeNode19 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("User account settings", New System.Windows.Forms.TreeNode() {TreeNode16, TreeNode17, TreeNode18})
-        Dim TreeNode20 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Ready to begin")
-        Dim TreeNode21 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Creation in progress")
-        Dim TreeNode22 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
+        Dim TreeNode23 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Before beginning")
+        Dim TreeNode24 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Target operating system selection")
+        Dim TreeNode25 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product activation")
+        Dim TreeNode26 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("License agreement")
+        Dim TreeNode27 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Computer personalization")
+        Dim TreeNode28 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Partitioning settings")
+        Dim TreeNode29 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Operating system setup", New System.Windows.Forms.TreeNode() {TreeNode25, TreeNode26, TreeNode27, TreeNode28})
+        Dim TreeNode30 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional settings")
+        Dim TreeNode31 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("End-user License Agreement")
+        Dim TreeNode32 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("OOBE skips")
+        Dim TreeNode33 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Network security")
+        Dim TreeNode34 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless configuration")
+        Dim TreeNode35 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Computer protection")
+        Dim TreeNode36 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Control Panel")
+        Dim TreeNode37 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Out-of-box experience", New System.Windows.Forms.TreeNode() {TreeNode31, TreeNode32, TreeNode33, TreeNode34, TreeNode35, TreeNode36})
+        Dim TreeNode38 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Account personalization")
+        Dim TreeNode39 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Account security")
+        Dim TreeNode40 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Customer Experience Improvement Program")
+        Dim TreeNode41 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("User account settings", New System.Windows.Forms.TreeNode() {TreeNode38, TreeNode39, TreeNode40})
+        Dim TreeNode42 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Ready to begin")
+        Dim TreeNode43 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Creation in progress")
+        Dim TreeNode44 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewUnattendWiz))
         Me.SidePanel = New System.Windows.Forms.Panel()
         Me.ExpressModeSteps = New System.Windows.Forms.Panel()
@@ -55,6 +55,27 @@ Partial Class NewUnattendWiz
         Me.Label1 = New System.Windows.Forms.Label()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.ExpressPanelContainer = New System.Windows.Forms.Panel()
+        Me.IncompleteWarningPanel = New System.Windows.Forms.Panel()
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.TargetOSSelectionPanel = New System.Windows.Forms.Panel()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.Label15 = New System.Windows.Forms.Label()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.Label14 = New System.Windows.Forms.Label()
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.CheckBox2 = New System.Windows.Forms.CheckBox()
+        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.RadioButton2 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton1 = New System.Windows.Forms.RadioButton()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.PictureBox4 = New System.Windows.Forms.PictureBox()
         Me.ActivationPanel = New System.Windows.Forms.Panel()
         Me.KeyCopyButton = New System.Windows.Forms.Button()
         Me.CheckBox5 = New System.Windows.Forms.CheckBox()
@@ -88,27 +109,6 @@ Partial Class NewUnattendWiz
         Me.RadioButton3 = New System.Windows.Forms.RadioButton()
         Me.Label16 = New System.Windows.Forms.Label()
         Me.PictureBox5 = New System.Windows.Forms.PictureBox()
-        Me.IncompleteWarningPanel = New System.Windows.Forms.Panel()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.TargetOSSelectionPanel = New System.Windows.Forms.Panel()
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.Label15 = New System.Windows.Forms.Label()
-        Me.Label13 = New System.Windows.Forms.Label()
-        Me.Label14 = New System.Windows.Forms.Label()
-        Me.Label12 = New System.Windows.Forms.Label()
-        Me.CheckBox2 = New System.Windows.Forms.CheckBox()
-        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
-        Me.Label11 = New System.Windows.Forms.Label()
-        Me.Label10 = New System.Windows.Forms.Label()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.RadioButton2 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton1 = New System.Windows.Forms.RadioButton()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.PictureBox4 = New System.Windows.Forms.PictureBox()
         Me.EndUserLicenseAgreementPanel = New System.Windows.Forms.Panel()
         Me.Label24 = New System.Windows.Forms.Label()
         Me.Label23 = New System.Windows.Forms.Label()
@@ -327,12 +327,12 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelTrigger.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ExpressPanelContainer.SuspendLayout()
-        Me.ActivationPanel.SuspendLayout()
-        CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.IncompleteWarningPanel.SuspendLayout()
         Me.TargetOSSelectionPanel.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.ActivationPanel.SuspendLayout()
+        CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.EndUserLicenseAgreementPanel.SuspendLayout()
         CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.CompPersonalizationPanel.SuspendLayout()
@@ -441,56 +441,57 @@ Partial Class NewUnattendWiz
         '
         'StepsTreeView
         '
+        Me.StepsTreeView.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.StepsTreeView.Dock = System.Windows.Forms.DockStyle.Fill
         Me.StepsTreeView.HideSelection = False
         Me.StepsTreeView.ItemHeight = 24
         Me.StepsTreeView.Location = New System.Drawing.Point(0, 0)
         Me.StepsTreeView.Name = "StepsTreeView"
-        TreeNode1.Name = "StartNode"
-        TreeNode1.Text = "Before beginning"
-        TreeNode2.Name = "TargetOSNode"
-        TreeNode2.Text = "Target operating system selection"
-        TreeNode3.Name = "Activation"
-        TreeNode3.Text = "Product activation"
-        TreeNode4.Name = "License"
-        TreeNode4.Text = "License agreement"
-        TreeNode5.Name = "CompPersonalize"
-        TreeNode5.Text = "Computer personalization"
-        TreeNode6.Name = "Partitioning"
-        TreeNode6.Text = "Partitioning settings"
-        TreeNode7.Name = "OSSetup"
-        TreeNode7.Text = "Operating system setup"
-        TreeNode8.Name = "Region"
-        TreeNode8.Text = "Regional settings"
-        TreeNode9.Name = "EULA"
-        TreeNode9.Text = "End-user License Agreement"
-        TreeNode10.Name = "OOBESkip"
-        TreeNode10.Text = "OOBE skips"
-        TreeNode11.Name = "OOBENet"
-        TreeNode11.Text = "Network security"
-        TreeNode12.Name = "Wireless"
-        TreeNode12.Text = "Wireless configuration"
-        TreeNode13.Name = "CompProtect"
-        TreeNode13.Text = "Computer protection"
-        TreeNode14.Name = "CPL"
-        TreeNode14.Text = "Control Panel"
-        TreeNode15.Name = "OOBE"
-        TreeNode15.Text = "Out-of-box experience"
-        TreeNode16.Name = "User"
-        TreeNode16.Text = "Account personalization"
-        TreeNode17.Name = "UserSec"
-        TreeNode17.Text = "Account security"
-        TreeNode18.Name = "CEIP"
-        TreeNode18.Text = "Customer Experience Improvement Program"
-        TreeNode19.Name = "UserAccount"
-        TreeNode19.Text = "User account settings"
-        TreeNode20.Name = "Prepare"
-        TreeNode20.Text = "Ready to begin"
-        TreeNode21.Name = "Progress"
-        TreeNode21.Text = "Creation in progress"
-        TreeNode22.Name = "Finish"
-        TreeNode22.Text = "Finish"
-        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode1, TreeNode2, TreeNode7, TreeNode8, TreeNode15, TreeNode19, TreeNode20, TreeNode21, TreeNode22})
+        TreeNode23.Name = "StartNode"
+        TreeNode23.Text = "Before beginning"
+        TreeNode24.Name = "TargetOSNode"
+        TreeNode24.Text = "Target operating system selection"
+        TreeNode25.Name = "Activation"
+        TreeNode25.Text = "Product activation"
+        TreeNode26.Name = "License"
+        TreeNode26.Text = "License agreement"
+        TreeNode27.Name = "CompPersonalize"
+        TreeNode27.Text = "Computer personalization"
+        TreeNode28.Name = "Partitioning"
+        TreeNode28.Text = "Partitioning settings"
+        TreeNode29.Name = "OSSetup"
+        TreeNode29.Text = "Operating system setup"
+        TreeNode30.Name = "Region"
+        TreeNode30.Text = "Regional settings"
+        TreeNode31.Name = "EULA"
+        TreeNode31.Text = "End-user License Agreement"
+        TreeNode32.Name = "OOBESkip"
+        TreeNode32.Text = "OOBE skips"
+        TreeNode33.Name = "OOBENet"
+        TreeNode33.Text = "Network security"
+        TreeNode34.Name = "Wireless"
+        TreeNode34.Text = "Wireless configuration"
+        TreeNode35.Name = "CompProtect"
+        TreeNode35.Text = "Computer protection"
+        TreeNode36.Name = "CPL"
+        TreeNode36.Text = "Control Panel"
+        TreeNode37.Name = "OOBE"
+        TreeNode37.Text = "Out-of-box experience"
+        TreeNode38.Name = "User"
+        TreeNode38.Text = "Account personalization"
+        TreeNode39.Name = "UserSec"
+        TreeNode39.Text = "Account security"
+        TreeNode40.Name = "CEIP"
+        TreeNode40.Text = "Customer Experience Improvement Program"
+        TreeNode41.Name = "UserAccount"
+        TreeNode41.Text = "User account settings"
+        TreeNode42.Name = "Prepare"
+        TreeNode42.Text = "Ready to begin"
+        TreeNode43.Name = "Progress"
+        TreeNode43.Text = "Creation in progress"
+        TreeNode44.Name = "Finish"
+        TreeNode44.Text = "Finish"
+        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode23, TreeNode24, TreeNode29, TreeNode30, TreeNode37, TreeNode41, TreeNode42, TreeNode43, TreeNode44})
         Me.StepsTreeView.ShowLines = False
         Me.StepsTreeView.ShowPlusMinus = False
         Me.StepsTreeView.ShowRootLines = False
@@ -583,6 +584,225 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer.Name = "ExpressPanelContainer"
         Me.ExpressPanelContainer.Size = New System.Drawing.Size(752, 417)
         Me.ExpressPanelContainer.TabIndex = 1
+        '
+        'IncompleteWarningPanel
+        '
+        Me.IncompleteWarningPanel.Controls.Add(Me.CheckBox1)
+        Me.IncompleteWarningPanel.Controls.Add(Me.Label5)
+        Me.IncompleteWarningPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.IncompleteWarningPanel.Location = New System.Drawing.Point(0, 0)
+        Me.IncompleteWarningPanel.Name = "IncompleteWarningPanel"
+        Me.IncompleteWarningPanel.Size = New System.Drawing.Size(752, 417)
+        Me.IncompleteWarningPanel.TabIndex = 0
+        '
+        'CheckBox1
+        '
+        Me.CheckBox1.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.Location = New System.Drawing.Point(95, 240)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(222, 17)
+        Me.CheckBox1.TabIndex = 1
+        Me.CheckBox1.Text = "I have read and understood this warning"
+        Me.CheckBox1.UseVisualStyleBackColor = True
+        '
+        'Label5
+        '
+        Me.Label5.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.Label5.Location = New System.Drawing.Point(92, 121)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(568, 115)
+        Me.Label5.TabIndex = 0
+        Me.Label5.Text = resources.GetString("Label5.Text")
+        '
+        'TargetOSSelectionPanel
+        '
+        Me.TargetOSSelectionPanel.Controls.Add(Me.GroupBox1)
+        Me.TargetOSSelectionPanel.Controls.Add(Me.CheckBox2)
+        Me.TargetOSSelectionPanel.Controls.Add(Me.ComboBox1)
+        Me.TargetOSSelectionPanel.Controls.Add(Me.Label11)
+        Me.TargetOSSelectionPanel.Controls.Add(Me.Label10)
+        Me.TargetOSSelectionPanel.Controls.Add(Me.Label8)
+        Me.TargetOSSelectionPanel.Controls.Add(Me.Label9)
+        Me.TargetOSSelectionPanel.Controls.Add(Me.Label7)
+        Me.TargetOSSelectionPanel.Controls.Add(Me.RadioButton2)
+        Me.TargetOSSelectionPanel.Controls.Add(Me.RadioButton1)
+        Me.TargetOSSelectionPanel.Controls.Add(Me.Label6)
+        Me.TargetOSSelectionPanel.Controls.Add(Me.PictureBox4)
+        Me.TargetOSSelectionPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TargetOSSelectionPanel.Location = New System.Drawing.Point(0, 0)
+        Me.TargetOSSelectionPanel.Name = "TargetOSSelectionPanel"
+        Me.TargetOSSelectionPanel.Size = New System.Drawing.Size(752, 417)
+        Me.TargetOSSelectionPanel.TabIndex = 2
+        '
+        'GroupBox1
+        '
+        Me.GroupBox1.Controls.Add(Me.Button1)
+        Me.GroupBox1.Controls.Add(Me.Label15)
+        Me.GroupBox1.Controls.Add(Me.Label13)
+        Me.GroupBox1.Controls.Add(Me.Label14)
+        Me.GroupBox1.Controls.Add(Me.Label12)
+        Me.GroupBox1.Location = New System.Drawing.Point(238, 271)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(276, 129)
+        Me.GroupBox1.TabIndex = 9
+        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = "Target OS details"
+        '
+        'Button1
+        '
+        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button1.Location = New System.Drawing.Point(27, 90)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(222, 23)
+        Me.Button1.TabIndex = 7
+        Me.Button1.Text = "Get more information about this OS"
+        Me.Button1.UseVisualStyleBackColor = True
+        '
+        'Label15
+        '
+        Me.Label15.AutoSize = True
+        Me.Label15.Location = New System.Drawing.Point(96, 52)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(69, 13)
+        Me.Label15.TabIndex = 6
+        Me.Label15.Text = "<keVersion>"
+        '
+        'Label13
+        '
+        Me.Label13.AutoSize = True
+        Me.Label13.Location = New System.Drawing.Point(108, 32)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(57, 13)
+        Me.Label13.TabIndex = 6
+        Me.Label13.Text = "<reldate>"
+        '
+        'Label14
+        '
+        Me.Label14.AutoSize = True
+        Me.Label14.Location = New System.Drawing.Point(28, 52)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(62, 13)
+        Me.Label14.TabIndex = 6
+        Me.Label14.Text = "NT version:"
+        '
+        'Label12
+        '
+        Me.Label12.AutoSize = True
+        Me.Label12.Location = New System.Drawing.Point(28, 32)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(74, 13)
+        Me.Label12.TabIndex = 6
+        Me.Label12.Text = "Release date:"
+        '
+        'CheckBox2
+        '
+        Me.CheckBox2.AutoSize = True
+        Me.CheckBox2.Location = New System.Drawing.Point(272, 248)
+        Me.CheckBox2.Name = "CheckBox2"
+        Me.CheckBox2.Size = New System.Drawing.Size(298, 17)
+        Me.CheckBox2.TabIndex = 8
+        Me.CheckBox2.Text = "I want to make an installation of an older OS unattended"
+        Me.CheckBox2.UseVisualStyleBackColor = True
+        '
+        'ComboBox1
+        '
+        Me.ComboBox1.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.ComboBox1.FormattingEnabled = True
+        Me.ComboBox1.Items.AddRange(New Object() {"Windows 7", "Windows Server 2008 R2", "Windows 8", "Windows Server 2012", "Windows 8.1", "Windows Server 2012 R2", "Windows 10", "Windows 11", "Windows Server 2016", "Windows Server 2019"})
+        Me.ComboBox1.Location = New System.Drawing.Point(272, 220)
+        Me.ComboBox1.Name = "ComboBox1"
+        Me.ComboBox1.Size = New System.Drawing.Size(343, 21)
+        Me.ComboBox1.TabIndex = 7
+        Me.ComboBox1.Text = "Windows 7"
+        '
+        'Label11
+        '
+        Me.Label11.AutoSize = True
+        Me.Label11.Location = New System.Drawing.Point(137, 224)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(129, 13)
+        Me.Label11.TabIndex = 6
+        Me.Label11.Text = "Target operating system:"
+        '
+        'Label10
+        '
+        Me.Label10.AutoEllipsis = True
+        Me.Label10.Location = New System.Drawing.Point(357, 166)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(281, 13)
+        Me.Label10.TabIndex = 5
+        Me.Label10.Text = "<TargetOS>"
+        '
+        'Label8
+        '
+        Me.Label8.Location = New System.Drawing.Point(115, 166)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(236, 13)
+        Me.Label8.TabIndex = 5
+        Me.Label8.Text = "Recommended target OS:"
+        Me.Label8.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'Label9
+        '
+        Me.Label9.AutoEllipsis = True
+        Me.Label9.Location = New System.Drawing.Point(357, 146)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(281, 13)
+        Me.Label9.TabIndex = 5
+        Me.Label9.Text = "<imgversion>"
+        '
+        'Label7
+        '
+        Me.Label7.Location = New System.Drawing.Point(115, 146)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(236, 13)
+        Me.Label7.TabIndex = 5
+        Me.Label7.Text = "Mounted image version:"
+        Me.Label7.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'RadioButton2
+        '
+        Me.RadioButton2.AutoSize = True
+        Me.RadioButton2.Location = New System.Drawing.Point(84, 190)
+        Me.RadioButton2.Name = "RadioButton2"
+        Me.RadioButton2.Size = New System.Drawing.Size(184, 17)
+        Me.RadioButton2.TabIndex = 4
+        Me.RadioButton2.Text = "Let me choose the target version"
+        Me.RadioButton2.UseVisualStyleBackColor = True
+        '
+        'RadioButton1
+        '
+        Me.RadioButton1.AutoSize = True
+        Me.RadioButton1.Checked = True
+        Me.RadioButton1.Location = New System.Drawing.Point(84, 118)
+        Me.RadioButton1.Name = "RadioButton1"
+        Me.RadioButton1.Size = New System.Drawing.Size(374, 17)
+        Me.RadioButton1.TabIndex = 4
+        Me.RadioButton1.TabStop = True
+        Me.RadioButton1.Text = "Let the program detect the version automatically for me (Recommended)"
+        Me.RadioButton1.UseVisualStyleBackColor = True
+        '
+        'Label6
+        '
+        Me.Label6.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label6.AutoEllipsis = True
+        Me.Label6.Location = New System.Drawing.Point(54, 16)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(682, 94)
+        Me.Label6.TabIndex = 3
+        Me.Label6.Text = resources.GetString("Label6.Text")
+        '
+        'PictureBox4
+        '
+        Me.PictureBox4.Image = Global.DISMTools.My.Resources.Resources.targetos
+        Me.PictureBox4.Location = New System.Drawing.Point(16, 16)
+        Me.PictureBox4.Name = "PictureBox4"
+        Me.PictureBox4.Size = New System.Drawing.Size(32, 32)
+        Me.PictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox4.TabIndex = 0
+        Me.PictureBox4.TabStop = False
         '
         'ActivationPanel
         '
@@ -948,225 +1168,6 @@ Partial Class NewUnattendWiz
         Me.PictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
         Me.PictureBox5.TabIndex = 1
         Me.PictureBox5.TabStop = False
-        '
-        'IncompleteWarningPanel
-        '
-        Me.IncompleteWarningPanel.Controls.Add(Me.CheckBox1)
-        Me.IncompleteWarningPanel.Controls.Add(Me.Label5)
-        Me.IncompleteWarningPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.IncompleteWarningPanel.Location = New System.Drawing.Point(0, 0)
-        Me.IncompleteWarningPanel.Name = "IncompleteWarningPanel"
-        Me.IncompleteWarningPanel.Size = New System.Drawing.Size(752, 417)
-        Me.IncompleteWarningPanel.TabIndex = 0
-        '
-        'CheckBox1
-        '
-        Me.CheckBox1.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(95, 240)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(222, 17)
-        Me.CheckBox1.TabIndex = 1
-        Me.CheckBox1.Text = "I have read and understood this warning"
-        Me.CheckBox1.UseVisualStyleBackColor = True
-        '
-        'Label5
-        '
-        Me.Label5.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.Label5.Location = New System.Drawing.Point(92, 121)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(568, 115)
-        Me.Label5.TabIndex = 0
-        Me.Label5.Text = resources.GetString("Label5.Text")
-        '
-        'TargetOSSelectionPanel
-        '
-        Me.TargetOSSelectionPanel.Controls.Add(Me.GroupBox1)
-        Me.TargetOSSelectionPanel.Controls.Add(Me.CheckBox2)
-        Me.TargetOSSelectionPanel.Controls.Add(Me.ComboBox1)
-        Me.TargetOSSelectionPanel.Controls.Add(Me.Label11)
-        Me.TargetOSSelectionPanel.Controls.Add(Me.Label10)
-        Me.TargetOSSelectionPanel.Controls.Add(Me.Label8)
-        Me.TargetOSSelectionPanel.Controls.Add(Me.Label9)
-        Me.TargetOSSelectionPanel.Controls.Add(Me.Label7)
-        Me.TargetOSSelectionPanel.Controls.Add(Me.RadioButton2)
-        Me.TargetOSSelectionPanel.Controls.Add(Me.RadioButton1)
-        Me.TargetOSSelectionPanel.Controls.Add(Me.Label6)
-        Me.TargetOSSelectionPanel.Controls.Add(Me.PictureBox4)
-        Me.TargetOSSelectionPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TargetOSSelectionPanel.Location = New System.Drawing.Point(0, 0)
-        Me.TargetOSSelectionPanel.Name = "TargetOSSelectionPanel"
-        Me.TargetOSSelectionPanel.Size = New System.Drawing.Size(752, 417)
-        Me.TargetOSSelectionPanel.TabIndex = 2
-        '
-        'GroupBox1
-        '
-        Me.GroupBox1.Controls.Add(Me.Button1)
-        Me.GroupBox1.Controls.Add(Me.Label15)
-        Me.GroupBox1.Controls.Add(Me.Label13)
-        Me.GroupBox1.Controls.Add(Me.Label14)
-        Me.GroupBox1.Controls.Add(Me.Label12)
-        Me.GroupBox1.Location = New System.Drawing.Point(238, 271)
-        Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(276, 129)
-        Me.GroupBox1.TabIndex = 9
-        Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Target OS details"
-        '
-        'Button1
-        '
-        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button1.Location = New System.Drawing.Point(27, 90)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(222, 23)
-        Me.Button1.TabIndex = 7
-        Me.Button1.Text = "Get more information about this OS"
-        Me.Button1.UseVisualStyleBackColor = True
-        '
-        'Label15
-        '
-        Me.Label15.AutoSize = True
-        Me.Label15.Location = New System.Drawing.Point(96, 52)
-        Me.Label15.Name = "Label15"
-        Me.Label15.Size = New System.Drawing.Size(69, 13)
-        Me.Label15.TabIndex = 6
-        Me.Label15.Text = "<keVersion>"
-        '
-        'Label13
-        '
-        Me.Label13.AutoSize = True
-        Me.Label13.Location = New System.Drawing.Point(108, 32)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(57, 13)
-        Me.Label13.TabIndex = 6
-        Me.Label13.Text = "<reldate>"
-        '
-        'Label14
-        '
-        Me.Label14.AutoSize = True
-        Me.Label14.Location = New System.Drawing.Point(28, 52)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(62, 13)
-        Me.Label14.TabIndex = 6
-        Me.Label14.Text = "NT version:"
-        '
-        'Label12
-        '
-        Me.Label12.AutoSize = True
-        Me.Label12.Location = New System.Drawing.Point(28, 32)
-        Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(74, 13)
-        Me.Label12.TabIndex = 6
-        Me.Label12.Text = "Release date:"
-        '
-        'CheckBox2
-        '
-        Me.CheckBox2.AutoSize = True
-        Me.CheckBox2.Location = New System.Drawing.Point(272, 248)
-        Me.CheckBox2.Name = "CheckBox2"
-        Me.CheckBox2.Size = New System.Drawing.Size(298, 17)
-        Me.CheckBox2.TabIndex = 8
-        Me.CheckBox2.Text = "I want to make an installation of an older OS unattended"
-        Me.CheckBox2.UseVisualStyleBackColor = True
-        '
-        'ComboBox1
-        '
-        Me.ComboBox1.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {"Windows 7", "Windows Server 2008 R2", "Windows 8", "Windows Server 2012", "Windows 8.1", "Windows Server 2012 R2", "Windows 10", "Windows 11", "Windows Server 2016", "Windows Server 2019"})
-        Me.ComboBox1.Location = New System.Drawing.Point(272, 220)
-        Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(343, 21)
-        Me.ComboBox1.TabIndex = 7
-        Me.ComboBox1.Text = "Windows 7"
-        '
-        'Label11
-        '
-        Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(137, 224)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(129, 13)
-        Me.Label11.TabIndex = 6
-        Me.Label11.Text = "Target operating system:"
-        '
-        'Label10
-        '
-        Me.Label10.AutoEllipsis = True
-        Me.Label10.Location = New System.Drawing.Point(357, 166)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(281, 13)
-        Me.Label10.TabIndex = 5
-        Me.Label10.Text = "<TargetOS>"
-        '
-        'Label8
-        '
-        Me.Label8.Location = New System.Drawing.Point(115, 166)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(236, 13)
-        Me.Label8.TabIndex = 5
-        Me.Label8.Text = "Recommended target OS:"
-        Me.Label8.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
-        'Label9
-        '
-        Me.Label9.AutoEllipsis = True
-        Me.Label9.Location = New System.Drawing.Point(357, 146)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(281, 13)
-        Me.Label9.TabIndex = 5
-        Me.Label9.Text = "<imgversion>"
-        '
-        'Label7
-        '
-        Me.Label7.Location = New System.Drawing.Point(115, 146)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(236, 13)
-        Me.Label7.TabIndex = 5
-        Me.Label7.Text = "Mounted image version:"
-        Me.Label7.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
-        'RadioButton2
-        '
-        Me.RadioButton2.AutoSize = True
-        Me.RadioButton2.Location = New System.Drawing.Point(84, 190)
-        Me.RadioButton2.Name = "RadioButton2"
-        Me.RadioButton2.Size = New System.Drawing.Size(184, 17)
-        Me.RadioButton2.TabIndex = 4
-        Me.RadioButton2.Text = "Let me choose the target version"
-        Me.RadioButton2.UseVisualStyleBackColor = True
-        '
-        'RadioButton1
-        '
-        Me.RadioButton1.AutoSize = True
-        Me.RadioButton1.Checked = True
-        Me.RadioButton1.Location = New System.Drawing.Point(84, 118)
-        Me.RadioButton1.Name = "RadioButton1"
-        Me.RadioButton1.Size = New System.Drawing.Size(374, 17)
-        Me.RadioButton1.TabIndex = 4
-        Me.RadioButton1.TabStop = True
-        Me.RadioButton1.Text = "Let the program detect the version automatically for me (Recommended)"
-        Me.RadioButton1.UseVisualStyleBackColor = True
-        '
-        'Label6
-        '
-        Me.Label6.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label6.AutoEllipsis = True
-        Me.Label6.Location = New System.Drawing.Point(54, 16)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(682, 94)
-        Me.Label6.TabIndex = 3
-        Me.Label6.Text = resources.GetString("Label6.Text")
-        '
-        'PictureBox4
-        '
-        Me.PictureBox4.Image = Global.DISMTools.My.Resources.Resources.targetos
-        Me.PictureBox4.Location = New System.Drawing.Point(16, 16)
-        Me.PictureBox4.Name = "PictureBox4"
-        Me.PictureBox4.Size = New System.Drawing.Size(32, 32)
-        Me.PictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.PictureBox4.TabIndex = 0
-        Me.PictureBox4.TabStop = False
         '
         'EndUserLicenseAgreementPanel
         '
@@ -3260,6 +3261,7 @@ Partial Class NewUnattendWiz
         '
         'ToolStripComboBox1
         '
+        Me.ToolStripComboBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ToolStripComboBox1.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ToolStripComboBox1.Name = "ToolStripComboBox1"
         Me.ToolStripComboBox1.Size = New System.Drawing.Size(121, 25)
@@ -3472,8 +3474,8 @@ Partial Class NewUnattendWiz
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1008, 561)
-        Me.Controls.Add(Me.ExpressPanelContainer)
         Me.Controls.Add(Me.EditorPanelContainer)
+        Me.Controls.Add(Me.ExpressPanelContainer)
         Me.Controls.Add(Me.LocationPanel)
         Me.Controls.Add(Me.HeaderPanel)
         Me.Controls.Add(Me.FooterContainer)
@@ -3496,9 +3498,6 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelTrigger.PerformLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ExpressPanelContainer.ResumeLayout(False)
-        Me.ActivationPanel.ResumeLayout(False)
-        Me.ActivationPanel.PerformLayout()
-        CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).EndInit()
         Me.IncompleteWarningPanel.ResumeLayout(False)
         Me.IncompleteWarningPanel.PerformLayout()
         Me.TargetOSSelectionPanel.ResumeLayout(False)
@@ -3506,6 +3505,9 @@ Partial Class NewUnattendWiz
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.ActivationPanel.ResumeLayout(False)
+        Me.ActivationPanel.PerformLayout()
+        CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).EndInit()
         Me.EndUserLicenseAgreementPanel.ResumeLayout(False)
         Me.EndUserLicenseAgreementPanel.PerformLayout()
         CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).EndInit()

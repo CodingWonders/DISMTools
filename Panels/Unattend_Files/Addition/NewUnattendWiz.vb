@@ -169,6 +169,20 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub NewUnattendWiz_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
+            BackColor = Color.FromArgb(31, 31, 31)
+            ForeColor = Color.White
+            StepsTreeView.BackColor = Color.FromArgb(31, 31, 31)
+            ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New MainForm.DarkModeColorTable())
+        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
+            BackColor = Color.FromArgb(238, 238, 242)
+            ForeColor = Color.Black
+            StepsTreeView.BackColor = Color.FromArgb(238, 238, 242)
+            ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New MainForm.LightModeColorTable())
+        End If
+        SidePanel.BackColor = BackColor
+        StepsTreeView.ForeColor = ForeColor
+        PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.editor_mode_select, My.Resources.editor_mode)
         ' Fill in font combinations
         ToolStripComboBox1.Items.Clear()
         For Each fntFamily As FontFamily In FontFamily.Families
@@ -176,6 +190,12 @@ Public Class NewUnattendWiz
         Next
         InitScintilla("Courier New", 10)
         StepsTreeView.ExpandAll()
+        ToolStripComboBox1.BackColor = BackColor
+        ToolStripComboBox1.ForeColor = ForeColor
+        ToolStripComboBox2.BackColor = BackColor
+        ToolStripComboBox2.ForeColor = ForeColor
+
+
     End Sub
 
     Private Sub StepsTreeView_AfterSelect(sender As Object, e As TreeViewEventArgs) Handles StepsTreeView.AfterSelect
@@ -186,7 +206,7 @@ Public Class NewUnattendWiz
         If ExpressPanelContainer.Visible Then
             ExpressPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.HotTrack)
         Else
-            ExpressPanelTrigger.BackColor = Color.Gainsboro
+            ExpressPanelTrigger.BackColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(48, 48, 48), Color.Gainsboro)
         End If
     End Sub
 
@@ -202,7 +222,7 @@ Public Class NewUnattendWiz
         If ExpressPanelContainer.Visible Then
             ExpressPanelTrigger.BackColor = Color.SteelBlue
         Else
-            ExpressPanelTrigger.BackColor = Color.Silver
+            ExpressPanelTrigger.BackColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(36, 36, 36), Color.Silver)
         End If
     End Sub
 
@@ -210,7 +230,7 @@ Public Class NewUnattendWiz
         If ExpressPanelContainer.Visible Then
             ExpressPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.HotTrack)
         Else
-            ExpressPanelTrigger.BackColor = Color.Gainsboro
+            ExpressPanelTrigger.BackColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(48, 48, 48), Color.Gainsboro)
         End If
     End Sub
 
@@ -221,12 +241,12 @@ Public Class NewUnattendWiz
         ExpressPanelContainer.Visible = True
         ExpressPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.Highlight)
         ExpressPanelTrigger.ForeColor = Color.White
-        PictureBox1.Image = New Bitmap(My.Resources.express_mode_select)
+        PictureBox1.Image = My.Resources.express_mode_select
         EditorPanelTrigger.BackColor = SidePanel.BackColor
-        EditorPanelTrigger.ForeColor = Color.Black
-        PictureBox2.Image = New Bitmap(My.Resources.editor_mode)
+        EditorPanelTrigger.ForeColor = Color.LightGray
+        PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.editor_mode_select, My.Resources.editor_mode)
         LocationPanel.Visible = True
-        PictureBox3.Image = New Bitmap(My.Resources.express_mode_fc)
+        PictureBox3.Image = My.Resources.express_mode_fc
         Label3.Text = "Express mode"
         Label4.Text = "If you haven't created unattended answer files before, use this wizard to create one"
     End Sub
@@ -235,7 +255,7 @@ Public Class NewUnattendWiz
         If EditorPanelContainer.Visible Then
             EditorPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.HotTrack)
         Else
-            EditorPanelTrigger.BackColor = Color.Gainsboro
+            EditorPanelTrigger.BackColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(48, 48, 48), Color.Gainsboro)
         End If
     End Sub
 
@@ -251,7 +271,7 @@ Public Class NewUnattendWiz
         If EditorPanelContainer.Visible Then
             EditorPanelTrigger.BackColor = Color.SteelBlue
         Else
-            EditorPanelTrigger.BackColor = Color.Silver
+            EditorPanelTrigger.BackColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(36, 36, 36), Color.Silver)
         End If
     End Sub
 
@@ -259,7 +279,7 @@ Public Class NewUnattendWiz
         If EditorPanelContainer.Visible Then
             EditorPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.HotTrack)
         Else
-            EditorPanelTrigger.BackColor = Color.Gainsboro
+            EditorPanelTrigger.BackColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(48, 48, 48), Color.Gainsboro)
         End If
     End Sub
 
@@ -269,13 +289,13 @@ Public Class NewUnattendWiz
         EditorPanelContainer.Visible = True
         ExpressPanelContainer.Visible = False
         ExpressPanelTrigger.BackColor = SidePanel.BackColor
-        ExpressPanelTrigger.ForeColor = Color.Black
-        PictureBox1.Image = New Bitmap(My.Resources.express_mode)
+        ExpressPanelTrigger.ForeColor = Color.LightGray
+        PictureBox1.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.express_mode_select, My.Resources.express_mode)
         EditorPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.Highlight)
         EditorPanelTrigger.ForeColor = Color.White
-        PictureBox2.Image = New Bitmap(My.Resources.editor_mode_select)
+        PictureBox2.Image = My.Resources.editor_mode_select
         LocationPanel.Visible = False
-        PictureBox3.Image = New Bitmap(My.Resources.editor_mode_fc)
+        PictureBox3.Image = My.Resources.editor_mode_fc
         Label3.Text = "Editor mode"
         Label4.Text = "Create your unattended answer files from scratch and save them anywhere"
     End Sub
