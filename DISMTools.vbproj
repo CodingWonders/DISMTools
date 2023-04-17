@@ -757,6 +757,7 @@
   <ItemGroup>
     <Content Include="logo.ico" />
     <None Include="Resources\startup\version.png" />
+    <None Include="Resources\startup\preview_flag.png" />
     <None Include="Resources\startup\startup_bg.png" />
     <EmbeddedResource Include="Resources\dtproj.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
