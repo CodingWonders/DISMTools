@@ -24,12 +24,14 @@ Partial Class SplashScreen
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.LogoPic = New System.Windows.Forms.PictureBox()
-        Me.VersionPic = New System.Windows.Forms.PictureBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.VersionPic = New System.Windows.Forms.PictureBox()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
+        Me.PreviewFlag = New System.Windows.Forms.PictureBox()
         CType(Me.LogoPic, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.VersionPic, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
+        CType(Me.VersionPic, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PreviewFlag, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'LogoPic
@@ -44,18 +46,6 @@ Partial Class SplashScreen
         Me.LogoPic.TabIndex = 0
         Me.LogoPic.TabStop = False
         '
-        'VersionPic
-        '
-        Me.VersionPic.BackColor = System.Drawing.Color.Transparent
-        Me.VersionPic.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.VersionPic.Image = Global.DISMTools.My.Resources.Resources.version
-        Me.VersionPic.Location = New System.Drawing.Point(0, 0)
-        Me.VersionPic.Name = "VersionPic"
-        Me.VersionPic.Size = New System.Drawing.Size(164, 32)
-        Me.VersionPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.VersionPic.TabIndex = 0
-        Me.VersionPic.TabStop = False
-        '
         'Panel1
         '
         Me.Panel1.BackColor = System.Drawing.Color.Transparent
@@ -65,8 +55,32 @@ Partial Class SplashScreen
         Me.Panel1.Size = New System.Drawing.Size(164, 32)
         Me.Panel1.TabIndex = 1
         '
+        'VersionPic
+        '
+        Me.VersionPic.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.VersionPic.Image = Global.DISMTools.My.Resources.Resources.version
+        Me.VersionPic.Location = New System.Drawing.Point(0, 0)
+        Me.VersionPic.Name = "VersionPic"
+        Me.VersionPic.Size = New System.Drawing.Size(164, 32)
+        Me.VersionPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.VersionPic.TabIndex = 0
+        Me.VersionPic.TabStop = False
+        '
         'Timer1
         '
+        '
+        'PreviewFlag
+        '
+        Me.PreviewFlag.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.PreviewFlag.BackColor = System.Drawing.Color.Transparent
+        Me.PreviewFlag.Image = Global.DISMTools.My.Resources.Resources.preview_flag
+        Me.PreviewFlag.Location = New System.Drawing.Point(512, 121)
+        Me.PreviewFlag.Name = "PreviewFlag"
+        Me.PreviewFlag.Size = New System.Drawing.Size(112, 48)
+        Me.PreviewFlag.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PreviewFlag.TabIndex = 0
+        Me.PreviewFlag.TabStop = False
+        Me.PreviewFlag.Visible = False
         '
         'SplashScreen
         '
@@ -75,9 +89,11 @@ Partial Class SplashScreen
         Me.BackgroundImage = Global.DISMTools.My.Resources.Resources.startup_bg
         Me.ClientSize = New System.Drawing.Size(800, 200)
         Me.ControlBox = False
-        Me.Controls.Add(Me.Panel1)
+        Me.Controls.Add(Me.PreviewFlag)
         Me.Controls.Add(Me.LogoPic)
+        Me.Controls.Add(Me.Panel1)
         Me.DoubleBuffered = True
+        Me.ForeColor = System.Drawing.Color.White
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.MaximizeBox = False
         Me.MinimizeBox = False
@@ -88,15 +104,17 @@ Partial Class SplashScreen
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "DISMTools - Starting up..."
         CType(Me.LogoPic, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.VersionPic, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
+        CType(Me.VersionPic, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PreviewFlag, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
     Friend WithEvents LogoPic As System.Windows.Forms.PictureBox
-    Friend WithEvents VersionPic As System.Windows.Forms.PictureBox
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents Timer1 As System.Windows.Forms.Timer
+    Friend WithEvents PreviewFlag As System.Windows.Forms.PictureBox
+    Friend WithEvents VersionPic As System.Windows.Forms.PictureBox
 End Class

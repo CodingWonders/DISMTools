@@ -9,6 +9,7 @@ Public Class SplashScreen
     End Sub
 
     Private Sub SplashScreen_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If MainForm.dtBranch.Contains("preview") Then PreviewFlag.Visible = True
         Timer1.Enabled = True
         Refresh()
     End Sub
