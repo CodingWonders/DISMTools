@@ -187,6 +187,12 @@ Public Class NewUnattendWiz
             ForeColor = Color.Black
             StepsTreeView.BackColor = Color.FromArgb(238, 238, 242)
         End If
+        GroupBox1.ForeColor = ForeColor
+        GroupBox2.ForeColor = ForeColor
+        GroupBox3.ForeColor = ForeColor
+        GroupBox4.ForeColor = ForeColor
+        GroupBox5.ForeColor = ForeColor
+        GroupBox6.ForeColor = ForeColor
         SidePanel.BackColor = BackColor
         StepsTreeView.ForeColor = ForeColor
         PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.editor_mode_select, My.Resources.editor_mode)
