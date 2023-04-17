@@ -85,6 +85,12 @@
     <Reference Include="System.Xml.Linq, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
+    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
+      <HintPath>packages\DockPanelSuite.3.1.0\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+    </Reference>
+    <Reference Include="WeifenLuo.WinFormsUI.Docking.ThemeVS2012, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
+      <HintPath>packages\DockPanelSuite.ThemeVS2012.3.1.0\lib\net40\WeifenLuo.WinFormsUI.Docking.ThemeVS2012.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -102,6 +108,12 @@
       <DependentUpon>Actions.MainForm.vb</DependentUpon>
     </Compile>
     <Compile Include="Actions\Actions.MainForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Actions\Validation\Actions.Validation.Designer.vb">
+      <DependentUpon>Actions.Validation.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\Validation\Actions.Validation.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ApplicationEvents.vb" />
@@ -479,7 +491,7 @@
       <DependentUpon>ActionProperties.vb</DependentUpon>
     </Compile>
     <Compile Include="Actions\DockPanels\ActionProperties.vb">
-      <SubType>UserControl</SubType>
+      <SubType>Form</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -488,6 +500,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Actions\DockPanels\ActionProperties.resx">
       <DependentUpon>ActionProperties.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\Validation\Actions.Validation.resx">
+      <DependentUpon>Actions.Validation.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.vb</DependentUpon>
@@ -756,6 +771,32 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo.ico" />
+    <None Include="Resources\actions\validation.png" />
+    <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
+    <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
+    <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />
+    <Content Include="ThemeVS2012\Resources\MaskArrowLeft.png" />
+    <Content Include="ThemeVS2012\Resources\MaskArrowRight.png" />
+    <Content Include="ThemeVS2012\Resources\MaskArrowTop.png" />
+    <Content Include="ThemeVS2012\Resources\MaskCoreBottom.png" />
+    <Content Include="ThemeVS2012\Resources\MaskCoreCenter.png" />
+    <Content Include="ThemeVS2012\Resources\MaskCoreLeft.png" />
+    <Content Include="ThemeVS2012\Resources\MaskCoreRight.png" />
+    <Content Include="ThemeVS2012\Resources\MaskCoreTop.png" />
+    <Content Include="ThemeVS2012\Resources\MaskDock.png" />
+    <Content Include="ThemeVS2012\Resources\MaskDockFive.png" />
+    <Content Include="ThemeVS2012\Resources\MaskTabClose.png" />
+    <Content Include="ThemeVS2012\Resources\MaskTabList.png" />
+    <Content Include="ThemeVS2012\Resources\MaskTabOverflow.png" />
+    <Content Include="ThemeVS2012\Resources\MaskToolWindowAutoHide.png" />
+    <Content Include="ThemeVS2012\Resources\MaskToolWindowClose.png" />
+    <Content Include="ThemeVS2012\Resources\MaskToolWindowDock.png" />
+    <Content Include="ThemeVS2012\Resources\MaskToolWindowOption.png" />
+    <Content Include="ThemeVS2012\Resources\MaskWindowBottom.png" />
+    <Content Include="ThemeVS2012\Resources\MaskWindowCenter.png" />
+    <Content Include="ThemeVS2012\Resources\MaskWindowLeft.png" />
+    <Content Include="ThemeVS2012\Resources\MaskWindowRight.png" />
+    <Content Include="ThemeVS2012\Resources\MaskWindowTop.png" />
     <None Include="Resources\startup\version.png" />
     <None Include="Resources\startup\preview_flag.png" />
     <None Include="Resources\startup\startup_bg.png" />
