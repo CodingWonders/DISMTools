@@ -858,6 +858,7 @@ Public Class MainForm
     ''' <param name="UseApi">(Optional) Uses the DISM API to get image information and to reduce the time these processes take</param>
     ''' <remarks>Depending on the parameter of bgProcOptn, and on the power of the system, the background processes may take a longer time to finish</remarks>
     Sub RunBackgroundProcesses(bgProcOptn As Integer, GatherBasicInfo As Boolean, GatherAdvancedInfo As Boolean, Optional UseApi As Boolean = False)
+        If Not IsImageMounted Then Exit Sub
         ' Let user know things are working
         BackgroundProcessesButton.Visible = False
         BackgroundProcessesButton.Image = My.Resources.bg_ops
@@ -5022,7 +5023,7 @@ Public Class MainForm
         End If
 
         ' Set image properties
-        If WasImageMounted And expBackgroundProcesses Then
+        If expBackgroundProcesses Then
             ImgBW.RunWorkerAsync()
             Exit Sub
         End If
