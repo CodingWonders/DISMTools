@@ -2,6 +2,7 @@
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.Globalization
+Imports Microsoft.Win32
 
 Public Class Options
 
@@ -171,6 +172,75 @@ Public Class Options
         End Select
     End Sub
 
+    Function DetectFileAssociations() As Boolean
+        Try
+            Dim AssocRk As RegistryKey = Registry.ClassesRoot.OpenSubKey("DISMTools.Project\Shell\Open\Command", False)
+            Dim AssocCmd As String = AssocRk.GetValue(Nothing).ToString()
+            AssocRk.Close()
+            If File.Exists(AssocCmd.Replace(" " & Quote & "/load=" & Quote & "%1" & Quote & Quote, "").Trim().Replace(Quote, "").Trim()) Then
+                Return True
+            Else
+                Return False
+            End If
+        Catch ex As Exception
+            Return False
+        End Try
+        Return False
+    End Function
+
+    ''' <summary>
+    ''' Manages the file associations for files with the ".dtproj" extension
+    ''' </summary>
+    ''' <param name="AssocOp"></param>
+    ''' <param name="UseCustomIcons"></param>
+    ''' <remarks></remarks>
+    Sub ManageAssociations(AssocOp As Integer, UseCustomIcons As Boolean)
+        Select Case AssocOp
+            Case 0
+                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe", "/c assoc .dtproj=DISMTools.Project").WaitForExit()
+                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe", "/c ftype DISMTools.Project=" & Quote & Environment.CurrentDirectory & "\DISMTools.exe" & Quote & " " & Quote & "/load=" & Quote & "%1" & Quote & Quote).WaitForExit()
+                Dim AssocRk As RegistryKey = Registry.ClassesRoot.OpenSubKey("DISMTools.Project", True)
+                AssocRk.SetValue(Nothing, "DISMTools project", RegistryValueKind.String)
+                If UseCustomIcons Then
+                    If File.Exists(Environment.CurrentDirectory & "\resources\dtproj.ico") Then
+                        AssocRk.CreateSubKey("DefaultIcon")
+                        Dim DefIcon As RegistryKey = Registry.ClassesRoot.OpenSubKey("DISMTools.Project\DefaultIcon", True)
+                        DefIcon.SetValue(Nothing, Environment.CurrentDirectory & "\resources\dtproj.ico", RegistryValueKind.String)
+                        DefIcon.Close()
+                    End If
+                End If
+                AssocRk.Close()
+            Case 1
+                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe", "/c assoc .dtproj=").WaitForExit()
+                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe", "/c ftype DISMTools.Project=").WaitForExit()
+                ' Delete registry key remnants
+                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe", "delete HKCR\DISMTools.Project /f").WaitForExit()
+        End Select
+        ' Clear icon cache
+        Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ie4uinit.exe", "-ClearIconCache").WaitForExit()
+        ' Restart explorer.exe
+        Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\taskkill.exe", "/f /im explorer.exe").WaitForExit()
+        Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe")
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Label42.Text = If(DetectFileAssociations(), "associations set", "associations not set")
+                        Button9.Text = If(DetectFileAssociations(), "Remove file associations", "Set file associations")
+                    Case "ESN"
+                        Label42.Text = If(DetectFileAssociations(), "asociaciones establecidas", "asociaciones no establecidas")
+                        Button9.Text = If(DetectFileAssociations(), "Eliminar asociaciones", "Establecer asociaciones")
+                End Select
+            Case 1
+                Label42.Text = If(DetectFileAssociations(), "associations set", "associations not set")
+                Button9.Text = If(DetectFileAssociations(), "Remove file associations", "Set file associations")
+            Case 2
+                Label42.Text = If(DetectFileAssociations(), "asociaciones establecidas", "asociaciones no establecidas")
+                Button9.Text = If(DetectFileAssociations(), "Eliminar asociaciones", "Establecer asociaciones")
+        End Select
+        CheckBox11.Enabled = If(DetectFileAssociations(), False, True)
+    End Sub
+
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         ApplyProgSettings()
         If CanExit Then
@@ -210,6 +280,7 @@ Public Class Options
                         TabPage7.Text = "Background processes"
                         TabPage8.Text = "Modules"
                         TabPage9.Text = "Image detection"
+                        TabPage10.Text = "File associations"
                         Label2.Text = "DISM executable path:"
                         Label3.Text = "Version:"
                         Label5.Text = "Save settings on:"
@@ -241,6 +312,9 @@ Public Class Options
                         Label35.Text = "Modify these settings only if you experience constant program or system slowdowns due to high CPU usage"
                         Label36.Text = "Review the status of this background process:"
                         Label37.Text = "Status:"
+                        Label40.Text = "File associations let you access project files directly, without having to load the program first"
+                        Label41.Text = "Association status:"
+                        Label42.Text = If(DetectFileAssociations(), "associations set", "associations not set")
                         Button1.Text = "Browse..."
                         Button2.Text = "View DISM component versions"
                         Button3.Text = "Browse..."
@@ -248,6 +322,7 @@ Public Class Options
                         Button5.Text = "Install"
                         Button6.Text = "Check for updates"
                         Button7.Text = "Remove"
+                        Button9.Text = If(DetectFileAssociations(), "Remove file associations", "Set file associations")
                         If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = "Stop" Else Button8.Text = "Start"
                         Cancel_Button.Text = "Cancel"
                         OK_Button.Text = "OK"
@@ -262,11 +337,13 @@ Public Class Options
                         CheckBox8.Text = "Detect mounted images at all times"
                         CheckBox9.Text = "Use uppercase menus"
                         CheckBox10.Text = "Automatically create logs for each operation performed"
+                        CheckBox11.Text = "Set custom file icons for DISMTools projects"
                         DismOFD.Title = "Specify the DISM executable to use"
                         GroupBox1.Text = "Log customization"
                         GroupBox2.Text = "Notification frequency"
                         GroupBox3.Text = "Module details"
                         GroupBox4.Text = "Background process"
+                        GroupBox5.Text = "Associations"
                         LinkLabel1.Text = "The program will enable or disable certain features according to what the DISM version supports. How is it going to affect my usage of this program, and which features will be disabled accordingly?"
                         LinkLabel1.LinkArea = New LinkArea(97, 100)
                         LinkLabel2.Text = "Learn more about background processes"
@@ -286,6 +363,7 @@ Public Class Options
                         TabPage7.Text = "Procesos en segundo plano"
                         TabPage8.Text = "Módulos"
                         TabPage9.Text = "Detección de imágenes"
+                        TabPage10.Text = "Asociaciones de archivos"
                         Label2.Text = "Ruta del ejecutable:"
                         Label3.Text = "Versión:"
                         Label5.Text = "Guardar configuraciones en:"
@@ -317,6 +395,9 @@ Public Class Options
                         Label35.Text = "Modifique estas configuraciones solo si experimenta ralentizaciones constantes del programa o del sistema debido a un uso elevado de CPU"
                         Label36.Text = "Consulte el estado de este proceso en segundo plano:"
                         Label37.Text = "Estado:"
+                        Label40.Text = "Las asociaciones le permiten acceder a archivos de proyectos directamente, sin tener que cargar el programa en primer lugar"
+                        Label41.Text = "Estado de asociaciones:"
+                        Label42.Text = If(DetectFileAssociations(), "asociaciones establecidas", "asociaciones no establecidas")
                         Button1.Text = "Examinar..."
                         Button2.Text = "Ver versiones de componentes"
                         Button3.Text = "Examinar..."
@@ -324,6 +405,7 @@ Public Class Options
                         Button5.Text = "Instalar"
                         Button6.Text = "Comprobar actualizaciones"
                         Button7.Text = "Eliminar"
+                        Button9.Text = If(DetectFileAssociations(), "Eliminar asociaciones", "Establecer asociaciones")
                         If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = "Detener" Else Button8.Text = "Iniciar"
                         Cancel_Button.Text = "Cancelar"
                         OK_Button.Text = "Aceptar"
@@ -338,11 +420,13 @@ Public Class Options
                         CheckBox8.Text = "Detectar imágenes montadas todo el tiempo"
                         CheckBox9.Text = "Usar menús en mayúscula"
                         CheckBox10.Text = "Crear registros para cada operación realizada automáticamente"
+                        CheckBox11.Text = "Establecer iconos personalizados para proyectos de DISMTools"
                         DismOFD.Title = "Especifique el ejecutable de DISM a usar"
                         GroupBox1.Text = "Personalización del registro"
                         GroupBox2.Text = "Frecuencia de notificaciones"
                         GroupBox3.Text = "Detalles de módulo"
                         GroupBox4.Text = "Proceso en segundo plano"
+                        GroupBox5.Text = "Asociaciones"
                         LinkLabel1.Text = "El programa habilitará o deshabilitará algunas características atendiendo a lo que soporte la versión de DISM. ¿Cómo va a afectar esto mi uso del programa, y qué características serán deshabilitadas?"
                         LinkLabel1.LinkArea = New LinkArea(111, 88)
                         LinkLabel2.Text = "Conocer más sobre los procesos en segundo plano"
@@ -363,6 +447,7 @@ Public Class Options
                 TabPage7.Text = "Background processes"
                 TabPage8.Text = "Modules"
                 TabPage9.Text = "Image detection"
+                TabPage10.Text = "File associations"
                 Label2.Text = "DISM executable path:"
                 Label3.Text = "Version:"
                 Label5.Text = "Save settings on:"
@@ -394,6 +479,9 @@ Public Class Options
                 Label35.Text = "Modify these settings only if you experience constant program or system slowdowns due to high CPU usage"
                 Label36.Text = "Review the status of this background process:"
                 Label37.Text = "Status:"
+                Label40.Text = "File associations let you access project files directly, without having to load the program first"
+                Label41.Text = "Association status:"
+                Label42.Text = If(DetectFileAssociations(), "associations set", "associations not set")
                 Button1.Text = "Browse..."
                 Button2.Text = "View DISM component versions"
                 Button3.Text = "Browse..."
@@ -401,6 +489,7 @@ Public Class Options
                 Button5.Text = "Install"
                 Button6.Text = "Check for updates"
                 Button7.Text = "Remove"
+                Button9.Text = If(DetectFileAssociations(), "Remove file associations", "Set file associations")
                 If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = "Stop" Else Button8.Text = "Start"
                 Cancel_Button.Text = "Cancel"
                 OK_Button.Text = "OK"
@@ -415,11 +504,13 @@ Public Class Options
                 CheckBox8.Text = "Detect mounted images at all times"
                 CheckBox9.Text = "Use uppercase menus"
                 CheckBox10.Text = "Automatically create logs for each operation performed"
+                CheckBox11.Text = "Set custom file icons for DISMTools projects"
                 DismOFD.Title = "Specify the DISM executable to use"
                 GroupBox1.Text = "Log customization"
                 GroupBox2.Text = "Notification frequency"
                 GroupBox3.Text = "Module details"
                 GroupBox4.Text = "Background process"
+                GroupBox5.Text = "Associations"
                 LinkLabel1.Text = "The program will enable or disable certain features according to what the DISM version supports. How is it going to affect my usage of this program, and which features will be disabled accordingly?"
                 LinkLabel1.LinkArea = New LinkArea(97, 100)
                 LinkLabel2.Text = "Learn more about background processes"
@@ -439,6 +530,7 @@ Public Class Options
                 TabPage7.Text = "Procesos en segundo plano"
                 TabPage8.Text = "Módulos"
                 TabPage9.Text = "Detección de imágenes"
+                TabPage10.Text = "Asociaciones de archivos"
                 Label2.Text = "Ruta del ejecutable:"
                 Label3.Text = "Versión:"
                 Label5.Text = "Guardar configuraciones en:"
@@ -470,6 +562,9 @@ Public Class Options
                 Label35.Text = "Modifique estas configuraciones solo si experimenta ralentizaciones constantes del programa o del sistema debido a un uso elevado de CPU"
                 Label36.Text = "Consulte el estado de este proceso en segundo plano:"
                 Label37.Text = "Estado:"
+                Label40.Text = "Las asociaciones le permiten acceder a archivos de proyectos directamente, sin tener que cargar el programa en primer lugar"
+                Label41.Text = "Estado de asociaciones:"
+                Label42.Text = If(DetectFileAssociations(), "asociaciones establecidas", "asociaciones no establecidas")
                 Button1.Text = "Examinar..."
                 Button2.Text = "Ver versiones de componentes"
                 Button3.Text = "Examinar..."
@@ -477,6 +572,7 @@ Public Class Options
                 Button5.Text = "Instalar"
                 Button6.Text = "Comprobar actualizaciones"
                 Button7.Text = "Eliminar"
+                Button9.Text = If(DetectFileAssociations(), "Eliminar asociaciones", "Establecer asociaciones")
                 If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = "Detener" Else Button8.Text = "Iniciar"
                 Cancel_Button.Text = "Cancelar"
                 OK_Button.Text = "Aceptar"
@@ -491,11 +587,13 @@ Public Class Options
                 CheckBox8.Text = "Detectar imágenes montadas todo el tiempo"
                 CheckBox9.Text = "Usar menús en mayúscula"
                 CheckBox10.Text = "Crear registros para cada operación realizada automáticamente"
+                CheckBox11.Text = "Establecer iconos personalizados para proyectos de DISMTools"
                 DismOFD.Title = "Especifique el ejecutable de DISM a usar"
                 GroupBox1.Text = "Personalización del registro"
                 GroupBox2.Text = "Frecuencia de notificaciones"
                 GroupBox3.Text = "Detalles de módulo"
                 GroupBox4.Text = "Proceso en segundo plano"
+                GroupBox5.Text = "Asociaciones"
                 LinkLabel1.Text = "El programa habilitará o deshabilitará algunas características atendiendo a lo que soporte la versión de DISM. ¿Cómo va a afectar esto mi uso del programa, y qué características serán deshabilitadas?"
                 LinkLabel1.LinkArea = New LinkArea(111, 88)
                 LinkLabel2.Text = "Conocer más sobre los procesos en segundo plano"
@@ -592,6 +690,7 @@ Public Class Options
             TabPage7.BackColor = Color.FromArgb(31, 31, 31)
             TabPage8.BackColor = Color.FromArgb(31, 31, 31)
             TabPage9.BackColor = Color.FromArgb(31, 31, 31)
+            TabPage10.BackColor = Color.FromArgb(31, 31, 31)
             TextBox1.BackColor = Color.FromArgb(31, 31, 31)
             TextBox1.ForeColor = Color.White
             TextBox2.BackColor = Color.FromArgb(31, 31, 31)
@@ -622,6 +721,7 @@ Public Class Options
             GroupBox2.ForeColor = Color.White
             GroupBox3.ForeColor = Color.White
             GroupBox4.ForeColor = Color.White
+            GroupBox5.ForeColor = Color.White
             TrackBar1.BackColor = Color.FromArgb(31, 31, 31)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Win10Title.BackColor = Color.White
@@ -636,6 +736,7 @@ Public Class Options
             TabPage7.BackColor = Color.FromArgb(238, 238, 242)
             TabPage8.BackColor = Color.FromArgb(238, 238, 242)
             TabPage9.BackColor = Color.FromArgb(238, 238, 242)
+            TabPage10.BackColor = Color.FromArgb(238, 238, 242)
             TextBox1.BackColor = Color.FromArgb(238, 238, 242)
             TextBox1.ForeColor = Color.Black
             TextBox2.BackColor = Color.FromArgb(238, 238, 242)
@@ -666,6 +767,7 @@ Public Class Options
             GroupBox2.ForeColor = Color.Black
             GroupBox3.ForeColor = Color.Black
             GroupBox4.ForeColor = Color.Black
+            GroupBox5.ForeColor = Color.Black
             TrackBar1.BackColor = Color.FromArgb(238, 238, 242)
         End If
         Select Case MainForm.Language
@@ -685,6 +787,7 @@ Public Class Options
                 Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "iniciado", "detenido")
                 Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Detener", "Iniciar")
         End Select
+        CheckBox11.Enabled = If(DetectFileAssociations(), False, True)
     End Sub
 
     Sub GetSystemFonts()
@@ -1185,5 +1288,9 @@ Public Class Options
         Else
             GroupBox2.Enabled = False
         End If
+    End Sub
+
+    Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
+        If DetectFileAssociations() Then ManageAssociations(1, False) Else ManageAssociations(0, If(CheckBox11.Checked, True, False))
     End Sub
 End Class
