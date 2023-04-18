@@ -26,5 +26,6 @@ Public Class Actions_MainForm
         StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
         StatusStrip.ForeColor = Color.White
         ActionProperties.Show(DockPanel1, DockAreas.DockTop)
+        SolutionExplorer.Show(DockPanel1, DockAreas.DockTop)
     End Sub
 End Class
