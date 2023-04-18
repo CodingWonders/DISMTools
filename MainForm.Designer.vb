@@ -1351,7 +1351,7 @@ Partial Class MainForm
         'BranchTSMI
         '
         Me.BranchTSMI.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
-        Me.BranchTSMI.Image = Global.DISMTools.My.Resources.Resources.branch
+        Me.BranchTSMI.Image = CType(resources.GetObject("BranchTSMI.Image"), System.Drawing.Image)
         Me.BranchTSMI.Name = "BranchTSMI"
         Me.BranchTSMI.Size = New System.Drawing.Size(72, 20)
         Me.BranchTSMI.Text = "Branch"
@@ -1371,7 +1371,7 @@ Partial Class MainForm
         '
         Me.InvalidSettingsTSMI.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.InvalidSettingsTSMI.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ISFix, Me.ToolStripSeparator19, Me.ISHelp})
-        Me.InvalidSettingsTSMI.Image = Global.DISMTools.My.Resources.Resources.setting_error_glyph
+        Me.InvalidSettingsTSMI.Image = CType(resources.GetObject("InvalidSettingsTSMI.Image"), System.Drawing.Image)
         Me.InvalidSettingsTSMI.Name = "InvalidSettingsTSMI"
         Me.InvalidSettingsTSMI.Size = New System.Drawing.Size(220, 20)
         Me.InvalidSettingsTSMI.Text = "Invalid settings have been detected"
@@ -1468,7 +1468,7 @@ Partial Class MainForm
         '
         'PictureBox2
         '
-        Me.PictureBox2.Image = Global.DISMTools.My.Resources.Resources.icons8_code_32px
+        Me.PictureBox2.Image = CType(resources.GetObject("PictureBox2.Image"), System.Drawing.Image)
         Me.PictureBox2.Location = New System.Drawing.Point(32, 176)
         Me.PictureBox2.Name = "PictureBox2"
         Me.PictureBox2.Size = New System.Drawing.Size(32, 32)
@@ -1478,7 +1478,7 @@ Partial Class MainForm
         '
         'PictureBox4
         '
-        Me.PictureBox4.Image = Global.DISMTools.My.Resources.Resources.getting_started
+        Me.PictureBox4.Image = CType(resources.GetObject("PictureBox4.Image"), System.Drawing.Image)
         Me.PictureBox4.Location = New System.Drawing.Point(32, 359)
         Me.PictureBox4.Name = "PictureBox4"
         Me.PictureBox4.Size = New System.Drawing.Size(32, 32)
@@ -1488,7 +1488,7 @@ Partial Class MainForm
         '
         'PictureBox3
         '
-        Me.PictureBox3.Image = Global.DISMTools.My.Resources.Resources.caution
+        Me.PictureBox3.Image = CType(resources.GetObject("PictureBox3.Image"), System.Drawing.Image)
         Me.PictureBox3.Location = New System.Drawing.Point(32, 265)
         Me.PictureBox3.Name = "PictureBox3"
         Me.PictureBox3.Size = New System.Drawing.Size(32, 32)
@@ -1498,7 +1498,7 @@ Partial Class MainForm
         '
         'PictureBox1
         '
-        Me.PictureBox1.Image = Global.DISMTools.My.Resources.Resources.ver_stability
+        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
         Me.PictureBox1.Location = New System.Drawing.Point(32, 83)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(32, 32)
@@ -2054,7 +2054,7 @@ Partial Class MainForm
         '
         'PictureBox5
         '
-        Me.PictureBox5.Image = Global.DISMTools.My.Resources.Resources.logo_mainscr_light
+        Me.PictureBox5.Image = CType(resources.GetObject("PictureBox5.Image"), System.Drawing.Image)
         Me.PictureBox5.Location = New System.Drawing.Point(32, 14)
         Me.PictureBox5.Name = "PictureBox5"
         Me.PictureBox5.Size = New System.Drawing.Size(192, 36)
@@ -2195,7 +2195,7 @@ Partial Class MainForm
         '
         'TabPageIcon1
         '
-        Me.TabPageIcon1.Image = Global.DISMTools.My.Resources.Resources.project
+        Me.TabPageIcon1.Image = CType(resources.GetObject("TabPageIcon1.Image"), System.Drawing.Image)
         Me.TabPageIcon1.Location = New System.Drawing.Point(8, 8)
         Me.TabPageIcon1.Name = "TabPageIcon1"
         Me.TabPageIcon1.Size = New System.Drawing.Size(48, 48)
@@ -2229,9 +2229,9 @@ Partial Class MainForm
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TableLayoutPanel2.ColumnCount = 3
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.33333!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.66667!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 109.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.44444!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.55556!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -2253,7 +2253,7 @@ Partial Class MainForm
         'ProjNameEditBtn
         '
         Me.ProjNameEditBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ProjNameEditBtn.Image = Global.DISMTools.My.Resources.Resources.proj_name_edit
+        Me.ProjNameEditBtn.Image = CType(resources.GetObject("ProjNameEditBtn.Image"), System.Drawing.Image)
         Me.ProjNameEditBtn.Location = New System.Drawing.Point(229, 3)
         Me.ProjNameEditBtn.Name = "ProjNameEditBtn"
         Me.ProjNameEditBtn.Size = New System.Drawing.Size(24, 23)
@@ -2266,9 +2266,9 @@ Partial Class MainForm
         Me.LinkLabel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel1.Location = New System.Drawing.Point(75, 146)
+        Me.LinkLabel1.Location = New System.Drawing.Point(103, 146)
         Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(178, 254)
+        Me.LinkLabel1.Size = New System.Drawing.Size(150, 254)
         Me.LinkLabel1.TabIndex = 5
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "Click here to mount an image"
@@ -2278,9 +2278,9 @@ Partial Class MainForm
         Me.Panel8.Controls.Add(Me.projName)
         Me.Panel8.Controls.Add(Me.projNameText)
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel8.Location = New System.Drawing.Point(75, 3)
+        Me.Panel8.Location = New System.Drawing.Point(103, 3)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(68, 23)
+        Me.Panel8.Size = New System.Drawing.Size(119, 23)
         Me.Panel8.TabIndex = 8
         '
         'projName
@@ -2289,7 +2289,7 @@ Partial Class MainForm
         Me.projName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projName.Location = New System.Drawing.Point(0, 0)
         Me.projName.Name = "projName"
-        Me.projName.Size = New System.Drawing.Size(68, 23)
+        Me.projName.Size = New System.Drawing.Size(119, 23)
         Me.projName.TabIndex = 2
         Me.projName.Text = "projName"
         Me.projName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -2299,7 +2299,7 @@ Partial Class MainForm
         Me.projNameText.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projNameText.Location = New System.Drawing.Point(0, 0)
         Me.projNameText.Name = "projNameText"
-        Me.projNameText.Size = New System.Drawing.Size(68, 21)
+        Me.projNameText.Size = New System.Drawing.Size(119, 21)
         Me.projNameText.TabIndex = 4
         Me.projNameText.Text = "projName"
         Me.projNameText.Visible = False
@@ -2310,9 +2310,9 @@ Partial Class MainForm
         Me.Label5.AutoSize = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label5, 2)
         Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label5.Location = New System.Drawing.Point(75, 131)
+        Me.Label5.Location = New System.Drawing.Point(103, 131)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(178, 15)
+        Me.Label5.Size = New System.Drawing.Size(150, 15)
         Me.Label5.TabIndex = 2
         Me.Label5.Text = "imgStatus"
         '
@@ -2322,7 +2322,7 @@ Partial Class MainForm
         Me.Label2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label2.Location = New System.Drawing.Point(3, 29)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(66, 102)
+        Me.Label2.Size = New System.Drawing.Size(94, 102)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "Location:"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2332,9 +2332,9 @@ Partial Class MainForm
         Me.Label3.AutoEllipsis = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label3, 2)
         Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label3.Location = New System.Drawing.Point(75, 29)
+        Me.Label3.Location = New System.Drawing.Point(103, 29)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(178, 102)
+        Me.Label3.Size = New System.Drawing.Size(150, 102)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "projPath"
         '
@@ -2345,7 +2345,7 @@ Partial Class MainForm
         Me.Label4.Location = New System.Drawing.Point(3, 131)
         Me.Label4.Name = "Label4"
         Me.TableLayoutPanel2.SetRowSpan(Me.Label4, 2)
-        Me.Label4.Size = New System.Drawing.Size(66, 269)
+        Me.Label4.Size = New System.Drawing.Size(94, 269)
         Me.Label4.TabIndex = 1
         Me.Label4.Text = "Images mounted?"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2356,7 +2356,7 @@ Partial Class MainForm
         Me.Panel9.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel9.Location = New System.Drawing.Point(3, 3)
         Me.Panel9.Name = "Panel9"
-        Me.Panel9.Size = New System.Drawing.Size(66, 23)
+        Me.Panel9.Size = New System.Drawing.Size(94, 23)
         Me.Panel9.TabIndex = 9
         '
         'Label1
@@ -2364,7 +2364,7 @@ Partial Class MainForm
         Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label1.Location = New System.Drawing.Point(0, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(66, 23)
+        Me.Label1.Size = New System.Drawing.Size(94, 23)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Name:"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -2474,7 +2474,7 @@ Partial Class MainForm
         '
         'TabPageIcon2
         '
-        Me.TabPageIcon2.Image = Global.DISMTools.My.Resources.Resources.image
+        Me.TabPageIcon2.Image = CType(resources.GetObject("TabPageIcon2.Image"), System.Drawing.Image)
         Me.TabPageIcon2.Location = New System.Drawing.Point(8, 8)
         Me.TabPageIcon2.Name = "TabPageIcon2"
         Me.TabPageIcon2.Size = New System.Drawing.Size(48, 48)
@@ -2694,7 +2694,7 @@ Partial Class MainForm
         'Button8
         '
         Me.Button8.Enabled = False
-        Me.Button8.Image = Global.DISMTools.My.Resources.Resources.get_feat_info
+        Me.Button8.Image = CType(resources.GetObject("Button8.Image"), System.Drawing.Image)
         Me.Button8.Location = New System.Drawing.Point(118, 20)
         Me.Button8.Name = "Button8"
         Me.Button8.Size = New System.Drawing.Size(201, 63)
@@ -2706,7 +2706,7 @@ Partial Class MainForm
         'Button9
         '
         Me.Button9.Enabled = False
-        Me.Button9.Image = Global.DISMTools.My.Resources.Resources.disable_feature
+        Me.Button9.Image = CType(resources.GetObject("Button9.Image"), System.Drawing.Image)
         Me.Button9.Location = New System.Drawing.Point(325, 20)
         Me.Button9.Name = "Button9"
         Me.Button9.Size = New System.Drawing.Size(129, 63)
@@ -2718,7 +2718,7 @@ Partial Class MainForm
         'Button10
         '
         Me.Button10.Enabled = False
-        Me.Button10.Image = Global.DISMTools.My.Resources.Resources.enable_feature
+        Me.Button10.Image = CType(resources.GetObject("Button10.Image"), System.Drawing.Image)
         Me.Button10.Location = New System.Drawing.Point(6, 20)
         Me.Button10.Name = "Button10"
         Me.Button10.Size = New System.Drawing.Size(106, 63)
@@ -2746,7 +2746,7 @@ Partial Class MainForm
         'Button13
         '
         Me.Button13.Enabled = False
-        Me.Button13.Image = Global.DISMTools.My.Resources.Resources.switch_indexes
+        Me.Button13.Image = CType(resources.GetObject("Button13.Image"), System.Drawing.Image)
         Me.Button13.Location = New System.Drawing.Point(233, 89)
         Me.Button13.Name = "Button13"
         Me.Button13.Size = New System.Drawing.Size(221, 63)
@@ -2758,7 +2758,7 @@ Partial Class MainForm
         'Button11
         '
         Me.Button11.Enabled = False
-        Me.Button11.Image = Global.DISMTools.My.Resources.Resources.servsession_reload
+        Me.Button11.Image = CType(resources.GetObject("Button11.Image"), System.Drawing.Image)
         Me.Button11.Location = New System.Drawing.Point(6, 89)
         Me.Button11.Name = "Button11"
         Me.Button11.Size = New System.Drawing.Size(221, 63)
@@ -2769,7 +2769,7 @@ Partial Class MainForm
         '
         'Button1
         '
-        Me.Button1.Image = Global.DISMTools.My.Resources.Resources.mount_img
+        Me.Button1.Image = CType(resources.GetObject("Button1.Image"), System.Drawing.Image)
         Me.Button1.Location = New System.Drawing.Point(6, 20)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(106, 63)
@@ -2781,7 +2781,7 @@ Partial Class MainForm
         'Button2
         '
         Me.Button2.Enabled = False
-        Me.Button2.Image = Global.DISMTools.My.Resources.Resources.commit_img
+        Me.Button2.Image = CType(resources.GetObject("Button2.Image"), System.Drawing.Image)
         Me.Button2.Location = New System.Drawing.Point(118, 20)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(145, 63)
@@ -2833,7 +2833,7 @@ Partial Class MainForm
         'Button6
         '
         Me.Button6.Enabled = False
-        Me.Button6.Image = Global.DISMTools.My.Resources.Resources.get_pkg_info
+        Me.Button6.Image = CType(resources.GetObject("Button6.Image"), System.Drawing.Image)
         Me.Button6.Location = New System.Drawing.Point(118, 20)
         Me.Button6.Name = "Button6"
         Me.Button6.Size = New System.Drawing.Size(201, 63)
@@ -2845,7 +2845,7 @@ Partial Class MainForm
         'Button7
         '
         Me.Button7.Enabled = False
-        Me.Button7.Image = Global.DISMTools.My.Resources.Resources.rem_pkg
+        Me.Button7.Image = CType(resources.GetObject("Button7.Image"), System.Drawing.Image)
         Me.Button7.Location = New System.Drawing.Point(325, 20)
         Me.Button7.Name = "Button7"
         Me.Button7.Size = New System.Drawing.Size(129, 63)
@@ -2857,7 +2857,7 @@ Partial Class MainForm
         'Button5
         '
         Me.Button5.Enabled = False
-        Me.Button5.Image = Global.DISMTools.My.Resources.Resources.add_pkg
+        Me.Button5.Image = CType(resources.GetObject("Button5.Image"), System.Drawing.Image)
         Me.Button5.Location = New System.Drawing.Point(6, 20)
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(106, 63)
@@ -2921,7 +2921,7 @@ Partial Class MainForm
         Me.ToolStripButton1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.ToolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.ToolStripButton1.Enabled = False
-        Me.ToolStripButton1.Image = Global.DISMTools.My.Resources.Resources.close_glyph
+        Me.ToolStripButton1.Image = CType(resources.GetObject("ToolStripButton1.Image"), System.Drawing.Image)
         Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton1.Name = "ToolStripButton1"
         Me.ToolStripButton1.Size = New System.Drawing.Size(23, 22)
@@ -2930,7 +2930,7 @@ Partial Class MainForm
         'ToolStripButton2
         '
         Me.ToolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton2.Image = Global.DISMTools.My.Resources.Resources.save_glyph
+        Me.ToolStripButton2.Image = CType(resources.GetObject("ToolStripButton2.Image"), System.Drawing.Image)
         Me.ToolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton2.Name = "ToolStripButton2"
         Me.ToolStripButton2.Size = New System.Drawing.Size(23, 22)
@@ -2943,7 +2943,7 @@ Partial Class MainForm
         '
         'ToolStripButton3
         '
-        Me.ToolStripButton3.Image = Global.DISMTools.My.Resources.Resources.prj_unload_glyph
+        Me.ToolStripButton3.Image = CType(resources.GetObject("ToolStripButton3.Image"), System.Drawing.Image)
         Me.ToolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton3.Name = "ToolStripButton3"
         Me.ToolStripButton3.Size = New System.Drawing.Size(105, 22)
@@ -2960,7 +2960,7 @@ Partial Class MainForm
         '
         Me.ToolStripButton4.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.ToolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton4.Image = Global.DISMTools.My.Resources.Resources.progress_window
+        Me.ToolStripButton4.Image = CType(resources.GetObject("ToolStripButton4.Image"), System.Drawing.Image)
         Me.ToolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton4.Name = "ToolStripButton4"
         Me.ToolStripButton4.Size = New System.Drawing.Size(23, 22)
@@ -2999,7 +2999,7 @@ Partial Class MainForm
         'RefreshViewTSB
         '
         Me.RefreshViewTSB.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.RefreshViewTSB.Image = Global.DISMTools.My.Resources.Resources.refresh_glyph
+        Me.RefreshViewTSB.Image = CType(resources.GetObject("RefreshViewTSB.Image"), System.Drawing.Image)
         Me.RefreshViewTSB.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.RefreshViewTSB.Name = "RefreshViewTSB"
         Me.RefreshViewTSB.Size = New System.Drawing.Size(23, 22)
@@ -3012,7 +3012,7 @@ Partial Class MainForm
         '
         'ExpandCollapseTSB
         '
-        Me.ExpandCollapseTSB.Image = Global.DISMTools.My.Resources.Resources.expand_glyph
+        Me.ExpandCollapseTSB.Image = CType(resources.GetObject("ExpandCollapseTSB.Image"), System.Drawing.Image)
         Me.ExpandCollapseTSB.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ExpandCollapseTSB.Name = "ExpandCollapseTSB"
         Me.ExpandCollapseTSB.Size = New System.Drawing.Size(66, 22)
@@ -3056,7 +3056,7 @@ Partial Class MainForm
         '
         Me.BackgroundProcessesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.BackgroundProcessesButton.DropDownButtonWidth = 0
-        Me.BackgroundProcessesButton.Image = Global.DISMTools.My.Resources.Resources.bg_ops_complete
+        Me.BackgroundProcessesButton.Image = CType(resources.GetObject("BackgroundProcessesButton.Image"), System.Drawing.Image)
         Me.BackgroundProcessesButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.BackgroundProcessesButton.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.BackgroundProcessesButton.Name = "BackgroundProcessesButton"
