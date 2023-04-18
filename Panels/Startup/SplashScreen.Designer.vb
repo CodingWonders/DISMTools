@@ -103,6 +103,7 @@ Partial Class SplashScreen
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "DISMTools - Starting up..."
+        Me.TopMost = True
         CType(Me.LogoPic, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
