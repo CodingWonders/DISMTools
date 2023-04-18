@@ -110,6 +110,12 @@
     <Compile Include="Actions\Actions.MainForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Actions\DockPanels\SolutionExplorer.Designer.vb">
+      <DependentUpon>SolutionExplorer.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\DockPanels\SolutionExplorer.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Actions\Validation\Actions.Validation.Designer.vb">
       <DependentUpon>Actions.Validation.vb</DependentUpon>
     </Compile>
@@ -500,6 +506,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Actions\DockPanels\ActionProperties.resx">
       <DependentUpon>ActionProperties.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\DockPanels\SolutionExplorer.resx">
+      <DependentUpon>SolutionExplorer.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Actions\Validation\Actions.Validation.resx">
       <DependentUpon>Actions.Validation.vb</DependentUpon>
