@@ -1602,129 +1602,67 @@ Public Class ProgressPanel
                         AddFromMsu(pkgs(x))
                         Continue For
                     End If
-                    File.WriteAllText(".\bin\exthelpers\pkginfo.bat",
-                                      "@echo off" & CrLf &
-                                      "dism /English /image=" & Quote & MountDir & Quote & " /get-packageinfo /packagepath=" & Quote & pkgs(x) & Quote & " | findstr /c:" & Quote & "Package Identity" & Quote & " > .\tempinfo\pkgname" & CrLf &
-                                      "dism /English /image=" & Quote & MountDir & Quote & " /get-packageinfo /packagepath=" & Quote & pkgs(x) & Quote & " | findstr /c:" & Quote & "Description" & Quote & " > .\tempinfo\pkgdesc" & CrLf &
-                                      "dism /English /image=" & Quote & MountDir & Quote & " /get-packageinfo /packagepath=" & Quote & pkgs(x) & Quote & " | findstr /c:" & Quote & "Applicable" & Quote & " > .\tempinfo\pkgapplicability" & CrLf &
-                                      "dism /English /image=" & Quote & MountDir & Quote & " /get-packageinfo /packagepath=" & Quote & pkgs(x) & Quote & " | findstr /c:" & Quote & "State" & Quote & " > .\tempinfo\pkgstate",
-                                      ASCII)
-                    If IsDebugged Then
-                        Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\pkginfo.bat").WaitForExit()
-                    End If
-                    Process.Start(".\bin\exthelpers\pkginfo.bat").WaitForExit()
-                    pkgName = My.Computer.FileSystem.ReadAllText(".\tempinfo\pkgname", ASCII).Replace("Package Identity : ", "").Trim()
-                    pkgDesc = My.Computer.FileSystem.ReadAllText(".\tempinfo\pkgdesc", ASCII).Replace("Description : ", "").Trim()
-                    pkgApplicabilityStatus = My.Computer.FileSystem.ReadAllText(".\tempinfo\pkgapplicability", ASCII).Replace("Applicable : ", "").Trim()
-                    pkgInstallationState = My.Computer.FileSystem.ReadAllText(".\tempinfo\pkgstate", ASCII).Replace("State : ", "").Trim()
-                    LogView.AppendText(CrLf & CrLf &
-                                       "- Package name: " & pkgName & CrLf &
-                                       "- Package description: " & pkgDesc & CrLf)
-                    If pkgApplicabilityStatus = "Yes" Then
-                        pkgIsApplicable = True
-                        LogView.AppendText("- Package is applicable to this image? Yes" & CrLf)
-                    Else
-                        pkgIsApplicable = False
-                        LogView.AppendText("- Package is applicable to this image? No" & CrLf)
-                    End If
-                    If pkgInstallationState = "Not Present" Or pkgInstallationState = "" Then
-                        pkgIsAlreadyAdded = False
-                        LogView.AppendText("- Package is already added? No" & CrLf)
-                    ElseIf pkgInstallationState = "Install Pending" Then
-                        pkgIsAlreadyAdded = True
-                        LogView.AppendText("- Package is already added? Yes" & CrLf)
-                    ElseIf pkgInstallationState = "Installed" Then
-                        pkgIsAlreadyAdded = True
-                        LogView.AppendText("- Package is already added? Yes" & CrLf)
-                    End If
+
+                    ' Get package information with the DISM API
+                    Dim pkgIsApplicable As Boolean
+                    Dim pkgIsInstalled As Boolean
                     Try
-                        Directory.Delete(".\tempinfo", True)
-                    Catch ex As Exception
-
+                        DismApi.Initialize(DismLogLevel.LogErrors)
+                        Using imgSession As DismSession = DismApi.OpenOfflineSession(mntString)
+                            Dim pkgInfo As DismPackageInfo = DismApi.GetPackageInfoByPath(imgSession, pkgs(x))
+                            LogView.AppendText(CrLf & CrLf & _
+                                               "- Package name: " & pkgInfo.PackageName & CrLf & _
+                                               "- Package description: " & pkgInfo.Description & CrLf & _
+                                               "- This package is a " & If(pkgInfo.ReleaseType = DismReleaseType.ServicePack, "Service Pack", pkgInfo.ReleaseType.ToString().ToLower()) & CrLf & _
+                                               "- Package is applicable to this image? " & If(pkgInfo.Applicable, "Yes", "No") & CrLf & _
+                                               "- Package is already installed? " & If(pkgInfo.PackageState = DismPackageFeatureState.Installed Or pkgInfo.PackageState = DismPackageFeatureState.InstallPending, "Yes", "No") & CrLf)
+                            pkgIsApplicable = pkgInfo.Applicable
+                            If pkgInfo.PackageState = DismPackageFeatureState.Installed Or pkgInfo.PackageState = DismPackageFeatureState.InstallPending Then pkgIsInstalled = True Else pkgIsInstalled = False
+                            If pkgInfo.Applicable Then
+                                If pkgInfo.PackageState = DismPackageFeatureState.Installed Or pkgInfo.PackageState = DismPackageFeatureState.InstallPending Then
+                                    LogView.AppendText(CrLf & "Package is already added. Skipping installation of this package...")
+                                    pkgFailedAdditions += 1
+                                End If
+                            Else
+                                If Not pkgIgnoreApplicabilityChecks Then
+                                    LogView.AppendText(CrLf & "Package is not applicable to this image. Skipping installation of this package...")
+                                    If PkgErrorText.RichTextBox1.Text = "" Then
+                                        PkgErrorText.RichTextBox1.AppendText("0x800F8023")
+                                    Else
+                                        PkgErrorText.RichTextBox1.AppendText(CrLf & "0x800F8023")
+                                    End If
+                                    pkgFailedAdditions += 1
+                                End If
+                            End If
+                        End Using
+                    Finally
+                        DismApi.Shutdown()
                     End Try
-
-                    ' Preparing to add pkg
-                    If pkgIsApplicable Then
-                        ' Determine whether package is already added (either Install Pending or Installed)
-                        If pkgIsAlreadyAdded Then
-                            LogView.AppendText(CrLf & "Package is already added. Skipping installation of this package...")
-                            pkgFailedAdditions += 1
-                            'CurrentPB.Value = x + 1
-                            Continue For
-                        Else
-                            LogView.AppendText(CrLf & "Processing package...")
-                            DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /add-package /packagepath=" & Quote & pkgs(x) & Quote
-                            If pkgIgnoreApplicabilityChecks Then
-                                CommandArgs &= " /ignorecheck"
-                            End If
-                            If pkgPreventIfPendingOnline Then
-                                CommandArgs &= " /preventpending"
-                            End If
-                            DISMProc.StartInfo.Arguments = CommandArgs
-                            DISMProc.Start()
-                            Do Until DISMProc.HasExited
-                                If DISMProc.HasExited Then
-                                    Exit Do
-                                End If
-                            Loop
-                            LogView.AppendText(CrLf & "Getting error level...")
-                            GetPkgErrorLevel()
-                            LogView.AppendText(" Error level: " & errCode)
-                            If PkgErrorText.RichTextBox1.Text = "" Then
-                                PkgErrorText.RichTextBox1.AppendText(errCode)
-                            Else
-                                PkgErrorText.RichTextBox1.AppendText(CrLf & errCode)
-                            End If
-                        End If
-                    Else
-                        If pkgIgnoreApplicabilityChecks Then
-                            LogView.AppendText(CrLf & "Trying to process package...")
-                            DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /add-package /packagepath=" & Quote & pkgs(x) & Quote & " /ignorecheck"
-                            If pkgPreventIfPendingOnline Then
-                                CommandArgs &= " /preventpending"
-                            End If
-                            DISMProc.StartInfo.Arguments = CommandArgs
-                            DISMProc.Start()
-                            Do Until DISMProc.HasExited
-                                If DISMProc.HasExited Then
-                                    Exit Do
-                                End If
-                            Loop
-                            LogView.AppendText(CrLf & "Getting error level...")
-                            GetPkgErrorLevel()
-                            If errCode.Length >= 8 Then
-                                LogView.AppendText(CrLf & CrLf & " Error level : 0x" & errCode)
-                            Else
-                                LogView.AppendText(CrLf & CrLf & " Error level : " & errCode)
-                            End If
-                            If PkgErrorText.RichTextBox1.Text = "" Then
-                                If errCode.Length >= 8 Then
-                                    PkgErrorText.RichTextBox1.AppendText("0x" & errCode)
-                                Else
-                                    PkgErrorText.RichTextBox1.AppendText(errCode)
-                                End If
-                            Else
-                                If errCode.Length >= 8 Then
-                                    PkgErrorText.RichTextBox1.AppendText(CrLf & "0x" & errCode)
-                                Else
-                                    PkgErrorText.RichTextBox1.AppendText(CrLf & errCode)
-                                End If
-                            End If
-                        Else
-                            LogView.AppendText(CrLf & "Package is not applicable to this image. Skipping installation of this package...")
-                            If PkgErrorText.RichTextBox1.Text = "" Then
-                                PkgErrorText.RichTextBox1.AppendText("0x800F8023")
-                            Else
-                                PkgErrorText.RichTextBox1.AppendText(CrLf & "0x800F8023")
-                            End If
-                            pkgFailedAdditions += 1
-                            'CurrentPB.Value = x + 1
-                            Continue For
-                        End If
+                    If Not pkgIsApplicable Or pkgIsInstalled Then Continue For
+                    LogView.AppendText(CrLf & "Processing package...")
+                    DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /add-package /packagepath=" & Quote & pkgs(x) & Quote
+                    If pkgIgnoreApplicabilityChecks Then
+                        CommandArgs &= " /ignorecheck"
                     End If
-                    'CurrentPB.Value = x + 1
+                    If pkgPreventIfPendingOnline Then
+                        CommandArgs &= " /preventpending"
+                    End If
+                    DISMProc.StartInfo.Arguments = CommandArgs
+                    DISMProc.Start()
+                    Do Until DISMProc.HasExited
+                        If DISMProc.HasExited Then
+                            Exit Do
+                        End If
+                    Loop
+                    LogView.AppendText(CrLf & "Getting error level...")
+                    GetPkgErrorLevel()
+                    LogView.AppendText(" Error level: " & errCode)
+                    If PkgErrorText.RichTextBox1.Text = "" Then
+                        PkgErrorText.RichTextBox1.AppendText(errCode)
+                    Else
+                        PkgErrorText.RichTextBox1.AppendText(CrLf & errCode)
+                    End If
                 Next
                 CurrentPB.Value = CurrentPB.Maximum
                 LogView.AppendText(CrLf & "Gathering error level for selected packages..." & CrLf)
@@ -1818,31 +1756,28 @@ Public Class ProgressPanel
                                        "Package " & (x + 1) & " of " & pkgRemovalCount)
                     CurrentPB.Value = x + 1
                     Directory.CreateDirectory(".\tempinfo")
-                    File.WriteAllText(".\bin\exthelpers\pkginfo.bat",
-                                      "@echo off" & CrLf &
-                                      "dism /English /image=" & Quote & MountDir & Quote & " /get-packageinfo /packagename=" & pkgRemovalNames(x) & " | findstr /c:" & Quote & "Package Identity" & Quote & " > .\tempinfo\pkgname" & CrLf &
-                                      "dism /English /image=" & Quote & MountDir & Quote & " /get-packageinfo /packagename=" & pkgRemovalNames(x) & " | findstr /c:" & Quote & "State" & Quote & " > .\tempinfo\pkgstate",
-                                      ASCII)
-                    If IsDebugged Then
-                        Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\pkginfo.bat").WaitForExit()
-                    End If
-                    Process.Start(".\bin\exthelpers\pkginfo.bat").WaitForExit()
-                    pkgRemovalName = My.Computer.FileSystem.ReadAllText(".\tempinfo\pkgname", ASCII).Replace("Package Identity : ", "").Trim()
-                    pkgRemovalState = My.Computer.FileSystem.ReadAllText(".\tempinfo\pkgstate", ASCII).Replace("State : ", "").Trim()
-                    LogView.AppendText(CrLf & CrLf &
-                                       "- Package name: " & pkgRemovalName)
-                    If pkgRemovalState = "Installed" Then
-                        LogView.AppendText(CrLf & "- Package state: installed")
-                    ElseIf pkgRemovalState = "Uninstall Pending" Then
-                        LogView.AppendText(CrLf & "- Package state: an uninstall is pending")
-                    ElseIf pkgRemovalState = "Install Pending" Then
-                        LogView.AppendText(CrLf & "- Package state: an install is pending")
-                    End If
-                    If pkgRemovalState = "Uninstall Pending" Or pkgRemovalState = "Install Pending" Or pkgRemovalState = "Not Present" Then
-                        pkgIsReadyForRemoval = False
-                    Else
-                        pkgIsReadyForRemoval = True
-                    End If
+                    Try
+                        DismApi.Initialize(DismLogLevel.LogErrors)
+                        Using imgSession As DismSession = DismApi.OpenOfflineSession(mntString)
+                            Dim pkgInfo As DismPackageInfo = DismApi.GetPackageInfoByName(imgSession, pkgRemovalNames(x))
+                            LogView.AppendText(CrLf & CrLf & _
+                                               "- Package name: " & pkgInfo.PackageName & CrLf)
+                            If pkgInfo.PackageState = DismPackageFeatureState.Installed Then
+                                LogView.AppendText("- Package state: installed" & CrLf)
+                            ElseIf pkgInfo.PackageState = DismPackageFeatureState.UninstallPending Then
+                                LogView.AppendText("- Package state: an uninstall is pending" & CrLf)
+                            ElseIf pkgInfo.PackageState = DismPackageFeatureState.InstallPending Then
+                                LogView.AppendText("- Package state: an install is pending" & CrLf)
+                            End If
+                            If pkgInfo.PackageState = DismPackageFeatureState.Installed Or pkgInfo.PackageState = DismPackageFeatureState.InstallPending Then
+                                pkgIsReadyForRemoval = True
+                            Else
+                                pkgIsReadyForRemoval = False
+                            End If
+                        End Using
+                    Finally
+                        DismApi.Shutdown()
+                    End Try
                     If pkgIsReadyForRemoval Then
                         LogView.AppendText(CrLf & "Processing package removal...")
                         DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
@@ -1867,7 +1802,6 @@ Public Class ProgressPanel
                         Else
                             LogView.AppendText(CrLf & CrLf & " Error level : " & errCode)
                         End If
-                        LogView.AppendText(" Error level: " & errCode)
                         If PkgErrorText.RichTextBox1.Text = "" Then
                             If errCode.Length >= 8 Then
                                 PkgErrorText.RichTextBox1.AppendText("0x" & errCode)
@@ -1882,11 +1816,7 @@ Public Class ProgressPanel
                             End If
                         End If
                     Else
-                        If pkgRemovalState = "Not Present" Then
-                            LogView.AppendText(CrLf & "This package is not present on the mounted image. Skipping removal of this package...")
-                        Else
-                            LogView.AppendText(CrLf & "This package requires the image be online before removing it. Skipping removal of this package...")
-                        End If
+                        LogView.AppendText(CrLf & "This package can't be removed. Skipping removal of this package...")
                         pkgFailedRemovals += 1
                         Continue For
                     End If
@@ -1911,31 +1841,28 @@ Public Class ProgressPanel
                                        "Package " & (x + 1) & " of " & pkgRemovalCount)
                     CurrentPB.Value = x + 1
                     Directory.CreateDirectory(".\tempinfo")
-                    File.WriteAllText(".\bin\exthelpers\pkginfo.bat",
-                                      "@echo off" & CrLf &
-                                      "dism /English /image=" & Quote & MountDir & Quote & " /get-packageinfo /packagepath=" & pkgRemovalFiles(x) & " | findstr /c:" & Quote & "Package Identity" & Quote & " > .\tempinfo\pkgname" & CrLf &
-                                      "dism /English /image=" & Quote & MountDir & Quote & " /get-packageinfo /packagepath=" & pkgRemovalFiles(x) & " | findstr /c:" & Quote & "State" & Quote & " > .\tempinfo\pkgstate",
-                                      ASCII)
-                    If IsDebugged Then
-                        Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\pkginfo.bat").WaitForExit()
-                    End If
-                    Process.Start(".\bin\exthelpers\pkginfo.bat").WaitForExit()
-                    pkgRemovalName = My.Computer.FileSystem.ReadAllText(".\tempinfo\pkgname", ASCII).Replace("Package Identity : ", "").Trim()
-                    pkgRemovalState = My.Computer.FileSystem.ReadAllText(".\tempinfo\pkgstate", ASCII).Replace("State : ", "").Trim()
-                    LogView.AppendText(CrLf & CrLf &
-                                       "- Package name: " & pkgName)
-                    If pkgRemovalState = "Installed" Then
-                        LogView.AppendText(CrLf & "- Package state: installed")
-                    ElseIf pkgRemovalState = "Uninstall Pending" Then
-                        LogView.AppendText(CrLf & "- Package state: an uninstall is pending")
-                    ElseIf pkgRemovalState = "Install Pending" Then
-                        LogView.AppendText(CrLf & "- Package state: an install is pending")
-                    End If
-                    If pkgRemovalState = "Uninstall Pending" Or pkgRemovalState = "Install Pending" Or pkgRemovalState = "Not Present" Then
-                        pkgIsReadyForRemoval = False
-                    Else
-                        pkgIsReadyForRemoval = True
-                    End If
+                    Try
+                        DismApi.Initialize(DismLogLevel.LogErrors)
+                        Using imgSession As DismSession = DismApi.OpenOfflineSession(mntString)
+                            Dim pkgInfo As DismPackageInfo = DismApi.GetPackageInfoByPath(imgSession, pkgRemovalFiles(x))
+                            LogView.AppendText(CrLf & CrLf & _
+                                               "- Package name: " & pkgInfo.PackageName & CrLf)
+                            If pkgInfo.PackageState = DismPackageFeatureState.Installed Then
+                                LogView.AppendText("- Package state: installed" & CrLf)
+                            ElseIf pkgInfo.PackageState = DismPackageFeatureState.UninstallPending Then
+                                LogView.AppendText("- Package state: an uninstall is pending" & CrLf)
+                            ElseIf pkgInfo.PackageState = DismPackageFeatureState.InstallPending Then
+                                LogView.AppendText("- Package state: an install is pending" & CrLf)
+                            End If
+                            If pkgInfo.PackageState = DismPackageFeatureState.Installed Or pkgInfo.PackageState = DismPackageFeatureState.InstallPending Then
+                                pkgIsReadyForRemoval = True
+                            Else
+                                pkgIsReadyForRemoval = False
+                            End If
+                        End Using
+                    Finally
+                        DismApi.Shutdown()
+                    End Try
                     If pkgIsReadyForRemoval Then
                         LogView.AppendText(CrLf & "Processing package removal...")
                         DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
@@ -1974,11 +1901,7 @@ Public Class ProgressPanel
                             End If
                         End If
                     Else
-                        If pkgRemovalState = "Not Present" Then
-                            LogView.AppendText(CrLf & "This package is not present on the mounted image. Skipping removal of this package...")
-                        Else
-                            LogView.AppendText(CrLf & "This package requires the image be online before removing it. Skipping removal of this package...")
-                        End If
+                        LogView.AppendText(CrLf & "This package can't be removed. Skipping removal of this package...")
                         pkgFailedRemovals += 1
                         Continue For
                     End If
