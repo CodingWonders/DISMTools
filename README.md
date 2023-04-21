@@ -1,6 +1,7 @@
 # DISMTools
  
-![Product image](https://user-images.githubusercontent.com/101426328/219872612-e7a8a169-b699-4df0-8656-3f5dc87f95ca.png)
+![Product image](https://user-images.githubusercontent.com/101426328/233696501-a27a1e20-f489-4010-8f3c-f060fb808fd2.png)
+
 
 DISMTools is a front-end for DISM which lets you manage your Windows Imaging (WIM) files and a whole lot more.
 
@@ -13,7 +14,7 @@ DISMTools is a front-end for DISM which lets you manage your Windows Imaging (WI
 
 The following actions are supported by DISMTools:
 
-  > This program is **still in Alpha stages**, so not every possible action is implemented. Check the "Unsupported actions" for more details
+  > This program is **in beta stages**, so not every possible action is implemented. Check the "Unsupported actions" section for more details
 
 - Image management
   - WIM/SWM/ESD file application
@@ -25,23 +26,26 @@ The following actions are supported by DISMTools:
   - Image index switches
   - WIM -> ESD and viceversa conversion
   - SWM file merger
+  - Component cleanup
 - OS packages and features
   - Package addition and removal
   - Feature enablement and disablement
 - AppX package servicing
   - Application addition and removal
+- Capabilities
+  - Capability addition and removal
+- Drivers
+  - Driver addition and removal
 - Other
   - Get complete information of an image
   
 ## Unsupported actions
 
 - Getting any kind of information from packages or features (on demand)
-- Driver management
-- Capability (Features on Demand) management
 - Regional settings
 - Applying unattended answer files
 - Using the project's scratch directory
-- and more, it's still in Alpha stages
+- and more, it's in beta stages
 
 These actions will be supported on future releases. They aren't implemented yet because it takes time to create working implementations that don't conflict with the rest of the program
 
@@ -50,7 +54,8 @@ These actions will be supported on future releases. They aren't implemented yet 
 If you want to grab a copy straight from the source code, follow these instructions:
 
 1. You begin by either cloning the project or downloading a ZIP of the source code. Go to "Code", and select an option from there
-2. Open the solution in Visual Studio 2012 or later
+2. Prepare the NuGet packages by running `nugetpkgprep.bat` in the location you cloned the repository to
+3. Open the solution in Visual Studio 2012 or later
 
     > You will need to install the .NET Framework 4.8 Developer Pack
     
