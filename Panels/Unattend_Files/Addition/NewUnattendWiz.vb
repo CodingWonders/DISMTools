@@ -1125,9 +1125,27 @@ Public Class NewUnattendWiz
                             ComboBox2.Items.Add("Windows 11 Enterprise")
                     End Select
             End Select
+            If KeVersion.ProductMajorPart = 6 And KeVersion.ProductMinorPart = 2 Or KeVersion.ProductMinorPart = 3 Then
+                GroupBox6.Visible = True
+                PictureBox19.Location = New Point(133, 84)
+                Label78.Location = New Point(33, 189)
+                TextBox4.Location = New Point(34, 208)
+                Label79.Location = New Point(33, 234)
+                TextBox5.Location = New Point(34, 253)
+                Label80.Location = New Point(33, 281)
+            Else
+                GroupBox6.Visible = False
+                PictureBox19.Location = New Point(328, 84)
+                Label78.Location = New Point(228, 189)
+                TextBox4.Location = New Point(229, 208)
+                Label79.Location = New Point(228, 234)
+                TextBox5.Location = New Point(229, 253)
+                Label80.Location = New Point(228, 281)
+            End If
         Else
             Select Case ComboBox1.SelectedIndex
                 Case 0
+                    IsWindows8 = False
                     ComboBox2.Items.Add("Windows 7 Starter")
                     ComboBox2.Items.Add("Windows 7 Home Basic")
                     ComboBox2.Items.Add("Windows 7 Home Premium")
@@ -1147,6 +1165,7 @@ Public Class NewUnattendWiz
                     ComboBox2.Items.Add("Windows 7 Ultimate E")
                     ComboBox2.Items.Add("Windows 7 Enterprise E")
                 Case 1
+                    IsWindows8 = False
                     ComboBox2.Items.Add("Windows Server 2008 R2 Foundation")
                     ComboBox2.Items.Add("Windows Server 2008 R2 Standard")
                     ComboBox2.Items.Add("Windows Server 2008 R2 Web")
@@ -1157,6 +1176,7 @@ Public Class NewUnattendWiz
                     ComboBox2.Items.Add("Microsoft Hyper-V Server 2008 R2")
                     ComboBox2.Items.Add("Windows MultiPoint Server 2010")
                 Case 2
+                    IsWindows8 = True
                     ComboBox2.Items.Add("Windows 8")
                     ComboBox2.Items.Add("Windows RT 8")
                     ComboBox2.Items.Add("Windows 8 with Bing")
@@ -1168,6 +1188,7 @@ Public Class NewUnattendWiz
                     ComboBox2.Items.Add("Windows 8 Pro N")
                     ComboBox2.Items.Add("Windows 8 Enterprise N")
                 Case 3
+                    IsWindows8 = True
                     ComboBox2.Items.Add("Windows Server 2012 Foundation")
                     ComboBox2.Items.Add("Windows Server 2012 Standard")
                     ComboBox2.Items.Add("Windows Server 2012 Datacenter")
@@ -1177,6 +1198,7 @@ Public Class NewUnattendWiz
                     ComboBox2.Items.Add("Windows Server 2012 Standard Core")
                     ComboBox2.Items.Add("Windows Server 2012 Datacenter Core")
                 Case 4
+                    IsWindows8 = True
                     ComboBox2.Items.Add("Windows 8.1")
                     ComboBox2.Items.Add("Windows RT 8.1")
                     ComboBox2.Items.Add("Windows 8.1 with Bing")
@@ -1188,6 +1210,7 @@ Public Class NewUnattendWiz
                     ComboBox2.Items.Add("Windows 8.1 Pro N")
                     ComboBox2.Items.Add("Windows 8.1 Enterprise N")
                 Case 5
+                    IsWindows8 = True
                     ComboBox2.Items.Add("Windows Server 2012 R2 Essentials")
                     ComboBox2.Items.Add("Windows Server 2012 R2 Foundation")
                     ComboBox2.Items.Add("Windows Server 2012 R2 Standard")
@@ -1202,23 +1225,44 @@ Public Class NewUnattendWiz
                     ComboBox2.Items.Add("Windows Server 2012 R2 Storage Server Standard Core")
                     ComboBox2.Items.Add("Windows Server 2012 R2 Storage Server Workgroup Core")
                 Case 6
+                    IsWindows8 = False
                     ComboBox2.Items.Add("Windows 10 Home")
                     ComboBox2.Items.Add("Windows 10 Pro")
                     ComboBox2.Items.Add("Windows 10 Education")
                     ComboBox2.Items.Add("Windows 10 Enterprise")
                 Case 7
+                    IsWindows8 = False
                     ComboBox2.Items.Add("Windows 11 Home")
                     ComboBox2.Items.Add("Windows 11 Pro")
                     ComboBox2.Items.Add("Windows 11 Education")
                     ComboBox2.Items.Add("Windows 11 Enterprise")
                 Case 8
+                    IsWindows8 = False
                     ComboBox2.Items.Add("Windows Server 2016 Essentials")
                     ComboBox2.Items.Add("Windows Server 2016 Standard")
                     ComboBox2.Items.Add("Windows Server 2016 Datacenter")
                 Case 9
+                    IsWindows8 = False
                     ComboBox2.Items.Add("Windows Server 2019 Standard")
                     ComboBox2.Items.Add("Windows Server 2019 Datacenter")
             End Select
+            If IsWindows8 Then
+                GroupBox6.Visible = True
+                PictureBox19.Location = New Point(133, 84)
+                Label78.Location = New Point(33, 189)
+                TextBox4.Location = New Point(34, 208)
+                Label79.Location = New Point(33, 234)
+                TextBox5.Location = New Point(34, 253)
+                Label80.Location = New Point(33, 281)
+            Else
+                GroupBox6.Visible = False
+                PictureBox19.Location = New Point(328, 84)
+                Label78.Location = New Point(228, 189)
+                TextBox4.Location = New Point(229, 208)
+                Label79.Location = New Point(228, 234)
+                TextBox5.Location = New Point(229, 253)
+                Label80.Location = New Point(228, 281)
+            End If
         End If
         Thread.Sleep(2000)
         ExpressStatusLbl.Visible = False
