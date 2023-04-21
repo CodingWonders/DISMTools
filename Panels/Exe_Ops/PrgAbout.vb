@@ -46,6 +46,8 @@ Public Class PrgAbout
                         LinkLabel9.Text = "Visit website"
                         LinkLabel10.Text = "Visit website"
                         LinkLabel11.Text = "Microsoft, Kýnan Antos"
+                        LinkLabel12.Text = "Visit website"
+                        LinkLabel13.Text = "Visit website"
                         OK_Button.Text = "OK"
                     Case "ESN"
                         Text = "Acerca de este programa"
@@ -60,7 +62,7 @@ Public Class PrgAbout
                         Label9.Text = "wimlib-imagex (usado en el futuro)"
                         Label10.Text = "Documentación de ayuda"
                         Label11.Text = "Fuente de ayuda de comandos"
-                        Label12.Text = "Asistente de creación de archivos de respuesta desatendida"
+                        Label12.Text = "Creación de archivos de respuesta desatendida"
                         Label13.Text = "Scintilla.NET (paquete NuGet)"
                         Label15.Text = "Compilado el " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " por msbuild"
                         Label16.Text = "ManagedDism (paquete NuGet)"
@@ -78,6 +80,8 @@ Public Class PrgAbout
                         LinkLabel9.Text = "Visitar sitio"
                         LinkLabel10.Text = "Visitar sitio"
                         LinkLabel11.Text = "Microsoft, Kýnan Antos"
+                        LinkLabel12.Text = "Visitar sitio"
+                        LinkLabel13.Text = "Visitar sitio"
                         OK_Button.Text = "Aceptar"
                 End Select
             Case 1
@@ -111,6 +115,8 @@ Public Class PrgAbout
                 LinkLabel9.Text = "Visit website"
                 LinkLabel10.Text = "Visit website"
                 LinkLabel11.Text = "Microsoft, Kýnan Antos"
+                LinkLabel12.Text = "Visit website"
+                LinkLabel13.Text = "Visit website"
                 OK_Button.Text = "OK"
             Case 2
                 Text = "Acerca de este programa"
@@ -125,7 +131,7 @@ Public Class PrgAbout
                 Label9.Text = "wimlib-imagex (usado en el futuro)"
                 Label10.Text = "Documentación de ayuda"
                 Label11.Text = "Fuente de ayuda de comandos"
-                Label12.Text = "Asistente de creación de archivos de respuesta desatendida"
+                Label12.Text = "Creación de archivos de respuesta desatendida"
                 Label13.Text = "Scintilla.NET (paquete NuGet)"
                 Label15.Text = "Compilado el " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " por msbuild"
                 Label16.Text = "ManagedDism (paquete NuGet)"
@@ -143,6 +149,8 @@ Public Class PrgAbout
                 LinkLabel9.Text = "Visitar sitio"
                 LinkLabel10.Text = "Visitar sitio"
                 LinkLabel11.Text = "Microsoft, Kýnan Antos"
+                LinkLabel12.Text = "Visitar sitio"
+                LinkLabel13.Text = "Visitar sitio"
                 OK_Button.Text = "Aceptar"
         End Select
         RichTextBox1.Text = My.Resources.LicenseOverview
@@ -198,6 +206,14 @@ Public Class PrgAbout
 
     Private Sub LinkLabel11_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel11.LinkClicked
         Process.Start("https://web.archive.org/web/20210907191944/https://twitter.com/prsymatic/status/1435317646346522628")
+    End Sub
+
+    Private Sub LinkLabel12_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel12.LinkClicked
+        Process.Start("https://github.com/RobinPerris/DarkUI")
+    End Sub
+
+    Private Sub LinkLabel13_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel13.LinkClicked
+        Process.Start("https://github.com/DockPanelSuite/DockPanelSuite")
     End Sub
 
     Private Sub RichTextBox1_LinkClicked(sender As Object, e As LinkClickedEventArgs) Handles RichTextBox1.LinkClicked
