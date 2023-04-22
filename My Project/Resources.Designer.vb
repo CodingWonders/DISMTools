@@ -1607,15 +1607,22 @@ Namespace My.Resources
         
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
-        '''- Re-added exception control for Windows 8 hosts when getting AppX packages from an image
+        '''- Fixed an issue where project creation would fail after cancelling the background processes
+        '''- Fixed an issue where the program would use the old method of gathering image information on a newly created project
         '''
         '''New features
         '''
-        '''Drivers
-        '''- Introduced driver package management through simple, intuitive interfaces
+        '''Options
+        '''- You can now manipulate file associations in the Options dialog
         '''
-        '''Removed features
-        '''- Dropped compability with Windows 7 and Server 2008 R2 from the application manifest.
+        '''Packages
+        '''- Package manipulation operations now use the DISM API
+        '''
+        '''Unattended answer files
+        '''- The creation wizard now supports color modes
+        '''
+        '''Dependencies
+        '''- Added the DarkUI, DockPanelSuite an [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
