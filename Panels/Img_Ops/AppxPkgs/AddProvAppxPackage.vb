@@ -423,7 +423,7 @@ Public Class AddProvAppxPackage
     End Sub
 
     ''' <summary>
-    ''' DISMTools AppX header scanner component: version 0.2.2
+    ''' DISMTools AppX header scanner component: version 0.3
     ''' </summary>
     ''' <param name="IsFolder">Determines whether the given value for "Package" is a folder</param>
     ''' <param name="Package">The name of the packed or unpacked AppX file. It may be a file containing the full structure, or a folder containing all AppX files</param>
