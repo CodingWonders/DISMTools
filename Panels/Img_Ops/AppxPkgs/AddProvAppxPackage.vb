@@ -1061,6 +1061,115 @@ Public Class AddProvAppxPackage
 
             End If
         End If
+        ' Detect ListView items
+        If ListView1.Items.Count > 0 Then
+            ' Iterate through the ListView items until we can find an entry with properties similar to those currently obtained
+            For Each Item As ListViewItem In ListView1.Items
+                If Item.SubItems(2).Text = currentAppxName And Item.SubItems(3).Text = currentAppxPublisher And Item.SubItems(4).Text = currentAppxVersion Then
+                    ' Cancel everything
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    MsgBox("The package you want to add is already added to the list, and all its properties match with the properties of the package specified. We won't add the specified package", vbOKOnly + vbCritical, Label1.Text)
+                                Case "ESN"
+                                    MsgBox("El paquete que desea añadir ya está añadido a la lista, y todas sus propiedades coinciden con las propiedades del paquete especificado. No añadiremos el paquete especificado", vbOKOnly + vbCritical, Label1.Text)
+                            End Select
+                        Case 1
+                            MsgBox("The package you want to add is already added to the list, and all its properties match with the properties of the package specified. We won't add the specified package", vbOKOnly + vbCritical, Label1.Text)
+                        Case 2
+                            MsgBox("El paquete que desea añadir ya está añadido a la lista, y todas sus propiedades coinciden con las propiedades del paquete especificado. No añadiremos el paquete especificado", vbOKOnly + vbCritical, Label1.Text)
+                    End Select
+                    If Directory.Exists(".\appxscan") Then
+                        Directory.Delete(".\appxscan", True)
+                    End If
+                    Exit Sub
+                ElseIf Item.SubItems(2).Text = currentAppxName And Not Item.SubItems(3).Text = currentAppxPublisher Then
+                    Dim msg As String = ""
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    msg = "The package you want to add is already added to the list, but it comes from a different developer or publisher." & CrLf & CrLf & "Do note that applications redistributed by third-party publishers or developers can cause damage to the Windows image." & CrLf & CrLf & "Do you want to replace the entry in the list with the package specified?"
+                                Case "ESN"
+                                    msg = "El paquete que desea añadir ya está añadido a la lista, pero proviene de un desarrollador o publicador distinto." & CrLf & CrLf & "Dese cuenta de que las aplicaciones redistribuidas por publicadores o desarrolladores de terceros pueden dañar la imagen de Windows." & CrLf & CrLf & "¿Desea reemplazar la entrada en la lista por el paquete especificado?"
+                            End Select
+                        Case 1
+                            msg = "The package you want to add is already added to the list, but it comes from a different developer or publisher." & CrLf & CrLf & "Do note that applications redistributed by third-party publishers or developers can cause damage to the Windows image." & CrLf & CrLf & "Do you want to replace the entry in the list with the package specified?"
+                        Case 2
+                            msg = "El paquete que desea añadir ya está añadido a la lista, pero proviene de un desarrollador o publicador distinto." & CrLf & CrLf & "Dese cuenta de que las aplicaciones redistribuidas por publicadores o desarrolladores de terceros pueden dañar la imagen de Windows." & CrLf & CrLf & "¿Desea reemplazar la entrada en la lista por el paquete especificado?"
+                    End Select
+                    If MsgBox(msg, vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.Yes Then
+                        ' Set properties
+                        Item.SubItems(0).Text = Package
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        Item.SubItems(1).Text = If(IsFolder, "Unpacked", "Packed")
+                                    Case "ESN"
+                                        Item.SubItems(1).Text = If(IsFolder, "Desempaquetado", "Empaquetado")
+                                End Select
+                            Case 1
+                                Item.SubItems(1).Text = If(IsFolder, "Unpacked", "Packed")
+                            Case 2
+                                Item.SubItems(1).Text = If(IsFolder, "Desempaquetado", "Empaquetado")
+                        End Select
+                        Item.SubItems(2).Text = currentAppxName
+                        Item.SubItems(3).Text = currentAppxPublisher
+                        Item.SubItems(4).Text = currentAppxVersion
+                    Else
+                        If Directory.Exists(".\appxscan") Then
+                            Directory.Delete(".\appxscan", True)
+                        End If
+                    End If
+                    Exit Sub
+                ElseIf Item.SubItems(2).Text = currentAppxName And Not Item.SubItems(4).Text = currentAppxVersion Then
+                    ' This is a rudimentary check which will run even if specifying an older version. It will be improved, so expect the following enhancements:
+                    ' - Cast the version strings to version objects
+                    ' - Compare the version objects part by part
+                    Dim msg As String = ""
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    msg = "The package you want to add is already added to the list, but it contains a newer version." & CrLf & CrLf & "Do you want to replace the entry in the list with the updated package specified?"
+                                Case "ESN"
+                                    msg = "El paquete que desea añadir ya está añadido a la lista, pero contiene una nueva versión." & CrLf & CrLf & "¿Desea reemplazar la entrada en la lista por el paquete actualizado especificado?"
+                            End Select
+                        Case 1
+                            msg = "The package you want to add is already added to the list, but it contains a newer version." & CrLf & CrLf & "Do you want to replace the entry in the list with the updated package specified?"
+                        Case 2
+                            msg = "El paquete que desea añadir ya está añadido a la lista, pero contiene una nueva versión." & CrLf & CrLf & "¿Desea reemplazar la entrada en la lista por el paquete actualizado especificado?"
+                    End Select
+                    If MsgBox(msg, vbYesNo + vbQuestion, Label1.Text) = MsgBoxResult.Yes Then
+                        ' Set properties
+                        Item.SubItems(0).Text = Package
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        Item.SubItems(1).Text = If(IsFolder, "Unpacked", "Packed")
+                                    Case "ESN"
+                                        Item.SubItems(1).Text = If(IsFolder, "Desempaquetado", "Empaquetado")
+                                End Select
+                            Case 1
+                                Item.SubItems(1).Text = If(IsFolder, "Unpacked", "Packed")
+                            Case 2
+                                Item.SubItems(1).Text = If(IsFolder, "Desempaquetado", "Empaquetado")
+                        End Select
+                        Item.SubItems(2).Text = currentAppxName
+                        Item.SubItems(3).Text = currentAppxPublisher
+                        Item.SubItems(4).Text = currentAppxVersion
+                    Else
+                        If Directory.Exists(".\appxscan") Then
+                            Directory.Delete(".\appxscan", True)
+                        End If
+                    End If
+                    Exit Sub
+                End If
+            Next
+        End If
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
