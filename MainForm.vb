@@ -7817,4 +7817,34 @@ Public Class MainForm
     Private Sub ActionEditorToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ActionEditorToolStripMenuItem.Click
         Actions_MainForm.Show()
     End Sub
+
+    ''' <summary>
+    ''' Detects the source for optional feature installs and component repairs from the "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Servicing" registry key
+    ''' </summary>
+    ''' <returns>Returns GPOSource as the aforementioned source if this function runs correctly. Otherwise, it returns Nothing</returns>
+    ''' <remarks>"LocalSourcePath" is updated every time a source is specified in the group policy editor. "GPOSource" pulls the value from "LocalSourcePath", which can be a local folder, a remote server or a Windows image (if it begins with "wim:\")</remarks>
+    Function GetSrcFromGPO() As String
+        Try
+            Dim GPOSourceRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Servicing", False)
+            Dim GPOSource As String = GPOSourceRk.GetValue("LocalSourcePath").ToString()
+            GPOSourceRk.Close()
+            Return GPOSource
+        Catch ex As Exception
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MsgBox("Could not gather source from group policy. Reason:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detect from group policy")
+                        Case "ESN"
+                            MsgBox("No se pudo recopilar el origen de las políticas de grupo. Razón:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detectar políticas de grupo")
+                    End Select
+                Case 1
+                    MsgBox("Could not gather source from group policy. Reason:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detect from group policy")
+                Case 2
+                    MsgBox("No se pudo recopilar el origen de las políticas de grupo. Razón:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detectar políticas de grupo")
+            End Select
+            Return Nothing
+        End Try
+        Return Nothing
+    End Function
 End Class

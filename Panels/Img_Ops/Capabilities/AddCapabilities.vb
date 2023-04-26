@@ -159,7 +159,7 @@ Public Class AddCapabilities
                         Button1.Text = "Examinar..."
                         Button2.Text = "Seleccionar todas"
                         Button3.Text = "Seleccionar ninguna"
-                        Button4.Text = "Determinar de políticas de grupo"
+                        Button4.Text = "Detectar políticas de grupo"
                         GroupBox1.Text = "Funcionalidades"
                         GroupBox2.Text = "Opciones"
                         CheckBox1.Text = "Especificar un origen diferente para la instalación de funcionalidades"
@@ -194,7 +194,7 @@ Public Class AddCapabilities
                 Button1.Text = "Examinar..."
                 Button2.Text = "Seleccionar todas"
                 Button3.Text = "Seleccionar ninguna"
-                Button4.Text = "Determinar de políticas de grupo"
+                Button4.Text = "Detectar políticas de grupo"
                 GroupBox1.Text = "Funcionalidades"
                 GroupBox2.Text = "Opciones"
                 CheckBox1.Text = "Especificar un origen diferente para la instalación de funcionalidades"
@@ -261,36 +261,15 @@ Public Class AddCapabilities
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
-        Try
-            ' It is actually getting stuff from the registry, as changes in this group policy add/edit a registry key. Change this if it's not accurate,
-            ' as the documentation doesn't specify which group policy is detected
-            Dim capGPOSourceRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Servicing", False)
-            Dim capGPOSource As String = capGPOSourceRk.GetValue("LocalSourcePath").ToString()
-            capGPOSourceRk.Close()
-            RichTextBox1.Text = capGPOSource
-            If capGPOSource.StartsWith("wim:\", StringComparison.OrdinalIgnoreCase) Then
-                TextBoxSourcePanel.Visible = False
-                WimFileSourcePanel.Visible = True
-                Dim parts() As String = capGPOSource.Split(":")
-                Label3.Text = parts(parts.Length - 1)
-                Label5.Text = parts(1).Replace("\", "").Trim() & ":" & parts(2)
-                If Label5.Text.EndsWith(":" & parts(parts.Length - 1)) Then Label5.Text = Label5.Text.Replace(":" & parts(parts.Length - 1), "").Trim()
-            End If
-        Catch ex As Exception
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
-                            MsgBox("Could not gather source from group policy. Reason:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, Label1.Text)
-                        Case "ESN"
-                            MsgBox("No se pudo recopilar el origen de las políticas de grupo. Razón:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, Label1.Text)
-                    End Select
-                Case 1
-                    MsgBox("Could not gather source from group policy. Reason:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, Label1.Text)
-                Case 2
-                    MsgBox("No se pudo recopilar el origen de las políticas de grupo. Razón:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, Label1.Text)
-            End Select
-        End Try
+        RichTextBox1.Text = MainForm.GetSrcFromGPO()
+        If RichTextBox1.Text.StartsWith("wim:\", StringComparison.OrdinalIgnoreCase) Then
+            TextBoxSourcePanel.Visible = False
+            WimFileSourcePanel.Visible = True
+            Dim parts() As String = RichTextBox1.Text.Split(":")
+            Label3.Text = parts(parts.Length - 1)
+            Label5.Text = parts(1).Replace("\", "").Trim() & ":" & parts(2)
+            If Label5.Text.EndsWith(":" & parts(parts.Length - 1)) Then Label5.Text = Label5.Text.Replace(":" & parts(parts.Length - 1), "").Trim()
+        End If
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
