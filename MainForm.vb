@@ -3508,6 +3508,7 @@ Public Class MainForm
                     Label1.Text = "Name:"
                     Label2.Text = "Location:"
                     Label4.Text = "Images mounted?"
+                    Label5.Text = If(IsImageMounted, "Yes", "No")
                     LinkLabel1.Text = "Click here to mount an image"
                     Label23.Text = "No image has been mounted"
                     LinkLabel2.Text = "You need to mount an image in order to view its information here. Click here to mount an image."
@@ -3761,6 +3762,7 @@ Public Class MainForm
                     Label1.Text = "Nombre:"
                     Label2.Text = "Ubicación:"
                     Label4.Text = "¿Hay imágenes montadas?"
+                    Label5.Text = If(IsImageMounted, "Sí", "No")
                     LinkLabel1.Text = "Haga clic aquí para montar una imagen"
                     Label23.Text = "No se ha montado una imagen"
                     LinkLabel2.Text = "Necesita montar una imagen para ver su información aquí. Haga clic aquí para montar una imagen."
@@ -4019,6 +4021,7 @@ Public Class MainForm
                 Label1.Text = "Name:"
                 Label2.Text = "Location:"
                 Label4.Text = "Images mounted?"
+                Label5.Text = If(IsImageMounted, "Yes", "No")
                 LinkLabel1.Text = "Click here to mount an image"
                 Label23.Text = "No image has been mounted"
                 LinkLabel2.Text = "You need to mount an image in order to view its information here. Click here to mount an image."
@@ -4272,6 +4275,7 @@ Public Class MainForm
                 Label1.Text = "Nombre:"
                 Label2.Text = "Ubicación:"
                 Label4.Text = "¿Hay imágenes montadas?"
+                Label5.Text = If(IsImageMounted, "Sí", "No")
                 LinkLabel1.Text = "Haga clic aquí para montar una imagen"
                 Label23.Text = "No se ha montado una imagen"
                 LinkLabel2.Text = "Necesita montar una imagen para ver su información aquí. Haga clic aquí para montar una imagen."
