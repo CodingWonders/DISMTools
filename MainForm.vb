@@ -221,7 +221,6 @@ Public Class MainForm
         Control.CheckForIllegalCrossThreadCalls = False
         BranchTSMI.Text = dtBranch
         If Debugger.IsAttached Then
-            expBackgroundProcesses = True
             BranchTSMI.Visible = True
             Text &= " (debug mode)"
         End If
