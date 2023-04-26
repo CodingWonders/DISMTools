@@ -7005,6 +7005,9 @@ Public Class MainForm
     End Sub
 
     Private Sub MainForm_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged
+        If Visible And ColorMode = 0 Then
+            ChangePrgColors(0)
+        End If
         If GroupBox1.Left < 0 Then
             SplitPanels.SplitterDistance = 264
         End If
