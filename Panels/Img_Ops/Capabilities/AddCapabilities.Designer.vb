@@ -290,7 +290,7 @@ Partial Class AddCapabilities
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(175, 23)
         Me.Button4.TabIndex = 9
-        Me.Button4.Text = "Determine from group policy"
+        Me.Button4.Text = "Detect from group policy"
         Me.Button4.UseVisualStyleBackColor = True
         '
         'Panel1
