@@ -17,7 +17,7 @@ Public Class ImgCleanup
                 ProgressPanel.DeferCleanupOps = If(CheckBox2.Checked And CheckBox3.Checked, True, False)
             Case 6
                 ProgressPanel.UseCompRepairSource = CheckBox4.Checked = True
-                If CheckBox4.Checked And RichTextBox1.Text = "" Or Not File.Exists(RichTextBox1.Text) Then
+                If CheckBox4.Checked And RichTextBox1.Text = "" Then
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -79,7 +79,7 @@ Public Class ImgCleanup
                         ComboBox1.Items.AddRange(Tasks)
                         HealthRestoreSourceOFD.Title = "Specify the source from which we will restore the component store health"
                         Button1.Text = "Browse..."
-                        Button2.Text = "Determine from group policy"
+                        Button2.Text = "Detect from group policy"
                         CheckBox1.Text = "Hide service pack from the Installed Updates list"
                         CheckBox2.Text = "Reset base of superseded components"
                         CheckBox3.Text = "Defer long-running cleanup operations"
@@ -144,7 +144,7 @@ Public Class ImgCleanup
                 ComboBox1.Items.AddRange(Tasks)
                 HealthRestoreSourceOFD.Title = "Specify the source from which we will restore the component store health"
                 Button1.Text = "Browse..."
-                Button2.Text = "Determine from group policy"
+                Button2.Text = "Detect from group policy"
                 CheckBox1.Text = "Hide service pack from the Installed Updates list"
                 CheckBox2.Text = "Reset base of superseded components"
                 CheckBox3.Text = "Defer long-running cleanup operations"
@@ -201,6 +201,7 @@ Public Class ImgCleanup
         RichTextBox1.BackColor = BackColor
         RichTextBox1.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
+        PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.image_dark, My.Resources.image_light)
         ' Determine when the last base reset was run
         Using reg As New Process
             reg.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe"
@@ -451,9 +452,17 @@ Public Class ImgCleanup
             TextBoxSourcePanel.Visible = False
             WimFileSourcePanel.Visible = True
             Dim parts() As String = RichTextBox1.Text.Split(":")
-            Label13.Text = parts(parts.Length - 1)
-            Label14.Text = parts(1).Replace("\", "").Trim() & ":" & parts(2)
-            If Label5.Text.EndsWith(":" & parts(parts.Length - 1)) Then Label5.Text = Label5.Text.Replace(":" & parts(parts.Length - 1), "").Trim()
+            Label14.Text = parts(parts.Length - 1)
+            Label13.Text = parts(1).Replace("\", "").Trim() & ":" & parts(2)
+            If Label13.Text.EndsWith(":" & parts(parts.Length - 1)) Then Label13.Text = Label13.Text.Replace(":" & parts(parts.Length - 1), "").Trim()
+        Else
+            TextBoxSourcePanel.Visible = True
+            WimFileSourcePanel.Visible = False
         End If
+    End Sub
+
+    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+        TextBoxSourcePanel.Visible = True
+        WimFileSourcePanel.Visible = False
     End Sub
 End Class

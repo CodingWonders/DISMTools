@@ -142,7 +142,7 @@ Public Class AddCapabilities
                         Button1.Text = "Browse..."
                         Button2.Text = "Select all"
                         Button3.Text = "Select none"
-                        Button4.Text = "Determine from group policy"
+                        Button4.Text = "Detect from group policy"
                         GroupBox1.Text = "Capabilities"
                         GroupBox2.Text = "Options"
                         CheckBox1.Text = "Specify different source for capability installs"
@@ -177,7 +177,7 @@ Public Class AddCapabilities
                 Button1.Text = "Browse..."
                 Button2.Text = "Select all"
                 Button3.Text = "Select none"
-                Button4.Text = "Determine from group policy"
+                Button4.Text = "Detect from group policy"
                 GroupBox1.Text = "Capabilities"
                 GroupBox2.Text = "Options"
                 CheckBox1.Text = "Specify different source for capability installs"
@@ -269,6 +269,9 @@ Public Class AddCapabilities
             Label3.Text = parts(parts.Length - 1)
             Label5.Text = parts(1).Replace("\", "").Trim() & ":" & parts(2)
             If Label5.Text.EndsWith(":" & parts(parts.Length - 1)) Then Label5.Text = Label5.Text.Replace(":" & parts(parts.Length - 1), "").Trim()
+        Else
+            TextBoxSourcePanel.Visible = True
+            WimFileSourcePanel.Visible = False
         End If
     End Sub
 
@@ -289,5 +292,10 @@ Public Class AddCapabilities
         If FolderBrowserDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
             RichTextBox1.Text = FolderBrowserDialog1.SelectedPath
         End If
+    End Sub
+
+    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+        TextBoxSourcePanel.Visible = True
+        WimFileSourcePanel.Visible = False
     End Sub
 End Class
