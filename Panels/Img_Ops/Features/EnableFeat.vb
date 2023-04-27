@@ -39,28 +39,28 @@ Public Class EnableFeat
             End Try
             For x = 0 To featEnablementCount - 1
                 If ListView1.CheckedItems(x).SubItems(1).Text = "Removed" Then
-                    If CheckBox2.Checked And TextBox2.Text = "" Or Not Directory.Exists(TextBox2.Text) Then
+                    If CheckBox2.Checked And RichTextBox1.Text = "" Or Not Directory.Exists(RichTextBox1.Text) Then
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                     Case "ENG"
-                                        If MsgBox("Some features in this image require specifying a source for them to be enabled. The specified source is not valid for this operation." & CrLf & CrLf & If(TextBox2.Text = "", "Please specify a valid source and try again.", "Please make sure the source exists in the file system and try again."), vbOKOnly + vbCritical, "Enable features") = MsgBoxResult.Ok Then
+                                        If MsgBox("Some features in this image require specifying a source for them to be enabled. The specified source is not valid for this operation." & CrLf & CrLf & If(RichTextBox1.Text = "", "Please specify a valid source and try again.", "Please make sure the source exists in the file system and try again."), vbOKOnly + vbCritical, "Enable features") = MsgBoxResult.Ok Then
                                             CheckBox2.Checked = True
                                             Button2.PerformClick()
                                         End If
                                     Case "ESN"
-                                        If MsgBox("Algunas características en esta imagen requieren especificar un origen para ser habilitadas. El origen especificado no es válido para esta operación" & CrLf & CrLf & If(TextBox2.Text = "", "Especifique un origen válido e inténtelo de nuevo.", "Asegúrese de que el origen exista en el sistema de archivos e inténtelo de nuevo."), vbOKOnly + vbCritical, "Habilitar características") = MsgBoxResult.Ok Then
+                                        If MsgBox("Algunas características en esta imagen requieren especificar un origen para ser habilitadas. El origen especificado no es válido para esta operación" & CrLf & CrLf & If(RichTextBox1.Text = "", "Especifique un origen válido e inténtelo de nuevo.", "Asegúrese de que el origen exista en el sistema de archivos e inténtelo de nuevo."), vbOKOnly + vbCritical, "Habilitar características") = MsgBoxResult.Ok Then
                                             CheckBox2.Checked = True
                                             Button2.PerformClick()
                                         End If
                                 End Select
                             Case 1
-                                If MsgBox("Some features in this image require specifying a source for them to be enabled. The specified source is not valid for this operation." & CrLf & CrLf & If(TextBox2.Text = "", "Please specify a valid source and try again.", "Please make sure the source exists in the file system and try again."), vbOKOnly + vbCritical, "Enable features") = MsgBoxResult.Ok Then
+                                If MsgBox("Some features in this image require specifying a source for them to be enabled. The specified source is not valid for this operation." & CrLf & CrLf & If(RichTextBox1.Text = "", "Please specify a valid source and try again.", "Please make sure the source exists in the file system and try again."), vbOKOnly + vbCritical, "Enable features") = MsgBoxResult.Ok Then
                                     CheckBox2.Checked = True
                                     Button2.PerformClick()
                                 End If
                             Case 2
-                                If MsgBox("Algunas características en esta imagen requieren especificar un origen para ser habilitadas. El origen especificado no es válido para esta operación" & CrLf & CrLf & If(TextBox2.Text = "", "Especifique un origen válido e inténtelo de nuevo.", "Asegúrese de que el origen exista en el sistema de archivos e inténtelo de nuevo."), vbOKOnly + vbCritical, "Habilitar características") = MsgBoxResult.Ok Then
+                                If MsgBox("Algunas características en esta imagen requieren especificar un origen para ser habilitadas. El origen especificado no es válido para esta operación" & CrLf & CrLf & If(RichTextBox1.Text = "", "Especifique un origen válido e inténtelo de nuevo.", "Asegúrese de que el origen exista en el sistema de archivos e inténtelo de nuevo."), vbOKOnly + vbCritical, "Habilitar características") = MsgBoxResult.Ok Then
                                     CheckBox2.Checked = True
                                     Button2.PerformClick()
                                 End If
@@ -81,7 +81,7 @@ Public Class EnableFeat
             End If
             If CheckBox2.Checked Then
                 ProgressPanel.featisSourceSpecified = True
-                If TextBox2.Text = "" Or Not Directory.Exists(TextBox2.Text) Then
+                If RichTextBox1.Text = "" Or Not Directory.Exists(RichTextBox1.Text) Then
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -97,7 +97,7 @@ Public Class EnableFeat
                     End Select
                     Exit Sub
                 Else
-                    ProgressPanel.featSource = TextBox2.Text
+                    ProgressPanel.featSource = RichTextBox1.Text
                 End If
             Else
                 ProgressPanel.featisSourceSpecified = True
@@ -145,6 +145,7 @@ Public Class EnableFeat
                         Label4.Text = "Feature source:"
                         Button1.Text = "Lookup..."
                         Button2.Text = "Browse..."
+                        Button3.Text = "Detect from group policy"
                         Cancel_Button.Text = "Cancel"
                         OK_Button.Text = "OK"
                         GroupBox1.Text = "Features"
@@ -164,6 +165,7 @@ Public Class EnableFeat
                         Label4.Text = "Origen:"
                         Button1.Text = "Consultar"
                         Button2.Text = "Examinar..."
+                        Button3.Text = "Detectar políticas de grupo"
                         Cancel_Button.Text = "Cancelar"
                         OK_Button.Text = "Aceptar"
                         GroupBox1.Text = "Características"
@@ -184,6 +186,7 @@ Public Class EnableFeat
                 Label4.Text = "Feature source:"
                 Button1.Text = "Lookup..."
                 Button2.Text = "Browse..."
+                Button3.Text = "Detect from group policy"
                 Cancel_Button.Text = "Cancel"
                 OK_Button.Text = "OK"
                 GroupBox1.Text = "Features"
@@ -203,6 +206,7 @@ Public Class EnableFeat
                 Label4.Text = "Origen:"
                 Button1.Text = "Consultar"
                 Button2.Text = "Examinar..."
+                Button3.Text = "Detectar políticas de grupo"
                 Cancel_Button.Text = "Cancelar"
                 OK_Button.Text = "Aceptar"
                 GroupBox1.Text = "Características"
@@ -224,7 +228,7 @@ Public Class EnableFeat
             GroupBox2.ForeColor = Color.White
             ListView1.BackColor = Color.FromArgb(31, 31, 31)
             TextBox1.BackColor = Color.FromArgb(31, 31, 31)
-            TextBox2.BackColor = Color.FromArgb(31, 31, 31)
+            RichTextBox1.BackColor = Color.FromArgb(31, 31, 31)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Win10Title.BackColor = Color.White
             BackColor = Color.FromArgb(238, 238, 242)
@@ -233,11 +237,12 @@ Public Class EnableFeat
             GroupBox2.ForeColor = Color.Black
             ListView1.BackColor = Color.FromArgb(238, 238, 242)
             TextBox1.BackColor = Color.FromArgb(238, 238, 242)
-            TextBox2.BackColor = Color.FromArgb(238, 238, 242)
+            RichTextBox1.BackColor = Color.FromArgb(238, 238, 242)
         End If
         ListView1.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
-        TextBox2.ForeColor = ForeColor
+        RichTextBox1.ForeColor = ForeColor
+        PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.image_dark, My.Resources.image_light)
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True
@@ -268,15 +273,10 @@ Public Class EnableFeat
     End Sub
 
     Private Sub CheckBox2_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox2.CheckedChanged
-        If CheckBox2.Checked Then
-            Label4.Enabled = True
-            Button2.Enabled = True
-            TextBox2.Enabled = True
-        Else
-            Label4.Enabled = False
-            Button2.Enabled = False
-            TextBox2.Enabled = False
-        End If
+        Label4.Enabled = CheckBox2.Checked = True
+        Button2.Enabled = CheckBox2.Checked = True
+        RichTextBox1.Enabled = CheckBox2.Checked = True
+        Button3.Enabled = CheckBox2.Checked = True
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -286,7 +286,27 @@ Public Class EnableFeat
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         If FolderBrowserDialog1.ShowDialog() = Windows.Forms.DialogResult.OK And FolderBrowserDialog1.SelectedPath <> "" Then
-            TextBox2.Text = FolderBrowserDialog1.SelectedPath
+            RichTextBox1.Text = FolderBrowserDialog1.SelectedPath
         End If
+    End Sub
+
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        RichTextBox1.Text = MainForm.GetSrcFromGPO()
+        If RichTextBox1.Text.StartsWith("wim:\", StringComparison.OrdinalIgnoreCase) Then
+            TextBoxSourcePanel.Visible = False
+            WimFileSourcePanel.Visible = True
+            Dim parts() As String = RichTextBox1.Text.Split(":")
+            Label6.Text = parts(parts.Length - 1)
+            Label5.Text = parts(1).Replace("\", "").Trim() & ":" & parts(2)
+            If Label5.Text.EndsWith(":" & parts(parts.Length - 1)) Then Label5.Text = Label5.Text.Replace(":" & parts(parts.Length - 1), "").Trim()
+        Else
+            TextBoxSourcePanel.Visible = True
+            WimFileSourcePanel.Visible = False
+        End If
+    End Sub
+
+    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+        TextBoxSourcePanel.Visible = True
+        WimFileSourcePanel.Visible = False
     End Sub
 End Class
