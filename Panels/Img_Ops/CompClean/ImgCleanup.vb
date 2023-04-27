@@ -17,23 +17,23 @@ Public Class ImgCleanup
                 ProgressPanel.DeferCleanupOps = If(CheckBox2.Checked And CheckBox3.Checked, True, False)
             Case 6
                 ProgressPanel.UseCompRepairSource = CheckBox4.Checked = True
-                If CheckBox4.Checked And TextBox1.Text = "" Or Not File.Exists(TextBox1.Text) Then
+                If CheckBox4.Checked And RichTextBox1.Text = "" Or Not File.Exists(RichTextBox1.Text) Then
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                 Case "ENG"
-                                    MsgBox("No valid source has been provided for component store repair." & CrLf & CrLf & If(TextBox1.Text = "", "Please provide a source and try again.", "Please make sure the specified source exists in the file system and try again."), vbOKOnly + vbCritical, "Image cleanup")
+                                    MsgBox("No valid source has been provided for component store repair." & CrLf & CrLf & If(RichTextBox1.Text = "", "Please provide a source and try again.", "Please make sure the specified source exists in the file system and try again."), vbOKOnly + vbCritical, "Image cleanup")
                                 Case "ESN"
-                                    MsgBox("No se ha proporcionado un origen válido para la reparación del almacén de componentes." & CrLf & CrLf & If(TextBox1.Text = "", "Proporcione un origen e inténtelo de nuevo", "Asegúrese de que el origen especificado exista en el sistema de archivos e inténtelo de nuevo."), vbOKOnly + vbCritical, "Limpieza de imagen")
+                                    MsgBox("No se ha proporcionado un origen válido para la reparación del almacén de componentes." & CrLf & CrLf & If(RichTextBox1.Text = "", "Proporcione un origen e inténtelo de nuevo", "Asegúrese de que el origen especificado exista en el sistema de archivos e inténtelo de nuevo."), vbOKOnly + vbCritical, "Limpieza de imagen")
                             End Select
                         Case 1
-                            MsgBox("No valid source has been provided for component store repair." & CrLf & CrLf & If(TextBox1.Text = "", "Please provide a source and try again.", "Please make sure the specified source exists in the file system and try again."), vbOKOnly + vbCritical, "Image cleanup")
+                            MsgBox("No valid source has been provided for component store repair." & CrLf & CrLf & If(RichTextBox1.Text = "", "Please provide a source and try again.", "Please make sure the specified source exists in the file system and try again."), vbOKOnly + vbCritical, "Image cleanup")
                         Case 2
-                            MsgBox("No se ha proporcionado un origen válido para la reparación del almacén de componentes." & CrLf & CrLf & If(TextBox1.Text = "", "Proporcione un origen e inténtelo de nuevo", "Asegúrese de que el origen especificado exista en el sistema de archivos e inténtelo de nuevo."), vbOKOnly + vbCritical, "Limpieza de imagen")
+                            MsgBox("No se ha proporcionado un origen válido para la reparación del almacén de componentes." & CrLf & CrLf & If(RichTextBox1.Text = "", "Proporcione un origen e inténtelo de nuevo", "Asegúrese de que el origen especificado exista en el sistema de archivos e inténtelo de nuevo."), vbOKOnly + vbCritical, "Limpieza de imagen")
                     End Select
                     Exit Sub
                 End If
-                ProgressPanel.ComponentRepairSource = TextBox1.Text
+                ProgressPanel.ComponentRepairSource = RichTextBox1.Text
                 ProgressPanel.LimitWUAccess = CheckBox5.Checked = True
         End Select
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
@@ -79,6 +79,7 @@ Public Class ImgCleanup
                         ComboBox1.Items.AddRange(Tasks)
                         HealthRestoreSourceOFD.Title = "Specify the source from which we will restore the component store health"
                         Button1.Text = "Browse..."
+                        Button2.Text = "Determine from group policy"
                         CheckBox1.Text = "Hide service pack from the Installed Updates list"
                         CheckBox2.Text = "Reset base of superseded components"
                         CheckBox3.Text = "Defer long-running cleanup operations"
@@ -110,6 +111,7 @@ Public Class ImgCleanup
                         ComboBox1.Items.AddRange(Tasks)
                         HealthRestoreSourceOFD.Title = "Especifique el origen desde donde restauraremos la salud del almacén de componentes"
                         Button1.Text = "Examinar..."
+                        Button2.Text = "Detectar políticas de grupo"
                         CheckBox1.Text = "Ocultar Service Pack del listado de Actualizaciones instaladas"
                         CheckBox2.Text = "Restablecer la base de componentes sustituidos"
                         CheckBox3.Text = "Diferir operaciones largas de limpieza"
@@ -142,6 +144,7 @@ Public Class ImgCleanup
                 ComboBox1.Items.AddRange(Tasks)
                 HealthRestoreSourceOFD.Title = "Specify the source from which we will restore the component store health"
                 Button1.Text = "Browse..."
+                Button2.Text = "Determine from group policy"
                 CheckBox1.Text = "Hide service pack from the Installed Updates list"
                 CheckBox2.Text = "Reset base of superseded components"
                 CheckBox3.Text = "Defer long-running cleanup operations"
@@ -173,6 +176,7 @@ Public Class ImgCleanup
                 ComboBox1.Items.AddRange(Tasks)
                 HealthRestoreSourceOFD.Title = "Especifique el origen desde donde restauraremos la salud del almacén de componentes"
                 Button1.Text = "Examinar..."
+                Button2.Text = "Detectar políticas de grupo"
                 CheckBox1.Text = "Ocultar Service Pack del listado de Actualizaciones instaladas"
                 CheckBox2.Text = "Restablecer la base de componentes sustituidos"
                 CheckBox3.Text = "Diferir operaciones largas de limpieza"
@@ -194,8 +198,8 @@ Public Class ImgCleanup
         End If
         ComboBox1.BackColor = BackColor
         ComboBox1.ForeColor = ForeColor
-        TextBox1.BackColor = BackColor
-        TextBox1.ForeColor = ForeColor
+        RichTextBox1.BackColor = BackColor
+        RichTextBox1.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
         ' Determine when the last base reset was run
         Using reg As New Process
@@ -428,8 +432,9 @@ Public Class ImgCleanup
 
     Private Sub CheckBox4_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox4.CheckedChanged
         Label11.Enabled = CheckBox4.Checked = True
-        TextBox1.Enabled = CheckBox4.Checked = True
+        RichTextBox1.Enabled = CheckBox4.Checked = True
         Button1.Enabled = CheckBox4.Checked = True
+        Button2.Enabled = CheckBox4.Checked = True
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -437,6 +442,18 @@ Public Class ImgCleanup
     End Sub
 
     Private Sub HealthRestoreSourceOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles HealthRestoreSourceOFD.FileOk
-        TextBox1.Text = HealthRestoreSourceOFD.FileName
+        RichTextBox1.Text = HealthRestoreSourceOFD.FileName
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        RichTextBox1.Text = MainForm.GetSrcFromGPO()
+        If RichTextBox1.Text.StartsWith("wim:\", StringComparison.OrdinalIgnoreCase) Then
+            TextBoxSourcePanel.Visible = False
+            WimFileSourcePanel.Visible = True
+            Dim parts() As String = RichTextBox1.Text.Split(":")
+            Label13.Text = parts(parts.Length - 1)
+            Label14.Text = parts(1).Replace("\", "").Trim() & ":" & parts(2)
+            If Label5.Text.EndsWith(":" & parts(parts.Length - 1)) Then Label5.Text = Label5.Text.Replace(":" & parts(parts.Length - 1), "").Trim()
+        End If
     End Sub
 End Class
