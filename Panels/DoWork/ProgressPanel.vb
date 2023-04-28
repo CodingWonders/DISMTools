@@ -324,6 +324,11 @@ Public Class ProgressPanel
     Public ComponentRepairSource As String                  ' A custom source that will be used for component store repair
     Public LimitWUAccess As Boolean                         ' Determines whether to limit access to Windows Update and strictly use the custom source (only for online images)
 
+    ' OperationNum: 33
+    Public ppkgAdditionPackagePath As String                ' The path of the provisioning package to add
+    Public ppkgAdditionCatalogPath As String                ' The path of the catalog file to add
+    Public ppkgAdditionCommit As Boolean                    ' Determines whether to commit the image after adding the provisioning package
+
     ' OperationNum: 37
     Public appxAdditionPackages(65535) As String            ' Array used to store AppX packages to add
     Public appxAdditionDependencies(65535) As String        ' Array used to store dependencies of AppX packages
@@ -498,6 +503,12 @@ Public Class ProgressPanel
             taskCount = 1
         ElseIf opNum = 32 Then
             taskCount = 1
+        ElseIf opNum = 33 Then
+            If ppkgAdditionCommit Then
+                taskCount = 2
+            Else
+                taskCount = 1
+            End If
         ElseIf opNum = 37 Then
             If appxAdditionCommit Then
                 taskCount = 2
@@ -2395,6 +2406,74 @@ Public Class ProgressPanel
             Else
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
+        ElseIf opNum = 33 Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Adding provisioning package..."
+                            currentTask.Text = "Adding provisioning package to the image..."
+                        Case "ESN"
+                            allTasks.Text = "Añadiendo paquete de aprovisionamiento..."
+                            currentTask.Text = "Añadiendo paquete de aprovisionamiento a la imagen..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Adding provisioning package..."
+                    currentTask.Text = "Adding provisioning package to the image..."
+                Case 2
+                    allTasks.Text = "Añadiendo paquete de aprovisionamiento..."
+                    currentTask.Text = "Añadiendo paquete de aprovisionamiento a la imagen..."
+            End Select
+            LogView.AppendText("Adding provisioning package to the image..." & CrLf & _
+                               "Options:" & CrLf & CrLf & _
+                               "- Provisioning package: " & Quote & ppkgAdditionPackagePath & Quote & CrLf & _
+                               "- Catalog file: " & If(ppkgAdditionCatalogPath = "", "none specified", Quote & ppkgAdditionCatalogPath & Quote) & CrLf & _
+                               "- Commit image after adding provisioning package? " & If(ppkgAdditionCommit, "Yes", "No"))
+            DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /add-provisioningpackage /packagepath=" & Quote & ppkgAdditionPackagePath & Quote & If(ppkgAdditionCatalogPath <> "" And File.Exists(ppkgAdditionCatalogPath), " /catalogpath=" & Quote & ppkgAdditionCatalogPath & Quote, "")
+            DISMProc.StartInfo.Arguments = CommandArgs
+            DISMProc.Start()
+            If Debugger.IsAttached Then
+                DISMProc.WaitForExit()
+            Else
+                Do Until DISMProc.HasExited
+                    If DISMProc.HasExited Then
+                        Exit Do
+                    End If
+                Loop
+            End If
+            LogView.AppendText(CrLf & "Getting error level...")
+            If Hex(DISMProc.ExitCode).Length < 8 Then
+                errCode = DISMProc.ExitCode
+            Else
+                errCode = Hex(DISMProc.ExitCode)
+            End If
+            If errCode.Length >= 8 Then
+                LogView.AppendText(" Error level : 0x" & errCode)
+            Else
+                LogView.AppendText(" Error level : " & errCode)
+            End If
+            If ppkgAdditionCommit Then
+                AllPB.Value = AllPB.Maximum / taskCount
+                currentTCont += 1
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
+                            Case "ESN"
+                                taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                        End Select
+                    Case 1
+                        taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
+                    Case 2
+                        taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                End Select
+                RunOps(8)
+            Else
+                AllPB.Value = 100
+            End If
+            GetErrorCode(False)
         ElseIf opNum = 37 Then
             Select Case Language
                 Case 0
@@ -4468,6 +4547,8 @@ Public Class ProgressPanel
             ElseIf OperationNum = 30 Then
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 31 Then
+                MainForm.UpdateProjProperties(True, False)
+            ElseIf OperationNum = 33 Then
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 37 Then
                 MainForm.SaveDTProj()
