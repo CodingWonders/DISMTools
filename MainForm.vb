@@ -1749,6 +1749,33 @@ Public Class MainForm
         End If
     End Sub
 
+    Sub DetectVersions(DismVer As Version, NTVer As Version)
+        ' This procedure is not called yet
+        ' Restore enabled properties of each menu item
+        For Each Item As ToolStripDropDownItem In CommandsToolStripMenuItem.DropDownItems
+            Item.Enabled = True
+            Try
+                For Each DropDownItem As ToolStripDropDownItem In Item.DropDownItems
+                    DropDownItem.Enabled = True
+                Next
+            Catch ex As Exception
+                Continue For
+            End Try
+        Next
+        ' Next, detect the DISM version, so that we can determine which things are applicable
+        Select Case DismVer.Major
+            Case 6
+                Select Case DismVer.Minor
+                    Case 1
+
+                    Case Is >= 2
+
+                End Select
+            Case 10
+
+        End Select
+    End Sub
+
     ''' <summary>
     ''' Detects the image's version by gathering the product version from its "ntoskrnl.exe" file in MountDir\Windows\System32
     ''' </summary>
