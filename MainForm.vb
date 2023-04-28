@@ -857,7 +857,22 @@ Public Class MainForm
     ''' <param name="UseApi">(Optional) Uses the DISM API to get image information and to reduce the time these processes take</param>
     ''' <remarks>Depending on the parameter of bgProcOptn, and on the power of the system, the background processes may take a longer time to finish</remarks>
     Sub RunBackgroundProcesses(bgProcOptn As Integer, GatherBasicInfo As Boolean, GatherAdvancedInfo As Boolean, Optional UseApi As Boolean = False)
-        If Not IsImageMounted Then Exit Sub
+        If Not IsImageMounted Then
+            Button1.Enabled = True
+            Button2.Enabled = False
+            Button3.Enabled = False
+            Button4.Enabled = False
+            Button5.Enabled = False
+            Button6.Enabled = False
+            Button7.Enabled = False
+            Button8.Enabled = False
+            Button9.Enabled = False
+            Button10.Enabled = False
+            Button11.Enabled = False
+            Button12.Enabled = False
+            Button13.Enabled = False
+            Exit Sub
+        End If
         ' Let user know things are working
         BackgroundProcessesButton.Visible = False
         BackgroundProcessesButton.Image = My.Resources.bg_ops
@@ -7880,4 +7895,8 @@ Public Class MainForm
         End Try
         Return Nothing
     End Function
+
+    Private Sub AddProvisioningPackage_Click(sender As Object, e As EventArgs) Handles AddProvisioningPackage.Click
+        AddProvisioningPkg.ShowDialog()
+    End Sub
 End Class
