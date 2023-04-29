@@ -429,6 +429,25 @@ Public Class AddProvAppxPackage
     ''' <param name="Package">The name of the packed or unpacked AppX file. It may be a file containing the full structure, or a folder containing all AppX files</param>
     ''' <remarks>Scans the header of AppX packages to gather application name, publisher, and version information</remarks>
     Sub ScanAppxPackage(IsFolder As Boolean, Package As String)
+        ' Detect if the package specified is encrypted
+        If Path.GetExtension(Package).Replace(".", "").Trim().StartsWith("e", StringComparison.OrdinalIgnoreCase) Then
+            Dim msg As String = ""
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            msg = "The package:" & CrLf & CrLf & Package & CrLf & CrLf & "is an encrypted application package. Neither DISMTools nor DISM support adding these application types. If you'd like to add it, you can do so, after the image is applied and booted to."
+                        Case "ESN"
+                            msg = "El paquete:" & CrLf & CrLf & Package & CrLf & CrLf & "es un paquete de aplicación encriptado. Ni DISMTools ni DISM soportan añadir estos tipos de aplicaciones. Si le gustaría añadirlo, puede hacerlo, después de que la imagen se haya aplicado e iniciado."
+                    End Select
+                Case 1
+                    msg = "The package:" & CrLf & CrLf & Package & CrLf & CrLf & "is an encrypted application package. Neither DISMTools nor DISM support adding these application types. If you'd like to add it, you can do so, after the image is applied and booted to."
+                Case 2
+                    msg = "El paquete:" & CrLf & CrLf & Package & CrLf & CrLf & "es un paquete de aplicación encriptado. Ni DISMTools ni DISM soportan añadir estos tipos de aplicaciones. Si le gustaría añadirlo, puede hacerlo, después de que la imagen se haya aplicado e iniciado."
+            End Select
+            MsgBox(msg, vbOKOnly + vbExclamation, Label1.Text)
+            Exit Sub
+        End If
         Dim Stepper As Integer = 2
         Dim QuoteCount As Integer = 0
         Dim ScannerRTB As New RichTextBox()
@@ -1540,7 +1559,9 @@ Public Class AddProvAppxPackage
         Cursor = Cursors.WaitCursor
         For Each PackageFile In PackageFiles
             If Path.GetExtension(PackageFile).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".msix", StringComparison.OrdinalIgnoreCase) Or _
-                Path.GetExtension(PackageFile).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".msixbundle", StringComparison.OrdinalIgnoreCase) Then
+                Path.GetExtension(PackageFile).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".msixbundle", StringComparison.OrdinalIgnoreCase) Or _
+                Path.GetExtension(PackageFile).Equals(".eappx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".emsix", StringComparison.OrdinalIgnoreCase) Or _
+                Path.GetExtension(PackageFile).Equals(".eappxbundle", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".emsixbundle", StringComparison.OrdinalIgnoreCase) Then
                 ScanAppxPackage(False, PackageFile)
             ElseIf File.GetAttributes(PackageFile) = FileAttributes.Directory Then
                 ' Temporary support for directories
