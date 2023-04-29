@@ -36,6 +36,8 @@ The following actions are supported by DISMTools:
   - Capability addition and removal
 - Drivers
   - Driver addition and removal
+- Provisioning packages
+  - Add provisioning packages to an image
 - Other
   - Get complete information of an image
   
