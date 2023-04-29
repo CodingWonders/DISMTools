@@ -737,7 +737,7 @@ Public Class AddProvAppxPackage
             If Directory.Exists(".\appxscan") Then Directory.Delete(".\appxscan", True)
             Directory.CreateDirectory(".\appxscan")
             AppxScanner.StartInfo.FileName = ".\bin\utils\7z.exe"
-            AppxScanner.StartInfo.Arguments = "e " & Quote & Package & Quote & " " & Quote & If(Path.GetExtension(Package).EndsWith("bundle"), "appxmetadata\appxbundlemanifest.xml", "appxmanifest.xml") & Quote & " -o.\appxscan"
+            AppxScanner.StartInfo.Arguments = "e " & Quote & Package & Quote & " " & Quote & If(Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase), "appxmetadata\appxbundlemanifest.xml", "appxmanifest.xml") & Quote & " -o.\appxscan"
             AppxScanner.StartInfo.CreateNoWindow = True
             AppxScanner.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
             AppxScanner.Start()
@@ -747,7 +747,7 @@ Public Class AddProvAppxPackage
                 End If
             Loop
             If AppxScanner.ExitCode = 0 Then
-                If Path.GetExtension(Package).EndsWith("bundle") Then
+                If Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase) Then
                     ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(".\appxscan\AppxBundleManifest.xml")
                     Dim IdScanner As String = ScannerRTB.Lines(If(ScannerRTB.Lines(2).EndsWith("<!--"), 10, 4))
                     Dim CharIndex As Integer = 0
@@ -1075,7 +1075,7 @@ Public Class AddProvAppxPackage
                         AppxVersion = AppxVersionList.ToArray()
                     End If
                 End If
-                GetApplicationStoreLogoAssets(pkgName, False, If(Path.GetExtension(Package).EndsWith("bundle"), True, False), Package, currentAppxName)
+                GetApplicationStoreLogoAssets(pkgName, False, If(Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase), True, False), Package, currentAppxName)
             Else
 
             End If

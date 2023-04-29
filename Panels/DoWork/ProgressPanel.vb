@@ -4136,7 +4136,7 @@ Public Class ProgressPanel
             If Directory.Exists(".\appxscan") Then Directory.Delete(".\appxscan", True)
             Directory.CreateDirectory(".\appxscan")
             AppxScanner.StartInfo.FileName = ".\bin\utils\7z.exe"
-            AppxScanner.StartInfo.Arguments = "e " & Quote & Package & Quote & " " & Quote & If(Path.GetExtension(Package).EndsWith("bundle"), "appxmetadata\appxbundlemanifest.xml", "appxmanifest.xml") & Quote & " -o.\appxscan"
+            AppxScanner.StartInfo.Arguments = "e " & Quote & Package & Quote & " " & Quote & If(Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase), "appxmetadata\appxbundlemanifest.xml", "appxmanifest.xml") & Quote & " -o.\appxscan"
             AppxScanner.StartInfo.CreateNoWindow = True
             AppxScanner.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
             AppxScanner.Start()
@@ -4146,7 +4146,7 @@ Public Class ProgressPanel
                 End If
             Loop
             If AppxScanner.ExitCode = 0 Then
-                If Path.GetExtension(Package).EndsWith("bundle") Then
+                If Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase) Then
                     ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(".\appxscan\AppxBundleManifest.xml")
                     If ScannerRTB.Lines(2).EndsWith("<!--") Then
                         ' XML comment
