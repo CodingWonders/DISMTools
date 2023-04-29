@@ -1607,22 +1607,16 @@ Namespace My.Resources
         
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
-        '''- Fixed an issue where project creation would fail after cancelling the background processes
-        '''- Fixed an issue where the program would use the old method of gathering image information on a newly created project
+        '''- Fixed an issue where direct actions other than mounting would not be disabled after unloading an image from a project
+        '''- Fixed an issue where adding AppX packages would fail if there were case variations in their extension
         '''
         '''New features
         '''
-        '''Options
-        '''- You can now manipulate file associations in the Options dialog
+        '''Provisioning packages
+        '''- Introduced addition of provisioning packages (PPKG files)
         '''
-        '''Packages
-        '''- Package manipulation operations now use the DISM API
-        '''
-        '''Unattended answer files
-        '''- The creation wizard now supports color modes
-        '''
-        '''Dependencies
-        '''- Added the DarkUI, DockPanelSuite an [resto de la cadena truncado]&quot;;.
+        '''AppX package addition
+        '''- Checks are now performed when adding applications to the queue list to prevent adding the same package or adding different versions of such package [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
