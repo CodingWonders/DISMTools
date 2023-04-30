@@ -87,8 +87,11 @@ Public Class MainForm
     Public bwGetImageInfo As Boolean
     Public bwGetAdvImgInfo As Boolean
 
+    ' Variable used for online installation management
+    Public OnlineManagement As Boolean
+
     ' Background process variables
-    Public imgCanGetAppxPkgs As Boolean            ' Windows 8 introduced AppX packages (Metro-style apps). The AppX format is still used in Windows 10 and 11
+    'Public imgCanGetAppxPkgs As Boolean            ' Windows 8 introduced AppX packages (Metro-style apps). The AppX format is still used in Windows 10 and 11
 
     ' These are the variables that need to change when testing setting validity
     Public isExeProblematic As Boolean
@@ -855,8 +858,9 @@ Public Class MainForm
     ''' <param name="GatherBasicInfo">When true, this procedure gets the basic image information (image file, index, mountpoint and status)</param>
     ''' <param name="GatherAdvancedInfo">When true, this procedure gets all image information unrelated to packages, features, capabilities, or drivers</param>
     ''' <param name="UseApi">(Optional) Uses the DISM API to get image information and to reduce the time these processes take</param>
+    ''' <param name="OnlineMode">(Optional) Detects properties of an active Windows installation if this value is True. Otherwise, if it is False or is not set, it won't pass this option</param>
     ''' <remarks>Depending on the parameter of bgProcOptn, and on the power of the system, the background processes may take a longer time to finish</remarks>
-    Sub RunBackgroundProcesses(bgProcOptn As Integer, GatherBasicInfo As Boolean, GatherAdvancedInfo As Boolean, Optional UseApi As Boolean = False)
+    Sub RunBackgroundProcesses(bgProcOptn As Integer, GatherBasicInfo As Boolean, GatherAdvancedInfo As Boolean, Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
         If Not IsImageMounted Then
             Button1.Enabled = True
             Button2.Enabled = False
@@ -884,31 +888,32 @@ Public Class MainForm
         pbOpNums = 0
         Dim session As DismSession = Nothing
         If UseApi Then
-            Try
-                For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
-                    If MountedImageMountDirs(x) = MountDir Then
-                        Select Case Language
-                            Case 0
-                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
-                                        progressLabel = "Creating session for this image..."
-                                    Case "ESN"
-                                        progressLabel = "Creando sesión para esta imagen..."
-                                End Select
-                            Case 1
-                                progressLabel = "Creating session for this image..."
-                            Case 2
-                                progressLabel = "Creando sesión para esta imagen..."
-                        End Select
-                        ImgBW.ReportProgress(0)
-                        sessionMntDir = MountedImageMountDirs(x)
-                        'session = DismApi.OpenOfflineSession(MountedImageMountDirs(x))
-                        Exit For
-                    End If
-                Next
-            Catch ex As Exception
+            If Not OnlineMode Then
+                Try
+                    For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
+                        If MountedImageMountDirs(x) = MountDir Then
+                            Select Case Language
+                                Case 0
+                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                        Case "ENG"
+                                            progressLabel = "Creating session for this image..."
+                                        Case "ESN"
+                                            progressLabel = "Creando sesión para esta imagen..."
+                                    End Select
+                                Case 1
+                                    progressLabel = "Creating session for this image..."
+                                Case 2
+                                    progressLabel = "Creando sesión para esta imagen..."
+                            End Select
+                            ImgBW.ReportProgress(0)
+                            sessionMntDir = MountedImageMountDirs(x)
+                            Exit For
+                        End If
+                    Next
+                Catch ex As Exception
 
-            End Try
+                End Try
+            End If
         End If
         ' Determine which actions are being done
         If GatherBasicInfo Then
@@ -962,7 +967,7 @@ Public Class MainForm
                     progressLabel = "Obteniendo información básica de la imagen..."
             End Select
             ImgBW.ReportProgress(progressMin + progressDivs)
-            GetBasicImageInfo(True)
+            GetBasicImageInfo(True, OnlineMode)
             If isOrphaned Then
                 'If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                 Exit Sub
@@ -987,7 +992,7 @@ Public Class MainForm
                         progressLabel = "Obteniendo información avanzada de la imagen..."
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
-                GetAdvancedImageInfo(True)
+                GetAdvancedImageInfo(True, OnlineMode)
             End If
         End If
         Directory.CreateDirectory(".\tempinfo")
@@ -1212,7 +1217,7 @@ Public Class MainForm
     ''' Gets basic image information, such as its index, its file path, or its mount dir
     ''' </summary>
     ''' <remarks>Depending on the GatherBasicInfo flag in RunBackgroundProcesses, this function will run or not</remarks>
-    Sub GetBasicImageInfo(Optional Streamlined As Boolean = False)
+    Sub GetBasicImageInfo(Optional Streamlined As Boolean = False, Optional OnlineMode As Boolean = False)
         ' Set image properties
         Label14.Text = ProgressPanel.ImgIndex
         Label12.Text = ProgressPanel.MountDir
@@ -1223,31 +1228,37 @@ Public Class MainForm
             Label12.Text = MountDir
         End If
         If Streamlined Then
-            Try
-                For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
-                    If MountedImageImgFiles(x) = SourceImg Then
-                        Label14.Text = MountedImageImgIndexes(x)
-                        Label12.Text = MountedImageMountDirs(x)
-                        If MountedImageImgStatuses(x) = 0 Then
-                            isOrphaned = False
-                        ElseIf MountedImageImgStatuses(x) = 1 Then
-                            isOrphaned = True
-                        End If
-                        Dim ImageInfoCollection As DismImageInfoCollection = DismApi.GetImageInfo(MountedImageImgFiles(x))
-                        For Each imageInfo As DismImageInfo In ImageInfoCollection
-                            If imageInfo.ImageIndex = MountedImageImgIndexes(x) Then
-                                Label17.Text = imageInfo.ProductVersion.ToString()
-                                Label18.Text = imageInfo.ImageName
-                                Label20.Text = imageInfo.ImageDescription
+            If OnlineMode Then
+                Label17.Text = "(Online installation)"
+                Label18.Text = "(Online installation)"
+                Label20.Text = "(Online installation)"
+            Else
+                Try
+                    For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
+                        If MountedImageImgFiles(x) = SourceImg Then
+                            Label14.Text = MountedImageImgIndexes(x)
+                            Label12.Text = MountedImageMountDirs(x)
+                            If MountedImageImgStatuses(x) = 0 Then
+                                isOrphaned = False
+                            ElseIf MountedImageImgStatuses(x) = 1 Then
+                                isOrphaned = True
                             End If
-                        Next
-                        RemountImageWithWritePermissionsToolStripMenuItem.Enabled = If(MountedImageMountedReWr(x) = 0, False, True)
-                        Exit For
-                    End If
-                Next
-            Catch ex As Exception
+                            Dim ImageInfoCollection As DismImageInfoCollection = DismApi.GetImageInfo(MountedImageImgFiles(x))
+                            For Each imageInfo As DismImageInfo In ImageInfoCollection
+                                If imageInfo.ImageIndex = MountedImageImgIndexes(x) Then
+                                    Label17.Text = imageInfo.ProductVersion.ToString()
+                                    Label18.Text = imageInfo.ImageName
+                                    Label20.Text = imageInfo.ImageDescription
+                                End If
+                            Next
+                            RemountImageWithWritePermissionsToolStripMenuItem.Enabled = If(MountedImageMountedReWr(x) = 0, False, True)
+                            Exit For
+                        End If
+                    Next
+                Catch ex As Exception
 
-            End Try
+                End Try
+            End If
             Exit Sub
         End If
         Try
@@ -1424,123 +1435,128 @@ Public Class MainForm
     ''' Gets advanced image information, such as number of files and directories, image name, and more
     ''' </summary>
     ''' <remarks>This is called when bgGetAdvImgInfo is True</remarks>
-    Sub GetAdvancedImageInfo(Optional UseApi As Boolean = False)
+    Sub GetAdvancedImageInfo(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
+        Button15.Enabled = True
         If UseApi Then
-            If IsImageMounted Then
-                Try
-                    For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
-                        If MountedImageImgFiles(x) = MountDir Then
-                            Dim ImageInfoCollection As DismImageInfoCollection = DismApi.GetImageInfo(MountedImageImgFiles(x))
-                            For Each imageInfo As DismImageInfo In ImageInfoCollection
-                                If imageInfo.ImageIndex = MountedImageImgIndexes(x) Then
-                                    imgMountedName = imageInfo.ImageName
-                                    imgMountedDesc = imageInfo.ImageDescription
-                                    imgHal = If(Not imageInfo.Hal = "", imageInfo.Hal, "Undefined by the image")
-                                    imgSPBuild = imageInfo.ProductVersion.Revision
-                                    imgSPLvl = imageInfo.SpLevel
-                                    imgEdition = imageInfo.EditionId
-                                    imgPType = imageInfo.ProductType
-                                    imgPSuite = imageInfo.ProductSuite
-                                    imgSysRoot = imageInfo.SystemRoot
-                                    For Each imageLang In imageInfo.Languages
-                                        imgLangs &= imageLang.Name & If(imageInfo.DefaultLanguage.Name = imageLang.Name, " (default)", "") & ", "
-                                    Next
-                                    Dim langArr() As Char = imgLangs.ToCharArray()
-                                    langArr(langArr.Count - 2) = ""
-                                    imgLangs = New String(langArr)
-                                    imgFormat = Path.GetExtension(MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper() & " file"
-                                    imgRW = If(MountedImageMountedReWr(x) = 0, "Yes", "No")
-                                    imgDirs = imageInfo.CustomizedInfo.DirectoryCount
-                                    imgFiles = imageInfo.CustomizedInfo.FileCount
-                                    imgCreation = imageInfo.CustomizedInfo.CreatedTime
-                                    imgModification = imageInfo.CustomizedInfo.ModifiedTime
-                                End If
-                            Next
-                        End If
-                    Next
-                Catch ex As Exception
-                    Exit Try
-                End Try
-                ' Time to use the DISM executable
-                Try     ' Try getting image properties
-                    If Not Directory.Exists(projPath & "\tempinfo") Then
-                        Directory.CreateDirectory(projPath & "\tempinfo").Attributes = FileAttributes.Hidden
-                    End If
-                    Select Case DismVersionChecker.ProductMajorPart
-                        Case 6
-                            Select Case DismVersionChecker.ProductMinorPart
-                                Case 1
-                                    File.WriteAllText(".\bin\exthelpers\imginfo.bat",
-                                                      "@echo off" & CrLf &
-                                                      "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot", ASCII)
-                                Case Is >= 2
-                                    File.WriteAllText(".\bin\exthelpers\imginfo.bat",
-                                                      "@echo off" & CrLf &
-                                                      "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot", ASCII)
-                            End Select
-                        Case 10
-                            File.WriteAllText(".\bin\exthelpers\imginfo.bat",
-                                              "@echo off" & CrLf &
-                                              "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot", ASCII)
-                    End Select
-                    If Debugger.IsAttached Then
-                        Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\imginfo.bat").WaitForExit()
-                    End If
-                    Using WIMBootProc As New Process()
-                        WIMBootProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
-                        WIMBootProc.StartInfo.Arguments = "/c " & Quote & Directory.GetCurrentDirectory() & "\bin\exthelpers\imginfo.bat" & Quote
-                        WIMBootProc.StartInfo.CreateNoWindow = True
-                        WIMBootProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-                        WIMBootProc.Start()
-                        Do Until WIMBootProc.HasExited
-                            If WIMBootProc.HasExited Then Exit Do
-                        Loop
-                    End Using
-                    'Process.Start(".\bin\exthelpers\imginfo.bat").WaitForExit()
-                    Try
-                        imgWimBootStatus = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgwimboot", ASCII).Replace("WIM Bootable : ", "").Trim()
-                        If Not ImgBW.IsBusy Then
-                            For Each foundFile In My.Computer.FileSystem.GetFiles(projPath & "\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
-                                File.Delete(foundFile)
-                            Next
-                            Directory.Delete(projPath & "\tempinfo")
-                        End If
-                        File.Delete(".\bin\exthelpers\imginfo.bat")
-                    Catch ex As Exception
-
-                    End Try
-                Catch ex As Exception
-                    Exit Try
-                End Try
-                Button1.Enabled = False
-                Button2.Enabled = True
-                Button3.Enabled = True
-                Button4.Enabled = True
-                Button5.Enabled = True
-                Button6.Enabled = True
-                Button7.Enabled = True
-                Button8.Enabled = True
-                Button9.Enabled = True
-                Button10.Enabled = True
-                Button11.Enabled = True
-                Button12.Enabled = True
-                Button13.Enabled = True
+            If OnlineMode Then
+                Button15.Enabled = False
             Else
-                Button1.Enabled = True
-                Button2.Enabled = False
-                Button3.Enabled = False
-                Button4.Enabled = False
-                Button5.Enabled = False
-                Button6.Enabled = False
-                Button7.Enabled = False
-                Button8.Enabled = False
-                Button9.Enabled = False
-                Button10.Enabled = False
-                Button11.Enabled = False
-                Button12.Enabled = False
-                Button13.Enabled = False
+                If IsImageMounted Then
+                    Try
+                        For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
+                            If MountedImageImgFiles(x) = MountDir Then
+                                Dim ImageInfoCollection As DismImageInfoCollection = DismApi.GetImageInfo(MountedImageImgFiles(x))
+                                For Each imageInfo As DismImageInfo In ImageInfoCollection
+                                    If imageInfo.ImageIndex = MountedImageImgIndexes(x) Then
+                                        imgMountedName = imageInfo.ImageName
+                                        imgMountedDesc = imageInfo.ImageDescription
+                                        imgHal = If(Not imageInfo.Hal = "", imageInfo.Hal, "Undefined by the image")
+                                        imgSPBuild = imageInfo.ProductVersion.Revision
+                                        imgSPLvl = imageInfo.SpLevel
+                                        imgEdition = imageInfo.EditionId
+                                        imgPType = imageInfo.ProductType
+                                        imgPSuite = imageInfo.ProductSuite
+                                        imgSysRoot = imageInfo.SystemRoot
+                                        For Each imageLang In imageInfo.Languages
+                                            imgLangs &= imageLang.Name & If(imageInfo.DefaultLanguage.Name = imageLang.Name, " (default)", "") & ", "
+                                        Next
+                                        Dim langArr() As Char = imgLangs.ToCharArray()
+                                        langArr(langArr.Count - 2) = ""
+                                        imgLangs = New String(langArr)
+                                        imgFormat = Path.GetExtension(MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper() & " file"
+                                        imgRW = If(MountedImageMountedReWr(x) = 0, "Yes", "No")
+                                        imgDirs = imageInfo.CustomizedInfo.DirectoryCount
+                                        imgFiles = imageInfo.CustomizedInfo.FileCount
+                                        imgCreation = imageInfo.CustomizedInfo.CreatedTime
+                                        imgModification = imageInfo.CustomizedInfo.ModifiedTime
+                                    End If
+                                Next
+                            End If
+                        Next
+                    Catch ex As Exception
+                        Exit Try
+                    End Try
+                    ' Time to use the DISM executable
+                    Try     ' Try getting image properties
+                        If Not Directory.Exists(projPath & "\tempinfo") Then
+                            Directory.CreateDirectory(projPath & "\tempinfo").Attributes = FileAttributes.Hidden
+                        End If
+                        Select Case DismVersionChecker.ProductMajorPart
+                            Case 6
+                                Select Case DismVersionChecker.ProductMinorPart
+                                    Case 1
+                                        File.WriteAllText(".\bin\exthelpers\imginfo.bat",
+                                                          "@echo off" & CrLf &
+                                                          "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot", ASCII)
+                                    Case Is >= 2
+                                        File.WriteAllText(".\bin\exthelpers\imginfo.bat",
+                                                          "@echo off" & CrLf &
+                                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot", ASCII)
+                                End Select
+                            Case 10
+                                File.WriteAllText(".\bin\exthelpers\imginfo.bat",
+                                                  "@echo off" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot", ASCII)
+                        End Select
+                        If Debugger.IsAttached Then
+                            Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\imginfo.bat").WaitForExit()
+                        End If
+                        Using WIMBootProc As New Process()
+                            WIMBootProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
+                            WIMBootProc.StartInfo.Arguments = "/c " & Quote & Directory.GetCurrentDirectory() & "\bin\exthelpers\imginfo.bat" & Quote
+                            WIMBootProc.StartInfo.CreateNoWindow = True
+                            WIMBootProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+                            WIMBootProc.Start()
+                            Do Until WIMBootProc.HasExited
+                                If WIMBootProc.HasExited Then Exit Do
+                            Loop
+                        End Using
+                        'Process.Start(".\bin\exthelpers\imginfo.bat").WaitForExit()
+                        Try
+                            imgWimBootStatus = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgwimboot", ASCII).Replace("WIM Bootable : ", "").Trim()
+                            If Not ImgBW.IsBusy Then
+                                For Each foundFile In My.Computer.FileSystem.GetFiles(projPath & "\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
+                                    File.Delete(foundFile)
+                                Next
+                                Directory.Delete(projPath & "\tempinfo")
+                            End If
+                            File.Delete(".\bin\exthelpers\imginfo.bat")
+                        Catch ex As Exception
+
+                        End Try
+                    Catch ex As Exception
+                        Exit Try
+                    End Try
+                    Button1.Enabled = False
+                    Button2.Enabled = True
+                    Button3.Enabled = True
+                    Button4.Enabled = True
+                    Button5.Enabled = True
+                    Button6.Enabled = True
+                    Button7.Enabled = True
+                    Button8.Enabled = True
+                    Button9.Enabled = True
+                    Button10.Enabled = True
+                    Button11.Enabled = True
+                    Button12.Enabled = True
+                    Button13.Enabled = True
+                Else
+                    Button1.Enabled = True
+                    Button2.Enabled = False
+                    Button3.Enabled = False
+                    Button4.Enabled = False
+                    Button5.Enabled = False
+                    Button6.Enabled = False
+                    Button7.Enabled = False
+                    Button8.Enabled = False
+                    Button9.Enabled = False
+                    Button10.Enabled = False
+                    Button11.Enabled = False
+                    Button12.Enabled = False
+                    Button13.Enabled = False
+                End If
+                Exit Sub
             End If
-            Exit Sub
         End If
         If IsImageMounted Then
             Try     ' Try getting image properties
@@ -5014,6 +5030,34 @@ Public Class MainForm
         BGProcDetails.Hide()
     End Sub
 
+    Sub BeginOnlineManagement()
+        IsImageMounted = True
+        OnlineManagement = True
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Label5.Text = "Yes"
+                    Case "ESN"
+                        Label5.Text = "Sí"
+                End Select
+            Case 1
+                Label5.Text = "Yes"
+            Case 2
+                Label5.Text = "Sí"
+        End Select
+        RemountImageWithWritePermissionsToolStripMenuItem.Enabled = False
+        LinkLabel1.Visible = False
+        ImageNotMountedPanel.Visible = False
+        ImagePanel.Visible = True
+        ' Saving a project is not possible in online mode
+        ToolStripButton2.Enabled = False
+        Label14.Text = "(Online installation)"
+        Label12.Text = "(Online installation)"
+        ImgBW.RunWorkerAsync()
+        Exit Sub
+    End Sub
+
     Sub UpdateProjProperties(WasImageMounted As Boolean, IsReadOnly As Boolean)
         If WasImageMounted Then
             Select Case Language
@@ -7898,5 +7942,9 @@ Public Class MainForm
 
     Private Sub AddProvisioningPackage_Click(sender As Object, e As EventArgs) Handles AddProvisioningPackage.Click
         AddProvisioningPkg.ShowDialog()
+    End Sub
+
+    Private Sub LinkLabel12_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel12.LinkClicked
+        BeginOnlineManagement()
     End Sub
 End Class
