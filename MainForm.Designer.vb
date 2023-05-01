@@ -350,6 +350,8 @@ Partial Class MainForm
         Me.DiscardAndUnmountTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator20 = New System.Windows.Forms.ToolStripSeparator()
         Me.UnmountSettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AppxPackagePopupCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ViewPackageDirectoryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -407,6 +409,7 @@ Partial Class MainForm
         Me.PkgInfoCMS.SuspendLayout()
         Me.FeatureInfoCMS.SuspendLayout()
         Me.ImgUMountPopupCMS.SuspendLayout()
+        Me.AppxPackagePopupCMS.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
@@ -3186,6 +3189,19 @@ Partial Class MainForm
         Me.UnmountSettingsToolStripMenuItem.Size = New System.Drawing.Size(252, 22)
         Me.UnmountSettingsToolStripMenuItem.Text = "Unmount settings..."
         '
+        'AppxPackagePopupCMS
+        '
+        Me.AppxPackagePopupCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ViewPackageDirectoryToolStripMenuItem})
+        Me.AppxPackagePopupCMS.Name = "AppxPackagePopupCMS"
+        Me.AppxPackagePopupCMS.Size = New System.Drawing.Size(197, 48)
+        '
+        'ViewPackageDirectoryToolStripMenuItem
+        '
+        Me.ViewPackageDirectoryToolStripMenuItem.Image = Global.DISMTools.My.Resources.Resources.openfile
+        Me.ViewPackageDirectoryToolStripMenuItem.Name = "ViewPackageDirectoryToolStripMenuItem"
+        Me.ViewPackageDirectoryToolStripMenuItem.Size = New System.Drawing.Size(196, 22)
+        Me.ViewPackageDirectoryToolStripMenuItem.Text = "View package directory"
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -3277,6 +3293,7 @@ Partial Class MainForm
         Me.PkgInfoCMS.ResumeLayout(False)
         Me.FeatureInfoCMS.ResumeLayout(False)
         Me.ImgUMountPopupCMS.ResumeLayout(False)
+        Me.AppxPackagePopupCMS.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -3607,4 +3624,6 @@ Partial Class MainForm
     Friend WithEvents ActionEditorToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator22 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents LinkLabel12 As System.Windows.Forms.LinkLabel
+    Friend WithEvents AppxPackagePopupCMS As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents ViewPackageDirectoryToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class

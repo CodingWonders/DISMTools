@@ -139,4 +139,13 @@ Public Class RemProvAppxPackage
         End If
         ListView1.ForeColor = ForeColor
     End Sub
+
+    Private Sub ListView1_MouseClick(sender As Object, e As MouseEventArgs) Handles ListView1.MouseClick
+        If e.Button = Windows.Forms.MouseButtons.Right Then
+            Dim item As ListViewItem = ListView1.GetItemAt(e.X, e.Y)
+            If item IsNot Nothing Then
+                MainForm.AppxPackagePopupCMS.Show(sender, e.Location)
+            End If
+        End If
+    End Sub
 End Class

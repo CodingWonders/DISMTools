@@ -3089,9 +3089,11 @@ Public Class MainForm
                         PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         FeatureInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                        AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         PkgInfoCMS.ForeColor = Color.White
                         FeatureInfoCMS.ForeColor = Color.White
                         ImgUMountPopupCMS.ForeColor = Color.White
+                        AppxPackagePopupCMS.ForeColor = Color.White
                         InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph_dark)
                         BranchTSMI.Image = New Bitmap(My.Resources.branch_dark)
                     ElseIf ColorMode = "1" Then
@@ -3179,9 +3181,11 @@ Public Class MainForm
                         PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         FeatureInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                        AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         PkgInfoCMS.ForeColor = Color.Black
                         FeatureInfoCMS.ForeColor = Color.Black
                         ImgUMountPopupCMS.ForeColor = Color.Black
+                        AppxPackagePopupCMS.ForeColor = Color.Black
                         InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph)
                         BranchTSMI.Image = New Bitmap(My.Resources.branch)
                     End If
@@ -3273,9 +3277,11 @@ Public Class MainForm
                 PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 FeatureInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 PkgInfoCMS.ForeColor = Color.Black
                 FeatureInfoCMS.ForeColor = Color.Black
                 ImgUMountPopupCMS.ForeColor = Color.Black
+                AppxPackagePopupCMS.ForeColor = Color.Black
                 InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph)
                 BranchTSMI.Image = New Bitmap(My.Resources.branch)
             Case 2
@@ -3363,9 +3369,11 @@ Public Class MainForm
                 PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 FeatureInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 PkgInfoCMS.ForeColor = Color.White
                 FeatureInfoCMS.ForeColor = Color.White
                 ImgUMountPopupCMS.ForeColor = Color.White
+                AppxPackagePopupCMS.ForeColor = Color.White
                 InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph_dark)
                 BranchTSMI.Image = New Bitmap(My.Resources.branch_dark)
         End Select
@@ -8043,5 +8051,40 @@ Public Class MainForm
 
     Private Sub LinkLabel12_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel12.LinkClicked
         BeginOnlineManagement()
+    End Sub
+
+    Private Sub AppxPackagePopupCMS_VisibleChanged(sender As Object, e As EventArgs) Handles AppxPackagePopupCMS.VisibleChanged
+        If AppxPackagePopupCMS.Visible Then
+            ViewPackageDirectoryToolStripMenuItem.Image = If(BackColor = Color.FromArgb(48, 48, 48), My.Resources.openfile_dark, My.Resources.openfile)
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            ViewPackageDirectoryToolStripMenuItem.Text = "View package directory"
+                        Case "ESN"
+                            ViewPackageDirectoryToolStripMenuItem.Text = "Ver directorio del paquete"
+                    End Select
+                Case 1
+                    ViewPackageDirectoryToolStripMenuItem.Text = "View package directory"
+                Case 2
+                    ViewPackageDirectoryToolStripMenuItem.Text = "Ver directorio del paquete"
+            End Select
+        End If
+    End Sub
+
+    Private Sub ViewPackageDirectoryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewPackageDirectoryToolStripMenuItem.Click
+        If OnlineManagement Then
+            If Directory.Exists(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\Program Files\WindowsApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text) Then
+                Process.Start(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\Program Files\WindowsApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text)
+            ElseIf Directory.Exists(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\Windows\SystemApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text) Then
+                Process.Start(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\Windows\SystemApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text)
+            End If
+        Else
+            If Directory.Exists(MountDir & "\Program Files\WindowsApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text) Then
+                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", MountDir & "\Program Files\WindowsApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text)
+            ElseIf Directory.Exists(MountDir & "\Windows\SystemApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text) Then
+                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", MountDir & "\Windows\SystemApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text)
+            End If
+        End If
     End Sub
 End Class
