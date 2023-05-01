@@ -239,7 +239,7 @@ Partial Class MainForm
         Me.Button18 = New System.Windows.Forms.Button()
         Me.SidePanel = New System.Windows.Forms.Panel()
         Me.Label11 = New System.Windows.Forms.Label()
-        Me.LinkLabel12 = New System.Windows.Forms.LinkLabel()
+        Me.OnlineInstMgmt = New System.Windows.Forms.LinkLabel()
         Me.ExistingProjLink = New System.Windows.Forms.LinkLabel()
         Me.NewProjLink = New System.Windows.Forms.LinkLabel()
         Me.Label10 = New System.Windows.Forms.Label()
@@ -1981,7 +1981,7 @@ Partial Class MainForm
         '
         Me.SidePanel.BackColor = System.Drawing.Color.White
         Me.SidePanel.Controls.Add(Me.Label11)
-        Me.SidePanel.Controls.Add(Me.LinkLabel12)
+        Me.SidePanel.Controls.Add(Me.OnlineInstMgmt)
         Me.SidePanel.Controls.Add(Me.ExistingProjLink)
         Me.SidePanel.Controls.Add(Me.NewProjLink)
         Me.SidePanel.Controls.Add(Me.Label10)
@@ -2004,17 +2004,17 @@ Partial Class MainForm
         Me.Label11.Text = "Coming soon!"
         Me.Label11.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
-        'LinkLabel12
+        'OnlineInstMgmt
         '
-        Me.LinkLabel12.AutoSize = True
-        Me.LinkLabel12.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel12.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel12.Location = New System.Drawing.Point(31, 150)
-        Me.LinkLabel12.Name = "LinkLabel12"
-        Me.LinkLabel12.Size = New System.Drawing.Size(147, 15)
-        Me.LinkLabel12.TabIndex = 2
-        Me.LinkLabel12.TabStop = True
-        Me.LinkLabel12.Text = "Manage online installation"
+        Me.OnlineInstMgmt.AutoSize = True
+        Me.OnlineInstMgmt.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.OnlineInstMgmt.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.OnlineInstMgmt.Location = New System.Drawing.Point(31, 150)
+        Me.OnlineInstMgmt.Name = "OnlineInstMgmt"
+        Me.OnlineInstMgmt.Size = New System.Drawing.Size(147, 15)
+        Me.OnlineInstMgmt.TabIndex = 2
+        Me.OnlineInstMgmt.TabStop = True
+        Me.OnlineInstMgmt.Text = "Manage online installation"
         '
         'ExistingProjLink
         '
@@ -2248,7 +2248,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.44444!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.55556!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 33.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -2283,9 +2283,9 @@ Partial Class MainForm
         Me.LinkLabel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel1.Location = New System.Drawing.Point(102, 146)
+        Me.LinkLabel1.Location = New System.Drawing.Point(101, 146)
         Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(151, 254)
+        Me.LinkLabel1.Size = New System.Drawing.Size(152, 254)
         Me.LinkLabel1.TabIndex = 5
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "Click here to mount an image"
@@ -2295,7 +2295,7 @@ Partial Class MainForm
         Me.Panel8.Controls.Add(Me.projName)
         Me.Panel8.Controls.Add(Me.projNameText)
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel8.Location = New System.Drawing.Point(102, 3)
+        Me.Panel8.Location = New System.Drawing.Point(101, 3)
         Me.Panel8.Name = "Panel8"
         Me.Panel8.Size = New System.Drawing.Size(117, 23)
         Me.Panel8.TabIndex = 8
@@ -2327,9 +2327,9 @@ Partial Class MainForm
         Me.Label5.AutoSize = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label5, 2)
         Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label5.Location = New System.Drawing.Point(102, 131)
+        Me.Label5.Location = New System.Drawing.Point(101, 131)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(151, 15)
+        Me.Label5.Size = New System.Drawing.Size(152, 15)
         Me.Label5.TabIndex = 2
         Me.Label5.Text = "imgStatus"
         '
@@ -2339,7 +2339,7 @@ Partial Class MainForm
         Me.Label2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label2.Location = New System.Drawing.Point(3, 29)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(93, 102)
+        Me.Label2.Size = New System.Drawing.Size(92, 102)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "Location:"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2349,9 +2349,9 @@ Partial Class MainForm
         Me.Label3.AutoEllipsis = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label3, 2)
         Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label3.Location = New System.Drawing.Point(102, 29)
+        Me.Label3.Location = New System.Drawing.Point(101, 29)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(151, 102)
+        Me.Label3.Size = New System.Drawing.Size(152, 102)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "projPath"
         '
@@ -2362,7 +2362,7 @@ Partial Class MainForm
         Me.Label4.Location = New System.Drawing.Point(3, 131)
         Me.Label4.Name = "Label4"
         Me.TableLayoutPanel2.SetRowSpan(Me.Label4, 2)
-        Me.Label4.Size = New System.Drawing.Size(93, 269)
+        Me.Label4.Size = New System.Drawing.Size(92, 269)
         Me.Label4.TabIndex = 1
         Me.Label4.Text = "Images mounted?"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2373,7 +2373,7 @@ Partial Class MainForm
         Me.Panel9.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel9.Location = New System.Drawing.Point(3, 3)
         Me.Panel9.Name = "Panel9"
-        Me.Panel9.Size = New System.Drawing.Size(93, 23)
+        Me.Panel9.Size = New System.Drawing.Size(92, 23)
         Me.Panel9.TabIndex = 9
         '
         'Label1
@@ -2381,7 +2381,7 @@ Partial Class MainForm
         Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label1.Location = New System.Drawing.Point(0, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(93, 23)
+        Me.Label1.Size = New System.Drawing.Size(92, 23)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Name:"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -3193,7 +3193,7 @@ Partial Class MainForm
         '
         Me.AppxPackagePopupCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ViewPackageDirectoryToolStripMenuItem})
         Me.AppxPackagePopupCMS.Name = "AppxPackagePopupCMS"
-        Me.AppxPackagePopupCMS.Size = New System.Drawing.Size(197, 48)
+        Me.AppxPackagePopupCMS.Size = New System.Drawing.Size(197, 26)
         '
         'ViewPackageDirectoryToolStripMenuItem
         '
@@ -3623,7 +3623,7 @@ Partial Class MainForm
     Friend WithEvents ToolStripSeparator21 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ActionEditorToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator22 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents LinkLabel12 As System.Windows.Forms.LinkLabel
+    Friend WithEvents OnlineInstMgmt As System.Windows.Forms.LinkLabel
     Friend WithEvents AppxPackagePopupCMS As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents ViewPackageDirectoryToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class

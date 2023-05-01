@@ -168,6 +168,7 @@ Public Class MainForm
     Dim DismVersionChecker As FileVersionInfo
 
     Dim argProjPath As String = ""                                       ' String used to know which project to load if it's specified in an argument
+    Dim argOnline As Boolean                                             ' Determine if program will be launched in online installation mode
 
     Dim sessionMntDir As String = ""
 
@@ -196,6 +197,12 @@ Public Class MainForm
                             Case 2
                                 MsgBox("Se ha especificado un proyecto no válido", vbOKOnly + vbCritical, Text)
                         End Select
+                    End If
+                ElseIf arg.StartsWith("/online", StringComparison.OrdinalIgnoreCase) Then
+                    If argProjPath = "" Then
+                        argOnline = True
+                    Else
+                        ' Add warning later
                     End If
                 End If
             Next
@@ -245,6 +252,9 @@ Public Class MainForm
             Visible = True
             ProgressPanel.OperationNum = 990
             LoadDTProj(argProjPath, Path.GetFileNameWithoutExtension(argProjPath), True)
+        End If
+        If argOnline Then
+            BeginOnlineManagement()
         End If
     End Sub
 
@@ -1451,12 +1461,16 @@ Public Class MainForm
     ''' </summary>
     ''' <remarks>This is called when bgGetAdvImgInfo is True</remarks>
     Sub GetAdvancedImageInfo(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
+        Button14.Enabled = True
         Button15.Enabled = True
         Button16.Enabled = True
+        ExplorerView.Enabled = True
         If UseApi Then
             If OnlineMode Then
+                Button14.Enabled = False
                 Button15.Enabled = False
                 Button16.Enabled = False
+                ExplorerView.Enabled = False
                 Exit Sub
             Else
                 If IsImageMounted Then
@@ -3549,6 +3563,7 @@ Public Class MainForm
                     Label11.Text = "Coming soon!"
                     NewProjLink.Text = "New project..."
                     ExistingProjLink.Text = "Open existing project..."
+                    OnlineInstMgmt.Text = "Manage online installation"
                     ' Start Panel tabs
                     WelcomeTab.Text = "Welcome"
                     NewsFeedTab.Text = "Latest news"
@@ -3803,6 +3818,7 @@ Public Class MainForm
                     Label11.Text = "¡Próximamente!"
                     NewProjLink.Text = "Nuevo proyecto..."
                     ExistingProjLink.Text = "Abrir proyecto existente..."
+                    OnlineInstMgmt.Text = "Administrar instalación activa"
                     ' Start Panel tabs
                     WelcomeTab.Text = "Bienvenido"
                     NewsFeedTab.Text = "Últimas noticias"
@@ -4062,6 +4078,7 @@ Public Class MainForm
                 Label11.Text = "Coming soon!"
                 NewProjLink.Text = "New project..."
                 ExistingProjLink.Text = "Open existing project..."
+                OnlineInstMgmt.Text = "Manage online installation"
                 ' Start Panel tabs
                 WelcomeTab.Text = "Welcome"
                 NewsFeedTab.Text = "Latest news"
@@ -4316,6 +4333,7 @@ Public Class MainForm
                 Label11.Text = "¡Próximamente!"
                 NewProjLink.Text = "Nuevo proyecto..."
                 ExistingProjLink.Text = "Abrir proyecto existente..."
+                OnlineInstMgmt.Text = "Administrar instalación activa"
                 ' Start Panel tabs
                 WelcomeTab.Text = "Bienvenido"
                 NewsFeedTab.Text = "Últimas noticias"
@@ -5123,6 +5141,8 @@ Public Class MainForm
                 Label14.Text = "(Instalación activa)"
                 Label12.Text = "(Instalación activa)"
         End Select
+        GroupBox1.Enabled = False
+        Panel2.Visible = False
         ImgBW.RunWorkerAsync()
         Exit Sub
     End Sub
@@ -5157,6 +5177,8 @@ Public Class MainForm
         Thread.Sleep(250)
         Refresh()
         ToolStripButton2.Enabled = True
+        GroupBox1.Enabled = True
+        Panel2.Visible = True
     End Sub
 
     Sub UpdateProjProperties(WasImageMounted As Boolean, IsReadOnly As Boolean)
@@ -8049,7 +8071,7 @@ Public Class MainForm
         AddProvisioningPkg.ShowDialog()
     End Sub
 
-    Private Sub LinkLabel12_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel12.LinkClicked
+    Private Sub OnlineInstMgmt_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles OnlineInstMgmt.LinkClicked
         BeginOnlineManagement()
     End Sub
 
@@ -8072,7 +8094,7 @@ Public Class MainForm
         End If
     End Sub
 
-    Private Sub ViewPackageDirectoryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewPackageDirectoryToolStripMenuItem.Click
+    Private Sub ViewPackageDirectoryToolStripMenuItem_Click(sender As Object, e As EventArgs)
         If OnlineManagement Then
             If Directory.Exists(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\Program Files\WindowsApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text) Then
                 Process.Start(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\Program Files\WindowsApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text)
