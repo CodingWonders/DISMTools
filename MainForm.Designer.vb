@@ -2004,7 +2004,6 @@ Partial Class MainForm
         'LinkLabel12
         '
         Me.LinkLabel12.AutoSize = True
-        Me.LinkLabel12.Enabled = False
         Me.LinkLabel12.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel12.LinkColor = System.Drawing.Color.DodgerBlue
         Me.LinkLabel12.Location = New System.Drawing.Point(31, 150)

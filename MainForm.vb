@@ -976,7 +976,7 @@ Public Class MainForm
                 'If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                 Exit Sub
             End If
-            DetectNTVersion(MountDir & "\Windows\system32\ntoskrnl.exe")
+            DetectNTVersion(If(OnlineMode, Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe", MountDir & "\Windows\system32\ntoskrnl.exe"))
             If GatherAdvancedInfo Then
                 Select Case Language
                     Case 0
@@ -1021,7 +1021,7 @@ Public Class MainForm
                         progressLabel = "Obteniendo paquetes de la imagen..."
                 End Select
                 ImgBW.ReportProgress(20)
-                GetImagePackages(True)
+                GetImagePackages(True, OnlineMode)
                 If ImgBW.CancellationPending Then
                     If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                     Exit Sub
@@ -1040,7 +1040,7 @@ Public Class MainForm
                         progressLabel = "Obteniendo características de la imagen..."
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
-                GetImageFeatures(True)
+                GetImageFeatures(True, OnlineMode)
                 If ImgBW.CancellationPending Then
                     If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                     Exit Sub
@@ -1062,7 +1062,7 @@ Public Class MainForm
                             progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
                     End Select
                     ImgBW.ReportProgress(progressMin + progressDivs)
-                    GetImageAppxPackages(True)
+                    GetImageAppxPackages(True, OnlineMode)
                     If ImgBW.CancellationPending Then
                         If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                         Exit Sub
@@ -1087,7 +1087,7 @@ Public Class MainForm
                             progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
                     End Select
                     ImgBW.ReportProgress(progressMin + progressDivs)
-                    GetImageCapabilities(True)
+                    GetImageCapabilities(True, OnlineMode)
                     If ImgBW.CancellationPending Then
                         If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                         Exit Sub
@@ -1109,7 +1109,7 @@ Public Class MainForm
                         progressLabel = "Obteniendo controladores de la imagen..."
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
-                GetImageDrivers(True)
+                GetImageDrivers(True, OnlineMode)
                 If ImgBW.CancellationPending Then
                     If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                     Exit Sub
@@ -1229,9 +1229,24 @@ Public Class MainForm
         End If
         If Streamlined Then
             If OnlineMode Then
-                Label17.Text = "(Online installation)"
-                Label18.Text = "(Online installation)"
-                Label20.Text = "(Online installation)"
+                Label17.Text = Environment.OSVersion.Version.ToString()
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                Label18.Text = "(Online installation)"
+                                Label20.Text = "(Online installation)"
+                            Case "ESN"
+                                Label18.Text = "(Instalación activa)"
+                                Label20.Text = "(Instalación activa)"
+                        End Select
+                    Case 1
+                        Label18.Text = "(Online installation)"
+                        Label20.Text = "(Online installation)"
+                    Case 2
+                        Label18.Text = "(Instalación activa)"
+                        Label20.Text = "(Instalación activa)"
+                End Select
             Else
                 Try
                     For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
@@ -1437,9 +1452,12 @@ Public Class MainForm
     ''' <remarks>This is called when bgGetAdvImgInfo is True</remarks>
     Sub GetAdvancedImageInfo(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
         Button15.Enabled = True
+        Button16.Enabled = True
         If UseApi Then
             If OnlineMode Then
                 Button15.Enabled = False
+                Button16.Enabled = False
+                Exit Sub
             Else
                 If IsImageMounted Then
                     Try
@@ -1944,11 +1962,11 @@ Public Class MainForm
     ''' <summary>
     ''' Gets installed packages in an image and puts them in separate arrays
     ''' </summary>
-    Sub GetImagePackages(Optional UseApi As Boolean = False)
+    Sub GetImagePackages(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
         If UseApi Then
             Try
                 DismApi.Initialize(DismLogLevel.LogErrors)
-                Using session As DismSession = DismApi.OpenOfflineSession(sessionMntDir)
+                Using session As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(sessionMntDir))
                     Dim imgPackageNameList As New List(Of String)
                     Dim imgPackageStateList As New List(Of String)
                     Dim imgPackageRelTypeList As New List(Of String)
@@ -2092,11 +2110,11 @@ Public Class MainForm
     ''' <summary>
     ''' Gets present features in an image and puts them in separate arrays
     ''' </summary>
-    Sub GetImageFeatures(Optional UseApi As Boolean = False)
+    Sub GetImageFeatures(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
         If UseApi Then
             Try
                 DismApi.Initialize(DismLogLevel.LogErrors)
-                Using session As DismSession = DismApi.OpenOfflineSession(sessionMntDir)
+                Using session As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(sessionMntDir))
                     Dim imgFeatureNameList As New List(Of String)
                     Dim imgFeatureStateList As New List(Of String)
                     Dim FeatureCollection As DismFeatureCollection = DismApi.GetFeatures(session)
@@ -2217,11 +2235,11 @@ Public Class MainForm
     ''' Gets installed provisioned APPX packages in an image and puts them in separate arrays
     ''' </summary>
     ''' <remarks>This is only for Windows 8 and newer</remarks>
-    Sub GetImageAppxPackages(Optional UseApi As Boolean = False)
+    Sub GetImageAppxPackages(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
         If UseApi And Environment.OSVersion.Version.Major > 6 Then
             Try
                 DismApi.Initialize(DismLogLevel.LogErrors)
-                Using session As DismSession = DismApi.OpenOfflineSession(sessionMntDir)
+                Using session As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(sessionMntDir))
                     Dim imgAppxDisplayNameList As New List(Of String)
                     Dim imgAppxPackageNameList As New List(Of String)
                     Dim imgAppxVersionList As New List(Of String)
@@ -2422,11 +2440,11 @@ Public Class MainForm
     ''' Gets installed Features on Demand (capabilities) in an image and puts them in separate arrays
     ''' </summary>
     ''' <remarks>This is only for Windows 10 or newer</remarks>
-    Sub GetImageCapabilities(Optional UseApi As Boolean = False)
+    Sub GetImageCapabilities(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
         If UseApi Then
             Try
                 DismApi.Initialize(DismLogLevel.LogErrors)
-                Using session As DismSession = DismApi.OpenOfflineSession(sessionMntDir)
+                Using session As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(sessionMntDir))
                     Dim imgCapabilityNameList As New List(Of String)
                     Dim imgCapabilityStateList As New List(Of String)
                     Dim CapabilityCollection As DismCapabilityCollection = DismApi.GetCapabilities(session)
@@ -2583,11 +2601,11 @@ Public Class MainForm
     ''' Gets installed third-party drivers in an image and puts them in separate arrays
     ''' </summary>
     ''' <remarks>This procedure will detect the number of third-party drivers. If the image contains none, this procedure will end</remarks>
-    Sub GetImageDrivers(Optional UseApi As Boolean = False)
+    Sub GetImageDrivers(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
         If UseApi Then
             Try
                 DismApi.Initialize(DismLogLevel.LogErrors)
-                Using session As DismSession = DismApi.OpenOfflineSession(sessionMntDir)
+                Using session As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(sessionMntDir))
                     Dim imgDrvPublishedNameList As New List(Of String)
                     Dim imgDrvOGFileNameList As New List(Of String)
                     Dim imgDrvInboxList As New List(Of String)
@@ -5028,11 +5046,31 @@ Public Class MainForm
         SaveProjectToolStripMenuItem.Enabled = False
         SaveProjectasToolStripMenuItem.Enabled = False
         BGProcDetails.Hide()
+        If OnlineManagement Then EndOnlineManagement()
     End Sub
 
     Sub BeginOnlineManagement()
         IsImageMounted = True
+        isProjectLoaded = True
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Text = "Online installation - DISMTools"
+                    Case "ESN"
+                        Text = "Instalación activa - DISMTools"
+                End Select
+            Case 1
+                Text = "Online installation - DISMTools"
+            Case 2
+                Text = "Instalación activa - DISMTools"
+        End Select
         OnlineManagement = True
+        ' Initialize background processes
+        bwAllBackgroundProcesses = True
+        bwGetImageInfo = True
+        bwGetAdvImgInfo = True
+        bwBackgroundProcessAction = 0
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -5046,16 +5084,71 @@ Public Class MainForm
             Case 2
                 Label5.Text = "Sí"
         End Select
+        HomePanel.Visible = False
+        PrjPanel.Visible = True
+        SplitPanels.Visible = True
+        RemountImageWithWritePermissionsToolStripMenuItem.Enabled = False
+        SaveProjectToolStripMenuItem.Enabled = False
+        SaveProjectasToolStripMenuItem.Enabled = False
+        LinkLabel1.Visible = False
+        ImageNotMountedPanel.Visible = False
+        ImagePanel.Visible = True
+        CommandsToolStripMenuItem.Visible = True
+        Thread.Sleep(250)
+        Refresh()
+        ' Saving a project is not possible in online mode
+        ToolStripButton2.Enabled = False
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Label14.Text = "(Online installation)"
+                        Label12.Text = "(Online installation)"
+                    Case "ESN"
+                        Label14.Text = "(Instalación activa)"
+                        Label12.Text = "(Instalación activa)"
+                End Select
+            Case 1
+                Label14.Text = "(Online installation)"
+                Label12.Text = "(Online installation)"
+            Case 2
+                Label14.Text = "(Instalación activa)"
+                Label12.Text = "(Instalación activa)"
+        End Select
+        ImgBW.RunWorkerAsync()
+        Exit Sub
+    End Sub
+
+    Sub EndOnlineManagement()
+        IsImageMounted = False
+        isProjectLoaded = False
+        Text = "DISMTools"
+        OnlineManagement = False
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Label5.Text = "Yes"
+                    Case "ESN"
+                        Label5.Text = "Sí"
+                End Select
+            Case 1
+                Label5.Text = "Yes"
+            Case 2
+                Label5.Text = "Sí"
+        End Select
+        HomePanel.Visible = True
+        PrjPanel.Visible = False
+        SplitPanels.Visible = False
         RemountImageWithWritePermissionsToolStripMenuItem.Enabled = False
         LinkLabel1.Visible = False
         ImageNotMountedPanel.Visible = False
         ImagePanel.Visible = True
-        ' Saving a project is not possible in online mode
-        ToolStripButton2.Enabled = False
-        Label14.Text = "(Online installation)"
-        Label12.Text = "(Online installation)"
-        ImgBW.RunWorkerAsync()
-        Exit Sub
+        CommandsToolStripMenuItem.Visible = False
+        ProjectToolStripMenuItem.Visible = False
+        Thread.Sleep(250)
+        Refresh()
+        ToolStripButton2.Enabled = True
     End Sub
 
     Sub UpdateProjProperties(WasImageMounted As Boolean, IsReadOnly As Boolean)
@@ -6564,6 +6657,10 @@ Public Class MainForm
     End Sub
 
     Private Sub ToolStripButton3_Click(sender As Object, e As EventArgs) Handles ToolStripButton3.Click
+        If OnlineManagement Then
+            EndOnlineManagement()
+            Exit Sub
+        End If
         If isModified Then
             SaveProjectQuestionDialog.ShowDialog()
             If SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Yes Then
@@ -6880,12 +6977,12 @@ Public Class MainForm
         If bwAllBackgroundProcesses Then
             If bwGetImageInfo Then
                 If bwGetAdvImgInfo Then
-                    RunBackgroundProcesses(bwBackgroundProcessAction, True, True, True)
+                    RunBackgroundProcesses(bwBackgroundProcessAction, True, True, True, OnlineManagement)
                 Else
-                    RunBackgroundProcesses(bwBackgroundProcessAction, True, False, True)
+                    RunBackgroundProcesses(bwBackgroundProcessAction, True, False, True, OnlineManagement)
                 End If
             Else
-                RunBackgroundProcesses(bwBackgroundProcessAction, False, False, True)
+                RunBackgroundProcesses(bwBackgroundProcessAction, False, False, True, OnlineManagement)
             End If
         Else
 
@@ -7733,7 +7830,7 @@ Public Class MainForm
     Private Sub OpenExistingProjectToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OpenExistingProjectToolStripMenuItem.Click
         If OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
             If File.Exists(OpenFileDialog1.FileName) Then
-                If isProjectLoaded Then UnloadDTProj(False, True, False)
+                If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement, False, True), False)
                 ProgressPanel.OperationNum = 990
                 LoadDTProj(OpenFileDialog1.FileName, Path.GetFileNameWithoutExtension(OpenFileDialog1.FileName), False)
             End If
