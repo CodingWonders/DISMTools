@@ -181,6 +181,20 @@ Public Class ProgressPanel
     Dim imgSession As DismSession = Nothing                 ' Image session for the DISM API
     Dim mntString As String = ""                            ' Mount directory, necessary for the DISM API
 
+    Dim OnlineMgmt As Boolean                               ' Determine whether to perform actions to the active installation or the mounted Windows image
+
+    ' Initial settings
+    Dim DismExe As String
+    Dim AutoLogs As Boolean
+    Dim LogPath As String
+    Dim LogLevel As Integer
+    Dim QuietOps As Boolean
+    Dim SkipSysRestart As Boolean
+    Dim UseScratchDir As Boolean
+    Dim ScratchDirPath As String
+    Dim EnglishOut As Boolean
+
+
     ' OperationNum: 0
     Public projName As String
     Public projPath As String
@@ -559,8 +573,12 @@ Public Class ProgressPanel
         CenterToParent()
     End Sub
 
+    ''' <summary>
+    ''' Gathers the initial list of settings to use for DISM
+    ''' </summary>
+    ''' <remarks>These settings can be configured at any time using the Options dialog</remarks>
     Sub GatherInitialSwitches()
-        ' This procedure is not yet called. Use default settings for now
+        CommandArgs = "/logpath=" & Quote & If(AutoLogs, Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now), LogPath) & Quote & " /loglevel=" & LogLevel & If(UseScratchDir And ScratchDirPath <> "", " /scratchdir=" & Quote & ScratchDirPath & Quote, "") & If(EnglishOut, " /english", "")
     End Sub
 
     ''' <summary>
@@ -1976,12 +1994,10 @@ Public Class ProgressPanel
             Else
                 LogView.AppendText(CrLf & "- Enable all parent features? No")
             End If
-            If featContactWindowsUpdate Then
-                If featCanContactWU Then
-                    LogView.AppendText(CrLf & "- Contact Windows Update? Yes")
-                Else
-                    LogView.AppendText(CrLf & "- Contact Windows Update? No, this is not an online installation")
-                End If
+            If featContactWindowsUpdate And OnlineMgmt Then
+                LogView.AppendText(CrLf & "- Contact Windows Update? Yes")
+            ElseIf featContactWindowsUpdate And OnlineMgmt = False Then
+                LogView.AppendText(CrLf & "- Contact Windows Update? No, this is not an online installation")
             Else
                 LogView.AppendText(CrLf & "- Contact Windows Update? No")
             End If
@@ -2048,7 +2064,7 @@ Public Class ProgressPanel
                 If featParentIsEnabled Then
                     CommandArgs &= " /all"
                 End If
-                If Not featContactWindowsUpdate And CommandArgs.Contains("/online") Then
+                If Not featContactWindowsUpdate And OnlineMgmt Then
                     CommandArgs &= " /limitaccess"
                 End If
                 DISMProc.StartInfo.Arguments = CommandArgs
@@ -2378,8 +2394,8 @@ Public Class ProgressPanel
                                        "Repairing the component store..." & CrLf & _
                                        "Options:" & CrLf & _
                                        "- Use different source? " & If(UseCompRepairSource, "Yes (" & Quote & ComponentRepairSource & Quote & ")", "No") & CrLf & _
-                                       "- Limit Windows Update access? " & If(LimitWUAccess, "Yes", "No"))
-                    CommandArgs &= " /restorehealth" & If(UseCompRepairSource And File.Exists(ComponentRepairSource), " /source=" & Quote & ComponentRepairSource & Quote, "") & If(LimitWUAccess, " /limitaccess", "")
+                                       "- Limit Windows Update access? " & If(LimitWUAccess And OnlineMgmt, "Yes", If(LimitWUAccess And Not OnlineMgmt, "No, this is not an online installation", "No")))
+                    CommandArgs &= " /restorehealth" & If(UseCompRepairSource And File.Exists(ComponentRepairSource), " /source=" & Quote & ComponentRepairSource & Quote, "") & If(LimitWUAccess And OnlineMgmt, " /limitaccess", "")
             End Select
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
@@ -2829,7 +2845,7 @@ Public Class ProgressPanel
                                "Options:" & CrLf & _
                                "- Use a source for capability addition? " & If(capAdditionUseSource, "Yes", "No") & CrLf & _
                                "- Capability source: " & If(capAdditionUseSource, Quote & capAdditionSource & Quote, "No source has been provided") & CrLf & _
-                               "- Limit access to Windows Update? " & If(capAdditionLimitWUAccess, "Yes", "No") & CrLf & _
+                               "- Limit access to Windows Update? " & If(capAdditionLimitWUAccess And OnlineMgmt, "Yes", If(capAdditionLimitWUAccess And Not OnlineMgmt, "No, this is not an online installation", "No")) & CrLf & _
                                "- Commit image after adding capabilities? " & If(capAdditionCommit, "Yes", "No") & CrLf)
             If capAdditionUseSource And Not Directory.Exists(capAdditionSource) Then
                 LogView.AppendText(CrLf & _
@@ -2887,7 +2903,7 @@ Public Class ProgressPanel
                 If capAdditionUseSource And Directory.Exists(capAdditionSource) Then
                     CommandArgs &= " /source=" & Quote & capAdditionSource & Quote
                 End If
-                If capAdditionLimitWUAccess Then CommandArgs &= " /limitaccess"
+                If capAdditionLimitWUAccess And OnlineMgmt Then CommandArgs &= " /limitaccess"
                 DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
@@ -4829,6 +4845,8 @@ Public Class ProgressPanel
         Control.CheckForIllegalCrossThreadCalls = False
         LinkLabel1.Visible = False
         If Not Directory.Exists(Directory.GetCurrentDirectory() & "\logs") Then Directory.CreateDirectory(Directory.GetCurrentDirectory() & "\logs")
+        ' Detect settings
+        OnlineMgmt = MainForm.OnlineManagement
         GetTasks(OperationNum)
         ProgressBW.RunWorkerAsync()
     End Sub
