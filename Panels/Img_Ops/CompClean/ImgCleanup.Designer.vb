@@ -49,13 +49,6 @@ Partial Class ImgCleanup
         Me.Panel7 = New System.Windows.Forms.Panel()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.Panel8 = New System.Windows.Forms.Panel()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.Label11 = New System.Windows.Forms.Label()
-        Me.CheckBox5 = New System.Windows.Forms.CheckBox()
-        Me.CheckBox4 = New System.Windows.Forms.CheckBox()
-        Me.Label12 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.HealthRestoreSourceOFD = New System.Windows.Forms.OpenFileDialog()
         Me.Panel9 = New System.Windows.Forms.Panel()
         Me.TextBoxSourcePanel = New System.Windows.Forms.Panel()
         Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
@@ -65,7 +58,14 @@ Partial Class ImgCleanup
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.Label14 = New System.Windows.Forms.Label()
         Me.Button5 = New System.Windows.Forms.Button()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.CheckBox5 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox4 = New System.Windows.Forms.CheckBox()
         Me.Button2 = New System.Windows.Forms.Button()
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.HealthRestoreSourceOFD = New System.Windows.Forms.OpenFileDialog()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -376,72 +376,6 @@ Partial Class ImgCleanup
         Me.Panel8.TabIndex = 6
         Me.Panel8.Visible = False
         '
-        'Button1
-        '
-        Me.Button1.Enabled = False
-        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button1.Location = New System.Drawing.Point(463, 46)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
-        Me.Button1.TabIndex = 3
-        Me.Button1.Text = "Browse..."
-        Me.Button1.UseVisualStyleBackColor = True
-        '
-        'Label11
-        '
-        Me.Label11.AutoSize = True
-        Me.Label11.Enabled = False
-        Me.Label11.Location = New System.Drawing.Point(52, 50)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(44, 13)
-        Me.Label11.TabIndex = 1
-        Me.Label11.Text = "Source:"
-        '
-        'CheckBox5
-        '
-        Me.CheckBox5.AutoSize = True
-        Me.CheckBox5.Enabled = False
-        Me.CheckBox5.Location = New System.Drawing.Point(36, 74)
-        Me.CheckBox5.Name = "CheckBox5"
-        Me.CheckBox5.Size = New System.Drawing.Size(179, 17)
-        Me.CheckBox5.TabIndex = 0
-        Me.CheckBox5.Text = "Limit access to Windows Update"
-        Me.CheckBox5.UseVisualStyleBackColor = True
-        '
-        'CheckBox4
-        '
-        Me.CheckBox4.AutoSize = True
-        Me.CheckBox4.Location = New System.Drawing.Point(36, 24)
-        Me.CheckBox4.Name = "CheckBox4"
-        Me.CheckBox4.Size = New System.Drawing.Size(228, 17)
-        Me.CheckBox4.TabIndex = 0
-        Me.CheckBox4.Text = "Use different source for component repair"
-        Me.CheckBox4.UseVisualStyleBackColor = True
-        '
-        'Label12
-        '
-        Me.Label12.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label12.Location = New System.Drawing.Point(0, 0)
-        Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(754, 172)
-        Me.Label12.TabIndex = 7
-        Me.Label12.Text = "Select a task listed above to configure its options."
-        Me.Label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'Label3
-        '
-        Me.Label3.Location = New System.Drawing.Point(97, 79)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(675, 60)
-        Me.Label3.TabIndex = 20
-        Me.Label3.Text = "Choose a task to see its description"
-        '
-        'HealthRestoreSourceOFD
-        '
-        Me.HealthRestoreSourceOFD.Filter = "WIM files|*.wim|ESD files|*.esd"
-        Me.HealthRestoreSourceOFD.SupportMultiDottedExtensions = True
-        Me.HealthRestoreSourceOFD.Title = "Specify the source from which we will restore the component store health"
-        '
         'Panel9
         '
         Me.Panel9.Controls.Add(Me.TextBoxSourcePanel)
@@ -542,6 +476,48 @@ Partial Class ImgCleanup
         Me.Button5.TabIndex = 9
         Me.Button5.UseVisualStyleBackColor = True
         '
+        'Button1
+        '
+        Me.Button1.Enabled = False
+        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button1.Location = New System.Drawing.Point(463, 46)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.TabIndex = 3
+        Me.Button1.Text = "Browse..."
+        Me.Button1.UseVisualStyleBackColor = True
+        '
+        'Label11
+        '
+        Me.Label11.AutoSize = True
+        Me.Label11.Enabled = False
+        Me.Label11.Location = New System.Drawing.Point(52, 50)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(44, 13)
+        Me.Label11.TabIndex = 1
+        Me.Label11.Text = "Source:"
+        '
+        'CheckBox5
+        '
+        Me.CheckBox5.AutoSize = True
+        Me.CheckBox5.Enabled = False
+        Me.CheckBox5.Location = New System.Drawing.Point(36, 74)
+        Me.CheckBox5.Name = "CheckBox5"
+        Me.CheckBox5.Size = New System.Drawing.Size(179, 17)
+        Me.CheckBox5.TabIndex = 0
+        Me.CheckBox5.Text = "Limit access to Windows Update"
+        Me.CheckBox5.UseVisualStyleBackColor = True
+        '
+        'CheckBox4
+        '
+        Me.CheckBox4.AutoSize = True
+        Me.CheckBox4.Location = New System.Drawing.Point(36, 24)
+        Me.CheckBox4.Name = "CheckBox4"
+        Me.CheckBox4.Size = New System.Drawing.Size(228, 17)
+        Me.CheckBox4.TabIndex = 0
+        Me.CheckBox4.Text = "Use different source for component repair"
+        Me.CheckBox4.UseVisualStyleBackColor = True
+        '
         'Button2
         '
         Me.Button2.Enabled = False
@@ -552,6 +528,30 @@ Partial Class ImgCleanup
         Me.Button2.TabIndex = 12
         Me.Button2.Text = "Detect from group policy"
         Me.Button2.UseVisualStyleBackColor = True
+        '
+        'Label12
+        '
+        Me.Label12.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label12.Location = New System.Drawing.Point(0, 0)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(754, 172)
+        Me.Label12.TabIndex = 7
+        Me.Label12.Text = "Select a task listed above to configure its options."
+        Me.Label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'Label3
+        '
+        Me.Label3.Location = New System.Drawing.Point(97, 79)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(675, 60)
+        Me.Label3.TabIndex = 20
+        Me.Label3.Text = "Choose a task to see its description"
+        '
+        'HealthRestoreSourceOFD
+        '
+        Me.HealthRestoreSourceOFD.Filter = "WIM files|*.wim|ESD files|*.esd"
+        Me.HealthRestoreSourceOFD.SupportMultiDottedExtensions = True
+        Me.HealthRestoreSourceOFD.Title = "Specify the source from which we will restore the component store health"
         '
         'ImgCleanup
         '

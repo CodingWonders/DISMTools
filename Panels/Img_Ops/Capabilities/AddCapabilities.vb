@@ -244,6 +244,7 @@ Public Class AddCapabilities
         CheckBox3.ForeColor = ForeColor
         ListView1.ForeColor = ForeColor
         RichTextBox1.ForeColor = ForeColor
+        CheckBox2.Enabled = MainForm.OnlineManagement = True
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged

@@ -254,6 +254,7 @@ Public Class ImgCleanup
                 End Select
             End If
         End Using
+        CheckBox5.Enabled = MainForm.OnlineManagement = True
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
