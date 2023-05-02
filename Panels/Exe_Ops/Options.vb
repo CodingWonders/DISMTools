@@ -1293,4 +1293,8 @@ Public Class Options
     Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
         If DetectFileAssociations() Then ManageAssociations(1, False) Else ManageAssociations(0, If(CheckBox11.Checked, True, False))
     End Sub
+
+    Private Sub Button10_Click(sender As Object, e As EventArgs) Handles Button10.Click
+        BGProcsAdvSettings.ShowDialog()
+    End Sub
 End Class
