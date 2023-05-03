@@ -727,6 +727,9 @@
     <None Include="Helpers\extbatch\options.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Helpers\extps1\extappx.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="LICENSE">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -1088,8 +1091,10 @@ IF NOT EXIST bin (
 	md bin\exthelpers
 	md bin\extbatch
 	md bin\utils
+	md bin\extps1
 	move helpers\extbatch\*.* bin\extbatch
 	move helpers\dthelper.bat bin
+	move helpers\extps1\*.* bin\extps1
 	IF EXIST HELPERS (
 		rd HELPERS /s /q
 	)

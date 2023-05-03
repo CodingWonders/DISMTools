@@ -54,8 +54,9 @@ echo Ready to accept user input.
 echo If you are new to the command line, or just want to know how to do a specific task, type CMDHELP (case-insensitive) to show the DISMTools Command Help (console view).
 echo.
 doskey pwd=cd
+doskey getappxpkg=powershell "bin\extps1\extappx.ps1"
 if exist ".\extbatch" (
-    path %cd%"\extbatch";"\Windows\system32";"\Windows\system32\wbem"
+    path %cd%"\extbatch";"%windir%\system32";"%windir%\system32\wbem";"%windir%\system32\WindowsPowerShell\v1.0"
 ) else (
-    path %cd%".\bin\extbatch";"\Windows\system32";"\Windows\system32\wbem"
+    path %cd%".\bin\extbatch";"%windir%\system32";"%windir%\system32\wbem";"%windir%\system32\WindowsPowerShell\v1.0"
 )

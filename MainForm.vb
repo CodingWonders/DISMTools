@@ -80,6 +80,10 @@ Public Class MainForm
     Public NotificationShow As Boolean
     Public NotificationFrequency As Integer
     Public NotificationTimes As Integer = 0
+    ' 0.3 settings
+    ' - Background processes -
+    Public ExtAppxGetter As Boolean
+    Public SkipNonRemovable As Boolean
 
     ' Background process initiator settings
     Public bwBackgroundProcessAction As Integer
