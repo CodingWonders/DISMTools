@@ -82,8 +82,8 @@ Public Class MainForm
     Public NotificationTimes As Integer = 0
     ' 0.3 settings
     ' - Background processes -
-    Public ExtAppxGetter As Boolean
-    Public SkipNonRemovable As Boolean
+    Public ExtAppxGetter As Boolean = True
+    Public SkipNonRemovable As Boolean = True
 
     ' Background process initiator settings
     Public bwBackgroundProcessAction As Integer
@@ -2249,6 +2249,51 @@ Public Class MainForm
                         imgAppxResourceIdList.Add(AppxPackage.ResourceId)
                         imgAppxVersionList.Add(AppxPackage.Version.ToString())
                     Next
+                    If OnlineMode And ExtAppxGetter Then
+                        PSExtAppxGetter()
+                        If Directory.Exists(Application.StartupPath & "\bin\extps1\out") And My.Computer.FileSystem.GetFiles(Application.StartupPath & "\bin\extps1\out").Count > 0 Then
+                            Dim appxPkgNameRTB As New RichTextBox()
+                            Dim appxPkgFullNameRTB As New RichTextBox()
+                            Dim appxArchRTB As New RichTextBox()
+                            Dim appxResIdRTB As New RichTextBox()
+                            Dim appxVerRTB As New RichTextBox()
+                            Dim appxNonRemPolRTB As New RichTextBox()
+                            appxPkgNameRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxpkgnames")
+                            appxPkgFullNameRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxpkgfullnames")
+                            appxArchRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxarch")
+                            appxResIdRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxresid")
+                            appxVerRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxver")
+                            appxNonRemPolRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxnonrempolicy")
+                            For x = 0 To appxPkgFullNameRTB.Lines.Count - 1
+                                If imgAppxPackageNameList.Contains(appxPkgFullNameRTB.Lines(x)) Then
+                                    Continue For
+                                Else
+                                    If SkipNonRemovable Then
+                                        If appxNonRemPolRTB.Lines(x) = "True" Then
+                                            Continue For
+                                        Else
+                                            imgAppxDisplayNameList.Add(appxPkgNameRTB.Lines(x))
+                                            imgAppxPackageNameList.Add(appxPkgFullNameRTB.Lines(x))
+                                            imgAppxArchitectureList.Add(appxArchRTB.Lines(x))
+                                            imgAppxResourceIdList.Add(appxResIdRTB.Lines(x))
+                                            imgAppxVersionList.Add(appxVerRTB.Lines(x))
+                                        End If
+                                    Else
+                                        imgAppxDisplayNameList.Add(appxPkgNameRTB.Lines(x))
+                                        imgAppxPackageNameList.Add(appxPkgFullNameRTB.Lines(x))
+                                        imgAppxArchitectureList.Add(appxArchRTB.Lines(x))
+                                        imgAppxResourceIdList.Add(appxResIdRTB.Lines(x))
+                                        imgAppxVersionList.Add(appxVerRTB.Lines(x))
+                                    End If
+                                End If
+                            Next
+                            Try
+                                Directory.Delete(Application.StartupPath & "\bin\extps1\out", True)
+                            Catch ex As Exception
+                                ' Leave directory for later
+                            End Try
+                        End If
+                    End If
                     imgAppxArchitectures = imgAppxArchitectureList.ToArray()
                     imgAppxDisplayNames = imgAppxDisplayNameList.ToArray()
                     imgAppxPackageNames = imgAppxPackageNameList.ToArray()
@@ -2363,6 +2408,22 @@ Public Class MainForm
             End If
         Next
         'ImgBW.ReportProgress(progressMin + progressDivs)
+    End Sub
+
+    Sub PSExtAppxGetter()
+        Dim PSExtAppxProc As New Process
+        PSExtAppxProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
+        PSExtAppxProc.StartInfo.WorkingDirectory = Application.StartupPath
+        PSExtAppxProc.StartInfo.Arguments = Application.StartupPath & "\bin\extps1\extappx.ps1"
+        If Not Debugger.IsAttached Then
+            PSExtAppxProc.StartInfo.CreateNoWindow = True
+            PSExtAppxProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+        End If
+        PSExtAppxProc.Start()
+        PSExtAppxProc.WaitForExit()
+        If PSExtAppxProc.ExitCode = 0 Then
+
+        End If
     End Sub
 
     ''' <summary>
