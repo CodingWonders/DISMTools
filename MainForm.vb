@@ -2564,7 +2564,7 @@ Public Class MainForm
                     Dim imgDrvDateList As New List(Of String)
                     Dim imgDrvVersionList As New List(Of String)
                     Dim imgDrvBootCriticalStatusList As New List(Of Boolean)
-                    Dim DriverCollection As DismDriverPackageCollection = DismApi.GetDrivers(session, True)
+                    Dim DriverCollection As DismDriverPackageCollection = DismApi.GetDrivers(session, False)
                     For Each driver As DismDriverPackage In DriverCollection
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
@@ -7990,8 +7990,44 @@ Public Class MainForm
                 Case 2
                     ViewPackageDirectoryToolStripMenuItem.Text = "Ver directorio del paquete"
             End Select
+            If RemProvAppxPackage.ListView1.SelectedItems.Count = 1 Then
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                AppxPackagePopupCMS.Items(1).Text = "View resources of " & GetPackageDisplayName(RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text)
+                            Case "ESN"
+                                AppxPackagePopupCMS.Items(1).Text = "Ver recursos de " & GetPackageDisplayName(RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text)
+                        End Select
+                    Case 1
+                        AppxPackagePopupCMS.Items(1).Text = "View resources of " & GetPackageDisplayName(RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text)
+                    Case 2
+                        AppxPackagePopupCMS.Items(1).Text = "Ver recursos de " & GetPackageDisplayName(RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text)
+                End Select
+            End If
+            AppxPackagePopupCMS.AutoSize = False
+            AppxPackagePopupCMS.AutoSize = True
         End If
     End Sub
+
+    Function GetPackageDisplayName(PackageName As String)
+        If File.Exists(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml") Then
+            ' Copy manifest to startup dir
+            File.Copy(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml", Application.StartupPath & "\AppxManifest.xml")
+            Dim XMLReaderRTB As New RichTextBox With {
+                .Text = File.ReadAllText(Application.StartupPath & "\AppxManifest.xml")
+            }
+            ' Go through each line until we find the properties tag
+            For x = 0 To XMLReaderRTB.Lines.Count - 1
+                If XMLReaderRTB.Lines(x).EndsWith("<Properties>") Then
+                    Dim pkgName As String = XMLReaderRTB.Lines(x + 1).Replace("/", "").Trim().Replace("<DisplayName>", "").Trim()
+                    File.Delete(Application.StartupPath & "\AppxManifest.xml")
+                    Return pkgName
+                End If
+            Next
+        End If
+        Return Nothing
+    End Function
 
     Private Sub ViewPackageDirectoryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewPackageDirectoryToolStripMenuItem.Click
         If OnlineManagement Then
