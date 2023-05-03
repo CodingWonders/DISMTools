@@ -5080,6 +5080,7 @@ Public Class MainForm
     End Sub
 
     Sub BeginOnlineManagement()
+        ActiveInstAccessWarn.ShowDialog()
         IsImageMounted = True
         isProjectLoaded = True
         Select Case Language
