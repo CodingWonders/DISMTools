@@ -2407,6 +2407,66 @@ Public Class MainForm
                 Continue For
             End If
         Next
+        If OnlineMode And ExtAppxGetter Then
+            Dim imgAppxDisplayNameList As New List(Of String)
+            Dim imgAppxPackageNameList As New List(Of String)
+            Dim imgAppxVersionList As New List(Of String)
+            Dim imgAppxArchitectureList As New List(Of String)
+            Dim imgAppxResourceIdList As New List(Of String)
+            imgAppxDisplayNameList = imgAppxDisplayNames.ToList()
+            imgAppxPackageNameList = imgAppxPackageNames.ToList()
+            imgAppxVersionList = imgAppxVersions.ToList()
+            imgAppxArchitectureList = imgAppxArchitectures.ToList()
+            imgAppxResourceIdList = imgAppxResourceIds.ToList()
+            PSExtAppxGetter()
+            If Directory.Exists(Application.StartupPath & "\bin\extps1\out") And My.Computer.FileSystem.GetFiles(Application.StartupPath & "\bin\extps1\out").Count > 0 Then
+                Dim appxPkgNameRTB As New RichTextBox()
+                Dim appxPkgFullNameRTB As New RichTextBox()
+                Dim appxArchRTB As New RichTextBox()
+                Dim appxResIdRTB As New RichTextBox()
+                Dim appxVerRTB As New RichTextBox()
+                Dim appxNonRemPolRTB As New RichTextBox()
+                appxPkgNameRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxpkgnames")
+                appxPkgFullNameRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxpkgfullnames")
+                appxArchRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxarch")
+                appxResIdRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxresid")
+                appxVerRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxver")
+                appxNonRemPolRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxnonrempolicy")
+                For x = 0 To appxPkgFullNameRTB.Lines.Count - 1
+                    If imgAppxPackageNameList.Contains(appxPkgFullNameRTB.Lines(x)) Then
+                        Continue For
+                    Else
+                        If SkipNonRemovable Then
+                            If appxNonRemPolRTB.Lines(x) = "True" Then
+                                Continue For
+                            Else
+                                imgAppxDisplayNameList.Add(appxPkgNameRTB.Lines(x))
+                                imgAppxPackageNameList.Add(appxPkgFullNameRTB.Lines(x))
+                                imgAppxArchitectureList.Add(appxArchRTB.Lines(x))
+                                imgAppxResourceIdList.Add(appxResIdRTB.Lines(x))
+                                imgAppxVersionList.Add(appxVerRTB.Lines(x))
+                            End If
+                        Else
+                            imgAppxDisplayNameList.Add(appxPkgNameRTB.Lines(x))
+                            imgAppxPackageNameList.Add(appxPkgFullNameRTB.Lines(x))
+                            imgAppxArchitectureList.Add(appxArchRTB.Lines(x))
+                            imgAppxResourceIdList.Add(appxResIdRTB.Lines(x))
+                            imgAppxVersionList.Add(appxVerRTB.Lines(x))
+                        End If
+                    End If
+                Next
+                Try
+                    Directory.Delete(Application.StartupPath & "\bin\extps1\out", True)
+                Catch ex As Exception
+                    ' Leave directory for later
+                End Try
+            End If
+            imgAppxDisplayNames = imgAppxDisplayNameList.ToArray()
+            imgAppxPackageNames = imgAppxPackageNameList.ToArray()
+            imgAppxVersions = imgAppxVersionList.ToArray()
+            imgAppxArchitectures = imgAppxArchitectureList.ToArray()
+            imgAppxResourceIds = imgAppxResourceIdList.ToArray()
+        End If
         'ImgBW.ReportProgress(progressMin + progressDivs)
     End Sub
 
@@ -3542,6 +3602,7 @@ Public Class MainForm
                     CommitAndUnmountTSMI.Text = "Commit changes and unmount image"
                     DiscardAndUnmountTSMI.Text = "Discard changes and unmount image"
                     UnmountSettingsToolStripMenuItem.Text = "Unmount settings..."
+                    ViewPackageDirectoryToolStripMenuItem.Text = "View package directory"
                     ' OpenFileDialogs and FolderBrowsers
                     OpenFileDialog1.Title = "Specify the project file to load"
                     LocalMountDirFBD.Description = "Please specify the mount directory you want to load into this project:"
@@ -3797,6 +3858,7 @@ Public Class MainForm
                     CommitAndUnmountTSMI.Text = "Guardar cambios y desmontar imagen"
                     DiscardAndUnmountTSMI.Text = "Descartar cambios y desmontar imagen"
                     UnmountSettingsToolStripMenuItem.Text = "Configuración de desmontaje..."
+                    ViewPackageDirectoryToolStripMenuItem.Text = "Ver directorio del paquete"
                     ' OpenFileDialogs and FolderBrowsers
                     OpenFileDialog1.Title = "Especifique el archivo de proyecto a cargar"
                     LocalMountDirFBD.Description = "Especifique el directorio de montaje que desea cargar en este proyecto:"
@@ -4057,6 +4119,7 @@ Public Class MainForm
                 CommitAndUnmountTSMI.Text = "Commit changes and unmount image"
                 DiscardAndUnmountTSMI.Text = "Discard changes and unmount image"
                 UnmountSettingsToolStripMenuItem.Text = "Unmount settings..."
+                ViewPackageDirectoryToolStripMenuItem.Text = "View package directory"
                 ' OpenFileDialogs and FolderBrowsers
                 OpenFileDialog1.Title = "Specify the project file to load"
                 LocalMountDirFBD.Description = "Please specify the mount directory you want to load into this project:"
@@ -4312,6 +4375,7 @@ Public Class MainForm
                 CommitAndUnmountTSMI.Text = "Guardar cambios y desmontar imagen"
                 DiscardAndUnmountTSMI.Text = "Descartar cambios y desmontar imagen"
                 UnmountSettingsToolStripMenuItem.Text = "Configuración de desmontaje..."
+                ViewPackageDirectoryToolStripMenuItem.Text = "Ver directorio del paquete"
                 ' OpenFileDialogs and FolderBrowsers
                 OpenFileDialog1.Title = "Especifique el archivo de proyecto a cargar"
                 LocalMountDirFBD.Description = "Especifique el directorio de montaje que desea cargar en este proyecto:"
@@ -7972,42 +8036,6 @@ Public Class MainForm
 
     Private Sub OnlineInstMgmt_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles OnlineInstMgmt.LinkClicked
         BeginOnlineManagement()
-    End Sub
-
-    Private Sub AppxPackagePopupCMS_VisibleChanged(sender As Object, e As EventArgs) Handles AppxPackagePopupCMS.VisibleChanged
-        If AppxPackagePopupCMS.Visible Then
-            ViewPackageDirectoryToolStripMenuItem.Image = If(BackColor = Color.FromArgb(48, 48, 48), My.Resources.openfile_dark, My.Resources.openfile)
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
-                            ViewPackageDirectoryToolStripMenuItem.Text = "View package directory"
-                        Case "ESN"
-                            ViewPackageDirectoryToolStripMenuItem.Text = "Ver directorio del paquete"
-                    End Select
-                Case 1
-                    ViewPackageDirectoryToolStripMenuItem.Text = "View package directory"
-                Case 2
-                    ViewPackageDirectoryToolStripMenuItem.Text = "Ver directorio del paquete"
-            End Select
-            If RemProvAppxPackage.ListView1.SelectedItems.Count = 1 Then
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                AppxPackagePopupCMS.Items(1).Text = "View resources of " & GetPackageDisplayName(RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text)
-                            Case "ESN"
-                                AppxPackagePopupCMS.Items(1).Text = "Ver recursos de " & GetPackageDisplayName(RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text)
-                        End Select
-                    Case 1
-                        AppxPackagePopupCMS.Items(1).Text = "View resources of " & GetPackageDisplayName(RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text)
-                    Case 2
-                        AppxPackagePopupCMS.Items(1).Text = "Ver recursos de " & GetPackageDisplayName(RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text)
-                End Select
-            End If
-            AppxPackagePopupCMS.AutoSize = False
-            AppxPackagePopupCMS.AutoSize = True
-        End If
     End Sub
 
     Function GetPackageDisplayName(PackageName As String)

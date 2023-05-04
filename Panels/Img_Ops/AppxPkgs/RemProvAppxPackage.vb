@@ -138,6 +138,7 @@ Public Class RemProvAppxPackage
             ListView1.BackColor = Color.FromArgb(238, 238, 242)
         End If
         ListView1.ForeColor = ForeColor
+        MainForm.ViewPackageDirectoryToolStripMenuItem.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.openfile_dark, My.Resources.openfile)
     End Sub
 
     Private Sub ListView1_MouseClick(sender As Object, e As MouseEventArgs) Handles ListView1.MouseClick
@@ -146,6 +147,24 @@ Public Class RemProvAppxPackage
             If item IsNot Nothing Then
                 MainForm.AppxPackagePopupCMS.Show(sender, e.Location)
             End If
+        End If
+    End Sub
+
+    Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
+        If ListView1.SelectedItems.Count = 1 Then
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MainForm.ResViewTSMI.Text = "View resources of " & MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text)
+                        Case "ESN"
+                            MainForm.ResViewTSMI.Text = "Ver recursos de " & MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text)
+                    End Select
+                Case 1
+                    MainForm.ResViewTSMI.Text = "View resources of " & MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text)
+                Case 2
+                    MainForm.ResViewTSMI.Text = "Ver recursos de " & MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text)
+            End Select
         End If
     End Sub
 End Class
