@@ -84,6 +84,7 @@ Public Class MainForm
     ' - Background processes -
     Public ExtAppxGetter As Boolean = True
     Public SkipNonRemovable As Boolean = True
+    Public AllDrivers As Boolean
 
     ' Background process initiator settings
     Public bwBackgroundProcessAction As Integer
@@ -2624,7 +2625,7 @@ Public Class MainForm
                     Dim imgDrvDateList As New List(Of String)
                     Dim imgDrvVersionList As New List(Of String)
                     Dim imgDrvBootCriticalStatusList As New List(Of Boolean)
-                    Dim DriverCollection As DismDriverPackageCollection = DismApi.GetDrivers(session, False)
+                    Dim DriverCollection As DismDriverPackageCollection = DismApi.GetDrivers(session, AllDrivers)
                     For Each driver As DismDriverPackage In DriverCollection
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
