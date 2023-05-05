@@ -3,6 +3,9 @@
 Public Class BGProcsAdvSettings
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        MainForm.ExtAppxGetter = CheckBox1.Checked
+        MainForm.SkipNonRemovable = CheckBox2.Checked
+        MainForm.AllDrivers = CheckBox3.Checked
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
     End Sub
@@ -20,5 +23,12 @@ Public Class BGProcsAdvSettings
             BackColor = Color.FromArgb(238, 238, 242)
             ForeColor = Color.Black
         End If
+        CheckBox1.Checked = MainForm.ExtAppxGetter
+        CheckBox2.Checked = MainForm.SkipNonRemovable
+        CheckBox3.Checked = MainForm.AllDrivers
+    End Sub
+
+    Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
+        CheckBox2.Enabled = CheckBox1.Checked
     End Sub
 End Class

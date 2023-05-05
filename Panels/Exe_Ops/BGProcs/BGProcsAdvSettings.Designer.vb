@@ -28,6 +28,7 @@ Partial Class BGProcsAdvSettings
         Me.Label1 = New System.Windows.Forms.Label()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.CheckBox2 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox3 = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -77,6 +78,8 @@ Partial Class BGProcsAdvSettings
         'CheckBox1
         '
         Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.Checked = True
+        Me.CheckBox1.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBox1.Location = New System.Drawing.Point(12, 40)
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(419, 17)
@@ -88,12 +91,24 @@ Partial Class BGProcsAdvSettings
         'CheckBox2
         '
         Me.CheckBox2.AutoSize = True
+        Me.CheckBox2.Checked = True
+        Me.CheckBox2.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBox2.Location = New System.Drawing.Point(30, 64)
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(246, 17)
         Me.CheckBox2.TabIndex = 2
         Me.CheckBox2.Text = "Skip packages with non-removable policies set"
         Me.CheckBox2.UseVisualStyleBackColor = True
+        '
+        'CheckBox3
+        '
+        Me.CheckBox3.AutoSize = True
+        Me.CheckBox3.Location = New System.Drawing.Point(12, 89)
+        Me.CheckBox3.Name = "CheckBox3"
+        Me.CheckBox3.Size = New System.Drawing.Size(138, 17)
+        Me.CheckBox3.TabIndex = 2
+        Me.CheckBox3.Text = "Detect all image drivers"
+        Me.CheckBox3.UseVisualStyleBackColor = True
         '
         'BGProcsAdvSettings
         '
@@ -103,6 +118,7 @@ Partial Class BGProcsAdvSettings
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(464, 281)
         Me.Controls.Add(Me.CheckBox2)
+        Me.Controls.Add(Me.CheckBox3)
         Me.Controls.Add(Me.CheckBox1)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.TableLayoutPanel1)
@@ -125,5 +141,6 @@ Partial Class BGProcsAdvSettings
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox2 As System.Windows.Forms.CheckBox
+    Friend WithEvents CheckBox3 As System.Windows.Forms.CheckBox
 
 End Class
