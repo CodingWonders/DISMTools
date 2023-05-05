@@ -6611,6 +6611,11 @@ Public Class MainForm
     End Sub
 
     Private Sub MainForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        If OnlineManagement Then
+            EndOnlineManagement()
+            MountedImageDetectorBW.CancelAsync()
+            If MountedImgMgr.DetectorBW.IsBusy Then MountedImgMgr.DetectorBW.CancelAsync()
+        End If
         If isProjectLoaded Then
             If isModified Then
                 SaveProjectQuestionDialog.ShowDialog()
