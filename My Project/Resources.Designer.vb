@@ -1607,16 +1607,19 @@ Namespace My.Resources
         
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
-        '''- Fixed an issue where direct actions other than mounting would not be disabled after unloading an image from a project
-        '''- Fixed an issue where adding AppX packages would fail if there were case variations in their extension
+        '''No bugfixes were made in this release
         '''
         '''New features
         '''
-        '''Provisioning packages
-        '''- Introduced addition of provisioning packages (PPKG files)
+        '''Active installations
+        '''- Introduced online (active) installation management
+        '''- Introduced a new program flag to directly enter this mode
         '''
-        '''AppX package addition
-        '''- Checks are now performed when adding applications to the queue list to prevent adding the same package or adding different versions of such package [resto de la cadena truncado]&quot;;.
+        '''Background processes
+        '''- You can now configure more settings of background processes
+        '''
+        '''AppX packages
+        '''- You can now view a package&apos;s directory, and its resources, from the package removal dialog.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

@@ -954,19 +954,18 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes
-- Fixed an issue where direct actions other than mounting would not be disabled after unloading an image from a project
-- Fixed an issue where adding AppX packages would fail if there were case variations in their extension
+No bugfixes were made in this release
 
 New features
 
-Provisioning packages
-- Introduced addition of provisioning packages (PPKG files)
+Active installations
+- Introduced online (active) installation management
+- Introduced a new program flag to directly enter this mode
 
-AppX package addition
-- Checks are now performed when adding applications to the queue list to prevent adding the same package or adding different versions of such packages
-- When attempting to add encrypted application packages (EAPPX, EMSIX, and so on), you will now receive a warning
+Background processes
+- You can now configure more settings of background processes
 
-Miscellaneous
-- The program can now change color modes when restored from the minimized state</value>
+AppX packages
+- You can now view a package's directory, and its resources, from the package removal dialog</value>
   </data>
 </root>
