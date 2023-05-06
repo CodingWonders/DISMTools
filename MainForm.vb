@@ -5112,6 +5112,71 @@ Public Class MainForm
     End Sub
 
     Sub EndOnlineManagement()
+        If ImgBW.IsBusy Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            If MsgBox("Background processes are still gathering information about this image. Do you want to cancel them?", vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
+                                ImgBW.CancelAsync()
+                            Else
+                                Exit Sub
+                            End If
+                        Case "ESN"
+                            If MsgBox("Procesos en segundo plano todavía están recopilando información de esta imagen. ¿Desea cancelarlos?", vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
+                                ImgBW.CancelAsync()
+                            Else
+                                Exit Sub
+                            End If
+                    End Select
+                Case 1
+                    If MsgBox("Background processes are still gathering information about this image. Do you want to cancel them?", vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
+                        ImgBW.CancelAsync()
+                    Else
+                        Exit Sub
+                    End If
+                Case 2
+                    If MsgBox("Procesos en segundo plano todavía están recopilando información de esta imagen. ¿Desea cancelarlos?", vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
+                        ImgBW.CancelAsync()
+                    Else
+                        Exit Sub
+                    End If
+            End Select
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MenuDesc.Text = "Cancelling background processes. Please wait..."
+                        Case "ESN"
+                            MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
+                    End Select
+                Case 1
+                    MenuDesc.Text = "Cancelling background processes. Please wait..."
+                Case 2
+                    MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
+            End Select
+            While ImgBW.IsBusy()
+                ToolStripButton3.Enabled = False
+                UnloadBtn.Enabled = False
+                Application.DoEvents()
+                Thread.Sleep(100)
+            End While
+            ToolStripButton3.Enabled = True
+            UnloadBtn.Enabled = True
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MenuDesc.Text = "Ready"
+                        Case "ESN"
+                            MenuDesc.Text = "Listo"
+                    End Select
+                Case 1
+                    MenuDesc.Text = "Ready"
+                Case 2
+                    MenuDesc.Text = "Listo"
+            End Select
+        End If
         IsImageMounted = False
         isProjectLoaded = False
         Text = "DISMTools"
@@ -8075,6 +8140,22 @@ Public Class MainForm
                 Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", MountDir & "\Program Files\WindowsApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text)
             ElseIf Directory.Exists(MountDir & "\Windows\SystemApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text) Then
                 Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", MountDir & "\Windows\SystemApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text)
+            End If
+        End If
+    End Sub
+
+    Private Sub ResViewTSMI_Click(sender As Object, e As EventArgs) Handles ResViewTSMI.Click
+        If OnlineManagement Then
+            If Directory.Exists(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\Program Files\WindowsApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text & "\Assets") Then
+                Process.Start(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\Program Files\WindowsApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text & "\Assets")
+            ElseIf Directory.Exists(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\Windows\SystemApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text & "\Assets") Then
+                Process.Start(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\Windows\SystemApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text & "\Assets")
+            End If
+        Else
+            If Directory.Exists(MountDir & "\Program Files\WindowsApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text & "\Assets") Then
+                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", MountDir & "\Program Files\WindowsApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text & "\Assets")
+            ElseIf Directory.Exists(MountDir & "\Windows\SystemApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text & "\Assets") Then
+                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", MountDir & "\Windows\SystemApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text & "\Assets")
             End If
         End If
     End Sub
