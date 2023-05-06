@@ -8,10 +8,10 @@ Imports System.Runtime.InteropServices
 
 ' Revisar los valores de los atributos del ensamblado
 
-<Assembly: AssemblyTitle("DISMTools-UCS")> 
+<Assembly: AssemblyTitle("Update Check System for DISMTools")> 
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("DISMTools-UCS")> 
+<Assembly: AssemblyProduct("Update Check System for DISMTools")> 
 <Assembly: AssemblyCopyright("Copyright ©  2023")> 
 <Assembly: AssemblyTrademark("")> 
 

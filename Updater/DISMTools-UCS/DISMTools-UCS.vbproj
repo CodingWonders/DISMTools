@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <StartupObject>DISMTools_UCS.My.MyApplication</StartupObject>
     <RootNamespace>DISMTools_UCS</RootNamespace>
-    <AssemblyName>DISMTools-UCS</AssemblyName>
+    <AssemblyName>update</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>WindowsForms</MyType>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
@@ -20,7 +20,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>DISMTools-UCS.xml</DocumentationFile>
+    <DocumentationFile>update.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -30,7 +30,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>DISMTools-UCS.xml</DocumentationFile>
+    <DocumentationFile>update.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -144,6 +144,10 @@
     <None Include="Resources\wndControls\wndPanel_Backdrop.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>IF NOT EXIST "$(ProjectDir)update-bin" (md "$(ProjectDir)update-bin")
+COPY "$(ProjectDir)$(OutDir)update.exe" "$(ProjectDir)update-bin"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
