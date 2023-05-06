@@ -22,6 +22,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DocumentationFile>update.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -115,6 +116,9 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <None Include="App.config" />
+    <None Include="verinfo\preview.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\dt_bgbranding.jpg" />
@@ -146,7 +150,8 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
     <PostBuildEvent>IF NOT EXIST "$(ProjectDir)update-bin" (md "$(ProjectDir)update-bin")
-COPY "$(ProjectDir)$(OutDir)update.exe" "$(ProjectDir)update-bin"</PostBuildEvent>
+COPY "$(ProjectDir)$(OutDir)update.exe" "$(ProjectDir)update-bin"
+COPY "$(ProjectDir)$(OutDir)verinfo\*.ini" "$(ProjectDir)update-bin"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

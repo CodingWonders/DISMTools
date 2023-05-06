@@ -29,17 +29,18 @@ Partial Class MainForm
         Me.minBox = New System.Windows.Forms.PictureBox()
         Me.closeBox = New System.Windows.Forms.PictureBox()
         Me.WelcomePanel = New System.Windows.Forms.Panel()
-        Me.UpdatePanel = New System.Windows.Forms.Panel()
-        Me.FinishPanel = New System.Windows.Forms.Panel()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
-        Me.Label4 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.Label5 = New System.Windows.Forms.Label()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
-        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.UpdatePanel = New System.Windows.Forms.Panel()
+        Me.FinishPanel = New System.Windows.Forms.Panel()
+        Me.ReleaseFetcherBW = New System.ComponentModel.BackgroundWorker()
         Me.btnControlPanel.SuspendLayout()
         Me.wndControlPanel.SuspendLayout()
         CType(Me.minBox, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -127,51 +128,6 @@ Partial Class MainForm
         Me.WelcomePanel.Size = New System.Drawing.Size(960, 616)
         Me.WelcomePanel.TabIndex = 4
         '
-        'UpdatePanel
-        '
-        Me.UpdatePanel.BackColor = System.Drawing.Color.Transparent
-        Me.UpdatePanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.UpdatePanel.Location = New System.Drawing.Point(0, 48)
-        Me.UpdatePanel.Name = "UpdatePanel"
-        Me.UpdatePanel.Size = New System.Drawing.Size(960, 616)
-        Me.UpdatePanel.TabIndex = 4
-        '
-        'FinishPanel
-        '
-        Me.FinishPanel.BackColor = System.Drawing.Color.Transparent
-        Me.FinishPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.FinishPanel.Location = New System.Drawing.Point(0, 48)
-        Me.FinishPanel.Name = "FinishPanel"
-        Me.FinishPanel.Size = New System.Drawing.Size(960, 616)
-        Me.FinishPanel.TabIndex = 4
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Font = New System.Drawing.Font("Segoe UI Variable Display Semib", 18.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(24, 24)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(267, 32)
-        Me.Label3.TabIndex = 1
-        Me.Label3.Text = "Checking for updates..."
-        '
-        'ProgressBar1
-        '
-        Me.ProgressBar1.Location = New System.Drawing.Point(30, 568)
-        Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(900, 23)
-        Me.ProgressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee
-        Me.ProgressBar1.TabIndex = 2
-        '
-        'Label4
-        '
-        Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(27, 546)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(52, 15)
-        Me.Label4.TabIndex = 3
-        Me.Label4.Text = "Progress"
-        '
         'Panel1
         '
         Me.Panel1.Controls.Add(Me.Button1)
@@ -183,15 +139,28 @@ Partial Class MainForm
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(900, 475)
         Me.Panel1.TabIndex = 4
+        Me.Panel1.Visible = False
         '
-        'Label5
+        'Button1
         '
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(16, 16)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(301, 15)
-        Me.Label5.TabIndex = 0
-        Me.Label5.Text = "There is a new version available to download and install:"
+        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button1.Location = New System.Drawing.Point(810, 439)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.TabIndex = 2
+        Me.Button1.Text = "Update"
+        Me.Button1.UseVisualStyleBackColor = True
+        '
+        'LinkLabel1
+        '
+        Me.LinkLabel1.AutoSize = True
+        Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel1.Location = New System.Drawing.Point(19, 439)
+        Me.LinkLabel1.Name = "LinkLabel1"
+        Me.LinkLabel1.Size = New System.Drawing.Size(103, 15)
+        Me.LinkLabel1.TabIndex = 1
+        Me.LinkLabel1.TabStop = True
+        Me.LinkLabel1.Text = "View release notes"
         '
         'Label6
         '
@@ -213,26 +182,63 @@ Partial Class MainForm
         Me.Label7.Text = "Please close any open DISMTools windows, while saving any projects loaded, and th" & _
     "en click ""Update"""
         '
-        'LinkLabel1
+        'Label5
         '
-        Me.LinkLabel1.AutoSize = True
-        Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel1.Location = New System.Drawing.Point(19, 439)
-        Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(103, 15)
-        Me.LinkLabel1.TabIndex = 1
-        Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "View release notes"
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(16, 16)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(301, 15)
+        Me.Label5.TabIndex = 0
+        Me.Label5.Text = "There is a new version available to download and install:"
         '
-        'Button1
+        'Label4
         '
-        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button1.Location = New System.Drawing.Point(810, 439)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
-        Me.Button1.TabIndex = 2
-        Me.Button1.Text = "Update"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(27, 546)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(52, 15)
+        Me.Label4.TabIndex = 3
+        Me.Label4.Text = "Progress"
+        '
+        'ProgressBar1
+        '
+        Me.ProgressBar1.Location = New System.Drawing.Point(30, 568)
+        Me.ProgressBar1.Name = "ProgressBar1"
+        Me.ProgressBar1.Size = New System.Drawing.Size(900, 23)
+        Me.ProgressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee
+        Me.ProgressBar1.TabIndex = 2
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Font = New System.Drawing.Font("Segoe UI Variable Display Semib", 18.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.Location = New System.Drawing.Point(24, 24)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(267, 32)
+        Me.Label3.TabIndex = 1
+        Me.Label3.Text = "Checking for updates..."
+        '
+        'UpdatePanel
+        '
+        Me.UpdatePanel.BackColor = System.Drawing.Color.Transparent
+        Me.UpdatePanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.UpdatePanel.Location = New System.Drawing.Point(0, 48)
+        Me.UpdatePanel.Name = "UpdatePanel"
+        Me.UpdatePanel.Size = New System.Drawing.Size(960, 616)
+        Me.UpdatePanel.TabIndex = 4
+        '
+        'FinishPanel
+        '
+        Me.FinishPanel.BackColor = System.Drawing.Color.Transparent
+        Me.FinishPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FinishPanel.Location = New System.Drawing.Point(0, 48)
+        Me.FinishPanel.Name = "FinishPanel"
+        Me.FinishPanel.Size = New System.Drawing.Size(960, 616)
+        Me.FinishPanel.TabIndex = 4
+        '
+        'ReleaseFetcherBW
+        '
+        Me.ReleaseFetcherBW.WorkerReportsProgress = True
         '
         'MainForm
         '
@@ -283,5 +289,6 @@ Partial Class MainForm
     Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents ProgressBar1 As System.Windows.Forms.ProgressBar
+    Friend WithEvents ReleaseFetcherBW As System.ComponentModel.BackgroundWorker
 
 End Class
