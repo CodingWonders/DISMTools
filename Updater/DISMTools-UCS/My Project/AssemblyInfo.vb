@@ -8,17 +8,17 @@ Imports System.Runtime.InteropServices
 
 ' Revisar los valores de los atributos del ensamblado
 
-<Assembly: AssemblyTitle("DISMTools")> 
-<Assembly: AssemblyDescription("A GUI and automation tool for DISM operations")> 
+<Assembly: AssemblyTitle("DISMTools-UCS")> 
+<Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("DISMTools")> 
-<Assembly: AssemblyCopyright("© CodingWonders. 2023 (github.com/CodingWonders)")> 
+<Assembly: AssemblyProduct("DISMTools-UCS")> 
+<Assembly: AssemblyCopyright("Copyright ©  2023")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
 
 'El siguiente GUID sirve como identificador de typelib si este proyecto se expone a COM
-<Assembly: Guid("f6f97856-b121-4274-afe6-ea40516b8192")> 
+<Assembly: Guid("07f6b497-5736-4221-af28-42dde37a008e")> 
 
 ' La información de versión de un ensamblado consta de los cuatro valores siguientes:
 '
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' mediante el asterisco ('*'), como se muestra a continuación:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("0.3.0.2352")> 
-<Assembly: AssemblyFileVersion("0.3.0.0")> 
+<Assembly: AssemblyVersion("1.0.0.0")> 
+<Assembly: AssemblyFileVersion("1.0.0.0")> 

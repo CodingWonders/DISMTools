@@ -67,6 +67,7 @@ Partial Class PrgAbout
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.PictureBox3 = New System.Windows.Forms.PictureBox()
+        Me.UpdCheckBtn = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ModernPanelContainer.SuspendLayout()
@@ -662,6 +663,16 @@ Partial Class PrgAbout
         Me.PictureBox3.TabIndex = 9
         Me.PictureBox3.TabStop = False
         '
+        'UpdCheckBtn
+        '
+        Me.UpdCheckBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.UpdCheckBtn.Location = New System.Drawing.Point(585, 403)
+        Me.UpdCheckBtn.Name = "UpdCheckBtn"
+        Me.UpdCheckBtn.Size = New System.Drawing.Size(168, 23)
+        Me.UpdCheckBtn.TabIndex = 10
+        Me.UpdCheckBtn.Text = "Check for updates"
+        Me.UpdCheckBtn.UseVisualStyleBackColor = True
+        '
         'PrgAbout
         '
         Me.AcceptButton = Me.OK_Button
@@ -669,6 +680,7 @@ Partial Class PrgAbout
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackgroundImage = Global.DISMTools.My.Resources.Resources.aboutscr_bg
         Me.ClientSize = New System.Drawing.Size(844, 441)
+        Me.Controls.Add(Me.UpdCheckBtn)
         Me.Controls.Add(Me.PictureBox3)
         Me.Controls.Add(Me.PictureBox2)
         Me.Controls.Add(Me.PictureBox1)
@@ -746,5 +758,6 @@ Partial Class PrgAbout
     Friend WithEvents Label20 As System.Windows.Forms.Label
     Friend WithEvents PictureBox2 As System.Windows.Forms.PictureBox
     Friend WithEvents PictureBox3 As System.Windows.Forms.PictureBox
+    Friend WithEvents UpdCheckBtn As System.Windows.Forms.Button
 
 End Class

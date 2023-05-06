@@ -1088,6 +1088,7 @@
     <Folder Include="bin\Debug\" />
     <Folder Include="Installer\" />
     <Folder Include="Panels\Set_Ops\" />
+    <Folder Include="Updater\" />
     <Folder Include="wimlib\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
