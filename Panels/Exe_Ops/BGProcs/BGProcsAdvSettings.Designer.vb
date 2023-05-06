@@ -77,15 +77,16 @@ Partial Class BGProcsAdvSettings
         '
         'CheckBox1
         '
-        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.CheckAlign = System.Drawing.ContentAlignment.TopLeft
         Me.CheckBox1.Checked = True
         Me.CheckBox1.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBox1.Location = New System.Drawing.Point(12, 40)
         Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(419, 17)
+        Me.CheckBox1.Size = New System.Drawing.Size(440, 32)
         Me.CheckBox1.TabIndex = 2
-        Me.CheckBox1.Text = "Detect all installed AppX packages of an active installation with PowerShell help" & _
-    "ers"
+        Me.CheckBox1.Text = "Enhance detection of installed AppX packages of an active installation with Power" & _
+    "Shell helpers"
+        Me.CheckBox1.TextAlign = System.Drawing.ContentAlignment.TopLeft
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'CheckBox2
@@ -93,7 +94,7 @@ Partial Class BGProcsAdvSettings
         Me.CheckBox2.AutoSize = True
         Me.CheckBox2.Checked = True
         Me.CheckBox2.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox2.Location = New System.Drawing.Point(30, 64)
+        Me.CheckBox2.Location = New System.Drawing.Point(30, 75)
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(246, 17)
         Me.CheckBox2.TabIndex = 2
@@ -103,7 +104,7 @@ Partial Class BGProcsAdvSettings
         'CheckBox3
         '
         Me.CheckBox3.AutoSize = True
-        Me.CheckBox3.Location = New System.Drawing.Point(12, 89)
+        Me.CheckBox3.Location = New System.Drawing.Point(12, 100)
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(138, 17)
         Me.CheckBox3.TabIndex = 2

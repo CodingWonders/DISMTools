@@ -323,6 +323,7 @@ Public Class Options
                         Button6.Text = "Check for updates"
                         Button7.Text = "Remove"
                         Button9.Text = If(DetectFileAssociations(), "Remove file associations", "Set file associations")
+                        Button10.Text = "Advanced settings"
                         If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = "Stop" Else Button8.Text = "Start"
                         Cancel_Button.Text = "Cancel"
                         OK_Button.Text = "OK"
@@ -406,6 +407,7 @@ Public Class Options
                         Button6.Text = "Comprobar actualizaciones"
                         Button7.Text = "Eliminar"
                         Button9.Text = If(DetectFileAssociations(), "Eliminar asociaciones", "Establecer asociaciones")
+                        Button10.Text = "Opciones avanzadas"
                         If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = "Detener" Else Button8.Text = "Iniciar"
                         Cancel_Button.Text = "Cancelar"
                         OK_Button.Text = "Aceptar"
@@ -490,6 +492,7 @@ Public Class Options
                 Button6.Text = "Check for updates"
                 Button7.Text = "Remove"
                 Button9.Text = If(DetectFileAssociations(), "Remove file associations", "Set file associations")
+                Button10.Text = "Advanced settings"
                 If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = "Stop" Else Button8.Text = "Start"
                 Cancel_Button.Text = "Cancel"
                 OK_Button.Text = "OK"
@@ -573,6 +576,7 @@ Public Class Options
                 Button6.Text = "Comprobar actualizaciones"
                 Button7.Text = "Eliminar"
                 Button9.Text = If(DetectFileAssociations(), "Eliminar asociaciones", "Establecer asociaciones")
+                Button10.Text = "Opciones avanzadas"
                 If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = "Detener" Else Button8.Text = "Iniciar"
                 Cancel_Button.Text = "Cancelar"
                 OK_Button.Text = "Aceptar"

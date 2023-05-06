@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Label1.Text" xml:space="preserve">
-    <value>You are entering the online installation management mode, which lets you perform changes to your active Windows installation.
+    <value>You are about to enter the online installation management mode, which lets you perform changes to your active Windows installation.
 
 Given that this mode lets you modify your installation, you should be extremely careful when performing tasks with this program.
 
