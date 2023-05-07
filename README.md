@@ -66,3 +66,7 @@ If you want to grab a copy straight from the source code, follow these instructi
 ## Testing the latest
 
 We continue development of the next version in the Preview branch. To go to it, select "dt_preview" from the branch list. Commits are done every day, and new builds are released every Sunday.
+
+## Stay in touch
+
+Be sure to [follow our official subreddit](https://reddit.com/r/DISMTools) for release announcements and other cool stuff!
