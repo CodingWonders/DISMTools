@@ -160,6 +160,7 @@ Public Class MainForm
             Dim fv As String = FileVersionInfo.GetVersionInfo(Application.StartupPath & "\DISMTools.exe").ProductVersion.ToString()
             If fv = latestVer Then
                 MsgBox("There aren't any updates available", vbOKOnly + vbInformation, Text)
+                Environment.Exit(0)
             Else
                 ReleaseFetcherBW.ReportProgress(100)
             End If
