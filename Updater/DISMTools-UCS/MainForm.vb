@@ -170,4 +170,69 @@ Public Class MainForm
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
         Process.Start("https://github.com/CodingWonders/DISMTools/releases/tag/" & relTag)
     End Sub
+
+    Private Sub MainForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        If UpdaterBW.IsBusy Then
+            e.Cancel = True
+            Beep()
+            Exit Sub
+        End If
+    End Sub
+
+    Private Sub UpdaterBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles UpdaterBW.DoWork
+        UpdaterBW.ReportProgress(0)
+    End Sub
+
+    Private Sub UpdaterBW_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles UpdaterBW.ProgressChanged
+        Select Case e.ProgressPercentage
+            Case 0 To 24.99
+                Label10.ForeColor = ForeColor
+                Label11.ForeColor = Color.Gray
+                Label12.ForeColor = Color.Gray
+                Label13.ForeColor = Color.Gray
+                Label10.Font = New Font("Segoe UI", 9, FontStyle.Bold)
+                Label11.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label12.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label13.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+            Case 25 To 49.99
+                Label10.ForeColor = Color.Gray
+                Label11.ForeColor = ForeColor
+                Label12.ForeColor = Color.Gray
+                Label13.ForeColor = Color.Gray
+                Label10.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label11.Font = New Font("Segoe UI", 9, FontStyle.Bold)
+                Label12.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label13.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+            Case 50 To 74.99
+                Label10.ForeColor = Color.Gray
+                Label11.ForeColor = Color.Gray
+                Label12.ForeColor = ForeColor
+                Label13.ForeColor = Color.Gray
+                Label10.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label11.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label12.Font = New Font("Segoe UI", 9, FontStyle.Bold)
+                Label13.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+            Case 75 To 99.99
+                Label10.ForeColor = Color.Gray
+                Label11.ForeColor = Color.Gray
+                Label12.ForeColor = Color.Gray
+                Label13.ForeColor = ForeColor
+                Label10.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label11.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label12.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label13.Font = New Font("Segoe UI", 9, FontStyle.Bold)
+            Case Is >= 100
+                Label10.ForeColor = Color.Gray
+                Label11.ForeColor = Color.Gray
+                Label12.ForeColor = Color.Gray
+                Label13.ForeColor = Color.Gray
+                Label10.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label11.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label12.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label13.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+        End Select
+        If e.ProgressPercentage > 0 Then
+            Label14.Text = msg
+        End If
+    End Sub
 End Class
