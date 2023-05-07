@@ -9,6 +9,16 @@ Public Class MainForm
     Private mouseOffset As Point
     Dim pageInt As Integer = 0
 
+    ' Argument variables
+    Dim branch As String
+
+    ' Progress variables
+    Dim msg As String
+
+    ' Necessary variables
+    Dim latestVer As String
+    Dim relTag As String
+
     Private Sub minBox_MouseEnter(sender As Object, e As EventArgs) Handles minBox.MouseEnter
         minBox.Image = My.Resources.minBox_focus
     End Sub
@@ -83,9 +93,80 @@ Public Class MainForm
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Label1.Text = "DISMTools Update Check System - Version " & Application.ProductVersion
+        GetArguments()
+        ReleaseFetcherBW.RunWorkerAsync()
+    End Sub
+
+    Sub GetArguments()
+        If Environment.GetCommandLineArgs.Length = 1 Then
+            MsgBox("The branch parameter is necessary to be able to check for updates", vbOKOnly + vbCritical, Text)
+            Environment.Exit(1)
+        Else
+            Dim args() As String = Environment.GetCommandLineArgs()
+            branch = args(1).Replace("/", "").Trim()
+        End If
     End Sub
 
     Private Sub ReleaseFetcherBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ReleaseFetcherBW.DoWork
+        msg = "Fetching update server..."
+        Threading.Thread.Sleep(3000)
+        ReleaseFetcherBW.ReportProgress(0)
+        FetchUpdates()
+        msg = "Comparing versions..."
+        ReleaseFetcherBW.ReportProgress(50)
+        CompareVersions()
+    End Sub
 
+    Private Sub ReleaseFetcherBW_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles ReleaseFetcherBW.ProgressChanged
+        ProgressBar1.Style = ProgressBarStyle.Blocks
+        ProgressBar1.Value = e.ProgressPercentage
+        Label4.Text = msg
+        If e.ProgressPercentage = 100 Then
+            Label3.Text = "Update information"
+            Label6.Text = FileVersionInfo.GetVersionInfo(Application.StartupPath & "\DISMTools.exe").FileVersion.ToString() & " → " & latestVer
+            Panel1.Visible = True
+            Label4.Visible = False
+            ProgressBar1.Visible = False
+        End If
+    End Sub
+
+    Sub FetchUpdates()
+        Using client As New WebClient()
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+            Try
+                client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/DISMTools/" & branch & "/Updater/DISMTools-UCS/update-bin/" & If(branch.Contains("preview"), "preview.ini", "stable.ini"), Application.StartupPath & "\info.ini")
+            Catch ex As WebException
+                MsgBox("We couldn't fetch the necessary update information. Reason:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, Text)
+                Environment.Exit(1)
+            End Try
+            If File.Exists(Application.StartupPath & "\info.ini") Then
+                Dim infoRTB As New RichTextBox With {
+                    .Text = File.ReadAllText(Application.StartupPath & "\info.ini")
+                }
+                For Each Line In infoRTB.Lines
+                    If Line.StartsWith("LatestVer") Then
+                        latestVer = Line.Replace("LatestVer = ", "").Trim()
+                    ElseIf Line.StartsWith("ReleaseTag") Then
+                        relTag = Line.Replace("ReleaseTag = ", "").Trim()
+                    End If
+                Next
+                File.Delete(Application.StartupPath & "\info.ini")
+            End If
+        End Using
+    End Sub
+
+    Sub CompareVersions()
+        If File.Exists(Application.StartupPath & "\DISMTools.exe") Then
+            Dim fv As String = FileVersionInfo.GetVersionInfo(Application.StartupPath & "\DISMTools.exe").ProductVersion.ToString()
+            If fv = latestVer Then
+                MsgBox("There aren't any updates available", vbOKOnly + vbInformation, Text)
+            Else
+                ReleaseFetcherBW.ReportProgress(100)
+            End If
+        End If
+    End Sub
+
+    Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
+        Process.Start("https://github.com/CodingWonders/DISMTools/releases/tag/" & relTag)
     End Sub
 End Class

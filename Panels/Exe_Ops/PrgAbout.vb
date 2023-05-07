@@ -1,6 +1,7 @@
 ﻿Imports System.Windows.Forms
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
+Imports System.Net
 
 Public Class PrgAbout
 
@@ -83,6 +84,7 @@ Public Class PrgAbout
                         LinkLabel12.Text = "Visitar sitio"
                         LinkLabel13.Text = "Visitar sitio"
                         OK_Button.Text = "Aceptar"
+                        UpdCheckBtn.Text = "Comprobar actualizaciones"
                 End Select
             Case 1
                 Text = "About this program"
@@ -118,6 +120,7 @@ Public Class PrgAbout
                 LinkLabel12.Text = "Visit website"
                 LinkLabel13.Text = "Visit website"
                 OK_Button.Text = "OK"
+                UpdCheckBtn.Text = "Check for updates"
             Case 2
                 Text = "Acerca de este programa"
                 Label1.Text = "DISMTools - versión " & My.Application.Info.Version.ToString()
@@ -152,10 +155,10 @@ Public Class PrgAbout
                 LinkLabel12.Text = "Visitar sitio"
                 LinkLabel13.Text = "Visitar sitio"
                 OK_Button.Text = "Aceptar"
+                UpdCheckBtn.Text = "Comprobar actualizaciones"
         End Select
         RichTextBox1.Text = My.Resources.LicenseOverview
         RichTextBox2.Text = My.Resources.WhatsNew
-
         ForeColor = Color.White
         PictureBox1.Image = If(MainForm.dtBranch.Contains("preview"), My.Resources.logo_preview, My.Resources.logo_aboutdlg_dark)
         If CreditsPanel.Visible Then
@@ -372,5 +375,30 @@ Public Class PrgAbout
             Case 2
                 PictureToolTip.SetToolTip(sender, "Consulte el subreddit oficial del proyecto")
         End Select
+    End Sub
+
+    Private Sub UpdCheckBtn_Click(sender As Object, e As EventArgs) Handles UpdCheckBtn.Click
+        Try
+            Using client As New WebClient()
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                client.DownloadFile("https://github.com/CodingWonders/DISMTools/raw/" & MainForm.dtBranch & "/Updater/DISMTools-UCS/update-bin/update.exe", Application.StartupPath & "\update.exe")
+            End Using
+        Catch ex As WebException
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MsgBox("We couldn't download the update checker. Reason:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
+                        Case "ESN"
+                            MsgBox("No pudimos descargar el comprobador de actualizaciones. Razón:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
+                    End Select
+                Case 1
+                    MsgBox("We couldn't download the update checker. Reason:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
+                Case 2
+                    MsgBox("No pudimos descargar el comprobador de actualizaciones. Razón:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
+            End Select
+            Exit Sub
+        End Try
+        If File.Exists(Application.StartupPath & "\update.exe") Then Process.Start(Application.StartupPath & "\update.exe", "/" & MainForm.dtBranch)
     End Sub
 End Class
