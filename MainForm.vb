@@ -1249,19 +1249,29 @@ Public Class MainForm
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENG"
+                                Label14.Text = "(Online installation)"
                                 Label18.Text = "(Online installation)"
                                 Label20.Text = "(Online installation)"
+                                projName.Text = "(Online installation)"
                             Case "ESN"
+                                Label14.Text = "(Instalación activa)"
                                 Label18.Text = "(Instalación activa)"
                                 Label20.Text = "(Instalación activa)"
+                                projName.Text = "(Instalación activa)"
                         End Select
                     Case 1
+                        Label14.Text = "(Online installation)"
                         Label18.Text = "(Online installation)"
                         Label20.Text = "(Online installation)"
+                        projName.Text = "(Online installation)"
                     Case 2
+                        Label14.Text = "(Instalación activa)"
                         Label18.Text = "(Instalación activa)"
                         Label20.Text = "(Instalación activa)"
+                        projName.Text = "(Instalación activa)"
                 End Select
+                Label12.Text = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows))
+                Label3.Text = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows))
             Else
                 Try
                     For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
@@ -1470,12 +1480,14 @@ Public Class MainForm
         Button15.Enabled = True
         Button16.Enabled = True
         ExplorerView.Enabled = True
+        ProjNameEditBtn.Visible = True
         If UseApi Then
             If OnlineMode Then
                 Button14.Enabled = False
                 Button15.Enabled = False
                 Button16.Enabled = False
                 ExplorerView.Enabled = False
+                ProjNameEditBtn.Visible = False
                 Exit Sub
             Else
                 If IsImageMounted Then
