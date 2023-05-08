@@ -139,6 +139,9 @@ Partial Class Options
         Me.Label40 = New System.Windows.Forms.Label()
         Me.PrefReset = New System.Windows.Forms.Button()
         Me.LogSFD = New System.Windows.Forms.SaveFileDialog()
+        Me.TabPage11 = New System.Windows.Forms.TabPage()
+        Me.Label43 = New System.Windows.Forms.Label()
+        Me.CheckBox12 = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -169,6 +172,7 @@ Partial Class Options
         Me.GroupBox4.SuspendLayout()
         Me.TabPage10.SuspendLayout()
         Me.GroupBox5.SuspendLayout()
+        Me.TabPage11.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -263,6 +267,7 @@ Partial Class Options
         Me.TabControl1.Controls.Add(Me.TabPage8)
         Me.TabControl1.Controls.Add(Me.TabPage9)
         Me.TabControl1.Controls.Add(Me.TabPage10)
+        Me.TabControl1.Controls.Add(Me.TabPage11)
         Me.TabControl1.Location = New System.Drawing.Point(13, 55)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
@@ -1415,6 +1420,37 @@ Partial Class Options
         Me.LogSFD.Filter = "All files|*.*"
         Me.LogSFD.Title = "Specify the location of the log file"
         '
+        'TabPage11
+        '
+        Me.TabPage11.Controls.Add(Me.CheckBox12)
+        Me.TabPage11.Controls.Add(Me.Label43)
+        Me.TabPage11.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage11.Name = "TabPage11"
+        Me.TabPage11.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage11.Size = New System.Drawing.Size(751, 433)
+        Me.TabPage11.TabIndex = 9
+        Me.TabPage11.Text = "Startup"
+        Me.TabPage11.UseVisualStyleBackColor = True
+        '
+        'Label43
+        '
+        Me.Label43.AutoSize = True
+        Me.Label43.Location = New System.Drawing.Point(22, 22)
+        Me.Label43.Name = "Label43"
+        Me.Label43.Size = New System.Drawing.Size(326, 13)
+        Me.Label43.TabIndex = 1
+        Me.Label43.Text = "Set options you would like to perform when the program starts up:"
+        '
+        'CheckBox12
+        '
+        Me.CheckBox12.AutoSize = True
+        Me.CheckBox12.Location = New System.Drawing.Point(56, 64)
+        Me.CheckBox12.Name = "CheckBox12"
+        Me.CheckBox12.Size = New System.Drawing.Size(326, 17)
+        Me.CheckBox12.TabIndex = 2
+        Me.CheckBox12.Text = "Remount mounted images in need of a servicing session reload"
+        Me.CheckBox12.UseVisualStyleBackColor = True
+        '
         'Options
         '
         Me.AcceptButton = Me.OK_Button
@@ -1481,6 +1517,8 @@ Partial Class Options
         Me.TabPage10.PerformLayout()
         Me.GroupBox5.ResumeLayout(False)
         Me.GroupBox5.PerformLayout()
+        Me.TabPage11.ResumeLayout(False)
+        Me.TabPage11.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1600,5 +1638,8 @@ Partial Class Options
     Friend WithEvents Label42 As System.Windows.Forms.Label
     Friend WithEvents Label40 As System.Windows.Forms.Label
     Friend WithEvents Button10 As System.Windows.Forms.Button
+    Friend WithEvents TabPage11 As System.Windows.Forms.TabPage
+    Friend WithEvents CheckBox12 As System.Windows.Forms.CheckBox
+    Friend WithEvents Label43 As System.Windows.Forms.Label
 
 End Class

@@ -85,6 +85,8 @@ Public Class MainForm
     Public ExtAppxGetter As Boolean = True
     Public SkipNonRemovable As Boolean = True
     Public AllDrivers As Boolean
+    ' - Startup -
+    Public StartupRemount As Boolean
 
     ' Background process initiator settings
     Public bwBackgroundProcessAction As Integer
@@ -245,6 +247,7 @@ Public Class MainForm
         If DismExe <> "" Then
             DismVersionChecker = FileVersionInfo.GetVersionInfo(DismExe)
         End If
+        If StartupRemount Or Debugger.IsAttached Then RemountOrphanedImages()
         MountedImageDetectorBW.RunWorkerAsync()
         If dtBranch.Contains("preview") And Not Debugger.IsAttached Then
             VersionTSMI.Visible = True
@@ -320,6 +323,27 @@ Public Class MainForm
             Exit Try
         End Try
         MountedImgMgr.Refresh()
+    End Sub
+
+    ''' <summary>
+    ''' Remounts orphaned images (images in need of a servicing session reload)
+    ''' </summary>
+    ''' <remarks></remarks>
+    Sub RemountOrphanedImages()
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        If MountedImageMountDirs.Count > 0 Then
+            DismApi.Initialize(DismLogLevel.LogErrors)
+            For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
+                If MountedImageImgStatuses(x) = 1 Then
+                    DismApi.RemountImage(MountedImageMountDirs(x))
+                End If
+            Next
+            DismApi.Shutdown()
+        End If
     End Sub
 
     Sub ChangeImgStatus()

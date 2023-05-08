@@ -695,6 +695,7 @@ Public Class Options
             TabPage8.BackColor = Color.FromArgb(31, 31, 31)
             TabPage9.BackColor = Color.FromArgb(31, 31, 31)
             TabPage10.BackColor = Color.FromArgb(31, 31, 31)
+            TabPage11.BackColor = Color.FromArgb(31, 31, 31)
             TextBox1.BackColor = Color.FromArgb(31, 31, 31)
             TextBox1.ForeColor = Color.White
             TextBox2.BackColor = Color.FromArgb(31, 31, 31)
@@ -741,6 +742,7 @@ Public Class Options
             TabPage8.BackColor = Color.FromArgb(238, 238, 242)
             TabPage9.BackColor = Color.FromArgb(238, 238, 242)
             TabPage10.BackColor = Color.FromArgb(238, 238, 242)
+            TabPage11.BackColor = Color.FromArgb(238, 238, 242)
             TextBox1.BackColor = Color.FromArgb(238, 238, 242)
             TextBox1.ForeColor = Color.Black
             TextBox2.BackColor = Color.FromArgb(238, 238, 242)
