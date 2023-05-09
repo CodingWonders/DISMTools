@@ -87,6 +87,8 @@ Public Class MainForm
     Public AllDrivers As Boolean
     ' - Startup -
     Public StartupRemount As Boolean
+    ' - Secondary progress panel -
+    Public ProgressPanelStyle As Integer = 1        ' 0 (Legacy, 0.1 - 0.2.2), 1 (Modern, >= 0.3)
 
     ' Background process initiator settings
     Public bwBackgroundProcessAction As Integer

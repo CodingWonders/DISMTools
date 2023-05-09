@@ -23,6 +23,22 @@ Public Class PleaseWaitDialog
     Public indexStr(1024) As String
 
     Private Sub PleaseWaitDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Select Case MainForm.ProgressPanelStyle
+            Case 0
+                PictureBox1.Visible = True
+                Label1.Visible = True
+                Label2.TextAlign = ContentAlignment.TopLeft
+                Label2.Location = New Point(52, 29)
+                Label2.Size = New Size(295, 15)
+                Label2.Font = New Font("Segoe UI", 9)
+            Case 1
+                PictureBox1.Visible = False
+                Label1.Visible = False
+                Label2.TextAlign = ContentAlignment.MiddleCenter
+                Label2.Location = New Point(8, 8)
+                Label2.Size = New Size(343, 43)
+                Label2.Font = New Font("Segoe UI", 11.25)
+        End Select
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
