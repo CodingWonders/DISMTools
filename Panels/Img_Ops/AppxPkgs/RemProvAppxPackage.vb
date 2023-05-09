@@ -156,14 +156,14 @@ Public Class RemProvAppxPackage
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
-                            MainForm.ResViewTSMI.Text = "View resources of " & MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text)
+                            MainForm.ResViewTSMI.Text = "View resources of " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text))
                         Case "ESN"
-                            MainForm.ResViewTSMI.Text = "Ver recursos de " & MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text)
+                            MainForm.ResViewTSMI.Text = "Ver recursos de " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text))
                     End Select
                 Case 1
-                    MainForm.ResViewTSMI.Text = "View resources of " & MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text)
+                    MainForm.ResViewTSMI.Text = "View resources of " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text))
                 Case 2
-                    MainForm.ResViewTSMI.Text = "Ver recursos de " & MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text)
+                    MainForm.ResViewTSMI.Text = "Ver recursos de " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text))
             End Select
         End If
     End Sub
