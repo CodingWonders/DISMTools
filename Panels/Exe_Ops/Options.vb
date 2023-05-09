@@ -154,6 +154,7 @@ Public Class Options
             MainForm.NotificationShow = False
         End If
         MainForm.NotificationFrequency = ComboBox6.SelectedIndex
+        MainForm.StartupRemount = CheckBox12.Checked
         If MainForm.VolatileMode Then
             MainForm.SaveDTSettings()
         End If
@@ -281,6 +282,7 @@ Public Class Options
                         TabPage8.Text = "Modules"
                         TabPage9.Text = "Image detection"
                         TabPage10.Text = "File associations"
+                        TabPage11.Text = "Startup"
                         Label2.Text = "DISM executable path:"
                         Label3.Text = "Version:"
                         Label5.Text = "Save settings on:"
@@ -315,6 +317,7 @@ Public Class Options
                         Label40.Text = "File associations let you access project files directly, without having to load the program first"
                         Label41.Text = "Association status:"
                         Label42.Text = If(DetectFileAssociations(), "associations set", "associations not set")
+                        Label43.Text = "Set options you would like to perform when the program starts up:"
                         Button1.Text = "Browse..."
                         Button2.Text = "View DISM component versions"
                         Button3.Text = "Browse..."
@@ -339,6 +342,7 @@ Public Class Options
                         CheckBox9.Text = "Use uppercase menus"
                         CheckBox10.Text = "Automatically create logs for each operation performed"
                         CheckBox11.Text = "Set custom file icons for DISMTools projects"
+                        CheckBox12.Text = "Remount mounted images in need of a servicing session reload"
                         DismOFD.Title = "Specify the DISM executable to use"
                         GroupBox1.Text = "Log customization"
                         GroupBox2.Text = "Notification frequency"
@@ -365,6 +369,7 @@ Public Class Options
                         TabPage8.Text = "Módulos"
                         TabPage9.Text = "Detección de imágenes"
                         TabPage10.Text = "Asociaciones de archivos"
+                        TabPage11.Text = "Inicio"
                         Label2.Text = "Ruta del ejecutable:"
                         Label3.Text = "Versión:"
                         Label5.Text = "Guardar configuraciones en:"
@@ -399,6 +404,7 @@ Public Class Options
                         Label40.Text = "Las asociaciones le permiten acceder a archivos de proyectos directamente, sin tener que cargar el programa en primer lugar"
                         Label41.Text = "Estado de asociaciones:"
                         Label42.Text = If(DetectFileAssociations(), "asociaciones establecidas", "asociaciones no establecidas")
+                        Label43.Text = "Establezca las opciones que le gustaría realizar cuando el programa inicie:"
                         Button1.Text = "Examinar..."
                         Button2.Text = "Ver versiones de componentes"
                         Button3.Text = "Examinar..."
@@ -423,6 +429,7 @@ Public Class Options
                         CheckBox9.Text = "Usar menús en mayúscula"
                         CheckBox10.Text = "Crear registros para cada operación realizada automáticamente"
                         CheckBox11.Text = "Establecer iconos personalizados para proyectos de DISMTools"
+                        CheckBox12.Text = "Remontar imágenes montadas que necesitan una recarga de su sesión de servicio"
                         DismOFD.Title = "Especifique el ejecutable de DISM a usar"
                         GroupBox1.Text = "Personalización del registro"
                         GroupBox2.Text = "Frecuencia de notificaciones"
@@ -450,6 +457,7 @@ Public Class Options
                 TabPage8.Text = "Modules"
                 TabPage9.Text = "Image detection"
                 TabPage10.Text = "File associations"
+                TabPage11.Text = "Startup"
                 Label2.Text = "DISM executable path:"
                 Label3.Text = "Version:"
                 Label5.Text = "Save settings on:"
@@ -484,6 +492,7 @@ Public Class Options
                 Label40.Text = "File associations let you access project files directly, without having to load the program first"
                 Label41.Text = "Association status:"
                 Label42.Text = If(DetectFileAssociations(), "associations set", "associations not set")
+                Label43.Text = "Set options you would like to perform when the program starts up:"
                 Button1.Text = "Browse..."
                 Button2.Text = "View DISM component versions"
                 Button3.Text = "Browse..."
@@ -508,6 +517,7 @@ Public Class Options
                 CheckBox9.Text = "Use uppercase menus"
                 CheckBox10.Text = "Automatically create logs for each operation performed"
                 CheckBox11.Text = "Set custom file icons for DISMTools projects"
+                CheckBox12.Text = "Remount mounted images in need of a servicing session reload"
                 DismOFD.Title = "Specify the DISM executable to use"
                 GroupBox1.Text = "Log customization"
                 GroupBox2.Text = "Notification frequency"
@@ -534,6 +544,7 @@ Public Class Options
                 TabPage8.Text = "Módulos"
                 TabPage9.Text = "Detección de imágenes"
                 TabPage10.Text = "Asociaciones de archivos"
+                TabPage11.Text = "Inicio"
                 Label2.Text = "Ruta del ejecutable:"
                 Label3.Text = "Versión:"
                 Label5.Text = "Guardar configuraciones en:"
@@ -568,6 +579,7 @@ Public Class Options
                 Label40.Text = "Las asociaciones le permiten acceder a archivos de proyectos directamente, sin tener que cargar el programa en primer lugar"
                 Label41.Text = "Estado de asociaciones:"
                 Label42.Text = If(DetectFileAssociations(), "asociaciones establecidas", "asociaciones no establecidas")
+                Label43.Text = "Establezca las opciones que le gustaría realizar cuando el programa inicie:"
                 Button1.Text = "Examinar..."
                 Button2.Text = "Ver versiones de componentes"
                 Button3.Text = "Examinar..."
@@ -592,6 +604,7 @@ Public Class Options
                 CheckBox9.Text = "Usar menús en mayúscula"
                 CheckBox10.Text = "Crear registros para cada operación realizada automáticamente"
                 CheckBox11.Text = "Establecer iconos personalizados para proyectos de DISMTools"
+                CheckBox12.Text = "Remontar imágenes montadas que necesitan una recarga de su sesión de servicio"
                 DismOFD.Title = "Especifique el ejecutable de DISM a usar"
                 GroupBox1.Text = "Personalización del registro"
                 GroupBox2.Text = "Frecuencia de notificaciones"
@@ -884,6 +897,7 @@ Public Class Options
                 ComboBox6.SelectedIndex = 1
         End Select
         GetRootSpace(TextBox3.Text)
+        CheckBox12.Checked = MainForm.StartupRemount
     End Sub
 
     Private Sub ComboBox5_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox5.SelectedIndexChanged

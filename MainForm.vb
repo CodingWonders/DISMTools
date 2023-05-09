@@ -247,7 +247,7 @@ Public Class MainForm
         If DismExe <> "" Then
             DismVersionChecker = FileVersionInfo.GetVersionInfo(DismExe)
         End If
-        If StartupRemount Or Debugger.IsAttached Then RemountOrphanedImages()
+        If StartupRemount Then RemountOrphanedImages()
         MountedImageDetectorBW.RunWorkerAsync()
         If dtBranch.Contains("preview") And Not Debugger.IsAttached Then
             VersionTSMI.Visible = True
@@ -821,6 +821,26 @@ Public Class MainForm
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("NotifyFrequency=1") Then
                     NotificationFrequency = 1
                 End If
+                If DTSettingForm.RichTextBox1.Text.Contains("EnhancedAppxGetter=1") Then
+                    ExtAppxGetter = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("EnhancedAppxGetter=0") Then
+                    ExtAppxGetter = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("SkipNonRemovable=1") Then
+                    SkipNonRemovable = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("SkipNonRemovable=0") Then
+                    SkipNonRemovable = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("DetectAllDrivers=1") Then
+                    AllDrivers = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("DetectAllDrivers=0") Then
+                    AllDrivers = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("RemountImages=1") Then
+                    StartupRemount = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("RemountImages=0") Then
+                    StartupRemount = False
+                End If
             Else
                 GenerateDTSettings()
                 LoadDTSettings(1)
@@ -846,7 +866,11 @@ Public Class MainForm
                             "EnglishOutput        =    " & EnglishOutput & CrLf & _
                             "ReportView           =    " & ReportView & CrLf & _
                             "NotificationShow     =    " & NotificationShow & CrLf & _
-                            "NotificationFrequency=    " & NotificationFrequency)
+                            "NotificationFrequency=    " & NotificationFrequency & CrLf & _
+                            "ExtAppxGetter        =    " & ExtAppxGetter & CrLf & _
+                            "SkipNonRemovable     =    " & SkipNonRemovable & CrLf & _
+                            "AllDrivers           =    " & AllDrivers & CrLf & _
+                            "StartupRemount       =    " & StartupRemount)
         End If
         ' Test setting validity
         If Not File.Exists(DismExe) Then
@@ -2880,7 +2904,13 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "ReportView=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[BgProcesses]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("ShowNotification=1")
-        DTSettingForm.RichTextBox2.AppendText("NotifyFrequency=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "NotifyFrequency=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[AdvBgProcesses]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("EnhancedAppxGetter=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipNonRemovable=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "DetectAllDrivers=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Startup]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("RemountImages=1")
         File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
     End Sub
 
@@ -2982,6 +3012,28 @@ Public Class MainForm
                     Case 1
                         DTSettingForm.RichTextBox2.AppendText(CrLf & "NotifyFrequency=1")
                 End Select
+                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[AdvBgProcesses]" & CrLf)
+                If ExtAppxGetter Then
+                    DTSettingForm.RichTextBox2.AppendText("EnhancedAppxGetter=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText("EnhancedAppxGetter=0")
+                End If
+                If SkipNonRemovable Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipNonRemovable=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipNonRemovable=0")
+                End If
+                If AllDrivers Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "DetectAllDrivers=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "DetectAllDrivers=0")
+                End If
+                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Startup]" & CrLf)
+                If StartupRemount Then
+                    DTSettingForm.RichTextBox2.AppendText("RemountImages=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText("RemountImages=0")
+                End If
                 File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
             Else
                 ' This procedure should not be called yet
