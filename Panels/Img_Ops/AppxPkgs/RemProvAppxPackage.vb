@@ -152,19 +152,25 @@ Public Class RemProvAppxPackage
 
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
         If ListView1.SelectedItems.Count = 1 Then
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
-                            MainForm.ResViewTSMI.Text = "View resources of " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text))
-                        Case "ESN"
-                            MainForm.ResViewTSMI.Text = "Ver recursos de " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text))
-                    End Select
-                Case 1
-                    MainForm.ResViewTSMI.Text = "View resources of " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text))
-                Case 2
-                    MainForm.ResViewTSMI.Text = "Ver recursos de " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text))
-            End Select
+            MainForm.ResViewTSMI.Visible = True
+            Try
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                MainForm.ResViewTSMI.Text = "View resources of " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
+                            Case "ESN"
+                                MainForm.ResViewTSMI.Text = "Ver recursos de " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
+                        End Select
+                    Case 1
+                        MainForm.ResViewTSMI.Text = "View resources of " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
+                    Case 2
+                        MainForm.ResViewTSMI.Text = "Ver recursos de " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
+                End Select
+            Catch ex As Exception
+                MainForm.ResViewTSMI.Text = ""
+                MainForm.ResViewTSMI.Visible = False
+            End Try
         End If
     End Sub
 End Class

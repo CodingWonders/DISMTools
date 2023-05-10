@@ -8199,7 +8199,7 @@ Public Class MainForm
         BeginOnlineManagement()
     End Sub
 
-    Function GetPackageDisplayName(PackageName As String)
+    Function GetPackageDisplayName(PackageName As String, Optional DisplayName As String = "")
         If File.Exists(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml") Then
             ' Copy manifest to startup dir
             File.Copy(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml", Application.StartupPath & "\AppxManifest.xml")
@@ -8209,11 +8209,33 @@ Public Class MainForm
             ' Go through each line until we find the properties tag
             For x = 0 To XMLReaderRTB.Lines.Count - 1
                 If XMLReaderRTB.Lines(x).EndsWith("<Properties>") Then
-                    Dim pkgName As String = XMLReaderRTB.Lines(x + 1).Replace("/", "").Trim().Replace("<DisplayName>", "").Trim()
+                    Dim pkgName As String = XMLReaderRTB.Lines(x + If(XMLReaderRTB.Lines(x + 1).Contains("Framework"), 2, 1)).Replace("/", "").Trim().Replace("<DisplayName>", "").Trim()
                     File.Delete(Application.StartupPath & "\AppxManifest.xml")
                     Return pkgName
                 End If
             Next
+        Else
+            If Directory.GetDirectories(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps", DisplayName & "*", SearchOption.TopDirectoryOnly).Count > 1 Then
+                ' Skip architecture neutral packages
+                Dim pkgDirs() As String = Directory.GetDirectories(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps", DisplayName & "*", SearchOption.TopDirectoryOnly)
+                For Each folder In pkgDirs
+                    If Not folder.Contains("neutral") Then
+                        ' Copy manifest to startup dir
+                        File.Copy(folder & "\AppxManifest.xml", Application.StartupPath & "\AppxManifest.xml")
+                        Dim XMLReaderRTB As New RichTextBox With {
+                            .Text = File.ReadAllText(Application.StartupPath & "\AppxManifest.xml")
+                        }
+                        ' Go through each line until we find the properties tag
+                        For x = 0 To XMLReaderRTB.Lines.Count - 1
+                            If XMLReaderRTB.Lines(x).EndsWith("<Properties>") Then
+                                Dim pkgName As String = XMLReaderRTB.Lines(x + If(XMLReaderRTB.Lines(x + 1).Contains("Framework"), 2, 1)).Replace("/", "").Trim().Replace("<DisplayName>", "").Trim()
+                                File.Delete(Application.StartupPath & "\AppxManifest.xml")
+                                Return pkgName
+                            End If
+                        Next
+                    End If
+                Next
+            End If
         End If
         Return Nothing
     End Function
