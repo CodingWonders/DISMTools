@@ -203,57 +203,81 @@ Public Class ImgCleanup
         GroupBox1.ForeColor = ForeColor
         PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.image_dark, My.Resources.image_light)
         ' Determine when the last base reset was run
-        Using reg As New Process
-            reg.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe"
-            reg.StartInfo.Arguments = "load HKLM\MountedSoft " & Quote & MainForm.MountDir & "\Windows\system32\config\software" & Quote
-            reg.StartInfo.CreateNoWindow = True
-            reg.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-            reg.Start()
-            Do Until reg.HasExited
-                If reg.HasExited Then Exit Do
-            Loop
-            If reg.ExitCode = 0 Then
-                Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("MountedSoft\Microsoft\Windows\CurrentVersion\Component Based Servicing", False)
-                Dim LastResetBase_UTC As String = ""
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "Could not get last base reset date. It is possible that no base resets were made").ToString()
-                            Case "ESN"
-                                LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "No se pudo obtener la fecha de restablecimiento de base. Es posible que no se haya hecho ningún restablecimiento").ToString()
-                        End Select
-                    Case 1
-                        LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "Could not get last base reset date. It is possible that no base resets were made").ToString()
-                    Case 2
-                        LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "No se pudo obtener la fecha de restablecimiento de base. Es posible que no se haya hecho ningún restablecimiento").ToString()
-                End Select
-                regKey.Close()
-                Dim charArray() As Char = LastResetBase_UTC.ToCharArray()
-                If LastResetBase_UTC.Contains("/") Then charArray(10) = " "
-                LastResetBase_UTC = New String(charArray)
-                Label6.Text = LastResetBase_UTC
-                reg.StartInfo.Arguments = "unload HKLM\MountedSoft"
+        If MainForm.OnlineManagement Then
+            Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing", False)
+            Dim LastResetBase_UTC As String = ""
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "Could not get last base reset date. It is possible that no base resets were made").ToString()
+                        Case "ESN"
+                            LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "No se pudo obtener la fecha de restablecimiento de base. Es posible que no se haya hecho ningún restablecimiento").ToString()
+                    End Select
+                Case 1
+                    LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "Could not get last base reset date. It is possible that no base resets were made").ToString()
+                Case 2
+                    LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "No se pudo obtener la fecha de restablecimiento de base. Es posible que no se haya hecho ningún restablecimiento").ToString()
+            End Select
+            regKey.Close()
+            Dim charArray() As Char = LastResetBase_UTC.ToCharArray()
+            If LastResetBase_UTC.Contains("/") Then charArray(10) = " "
+            LastResetBase_UTC = New String(charArray)
+            Label6.Text = LastResetBase_UTC
+        Else
+            Using reg As New Process
+                reg.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe"
+                reg.StartInfo.Arguments = "load HKLM\MountedSoft " & Quote & MainForm.MountDir & "\Windows\system32\config\software" & Quote
+                reg.StartInfo.CreateNoWindow = True
+                reg.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
                 reg.Start()
                 Do Until reg.HasExited
                     If reg.HasExited Then Exit Do
                 Loop
-            Else
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Label6.Text = "Could not get last base reset date"
-                            Case "ESN"
-                                Label6.Text = "No se pudo obtener la fecha del último restablecimiento de base"
-                        End Select
-                    Case 1
-                        Label6.Text = "Could not get last base reset date"
-                    Case 2
-                        Label6.Text = "No se pudo obtener la fecha del último restablecimiento de base"
-                End Select
-            End If
-        End Using
+                If reg.ExitCode = 0 Then
+                    Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("MountedSoft\Microsoft\Windows\CurrentVersion\Component Based Servicing", False)
+                    Dim LastResetBase_UTC As String = ""
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "Could not get last base reset date. It is possible that no base resets were made").ToString()
+                                Case "ESN"
+                                    LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "No se pudo obtener la fecha de restablecimiento de base. Es posible que no se haya hecho ningún restablecimiento").ToString()
+                            End Select
+                        Case 1
+                            LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "Could not get last base reset date. It is possible that no base resets were made").ToString()
+                        Case 2
+                            LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "No se pudo obtener la fecha de restablecimiento de base. Es posible que no se haya hecho ningún restablecimiento").ToString()
+                    End Select
+                    regKey.Close()
+                    Dim charArray() As Char = LastResetBase_UTC.ToCharArray()
+                    If LastResetBase_UTC.Contains("/") Then charArray(10) = " "
+                    LastResetBase_UTC = New String(charArray)
+                    Label6.Text = LastResetBase_UTC
+                    reg.StartInfo.Arguments = "unload HKLM\MountedSoft"
+                    reg.Start()
+                    Do Until reg.HasExited
+                        If reg.HasExited Then Exit Do
+                    Loop
+                Else
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    Label6.Text = "Could not get last base reset date"
+                                Case "ESN"
+                                    Label6.Text = "No se pudo obtener la fecha del último restablecimiento de base"
+                            End Select
+                        Case 1
+                            Label6.Text = "Could not get last base reset date"
+                        Case 2
+                            Label6.Text = "No se pudo obtener la fecha del último restablecimiento de base"
+                    End Select
+                End If
+            End Using
+        End If
+
         CheckBox5.Enabled = MainForm.OnlineManagement = True
     End Sub
 
