@@ -58,5 +58,6 @@ Public Class ActiveInstAccessWarn
             BackColor = Color.FromArgb(238, 238, 242)
             ForeColor = Color.Black
         End If
+        Beep()
     End Sub
 End Class
