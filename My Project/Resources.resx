@@ -954,18 +954,24 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes
-No bugfixes were made in this release
+
+- Fixed an issue where the extended AppX package getter would fail if the PowerShell execution policy wasn't set correctly
+- Fixed an issue related to setting file generation where the background process notification setting would not be in a new line
 
 New features
 
-Active installations
-- Introduced online (active) installation management
-- Introduced a new program flag to directly enter this mode
+General
 
-Background processes
-- You can now configure more settings of background processes
+- Introduced the update system
+- Introduced startup settings, beginning with the program being able to reload the servicing session of orphaned images
+- Introduced secondary progress panel styles (options to configure these are unavailable for now)
 
 AppX packages
-- You can now view a package's directory, and its resources, from the package removal dialog</value>
+
+- Enhanced the context menu of the AppX package removal dialog
+  - If the application manifest file cannot be found, the "View resources of" entry will be hidden
+  - If the application display name defined in the manifest started with "ms-resource:", the entry above will reflect the package name
+  - If an application is architecture-neutral, the program will now look at other package folders, excluding the neutral directory, for an application manifest
+  - For framework packages, the program will now display the package display name instead of "&lt;Framework&gt;true&lt;/Framework&gt;"</value>
   </data>
 </root>

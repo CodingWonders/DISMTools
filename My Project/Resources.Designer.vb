@@ -1607,19 +1607,17 @@ Namespace My.Resources
         
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
-        '''No bugfixes were made in this release
+        '''
+        '''- Fixed an issue where the extended AppX package getter would fail if the PowerShell execution policy wasn&apos;t set correctly
+        '''- Fixed an issue related to setting file generation where the background process notification setting would not be in a new line
         '''
         '''New features
         '''
-        '''Active installations
-        '''- Introduced online (active) installation management
-        '''- Introduced a new program flag to directly enter this mode
+        '''General
         '''
-        '''Background processes
-        '''- You can now configure more settings of background processes
-        '''
-        '''AppX packages
-        '''- You can now view a package&apos;s directory, and its resources, from the package removal dialog.
+        '''- Introduced the update system
+        '''- Introduced startup settings, beginning with the program being able to reload the servicing session of orphaned images
+        '''- Introduced secondary progress panel styles (options to configu [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
