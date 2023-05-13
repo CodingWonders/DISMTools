@@ -169,6 +169,12 @@
     <Compile Include="Panels\Exe_Ops\DTSettingForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Exe_Ops\Migration\MigrationForm.Designer.vb">
+      <DependentUpon>MigrationForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Exe_Ops\Migration\MigrationForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Exe_Ops\PrgAbout.Designer.vb">
       <DependentUpon>PrgAbout.vb</DependentUpon>
     </Compile>
@@ -551,6 +557,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Exe_Ops\DTSettingForm.resx">
       <DependentUpon>DTSettingForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Exe_Ops\Migration\MigrationForm.resx">
+      <DependentUpon>MigrationForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Exe_Ops\PrgAbout.resx">
       <DependentUpon>PrgAbout.vb</DependentUpon>
