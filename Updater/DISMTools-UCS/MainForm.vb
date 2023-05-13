@@ -19,6 +19,8 @@ Public Class MainForm
     Dim latestVer As String
     Dim relTag As String
 
+    Dim ReleaseDownloader As New WebClient()
+
     Private Sub minBox_MouseEnter(sender As Object, e As EventArgs) Handles minBox.MouseEnter
         minBox.Image = My.Resources.minBox_focus
     End Sub
@@ -92,7 +94,9 @@ Public Class MainForm
     End Sub
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Control.CheckForIllegalCrossThreadCalls = False
         Label1.Text = "DISMTools Update Check System - Version " & Application.ProductVersion
+        If Directory.Exists(Application.StartupPath & "\new") Then Directory.Delete(Application.StartupPath & "\new", True)
         GetArguments()
         ReleaseFetcherBW.RunWorkerAsync()
     End Sub
@@ -180,59 +184,194 @@ Public Class MainForm
     End Sub
 
     Private Sub UpdaterBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles UpdaterBW.DoWork
-        UpdaterBW.ReportProgress(0)
+        PictureBox1.Visible = False
+        PictureBox2.Visible = False
+        PictureBox3.Visible = False
+        PictureBox4.Visible = False
+        msg = "Downloading the latest release..."
+        Label10.ForeColor = ForeColor
+        Label11.ForeColor = Color.Gray
+        Label12.ForeColor = Color.Gray
+        Label13.ForeColor = Color.Gray
+        Label10.Font = New Font("Segoe UI", 9, FontStyle.Bold)
+        Label11.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+        Label12.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+        Label13.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+        UpdaterBW.ReportProgress(5)
+        DownloadRelease(relTag)
+        msg = "Extracting the release..."
+        Label10.ForeColor = Color.Gray
+        Label11.ForeColor = ForeColor
+        Label12.ForeColor = Color.Gray
+        Label13.ForeColor = Color.Gray
+        Label10.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+        Label11.Font = New Font("Segoe UI", 9, FontStyle.Bold)
+        Label12.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+        Label13.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+        PictureBox1.Visible = True
+        PictureBox2.Visible = False
+        PictureBox3.Visible = False
+        PictureBox4.Visible = False
+        UpdaterBW.ReportProgress(25)
+        ExpandContents()
+        msg = "Closing the program..."
+        UpdaterBW.ReportProgress(47.5)
+        CloseMainProcess()
+        Label10.ForeColor = Color.Gray
+        Label11.ForeColor = Color.Gray
+        Label12.ForeColor = ForeColor
+        Label13.ForeColor = Color.Gray
+        Label10.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+        Label11.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+        Label12.Font = New Font("Segoe UI", 9, FontStyle.Bold)
+        Label13.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+        PictureBox1.Visible = True
+        PictureBox2.Visible = True
+        PictureBox3.Visible = False
+        PictureBox4.Visible = False
+        msg = "Backing up old installation..."
+        UpdaterBW.ReportProgress(50)
+        BackupInstallation()
+        msg = "Deleting files..."
+        UpdaterBW.ReportProgress(62.5)
+        DeleteInstallation()
+        msg = "Copying files..."
+        UpdaterBW.ReportProgress(70)
+        InstallNewVersion()
+        Label10.ForeColor = Color.Gray
+        Label11.ForeColor = Color.Gray
+        Label12.ForeColor = Color.Gray
+        Label13.ForeColor = ForeColor
+        Label10.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+        Label11.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+        Label12.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+        Label13.Font = New Font("Segoe UI", 9, FontStyle.Bold)
+        PictureBox1.Visible = True
+        PictureBox2.Visible = True
+        PictureBox3.Visible = True
+        PictureBox4.Visible = False
+        msg = "Deleting backup files..."
+        UpdaterBW.ReportProgress(87.5)
+        CleanBackupFiles()
+        msg = "Done."
+        Label10.ForeColor = Color.Gray
+        Label11.ForeColor = Color.Gray
+        Label12.ForeColor = Color.Gray
+        Label13.ForeColor = Color.Gray
+        Label10.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+        Label11.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+        Label12.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+        Label13.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+        PictureBox1.Visible = True
+        PictureBox2.Visible = True
+        PictureBox3.Visible = True
+        PictureBox4.Visible = True
+        UpdaterBW.ReportProgress(100)
+    End Sub
+
+    Private Sub UpdaterBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles UpdaterBW.RunWorkerCompleted
+        If CheckBox1.Checked Then
+            Process.Start(Application.StartupPath & "\DISMTools.exe", "/migrate")
+            Environment.Exit(0)
+        Else
+            WelcomePanel.Visible = False
+            UpdatePanel.Visible = False
+            FinishPanel.Visible = True
+        End If
+    End Sub
+
+    Sub DownloadRelease(ReleaseTag As String)
+        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+        If Not Directory.Exists(Application.StartupPath & "\new") Then Directory.CreateDirectory(Application.StartupPath & "\new")
+        ReleaseDownloader.DownloadFile("https://github.com/CodingWonders/DISMTools/releases/download/" & ReleaseTag & "/DISMTools.zip", Application.StartupPath & "\new\DISMTools.zip")
+    End Sub
+
+    Sub ExpandContents()
+        Dim Expander As New Process()
+        Expander.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
+        Expander.StartInfo.Arguments = "-command Expand-Archive -Path " & Quote & Application.StartupPath & "\new\DISMTools.zip" & Quote & " -DestinationPath " & Quote & Application.StartupPath & "\new"
+        Expander.StartInfo.CreateNoWindow = True
+        Expander.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+        Expander.Start()
+        Expander.WaitForExit()
+        File.Delete(Application.StartupPath & "\new\DISMTools.zip")
+    End Sub
+
+    Sub CloseMainProcess()
+        Dim Closer As New Process()
+        Closer.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
+        Closer.StartInfo.Arguments = "-command Get-Process DISMTools | Foreach-Object { $_.CloseMainWindow() | Out-Null }"
+        Closer.StartInfo.CreateNoWindow = True
+        Closer.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+        Closer.Start()
+        Closer.WaitForExit()
+    End Sub
+
+    Sub BackupInstallation()
+        Dim Backupper As New Process()
+        Backupper.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
+        Backupper.StartInfo.CreateNoWindow = True
+        Backupper.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+        If Not Directory.Exists(Application.StartupPath & "\old") Then Directory.CreateDirectory(Application.StartupPath & "\old")
+        Directory.CreateDirectory(Application.StartupPath & "\old\Resources")
+        Directory.CreateDirectory(Application.StartupPath & "\old\bin")
+        Backupper.StartInfo.Arguments = "-command Copy-Item -Path *.dll -Destination " & Quote & Application.StartupPath & "\old" & Quote
+        Backupper.Start()
+        Backupper.WaitForExit()
+        Backupper.StartInfo.Arguments = "-command Copy-Item -Path " & Quote & Application.StartupPath & "\Resources" & Quote & " -Destination " & Quote & Application.StartupPath & "\old\Resources" & Quote & " -Recurse -Force"
+        Backupper.Start()
+        Backupper.WaitForExit()
+        Backupper.StartInfo.Arguments = "-command Copy-Item -Path " & Quote & Application.StartupPath & "\bin" & Quote & " -Destination " & Quote & Application.StartupPath & "\old\bin" & Quote & " -Recurse -Force"
+        Backupper.Start()
+        Backupper.WaitForExit()
+        File.Copy(Application.StartupPath & "\LICENSE", Application.StartupPath & "\old\LICENSE")
+        File.Copy(Application.StartupPath & "\DISMTools.exe", Application.StartupPath & "\old\DISMTools.exe")
+    End Sub
+
+    Sub DeleteInstallation()
+        For Each dll In My.Computer.FileSystem.GetFiles(Application.StartupPath, FileIO.SearchOption.SearchTopLevelOnly, "*.dll")
+            File.Delete(dll)
+        Next
+        Directory.Delete(Application.StartupPath & "\bin", True)
+        Directory.Delete(Application.StartupPath & "\Resources", True)
+        File.Delete(Application.StartupPath & "\DISMTools.exe")
+        File.Delete(Application.StartupPath & "\LICENSE")
+    End Sub
+
+    Sub InstallNewVersion()
+        Dim Updater As New Process()
+        Updater.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
+        Updater.StartInfo.CreateNoWindow = True
+        Updater.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+        Updater.StartInfo.Arguments = "-command Copy-Item -Path " & Quote & Application.StartupPath & "\new\*" & Quote & " -Exclude DISMTools.zip"
+        Updater.Start()
+        Updater.WaitForExit()
+        Updater.StartInfo.Arguments = "-command Copy-Item -Path " & Quote & Application.StartupPath & "\new\Resources" & Quote & " -Destination " & Quote & Application.StartupPath & "\Resources" & Quote & " -Recurse -Force"
+        Updater.Start()
+        Updater.WaitForExit()
+        Updater.StartInfo.Arguments = "-command Copy-Item -Path " & Quote & Application.StartupPath & "\new\bin" & Quote & " -Destination " & Quote & Application.StartupPath & "\bin" & Quote & " -Recurse -Force"
+        Updater.Start()
+        Updater.WaitForExit()
+    End Sub
+
+    Sub CleanBackupFiles()
+        Directory.Delete(Application.StartupPath & "\new", True)
+        Directory.Delete(Application.StartupPath & "\old", True)
     End Sub
 
     Private Sub UpdaterBW_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles UpdaterBW.ProgressChanged
-        Select Case e.ProgressPercentage
-            Case 0 To 24.99
-                Label10.ForeColor = ForeColor
-                Label11.ForeColor = Color.Gray
-                Label12.ForeColor = Color.Gray
-                Label13.ForeColor = Color.Gray
-                Label10.Font = New Font("Segoe UI", 9, FontStyle.Bold)
-                Label11.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label12.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label13.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-            Case 25 To 49.99
-                Label10.ForeColor = Color.Gray
-                Label11.ForeColor = ForeColor
-                Label12.ForeColor = Color.Gray
-                Label13.ForeColor = Color.Gray
-                Label10.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label11.Font = New Font("Segoe UI", 9, FontStyle.Bold)
-                Label12.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label13.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-            Case 50 To 74.99
-                Label10.ForeColor = Color.Gray
-                Label11.ForeColor = Color.Gray
-                Label12.ForeColor = ForeColor
-                Label13.ForeColor = Color.Gray
-                Label10.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label11.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label12.Font = New Font("Segoe UI", 9, FontStyle.Bold)
-                Label13.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-            Case 75 To 99.99
-                Label10.ForeColor = Color.Gray
-                Label11.ForeColor = Color.Gray
-                Label12.ForeColor = Color.Gray
-                Label13.ForeColor = ForeColor
-                Label10.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label11.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label12.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label13.Font = New Font("Segoe UI", 9, FontStyle.Bold)
-            Case Is >= 100
-                Label10.ForeColor = Color.Gray
-                Label11.ForeColor = Color.Gray
-                Label12.ForeColor = Color.Gray
-                Label13.ForeColor = Color.Gray
-                Label10.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label11.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label12.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-                Label13.Font = New Font("Segoe UI", 9, FontStyle.Regular)
-        End Select
-        If e.ProgressPercentage > 0 Then
-            Label14.Text = msg
-        End If
+        Label14.Text = msg
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        WelcomePanel.Visible = False
+        UpdatePanel.Visible = True
+        FinishPanel.Visible = False
+        UpdaterBW.RunWorkerAsync()
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        Process.Start(Application.StartupPath & "\DISMTools.exe", "/migrate")
+        Environment.Exit(0)
     End Sub
 End Class

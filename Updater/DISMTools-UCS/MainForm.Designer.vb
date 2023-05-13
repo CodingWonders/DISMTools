@@ -39,6 +39,10 @@ Partial Class MainForm
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.UpdatePanel = New System.Windows.Forms.Panel()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
+        Me.PictureBox3 = New System.Windows.Forms.PictureBox()
+        Me.PictureBox4 = New System.Windows.Forms.PictureBox()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.Label13 = New System.Windows.Forms.Label()
         Me.Label12 = New System.Windows.Forms.Label()
@@ -48,16 +52,12 @@ Partial Class MainForm
         Me.Label9 = New System.Windows.Forms.Label()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.FinishPanel = New System.Windows.Forms.Panel()
+        Me.Button2 = New System.Windows.Forms.Button()
+        Me.Label17 = New System.Windows.Forms.Label()
+        Me.Label16 = New System.Windows.Forms.Label()
+        Me.Label15 = New System.Windows.Forms.Label()
         Me.ReleaseFetcherBW = New System.ComponentModel.BackgroundWorker()
         Me.UpdaterBW = New System.ComponentModel.BackgroundWorker()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
-        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
-        Me.PictureBox3 = New System.Windows.Forms.PictureBox()
-        Me.PictureBox4 = New System.Windows.Forms.PictureBox()
-        Me.Label15 = New System.Windows.Forms.Label()
-        Me.Label16 = New System.Windows.Forms.Label()
-        Me.Label17 = New System.Windows.Forms.Label()
-        Me.Button2 = New System.Windows.Forms.Button()
         Me.btnControlPanel.SuspendLayout()
         Me.wndControlPanel.SuspendLayout()
         CType(Me.minBox, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -65,11 +65,11 @@ Partial Class MainForm
         Me.WelcomePanel.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.UpdatePanel.SuspendLayout()
-        Me.FinishPanel.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.FinishPanel.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label1
@@ -263,6 +263,46 @@ Partial Class MainForm
         Me.UpdatePanel.TabIndex = 4
         Me.UpdatePanel.Visible = False
         '
+        'PictureBox1
+        '
+        Me.PictureBox1.Image = Global.DISMTools_UCS.My.Resources.Resources.check
+        Me.PictureBox1.Location = New System.Drawing.Point(58, 123)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(24, 24)
+        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox1.TabIndex = 5
+        Me.PictureBox1.TabStop = False
+        '
+        'PictureBox2
+        '
+        Me.PictureBox2.Image = Global.DISMTools_UCS.My.Resources.Resources.check
+        Me.PictureBox2.Location = New System.Drawing.Point(58, 144)
+        Me.PictureBox2.Name = "PictureBox2"
+        Me.PictureBox2.Size = New System.Drawing.Size(24, 24)
+        Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox2.TabIndex = 5
+        Me.PictureBox2.TabStop = False
+        '
+        'PictureBox3
+        '
+        Me.PictureBox3.Image = Global.DISMTools_UCS.My.Resources.Resources.check
+        Me.PictureBox3.Location = New System.Drawing.Point(58, 165)
+        Me.PictureBox3.Name = "PictureBox3"
+        Me.PictureBox3.Size = New System.Drawing.Size(24, 24)
+        Me.PictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox3.TabIndex = 5
+        Me.PictureBox3.TabStop = False
+        '
+        'PictureBox4
+        '
+        Me.PictureBox4.Image = Global.DISMTools_UCS.My.Resources.Resources.check
+        Me.PictureBox4.Location = New System.Drawing.Point(58, 186)
+        Me.PictureBox4.Name = "PictureBox4"
+        Me.PictureBox4.Size = New System.Drawing.Size(24, 24)
+        Me.PictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox4.TabIndex = 5
+        Me.PictureBox4.TabStop = False
+        '
         'CheckBox1
         '
         Me.CheckBox1.AutoSize = True
@@ -357,78 +397,15 @@ Partial Class MainForm
         Me.FinishPanel.TabIndex = 4
         Me.FinishPanel.Visible = False
         '
-        'ReleaseFetcherBW
+        'Button2
         '
-        Me.ReleaseFetcherBW.WorkerReportsProgress = True
-        '
-        'UpdaterBW
-        '
-        Me.UpdaterBW.WorkerReportsProgress = True
-        Me.UpdaterBW.WorkerSupportsCancellation = True
-        '
-        'PictureBox1
-        '
-        Me.PictureBox1.Image = Global.DISMTools_UCS.My.Resources.Resources.check
-        Me.PictureBox1.Location = New System.Drawing.Point(58, 123)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(24, 24)
-        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.PictureBox1.TabIndex = 5
-        Me.PictureBox1.TabStop = False
-        Me.PictureBox1.Visible = False
-        '
-        'PictureBox2
-        '
-        Me.PictureBox2.Image = Global.DISMTools_UCS.My.Resources.Resources.check
-        Me.PictureBox2.Location = New System.Drawing.Point(58, 144)
-        Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(24, 24)
-        Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.PictureBox2.TabIndex = 5
-        Me.PictureBox2.TabStop = False
-        Me.PictureBox2.Visible = False
-        '
-        'PictureBox3
-        '
-        Me.PictureBox3.Image = Global.DISMTools_UCS.My.Resources.Resources.check
-        Me.PictureBox3.Location = New System.Drawing.Point(58, 165)
-        Me.PictureBox3.Name = "PictureBox3"
-        Me.PictureBox3.Size = New System.Drawing.Size(24, 24)
-        Me.PictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.PictureBox3.TabIndex = 5
-        Me.PictureBox3.TabStop = False
-        Me.PictureBox3.Visible = False
-        '
-        'PictureBox4
-        '
-        Me.PictureBox4.Image = Global.DISMTools_UCS.My.Resources.Resources.check
-        Me.PictureBox4.Location = New System.Drawing.Point(58, 186)
-        Me.PictureBox4.Name = "PictureBox4"
-        Me.PictureBox4.Size = New System.Drawing.Size(24, 24)
-        Me.PictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.PictureBox4.TabIndex = 5
-        Me.PictureBox4.TabStop = False
-        Me.PictureBox4.Visible = False
-        '
-        'Label15
-        '
-        Me.Label15.AutoSize = True
-        Me.Label15.Font = New System.Drawing.Font("Segoe UI Variable Display Semib", 18.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label15.Location = New System.Drawing.Point(24, 24)
-        Me.Label15.Name = "Label15"
-        Me.Label15.Size = New System.Drawing.Size(203, 32)
-        Me.Label15.TabIndex = 3
-        Me.Label15.Text = "Update complete"
-        '
-        'Label16
-        '
-        Me.Label16.AutoSize = True
-        Me.Label16.Location = New System.Drawing.Point(46, 84)
-        Me.Label16.Name = "Label16"
-        Me.Label16.Size = New System.Drawing.Size(499, 15)
-        Me.Label16.TabIndex = 4
-        Me.Label16.Text = "DISMTools has been updated successfully. You can now enjoy the new features of th" & _
-    "is release."
+        Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button2.Location = New System.Drawing.Point(840, 507)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(75, 23)
+        Me.Button2.TabIndex = 5
+        Me.Button2.Text = "Launch"
+        Me.Button2.UseVisualStyleBackColor = True
         '
         'Label17
         '
@@ -440,15 +417,34 @@ Partial Class MainForm
         Me.Label17.Text = "This version may come with new settings you may not have set previously. Your old" & _
     " settings file will be migrated to this version."
         '
-        'Button2
+        'Label16
         '
-        Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button2.Location = New System.Drawing.Point(840, 507)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(75, 23)
-        Me.Button2.TabIndex = 5
-        Me.Button2.Text = "Launch"
-        Me.Button2.UseVisualStyleBackColor = True
+        Me.Label16.AutoSize = True
+        Me.Label16.Location = New System.Drawing.Point(46, 84)
+        Me.Label16.Name = "Label16"
+        Me.Label16.Size = New System.Drawing.Size(499, 15)
+        Me.Label16.TabIndex = 4
+        Me.Label16.Text = "DISMTools has been updated successfully. You can now enjoy the new features of th" & _
+    "is release."
+        '
+        'Label15
+        '
+        Me.Label15.AutoSize = True
+        Me.Label15.Font = New System.Drawing.Font("Segoe UI Variable Display Semib", 18.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label15.Location = New System.Drawing.Point(24, 24)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(203, 32)
+        Me.Label15.TabIndex = 3
+        Me.Label15.Text = "Update complete"
+        '
+        'ReleaseFetcherBW
+        '
+        Me.ReleaseFetcherBW.WorkerReportsProgress = True
+        '
+        'UpdaterBW
+        '
+        Me.UpdaterBW.WorkerReportsProgress = True
+        Me.UpdaterBW.WorkerSupportsCancellation = True
         '
         'MainForm
         '
@@ -480,12 +476,12 @@ Partial Class MainForm
         Me.Panel1.PerformLayout()
         Me.UpdatePanel.ResumeLayout(False)
         Me.UpdatePanel.PerformLayout()
-        Me.FinishPanel.ResumeLayout(False)
-        Me.FinishPanel.PerformLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.FinishPanel.ResumeLayout(False)
+        Me.FinishPanel.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
