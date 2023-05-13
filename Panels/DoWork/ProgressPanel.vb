@@ -193,6 +193,8 @@ Public Class ProgressPanel
     Dim UseScratchDir As Boolean
     Dim ScratchDirPath As String
     Dim EnglishOut As Boolean
+    ' Backup command arguments
+    Dim BckArgs As String
 
 
     ' OperationNum: 0
@@ -579,6 +581,7 @@ Public Class ProgressPanel
     ''' <remarks>These settings can be configured at any time using the Options dialog</remarks>
     Sub GatherInitialSwitches()
         CommandArgs = "/logpath=" & Quote & If(AutoLogs, Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now), LogPath) & Quote & " /loglevel=" & LogLevel & If(UseScratchDir And ScratchDirPath <> "", " /scratchdir=" & Quote & ScratchDirPath & Quote, "") & If(EnglishOut, " /english", "")
+        BckArgs = CommandArgs
     End Sub
 
     ''' <summary>
