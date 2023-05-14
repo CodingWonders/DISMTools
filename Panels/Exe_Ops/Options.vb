@@ -155,6 +155,7 @@ Public Class Options
         End If
         MainForm.NotificationFrequency = ComboBox6.SelectedIndex
         MainForm.StartupRemount = CheckBox12.Checked
+        MainForm.StartupUpdateCheck = CheckBox13.Checked
         If MainForm.VolatileMode Then
             MainForm.SaveDTSettings()
         End If
@@ -343,6 +344,7 @@ Public Class Options
                         CheckBox10.Text = "Automatically create logs for each operation performed"
                         CheckBox11.Text = "Set custom file icons for DISMTools projects"
                         CheckBox12.Text = "Remount mounted images in need of a servicing session reload"
+                        CheckBox13.Text = "Check for updates"
                         DismOFD.Title = "Specify the DISM executable to use"
                         GroupBox1.Text = "Log customization"
                         GroupBox2.Text = "Notification frequency"
@@ -430,6 +432,7 @@ Public Class Options
                         CheckBox10.Text = "Crear registros para cada operación realizada automáticamente"
                         CheckBox11.Text = "Establecer iconos personalizados para proyectos de DISMTools"
                         CheckBox12.Text = "Remontar imágenes montadas que necesitan una recarga de su sesión de servicio"
+                        CheckBox13.Text = "Comprobar actualizaciones"
                         DismOFD.Title = "Especifique el ejecutable de DISM a usar"
                         GroupBox1.Text = "Personalización del registro"
                         GroupBox2.Text = "Frecuencia de notificaciones"
@@ -518,6 +521,7 @@ Public Class Options
                 CheckBox10.Text = "Automatically create logs for each operation performed"
                 CheckBox11.Text = "Set custom file icons for DISMTools projects"
                 CheckBox12.Text = "Remount mounted images in need of a servicing session reload"
+                CheckBox13.Text = "Check for updates"
                 DismOFD.Title = "Specify the DISM executable to use"
                 GroupBox1.Text = "Log customization"
                 GroupBox2.Text = "Notification frequency"
@@ -605,6 +609,7 @@ Public Class Options
                 CheckBox10.Text = "Crear registros para cada operación realizada automáticamente"
                 CheckBox11.Text = "Establecer iconos personalizados para proyectos de DISMTools"
                 CheckBox12.Text = "Remontar imágenes montadas que necesitan una recarga de su sesión de servicio"
+                CheckBox13.Text = "Comprobar actualizaciones"
                 DismOFD.Title = "Especifique el ejecutable de DISM a usar"
                 GroupBox1.Text = "Personalización del registro"
                 GroupBox2.Text = "Frecuencia de notificaciones"
@@ -898,6 +903,7 @@ Public Class Options
         End Select
         GetRootSpace(TextBox3.Text)
         CheckBox12.Checked = MainForm.StartupRemount
+        CheckBox13.Checked = MainForm.StartupUpdateCheck
     End Sub
 
     Private Sub ComboBox5_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox5.SelectedIndexChanged

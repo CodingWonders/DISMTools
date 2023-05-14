@@ -87,6 +87,7 @@ Public Class MainForm
     Public AllDrivers As Boolean
     ' - Startup -
     Public StartupRemount As Boolean
+    Public StartupUpdateCheck As Boolean
     ' - Secondary progress panel -
     Public ProgressPanelStyle As Integer = 1        ' 0 (Legacy, 0.1 - 0.2.2), 1 (Modern, >= 0.3)
 
@@ -250,6 +251,7 @@ Public Class MainForm
             DismVersionChecker = FileVersionInfo.GetVersionInfo(DismExe)
         End If
         If StartupRemount Then RemountOrphanedImages()
+        If StartupUpdateCheck Then CheckForUpdates(dtBranch)
         MountedImageDetectorBW.RunWorkerAsync()
         If dtBranch.Contains("preview") And Not Debugger.IsAttached Then
             VersionTSMI.Visible = True
@@ -346,6 +348,40 @@ Public Class MainForm
             Next
             DismApi.Shutdown()
         End If
+    End Sub
+
+    Sub CheckForUpdates(branch As String)
+        Dim latestVer As String = ""
+        Using client As New WebClient()
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+            Try
+                client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/DISMTools/" & branch & "/Updater/DISMTools-UCS/update-bin/" & If(branch.Contains("preview"), "preview.ini", "stable.ini"), Application.StartupPath & "\info.ini")
+            Catch ex As WebException
+                Debug.WriteLine("We couldn't fetch the necessary update information. Reason:" & CrLf & ex.Status.ToString())
+                Exit Sub
+            End Try
+            Debug.WriteLine("Reading update information...")
+            If File.Exists(Application.StartupPath & "\info.ini") Then
+                Dim infoRTB As New RichTextBox With {
+                    .Text = File.ReadAllText(Application.StartupPath & "\info.ini")
+                }
+                For Each Line In infoRTB.Lines
+                    If Line.StartsWith("LatestVer") Then
+                        latestVer = Line.Replace("LatestVer = ", "").Trim()
+                    End If
+                Next
+                File.Delete(Application.StartupPath & "\info.ini")
+                Debug.WriteLine("Comparing versions...")
+                Dim fv As String = My.Application.Info.Version.ToString()
+                If fv = latestVer Then
+                    Debug.WriteLine("There aren't any updates available")
+                    UpdatePanel.Visible = False
+                Else
+                    Debug.WriteLine("There are updates available. Showing update recommendation...")
+                    UpdatePanel.Visible = True
+                End If
+            End If
+        End Using
     End Sub
 
     Sub ChangeImgStatus()
@@ -842,6 +878,11 @@ Public Class MainForm
                     StartupRemount = True
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("RemountImages=0") Then
                     StartupRemount = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("CheckForUpdates=1") Then
+                    StartupUpdateCheck = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("CheckForUpdates=0") Then
+                    StartupUpdateCheck = False
                 End If
             Else
                 GenerateDTSettings()
@@ -2915,6 +2956,7 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "DetectAllDrivers=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Startup]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("RemountImages=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "CheckForUpdates=1")
         File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
     End Sub
 
@@ -3037,6 +3079,11 @@ Public Class MainForm
                     DTSettingForm.RichTextBox2.AppendText("RemountImages=1")
                 Else
                     DTSettingForm.RichTextBox2.AppendText("RemountImages=0")
+                End If
+                If StartupUpdateCheck Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "CheckForUpdates=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "CheckForUpdates=0")
                 End If
                 File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
             Else
@@ -3665,6 +3712,8 @@ Public Class MainForm
                     LinkLabel2.LinkArea = New LinkArea(72, 4)
                     LinkLabel3.Text = "Or, if you have a mounted image, open an existing mount directory"
                     LinkLabel3.LinkArea = New LinkArea(33, 32)
+                    UpdateLink.Text = "A new version is available for download and installation. Click here to learn more"
+                    UpdateLink.LinkArea = New LinkArea(58, 24)
                     Label15.Text = "Image index:"
                     Label13.Text = "Mount point:"
                     Label16.Text = "Version:"
@@ -3921,6 +3970,8 @@ Public Class MainForm
                     LinkLabel2.LinkArea = New LinkArea(67, 4)
                     LinkLabel3.Text = "O, si tiene una imagen montada, abra un directorio de montaje existente"
                     LinkLabel3.LinkArea = New LinkArea(32, 40)
+                    UpdateLink.Text = "Hay una nueva versión disponible para su descarga e instalación. Haga clic aquí para saber más"
+                    UpdateLink.LinkArea = New LinkArea(65, 29)
                     Label15.Text = "Índice:"
                     Label13.Text = "Punto de montaje:"
                     Label16.Text = "Versión:"
@@ -4182,6 +4233,8 @@ Public Class MainForm
                 LinkLabel2.LinkArea = New LinkArea(72, 4)
                 LinkLabel3.Text = "Or, if you have a mounted image, open an existing mount directory"
                 LinkLabel3.LinkArea = New LinkArea(33, 32)
+                UpdateLink.Text = "A new version is available for download and installation. Click here to learn more"
+                UpdateLink.LinkArea = New LinkArea(58, 24)
                 Label15.Text = "Image index:"
                 Label13.Text = "Mount point:"
                 Label16.Text = "Version:"
@@ -4438,6 +4491,8 @@ Public Class MainForm
                 LinkLabel2.LinkArea = New LinkArea(67, 4)
                 LinkLabel3.Text = "O, si tiene una imagen montada, abra un directorio de montaje existente"
                 LinkLabel3.LinkArea = New LinkArea(32, 40)
+                UpdateLink.Text = "Hay una nueva versión disponible para su descarga e instalación. Haga clic aquí para saber más"
+                UpdateLink.LinkArea = New LinkArea(65, 29)
                 Label15.Text = "Índice:"
                 Label13.Text = "Punto de montaje:"
                 Label16.Text = "Versión:"

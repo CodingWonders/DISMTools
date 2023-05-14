@@ -238,6 +238,7 @@ Partial Class MainForm
         Me.Label7 = New System.Windows.Forms.Label()
         Me.Button18 = New System.Windows.Forms.Button()
         Me.SidePanel = New System.Windows.Forms.Panel()
+        Me.UpdatePanel = New System.Windows.Forms.Panel()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.OnlineInstMgmt = New System.Windows.Forms.LinkLabel()
         Me.ExistingProjLink = New System.Windows.Forms.LinkLabel()
@@ -353,6 +354,7 @@ Partial Class MainForm
         Me.AppxPackagePopupCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.ViewPackageDirectoryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ResViewTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.UpdateLink = New System.Windows.Forms.LinkLabel()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -374,6 +376,7 @@ Partial Class MainForm
         Me.Panel1.SuspendLayout()
         Me.Panel4.SuspendLayout()
         Me.SidePanel.SuspendLayout()
+        Me.UpdatePanel.SuspendLayout()
         Me.Panel3.SuspendLayout()
         CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PrjPanel.SuspendLayout()
@@ -1981,6 +1984,7 @@ Partial Class MainForm
         'SidePanel
         '
         Me.SidePanel.BackColor = System.Drawing.Color.White
+        Me.SidePanel.Controls.Add(Me.UpdatePanel)
         Me.SidePanel.Controls.Add(Me.Label11)
         Me.SidePanel.Controls.Add(Me.OnlineInstMgmt)
         Me.SidePanel.Controls.Add(Me.ExistingProjLink)
@@ -1995,6 +1999,15 @@ Partial Class MainForm
         Me.SidePanel.Name = "SidePanel"
         Me.SidePanel.Size = New System.Drawing.Size(256, 657)
         Me.SidePanel.TabIndex = 0
+        '
+        'UpdatePanel
+        '
+        Me.UpdatePanel.Controls.Add(Me.UpdateLink)
+        Me.UpdatePanel.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.UpdatePanel.Location = New System.Drawing.Point(0, 573)
+        Me.UpdatePanel.Name = "UpdatePanel"
+        Me.UpdatePanel.Size = New System.Drawing.Size(256, 84)
+        Me.UpdatePanel.TabIndex = 5
         '
         'Label11
         '
@@ -2249,7 +2262,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.44444!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.55556!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 43.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -2284,9 +2297,9 @@ Partial Class MainForm
         Me.LinkLabel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel1.Location = New System.Drawing.Point(98, 146)
+        Me.LinkLabel1.Location = New System.Drawing.Point(97, 146)
         Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(155, 254)
+        Me.LinkLabel1.Size = New System.Drawing.Size(156, 254)
         Me.LinkLabel1.TabIndex = 5
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "Click here to mount an image"
@@ -2296,7 +2309,7 @@ Partial Class MainForm
         Me.Panel8.Controls.Add(Me.projName)
         Me.Panel8.Controls.Add(Me.projNameText)
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel8.Location = New System.Drawing.Point(98, 3)
+        Me.Panel8.Location = New System.Drawing.Point(97, 3)
         Me.Panel8.Name = "Panel8"
         Me.Panel8.Size = New System.Drawing.Size(112, 23)
         Me.Panel8.TabIndex = 8
@@ -2328,9 +2341,9 @@ Partial Class MainForm
         Me.Label5.AutoSize = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label5, 2)
         Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label5.Location = New System.Drawing.Point(98, 131)
+        Me.Label5.Location = New System.Drawing.Point(97, 131)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(155, 15)
+        Me.Label5.Size = New System.Drawing.Size(156, 15)
         Me.Label5.TabIndex = 2
         Me.Label5.Text = "imgStatus"
         '
@@ -2340,7 +2353,7 @@ Partial Class MainForm
         Me.Label2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label2.Location = New System.Drawing.Point(3, 29)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(89, 102)
+        Me.Label2.Size = New System.Drawing.Size(88, 102)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "Location:"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2350,9 +2363,9 @@ Partial Class MainForm
         Me.Label3.AutoEllipsis = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label3, 2)
         Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label3.Location = New System.Drawing.Point(98, 29)
+        Me.Label3.Location = New System.Drawing.Point(97, 29)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(155, 102)
+        Me.Label3.Size = New System.Drawing.Size(156, 102)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "projPath"
         '
@@ -2363,7 +2376,7 @@ Partial Class MainForm
         Me.Label4.Location = New System.Drawing.Point(3, 131)
         Me.Label4.Name = "Label4"
         Me.TableLayoutPanel2.SetRowSpan(Me.Label4, 2)
-        Me.Label4.Size = New System.Drawing.Size(89, 269)
+        Me.Label4.Size = New System.Drawing.Size(88, 269)
         Me.Label4.TabIndex = 1
         Me.Label4.Text = "Images mounted?"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2374,7 +2387,7 @@ Partial Class MainForm
         Me.Panel9.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel9.Location = New System.Drawing.Point(3, 3)
         Me.Panel9.Name = "Panel9"
-        Me.Panel9.Size = New System.Drawing.Size(89, 23)
+        Me.Panel9.Size = New System.Drawing.Size(88, 23)
         Me.Panel9.TabIndex = 9
         '
         'Label1
@@ -2382,7 +2395,7 @@ Partial Class MainForm
         Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label1.Location = New System.Drawing.Point(0, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(89, 23)
+        Me.Label1.Size = New System.Drawing.Size(88, 23)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Name:"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -3209,6 +3222,24 @@ Partial Class MainForm
         Me.ResViewTSMI.Size = New System.Drawing.Size(196, 22)
         Me.ResViewTSMI.Text = "View resources for "
         '
+        'UpdateLink
+        '
+        Me.UpdateLink.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.UpdateLink.AutoEllipsis = True
+        Me.UpdateLink.LinkArea = New System.Windows.Forms.LinkArea(58, 24)
+        Me.UpdateLink.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.UpdateLink.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.UpdateLink.Location = New System.Drawing.Point(16, 14)
+        Me.UpdateLink.Name = "UpdateLink"
+        Me.UpdateLink.Size = New System.Drawing.Size(223, 56)
+        Me.UpdateLink.TabIndex = 0
+        Me.UpdateLink.TabStop = True
+        Me.UpdateLink.Text = "A new version is available for download and installation. Click here to learn mor" & _
+    "e"
+        Me.UpdateLink.UseCompatibleTextRendering = True
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -3252,6 +3283,7 @@ Partial Class MainForm
         Me.Panel4.PerformLayout()
         Me.SidePanel.ResumeLayout(False)
         Me.SidePanel.PerformLayout()
+        Me.UpdatePanel.ResumeLayout(False)
         Me.Panel3.ResumeLayout(False)
         Me.Panel3.PerformLayout()
         CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).EndInit()
@@ -3634,4 +3666,6 @@ Partial Class MainForm
     Friend WithEvents AppxPackagePopupCMS As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents ViewPackageDirectoryToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ResViewTSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents UpdatePanel As System.Windows.Forms.Panel
+    Friend WithEvents UpdateLink As System.Windows.Forms.LinkLabel
 End Class
