@@ -18,6 +18,7 @@ Public Class MainForm
     ' Necessary variables
     Dim latestVer As String
     Dim relTag As String
+    Dim needsMigration As Boolean
 
     Dim ReleaseDownloader As New WebClient()
 
@@ -152,8 +153,11 @@ Public Class MainForm
                         latestVer = Line.Replace("LatestVer = ", "").Trim()
                     ElseIf Line.StartsWith("ReleaseTag") Then
                         relTag = Line.Replace("ReleaseTag = ", "").Trim()
+                    ElseIf Line.StartsWith("MigrateSettings") Then
+                        needsMigration = If(Line.Replace("MigrateSettings = ", "").Trim() = "True", True, False)
                     End If
                 Next
+                Label17.Visible = needsMigration
                 File.Delete(Application.StartupPath & "\info.ini")
             End If
         End Using
@@ -267,11 +271,12 @@ Public Class MainForm
         PictureBox3.Visible = True
         PictureBox4.Visible = True
         UpdaterBW.ReportProgress(100)
+        Threading.Thread.Sleep(1000)
     End Sub
 
     Private Sub UpdaterBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles UpdaterBW.RunWorkerCompleted
         If CheckBox1.Checked Then
-            Process.Start(Application.StartupPath & "\DISMTools.exe", "/migrate")
+            Process.Start(Application.StartupPath & "\DISMTools.exe", If(needsMigration, "/migrate", ""))
             Environment.Exit(0)
         Else
             WelcomePanel.Visible = False
@@ -371,7 +376,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        Process.Start(Application.StartupPath & "\DISMTools.exe", "/migrate")
+        Process.Start(Application.StartupPath & "\DISMTools.exe", If(needsMigration, "/migrate", ""))
         Environment.Exit(0)
     End Sub
 End Class
