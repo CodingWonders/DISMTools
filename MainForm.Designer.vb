@@ -239,6 +239,7 @@ Partial Class MainForm
         Me.Button18 = New System.Windows.Forms.Button()
         Me.SidePanel = New System.Windows.Forms.Panel()
         Me.UpdatePanel = New System.Windows.Forms.Panel()
+        Me.UpdateLink = New System.Windows.Forms.LinkLabel()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.OnlineInstMgmt = New System.Windows.Forms.LinkLabel()
         Me.ExistingProjLink = New System.Windows.Forms.LinkLabel()
@@ -354,7 +355,6 @@ Partial Class MainForm
         Me.AppxPackagePopupCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.ViewPackageDirectoryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ResViewTSMI = New System.Windows.Forms.ToolStripMenuItem()
-        Me.UpdateLink = New System.Windows.Forms.LinkLabel()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -2009,6 +2009,24 @@ Partial Class MainForm
         Me.UpdatePanel.Size = New System.Drawing.Size(256, 84)
         Me.UpdatePanel.TabIndex = 5
         '
+        'UpdateLink
+        '
+        Me.UpdateLink.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.UpdateLink.AutoEllipsis = True
+        Me.UpdateLink.LinkArea = New System.Windows.Forms.LinkArea(58, 24)
+        Me.UpdateLink.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.UpdateLink.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.UpdateLink.Location = New System.Drawing.Point(16, 14)
+        Me.UpdateLink.Name = "UpdateLink"
+        Me.UpdateLink.Size = New System.Drawing.Size(223, 56)
+        Me.UpdateLink.TabIndex = 0
+        Me.UpdateLink.TabStop = True
+        Me.UpdateLink.Text = "A new version is available for download and installation. Click here to learn mor" & _
+    "e"
+        Me.UpdateLink.UseCompatibleTextRendering = True
+        '
         'Label11
         '
         Me.Label11.Location = New System.Drawing.Point(34, 209)
@@ -2262,7 +2280,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.44444!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.55556!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 43.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 44.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -2311,7 +2329,7 @@ Partial Class MainForm
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel8.Location = New System.Drawing.Point(97, 3)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(112, 23)
+        Me.Panel8.Size = New System.Drawing.Size(111, 23)
         Me.Panel8.TabIndex = 8
         '
         'projName
@@ -2320,7 +2338,7 @@ Partial Class MainForm
         Me.projName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projName.Location = New System.Drawing.Point(0, 0)
         Me.projName.Name = "projName"
-        Me.projName.Size = New System.Drawing.Size(112, 23)
+        Me.projName.Size = New System.Drawing.Size(111, 23)
         Me.projName.TabIndex = 2
         Me.projName.Text = "projName"
         Me.projName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -2330,7 +2348,7 @@ Partial Class MainForm
         Me.projNameText.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projNameText.Location = New System.Drawing.Point(0, 0)
         Me.projNameText.Name = "projNameText"
-        Me.projNameText.Size = New System.Drawing.Size(112, 21)
+        Me.projNameText.Size = New System.Drawing.Size(111, 21)
         Me.projNameText.TabIndex = 4
         Me.projNameText.Text = "projName"
         Me.projNameText.Visible = False
@@ -3207,7 +3225,7 @@ Partial Class MainForm
         '
         Me.AppxPackagePopupCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ViewPackageDirectoryToolStripMenuItem, Me.ResViewTSMI})
         Me.AppxPackagePopupCMS.Name = "AppxPackagePopupCMS"
-        Me.AppxPackagePopupCMS.Size = New System.Drawing.Size(197, 48)
+        Me.AppxPackagePopupCMS.Size = New System.Drawing.Size(197, 70)
         '
         'ViewPackageDirectoryToolStripMenuItem
         '
@@ -3221,24 +3239,6 @@ Partial Class MainForm
         Me.ResViewTSMI.Name = "ResViewTSMI"
         Me.ResViewTSMI.Size = New System.Drawing.Size(196, 22)
         Me.ResViewTSMI.Text = "View resources for "
-        '
-        'UpdateLink
-        '
-        Me.UpdateLink.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.UpdateLink.AutoEllipsis = True
-        Me.UpdateLink.LinkArea = New System.Windows.Forms.LinkArea(58, 24)
-        Me.UpdateLink.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.UpdateLink.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.UpdateLink.Location = New System.Drawing.Point(16, 14)
-        Me.UpdateLink.Name = "UpdateLink"
-        Me.UpdateLink.Size = New System.Drawing.Size(223, 56)
-        Me.UpdateLink.TabIndex = 0
-        Me.UpdateLink.TabStop = True
-        Me.UpdateLink.Text = "A new version is available for download and installation. Click here to learn mor" & _
-    "e"
-        Me.UpdateLink.UseCompatibleTextRendering = True
         '
         'MainForm
         '

@@ -8297,7 +8297,29 @@ Public Class MainForm
         Return Nothing
     End Function
 
+    Function GetSuitablePackageFolder(PackageName As String)
+        If Directory.GetDirectories(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps", PackageName & "*", SearchOption.TopDirectoryOnly).Count > 1 Then
+            Dim pkgDirs() As String = Directory.GetDirectories(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps", PackageName & "*", SearchOption.TopDirectoryOnly)
+            For Each folder In pkgDirs
+                If Not folder.Contains("neutral") Then
+                    Return folder
+                End If
+            Next
+        End If
+        Return Nothing
+    End Function
+
     Private Sub ViewPackageDirectoryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewPackageDirectoryToolStripMenuItem.Click
+        Dim suitableFolderName As String = ""
+        Try
+            suitableFolderName = GetSuitablePackageFolder(RemProvAppxPackage.ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim())
+        Catch ex As Exception
+            ' Continue
+        End Try
+        If suitableFolderName IsNot Nothing Then
+            Process.Start(suitableFolderName)
+            Exit Sub
+        End If
         If OnlineManagement Then
             If Directory.Exists(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\Program Files\WindowsApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text) Then
                 Process.Start(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\Program Files\WindowsApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text)
@@ -8314,6 +8336,16 @@ Public Class MainForm
     End Sub
 
     Private Sub ResViewTSMI_Click(sender As Object, e As EventArgs) Handles ResViewTSMI.Click
+        Dim suitableFolderName As String = ""
+        Try
+            suitableFolderName = GetSuitablePackageFolder(RemProvAppxPackage.ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim())
+        Catch ex As Exception
+            ' Continue
+        End Try
+        If suitableFolderName IsNot Nothing Then
+            If Directory.Exists(suitableFolderName & "\Assets") Then Process.Start(suitableFolderName & "\Assets")
+            Exit Sub
+        End If
         If OnlineManagement Then
             If Directory.Exists(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\Program Files\WindowsApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text & "\Assets") Then
                 Process.Start(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\Program Files\WindowsApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text & "\Assets")
