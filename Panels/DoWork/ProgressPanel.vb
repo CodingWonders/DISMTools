@@ -2735,6 +2735,7 @@ Public Class ProgressPanel
             CurrentPB.Maximum = appxRemovalCount
             For x = 0 To Array.LastIndexOf(appxRemovalPackages, appxRemovalLastPackage)
                 If x + 1 > CurrentPB.Maximum Then Exit For
+                CommandArgs = BckArgs
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2776,7 +2777,7 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & _
                                    "Processing package...")
                 DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /remove-provisionedappxpackage /packagename=" & appxRemovalPackages(x)
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /remove-provisionedappxpackage /packagename=" & appxRemovalPackages(x)
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
                 Do Until DISMProc.HasExited
@@ -4850,6 +4851,15 @@ Public Class ProgressPanel
         If Not Directory.Exists(Directory.GetCurrentDirectory() & "\logs") Then Directory.CreateDirectory(Directory.GetCurrentDirectory() & "\logs")
         ' Detect settings
         OnlineMgmt = MainForm.OnlineManagement
+        AutoLogs = MainForm.AutoLogs
+        LogPath = MainForm.LogFile
+        LogLevel = MainForm.LogLevel
+        QuietOps = MainForm.QuietOperations
+        SkipSysRestart = MainForm.SysNoRestart
+        UseScratchDir = MainForm.UseScratch
+        ScratchDirPath = MainForm.ScratchDir
+        EnglishOut = MainForm.EnglishOutput
+        GatherInitialSwitches()
         GetTasks(OperationNum)
         ProgressBW.RunWorkerAsync()
     End Sub
@@ -4857,6 +4867,8 @@ Public Class ProgressPanel
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
         If File.Exists(Directory.GetCurrentDirectory() & "\logs\" & dateStr) Then
             Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\notepad.exe", Directory.GetCurrentDirectory() & "\logs\" & dateStr)
+        ElseIf File.Exists(LogPath) Then
+            Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\notepad.exe", LogPath)
         End If
     End Sub
 
