@@ -156,6 +156,7 @@ Public Class Options
         MainForm.NotificationFrequency = ComboBox6.SelectedIndex
         MainForm.StartupRemount = CheckBox12.Checked
         MainForm.StartupUpdateCheck = CheckBox13.Checked
+        MainForm.AutoLogs = CheckBox10.Checked
         If MainForm.VolatileMode Then
             MainForm.SaveDTSettings()
         End If
@@ -902,6 +903,7 @@ Public Class Options
                 ComboBox6.SelectedIndex = 1
         End Select
         GetRootSpace(TextBox3.Text)
+        CheckBox10.Checked = MainForm.AutoLogs
         CheckBox12.Checked = MainForm.StartupRemount
         CheckBox13.Checked = MainForm.StartupUpdateCheck
     End Sub

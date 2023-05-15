@@ -90,6 +90,8 @@ Public Class MainForm
     Public StartupUpdateCheck As Boolean
     ' - Secondary progress panel -
     Public ProgressPanelStyle As Integer = 1        ' 0 (Legacy, 0.1 - 0.2.2), 1 (Modern, >= 0.3)
+    ' - Progress panel -
+    Public AutoLogs As Boolean
 
     ' Background process initiator settings
     Public bwBackgroundProcessAction As Integer
@@ -805,6 +807,11 @@ Public Class MainForm
                     LogLevel = 3
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("LogLevel=4") Then
                     LogLevel = 4
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("AutoLogs=0") Then
+                    AutoLogs = 0
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("AutoLogs=1") Then
+                    AutoLogs = 1
                 End If
                 ' Detect image operation mode: 0 - Offline mode (mounted Windows image)
                 '                              1 - Online mode
@@ -2937,6 +2944,7 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\Logs\DISM\DISM.log" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=3")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoLogs=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ImgOps]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("ImgOperationMode=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "Quiet=0")
@@ -3010,6 +3018,11 @@ Public Class MainForm
                     Case 4
                         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=4")
                 End Select
+                If AutoLogs Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoLogs=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoLogs=0")
+                End If
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ImgOps]" & CrLf)
                 Select Case ImgOperationMode
                     Case 0
