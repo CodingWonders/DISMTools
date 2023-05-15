@@ -2535,12 +2535,12 @@ Public Class MainForm
                 appxArchRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxarch")
                 appxResIdRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxresid")
                 appxVerRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxver")
-                appxNonRemPolRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxnonrempolicy")
+                If File.Exists(Application.StartupPath & "\bin\extps1\out\appxnonrempolicy") Then appxNonRemPolRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxnonrempolicy")
                 For x = 0 To appxPkgFullNameRTB.Lines.Count - 1
                     If imgAppxPackageNameList.Contains(appxPkgFullNameRTB.Lines(x)) Then
                         Continue For
                     Else
-                        If SkipNonRemovable Then
+                        If SkipNonRemovable And File.Exists(Application.StartupPath & "\bin\extps1\out\appxnonrempolicy") Then
                             If appxNonRemPolRTB.Lines(x) = "True" Then
                                 Continue For
                             Else

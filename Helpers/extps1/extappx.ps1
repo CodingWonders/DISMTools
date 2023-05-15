@@ -10,4 +10,4 @@ Import-Module Appx
 (Get-AppxPackage | Select-Object -ExpandProperty Architecture) | Out-File "bin\extps1\out\appxarch"
 (Get-AppxPackage | Select-Object -ExpandProperty ResourceID) | Out-File "bin\extps1\out\appxresid"
 (Get-AppxPackage | Select-Object -ExpandProperty Version) | Out-File "bin\extps1\out\appxver"
-(Get-AppxPackage | Select-Object -ExpandProperty NonRemovable) | Out-File "bin\extps1\out\appxnonrempolicy"
+if ([System.Environment]::OSVersion.Version.Major -ge 10) { (Get-AppxPackage | Select-Object -ExpandProperty NonRemovable) | Out-File "bin\extps1\out\appxnonrempolicy" } else { Write-Output "Cannot get non-removable policy"}
