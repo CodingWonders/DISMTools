@@ -4451,9 +4451,45 @@ Public Class ProgressPanel
         RunOps(OperationNum)
     End Sub
 
+    Sub SaveLog(LogFile As String)
+        If Not File.Exists(LogFile) Then
+            ' Create file
+            Try
+                File.WriteAllText(LogFile, String.Empty)
+            Catch ex As Exception
+                LogView.AppendText(CrLf & _
+                                   "Warning: the contents of the log window could not be saved to the log file. Reason: " & CrLf & ex.ToString())
+                Exit Sub
+            End Try
+        End If
+        Dim logWindowReader As New RichTextBox() With {
+            .Text = My.Computer.FileSystem.ReadAllText(LogFile, ASCII)
+        }
+        If logWindowReader.Text <> "" Then
+            logWindowReader.AppendText(CrLf & "==================== DISMTools Log Window Contents (" & DateTime.Now.ToString() & ") ====================")
+        Else
+            logWindowReader.AppendText("======================== DISMTools Log File ========================" & CrLf & _
+                                       "This is an automatically generated log file created by DISMTools." & CrLf & _
+                                       "This file can be viewed at any time to view successful and/or" & CrLf & _
+                                       "failed tasks." & CrLf & CrLf & _
+                                       "This log file is updated every time an operation is performed." & CrLf & _
+                                       "However, it does not contain the actual DISM log file, which is" & CrLf & _
+                                       "also automatically generated each time DISM is run from this" & CrLf & _
+                                       "program. These log files are named: " & CrLf & _
+                                       "                    " & Quote & "DISMTools-<date/time>.log" & Quote & "                    " & CrLf & _
+                                       "====================================================================")
+        End If
+        logWindowReader.AppendText(CrLf & LogView.Text)
+        File.WriteAllText(LogFile, logWindowReader.Text, ASCII)
+    End Sub
+
     Private Sub ProgressBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ProgressBW.RunWorkerCompleted
         If IsSuccessful Then
+            If OperationNum = 9 Then LogView.AppendText(CrLf & _
+                               "The volume images have been deleted. If you want to remount this image into a DISMTools project, choose the " & Quote & "Mount image" & Quote & " option, or use this command if you want to mount it elsewhere:" & CrLf & _
+                               "  dism /mount-image /imagefile:" & Quote & imgIndexDeletionSourceImg & Quote & " /index:<preferred index> /mountdir:<preferred mountpoint>")
             'Visible = False
+            SaveLog(Application.StartupPath & "\logs\DISMTools.log")
             Try
                 CurrentPB.Value = 100
             Catch ex As Exception
@@ -4482,9 +4518,6 @@ Public Class ProgressPanel
             ElseIf OperationNum = 8 Then
                 MainForm.SaveDTProj()
             ElseIf OperationNum = 9 Then
-                LogView.AppendText(CrLf & _
-                                   "The volume images have been deleted. If you want to remount this image into a DISMTools project, choose the " & Quote & "Mount image" & Quote & " option, or use this command if you want to mount it elsewhere:" & CrLf & _
-                                   "  dism /mount-image /imagefile:" & Quote & imgIndexDeletionSourceImg & Quote & " /index:<preferred index> /mountdir:<preferred mountpoint>")
                 If imgIndexDeletionUnmount Then
                     ' Detect mounted images if the program needed to unmount the source image
                     MainForm.DetectMountedImages(False)
@@ -4733,6 +4766,7 @@ Public Class ProgressPanel
                     MainForm.MenuDesc.Text = "Listo"
             End Select
             MainForm.StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
+            SaveLog(Application.StartupPath & "\logs\DISMTools.log")
         End If
     End Sub
 
