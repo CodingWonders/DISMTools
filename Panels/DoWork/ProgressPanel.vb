@@ -2627,7 +2627,7 @@ Public Class ProgressPanel
                 End If
                 If appxAdditionUseAllRegions And FileVersionInfo.GetVersionInfo(DismProgram).ProductMajorPart = 10 Then
                     CommandArgs &= " /region:all"
-                ElseIf Not appxAdditionUseAllRegions Then
+                ElseIf Not appxAdditionUseAllRegions And FileVersionInfo.GetVersionInfo(DismProgram).ProductMajorPart = 10 Then
                     CommandArgs &= " /region:" & Quote & appxAdditionRegions & Quote
                 ElseIf FileVersionInfo.GetVersionInfo(DismProgram).ProductMajorPart < 10 Then
                     ' Don't set region parameter
