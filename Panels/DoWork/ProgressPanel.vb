@@ -1577,7 +1577,7 @@ Public Class ProgressPanel
                                "Processing " & pkgCount & " packages..." & CrLf)
             If pkgAdditionOp = 0 Then
                 DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /add-package /packagepath=" & Quote & pkgSource & Quote
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-package /packagepath=" & Quote & pkgSource & Quote
                 If pkgIgnoreApplicabilityChecks Then
                     CommandArgs &= " /ignorecheck"
                 End If
@@ -1673,7 +1673,7 @@ Public Class ProgressPanel
                     If Not pkgIsApplicable Or pkgIsInstalled Then Continue For
                     LogView.AppendText(CrLf & "Processing package...")
                     DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /add-package /packagepath=" & Quote & pkgs(x) & Quote
+                    CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-package /packagepath=" & Quote & pkgs(x) & Quote
                     If pkgIgnoreApplicabilityChecks Then
                         CommandArgs &= " /ignorecheck"
                     End If
@@ -1813,7 +1813,7 @@ Public Class ProgressPanel
                     If pkgIsReadyForRemoval Then
                         LogView.AppendText(CrLf & "Processing package removal...")
                         DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                        CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /remove-package /packagename=" & pkgRemovalNames(x)
+                        CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /remove-package /packagename=" & pkgRemovalNames(x)
                         DISMProc.StartInfo.Arguments = CommandArgs
                         DISMProc.Start()
                         Do Until DISMProc.HasExited
@@ -1898,7 +1898,7 @@ Public Class ProgressPanel
                     If pkgIsReadyForRemoval Then
                         LogView.AppendText(CrLf & "Processing package removal...")
                         DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                        CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /remove-package /packagepath=" & pkgRemovalFiles(x)
+                        CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /remove-package /packagepath=" & pkgRemovalFiles(x)
                         DISMProc.StartInfo.Arguments = CommandArgs
                         DISMProc.Start()
                         Do Until DISMProc.HasExited
@@ -2057,7 +2057,7 @@ Public Class ProgressPanel
                 Finally
                     DismApi.Shutdown()
                 End Try
-                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /enable-feature /featurename=" & featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /enable-feature /featurename=" & featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
                 If featisParentPkgNameUsed And featParentPkgName <> "" Then
                     CommandArgs &= " /packagename=" & featParentPkgName
                 End If
@@ -2201,7 +2201,7 @@ Public Class ProgressPanel
                 Finally
                     DismApi.Shutdown()
                 End Try
-                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /disable-feature /featurename=" & featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /disable-feature /featurename=" & featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
                 If featDisablementParentPkgUsed And featDisablementParentPkg <> "" Then
                     CommandArgs &= " /packagename=" & featParentPkgName
                 End If
@@ -2269,7 +2269,7 @@ Public Class ProgressPanel
             End Select
             ' Initialize command
             DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /cleanup-image"
+            CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /cleanup-image"
             Select Case CleanupTask
                 Case 0
                     Select Case Language
@@ -2449,7 +2449,7 @@ Public Class ProgressPanel
                                "- Catalog file: " & If(ppkgAdditionCatalogPath = "", "none specified", Quote & ppkgAdditionCatalogPath & Quote) & CrLf & _
                                "- Commit image after adding provisioning package? " & If(ppkgAdditionCommit, "Yes", "No"))
             DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /add-provisioningpackage /packagepath=" & Quote & ppkgAdditionPackagePath & Quote & If(ppkgAdditionCatalogPath <> "" And File.Exists(ppkgAdditionCatalogPath), " /catalogpath=" & Quote & ppkgAdditionCatalogPath & Quote, "")
+            CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-provisioningpackage /packagepath=" & Quote & ppkgAdditionPackagePath & Quote & If(ppkgAdditionCatalogPath <> "" And File.Exists(ppkgAdditionCatalogPath), " /catalogpath=" & Quote & ppkgAdditionCatalogPath & Quote, "")
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
             If Debugger.IsAttached Then
@@ -2876,6 +2876,7 @@ Public Class ProgressPanel
             CurrentPB.Maximum = capAdditionCount
             For x = 0 To Array.LastIndexOf(capAdditionIds, capAdditionLastId)
                 If x + 1 > CurrentPB.Maximum Then Exit For
+                CommandArgs = BckArgs
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2906,7 +2907,7 @@ Public Class ProgressPanel
                 Finally
                     DismApi.Shutdown()
                 End Try
-                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /add-capability /capabilityname=" & capAdditionIds(x)
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-capability /capabilityname=" & capAdditionIds(x)
                 If capAdditionUseSource And Directory.Exists(capAdditionSource) Then
                     CommandArgs &= " /source=" & Quote & capAdditionSource & Quote
                 End If
@@ -3011,6 +3012,7 @@ Public Class ProgressPanel
             CurrentPB.Maximum = capRemovalCount
             For x = 0 To Array.LastIndexOf(capRemovalIds, capRemovalLastId)
                 If x + 1 > CurrentPB.Maximum Then Exit For
+                CommandArgs = BckArgs
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3039,7 +3041,7 @@ Public Class ProgressPanel
                     DismApi.Shutdown()
                 End Try
                 DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /remove-capability /capabilityname=" & capRemovalIds(x)
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /remove-capability /capabilityname=" & capRemovalIds(x)
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
                 Do Until DISMProc.HasExited
@@ -3128,6 +3130,7 @@ Public Class ProgressPanel
             CurrentPB.Maximum = drvAdditionCount
             For x = 0 To Array.LastIndexOf(drvAdditionPkgs, drvAdditionLastPkg)
                 If x + 1 > CurrentPB.Maximum Then Exit For
+                CommandArgs = BckArgs
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3173,7 +3176,7 @@ Public Class ProgressPanel
                                        "The driver package currently about to be processed is a folder, so information about it can't be obtained. Proceeding anyway...")
                 End If
                 DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /add-driver /driver=" & Quote & drvAdditionPkgs(x) & Quote
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-driver /driver=" & Quote & drvAdditionPkgs(x) & Quote
                 If drvAdditionForceUnsigned Then
                     CommandArgs &= " /forceunsigned"
                 End If
@@ -3289,6 +3292,7 @@ Public Class ProgressPanel
             CurrentPB.Maximum = drvRemovalCount
             For x = 0 To Array.LastIndexOf(drvRemovalPkgs, drvRemovalLastPkg)
                 If x + 1 > CurrentPB.Maximum Then Exit For
+                CommandArgs = BckArgs
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3309,9 +3313,6 @@ Public Class ProgressPanel
                 Try
                     DismApi.Initialize(DismLogLevel.LogErrors)
                     Using imgSession As DismSession = DismApi.OpenOfflineSession(mntString)
-                        ' Get drivers first
-                        'drvCollection = DismApi.GetDrivers(imgSession, True)
-                        ' Go through all driver packages until we find the details of the one about to be processed
                         For Each drv As DismDriverPackage In drvCollection
                             If drv.PublishedName = drvRemovalPkgs(x) Then
                                 LogView.AppendText(CrLf & CrLf & _
@@ -3339,7 +3340,7 @@ Public Class ProgressPanel
                     DismApi.Shutdown()
                 End Try
                 DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /remove-driver /driver=" & Quote & drvRemovalPkgs(x) & Quote
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /remove-driver /driver=" & Quote & drvRemovalPkgs(x) & Quote
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
                 Do Until DISMProc.HasExited
