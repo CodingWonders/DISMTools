@@ -2558,6 +2558,7 @@ Public Class ProgressPanel
             CurrentPB.Maximum = appxAdditionCount
             For x = 0 To Array.LastIndexOf(appxAdditionPackages, appxAdditionLastPackage)
                 If x + 1 > CurrentPB.Maximum Then Exit For
+                CommandArgs = BckArgs
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2581,7 +2582,7 @@ Public Class ProgressPanel
                 End If
                 ' Initialize command
                 DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /add-provisionedappxpackage "
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-provisionedappxpackage "
                 If File.GetAttributes(appxAdditionPackages(x)) = FileAttributes.Directory Then
                     CommandArgs &= "/folderpath=" & Quote & appxAdditionPackages(x) & Quote
                 Else
@@ -2624,10 +2625,12 @@ Public Class ProgressPanel
                         End If
                     End If
                 End If
-                If appxAdditionUseAllRegions Then
+                If appxAdditionUseAllRegions And FileVersionInfo.GetVersionInfo(DismProgram).ProductMajorPart = 10 Then
                     CommandArgs &= " /region:all"
-                Else
+                ElseIf Not appxAdditionUseAllRegions Then
                     CommandArgs &= " /region:" & Quote & appxAdditionRegions & Quote
+                ElseIf FileVersionInfo.GetVersionInfo(DismProgram).ProductMajorPart < 10 Then
+                    ' Don't set region parameter
                 End If
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
