@@ -284,7 +284,7 @@ Public Class AddDrivers
             If Not File.GetAttributes(PkgFile) = FileAttributes.Directory And Not Path.GetExtension(PkgFile).EndsWith("inf") Then Continue For
             If File.GetAttributes(PkgFile) = FileAttributes.Directory Then
                 Cursor = Cursors.WaitCursor
-                If My.Computer.FileSystem.GetFiles(FolderBrowserDialog1.SelectedPath, FileIO.SearchOption.SearchAllSubDirectories, "*.inf").Count < 0 Then
+                If My.Computer.FileSystem.GetFiles(PkgFile, FileIO.SearchOption.SearchAllSubDirectories, "*.inf").Count < 0 Then
                     Continue For
                 End If
                 Cursor = Cursors.Arrow
