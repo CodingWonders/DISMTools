@@ -216,6 +216,9 @@ Public Class MainForm
                     Else
                         ' Add warning later
                     End If
+                ElseIf arg.StartsWith("/migrate", StringComparison.OrdinalIgnoreCase) Then
+                    MigrationForm.ShowDialog()
+                    Thread.Sleep(1500)
                 End If
             Next
         End If
@@ -8376,5 +8379,31 @@ Public Class MainForm
 
     Private Sub ExitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.Click
         Close()
+    End Sub
+
+    Private Sub UpdateLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles UpdateLink.LinkClicked
+        If File.Exists(Application.StartupPath & "\update.exe") Then File.Delete(Application.StartupPath & "\update.exe")
+        Try
+            Using client As New WebClient()
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                client.DownloadFile("https://github.com/CodingWonders/DISMTools/raw/" & dtBranch & "/Updater/DISMTools-UCS/update-bin/update.exe", Application.StartupPath & "\update.exe")
+            End Using
+        Catch ex As WebException
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MsgBox("We couldn't download the update checker. Reason:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Check for updates")
+                        Case "ESN"
+                            MsgBox("No pudimos descargar el comprobador de actualizaciones. Razón:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Comprobar actualizaciones")
+                    End Select
+                Case 1
+                    MsgBox("We couldn't download the update checker. Reason:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Check for updates")
+                Case 2
+                    MsgBox("No pudimos descargar el comprobador de actualizaciones. Razón:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Comprobar actualizaciones")
+            End Select
+            Exit Sub
+        End Try
+        If File.Exists(Application.StartupPath & "\update.exe") Then Process.Start(Application.StartupPath & "\update.exe", "/" & dtBranch)
     End Sub
 End Class

@@ -22,9 +22,11 @@ Partial Class MigrationForm
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MigrationForm))
         Me.Label1 = New System.Windows.Forms.Label()
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
         Me.Label2 = New System.Windows.Forms.Label()
+        Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.SuspendLayout()
         '
         'Label1
@@ -36,7 +38,7 @@ Partial Class MigrationForm
         Me.Label1.Size = New System.Drawing.Size(615, 37)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Please wait while DISMTools migrates your old settings file to work on this versi" & _
-    "on. This may take some time"
+    "on. This may take some time."
         '
         'ProgressBar1
         '
@@ -57,6 +59,10 @@ Partial Class MigrationForm
         Me.Label2.TabIndex = 0
         Me.Label2.Text = "Please wait..."
         '
+        'BackgroundWorker1
+        '
+        Me.BackgroundWorker1.WorkerReportsProgress = True
+        '
         'MigrationForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -68,6 +74,7 @@ Partial Class MigrationForm
         Me.Controls.Add(Me.Label1)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "MigrationForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "DISMTools"
@@ -78,4 +85,5 @@ Partial Class MigrationForm
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents ProgressBar1 As System.Windows.Forms.ProgressBar
     Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
 End Class
