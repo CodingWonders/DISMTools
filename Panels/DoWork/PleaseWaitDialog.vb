@@ -280,6 +280,12 @@ Public Class PleaseWaitDialog
                 End If
             End If
         ElseIf ProgressPanel.OperationNum = 995 Then
+            If MainForm.MountedImageDetectorBW.CancellationPending Then
+                While MainForm.MountedImageDetectorBW.IsBusy
+                    Application.DoEvents()
+                    Thread.Sleep(100)
+                End While
+            End If
             Dim imgInfoCollection As DismImageInfoCollection = Nothing
             Try
                 imgInfoCollection = DismApi.GetImageInfo(indexesSourceImg)
