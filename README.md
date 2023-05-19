@@ -7,7 +7,7 @@ DISMTools is a front-end for DISM which lets you manage your Windows Imaging (WI
 
 ## Key features
 
-- DISMTools is the first project-based GUI. Projects store the mounted image, unattended answer files you want to apply (using the command line at this time), and provide a scratch directory for temporary operations (also for the command line)
+- DISMTools is the first project-based GUI. Projects store the mounted image, unattended answer files you want to apply (using the command line at this time), and provide a scratch directory for temporary operations
 - DISMTools is also smart, checking first if an action can be performed before doing it
 
 ## Supported actions
