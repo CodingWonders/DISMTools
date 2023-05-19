@@ -5,6 +5,7 @@ Imports Microsoft.VisualBasic.ControlChars
 Imports System.Text.Encoding
 Imports Microsoft.Win32
 Imports Microsoft.Dism
+Imports System.Runtime.InteropServices
 
 Public Class MainForm
 
@@ -184,6 +185,36 @@ Public Class MainForm
     Dim argOnline As Boolean                                             ' Determine if program will be launched in online installation mode
 
     Dim sessionMntDir As String = ""
+
+    <DllImport("user32.dll")>
+    Shared Function GetActiveWindow() As IntPtr
+    End Function
+
+    <DllImport("user32.dll")>
+    Shared Function SetWindowText(hWnd As IntPtr, lpString As String) As Boolean
+    End Function
+
+    <DllImport("user32.dll")>
+    Shared Function SetWindowLong(hWnd As IntPtr, nIndex As Integer, dwNewLong As IntPtr) As IntPtr
+    End Function
+
+    <DllImport("dwmapi.dll")>
+    Shared Function DwmSetWindowAttribute(hwnd As IntPtr, attr As Integer, ByRef attrValue As Integer, attrSize As Integer) As Integer
+    End Function
+
+    Const DWMWA_USE_IMMERSIVE_DARK_MODE As Integer = 20
+    Const WS_EX_COMPOSITED As Integer = &H2000000
+    Const GWL_EXSTYLE As Integer = -20
+
+    Shared Sub EnableDarkTitleBar(hwnd As IntPtr, isDarkMode As Boolean)
+        Dim attribute As Integer = If(isDarkMode, 1, 0)
+        Dim result As Integer = DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, attribute, 4)
+    End Sub
+
+    Function IsWindowsVersionOrGreater(majorVersion As Integer, minorVersion As Integer, buildNumber As Integer) As Boolean
+        Dim version = Environment.OSVersion.Version
+        Return version.Major > majorVersion OrElse (version.Major = majorVersion AndAlso version.Minor > minorVersion) OrElse (version.Major = majorVersion AndAlso version.Minor = minorVersion AndAlso version.Build >= buildNumber)
+    End Function
 
     Sub GetArguments()
         Dim args() As String = Environment.GetCommandLineArgs()
@@ -803,7 +834,7 @@ Public Class MainForm
                     ProgressPanelStyle = 1
                 End If
                 ' Detect log file path. If file does not exist, create one
-                LogFile = DTSettingForm.RichTextBox1.Lines(15).Replace("LogFile=", "").Trim().Replace(Quote, "").Trim()
+                LogFile = DTSettingForm.RichTextBox1.Lines(16).Replace("LogFile=", "").Trim().Replace(Quote, "").Trim()
                 ' Detect log file level: 1 - Errors only
                 '                        2 - Errors and warnings
                 '                        3 - Errors, warnings and informations
@@ -3157,6 +3188,7 @@ Public Class MainForm
                     Dim ColorMode As String = ColorModeRk.GetValue("AppsUseLightTheme").ToString()
                     ColorModeRk.Close()
                     If ColorMode = "0" Then
+                        If IsWindowsVersionOrGreater(10, 0, 18362) Then EnableDarkTitleBar(Handle, True)
                         BackColor = Color.FromArgb(48, 48, 48)
                         ForeColor = Color.White
                         HomePanel.BackColor = Color.FromArgb(40, 40, 43)
@@ -3249,6 +3281,7 @@ Public Class MainForm
                         InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph_dark)
                         BranchTSMI.Image = New Bitmap(My.Resources.branch_dark)
                     ElseIf ColorMode = "1" Then
+                        If IsWindowsVersionOrGreater(10, 0, 18362) Then EnableDarkTitleBar(Handle, False)
                         BackColor = Color.FromArgb(239, 239, 242)
                         ForeColor = Color.Black
                         HomePanel.BackColor = Color.White
@@ -3345,6 +3378,7 @@ Public Class MainForm
                     ChangePrgColors(1)
                 End Try
             Case 1
+                If IsWindowsVersionOrGreater(10, 0, 18362) Then EnableDarkTitleBar(Handle, False)
                 BackColor = Color.FromArgb(239, 239, 242)
                 ForeColor = Color.Black
                 HomePanel.BackColor = Color.White
@@ -3437,6 +3471,7 @@ Public Class MainForm
                 InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph)
                 BranchTSMI.Image = New Bitmap(My.Resources.branch)
             Case 2
+                If IsWindowsVersionOrGreater(10, 0, 18362) Then EnableDarkTitleBar(Handle, True)
                 BackColor = Color.FromArgb(48, 48, 48)
                 ForeColor = Color.White
                 HomePanel.BackColor = Color.FromArgb(40, 40, 43)
