@@ -1338,6 +1338,26 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property secprogress_classic() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("secprogress_classic", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property secprogress_modern() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("secprogress_modern", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property sedition_pic() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("sedition_pic", resourceCulture)

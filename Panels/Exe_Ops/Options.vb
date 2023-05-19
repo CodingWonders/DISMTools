@@ -95,6 +95,11 @@ Public Class Options
         Else
             MainForm.LogFontIsBold = False
         End If
+        If RadioButton5.Checked Then
+            MainForm.ProgressPanelStyle = 1
+        Else
+            MainForm.ProgressPanelStyle = 0
+        End If
         MainForm.LogFile = TextBox2.Text
         MainForm.LogLevel = TrackBar1.Value + 1
         If RadioButton1.Checked Then
@@ -330,6 +335,7 @@ Public Class Options
                         Label42.Text = If(DetectFileAssociations(), "associations set", "associations not set")
                         Label43.Text = "Set options you would like to perform when the program starts up:"
                         Label44.Text = "The program will use the scratch directory provided by the project if one is loaded. If you are in online installation management mode, the program will use its scratch directory"
+                        Label45.Text = "Secondary progress panel style:"
                         Button1.Text = "Browse..."
                         Button2.Text = "View DISM component versions"
                         Button3.Text = "Browse..."
@@ -370,6 +376,8 @@ Public Class Options
                         RadioButton2.Text = "Active installation"
                         RadioButton3.Text = "Use the project or program scratch directory"
                         RadioButton4.Text = "Use the specified scratch directory"
+                        RadioButton5.Text = "Modern"
+                        RadioButton6.Text = "Classic"
                         ScratchFBD.Description = "Specify the scratch directory the program should use:"
                     Case "ESN"
                         Text = "Opciones"
@@ -421,6 +429,7 @@ Public Class Options
                         Label42.Text = If(DetectFileAssociations(), "asociaciones establecidas", "asociaciones no establecidas")
                         Label43.Text = "Establezca las opciones que le gustaría realizar cuando el programa inicie:"
                         Label44.Text = "El programa usará el directorio temporal proporcionado por el proyecto si se cargó alguno. Si está en modo de administración de instalaciones en línea, el programa utilizará su directorio temporal"
+                        Label45.Text = "Estilo del panel de progreso secundario:"
                         Button1.Text = "Examinar..."
                         Button2.Text = "Ver versiones de componentes"
                         Button3.Text = "Examinar..."
@@ -461,6 +470,8 @@ Public Class Options
                         RadioButton2.Text = "Instalación actual"
                         RadioButton3.Text = "Utilizar el directorio temporal del proyecto o del programa"
                         RadioButton4.Text = "Utilizar el directorio temporal especificado"
+                        RadioButton5.Text = "Moderno"
+                        RadioButton6.Text = "Clásico"
                         ScratchFBD.Description = "Especifique el directorio temporal que debería usar el programa:"
                 End Select
             Case 1
@@ -513,6 +524,7 @@ Public Class Options
                 Label42.Text = If(DetectFileAssociations(), "associations set", "associations not set")
                 Label43.Text = "Set options you would like to perform when the program starts up:"
                 Label44.Text = "The program will use the scratch directory provided by the project if one is loaded. If you are in online installation management mode, the program will use its scratch directory"
+                Label45.Text = "Secondary progress panel style:"
                 Button1.Text = "Browse..."
                 Button2.Text = "View DISM component versions"
                 Button3.Text = "Browse..."
@@ -553,6 +565,8 @@ Public Class Options
                 RadioButton2.Text = "Active installation"
                 RadioButton3.Text = "Use the project or program scratch directory"
                 RadioButton4.Text = "Use the specified scratch directory"
+                RadioButton5.Text = "Modern"
+                RadioButton6.Text = "Classic"
                 ScratchFBD.Description = "Specify the scratch directory the program should use:"
             Case 2
                 Text = "Opciones"
@@ -603,6 +617,8 @@ Public Class Options
                 Label41.Text = "Estado de asociaciones:"
                 Label42.Text = If(DetectFileAssociations(), "asociaciones establecidas", "asociaciones no establecidas")
                 Label43.Text = "Establezca las opciones que le gustaría realizar cuando el programa inicie:"
+                Label44.Text = "El programa usará el directorio temporal proporcionado por el proyecto si se cargó alguno. Si está en modo de administración de instalaciones en línea, el programa utilizará su directorio temporal"
+                Label45.Text = "Estilo del panel de progreso secundario:"
                 Button1.Text = "Examinar..."
                 Button2.Text = "Ver versiones de componentes"
                 Button3.Text = "Examinar..."
@@ -641,6 +657,10 @@ Public Class Options
                 LogSFD.Title = "Especifique la ubicación del archivo de registro"
                 RadioButton1.Text = "Imagen de Windows montada"
                 RadioButton2.Text = "Instalación actual"
+                RadioButton3.Text = "Utilizar el directorio temporal del proyecto o del programa"
+                RadioButton4.Text = "Utilizar el directorio temporal especificado"
+                RadioButton5.Text = "Moderno"
+                RadioButton6.Text = "Clásico"
                 ScratchFBD.Description = "Especifique el directorio temporal que debería usar el programa:"
         End Select
         Select Case MainForm.Language
@@ -871,6 +891,14 @@ Public Class Options
         Else
             Toggle1.Checked = False
         End If
+        Select Case MainForm.ProgressPanelStyle
+            Case 0
+                RadioButton5.Checked = False
+                RadioButton6.Checked = True
+            Case 1
+                RadioButton5.Checked = True
+                RadioButton6.Checked = False
+        End Select
         TextBox2.Text = MainForm.LogFile
         TrackBar1.Value = If(MainForm.LogLevel = TrackBar1.Minimum, MainForm.LogLevel, MainForm.LogLevel - 1)
         Select Case MainForm.ImgOperationMode
@@ -1390,6 +1418,14 @@ Public Class Options
             Label24.Enabled = False
             PictureBox5.Enabled = False
             Label44.Enabled = False
+        End If
+    End Sub
+
+    Private Sub RadioButton5_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton5.CheckedChanged
+        If RadioButton5.Checked Then
+            SecProgressStylePreview.Image = My.Resources.secprogress_modern
+        Else
+            SecProgressStylePreview.Image = My.Resources.secprogress_classic
         End If
     End Sub
 End Class

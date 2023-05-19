@@ -797,6 +797,11 @@ Public Class MainForm
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("LogFontBold=1") Then
                     LogFontIsBold = True
                 End If
+                If DTSettingForm.RichTextBox1.Text.Contains("SecondaryProgressPanelStyle=0") Then
+                    ProgressPanelStyle = 0
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("SecondaryProgressPanelStyle=1") Then
+                    ProgressPanelStyle = 1
+                End If
                 ' Detect log file path. If file does not exist, create one
                 LogFile = DTSettingForm.RichTextBox1.Lines(15).Replace("LogFile=", "").Trim().Replace(Quote, "").Trim()
                 ' Detect log file level: 1 - Errors only
@@ -844,7 +849,7 @@ Public Class MainForm
                     UseScratch = True
                 End If
                 ' Detect scratch directory
-                ScratchDir = DTSettingForm.RichTextBox1.Lines(27).Replace("ScratchDirLocation=", "").Trim().Replace(Quote, "").Trim()
+                ScratchDir = DTSettingForm.RichTextBox1.Lines(28).Replace("ScratchDirLocation=", "").Trim().Replace(Quote, "").Trim()
                 If DTSettingForm.RichTextBox1.Text.Contains("AutoScratch=1") Then
                     AutoScrDir = True
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("AutoScratch=0") Then
@@ -2950,6 +2955,7 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFont=" & Quote & "Courier New" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontSi=10")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontBold=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "SecondaryProgressPanelStyle=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\Logs\DISM\DISM.log" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=3")
@@ -3016,6 +3022,12 @@ Public Class MainForm
                 Else
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontBold=0")
                 End If
+                Select Case ProgressPanelStyle
+                    Case 0
+                        DTSettingForm.RichTextBox2.AppendText(CrLf & "SecondaryProgressPanelStyle=0")
+                    Case 1
+                        DTSettingForm.RichTextBox2.AppendText(CrLf & "SecondaryProgressPanelStyle=1")
+                End Select
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
                 DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & LogFile & Quote)
                 Select Case LogLevel

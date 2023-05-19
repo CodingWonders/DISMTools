@@ -47,6 +47,9 @@ Partial Class Options
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
+        Me.SecProgressStylePreview = New System.Windows.Forms.PictureBox()
+        Me.RadioButton6 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton5 = New System.Windows.Forms.RadioButton()
         Me.CheckBox9 = New System.Windows.Forms.CheckBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.Toggle1 = New System.Windows.Forms.CheckBox()
@@ -59,6 +62,7 @@ Partial Class Options
         Me.ComboBox3 = New System.Windows.Forms.ComboBox()
         Me.ComboBox2 = New System.Windows.Forms.ComboBox()
         Me.Label8 = New System.Windows.Forms.Label()
+        Me.Label45 = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.TabPage3 = New System.Windows.Forms.TabPage()
         Me.Panel1 = New System.Windows.Forms.Panel()
@@ -154,6 +158,7 @@ Partial Class Options
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabPage2.SuspendLayout()
+        CType(Me.SecProgressStylePreview, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabPage3.SuspendLayout()
@@ -429,11 +434,15 @@ Partial Class Options
         '
         'TabPage2
         '
+        Me.TabPage2.Controls.Add(Me.SecProgressStylePreview)
+        Me.TabPage2.Controls.Add(Me.RadioButton6)
+        Me.TabPage2.Controls.Add(Me.RadioButton5)
         Me.TabPage2.Controls.Add(Me.CheckBox9)
         Me.TabPage2.Controls.Add(Me.GroupBox1)
         Me.TabPage2.Controls.Add(Me.ComboBox3)
         Me.TabPage2.Controls.Add(Me.ComboBox2)
         Me.TabPage2.Controls.Add(Me.Label8)
+        Me.TabPage2.Controls.Add(Me.Label45)
         Me.TabPage2.Controls.Add(Me.Label7)
         Me.TabPage2.Location = New System.Drawing.Point(4, 22)
         Me.TabPage2.Name = "TabPage2"
@@ -442,6 +451,38 @@ Partial Class Options
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "Personalization"
         Me.TabPage2.UseVisualStyleBackColor = True
+        '
+        'SecProgressStylePreview
+        '
+        Me.SecProgressStylePreview.Image = Global.DISMTools.My.Resources.Resources.secprogress_modern
+        Me.SecProgressStylePreview.Location = New System.Drawing.Point(368, 358)
+        Me.SecProgressStylePreview.Name = "SecProgressStylePreview"
+        Me.SecProgressStylePreview.Size = New System.Drawing.Size(360, 60)
+        Me.SecProgressStylePreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.SecProgressStylePreview.TabIndex = 7
+        Me.SecProgressStylePreview.TabStop = False
+        '
+        'RadioButton6
+        '
+        Me.RadioButton6.AutoSize = True
+        Me.RadioButton6.Location = New System.Drawing.Point(25, 402)
+        Me.RadioButton6.Name = "RadioButton6"
+        Me.RadioButton6.Size = New System.Drawing.Size(57, 17)
+        Me.RadioButton6.TabIndex = 6
+        Me.RadioButton6.Text = "Classic"
+        Me.RadioButton6.UseVisualStyleBackColor = True
+        '
+        'RadioButton5
+        '
+        Me.RadioButton5.AutoSize = True
+        Me.RadioButton5.Checked = True
+        Me.RadioButton5.Location = New System.Drawing.Point(25, 379)
+        Me.RadioButton5.Name = "RadioButton5"
+        Me.RadioButton5.Size = New System.Drawing.Size(61, 17)
+        Me.RadioButton5.TabIndex = 6
+        Me.RadioButton5.TabStop = True
+        Me.RadioButton5.Text = "Modern"
+        Me.RadioButton5.UseVisualStyleBackColor = True
         '
         'CheckBox9
         '
@@ -464,7 +505,7 @@ Partial Class Options
         Me.GroupBox1.Controls.Add(Me.ComboBox4)
         Me.GroupBox1.Location = New System.Drawing.Point(25, 69)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(703, 343)
+        Me.GroupBox1.Size = New System.Drawing.Size(703, 276)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Log customization"
@@ -492,13 +533,16 @@ Partial Class Options
         '
         'LogPreview
         '
+        Me.LogPreview.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.LogPreview.Font = New System.Drawing.Font("Courier New", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LogPreview.Location = New System.Drawing.Point(49, 115)
         Me.LogPreview.Multiline = True
         Me.LogPreview.Name = "LogPreview"
         Me.LogPreview.ReadOnly = True
         Me.LogPreview.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.LogPreview.Size = New System.Drawing.Size(607, 201)
+        Me.LogPreview.Size = New System.Drawing.Size(607, 134)
         Me.LogPreview.TabIndex = 4
         Me.LogPreview.Text = resources.GetString("LogPreview.Text")
         '
@@ -566,6 +610,15 @@ Partial Class Options
         Me.Label8.Size = New System.Drawing.Size(58, 13)
         Me.Label8.TabIndex = 2
         Me.Label8.Text = "Language:"
+        '
+        'Label45
+        '
+        Me.Label45.AutoEllipsis = True
+        Me.Label45.Location = New System.Drawing.Point(22, 356)
+        Me.Label45.Name = "Label45"
+        Me.Label45.Size = New System.Drawing.Size(340, 13)
+        Me.Label45.TabIndex = 2
+        Me.Label45.Text = "Secondary progress panel style:"
         '
         'Label7
         '
@@ -1535,6 +1588,7 @@ Partial Class Options
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TabPage2.ResumeLayout(False)
         Me.TabPage2.PerformLayout()
+        CType(Me.SecProgressStylePreview, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
@@ -1699,5 +1753,9 @@ Partial Class Options
     Friend WithEvents RadioButton4 As System.Windows.Forms.RadioButton
     Friend WithEvents RadioButton3 As System.Windows.Forms.RadioButton
     Friend WithEvents Label44 As System.Windows.Forms.Label
+    Friend WithEvents SecProgressStylePreview As System.Windows.Forms.PictureBox
+    Friend WithEvents RadioButton6 As System.Windows.Forms.RadioButton
+    Friend WithEvents RadioButton5 As System.Windows.Forms.RadioButton
+    Friend WithEvents Label45 As System.Windows.Forms.Label
 
 End Class
