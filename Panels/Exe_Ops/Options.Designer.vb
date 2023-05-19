@@ -81,12 +81,15 @@ Partial Class Options
         Me.RadioButton1 = New System.Windows.Forms.RadioButton()
         Me.Label17 = New System.Windows.Forms.Label()
         Me.TabPage5 = New System.Windows.Forms.TabPage()
+        Me.RadioButton4 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton3 = New System.Windows.Forms.RadioButton()
         Me.Label24 = New System.Windows.Forms.Label()
         Me.Label23 = New System.Windows.Forms.Label()
         Me.Label22 = New System.Windows.Forms.Label()
         Me.Button4 = New System.Windows.Forms.Button()
         Me.TextBox3 = New System.Windows.Forms.TextBox()
         Me.Label21 = New System.Windows.Forms.Label()
+        Me.Label44 = New System.Windows.Forms.Label()
         Me.Label20 = New System.Windows.Forms.Label()
         Me.CheckBox4 = New System.Windows.Forms.CheckBox()
         Me.PictureBox5 = New System.Windows.Forms.PictureBox()
@@ -138,11 +141,11 @@ Partial Class Options
         Me.Label42 = New System.Windows.Forms.Label()
         Me.Label40 = New System.Windows.Forms.Label()
         Me.TabPage11 = New System.Windows.Forms.TabPage()
+        Me.CheckBox13 = New System.Windows.Forms.CheckBox()
         Me.CheckBox12 = New System.Windows.Forms.CheckBox()
         Me.Label43 = New System.Windows.Forms.Label()
         Me.PrefReset = New System.Windows.Forms.Button()
         Me.LogSFD = New System.Windows.Forms.SaveFileDialog()
-        Me.CheckBox13 = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -790,12 +793,15 @@ Partial Class Options
         '
         'TabPage5
         '
+        Me.TabPage5.Controls.Add(Me.RadioButton4)
+        Me.TabPage5.Controls.Add(Me.RadioButton3)
         Me.TabPage5.Controls.Add(Me.Label24)
         Me.TabPage5.Controls.Add(Me.Label23)
         Me.TabPage5.Controls.Add(Me.Label22)
         Me.TabPage5.Controls.Add(Me.Button4)
         Me.TabPage5.Controls.Add(Me.TextBox3)
         Me.TabPage5.Controls.Add(Me.Label21)
+        Me.TabPage5.Controls.Add(Me.Label44)
         Me.TabPage5.Controls.Add(Me.Label20)
         Me.TabPage5.Controls.Add(Me.CheckBox4)
         Me.TabPage5.Controls.Add(Me.PictureBox5)
@@ -806,12 +812,36 @@ Partial Class Options
         Me.TabPage5.Text = "Scratch directory"
         Me.TabPage5.UseVisualStyleBackColor = True
         '
+        'RadioButton4
+        '
+        Me.RadioButton4.AutoSize = True
+        Me.RadioButton4.Enabled = False
+        Me.RadioButton4.Location = New System.Drawing.Point(42, 108)
+        Me.RadioButton4.Name = "RadioButton4"
+        Me.RadioButton4.Size = New System.Drawing.Size(191, 17)
+        Me.RadioButton4.TabIndex = 12
+        Me.RadioButton4.Text = "Use the specified scratch directory"
+        Me.RadioButton4.UseVisualStyleBackColor = True
+        '
+        'RadioButton3
+        '
+        Me.RadioButton3.AutoSize = True
+        Me.RadioButton3.Checked = True
+        Me.RadioButton3.Enabled = False
+        Me.RadioButton3.Location = New System.Drawing.Point(42, 46)
+        Me.RadioButton3.Name = "RadioButton3"
+        Me.RadioButton3.Size = New System.Drawing.Size(239, 17)
+        Me.RadioButton3.TabIndex = 12
+        Me.RadioButton3.TabStop = True
+        Me.RadioButton3.Text = "Use the project or program scratch directory"
+        Me.RadioButton3.UseVisualStyleBackColor = True
+        '
         'Label24
         '
         Me.Label24.Enabled = False
-        Me.Label24.Location = New System.Drawing.Point(64, 116)
+        Me.Label24.Location = New System.Drawing.Point(82, 204)
         Me.Label24.Name = "Label24"
-        Me.Label24.Size = New System.Drawing.Size(640, 32)
+        Me.Label24.Size = New System.Drawing.Size(629, 32)
         Me.Label24.TabIndex = 11
         Me.Label24.Text = "You may not have enough space on the selected scratch directory for some operatio" & _
     "ns."
@@ -821,7 +851,7 @@ Partial Class Options
         '
         Me.Label23.AutoSize = True
         Me.Label23.Enabled = False
-        Me.Label23.Location = New System.Drawing.Point(246, 95)
+        Me.Label23.Location = New System.Drawing.Point(264, 183)
         Me.Label23.Name = "Label23"
         Me.Label23.Size = New System.Drawing.Size(79, 13)
         Me.Label23.TabIndex = 4
@@ -831,7 +861,7 @@ Partial Class Options
         '
         Me.Label22.AutoSize = True
         Me.Label22.Enabled = False
-        Me.Label22.Location = New System.Drawing.Point(39, 95)
+        Me.Label22.Location = New System.Drawing.Point(57, 183)
         Me.Label22.Name = "Label22"
         Me.Label22.Size = New System.Drawing.Size(201, 13)
         Me.Label22.TabIndex = 4
@@ -841,7 +871,7 @@ Partial Class Options
         '
         Me.Button4.Enabled = False
         Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button4.Location = New System.Drawing.Point(636, 67)
+        Me.Button4.Location = New System.Drawing.Point(636, 156)
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(75, 23)
         Me.Button4.TabIndex = 3
@@ -851,26 +881,38 @@ Partial Class Options
         'TextBox3
         '
         Me.TextBox3.Enabled = False
-        Me.TextBox3.Location = New System.Drawing.Point(138, 68)
+        Me.TextBox3.Location = New System.Drawing.Point(156, 157)
         Me.TextBox3.Name = "TextBox3"
-        Me.TextBox3.Size = New System.Drawing.Size(492, 21)
+        Me.TextBox3.Size = New System.Drawing.Size(474, 21)
         Me.TextBox3.TabIndex = 2
         '
         'Label21
         '
         Me.Label21.AutoSize = True
         Me.Label21.Enabled = False
-        Me.Label21.Location = New System.Drawing.Point(39, 71)
+        Me.Label21.Location = New System.Drawing.Point(57, 160)
         Me.Label21.Name = "Label21"
         Me.Label21.Size = New System.Drawing.Size(93, 13)
         Me.Label21.TabIndex = 1
         Me.Label21.Text = "Scratch directory:"
         '
+        'Label44
+        '
+        Me.Label44.AutoEllipsis = True
+        Me.Label44.Enabled = False
+        Me.Label44.Location = New System.Drawing.Point(57, 69)
+        Me.Label44.Name = "Label44"
+        Me.Label44.Size = New System.Drawing.Size(654, 36)
+        Me.Label44.TabIndex = 1
+        Me.Label44.Text = "The program will use the scratch directory provided by the project if one is load" & _
+    "ed. If you are in online installation management mode, the program will use its " & _
+    "scratch directory"
+        '
         'Label20
         '
         Me.Label20.AutoSize = True
         Me.Label20.Enabled = False
-        Me.Label20.Location = New System.Drawing.Point(39, 46)
+        Me.Label20.Location = New System.Drawing.Point(57, 135)
         Me.Label20.Name = "Label20"
         Me.Label20.Size = New System.Drawing.Size(335, 13)
         Me.Label20.TabIndex = 1
@@ -890,7 +932,7 @@ Partial Class Options
         '
         Me.PictureBox5.Enabled = False
         Me.PictureBox5.Image = Global.DISMTools.My.Resources.Resources.warning_16px
-        Me.PictureBox5.Location = New System.Drawing.Point(42, 115)
+        Me.PictureBox5.Location = New System.Drawing.Point(60, 203)
         Me.PictureBox5.Name = "PictureBox5"
         Me.PictureBox5.Size = New System.Drawing.Size(16, 16)
         Me.PictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
@@ -1419,6 +1461,16 @@ Partial Class Options
         Me.TabPage11.Text = "Startup"
         Me.TabPage11.UseVisualStyleBackColor = True
         '
+        'CheckBox13
+        '
+        Me.CheckBox13.AutoSize = True
+        Me.CheckBox13.Location = New System.Drawing.Point(56, 87)
+        Me.CheckBox13.Name = "CheckBox13"
+        Me.CheckBox13.Size = New System.Drawing.Size(114, 17)
+        Me.CheckBox13.TabIndex = 2
+        Me.CheckBox13.Text = "Check for updates"
+        Me.CheckBox13.UseVisualStyleBackColor = True
+        '
         'CheckBox12
         '
         Me.CheckBox12.AutoSize = True
@@ -1452,16 +1504,6 @@ Partial Class Options
         '
         Me.LogSFD.Filter = "All files|*.*"
         Me.LogSFD.Title = "Specify the location of the log file"
-        '
-        'CheckBox13
-        '
-        Me.CheckBox13.AutoSize = True
-        Me.CheckBox13.Location = New System.Drawing.Point(56, 87)
-        Me.CheckBox13.Name = "CheckBox13"
-        Me.CheckBox13.Size = New System.Drawing.Size(114, 17)
-        Me.CheckBox13.TabIndex = 2
-        Me.CheckBox13.Text = "Check for updates"
-        Me.CheckBox13.UseVisualStyleBackColor = True
         '
         'Options
         '
@@ -1654,5 +1696,8 @@ Partial Class Options
     Friend WithEvents CheckBox12 As System.Windows.Forms.CheckBox
     Friend WithEvents Label43 As System.Windows.Forms.Label
     Friend WithEvents CheckBox13 As System.Windows.Forms.CheckBox
+    Friend WithEvents RadioButton4 As System.Windows.Forms.RadioButton
+    Friend WithEvents RadioButton3 As System.Windows.Forms.RadioButton
+    Friend WithEvents Label44 As System.Windows.Forms.Label
 
 End Class

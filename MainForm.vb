@@ -92,6 +92,7 @@ Public Class MainForm
     Public ProgressPanelStyle As Integer = 1        ' 0 (Legacy, 0.1 - 0.2.2), 1 (Modern, >= 0.3)
     ' - Progress panel -
     Public AutoLogs As Boolean
+    Public AutoScrDir As Boolean
 
     ' Background process initiator settings
     Public bwBackgroundProcessAction As Integer
@@ -841,8 +842,13 @@ Public Class MainForm
                     UseScratch = False
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("UseScratch=1") Then
                     UseScratch = True
-                    ' Detect scratch directory
-                    ScratchDir = DTSettingForm.RichTextBox1.Lines(23).Replace("ScratchDirLocation=", "").Trim().Replace(Quote, "").Trim()
+                End If
+                ' Detect scratch directory
+                ScratchDir = DTSettingForm.RichTextBox1.Lines(27).Replace("ScratchDirLocation=", "").Trim().Replace(Quote, "").Trim()
+                If DTSettingForm.RichTextBox1.Text.Contains("AutoScratch=1") Then
+                    AutoScrDir = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("AutoScratch=0") Then
+                    AutoScrDir = False
                 End If
                 ' Detect whether output should be in English
                 If DTSettingForm.RichTextBox1.Text.Contains("EnglishOutput=0") Then
@@ -2954,6 +2960,7 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "NoRestart=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ScratchDir]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("UseScratch=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoScratch=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "ScratchDirLocation=" & Quote & "" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Output]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("EnglishOutput=1")
@@ -3048,6 +3055,11 @@ Public Class MainForm
                     DTSettingForm.RichTextBox2.AppendText("UseScratch=1")
                 Else
                     DTSettingForm.RichTextBox2.AppendText("UseScratch=0")
+                End If
+                If AutoScrDir Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoScratch=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoScratch=0")
                 End If
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "ScratchDirLocation=" & Quote & ScratchDir & Quote)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Output]" & CrLf)

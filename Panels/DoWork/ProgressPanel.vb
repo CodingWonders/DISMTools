@@ -191,6 +191,7 @@ Public Class ProgressPanel
     Dim QuietOps As Boolean
     Dim SkipSysRestart As Boolean
     Dim UseScratchDir As Boolean
+    Dim AutoScratch As Boolean
     Dim ScratchDirPath As String
     Dim EnglishOut As Boolean
     ' Backup command arguments
@@ -580,7 +581,7 @@ Public Class ProgressPanel
     ''' </summary>
     ''' <remarks>These settings can be configured at any time using the Options dialog</remarks>
     Sub GatherInitialSwitches()
-        CommandArgs = "/logpath=" & Quote & If(AutoLogs, Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now), LogPath) & Quote & " /loglevel=" & LogLevel & If(UseScratchDir And ScratchDirPath <> "", " /scratchdir=" & Quote & ScratchDirPath & Quote, "") & If(EnglishOut, " /english", "")
+        CommandArgs = "/logpath=" & Quote & If(AutoLogs, Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now), LogPath) & Quote & " /loglevel=" & LogLevel & If(UseScratchDir, If(AutoScratch, If(OnlineMgmt, " /scratchdir=" & Quote & Application.StartupPath & "\scratch" & Quote, " /scratchdir=" & Quote & projPath & "\scr_temp"), If(ScratchDirPath <> "", " /scratchdir=" & Quote & ScratchDirPath & Quote, "")), "") & If(EnglishOut, " /english", "")
         BckArgs = CommandArgs
     End Sub
 
@@ -4895,8 +4896,10 @@ Public Class ProgressPanel
         QuietOps = MainForm.QuietOperations
         SkipSysRestart = MainForm.SysNoRestart
         UseScratchDir = MainForm.UseScratch
+        AutoScratch = MainForm.AutoScrDir
         ScratchDirPath = MainForm.ScratchDir
         EnglishOut = MainForm.EnglishOutput
+        If UseScratchDir And AutoScratch And OnlineMgmt And Not Directory.Exists(Application.StartupPath & "\scratch") Then Directory.CreateDirectory(Application.StartupPath & "\scratch")
         GatherInitialSwitches()
         GetTasks(OperationNum)
         ProgressBW.RunWorkerAsync()

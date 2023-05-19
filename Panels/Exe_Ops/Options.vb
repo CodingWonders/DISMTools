@@ -43,6 +43,10 @@ Public Class Options
             End If
         End If
         If CheckBox4.Checked Then
+            If RadioButton3.Checked Then
+                CanExit = True
+                Exit Sub
+            End If
             If TextBox3.Text = "" Then
                 CanExit = False
                 GiveErrorExplanation(5)
@@ -112,6 +116,11 @@ Public Class Options
             MainForm.UseScratch = True
         Else
             MainForm.UseScratch = False
+        End If
+        If RadioButton3.Checked Then
+            MainForm.AutoScrDir = True
+        Else
+            MainForm.AutoScrDir = False
         End If
         MainForm.ScratchDir = TextBox3.Text
         If CheckBox5.Checked Then
@@ -320,6 +329,7 @@ Public Class Options
                         Label41.Text = "Association status:"
                         Label42.Text = If(DetectFileAssociations(), "associations set", "associations not set")
                         Label43.Text = "Set options you would like to perform when the program starts up:"
+                        Label44.Text = "The program will use the scratch directory provided by the project if one is loaded. If you are in online installation management mode, the program will use its scratch directory"
                         Button1.Text = "Browse..."
                         Button2.Text = "View DISM component versions"
                         Button3.Text = "Browse..."
@@ -358,6 +368,8 @@ Public Class Options
                         LogSFD.Title = "Specify the location of the log file"
                         RadioButton1.Text = "Mounted Windows image"
                         RadioButton2.Text = "Active installation"
+                        RadioButton3.Text = "Use the project or program scratch directory"
+                        RadioButton4.Text = "Use the specified scratch directory"
                         ScratchFBD.Description = "Specify the scratch directory the program should use:"
                     Case "ESN"
                         Text = "Opciones"
@@ -408,6 +420,7 @@ Public Class Options
                         Label41.Text = "Estado de asociaciones:"
                         Label42.Text = If(DetectFileAssociations(), "asociaciones establecidas", "asociaciones no establecidas")
                         Label43.Text = "Establezca las opciones que le gustaría realizar cuando el programa inicie:"
+                        Label44.Text = "El programa usará el directorio temporal proporcionado por el proyecto si se cargó alguno. Si está en modo de administración de instalaciones en línea, el programa utilizará su directorio temporal"
                         Button1.Text = "Examinar..."
                         Button2.Text = "Ver versiones de componentes"
                         Button3.Text = "Examinar..."
@@ -446,6 +459,8 @@ Public Class Options
                         LogSFD.Title = "Especifique la ubicación del archivo de registro"
                         RadioButton1.Text = "Imagen de Windows montada"
                         RadioButton2.Text = "Instalación actual"
+                        RadioButton3.Text = "Utilizar el directorio temporal del proyecto o del programa"
+                        RadioButton4.Text = "Utilizar el directorio temporal especificado"
                         ScratchFBD.Description = "Especifique el directorio temporal que debería usar el programa:"
                 End Select
             Case 1
@@ -497,6 +512,7 @@ Public Class Options
                 Label41.Text = "Association status:"
                 Label42.Text = If(DetectFileAssociations(), "associations set", "associations not set")
                 Label43.Text = "Set options you would like to perform when the program starts up:"
+                Label44.Text = "The program will use the scratch directory provided by the project if one is loaded. If you are in online installation management mode, the program will use its scratch directory"
                 Button1.Text = "Browse..."
                 Button2.Text = "View DISM component versions"
                 Button3.Text = "Browse..."
@@ -535,6 +551,8 @@ Public Class Options
                 LogSFD.Title = "Specify the location of the log file"
                 RadioButton1.Text = "Mounted Windows image"
                 RadioButton2.Text = "Active installation"
+                RadioButton3.Text = "Use the project or program scratch directory"
+                RadioButton4.Text = "Use the specified scratch directory"
                 ScratchFBD.Description = "Specify the scratch directory the program should use:"
             Case 2
                 Text = "Opciones"
@@ -880,6 +898,13 @@ Public Class Options
             CheckBox4.Checked = False
             TextBox3.Text = ""
         End If
+        If MainForm.AutoScrDir Then
+            RadioButton3.Checked = True
+            RadioButton4.Checked = False
+        Else
+            RadioButton3.Checked = False
+            RadioButton4.Checked = True
+        End If
         If MainForm.EnglishOutput Then
             CheckBox5.Checked = True
         Else
@@ -1051,17 +1076,8 @@ Public Class Options
         End Select
     End Sub
 
-    Private Sub CheckBox4_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox4.CheckedChanged
-        If CheckBox4.Checked Then
-            Label20.Enabled = True
-            Label21.Enabled = True
-            TextBox3.Enabled = True
-            Button4.Enabled = True
-            Label22.Enabled = True
-            Label23.Enabled = True
-            Label24.Enabled = True
-            PictureBox5.Enabled = True
-        Else
+    Private Sub RadioButton3_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton3.CheckedChanged
+        If RadioButton3.Checked Then
             Label20.Enabled = False
             Label21.Enabled = False
             TextBox3.Enabled = False
@@ -1070,6 +1086,17 @@ Public Class Options
             Label23.Enabled = False
             Label24.Enabled = False
             PictureBox5.Enabled = False
+            Label44.Enabled = True
+        Else
+            Label20.Enabled = True
+            Label21.Enabled = True
+            TextBox3.Enabled = True
+            Button4.Enabled = True
+            Label22.Enabled = True
+            Label23.Enabled = True
+            Label24.Enabled = True
+            PictureBox5.Enabled = True
+            Label44.Enabled = False
         End If
     End Sub
 
@@ -1324,5 +1351,45 @@ Public Class Options
 
     Private Sub Button10_Click(sender As Object, e As EventArgs) Handles Button10.Click
         BGProcsAdvSettings.ShowDialog()
+    End Sub
+
+    Private Sub CheckBox4_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox4.CheckedChanged
+        If CheckBox4.Checked Then
+            RadioButton3.Enabled = True
+            RadioButton4.Enabled = True
+            If RadioButton3.Checked Then
+                Label20.Enabled = False
+                Label21.Enabled = False
+                TextBox3.Enabled = False
+                Button4.Enabled = False
+                Label22.Enabled = False
+                Label23.Enabled = False
+                Label24.Enabled = False
+                PictureBox5.Enabled = False
+                Label44.Enabled = True
+            Else
+                Label20.Enabled = True
+                Label21.Enabled = True
+                TextBox3.Enabled = True
+                Button4.Enabled = True
+                Label22.Enabled = True
+                Label23.Enabled = True
+                Label24.Enabled = True
+                PictureBox5.Enabled = True
+                Label44.Enabled = False
+            End If
+        Else
+            RadioButton3.Enabled = False
+            RadioButton4.Enabled = False
+            Label20.Enabled = False
+            Label21.Enabled = False
+            TextBox3.Enabled = False
+            Button4.Enabled = False
+            Label22.Enabled = False
+            Label23.Enabled = False
+            Label24.Enabled = False
+            PictureBox5.Enabled = False
+            Label44.Enabled = False
+        End If
     End Sub
 End Class

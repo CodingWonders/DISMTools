@@ -1136,6 +1136,9 @@ IF NOT EXIST logs (
 		echo If you want to delete log files, set the DELETELOGDIR post-build variable to "Yes"
 	)
 )
+IF NOT EXIST scratch (
+	md scratch
+)
 IF %25ISPREVIEW%25=="Yes" (
 	echo You will be running a preview release, which may not be ready for production. You may experience more bugs and less stability. Please switch to a stable release whenever possible.
 )</PostBuildEvent>
@@ -1147,6 +1150,9 @@ IF EXIST bin (
 )
 IF EXIST temp (
 	rd temp /s /q
+)
+IF EXIST scratch (
+	rd scratch /s /q
 )</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
