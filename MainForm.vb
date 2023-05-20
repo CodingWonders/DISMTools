@@ -821,8 +821,18 @@ Public Class MainForm
                 ChangeLangs(Language)
                 ' Detect log font setting. Do note that, if a system does not contain the font set in this program,
                 ' it will revert to "Courier New"
-                LogFont = DTSettingForm.RichTextBox1.Lines(10).Replace("LogFont=", "").Trim().Replace(Quote, "").Trim()
-                LogFontSize = CInt(DTSettingForm.RichTextBox1.Lines(11).Replace("LogFontSi=", "").Trim())
+                For Each line In DTSettingForm.RichTextBox1.Lines
+                    If line.StartsWith("LogFont=", StringComparison.OrdinalIgnoreCase) Then
+                        LogFont = line.Replace("LogFont=", "").Trim().Replace(Quote, "").Trim()
+                    ElseIf line.StartsWith("LogFontSi=", StringComparison.OrdinalIgnoreCase) Then
+                        LogFontSize = CInt(line.Replace("LogFontSi=", "").Trim())
+                    ElseIf line.StartsWith("LogFile=", StringComparison.OrdinalIgnoreCase) Then
+                        ' Detect log file path. If file does not exist, create one
+                        LogFile = line.Replace("LogFile=", "").Trim().Replace(Quote, "").Trim()
+                    ElseIf line.StartsWith("ScratchDirLocation=", StringComparison.OrdinalIgnoreCase) Then
+                        ScratchDir = line.Replace("ScratchDirLocation=", "").Trim().Replace(Quote, "").Trim()
+                    End If
+                Next
                 If DTSettingForm.RichTextBox1.Text.Contains("LogFontBold=0") Then
                     LogFontIsBold = False
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("LogFontBold=1") Then
@@ -833,8 +843,6 @@ Public Class MainForm
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("SecondaryProgressPanelStyle=1") Then
                     ProgressPanelStyle = 1
                 End If
-                ' Detect log file path. If file does not exist, create one
-                LogFile = DTSettingForm.RichTextBox1.Lines(16).Replace("LogFile=", "").Trim().Replace(Quote, "").Trim()
                 ' Detect log file level: 1 - Errors only
                 '                        2 - Errors and warnings
                 '                        3 - Errors, warnings and informations
@@ -880,7 +888,6 @@ Public Class MainForm
                     UseScratch = True
                 End If
                 ' Detect scratch directory
-                ScratchDir = DTSettingForm.RichTextBox1.Lines(28).Replace("ScratchDirLocation=", "").Trim().Replace(Quote, "").Trim()
                 If DTSettingForm.RichTextBox1.Text.Contains("AutoScratch=1") Then
                     AutoScrDir = True
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("AutoScratch=0") Then
