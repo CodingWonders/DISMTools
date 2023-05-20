@@ -8407,7 +8407,7 @@ Public Class MainForm
         Catch ex As Exception
             ' Continue
         End Try
-        If suitableFolderName IsNot Nothing Then
+        If suitableFolderName <> "" Then
             Process.Start(suitableFolderName)
             Exit Sub
         End If
@@ -8433,7 +8433,7 @@ Public Class MainForm
         Catch ex As Exception
             ' Continue
         End Try
-        If suitableFolderName IsNot Nothing Then
+        If suitableFolderName <> "" Then
             If Directory.Exists(suitableFolderName & "\Assets") Then Process.Start(suitableFolderName & "\Assets")
             Exit Sub
         End If
