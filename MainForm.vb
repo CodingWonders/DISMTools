@@ -288,7 +288,7 @@ Public Class MainForm
             DismVersionChecker = FileVersionInfo.GetVersionInfo(DismExe)
         End If
         If StartupRemount Then RemountOrphanedImages()
-        If StartupUpdateCheck Then CheckForUpdates(dtBranch)
+        If StartupUpdateCheck Then CheckForUpdates(dtBranch) Else UpdatePanel.Visible = False
         MountedImageDetectorBW.RunWorkerAsync()
         If dtBranch.Contains("preview") And Not Debugger.IsAttached Then
             VersionTSMI.Visible = True
