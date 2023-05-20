@@ -6810,10 +6810,12 @@ Public Class MainForm
 #End Region
 
     Private Sub NewProjLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles NewProjLink.LinkClicked
+        If Not HomePanel.Visible Then Exit Sub
         NewProj.ShowDialog()
     End Sub
 
     Private Sub ExistingProjLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles ExistingProjLink.LinkClicked
+        If Not HomePanel.Visible Then Exit Sub
         If OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
             If File.Exists(OpenFileDialog1.FileName) Then
                 ProgressPanel.OperationNum = 990
@@ -8335,6 +8337,7 @@ Public Class MainForm
     End Sub
 
     Private Sub OnlineInstMgmt_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles OnlineInstMgmt.LinkClicked
+        If Not HomePanel.Visible Then Exit Sub
         BeginOnlineManagement()
     End Sub
 
@@ -8448,6 +8451,7 @@ Public Class MainForm
     End Sub
 
     Private Sub UpdateLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles UpdateLink.LinkClicked
+        If Not HomePanel.Visible Then Exit Sub
         If File.Exists(Application.StartupPath & "\update.exe") Then File.Delete(Application.StartupPath & "\update.exe")
         Try
             Using client As New WebClient()
