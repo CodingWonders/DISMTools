@@ -1015,7 +1015,7 @@ Public Class Options
 
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
         If TextBox1.Text = "" Or Not File.Exists(TextBox1.Text) Then
-            TextBox1.Text = "C:\Windows\system32\dism.exe"
+            TextBox1.Text = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
         End If
         DismVersion = FileVersionInfo.GetVersionInfo(TextBox1.Text)
         Label4.Text = DismVersion.ProductVersion
