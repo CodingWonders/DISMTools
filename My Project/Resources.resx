@@ -955,24 +955,20 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes
 
-- Fixed an issue where the extended AppX package getter would fail if the PowerShell execution policy wasn't set correctly
-- Fixed an issue related to setting file generation where the background process notification setting would not be in a new line
+- Fixed an issue where background processes would fail in active installation management mode if the AppX package non-removable policy could not be gathered
+- Fixed an issue where AppX package addition operations would fail after the "/Region" parameter was passed (DISM for Windows 8)
+- Fixed an issue where the program would throw an "IOException" when dropping driver folders to the driver addition list view
+- Fixed an issue where the program would crash when loading the image index switcher too fast
 
 New features
 
-General
-
-- Introduced the update system
-- Introduced startup settings, beginning with the program being able to reload the servicing session of orphaned images
-- Introduced secondary progress panel styles (options to configure these are unavailable for now)
-
-AppX packages
-
-- Enhanced the context menu of the AppX package removal dialog
-  - If the application manifest file cannot be found, the "View resources of" entry will be hidden
-  - If the application display name defined in the manifest started with "ms-resource:", the entry above will reflect the package name
-  - If an application is architecture-neutral, the program will now look at other package folders, excluding the neutral directory, for an application manifest
-  - For framework packages, the program will now display the package display name instead of "&lt;Framework&gt;true&lt;/Framework&gt;"</value>
+- Introduced the automatic update notifier
+- The program will now use the user-specified task settings. This makes performing operations on an active installation possible
+- The program will now log the contents of the log window in a file named "DISMTools.log"
+- Introduced setting file migration
+- You can now use the scratch directory provided by the project or by the program
+- You can now configure the style of the secondary progress panel
+- The program now applies dark mode title bars on Windows 10 May 2019 Update and later</value>
   </data>
   <data name="secprogress_classic" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\secprogress_classic.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

@@ -1628,16 +1628,10 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''- Fixed an issue where the extended AppX package getter would fail if the PowerShell execution policy wasn&apos;t set correctly
-        '''- Fixed an issue related to setting file generation where the background process notification setting would not be in a new line
-        '''
-        '''New features
-        '''
-        '''General
-        '''
-        '''- Introduced the update system
-        '''- Introduced startup settings, beginning with the program being able to reload the servicing session of orphaned images
-        '''- Introduced secondary progress panel styles (options to configu [resto de la cadena truncado]&quot;;.
+        '''- Fixed an issue where background processes would fail in active installation management mode if the AppX package non-removable policy could not be gathered
+        '''- Fixed an issue where AppX package addition operations would fail after the &quot;/Region&quot; parameter was passed (DISM for Windows 8)
+        '''- Fixed an issue where the program would throw an &quot;IOException&quot; when dropping driver folders to the driver addition list view
+        '''- Fixed an issue where the program would crash when loading the image index switcher  [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
