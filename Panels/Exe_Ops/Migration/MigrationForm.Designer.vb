@@ -78,6 +78,7 @@ Partial Class MigrationForm
         Me.Name = "MigrationForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "DISMTools"
+        Me.TopMost = True
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
