@@ -40,16 +40,20 @@ Public Class MigrationForm
     End Sub
 
     Private Sub MigrationForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Dim ColorModeRk As RegistryKey = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Themes\Personalize")
-        Select Case ColorModeRk.GetValue("AppsUseLightTheme").ToString()
-            Case "0"
-                BackColor = Color.FromArgb(31, 31, 31)
-                ForeColor = Color.White
-            Case "1"
-                BackColor = Color.FromArgb(238, 238, 242)
-                ForeColor = Color.Black
-        End Select
-        ColorModeRk.Close()
+        Try
+            Dim ColorModeRk As RegistryKey = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Themes\Personalize")
+            Select Case ColorModeRk.GetValue("AppsUseLightTheme").ToString()
+                Case "0"
+                    BackColor = Color.FromArgb(31, 31, 31)
+                    ForeColor = Color.White
+                Case "1"
+                    BackColor = Color.FromArgb(238, 238, 242)
+                    ForeColor = Color.Black
+            End Select
+            ColorModeRk.Close()
+        Catch ex As Exception
+            ' Continue
+        End Try
         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
             Case "ENG"
                 Label1.Text = "Please wait while DISMTools migrates your old settings file to work on this version. This may take some time."
