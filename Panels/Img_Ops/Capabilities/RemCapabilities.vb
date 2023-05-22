@@ -110,5 +110,7 @@ Public Class RemCapabilities
             Case 2
                 Label2.Text &= " Solo las funcionalidades instaladas (" & ListView1.Items.Count & ") son mostradas"
         End Select
+        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
     End Sub
 End Class

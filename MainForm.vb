@@ -211,6 +211,10 @@ Public Class MainForm
         Dim result As Integer = DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, attribute, 4)
     End Sub
 
+    Function GetWindowHandle(ctrl As Control) As IntPtr
+        Return ctrl.Handle
+    End Function
+
     Function IsWindowsVersionOrGreater(majorVersion As Integer, minorVersion As Integer, buildNumber As Integer) As Boolean
         Dim version = Environment.OSVersion.Version
         Return version.Major > majorVersion OrElse (version.Major = majorVersion AndAlso version.Minor > minorVersion) OrElse (version.Major = majorVersion AndAlso version.Minor = minorVersion AndAlso version.Build >= buildNumber)

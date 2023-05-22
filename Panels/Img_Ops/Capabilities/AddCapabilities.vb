@@ -245,6 +245,8 @@ Public Class AddCapabilities
         ListView1.ForeColor = ForeColor
         RichTextBox1.ForeColor = ForeColor
         CheckBox2.Enabled = MainForm.OnlineManagement = True
+        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged

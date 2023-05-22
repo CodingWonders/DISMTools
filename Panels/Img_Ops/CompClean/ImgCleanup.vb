@@ -202,6 +202,8 @@ Public Class ImgCleanup
         RichTextBox1.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
         PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.image_dark, My.Resources.image_light)
+        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         ' Determine when the last base reset was run
         If MainForm.OnlineManagement Then
             Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing", False)

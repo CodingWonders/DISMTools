@@ -139,6 +139,8 @@ Public Class RemProvAppxPackage
         End If
         ListView1.ForeColor = ForeColor
         MainForm.ViewPackageDirectoryToolStripMenuItem.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.openfile_dark, My.Resources.openfile)
+        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
     End Sub
 
     Private Sub ListView1_MouseClick(sender As Object, e As MouseEventArgs) Handles ListView1.MouseClick

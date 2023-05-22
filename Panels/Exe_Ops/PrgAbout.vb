@@ -177,6 +177,8 @@ Public Class PrgAbout
         CreditsPanel.ForeColor = Color.White
         RichTextBox1.ForeColor = ForeColor
         RichTextBox2.ForeColor = ForeColor
+        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+        MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
     End Sub
 
     Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel4.LinkClicked

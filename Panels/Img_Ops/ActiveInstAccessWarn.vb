@@ -58,6 +58,8 @@ Public Class ActiveInstAccessWarn
             BackColor = Color.FromArgb(238, 238, 242)
             ForeColor = Color.Black
         End If
+        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         Beep()
     End Sub
 End Class

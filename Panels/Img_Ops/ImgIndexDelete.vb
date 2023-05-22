@@ -238,6 +238,9 @@ Public Class ImgIndexDelete
         ListView1.ForeColor = ForeColor
         ListView2.ForeColor = ForeColor
 
+        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+
         ' Set disabled ListView's backcolor. Source: https://stackoverflow.com/questions/17461902/changing-background-color-of-listview-c-sharp-when-disabled
         Dim bm As New Bitmap(ListView2.ClientSize.Width, ListView2.ClientSize.Height)
         Graphics.FromImage(bm).Clear(ListView2.BackColor)

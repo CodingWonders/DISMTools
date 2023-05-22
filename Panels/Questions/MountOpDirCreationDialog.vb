@@ -46,5 +46,7 @@ Public Class MountOpDirCreationDialog
             Panel1.BackColor = Color.FromArgb(238, 238, 242)
             Label1.ForeColor = Color.FromArgb(0, 51, 153)
         End If
+        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
     End Sub
 End Class

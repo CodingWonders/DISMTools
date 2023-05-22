@@ -28,4 +28,10 @@
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
         NewUnattendWiz.Show()
     End Sub
+
+    Private Sub UnattendMgr_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+    End Sub
 End Class

@@ -261,6 +261,8 @@ Public Class EnableFeat
                 Label2.Text &= " Solo las características deshabilitadas (" & ListView1.Items.Count & ") son mostradas"
         End Select
         CheckBox4.Enabled = MainForm.OnlineManagement = True
+        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged

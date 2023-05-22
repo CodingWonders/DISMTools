@@ -63,6 +63,8 @@ Public Class BGProcsAdvSettings
         CheckBox1.Checked = MainForm.ExtAppxGetter
         CheckBox2.Checked = MainForm.SkipNonRemovable
         CheckBox3.Checked = MainForm.AllDrivers
+        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged

@@ -474,6 +474,8 @@ Public Class ProjProperties
             TabPage2.BackColor = Color.FromArgb(238, 238, 242)
             imgLangText.BackColor = Color.FromArgb(238, 238, 242)
         End If
+        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         imgLangText.ForeColor = ForeColor
         DismVersionChecker = FileVersionInfo.GetVersionInfo(MainForm.DismExe)
         imgMountDir.Text = ""

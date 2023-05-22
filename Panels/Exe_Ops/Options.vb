@@ -851,6 +851,8 @@ Public Class Options
                 Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Detener", "Iniciar")
         End Select
         CheckBox11.Enabled = If(DetectFileAssociations(), False, True)
+        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
     End Sub
 
     Sub GetSystemFonts()
