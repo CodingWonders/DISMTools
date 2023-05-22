@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports System.Net
 Imports Microsoft.VisualBasic.ControlChars
+Imports System.IO.Compression
 
 Public Class MainForm
 
@@ -299,6 +300,9 @@ Public Class MainForm
         Expander.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
         Expander.Start()
         Expander.WaitForExit()
+        If Expander.ExitCode <> 0 Then
+            ZipFile.ExtractToDirectory(Application.StartupPath & "\new\DISMTools.zip", Application.StartupPath & "\new")
+        End If
         File.Delete(Application.StartupPath & "\new\DISMTools.zip")
     End Sub
 
