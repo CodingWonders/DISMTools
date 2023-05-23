@@ -355,6 +355,43 @@ Partial Class MainForm
         Me.AppxPackagePopupCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.ViewPackageDirectoryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ResViewTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TreeViewCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ExpandToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator23 = New System.Windows.Forms.ToolStripSeparator()
+        Me.UnloadProjectToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AccessDirectoryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator24 = New System.Windows.Forms.ToolStripSeparator()
+        Me.CopyDeploymentToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.OfAllArchitecturesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.OfSelectedArchitectureToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator25 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ForX86ArchitectureToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ForAmd64ArchitectureToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ForARMArchitectureToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ForARM64ArchitectureToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator26 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ViewDeploymentToolLicenseDisclaimerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator27 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ImageOperationsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MountImageToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.UnmountImageToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator28 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ViewMountDirectoryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator29 = New System.Windows.Forms.ToolStripSeparator()
+        Me.RemoveVolumeImagesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SwitchImageIndexesToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator30 = New System.Windows.Forms.ToolStripSeparator()
+        Me.UnattendedAnswerFilesToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ManageToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LaunchCreationWizardToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator31 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ScratchDirectoryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator32 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ManageReportsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator33 = New System.Windows.Forms.ToolStripSeparator()
+        Me.AddToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.NewFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ExistingFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -414,6 +451,7 @@ Partial Class MainForm
         Me.FeatureInfoCMS.SuspendLayout()
         Me.ImgUMountPopupCMS.SuspendLayout()
         Me.AppxPackagePopupCMS.SuspendLayout()
+        Me.TreeViewCMS.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
@@ -2280,7 +2318,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.44444!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.55556!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 51.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -2329,7 +2367,7 @@ Partial Class MainForm
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel8.Location = New System.Drawing.Point(94, 3)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(108, 23)
+        Me.Panel8.Size = New System.Drawing.Size(107, 23)
         Me.Panel8.TabIndex = 8
         '
         'projName
@@ -2338,7 +2376,7 @@ Partial Class MainForm
         Me.projName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projName.Location = New System.Drawing.Point(0, 0)
         Me.projName.Name = "projName"
-        Me.projName.Size = New System.Drawing.Size(108, 23)
+        Me.projName.Size = New System.Drawing.Size(107, 23)
         Me.projName.TabIndex = 2
         Me.projName.Text = "projName"
         Me.projName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -2348,7 +2386,7 @@ Partial Class MainForm
         Me.projNameText.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projNameText.Location = New System.Drawing.Point(0, 0)
         Me.projNameText.Name = "projNameText"
-        Me.projNameText.Size = New System.Drawing.Size(108, 21)
+        Me.projNameText.Size = New System.Drawing.Size(107, 21)
         Me.projNameText.TabIndex = 4
         Me.projNameText.Text = "projName"
         Me.projNameText.Visible = False
@@ -3240,6 +3278,221 @@ Partial Class MainForm
         Me.ResViewTSMI.Size = New System.Drawing.Size(196, 22)
         Me.ResViewTSMI.Text = "View resources for "
         '
+        'TreeViewCMS
+        '
+        Me.TreeViewCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExpandToolStripMenuItem, Me.AccessDirectoryToolStripMenuItem, Me.ToolStripSeparator23, Me.UnloadProjectToolStripMenuItem1, Me.ToolStripSeparator24, Me.CopyDeploymentToolsToolStripMenuItem, Me.ToolStripSeparator27, Me.ImageOperationsToolStripMenuItem, Me.ToolStripSeparator30, Me.UnattendedAnswerFilesToolStripMenuItem1, Me.ToolStripSeparator31, Me.ScratchDirectoryToolStripMenuItem, Me.ToolStripSeparator32, Me.ManageReportsToolStripMenuItem, Me.ToolStripSeparator33, Me.AddToolStripMenuItem})
+        Me.TreeViewCMS.Name = "TreeViewCMS"
+        Me.TreeViewCMS.Size = New System.Drawing.Size(201, 244)
+        '
+        'ExpandToolStripMenuItem
+        '
+        Me.ExpandToolStripMenuItem.Name = "ExpandToolStripMenuItem"
+        Me.ExpandToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
+        Me.ExpandToolStripMenuItem.Text = "Expand item"
+        '
+        'ToolStripSeparator23
+        '
+        Me.ToolStripSeparator23.Name = "ToolStripSeparator23"
+        Me.ToolStripSeparator23.Size = New System.Drawing.Size(157, 6)
+        '
+        'UnloadProjectToolStripMenuItem1
+        '
+        Me.UnloadProjectToolStripMenuItem1.Name = "UnloadProjectToolStripMenuItem1"
+        Me.UnloadProjectToolStripMenuItem1.Size = New System.Drawing.Size(160, 22)
+        Me.UnloadProjectToolStripMenuItem1.Text = "Unload project"
+        '
+        'AccessDirectoryToolStripMenuItem
+        '
+        Me.AccessDirectoryToolStripMenuItem.Name = "AccessDirectoryToolStripMenuItem"
+        Me.AccessDirectoryToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
+        Me.AccessDirectoryToolStripMenuItem.Text = "Access directory"
+        '
+        'ToolStripSeparator24
+        '
+        Me.ToolStripSeparator24.Name = "ToolStripSeparator24"
+        Me.ToolStripSeparator24.Size = New System.Drawing.Size(197, 6)
+        '
+        'CopyDeploymentToolsToolStripMenuItem
+        '
+        Me.CopyDeploymentToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OfAllArchitecturesToolStripMenuItem, Me.OfSelectedArchitectureToolStripMenuItem, Me.ToolStripSeparator25, Me.ForX86ArchitectureToolStripMenuItem, Me.ForAmd64ArchitectureToolStripMenuItem, Me.ForARMArchitectureToolStripMenuItem, Me.ForARM64ArchitectureToolStripMenuItem, Me.ToolStripSeparator26, Me.ViewDeploymentToolLicenseDisclaimerToolStripMenuItem})
+        Me.CopyDeploymentToolsToolStripMenuItem.Name = "CopyDeploymentToolsToolStripMenuItem"
+        Me.CopyDeploymentToolsToolStripMenuItem.Size = New System.Drawing.Size(200, 22)
+        Me.CopyDeploymentToolsToolStripMenuItem.Text = "Copy deployment tools"
+        '
+        'OfAllArchitecturesToolStripMenuItem
+        '
+        Me.OfAllArchitecturesToolStripMenuItem.Name = "OfAllArchitecturesToolStripMenuItem"
+        Me.OfAllArchitecturesToolStripMenuItem.Size = New System.Drawing.Size(291, 22)
+        Me.OfAllArchitecturesToolStripMenuItem.Text = "Of all architectures"
+        '
+        'OfSelectedArchitectureToolStripMenuItem
+        '
+        Me.OfSelectedArchitectureToolStripMenuItem.Name = "OfSelectedArchitectureToolStripMenuItem"
+        Me.OfSelectedArchitectureToolStripMenuItem.Size = New System.Drawing.Size(291, 22)
+        Me.OfSelectedArchitectureToolStripMenuItem.Text = "Of selected architecture"
+        '
+        'ToolStripSeparator25
+        '
+        Me.ToolStripSeparator25.Name = "ToolStripSeparator25"
+        Me.ToolStripSeparator25.Size = New System.Drawing.Size(288, 6)
+        '
+        'ForX86ArchitectureToolStripMenuItem
+        '
+        Me.ForX86ArchitectureToolStripMenuItem.Name = "ForX86ArchitectureToolStripMenuItem"
+        Me.ForX86ArchitectureToolStripMenuItem.Size = New System.Drawing.Size(291, 22)
+        Me.ForX86ArchitectureToolStripMenuItem.Text = "For x86 architecture"
+        '
+        'ForAmd64ArchitectureToolStripMenuItem
+        '
+        Me.ForAmd64ArchitectureToolStripMenuItem.Name = "ForAmd64ArchitectureToolStripMenuItem"
+        Me.ForAmd64ArchitectureToolStripMenuItem.Size = New System.Drawing.Size(291, 22)
+        Me.ForAmd64ArchitectureToolStripMenuItem.Text = "For AMD64 architecture"
+        '
+        'ForARMArchitectureToolStripMenuItem
+        '
+        Me.ForARMArchitectureToolStripMenuItem.Name = "ForARMArchitectureToolStripMenuItem"
+        Me.ForARMArchitectureToolStripMenuItem.Size = New System.Drawing.Size(291, 22)
+        Me.ForARMArchitectureToolStripMenuItem.Text = "For ARM architecture"
+        '
+        'ForARM64ArchitectureToolStripMenuItem
+        '
+        Me.ForARM64ArchitectureToolStripMenuItem.Name = "ForARM64ArchitectureToolStripMenuItem"
+        Me.ForARM64ArchitectureToolStripMenuItem.Size = New System.Drawing.Size(291, 22)
+        Me.ForARM64ArchitectureToolStripMenuItem.Text = "For ARM64 architecture"
+        '
+        'ToolStripSeparator26
+        '
+        Me.ToolStripSeparator26.Name = "ToolStripSeparator26"
+        Me.ToolStripSeparator26.Size = New System.Drawing.Size(288, 6)
+        '
+        'ViewDeploymentToolLicenseDisclaimerToolStripMenuItem
+        '
+        Me.ViewDeploymentToolLicenseDisclaimerToolStripMenuItem.Name = "ViewDeploymentToolLicenseDisclaimerToolStripMenuItem"
+        Me.ViewDeploymentToolLicenseDisclaimerToolStripMenuItem.Size = New System.Drawing.Size(291, 22)
+        Me.ViewDeploymentToolLicenseDisclaimerToolStripMenuItem.Text = "View deployment tools license disclaimer"
+        '
+        'ToolStripSeparator27
+        '
+        Me.ToolStripSeparator27.Name = "ToolStripSeparator27"
+        Me.ToolStripSeparator27.Size = New System.Drawing.Size(197, 6)
+        '
+        'ImageOperationsToolStripMenuItem
+        '
+        Me.ImageOperationsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MountImageToolStripMenuItem, Me.UnmountImageToolStripMenuItem, Me.ToolStripSeparator28, Me.ViewMountDirectoryToolStripMenuItem, Me.ToolStripSeparator29, Me.RemoveVolumeImagesToolStripMenuItem, Me.SwitchImageIndexesToolStripMenuItem1})
+        Me.ImageOperationsToolStripMenuItem.Name = "ImageOperationsToolStripMenuItem"
+        Me.ImageOperationsToolStripMenuItem.Size = New System.Drawing.Size(200, 22)
+        Me.ImageOperationsToolStripMenuItem.Text = "Image operations"
+        '
+        'MountImageToolStripMenuItem
+        '
+        Me.MountImageToolStripMenuItem.Name = "MountImageToolStripMenuItem"
+        Me.MountImageToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
+        Me.MountImageToolStripMenuItem.Text = "Mount image..."
+        '
+        'UnmountImageToolStripMenuItem
+        '
+        Me.UnmountImageToolStripMenuItem.Name = "UnmountImageToolStripMenuItem"
+        Me.UnmountImageToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
+        Me.UnmountImageToolStripMenuItem.Text = "Unmount image..."
+        '
+        'ToolStripSeparator28
+        '
+        Me.ToolStripSeparator28.Name = "ToolStripSeparator28"
+        Me.ToolStripSeparator28.Size = New System.Drawing.Size(207, 6)
+        '
+        'ViewMountDirectoryToolStripMenuItem
+        '
+        Me.ViewMountDirectoryToolStripMenuItem.Name = "ViewMountDirectoryToolStripMenuItem"
+        Me.ViewMountDirectoryToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
+        Me.ViewMountDirectoryToolStripMenuItem.Text = "View mount directory"
+        '
+        'ToolStripSeparator29
+        '
+        Me.ToolStripSeparator29.Name = "ToolStripSeparator29"
+        Me.ToolStripSeparator29.Size = New System.Drawing.Size(207, 6)
+        '
+        'RemoveVolumeImagesToolStripMenuItem
+        '
+        Me.RemoveVolumeImagesToolStripMenuItem.Name = "RemoveVolumeImagesToolStripMenuItem"
+        Me.RemoveVolumeImagesToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
+        Me.RemoveVolumeImagesToolStripMenuItem.Text = "Remove volume images..."
+        '
+        'SwitchImageIndexesToolStripMenuItem1
+        '
+        Me.SwitchImageIndexesToolStripMenuItem1.Name = "SwitchImageIndexesToolStripMenuItem1"
+        Me.SwitchImageIndexesToolStripMenuItem1.Size = New System.Drawing.Size(210, 22)
+        Me.SwitchImageIndexesToolStripMenuItem1.Text = "Switch image indexes..."
+        '
+        'ToolStripSeparator30
+        '
+        Me.ToolStripSeparator30.Name = "ToolStripSeparator30"
+        Me.ToolStripSeparator30.Size = New System.Drawing.Size(197, 6)
+        '
+        'UnattendedAnswerFilesToolStripMenuItem1
+        '
+        Me.UnattendedAnswerFilesToolStripMenuItem1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ManageToolStripMenuItem, Me.LaunchCreationWizardToolStripMenuItem})
+        Me.UnattendedAnswerFilesToolStripMenuItem1.Name = "UnattendedAnswerFilesToolStripMenuItem1"
+        Me.UnattendedAnswerFilesToolStripMenuItem1.Size = New System.Drawing.Size(200, 22)
+        Me.UnattendedAnswerFilesToolStripMenuItem1.Text = "Unattended answer files"
+        '
+        'ManageToolStripMenuItem
+        '
+        Me.ManageToolStripMenuItem.Name = "ManageToolStripMenuItem"
+        Me.ManageToolStripMenuItem.Size = New System.Drawing.Size(196, 22)
+        Me.ManageToolStripMenuItem.Text = "Manage"
+        '
+        'LaunchCreationWizardToolStripMenuItem
+        '
+        Me.LaunchCreationWizardToolStripMenuItem.Name = "LaunchCreationWizardToolStripMenuItem"
+        Me.LaunchCreationWizardToolStripMenuItem.Size = New System.Drawing.Size(196, 22)
+        Me.LaunchCreationWizardToolStripMenuItem.Text = "Launch creation wizard"
+        '
+        'ToolStripSeparator31
+        '
+        Me.ToolStripSeparator31.Name = "ToolStripSeparator31"
+        Me.ToolStripSeparator31.Size = New System.Drawing.Size(197, 6)
+        '
+        'ScratchDirectoryToolStripMenuItem
+        '
+        Me.ScratchDirectoryToolStripMenuItem.Name = "ScratchDirectoryToolStripMenuItem"
+        Me.ScratchDirectoryToolStripMenuItem.Size = New System.Drawing.Size(200, 22)
+        Me.ScratchDirectoryToolStripMenuItem.Text = "Open scratch directory"
+        '
+        'ToolStripSeparator32
+        '
+        Me.ToolStripSeparator32.Name = "ToolStripSeparator32"
+        Me.ToolStripSeparator32.Size = New System.Drawing.Size(197, 6)
+        '
+        'ManageReportsToolStripMenuItem
+        '
+        Me.ManageReportsToolStripMenuItem.Name = "ManageReportsToolStripMenuItem"
+        Me.ManageReportsToolStripMenuItem.Size = New System.Drawing.Size(200, 22)
+        Me.ManageReportsToolStripMenuItem.Text = "Manage reports"
+        '
+        'ToolStripSeparator33
+        '
+        Me.ToolStripSeparator33.Name = "ToolStripSeparator33"
+        Me.ToolStripSeparator33.Size = New System.Drawing.Size(197, 6)
+        '
+        'AddToolStripMenuItem
+        '
+        Me.AddToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewFileToolStripMenuItem, Me.ExistingFileToolStripMenuItem})
+        Me.AddToolStripMenuItem.Name = "AddToolStripMenuItem"
+        Me.AddToolStripMenuItem.Size = New System.Drawing.Size(200, 22)
+        Me.AddToolStripMenuItem.Text = "Add"
+        '
+        'NewFileToolStripMenuItem
+        '
+        Me.NewFileToolStripMenuItem.Name = "NewFileToolStripMenuItem"
+        Me.NewFileToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.NewFileToolStripMenuItem.Text = "New file..."
+        '
+        'ExistingFileToolStripMenuItem
+        '
+        Me.ExistingFileToolStripMenuItem.Name = "ExistingFileToolStripMenuItem"
+        Me.ExistingFileToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.ExistingFileToolStripMenuItem.Text = "Existing file..."
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -3333,6 +3586,7 @@ Partial Class MainForm
         Me.FeatureInfoCMS.ResumeLayout(False)
         Me.ImgUMountPopupCMS.ResumeLayout(False)
         Me.AppxPackagePopupCMS.ResumeLayout(False)
+        Me.TreeViewCMS.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -3668,4 +3922,41 @@ Partial Class MainForm
     Friend WithEvents ResViewTSMI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents UpdatePanel As System.Windows.Forms.Panel
     Friend WithEvents UpdateLink As System.Windows.Forms.LinkLabel
+    Friend WithEvents TreeViewCMS As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents ExpandToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents AccessDirectoryToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator23 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents UnloadProjectToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator24 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents CopyDeploymentToolsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents OfAllArchitecturesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents OfSelectedArchitectureToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator25 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents ForX86ArchitectureToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ForAmd64ArchitectureToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ForARMArchitectureToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ForARM64ArchitectureToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator26 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents ViewDeploymentToolLicenseDisclaimerToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator27 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents ImageOperationsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MountImageToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents UnmountImageToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator28 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents ViewMountDirectoryToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator29 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents RemoveVolumeImagesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents SwitchImageIndexesToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator30 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents UnattendedAnswerFilesToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ManageToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents LaunchCreationWizardToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator31 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents ScratchDirectoryToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator32 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents ManageReportsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator33 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents AddToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents NewFileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ExistingFileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class

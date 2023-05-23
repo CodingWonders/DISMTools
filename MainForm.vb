@@ -3291,10 +3291,28 @@ Public Class MainForm
                         FeatureInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                        TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         PkgInfoCMS.ForeColor = Color.White
                         FeatureInfoCMS.ForeColor = Color.White
                         ImgUMountPopupCMS.ForeColor = Color.White
                         AppxPackagePopupCMS.ForeColor = Color.White
+                        TreeViewCMS.ForeColor = Color.White
+                        Dim items = TreeViewCMS.Items
+                        Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
+                        For Each item As ToolStripDropDownItem In mItem
+                            If item.DropDownItems.Count > 0 Then
+                                Dim ditems = item.DropDownItems
+                                Dim dmItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(ditems)
+                                Try
+                                    For Each dropDownItem As ToolStripDropDownItem In dmItem
+                                        dropDownItem.BackColor = Color.FromArgb(27, 27, 28)
+                                        dropDownItem.ForeColor = Color.White
+                                    Next
+                                Catch ex As Exception
+                                    Continue For
+                                End Try
+                            End If
+                        Next
                         InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph_dark)
                         BranchTSMI.Image = New Bitmap(My.Resources.branch_dark)
                     ElseIf ColorMode = "1" Then
@@ -3384,10 +3402,28 @@ Public Class MainForm
                         FeatureInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                        TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         PkgInfoCMS.ForeColor = Color.Black
                         FeatureInfoCMS.ForeColor = Color.Black
                         ImgUMountPopupCMS.ForeColor = Color.Black
                         AppxPackagePopupCMS.ForeColor = Color.Black
+                        TreeViewCMS.ForeColor = Color.Black
+                        Dim items = TreeViewCMS.Items
+                        Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
+                        For Each item As ToolStripDropDownItem In mItem
+                            If item.DropDownItems.Count > 0 Then
+                                Dim ditems = item.DropDownItems
+                                Dim dmItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(ditems)
+                                Try
+                                    For Each dropDownItem As ToolStripDropDownItem In dmItem
+                                        dropDownItem.BackColor = Color.FromArgb(231, 232, 236)
+                                        dropDownItem.ForeColor = Color.Black
+                                    Next
+                                Catch ex As Exception
+                                    Continue For
+                                End Try
+                            End If
+                        Next
                         InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph)
                         BranchTSMI.Image = New Bitmap(My.Resources.branch)
                     End If
@@ -3481,10 +3517,28 @@ Public Class MainForm
                 FeatureInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 PkgInfoCMS.ForeColor = Color.Black
                 FeatureInfoCMS.ForeColor = Color.Black
                 ImgUMountPopupCMS.ForeColor = Color.Black
                 AppxPackagePopupCMS.ForeColor = Color.Black
+                TreeViewCMS.ForeColor = Color.Black
+                Dim items = TreeViewCMS.Items
+                Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
+                For Each item As ToolStripDropDownItem In mItem
+                    If item.DropDownItems.Count > 0 Then
+                        Dim ditems = item.DropDownItems
+                        Dim dmItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(ditems)
+                        Try
+                            For Each dropDownItem As ToolStripDropDownItem In dmItem
+                                dropDownItem.BackColor = Color.FromArgb(231, 232, 236)
+                                dropDownItem.ForeColor = Color.Black
+                            Next
+                        Catch ex As Exception
+                            Continue For
+                        End Try
+                    End If
+                Next
                 InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph)
                 BranchTSMI.Image = New Bitmap(My.Resources.branch)
             Case 2
@@ -3574,10 +3628,28 @@ Public Class MainForm
                 FeatureInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 PkgInfoCMS.ForeColor = Color.White
                 FeatureInfoCMS.ForeColor = Color.White
                 ImgUMountPopupCMS.ForeColor = Color.White
                 AppxPackagePopupCMS.ForeColor = Color.White
+                TreeViewCMS.ForeColor = Color.White
+                Dim items = TreeViewCMS.Items
+                Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
+                For Each item As ToolStripDropDownItem In mItem
+                    If item.DropDownItems.Count > 0 Then
+                        Dim ditems = item.DropDownItems
+                        Dim dmItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(ditems)
+                        Try
+                            For Each dropDownItem As ToolStripDropDownItem In dmItem
+                                dropDownItem.BackColor = Color.FromArgb(27, 27, 28)
+                                dropDownItem.ForeColor = Color.White
+                            Next
+                        Catch ex As Exception
+                            Continue For
+                        End Try
+                    End If
+                Next
                 InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph_dark)
                 BranchTSMI.Image = New Bitmap(My.Resources.branch_dark)
         End Select
@@ -8485,5 +8557,13 @@ Public Class MainForm
             Exit Sub
         End Try
         If File.Exists(Application.StartupPath & "\update.exe") Then Process.Start(Application.StartupPath & "\update.exe", "/" & dtBranch)
+    End Sub
+
+    Private Sub prjTreeView_NodeMouseClick(sender As Object, e As TreeNodeMouseClickEventArgs) Handles prjTreeView.NodeMouseClick
+        If e.Button = Windows.Forms.MouseButtons.Right Then
+            prjTreeView.SelectedNode = e.Node
+            Dim pnt As Point = e.Location
+            TreeViewCMS.Show(sender, pnt)
+        End If
     End Sub
 End Class
