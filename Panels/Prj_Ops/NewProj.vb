@@ -138,14 +138,14 @@ Public Class NewProj
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
             BackColor = Color.FromArgb(31, 31, 31)
             ForeColor = Color.White
-            TextBox2.BackColor = Color.FromArgb(31, 31, 31)
+            TextBox1.BackColor = Color.FromArgb(31, 31, 31)
             TextBox2.BackColor = Color.FromArgb(31, 31, 31)
             GroupBox1.ForeColor = Color.White
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Win10Title.BackColor = Color.White
             BackColor = Color.FromArgb(238, 238, 242)
             ForeColor = Color.Black
-            TextBox2.BackColor = Color.FromArgb(238, 238, 242)
+            TextBox1.BackColor = Color.FromArgb(238, 238, 242)
             TextBox2.BackColor = Color.FromArgb(238, 238, 242)
             GroupBox1.ForeColor = Color.Black
         End If
