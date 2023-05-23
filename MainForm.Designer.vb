@@ -369,14 +369,10 @@ Partial Class MainForm
         Me.ForAmd64ArchitectureToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ForARMArchitectureToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ForARM64ArchitectureToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator26 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ViewDeploymentToolLicenseDisclaimerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator27 = New System.Windows.Forms.ToolStripSeparator()
         Me.ImageOperationsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MountImageToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.UnmountImageToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator28 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ViewMountDirectoryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator29 = New System.Windows.Forms.ToolStripSeparator()
         Me.RemoveVolumeImagesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SwitchImageIndexesToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
@@ -3282,7 +3278,7 @@ Partial Class MainForm
         '
         Me.TreeViewCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExpandToolStripMenuItem, Me.AccessDirectoryToolStripMenuItem, Me.ToolStripSeparator23, Me.UnloadProjectToolStripMenuItem1, Me.ToolStripSeparator24, Me.CopyDeploymentToolsToolStripMenuItem, Me.ToolStripSeparator27, Me.ImageOperationsToolStripMenuItem, Me.ToolStripSeparator30, Me.UnattendedAnswerFilesToolStripMenuItem1, Me.ToolStripSeparator31, Me.ScratchDirectoryToolStripMenuItem, Me.ToolStripSeparator32, Me.ManageReportsToolStripMenuItem, Me.ToolStripSeparator33, Me.AddToolStripMenuItem})
         Me.TreeViewCMS.Name = "TreeViewCMS"
-        Me.TreeViewCMS.Size = New System.Drawing.Size(201, 244)
+        Me.TreeViewCMS.Size = New System.Drawing.Size(201, 266)
         '
         'ExpandToolStripMenuItem
         '
@@ -3314,7 +3310,7 @@ Partial Class MainForm
         '
         'CopyDeploymentToolsToolStripMenuItem
         '
-        Me.CopyDeploymentToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OfAllArchitecturesToolStripMenuItem, Me.OfSelectedArchitectureToolStripMenuItem, Me.ToolStripSeparator25, Me.ForX86ArchitectureToolStripMenuItem, Me.ForAmd64ArchitectureToolStripMenuItem, Me.ForARMArchitectureToolStripMenuItem, Me.ForARM64ArchitectureToolStripMenuItem, Me.ToolStripSeparator26, Me.ViewDeploymentToolLicenseDisclaimerToolStripMenuItem})
+        Me.CopyDeploymentToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OfAllArchitecturesToolStripMenuItem, Me.OfSelectedArchitectureToolStripMenuItem, Me.ToolStripSeparator25, Me.ForX86ArchitectureToolStripMenuItem, Me.ForAmd64ArchitectureToolStripMenuItem, Me.ForARMArchitectureToolStripMenuItem, Me.ForARM64ArchitectureToolStripMenuItem})
         Me.CopyDeploymentToolsToolStripMenuItem.Name = "CopyDeploymentToolsToolStripMenuItem"
         Me.CopyDeploymentToolsToolStripMenuItem.Size = New System.Drawing.Size(200, 22)
         Me.CopyDeploymentToolsToolStripMenuItem.Text = "Copy deployment tools"
@@ -3360,17 +3356,6 @@ Partial Class MainForm
         Me.ForARM64ArchitectureToolStripMenuItem.Size = New System.Drawing.Size(291, 22)
         Me.ForARM64ArchitectureToolStripMenuItem.Text = "For ARM64 architecture"
         '
-        'ToolStripSeparator26
-        '
-        Me.ToolStripSeparator26.Name = "ToolStripSeparator26"
-        Me.ToolStripSeparator26.Size = New System.Drawing.Size(288, 6)
-        '
-        'ViewDeploymentToolLicenseDisclaimerToolStripMenuItem
-        '
-        Me.ViewDeploymentToolLicenseDisclaimerToolStripMenuItem.Name = "ViewDeploymentToolLicenseDisclaimerToolStripMenuItem"
-        Me.ViewDeploymentToolLicenseDisclaimerToolStripMenuItem.Size = New System.Drawing.Size(291, 22)
-        Me.ViewDeploymentToolLicenseDisclaimerToolStripMenuItem.Text = "View deployment tools license disclaimer"
-        '
         'ToolStripSeparator27
         '
         Me.ToolStripSeparator27.Name = "ToolStripSeparator27"
@@ -3378,7 +3363,7 @@ Partial Class MainForm
         '
         'ImageOperationsToolStripMenuItem
         '
-        Me.ImageOperationsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MountImageToolStripMenuItem, Me.UnmountImageToolStripMenuItem, Me.ToolStripSeparator28, Me.ViewMountDirectoryToolStripMenuItem, Me.ToolStripSeparator29, Me.RemoveVolumeImagesToolStripMenuItem, Me.SwitchImageIndexesToolStripMenuItem1})
+        Me.ImageOperationsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MountImageToolStripMenuItem, Me.UnmountImageToolStripMenuItem, Me.ToolStripSeparator29, Me.RemoveVolumeImagesToolStripMenuItem, Me.SwitchImageIndexesToolStripMenuItem1})
         Me.ImageOperationsToolStripMenuItem.Name = "ImageOperationsToolStripMenuItem"
         Me.ImageOperationsToolStripMenuItem.Size = New System.Drawing.Size(200, 22)
         Me.ImageOperationsToolStripMenuItem.Text = "Image operations"
@@ -3394,17 +3379,6 @@ Partial Class MainForm
         Me.UnmountImageToolStripMenuItem.Name = "UnmountImageToolStripMenuItem"
         Me.UnmountImageToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
         Me.UnmountImageToolStripMenuItem.Text = "Unmount image..."
-        '
-        'ToolStripSeparator28
-        '
-        Me.ToolStripSeparator28.Name = "ToolStripSeparator28"
-        Me.ToolStripSeparator28.Size = New System.Drawing.Size(207, 6)
-        '
-        'ViewMountDirectoryToolStripMenuItem
-        '
-        Me.ViewMountDirectoryToolStripMenuItem.Name = "ViewMountDirectoryToolStripMenuItem"
-        Me.ViewMountDirectoryToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
-        Me.ViewMountDirectoryToolStripMenuItem.Text = "View mount directory"
         '
         'ToolStripSeparator29
         '
@@ -3936,14 +3910,10 @@ Partial Class MainForm
     Friend WithEvents ForAmd64ArchitectureToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ForARMArchitectureToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ForARM64ArchitectureToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripSeparator26 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents ViewDeploymentToolLicenseDisclaimerToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator27 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ImageOperationsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MountImageToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents UnmountImageToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripSeparator28 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents ViewMountDirectoryToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator29 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents RemoveVolumeImagesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents SwitchImageIndexesToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem

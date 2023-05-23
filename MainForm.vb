@@ -8562,6 +8562,44 @@ Public Class MainForm
     Private Sub prjTreeView_NodeMouseClick(sender As Object, e As TreeNodeMouseClickEventArgs) Handles prjTreeView.NodeMouseClick
         If e.Button = Windows.Forms.MouseButtons.Right Then
             prjTreeView.SelectedNode = e.Node
+            If e.Node.Name.StartsWith("dandi") Then
+                OfSelectedArchitectureToolStripMenuItem.Enabled = Not e.Node.Name.Equals("dandi")
+                CopyDeploymentToolsToolStripMenuItem.Enabled = True
+                ImageOperationsToolStripMenuItem.Enabled = False
+                UnattendedAnswerFilesToolStripMenuItem1.Enabled = False
+                ScratchDirectoryToolStripMenuItem.Enabled = False
+                ManageReportsToolStripMenuItem.Enabled = False
+            ElseIf e.Node.Name = "mount" Then
+                CopyDeploymentToolsToolStripMenuItem.Enabled = False
+                ImageOperationsToolStripMenuItem.Enabled = True
+                UnattendedAnswerFilesToolStripMenuItem1.Enabled = False
+                ScratchDirectoryToolStripMenuItem.Enabled = False
+                ManageReportsToolStripMenuItem.Enabled = False
+            ElseIf e.Node.Name = "unattend_xml" Then
+                CopyDeploymentToolsToolStripMenuItem.Enabled = False
+                ImageOperationsToolStripMenuItem.Enabled = False
+                UnattendedAnswerFilesToolStripMenuItem1.Enabled = True
+                ScratchDirectoryToolStripMenuItem.Enabled = False
+                ManageReportsToolStripMenuItem.Enabled = False
+            ElseIf e.Node.Name = "scr_temp" Then
+                CopyDeploymentToolsToolStripMenuItem.Enabled = False
+                ImageOperationsToolStripMenuItem.Enabled = False
+                UnattendedAnswerFilesToolStripMenuItem1.Enabled = False
+                ScratchDirectoryToolStripMenuItem.Enabled = True
+                ManageReportsToolStripMenuItem.Enabled = False
+            ElseIf e.Node.Name = "reports" Then
+                CopyDeploymentToolsToolStripMenuItem.Enabled = False
+                ImageOperationsToolStripMenuItem.Enabled = False
+                UnattendedAnswerFilesToolStripMenuItem1.Enabled = False
+                ScratchDirectoryToolStripMenuItem.Enabled = False
+                ManageReportsToolStripMenuItem.Enabled = True
+            Else
+                CopyDeploymentToolsToolStripMenuItem.Enabled = False
+                ImageOperationsToolStripMenuItem.Enabled = False
+                UnattendedAnswerFilesToolStripMenuItem1.Enabled = False
+                ScratchDirectoryToolStripMenuItem.Enabled = False
+                ManageReportsToolStripMenuItem.Enabled = False
+            End If
             Dim pnt As Point = e.Location
             TreeViewCMS.Show(sender, pnt)
         End If
