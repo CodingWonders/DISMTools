@@ -186,6 +186,10 @@ Public Class MainForm
 
     Dim sessionMntDir As String = ""
 
+    Dim adkCopyArg As Integer
+    Dim currentArch As String
+    Dim archIntg As Integer
+
     <DllImport("user32.dll")>
     Shared Function GetActiveWindow() As IntPtr
     End Function
@@ -8603,5 +8607,113 @@ Public Class MainForm
             Dim pnt As Point = e.Location
             TreeViewCMS.Show(sender, pnt)
         End If
+    End Sub
+
+    ''' <summary>
+    ''' Copies the Windows ADK deployment tools to the project directory
+    ''' </summary>
+    ''' <param name="arch">The architecture to copy the files of</param>
+    ''' <remarks></remarks>
+    Sub CopyDeploymentTools(arch As Integer)
+        Try
+            Dim adkInst As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\WIMMount")
+            Dim adk As String = adkInst.GetValue("AdkInstallation").ToString()
+            If adk = "1" Then
+                ' Copy deployment tools. This will default to "Program Files\Windows Kits\10"
+                Select Case arch
+                    Case 0
+                        ' Copy all architectures
+                        If Directory.Exists(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools") Then
+                            Dim arches() As String = New String(3) {"x86", "amd64", "arm", "arm64"}
+                            For x = 0 To Array.LastIndexOf(arches, arches.Last)
+                                archIntg = x + 1
+                                currentArch = arches(x)
+                                ' Count files
+                                Dim fileCount As Integer = My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\" & arches(x), FileIO.SearchOption.SearchAllSubDirectories).Count
+                                ADKCopierBW.ReportProgress(0)
+                                Dim CurrentFileInt As Integer = 0
+                                For Each archFile In My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\" & arches(x), FileIO.SearchOption.SearchAllSubDirectories)
+                                    ADKCopierBW.ReportProgress(Math.Round(CurrentFileInt / fileCount, 2))
+                                    File.Copy(archFile, projPath & "\DandI\" & arches(x) & "\" & Path.GetFileName(archFile))
+                                Next
+                            Next
+                        End If
+                    Case 1
+                        ' Copy x86 architecture
+
+                    Case 2
+                        ' Copy AMD64 architecture
+
+                    Case 3
+                        ' Copy ARM architecture
+
+                    Case 4
+                        ' Copy ARM64 architecture
+
+                End Select
+            End If
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub ADKCopierBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ADKCopierBW.DoWork
+        If prjTreeView.SelectedNode.Name.StartsWith("dandi") Then
+            CopyDeploymentTools(adkCopyArg)
+        End If
+    End Sub
+
+    Private Sub OfAllArchitecturesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OfAllArchitecturesToolStripMenuItem.Click
+        adkCopyArg = 0
+        ADKCopierBW.RunWorkerAsync()
+    End Sub
+
+    Private Sub OfSelectedArchitectureToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OfSelectedArchitectureToolStripMenuItem.Click
+        If prjTreeView.SelectedNode.Name.EndsWith("x86") Then
+            adkCopyArg = 1
+        ElseIf prjTreeView.SelectedNode.Name.EndsWith("amd64") Then
+            adkCopyArg = 2
+        ElseIf prjTreeView.SelectedNode.Name.EndsWith("arm") Then
+            adkCopyArg = 3
+        ElseIf prjTreeView.SelectedNode.Name.EndsWith("arm64") Then
+            adkCopyArg = 4
+        End If
+        ADKCopierBW.RunWorkerAsync()
+    End Sub
+
+    Private Sub ForX86ArchitectureToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ForX86ArchitectureToolStripMenuItem.Click
+        adkCopyArg = 1
+        ADKCopierBW.RunWorkerAsync()
+    End Sub
+
+    Private Sub ForAmd64ArchitectureToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ForAmd64ArchitectureToolStripMenuItem.Click
+        adkCopyArg = 2
+        ADKCopierBW.RunWorkerAsync()
+    End Sub
+
+    Private Sub ForARMArchitectureToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ForARMArchitectureToolStripMenuItem.Click
+        adkCopyArg = 3
+        ADKCopierBW.RunWorkerAsync()
+    End Sub
+
+    Private Sub ForARM64ArchitectureToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ForARM64ArchitectureToolStripMenuItem.Click
+        adkCopyArg = 4
+        ADKCopierBW.RunWorkerAsync()
+    End Sub
+
+    Private Sub ADKCopierBW_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles ADKCopierBW.ProgressChanged
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        MenuDesc.Text = If(e.ProgressPercentage = 0, "Preparing to copy deployment tools..." & If(adkCopyArg = 0, "", ""), "Copying deployment tools for architecture (" & currentArch & ", " & e.ProgressPercentage & "%)" & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4", ""))
+                    Case "ESN"
+                        MenuDesc.Text = If(e.ProgressPercentage = 0, "Preparing to copy deployment tools..." & If(adkCopyArg = 0, "", ""), "Copying deployment tools for architecture (" & currentArch & ", " & e.ProgressPercentage & "%)" & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4", ""))
+                End Select
+            Case 1
+                MenuDesc.Text = If(e.ProgressPercentage = 0, "Preparing to copy deployment tools..." & If(adkCopyArg = 0, "", ""), "Copying deployment tools for architecture (" & currentArch & ", " & e.ProgressPercentage & "%)" & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4", ""))
+            Case 2
+
+        End Select
     End Sub
 End Class

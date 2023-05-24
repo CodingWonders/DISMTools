@@ -357,9 +357,9 @@ Partial Class MainForm
         Me.ResViewTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.TreeViewCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.ExpandToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AccessDirectoryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator23 = New System.Windows.Forms.ToolStripSeparator()
         Me.UnloadProjectToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AccessDirectoryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator24 = New System.Windows.Forms.ToolStripSeparator()
         Me.CopyDeploymentToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OfAllArchitecturesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -388,6 +388,7 @@ Partial Class MainForm
         Me.AddToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.NewFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExistingFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ADKCopierBW = New System.ComponentModel.BackgroundWorker()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -470,43 +471,43 @@ Partial Class MainForm
         'NewProjectToolStripMenuItem
         '
         Me.NewProjectToolStripMenuItem.Name = "NewProjectToolStripMenuItem"
-        Me.NewProjectToolStripMenuItem.Size = New System.Drawing.Size(187, 22)
+        Me.NewProjectToolStripMenuItem.Size = New System.Drawing.Size(186, 22)
         Me.NewProjectToolStripMenuItem.Text = "&New project..."
         '
         'OpenExistingProjectToolStripMenuItem
         '
         Me.OpenExistingProjectToolStripMenuItem.Name = "OpenExistingProjectToolStripMenuItem"
-        Me.OpenExistingProjectToolStripMenuItem.Size = New System.Drawing.Size(187, 22)
+        Me.OpenExistingProjectToolStripMenuItem.Size = New System.Drawing.Size(186, 22)
         Me.OpenExistingProjectToolStripMenuItem.Text = "&Open existing project"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(184, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(183, 6)
         '
         'SaveProjectToolStripMenuItem
         '
         Me.SaveProjectToolStripMenuItem.Enabled = False
         Me.SaveProjectToolStripMenuItem.Name = "SaveProjectToolStripMenuItem"
-        Me.SaveProjectToolStripMenuItem.Size = New System.Drawing.Size(187, 22)
+        Me.SaveProjectToolStripMenuItem.Size = New System.Drawing.Size(186, 22)
         Me.SaveProjectToolStripMenuItem.Text = "&Save project..."
         '
         'SaveProjectasToolStripMenuItem
         '
         Me.SaveProjectasToolStripMenuItem.Enabled = False
         Me.SaveProjectasToolStripMenuItem.Name = "SaveProjectasToolStripMenuItem"
-        Me.SaveProjectasToolStripMenuItem.Size = New System.Drawing.Size(187, 22)
+        Me.SaveProjectasToolStripMenuItem.Size = New System.Drawing.Size(186, 22)
         Me.SaveProjectasToolStripMenuItem.Text = "Save project &as..."
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(184, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(183, 6)
         '
         'ExitToolStripMenuItem
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(187, 22)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(186, 22)
         Me.ExitToolStripMenuItem.Text = "E&xit"
         '
         'ProjectToolStripMenuItem
@@ -520,41 +521,41 @@ Partial Class MainForm
         'ViewProjectFilesInFileExplorerToolStripMenuItem
         '
         Me.ViewProjectFilesInFileExplorerToolStripMenuItem.Name = "ViewProjectFilesInFileExplorerToolStripMenuItem"
-        Me.ViewProjectFilesInFileExplorerToolStripMenuItem.Size = New System.Drawing.Size(243, 22)
+        Me.ViewProjectFilesInFileExplorerToolStripMenuItem.Size = New System.Drawing.Size(242, 22)
         Me.ViewProjectFilesInFileExplorerToolStripMenuItem.Text = "View project files in File Explorer"
         '
         'UnloadProjectToolStripMenuItem
         '
         Me.UnloadProjectToolStripMenuItem.Name = "UnloadProjectToolStripMenuItem"
-        Me.UnloadProjectToolStripMenuItem.Size = New System.Drawing.Size(243, 22)
+        Me.UnloadProjectToolStripMenuItem.Size = New System.Drawing.Size(242, 22)
         Me.UnloadProjectToolStripMenuItem.Text = "Unload project..."
         '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(240, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(239, 6)
         '
         'SwitchImageIndexesToolStripMenuItem
         '
         Me.SwitchImageIndexesToolStripMenuItem.Name = "SwitchImageIndexesToolStripMenuItem"
-        Me.SwitchImageIndexesToolStripMenuItem.Size = New System.Drawing.Size(243, 22)
+        Me.SwitchImageIndexesToolStripMenuItem.Size = New System.Drawing.Size(242, 22)
         Me.SwitchImageIndexesToolStripMenuItem.Text = "Switch image indexes..."
         '
         'ToolStripSeparator11
         '
         Me.ToolStripSeparator11.Name = "ToolStripSeparator11"
-        Me.ToolStripSeparator11.Size = New System.Drawing.Size(240, 6)
+        Me.ToolStripSeparator11.Size = New System.Drawing.Size(239, 6)
         '
         'ProjectPropertiesToolStripMenuItem
         '
         Me.ProjectPropertiesToolStripMenuItem.Name = "ProjectPropertiesToolStripMenuItem"
-        Me.ProjectPropertiesToolStripMenuItem.Size = New System.Drawing.Size(243, 22)
+        Me.ProjectPropertiesToolStripMenuItem.Size = New System.Drawing.Size(242, 22)
         Me.ProjectPropertiesToolStripMenuItem.Text = "Project properties"
         '
         'ImagePropertiesToolStripMenuItem
         '
         Me.ImagePropertiesToolStripMenuItem.Name = "ImagePropertiesToolStripMenuItem"
-        Me.ImagePropertiesToolStripMenuItem.Size = New System.Drawing.Size(243, 22)
+        Me.ImagePropertiesToolStripMenuItem.Size = New System.Drawing.Size(242, 22)
         Me.ImagePropertiesToolStripMenuItem.Text = "Image properties"
         '
         'CommandsToolStripMenuItem
@@ -1245,7 +1246,7 @@ Partial Class MainForm
         '
         Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImageConversionToolStripMenuItem, Me.ToolStripSeparator12, Me.MergeSWM, Me.ToolStripSeparator18, Me.RemountImageWithWritePermissionsToolStripMenuItem, Me.ToolStripSeparator13, Me.CommandShellToolStripMenuItem, Me.ToolStripSeparator16, Me.UnattendedAnswerFileManagerToolStripMenuItem, Me.ReportManagerToolStripMenuItem, Me.MountedImageManagerTSMI, Me.ToolStripSeparator9, Me.ActionEditorToolStripMenuItem, Me.ToolStripSeparator22, Me.OptionsToolStripMenuItem})
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
-        Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(46, 20)
+        Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(48, 20)
         Me.ToolsToolStripMenuItem.Text = "&Tools"
         '
         'ImageConversionToolStripMenuItem
@@ -1638,7 +1639,7 @@ Partial Class MainForm
         Me.Label24.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label24.Location = New System.Drawing.Point(14, 14)
         Me.Label24.Name = "Label24"
-        Me.Label24.Size = New System.Drawing.Size(228, 30)
+        Me.Label24.Size = New System.Drawing.Size(231, 30)
         Me.Label24.TabIndex = 1
         Me.Label24.Text = "Welcome to DISMTools"
         '
@@ -1759,7 +1760,7 @@ Partial Class MainForm
         Me.LinkLabel10.LinkColor = System.Drawing.Color.DodgerBlue
         Me.LinkLabel10.Location = New System.Drawing.Point(81, 208)
         Me.LinkLabel10.Name = "LinkLabel10"
-        Me.LinkLabel10.Size = New System.Drawing.Size(169, 15)
+        Me.LinkLabel10.Size = New System.Drawing.Size(171, 15)
         Me.LinkLabel10.TabIndex = 4
         Me.LinkLabel10.TabStop = True
         Me.LinkLabel10.Text = "Getting started with DISMTools"
@@ -1771,7 +1772,7 @@ Partial Class MainForm
         Me.LinkLabel7.LinkColor = System.Drawing.Color.DodgerBlue
         Me.LinkLabel7.Location = New System.Drawing.Point(81, 125)
         Me.LinkLabel7.Name = "LinkLabel7"
-        Me.LinkLabel7.Size = New System.Drawing.Size(169, 15)
+        Me.LinkLabel7.Size = New System.Drawing.Size(171, 15)
         Me.LinkLabel7.TabIndex = 4
         Me.LinkLabel7.TabStop = True
         Me.LinkLabel7.Text = "Getting started with DISMTools"
@@ -1819,7 +1820,7 @@ Partial Class MainForm
         Me.LinkLabel4.LinkColor = System.Drawing.Color.DodgerBlue
         Me.LinkLabel4.Location = New System.Drawing.Point(81, 39)
         Me.LinkLabel4.Name = "LinkLabel4"
-        Me.LinkLabel4.Size = New System.Drawing.Size(139, 15)
+        Me.LinkLabel4.Size = New System.Drawing.Size(141, 15)
         Me.LinkLabel4.TabIndex = 4
         Me.LinkLabel4.TabStop = True
         Me.LinkLabel4.Text = "What's new in DISMTools"
@@ -1909,7 +1910,7 @@ Partial Class MainForm
         Me.Label34.ForeColor = System.Drawing.Color.FromArgb(CType(CType(85, Byte), Integer), CType(CType(85, Byte), Integer), CType(CType(85, Byte), Integer))
         Me.Label34.Location = New System.Drawing.Point(14, 8)
         Me.Label34.Name = "Label34"
-        Me.Label34.Size = New System.Drawing.Size(71, 20)
+        Me.Label34.Size = New System.Drawing.Size(72, 20)
         Me.Label34.TabIndex = 3
         Me.Label34.Text = "Welcome"
         '
@@ -1999,7 +2000,7 @@ Partial Class MainForm
         Me.Label7.AutoSize = True
         Me.Label7.Location = New System.Drawing.Point(11, 11)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(512, 15)
+        Me.Label7.Size = New System.Drawing.Size(514, 15)
         Me.Label7.TabIndex = 2
         Me.Label7.Text = "You are using a preview design of the Start Panel. You can go back to the old des" & _
     "ign at any time."
@@ -2089,7 +2090,7 @@ Partial Class MainForm
         Me.ExistingProjLink.LinkColor = System.Drawing.Color.DodgerBlue
         Me.ExistingProjLink.Location = New System.Drawing.Point(31, 132)
         Me.ExistingProjLink.Name = "ExistingProjLink"
-        Me.ExistingProjLink.Size = New System.Drawing.Size(129, 15)
+        Me.ExistingProjLink.Size = New System.Drawing.Size(128, 15)
         Me.ExistingProjLink.TabIndex = 2
         Me.ExistingProjLink.TabStop = True
         Me.ExistingProjLink.Text = "Open existing project..."
@@ -2314,7 +2315,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.44444!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.55556!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 51.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 53.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -2349,9 +2350,9 @@ Partial Class MainForm
         Me.LinkLabel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel1.Location = New System.Drawing.Point(94, 146)
+        Me.LinkLabel1.Location = New System.Drawing.Point(93, 146)
         Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(159, 254)
+        Me.LinkLabel1.Size = New System.Drawing.Size(160, 254)
         Me.LinkLabel1.TabIndex = 5
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "Click here to mount an image"
@@ -2361,9 +2362,9 @@ Partial Class MainForm
         Me.Panel8.Controls.Add(Me.projName)
         Me.Panel8.Controls.Add(Me.projNameText)
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel8.Location = New System.Drawing.Point(94, 3)
+        Me.Panel8.Location = New System.Drawing.Point(93, 3)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(107, 23)
+        Me.Panel8.Size = New System.Drawing.Size(106, 23)
         Me.Panel8.TabIndex = 8
         '
         'projName
@@ -2372,7 +2373,7 @@ Partial Class MainForm
         Me.projName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projName.Location = New System.Drawing.Point(0, 0)
         Me.projName.Name = "projName"
-        Me.projName.Size = New System.Drawing.Size(107, 23)
+        Me.projName.Size = New System.Drawing.Size(106, 23)
         Me.projName.TabIndex = 2
         Me.projName.Text = "projName"
         Me.projName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -2382,7 +2383,7 @@ Partial Class MainForm
         Me.projNameText.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projNameText.Location = New System.Drawing.Point(0, 0)
         Me.projNameText.Name = "projNameText"
-        Me.projNameText.Size = New System.Drawing.Size(107, 21)
+        Me.projNameText.Size = New System.Drawing.Size(106, 21)
         Me.projNameText.TabIndex = 4
         Me.projNameText.Text = "projName"
         Me.projNameText.Visible = False
@@ -2393,9 +2394,9 @@ Partial Class MainForm
         Me.Label5.AutoSize = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label5, 2)
         Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label5.Location = New System.Drawing.Point(94, 131)
+        Me.Label5.Location = New System.Drawing.Point(93, 131)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(159, 15)
+        Me.Label5.Size = New System.Drawing.Size(160, 15)
         Me.Label5.TabIndex = 2
         Me.Label5.Text = "imgStatus"
         '
@@ -2405,7 +2406,7 @@ Partial Class MainForm
         Me.Label2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label2.Location = New System.Drawing.Point(3, 29)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(85, 102)
+        Me.Label2.Size = New System.Drawing.Size(84, 102)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "Location:"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2415,9 +2416,9 @@ Partial Class MainForm
         Me.Label3.AutoEllipsis = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label3, 2)
         Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label3.Location = New System.Drawing.Point(94, 29)
+        Me.Label3.Location = New System.Drawing.Point(93, 29)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(159, 102)
+        Me.Label3.Size = New System.Drawing.Size(160, 102)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "projPath"
         '
@@ -2428,7 +2429,7 @@ Partial Class MainForm
         Me.Label4.Location = New System.Drawing.Point(3, 131)
         Me.Label4.Name = "Label4"
         Me.TableLayoutPanel2.SetRowSpan(Me.Label4, 2)
-        Me.Label4.Size = New System.Drawing.Size(85, 269)
+        Me.Label4.Size = New System.Drawing.Size(84, 269)
         Me.Label4.TabIndex = 1
         Me.Label4.Text = "Images mounted?"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2439,7 +2440,7 @@ Partial Class MainForm
         Me.Panel9.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel9.Location = New System.Drawing.Point(3, 3)
         Me.Panel9.Name = "Panel9"
-        Me.Panel9.Size = New System.Drawing.Size(85, 23)
+        Me.Panel9.Size = New System.Drawing.Size(84, 23)
         Me.Panel9.TabIndex = 9
         '
         'Label1
@@ -2447,7 +2448,7 @@ Partial Class MainForm
         Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label1.Location = New System.Drawing.Point(0, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(85, 23)
+        Me.Label1.Size = New System.Drawing.Size(84, 23)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Name:"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -2986,7 +2987,7 @@ Partial Class MainForm
         Me.Label6.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label6.Location = New System.Drawing.Point(16, 16)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(323, 30)
+        Me.Label6.Size = New System.Drawing.Size(324, 30)
         Me.Label6.TabIndex = 0
         Me.Label6.Text = "Welcome to this servicing session"
         '
@@ -3098,7 +3099,7 @@ Partial Class MainForm
         Me.ExpandCollapseTSB.Image = CType(resources.GetObject("ExpandCollapseTSB.Image"), System.Drawing.Image)
         Me.ExpandCollapseTSB.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ExpandCollapseTSB.Name = "ExpandCollapseTSB"
-        Me.ExpandCollapseTSB.Size = New System.Drawing.Size(66, 22)
+        Me.ExpandCollapseTSB.Size = New System.Drawing.Size(65, 22)
         Me.ExpandCollapseTSB.Text = "Expand"
         '
         'prjTreeStatus
@@ -3278,30 +3279,30 @@ Partial Class MainForm
         '
         Me.TreeViewCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExpandToolStripMenuItem, Me.AccessDirectoryToolStripMenuItem, Me.ToolStripSeparator23, Me.UnloadProjectToolStripMenuItem1, Me.ToolStripSeparator24, Me.CopyDeploymentToolsToolStripMenuItem, Me.ToolStripSeparator27, Me.ImageOperationsToolStripMenuItem, Me.ToolStripSeparator30, Me.UnattendedAnswerFilesToolStripMenuItem1, Me.ToolStripSeparator31, Me.ScratchDirectoryToolStripMenuItem, Me.ToolStripSeparator32, Me.ManageReportsToolStripMenuItem, Me.ToolStripSeparator33, Me.AddToolStripMenuItem})
         Me.TreeViewCMS.Name = "TreeViewCMS"
-        Me.TreeViewCMS.Size = New System.Drawing.Size(201, 266)
+        Me.TreeViewCMS.Size = New System.Drawing.Size(201, 244)
         '
         'ExpandToolStripMenuItem
         '
         Me.ExpandToolStripMenuItem.Name = "ExpandToolStripMenuItem"
-        Me.ExpandToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
+        Me.ExpandToolStripMenuItem.Size = New System.Drawing.Size(200, 22)
         Me.ExpandToolStripMenuItem.Text = "Expand item"
-        '
-        'ToolStripSeparator23
-        '
-        Me.ToolStripSeparator23.Name = "ToolStripSeparator23"
-        Me.ToolStripSeparator23.Size = New System.Drawing.Size(157, 6)
-        '
-        'UnloadProjectToolStripMenuItem1
-        '
-        Me.UnloadProjectToolStripMenuItem1.Name = "UnloadProjectToolStripMenuItem1"
-        Me.UnloadProjectToolStripMenuItem1.Size = New System.Drawing.Size(160, 22)
-        Me.UnloadProjectToolStripMenuItem1.Text = "Unload project"
         '
         'AccessDirectoryToolStripMenuItem
         '
         Me.AccessDirectoryToolStripMenuItem.Name = "AccessDirectoryToolStripMenuItem"
-        Me.AccessDirectoryToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
+        Me.AccessDirectoryToolStripMenuItem.Size = New System.Drawing.Size(200, 22)
         Me.AccessDirectoryToolStripMenuItem.Text = "Access directory"
+        '
+        'ToolStripSeparator23
+        '
+        Me.ToolStripSeparator23.Name = "ToolStripSeparator23"
+        Me.ToolStripSeparator23.Size = New System.Drawing.Size(197, 6)
+        '
+        'UnloadProjectToolStripMenuItem1
+        '
+        Me.UnloadProjectToolStripMenuItem1.Name = "UnloadProjectToolStripMenuItem1"
+        Me.UnloadProjectToolStripMenuItem1.Size = New System.Drawing.Size(200, 22)
+        Me.UnloadProjectToolStripMenuItem1.Text = "Unload project"
         '
         'ToolStripSeparator24
         '
@@ -3318,42 +3319,42 @@ Partial Class MainForm
         'OfAllArchitecturesToolStripMenuItem
         '
         Me.OfAllArchitecturesToolStripMenuItem.Name = "OfAllArchitecturesToolStripMenuItem"
-        Me.OfAllArchitecturesToolStripMenuItem.Size = New System.Drawing.Size(291, 22)
+        Me.OfAllArchitecturesToolStripMenuItem.Size = New System.Drawing.Size(199, 22)
         Me.OfAllArchitecturesToolStripMenuItem.Text = "Of all architectures"
         '
         'OfSelectedArchitectureToolStripMenuItem
         '
         Me.OfSelectedArchitectureToolStripMenuItem.Name = "OfSelectedArchitectureToolStripMenuItem"
-        Me.OfSelectedArchitectureToolStripMenuItem.Size = New System.Drawing.Size(291, 22)
+        Me.OfSelectedArchitectureToolStripMenuItem.Size = New System.Drawing.Size(199, 22)
         Me.OfSelectedArchitectureToolStripMenuItem.Text = "Of selected architecture"
         '
         'ToolStripSeparator25
         '
         Me.ToolStripSeparator25.Name = "ToolStripSeparator25"
-        Me.ToolStripSeparator25.Size = New System.Drawing.Size(288, 6)
+        Me.ToolStripSeparator25.Size = New System.Drawing.Size(196, 6)
         '
         'ForX86ArchitectureToolStripMenuItem
         '
         Me.ForX86ArchitectureToolStripMenuItem.Name = "ForX86ArchitectureToolStripMenuItem"
-        Me.ForX86ArchitectureToolStripMenuItem.Size = New System.Drawing.Size(291, 22)
+        Me.ForX86ArchitectureToolStripMenuItem.Size = New System.Drawing.Size(199, 22)
         Me.ForX86ArchitectureToolStripMenuItem.Text = "For x86 architecture"
         '
         'ForAmd64ArchitectureToolStripMenuItem
         '
         Me.ForAmd64ArchitectureToolStripMenuItem.Name = "ForAmd64ArchitectureToolStripMenuItem"
-        Me.ForAmd64ArchitectureToolStripMenuItem.Size = New System.Drawing.Size(291, 22)
+        Me.ForAmd64ArchitectureToolStripMenuItem.Size = New System.Drawing.Size(199, 22)
         Me.ForAmd64ArchitectureToolStripMenuItem.Text = "For AMD64 architecture"
         '
         'ForARMArchitectureToolStripMenuItem
         '
         Me.ForARMArchitectureToolStripMenuItem.Name = "ForARMArchitectureToolStripMenuItem"
-        Me.ForARMArchitectureToolStripMenuItem.Size = New System.Drawing.Size(291, 22)
+        Me.ForARMArchitectureToolStripMenuItem.Size = New System.Drawing.Size(199, 22)
         Me.ForARMArchitectureToolStripMenuItem.Text = "For ARM architecture"
         '
         'ForARM64ArchitectureToolStripMenuItem
         '
         Me.ForARM64ArchitectureToolStripMenuItem.Name = "ForARM64ArchitectureToolStripMenuItem"
-        Me.ForARM64ArchitectureToolStripMenuItem.Size = New System.Drawing.Size(291, 22)
+        Me.ForARM64ArchitectureToolStripMenuItem.Size = New System.Drawing.Size(199, 22)
         Me.ForARM64ArchitectureToolStripMenuItem.Text = "For ARM64 architecture"
         '
         'ToolStripSeparator27
@@ -3458,14 +3459,19 @@ Partial Class MainForm
         'NewFileToolStripMenuItem
         '
         Me.NewFileToolStripMenuItem.Name = "NewFileToolStripMenuItem"
-        Me.NewFileToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.NewFileToolStripMenuItem.Size = New System.Drawing.Size(142, 22)
         Me.NewFileToolStripMenuItem.Text = "New file..."
         '
         'ExistingFileToolStripMenuItem
         '
         Me.ExistingFileToolStripMenuItem.Name = "ExistingFileToolStripMenuItem"
-        Me.ExistingFileToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.ExistingFileToolStripMenuItem.Size = New System.Drawing.Size(142, 22)
         Me.ExistingFileToolStripMenuItem.Text = "Existing file..."
+        '
+        'ADKCopierBW
+        '
+        Me.ADKCopierBW.WorkerReportsProgress = True
+        Me.ADKCopierBW.WorkerSupportsCancellation = True
         '
         'MainForm
         '
@@ -3929,4 +3935,5 @@ Partial Class MainForm
     Friend WithEvents AddToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents NewFileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ExistingFileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ADKCopierBW As System.ComponentModel.BackgroundWorker
 End Class
