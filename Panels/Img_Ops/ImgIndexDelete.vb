@@ -249,6 +249,10 @@ Public Class ImgIndexDelete
 
     Sub GetImageIndexInfo(SourceImage As String)
         If MainForm.MountedImageDetectorBW.IsBusy Then MainForm.MountedImageDetectorBW.CancelAsync()
+        While MainForm.MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Threading.Thread.Sleep(100)
+        End While
         RemoveHandler ListView1.ItemChecked, AddressOf ListView1_ItemChecked
         ' Clear arrays
         Array.Clear(IndexNames, 0, IndexNames.Length)
