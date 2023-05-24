@@ -8630,26 +8630,199 @@ Public Class MainForm
                                 currentArch = arches(x)
                                 ' Count files
                                 Dim fileCount As Integer = My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\" & arches(x), FileIO.SearchOption.SearchAllSubDirectories).Count
-                                ADKCopierBW.ReportProgress(0)
+                                Select Case Language
+                                    Case 0
+                                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                            Case "ENG"
+                                                MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
+                                            Case "ESN"
+                                                MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
+                                        End Select
+                                    Case 1
+                                        MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
+                                    Case 2
+                                        MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
+                                End Select
                                 Dim CurrentFileInt As Integer = 0
+                                For Each folder In My.Computer.FileSystem.GetDirectories(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\" & arches(x), FileIO.SearchOption.SearchAllSubDirectories)
+                                    Directory.CreateDirectory(folder.Replace(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\" & arches(x), projPath & "\DandI\" & arches(x)))
+                                Next
                                 For Each archFile In My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\" & arches(x), FileIO.SearchOption.SearchAllSubDirectories)
+                                    Select Case Language
+                                        Case 0
+                                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                                Case "ENG"
+                                                    MenuDesc.Text = "Copying deployment tools for architecture (" & currentArch & ", " & (Math.Round(CurrentFileInt / fileCount, 2) * 100) & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
+                                                Case "ESN"
+                                                    MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (" & currentArch & ", " & (Math.Round(CurrentFileInt / fileCount, 2) * 100) & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
+                                            End Select
+                                        Case 1
+                                            MenuDesc.Text = "Copying deployment tools for architecture (" & currentArch & ", " & (Math.Round(CurrentFileInt / fileCount, 2) * 100) & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
+                                        Case 2
+                                            MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (" & currentArch & ", " & (Math.Round(CurrentFileInt / fileCount, 2) * 100) & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
+                                    End Select
                                     ADKCopierBW.ReportProgress(Math.Round(CurrentFileInt / fileCount, 2))
-                                    File.Copy(archFile, projPath & "\DandI\" & arches(x) & "\" & Path.GetFileName(archFile))
+                                    File.Copy(archFile, archFile.Replace(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\" & arches(x), projPath & "\DandI\" & arches(x)), True)
+                                    CurrentFileInt += 1
                                 Next
                             Next
                         End If
                     Case 1
                         ' Copy x86 architecture
-
+                        ' Count files
+                        Dim fileCount As Integer = My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\x86", FileIO.SearchOption.SearchAllSubDirectories).Count
+                        Select Case Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
+                                    Case "ESN"
+                                        MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
+                                End Select
+                            Case 1
+                                MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
+                            Case 2
+                                MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
+                        End Select
+                        Dim CurrentFileInt As Integer = 0
+                        For Each folder In My.Computer.FileSystem.GetDirectories(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\x86", FileIO.SearchOption.SearchAllSubDirectories)
+                            Directory.CreateDirectory(folder.Replace(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\x86", projPath & "\DandI\x86"))
+                        Next
+                        For Each archFile In My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\x86", FileIO.SearchOption.SearchAllSubDirectories)
+                            Select Case Language
+                                Case 0
+                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                        Case "ENG"
+                                            MenuDesc.Text = "Copying deployment tools for architecture (x86, " & (Math.Round(CurrentFileInt / fileCount, 2) * 100) & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
+                                        Case "ESN"
+                                            MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (x86, " & (Math.Round(CurrentFileInt / fileCount, 2) * 100) & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
+                                    End Select
+                                Case 1
+                                    MenuDesc.Text = "Copying deployment tools for architecture (x86, " & (Math.Round(CurrentFileInt / fileCount, 2) * 100) & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
+                                Case 2
+                                    MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (x86, " & (Math.Round(CurrentFileInt / fileCount, 2) * 100) & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
+                            End Select
+                            ADKCopierBW.ReportProgress(Math.Round(CurrentFileInt / fileCount, 2))
+                            File.Copy(archFile, archFile.Replace(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\x86", projPath & "\DandI\x86"), True)
+                            CurrentFileInt += 1
+                        Next
                     Case 2
                         ' Copy AMD64 architecture
-
+                        ' Count files
+                        Dim fileCount As Integer = My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64", FileIO.SearchOption.SearchAllSubDirectories).Count
+                        Select Case Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
+                                    Case "ESN"
+                                        MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
+                                End Select
+                            Case 1
+                                MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
+                            Case 2
+                                MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
+                        End Select
+                        Dim CurrentFileInt As Integer = 0
+                        For Each folder In My.Computer.FileSystem.GetDirectories(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64", FileIO.SearchOption.SearchAllSubDirectories)
+                            Directory.CreateDirectory(folder.Replace(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64", projPath & "\DandI\amd64"))
+                        Next
+                        For Each archFile In My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64", FileIO.SearchOption.SearchAllSubDirectories)
+                            Select Case Language
+                                Case 0
+                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                        Case "ENG"
+                                            MenuDesc.Text = "Copying deployment tools for architecture (amd64, " & (Math.Round(CurrentFileInt / fileCount, 2) * 100) & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
+                                        Case "ESN"
+                                            MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (amd64, " & (Math.Round(CurrentFileInt / fileCount, 2) * 100) & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
+                                    End Select
+                                Case 1
+                                    MenuDesc.Text = "Copying deployment tools for architecture (amd64, " & (Math.Round(CurrentFileInt / fileCount, 2) * 100) & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
+                                Case 2
+                                    MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (amd64, " & (Math.Round(CurrentFileInt / fileCount, 2) * 100) & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
+                            End Select
+                            ADKCopierBW.ReportProgress(Math.Round(CurrentFileInt / fileCount, 2))
+                            File.Copy(archFile, archFile.Replace(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64", projPath & "\DandI\amd64"), True)
+                            CurrentFileInt += 1
+                        Next
                     Case 3
                         ' Copy ARM architecture
-
+                        ' Count files
+                        Dim fileCount As Integer = My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm", FileIO.SearchOption.SearchAllSubDirectories).Count
+                        Select Case Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
+                                    Case "ESN"
+                                        MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
+                                End Select
+                            Case 1
+                                MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
+                            Case 2
+                                MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
+                        End Select
+                        Dim CurrentFileInt As Integer = 0
+                        For Each folder In My.Computer.FileSystem.GetDirectories(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm", FileIO.SearchOption.SearchAllSubDirectories)
+                            Directory.CreateDirectory(folder.Replace(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm", projPath & "\DandI\arm"))
+                        Next
+                        For Each archFile In My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm", FileIO.SearchOption.SearchAllSubDirectories)
+                            Select Case Language
+                                Case 0
+                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                        Case "ENG"
+                                            MenuDesc.Text = "Copying deployment tools for architecture (arm, " & (Math.Round(CurrentFileInt / fileCount, 2) * 100) & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
+                                        Case "ESN"
+                                            MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (arm, " & (Math.Round(CurrentFileInt / fileCount, 2) * 100) & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
+                                    End Select
+                                Case 1
+                                    MenuDesc.Text = "Copying deployment tools for architecture (arm, " & (Math.Round(CurrentFileInt / fileCount, 2) * 100) & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
+                                Case 2
+                                    MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (arm, " & (Math.Round(CurrentFileInt / fileCount, 2) * 100) & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
+                            End Select
+                            ADKCopierBW.ReportProgress(Math.Round(CurrentFileInt / fileCount, 2))
+                            File.Copy(archFile, archFile.Replace(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm", projPath & "\DandI\arm"), True)
+                            CurrentFileInt += 1
+                        Next
                     Case 4
                         ' Copy ARM64 architecture
-
+                        ' Count files
+                        Dim fileCount As Integer = My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm64", FileIO.SearchOption.SearchAllSubDirectories).Count
+                        Select Case Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
+                                    Case "ESN"
+                                        MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
+                                End Select
+                            Case 1
+                                MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
+                            Case 2
+                                MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
+                        End Select
+                        Dim CurrentFileInt As Integer = 0
+                        For Each folder In My.Computer.FileSystem.GetDirectories(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm64", FileIO.SearchOption.SearchAllSubDirectories)
+                            Directory.CreateDirectory(folder.Replace(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm64", projPath & "\DandI\arm64"))
+                        Next
+                        For Each archFile In My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm64", FileIO.SearchOption.SearchAllSubDirectories)
+                            Select Case Language
+                                Case 0
+                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                        Case "ENG"
+                                            MenuDesc.Text = "Copying deployment tools for architecture (arm64, " & (Math.Round(CurrentFileInt / fileCount, 2) * 100) & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
+                                        Case "ESN"
+                                            MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (arm64, " & (Math.Round(CurrentFileInt / fileCount, 2) * 100) & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
+                                    End Select
+                                Case 1
+                                    MenuDesc.Text = "Copying deployment tools for architecture (arm64, " & (Math.Round(CurrentFileInt / fileCount, 2) * 100) & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
+                                Case 2
+                                    MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (arm64, " & (Math.Round(CurrentFileInt / fileCount, 2) * 100) & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
+                            End Select
+                            ADKCopierBW.ReportProgress(Math.Round(CurrentFileInt / fileCount, 2))
+                            File.Copy(archFile, archFile.Replace(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm64", projPath & "\DandI\arm64"), True)
+                            CurrentFileInt += 1
+                        Next
                 End Select
             End If
         Catch ex As Exception
@@ -8701,19 +8874,19 @@ Public Class MainForm
         ADKCopierBW.RunWorkerAsync()
     End Sub
 
-    Private Sub ADKCopierBW_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles ADKCopierBW.ProgressChanged
+    Private Sub ADKCopierBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ADKCopierBW.RunWorkerCompleted
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENG"
-                        MenuDesc.Text = If(e.ProgressPercentage = 0, "Preparing to copy deployment tools..." & If(adkCopyArg = 0, "", ""), "Copying deployment tools for architecture (" & currentArch & ", " & e.ProgressPercentage & "%)" & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4", ""))
+                        MenuDesc.Text = "Deployment tools were copied to the project successfully"
                     Case "ESN"
-                        MenuDesc.Text = If(e.ProgressPercentage = 0, "Preparing to copy deployment tools..." & If(adkCopyArg = 0, "", ""), "Copying deployment tools for architecture (" & currentArch & ", " & e.ProgressPercentage & "%)" & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4", ""))
+                        MenuDesc.Text = "Las herramientas de implementación fueron copiadas al proyecto satisfactoriamente"
                 End Select
             Case 1
-                MenuDesc.Text = If(e.ProgressPercentage = 0, "Preparing to copy deployment tools..." & If(adkCopyArg = 0, "", ""), "Copying deployment tools for architecture (" & currentArch & ", " & e.ProgressPercentage & "%)" & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4", ""))
+                MenuDesc.Text = "Deployment tools were copied to the project successfully"
             Case 2
-
+                MenuDesc.Text = "Las herramientas de implementación fueron copiadas al proyecto satisfactoriamente"
         End Select
     End Sub
 End Class
