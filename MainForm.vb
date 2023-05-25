@@ -6928,6 +6928,10 @@ Public Class MainForm
 
     Private Sub Button14_Click(sender As Object, e As EventArgs) Handles Button14.Click, ProjectPropertiesToolStripMenuItem.Click
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         ProjProperties.TabControl1.SelectedIndex = 0
         Select Case Language
             Case 0
@@ -6952,6 +6956,10 @@ Public Class MainForm
 
     Private Sub Button15_Click(sender As Object, e As EventArgs) Handles ImagePropertiesToolStripMenuItem.Click, Button15.Click
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         ProjProperties.TabControl1.SelectedIndex = 1
         Select Case Language
             Case 0
@@ -6997,7 +7005,15 @@ Public Class MainForm
         If OnlineManagement Then
             EndOnlineManagement()
             MountedImageDetectorBW.CancelAsync()
+            While MountedImageDetectorBW.IsBusy
+                Application.DoEvents()
+                Thread.Sleep(100)
+            End While
             If MountedImgMgr.DetectorBW.IsBusy Then MountedImgMgr.DetectorBW.CancelAsync()
+            While MountedImgMgr.DetectorBW.IsBusy
+                Application.DoEvents()
+                Thread.Sleep(100)
+            End While
         End If
         If isProjectLoaded Then
             If isModified Then
@@ -7030,7 +7046,15 @@ Public Class MainForm
             SaveDTSettings()
         End If
         MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         If MountedImgMgr.DetectorBW.IsBusy Then MountedImgMgr.DetectorBW.CancelAsync()
+        While MountedImgMgr.DetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
     End Sub
 
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
@@ -7080,6 +7104,10 @@ Public Class MainForm
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         ImgMount.ShowDialog()
     End Sub
 
@@ -7355,6 +7383,10 @@ Public Class MainForm
 
     Private Sub ImgBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ImgBW.DoWork
         MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         If bwAllBackgroundProcesses Then
             If bwGetImageInfo Then
                 If bwGetAdvImgInfo Then

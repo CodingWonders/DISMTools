@@ -293,6 +293,10 @@ Public Class MountedImgMgr
 
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
         If MainForm.MountedImageDetectorBW.IsBusy Then MainForm.MountedImageDetectorBW.CancelAsync()
+        While MainForm.MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Threading.Thread.Sleep(100)
+        End While
         ImgIndexDelete.TextBox1.Text = ListView1.FocusedItem.SubItems(0).Text
         ImgIndexDelete.ShowDialog()
     End Sub

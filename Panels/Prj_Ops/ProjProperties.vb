@@ -26,6 +26,10 @@ Public Class ProjProperties
     ''' <remarks></remarks>
     Sub DetectImageProperties()
         If MainForm.MountedImageDetectorBW.IsBusy Then MainForm.MountedImageDetectorBW.CancelAsync()
+        While MainForm.MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Threading.Thread.Sleep(100)
+        End While
         DismApi.Initialize(DismLogLevel.LogErrors)
         ' Detect mounted images to find the loaded one
         Try

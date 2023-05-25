@@ -297,6 +297,10 @@ Public Class ImgApply
 
     Sub GetMaxIndexCount(ImgFile As String)
         If MainForm.MountedImageDetectorBW.IsBusy Then MainForm.MountedImageDetectorBW.CancelAsync()
+        While MainForm.MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Threading.Thread.Sleep(100)
+        End While
         Dim imgInfo As DismImageInfoCollection = Nothing
         Try
             imgInfo = DismApi.GetImageInfo(TextBox1.Text)

@@ -4827,6 +4827,10 @@ Public Class ProgressPanel
         Language = MainForm.Language
         ' Cancel detector background worker which can interfere with image operations and cause crashes due to access violations
         MainForm.MountedImageDetectorBW.CancelAsync()
+        While MainForm.MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         ' Go through all mounted images to determine which one to get info from with the DISM API,
         ' if a project has been loaded and if that project has a mounted image
         If MainForm.isProjectLoaded And MainForm.IsImageMounted Then
