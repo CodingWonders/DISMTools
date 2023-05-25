@@ -94,6 +94,8 @@ Public Class MainForm
     ' - Progress panel -
     Public AutoLogs As Boolean
     Public AutoScrDir As Boolean
+    ' - Appearance -
+    Public AllCaps As Boolean
 
     ' Background process initiator settings
     Public bwBackgroundProcessAction As Integer
@@ -850,6 +852,16 @@ Public Class MainForm
                     ProgressPanelStyle = 0
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("SecondaryProgressPanelStyle=1") Then
                     ProgressPanelStyle = 1
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("AllCaps=0") Then
+                    AllCaps = False
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("AllCaps=1") Then
+                    AllCaps = True
+                    FileToolStripMenuItem.Text = FileToolStripMenuItem.Text.ToUpper()
+                    ProjectToolStripMenuItem.Text = ProjectToolStripMenuItem.Text.ToUpper()
+                    CommandsToolStripMenuItem.Text = CommandsToolStripMenuItem.Text.ToUpper()
+                    ToolsToolStripMenuItem.Text = ToolsToolStripMenuItem.Text.ToUpper()
+                    HelpToolStripMenuItem.Text = HelpToolStripMenuItem.Text.ToUpper()
                 End If
                 ' Detect log file level: 1 - Errors only
                 '                        2 - Errors and warnings
@@ -3008,6 +3020,7 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontSi=10")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontBold=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SecondaryProgressPanelStyle=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\Logs\DISM\DISM.log" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=3")
@@ -3080,6 +3093,11 @@ Public Class MainForm
                     Case 1
                         DTSettingForm.RichTextBox2.AppendText(CrLf & "SecondaryProgressPanelStyle=1")
                 End Select
+                If AllCaps Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=0")
+                End If
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
                 DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & LogFile & Quote)
                 Select Case LogLevel

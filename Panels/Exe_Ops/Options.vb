@@ -134,6 +134,7 @@ Public Class Options
             MainForm.EnglishOutput = False
         End If
         Dim ti As TextInfo = New CultureInfo("en-US", False).TextInfo
+        MainForm.AllCaps = CheckBox9.Checked
         If CheckBox9.Checked Then
             MainForm.FileToolStripMenuItem.Text = MainForm.FileToolStripMenuItem.Text.ToUpper()
             MainForm.ProjectToolStripMenuItem.Text = MainForm.ProjectToolStripMenuItem.Text.ToUpper()
@@ -961,6 +962,7 @@ Public Class Options
         CheckBox10.Checked = MainForm.AutoLogs
         CheckBox12.Checked = MainForm.StartupRemount
         CheckBox13.Checked = MainForm.StartupUpdateCheck
+        CheckBox9.Checked = MainForm.AllCaps
     End Sub
 
     Private Sub ComboBox5_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox5.SelectedIndexChanged
