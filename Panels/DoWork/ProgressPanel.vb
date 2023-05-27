@@ -1641,7 +1641,7 @@ Public Class ProgressPanel
                     Dim pkgIsInstalled As Boolean
                     Try
                         DismApi.Initialize(DismLogLevel.LogErrors)
-                        Using imgSession As DismSession = DismApi.OpenOfflineSession(mntString)
+                        Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
                             Dim pkgInfo As DismPackageInfo = DismApi.GetPackageInfoByPath(imgSession, pkgs(x))
                             LogView.AppendText(CrLf & CrLf & _
                                                "- Package name: " & pkgInfo.PackageName & CrLf & _
@@ -1791,7 +1791,7 @@ Public Class ProgressPanel
                     Directory.CreateDirectory(Application.StartupPath & "\tempinfo")
                     Try
                         DismApi.Initialize(DismLogLevel.LogErrors)
-                        Using imgSession As DismSession = DismApi.OpenOfflineSession(mntString)
+                        Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
                             Dim pkgInfo As DismPackageInfo = DismApi.GetPackageInfoByName(imgSession, pkgRemovalNames(x))
                             LogView.AppendText(CrLf & CrLf & _
                                                "- Package name: " & pkgInfo.PackageName & CrLf)
@@ -1876,7 +1876,7 @@ Public Class ProgressPanel
                     Directory.CreateDirectory(Application.StartupPath & "\tempinfo")
                     Try
                         DismApi.Initialize(DismLogLevel.LogErrors)
-                        Using imgSession As DismSession = DismApi.OpenOfflineSession(mntString)
+                        Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
                             Dim pkgInfo As DismPackageInfo = DismApi.GetPackageInfoByPath(imgSession, pkgRemovalFiles(x))
                             LogView.AppendText(CrLf & CrLf & _
                                                "- Package name: " & pkgInfo.PackageName & CrLf)
@@ -2049,7 +2049,7 @@ Public Class ProgressPanel
                 CurrentPB.Value = x + 1
                 Try
                     DismApi.Initialize(DismLogLevel.LogErrors)
-                    Using imgSession As DismSession = DismApi.OpenOfflineSession(mntString)
+                    Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
                         Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim())
                         LogView.AppendText(CrLf & CrLf &
                                            "- Feature name: " & featInfo.FeatureName & CrLf &
@@ -2192,7 +2192,7 @@ Public Class ProgressPanel
                 CurrentPB.Value = x + 1
                 Try
                     DismApi.Initialize(DismLogLevel.LogErrors)
-                    Using imgSession As DismSession = DismApi.OpenOfflineSession(mntString)
+                    Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
                         Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim())
                         LogView.AppendText(CrLf & CrLf &
                                            "- Feature name: " & featInfo.FeatureName & CrLf &
@@ -2898,7 +2898,7 @@ Public Class ProgressPanel
                 ' Try opening the session. If API is not initialized, initialize it
                 Try
                     DismApi.Initialize(DismLogLevel.LogErrors)
-                    Using imgSession As DismSession = DismApi.OpenOfflineSession(mntString)
+                    Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
                         ' Get capability information
                         Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, capAdditionIds(x))
                         LogView.AppendText(CrLf & CrLf & _
@@ -3032,7 +3032,7 @@ Public Class ProgressPanel
                                    "Capability " & (x + 1) & " of " & capRemovalCount)
                 Try
                     DismApi.Initialize(DismLogLevel.LogErrors)
-                    Using imgSession As DismSession = DismApi.OpenOfflineSession(mntString)
+                    Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
                         Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, capRemovalIds(x))
                         LogView.AppendText(CrLf & CrLf & _
                                            "- Capability identity: " & capInfo.DisplayName & CrLf & _
@@ -3152,7 +3152,7 @@ Public Class ProgressPanel
                 If Not File.GetAttributes(drvAdditionPkgs(x)) = FileAttributes.Directory Then
                     Try
                         DismApi.Initialize(DismLogLevel.LogErrors)
-                        Using imgSession As DismSession = DismApi.OpenOfflineSession(mntString)
+                        Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
                             Dim drvInfoCollection As DismDriverCollection = DismApi.GetDriverInfo(imgSession, drvAdditionPkgs(x))
                             If drvInfoCollection.Count > 0 Then
                                 For Each drvInfo As DismDriver In drvInfoCollection
@@ -3269,7 +3269,7 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & "Getting image drivers. This may take some time..." & CrLf)
             Try
                 DismApi.Initialize(DismLogLevel.LogErrors)
-                Using imgSession As DismSession = DismApi.OpenOfflineSession(mntString)
+                Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
                     drvCollection = DismApi.GetDrivers(imgSession, True)
                 End Using
             Finally
@@ -3313,7 +3313,7 @@ Public Class ProgressPanel
                 ' Get driver information
                 Try
                     DismApi.Initialize(DismLogLevel.LogErrors)
-                    Using imgSession As DismSession = DismApi.OpenOfflineSession(mntString)
+                    Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
                         For Each drv As DismDriverPackage In drvCollection
                             If drv.PublishedName = drvRemovalPkgs(x) Then
                                 LogView.AppendText(CrLf & CrLf & _
@@ -4750,6 +4750,8 @@ Public Class ProgressPanel
             ElseIf errCode = "800F0806" Then
                 ' There are pending image operations
                 LogView.AppendText(CrLf & "The operation could not be performed because this image has pending online operations. Applying and booting up the image might fix this issue.")
+            ElseIf errCode = "BC2" Then
+                LogView.AppendText(CrLf & "The specified operation completed successfully, but requires a restart in order to be fully applied. Save your work and restart when ready")
             Else
                 ' Errors that weren't added to the database
                 LogView.AppendText(CrLf & "This error has not yet been added to the database, so a useful description can't be shown now. Try running the command manually and, if you see the same error, try looking it up on the Internet.")
