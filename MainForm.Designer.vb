@@ -389,6 +389,8 @@ Partial Class MainForm
         Me.NewFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExistingFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ADKCopierBW = New System.ComponentModel.BackgroundWorker()
+        Me.ToolStripSeparator26 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ShowValidationFormToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -1244,7 +1246,7 @@ Partial Class MainForm
         '
         'ToolsToolStripMenuItem
         '
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImageConversionToolStripMenuItem, Me.ToolStripSeparator12, Me.MergeSWM, Me.ToolStripSeparator18, Me.RemountImageWithWritePermissionsToolStripMenuItem, Me.ToolStripSeparator13, Me.CommandShellToolStripMenuItem, Me.ToolStripSeparator16, Me.UnattendedAnswerFileManagerToolStripMenuItem, Me.ReportManagerToolStripMenuItem, Me.MountedImageManagerTSMI, Me.ToolStripSeparator9, Me.ActionEditorToolStripMenuItem, Me.ToolStripSeparator22, Me.OptionsToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImageConversionToolStripMenuItem, Me.ToolStripSeparator12, Me.MergeSWM, Me.ToolStripSeparator18, Me.RemountImageWithWritePermissionsToolStripMenuItem, Me.ToolStripSeparator13, Me.CommandShellToolStripMenuItem, Me.ToolStripSeparator16, Me.UnattendedAnswerFileManagerToolStripMenuItem, Me.ReportManagerToolStripMenuItem, Me.MountedImageManagerTSMI, Me.ToolStripSeparator9, Me.ActionEditorToolStripMenuItem, Me.ToolStripSeparator22, Me.OptionsToolStripMenuItem, Me.ToolStripSeparator26, Me.ShowValidationFormToolStripMenuItem})
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(46, 20)
         Me.ToolsToolStripMenuItem.Text = "&Tools"
@@ -2316,7 +2318,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.44444!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.55556!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 57.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 58.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -2351,9 +2353,9 @@ Partial Class MainForm
         Me.LinkLabel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel1.Location = New System.Drawing.Point(91, 146)
+        Me.LinkLabel1.Location = New System.Drawing.Point(90, 146)
         Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(162, 254)
+        Me.LinkLabel1.Size = New System.Drawing.Size(163, 254)
         Me.LinkLabel1.TabIndex = 5
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "Click here to mount an image"
@@ -2363,7 +2365,7 @@ Partial Class MainForm
         Me.Panel8.Controls.Add(Me.projName)
         Me.Panel8.Controls.Add(Me.projNameText)
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel8.Location = New System.Drawing.Point(91, 3)
+        Me.Panel8.Location = New System.Drawing.Point(90, 3)
         Me.Panel8.Name = "Panel8"
         Me.Panel8.Size = New System.Drawing.Size(104, 23)
         Me.Panel8.TabIndex = 8
@@ -2395,9 +2397,9 @@ Partial Class MainForm
         Me.Label5.AutoSize = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label5, 2)
         Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label5.Location = New System.Drawing.Point(91, 131)
+        Me.Label5.Location = New System.Drawing.Point(90, 131)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(162, 15)
+        Me.Label5.Size = New System.Drawing.Size(163, 15)
         Me.Label5.TabIndex = 2
         Me.Label5.Text = "imgStatus"
         '
@@ -2407,7 +2409,7 @@ Partial Class MainForm
         Me.Label2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label2.Location = New System.Drawing.Point(3, 29)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(82, 102)
+        Me.Label2.Size = New System.Drawing.Size(81, 102)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "Location:"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2417,9 +2419,9 @@ Partial Class MainForm
         Me.Label3.AutoEllipsis = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label3, 2)
         Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label3.Location = New System.Drawing.Point(91, 29)
+        Me.Label3.Location = New System.Drawing.Point(90, 29)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(162, 102)
+        Me.Label3.Size = New System.Drawing.Size(163, 102)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "projPath"
         '
@@ -2430,7 +2432,7 @@ Partial Class MainForm
         Me.Label4.Location = New System.Drawing.Point(3, 131)
         Me.Label4.Name = "Label4"
         Me.TableLayoutPanel2.SetRowSpan(Me.Label4, 2)
-        Me.Label4.Size = New System.Drawing.Size(82, 269)
+        Me.Label4.Size = New System.Drawing.Size(81, 269)
         Me.Label4.TabIndex = 1
         Me.Label4.Text = "Images mounted?"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2441,7 +2443,7 @@ Partial Class MainForm
         Me.Panel9.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel9.Location = New System.Drawing.Point(3, 3)
         Me.Panel9.Name = "Panel9"
-        Me.Panel9.Size = New System.Drawing.Size(82, 23)
+        Me.Panel9.Size = New System.Drawing.Size(81, 23)
         Me.Panel9.TabIndex = 9
         '
         'Label1
@@ -2449,7 +2451,7 @@ Partial Class MainForm
         Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label1.Location = New System.Drawing.Point(0, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(82, 23)
+        Me.Label1.Size = New System.Drawing.Size(81, 23)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Name:"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -3474,6 +3476,17 @@ Partial Class MainForm
         Me.ADKCopierBW.WorkerReportsProgress = True
         Me.ADKCopierBW.WorkerSupportsCancellation = True
         '
+        'ToolStripSeparator26
+        '
+        Me.ToolStripSeparator26.Name = "ToolStripSeparator26"
+        Me.ToolStripSeparator26.Size = New System.Drawing.Size(277, 6)
+        '
+        'ShowValidationFormToolStripMenuItem
+        '
+        Me.ShowValidationFormToolStripMenuItem.Name = "ShowValidationFormToolStripMenuItem"
+        Me.ShowValidationFormToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
+        Me.ShowValidationFormToolStripMenuItem.Text = "Show validation form"
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -3937,4 +3950,6 @@ Partial Class MainForm
     Friend WithEvents NewFileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ExistingFileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ADKCopierBW As System.ComponentModel.BackgroundWorker
+    Friend WithEvents ToolStripSeparator26 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents ShowValidationFormToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class

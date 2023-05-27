@@ -8943,4 +8943,9 @@ Public Class MainForm
                 End Select
         End Select
     End Sub
+
+    Private Sub ShowValidationFormToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ShowValidationFormToolStripMenuItem.Click
+        ValidationForm.Left = 0
+        ValidationForm.Show()
+    End Sub
 End Class
