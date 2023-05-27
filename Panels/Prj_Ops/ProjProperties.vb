@@ -240,25 +240,25 @@ Public Class ProjProperties
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
                         Case 1
-                            File.WriteAllText(".\bin\exthelpers\imginfo.bat",
+                            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat",
                                               "@echo off" & CrLf &
                                               "dism /English /get-wiminfo /wimfile=" & Quote & MainForm.SourceImg & Quote & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot", ASCII)
                         Case Is >= 2
-                            File.WriteAllText(".\bin\exthelpers\imginfo.bat",
+                            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat",
                                               "@echo off" & CrLf &
                                               "dism /English /get-imageinfo /imagefile=" & Quote & MainForm.SourceImg & Quote & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot", ASCII)
                     End Select
                 Case 10
-                    File.WriteAllText(".\bin\exthelpers\imginfo.bat",
+                    File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat",
                                       "@echo off" & CrLf &
                                       "dism /English /get-imageinfo /imagefile=" & Quote & MainForm.SourceImg & Quote & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot", ASCII)
             End Select
             If Debugger.IsAttached Then
-                Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\imginfo.bat").WaitForExit()
+                Process.Start("\Windows\system32\notepad.exe", Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
             End If
             Using WIMBootProc As New Process()
                 WIMBootProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
-                WIMBootProc.StartInfo.Arguments = "/c " & Quote & Directory.GetCurrentDirectory() & "\bin\exthelpers\imginfo.bat" & Quote
+                WIMBootProc.StartInfo.Arguments = "/c " & Quote & Application.StartupPath & "\bin\exthelpers\imginfo.bat" & Quote
                 WIMBootProc.StartInfo.CreateNoWindow = True
                 WIMBootProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
                 WIMBootProc.Start()
@@ -274,7 +274,7 @@ Public Class ProjProperties
                     Next
                     Directory.Delete(MainForm.projPath & "\tempinfo")
                 End If
-                File.Delete(".\bin\exthelpers\imginfo.bat")
+                File.Delete(Application.StartupPath & "\bin\exthelpers\imginfo.bat")
             Catch ex As Exception
 
             End Try

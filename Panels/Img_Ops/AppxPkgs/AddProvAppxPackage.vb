@@ -736,10 +736,10 @@ Public Class AddProvAppxPackage
             End If
             GetApplicationStoreLogoAssets(pkgName, True, False, Package, currentAppxName)
         Else
-            If Directory.Exists(".\appxscan") Then Directory.Delete(".\appxscan", True)
-            Directory.CreateDirectory(".\appxscan")
-            AppxScanner.StartInfo.FileName = ".\bin\utils\7z.exe"
-            AppxScanner.StartInfo.Arguments = "e " & Quote & Package & Quote & " " & Quote & If(Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase), "appxmetadata\appxbundlemanifest.xml", "appxmanifest.xml") & Quote & " -o.\appxscan"
+            If Directory.Exists(Application.StartupPath & "\appxscan") Then Directory.Delete(Application.StartupPath & "\appxscan", True)
+            Directory.CreateDirectory(Application.StartupPath & "\appxscan")
+            AppxScanner.StartInfo.FileName = Application.StartupPath & "\bin\utils\7z.exe"
+            AppxScanner.StartInfo.Arguments = "e " & Quote & Package & Quote & " " & Quote & If(Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase), "appxmetadata\appxbundlemanifest.xml", "appxmanifest.xml") & Quote & " -o" & Quote & Application.StartupPath & "\appxscan" & Quote
             AppxScanner.StartInfo.CreateNoWindow = True
             AppxScanner.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
             AppxScanner.Start()
@@ -750,7 +750,7 @@ Public Class AddProvAppxPackage
             Loop
             If AppxScanner.ExitCode = 0 Then
                 If Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase) Then
-                    ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(".\appxscan\AppxBundleManifest.xml")
+                    ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\appxscan\AppxBundleManifest.xml")
                     Dim IdScanner As String = ScannerRTB.Lines(If(ScannerRTB.Lines(2).EndsWith("<!--"), 10, 4))
                     Dim CharIndex As Integer = 0
                     Dim CharNext As Integer
@@ -934,7 +934,7 @@ Public Class AddProvAppxPackage
                         AppxVersion = AppxVersionList.ToArray()
                     End If
                 Else
-                    ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(".\appxscan\AppxManifest.xml")
+                    ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\appxscan\AppxManifest.xml")
                     If ScannerRTB.Lines(2).EndsWith("<!--") Then
                         Dim IdScanner As String = ScannerRTB.Lines(9)
                         Dim CharIndex As Integer = 0
@@ -1101,8 +1101,8 @@ Public Class AddProvAppxPackage
                         Case 2
                             MsgBox("El paquete que desea añadir ya está añadido a la lista, y todas sus propiedades coinciden con las propiedades del paquete especificado. No añadiremos el paquete especificado", vbOKOnly + vbCritical, Label1.Text)
                     End Select
-                    If Directory.Exists(".\appxscan") Then
-                        Directory.Delete(".\appxscan", True)
+                    If Directory.Exists(Application.StartupPath & "\appxscan") Then
+                        Directory.Delete(Application.StartupPath & "\appxscan", True)
                     End If
                     Exit Sub
                 ElseIf Item.SubItems(2).Text = currentAppxName And Not Item.SubItems(3).Text = currentAppxPublisher Then
@@ -1140,8 +1140,8 @@ Public Class AddProvAppxPackage
                         Item.SubItems(3).Text = currentAppxPublisher
                         Item.SubItems(4).Text = currentAppxVersion
                     Else
-                        If Directory.Exists(".\appxscan") Then
-                            Directory.Delete(".\appxscan", True)
+                        If Directory.Exists(Application.StartupPath & "\appxscan") Then
+                            Directory.Delete(Application.StartupPath & "\appxscan", True)
                         End If
                     End If
                     Exit Sub
@@ -1183,8 +1183,8 @@ Public Class AddProvAppxPackage
                         Item.SubItems(3).Text = currentAppxPublisher
                         Item.SubItems(4).Text = currentAppxVersion
                     Else
-                        If Directory.Exists(".\appxscan") Then
-                            Directory.Delete(".\appxscan", True)
+                        If Directory.Exists(Application.StartupPath & "\appxscan") Then
+                            Directory.Delete(Application.StartupPath & "\appxscan", True)
                         End If
                     End If
                     Exit Sub
@@ -1221,8 +1221,8 @@ Public Class AddProvAppxPackage
                 End If
         End Select
         Button3.Enabled = True
-        If Directory.Exists(".\appxscan") Then
-            Directory.Delete(".\appxscan", True)
+        If Directory.Exists(Application.StartupPath & "\appxscan") Then
+            Directory.Delete(Application.StartupPath & "\appxscan", True)
         End If
     End Sub
 
@@ -1238,90 +1238,119 @@ Public Class AddProvAppxPackage
     Sub GetApplicationStoreLogoAssets(PackageName As String, IsDirectory As Boolean, IsBundlePackage As Boolean, SourcePackage As String, AppxPackageName As String)
         ' The assets from the main package are enough for us. The current AppX XML schema also puts these in the Assets folder, so
         ' getting them should be a breeze
-        If IsDirectory Then
-            If File.Exists(SourcePackage & "\AppxMetadata\AppxBundleManifest.xml") Then
-                ' APPXBUNDLE/MSIXBUNDLE
-                AppxScanner.StartInfo.Arguments = "x " & Quote & SourcePackage & "\" & PackageName & Quote & " -o.\appxscan"
-                AppxScanner.Start()
-                Do Until AppxScanner.HasExited
-                    If AppxScanner.HasExited Then
-                        Exit Do
+        Try
+            If IsDirectory Then
+                If File.Exists(SourcePackage & "\AppxMetadata\AppxBundleManifest.xml") Then
+                    ' APPXBUNDLE/MSIXBUNDLE
+                    AppxScanner.StartInfo.Arguments = "x " & Quote & SourcePackage & "\" & PackageName & Quote & " -o" & Quote & Application.StartupPath & "\appxscan" & Quote
+                    AppxScanner.Start()
+                    Do Until AppxScanner.HasExited
+                        If AppxScanner.HasExited Then
+                            Exit Do
+                        End If
+                    Loop
+                    If Not Directory.Exists(Application.StartupPath & "\temp\storeassets") Then Directory.CreateDirectory(Application.StartupPath & "\temp\storeassets").Attributes = FileAttributes.Hidden
+                    If AppxScanner.ExitCode = 0 Then
+                        Directory.CreateDirectory(Application.StartupPath & "\temp\storeassets\" & AppxPackageName)
+                        If My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & AppxPackageName).Count <= 0 Then
+                            For Each AssetFile In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\appxscan\Assets", FileIO.SearchOption.SearchTopLevelOnly)
+                                If Path.GetFileNameWithoutExtension(AssetFile).StartsWith("small", StringComparison.OrdinalIgnoreCase) Then
+                                    File.Copy(AssetFile, Application.StartupPath & "\temp\storeassets\" & Path.GetFileName(AssetFile))
+                                ElseIf Path.GetFileNameWithoutExtension(AssetFile).StartsWith("store", StringComparison.OrdinalIgnoreCase) Then
+                                    File.Copy(AssetFile, Application.StartupPath & "\temp\storeassets\" & Path.GetFileName(AssetFile))
+                                ElseIf Path.GetFileNameWithoutExtension(AssetFile).StartsWith("large", StringComparison.OrdinalIgnoreCase) Then
+                                    File.Copy(AssetFile, Application.StartupPath & "\temp\storeassets\" & Path.GetFileName(AssetFile))
+                                End If
+                            Next
+                        End If
                     End If
-                Loop
-                If Not Directory.Exists(Directory.GetCurrentDirectory() & "\temp\storeassets") Then Directory.CreateDirectory(Directory.GetCurrentDirectory() & "\temp\storeassets").Attributes = FileAttributes.Hidden
-                If AppxScanner.ExitCode = 0 Then
-                    Directory.CreateDirectory(Directory.GetCurrentDirectory() & "\temp\storeassets\" & AppxPackageName)
-                    If My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & AppxPackageName).Count <= 0 Then
-                        For Each AssetFile In My.Computer.FileSystem.GetFiles(".\appxscan\Assets", FileIO.SearchOption.SearchTopLevelOnly)
+                    Directory.Delete(Application.StartupPath & "\appxscan", True)
+                ElseIf File.Exists(SourcePackage & "\AppxManifest.xml") Then
+                    ' APPX/MSIX
+                    If Not Directory.Exists(Application.StartupPath & "\temp\storeassets") Then Directory.CreateDirectory(Application.StartupPath & "\temp\storeassets").Attributes = FileAttributes.Hidden
+                    If My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & AppxPackageName).Count <= 0 Then
+                        For Each AssetFile In My.Computer.FileSystem.GetFiles(SourcePackage & "\Assets", FileIO.SearchOption.SearchTopLevelOnly)
                             If Path.GetFileNameWithoutExtension(AssetFile).StartsWith("small", StringComparison.OrdinalIgnoreCase) Then
-                                File.Copy(AssetFile, Directory.GetCurrentDirectory() & "\temp\storeassets\" & Path.GetFileName(AssetFile))
+                                File.Copy(AssetFile, Application.StartupPath & "\temp\storeassets\" & Path.GetFileName(AssetFile))
                             ElseIf Path.GetFileNameWithoutExtension(AssetFile).StartsWith("store", StringComparison.OrdinalIgnoreCase) Then
-                                File.Copy(AssetFile, Directory.GetCurrentDirectory() & "\temp\storeassets\" & Path.GetFileName(AssetFile))
+                                File.Copy(AssetFile, Application.StartupPath & "\temp\storeassets\" & Path.GetFileName(AssetFile))
                             ElseIf Path.GetFileNameWithoutExtension(AssetFile).StartsWith("large", StringComparison.OrdinalIgnoreCase) Then
-                                File.Copy(AssetFile, Directory.GetCurrentDirectory() & "\temp\storeassets\" & Path.GetFileName(AssetFile))
+                                File.Copy(AssetFile, Application.StartupPath & "\temp\storeassets\" & Path.GetFileName(AssetFile))
                             End If
                         Next
                     End If
-                End If
-                Directory.Delete(".\appxscan", True)
-            ElseIf File.Exists(SourcePackage & "\AppxManifest.xml") Then
-                ' APPX/MSIX
-                If Not Directory.Exists(Directory.GetCurrentDirectory() & "\temp\storeassets") Then Directory.CreateDirectory(Directory.GetCurrentDirectory() & "\temp\storeassets").Attributes = FileAttributes.Hidden
-                If My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & AppxPackageName).Count <= 0 Then
-                    For Each AssetFile In My.Computer.FileSystem.GetFiles(SourcePackage & "\Assets", FileIO.SearchOption.SearchTopLevelOnly)
-                        If Path.GetFileNameWithoutExtension(AssetFile).StartsWith("small", StringComparison.OrdinalIgnoreCase) Then
-                            File.Copy(AssetFile, Directory.GetCurrentDirectory() & "\temp\storeassets\" & Path.GetFileName(AssetFile))
-                        ElseIf Path.GetFileNameWithoutExtension(AssetFile).StartsWith("store", StringComparison.OrdinalIgnoreCase) Then
-                            File.Copy(AssetFile, Directory.GetCurrentDirectory() & "\temp\storeassets\" & Path.GetFileName(AssetFile))
-                        ElseIf Path.GetFileNameWithoutExtension(AssetFile).StartsWith("large", StringComparison.OrdinalIgnoreCase) Then
-                            File.Copy(AssetFile, Directory.GetCurrentDirectory() & "\temp\storeassets\" & Path.GetFileName(AssetFile))
-                        End If
-                    Next
+                Else
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    MsgBox("Could not get application store logo assets from this package - cannot read from manifest", vbOKOnly + vbCritical, "Add provisioned AppX packages")
+                                Case "ESN"
+                                    MsgBox("No se pudo obtener recursos de logotipos de este paquete - no se puede leer el manifiesto", vbOKOnly + vbCritical, "Añadir paquetes aprovisionados AppX")
+                            End Select
+                        Case 1
+                            MsgBox("Could not get application store logo assets from this package - cannot read from manifest", vbOKOnly + vbCritical, "Add provisioned AppX packages")
+                        Case 2
+                            MsgBox("No se pudo obtener recursos de logotipos de este paquete - no se puede leer el manifiesto", vbOKOnly + vbCritical, "Añadir paquetes aprovisionados AppX")
+                    End Select
                 End If
             Else
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                MsgBox("Could not get application store logo assets from this package - cannot read from manifest", vbOKOnly + vbCritical, "Add provisioned AppX packages")
-                            Case "ESN"
-                                MsgBox("No se pudo obtener recursos de logotipos de este paquete - no se puede leer el manifiesto", vbOKOnly + vbCritical, "Añadir paquetes aprovisionados AppX")
-                        End Select
-                    Case 1
-                        MsgBox("Could not get application store logo assets from this package - cannot read from manifest", vbOKOnly + vbCritical, "Add provisioned AppX packages")
-                    Case 2
-                        MsgBox("No se pudo obtener recursos de logotipos de este paquete - no se puede leer el manifiesto", vbOKOnly + vbCritical, "Añadir paquetes aprovisionados AppX")
-                End Select
-            End If
-        Else
-            If IsBundlePackage Then
-                AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & PackageName & Quote & " -o.\appxscan"
-                AppxScanner.Start()
-                Do Until AppxScanner.HasExited
-                    If AppxScanner.HasExited Then
-                        Exit Do
+                If IsBundlePackage Then
+                    AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & PackageName & Quote & " -o" & Quote & Application.StartupPath & "\appxscan" & Quote
+                    AppxScanner.Start()
+                    Do Until AppxScanner.HasExited
+                        If AppxScanner.HasExited Then
+                            Exit Do
+                        End If
+                    Loop
+                    If Not Directory.Exists(Application.StartupPath & "\temp\storeassets") Then Directory.CreateDirectory(Application.StartupPath & "\temp\storeassets").Attributes = FileAttributes.Hidden
+                    If AppxScanner.ExitCode = 0 Then
+                        Directory.CreateDirectory(Application.StartupPath & "\temp\storeassets\" & AppxPackageName)
+                        If My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & AppxPackageName).Count <= 0 Then
+                            ' Try extracting small, store and large assets
+                            AppxScanner.StartInfo.Arguments = "e " & Quote & Application.StartupPath & "\appxscan\" & PackageName & Quote & " " & Quote & "Assets\small*" & Quote & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
+                            AppxScanner.Start()
+                            Do Until AppxScanner.HasExited
+                                If AppxScanner.HasExited Then
+                                    Exit Do
+                                End If
+                            Loop
+                            AppxScanner.StartInfo.Arguments = "e " & Quote & Application.StartupPath & "\appxscan\" & PackageName & Quote & " " & Quote & "Assets\store*" & Quote & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
+                            AppxScanner.Start()
+                            Do Until AppxScanner.HasExited
+                                If AppxScanner.HasExited Then
+                                    Exit Do
+                                End If
+                            Loop
+                            AppxScanner.StartInfo.Arguments = "e " & Quote & Application.StartupPath & "\appxscan\" & PackageName & Quote & " " & Quote & "Assets\large*" & Quote & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
+                            AppxScanner.Start()
+                            Do Until AppxScanner.HasExited
+                                If AppxScanner.HasExited Then
+                                    Exit Do
+                                End If
+                            Loop
+                        End If
                     End If
-                Loop
-                If Not Directory.Exists(Directory.GetCurrentDirectory() & "\temp\storeassets") Then Directory.CreateDirectory(Directory.GetCurrentDirectory() & "\temp\storeassets").Attributes = FileAttributes.Hidden
-                If AppxScanner.ExitCode = 0 Then
-                    Directory.CreateDirectory(Directory.GetCurrentDirectory() & "\temp\storeassets\" & AppxPackageName)
-                    If My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & AppxPackageName).Count <= 0 Then
+                Else
+                    If Not Directory.Exists(Application.StartupPath & "\temp\storeassets") Then Directory.CreateDirectory(Application.StartupPath & "\temp\storeassets").Attributes = FileAttributes.Hidden
+                    Directory.CreateDirectory(Application.StartupPath & "\temp\storeassets\" & AppxPackageName)
+                    If My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & AppxPackageName).Count <= 0 Then
                         ' Try extracting small, store and large assets
-                        AppxScanner.StartInfo.Arguments = "e " & Quote & Directory.GetCurrentDirectory() & "\appxscan\" & PackageName & Quote & " " & Quote & "Assets\small*" & Quote & " -o" & Quote & ".\temp\storeassets\" & AppxPackageName & Quote
+                        AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & "Assets\small*" & Quote & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
                         AppxScanner.Start()
                         Do Until AppxScanner.HasExited
                             If AppxScanner.HasExited Then
                                 Exit Do
                             End If
                         Loop
-                        AppxScanner.StartInfo.Arguments = "e " & Quote & Directory.GetCurrentDirectory() & "\appxscan\" & PackageName & Quote & " " & Quote & "Assets\store*" & Quote & " -o" & Quote & ".\temp\storeassets\" & AppxPackageName & Quote
+                        AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & "Assets\store*" & Quote & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
                         AppxScanner.Start()
                         Do Until AppxScanner.HasExited
                             If AppxScanner.HasExited Then
                                 Exit Do
                             End If
                         Loop
-                        AppxScanner.StartInfo.Arguments = "e " & Quote & Directory.GetCurrentDirectory() & "\appxscan\" & PackageName & Quote & " " & Quote & "Assets\large*" & Quote & " -o" & Quote & ".\temp\storeassets\" & AppxPackageName & Quote
+                        AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & "Assets\large*" & Quote & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
                         AppxScanner.Start()
                         Do Until AppxScanner.HasExited
                             If AppxScanner.HasExited Then
@@ -1330,35 +1359,10 @@ Public Class AddProvAppxPackage
                         Loop
                     End If
                 End If
-            Else
-                If Not Directory.Exists(Directory.GetCurrentDirectory() & "\temp\storeassets") Then Directory.CreateDirectory(Directory.GetCurrentDirectory() & "\temp\storeassets").Attributes = FileAttributes.Hidden
-                Directory.CreateDirectory(Directory.GetCurrentDirectory() & "\temp\storeassets\" & AppxPackageName)
-                If My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & AppxPackageName).Count <= 0 Then
-                    ' Try extracting small, store and large assets
-                    AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & "Assets\small*" & Quote & " -o" & Quote & ".\temp\storeassets\" & AppxPackageName & Quote
-                    AppxScanner.Start()
-                    Do Until AppxScanner.HasExited
-                        If AppxScanner.HasExited Then
-                            Exit Do
-                        End If
-                    Loop
-                    AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & "Assets\store*" & Quote & " -o" & Quote & ".\temp\storeassets\" & AppxPackageName & Quote
-                    AppxScanner.Start()
-                    Do Until AppxScanner.HasExited
-                        If AppxScanner.HasExited Then
-                            Exit Do
-                        End If
-                    Loop
-                    AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & "Assets\large*" & Quote & " -o" & Quote & ".\temp\storeassets\" & AppxPackageName & Quote
-                    AppxScanner.Start()
-                    Do Until AppxScanner.HasExited
-                        If AppxScanner.HasExited Then
-                            Exit Do
-                        End If
-                    Loop
-                End If
             End If
-        End If
+        Catch ex As Exception
+            Debug.WriteLine("Could not get store logo assets. Reason: " & ex.ToString())
+        End Try
     End Sub
 
     Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
@@ -1440,10 +1444,10 @@ Public Class AddProvAppxPackage
             End Try
         End If
         Try
-            If Directory.Exists(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text) And My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count > 0 Then
+            If Directory.Exists(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text) And My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count > 0 Then
                 PictureBox2.SizeMode = PictureBoxSizeMode.Zoom
                 Dim asset As Image = Nothing
-                For Each StoreAsset In My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text)
+                For Each StoreAsset In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text)
                     If Path.GetExtension(StoreAsset).EndsWith("png") Then
                         asset = Image.FromFile(StoreAsset)
                         If asset.Width / asset.Height = 1 Then      ' Determine if the image's aspect ratio is 1:1
@@ -1457,8 +1461,9 @@ Public Class AddProvAppxPackage
                 PictureBox2.SizeMode = PictureBoxSizeMode.CenterImage
                 PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.preview_unavail_dark, My.Resources.preview_unavail_light)
             End If
-        Catch ex As NullReferenceException
-
+        Catch ex As Exception
+            PictureBox2.SizeMode = PictureBoxSizeMode.CenterImage
+            PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.preview_unavail_dark, My.Resources.preview_unavail_light)
         End Try
     End Sub
 
@@ -1471,7 +1476,7 @@ Public Class AddProvAppxPackage
     End Sub
 
     Private Sub PictureBox2_Click(sender As Object, e As EventArgs) Handles PictureBox2.Click
-        If My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0 Then Exit Sub
+        If My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0 Then Exit Sub
         HidePopupForm()
         With LogoAssetPopupForm
             .BackColor = BackColor
@@ -1502,9 +1507,9 @@ Public Class AddProvAppxPackage
                 .Dock = DockStyle.Fill
                 .SizeMode = PictureBoxSizeMode.Zoom
                 Try
-                    If Directory.Exists(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text) And My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count > 0 Then
+                    If Directory.Exists(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text) And My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count > 0 Then
                         Dim asset As Image = Nothing
-                        For Each StoreAsset In My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text)
+                        For Each StoreAsset In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text)
                             If Path.GetExtension(StoreAsset).EndsWith("png") Then
                                 asset = Image.FromFile(StoreAsset)
                                 If asset.Width / asset.Height = 1 Then      ' Determine if the image's aspect ratio is 1:1
@@ -1535,19 +1540,35 @@ Public Class AddProvAppxPackage
     End Sub
 
     Private Sub PictureBox2_MouseHover(sender As Object, e As EventArgs) Handles PictureBox2.MouseHover
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
-                        previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "The logo assets for this file could not be detected", "Click here to enlarge the view"))
-                    Case "ESN"
-                        previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Los recursos de este archivo no pudieron ser detectados", "Haga clic para agrandar la vista"))
-                End Select
-            Case 1
-                previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "The logo assets for this file could not be detected", "Click here to enlarge the view"))
-            Case 2
-                previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Directory.GetCurrentDirectory() & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Los recursos de este archivo no pudieron ser detectados", "Haga clic para agrandar la vista"))
-        End Select
+        Try
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "The logo assets for this file could not be detected", "Click here to enlarge the view"))
+                        Case "ESN"
+                            previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Los recursos de este archivo no pudieron ser detectados", "Haga clic para agrandar la vista"))
+                    End Select
+                Case 1
+                    previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "The logo assets for this file could not be detected", "Click here to enlarge the view"))
+                Case 2
+                    previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Los recursos de este archivo no pudieron ser detectados", "Haga clic para agrandar la vista"))
+            End Select
+        Catch ex As Exception
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            previewer.SetToolTip(sender, "The logo assets for this file could not be detected")
+                        Case "ESN"
+                            previewer.SetToolTip(sender, "Los recursos de este archivo no pudieron ser detectados")
+                    End Select
+                Case 1
+                    previewer.SetToolTip(sender, "The logo assets for this file could not be detected")
+                Case 2
+                    previewer.SetToolTip(sender, "Los recursos de este archivo no pudieron ser detectados")
+            End Select
+        End Try
     End Sub
 
     Private Sub ListView1_DragEnter(sender As Object, e As DragEventArgs) Handles ListView1.DragEnter

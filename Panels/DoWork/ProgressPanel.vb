@@ -581,7 +581,7 @@ Public Class ProgressPanel
     ''' </summary>
     ''' <remarks>These settings can be configured at any time using the Options dialog</remarks>
     Sub GatherInitialSwitches()
-        CommandArgs = "/logpath=" & Quote & If(AutoLogs, Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now), LogPath) & Quote & " /loglevel=" & LogLevel & If(UseScratchDir, If(AutoScratch, If(OnlineMgmt, " /scratchdir=" & Quote & Application.StartupPath & "\scratch" & Quote, " /scratchdir=" & Quote & projPath & "\scr_temp"), If(ScratchDirPath <> "", " /scratchdir=" & Quote & ScratchDirPath & Quote, "")), "") & If(EnglishOut, " /english", "")
+        CommandArgs = "/logpath=" & Quote & If(AutoLogs, Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now), LogPath) & Quote & " /loglevel=" & LogLevel & If(UseScratchDir, If(AutoScratch, If(OnlineMgmt, " /scratchdir=" & Quote & Application.StartupPath & "\scratch" & Quote, " /scratchdir=" & Quote & projPath & "\scr_temp"), If(ScratchDirPath <> "", " /scratchdir=" & Quote & ScratchDirPath & Quote, "")), "") & If(EnglishOut, " /english", "")
         BckArgs = CommandArgs
     End Sub
 
@@ -754,10 +754,10 @@ Public Class ProgressPanel
                         Case 1
                             ' It seems like it's not available :(
                         Case Is >= 2
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /apply-image /imagefile=" & Quote & ApplicationSourceImg & Quote & " /index=" & ApplicationIndex
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /apply-image /imagefile=" & Quote & ApplicationSourceImg & Quote & " /index=" & ApplicationIndex
                     End Select
                 Case 10
-                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /apply-image /imagefile=" & Quote & ApplicationSourceImg & Quote & " /index=" & ApplicationIndex
+                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /apply-image /imagefile=" & Quote & ApplicationSourceImg & Quote & " /index=" & ApplicationIndex
             End Select
             ' Detect additional options and set CommandArgs
             If ApplicationDestDrive = "" Then
@@ -874,10 +874,10 @@ Public Class ProgressPanel
                         Case 1
                             ' Not available
                         Case Is >= 2
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /capture-image /imagefile=" & Quote & CaptureDestinationImage & Quote & " /capturedir=" & Quote & CaptureSourceDir & Quote & " /name=" & Quote & CaptureName & Quote
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /capture-image /imagefile=" & Quote & CaptureDestinationImage & Quote & " /capturedir=" & Quote & CaptureSourceDir & Quote & " /name=" & Quote & CaptureName & Quote
                     End Select
                 Case 10
-                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /capture-image /imagefile=" & Quote & CaptureDestinationImage & Quote & " /capturedir=" & Quote & CaptureSourceDir & Quote & " /name=" & Quote & CaptureName & Quote
+                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /capture-image /imagefile=" & Quote & CaptureDestinationImage & Quote & " /capturedir=" & Quote & CaptureSourceDir & Quote & " /name=" & Quote & CaptureName & Quote
             End Select
             ' Get additional options
             If CaptureDescription = "" Then
@@ -1013,12 +1013,12 @@ Public Class ProgressPanel
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
                         Case 1
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /commit-wim /mountdir=" & Quote & MountDir & Quote
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /commit-wim /mountdir=" & Quote & MountDir & Quote
                         Case Is >= 2
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /commit-image /mountdir=" & Quote & MountDir & Quote
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /commit-image /mountdir=" & Quote & MountDir & Quote
                     End Select
                 Case 10
-                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /commit-image /mountdir=" & Quote & MountDir & Quote
+                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /commit-image /mountdir=" & Quote & MountDir & Quote
             End Select
             ' TODO: Add additional options later
             DISMProc.StartInfo.Arguments = CommandArgs
@@ -1115,7 +1115,7 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & _
                                    "- " & imgIndexDeletionNames(x) & "...")
                 DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /delete-image /imagefile=" & Quote & imgIndexDeletionSourceImg & Quote & " /name=" & Quote & imgIndexDeletionNames(x) & Quote
+                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /delete-image /imagefile=" & Quote & imgIndexDeletionSourceImg & Quote & " /name=" & Quote & imgIndexDeletionNames(x) & Quote
                 If imgIndexDeletionIntCheck Then
                     CommandArgs &= " /checkintegrity"
                 End If
@@ -1136,7 +1136,7 @@ Public Class ProgressPanel
             AllPB.Value = 100
             GetErrorCode(False)
         ElseIf opNum = 11 Then
-            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /Get-ImageInfo"
+            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /Get-ImageInfo"
             allTasks.Text = "Getting information..."
             currentTask.Text = "Getting image information..."
             LogView.AppendText(CrLf & "Getting information from image..." & CrLf & "Options:" & CrLf)
@@ -1168,7 +1168,7 @@ Public Class ProgressPanel
                 End If
             End If
             ' Run process. Right now, use an external process to do all the job
-            File.WriteAllText(".\bin\exthelpers\temp.bat",
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat",
                               "@echo off" & CrLf &
                               "dism " & CommandArgs & " > ",
                               ASCII)
@@ -1199,12 +1199,12 @@ Public Class ProgressPanel
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
                         Case 1
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-wim /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " /mountdir=" & Quote & MountDir & Quote
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-wim /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " /mountdir=" & Quote & MountDir & Quote
                         Case Is >= 2
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-image /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " /mountdir=" & Quote & MountDir & Quote
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-image /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " /mountdir=" & Quote & MountDir & Quote
                     End Select
                 Case 10
-                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-image /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " /mountdir=" & Quote & MountDir & Quote
+                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-image /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " /mountdir=" & Quote & MountDir & Quote
             End Select
             If isReadOnly Then
                 LogView.AppendText(CrLf & "- Mount image with read-only permissions? Yes")
@@ -1276,12 +1276,12 @@ Public Class ProgressPanel
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
                         Case 1
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /remount-wim /mountdir=" & Quote & MountDir & Quote
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /remount-wim /mountdir=" & Quote & MountDir & Quote
                         Case Is >= 2
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /remount-image /mountdir=" & Quote & MountDir & Quote
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /remount-image /mountdir=" & Quote & MountDir & Quote
                     End Select
                 Case 10
-                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /remount-image /mountdir=" & Quote & MountDir & Quote
+                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /remount-image /mountdir=" & Quote & MountDir & Quote
             End Select
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
@@ -1349,12 +1349,12 @@ Public Class ProgressPanel
                         Case 6
                             Select Case DismVersionChecker.ProductMinorPart
                                 Case 1
-                                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & MountDir & Quote & " /commit"
+                                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & MountDir & Quote & " /commit"
                                 Case Is >= 2
-                                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /commit"
+                                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /commit"
                             End Select
                         Case 10
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /commit"
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /commit"
                     End Select
                     DISMProc.StartInfo.Arguments = CommandArgs
                     DISMProc.Start()
@@ -1371,12 +1371,12 @@ Public Class ProgressPanel
                             Case 6
                                 Select Case DismVersionChecker.ProductMinorPart
                                     Case 1
-                                        CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & MountDir & Quote & " /discard"
+                                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & MountDir & Quote & " /discard"
                                     Case Is >= 2
-                                        CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /discard"
+                                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /discard"
                                 End Select
                             Case 10
-                                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /discard"
+                                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /discard"
                         End Select
                         DISMProc.StartInfo.Arguments = CommandArgs
                         DISMProc.Start()
@@ -1387,11 +1387,11 @@ Public Class ProgressPanel
                         Loop
                     End If
                 Catch ex As Exception
-                    File.WriteAllText(".\bin\exthelpers\temp.bat",
+                    File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat",
                                       "@echo off" & CrLf &
                                       "dism /English /unmount-image /mountdir=" & MountDir,
                                       ASCII)
-                    Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
+                    Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
                 End Try
                 Select Case Language
                     Case 0
@@ -1421,22 +1421,22 @@ Public Class ProgressPanel
                             Select Case DismVersionChecker.ProductMinorPart
                                 Case 1
                                     If UMountLocalDir Then
-                                        CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & MountDir & Quote
+                                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & MountDir & Quote
                                     Else
-                                        CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & RandomMountDir & Quote
+                                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & RandomMountDir & Quote
                                     End If
                                 Case Is >= 2
                                     If UMountLocalDir Then
-                                        CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote
+                                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote
                                     Else
-                                        CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & RandomMountDir & Quote
+                                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & RandomMountDir & Quote
                                     End If
                             End Select
                         Case 10
                             If UMountLocalDir Then
-                                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote
+                                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote
                             Else
-                                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & RandomMountDir & Quote
+                                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & RandomMountDir & Quote
                             End If
                     End Select
                     If UMountOp = 0 Then
@@ -1628,7 +1628,7 @@ Public Class ProgressPanel
                     CurrentPB.Value = x + 1
                     LogView.AppendText(CrLf &
                                        "Package " & (x + 1) & " of " & pkgCount)        ' You don't want to see "Package 0 of 407", right?
-                    Directory.CreateDirectory(".\tempinfo")
+                    Directory.CreateDirectory(Application.StartupPath & "\tempinfo")
                     pkgPossibleMsuFile = Path.GetFileName(pkgs(x)).ToString()
                     If pkgPossibleMsuFile.EndsWith(".msu") Then
                         LogView.AppendText(CrLf & "WARNING: the package currently about to be processed is a MSU file. Proceeding with special addition mode...")
@@ -1788,7 +1788,7 @@ Public Class ProgressPanel
                     LogView.AppendText(CrLf &
                                        "Package " & (x + 1) & " of " & pkgRemovalCount)
                     CurrentPB.Value = x + 1
-                    Directory.CreateDirectory(".\tempinfo")
+                    Directory.CreateDirectory(Application.StartupPath & "\tempinfo")
                     Try
                         DismApi.Initialize(DismLogLevel.LogErrors)
                         Using imgSession As DismSession = DismApi.OpenOfflineSession(mntString)
@@ -1873,7 +1873,7 @@ Public Class ProgressPanel
                     LogView.AppendText(CrLf &
                                        "Package " & (x + 1) & " of " & pkgRemovalCount)
                     CurrentPB.Value = x + 1
-                    Directory.CreateDirectory(".\tempinfo")
+                    Directory.CreateDirectory(Application.StartupPath & "\tempinfo")
                     Try
                         DismApi.Initialize(DismLogLevel.LogErrors)
                         Using imgSession As DismSession = DismApi.OpenOfflineSession(mntString)
@@ -1940,7 +1940,7 @@ Public Class ProgressPanel
                     End If
                 Next
             End If
-            Directory.Delete(".\tempinfo", True)
+            Directory.Delete(Application.StartupPath & "\tempinfo", True)
             CurrentPB.Value = CurrentPB.Maximum
             LogView.AppendText(CrLf & "Gathering error level for selected packages..." & CrLf)
             For x = 0 To PkgErrorText.RichTextBox1.Lines.Count - 1
@@ -3392,7 +3392,7 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & "Setting the amount of days an uninstall can happen..." & CrLf &
                                "Number of days: " & osUninstDayCount)
             DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /online /set-osuninstallwindow /value:" & osUninstDayCount
+            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /online /set-osuninstallwindow /value:" & osUninstDayCount
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
             Do Until DISMProc.HasExited
@@ -3447,10 +3447,10 @@ Public Class ProgressPanel
                         Case 1
                             ' Not available
                         Case Is >= 2
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSrcFile & Quote & " /sourceindex=1 /destinationimagefile=" & Quote & imgDestFile & Quote
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSrcFile & Quote & " /sourceindex=1 /destinationimagefile=" & Quote & imgDestFile & Quote
                     End Select
                 Case 10
-                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSrcFile & Quote & " /sourceindex=1 /destinationimagefile=" & Quote & imgDestFile & Quote
+                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSrcFile & Quote & " /sourceindex=1 /destinationimagefile=" & Quote & imgDestFile & Quote
             End Select
             If imgConversionMode = 0 Then
                 CommandArgs &= " /compress:recovery"
@@ -3516,10 +3516,10 @@ Public Class ProgressPanel
                         Case 1
                             ' Not available
                         Case Is >= 2
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSwmSource & Quote & " /swmfile=" & Quote & Path.GetDirectoryName(imgSwmSource) & "\" & Path.GetFileNameWithoutExtension(imgSwmSource) & "*.swm" & Quote & " /sourceindex=1 /destinationimagefile=" & Quote & imgWimDestination & Quote & " /compress=max /checkintegrity"
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSwmSource & Quote & " /swmfile=" & Quote & Path.GetDirectoryName(imgSwmSource) & "\" & Path.GetFileNameWithoutExtension(imgSwmSource) & "*.swm" & Quote & " /sourceindex=1 /destinationimagefile=" & Quote & imgWimDestination & Quote & " /compress=max /checkintegrity"
                     End Select
                 Case 10
-                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSwmSource & Quote & " /swmfile=" & Quote & Path.GetDirectoryName(imgSwmSource) & "\" & Path.GetFileNameWithoutExtension(imgSwmSource) & "*.swm" & Quote & " /sourceindex=1 /destinationimagefile=" & Quote & imgWimDestination & Quote & " /compress=max /checkintegrity"
+                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSwmSource & Quote & " /swmfile=" & Quote & Path.GetDirectoryName(imgSwmSource) & "\" & Path.GetFileNameWithoutExtension(imgSwmSource) & "*.swm" & Quote & " /sourceindex=1 /destinationimagefile=" & Quote & imgWimDestination & Quote & " /compress=max /checkintegrity"
             End Select
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
@@ -3583,12 +3583,12 @@ Public Class ProgressPanel
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
                         Case 1
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & SwitchTarget & Quote
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & SwitchTarget & Quote
                         Case Is >= 2
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & SwitchTarget & Quote
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & SwitchTarget & Quote
                     End Select
                 Case 10
-                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & SwitchTarget & Quote
+                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & SwitchTarget & Quote
             End Select
             If SwitchCommitSourceIndex Then
                 CommandArgs &= " /commit"
@@ -3641,12 +3641,12 @@ Public Class ProgressPanel
                     Case 6
                         Select Case DismVersionChecker.ProductMinorPart
                             Case 1
-                                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & SwitchTarget & Quote & " /discard"
+                                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & SwitchTarget & Quote & " /discard"
                             Case Is >= 2
-                                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & SwitchTarget & Quote & " /discard"
+                                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & SwitchTarget & Quote & " /discard"
                         End Select
                     Case 10
-                        CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & SwitchTarget & Quote & " /discard"
+                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & SwitchTarget & Quote & " /discard"
                 End Select
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
@@ -3703,12 +3703,12 @@ Public Class ProgressPanel
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
                         Case 1
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-wim /wimfile=" & Quote & SwitchSourceImg & Quote & " /index=" & SwitchTargetIndex & " /mountdir=" & Quote & SwitchTarget & Quote
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-wim /wimfile=" & Quote & SwitchSourceImg & Quote & " /index=" & SwitchTargetIndex & " /mountdir=" & Quote & SwitchTarget & Quote
                         Case Is >= 2
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-image /imagefile=" & Quote & SwitchSourceImg & Quote & " /index=" & SwitchTargetIndex & " /mountdir=" & Quote & SwitchTarget & Quote
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-image /imagefile=" & Quote & SwitchSourceImg & Quote & " /index=" & SwitchTargetIndex & " /mountdir=" & Quote & SwitchTarget & Quote
                     End Select
                 Case 10
-                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-image /imagefile=" & Quote & SwitchSourceImg & Quote & " /index=" & SwitchTargetIndex & " /mountdir=" & Quote & SwitchTarget & Quote
+                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-image /imagefile=" & Quote & SwitchSourceImg & Quote & " /index=" & SwitchTargetIndex & " /mountdir=" & Quote & SwitchTarget & Quote
             End Select
             If SwitchMountAsReadOnly Then
                 CommandArgs &= " /readonly"
@@ -3766,10 +3766,10 @@ Public Class ProgressPanel
             Directory.Delete(pkgSource & "\MsuExtract\" & MsuName, True)
         End If
         Directory.CreateDirectory(pkgSource & "\MsuExtract\" & MsuName)
-        File.WriteAllText(".\bin\exthelpers\temp.bat", _
+        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", _
                           "@echo off" & CrLf & _
-                          ".\bin\utils\7z x " & MsuFile & " -o" & pkgSource & "\MsuExtract\" & MsuName, ASCII)
-        Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
+                          Application.StartupPath & "\bin\utils\7z x " & MsuFile & " -o" & pkgSource & "\MsuExtract\" & MsuName, ASCII)
+        Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
         If MsuName.StartsWith("windows6.1") Then    ' Windows 7
             If MsuName.Contains("-v") Then
                 ' There may be no hotfix for Windows 7 that has "-v<n>"
@@ -3810,7 +3810,7 @@ Public Class ProgressPanel
         CabFile &= ".cab"
         pkgToAdd = pkgSource & "\MsuExtract\" & MsuName & "\" & CabFile
         ' Add MSU file
-        File.WriteAllText(".\bin\exthelpers\pkginfo.bat", _
+        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\pkginfo.bat", _
                           "@echo off" & CrLf & _
                           "dism /English /image=" & MountDir & " /get-packageinfo /packagepath=" & pkgToAdd & " | findstr /c:" & Quote & "Package Identity" & Quote & " > .\tempinfo\pkgname" & CrLf & _
                           "dism /English /image=" & MountDir & " /get-packageinfo /packagepath=" & pkgToAdd & " | findstr /c:" & Quote & "Description" & Quote & " > .\tempinfo\pkgdesc" & CrLf & _
@@ -3818,13 +3818,13 @@ Public Class ProgressPanel
                           "dism /English /image=" & MountDir & " /get-packageinfo /packagepath=" & pkgToAdd & " | findstr /c:" & Quote & "State" & Quote & " > .\tempinfo\pkgstate", _
                           ASCII)
         If IsDebugged Then
-            Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\pkginfo.bat").WaitForExit()
+            Process.Start("\Windows\system32\notepad.exe", Application.StartupPath & "\bin\exthelpers\pkginfo.bat").WaitForExit()
         End If
-        Process.Start(".\bin\exthelpers\pkginfo.bat").WaitForExit()
-        pkgName = My.Computer.FileSystem.ReadAllText(".\tempinfo\pkgname", ASCII).Replace("Package Identity : ", "").Trim()
-        pkgDesc = My.Computer.FileSystem.ReadAllText(".\tempinfo\pkgdesc", ASCII).Replace("Description : ", "").Trim()
-        pkgApplicabilityStatus = My.Computer.FileSystem.ReadAllText(".\tempinfo\pkgapplicability", ASCII).Replace("Applicable : ", "").Trim()
-        pkgInstallationState = My.Computer.FileSystem.ReadAllText(".\tempinfo\pkgstate", ASCII).Replace("State : ", "").Trim()
+        Process.Start(Application.StartupPath & "\bin\exthelpers\pkginfo.bat").WaitForExit()
+        pkgName = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\tempinfo\pkgname", ASCII).Replace("Package Identity : ", "").Trim()
+        pkgDesc = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\tempinfo\pkgdesc", ASCII).Replace("Description : ", "").Trim()
+        pkgApplicabilityStatus = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\tempinfo\pkgapplicability", ASCII).Replace("Applicable : ", "").Trim()
+        pkgInstallationState = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\tempinfo\pkgstate", ASCII).Replace("State : ", "").Trim()
         LogView.AppendText(CrLf & CrLf & _
                            "- Package name: " & pkgName & CrLf & _
                            "- Package description: " & pkgDesc & CrLf)
@@ -3846,7 +3846,7 @@ Public Class ProgressPanel
             LogView.AppendText("- Package is already added? Yes" & CrLf)
         End If
         Try
-            Directory.Delete(".\tempinfo", True)
+            Directory.Delete(Application.StartupPath & "\tempinfo", True)
         Catch ex As Exception
 
         End Try
@@ -3861,7 +3861,7 @@ Public Class ProgressPanel
             Else
                 LogView.AppendText(CrLf & "Processing package...")
                 DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & MountDir & " /add-package /packagepath=" & pkgToAdd
+                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & MountDir & " /add-package /packagepath=" & pkgToAdd
                 If pkgIgnoreApplicabilityChecks Then
                     CommandArgs &= " /ignorecheck"
                 End If
@@ -3888,7 +3888,7 @@ Public Class ProgressPanel
             If pkgIgnoreApplicabilityChecks Then
                 LogView.AppendText(CrLf & "Trying to process package...")
                 DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & MountDir & " /add-package /packagepath=" & pkgToAdd & " /ignorecheck"
+                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & MountDir & " /add-package /packagepath=" & pkgToAdd & " /ignorecheck"
                 If pkgPreventIfPendingOnline Then
                     CommandArgs &= " /preventpending"
                 End If
@@ -4158,10 +4158,10 @@ Public Class ProgressPanel
                 End If
             End If
         Else
-            If Directory.Exists(".\appxscan") Then Directory.Delete(".\appxscan", True)
-            Directory.CreateDirectory(".\appxscan")
-            AppxScanner.StartInfo.FileName = ".\bin\utils\7z.exe"
-            AppxScanner.StartInfo.Arguments = "e " & Quote & Package & Quote & " " & Quote & If(Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase), "appxmetadata\appxbundlemanifest.xml", "appxmanifest.xml") & Quote & " -o.\appxscan"
+            If Directory.Exists(Application.StartupPath & "\appxscan") Then Directory.Delete(Application.StartupPath & "\appxscan", True)
+            Directory.CreateDirectory(Application.StartupPath & "\appxscan")
+            AppxScanner.StartInfo.FileName = Application.StartupPath & "\bin\utils\7z.exe"
+            AppxScanner.StartInfo.Arguments = "e " & Quote & Package & Quote & " " & Quote & If(Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase), "appxmetadata\appxbundlemanifest.xml", "appxmanifest.xml") & Quote & " -o" & Quote & Application.StartupPath & "\appxscan" & Quote
             AppxScanner.StartInfo.CreateNoWindow = True
             AppxScanner.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
             AppxScanner.Start()
@@ -4172,7 +4172,7 @@ Public Class ProgressPanel
             Loop
             If AppxScanner.ExitCode = 0 Then
                 If Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase) Then
-                    ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(".\appxscan\AppxBundleManifest.xml")
+                    ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\appxscan\AppxBundleManifest.xml")
                     If ScannerRTB.Lines(2).EndsWith("<!--") Then
                         ' XML comment
                         Dim IdScanner As String = ScannerRTB.Lines(9)
@@ -4304,7 +4304,7 @@ Public Class ProgressPanel
                         Next
                     End If
                 Else
-                    ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(".\appxscan\AppxManifest.xml")
+                    ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\appxscan\AppxManifest.xml")
                     If ScannerRTB.Lines(2).EndsWith("<!--") Then
                         Dim IdScanner As String = ScannerRTB.Lines(9)
                         Dim CharIndex As Integer = 0
@@ -4444,8 +4444,8 @@ Public Class ProgressPanel
                            "- Application name: " & currentAppxName & CrLf & _
                            "- Application publisher: " & currentAppxPublisher & CrLf & _
                            "- Application version: " & currentAppxVersion & CrLf)
-        If Directory.Exists(".\appxscan") Then
-            Directory.Delete(".\appxscan", True)
+        If Directory.Exists(Application.StartupPath & "\appxscan") Then
+            Directory.Delete(Application.StartupPath & "\appxscan", True)
         End If
     End Sub
 
@@ -4891,7 +4891,7 @@ Public Class ProgressPanel
         MainForm.ToolStripButton4.Visible = True
         Control.CheckForIllegalCrossThreadCalls = False
         LinkLabel1.Visible = False
-        If Not Directory.Exists(Directory.GetCurrentDirectory() & "\logs") Then Directory.CreateDirectory(Directory.GetCurrentDirectory() & "\logs")
+        If Not Directory.Exists(Application.StartupPath & "\logs") Then Directory.CreateDirectory(Application.StartupPath & "\logs")
         ' Detect settings
         OnlineMgmt = MainForm.OnlineManagement
         AutoLogs = MainForm.AutoLogs
@@ -4910,8 +4910,8 @@ Public Class ProgressPanel
     End Sub
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
-        If File.Exists(Directory.GetCurrentDirectory() & "\logs\" & dateStr) Then
-            Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\notepad.exe", Directory.GetCurrentDirectory() & "\logs\" & dateStr)
+        If File.Exists(Application.StartupPath & "\logs\" & dateStr) Then
+            Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\notepad.exe", Application.StartupPath & "\logs\" & dateStr)
         ElseIf File.Exists(LogPath) Then
             Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\notepad.exe", LogPath)
         End If

@@ -83,8 +83,8 @@ Public Class ApplicationDriveSpecifier
             End If
         Loop
         Try
-            RichTextBox1.Text = File.ReadAllText(".\wmic")
-            File.Delete(".\wmic")
+            RichTextBox1.Text = File.ReadAllText(Application.StartupPath & "\wmic")
+            File.Delete(Application.StartupPath & "\wmic")
         Catch ex As Exception
 
         End Try
@@ -101,8 +101,8 @@ Public Class ApplicationDriveSpecifier
             End If
         Loop
         Try
-            RichTextBox1.Text = File.ReadAllText(".\wmic")
-            File.Delete(".\wmic")
+            RichTextBox1.Text = File.ReadAllText(Application.StartupPath & "\wmic")
+            File.Delete(Application.StartupPath & "\wmic")
         Catch ex As Exception
 
         End Try

@@ -257,18 +257,18 @@ Public Class ImgMount
             DismApi.Shutdown()
         Catch ex As AccessViolationException
             If IndexOperationMode = 0 Then
-                File.WriteAllText(".\bin\exthelpers\temp.bat", _
+                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", _
                                   "@echo off" & CrLf & _
                                   "dism /English /get-imageinfo /imagefile=" & ImgFile & " | find /c " & Quote & "Index" & Quote & " > .\indexcount", ASCII)
             ElseIf IndexOperationMode = 1 Then
-                File.WriteAllText(".\bin\exthelpers\temp.bat", _
+                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", _
                                   "@echo off" & CrLf & _
                                   "dism /English /get-wiminfo /wimfile=" & ImgFile & " | find /c " & Quote & "Index" & Quote & " > .\indexcount", ASCII)
             End If
-            Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
-            MainForm.imgIndexCount = CInt(My.Computer.FileSystem.ReadAllText(".\indexcount"))
+            Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
+            MainForm.imgIndexCount = CInt(My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\indexcount"))
             NumericUpDown1.Maximum = MainForm.imgIndexCount
-            File.Delete(".\indexcount")
+            File.Delete(Application.StartupPath & "\indexcount")
         End Try
     End Sub
 

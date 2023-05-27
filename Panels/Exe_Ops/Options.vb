@@ -732,10 +732,10 @@ Public Class Options
         End If
         GetSystemFonts()
         ' Set default values before loading custom ones
-        TextBox1.Text = Path.GetPathRoot(Directory.GetCurrentDirectory()) & "Windows\system32\dism.exe"
+        TextBox1.Text = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
         DismVersion = FileVersionInfo.GetVersionInfo(TextBox1.Text)
         Label4.Text = DismVersion.ProductVersion
-        TextBox2.Text = Path.GetPathRoot(Directory.GetCurrentDirectory()) & "Windows\Logs\DISM\DISM.log"
+        TextBox2.Text = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\Windows\Logs\DISM\DISM.log"
         GatherCustomSettings()
 
         ' Set program colors

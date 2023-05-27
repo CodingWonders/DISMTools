@@ -1183,7 +1183,7 @@ Public Class MainForm
                 GetAdvancedImageInfo(True, OnlineMode)
             End If
         End If
-        Directory.CreateDirectory(".\tempinfo")
+        Directory.CreateDirectory(Application.StartupPath & "\tempinfo")
         ' Parameters for bgProcOptn:
         ' 0 (meta-optn): run every background process
         ' 1: run package background processes
@@ -1485,44 +1485,44 @@ Public Class MainForm
                     Case 6
                         Select Case DismVersionChecker.ProductMinorPart
                             Case 1
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-wiminfo /wimfile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " > imgname", _
                                                   ASCII)
                             Case Is >= 2
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " > imgname", _
                                                   ASCII)
                         End Select
                     Case 10
-                        File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                           "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " > imgname", _
                                           ASCII)
                 End Select
-                Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
-                Label18.Text = My.Computer.FileSystem.ReadAllText(".\imgname").Replace("Name : ", "").Trim()
-                File.Delete(".\imgname")
-                File.Delete(".\bin\exthelpers\temp.bat")
+                Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
+                Label18.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\imgname").Replace("Name : ", "").Trim()
+                File.Delete(Application.StartupPath & "\imgname")
+                File.Delete(Application.StartupPath & "\bin\exthelpers\temp.bat")
                 Select Case DismVersionChecker.ProductMajorPart
                     Case 6
                         Select Case DismVersionChecker.ProductMinorPart
                             Case 1
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-wiminfo /wimfile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
                                                   ASCII)
                             Case Is >= 2
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
                                                   ASCII)
                         End Select
                     Case 10
-                        File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                           "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
                                           ASCII)
                 End Select
-                Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
-                Label20.Text = My.Computer.FileSystem.ReadAllText(".\imgdesc").Replace("Description : ", "").Trim()
-                File.Delete(".\imgdesc")
-                File.Delete(".\bin\exthelpers\temp.bat")
+                Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
+                Label20.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\imgdesc").Replace("Description : ", "").Trim()
+                File.Delete(Application.StartupPath & "\imgdesc")
+                File.Delete(Application.StartupPath & "\bin\exthelpers\temp.bat")
                 If Label18.Text = "" Or Label20.Text = "" Then
                     Label18.Text = imgMountedName
                     Label20.Text = imgMountedDesc
@@ -1538,44 +1538,44 @@ Public Class MainForm
                     Case 6
                         Select Case DismVersionChecker.ProductMinorPart
                             Case 1
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Name" & Quote & " > imgname", _
                                                   ASCII)
                             Case Is >= 2
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Name" & Quote & " > imgname", _
                                                   ASCII)
                         End Select
                     Case 10
-                        File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                           "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Name" & Quote & " > imgname", _
                                           ASCII)
                 End Select
-                Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
-                Label18.Text = My.Computer.FileSystem.ReadAllText(".\imgname").Replace("Name : ", "").Trim()
-                File.Delete(".\imgname")
-                File.Delete(".\bin\exthelpers\temp.bat")
+                Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
+                Label18.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\imgname").Replace("Name : ", "").Trim()
+                File.Delete(Application.StartupPath & "\imgname")
+                File.Delete(Application.StartupPath & "\bin\exthelpers\temp.bat")
                 Select Case DismVersionChecker.ProductMajorPart
                     Case 6
                         Select Case DismVersionChecker.ProductMinorPart
                             Case 1
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
                                                   ASCII)
                             Case Is >= 2
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
                                                   ASCII)
                         End Select
                     Case 10
-                        File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                           "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
                                           ASCII)
                 End Select
-                Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
-                Label20.Text = My.Computer.FileSystem.ReadAllText(".\imgdesc").Replace("Description : ", "").Trim()
-                File.Delete(".\imgdesc")
-                File.Delete(".\bin\exthelpers\temp.bat")
+                Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
+                Label20.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\imgdesc").Replace("Description : ", "").Trim()
+                File.Delete(Application.StartupPath & "\imgdesc")
+                File.Delete(Application.StartupPath & "\bin\exthelpers\temp.bat")
                 If Label18.Text = "" Or Label20.Text = "" Then
                     Label18.Text = imgMountedName
                     Label20.Text = imgMountedDesc
@@ -1592,42 +1592,42 @@ Public Class MainForm
             Case 6
                 Select Case DismVersionChecker.ProductMinorPart
                     Case 1
-                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                           "@echo off" & CrLf & _
                                           "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus", ASCII)
                     Case Is >= 2
-                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                           "@echo off" & CrLf & _
                                           "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus", ASCII)
                 End Select
             Case 10
-                File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                   "@echo off" & CrLf & _
                                   "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus", ASCII)
         End Select
-        Process.Start(".\bin\exthelpers\imginfo.bat").WaitForExit()
+        Process.Start(Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
         mountedImgStatus = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgmountedstatus", ASCII).Replace("Status : ", "").Trim()
-        File.Delete(".\bin\exthelpers\imginfo.bat")
+        File.Delete(Application.StartupPath & "\bin\exthelpers\imginfo.bat")
         Select Case DismVersionChecker.ProductMajorPart
             Case 6
                 Select Case DismVersionChecker.ProductMinorPart
                     Case 1
-                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                           "@echo off" & CrLf & _
                                           "dism /English /get-wiminfo /wimfile=" & SourceImg & " | find /c " & Quote & "Index" & Quote & " > " & projPath & "\tempinfo\indexcount", ASCII)
                     Case Is >= 2
-                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                           "@echo off" & CrLf & _
                                           "dism /English /get-imageinfo /imagefile=" & SourceImg & " | find /c " & Quote & "Index" & Quote & " > " & projPath & "\tempinfo\indexcount", ASCII)
                 End Select
             Case 10
-                File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                   "@echo off" & CrLf & _
                                   "dism /English /get-imageinfo /imagefile=" & SourceImg & " | find /c " & Quote & "Index" & Quote & " > " & projPath & "\tempinfo\indexcount", ASCII)
         End Select
-        Process.Start(".\bin\exthelpers\imginfo.bat").WaitForExit()
+        Process.Start(Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
         imgIndexCount = CInt(My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\indexcount", ASCII))
-        File.Delete(".\bin\exthelpers\imginfo.bat")
+        File.Delete(Application.StartupPath & "\bin\exthelpers\imginfo.bat")
         For Each FoundFile In My.Computer.FileSystem.GetFiles(projPath & "\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
             File.Delete(FoundFile)
         Next
@@ -1707,25 +1707,25 @@ Public Class MainForm
                             Case 6
                                 Select Case DismVersionChecker.ProductMinorPart
                                     Case 1
-                                        File.WriteAllText(".\bin\exthelpers\imginfo.bat",
+                                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat",
                                                           "@echo off" & CrLf &
                                                           "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot", ASCII)
                                     Case Is >= 2
-                                        File.WriteAllText(".\bin\exthelpers\imginfo.bat",
+                                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat",
                                                           "@echo off" & CrLf &
                                                           "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot", ASCII)
                                 End Select
                             Case 10
-                                File.WriteAllText(".\bin\exthelpers\imginfo.bat",
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat",
                                                   "@echo off" & CrLf &
                                                   "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot", ASCII)
                         End Select
                         If Debugger.IsAttached Then
-                            Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\imginfo.bat").WaitForExit()
+                            Process.Start("\Windows\system32\notepad.exe", Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
                         End If
                         Using WIMBootProc As New Process()
                             WIMBootProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
-                            WIMBootProc.StartInfo.Arguments = "/c " & Quote & Directory.GetCurrentDirectory() & "\bin\exthelpers\imginfo.bat" & Quote
+                            WIMBootProc.StartInfo.Arguments = "/c " & Quote & Application.StartupPath & "\bin\exthelpers\imginfo.bat" & Quote
                             WIMBootProc.StartInfo.CreateNoWindow = True
                             WIMBootProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
                             WIMBootProc.Start()
@@ -1733,7 +1733,7 @@ Public Class MainForm
                                 If WIMBootProc.HasExited Then Exit Do
                             Loop
                         End Using
-                        'Process.Start(".\bin\exthelpers\imginfo.bat").WaitForExit()
+                        'Process.Start(Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
                         Try
                             imgWimBootStatus = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgwimboot", ASCII).Replace("WIM Bootable : ", "").Trim()
                             If Not ImgBW.IsBusy Then
@@ -1742,7 +1742,7 @@ Public Class MainForm
                                 Next
                                 Directory.Delete(projPath & "\tempinfo")
                             End If
-                            File.Delete(".\bin\exthelpers\imginfo.bat")
+                            File.Delete(Application.StartupPath & "\bin\exthelpers\imginfo.bat")
                         Catch ex As Exception
 
                         End Try
@@ -1789,7 +1789,7 @@ Public Class MainForm
                     Case 6
                         Select Case DismVersionChecker.ProductMinorPart
                             Case 1
-                                File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                                   "@echo off" & CrLf & _
                                                   "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf & _
                                                   "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf & _
@@ -1815,7 +1815,7 @@ Public Class MainForm
                                                   "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & projPath & "\tempinfo\imgmodification" & CrLf & _
                                                   "dism /English /image=" & Quote & MountDir & Quote & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & projPath & "\tempinfo\imglangs", ASCII)
                             Case Is >= 2
-                                File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                                   "@echo off" & CrLf & _
                                                   "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf & _
                                                   "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf & _
@@ -1842,7 +1842,7 @@ Public Class MainForm
                                                   "dism /English /image=" & Quote & MountDir & Quote & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & projPath & "\tempinfo\imglangs", ASCII)
                         End Select
                     Case 10
-                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                           "@echo off" & CrLf & _
                                           "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf & _
                                           "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf & _
@@ -1870,9 +1870,9 @@ Public Class MainForm
                 End Select
 
                 If Debugger.IsAttached Then
-                    Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\imginfo.bat").WaitForExit()
+                    Process.Start("\Windows\system32\notepad.exe", Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
                 End If
-                Process.Start(".\bin\exthelpers\imginfo.bat").WaitForExit()
+                Process.Start(Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
                 'imgName = SourceImg
                 'ImgIndex = ImgIndex
                 'imgMountDir = MountDir
@@ -1913,7 +1913,7 @@ Public Class MainForm
                         File.Delete(foundFile)
                     Next
                     Directory.Delete(projPath & "\tempinfo")
-                    File.Delete(".\bin\exthelpers\imginfo.bat")
+                    File.Delete(Application.StartupPath & "\bin\exthelpers\imginfo.bat")
                 Catch ex As Exception
 
                 End Try
@@ -2205,19 +2205,19 @@ Public Class MainForm
         Debug.WriteLine("[GetImagePackages] Running function...")
         Debug.WriteLine("[GetImagePackages] Writing getter scripts...")
         Try
-            File.WriteAllText(".\bin\exthelpers\pkgnames.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\pkgnames.bat", _
                               "@echo off" & CrLf & _
                               "dism /English /image=" & Quote & MountDir & Quote & " /get-packages | findstr /c:" & Quote & "Package Identity : " & Quote & " > .\tempinfo\pkgnames", _
                               ASCII)
-            File.WriteAllText(".\bin\exthelpers\pkgstate.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\pkgstate.bat", _
                               "@echo off" & CrLf & _
                               "dism /English /image=" & Quote & MountDir & Quote & " /get-packages | findstr /c:" & Quote & "State : " & Quote & " > .\tempinfo\pkgstate", _
                               ASCII)
-            File.WriteAllText(".\bin\exthelpers\pkgreltype.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\pkgreltype.bat", _
                               "@echo off" & CrLf & _
                               "dism /English /image=" & Quote & MountDir & Quote & " /get-packages | findstr /c:" & Quote & "Release Type : " & Quote & " > .\tempinfo\pkgreltype", _
                               ASCII)
-            File.WriteAllText(".\bin\exthelpers\pkginsttime.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\pkginsttime.bat", _
                               "@echo off" & CrLf & _
                               "dism /English /image=" & Quote & MountDir & Quote & " /get-packages | findstr /c:" & Quote & "Install Time : " & Quote & " > .\tempinfo\pkginsttime", _
                               ASCII)
@@ -2229,7 +2229,7 @@ Public Class MainForm
         ImgProcesses.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
         ImgProcesses.StartInfo.CreateNoWindow = True
         ImgProcesses.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-        For Each pkgScript In My.Computer.FileSystem.GetFiles(".\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly, "*.bat")
+        For Each pkgScript In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly, "*.bat")
             If Path.GetFileName(pkgScript).StartsWith("pkg") Then
                 Debug.WriteLine("[GetImagePackages] RunCommand -> " & Path.GetFileName(pkgScript))
                 ImgProcesses.StartInfo.Arguments = "/c " & pkgScript
@@ -2250,7 +2250,7 @@ Public Class MainForm
         Dim FileGetterRTB As New RichTextBox()
         Dim TypeLookups() As String = New String(3) {"Package Identity : ", "State : ", "Release Type : ", "Install Time : "}
         Dim lineToAppend As String = ""
-        For Each pkgFile In My.Computer.FileSystem.GetFiles(".\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
+        For Each pkgFile In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
             If Path.GetFileName(pkgFile).StartsWith("pkg") Then
                 Debug.WriteLine("[GetImagePackages] FillArray -> (values_from: " & Path.GetFileName(pkgFile) & ")")
                 FileGetterRTB.Clear()
@@ -2333,11 +2333,11 @@ Public Class MainForm
         Debug.WriteLine("[GetImageFeatures] Running function...")
         Debug.WriteLine("[GetImageFeatures] Writing getter scripts...")
         Try
-            File.WriteAllText(".\bin\exthelpers\featnames.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\featnames.bat", _
                               "@echo off" & CrLf & _
                               "dism /English /image=" & Quote & MountDir & Quote & " /get-features | findstr /c:" & Quote & "Feature Name : " & Quote & " > .\tempinfo\featnames", _
                               ASCII)
-            File.WriteAllText(".\bin\exthelpers\featstate.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\featstate.bat", _
                               "@echo off" & CrLf & _
                               "dism /English /image=" & Quote & MountDir & Quote & " /get-features | findstr /c:" & Quote & "State : " & Quote & " > .\tempinfo\featstate", _
                               ASCII)
@@ -2349,7 +2349,7 @@ Public Class MainForm
         ImgProcesses.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
         ImgProcesses.StartInfo.CreateNoWindow = True
         ImgProcesses.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-        For Each featScript In My.Computer.FileSystem.GetFiles(".\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly, "*.bat")
+        For Each featScript In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly, "*.bat")
             If Path.GetFileName(featScript).StartsWith("feat") Then
                 Debug.WriteLine("[GetImageFeatures] RunCommand -> " & Path.GetFileName(featScript))
                 ImgProcesses.StartInfo.Arguments = "/c " & featScript
@@ -2370,7 +2370,7 @@ Public Class MainForm
         Dim FileGetterRTB As New RichTextBox()
         Dim TypeLookups() As String = New String(1) {"Feature Name : ", "State : "}
         Dim lineToAppend As String = ""
-        For Each featFile In My.Computer.FileSystem.GetFiles(".\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
+        For Each featFile In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
             If Path.GetFileName(featFile).StartsWith("feat") Then
                 Debug.WriteLine("[GetImageFeatures] FillArray -> (values_from: " & Path.GetFileName(featFile) & ")")
                 FileGetterRTB.Clear()
@@ -2511,21 +2511,21 @@ Public Class MainForm
         End Select
         Debug.WriteLine("[GetImageAppxPackages] Writing getter scripts...")
         Try
-            File.WriteAllText(".\bin\exthelpers\appxnames.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\appxnames.bat", _
                               "@echo off" & CrLf & _
                               "dism /English " & If(OnlineMode, " /online", " /image=" & Quote & MountDir & Quote) & " /get-provisionedappxpackages | findstr /c:" & Quote & "DisplayName : " & Quote & " > .\tempinfo\appxdisplaynames" & CrLf & _
                               "dism /English " & If(OnlineMode, " /online", " /image=" & Quote & MountDir & Quote) & " /get-provisionedappxpackages | findstr /c:" & Quote & "PackageName : " & Quote & " > .\tempinfo\appxpackagenames", _
                               ASCII)
-            File.WriteAllText(".\bin\exthelpers\appxversions.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\appxversions.bat", _
                               "dism /English " & If(OnlineMode, " /online", " /image=" & Quote & MountDir & Quote) & " /get-provisionedappxpackages | findstr /c:" & Quote & "Version : " & Quote & " > .\tempinfo\appxversions", _
                               ASCII)
-            File.WriteAllText(".\bin\exthelpers\appxarches.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\appxarches.bat", _
                               "dism /English " & If(OnlineMode, " /online", " /image=" & Quote & MountDir & Quote) & " /get-provisionedappxpackages | findstr /c:" & Quote & "Architecture : " & Quote & " > .\tempinfo\appxarchitectures", _
                               ASCII)
-            File.WriteAllText(".\bin\exthelpers\appxresids.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\appxresids.bat", _
                               "dism /English " & If(OnlineMode, " /online", " /image=" & Quote & MountDir & Quote) & " /get-provisionedappxpackages | findstr /c:" & Quote & "ResourceId : " & Quote & " > .\tempinfo\appxresids", _
                               ASCII)
-            File.WriteAllText(".\bin\exthelpers\appxregions.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\appxregions.bat", _
                               "dism /English " & If(OnlineMode, " /online", " /image=" & Quote & MountDir & Quote) & " /get-provisionedappxpackages | findstr /c:" & Quote & "Regions : " & Quote & " > .\tempinfo\appxregions", _
                               ASCII)
         Catch ex As Exception
@@ -2536,7 +2536,7 @@ Public Class MainForm
         ImgProcesses.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
         ImgProcesses.StartInfo.CreateNoWindow = True
         ImgProcesses.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-        For Each appxScript In My.Computer.FileSystem.GetFiles(".\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly, "*.bat")
+        For Each appxScript In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly, "*.bat")
             If Path.GetFileName(appxScript).StartsWith("appx") Then
                 Debug.WriteLine("[GetImageAppxPackages] RunCommand -> " & Path.GetFileName(appxScript))
                 ImgProcesses.StartInfo.Arguments = "/c " & appxScript
@@ -2557,7 +2557,7 @@ Public Class MainForm
         Dim FileGetterRTB As New RichTextBox()
         Dim TypeLookups() As String = New String(5) {"DisplayName : ", "PackageName : ", "Version : ", "Architecture : ", "ResourceId : ", "Regions : "}
         Dim lineToAppend As String = ""
-        For Each appxFile In My.Computer.FileSystem.GetFiles(".\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
+        For Each appxFile In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
             If Path.GetFileName(appxFile).StartsWith("appx") Then
                 Debug.WriteLine("[GetImageAppxPackages] FillArray -> (values_from: " & Path.GetFileName(appxFile) & ")")
                 FileGetterRTB.Clear()
@@ -2735,11 +2735,11 @@ Public Class MainForm
         End Select
         Debug.WriteLine("[GetImageCapabilities] Writing getter scripts...")
         Try
-            File.WriteAllText(".\bin\exthelpers\capids.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\capids.bat", _
                               "@echo off" & CrLf & _
                               "dism /English /image=" & Quote & MountDir & Quote & " /get-capabilities | findstr /c:" & Quote & "Capability Identity : " & Quote & " > .\tempinfo\capids", _
                               ASCII)
-            File.WriteAllText(".\bin\exthelpers\capstate.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\capstate.bat", _
                               "@echo off" & CrLf & _
                               "dism /English /image=" & Quote & MountDir & Quote & " /get-capabilities | findstr /c:" & Quote & "State : " & Quote & " > .\tempinfo\capstate", _
                               ASCII)
@@ -2751,7 +2751,7 @@ Public Class MainForm
         ImgProcesses.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
         ImgProcesses.StartInfo.CreateNoWindow = True
         ImgProcesses.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-        For Each capScript In My.Computer.FileSystem.GetFiles(".\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly, "*.bat")
+        For Each capScript In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly, "*.bat")
             If Path.GetFileName(capScript).StartsWith("cap") Then
                 Debug.WriteLine("[GetImageCapabilities] RunCommand -> " & Path.GetFileName(capScript))
                 ImgProcesses.StartInfo.Arguments = "/c " & capScript
@@ -2772,7 +2772,7 @@ Public Class MainForm
         Dim FileGetterRTB As New RichTextBox()
         Dim TypeLookups() As String = New String(1) {"Capability Identity : ", "State : "}
         Dim lineToAppend As String = ""
-        For Each capFile In My.Computer.FileSystem.GetFiles(".\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
+        For Each capFile In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
             If Path.GetFileName(capFile).StartsWith("cap") Then
                 Debug.WriteLine("[GetImageCapabilities] FillArray -> (values_from: " & Path.GetFileName(capFile) & ")")
                 FileGetterRTB.Clear()
@@ -2850,7 +2850,7 @@ Public Class MainForm
         Debug.WriteLine("[GetImageDrivers] Running function...")
         Debug.WriteLine("[GetImageDrivers] Determining whether there are third-party drivers in image...")
         Try
-            File.WriteAllText(".\bin\exthelpers\drvnums.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvnums.bat", _
                               "@echo off" & CrLf & _
                               "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | find /c " & Quote & "Published Name : " & Quote & " > .\tempinfo\drvnums", _
                               ASCII)
@@ -2861,16 +2861,16 @@ Public Class MainForm
         ImgProcesses.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
         ImgProcesses.StartInfo.CreateNoWindow = True
         ImgProcesses.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-        ImgProcesses.StartInfo.Arguments = "/c " & Directory.GetCurrentDirectory() & "\bin\exthelpers\drvnums.bat"
+        ImgProcesses.StartInfo.Arguments = "/c " & Application.StartupPath & "\bin\exthelpers\drvnums.bat"
         ImgProcesses.Start()
         Do Until ImgProcesses.HasExited
             If ImgProcesses.HasExited Then
                 Exit Do
             End If
         Loop
-        File.Delete(".\bin\exthelpers\drvnums.bat")
+        File.Delete(Application.StartupPath & "\bin\exthelpers\drvnums.bat")
         If ImgProcesses.ExitCode = 0 Then
-            Dim drvCount As Integer = CInt(My.Computer.FileSystem.ReadAllText(".\tempinfo\drvnums"))
+            Dim drvCount As Integer = CInt(My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\tempinfo\drvnums"))
             If drvCount = 0 Then
                 Debug.WriteLine("[GetImageDrivers] There are no available third-party drivers in this image. Exiting function...")
                 Exit Sub
@@ -2878,31 +2878,31 @@ Public Class MainForm
         End If
         Debug.WriteLine("[GetImageDrivers] Writing getter scripts...")
         Try
-            File.WriteAllText(".\bin\exthelpers\drvpublishednames.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvpublishednames.bat", _
                               "@echo off" & CrLf & _
                               "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Published Name : " & Quote & " > .\tempinfo\drvpublishednames", _
                               ASCII)
-            File.WriteAllText(".\bin\exthelpers\drvogfilenames.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvogfilenames.bat", _
                               "@echo off" & CrLf & _
                               "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Original File Name : " & Quote & " > .\tempinfo\drvogfilenames", _
                               ASCII)
-            File.WriteAllText(".\bin\exthelpers\drvinbox.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvinbox.bat", _
                               "@echo off" & CrLf & _
                               "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Inbox : " & Quote & " > .\tempinfo\drvinbox", _
                               ASCII)
-            File.WriteAllText(".\bin\exthelpers\drvclassnames.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvclassnames.bat", _
                               "@echo off" & CrLf & _
                               "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Class Name : " & Quote & " > .\tempinfo\drvclassnames", _
                               ASCII)
-            File.WriteAllText(".\bin\exthelpers\drvprovnames.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvprovnames.bat", _
                               "@echo off" & CrLf & _
                               "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Provider Name : " & Quote & " > .\tempinfo\drvprovnames", _
                               ASCII)
-            File.WriteAllText(".\bin\exthelpers\drvdates.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvdates.bat", _
                               "@echo off" & CrLf & _
                               "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Date : " & Quote & " > .\tempinfo\drvdates", _
                               ASCII)
-            File.WriteAllText(".\bin\exthelpers\drvversions.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvversions.bat", _
                               "@echo off" & CrLf & _
                               "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Version : " & Quote & " > .\tempinfo\drvversions", _
                               ASCII)
@@ -2914,7 +2914,7 @@ Public Class MainForm
         ImgProcesses.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
         ImgProcesses.StartInfo.CreateNoWindow = True
         ImgProcesses.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-        For Each drvScript In My.Computer.FileSystem.GetFiles(".\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly, "*.bat")
+        For Each drvScript In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly, "*.bat")
             If Path.GetFileName(drvScript).StartsWith("drv") Then
                 Debug.WriteLine("[GetImageDrivers] RunCommand -> " & Path.GetFileName(drvScript))
                 ImgProcesses.StartInfo.Arguments = "/c " & drvScript
@@ -2935,7 +2935,7 @@ Public Class MainForm
         Dim FileGetterRTB As New RichTextBox()
         Dim TypeLookups() As String = New String(6) {"Published Name : ", "Original File Name : ", "Inbox : ", "Class Name : ", "Provider Name : ", "Date : ", "Version : "}
         Dim lineToAppend As String = ""
-        For Each drvFile In My.Computer.FileSystem.GetFiles(".\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
+        For Each drvFile In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
             If Path.GetFileName(drvFile).StartsWith("drv") Then
                 Debug.WriteLine("[GetImageDrivers] FillArray -> (values_from: " & Path.GetFileName(drvFile) & ")")
                 FileGetterRTB.Clear()
@@ -2992,9 +2992,9 @@ Public Class MainForm
             Exit Sub
         End If
         Try
-            Directory.Delete(".\tempinfo", True)
+            Directory.Delete(Application.StartupPath & "\tempinfo", True)
             ' Keep the "exthelpers" folder in case background processes need to be run again
-            For Each TempFile In My.Computer.FileSystem.GetFiles(".\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly)
+            For Each TempFile In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly)
                 File.Delete(TempFile)
             Next
         Catch ex As Exception
@@ -5623,44 +5623,44 @@ Public Class MainForm
                     Case 6
                         Select Case DismVersionChecker.ProductMinorPart
                             Case 1
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-wiminfo /wimfile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " > imgname", _
                                                   ASCII)
                             Case Is >= 2
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " > imgname", _
                                                   ASCII)
                         End Select
                     Case 10
-                        File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                           "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " > imgname", _
                                           ASCII)
                 End Select
-                Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
-                Label18.Text = My.Computer.FileSystem.ReadAllText(".\imgname").Replace("Name : ", "").Trim()
-                File.Delete(".\imgname")
-                File.Delete(".\bin\exthelpers\temp.bat")
+                Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
+                Label18.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\imgname").Replace("Name : ", "").Trim()
+                File.Delete(Application.StartupPath & "\imgname")
+                File.Delete(Application.StartupPath & "\bin\exthelpers\temp.bat")
                 Select Case DismVersionChecker.ProductMajorPart
                     Case 6
                         Select Case DismVersionChecker.ProductMinorPart
                             Case 1
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-wiminfo /wimfile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
                                                   ASCII)
                             Case Is >= 2
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
                                                   ASCII)
                         End Select
                     Case 10
-                        File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                           "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
                                           ASCII)
                 End Select
-                Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
-                Label20.Text = My.Computer.FileSystem.ReadAllText(".\imgdesc").Replace("Description : ", "").Trim()
-                File.Delete(".\imgdesc")
-                File.Delete(".\bin\exthelpers\temp.bat")
+                Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
+                Label20.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\imgdesc").Replace("Description : ", "").Trim()
+                File.Delete(Application.StartupPath & "\imgdesc")
+                File.Delete(Application.StartupPath & "\bin\exthelpers\temp.bat")
                 If Label18.Text = "" Or Label20.Text = "" Then
                     Label18.Text = imgMountedName
                     Label20.Text = imgMountedDesc
@@ -5676,44 +5676,44 @@ Public Class MainForm
                     Case 6
                         Select Case DismVersionChecker.ProductMinorPart
                             Case 1
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Name" & Quote & " > imgname", _
                                                   ASCII)
                             Case Is >= 2
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Name" & Quote & " > imgname", _
                                                   ASCII)
                         End Select
                     Case 10
-                        File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                           "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Name" & Quote & " > imgname", _
                                           ASCII)
                 End Select
-                Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
-                Label18.Text = My.Computer.FileSystem.ReadAllText(".\imgname").Replace("Name : ", "").Trim()
-                File.Delete(".\imgname")
-                File.Delete(".\bin\exthelpers\temp.bat")
+                Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
+                Label18.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\imgname").Replace("Name : ", "").Trim()
+                File.Delete(Application.StartupPath & "\imgname")
+                File.Delete(Application.StartupPath & "\bin\exthelpers\temp.bat")
                 Select Case DismVersionChecker.ProductMajorPart
                     Case 6
                         Select Case DismVersionChecker.ProductMinorPart
                             Case 1
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
                                                   ASCII)
                             Case Is >= 2
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
                                                   ASCII)
                         End Select
                     Case 10
-                        File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                           "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
                                           ASCII)
                 End Select
-                Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
-                Label20.Text = My.Computer.FileSystem.ReadAllText(".\imgdesc").Replace("Description : ", "").Trim()
-                File.Delete(".\imgdesc")
-                File.Delete(".\bin\exthelpers\temp.bat")
+                Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
+                Label20.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\imgdesc").Replace("Description : ", "").Trim()
+                File.Delete(Application.StartupPath & "\imgdesc")
+                File.Delete(Application.StartupPath & "\bin\exthelpers\temp.bat")
                 If Label18.Text = "" Or Label20.Text = "" Then
                     Label18.Text = imgMountedName
                     Label20.Text = imgMountedDesc
@@ -5729,42 +5729,42 @@ Public Class MainForm
             Case 6
                 Select Case DismVersionChecker.ProductMinorPart
                     Case 1
-                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                           "@echo off" & CrLf & _
                                           "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus", ASCII)
                     Case Is >= 2
-                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                           "@echo off" & CrLf & _
                                           "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus", ASCII)
                 End Select
             Case 10
-                File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                   "@echo off" & CrLf & _
                                   "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus", ASCII)
         End Select
-        Process.Start(".\bin\exthelpers\imginfo.bat").WaitForExit()
+        Process.Start(Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
         mountedImgStatus = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgmountedstatus", ASCII).Replace("Status : ", "").Trim()
-        File.Delete(".\bin\exthelpers\imginfo.bat")
+        File.Delete(Application.StartupPath & "\bin\exthelpers\imginfo.bat")
         Select Case DismVersionChecker.ProductMajorPart
             Case 6
                 Select Case DismVersionChecker.ProductMinorPart
                     Case 1
-                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                           "@echo off" & CrLf & _
                                           "dism /English /get-wiminfo /wimfile=" & SourceImg & " | find /c " & Quote & "Index" & Quote & " > " & projPath & "\tempinfo\indexcount", ASCII)
                     Case Is >= 2
-                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                           "@echo off" & CrLf & _
                                           "dism /English /get-imageinfo /imagefile=" & SourceImg & " | find /c " & Quote & "Index" & Quote & " > " & projPath & "\tempinfo\indexcount", ASCII)
                 End Select
             Case 10
-                File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                   "@echo off" & CrLf & _
                                   "dism /English /get-imageinfo /imagefile=" & SourceImg & " | find /c " & Quote & "Index" & Quote & " > " & projPath & "\tempinfo\indexcount", ASCII)
         End Select
-        Process.Start(".\bin\exthelpers\imginfo.bat").WaitForExit()
+        Process.Start(Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
         imgIndexCount = CInt(My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\indexcount", ASCII))
-        File.Delete(".\bin\exthelpers\imginfo.bat")
+        File.Delete(Application.StartupPath & "\bin\exthelpers\imginfo.bat")
         For Each FoundFile In My.Computer.FileSystem.GetFiles(projPath & "\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
             File.Delete(FoundFile)
         Next
@@ -5799,7 +5799,7 @@ Public Class MainForm
                     Case 6
                         Select Case DismVersionChecker.ProductMinorPart
                             Case 1
-                                File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                                   "@echo off" & CrLf & _
                                                   "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf & _
                                                   "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf & _
@@ -5825,7 +5825,7 @@ Public Class MainForm
                                                   "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & projPath & "\tempinfo\imgmodification" & CrLf & _
                                                   "dism /English /image=" & MountDir & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & projPath & "\tempinfo\imglangs", ASCII)
                             Case Is >= 2
-                                File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                                   "@echo off" & CrLf & _
                                                   "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf & _
                                                   "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf & _
@@ -5852,7 +5852,7 @@ Public Class MainForm
                                                   "dism /English /image=" & MountDir & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & projPath & "\tempinfo\imglangs", ASCII)
                         End Select
                     Case 10
-                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                           "@echo off" & CrLf & _
                                           "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf & _
                                           "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf & _
@@ -5880,9 +5880,9 @@ Public Class MainForm
                 End Select
 
                 If Debugger.IsAttached Then
-                    Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\imginfo.bat").WaitForExit()
+                    Process.Start("\Windows\system32\notepad.exe", Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
                 End If
-                Process.Start(".\bin\exthelpers\imginfo.bat").WaitForExit()
+                Process.Start(Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
                 'imgName = SourceImg
                 'ImgIndex = ImgIndex
                 'imgMountDir = MountDir
@@ -5923,7 +5923,7 @@ Public Class MainForm
                         File.Delete(foundFile)
                     Next
                     Directory.Delete(projPath & "\tempinfo")
-                    File.Delete(".\bin\exthelpers\imginfo.bat")
+                    File.Delete(Application.StartupPath & "\bin\exthelpers\imginfo.bat")
                 Catch ex As Exception
 
                 End Try
