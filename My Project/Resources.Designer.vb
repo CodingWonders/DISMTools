@@ -1628,10 +1628,14 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''- Fixed an issue where background processes would fail in active installation management mode if the AppX package non-removable policy could not be gathered
-        '''- Fixed an issue where AppX package addition operations would fail after the &quot;/Region&quot; parameter was passed (DISM for Windows 8)
-        '''- Fixed an issue where the program would throw an &quot;IOException&quot; when dropping driver folders to the driver addition list view
-        '''- Fixed an issue where the program would crash when loading the image index switcher  [resto de la cadena truncado]&quot;;.
+        '''- Fixed an issue where the program would fail AppX package detection on images running Windows versions older than Windows Developer Preview
+        '''- Fixed an issue where the program would throw an exception after failing to find a suitable AppX package name
+        '''- Fixed an issue where the updater would fail at extracting the new release on older PowerShell versions
+        '''- Fixed several crashes which would occur when performing actions if the mounted image detector process was starting up
+        '''
+        '''New features
+        '''
+        '''- [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
