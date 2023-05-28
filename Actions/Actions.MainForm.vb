@@ -27,38 +27,26 @@ Public Class Actions_MainForm
 
         ' Use Notepad++'s lexer style colors
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Scintilla1.Styles(Style.Xml.XmlStart).ForeColor = Color.FromArgb(127, 159, 127)
-            Scintilla1.Styles(Style.Xml.XmlEnd).ForeColor = Color.FromArgb(127, 159, 127)
-            Scintilla1.Styles(Style.Xml.Default).ForeColor = Color.FromArgb(220, 220, 204)
-            Scintilla1.Styles(Style.Xml.Comment).ForeColor = Color.FromArgb(127, 159, 127)
-            Scintilla1.Styles(Style.Xml.Number).ForeColor = Color.FromArgb(140, 208, 211)
-            Scintilla1.Styles(Style.Xml.DoubleString).ForeColor = Color.FromArgb(200, 145, 145)
-            Scintilla1.Styles(Style.Xml.SingleString).ForeColor = Color.FromArgb(200, 145, 145)
-            Scintilla1.Styles(Style.Xml.Tag).ForeColor = Color.FromArgb(227, 206, 171)
-            Scintilla1.Styles(Style.Xml.TagEnd).ForeColor = Color.FromArgb(227, 206, 171)
-            Scintilla1.Styles(Style.Xml.TagUnknown).ForeColor = Color.FromArgb(237, 214, 237)
-            Scintilla1.Styles(Style.Xml.Attribute).ForeColor = Color.FromArgb(190, 200, 158)
-            Scintilla1.Styles(Style.Xml.AttributeUnknown).ForeColor = Color.FromArgb(223, 223, 223)
-            Scintilla1.Styles(Style.Xml.CData).ForeColor = Color.FromArgb(200, 145, 145)
-            Scintilla1.Styles(Style.Xml.Entity).ForeColor = Color.FromArgb(207, 191, 175)
+            Scintilla1.Styles(Style.Vb.Default).ForeColor = Color.FromArgb(220, 220, 204)
+            Scintilla1.Styles(Style.Vb.Comment).ForeColor = Color.FromArgb(127, 159, 127)
+            Scintilla1.Styles(Style.Vb.Number).ForeColor = Color.FromArgb(140, 208, 211)
+            Scintilla1.Styles(Style.Vb.DocKeyword).ForeColor = Color.FromArgb(206, 223, 153)
+            Scintilla1.Styles(Style.Vb.String).ForeColor = Color.FromArgb(204, 147, 147)
+            Scintilla1.Styles(Style.Vb.Preprocessor).ForeColor = Color.FromArgb(255, 207, 175)
+            Scintilla1.Styles(Style.Vb.Operator).ForeColor = Color.FromArgb(159, 157, 109)
+            Scintilla1.Styles(Style.Vb.Date).ForeColor = Color.FromArgb(223, 196, 125)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Scintilla1.Styles(Style.Xml.XmlStart).ForeColor = Color.Red
-            Scintilla1.Styles(Style.Xml.XmlEnd).ForeColor = Color.Red
-            Scintilla1.Styles(Style.Xml.Default).ForeColor = Color.Black
-            Scintilla1.Styles(Style.Xml.Comment).ForeColor = Color.FromArgb(0, 128, 0)
-            Scintilla1.Styles(Style.Xml.Number).ForeColor = Color.Red
-            Scintilla1.Styles(Style.Xml.DoubleString).ForeColor = Color.FromArgb(128, 0, 255)
-            Scintilla1.Styles(Style.Xml.SingleString).ForeColor = Color.FromArgb(128, 0, 255)
-            Scintilla1.Styles(Style.Xml.Tag).ForeColor = Color.Blue
-            Scintilla1.Styles(Style.Xml.TagEnd).ForeColor = Color.Blue
-            Scintilla1.Styles(Style.Xml.TagUnknown).ForeColor = Color.Blue
-            Scintilla1.Styles(Style.Xml.Attribute).ForeColor = Color.Red
-            Scintilla1.Styles(Style.Xml.AttributeUnknown).ForeColor = Color.Red
-            Scintilla1.Styles(Style.Xml.CData).ForeColor = Color.FromArgb(255, 128, 0)
-            Scintilla1.Styles(Style.Xml.Entity).ForeColor = Color.Black
+            Scintilla1.Styles(Style.Vb.Default).ForeColor = ForeColor
+            Scintilla1.Styles(Style.Vb.Comment).ForeColor = Color.FromArgb(0, 128, 0)
+            Scintilla1.Styles(Style.Vb.Number).ForeColor = Color.FromArgb(255, 0, 0)
+            Scintilla1.Styles(Style.Vb.DocKeyword).ForeColor = Color.FromArgb(0, 0, 255)
+            Scintilla1.Styles(Style.Vb.String).ForeColor = Color.FromArgb(128, 128, 128)
+            Scintilla1.Styles(Style.Vb.Preprocessor).ForeColor = Color.FromArgb(255, 0, 0)
+            Scintilla1.Styles(Style.Vb.Operator).ForeColor = ForeColor
+            Scintilla1.Styles(Style.Vb.Date).ForeColor = Color.FromArgb(0, 255, 0)
         End If
         ' Set lexer
-        Scintilla1.Lexer = Lexer.Xml
+        Scintilla1.Lexer = Lexer.Vb
 
         ' Set line number margin properties
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
