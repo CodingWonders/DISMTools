@@ -170,6 +170,8 @@ Partial Class MainForm
         Me.ActionEditorToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator22 = New System.Windows.Forms.ToolStripSeparator()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator26 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ShowValidationFormToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpTopicsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GlossaryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -389,8 +391,6 @@ Partial Class MainForm
         Me.NewFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExistingFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ADKCopierBW = New System.ComponentModel.BackgroundWorker()
-        Me.ToolStripSeparator26 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ShowValidationFormToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -1328,7 +1328,6 @@ Partial Class MainForm
         '
         'ActionEditorToolStripMenuItem
         '
-        Me.ActionEditorToolStripMenuItem.Enabled = False
         Me.ActionEditorToolStripMenuItem.Name = "ActionEditorToolStripMenuItem"
         Me.ActionEditorToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
         Me.ActionEditorToolStripMenuItem.Text = "Action editor"
@@ -1343,6 +1342,17 @@ Partial Class MainForm
         Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
         Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
         Me.OptionsToolStripMenuItem.Text = "Options"
+        '
+        'ToolStripSeparator26
+        '
+        Me.ToolStripSeparator26.Name = "ToolStripSeparator26"
+        Me.ToolStripSeparator26.Size = New System.Drawing.Size(277, 6)
+        '
+        'ShowValidationFormToolStripMenuItem
+        '
+        Me.ShowValidationFormToolStripMenuItem.Name = "ShowValidationFormToolStripMenuItem"
+        Me.ShowValidationFormToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
+        Me.ShowValidationFormToolStripMenuItem.Text = "Show validation form"
         '
         'HelpToolStripMenuItem
         '
@@ -2318,7 +2328,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.44444!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.55556!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 58.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -2367,7 +2377,7 @@ Partial Class MainForm
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel8.Location = New System.Drawing.Point(90, 3)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(104, 23)
+        Me.Panel8.Size = New System.Drawing.Size(102, 23)
         Me.Panel8.TabIndex = 8
         '
         'projName
@@ -2376,7 +2386,7 @@ Partial Class MainForm
         Me.projName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projName.Location = New System.Drawing.Point(0, 0)
         Me.projName.Name = "projName"
-        Me.projName.Size = New System.Drawing.Size(104, 23)
+        Me.projName.Size = New System.Drawing.Size(102, 23)
         Me.projName.TabIndex = 2
         Me.projName.Text = "projName"
         Me.projName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -2386,7 +2396,7 @@ Partial Class MainForm
         Me.projNameText.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projNameText.Location = New System.Drawing.Point(0, 0)
         Me.projNameText.Name = "projNameText"
-        Me.projNameText.Size = New System.Drawing.Size(104, 21)
+        Me.projNameText.Size = New System.Drawing.Size(102, 21)
         Me.projNameText.TabIndex = 4
         Me.projNameText.Text = "projName"
         Me.projNameText.Visible = False
@@ -3475,17 +3485,6 @@ Partial Class MainForm
         '
         Me.ADKCopierBW.WorkerReportsProgress = True
         Me.ADKCopierBW.WorkerSupportsCancellation = True
-        '
-        'ToolStripSeparator26
-        '
-        Me.ToolStripSeparator26.Name = "ToolStripSeparator26"
-        Me.ToolStripSeparator26.Size = New System.Drawing.Size(277, 6)
-        '
-        'ShowValidationFormToolStripMenuItem
-        '
-        Me.ShowValidationFormToolStripMenuItem.Name = "ShowValidationFormToolStripMenuItem"
-        Me.ShowValidationFormToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
-        Me.ShowValidationFormToolStripMenuItem.Text = "Show validation form"
         '
         'MainForm
         '

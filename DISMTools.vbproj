@@ -104,6 +104,12 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\Actions.MainForm.Designer.vb">
+      <DependentUpon>Actions.MainForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\Actions.MainForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Actions\Validation\Actions.Validation.Designer.vb">
       <DependentUpon>Actions.Validation.vb</DependentUpon>
     </Compile>
@@ -507,6 +513,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Actions\Actions.MainForm.resx">
+      <DependentUpon>Actions.MainForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Actions\Validation\Actions.Validation.resx">
       <DependentUpon>Actions.Validation.vb</DependentUpon>
     </EmbeddedResource>
