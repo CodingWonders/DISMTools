@@ -144,5 +144,17 @@ Public Class Actions_MainForm
         StatusStrip.BackColor = MainForm.StatusStrip.BackColor
         InitScintilla("Courier New", 10)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(Handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        ' Fill in font combinations
+        FontFamilyTSCB.Items.Clear()
+        For Each fntFamily As FontFamily In FontFamily.Families
+            FontFamilyTSCB.Items.Add(fntFamily.Name)
+        Next
+        FontFamilyTSCB.SelectedItem = "Courier New"
+        InitScintilla("Courier New", 10)
+    End Sub
+
+    Private Sub FontChange(sender As Object, e As EventArgs) Handles FontFamilyTSCB.SelectedIndexChanged, FontSizeTSCB.SelectedIndexChanged
+        ' Change Scintilla editor font
+        InitScintilla(FontFamilyTSCB.SelectedItem, FontSizeTSCB.SelectedItem)
     End Sub
 End Class
