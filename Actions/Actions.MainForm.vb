@@ -1,4 +1,6 @@
-﻿Imports ScintillaNET
+﻿Imports System.IO
+Imports ScintillaNET
+
 Public Class Actions_MainForm
 
     Sub InitScintilla(fntName As String, fntSize As Integer)
@@ -156,5 +158,14 @@ Public Class Actions_MainForm
     Private Sub FontChange(sender As Object, e As EventArgs) Handles FontFamilyTSCB.SelectedIndexChanged, FontSizeTSCB.SelectedIndexChanged
         ' Change Scintilla editor font
         InitScintilla(FontFamilyTSCB.SelectedItem, FontSizeTSCB.SelectedItem)
+    End Sub
+
+    Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
+        Scintilla1.Text = File.ReadAllText(OpenFileDialog1.FileName)
+        Text = "Actions - " & Path.GetFileName(OpenFileDialog1.FileName)
+    End Sub
+
+    Private Sub ToolStripButton3_Click(sender As Object, e As EventArgs) Handles ToolStripButton3.Click
+        OpenFileDialog1.ShowDialog()
     End Sub
 End Class

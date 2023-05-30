@@ -78,6 +78,7 @@ Partial Class Actions_MainForm
         Me.ToolStripSeparator15 = New System.Windows.Forms.ToolStripSeparator()
         Me.ReportFeedbackopensInWebBrowserToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Scintilla1 = New ScintillaNET.Scintilla()
         Me.DarkToolStrip1 = New DarkUI.Controls.DarkToolStrip()
         Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton3 = New System.Windows.Forms.ToolStripButton()
@@ -89,10 +90,13 @@ Partial Class Actions_MainForm
         Me.ToolStripButton5 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator18 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripButton6 = New System.Windows.Forms.ToolStripButton()
-        Me.Scintilla1 = New ScintillaNET.Scintilla()
         Me.StatusStrip = New System.Windows.Forms.StatusStrip()
-        Me.MenuDesc = New System.Windows.Forms.ToolStripStatusLabel()
         Me.BackgroundProcessesButton = New System.Windows.Forms.ToolStripSplitButton()
+        Me.MenuDesc = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.ToolStripSeparator19 = New System.Windows.Forms.ToolStripSeparator()
+        Me.SamplesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
+        Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.MenuStrip1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.DarkToolStrip1.SuspendLayout()
@@ -408,7 +412,7 @@ Partial Class Actions_MainForm
         '
         'HelpToolStripMenuItem
         '
-        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ActionsReferenceToolStripMenuItem, Me.GeneralHelpTopicsToolStripMenuItem, Me.ToolStripSeparator14, Me.AboutToolStripMenuItem, Me.ToolStripSeparator15, Me.ReportFeedbackopensInWebBrowserToolStripMenuItem})
+        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ActionsReferenceToolStripMenuItem, Me.GeneralHelpTopicsToolStripMenuItem, Me.ToolStripSeparator19, Me.SamplesToolStripMenuItem, Me.ToolStripSeparator14, Me.AboutToolStripMenuItem, Me.ToolStripSeparator15, Me.ReportFeedbackopensInWebBrowserToolStripMenuItem})
         Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
         Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
         Me.HelpToolStripMenuItem.Text = "Help"
@@ -455,6 +459,15 @@ Partial Class Actions_MainForm
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(1264, 603)
         Me.Panel1.TabIndex = 2
+        '
+        'Scintilla1
+        '
+        Me.Scintilla1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Scintilla1.IndentationGuides = ScintillaNET.IndentView.LookBoth
+        Me.Scintilla1.Location = New System.Drawing.Point(0, 0)
+        Me.Scintilla1.Name = "Scintilla1"
+        Me.Scintilla1.Size = New System.Drawing.Size(1264, 603)
+        Me.Scintilla1.TabIndex = 3
         '
         'DarkToolStrip1
         '
@@ -569,15 +582,6 @@ Partial Class Actions_MainForm
         Me.ToolStripButton6.Size = New System.Drawing.Size(23, 25)
         Me.ToolStripButton6.Text = "Help"
         '
-        'Scintilla1
-        '
-        Me.Scintilla1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Scintilla1.IndentationGuides = ScintillaNET.IndentView.LookBoth
-        Me.Scintilla1.Location = New System.Drawing.Point(0, 0)
-        Me.Scintilla1.Name = "Scintilla1"
-        Me.Scintilla1.Size = New System.Drawing.Size(1264, 603)
-        Me.Scintilla1.TabIndex = 3
-        '
         'StatusStrip
         '
         Me.StatusStrip.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -587,13 +591,6 @@ Partial Class Actions_MainForm
         Me.StatusStrip.Size = New System.Drawing.Size(1264, 26)
         Me.StatusStrip.TabIndex = 5
         Me.StatusStrip.Text = "Status"
-        '
-        'MenuDesc
-        '
-        Me.MenuDesc.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.MenuDesc.Name = "MenuDesc"
-        Me.MenuDesc.Size = New System.Drawing.Size(39, 21)
-        Me.MenuDesc.Text = "Ready"
         '
         'BackgroundProcessesButton
         '
@@ -605,6 +602,29 @@ Partial Class Actions_MainForm
         Me.BackgroundProcessesButton.Name = "BackgroundProcessesButton"
         Me.BackgroundProcessesButton.Size = New System.Drawing.Size(25, 24)
         Me.BackgroundProcessesButton.ToolTipText = "View background processes"
+        '
+        'MenuDesc
+        '
+        Me.MenuDesc.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.MenuDesc.Name = "MenuDesc"
+        Me.MenuDesc.Size = New System.Drawing.Size(39, 21)
+        Me.MenuDesc.Text = "Ready"
+        '
+        'ToolStripSeparator19
+        '
+        Me.ToolStripSeparator19.Name = "ToolStripSeparator19"
+        Me.ToolStripSeparator19.Size = New System.Drawing.Size(283, 6)
+        '
+        'SamplesToolStripMenuItem
+        '
+        Me.SamplesToolStripMenuItem.Name = "SamplesToolStripMenuItem"
+        Me.SamplesToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
+        Me.SamplesToolStripMenuItem.Text = "Samples"
+        '
+        'OpenFileDialog1
+        '
+        Me.OpenFileDialog1.Filter = "DISMTools Action files|*.dta"
+        Me.OpenFileDialog1.SupportMultiDottedExtensions = True
         '
         'Actions_MainForm
         '
@@ -702,4 +722,8 @@ Partial Class Actions_MainForm
     Friend WithEvents StatusStrip As System.Windows.Forms.StatusStrip
     Friend WithEvents BackgroundProcessesButton As System.Windows.Forms.ToolStripSplitButton
     Friend WithEvents MenuDesc As System.Windows.Forms.ToolStripStatusLabel
+    Friend WithEvents ToolStripSeparator19 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents SamplesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
+    Friend WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
 End Class
