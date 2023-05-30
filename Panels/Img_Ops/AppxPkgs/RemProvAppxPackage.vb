@@ -24,6 +24,7 @@ Public Class RemProvAppxPackage
                 Case 2
                     MsgBox("Especifique paquetes AppX a eliminar e inténtelo de nuevo.", vbOKOnly + vbCritical, "Eliminar paquetes aprovisionados AppX")
             End Select
+            Exit Sub
         Else
             If AppxRemovalCount > 65535 Then
                 MsgBox("Right now, you can only specify less than 65535 AppX packages. This is a program limitation that will be gone in a future update.", vbOKOnly + vbCritical, "Remove provisioned AppX packages")
