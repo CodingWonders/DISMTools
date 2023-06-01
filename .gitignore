@@ -396,3 +396,7 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Installer leftovers
+[Ii]nstaller/[Ff]iles/
+[Ii]nstaller/[Oo]utput/

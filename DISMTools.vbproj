@@ -730,6 +730,10 @@
     <None Include="Helpers\extps1\extappx.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Installer\Default.isl" />
+    <None Include="Installer\Setup.e32" />
+    <None Include="Installer\SetupLdr.e32" />
+    <None Include="Installer\Spanish.isl" />
     <None Include="LICENSE">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -803,6 +807,15 @@
     <None Include="Resources\icons8_code_32px.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Installer\dt.iss" />
+    <Content Include="Installer\ISCC.exe" />
+    <Content Include="Installer\ISCmplr.dll" />
+    <Content Include="Installer\islzma.dll" />
+    <Content Include="Installer\islzma32.exe" />
+    <Content Include="Installer\islzma64.exe" />
+    <Content Include="Installer\ISPP.dll" />
+    <Content Include="Installer\ISPPBuiltins.iss" />
+    <Content Include="Installer\license.txt" />
     <Content Include="logo.ico" />
     <None Include="Resources\actions\validation.png" />
     <None Include="Resources\setting_migration.ico" />
@@ -1080,7 +1093,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\Debug\" />
-    <Folder Include="Installer\" />
     <Folder Include="Panels\Set_Ops\" />
     <Folder Include="Updater\" />
     <Folder Include="wimlib\" />
@@ -1128,7 +1140,17 @@ IF %25ISPREVIEW%25=="Yes" (
 	echo You will be running a preview release, which may not be ready for production. You may experience more bugs and less stability. Please switch to a stable release whenever possible.
 )
 IF %25GEN_INSTALLER%25=="Yes" (
-	echo Support for generating an installer will come later ;^)
+	echo The technology used for creating the installer is subject to a license. Refer to the "LICENSE.TXT" file in the "$(SolutionDir)Installer" directory for more information
+	echo Copying program files...
+	IF NOT EXIST "$(SolutionDir)Installer\files" (md "$(SolutionDir)Installer\files")
+	XCOPY "$(TargetDir)*.*" "$(SolutionDir)Installer\files" /cehyi
+	IF EXIST "$(SolutionDir)Installer\iscc.exe" (
+		echo Building the installer...
+		"$(SolutionDir)Installer\iscc.exe" "$(SolutionDir)Installer\dt.iss"
+	) ELSE (
+		echo Warning: the installer compiler could not be found. Deleting temporary setup files...
+		rd "$(SolutionDir)Installer\files" /s /q
+	)
 )</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
