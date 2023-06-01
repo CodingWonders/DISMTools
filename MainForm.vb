@@ -7240,13 +7240,17 @@ Public Class MainForm
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
                             ExpandCollapseTSB.Text = "Collapse"
+                            ExpandToolStripMenuItem.Text = "Collapse item"
                         Case "ESN"
                             ExpandCollapseTSB.Text = "Contraer"
+                            ExpandToolStripMenuItem.Text = "Contraer objeto"
                     End Select
                 Case 1
                     ExpandCollapseTSB.Text = "Collapse"
+                    ExpandToolStripMenuItem.Text = "Collapse item"
                 Case 2
                     ExpandCollapseTSB.Text = "Contraer"
+                    ExpandToolStripMenuItem.Text = "Contraer objeto"
             End Select
             If BackColor = Color.FromArgb(48, 48, 48) Then
                 ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph_dark)
@@ -7259,13 +7263,17 @@ Public Class MainForm
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
                             ExpandCollapseTSB.Text = "Expand"
+                            ExpandToolStripMenuItem.Text = "Expand item"
                         Case "ESN"
                             ExpandCollapseTSB.Text = "Expandir"
+                            ExpandToolStripMenuItem.Text = "Expandir objeto"
                     End Select
                 Case 1
                     ExpandCollapseTSB.Text = "Expand"
+                    ExpandToolStripMenuItem.Text = "Expand item"
                 Case 2
                     ExpandCollapseTSB.Text = "Expandir"
+                    ExpandToolStripMenuItem.Text = "Expandir objeto"
             End Select
             If BackColor = Color.FromArgb(48, 48, 48) Then
                 ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
@@ -7275,8 +7283,10 @@ Public Class MainForm
         End If
         If prjTreeView.SelectedNode.Nodes.Count = 0 Then
             ExpandCollapseTSB.Enabled = False
+            ExpandToolStripMenuItem.Enabled = False
         Else
             ExpandCollapseTSB.Enabled = True
+            ExpandToolStripMenuItem.Enabled = True
         End If
     End Sub
 
@@ -8947,5 +8957,9 @@ Public Class MainForm
     Private Sub ShowValidationFormToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ShowValidationFormToolStripMenuItem.Click
         ValidationForm.Left = 0
         ValidationForm.Show()
+    End Sub
+
+    Private Sub ExpandToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExpandToolStripMenuItem.Click
+        ExpandCollapseTSB.PerformClick()
     End Sub
 End Class

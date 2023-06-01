@@ -2328,7 +2328,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.44444!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.55556!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 61.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 62.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -2377,7 +2377,7 @@ Partial Class MainForm
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel8.Location = New System.Drawing.Point(89, 3)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(102, 23)
+        Me.Panel8.Size = New System.Drawing.Size(101, 23)
         Me.Panel8.TabIndex = 8
         '
         'projName
@@ -2386,7 +2386,7 @@ Partial Class MainForm
         Me.projName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projName.Location = New System.Drawing.Point(0, 0)
         Me.projName.Name = "projName"
-        Me.projName.Size = New System.Drawing.Size(102, 23)
+        Me.projName.Size = New System.Drawing.Size(101, 23)
         Me.projName.TabIndex = 2
         Me.projName.Text = "projName"
         Me.projName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -2396,7 +2396,7 @@ Partial Class MainForm
         Me.projNameText.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projNameText.Location = New System.Drawing.Point(0, 0)
         Me.projNameText.Name = "projNameText"
-        Me.projNameText.Size = New System.Drawing.Size(102, 21)
+        Me.projNameText.Size = New System.Drawing.Size(101, 21)
         Me.projNameText.TabIndex = 4
         Me.projNameText.Text = "projName"
         Me.projNameText.Visible = False
@@ -3292,7 +3292,7 @@ Partial Class MainForm
         '
         Me.TreeViewCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExpandToolStripMenuItem, Me.AccessDirectoryToolStripMenuItem, Me.ToolStripSeparator23, Me.UnloadProjectToolStripMenuItem1, Me.ToolStripSeparator24, Me.CopyDeploymentToolsToolStripMenuItem, Me.ToolStripSeparator27, Me.ImageOperationsToolStripMenuItem, Me.ToolStripSeparator30, Me.UnattendedAnswerFilesToolStripMenuItem1, Me.ToolStripSeparator31, Me.ScratchDirectoryToolStripMenuItem, Me.ToolStripSeparator32, Me.ManageReportsToolStripMenuItem, Me.ToolStripSeparator33, Me.AddToolStripMenuItem})
         Me.TreeViewCMS.Name = "TreeViewCMS"
-        Me.TreeViewCMS.Size = New System.Drawing.Size(201, 244)
+        Me.TreeViewCMS.Size = New System.Drawing.Size(201, 266)
         '
         'ExpandToolStripMenuItem
         '
