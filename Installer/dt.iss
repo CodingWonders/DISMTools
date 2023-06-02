@@ -56,6 +56,7 @@ Source: ".\files\System.Xml.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\files\System.Xml.Linq.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\files\WeifenLuo.WinFormsUI.Docking.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\files\WeifenLuo.WinFormsUI.Docking.ThemeVS2012.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: ".\files\bin\*"; DestDir: "{app}\bin"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Registry]
