@@ -35,6 +35,8 @@ WizardStyle=modern
 DisableWelcomePage=no
 ArchitecturesInstallIn64BitMode=x64
 CloseApplications=yes
+WizardImageFile=mainImg.bmp
+WizardSmallImageFile=logo.bmp
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
