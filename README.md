@@ -1,5 +1,9 @@
-# DISMTools
- 
+<p align="center">
+  <img src="https://github.com/CodingWonders/DISMTools/assets/101426328/165075ee-87f6-4e0a-9e85-67f93c0ca319">
+  <h3 align="center">A free and open-source GUI for DISM operations</h3>
+</p>
+<hr>
+
 ![Product image](https://user-images.githubusercontent.com/101426328/233696501-a27a1e20-f489-4010-8f3c-f060fb808fd2.png)
 
 
@@ -40,13 +44,13 @@ The following actions are supported by DISMTools:
   - Add provisioning packages to an image
 - Other
   - Get complete information of an image
+  - Using the project's or program's scratch directory
   
 ## Unsupported actions
 
 - Getting any kind of information from packages or features (on demand)
 - Regional settings
 - Applying unattended answer files
-- Using the project's scratch directory
 - and more, it's in beta stages
 
 These actions will be supported on future releases. They aren't implemented yet because it takes time to create working implementations that don't conflict with the rest of the program
