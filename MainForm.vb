@@ -2668,7 +2668,7 @@ Public Class MainForm
         PSExtAppxProc.StartInfo.WorkingDirectory = Application.StartupPath
         ' The "executionpolicy" argument is passed to PowerShell as a temporary execution policy setting that happens once.
         ' More on that here: https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.3#set-a-different-policy-for-one-session
-        PSExtAppxProc.StartInfo.Arguments = "-executionpolicy unrestricted " & Quote & Application.StartupPath & "\bin\extps1\extappx.ps1" & Quote
+        PSExtAppxProc.StartInfo.Arguments = "-executionpolicy unrestricted -file" & Quote & Application.StartupPath & "\bin\extps1\extappx.ps1" & Quote
         If Not Debugger.IsAttached Then
             PSExtAppxProc.StartInfo.CreateNoWindow = True
             PSExtAppxProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
