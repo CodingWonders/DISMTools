@@ -6124,7 +6124,7 @@ Public Class MainForm
                             prjTreeView.Nodes("parent").Nodes.Add("reports", "Project reports")
                         Case "ESN"
                             prjTreeView.Nodes.Add("parent", "Proyecto: " & Quote & MainProjNameNode & Quote)
-                            prjTreeView.Nodes("parent").Nodes.Add("dandi", "Herramientas de implementación KEI")
+                            prjTreeView.Nodes("parent").Nodes.Add("dandi", "Herramientas de implementación")
                             prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_x86", "Herramientas de implementación (x86)")
                             prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_amd64", "Herramientas de implementación (AMD64)")
                             prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm", "Herramientas de implementación (ARM)")
@@ -6147,7 +6147,7 @@ Public Class MainForm
                     prjTreeView.Nodes("parent").Nodes.Add("reports", "Project reports")
                 Case 2
                     prjTreeView.Nodes.Add("parent", "Proyecto: " & Quote & MainProjNameNode & Quote)
-                    prjTreeView.Nodes("parent").Nodes.Add("dandi", "Herramientas de implementación KEI")
+                    prjTreeView.Nodes("parent").Nodes.Add("dandi", "Herramientas de implementación")
                     prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_x86", "Herramientas de implementación para x86")
                     prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_amd64", "Herramientas de implementación para AMD64")
                     prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm", "Herramientas de implementación para ARM")
