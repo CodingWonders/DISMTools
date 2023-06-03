@@ -379,9 +379,9 @@ Partial Class MainForm
         Me.ToolStripSeparator30 = New System.Windows.Forms.ToolStripSeparator()
         Me.UnattendedAnswerFilesToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ManageToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.LaunchCreationWizardToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CreationWizardToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator31 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ScratchDirectoryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ScratchDirectorySettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator32 = New System.Windows.Forms.ToolStripSeparator()
         Me.ManageReportsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator33 = New System.Windows.Forms.ToolStripSeparator()
@@ -3277,43 +3277,43 @@ Partial Class MainForm
         '
         'TreeViewCMS
         '
-        Me.TreeViewCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExpandToolStripMenuItem, Me.AccessDirectoryToolStripMenuItem, Me.ToolStripSeparator23, Me.UnloadProjectToolStripMenuItem1, Me.ToolStripSeparator24, Me.CopyDeploymentToolsToolStripMenuItem, Me.ToolStripSeparator27, Me.ImageOperationsToolStripMenuItem, Me.ToolStripSeparator30, Me.UnattendedAnswerFilesToolStripMenuItem1, Me.ToolStripSeparator31, Me.ScratchDirectoryToolStripMenuItem, Me.ToolStripSeparator32, Me.ManageReportsToolStripMenuItem, Me.ToolStripSeparator33, Me.AddToolStripMenuItem})
+        Me.TreeViewCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExpandToolStripMenuItem, Me.AccessDirectoryToolStripMenuItem, Me.ToolStripSeparator23, Me.UnloadProjectToolStripMenuItem1, Me.ToolStripSeparator24, Me.CopyDeploymentToolsToolStripMenuItem, Me.ToolStripSeparator27, Me.ImageOperationsToolStripMenuItem, Me.ToolStripSeparator30, Me.UnattendedAnswerFilesToolStripMenuItem1, Me.ToolStripSeparator31, Me.ScratchDirectorySettingsToolStripMenuItem, Me.ToolStripSeparator32, Me.ManageReportsToolStripMenuItem, Me.ToolStripSeparator33, Me.AddToolStripMenuItem})
         Me.TreeViewCMS.Name = "TreeViewCMS"
-        Me.TreeViewCMS.Size = New System.Drawing.Size(201, 244)
+        Me.TreeViewCMS.Size = New System.Drawing.Size(219, 266)
         '
         'ExpandToolStripMenuItem
         '
         Me.ExpandToolStripMenuItem.Name = "ExpandToolStripMenuItem"
-        Me.ExpandToolStripMenuItem.Size = New System.Drawing.Size(200, 22)
+        Me.ExpandToolStripMenuItem.Size = New System.Drawing.Size(218, 22)
         Me.ExpandToolStripMenuItem.Text = "Expand item"
         '
         'AccessDirectoryToolStripMenuItem
         '
         Me.AccessDirectoryToolStripMenuItem.Name = "AccessDirectoryToolStripMenuItem"
-        Me.AccessDirectoryToolStripMenuItem.Size = New System.Drawing.Size(200, 22)
+        Me.AccessDirectoryToolStripMenuItem.Size = New System.Drawing.Size(218, 22)
         Me.AccessDirectoryToolStripMenuItem.Text = "Access directory"
         '
         'ToolStripSeparator23
         '
         Me.ToolStripSeparator23.Name = "ToolStripSeparator23"
-        Me.ToolStripSeparator23.Size = New System.Drawing.Size(197, 6)
+        Me.ToolStripSeparator23.Size = New System.Drawing.Size(215, 6)
         '
         'UnloadProjectToolStripMenuItem1
         '
         Me.UnloadProjectToolStripMenuItem1.Name = "UnloadProjectToolStripMenuItem1"
-        Me.UnloadProjectToolStripMenuItem1.Size = New System.Drawing.Size(200, 22)
+        Me.UnloadProjectToolStripMenuItem1.Size = New System.Drawing.Size(218, 22)
         Me.UnloadProjectToolStripMenuItem1.Text = "Unload project"
         '
         'ToolStripSeparator24
         '
         Me.ToolStripSeparator24.Name = "ToolStripSeparator24"
-        Me.ToolStripSeparator24.Size = New System.Drawing.Size(197, 6)
+        Me.ToolStripSeparator24.Size = New System.Drawing.Size(215, 6)
         '
         'CopyDeploymentToolsToolStripMenuItem
         '
         Me.CopyDeploymentToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OfAllArchitecturesToolStripMenuItem, Me.OfSelectedArchitectureToolStripMenuItem, Me.ToolStripSeparator25, Me.ForX86ArchitectureToolStripMenuItem, Me.ForAmd64ArchitectureToolStripMenuItem, Me.ForARMArchitectureToolStripMenuItem, Me.ForARM64ArchitectureToolStripMenuItem})
         Me.CopyDeploymentToolsToolStripMenuItem.Name = "CopyDeploymentToolsToolStripMenuItem"
-        Me.CopyDeploymentToolsToolStripMenuItem.Size = New System.Drawing.Size(200, 22)
+        Me.CopyDeploymentToolsToolStripMenuItem.Size = New System.Drawing.Size(218, 22)
         Me.CopyDeploymentToolsToolStripMenuItem.Text = "Copy deployment tools"
         '
         'OfAllArchitecturesToolStripMenuItem
@@ -3360,13 +3360,13 @@ Partial Class MainForm
         'ToolStripSeparator27
         '
         Me.ToolStripSeparator27.Name = "ToolStripSeparator27"
-        Me.ToolStripSeparator27.Size = New System.Drawing.Size(197, 6)
+        Me.ToolStripSeparator27.Size = New System.Drawing.Size(215, 6)
         '
         'ImageOperationsToolStripMenuItem
         '
         Me.ImageOperationsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MountImageToolStripMenuItem, Me.UnmountImageToolStripMenuItem, Me.ToolStripSeparator29, Me.RemoveVolumeImagesToolStripMenuItem, Me.SwitchImageIndexesToolStripMenuItem1})
         Me.ImageOperationsToolStripMenuItem.Name = "ImageOperationsToolStripMenuItem"
-        Me.ImageOperationsToolStripMenuItem.Size = New System.Drawing.Size(200, 22)
+        Me.ImageOperationsToolStripMenuItem.Size = New System.Drawing.Size(218, 22)
         Me.ImageOperationsToolStripMenuItem.Text = "Image operations"
         '
         'MountImageToolStripMenuItem
@@ -3401,59 +3401,59 @@ Partial Class MainForm
         'ToolStripSeparator30
         '
         Me.ToolStripSeparator30.Name = "ToolStripSeparator30"
-        Me.ToolStripSeparator30.Size = New System.Drawing.Size(197, 6)
+        Me.ToolStripSeparator30.Size = New System.Drawing.Size(215, 6)
         '
         'UnattendedAnswerFilesToolStripMenuItem1
         '
-        Me.UnattendedAnswerFilesToolStripMenuItem1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ManageToolStripMenuItem, Me.LaunchCreationWizardToolStripMenuItem})
+        Me.UnattendedAnswerFilesToolStripMenuItem1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ManageToolStripMenuItem, Me.CreationWizardToolStripMenuItem})
         Me.UnattendedAnswerFilesToolStripMenuItem1.Name = "UnattendedAnswerFilesToolStripMenuItem1"
-        Me.UnattendedAnswerFilesToolStripMenuItem1.Size = New System.Drawing.Size(200, 22)
+        Me.UnattendedAnswerFilesToolStripMenuItem1.Size = New System.Drawing.Size(218, 22)
         Me.UnattendedAnswerFilesToolStripMenuItem1.Text = "Unattended answer files"
         '
         'ManageToolStripMenuItem
         '
         Me.ManageToolStripMenuItem.Name = "ManageToolStripMenuItem"
-        Me.ManageToolStripMenuItem.Size = New System.Drawing.Size(196, 22)
+        Me.ManageToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.ManageToolStripMenuItem.Text = "Manage"
         '
-        'LaunchCreationWizardToolStripMenuItem
+        'CreationWizardToolStripMenuItem
         '
-        Me.LaunchCreationWizardToolStripMenuItem.Name = "LaunchCreationWizardToolStripMenuItem"
-        Me.LaunchCreationWizardToolStripMenuItem.Size = New System.Drawing.Size(196, 22)
-        Me.LaunchCreationWizardToolStripMenuItem.Text = "Launch creation wizard"
+        Me.CreationWizardToolStripMenuItem.Name = "CreationWizardToolStripMenuItem"
+        Me.CreationWizardToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.CreationWizardToolStripMenuItem.Text = "Create"
         '
         'ToolStripSeparator31
         '
         Me.ToolStripSeparator31.Name = "ToolStripSeparator31"
-        Me.ToolStripSeparator31.Size = New System.Drawing.Size(197, 6)
+        Me.ToolStripSeparator31.Size = New System.Drawing.Size(215, 6)
         '
-        'ScratchDirectoryToolStripMenuItem
+        'ScratchDirectorySettingsToolStripMenuItem
         '
-        Me.ScratchDirectoryToolStripMenuItem.Name = "ScratchDirectoryToolStripMenuItem"
-        Me.ScratchDirectoryToolStripMenuItem.Size = New System.Drawing.Size(200, 22)
-        Me.ScratchDirectoryToolStripMenuItem.Text = "Open scratch directory"
+        Me.ScratchDirectorySettingsToolStripMenuItem.Name = "ScratchDirectorySettingsToolStripMenuItem"
+        Me.ScratchDirectorySettingsToolStripMenuItem.Size = New System.Drawing.Size(218, 22)
+        Me.ScratchDirectorySettingsToolStripMenuItem.Text = "Configure scratch directory"
         '
         'ToolStripSeparator32
         '
         Me.ToolStripSeparator32.Name = "ToolStripSeparator32"
-        Me.ToolStripSeparator32.Size = New System.Drawing.Size(197, 6)
+        Me.ToolStripSeparator32.Size = New System.Drawing.Size(215, 6)
         '
         'ManageReportsToolStripMenuItem
         '
         Me.ManageReportsToolStripMenuItem.Name = "ManageReportsToolStripMenuItem"
-        Me.ManageReportsToolStripMenuItem.Size = New System.Drawing.Size(200, 22)
+        Me.ManageReportsToolStripMenuItem.Size = New System.Drawing.Size(218, 22)
         Me.ManageReportsToolStripMenuItem.Text = "Manage reports"
         '
         'ToolStripSeparator33
         '
         Me.ToolStripSeparator33.Name = "ToolStripSeparator33"
-        Me.ToolStripSeparator33.Size = New System.Drawing.Size(197, 6)
+        Me.ToolStripSeparator33.Size = New System.Drawing.Size(215, 6)
         '
         'AddToolStripMenuItem
         '
         Me.AddToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewFileToolStripMenuItem, Me.ExistingFileToolStripMenuItem})
         Me.AddToolStripMenuItem.Name = "AddToolStripMenuItem"
-        Me.AddToolStripMenuItem.Size = New System.Drawing.Size(200, 22)
+        Me.AddToolStripMenuItem.Size = New System.Drawing.Size(218, 22)
         Me.AddToolStripMenuItem.Text = "Add"
         '
         'NewFileToolStripMenuItem
@@ -3926,9 +3926,9 @@ Partial Class MainForm
     Friend WithEvents ToolStripSeparator30 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents UnattendedAnswerFilesToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ManageToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents LaunchCreationWizardToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents CreationWizardToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator31 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents ScratchDirectoryToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ScratchDirectorySettingsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator32 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ManageReportsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator33 As System.Windows.Forms.ToolStripSeparator

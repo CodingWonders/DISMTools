@@ -1733,7 +1733,6 @@ Public Class MainForm
                                 If WIMBootProc.HasExited Then Exit Do
                             Loop
                         End Using
-                        'Process.Start(Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
                         Try
                             imgWimBootStatus = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgwimboot", ASCII).Replace("WIM Bootable : ", "").Trim()
                             If Not ImgBW.IsBusy Then
@@ -1762,6 +1761,8 @@ Public Class MainForm
                     Button11.Enabled = True
                     Button12.Enabled = True
                     Button13.Enabled = True
+                    MountImageToolStripMenuItem.Enabled = False
+                    UnmountImageToolStripMenuItem.Enabled = True
                 Else
                     Button1.Enabled = True
                     Button2.Enabled = False
@@ -1776,6 +1777,8 @@ Public Class MainForm
                     Button11.Enabled = False
                     Button12.Enabled = False
                     Button13.Enabled = False
+                    MountImageToolStripMenuItem.Enabled = True
+                    UnmountImageToolStripMenuItem.Enabled = False
                 End If
                 Exit Sub
             End If
@@ -3941,6 +3944,29 @@ Public Class MainForm
                         BGProcDetails.Label2.Text = "Image processes have completed"
                     End If
                     MenuDesc.Text = "Ready"
+                    ' Tree view context menu
+                    AccessDirectoryToolStripMenuItem.Text = "Access directory"
+                    UnloadProjectToolStripMenuItem1.Text = "Unload project"
+                    CopyDeploymentToolsToolStripMenuItem.Text = "Copy deployment tools"
+                    OfAllArchitecturesToolStripMenuItem.Text = "Of all architectures"
+                    OfSelectedArchitectureToolStripMenuItem.Text = "Of selected architecture"
+                    ForX86ArchitectureToolStripMenuItem.Text = "For x86 architecture"
+                    ForAmd64ArchitectureToolStripMenuItem.Text = "For AMD64 architecture"
+                    ForARMArchitectureToolStripMenuItem.Text = "For ARM architecture"
+                    ForARM64ArchitectureToolStripMenuItem.Text = "For ARM64 architecture"
+                    ImageOperationsToolStripMenuItem.Text = "Image operations"
+                    MountImageToolStripMenuItem.Text = "Mount image..."
+                    UnmountImageToolStripMenuItem.Text = "Unmount image..."
+                    RemoveVolumeImagesToolStripMenuItem.Text = "Remove volume images..."
+                    SwitchImageIndexesToolStripMenuItem1.Text = "Switch image indexes..."
+                    UnattendedAnswerFilesToolStripMenuItem1.Text = "Unattended answer files"
+                    ManageToolStripMenuItem.Text = "Manage"
+                    CreationWizardToolStripMenuItem.Text = "Create"
+                    ScratchDirectorySettingsToolStripMenuItem.Text = "Configure scratch directory"
+                    ManageReportsToolStripMenuItem.Text = "Manage reports"
+                    AddToolStripMenuItem.Text = "Add"
+                    NewFileToolStripMenuItem.Text = "New file..."
+                    ExistingFileToolStripMenuItem.Text = "Existing file..."
                 ElseIf My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "ESN" Then
                     ' Top-level menu items
                     FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -4199,6 +4225,29 @@ Public Class MainForm
                         BGProcDetails.Label2.Text = "Los procesos de la imagen han completado"
                     End If
                     MenuDesc.Text = "Listo"
+                    ' Tree view context menu
+                    AccessDirectoryToolStripMenuItem.Text = "Acceder directorio"
+                    UnloadProjectToolStripMenuItem1.Text = "Descargar proyecto"
+                    CopyDeploymentToolsToolStripMenuItem.Text = "Copiar herramientas de implementación"
+                    OfAllArchitecturesToolStripMenuItem.Text = "De todas las arquitecturas"
+                    OfSelectedArchitectureToolStripMenuItem.Text = "De la arquitectura seleccionada"
+                    ForX86ArchitectureToolStripMenuItem.Text = "Para arquitectura x86"
+                    ForAmd64ArchitectureToolStripMenuItem.Text = "Para arquitectura AMD64"
+                    ForARMArchitectureToolStripMenuItem.Text = "Para arquitectura ARM"
+                    ForARM64ArchitectureToolStripMenuItem.Text = "Para arquitectura ARM64"
+                    ImageOperationsToolStripMenuItem.Text = "Operaciones de la imagen"
+                    MountImageToolStripMenuItem.Text = "Montar imagen..."
+                    UnmountImageToolStripMenuItem.Text = "Desmontar imagen..."
+                    RemoveVolumeImagesToolStripMenuItem.Text = "Eliminar imágenes de volumen..."
+                    SwitchImageIndexesToolStripMenuItem1.Text = "Cambiar índices de imagen..."
+                    UnattendedAnswerFilesToolStripMenuItem1.Text = "Archivos de respuesta desatendida"
+                    ManageToolStripMenuItem.Text = "Administrar"
+                    CreationWizardToolStripMenuItem.Text = "Crear"
+                    ScratchDirectorySettingsToolStripMenuItem.Text = "Configurar directorio temporal"
+                    ManageReportsToolStripMenuItem.Text = "Administrar informes"
+                    AddToolStripMenuItem.Text = "Añadir"
+                    NewFileToolStripMenuItem.Text = "Nuevo archivo..."
+                    ExistingFileToolStripMenuItem.Text = "Archivo existente..."
                 Else
                     Language = 1
                     ChangeLangs(Language)
@@ -4462,6 +4511,29 @@ Public Class MainForm
                     BGProcDetails.Label2.Text = "Image processes have completed"
                 End If
                 MenuDesc.Text = "Ready"
+                ' Tree view context menu
+                AccessDirectoryToolStripMenuItem.Text = "Access directory"
+                UnloadProjectToolStripMenuItem1.Text = "Unload project"
+                CopyDeploymentToolsToolStripMenuItem.Text = "Copy deployment tools"
+                OfAllArchitecturesToolStripMenuItem.Text = "Of all architectures"
+                OfSelectedArchitectureToolStripMenuItem.Text = "Of selected architecture"
+                ForX86ArchitectureToolStripMenuItem.Text = "For x86 architecture"
+                ForAmd64ArchitectureToolStripMenuItem.Text = "For AMD64 architecture"
+                ForARMArchitectureToolStripMenuItem.Text = "For ARM architecture"
+                ForARM64ArchitectureToolStripMenuItem.Text = "For ARM64 architecture"
+                ImageOperationsToolStripMenuItem.Text = "Image operations"
+                MountImageToolStripMenuItem.Text = "Mount image..."
+                UnmountImageToolStripMenuItem.Text = "Unmount image..."
+                RemoveVolumeImagesToolStripMenuItem.Text = "Remove volume images..."
+                SwitchImageIndexesToolStripMenuItem1.Text = "Switch image indexes..."
+                UnattendedAnswerFilesToolStripMenuItem1.Text = "Unattended answer files"
+                ManageToolStripMenuItem.Text = "Manage"
+                CreationWizardToolStripMenuItem.Text = "Create"
+                ScratchDirectorySettingsToolStripMenuItem.Text = "Configure scratch directory"
+                ManageReportsToolStripMenuItem.Text = "Manage reports"
+                AddToolStripMenuItem.Text = "Add"
+                NewFileToolStripMenuItem.Text = "New file..."
+                ExistingFileToolStripMenuItem.Text = "Existing file..."
             Case 2
                 ' Top-level menu items
                 FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -4720,6 +4792,29 @@ Public Class MainForm
                     BGProcDetails.Label2.Text = "Los procesos de la imagen han completado"
                 End If
                 MenuDesc.Text = "Listo"
+                ' Tree view context menu
+                AccessDirectoryToolStripMenuItem.Text = "Acceder directorio"
+                UnloadProjectToolStripMenuItem1.Text = "Descargar proyecto"
+                CopyDeploymentToolsToolStripMenuItem.Text = "Copiar herramientas de implementación"
+                OfAllArchitecturesToolStripMenuItem.Text = "De todas las arquitecturas"
+                OfSelectedArchitectureToolStripMenuItem.Text = "De la arquitectura seleccionada"
+                ForX86ArchitectureToolStripMenuItem.Text = "Para arquitectura x86"
+                ForAmd64ArchitectureToolStripMenuItem.Text = "Para arquitectura AMD64"
+                ForARMArchitectureToolStripMenuItem.Text = "Para arquitectura ARM"
+                ForARM64ArchitectureToolStripMenuItem.Text = "Para arquitectura ARM64"
+                ImageOperationsToolStripMenuItem.Text = "Operaciones de la imagen"
+                MountImageToolStripMenuItem.Text = "Montar imagen..."
+                UnmountImageToolStripMenuItem.Text = "Desmontar imagen..."
+                RemoveVolumeImagesToolStripMenuItem.Text = "Eliminar imágenes de volumen..."
+                SwitchImageIndexesToolStripMenuItem1.Text = "Cambiar índices de imagen..."
+                UnattendedAnswerFilesToolStripMenuItem1.Text = "Archivos de respuesta desatendida"
+                ManageToolStripMenuItem.Text = "Administrar"
+                CreationWizardToolStripMenuItem.Text = "Crear"
+                ScratchDirectorySettingsToolStripMenuItem.Text = "Configurar directorio temporal"
+                ManageReportsToolStripMenuItem.Text = "Administrar informes"
+                AddToolStripMenuItem.Text = "Añadir"
+                NewFileToolStripMenuItem.Text = "Nuevo archivo..."
+                ExistingFileToolStripMenuItem.Text = "Archivo existente..."
         End Select
     End Sub
 
@@ -7150,13 +7245,46 @@ Public Class MainForm
     Private Sub prjTreeView_AfterExpand(sender As Object, e As TreeViewEventArgs) Handles prjTreeView.AfterExpand
         Try
             If prjTreeView.SelectedNode.IsExpanded Then
-                ExpandCollapseTSB.Text = "Collapse"
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                ExpandCollapseTSB.Text = "Collapse"
+                                ExpandToolStripMenuItem.Text = "Collapse item"
+                            Case "ESN"
+                                ExpandCollapseTSB.Text = "Contraer"
+                                ExpandToolStripMenuItem.Text = "Contraer objeto"
+                        End Select
+                    Case 1
+                        ExpandCollapseTSB.Text = "Collapse"
+                        ExpandToolStripMenuItem.Text = "Collapse item"
+                    Case 2
+                        ExpandCollapseTSB.Text = "Contraer"
+                        ExpandToolStripMenuItem.Text = "Contraer objeto"
+                End Select
                 If BackColor = Color.FromArgb(48, 48, 48) Then
                     ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph_dark)
                 ElseIf BackColor = Color.White Then
                     ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph)
                 End If
             Else
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                ExpandCollapseTSB.Text = "Expand"
+                                ExpandToolStripMenuItem.Text = "Expand item"
+                            Case "ESN"
+                                ExpandCollapseTSB.Text = "Expandir"
+                                ExpandToolStripMenuItem.Text = "Expandir objeto"
+                        End Select
+                    Case 1
+                        ExpandCollapseTSB.Text = "Expand"
+                        ExpandToolStripMenuItem.Text = "Expand item"
+                    Case 2
+                        ExpandCollapseTSB.Text = "Expandir"
+                        ExpandToolStripMenuItem.Text = "Expandir objeto"
+                End Select
                 ExpandCollapseTSB.Text = "Expand"
                 If BackColor = Color.FromArgb(48, 48, 48) Then
                     ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
@@ -7178,13 +7306,17 @@ Public Class MainForm
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENG"
                                 ExpandCollapseTSB.Text = "Collapse"
+                                ExpandToolStripMenuItem.Text = "Collapse item"
                             Case "ESN"
                                 ExpandCollapseTSB.Text = "Contraer"
+                                ExpandToolStripMenuItem.Text = "Contraer objeto"
                         End Select
                     Case 1
                         ExpandCollapseTSB.Text = "Collapse"
+                        ExpandToolStripMenuItem.Text = "Collapse item"
                     Case 2
                         ExpandCollapseTSB.Text = "Contraer"
+                        ExpandToolStripMenuItem.Text = "Contraer objeto"
                 End Select
                 If BackColor = Color.FromArgb(48, 48, 48) Then
                     ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph_dark)
@@ -7197,13 +7329,17 @@ Public Class MainForm
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENG"
                                 ExpandCollapseTSB.Text = "Expand"
+                                ExpandToolStripMenuItem.Text = "Expand item"
                             Case "ESN"
                                 ExpandCollapseTSB.Text = "Expandir"
+                                ExpandToolStripMenuItem.Text = "Expandir objeto"
                         End Select
                     Case 1
                         ExpandCollapseTSB.Text = "Expand"
+                        ExpandToolStripMenuItem.Text = "Expand item"
                     Case 2
                         ExpandCollapseTSB.Text = "Expandir"
+                        ExpandToolStripMenuItem.Text = "Expandir objeto"
                 End Select
                 If BackColor = Color.FromArgb(48, 48, 48) Then
                     ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
@@ -7217,13 +7353,17 @@ Public Class MainForm
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
                             ExpandCollapseTSB.Text = "Expand"
+                            ExpandToolStripMenuItem.Text = "Expand item"
                         Case "ESN"
                             ExpandCollapseTSB.Text = "Expandir"
+                            ExpandToolStripMenuItem.Text = "Expandir objeto"
                     End Select
                 Case 1
                     ExpandCollapseTSB.Text = "Expand"
+                    ExpandToolStripMenuItem.Text = "Expand item"
                 Case 2
                     ExpandCollapseTSB.Text = "Expandir"
+                    ExpandToolStripMenuItem.Text = "Expandir objeto"
             End Select
             If BackColor = Color.FromArgb(48, 48, 48) Then
                 ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
@@ -8634,37 +8774,37 @@ Public Class MainForm
                 CopyDeploymentToolsToolStripMenuItem.Enabled = True
                 ImageOperationsToolStripMenuItem.Enabled = False
                 UnattendedAnswerFilesToolStripMenuItem1.Enabled = False
-                ScratchDirectoryToolStripMenuItem.Enabled = False
+                ScratchDirectorySettingsToolStripMenuItem.Enabled = False
                 ManageReportsToolStripMenuItem.Enabled = False
             ElseIf e.Node.Name = "mount" Then
                 CopyDeploymentToolsToolStripMenuItem.Enabled = False
                 ImageOperationsToolStripMenuItem.Enabled = True
                 UnattendedAnswerFilesToolStripMenuItem1.Enabled = False
-                ScratchDirectoryToolStripMenuItem.Enabled = False
+                ScratchDirectorySettingsToolStripMenuItem.Enabled = False
                 ManageReportsToolStripMenuItem.Enabled = False
             ElseIf e.Node.Name = "unattend_xml" Then
                 CopyDeploymentToolsToolStripMenuItem.Enabled = False
                 ImageOperationsToolStripMenuItem.Enabled = False
                 UnattendedAnswerFilesToolStripMenuItem1.Enabled = True
-                ScratchDirectoryToolStripMenuItem.Enabled = False
+                ScratchDirectorySettingsToolStripMenuItem.Enabled = False
                 ManageReportsToolStripMenuItem.Enabled = False
             ElseIf e.Node.Name = "scr_temp" Then
                 CopyDeploymentToolsToolStripMenuItem.Enabled = False
                 ImageOperationsToolStripMenuItem.Enabled = False
                 UnattendedAnswerFilesToolStripMenuItem1.Enabled = False
-                ScratchDirectoryToolStripMenuItem.Enabled = True
+                ScratchDirectorySettingsToolStripMenuItem.Enabled = True
                 ManageReportsToolStripMenuItem.Enabled = False
             ElseIf e.Node.Name = "reports" Then
                 CopyDeploymentToolsToolStripMenuItem.Enabled = False
                 ImageOperationsToolStripMenuItem.Enabled = False
                 UnattendedAnswerFilesToolStripMenuItem1.Enabled = False
-                ScratchDirectoryToolStripMenuItem.Enabled = False
+                ScratchDirectorySettingsToolStripMenuItem.Enabled = False
                 ManageReportsToolStripMenuItem.Enabled = True
             Else
                 CopyDeploymentToolsToolStripMenuItem.Enabled = False
                 ImageOperationsToolStripMenuItem.Enabled = False
                 UnattendedAnswerFilesToolStripMenuItem1.Enabled = False
-                ScratchDirectoryToolStripMenuItem.Enabled = False
+                ScratchDirectorySettingsToolStripMenuItem.Enabled = False
                 ManageReportsToolStripMenuItem.Enabled = False
             End If
             Dim pnt As Point = e.Location
@@ -8956,5 +9096,100 @@ Public Class MainForm
 
     Private Sub ExpandToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExpandToolStripMenuItem.Click
         ExpandCollapseTSB.PerformClick()
+    End Sub
+
+    Private Sub AccessDirectoryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AccessDirectoryToolStripMenuItem.Click
+        If prjTreeView.SelectedNode.Name = "parent" Then
+            Process.Start(projPath)
+        ElseIf prjTreeView.SelectedNode.Name = "dandi" Then
+            Process.Start(projPath & "\dandi")
+        ElseIf prjTreeView.SelectedNode.Name.EndsWith("x86") Then
+            Process.Start(projPath & "\dandi\x86")
+        ElseIf prjTreeView.SelectedNode.Name.EndsWith("amd64") Then
+            Process.Start(projPath & "\dandi\amd64")
+        ElseIf prjTreeView.SelectedNode.Name.EndsWith("arm") Then
+            Process.Start(projPath & "\dandi\arm")
+        ElseIf prjTreeView.SelectedNode.Name.EndsWith("arm64") Then
+            Process.Start(projPath & "\dandi\arm64")
+        ElseIf prjTreeView.SelectedNode.Name = "mount" Then
+            Process.Start(projPath & "\mount")
+        ElseIf prjTreeView.SelectedNode.Name = "unattend_xml" Then
+            Process.Start(projPath & "\unattend_xml")
+        ElseIf prjTreeView.SelectedNode.Name = "scr_temp" Then
+            Process.Start(projPath & "\scr_temp")
+        ElseIf prjTreeView.SelectedNode.Name = "reports" Then
+            Process.Start(projPath & "\reports")
+        End If
+    End Sub
+
+    Private Sub UnloadProjectToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles UnloadProjectToolStripMenuItem1.Click
+        ToolStripButton3.PerformClick()
+    End Sub
+
+    Private Sub ScratchDirectorySettingsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ScratchDirectorySettingsToolStripMenuItem.Click
+        Options.TabControl1.SelectedIndex = 4
+        Options.ShowDialog()
+    End Sub
+
+    Private Sub ManageToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageToolStripMenuItem.Click
+        UnattendMgr.Show()
+    End Sub
+
+    Private Sub CreationWizardToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreationWizardToolStripMenuItem.Click
+        NewUnattendWiz.Show()
+    End Sub
+
+    Private Sub MountImageToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MountImageToolStripMenuItem.Click
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        ImgMount.ShowDialog()
+    End Sub
+
+    Private Sub UnmountImageToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UnmountImageToolStripMenuItem.Click
+        ImgUMount.RadioButton1.Checked = True
+        ImgUMount.RadioButton2.Checked = False
+        ImgUMount.ShowDialog()
+    End Sub
+
+    Private Sub RemoveVolumeImagesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RemoveVolumeImagesToolStripMenuItem.Click
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Threading.Thread.Sleep(100)
+        End While
+        For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
+            If MountedImageMountDirs(x) = MountDir Then
+                ImgIndexDelete.TextBox1.Text = MountedImageImgFiles(x)
+                Exit For
+            End If
+        Next
+        ImgIndexDelete.ShowDialog()
+    End Sub
+
+    Private Sub SwitchImageIndexesToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles SwitchImageIndexesToolStripMenuItem1.Click
+        MountedImageDetectorBW.CancelAsync()
+        ProgressPanel.OperationNum = 995
+        PleaseWaitDialog.indexesSourceImg = SourceImg
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting image indexes..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting image indexes..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
+        End Select
+        PleaseWaitDialog.ShowDialog(Me)
+        If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
+        If PleaseWaitDialog.imgIndexes > 1 Then
+            ImgIndexSwitch.ShowDialog()
+        End If
     End Sub
 End Class
