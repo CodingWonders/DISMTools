@@ -1729,9 +1729,7 @@ Public Class MainForm
                             WIMBootProc.StartInfo.CreateNoWindow = True
                             WIMBootProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
                             WIMBootProc.Start()
-                            Do Until WIMBootProc.HasExited
-                                If WIMBootProc.HasExited Then Exit Do
-                            Loop
+                            WIMBootProc.WaitForExit()
                         End Using
                         Try
                             imgWimBootStatus = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgwimboot", ASCII).Replace("WIM Bootable : ", "").Trim()
@@ -2237,11 +2235,7 @@ Public Class MainForm
                 Debug.WriteLine("[GetImagePackages] RunCommand -> " & Path.GetFileName(pkgScript))
                 ImgProcesses.StartInfo.Arguments = "/c " & pkgScript
                 ImgProcesses.Start()
-                Do Until ImgProcesses.HasExited
-                    If ImgProcesses.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                ImgProcesses.WaitForExit()
                 If ImgProcesses.ExitCode = 0 Then
                     Continue For
                 End If
@@ -2357,11 +2351,7 @@ Public Class MainForm
                 Debug.WriteLine("[GetImageFeatures] RunCommand -> " & Path.GetFileName(featScript))
                 ImgProcesses.StartInfo.Arguments = "/c " & featScript
                 ImgProcesses.Start()
-                Do Until ImgProcesses.HasExited
-                    If ImgProcesses.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                ImgProcesses.WaitForExit()
                 If ImgProcesses.ExitCode = 0 Then
                     Continue For
                 End If
@@ -2544,11 +2534,7 @@ Public Class MainForm
                 Debug.WriteLine("[GetImageAppxPackages] RunCommand -> " & Path.GetFileName(appxScript))
                 ImgProcesses.StartInfo.Arguments = "/c " & appxScript
                 ImgProcesses.Start()
-                Do Until ImgProcesses.HasExited
-                    If ImgProcesses.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                ImgProcesses.WaitForExit()
                 If ImgProcesses.ExitCode = 0 Then
                     Continue For
                 End If
@@ -2759,11 +2745,7 @@ Public Class MainForm
                 Debug.WriteLine("[GetImageCapabilities] RunCommand -> " & Path.GetFileName(capScript))
                 ImgProcesses.StartInfo.Arguments = "/c " & capScript
                 ImgProcesses.Start()
-                Do Until ImgProcesses.HasExited
-                    If ImgProcesses.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                ImgProcesses.WaitForExit()
                 If ImgProcesses.ExitCode = 0 Then
                     Continue For
                 End If
@@ -2866,11 +2848,7 @@ Public Class MainForm
         ImgProcesses.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
         ImgProcesses.StartInfo.Arguments = "/c " & Application.StartupPath & "\bin\exthelpers\drvnums.bat"
         ImgProcesses.Start()
-        Do Until ImgProcesses.HasExited
-            If ImgProcesses.HasExited Then
-                Exit Do
-            End If
-        Loop
+        ImgProcesses.WaitForExit()
         File.Delete(Application.StartupPath & "\bin\exthelpers\drvnums.bat")
         If ImgProcesses.ExitCode = 0 Then
             Dim drvCount As Integer = CInt(My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\tempinfo\drvnums"))
@@ -2922,11 +2900,7 @@ Public Class MainForm
                 Debug.WriteLine("[GetImageDrivers] RunCommand -> " & Path.GetFileName(drvScript))
                 ImgProcesses.StartInfo.Arguments = "/c " & drvScript
                 ImgProcesses.Start()
-                Do Until ImgProcesses.HasExited
-                    If ImgProcesses.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                ImgProcesses.WaitForExit()
                 If ImgProcesses.ExitCode = 0 Then
                     Continue For
                 End If

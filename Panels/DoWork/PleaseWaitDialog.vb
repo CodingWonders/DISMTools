@@ -178,11 +178,7 @@ Public Class PleaseWaitDialog
                 Sup_DISMProc.StartInfo.CreateNoWindow = True
                 Sup_DISMProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
                 Sup_DISMProc.Start()
-                Do Until Sup_DISMProc.HasExited
-                    If Sup_DISMProc.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                Sup_DISMProc.WaitForExit()
                 If Decimal.ToInt32(Sup_DISMProc.ExitCode) = 0 Then
                     RemPackage.CheckedListBox1.Items.Clear()
                     RemPackage.CheckedListBox2.Items.Clear()
@@ -218,11 +214,7 @@ Public Class PleaseWaitDialog
                 Sup_DISMProc.StartInfo.CreateNoWindow = True
                 Sup_DISMProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
                 Sup_DISMProc.Start()
-                Do Until Sup_DISMProc.HasExited
-                    If Sup_DISMProc.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                Sup_DISMProc.WaitForExit()
                 If Decimal.ToInt32(Sup_DISMProc.ExitCode) = 0 Then
                     EnableFeat.ListView1.Items.Clear()
                     DisableFeat.ListView1.Items.Clear()
