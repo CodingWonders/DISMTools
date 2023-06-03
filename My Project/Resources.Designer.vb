@@ -1627,15 +1627,20 @@ Namespace My.Resources
         
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
-        '''
-        '''- Fixed an issue where the program would fail AppX package detection on images running Windows versions older than Windows Developer Preview
-        '''- Fixed an issue where the program would throw an exception after failing to find a suitable AppX package name
-        '''- Fixed an issue where the updater would fail at extracting the new release on older PowerShell versions
-        '''- Fixed several crashes which would occur when performing actions if the mounted image detector process was starting up
+        '''- Fixed an issue that occurred in the AppX package removal dialog where it would continue even if no packages were marked for removal
+        '''- The program now uses correct startup path conventions
         '''
         '''New features
         '''
-        '''- [resto de la cadena truncado]&quot;;.
+        '''Installer
+        '''
+        '''- Installers are now available
+        '''
+        '''General
+        '''
+        '''- Added feature update detection for Windows 11 2022 Update Moment 4
+        '''- Added more sections to the Command Help documentation
+        '''- The project tree view context menu is now fully functional and translated.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

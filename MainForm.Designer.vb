@@ -1259,7 +1259,7 @@ Partial Class MainForm
         'WIMESDToolStripMenuItem
         '
         Me.WIMESDToolStripMenuItem.Name = "WIMESDToolStripMenuItem"
-        Me.WIMESDToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.WIMESDToolStripMenuItem.Size = New System.Drawing.Size(146, 22)
         Me.WIMESDToolStripMenuItem.Text = "WIM <-> ESD"
         '
         'ToolStripSeparator12
@@ -2315,7 +2315,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.44444!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.55556!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 63.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 64.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -2364,7 +2364,7 @@ Partial Class MainForm
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel8.Location = New System.Drawing.Point(88, 3)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(101, 23)
+        Me.Panel8.Size = New System.Drawing.Size(100, 23)
         Me.Panel8.TabIndex = 8
         '
         'projName
@@ -2373,7 +2373,7 @@ Partial Class MainForm
         Me.projName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projName.Location = New System.Drawing.Point(0, 0)
         Me.projName.Name = "projName"
-        Me.projName.Size = New System.Drawing.Size(101, 23)
+        Me.projName.Size = New System.Drawing.Size(100, 23)
         Me.projName.TabIndex = 2
         Me.projName.Text = "projName"
         Me.projName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -2383,7 +2383,7 @@ Partial Class MainForm
         Me.projNameText.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projNameText.Location = New System.Drawing.Point(0, 0)
         Me.projNameText.Name = "projNameText"
-        Me.projNameText.Size = New System.Drawing.Size(101, 21)
+        Me.projNameText.Size = New System.Drawing.Size(100, 21)
         Me.projNameText.TabIndex = 4
         Me.projNameText.Text = "projName"
         Me.projNameText.Visible = False
@@ -3279,7 +3279,7 @@ Partial Class MainForm
         '
         Me.TreeViewCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExpandToolStripMenuItem, Me.AccessDirectoryToolStripMenuItem, Me.ToolStripSeparator23, Me.UnloadProjectToolStripMenuItem1, Me.ToolStripSeparator24, Me.CopyDeploymentToolsToolStripMenuItem, Me.ToolStripSeparator27, Me.ImageOperationsToolStripMenuItem, Me.ToolStripSeparator30, Me.UnattendedAnswerFilesToolStripMenuItem1, Me.ToolStripSeparator31, Me.ScratchDirectorySettingsToolStripMenuItem, Me.ToolStripSeparator32, Me.ManageReportsToolStripMenuItem, Me.ToolStripSeparator33, Me.AddToolStripMenuItem})
         Me.TreeViewCMS.Name = "TreeViewCMS"
-        Me.TreeViewCMS.Size = New System.Drawing.Size(219, 266)
+        Me.TreeViewCMS.Size = New System.Drawing.Size(219, 244)
         '
         'ExpandToolStripMenuItem
         '
@@ -3413,13 +3413,13 @@ Partial Class MainForm
         'ManageToolStripMenuItem
         '
         Me.ManageToolStripMenuItem.Name = "ManageToolStripMenuItem"
-        Me.ManageToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.ManageToolStripMenuItem.Size = New System.Drawing.Size(117, 22)
         Me.ManageToolStripMenuItem.Text = "Manage"
         '
         'CreationWizardToolStripMenuItem
         '
         Me.CreationWizardToolStripMenuItem.Name = "CreationWizardToolStripMenuItem"
-        Me.CreationWizardToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.CreationWizardToolStripMenuItem.Size = New System.Drawing.Size(117, 22)
         Me.CreationWizardToolStripMenuItem.Text = "Create"
         '
         'ToolStripSeparator31
