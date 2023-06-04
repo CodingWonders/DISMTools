@@ -171,12 +171,15 @@ Public Class MainForm
     Public MountedImageImgIndexes(65535) As String
     Public MountedImageMountedReWr(65535) As String
     Public MountedImageImgStatuses(65535) As String
+    ' New variables for 0.3
+    Public MountedImageImgVersions(65535) As String
     ' Private lists for DetectMountedImages function
     Dim MountedImageImgFileList As New List(Of String)
     Dim MountedImageImgIndexList As New List(Of String)
     Dim MountedImageMountDirList As New List(Of String)
     Dim MountedImageImgStatusList As New List(Of String)
     Dim MountedImageReWrList As New List(Of String)
+    Dim MountedImageImgVersionList As New List(Of String)
 
     ' Perform image unmount operations when pressing on buttons
     Public imgCommitOperation As Integer = -1 ' 0: commit; 1: discard
@@ -333,6 +336,7 @@ Public Class MainForm
             MountedImageMountDirList.Clear()
             MountedImageImgStatusList.Clear()
             MountedImageReWrList.Clear()
+            MountedImageImgVersionList.Clear()
         End If
         DismApi.Initialize(DismLogLevel.LogErrors)
         Dim MountedImgs As DismMountedImageInfoCollection = DismApi.GetMountedImages()
@@ -348,13 +352,23 @@ Public Class MainForm
             MountedImageMountDirList.Add(imageInfo.MountPath)
             MountedImageImgStatusList.Add(imageInfo.MountStatus)
             MountedImageReWrList.Add(imageInfo.MountMode)
+            DismApi.GetImageInfo(imageInfo.ImageFilePath)
         Next
-        DismApi.Shutdown()
         MountedImageImgFiles = MountedImageImgFileList.ToArray()
         MountedImageImgIndexes = MountedImageImgIndexList.ToArray()
         MountedImageMountDirs = MountedImageMountDirList.ToArray()
         MountedImageImgStatuses = MountedImageImgStatusList.ToArray()
         MountedImageMountedReWr = MountedImageReWrList.ToArray()
+        For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
+            Dim infoCollection As DismImageInfoCollection = DismApi.GetImageInfo(MountedImageImgFiles(x))
+            For Each imageInfo As DismImageInfo In infoCollection
+                If imageInfo.ImageIndex = MountedImageImgIndexes(x) Then
+                    MountedImageImgVersionList.Add(imageInfo.ProductVersion.ToString())
+                End If
+            Next
+        Next
+        DismApi.Shutdown()
+        MountedImageImgVersions = MountedImageImgVersionList.ToArray()
         ' Fill mounted image manager list
         MountedImgMgr.ListView1.Items.Clear()
         Try
@@ -363,14 +377,14 @@ Public Class MainForm
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENG"
-                                MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "OK", If(MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MountedImageMountedReWr(x) = 0, "Yes", "No"), If(File.Exists(MountedImageMountDirs(x) & "\Windows\System32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion, "Could not get version info")}))
+                                MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "OK", If(MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MountedImageMountedReWr(x) = 0, "Yes", "No"), MountedImageImgVersions(x)}))
                             Case "ESN"
-                                MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "Correcto", If(MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MountedImageMountedReWr(x) = 0, "Sí", "No"), If(File.Exists(MountedImageMountDirs(x) & "\Windows\System32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion, "No se pudo obtener información de la versión")}))
+                                MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "Correcto", If(MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MountedImageMountedReWr(x) = 0, "Sí", "No"), MountedImageImgVersions(x)}))
                         End Select
                     Case 1
-                        MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "OK", If(MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MountedImageMountedReWr(x) = 0, "Yes", "No"), If(File.Exists(MountedImageMountDirs(x) & "\Windows\System32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion, "Could not get version info")}))
+                        MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "OK", If(MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MountedImageMountedReWr(x) = 0, "Yes", "No"), MountedImageImgVersions(x)}))
                     Case 2
-                        MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "Correcto", If(MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MountedImageMountedReWr(x) = 0, "Sí", "No"), If(File.Exists(MountedImageMountDirs(x) & "\Windows\System32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion, "No se pudo obtener información de la versión")}))
+                        MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "Correcto", If(MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MountedImageMountedReWr(x) = 0, "Sí", "No"), MountedImageImgVersions(x)}))
                 End Select
             Next
         Catch ex As Exception
@@ -8283,22 +8297,9 @@ Public Class MainForm
     End Sub
 
     Private Sub MountedImageDetectorBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles MountedImageDetectorBW.DoWork
-        Dim timer As New Stopwatch
         Do
-            timer.Start()
-            Do
-                If MountedImageDetectorBW.CancellationPending Or ImgBW.IsBusy Then
-                    timer.Stop()
-                    timer.Reset()
-                    Exit Sub
-                End If
-                If timer.ElapsedMilliseconds >= 100 Then
-                    timer.Stop()
-                    DetectMountedImages(False)
-                    timer.Reset()
-                    Exit Do
-                End If
-            Loop
+            If MountedImageDetectorBW.CancellationPending Or ImgBW.IsBusy Then Exit Do
+            DetectMountedImages(False)
         Loop
     End Sub
 
