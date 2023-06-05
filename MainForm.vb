@@ -352,7 +352,6 @@ Public Class MainForm
             MountedImageMountDirList.Add(imageInfo.MountPath)
             MountedImageImgStatusList.Add(imageInfo.MountStatus)
             MountedImageReWrList.Add(imageInfo.MountMode)
-            DismApi.GetImageInfo(imageInfo.ImageFilePath)
         Next
         MountedImageImgFiles = MountedImageImgFileList.ToArray()
         MountedImageImgIndexes = MountedImageImgIndexList.ToArray()
