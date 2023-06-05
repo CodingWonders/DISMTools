@@ -359,14 +359,16 @@ Public Class MainForm
         MountedImageMountDirs = MountedImageMountDirList.ToArray()
         MountedImageImgStatuses = MountedImageImgStatusList.ToArray()
         MountedImageMountedReWr = MountedImageReWrList.ToArray()
-        For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
-            Dim infoCollection As DismImageInfoCollection = DismApi.GetImageInfo(MountedImageImgFiles(x))
-            For Each imageInfo As DismImageInfo In infoCollection
-                If imageInfo.ImageIndex = MountedImageImgIndexes(x) Then
-                    MountedImageImgVersionList.Add(imageInfo.ProductVersion.ToString())
-                End If
+        If MountedImageImgFileList.Count > 0 Then
+            For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
+                Dim infoCollection As DismImageInfoCollection = DismApi.GetImageInfo(MountedImageImgFiles(x))
+                For Each imageInfo As DismImageInfo In infoCollection
+                    If imageInfo.ImageIndex = MountedImageImgIndexes(x) Then
+                        MountedImageImgVersionList.Add(imageInfo.ProductVersion.ToString())
+                    End If
+                Next
             Next
-        Next
+        End If
         DismApi.Shutdown()
         MountedImageImgVersions = MountedImageImgVersionList.ToArray()
         ' Fill mounted image manager list
