@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/CodingWonders/DISMTools/assets/101426328/165075ee-87f6-4e0a-9e85-67f93c0ca319">
+  <img src="https://github.com/CodingWonders/DISMTools/assets/101426328/4c753c9a-1440-44cb-a742-04e71d077dff">
   <h3 align="center">A free and open-source GUI for DISM operations</h3>
 </p>
 <hr>
