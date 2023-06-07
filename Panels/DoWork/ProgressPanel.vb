@@ -4703,14 +4703,16 @@ Public Class ProgressPanel
             Application.DoEvents()
             Thread.Sleep(100)
         End While
-        ' Go through all mounted images to determine which one to get info from with the DISM API,
-        ' if a project has been loaded and if that project has a mounted image
-        If MainForm.isProjectLoaded And MainForm.IsImageMounted Then
-            For x = 0 To Array.LastIndexOf(MainForm.MountedImageMountDirs, MainForm.MountedImageMountDirs.Last)
-                If MainForm.MountedImageMountDirs(x) = MainForm.MountDir Then
-                    mntString = MainForm.MountedImageMountDirs(x)
-                End If
-            Next
+        If MainForm.MountedImageMountDirs.Count > 0 Then
+            ' Go through all mounted images to determine which one to get info from with the DISM API,
+            ' if a project has been loaded and if that project has a mounted image
+            If MainForm.isProjectLoaded And MainForm.IsImageMounted Then
+                For x = 0 To Array.LastIndexOf(MainForm.MountedImageMountDirs, MainForm.MountedImageMountDirs.Last)
+                    If MainForm.MountedImageMountDirs(x) = MainForm.MountDir Then
+                        mntString = MainForm.MountedImageMountDirs(x)
+                    End If
+                Next
+            End If
         End If
         DismProgram = MainForm.DismExe
         If MountDir = "" Then MountDir = MainForm.MountDir
