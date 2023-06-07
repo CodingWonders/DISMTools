@@ -436,7 +436,6 @@ Public Class ProgressPanel
             ProgressBW.CancelAsync()
         ElseIf Cancel_Button.Text = "OK" Or Cancel_Button.Text = "Aceptar" Then
             MainForm.ToolStripButton4.Visible = False
-            Dispose()
             Close()
         End If
     End Sub
@@ -4524,7 +4523,6 @@ Public Class ProgressPanel
             MainForm.StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
             MainForm.ToolStripButton4.Visible = False
             Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
-            Dispose()
             Close()
         Else
             MainForm.ToolStripButton4.Visible = False

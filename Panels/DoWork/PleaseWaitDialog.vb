@@ -292,7 +292,6 @@ Public Class PleaseWaitDialog
                 Catch ex As DismOpenSessionsException
                     ' Leave session open
                 End Try
-                Close()
             Else
                 Dim indexNames As New List(Of String)
                 For Each imgInfo As DismImageInfo In imgInfoCollection

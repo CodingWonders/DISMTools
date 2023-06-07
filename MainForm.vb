@@ -198,21 +198,16 @@ Public Class MainForm
     Dim fileCount As Integer
     Dim CurrentFileInt As Integer
 
-    <DllImport("user32.dll")>
-    Shared Function GetActiveWindow() As IntPtr
-    End Function
+    Friend NotInheritable Class NativeMethods
 
-    <DllImport("user32.dll")>
-    Shared Function SetWindowText(hWnd As IntPtr, lpString As String) As Boolean
-    End Function
+        Private Sub New()
+        End Sub
 
-    <DllImport("user32.dll")>
-    Shared Function SetWindowLong(hWnd As IntPtr, nIndex As Integer, dwNewLong As IntPtr) As IntPtr
-    End Function
+        <DllImport("dwmapi.dll")>
+        Shared Function DwmSetWindowAttribute(hwnd As IntPtr, attr As Integer, ByRef attrValue As Integer, attrSize As Integer) As Integer
+        End Function
 
-    <DllImport("dwmapi.dll")>
-    Shared Function DwmSetWindowAttribute(hwnd As IntPtr, attr As Integer, ByRef attrValue As Integer, attrSize As Integer) As Integer
-    End Function
+    End Class
 
     Const DWMWA_USE_IMMERSIVE_DARK_MODE As Integer = 20
     Const WS_EX_COMPOSITED As Integer = &H2000000
@@ -220,7 +215,7 @@ Public Class MainForm
 
     Shared Sub EnableDarkTitleBar(hwnd As IntPtr, isDarkMode As Boolean)
         Dim attribute As Integer = If(isDarkMode, 1, 0)
-        Dim result As Integer = DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, attribute, 4)
+        Dim result As Integer = NativeMethods.DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, attribute, 4)
     End Sub
 
     Function GetWindowHandle(ctrl As Control) As IntPtr
