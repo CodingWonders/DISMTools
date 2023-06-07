@@ -471,43 +471,43 @@ Partial Class MainForm
         'NewProjectToolStripMenuItem
         '
         Me.NewProjectToolStripMenuItem.Name = "NewProjectToolStripMenuItem"
-        Me.NewProjectToolStripMenuItem.Size = New System.Drawing.Size(187, 22)
+        Me.NewProjectToolStripMenuItem.Size = New System.Drawing.Size(186, 22)
         Me.NewProjectToolStripMenuItem.Text = "&New project..."
         '
         'OpenExistingProjectToolStripMenuItem
         '
         Me.OpenExistingProjectToolStripMenuItem.Name = "OpenExistingProjectToolStripMenuItem"
-        Me.OpenExistingProjectToolStripMenuItem.Size = New System.Drawing.Size(187, 22)
+        Me.OpenExistingProjectToolStripMenuItem.Size = New System.Drawing.Size(186, 22)
         Me.OpenExistingProjectToolStripMenuItem.Text = "&Open existing project"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(184, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(183, 6)
         '
         'SaveProjectToolStripMenuItem
         '
         Me.SaveProjectToolStripMenuItem.Enabled = False
         Me.SaveProjectToolStripMenuItem.Name = "SaveProjectToolStripMenuItem"
-        Me.SaveProjectToolStripMenuItem.Size = New System.Drawing.Size(187, 22)
+        Me.SaveProjectToolStripMenuItem.Size = New System.Drawing.Size(186, 22)
         Me.SaveProjectToolStripMenuItem.Text = "&Save project..."
         '
         'SaveProjectasToolStripMenuItem
         '
         Me.SaveProjectasToolStripMenuItem.Enabled = False
         Me.SaveProjectasToolStripMenuItem.Name = "SaveProjectasToolStripMenuItem"
-        Me.SaveProjectasToolStripMenuItem.Size = New System.Drawing.Size(187, 22)
+        Me.SaveProjectasToolStripMenuItem.Size = New System.Drawing.Size(186, 22)
         Me.SaveProjectasToolStripMenuItem.Text = "Save project &as..."
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(184, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(183, 6)
         '
         'ExitToolStripMenuItem
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(187, 22)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(186, 22)
         Me.ExitToolStripMenuItem.Text = "E&xit"
         '
         'ProjectToolStripMenuItem
@@ -521,41 +521,41 @@ Partial Class MainForm
         'ViewProjectFilesInFileExplorerToolStripMenuItem
         '
         Me.ViewProjectFilesInFileExplorerToolStripMenuItem.Name = "ViewProjectFilesInFileExplorerToolStripMenuItem"
-        Me.ViewProjectFilesInFileExplorerToolStripMenuItem.Size = New System.Drawing.Size(243, 22)
+        Me.ViewProjectFilesInFileExplorerToolStripMenuItem.Size = New System.Drawing.Size(242, 22)
         Me.ViewProjectFilesInFileExplorerToolStripMenuItem.Text = "View project files in File Explorer"
         '
         'UnloadProjectToolStripMenuItem
         '
         Me.UnloadProjectToolStripMenuItem.Name = "UnloadProjectToolStripMenuItem"
-        Me.UnloadProjectToolStripMenuItem.Size = New System.Drawing.Size(243, 22)
+        Me.UnloadProjectToolStripMenuItem.Size = New System.Drawing.Size(242, 22)
         Me.UnloadProjectToolStripMenuItem.Text = "Unload project..."
         '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(240, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(239, 6)
         '
         'SwitchImageIndexesToolStripMenuItem
         '
         Me.SwitchImageIndexesToolStripMenuItem.Name = "SwitchImageIndexesToolStripMenuItem"
-        Me.SwitchImageIndexesToolStripMenuItem.Size = New System.Drawing.Size(243, 22)
+        Me.SwitchImageIndexesToolStripMenuItem.Size = New System.Drawing.Size(242, 22)
         Me.SwitchImageIndexesToolStripMenuItem.Text = "Switch image indexes..."
         '
         'ToolStripSeparator11
         '
         Me.ToolStripSeparator11.Name = "ToolStripSeparator11"
-        Me.ToolStripSeparator11.Size = New System.Drawing.Size(240, 6)
+        Me.ToolStripSeparator11.Size = New System.Drawing.Size(239, 6)
         '
         'ProjectPropertiesToolStripMenuItem
         '
         Me.ProjectPropertiesToolStripMenuItem.Name = "ProjectPropertiesToolStripMenuItem"
-        Me.ProjectPropertiesToolStripMenuItem.Size = New System.Drawing.Size(243, 22)
+        Me.ProjectPropertiesToolStripMenuItem.Size = New System.Drawing.Size(242, 22)
         Me.ProjectPropertiesToolStripMenuItem.Text = "Project properties"
         '
         'ImagePropertiesToolStripMenuItem
         '
         Me.ImagePropertiesToolStripMenuItem.Name = "ImagePropertiesToolStripMenuItem"
-        Me.ImagePropertiesToolStripMenuItem.Size = New System.Drawing.Size(243, 22)
+        Me.ImagePropertiesToolStripMenuItem.Size = New System.Drawing.Size(242, 22)
         Me.ImagePropertiesToolStripMenuItem.Text = "Image properties"
         '
         'CommandsToolStripMenuItem
@@ -1246,7 +1246,7 @@ Partial Class MainForm
         '
         Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImageConversionToolStripMenuItem, Me.ToolStripSeparator12, Me.MergeSWM, Me.ToolStripSeparator18, Me.RemountImageWithWritePermissionsToolStripMenuItem, Me.ToolStripSeparator13, Me.CommandShellToolStripMenuItem, Me.ToolStripSeparator16, Me.UnattendedAnswerFileManagerToolStripMenuItem, Me.ReportManagerToolStripMenuItem, Me.MountedImageManagerTSMI, Me.ToolStripSeparator9, Me.ActionEditorToolStripMenuItem, Me.ToolStripSeparator22, Me.OptionsToolStripMenuItem})
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
-        Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(46, 20)
+        Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(48, 20)
         Me.ToolsToolStripMenuItem.Text = "&Tools"
         '
         'ImageConversionToolStripMenuItem
@@ -1639,7 +1639,7 @@ Partial Class MainForm
         Me.Label24.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label24.Location = New System.Drawing.Point(14, 14)
         Me.Label24.Name = "Label24"
-        Me.Label24.Size = New System.Drawing.Size(228, 30)
+        Me.Label24.Size = New System.Drawing.Size(231, 30)
         Me.Label24.TabIndex = 1
         Me.Label24.Text = "Welcome to DISMTools"
         '
@@ -1760,7 +1760,7 @@ Partial Class MainForm
         Me.LinkLabel10.LinkColor = System.Drawing.Color.DodgerBlue
         Me.LinkLabel10.Location = New System.Drawing.Point(81, 208)
         Me.LinkLabel10.Name = "LinkLabel10"
-        Me.LinkLabel10.Size = New System.Drawing.Size(169, 15)
+        Me.LinkLabel10.Size = New System.Drawing.Size(171, 15)
         Me.LinkLabel10.TabIndex = 4
         Me.LinkLabel10.TabStop = True
         Me.LinkLabel10.Text = "Getting started with DISMTools"
@@ -1772,7 +1772,7 @@ Partial Class MainForm
         Me.LinkLabel7.LinkColor = System.Drawing.Color.DodgerBlue
         Me.LinkLabel7.Location = New System.Drawing.Point(81, 125)
         Me.LinkLabel7.Name = "LinkLabel7"
-        Me.LinkLabel7.Size = New System.Drawing.Size(169, 15)
+        Me.LinkLabel7.Size = New System.Drawing.Size(171, 15)
         Me.LinkLabel7.TabIndex = 4
         Me.LinkLabel7.TabStop = True
         Me.LinkLabel7.Text = "Getting started with DISMTools"
@@ -1820,7 +1820,7 @@ Partial Class MainForm
         Me.LinkLabel4.LinkColor = System.Drawing.Color.DodgerBlue
         Me.LinkLabel4.Location = New System.Drawing.Point(81, 39)
         Me.LinkLabel4.Name = "LinkLabel4"
-        Me.LinkLabel4.Size = New System.Drawing.Size(139, 15)
+        Me.LinkLabel4.Size = New System.Drawing.Size(141, 15)
         Me.LinkLabel4.TabIndex = 4
         Me.LinkLabel4.TabStop = True
         Me.LinkLabel4.Text = "What's new in DISMTools"
@@ -1910,7 +1910,7 @@ Partial Class MainForm
         Me.Label34.ForeColor = System.Drawing.Color.FromArgb(CType(CType(85, Byte), Integer), CType(CType(85, Byte), Integer), CType(CType(85, Byte), Integer))
         Me.Label34.Location = New System.Drawing.Point(14, 8)
         Me.Label34.Name = "Label34"
-        Me.Label34.Size = New System.Drawing.Size(71, 20)
+        Me.Label34.Size = New System.Drawing.Size(72, 20)
         Me.Label34.TabIndex = 3
         Me.Label34.Text = "Welcome"
         '
@@ -2000,7 +2000,7 @@ Partial Class MainForm
         Me.Label7.AutoSize = True
         Me.Label7.Location = New System.Drawing.Point(11, 11)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(512, 15)
+        Me.Label7.Size = New System.Drawing.Size(514, 15)
         Me.Label7.TabIndex = 2
         Me.Label7.Text = "You are using a preview design of the Start Panel. You can go back to the old des" & _
     "ign at any time."
@@ -2090,7 +2090,7 @@ Partial Class MainForm
         Me.ExistingProjLink.LinkColor = System.Drawing.Color.DodgerBlue
         Me.ExistingProjLink.Location = New System.Drawing.Point(31, 132)
         Me.ExistingProjLink.Name = "ExistingProjLink"
-        Me.ExistingProjLink.Size = New System.Drawing.Size(129, 15)
+        Me.ExistingProjLink.Size = New System.Drawing.Size(128, 15)
         Me.ExistingProjLink.TabIndex = 2
         Me.ExistingProjLink.TabStop = True
         Me.ExistingProjLink.Text = "Open existing project..."
@@ -2315,7 +2315,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.44444!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.55556!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 65.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 66.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -2364,7 +2364,7 @@ Partial Class MainForm
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel8.Location = New System.Drawing.Point(87, 3)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(100, 23)
+        Me.Panel8.Size = New System.Drawing.Size(99, 23)
         Me.Panel8.TabIndex = 8
         '
         'projName
@@ -2373,7 +2373,7 @@ Partial Class MainForm
         Me.projName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projName.Location = New System.Drawing.Point(0, 0)
         Me.projName.Name = "projName"
-        Me.projName.Size = New System.Drawing.Size(100, 23)
+        Me.projName.Size = New System.Drawing.Size(99, 23)
         Me.projName.TabIndex = 2
         Me.projName.Text = "projName"
         Me.projName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -2383,7 +2383,7 @@ Partial Class MainForm
         Me.projNameText.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projNameText.Location = New System.Drawing.Point(0, 0)
         Me.projNameText.Name = "projNameText"
-        Me.projNameText.Size = New System.Drawing.Size(100, 21)
+        Me.projNameText.Size = New System.Drawing.Size(99, 21)
         Me.projNameText.TabIndex = 4
         Me.projNameText.Text = "projName"
         Me.projNameText.Visible = False
@@ -2987,7 +2987,7 @@ Partial Class MainForm
         Me.Label6.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label6.Location = New System.Drawing.Point(16, 16)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(323, 30)
+        Me.Label6.Size = New System.Drawing.Size(324, 30)
         Me.Label6.TabIndex = 0
         Me.Label6.Text = "Welcome to this servicing session"
         '
@@ -3099,7 +3099,7 @@ Partial Class MainForm
         Me.ExpandCollapseTSB.Image = CType(resources.GetObject("ExpandCollapseTSB.Image"), System.Drawing.Image)
         Me.ExpandCollapseTSB.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ExpandCollapseTSB.Name = "ExpandCollapseTSB"
-        Me.ExpandCollapseTSB.Size = New System.Drawing.Size(66, 22)
+        Me.ExpandCollapseTSB.Size = New System.Drawing.Size(65, 22)
         Me.ExpandCollapseTSB.Text = "Expand"
         '
         'prjTreeStatus
@@ -3459,13 +3459,13 @@ Partial Class MainForm
         'NewFileToolStripMenuItem
         '
         Me.NewFileToolStripMenuItem.Name = "NewFileToolStripMenuItem"
-        Me.NewFileToolStripMenuItem.Size = New System.Drawing.Size(143, 22)
+        Me.NewFileToolStripMenuItem.Size = New System.Drawing.Size(142, 22)
         Me.NewFileToolStripMenuItem.Text = "New file..."
         '
         'ExistingFileToolStripMenuItem
         '
         Me.ExistingFileToolStripMenuItem.Name = "ExistingFileToolStripMenuItem"
-        Me.ExistingFileToolStripMenuItem.Size = New System.Drawing.Size(143, 22)
+        Me.ExistingFileToolStripMenuItem.Size = New System.Drawing.Size(142, 22)
         Me.ExistingFileToolStripMenuItem.Text = "Existing file..."
         '
         'ADKCopierBW
