@@ -102,6 +102,8 @@ Public Class ImgMount
                         OK_Button.Text = "OK"
                         ListView1.Columns(0).Text = "Index"
                         ListView1.Columns(1).Text = "Image name"
+                        ListView1.Columns(2).Text = "Image description"
+                        ListView1.Columns(3).Text = "Image version"
                         CheckBox1.Text = "Mount with read only permissions"
                         CheckBox3.Text = "Optimize mount times"
                         CheckBox4.Text = "Check image integrity"
@@ -124,6 +126,8 @@ Public Class ImgMount
                         OK_Button.Text = "Aceptar"
                         ListView1.Columns(0).Text = "Índice"
                         ListView1.Columns(1).Text = "Nombre de imagen"
+                        ListView1.Columns(2).Text = "Descripción de la imagen"
+                        ListView1.Columns(3).Text = "Versión de la imagen"
                         CheckBox1.Text = "Montar con permisos de solo lectura"
                         CheckBox3.Text = "Optimizar tiempos de montaje"
                         CheckBox4.Text = "Comprobar integridad de la imagen"
@@ -147,6 +151,8 @@ Public Class ImgMount
                 OK_Button.Text = "OK"
                 ListView1.Columns(0).Text = "Index"
                 ListView1.Columns(1).Text = "Image name"
+                ListView1.Columns(2).Text = "Image description"
+                ListView1.Columns(3).Text = "Image version"
                 CheckBox1.Text = "Mount with read only permissions"
                 CheckBox3.Text = "Optimize mount times"
                 CheckBox4.Text = "Check image integrity"
@@ -169,6 +175,8 @@ Public Class ImgMount
                 OK_Button.Text = "Aceptar"
                 ListView1.Columns(0).Text = "Índice"
                 ListView1.Columns(1).Text = "Nombre de imagen"
+                ListView1.Columns(2).Text = "Descripción de la imagen"
+                ListView1.Columns(3).Text = "Versión de la imagen"
                 CheckBox1.Text = "Montar con permisos de solo lectura"
                 CheckBox3.Text = "Optimizar tiempos de montaje"
                 CheckBox4.Text = "Comprobar integridad de la imagen"
@@ -252,7 +260,7 @@ Public Class ImgMount
             Dim imgInfoCollection As DismImageInfoCollection = DismApi.GetImageInfo(ImgFile)
             NumericUpDown1.Maximum = imgInfoCollection.Count
             For Each imgInfo As DismImageInfo In imgInfoCollection
-                ListView1.Items.Add(New ListViewItem(New String() {imgInfo.ImageIndex, imgInfo.ImageName}))
+                ListView1.Items.Add(New ListViewItem(New String() {imgInfo.ImageIndex, imgInfo.ImageName, imgInfo.ImageDescription, imgInfo.ProductVersion.ToString()}))
             Next
             DismApi.Shutdown()
         Catch ex As AccessViolationException

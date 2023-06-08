@@ -51,6 +51,8 @@ Partial Class ImgMount
         Me.Label11 = New System.Windows.Forms.Label()
         Me.FileSpecDialog = New System.Windows.Forms.OpenFileDialog()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
+        Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader4 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -255,7 +257,7 @@ Partial Class ImgMount
         '
         'ListView1
         '
-        Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
+        Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3, Me.ColumnHeader4})
         Me.ListView1.Dock = System.Windows.Forms.DockStyle.Right
         Me.ListView1.Location = New System.Drawing.Point(388, 17)
         Me.ListView1.Name = "ListView1"
@@ -272,7 +274,7 @@ Partial Class ImgMount
         'ColumnHeader2
         '
         Me.ColumnHeader2.Text = "Image name"
-        Me.ColumnHeader2.Width = 263
+        Me.ColumnHeader2.Width = 256
         '
         'NumericUpDown1
         '
@@ -334,6 +336,16 @@ Partial Class ImgMount
         'FileSpecDialog
         '
         Me.FileSpecDialog.Filter = "WIM files|*.wim|VHD(X) files|*.vhd;*.vhdx;"
+        '
+        'ColumnHeader3
+        '
+        Me.ColumnHeader3.Text = "Image description"
+        Me.ColumnHeader3.Width = 256
+        '
+        'ColumnHeader4
+        '
+        Me.ColumnHeader4.Text = "Image version"
+        Me.ColumnHeader4.Width = 128
         '
         'ImgMount
         '
@@ -401,5 +413,7 @@ Partial Class ImgMount
     Friend WithEvents ListView1 As System.Windows.Forms.ListView
     Friend WithEvents ColumnHeader1 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader2 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader3 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader4 As System.Windows.Forms.ColumnHeader
 
 End Class
