@@ -355,12 +355,17 @@ Public Class MainForm
         MountedImageMountedReWr = MountedImageReWrList.ToArray()
         If MountedImageImgFileList.Count > 0 Then
             For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
-                Dim infoCollection As DismImageInfoCollection = DismApi.GetImageInfo(MountedImageImgFiles(x))
-                For Each imageInfo As DismImageInfo In infoCollection
-                    If imageInfo.ImageIndex = MountedImageImgIndexes(x) Then
-                        MountedImageImgVersionList.Add(imageInfo.ProductVersion.ToString())
-                    End If
-                Next
+                Try
+                    Dim infoCollection As DismImageInfoCollection = DismApi.GetImageInfo(MountedImageImgFiles(x))
+                    For Each imageInfo As DismImageInfo In infoCollection
+                        If imageInfo.ImageIndex = MountedImageImgIndexes(x) Then
+                            MountedImageImgVersionList.Add(imageInfo.ProductVersion.ToString())
+                        End If
+                    Next
+                Catch ex As Exception
+                    Debug.WriteLine("[DetectMountedImages] Exception: " & ex.ToString() & " has occurred when detecting the image version. Proceeding with detecting image version with ntoskrnl...")
+                    MountedImageImgVersionList.Add(FileVersionInfo.GetVersionInfo(MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion)
+                End Try
             Next
         End If
         DismApi.Shutdown()

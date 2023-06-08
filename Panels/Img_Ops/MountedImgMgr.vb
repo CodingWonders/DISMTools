@@ -227,7 +227,7 @@ Public Class MountedImgMgr
         Try
             For x = 0 To Array.LastIndexOf(MainForm.MountedImageImgFiles, MainForm.MountedImageImgFiles.Last)
                 If ignoreRepeats Then
-                    If ListView1.Items.Count <> MainForm.MountedImageImgFiles.Length Then
+                    If ListView1.Items.Count <> MainForm.MountedImageImgFiles.Count Then
                         ListView1.Items.Clear()
                         PopupImageManager.ListView1.Items.Clear()
                         ignoreRepeats = False
