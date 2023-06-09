@@ -63,6 +63,7 @@ Public Class NewProj
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         If MainForm.isProjectLoaded Then
             MainForm.UnloadDTProj(False, True, False)
+            If MainForm.ImgBW.IsBusy Then Exit Sub
         End If
         ProgressPanel.projName = TextBox1.Text
         ProgressPanel.projPath = TextBox2.Text

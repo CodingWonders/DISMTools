@@ -8394,6 +8394,7 @@ Public Class MainForm
         If OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
             If File.Exists(OpenFileDialog1.FileName) Then
                 If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement, False, True), False)
+                If ImgBW.IsBusy Then Exit Sub
                 ProgressPanel.OperationNum = 990
                 LoadDTProj(OpenFileDialog1.FileName, Path.GetFileNameWithoutExtension(OpenFileDialog1.FileName), False)
             End If
