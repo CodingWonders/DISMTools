@@ -71,6 +71,8 @@ If you want to grab a copy straight from the source code, follow these instructi
 
 We continue development of the next version in the Preview branch. To go to it, select "dt_preview" from the branch list. Commits are done every day, and new builds are released every Sunday.
 
+However, if you want to download the latest release AS SOON AS the project is built with new changes, you can download the [nightly installer](https://github.com/CodingWonders/DISMTools/raw/dt_pre_2362/Installer/Output/dt_setup.exe).
+
 ## Stay in touch
 
 Be sure to [follow our official subreddit](https://reddit.com/r/DISMTools) for release announcements and other cool stuff!
