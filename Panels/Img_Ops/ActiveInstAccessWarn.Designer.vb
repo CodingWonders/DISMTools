@@ -27,6 +27,7 @@ Partial Class ActiveInstAccessWarn
         Me.OK_Button = New System.Windows.Forms.Button()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.Label1 = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -72,12 +73,22 @@ Partial Class ActiveInstAccessWarn
         Me.Label1.TabIndex = 2
         Me.Label1.Text = resources.GetString("Label1.Text")
         '
+        'Label2
+        '
+        Me.Label2.AutoEllipsis = True
+        Me.Label2.Location = New System.Drawing.Point(10, 312)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(363, 18)
+        Me.Label2.TabIndex = 2
+        Me.Label2.Text = "The current project will be unloaded."
+        '
         'ActiveInstAccessWarn
         '
         Me.AcceptButton = Me.OK_Button
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(464, 345)
+        Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.TableLayoutPanel1)
@@ -99,5 +110,6 @@ Partial Class ActiveInstAccessWarn
     Friend WithEvents OK_Button As System.Windows.Forms.Button
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
     Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents Label2 As System.Windows.Forms.Label
 
 End Class

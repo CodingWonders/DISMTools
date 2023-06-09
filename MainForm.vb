@@ -314,7 +314,7 @@ Public Class MainForm
             LoadDTProj(argProjPath, Path.GetFileNameWithoutExtension(argProjPath), True)
         End If
         If argOnline Then
-            BeginOnlineManagement()
+            BeginOnlineManagement(True)
         End If
     End Sub
 
@@ -3687,6 +3687,7 @@ Public Class MainForm
                     ' Menu - File
                     NewProjectToolStripMenuItem.Text = "&New project..."
                     OpenExistingProjectToolStripMenuItem.Text = "&Open existing project"
+                    ManageOnlineInstallationToolStripMenuItem.Text = "&Manage online installation"
                     SaveProjectToolStripMenuItem.Text = "&Save project..."
                     SaveProjectasToolStripMenuItem.Text = "Save project &as..."
                     ExitToolStripMenuItem.Text = "E&xit"
@@ -3968,6 +3969,7 @@ Public Class MainForm
                     ' Menu - File
                     NewProjectToolStripMenuItem.Text = "&Nuevo proyecto..."
                     OpenExistingProjectToolStripMenuItem.Text = "&Abrir proyecto existente"
+                    ManageOnlineInstallationToolStripMenuItem.Text = "Administrar &instalación activa"
                     SaveProjectToolStripMenuItem.Text = "&Guardar proyecto..."
                     SaveProjectasToolStripMenuItem.Text = "Guardar proyecto &como..."
                     ExitToolStripMenuItem.Text = "Sa&lir"
@@ -4254,6 +4256,7 @@ Public Class MainForm
                 ' Menu - File
                 NewProjectToolStripMenuItem.Text = "&New project..."
                 OpenExistingProjectToolStripMenuItem.Text = "&Open existing project"
+                ManageOnlineInstallationToolStripMenuItem.Text = "&Manage online installation"
                 SaveProjectToolStripMenuItem.Text = "&Save project..."
                 SaveProjectasToolStripMenuItem.Text = "Save project &as..."
                 ExitToolStripMenuItem.Text = "E&xit"
@@ -4535,6 +4538,7 @@ Public Class MainForm
                 ' Menu - File
                 NewProjectToolStripMenuItem.Text = "&Nuevo proyecto..."
                 OpenExistingProjectToolStripMenuItem.Text = "&Abrir proyecto existente"
+                ManageOnlineInstallationToolStripMenuItem.Text = "Administrar &instalación activa"
                 SaveProjectToolStripMenuItem.Text = "&Guardar proyecto..."
                 SaveProjectasToolStripMenuItem.Text = "Guardar proyecto &como..."
                 ExitToolStripMenuItem.Text = "Sa&lir"
@@ -5458,8 +5462,8 @@ Public Class MainForm
         If OnlineManagement Then EndOnlineManagement()
     End Sub
 
-    Sub BeginOnlineManagement()
-        ActiveInstAccessWarn.ShowDialog()
+    Sub BeginOnlineManagement(ShowDialog As Boolean)
+        If ShowDialog Then ActiveInstAccessWarn.ShowDialog()
         IsImageMounted = True
         isProjectLoaded = True
         Select Case Language
@@ -5527,6 +5531,11 @@ Public Class MainForm
         End Select
         GroupBox1.Enabled = False
         Panel2.Visible = False
+        ProjNameEditBtn.Visible = False
+        TableLayoutPanel2.ColumnCount = 2
+        TableLayoutPanel2.SetColumnSpan(Label5, 1)
+        TableLayoutPanel2.SetColumnSpan(Label3, 1)
+        ManageOnlineInstallationToolStripMenuItem.Enabled = False
         ImgBW.RunWorkerAsync()
         Exit Sub
     End Sub
@@ -5628,6 +5637,11 @@ Public Class MainForm
         ToolStripButton2.Enabled = True
         GroupBox1.Enabled = True
         Panel2.Visible = True
+        ProjNameEditBtn.Visible = True
+        TableLayoutPanel2.ColumnCount = 3
+        TableLayoutPanel2.SetColumnSpan(Label5, 2)
+        TableLayoutPanel2.SetColumnSpan(Label3, 2)
+        ManageOnlineInstallationToolStripMenuItem.Enabled = True
     End Sub
 
     Sub UpdateProjProperties(WasImageMounted As Boolean, IsReadOnly As Boolean)
@@ -6392,46 +6406,48 @@ Public Class MainForm
                 Case 2
                     MenuDesc.Text = "Opens an existing DISMTools project. The current project will be unloaded"
                 Case 3
-                    MenuDesc.Text = "Saves the changes of this project"
+                    MenuDesc.Text = "Enters online installation management mode"
                 Case 4
-                    MenuDesc.Text = "Saves this project on another location"
+                    MenuDesc.Text = "Saves the changes of this project"
                 Case 5
-                    MenuDesc.Text = "Closes the program. If a project is loaded, you will be asked whether or not you would like to save it"
+                    MenuDesc.Text = "Saves this project on another location"
                 Case 6
-                    MenuDesc.Text = "Opens the File Explorer to view the project files"
+                    MenuDesc.Text = "Closes the program. If a project is loaded, you will be asked whether or not you would like to save it"
                 Case 7
-                    MenuDesc.Text = "Unloads this project. If changes were made, you will be asked whether or not you would like to save it"
+                    MenuDesc.Text = "Opens the File Explorer to view the project files"
                 Case 8
-                    MenuDesc.Text = "Switches the mounted image index"
+                    MenuDesc.Text = "Unloads this project. If changes were made, you will be asked whether or not you would like to save it"
                 Case 9
-                    MenuDesc.Text = "Launches the project section of the project properties dialog"
+                    MenuDesc.Text = "Switches the mounted image index"
                 Case 10
-                    MenuDesc.Text = "Launches the image section of the project properties dialog"
+                    MenuDesc.Text = "Launches the project section of the project properties dialog"
                 Case 11
-                    MenuDesc.Text = "Performs image format conversion from WIM to ESD and vice versa"
+                    MenuDesc.Text = "Launches the image section of the project properties dialog"
                 Case 12
-                    MenuDesc.Text = "Merges two or more SWM files into a single WIM file"
+                    MenuDesc.Text = "Performs image format conversion from WIM to ESD and vice versa"
                 Case 13
-                    MenuDesc.Text = "Remounts the image with read-write permissions to allow making modifications to it"
+                    MenuDesc.Text = "Merges two or more SWM files into a single WIM file"
                 Case 14
-                    MenuDesc.Text = "Opens the Command Console"
+                    MenuDesc.Text = "Remounts the image with read-write permissions to allow making modifications to it"
                 Case 15
-                    MenuDesc.Text = "Lets you manage unattended answer files for this project"
+                    MenuDesc.Text = "Opens the Command Console"
                 Case 16
-                    MenuDesc.Text = "Lets you manage project reports"
+                    MenuDesc.Text = "Lets you manage unattended answer files for this project"
                 Case 17
-                    MenuDesc.Text = "Shows an overview of the mounted images"
+                    MenuDesc.Text = "Lets you manage project reports"
                 Case 18
-                    MenuDesc.Text = "Configures settings for the program"
+                    MenuDesc.Text = "Shows an overview of the mounted images"
                 Case 19
-                    MenuDesc.Text = "Opens the help topics for this program"
+                    MenuDesc.Text = "Configures settings for the program"
                 Case 20
-                    MenuDesc.Text = "Opens the glossary, if you don't understand a concept"
+                    MenuDesc.Text = "Opens the help topics for this program"
                 Case 21
-                    MenuDesc.Text = "Shows the Command Help, letting you use commands to perform the same actions"
+                    MenuDesc.Text = "Opens the glossary, if you don't understand a concept"
                 Case 22
-                    MenuDesc.Text = "Shows program information"
+                    MenuDesc.Text = "Shows the Command Help, letting you use commands to perform the same actions"
                 Case 23
+                    MenuDesc.Text = "Shows program information"
+                Case 24
                     MenuDesc.Text = "Lets you report feedback through a new GitHub issue (a GitHub account is needed)"
             End Select
         End If
@@ -6543,7 +6559,7 @@ Public Class MainForm
         ShowChildDescs(True, 1)
     End Sub
 
-    Private Sub HideChildDescsTrigger(sender As Object, e As EventArgs) Handles AppendImage.MouseLeave, ApplyFFU.MouseLeave, ApplyImage.MouseLeave, CaptureCustomImage.MouseLeave, CaptureFFU.MouseLeave, CaptureImage.MouseLeave, CleanupMountpoints.MouseLeave, CommitImage.MouseLeave, DeleteImage.MouseLeave, ExportImage.MouseLeave, GetImageInfo.MouseLeave, GetMountedImageInfo.MouseLeave, GetWIMBootEntry.MouseLeave, ListImage.MouseLeave, MountImage.MouseLeave, OptimizeFFU.MouseLeave, OptimizeImage.MouseLeave, RemountImage.MouseLeave, SplitFFU.MouseLeave, SplitImage.MouseLeave, UnmountImage.MouseLeave, UpdateWIMBootEntry.MouseLeave, ApplySiloedPackage.MouseLeave, GetPackages.MouseLeave, GetPackageInfo.MouseLeave, AddPackage.MouseLeave, RemovePackage.MouseLeave, GetFeatures.MouseLeave, GetFeatureInfo.MouseLeave, EnableFeature.MouseLeave, DisableFeature.MouseLeave, CleanupImage.MouseLeave, AddProvisionedAppxPackage.MouseLeave, GetProvisioningPackageInfo.MouseLeave, ApplyCustomDataImage.MouseLeave, GetProvisionedAppxPackages.MouseLeave, AddProvisionedAppxPackage.MouseLeave, RemoveProvisionedAppxPackage.MouseLeave, OptimizeProvisionedAppxPackages.MouseLeave, SetProvisionedAppxDataFile.MouseLeave, CheckAppPatch.MouseLeave, GetAppPatchInfo.MouseLeave, GetAppPatches.MouseLeave, GetAppInfo.MouseLeave, GetApps.MouseLeave, ExportDefaultAppAssociations.MouseLeave, GetDefaultAppAssociations.MouseLeave, ImportDefaultAppAssociations.MouseLeave, RemoveDefaultAppAssociations.MouseLeave, GetIntl.MouseLeave, SetUILangFallback.MouseLeave, SetSysUILang.MouseLeave, SetSysLocale.MouseLeave, SetUserLocale.MouseLeave, SetInputLocale.MouseLeave, SetAllIntl.MouseLeave, SetTimeZone.MouseLeave, SetSKUIntlDefaults.MouseLeave, SetLayeredDriver.MouseLeave, GenLangINI.MouseLeave, SetSetupUILang.MouseLeave, AddCapability.MouseLeave, ExportSource.MouseLeave, GetCapabilities.MouseLeave, GetCapabilityInfo.MouseLeave, RemoveCapability.MouseLeave, GetCurrentEdition.MouseLeave, GetTargetEditions.MouseLeave, SetEdition.MouseLeave, SetProductKey.MouseLeave, GetDrivers.MouseLeave, GetDriverInfo.MouseLeave, AddDriver.MouseLeave, RemoveDriver.MouseLeave, ExportDriver.MouseLeave, ApplyUnattend.MouseLeave, GetPESettings.MouseLeave, GetTargetPath.MouseLeave, GetScratchSpace.MouseLeave, SetScratchSpace.MouseLeave, SetTargetPath.MouseLeave, GetOSUninstallWindow.MouseLeave, InitiateOSUninstall.MouseLeave, RemoveOSUninstall.MouseLeave, SetOSUninstallWindow.MouseLeave, SetReservedStorageState.MouseLeave, GetReservedStorageState.MouseLeave, NewProjectToolStripMenuItem.MouseLeave, OpenExistingProjectToolStripMenuItem.MouseLeave, SaveProjectToolStripMenuItem.MouseLeave, SaveProjectasToolStripMenuItem.MouseLeave, ExitToolStripMenuItem.MouseLeave, ViewProjectFilesInFileExplorerToolStripMenuItem.MouseLeave, UnloadProjectToolStripMenuItem.MouseLeave, SwitchImageIndexesToolStripMenuItem.MouseLeave, ProjectPropertiesToolStripMenuItem.MouseLeave, ImagePropertiesToolStripMenuItem.MouseLeave, ImageManagementToolStripMenuItem.MouseLeave, OSPackagesToolStripMenuItem.MouseLeave, ProvisioningPackagesToolStripMenuItem.MouseLeave, AppPackagesToolStripMenuItem.MouseLeave, AppPatchesToolStripMenuItem.MouseLeave, DefaultAppAssociationsToolStripMenuItem.MouseLeave, LanguagesAndRegionSettingsToolStripMenuItem.MouseLeave, CapabilitiesToolStripMenuItem.MouseLeave, WindowsEditionsToolStripMenuItem.MouseLeave, DriversToolStripMenuItem.MouseLeave, UnattendedAnswerFilesToolStripMenuItem.MouseLeave, WindowsPEServicingToolStripMenuItem.MouseLeave, OSUninstallToolStripMenuItem.MouseLeave, ReservedStorageToolStripMenuItem.MouseLeave, ImageConversionToolStripMenuItem.MouseLeave, WIMESDToolStripMenuItem.MouseLeave, RemountImageWithWritePermissionsToolStripMenuItem.MouseLeave, CommandShellToolStripMenuItem.MouseLeave, OptionsToolStripMenuItem.MouseLeave, HelpTopicsToolStripMenuItem.MouseLeave, GlossaryToolStripMenuItem.MouseLeave, CommandHelpToolStripMenuItem.MouseLeave, AboutDISMToolsToolStripMenuItem.MouseLeave, UnattendedAnswerFileManagerToolStripMenuItem.MouseLeave, AddEdge.MouseLeave, AddEdgeBrowser.MouseLeave, AddEdgeWebView.MouseLeave, ReportManagerToolStripMenuItem.MouseLeave, MergeSWM.MouseLeave, MountedImageManagerTSMI.MouseLeave, ReportFeedbackToolStripMenuItem.MouseLeave
+    Private Sub HideChildDescsTrigger(sender As Object, e As EventArgs) Handles AppendImage.MouseLeave, ApplyFFU.MouseLeave, ApplyImage.MouseLeave, CaptureCustomImage.MouseLeave, CaptureFFU.MouseLeave, CaptureImage.MouseLeave, CleanupMountpoints.MouseLeave, CommitImage.MouseLeave, DeleteImage.MouseLeave, ExportImage.MouseLeave, GetImageInfo.MouseLeave, GetMountedImageInfo.MouseLeave, GetWIMBootEntry.MouseLeave, ListImage.MouseLeave, MountImage.MouseLeave, OptimizeFFU.MouseLeave, OptimizeImage.MouseLeave, RemountImage.MouseLeave, SplitFFU.MouseLeave, SplitImage.MouseLeave, UnmountImage.MouseLeave, UpdateWIMBootEntry.MouseLeave, ApplySiloedPackage.MouseLeave, GetPackages.MouseLeave, GetPackageInfo.MouseLeave, AddPackage.MouseLeave, RemovePackage.MouseLeave, GetFeatures.MouseLeave, GetFeatureInfo.MouseLeave, EnableFeature.MouseLeave, DisableFeature.MouseLeave, CleanupImage.MouseLeave, AddProvisionedAppxPackage.MouseLeave, GetProvisioningPackageInfo.MouseLeave, ApplyCustomDataImage.MouseLeave, GetProvisionedAppxPackages.MouseLeave, AddProvisionedAppxPackage.MouseLeave, RemoveProvisionedAppxPackage.MouseLeave, OptimizeProvisionedAppxPackages.MouseLeave, SetProvisionedAppxDataFile.MouseLeave, CheckAppPatch.MouseLeave, GetAppPatchInfo.MouseLeave, GetAppPatches.MouseLeave, GetAppInfo.MouseLeave, GetApps.MouseLeave, ExportDefaultAppAssociations.MouseLeave, GetDefaultAppAssociations.MouseLeave, ImportDefaultAppAssociations.MouseLeave, RemoveDefaultAppAssociations.MouseLeave, GetIntl.MouseLeave, SetUILangFallback.MouseLeave, SetSysUILang.MouseLeave, SetSysLocale.MouseLeave, SetUserLocale.MouseLeave, SetInputLocale.MouseLeave, SetAllIntl.MouseLeave, SetTimeZone.MouseLeave, SetSKUIntlDefaults.MouseLeave, SetLayeredDriver.MouseLeave, GenLangINI.MouseLeave, SetSetupUILang.MouseLeave, AddCapability.MouseLeave, ExportSource.MouseLeave, GetCapabilities.MouseLeave, GetCapabilityInfo.MouseLeave, RemoveCapability.MouseLeave, GetCurrentEdition.MouseLeave, GetTargetEditions.MouseLeave, SetEdition.MouseLeave, SetProductKey.MouseLeave, GetDrivers.MouseLeave, GetDriverInfo.MouseLeave, AddDriver.MouseLeave, RemoveDriver.MouseLeave, ExportDriver.MouseLeave, ApplyUnattend.MouseLeave, GetPESettings.MouseLeave, GetTargetPath.MouseLeave, GetScratchSpace.MouseLeave, SetScratchSpace.MouseLeave, SetTargetPath.MouseLeave, GetOSUninstallWindow.MouseLeave, InitiateOSUninstall.MouseLeave, RemoveOSUninstall.MouseLeave, SetOSUninstallWindow.MouseLeave, SetReservedStorageState.MouseLeave, GetReservedStorageState.MouseLeave, NewProjectToolStripMenuItem.MouseLeave, OpenExistingProjectToolStripMenuItem.MouseLeave, SaveProjectToolStripMenuItem.MouseLeave, SaveProjectasToolStripMenuItem.MouseLeave, ExitToolStripMenuItem.MouseLeave, ViewProjectFilesInFileExplorerToolStripMenuItem.MouseLeave, UnloadProjectToolStripMenuItem.MouseLeave, SwitchImageIndexesToolStripMenuItem.MouseLeave, ProjectPropertiesToolStripMenuItem.MouseLeave, ImagePropertiesToolStripMenuItem.MouseLeave, ImageManagementToolStripMenuItem.MouseLeave, OSPackagesToolStripMenuItem.MouseLeave, ProvisioningPackagesToolStripMenuItem.MouseLeave, AppPackagesToolStripMenuItem.MouseLeave, AppPatchesToolStripMenuItem.MouseLeave, DefaultAppAssociationsToolStripMenuItem.MouseLeave, LanguagesAndRegionSettingsToolStripMenuItem.MouseLeave, CapabilitiesToolStripMenuItem.MouseLeave, WindowsEditionsToolStripMenuItem.MouseLeave, DriversToolStripMenuItem.MouseLeave, UnattendedAnswerFilesToolStripMenuItem.MouseLeave, WindowsPEServicingToolStripMenuItem.MouseLeave, OSUninstallToolStripMenuItem.MouseLeave, ReservedStorageToolStripMenuItem.MouseLeave, ImageConversionToolStripMenuItem.MouseLeave, WIMESDToolStripMenuItem.MouseLeave, RemountImageWithWritePermissionsToolStripMenuItem.MouseLeave, CommandShellToolStripMenuItem.MouseLeave, OptionsToolStripMenuItem.MouseLeave, HelpTopicsToolStripMenuItem.MouseLeave, GlossaryToolStripMenuItem.MouseLeave, CommandHelpToolStripMenuItem.MouseLeave, AboutDISMToolsToolStripMenuItem.MouseLeave, UnattendedAnswerFileManagerToolStripMenuItem.MouseLeave, AddEdge.MouseLeave, AddEdgeBrowser.MouseLeave, AddEdgeWebView.MouseLeave, ReportManagerToolStripMenuItem.MouseLeave, MergeSWM.MouseLeave, MountedImageManagerTSMI.MouseLeave, ReportFeedbackToolStripMenuItem.MouseLeave, ManageOnlineInstallationToolStripMenuItem.MouseLeave, AddProvisioningPackage.MouseLeave
         HideChildDescs()
     End Sub
 
@@ -6915,88 +6931,92 @@ Public Class MainForm
         ShowChildDescs(False, 2)
     End Sub
 
-    Private Sub SaveProject_MouseEnter(sender As Object, e As EventArgs) Handles SaveProjectToolStripMenuItem.MouseEnter
+    Private Sub ManageOnlineInstallation_MouseEnter(sender As Object, e As EventArgs) Handles ManageOnlineInstallationToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 3)
     End Sub
 
-    Private Sub SaveProjAs_MouseEnter(sender As Object, e As EventArgs) Handles SaveProjectasToolStripMenuItem.MouseEnter
+    Private Sub SaveProject_MouseEnter(sender As Object, e As EventArgs) Handles SaveProjectToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 4)
     End Sub
 
-    Private Sub ExitProg_MouseEnter(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.MouseEnter
+    Private Sub SaveProjAs_MouseEnter(sender As Object, e As EventArgs) Handles SaveProjectasToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 5)
     End Sub
 
-    Private Sub ProjectInExplorer_MouseEnter(sender As Object, e As EventArgs) Handles ViewProjectFilesInFileExplorerToolStripMenuItem.MouseEnter
+    Private Sub ExitProg_MouseEnter(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 6)
     End Sub
 
-    Private Sub UnloadProject_MouseEnter(sender As Object, e As EventArgs) Handles UnloadProjectToolStripMenuItem.MouseEnter
+    Private Sub ProjectInExplorer_MouseEnter(sender As Object, e As EventArgs) Handles ViewProjectFilesInFileExplorerToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 7)
     End Sub
 
-    Private Sub SwitchIndexes_MouseEnter(sender As Object, e As EventArgs) Handles SwitchImageIndexesToolStripMenuItem.MouseEnter
+    Private Sub UnloadProject_MouseEnter(sender As Object, e As EventArgs) Handles UnloadProjectToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 8)
     End Sub
 
-    Private Sub ProjProps_MouseEnter(sender As Object, e As EventArgs) Handles ProjectPropertiesToolStripMenuItem.MouseEnter
+    Private Sub SwitchIndexes_MouseEnter(sender As Object, e As EventArgs) Handles SwitchImageIndexesToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 9)
     End Sub
 
-    Private Sub ImgProps_MouseEnter(sender As Object, e As EventArgs) Handles ImagePropertiesToolStripMenuItem.MouseEnter
+    Private Sub ProjProps_MouseEnter(sender As Object, e As EventArgs) Handles ProjectPropertiesToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 10)
     End Sub
 
-    Private Sub ImgConversion_MouseEnter(sender As Object, e As EventArgs) Handles ImageConversionToolStripMenuItem.MouseEnter, WIMESDToolStripMenuItem.MouseEnter
+    Private Sub ImgProps_MouseEnter(sender As Object, e As EventArgs) Handles ImagePropertiesToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 11)
     End Sub
 
-    Private Sub MergeSWM_MouseEnter(sender As Object, e As EventArgs) Handles MergeSWM.MouseEnter
+    Private Sub ImgConversion_MouseEnter(sender As Object, e As EventArgs) Handles ImageConversionToolStripMenuItem.MouseEnter, WIMESDToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 12)
     End Sub
 
-    Private Sub RemountImg_MouseEnter(sender As Object, e As EventArgs) Handles RemountImageWithWritePermissionsToolStripMenuItem.MouseEnter
+    Private Sub MergeSWM_MouseEnter(sender As Object, e As EventArgs) Handles MergeSWM.MouseEnter
         ShowChildDescs(False, 13)
     End Sub
 
-    Private Sub CmdConsole_MouseEnter(sender As Object, e As EventArgs) Handles CommandShellToolStripMenuItem.MouseEnter
+    Private Sub RemountImg_MouseEnter(sender As Object, e As EventArgs) Handles RemountImageWithWritePermissionsToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 14)
     End Sub
 
-    Private Sub UAFileMan_MouseEnter(sender As Object, e As EventArgs) Handles UnattendedAnswerFileManagerToolStripMenuItem.MouseEnter
+    Private Sub CmdConsole_MouseEnter(sender As Object, e As EventArgs) Handles CommandShellToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 15)
     End Sub
 
-    Private Sub ReportManagerToolStripMenuItem_MouseEnter(sender As Object, e As EventArgs) Handles ReportManagerToolStripMenuItem.MouseEnter
+    Private Sub UAFileMan_MouseEnter(sender As Object, e As EventArgs) Handles UnattendedAnswerFileManagerToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 16)
     End Sub
 
-    Private Sub MountedImageManagerTSMI_MouseEnter(sender As Object, e As EventArgs) Handles MountedImageManagerTSMI.MouseEnter
+    Private Sub ReportManagerToolStripMenuItem_MouseEnter(sender As Object, e As EventArgs) Handles ReportManagerToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 17)
     End Sub
 
-    Private Sub ProgSettings_MouseEnter(sender As Object, e As EventArgs) Handles OptionsToolStripMenuItem.MouseEnter
+    Private Sub MountedImageManagerTSMI_MouseEnter(sender As Object, e As EventArgs) Handles MountedImageManagerTSMI.MouseEnter
         ShowChildDescs(False, 18)
     End Sub
 
-    Private Sub HelpTopics_MouseEnter(sender As Object, e As EventArgs) Handles HelpTopicsToolStripMenuItem.MouseEnter
+    Private Sub ProgSettings_MouseEnter(sender As Object, e As EventArgs) Handles OptionsToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 19)
     End Sub
 
-    Private Sub Glossary_MouseEnter(sender As Object, e As EventArgs) Handles GlossaryToolStripMenuItem.MouseEnter
+    Private Sub HelpTopics_MouseEnter(sender As Object, e As EventArgs) Handles HelpTopicsToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 20)
     End Sub
 
-    Private Sub CmdHelp_MouseEnter(sender As Object, e As EventArgs) Handles CommandHelpToolStripMenuItem.MouseEnter
+    Private Sub Glossary_MouseEnter(sender As Object, e As EventArgs) Handles GlossaryToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 21)
     End Sub
 
-    Private Sub ProgInfo_MouseEnter(sender As Object, e As EventArgs) Handles AboutDISMToolsToolStripMenuItem.MouseEnter
+    Private Sub CmdHelp_MouseEnter(sender As Object, e As EventArgs) Handles CommandHelpToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 22)
     End Sub
 
-    Private Sub ReportFeedbackToolStripMenuItem_MouseEnter(sender As Object, e As EventArgs) Handles ReportFeedbackToolStripMenuItem.MouseEnter
+    Private Sub ProgInfo_MouseEnter(sender As Object, e As EventArgs) Handles AboutDISMToolsToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 23)
+    End Sub
+
+    Private Sub ReportFeedbackToolStripMenuItem_MouseEnter(sender As Object, e As EventArgs) Handles ReportFeedbackToolStripMenuItem.MouseEnter
+        ShowChildDescs(False, 24)
     End Sub
 #End Region
 
@@ -8607,7 +8627,8 @@ Public Class MainForm
 
     Private Sub OnlineInstMgmt_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles OnlineInstMgmt.LinkClicked
         If Not HomePanel.Visible Then Exit Sub
-        BeginOnlineManagement()
+        ActiveInstAccessWarn.Label2.Visible = False
+        BeginOnlineManagement(True)
     End Sub
 
     Function GetPackageDisplayName(PackageName As String, Optional DisplayName As String = "")
@@ -9171,5 +9192,17 @@ Public Class MainForm
         If PleaseWaitDialog.imgIndexes > 1 Then
             ImgIndexSwitch.ShowDialog()
         End If
+    End Sub
+
+    Private Sub ManageOnlineInstallationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageOnlineInstallationToolStripMenuItem.Click
+        Dim showMessage As Boolean = isProjectLoaded
+        If isProjectLoaded Then
+            ActiveInstAccessWarn.Label2.Visible = True
+            ActiveInstAccessWarn.ShowDialog()
+            If ActiveInstAccessWarn.DialogResult = Windows.Forms.DialogResult.OK Then UnloadDTProj(False, True, False)
+            If ImgBW.IsBusy Then Exit Sub
+        End If
+        ActiveInstAccessWarn.Label2.Visible = False
+        BeginOnlineManagement(Not showMessage)
     End Sub
 End Class
