@@ -436,7 +436,6 @@ Public Class ProgressPanel
             ProgressBW.CancelAsync()
         ElseIf Cancel_Button.Text = "OK" Or Cancel_Button.Text = "Aceptar" Then
             MainForm.ToolStripButton4.Visible = False
-            Dispose()
             Close()
         End If
     End Sub
@@ -820,11 +819,7 @@ Public Class ProgressPanel
             End If
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
-            Do Until DISMProc.HasExited
-                If DISMProc.HasExited Then
-                    Exit Do
-                End If
-            Loop
+            DISMProc.WaitForExit()
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -946,11 +941,7 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & "Capturing image...")
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
-            Do Until DISMProc.HasExited
-                If DISMProc.HasExited Then
-                    Exit Do
-                End If
-            Loop
+            DISMProc.WaitForExit()
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1023,11 +1014,7 @@ Public Class ProgressPanel
             ' TODO: Add additional options later
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
-            Do Until DISMProc.HasExited
-                If DISMProc.HasExited Then
-                    Exit Do
-                End If
-            Loop
+            DISMProc.WaitForExit()
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1121,11 +1108,7 @@ Public Class ProgressPanel
                 End If
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
-                Do Until DISMProc.HasExited
-                    If DISMProc.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                DISMProc.WaitForExit()
                 If Hex(DISMProc.ExitCode).Length < 8 Then
                     LogView.AppendText(" Error level : " & DISMProc.ExitCode)
                 Else
@@ -1226,11 +1209,7 @@ Public Class ProgressPanel
             End If
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
-            Do Until DISMProc.HasExited
-                If DISMProc.HasExited Then
-                    Exit Do
-                End If
-            Loop
+            DISMProc.WaitForExit()
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1285,11 +1264,7 @@ Public Class ProgressPanel
             End Select
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
-            Do Until DISMProc.HasExited
-                If DISMProc.HasExited Then
-                    Exit Do
-                End If
-            Loop
+            DISMProc.WaitForExit()
             CurrentPB.Value = 50
             AllPB.Value = CurrentPB.Value
             Select Case Language
@@ -1358,11 +1333,7 @@ Public Class ProgressPanel
                     End Select
                     DISMProc.StartInfo.Arguments = CommandArgs
                     DISMProc.Start()
-                    Do Until DISMProc.HasExited
-                        If DISMProc.HasExited Then
-                            Exit Do
-                        End If
-                    Loop
+                    DISMProc.WaitForExit()
                     If DISMProc.ExitCode = Decimal.ToInt32(-1052638964) Then
                         LogView.AppendText(CrLf & CrLf & "Saving changes to the image has failed. Discarding changes...")
                         ' It mostly came from a read-only source. Discard changes
@@ -1380,11 +1351,7 @@ Public Class ProgressPanel
                         End Select
                         DISMProc.StartInfo.Arguments = CommandArgs
                         DISMProc.Start()
-                        Do Until DISMProc.HasExited
-                            If DISMProc.HasExited Then
-                                Exit Do
-                            End If
-                        Loop
+                        DISMProc.WaitForExit()
                     End If
                 Catch ex As Exception
                     File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat",
@@ -1460,11 +1427,7 @@ Public Class ProgressPanel
                     End If
                     DISMProc.StartInfo.Arguments = CommandArgs
                     DISMProc.Start()
-                    Do Until DISMProc.HasExited
-                        If DISMProc.HasExited Then
-                            Exit Do
-                        End If
-                    Loop
+                    DISMProc.WaitForExit()
                 Catch ex As Exception
                     ' Let's try this before setting things up here
                 End Try
@@ -1587,11 +1550,7 @@ Public Class ProgressPanel
                 End If
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
-                Do Until DISMProc.HasExited
-                    If DISMProc.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                DISMProc.WaitForExit()
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1683,11 +1642,7 @@ Public Class ProgressPanel
                     End If
                     DISMProc.StartInfo.Arguments = CommandArgs
                     DISMProc.Start()
-                    Do Until DISMProc.HasExited
-                        If DISMProc.HasExited Then
-                            Exit Do
-                        End If
-                    Loop
+                    DISMProc.WaitForExit()
                     LogView.AppendText(CrLf & "Getting error level...")
                     GetPkgErrorLevel()
                     LogView.AppendText(" Error level: " & errCode)
@@ -1817,11 +1772,7 @@ Public Class ProgressPanel
                         CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /remove-package /packagename=" & pkgRemovalNames(x)
                         DISMProc.StartInfo.Arguments = CommandArgs
                         DISMProc.Start()
-                        Do Until DISMProc.HasExited
-                            If DISMProc.HasExited Then
-                                Exit Do
-                            End If
-                        Loop
+                        DISMProc.WaitForExit()
                         LogView.AppendText(CrLf & "Getting error level...")
                         errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
                         If DISMProc.ExitCode = 0 Then
@@ -1902,11 +1853,7 @@ Public Class ProgressPanel
                         CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /remove-package /packagepath=" & pkgRemovalFiles(x)
                         DISMProc.StartInfo.Arguments = CommandArgs
                         DISMProc.Start()
-                        Do Until DISMProc.HasExited
-                            If DISMProc.HasExited Then
-                                Exit Do
-                            End If
-                        Loop
+                        DISMProc.WaitForExit()
                         LogView.AppendText(CrLf & "Getting error level...")
                         errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
                         If DISMProc.ExitCode = 0 Then
@@ -2073,11 +2020,7 @@ Public Class ProgressPanel
                 End If
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
-                Do Until DISMProc.HasExited
-                    If DISMProc.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                DISMProc.WaitForExit()
                 LogView.AppendText(CrLf & "Getting error level...")
                 GetFeatErrorLevel()
                 If errCode.Length >= 8 Then
@@ -2211,11 +2154,7 @@ Public Class ProgressPanel
                 End If
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
-                Do Until DISMProc.HasExited
-                    If DISMProc.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                DISMProc.WaitForExit()
                 LogView.AppendText(CrLf & "Getting error level...")
                 'GetFeatErrorLevel()
                 errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
@@ -2403,9 +2342,7 @@ Public Class ProgressPanel
             End Select
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
-            Do Until DISMProc.HasExited
-                If DISMProc.HasExited Then Exit Do
-            Loop
+            DISMProc.WaitForExit()
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2453,15 +2390,7 @@ Public Class ProgressPanel
             CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-provisioningpackage /packagepath=" & Quote & ppkgAdditionPackagePath & Quote & If(ppkgAdditionCatalogPath <> "" And File.Exists(ppkgAdditionCatalogPath), " /catalogpath=" & Quote & ppkgAdditionCatalogPath & Quote, "")
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
-            If Debugger.IsAttached Then
-                DISMProc.WaitForExit()
-            Else
-                Do Until DISMProc.HasExited
-                    If DISMProc.HasExited Then
-                        Exit Do
-                    End If
-                Loop
-            End If
+            DISMProc.WaitForExit()
             LogView.AppendText(CrLf & "Getting error level...")
             If Hex(DISMProc.ExitCode).Length < 8 Then
                 errCode = DISMProc.ExitCode
@@ -2635,11 +2564,7 @@ Public Class ProgressPanel
                 End If
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
-                Do Until DISMProc.HasExited
-                    If DISMProc.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                DISMProc.WaitForExit()
                 LogView.AppendText(CrLf & "Getting error level...")
                 If Hex(DISMProc.ExitCode).Length < 8 Then
                     errCode = DISMProc.ExitCode
@@ -2784,11 +2709,7 @@ Public Class ProgressPanel
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /remove-provisionedappxpackage /packagename=" & appxRemovalPackages(x)
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
-                Do Until DISMProc.HasExited
-                    If DISMProc.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                DISMProc.WaitForExit()
                 LogView.AppendText(CrLf & "Getting error level...")
                 If Hex(DISMProc.ExitCode).Length < 8 Then
                     errCode = DISMProc.ExitCode
@@ -2916,11 +2837,7 @@ Public Class ProgressPanel
                 DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
-                Do Until DISMProc.HasExited
-                    If DISMProc.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                DISMProc.WaitForExit()
                 LogView.AppendText(CrLf & "Getting error level...")
                 errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
                 If DISMProc.ExitCode = 0 Then
@@ -3045,11 +2962,7 @@ Public Class ProgressPanel
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /remove-capability /capabilityname=" & capRemovalIds(x)
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
-                Do Until DISMProc.HasExited
-                    If DISMProc.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                DISMProc.WaitForExit()
                 LogView.AppendText(CrLf & "Getting error level...")
                 errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
                 If DISMProc.ExitCode = 0 Then
@@ -3186,11 +3099,7 @@ Public Class ProgressPanel
                 End If
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
-                Do Until DISMProc.HasExited
-                    If DISMProc.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                DISMProc.WaitForExit()
                 LogView.AppendText(CrLf & "Getting error level...")
                 errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
                 If DISMProc.ExitCode = 0 Then
@@ -3344,11 +3253,7 @@ Public Class ProgressPanel
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /remove-driver /driver=" & Quote & drvRemovalPkgs(x) & Quote
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
-                Do Until DISMProc.HasExited
-                    If DISMProc.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                DISMProc.WaitForExit()
                 LogView.AppendText(CrLf & "Getting error level...")
                 errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
                 If DISMProc.ExitCode = 0 Then
@@ -3395,11 +3300,7 @@ Public Class ProgressPanel
             CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /online /set-osuninstallwindow /value:" & osUninstDayCount
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
-            Do Until DISMProc.HasExited
-                If DISMProc.HasExited Then
-                    Exit Do
-                End If
-            Loop
+            DISMProc.WaitForExit()
             currentTask.Text = "Gathering error level..."
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
@@ -3459,11 +3360,7 @@ Public Class ProgressPanel
             End If
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
-            Do Until DISMProc.HasExited
-                If DISMProc.HasExited Then
-                    Exit Do
-                End If
-            Loop
+            DISMProc.WaitForExit()
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3523,11 +3420,7 @@ Public Class ProgressPanel
             End Select
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
-            Do Until DISMProc.HasExited
-                If DISMProc.HasExited Then
-                    Exit Do
-                End If
-            Loop
+            DISMProc.WaitForExit()
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3597,11 +3490,7 @@ Public Class ProgressPanel
             End If
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
-            Do Until DISMProc.HasExited
-                If DISMProc.HasExited Then
-                    Exit Do
-                End If
-            Loop
+            DISMProc.WaitForExit()
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3650,11 +3539,7 @@ Public Class ProgressPanel
                 End Select
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
-                Do Until DISMProc.HasExited
-                    If DISMProc.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                DISMProc.WaitForExit()
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3715,11 +3600,7 @@ Public Class ProgressPanel
             End If
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
-            Do Until DISMProc.HasExited
-                If DISMProc.HasExited Then
-                    Exit Do
-                End If
-            Loop
+            DISMProc.WaitForExit()
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3870,11 +3751,7 @@ Public Class ProgressPanel
                 End If
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
-                Do Until DISMProc.HasExited
-                    If DISMProc.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                DISMProc.WaitForExit()
                 LogView.AppendText(CrLf & "Getting error level...")
                 GetPkgErrorLevel()
                 LogView.AppendText(" Error level: " & errCode)
@@ -3894,11 +3771,7 @@ Public Class ProgressPanel
                 End If
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
-                Do Until DISMProc.HasExited
-                    If DISMProc.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                DISMProc.WaitForExit()
                 LogView.AppendText(CrLf & "Getting error level...")
                 GetPkgErrorLevel()
                 LogView.AppendText(" Error level: " & errCode)
@@ -4165,11 +4038,7 @@ Public Class ProgressPanel
             AppxScanner.StartInfo.CreateNoWindow = True
             AppxScanner.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
             AppxScanner.Start()
-            Do Until AppxScanner.HasExited
-                If AppxScanner.HasExited Then
-                    Exit Do
-                End If
-            Loop
+            AppxScanner.WaitForExit()
             If AppxScanner.ExitCode = 0 Then
                 If Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase) Then
                     ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\appxscan\AppxBundleManifest.xml")
@@ -4654,7 +4523,6 @@ Public Class ProgressPanel
             MainForm.StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
             MainForm.ToolStripButton4.Visible = False
             Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
-            Dispose()
             Close()
         Else
             MainForm.ToolStripButton4.Visible = False
@@ -4833,14 +4701,16 @@ Public Class ProgressPanel
             Application.DoEvents()
             Thread.Sleep(100)
         End While
-        ' Go through all mounted images to determine which one to get info from with the DISM API,
-        ' if a project has been loaded and if that project has a mounted image
-        If MainForm.isProjectLoaded And MainForm.IsImageMounted Then
-            For x = 0 To Array.LastIndexOf(MainForm.MountedImageMountDirs, MainForm.MountedImageMountDirs.Last)
-                If MainForm.MountedImageMountDirs(x) = MainForm.MountDir Then
-                    mntString = MainForm.MountedImageMountDirs(x)
-                End If
-            Next
+        If MainForm.MountedImageMountDirs.Count > 0 Then
+            ' Go through all mounted images to determine which one to get info from with the DISM API,
+            ' if a project has been loaded and if that project has a mounted image
+            If MainForm.isProjectLoaded And MainForm.IsImageMounted Then
+                For x = 0 To Array.LastIndexOf(MainForm.MountedImageMountDirs, MainForm.MountedImageMountDirs.Last)
+                    If MainForm.MountedImageMountDirs(x) = MainForm.MountDir Then
+                        mntString = MainForm.MountedImageMountDirs(x)
+                    End If
+                Next
+            End If
         End If
         DismProgram = MainForm.DismExe
         If MountDir = "" Then MountDir = MainForm.MountDir
@@ -4906,6 +4776,9 @@ Public Class ProgressPanel
         ScratchDirPath = MainForm.ScratchDir
         EnglishOut = MainForm.EnglishOutput
         If UseScratchDir And AutoScratch And OnlineMgmt And Not Directory.Exists(Application.StartupPath & "\scratch") Then Directory.CreateDirectory(Application.StartupPath & "\scratch")
+        If LogView.Text <> "" Then LogView.Clear()
+        CurrentPB.Value = 0
+        AllPB.Value = 0
         GatherInitialSwitches()
         GetTasks(OperationNum)
         ProgressBW.RunWorkerAsync()

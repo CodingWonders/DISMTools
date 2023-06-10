@@ -262,9 +262,7 @@ Public Class ProjProperties
                 WIMBootProc.StartInfo.CreateNoWindow = True
                 WIMBootProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
                 WIMBootProc.Start()
-                Do Until WIMBootProc.HasExited
-                    If WIMBootProc.HasExited Then Exit Do
-                Loop
+                WIMBootProc.WaitForExit()
             End Using
             Try
                 imgWimBootStatus.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgwimboot", ASCII).Replace("WIM Bootable : ", "").Trim()

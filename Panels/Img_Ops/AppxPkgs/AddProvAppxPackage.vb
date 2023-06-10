@@ -743,11 +743,7 @@ Public Class AddProvAppxPackage
             AppxScanner.StartInfo.CreateNoWindow = True
             AppxScanner.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
             AppxScanner.Start()
-            Do Until AppxScanner.HasExited
-                If AppxScanner.HasExited Then
-                    Exit Do
-                End If
-            Loop
+            AppxScanner.WaitForExit()
             If AppxScanner.ExitCode = 0 Then
                 If Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase) Then
                     ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\appxscan\AppxBundleManifest.xml")
@@ -1244,11 +1240,7 @@ Public Class AddProvAppxPackage
                     ' APPXBUNDLE/MSIXBUNDLE
                     AppxScanner.StartInfo.Arguments = "x " & Quote & SourcePackage & "\" & PackageName & Quote & " -o" & Quote & Application.StartupPath & "\appxscan" & Quote
                     AppxScanner.Start()
-                    Do Until AppxScanner.HasExited
-                        If AppxScanner.HasExited Then
-                            Exit Do
-                        End If
-                    Loop
+                    AppxScanner.WaitForExit()
                     If Not Directory.Exists(Application.StartupPath & "\temp\storeassets") Then Directory.CreateDirectory(Application.StartupPath & "\temp\storeassets").Attributes = FileAttributes.Hidden
                     If AppxScanner.ExitCode = 0 Then
                         Directory.CreateDirectory(Application.StartupPath & "\temp\storeassets\" & AppxPackageName)
@@ -1298,11 +1290,7 @@ Public Class AddProvAppxPackage
                 If IsBundlePackage Then
                     AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & PackageName & Quote & " -o" & Quote & Application.StartupPath & "\appxscan" & Quote
                     AppxScanner.Start()
-                    Do Until AppxScanner.HasExited
-                        If AppxScanner.HasExited Then
-                            Exit Do
-                        End If
-                    Loop
+                    AppxScanner.WaitForExit()
                     If Not Directory.Exists(Application.StartupPath & "\temp\storeassets") Then Directory.CreateDirectory(Application.StartupPath & "\temp\storeassets").Attributes = FileAttributes.Hidden
                     If AppxScanner.ExitCode = 0 Then
                         Directory.CreateDirectory(Application.StartupPath & "\temp\storeassets\" & AppxPackageName)
@@ -1310,25 +1298,13 @@ Public Class AddProvAppxPackage
                             ' Try extracting small, store and large assets
                             AppxScanner.StartInfo.Arguments = "e " & Quote & Application.StartupPath & "\appxscan\" & PackageName & Quote & " " & Quote & "Assets\small*" & Quote & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
                             AppxScanner.Start()
-                            Do Until AppxScanner.HasExited
-                                If AppxScanner.HasExited Then
-                                    Exit Do
-                                End If
-                            Loop
+                            AppxScanner.WaitForExit()
                             AppxScanner.StartInfo.Arguments = "e " & Quote & Application.StartupPath & "\appxscan\" & PackageName & Quote & " " & Quote & "Assets\store*" & Quote & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
                             AppxScanner.Start()
-                            Do Until AppxScanner.HasExited
-                                If AppxScanner.HasExited Then
-                                    Exit Do
-                                End If
-                            Loop
+                            AppxScanner.WaitForExit()
                             AppxScanner.StartInfo.Arguments = "e " & Quote & Application.StartupPath & "\appxscan\" & PackageName & Quote & " " & Quote & "Assets\large*" & Quote & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
                             AppxScanner.Start()
-                            Do Until AppxScanner.HasExited
-                                If AppxScanner.HasExited Then
-                                    Exit Do
-                                End If
-                            Loop
+                            AppxScanner.WaitForExit()
                         End If
                     End If
                 Else
@@ -1338,25 +1314,13 @@ Public Class AddProvAppxPackage
                         ' Try extracting small, store and large assets
                         AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & "Assets\small*" & Quote & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
                         AppxScanner.Start()
-                        Do Until AppxScanner.HasExited
-                            If AppxScanner.HasExited Then
-                                Exit Do
-                            End If
-                        Loop
+                        AppxScanner.WaitForExit()
                         AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & "Assets\store*" & Quote & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
                         AppxScanner.Start()
-                        Do Until AppxScanner.HasExited
-                            If AppxScanner.HasExited Then
-                                Exit Do
-                            End If
-                        Loop
+                        AppxScanner.WaitForExit()
                         AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & "Assets\large*" & Quote & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
                         AppxScanner.Start()
-                        Do Until AppxScanner.HasExited
-                            If AppxScanner.HasExited Then
-                                Exit Do
-                            End If
-                        Loop
+                        AppxScanner.WaitForExit()
                     End If
                 End If
             End If

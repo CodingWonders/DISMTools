@@ -233,9 +233,7 @@ Public Class ImgCleanup
                 reg.StartInfo.CreateNoWindow = True
                 reg.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
                 reg.Start()
-                Do Until reg.HasExited
-                    If reg.HasExited Then Exit Do
-                Loop
+                reg.WaitForExit()
                 If reg.ExitCode = 0 Then
                     Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("MountedSoft\Microsoft\Windows\CurrentVersion\Component Based Servicing", False)
                     Dim LastResetBase_UTC As String = ""
@@ -259,9 +257,7 @@ Public Class ImgCleanup
                     Label6.Text = LastResetBase_UTC
                     reg.StartInfo.Arguments = "unload HKLM\MountedSoft"
                     reg.Start()
-                    Do Until reg.HasExited
-                        If reg.HasExited Then Exit Do
-                    Loop
+                    reg.WaitForExit()
                 Else
                     Select Case MainForm.Language
                         Case 0

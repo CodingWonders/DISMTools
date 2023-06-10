@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/CodingWonders/DISMTools/assets/101426328/165075ee-87f6-4e0a-9e85-67f93c0ca319">
+  <img src="https://github.com/CodingWonders/DISMTools/assets/101426328/4c753c9a-1440-44cb-a742-04e71d077dff">
   <h3 align="center">A free and open-source GUI for DISM operations</h3>
 </p>
 <hr>
@@ -59,6 +59,8 @@ These actions will be supported on future releases. They aren't implemented yet 
 
 If you want to grab a copy straight from the source code, follow these instructions:
 
+- **Requirements**: 7-Zip
+
 1. You begin by either cloning the project or downloading a ZIP of the source code. Go to "Code", and select an option from there
 2. Prepare the NuGet packages by running `nugetpkgprep.bat` in the location you cloned the repository to
 3. Open the solution in Visual Studio 2012 or later
@@ -67,10 +69,29 @@ If you want to grab a copy straight from the source code, follow these instructi
     
 3. Finally, go to "Build > Build solution", or press CTRL-Shift-B
 
+**NOTE:** in the event that the program detects an update and lets you download an older version, we suggest that you should disregard its advice (it's not like it will affect the binary being compiled, as it will be recompiled when you build the project, but it will make you waste time)
+
+## Contributions
+
+If you want to contribute to this project, you can do so in many ways:
+
+- Code changes: changes that WILL make it to the next release. If you want to do these, do the following:
+
+  1. Create your separate branch, based on the `dt_pre_****` one. This will make sure your change will arrive in the next preview
+  2. Clone the newly created branch or, if you already cloned the repository, fetch the origin (`git fetch origin`) and switch to your branch
+  3. Work on your changes **and test them**. We want to make sure your changes work as expected, and there aren't any [regressions](https://en.wikipedia.org/wiki/Regression_testing) because of them
+  4. Commit your changes and create a pull request. If not set automatically, select the `dt_pre_****` branch to merge the contents to it. We'll review your changes and, if they're ready, we'll merge them.
+
+- Documentation and/or artwork: if you like the visual side of things more, you can contribute to the Wiki. For more information, read [the following issue](https://github.com/CodingWonders/DISMTools/issues/2)
+
 ## Testing the latest
 
 We continue development of the next version in the Preview branch. To go to it, select "dt_preview" from the branch list. Commits are done every day, and new builds are released every Sunday.
 
+However, if you want to download the latest release AS SOON AS the project is built with new changes, you can download the [nightly installer](https://github.com/CodingWonders/DISMTools/raw/dt_pre_2362/Installer/Output/dt_setup.exe).
+
 ## Stay in touch
 
-Be sure to [follow our official subreddit](https://reddit.com/r/DISMTools) for release announcements and other cool stuff!
+~~Be sure to [follow our official subreddit](https://reddit.com/r/DISMTools) for release announcements and other cool stuff!~~
+
+The community will suffer from a blackout, to support the protest of Reddit's API changes. In the event that we need to do more of these, we'll look into more ways you can use to stay in touch.

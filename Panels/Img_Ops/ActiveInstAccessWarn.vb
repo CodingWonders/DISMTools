@@ -24,6 +24,7 @@ Public Class ActiveInstAccessWarn
                             "If you carelessly perform an operation to an online image, you may break it, to the point of making the installation unbootable." & CrLf & CrLf & _
                             "We AREN'T RESPONSIBLE for any damage done to your active installation. If you are left with an unbootable system, you should re-install Windows (while backing up your files first, if possible)" & CrLf & CrLf & _
                             "If you understand this warning, and would like to proceed, click OK. Otherwise, click OK, and then click " & Quote & "Unload project" & Quote & ". This will end online installation management."
+                        Label2.Text = "The current project will be unloaded."
                         OK_Button.Text = "OK"
                     Case "ESN"
                         Text = "Acerca de la administración de instalaciones activas"
@@ -32,6 +33,7 @@ Public Class ActiveInstAccessWarn
                             "Si realiza una operación a una imagen en línea sin tener cuidado, puede romperla, a tal punto que la instalación no pueda iniciar." & CrLf & CrLf & _
                             "Nosotros NO SOMOS RESPONSABLES de cualquier daño producido a su instalación activa. Si se queda con un sistema que no puede iniciar, debería reinstalar Windows (haciendo una copia de seguridad de sus archivos en primer lugar, si es posible)" & CrLf & CrLf & _
                             "Si entiende este aviso, y le gustaría seguir, haga clic en Aceptar. De lo contrario, haga clic en Aceptar, y luego en " & Quote & "Descargar proyecto" & Quote & ". Esto terminará la administración de instalaciones en línea."
+                        Label2.Text = "El proyecto actual será descargado."
                         OK_Button.Text = "Aceptar"
                 End Select
             Case 1
@@ -41,6 +43,7 @@ Public Class ActiveInstAccessWarn
                     "If you carelessly perform an operation to an online image, you may break it, to the point of making the installation unbootable." & CrLf & CrLf & _
                     "We AREN'T RESPONSIBLE for any damage done to your active installation. If you are left with an unbootable system, you should re-install Windows (while backing up your files first, if possible)" & CrLf & CrLf & _
                     "If you understand this warning, and would like to proceed, click OK. Otherwise, click OK, and then click " & Quote & "Unload project" & Quote & ". This will end online installation management."
+                Label2.Text = "The current project will be unloaded."
                 OK_Button.Text = "OK"
             Case 2
                 Text = "Acerca de la administración de instalaciones activas"
@@ -49,6 +52,7 @@ Public Class ActiveInstAccessWarn
                     "Si realiza una operación a una imagen en línea sin tener cuidado, puede romperla, a tal punto que la instalación no pueda iniciar." & CrLf & CrLf & _
                     "Nosotros NO SOMOS RESPONSABLES de cualquier daño producido a su instalación activa. Si se queda con un sistema que no puede iniciar, debería reinstalar Windows (haciendo una copia de seguridad de sus archivos en primer lugar, si es posible)" & CrLf & CrLf & _
                     "Si entiende este aviso, y le gustaría seguir, haga clic en Aceptar. De lo contrario, haga clic en Aceptar, y luego en " & Quote & "Descargar proyecto" & Quote & ". Esto terminará la administración de instalaciones en línea."
+                Label2.Text = "El proyecto actual será descargado."
                 OK_Button.Text = "Aceptar"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then

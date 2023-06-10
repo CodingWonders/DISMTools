@@ -137,11 +137,7 @@ Public Class PkgParentNameLookupDlg
         pkgProc.StartInfo.CreateNoWindow = True
         pkgProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
         pkgProc.Start()
-        Do Until pkgProc.HasExited
-            If pkgProc.HasExited Then
-                Exit Do
-            End If
-        Loop
+        pkgProc.WaitForExit()
         If Decimal.ToInt32(pkgProc.ExitCode) = 0 Then
             RemPackage.CheckedListBox1.Items.Clear()
             RemPackage.CheckedListBox2.Items.Clear()

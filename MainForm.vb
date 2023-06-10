@@ -171,12 +171,15 @@ Public Class MainForm
     Public MountedImageImgIndexes(65535) As String
     Public MountedImageMountedReWr(65535) As String
     Public MountedImageImgStatuses(65535) As String
+    ' New variables for 0.3
+    Public MountedImageImgVersions(65535) As String
     ' Private lists for DetectMountedImages function
     Dim MountedImageImgFileList As New List(Of String)
     Dim MountedImageImgIndexList As New List(Of String)
     Dim MountedImageMountDirList As New List(Of String)
     Dim MountedImageImgStatusList As New List(Of String)
     Dim MountedImageReWrList As New List(Of String)
+    Dim MountedImageImgVersionList As New List(Of String)
 
     ' Perform image unmount operations when pressing on buttons
     Public imgCommitOperation As Integer = -1 ' 0: commit; 1: discard
@@ -195,21 +198,16 @@ Public Class MainForm
     Dim fileCount As Integer
     Dim CurrentFileInt As Integer
 
-    <DllImport("user32.dll")>
-    Shared Function GetActiveWindow() As IntPtr
-    End Function
+    Friend NotInheritable Class NativeMethods
 
-    <DllImport("user32.dll")>
-    Shared Function SetWindowText(hWnd As IntPtr, lpString As String) As Boolean
-    End Function
+        Private Sub New()
+        End Sub
 
-    <DllImport("user32.dll")>
-    Shared Function SetWindowLong(hWnd As IntPtr, nIndex As Integer, dwNewLong As IntPtr) As IntPtr
-    End Function
+        <DllImport("dwmapi.dll")>
+        Shared Function DwmSetWindowAttribute(hwnd As IntPtr, attr As Integer, ByRef attrValue As Integer, attrSize As Integer) As Integer
+        End Function
 
-    <DllImport("dwmapi.dll")>
-    Shared Function DwmSetWindowAttribute(hwnd As IntPtr, attr As Integer, ByRef attrValue As Integer, attrSize As Integer) As Integer
-    End Function
+    End Class
 
     Const DWMWA_USE_IMMERSIVE_DARK_MODE As Integer = 20
     Const WS_EX_COMPOSITED As Integer = &H2000000
@@ -217,7 +215,7 @@ Public Class MainForm
 
     Shared Sub EnableDarkTitleBar(hwnd As IntPtr, isDarkMode As Boolean)
         Dim attribute As Integer = If(isDarkMode, 1, 0)
-        Dim result As Integer = DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, attribute, 4)
+        Dim result As Integer = NativeMethods.DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, attribute, 4)
     End Sub
 
     Function GetWindowHandle(ctrl As Control) As IntPtr
@@ -316,7 +314,7 @@ Public Class MainForm
             LoadDTProj(argProjPath, Path.GetFileNameWithoutExtension(argProjPath), True)
         End If
         If argOnline Then
-            BeginOnlineManagement()
+            BeginOnlineManagement(True)
         End If
     End Sub
 
@@ -333,6 +331,7 @@ Public Class MainForm
             MountedImageMountDirList.Clear()
             MountedImageImgStatusList.Clear()
             MountedImageReWrList.Clear()
+            MountedImageImgVersionList.Clear()
         End If
         DismApi.Initialize(DismLogLevel.LogErrors)
         Dim MountedImgs As DismMountedImageInfoCollection = DismApi.GetMountedImages()
@@ -349,12 +348,28 @@ Public Class MainForm
             MountedImageImgStatusList.Add(imageInfo.MountStatus)
             MountedImageReWrList.Add(imageInfo.MountMode)
         Next
-        DismApi.Shutdown()
         MountedImageImgFiles = MountedImageImgFileList.ToArray()
         MountedImageImgIndexes = MountedImageImgIndexList.ToArray()
         MountedImageMountDirs = MountedImageMountDirList.ToArray()
         MountedImageImgStatuses = MountedImageImgStatusList.ToArray()
         MountedImageMountedReWr = MountedImageReWrList.ToArray()
+        If MountedImageImgFileList.Count > 0 Then
+            For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
+                Try
+                    Dim infoCollection As DismImageInfoCollection = DismApi.GetImageInfo(MountedImageImgFiles(x))
+                    For Each imageInfo As DismImageInfo In infoCollection
+                        If imageInfo.ImageIndex = MountedImageImgIndexes(x) Then
+                            MountedImageImgVersionList.Add(imageInfo.ProductVersion.ToString())
+                        End If
+                    Next
+                Catch ex As Exception
+                    If DebugLog Then Debug.WriteLine("[DetectMountedImages] Exception: " & ex.Message & " has occurred when detecting the image version. Proceeding with detecting image version with ntoskrnl...")
+                    MountedImageImgVersionList.Add(FileVersionInfo.GetVersionInfo(MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion)
+                End Try
+            Next
+        End If
+        DismApi.Shutdown()
+        MountedImageImgVersions = MountedImageImgVersionList.ToArray()
         ' Fill mounted image manager list
         MountedImgMgr.ListView1.Items.Clear()
         Try
@@ -363,14 +378,14 @@ Public Class MainForm
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENG"
-                                MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "OK", If(MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MountedImageMountedReWr(x) = 0, "Yes", "No"), If(File.Exists(MountedImageMountDirs(x) & "\Windows\System32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion, "Could not get version info")}))
+                                MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "OK", If(MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MountedImageMountedReWr(x) = 0, "Yes", "No"), MountedImageImgVersions(x)}))
                             Case "ESN"
-                                MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "Correcto", If(MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MountedImageMountedReWr(x) = 0, "Sí", "No"), If(File.Exists(MountedImageMountDirs(x) & "\Windows\System32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion, "No se pudo obtener información de la versión")}))
+                                MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "Correcto", If(MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MountedImageMountedReWr(x) = 0, "Sí", "No"), MountedImageImgVersions(x)}))
                         End Select
                     Case 1
-                        MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "OK", If(MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MountedImageMountedReWr(x) = 0, "Yes", "No"), If(File.Exists(MountedImageMountDirs(x) & "\Windows\System32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion, "Could not get version info")}))
+                        MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "OK", If(MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MountedImageMountedReWr(x) = 0, "Yes", "No"), MountedImageImgVersions(x)}))
                     Case 2
-                        MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "Correcto", If(MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MountedImageMountedReWr(x) = 0, "Sí", "No"), If(File.Exists(MountedImageMountDirs(x) & "\Windows\System32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion, "No se pudo obtener información de la versión")}))
+                        MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "Correcto", If(MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MountedImageMountedReWr(x) = 0, "Sí", "No"), MountedImageImgVersions(x)}))
                 End Select
             Next
         Catch ex As Exception
@@ -1729,9 +1744,7 @@ Public Class MainForm
                             WIMBootProc.StartInfo.CreateNoWindow = True
                             WIMBootProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
                             WIMBootProc.Start()
-                            Do Until WIMBootProc.HasExited
-                                If WIMBootProc.HasExited Then Exit Do
-                            Loop
+                            WIMBootProc.WaitForExit()
                         End Using
                         Try
                             imgWimBootStatus = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgwimboot", ASCII).Replace("WIM Bootable : ", "").Trim()
@@ -2237,11 +2250,7 @@ Public Class MainForm
                 Debug.WriteLine("[GetImagePackages] RunCommand -> " & Path.GetFileName(pkgScript))
                 ImgProcesses.StartInfo.Arguments = "/c " & pkgScript
                 ImgProcesses.Start()
-                Do Until ImgProcesses.HasExited
-                    If ImgProcesses.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                ImgProcesses.WaitForExit()
                 If ImgProcesses.ExitCode = 0 Then
                     Continue For
                 End If
@@ -2357,11 +2366,7 @@ Public Class MainForm
                 Debug.WriteLine("[GetImageFeatures] RunCommand -> " & Path.GetFileName(featScript))
                 ImgProcesses.StartInfo.Arguments = "/c " & featScript
                 ImgProcesses.Start()
-                Do Until ImgProcesses.HasExited
-                    If ImgProcesses.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                ImgProcesses.WaitForExit()
                 If ImgProcesses.ExitCode = 0 Then
                     Continue For
                 End If
@@ -2544,11 +2549,7 @@ Public Class MainForm
                 Debug.WriteLine("[GetImageAppxPackages] RunCommand -> " & Path.GetFileName(appxScript))
                 ImgProcesses.StartInfo.Arguments = "/c " & appxScript
                 ImgProcesses.Start()
-                Do Until ImgProcesses.HasExited
-                    If ImgProcesses.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                ImgProcesses.WaitForExit()
                 If ImgProcesses.ExitCode = 0 Then
                     Continue For
                 End If
@@ -2671,7 +2672,7 @@ Public Class MainForm
         PSExtAppxProc.StartInfo.WorkingDirectory = Application.StartupPath
         ' The "executionpolicy" argument is passed to PowerShell as a temporary execution policy setting that happens once.
         ' More on that here: https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.3#set-a-different-policy-for-one-session
-        PSExtAppxProc.StartInfo.Arguments = "-executionpolicy unrestricted -file" & Quote & Application.StartupPath & "\bin\extps1\extappx.ps1" & Quote
+        PSExtAppxProc.StartInfo.Arguments = "-executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\extappx.ps1" & Quote
         If Not Debugger.IsAttached Then
             PSExtAppxProc.StartInfo.CreateNoWindow = True
             PSExtAppxProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
@@ -2759,11 +2760,7 @@ Public Class MainForm
                 Debug.WriteLine("[GetImageCapabilities] RunCommand -> " & Path.GetFileName(capScript))
                 ImgProcesses.StartInfo.Arguments = "/c " & capScript
                 ImgProcesses.Start()
-                Do Until ImgProcesses.HasExited
-                    If ImgProcesses.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                ImgProcesses.WaitForExit()
                 If ImgProcesses.ExitCode = 0 Then
                     Continue For
                 End If
@@ -2866,11 +2863,7 @@ Public Class MainForm
         ImgProcesses.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
         ImgProcesses.StartInfo.Arguments = "/c " & Application.StartupPath & "\bin\exthelpers\drvnums.bat"
         ImgProcesses.Start()
-        Do Until ImgProcesses.HasExited
-            If ImgProcesses.HasExited Then
-                Exit Do
-            End If
-        Loop
+        ImgProcesses.WaitForExit()
         File.Delete(Application.StartupPath & "\bin\exthelpers\drvnums.bat")
         If ImgProcesses.ExitCode = 0 Then
             Dim drvCount As Integer = CInt(My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\tempinfo\drvnums"))
@@ -2922,11 +2915,7 @@ Public Class MainForm
                 Debug.WriteLine("[GetImageDrivers] RunCommand -> " & Path.GetFileName(drvScript))
                 ImgProcesses.StartInfo.Arguments = "/c " & drvScript
                 ImgProcesses.Start()
-                Do Until ImgProcesses.HasExited
-                    If ImgProcesses.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                ImgProcesses.WaitForExit()
                 If ImgProcesses.ExitCode = 0 Then
                     Continue For
                 End If
@@ -3698,6 +3687,7 @@ Public Class MainForm
                     ' Menu - File
                     NewProjectToolStripMenuItem.Text = "&New project..."
                     OpenExistingProjectToolStripMenuItem.Text = "&Open existing project"
+                    ManageOnlineInstallationToolStripMenuItem.Text = "&Manage online installation"
                     SaveProjectToolStripMenuItem.Text = "&Save project..."
                     SaveProjectasToolStripMenuItem.Text = "Save project &as..."
                     ExitToolStripMenuItem.Text = "E&xit"
@@ -3979,6 +3969,7 @@ Public Class MainForm
                     ' Menu - File
                     NewProjectToolStripMenuItem.Text = "&Nuevo proyecto..."
                     OpenExistingProjectToolStripMenuItem.Text = "&Abrir proyecto existente"
+                    ManageOnlineInstallationToolStripMenuItem.Text = "Administrar &instalación activa"
                     SaveProjectToolStripMenuItem.Text = "&Guardar proyecto..."
                     SaveProjectasToolStripMenuItem.Text = "Guardar proyecto &como..."
                     ExitToolStripMenuItem.Text = "Sa&lir"
@@ -4265,6 +4256,7 @@ Public Class MainForm
                 ' Menu - File
                 NewProjectToolStripMenuItem.Text = "&New project..."
                 OpenExistingProjectToolStripMenuItem.Text = "&Open existing project"
+                ManageOnlineInstallationToolStripMenuItem.Text = "&Manage online installation"
                 SaveProjectToolStripMenuItem.Text = "&Save project..."
                 SaveProjectasToolStripMenuItem.Text = "Save project &as..."
                 ExitToolStripMenuItem.Text = "E&xit"
@@ -4546,6 +4538,7 @@ Public Class MainForm
                 ' Menu - File
                 NewProjectToolStripMenuItem.Text = "&Nuevo proyecto..."
                 OpenExistingProjectToolStripMenuItem.Text = "&Abrir proyecto existente"
+                ManageOnlineInstallationToolStripMenuItem.Text = "Administrar &instalación activa"
                 SaveProjectToolStripMenuItem.Text = "&Guardar proyecto..."
                 SaveProjectasToolStripMenuItem.Text = "Guardar proyecto &como..."
                 ExitToolStripMenuItem.Text = "Sa&lir"
@@ -5469,8 +5462,8 @@ Public Class MainForm
         If OnlineManagement Then EndOnlineManagement()
     End Sub
 
-    Sub BeginOnlineManagement()
-        ActiveInstAccessWarn.ShowDialog()
+    Sub BeginOnlineManagement(ShowDialog As Boolean)
+        If ShowDialog Then ActiveInstAccessWarn.ShowDialog()
         IsImageMounted = True
         isProjectLoaded = True
         Select Case Language
@@ -5538,6 +5531,11 @@ Public Class MainForm
         End Select
         GroupBox1.Enabled = False
         Panel2.Visible = False
+        ProjNameEditBtn.Visible = False
+        TableLayoutPanel2.ColumnCount = 2
+        TableLayoutPanel2.SetColumnSpan(Label5, 1)
+        TableLayoutPanel2.SetColumnSpan(Label3, 1)
+        ManageOnlineInstallationToolStripMenuItem.Enabled = False
         ImgBW.RunWorkerAsync()
         Exit Sub
     End Sub
@@ -5639,6 +5637,11 @@ Public Class MainForm
         ToolStripButton2.Enabled = True
         GroupBox1.Enabled = True
         Panel2.Visible = True
+        ProjNameEditBtn.Visible = True
+        TableLayoutPanel2.ColumnCount = 3
+        TableLayoutPanel2.SetColumnSpan(Label5, 2)
+        TableLayoutPanel2.SetColumnSpan(Label3, 2)
+        ManageOnlineInstallationToolStripMenuItem.Enabled = True
     End Sub
 
     Sub UpdateProjProperties(WasImageMounted As Boolean, IsReadOnly As Boolean)
@@ -6403,46 +6406,48 @@ Public Class MainForm
                 Case 2
                     MenuDesc.Text = "Opens an existing DISMTools project. The current project will be unloaded"
                 Case 3
-                    MenuDesc.Text = "Saves the changes of this project"
+                    MenuDesc.Text = "Enters online installation management mode"
                 Case 4
-                    MenuDesc.Text = "Saves this project on another location"
+                    MenuDesc.Text = "Saves the changes of this project"
                 Case 5
-                    MenuDesc.Text = "Closes the program. If a project is loaded, you will be asked whether or not you would like to save it"
+                    MenuDesc.Text = "Saves this project on another location"
                 Case 6
-                    MenuDesc.Text = "Opens the File Explorer to view the project files"
+                    MenuDesc.Text = "Closes the program. If a project is loaded, you will be asked whether or not you would like to save it"
                 Case 7
-                    MenuDesc.Text = "Unloads this project. If changes were made, you will be asked whether or not you would like to save it"
+                    MenuDesc.Text = "Opens the File Explorer to view the project files"
                 Case 8
-                    MenuDesc.Text = "Switches the mounted image index"
+                    MenuDesc.Text = "Unloads this project. If changes were made, you will be asked whether or not you would like to save it"
                 Case 9
-                    MenuDesc.Text = "Launches the project section of the project properties dialog"
+                    MenuDesc.Text = "Switches the mounted image index"
                 Case 10
-                    MenuDesc.Text = "Launches the image section of the project properties dialog"
+                    MenuDesc.Text = "Launches the project section of the project properties dialog"
                 Case 11
-                    MenuDesc.Text = "Performs image format conversion from WIM to ESD and vice versa"
+                    MenuDesc.Text = "Launches the image section of the project properties dialog"
                 Case 12
-                    MenuDesc.Text = "Merges two or more SWM files into a single WIM file"
+                    MenuDesc.Text = "Performs image format conversion from WIM to ESD and vice versa"
                 Case 13
-                    MenuDesc.Text = "Remounts the image with read-write permissions to allow making modifications to it"
+                    MenuDesc.Text = "Merges two or more SWM files into a single WIM file"
                 Case 14
-                    MenuDesc.Text = "Opens the Command Console"
+                    MenuDesc.Text = "Remounts the image with read-write permissions to allow making modifications to it"
                 Case 15
-                    MenuDesc.Text = "Lets you manage unattended answer files for this project"
+                    MenuDesc.Text = "Opens the Command Console"
                 Case 16
-                    MenuDesc.Text = "Lets you manage project reports"
+                    MenuDesc.Text = "Lets you manage unattended answer files for this project"
                 Case 17
-                    MenuDesc.Text = "Shows an overview of the mounted images"
+                    MenuDesc.Text = "Lets you manage project reports"
                 Case 18
-                    MenuDesc.Text = "Configures settings for the program"
+                    MenuDesc.Text = "Shows an overview of the mounted images"
                 Case 19
-                    MenuDesc.Text = "Opens the help topics for this program"
+                    MenuDesc.Text = "Configures settings for the program"
                 Case 20
-                    MenuDesc.Text = "Opens the glossary, if you don't understand a concept"
+                    MenuDesc.Text = "Opens the help topics for this program"
                 Case 21
-                    MenuDesc.Text = "Shows the Command Help, letting you use commands to perform the same actions"
+                    MenuDesc.Text = "Opens the glossary, if you don't understand a concept"
                 Case 22
-                    MenuDesc.Text = "Shows program information"
+                    MenuDesc.Text = "Shows the Command Help, letting you use commands to perform the same actions"
                 Case 23
+                    MenuDesc.Text = "Shows program information"
+                Case 24
                     MenuDesc.Text = "Lets you report feedback through a new GitHub issue (a GitHub account is needed)"
             End Select
         End If
@@ -6554,7 +6559,7 @@ Public Class MainForm
         ShowChildDescs(True, 1)
     End Sub
 
-    Private Sub HideChildDescsTrigger(sender As Object, e As EventArgs) Handles AppendImage.MouseLeave, ApplyFFU.MouseLeave, ApplyImage.MouseLeave, CaptureCustomImage.MouseLeave, CaptureFFU.MouseLeave, CaptureImage.MouseLeave, CleanupMountpoints.MouseLeave, CommitImage.MouseLeave, DeleteImage.MouseLeave, ExportImage.MouseLeave, GetImageInfo.MouseLeave, GetMountedImageInfo.MouseLeave, GetWIMBootEntry.MouseLeave, ListImage.MouseLeave, MountImage.MouseLeave, OptimizeFFU.MouseLeave, OptimizeImage.MouseLeave, RemountImage.MouseLeave, SplitFFU.MouseLeave, SplitImage.MouseLeave, UnmountImage.MouseLeave, UpdateWIMBootEntry.MouseLeave, ApplySiloedPackage.MouseLeave, GetPackages.MouseLeave, GetPackageInfo.MouseLeave, AddPackage.MouseLeave, RemovePackage.MouseLeave, GetFeatures.MouseLeave, GetFeatureInfo.MouseLeave, EnableFeature.MouseLeave, DisableFeature.MouseLeave, CleanupImage.MouseLeave, AddProvisionedAppxPackage.MouseLeave, GetProvisioningPackageInfo.MouseLeave, ApplyCustomDataImage.MouseLeave, GetProvisionedAppxPackages.MouseLeave, AddProvisionedAppxPackage.MouseLeave, RemoveProvisionedAppxPackage.MouseLeave, OptimizeProvisionedAppxPackages.MouseLeave, SetProvisionedAppxDataFile.MouseLeave, CheckAppPatch.MouseLeave, GetAppPatchInfo.MouseLeave, GetAppPatches.MouseLeave, GetAppInfo.MouseLeave, GetApps.MouseLeave, ExportDefaultAppAssociations.MouseLeave, GetDefaultAppAssociations.MouseLeave, ImportDefaultAppAssociations.MouseLeave, RemoveDefaultAppAssociations.MouseLeave, GetIntl.MouseLeave, SetUILangFallback.MouseLeave, SetSysUILang.MouseLeave, SetSysLocale.MouseLeave, SetUserLocale.MouseLeave, SetInputLocale.MouseLeave, SetAllIntl.MouseLeave, SetTimeZone.MouseLeave, SetSKUIntlDefaults.MouseLeave, SetLayeredDriver.MouseLeave, GenLangINI.MouseLeave, SetSetupUILang.MouseLeave, AddCapability.MouseLeave, ExportSource.MouseLeave, GetCapabilities.MouseLeave, GetCapabilityInfo.MouseLeave, RemoveCapability.MouseLeave, GetCurrentEdition.MouseLeave, GetTargetEditions.MouseLeave, SetEdition.MouseLeave, SetProductKey.MouseLeave, GetDrivers.MouseLeave, GetDriverInfo.MouseLeave, AddDriver.MouseLeave, RemoveDriver.MouseLeave, ExportDriver.MouseLeave, ApplyUnattend.MouseLeave, GetPESettings.MouseLeave, GetTargetPath.MouseLeave, GetScratchSpace.MouseLeave, SetScratchSpace.MouseLeave, SetTargetPath.MouseLeave, GetOSUninstallWindow.MouseLeave, InitiateOSUninstall.MouseLeave, RemoveOSUninstall.MouseLeave, SetOSUninstallWindow.MouseLeave, SetReservedStorageState.MouseLeave, GetReservedStorageState.MouseLeave, NewProjectToolStripMenuItem.MouseLeave, OpenExistingProjectToolStripMenuItem.MouseLeave, SaveProjectToolStripMenuItem.MouseLeave, SaveProjectasToolStripMenuItem.MouseLeave, ExitToolStripMenuItem.MouseLeave, ViewProjectFilesInFileExplorerToolStripMenuItem.MouseLeave, UnloadProjectToolStripMenuItem.MouseLeave, SwitchImageIndexesToolStripMenuItem.MouseLeave, ProjectPropertiesToolStripMenuItem.MouseLeave, ImagePropertiesToolStripMenuItem.MouseLeave, ImageManagementToolStripMenuItem.MouseLeave, OSPackagesToolStripMenuItem.MouseLeave, ProvisioningPackagesToolStripMenuItem.MouseLeave, AppPackagesToolStripMenuItem.MouseLeave, AppPatchesToolStripMenuItem.MouseLeave, DefaultAppAssociationsToolStripMenuItem.MouseLeave, LanguagesAndRegionSettingsToolStripMenuItem.MouseLeave, CapabilitiesToolStripMenuItem.MouseLeave, WindowsEditionsToolStripMenuItem.MouseLeave, DriversToolStripMenuItem.MouseLeave, UnattendedAnswerFilesToolStripMenuItem.MouseLeave, WindowsPEServicingToolStripMenuItem.MouseLeave, OSUninstallToolStripMenuItem.MouseLeave, ReservedStorageToolStripMenuItem.MouseLeave, ImageConversionToolStripMenuItem.MouseLeave, WIMESDToolStripMenuItem.MouseLeave, RemountImageWithWritePermissionsToolStripMenuItem.MouseLeave, CommandShellToolStripMenuItem.MouseLeave, OptionsToolStripMenuItem.MouseLeave, HelpTopicsToolStripMenuItem.MouseLeave, GlossaryToolStripMenuItem.MouseLeave, CommandHelpToolStripMenuItem.MouseLeave, AboutDISMToolsToolStripMenuItem.MouseLeave, UnattendedAnswerFileManagerToolStripMenuItem.MouseLeave, AddEdge.MouseLeave, AddEdgeBrowser.MouseLeave, AddEdgeWebView.MouseLeave, ReportManagerToolStripMenuItem.MouseLeave, MergeSWM.MouseLeave, MountedImageManagerTSMI.MouseLeave, ReportFeedbackToolStripMenuItem.MouseLeave
+    Private Sub HideChildDescsTrigger(sender As Object, e As EventArgs) Handles AppendImage.MouseLeave, ApplyFFU.MouseLeave, ApplyImage.MouseLeave, CaptureCustomImage.MouseLeave, CaptureFFU.MouseLeave, CaptureImage.MouseLeave, CleanupMountpoints.MouseLeave, CommitImage.MouseLeave, DeleteImage.MouseLeave, ExportImage.MouseLeave, GetImageInfo.MouseLeave, GetMountedImageInfo.MouseLeave, GetWIMBootEntry.MouseLeave, ListImage.MouseLeave, MountImage.MouseLeave, OptimizeFFU.MouseLeave, OptimizeImage.MouseLeave, RemountImage.MouseLeave, SplitFFU.MouseLeave, SplitImage.MouseLeave, UnmountImage.MouseLeave, UpdateWIMBootEntry.MouseLeave, ApplySiloedPackage.MouseLeave, GetPackages.MouseLeave, GetPackageInfo.MouseLeave, AddPackage.MouseLeave, RemovePackage.MouseLeave, GetFeatures.MouseLeave, GetFeatureInfo.MouseLeave, EnableFeature.MouseLeave, DisableFeature.MouseLeave, CleanupImage.MouseLeave, AddProvisionedAppxPackage.MouseLeave, GetProvisioningPackageInfo.MouseLeave, ApplyCustomDataImage.MouseLeave, GetProvisionedAppxPackages.MouseLeave, AddProvisionedAppxPackage.MouseLeave, RemoveProvisionedAppxPackage.MouseLeave, OptimizeProvisionedAppxPackages.MouseLeave, SetProvisionedAppxDataFile.MouseLeave, CheckAppPatch.MouseLeave, GetAppPatchInfo.MouseLeave, GetAppPatches.MouseLeave, GetAppInfo.MouseLeave, GetApps.MouseLeave, ExportDefaultAppAssociations.MouseLeave, GetDefaultAppAssociations.MouseLeave, ImportDefaultAppAssociations.MouseLeave, RemoveDefaultAppAssociations.MouseLeave, GetIntl.MouseLeave, SetUILangFallback.MouseLeave, SetSysUILang.MouseLeave, SetSysLocale.MouseLeave, SetUserLocale.MouseLeave, SetInputLocale.MouseLeave, SetAllIntl.MouseLeave, SetTimeZone.MouseLeave, SetSKUIntlDefaults.MouseLeave, SetLayeredDriver.MouseLeave, GenLangINI.MouseLeave, SetSetupUILang.MouseLeave, AddCapability.MouseLeave, ExportSource.MouseLeave, GetCapabilities.MouseLeave, GetCapabilityInfo.MouseLeave, RemoveCapability.MouseLeave, GetCurrentEdition.MouseLeave, GetTargetEditions.MouseLeave, SetEdition.MouseLeave, SetProductKey.MouseLeave, GetDrivers.MouseLeave, GetDriverInfo.MouseLeave, AddDriver.MouseLeave, RemoveDriver.MouseLeave, ExportDriver.MouseLeave, ApplyUnattend.MouseLeave, GetPESettings.MouseLeave, GetTargetPath.MouseLeave, GetScratchSpace.MouseLeave, SetScratchSpace.MouseLeave, SetTargetPath.MouseLeave, GetOSUninstallWindow.MouseLeave, InitiateOSUninstall.MouseLeave, RemoveOSUninstall.MouseLeave, SetOSUninstallWindow.MouseLeave, SetReservedStorageState.MouseLeave, GetReservedStorageState.MouseLeave, NewProjectToolStripMenuItem.MouseLeave, OpenExistingProjectToolStripMenuItem.MouseLeave, SaveProjectToolStripMenuItem.MouseLeave, SaveProjectasToolStripMenuItem.MouseLeave, ExitToolStripMenuItem.MouseLeave, ViewProjectFilesInFileExplorerToolStripMenuItem.MouseLeave, UnloadProjectToolStripMenuItem.MouseLeave, SwitchImageIndexesToolStripMenuItem.MouseLeave, ProjectPropertiesToolStripMenuItem.MouseLeave, ImagePropertiesToolStripMenuItem.MouseLeave, ImageManagementToolStripMenuItem.MouseLeave, OSPackagesToolStripMenuItem.MouseLeave, ProvisioningPackagesToolStripMenuItem.MouseLeave, AppPackagesToolStripMenuItem.MouseLeave, AppPatchesToolStripMenuItem.MouseLeave, DefaultAppAssociationsToolStripMenuItem.MouseLeave, LanguagesAndRegionSettingsToolStripMenuItem.MouseLeave, CapabilitiesToolStripMenuItem.MouseLeave, WindowsEditionsToolStripMenuItem.MouseLeave, DriversToolStripMenuItem.MouseLeave, UnattendedAnswerFilesToolStripMenuItem.MouseLeave, WindowsPEServicingToolStripMenuItem.MouseLeave, OSUninstallToolStripMenuItem.MouseLeave, ReservedStorageToolStripMenuItem.MouseLeave, ImageConversionToolStripMenuItem.MouseLeave, WIMESDToolStripMenuItem.MouseLeave, RemountImageWithWritePermissionsToolStripMenuItem.MouseLeave, CommandShellToolStripMenuItem.MouseLeave, OptionsToolStripMenuItem.MouseLeave, HelpTopicsToolStripMenuItem.MouseLeave, GlossaryToolStripMenuItem.MouseLeave, CommandHelpToolStripMenuItem.MouseLeave, AboutDISMToolsToolStripMenuItem.MouseLeave, UnattendedAnswerFileManagerToolStripMenuItem.MouseLeave, AddEdge.MouseLeave, AddEdgeBrowser.MouseLeave, AddEdgeWebView.MouseLeave, ReportManagerToolStripMenuItem.MouseLeave, MergeSWM.MouseLeave, MountedImageManagerTSMI.MouseLeave, ReportFeedbackToolStripMenuItem.MouseLeave, ManageOnlineInstallationToolStripMenuItem.MouseLeave, AddProvisioningPackage.MouseLeave
         HideChildDescs()
     End Sub
 
@@ -6926,88 +6931,92 @@ Public Class MainForm
         ShowChildDescs(False, 2)
     End Sub
 
-    Private Sub SaveProject_MouseEnter(sender As Object, e As EventArgs) Handles SaveProjectToolStripMenuItem.MouseEnter
+    Private Sub ManageOnlineInstallation_MouseEnter(sender As Object, e As EventArgs) Handles ManageOnlineInstallationToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 3)
     End Sub
 
-    Private Sub SaveProjAs_MouseEnter(sender As Object, e As EventArgs) Handles SaveProjectasToolStripMenuItem.MouseEnter
+    Private Sub SaveProject_MouseEnter(sender As Object, e As EventArgs) Handles SaveProjectToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 4)
     End Sub
 
-    Private Sub ExitProg_MouseEnter(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.MouseEnter
+    Private Sub SaveProjAs_MouseEnter(sender As Object, e As EventArgs) Handles SaveProjectasToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 5)
     End Sub
 
-    Private Sub ProjectInExplorer_MouseEnter(sender As Object, e As EventArgs) Handles ViewProjectFilesInFileExplorerToolStripMenuItem.MouseEnter
+    Private Sub ExitProg_MouseEnter(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 6)
     End Sub
 
-    Private Sub UnloadProject_MouseEnter(sender As Object, e As EventArgs) Handles UnloadProjectToolStripMenuItem.MouseEnter
+    Private Sub ProjectInExplorer_MouseEnter(sender As Object, e As EventArgs) Handles ViewProjectFilesInFileExplorerToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 7)
     End Sub
 
-    Private Sub SwitchIndexes_MouseEnter(sender As Object, e As EventArgs) Handles SwitchImageIndexesToolStripMenuItem.MouseEnter
+    Private Sub UnloadProject_MouseEnter(sender As Object, e As EventArgs) Handles UnloadProjectToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 8)
     End Sub
 
-    Private Sub ProjProps_MouseEnter(sender As Object, e As EventArgs) Handles ProjectPropertiesToolStripMenuItem.MouseEnter
+    Private Sub SwitchIndexes_MouseEnter(sender As Object, e As EventArgs) Handles SwitchImageIndexesToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 9)
     End Sub
 
-    Private Sub ImgProps_MouseEnter(sender As Object, e As EventArgs) Handles ImagePropertiesToolStripMenuItem.MouseEnter
+    Private Sub ProjProps_MouseEnter(sender As Object, e As EventArgs) Handles ProjectPropertiesToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 10)
     End Sub
 
-    Private Sub ImgConversion_MouseEnter(sender As Object, e As EventArgs) Handles ImageConversionToolStripMenuItem.MouseEnter, WIMESDToolStripMenuItem.MouseEnter
+    Private Sub ImgProps_MouseEnter(sender As Object, e As EventArgs) Handles ImagePropertiesToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 11)
     End Sub
 
-    Private Sub MergeSWM_MouseEnter(sender As Object, e As EventArgs) Handles MergeSWM.MouseEnter
+    Private Sub ImgConversion_MouseEnter(sender As Object, e As EventArgs) Handles ImageConversionToolStripMenuItem.MouseEnter, WIMESDToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 12)
     End Sub
 
-    Private Sub RemountImg_MouseEnter(sender As Object, e As EventArgs) Handles RemountImageWithWritePermissionsToolStripMenuItem.MouseEnter
+    Private Sub MergeSWM_MouseEnter(sender As Object, e As EventArgs) Handles MergeSWM.MouseEnter
         ShowChildDescs(False, 13)
     End Sub
 
-    Private Sub CmdConsole_MouseEnter(sender As Object, e As EventArgs) Handles CommandShellToolStripMenuItem.MouseEnter
+    Private Sub RemountImg_MouseEnter(sender As Object, e As EventArgs) Handles RemountImageWithWritePermissionsToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 14)
     End Sub
 
-    Private Sub UAFileMan_MouseEnter(sender As Object, e As EventArgs) Handles UnattendedAnswerFileManagerToolStripMenuItem.MouseEnter
+    Private Sub CmdConsole_MouseEnter(sender As Object, e As EventArgs) Handles CommandShellToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 15)
     End Sub
 
-    Private Sub ReportManagerToolStripMenuItem_MouseEnter(sender As Object, e As EventArgs) Handles ReportManagerToolStripMenuItem.MouseEnter
+    Private Sub UAFileMan_MouseEnter(sender As Object, e As EventArgs) Handles UnattendedAnswerFileManagerToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 16)
     End Sub
 
-    Private Sub MountedImageManagerTSMI_MouseEnter(sender As Object, e As EventArgs) Handles MountedImageManagerTSMI.MouseEnter
+    Private Sub ReportManagerToolStripMenuItem_MouseEnter(sender As Object, e As EventArgs) Handles ReportManagerToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 17)
     End Sub
 
-    Private Sub ProgSettings_MouseEnter(sender As Object, e As EventArgs) Handles OptionsToolStripMenuItem.MouseEnter
+    Private Sub MountedImageManagerTSMI_MouseEnter(sender As Object, e As EventArgs) Handles MountedImageManagerTSMI.MouseEnter
         ShowChildDescs(False, 18)
     End Sub
 
-    Private Sub HelpTopics_MouseEnter(sender As Object, e As EventArgs) Handles HelpTopicsToolStripMenuItem.MouseEnter
+    Private Sub ProgSettings_MouseEnter(sender As Object, e As EventArgs) Handles OptionsToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 19)
     End Sub
 
-    Private Sub Glossary_MouseEnter(sender As Object, e As EventArgs) Handles GlossaryToolStripMenuItem.MouseEnter
+    Private Sub HelpTopics_MouseEnter(sender As Object, e As EventArgs) Handles HelpTopicsToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 20)
     End Sub
 
-    Private Sub CmdHelp_MouseEnter(sender As Object, e As EventArgs) Handles CommandHelpToolStripMenuItem.MouseEnter
+    Private Sub Glossary_MouseEnter(sender As Object, e As EventArgs) Handles GlossaryToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 21)
     End Sub
 
-    Private Sub ProgInfo_MouseEnter(sender As Object, e As EventArgs) Handles AboutDISMToolsToolStripMenuItem.MouseEnter
+    Private Sub CmdHelp_MouseEnter(sender As Object, e As EventArgs) Handles CommandHelpToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 22)
     End Sub
 
-    Private Sub ReportFeedbackToolStripMenuItem_MouseEnter(sender As Object, e As EventArgs) Handles ReportFeedbackToolStripMenuItem.MouseEnter
+    Private Sub ProgInfo_MouseEnter(sender As Object, e As EventArgs) Handles AboutDISMToolsToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 23)
+    End Sub
+
+    Private Sub ReportFeedbackToolStripMenuItem_MouseEnter(sender As Object, e As EventArgs) Handles ReportFeedbackToolStripMenuItem.MouseEnter
+        ShowChildDescs(False, 24)
     End Sub
 #End Region
 
@@ -8252,6 +8261,9 @@ Public Class MainForm
         Catch ex As Exception
             Exit Try
         End Try
+        If ElementCount <= 0 Then
+            ElementCount = RemProvAppxPackage.ListView1.Items.Count
+        End If
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -8309,22 +8321,9 @@ Public Class MainForm
     End Sub
 
     Private Sub MountedImageDetectorBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles MountedImageDetectorBW.DoWork
-        Dim timer As New Stopwatch
         Do
-            timer.Start()
-            Do
-                If MountedImageDetectorBW.CancellationPending Or ImgBW.IsBusy Then
-                    timer.Stop()
-                    timer.Reset()
-                    Exit Sub
-                End If
-                If timer.ElapsedMilliseconds >= 100 Then
-                    timer.Stop()
-                    DetectMountedImages(False)
-                    timer.Reset()
-                    Exit Do
-                End If
-            Loop
+            If MountedImageDetectorBW.CancellationPending Or ImgBW.IsBusy Then Exit Do
+            DetectMountedImages(False)
         Loop
     End Sub
 
@@ -8415,6 +8414,7 @@ Public Class MainForm
         If OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
             If File.Exists(OpenFileDialog1.FileName) Then
                 If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement, False, True), False)
+                If ImgBW.IsBusy Then Exit Sub
                 ProgressPanel.OperationNum = 990
                 LoadDTProj(OpenFileDialog1.FileName, Path.GetFileNameWithoutExtension(OpenFileDialog1.FileName), False)
             End If
@@ -8627,7 +8627,8 @@ Public Class MainForm
 
     Private Sub OnlineInstMgmt_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles OnlineInstMgmt.LinkClicked
         If Not HomePanel.Visible Then Exit Sub
-        BeginOnlineManagement()
+        ActiveInstAccessWarn.Label2.Visible = False
+        BeginOnlineManagement(True)
     End Sub
 
     Function GetPackageDisplayName(PackageName As String, Optional DisplayName As String = "")
@@ -9191,5 +9192,17 @@ Public Class MainForm
         If PleaseWaitDialog.imgIndexes > 1 Then
             ImgIndexSwitch.ShowDialog()
         End If
+    End Sub
+
+    Private Sub ManageOnlineInstallationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageOnlineInstallationToolStripMenuItem.Click
+        Dim showMessage As Boolean = isProjectLoaded
+        If isProjectLoaded Then
+            ActiveInstAccessWarn.Label2.Visible = True
+            ActiveInstAccessWarn.ShowDialog()
+            If ActiveInstAccessWarn.DialogResult = Windows.Forms.DialogResult.OK Then UnloadDTProj(False, True, False)
+            If ImgBW.IsBusy Then Exit Sub
+        End If
+        ActiveInstAccessWarn.Label2.Visible = False
+        BeginOnlineManagement(Not showMessage)
     End Sub
 End Class
