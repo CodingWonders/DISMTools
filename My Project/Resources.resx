@@ -954,20 +954,17 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes
-- Fixed an issue that occurred in the AppX package removal dialog where it would continue even if no packages were marked for removal
-- The program now uses correct startup path conventions
+- Fixed issues that caused the program to fail operations if there were no images mounted
+- Fixed an issue where the extended AppX package getter would fail to start
+- Fixed an issue where the program would continue creating or loading a project if the user declined the background processes cancellation confirmation
+- CODE: removed code analysis warnings CA1060 and CA2202
+- The program no longer consumes CPU power when performing operations, and will consume a lot less when running the mounted image detector
 
 New features
 
-Installer
-
-- Installers are now available
-
-General
-
-- Added feature update detection for Windows 11 2022 Update Moment 4
-- Added more sections to the Command Help documentation
-- The project tree view context menu is now fully functional and translated</value>
+- The mounted image detector now detects image versions using the DISM API
+- You can now view the index description and version information when mounting an image
+- You can now enter online installation management mode from the File menu</value>
   </data>
   <data name="secprogress_classic" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\secprogress_classic.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

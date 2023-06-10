@@ -4776,6 +4776,9 @@ Public Class ProgressPanel
         ScratchDirPath = MainForm.ScratchDir
         EnglishOut = MainForm.EnglishOutput
         If UseScratchDir And AutoScratch And OnlineMgmt And Not Directory.Exists(Application.StartupPath & "\scratch") Then Directory.CreateDirectory(Application.StartupPath & "\scratch")
+        If LogView.Text <> "" Then LogView.Clear()
+        CurrentPB.Value = 0
+        AllPB.Value = 0
         GatherInitialSwitches()
         GetTasks(OperationNum)
         ProgressBW.RunWorkerAsync()

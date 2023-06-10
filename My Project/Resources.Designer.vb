@@ -1627,20 +1627,11 @@ Namespace My.Resources
         
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
-        '''- Fixed an issue that occurred in the AppX package removal dialog where it would continue even if no packages were marked for removal
-        '''- The program now uses correct startup path conventions
-        '''
-        '''New features
-        '''
-        '''Installer
-        '''
-        '''- Installers are now available
-        '''
-        '''General
-        '''
-        '''- Added feature update detection for Windows 11 2022 Update Moment 4
-        '''- Added more sections to the Command Help documentation
-        '''- The project tree view context menu is now fully functional and translated.
+        '''- Fixed issues that caused the program to fail operations if there were no images mounted
+        '''- Fixed an issue where the extended AppX package getter would fail to start
+        '''- Fixed an issue where the program would continue creating or loading a project if the user declined the background processes cancellation confirmation
+        '''- CODE: removed code analysis warnings CA1060 and CA2202
+        '''- The program no longer consumes CPU power when performing operations, and will consume a lot less when running the mounted [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
