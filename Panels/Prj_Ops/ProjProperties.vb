@@ -811,8 +811,10 @@ Public Class ProjProperties
                         FeatUpd = "23H2 (Nickel)"
                     Case 25057 To 25238
                         FeatUpd = "22H2 (Copper)"
-                    Case 25240 To 26000     ' 26000 is a relative number. We still don't know Zinc's final build
+                    Case 25240 To 25800     ' 25800 is a relative number. We still don't know Zinc's final build
                         FeatUpd = "23H2 (Zinc)"
+                    Case 25801 To 27000     ' 27000 is a relative number
+                        FeatUpd = "24H2 (Gallium)"
                 End Select
             Case Else
                 Exit Sub
