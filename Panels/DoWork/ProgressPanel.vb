@@ -183,6 +183,8 @@ Public Class ProgressPanel
 
     Dim OnlineMgmt As Boolean                               ' Determine whether to perform actions to the active installation or the mounted Windows image
 
+    Public TaskList As New List(Of Integer)                 ' Task list
+
     ' Initial settings
     Dim DismExe As String
     Dim AutoLogs As Boolean
@@ -600,6 +602,33 @@ Public Class ProgressPanel
         Return dateStr
     End Function
 
+    Sub RunTaskList(taskList As List(Of Integer))
+        Dim successfulTasks As Integer = 0
+        Dim failedTasks As Integer = 0
+        Dim prevValue As Integer = 0
+        For Each Task In taskList
+            RunOps(Task)
+            AllPB.Value = prevValue + (AllPB.Maximum / taskList.Count)
+            prevValue = AllPB.Value
+            currentTCont += 1
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskList.Count
+                        Case "ESN"
+                            taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskList.Count
+                    End Select
+                Case 1
+                    taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskList.Count
+                Case 2
+                    taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskList.Count
+            End Select
+            If IsSuccessful Then successfulTasks += 1 Else failedTasks += 1
+        Next
+        If successfulTasks > failedTasks Then IsSuccessful = True Else IsSuccessful = False
+    End Sub
+
     Sub RunOps(opNum As Integer)
         If DismProgram = "" Then DismProgram = MainForm.DismExe
         DismVersionChecker = FileVersionInfo.GetVersionInfo(DismProgram)
@@ -962,22 +991,22 @@ Public Class ProgressPanel
             Else
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
-            If CaptureMountDestImg Then
-                AllPB.Value = AllPB.Value + (AllPB.Maximum / taskCount)
-                currentTCont += 1
-                taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
-                If ImgIndex = 0 Then
-                    ImgIndex = 1
-                    UMountImgIndex = ImgIndex
-                End If
-                RunOps(21)
-                AllPB.Value = AllPB.Value + (AllPB.Maximum / taskCount)
-                currentTCont += 1
-                taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
-                RunOps(15)
-                'MainForm.UpdateProjProperties(False, False)
-                'MainForm.SaveDTProj()
-            End If
+            'If CaptureMountDestImg Then
+            '    AllPB.Value = AllPB.Value + (AllPB.Maximum / taskCount)
+            '    currentTCont += 1
+            '    taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
+            '    If ImgIndex = 0 Then
+            '        ImgIndex = 1
+            '        UMountImgIndex = ImgIndex
+            '    End If
+            '    RunOps(21)
+            '    AllPB.Value = AllPB.Value + (AllPB.Maximum / taskCount)
+            '    currentTCont += 1
+            '    taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
+            '    RunOps(15)
+            '    'MainForm.UpdateProjProperties(False, False)
+            '    'MainForm.SaveDTProj()
+            'End If
         ElseIf opNum = 8 Then
             Select Case Language
                 Case 0
@@ -4319,7 +4348,11 @@ Public Class ProgressPanel
     End Sub
 
     Private Sub ProgressBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ProgressBW.DoWork
-        RunOps(OperationNum)
+        If TaskList.Count > 2 Then
+            RunTaskList(TaskList)
+        Else
+            RunOps(OperationNum)
+        End If
     End Sub
 
     Sub SaveLog(LogFile As String)
@@ -4355,6 +4388,7 @@ Public Class ProgressPanel
     End Sub
 
     Private Sub ProgressBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ProgressBW.RunWorkerCompleted
+        TaskList.Clear()
         If IsSuccessful Then
             If OperationNum = 9 Then LogView.AppendText(CrLf & _
                                "The volume images have been deleted. If you want to remount this image into a DISMTools project, choose the " & Quote & "Mount image" & Quote & " option, or use this command if you want to mount it elsewhere:" & CrLf & _
@@ -4506,6 +4540,32 @@ Public Class ProgressPanel
                 End If
                 ' This is a crucial change, so save things immediately
                 MainForm.SaveDTProj()
+            ElseIf OperationNum = 1000 Then
+                If TaskList.Last = 21 Then
+                    If MainForm.isProjectLoaded And MountDir = MainForm.MountDir Or RandomMountDir = MainForm.MountDir Then
+                        MainForm.UpdateProjProperties(False, False)
+                        MainForm.MountDir = "N/A"
+                        ' This is a crucial change, so save things immediately
+                        MainForm.SaveDTProj()
+                        ImgMount.TextBox1.Text = ""     ' The program has a bug where mounting the same image after doing this results in the image file being ""
+                        If MainForm.imgCommitOperation <> -1 Then
+                            MainForm.imgCommitOperation = -1    ' Let program close on later occassions
+                        End If
+                    End If
+                    MainForm.DetectMountedImages(False)
+                ElseIf TaskList.Last = 15 Then
+                    MainForm.SourceImg = SourceImg
+                    MainForm.ImgIndex = ImgIndex
+                    MainForm.MountDir = MountDir
+                    MainForm.DetectMountedImages(False)
+                    If isReadOnly Then
+                        MainForm.UpdateProjProperties(True, True)
+                    Else
+                        MainForm.UpdateProjProperties(True, False)
+                    End If
+                    ' This is a crucial change, so save things immediately
+                    MainForm.SaveDTProj()
+                End If
             End If
             Select Case MainForm.Language
                 Case 0
@@ -4780,7 +4840,25 @@ Public Class ProgressPanel
         CurrentPB.Value = 0
         AllPB.Value = 0
         GatherInitialSwitches()
-        GetTasks(OperationNum)
+        If TaskList.Count > 2 Then
+            AllPB.Maximum = TaskList.Count * 100
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            taskCountLbl.Text = "Tasks: 1/" & TaskList.Count
+                        Case "ESN"
+                            taskCountLbl.Text = "Tareas: 1/" & TaskList.Count
+                    End Select
+                Case 1
+                    taskCountLbl.Text = "Tasks: 1/" & TaskList.Count
+                Case 2
+                    taskCountLbl.Text = "Tareas: 1/" & TaskList.Count
+            End Select
+            OperationNum = 1000
+        Else
+            GetTasks(OperationNum)
+        End If
         ProgressBW.RunWorkerAsync()
     End Sub
 
