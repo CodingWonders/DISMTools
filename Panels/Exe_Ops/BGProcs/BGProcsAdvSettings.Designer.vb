@@ -29,6 +29,7 @@ Partial Class BGProcsAdvSettings
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox4 = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -104,12 +105,26 @@ Partial Class BGProcsAdvSettings
         'CheckBox3
         '
         Me.CheckBox3.AutoSize = True
-        Me.CheckBox3.Location = New System.Drawing.Point(12, 100)
+        Me.CheckBox3.Location = New System.Drawing.Point(12, 136)
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(138, 17)
         Me.CheckBox3.TabIndex = 2
         Me.CheckBox3.Text = "Detect all image drivers"
         Me.CheckBox3.UseVisualStyleBackColor = True
+        '
+        'CheckBox4
+        '
+        Me.CheckBox4.AutoEllipsis = True
+        Me.CheckBox4.CheckAlign = System.Drawing.ContentAlignment.TopLeft
+        Me.CheckBox4.Checked = True
+        Me.CheckBox4.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox4.Location = New System.Drawing.Point(30, 98)
+        Me.CheckBox4.Name = "CheckBox4"
+        Me.CheckBox4.Size = New System.Drawing.Size(422, 32)
+        Me.CheckBox4.TabIndex = 2
+        Me.CheckBox4.Text = "Skip framework packages, and remove them from the listings if they were detected"
+        Me.CheckBox4.TextAlign = System.Drawing.ContentAlignment.TopLeft
+        Me.CheckBox4.UseVisualStyleBackColor = True
         '
         'BGProcsAdvSettings
         '
@@ -119,6 +134,7 @@ Partial Class BGProcsAdvSettings
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(464, 281)
         Me.Controls.Add(Me.CheckBox2)
+        Me.Controls.Add(Me.CheckBox4)
         Me.Controls.Add(Me.CheckBox3)
         Me.Controls.Add(Me.CheckBox1)
         Me.Controls.Add(Me.Label1)
@@ -143,5 +159,6 @@ Partial Class BGProcsAdvSettings
     Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox2 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox3 As System.Windows.Forms.CheckBox
+    Friend WithEvents CheckBox4 As System.Windows.Forms.CheckBox
 
 End Class

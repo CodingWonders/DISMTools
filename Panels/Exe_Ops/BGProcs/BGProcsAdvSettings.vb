@@ -6,6 +6,7 @@ Public Class BGProcsAdvSettings
         MainForm.ExtAppxGetter = CheckBox1.Checked
         MainForm.SkipNonRemovable = CheckBox2.Checked
         MainForm.AllDrivers = CheckBox3.Checked
+        MainForm.SkipFrameworks = CheckBox4.Checked
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
     End Sub
@@ -25,6 +26,7 @@ Public Class BGProcsAdvSettings
                         CheckBox1.Text = "Enhance detection of all installed AppX packages of an active installation with PowerShell helpers"
                         CheckBox2.Text = "Skip packages with non-removable policies set"
                         CheckBox3.Text = "Detect all image drivers"
+                        CheckBox4.Text = "Skip framework packages, and remove them from the listings if they were detected"
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Cancel"
                     Case "ESN"
@@ -33,6 +35,7 @@ Public Class BGProcsAdvSettings
                         CheckBox1.Text = "Mejorar la detección de todos los paquetes AppX instalados en una instalación activa con ayudantes de PowerShell"
                         CheckBox2.Text = "Omitir paquetes no removibles"
                         CheckBox3.Text = "Detectar todos los controladores de la imagen"
+                        CheckBox4.Text = "Omitir paquetes de marcos de trabajo, y eliminarlos de los listados si fueron detectados"
                         OK_Button.Text = "Aceptar"
                         Cancel_Button.Text = "Cancelar"
                 End Select
@@ -42,6 +45,7 @@ Public Class BGProcsAdvSettings
                 CheckBox1.Text = "Enhance detection of all installed AppX packages of an active installation with PowerShell helpers"
                 CheckBox2.Text = "Skip packages with non-removable policies set"
                 CheckBox3.Text = "Detect all image drivers"
+                CheckBox4.Text = "Skip framework packages, and remove them from the listings if they were detected"
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Cancel"
             Case 2
@@ -50,6 +54,7 @@ Public Class BGProcsAdvSettings
                 CheckBox1.Text = "Mejorar la detección de todos los paquetes AppX instalados en una instalación activa con ayudantes de PowerShell"
                 CheckBox2.Text = "Omitir paquetes no removibles"
                 CheckBox3.Text = "Detectar todos los controladores de la imagen"
+                CheckBox4.Text = "Omitir paquetes de marcos de trabajo, y eliminarlos de los listados si fueron detectados"
                 OK_Button.Text = "Aceptar"
                 Cancel_Button.Text = "Cancelar"
         End Select
@@ -69,5 +74,6 @@ Public Class BGProcsAdvSettings
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
         CheckBox2.Enabled = CheckBox1.Checked
+        CheckBox4.Enabled = CheckBox1.Checked
     End Sub
 End Class

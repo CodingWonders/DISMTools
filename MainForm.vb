@@ -86,6 +86,7 @@ Public Class MainForm
     Public ExtAppxGetter As Boolean = True
     Public SkipNonRemovable As Boolean = True
     Public AllDrivers As Boolean
+    Public SkipFrameworks As Boolean = True
     ' - Startup -
     Public StartupRemount As Boolean
     Public StartupUpdateCheck As Boolean
@@ -970,6 +971,11 @@ Public Class MainForm
                     AllDrivers = True
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("DetectAllDrivers=0") Then
                     AllDrivers = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("SkipFrameworks=1") Then
+                    SkipFrameworks = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("SkipFrameworks=0") Then
+                    SkipFrameworks = False
                 End If
                 If DTSettingForm.RichTextBox1.Text.Contains("RemountImages=1") Then
                     StartupRemount = True
@@ -2458,18 +2464,20 @@ Public Class MainForm
                             Dim appxResIdRTB As New RichTextBox()
                             Dim appxVerRTB As New RichTextBox()
                             Dim appxNonRemPolRTB As New RichTextBox()
+                            Dim appxFrameworkRTB As New RichTextBox()
                             appxPkgNameRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxpkgnames")
                             appxPkgFullNameRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxpkgfullnames")
                             appxArchRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxarch")
                             appxResIdRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxresid")
                             appxVerRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxver")
-                            appxNonRemPolRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxnonrempolicy")
+                            If File.Exists(Application.StartupPath & "\bin\extps1\out\appxnonrempolicy") Then appxNonRemPolRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxnonrempolicy")
+                            If File.Exists(Application.StartupPath & "\bin\extps1\out\appxframework") Then appxFrameworkRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxframework")
                             For x = 0 To appxPkgFullNameRTB.Lines.Count - 1
                                 If imgAppxPackageNameList.Contains(appxPkgFullNameRTB.Lines(x)) Then
                                     Continue For
                                 Else
-                                    If SkipNonRemovable Then
-                                        If appxNonRemPolRTB.Lines(x) = "True" Then
+                                    If SkipNonRemovable Or (SkipFrameworks And appxFrameworkRTB.Text <> "") Then
+                                        If appxNonRemPolRTB.Lines(x) = "True" Or (SkipFrameworks And appxFrameworkRTB.Lines(x) = "True") Then
                                             Continue For
                                         Else
                                             imgAppxDisplayNameList.Add(appxPkgNameRTB.Lines(x))
@@ -3038,6 +3046,7 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText("EnhancedAppxGetter=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipNonRemovable=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "DetectAllDrivers=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipFrameworks=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Startup]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("RemountImages=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "CheckForUpdates=1")
@@ -3178,6 +3187,11 @@ Public Class MainForm
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "DetectAllDrivers=1")
                 Else
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "DetectAllDrivers=0")
+                End If
+                If SkipFrameworks Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipFrameworks=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipFrameworks=0")
                 End If
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Startup]" & CrLf)
                 If StartupRemount Then
