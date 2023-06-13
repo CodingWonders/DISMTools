@@ -299,6 +299,7 @@ Public Class MainForm
         If DismExe <> "" Then
             DismVersionChecker = FileVersionInfo.GetVersionInfo(DismExe)
         End If
+        UnblockPSHelpers()
         If StartupRemount Then RemountOrphanedImages()
         If StartupUpdateCheck Then CheckForUpdates(dtBranch) Else UpdatePanel.Visible = False
         MountedImageDetectorBW.RunWorkerAsync()
@@ -448,6 +449,16 @@ Public Class MainForm
                 End If
             End If
         End Using
+    End Sub
+
+    Sub UnblockPSHelpers()
+        Dim PSUnblocker As New Process()
+        PSUnblocker.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\System32\WindowsPowerShell\v1.0\powershell.exe"
+        PSUnblocker.StartInfo.Arguments = "-executionpolicy unrestricted -command Unblock-File " & Quote & Application.StartupPath & "\bin\extps1\extappx.ps1" & Quote
+        PSUnblocker.StartInfo.CreateNoWindow = True
+        PSUnblocker.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+        PSUnblocker.Start()
+        PSUnblocker.WaitForExit()
     End Sub
 
     Sub ChangeImgStatus()
