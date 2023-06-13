@@ -87,6 +87,7 @@ Public Class MainForm
     Public SkipNonRemovable As Boolean = True
     Public AllDrivers As Boolean
     Public SkipFrameworks As Boolean = True
+    Public RunAllProcs As Boolean
     ' - Startup -
     Public StartupRemount As Boolean
     Public StartupUpdateCheck As Boolean
@@ -106,9 +107,6 @@ Public Class MainForm
 
     ' Variable used for online installation management
     Public OnlineManagement As Boolean
-
-    ' Background process variables
-    'Public imgCanGetAppxPkgs As Boolean            ' Windows 8 introduced AppX packages (Metro-style apps). The AppX format is still used in Windows 10 and 11
 
     ' These are the variables that need to change when testing setting validity
     Public isExeProblematic As Boolean
@@ -987,6 +985,11 @@ Public Class MainForm
                     SkipFrameworks = True
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("SkipFrameworks=0") Then
                     SkipFrameworks = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("RunAllProcs=1") Then
+                    RunAllProcs = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("RunAllProcs=0") Then
+                    RunAllProcs = False
                 End If
                 If DTSettingForm.RichTextBox1.Text.Contains("RemountImages=1") Then
                     StartupRemount = True
@@ -3058,6 +3061,7 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipNonRemovable=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "DetectAllDrivers=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipFrameworks=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "RunAllProcs=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Startup]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("RemountImages=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "CheckForUpdates=1")
@@ -3203,6 +3207,11 @@ Public Class MainForm
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipFrameworks=1")
                 Else
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipFrameworks=0")
+                End If
+                If RunAllProcs Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "RunAllProcs=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "RunAllProcs=0")
                 End If
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Startup]" & CrLf)
                 If StartupRemount Then

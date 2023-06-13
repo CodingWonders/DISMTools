@@ -7,6 +7,12 @@ Public Class BGProcsAdvSettings
         MainForm.SkipNonRemovable = CheckBox2.Checked
         MainForm.AllDrivers = CheckBox3.Checked
         MainForm.SkipFrameworks = CheckBox4.Checked
+        MainForm.RunAllProcs = CheckBox5.Checked
+        If CheckBox5.Checked Then
+            MainForm.bwBackgroundProcessAction = 0
+            MainForm.bwGetImageInfo = True
+            MainForm.bwGetAdvImgInfo = True
+        End If
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
     End Sub
@@ -27,6 +33,7 @@ Public Class BGProcsAdvSettings
                         CheckBox2.Text = "Skip packages with non-removable policies set"
                         CheckBox3.Text = "Detect all image drivers"
                         CheckBox4.Text = "Skip framework packages, and remove them from the listings if they were detected"
+                        CheckBox5.Text = "Run all background processes after performing a task"
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Cancel"
                     Case "ESN"
@@ -36,6 +43,7 @@ Public Class BGProcsAdvSettings
                         CheckBox2.Text = "Omitir paquetes no removibles"
                         CheckBox3.Text = "Detectar todos los controladores de la imagen"
                         CheckBox4.Text = "Omitir paquetes de marcos de trabajo, y eliminarlos de los listados si fueron detectados"
+                        CheckBox5.Text = "Ejecutar todos los procesos en segundo plano tras realizar una operación"
                         OK_Button.Text = "Aceptar"
                         Cancel_Button.Text = "Cancelar"
                 End Select
@@ -46,6 +54,7 @@ Public Class BGProcsAdvSettings
                 CheckBox2.Text = "Skip packages with non-removable policies set"
                 CheckBox3.Text = "Detect all image drivers"
                 CheckBox4.Text = "Skip framework packages, and remove them from the listings if they were detected"
+                CheckBox5.Text = "Run all background processes after performing a task"
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Cancel"
             Case 2
@@ -55,6 +64,7 @@ Public Class BGProcsAdvSettings
                 CheckBox2.Text = "Omitir paquetes no removibles"
                 CheckBox3.Text = "Detectar todos los controladores de la imagen"
                 CheckBox4.Text = "Omitir paquetes de marcos de trabajo, y eliminarlos de los listados si fueron detectados"
+                CheckBox5.Text = "Ejecutar todos los procesos en segundo plano tras realizar una operación"
                 OK_Button.Text = "Aceptar"
                 Cancel_Button.Text = "Cancelar"
         End Select
@@ -68,6 +78,8 @@ Public Class BGProcsAdvSettings
         CheckBox1.Checked = MainForm.ExtAppxGetter
         CheckBox2.Checked = MainForm.SkipNonRemovable
         CheckBox3.Checked = MainForm.AllDrivers
+        CheckBox4.Checked = MainForm.SkipFrameworks
+        CheckBox5.Checked = MainForm.RunAllProcs
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
     End Sub

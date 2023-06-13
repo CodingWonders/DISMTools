@@ -4441,6 +4441,9 @@ Public Class ProgressPanel
                 MainForm.SourceImg = SourceImg
                 MainForm.ImgIndex = ImgIndex
                 MainForm.MountDir = MountDir
+                MainForm.bwBackgroundProcessAction = 0
+                MainForm.bwGetImageInfo = True
+                MainForm.bwGetAdvImgInfo = True
                 MainForm.DetectMountedImages(False)
                 If isReadOnly Then
                     MainForm.UpdateProjProperties(True, True)
@@ -4452,6 +4455,9 @@ Public Class ProgressPanel
             ElseIf OperationNum = 18 Then
                 MainForm.DetectMountedImages(False)
                 If MainForm.isProjectLoaded And MountDir = MainForm.MountDir Then
+                    MainForm.bwBackgroundProcessAction = 0
+                    MainForm.bwGetImageInfo = True
+                    MainForm.bwGetAdvImgInfo = True
                     If ProjProperties.Visible Then
                         isTriggeredByPropertyDialog = True
                         ProjProperties.Close()
@@ -4469,6 +4475,9 @@ Public Class ProgressPanel
                 End If
             ElseIf OperationNum = 21 Then
                 If MainForm.isProjectLoaded And MountDir = MainForm.MountDir Or RandomMountDir = MainForm.MountDir Then
+                    MainForm.bwBackgroundProcessAction = 0
+                    MainForm.bwGetImageInfo = True
+                    MainForm.bwGetAdvImgInfo = True
                     MainForm.UpdateProjProperties(False, False)
                     MainForm.MountDir = "N/A"
                     ' This is a crucial change, so save things immediately
@@ -4481,7 +4490,7 @@ Public Class ProgressPanel
                 MainForm.DetectMountedImages(False)
             ElseIf OperationNum = 26 Then
                 MainForm.SaveDTProj()
-                MainForm.bwBackgroundProcessAction = 1
+                If Not MainForm.RunAllProcs Then MainForm.bwBackgroundProcessAction = 1
                 MainForm.UpdateProjProperties(True, False)
                 AddPackageReport.Label4.Text = MountDir
                 AddPackageReport.Label6.Text = pkgSource
@@ -4506,58 +4515,74 @@ Public Class ProgressPanel
                 'AddPackageReport.ProgressBar1.Value = AddPackageReport.pkgSuccessFailureRatio
                 AddPackageReport.Show()
             ElseIf OperationNum = 27 Then
-                MainForm.bwBackgroundProcessAction = 1
+                If Not MainForm.RunAllProcs Then MainForm.bwBackgroundProcessAction = 1
                 MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 30 Then
-                MainForm.bwGetImageInfo = False
-                MainForm.bwGetAdvImgInfo = False
-                MainForm.bwBackgroundProcessAction = 2
+                If Not MainForm.RunAllProcs Then
+                    MainForm.bwGetImageInfo = False
+                    MainForm.bwGetAdvImgInfo = False
+                    MainForm.bwBackgroundProcessAction = 2
+                End If
                 MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 31 Then
-                MainForm.bwGetImageInfo = False
-                MainForm.bwGetAdvImgInfo = False
-                MainForm.bwBackgroundProcessAction = 2
+                If Not MainForm.RunAllProcs Then
+                    MainForm.bwGetImageInfo = False
+                    MainForm.bwGetAdvImgInfo = False
+                    MainForm.bwBackgroundProcessAction = 2
+                End If
                 MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 33 Then
                 MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 37 Then
-                MainForm.bwGetImageInfo = False
-                MainForm.bwGetAdvImgInfo = False
-                MainForm.bwBackgroundProcessAction = 3
+                If Not MainForm.RunAllProcs Then
+                    MainForm.bwGetImageInfo = False
+                    MainForm.bwGetAdvImgInfo = False
+                    MainForm.bwBackgroundProcessAction = 3
+                End If
                 MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 38 Then
-                MainForm.bwGetImageInfo = False
-                MainForm.bwGetAdvImgInfo = False
-                MainForm.bwBackgroundProcessAction = 3
+                If Not MainForm.RunAllProcs Then
+                    MainForm.bwGetImageInfo = False
+                    MainForm.bwGetAdvImgInfo = False
+                    MainForm.bwBackgroundProcessAction = 3
+                End If
                 MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 64 Then
-                MainForm.bwGetImageInfo = False
-                MainForm.bwGetAdvImgInfo = False
-                MainForm.bwBackgroundProcessAction = 4
+                If Not MainForm.RunAllProcs Then
+                    MainForm.bwGetImageInfo = False
+                    MainForm.bwGetAdvImgInfo = False
+                    MainForm.bwBackgroundProcessAction = 4
+                End If
                 MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 68 Then
-                MainForm.bwGetImageInfo = False
-                MainForm.bwGetAdvImgInfo = False
-                MainForm.bwBackgroundProcessAction = 4
+                If Not MainForm.RunAllProcs Then
+                    MainForm.bwGetImageInfo = False
+                    MainForm.bwGetAdvImgInfo = False
+                    MainForm.bwBackgroundProcessAction = 4
+                End If
                 MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 75 Then
-                MainForm.bwGetImageInfo = False
-                MainForm.bwGetAdvImgInfo = False
-                MainForm.bwBackgroundProcessAction = 5
+                If Not MainForm.RunAllProcs Then
+                    MainForm.bwGetImageInfo = False
+                    MainForm.bwGetAdvImgInfo = False
+                    MainForm.bwBackgroundProcessAction = 5
+                End If
                 MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 76 Then
-                MainForm.bwGetImageInfo = False
-                MainForm.bwGetAdvImgInfo = False
-                MainForm.bwBackgroundProcessAction = 5
+                If Not MainForm.RunAllProcs Then
+                    MainForm.bwGetImageInfo = False
+                    MainForm.bwGetAdvImgInfo = False
+                    MainForm.bwBackgroundProcessAction = 5
+                End If
                 MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 991 Then

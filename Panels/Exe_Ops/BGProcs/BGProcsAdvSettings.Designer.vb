@@ -30,6 +30,7 @@ Partial Class BGProcsAdvSettings
         Me.CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
         Me.CheckBox4 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox5 = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -126,6 +127,16 @@ Partial Class BGProcsAdvSettings
         Me.CheckBox4.TextAlign = System.Drawing.ContentAlignment.TopLeft
         Me.CheckBox4.UseVisualStyleBackColor = True
         '
+        'CheckBox5
+        '
+        Me.CheckBox5.AutoSize = True
+        Me.CheckBox5.Location = New System.Drawing.Point(12, 159)
+        Me.CheckBox5.Name = "CheckBox5"
+        Me.CheckBox5.Size = New System.Drawing.Size(282, 17)
+        Me.CheckBox5.TabIndex = 2
+        Me.CheckBox5.Text = "Run all background processes after performing a task"
+        Me.CheckBox5.UseVisualStyleBackColor = True
+        '
         'BGProcsAdvSettings
         '
         Me.AcceptButton = Me.OK_Button
@@ -135,6 +146,7 @@ Partial Class BGProcsAdvSettings
         Me.ClientSize = New System.Drawing.Size(464, 281)
         Me.Controls.Add(Me.CheckBox2)
         Me.Controls.Add(Me.CheckBox4)
+        Me.Controls.Add(Me.CheckBox5)
         Me.Controls.Add(Me.CheckBox3)
         Me.Controls.Add(Me.CheckBox1)
         Me.Controls.Add(Me.Label1)
@@ -160,5 +172,6 @@ Partial Class BGProcsAdvSettings
     Friend WithEvents CheckBox2 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox3 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox4 As System.Windows.Forms.CheckBox
+    Friend WithEvents CheckBox5 As System.Windows.Forms.CheckBox
 
 End Class
