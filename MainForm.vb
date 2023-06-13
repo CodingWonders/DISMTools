@@ -1157,7 +1157,7 @@ Public Class MainForm
             Case 5
                 pbOpNums += 1
         End Select
-        progressDivs = 100 / pbOpNums
+        If pbOpNums > 1 Then progressDivs = 100 / pbOpNums Else progressDivs = 0
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1349,7 +1349,7 @@ Public Class MainForm
                         progressLabel = "Obteniendo paquetes de la imagen..."
                 End Select
                 ImgBW.ReportProgress(20)
-                GetImagePackages()
+                GetImagePackages(True, OnlineMode)
             Case 2
                 Select Case Language
                     Case 0
@@ -1365,7 +1365,7 @@ Public Class MainForm
                         progressLabel = "Obteniendo características de la imagen..."
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
-                GetImageFeatures()
+                GetImageFeatures(True, OnlineMode)
             Case 3
                 If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") = True Then
                     Debug.WriteLine("[IsWindows8OrHigher] Returned True")
@@ -1384,7 +1384,7 @@ Public Class MainForm
                             progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
                     End Select
                     ImgBW.ReportProgress(progressMin + progressDivs)
-                    GetImageAppxPackages()
+                    GetImageAppxPackages(True, OnlineMode)
                 Else
                     Debug.WriteLine("[IsWindows8OrHigher] Returned False")
                 End If
@@ -1406,7 +1406,7 @@ Public Class MainForm
                             progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
                     End Select
                     ImgBW.ReportProgress(progressMin + progressDivs)
-                    GetImageCapabilities()
+                    GetImageCapabilities(True, OnlineMode)
                 Else
                     Debug.WriteLine("[IsWindows10OrHigher] Returned False")
                 End If
@@ -1425,7 +1425,7 @@ Public Class MainForm
                         progressLabel = "Obteniendo controladores de la imagen..."
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
-                GetImageDrivers()
+                GetImageDrivers(True, OnlineMode)
         End Select
         DeleteTempFiles()
         If UseApi And session IsNot Nothing Then
@@ -5433,6 +5433,9 @@ Public Class MainForm
                     MenuDesc.Text = "Listo"
             End Select
         End If
+        bwBackgroundProcessAction = 0
+        bwGetImageInfo = True
+        bwGetAdvImgInfo = True
         If imgCommitOperation = 0 Then
             ProgressPanel.OperationNum = 21
             ProgressPanel.UMountLocalDir = True
@@ -5631,6 +5634,9 @@ Public Class MainForm
                     MenuDesc.Text = "Listo"
             End Select
         End If
+        bwBackgroundProcessAction = 0
+        bwGetImageInfo = True
+        bwGetAdvImgInfo = True
         IsImageMounted = False
         isProjectLoaded = False
         Text = "DISMTools"
@@ -7580,10 +7586,6 @@ Public Class MainForm
                 RemPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes"
         End Select
         RemPackage.ShowDialog()
-    End Sub
-
-    Sub RefreshInfo()
-        ImgBW.RunWorkerAsync()
     End Sub
 
     Private Sub ImgBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ImgBW.DoWork

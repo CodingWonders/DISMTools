@@ -4480,6 +4480,8 @@ Public Class ProgressPanel
                 End If
                 MainForm.DetectMountedImages(False)
             ElseIf OperationNum = 26 Then
+                MainForm.SaveDTProj()
+                MainForm.bwBackgroundProcessAction = 1
                 MainForm.UpdateProjProperties(True, False)
                 AddPackageReport.Label4.Text = MountDir
                 AddPackageReport.Label6.Text = pkgSource
@@ -4504,25 +4506,59 @@ Public Class ProgressPanel
                 'AddPackageReport.ProgressBar1.Value = AddPackageReport.pkgSuccessFailureRatio
                 AddPackageReport.Show()
             ElseIf OperationNum = 27 Then
+                MainForm.bwBackgroundProcessAction = 1
+                MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 30 Then
+                MainForm.bwGetImageInfo = False
+                MainForm.bwGetAdvImgInfo = False
+                MainForm.bwBackgroundProcessAction = 2
+                MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 31 Then
+                MainForm.bwGetImageInfo = False
+                MainForm.bwGetAdvImgInfo = False
+                MainForm.bwBackgroundProcessAction = 2
+                MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 33 Then
+                MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 37 Then
+                MainForm.bwGetImageInfo = False
+                MainForm.bwGetAdvImgInfo = False
+                MainForm.bwBackgroundProcessAction = 3
                 MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 38 Then
+                MainForm.bwGetImageInfo = False
+                MainForm.bwGetAdvImgInfo = False
+                MainForm.bwBackgroundProcessAction = 3
+                MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 64 Then
+                MainForm.bwGetImageInfo = False
+                MainForm.bwGetAdvImgInfo = False
+                MainForm.bwBackgroundProcessAction = 4
+                MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 68 Then
+                MainForm.bwGetImageInfo = False
+                MainForm.bwGetAdvImgInfo = False
+                MainForm.bwBackgroundProcessAction = 4
+                MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 75 Then
+                MainForm.bwGetImageInfo = False
+                MainForm.bwGetAdvImgInfo = False
+                MainForm.bwBackgroundProcessAction = 5
+                MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 76 Then
+                MainForm.bwGetImageInfo = False
+                MainForm.bwGetAdvImgInfo = False
+                MainForm.bwBackgroundProcessAction = 5
+                MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 991 Then
                 Visible = False
@@ -4533,6 +4569,7 @@ Public Class ProgressPanel
             ElseIf OperationNum = 996 Then
                 MainForm.ImgIndex = SwitchTargetIndex
                 MainForm.imgMountedName = SwitchTargetIndexName
+                MainForm.SaveDTProj()
                 If SwitchMountAsReadOnly Then
                     MainForm.UpdateProjProperties(True, True)
                 Else
@@ -4554,6 +4591,7 @@ Public Class ProgressPanel
                     End If
                     MainForm.DetectMountedImages(False)
                 ElseIf TaskList.Last = 15 Then
+                    MainForm.bwBackgroundProcessAction = 0
                     MainForm.SourceImg = SourceImg
                     MainForm.ImgIndex = ImgIndex
                     MainForm.MountDir = MountDir
@@ -4754,6 +4792,9 @@ Public Class ProgressPanel
                 LinkLabel1.Text = "Mostrar archivo de registro de DISM (avanzado)"
                 GroupBox1.Text = "Registro"
         End Select
+        MainForm.bwBackgroundProcessAction = 0
+        MainForm.bwGetImageInfo = True
+        MainForm.bwGetAdvImgInfo = True
         Language = MainForm.Language
         ' Cancel detector background worker which can interfere with image operations and cause crashes due to access violations
         MainForm.MountedImageDetectorBW.CancelAsync()
