@@ -334,7 +334,7 @@ Public Class MainForm
             MountedImageReWrList.Clear()
             MountedImageImgVersionList.Clear()
         End If
-        DismApi.Initialize(DismLogLevel.LogErrors)
+        DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
         Dim MountedImgs As DismMountedImageInfoCollection = DismApi.GetMountedImages()
         For Each imageInfo As DismMountedImageInfo In MountedImgs
             If DebugLog Then Debug.WriteLine("- Image file : " & imageInfo.ImageFilePath)
@@ -406,7 +406,7 @@ Public Class MainForm
             Thread.Sleep(100)
         End While
         If MountedImageMountDirs.Count > 0 Then
-            DismApi.Initialize(DismLogLevel.LogErrors)
+            DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
             For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
                 If MountedImageImgStatuses(x) = 1 Then
                     DismApi.RemountImage(MountedImageMountDirs(x))
@@ -1090,7 +1090,7 @@ Public Class MainForm
         BackgroundProcessesButton.Visible = False
         BackgroundProcessesButton.Image = My.Resources.bg_ops
         BackgroundProcessesButton.Visible = True
-        If UseApi Then DismApi.Initialize(DismLogLevel.LogErrors)
+        If UseApi Then DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
         areBackgroundProcessesDone = False
         regJumps = False
         irregVal = 0
@@ -2197,7 +2197,7 @@ Public Class MainForm
     Sub GetImagePackages(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
         If UseApi Then
             Try
-                DismApi.Initialize(DismLogLevel.LogErrors)
+                DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
                 Using session As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(sessionMntDir))
                     Dim imgPackageNameList As New List(Of String)
                     Dim imgPackageStateList As New List(Of String)
@@ -2310,7 +2310,7 @@ Public Class MainForm
     Sub GetImageFeatures(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
         If UseApi Then
             Try
-                DismApi.Initialize(DismLogLevel.LogErrors)
+                DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
                 Using session As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(sessionMntDir))
                     Dim imgFeatureNameList As New List(Of String)
                     Dim imgFeatureStateList As New List(Of String)
@@ -2420,7 +2420,7 @@ Public Class MainForm
     Sub GetImageAppxPackages(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
         If UseApi And Environment.OSVersion.Version.Major > 6 Then
             Try
-                DismApi.Initialize(DismLogLevel.LogErrors)
+                DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
                 Using session As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(sessionMntDir))
                     Dim imgAppxDisplayNameList As New List(Of String)
                     Dim imgAppxPackageNameList As New List(Of String)
@@ -2699,7 +2699,7 @@ Public Class MainForm
     Sub GetImageCapabilities(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
         If UseApi Then
             Try
-                DismApi.Initialize(DismLogLevel.LogErrors)
+                DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
                 Using session As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(sessionMntDir))
                     Dim imgCapabilityNameList As New List(Of String)
                     Dim imgCapabilityStateList As New List(Of String)
@@ -2816,7 +2816,7 @@ Public Class MainForm
     Sub GetImageDrivers(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
         If UseApi Then
             Try
-                DismApi.Initialize(DismLogLevel.LogErrors)
+                DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
                 Using session As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(sessionMntDir))
                     Dim imgDrvPublishedNameList As New List(Of String)
                     Dim imgDrvOGFileNameList As New List(Of String)
