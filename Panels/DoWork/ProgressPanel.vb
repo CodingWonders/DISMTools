@@ -4791,6 +4791,8 @@ Public Class ProgressPanel
                         LogButton.Text = If(Height = 240, "Show log", "Hide log")
                         LinkLabel1.Text = "Show DISM log file (advanced)"
                         GroupBox1.Text = "Log"
+                        allTasks.Text = "Please wait..."
+                        currentTask.Text = "Please wait..."
                     Case "ESN"
                         Text = "Progreso"
                         Label1.Text = "Operaciones en progreso..."
@@ -4799,6 +4801,8 @@ Public Class ProgressPanel
                         LogButton.Text = If(Height = 240, "Mostrar registro", "Ocultar registro")
                         LinkLabel1.Text = "Mostrar archivo de registro de DISM (avanzado)"
                         GroupBox1.Text = "Registro"
+                        allTasks.Text = "Por favor, espere..."
+                        currentTask.Text = "Por favor, espere..."
                 End Select
             Case 1
                 Text = "Progress"
@@ -4808,6 +4812,8 @@ Public Class ProgressPanel
                 LogButton.Text = If(Height = 240, "Show log", "Hide log")
                 LinkLabel1.Text = "Show DISM log file (advanced)"
                 GroupBox1.Text = "Log"
+                allTasks.Text = "Please wait..."
+                currentTask.Text = "Please wait..."
             Case 2
                 Text = "Progreso"
                 Label1.Text = "Operaciones en progreso..."
@@ -4816,11 +4822,46 @@ Public Class ProgressPanel
                 LogButton.Text = If(Height = 240, "Mostrar registro", "Ocultar registro")
                 LinkLabel1.Text = "Mostrar archivo de registro de DISM (avanzado)"
                 GroupBox1.Text = "Registro"
+                allTasks.Text = "Por favor, espere..."
+                currentTask.Text = "Por favor, espere..."
         End Select
+        taskCountLbl.Visible = False
         MainForm.bwBackgroundProcessAction = 0
         MainForm.bwGetImageInfo = True
         MainForm.bwGetAdvImgInfo = True
         Language = MainForm.Language
+        BodyPanel.BorderStyle = BorderStyle.None
+        ' Determine program colors
+        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
+            BodyPanel.BackColor = Color.FromArgb(37, 37, 38)
+            BodyPanel.ForeColor = Color.White
+            GroupBox1.BackColor = Color.FromArgb(37, 37, 38)
+            GroupBox1.ForeColor = Color.White
+            LogView.BackColor = Color.FromArgb(37, 37, 38)
+            LogView.ForeColor = Color.White
+        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
+            BodyPanel.BackColor = Color.FromArgb(246, 246, 246)
+            BodyPanel.ForeColor = Color.Black
+            GroupBox1.BackColor = Color.FromArgb(246, 246, 246)
+            GroupBox1.ForeColor = Color.Black
+            LogView.BackColor = Color.FromArgb(246, 246, 246)
+            LogView.ForeColor = Color.Black
+        End If
+        CurrentPB.Value = 0
+        AllPB.Value = 0
+        If LogView.Text <> "" Then LogView.Clear()
+        ' If running, cancel background processes
+        If MainForm.ImgBW.IsBusy Then
+            ' Make form visible sooner. We may have to set more things up here,
+            ' but we'll see
+            Visible = True
+            LogView.AppendText("Cancelling background processes...")
+            MainForm.ImgBW.CancelAsync()
+            While MainForm.ImgBW.IsBusy
+                Application.DoEvents()
+                Thread.Sleep(100)
+            End While
+        End If
         ' Cancel detector background worker which can interfere with image operations and cause crashes due to access violations
         MainForm.MountedImageDetectorBW.CancelAsync()
         While MainForm.MountedImageDetectorBW.IsBusy
@@ -4841,23 +4882,6 @@ Public Class ProgressPanel
         DismProgram = MainForm.DismExe
         If MountDir = "" Then MountDir = MainForm.MountDir
         DISMProc.StartInfo.CreateNoWindow = False
-        BodyPanel.BorderStyle = BorderStyle.None
-        ' Determine program colors
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            BodyPanel.BackColor = Color.FromArgb(37, 37, 38)
-            BodyPanel.ForeColor = Color.White
-            GroupBox1.BackColor = Color.FromArgb(37, 37, 38)
-            GroupBox1.ForeColor = Color.White
-            LogView.BackColor = Color.FromArgb(37, 37, 38)
-            LogView.ForeColor = Color.White
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            BodyPanel.BackColor = Color.FromArgb(246, 246, 246)
-            BodyPanel.ForeColor = Color.Black
-            GroupBox1.BackColor = Color.FromArgb(246, 246, 246)
-            GroupBox1.ForeColor = Color.Black
-            LogView.BackColor = Color.FromArgb(246, 246, 246)
-            LogView.ForeColor = Color.Black
-        End If
         Try
             If MainForm.LogFontIsBold Then
                 LogView.Font = New Font(MainForm.LogFont, MainForm.LogFontSize, FontStyle.Bold)
@@ -4902,9 +4926,6 @@ Public Class ProgressPanel
         ScratchDirPath = MainForm.ScratchDir
         EnglishOut = MainForm.EnglishOutput
         If UseScratchDir And AutoScratch And OnlineMgmt And Not Directory.Exists(Application.StartupPath & "\scratch") Then Directory.CreateDirectory(Application.StartupPath & "\scratch")
-        If LogView.Text <> "" Then LogView.Clear()
-        CurrentPB.Value = 0
-        AllPB.Value = 0
         GatherInitialSwitches()
         If TaskList.Count > 2 Then
             AllPB.Maximum = TaskList.Count * 100
@@ -4925,6 +4946,7 @@ Public Class ProgressPanel
         Else
             GetTasks(OperationNum)
         End If
+        taskCountLbl.Visible = True
         ProgressBW.RunWorkerAsync()
     End Sub
 

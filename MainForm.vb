@@ -197,6 +197,8 @@ Public Class MainForm
     Dim fileCount As Integer
     Dim CurrentFileInt As Integer
 
+    Public CompletedTasks(4) As Boolean
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -1100,6 +1102,7 @@ Public Class MainForm
             Button13.Enabled = False
             Exit Sub
         End If
+        Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
         ' Let user know things are working
         BackgroundProcessesButton.Visible = False
         BackgroundProcessesButton.Image = My.Resources.bg_ops
@@ -2221,6 +2224,7 @@ Public Class MainForm
                     For Each package As DismPackage In PackageCollection
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                            CompletedTasks(0) = False
                             Exit Sub
                         End If
                         imgPackageNameList.Add(package.PackageName)
@@ -2236,6 +2240,7 @@ Public Class MainForm
             Finally
                 DismApi.Shutdown()
             End Try
+            CompletedTasks(0) = True
             Exit Sub
         End If
         Debug.WriteLine("[GetImagePackages] Running function...")
@@ -2259,6 +2264,7 @@ Public Class MainForm
                               ASCII)
         Catch ex As Exception
             Debug.WriteLine("[GetImagePackages] Failed writing getter scripts. Reason: " & ex.Message)
+            CompletedTasks(0) = False
             Exit Sub
         End Try
         Debug.WriteLine("[GetImagePackages] Finished writing getter scripts. Executing them...")
@@ -2314,6 +2320,7 @@ Public Class MainForm
                 Continue For
             End If
         Next
+        CompletedTasks(0) = True
         'imgPackageNameLastEntry = UBound(imgPackageNames)
         'ImgBW.ReportProgress(progressMin + progressDivs)
     End Sub
@@ -2332,6 +2339,7 @@ Public Class MainForm
                     For Each feature As DismFeature In FeatureCollection
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                            CompletedTasks(1) = False
                             Exit Sub
                         End If
                         imgFeatureNameList.Add(feature.FeatureName)
@@ -2360,6 +2368,7 @@ Public Class MainForm
             Finally
                 DismApi.Shutdown()
             End Try
+            CompletedTasks(1) = True
             Exit Sub
         End If
         Debug.WriteLine("[GetImageFeatures] Running function...")
@@ -2375,6 +2384,7 @@ Public Class MainForm
                               ASCII)
         Catch ex As Exception
             Debug.WriteLine("[GetImageFeatures] Failed writing getter scripts. Reason: " & ex.Message)
+            CompletedTasks(1) = False
             Exit Sub
         End Try
         Debug.WriteLine("[GetImageFeatures] Finished writing getter scripts. Executing them...")
@@ -2424,6 +2434,7 @@ Public Class MainForm
                 Continue For
             End If
         Next
+        CompletedTasks(1) = True
         'ImgBW.ReportProgress(progressMin + progressDivs)
     End Sub
 
@@ -2446,6 +2457,7 @@ Public Class MainForm
                     For Each AppxPackage As DismAppxPackage In AppxPackageCollection
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                            CompletedTasks(2) = False
                             Exit Sub
                         End If
                         Select Case AppxPackage.Architecture
@@ -2525,6 +2537,7 @@ Public Class MainForm
             Finally
                 DismApi.Shutdown()
             End Try
+            CompletedTasks(2) = True
             Exit Sub
         End If
         Debug.WriteLine("[GetImageAppxPackages] Running function...")
@@ -2536,6 +2549,7 @@ Public Class MainForm
                 Select Case FileVersion.ProductMinorPart
                     Case 1
                         Debug.WriteLine("[GetImageAppxPackages] The image is Windows 8 or later, but this version of DISM does not support this command. Exiting...")
+                        CompletedTasks(2) = False
                         Exit Sub
                 End Select
         End Select
@@ -2560,6 +2574,7 @@ Public Class MainForm
                               ASCII)
         Catch ex As Exception
             Debug.WriteLine("[GetImageAppxPackages] Failed writing getter scripts. Reason: " & ex.Message)
+            CompletedTasks(2) = False
             Exit Sub
         End Try
         Debug.WriteLine("[GetImageAppxPackages] Finished writing getter scripts. Executing them...")
@@ -2685,6 +2700,7 @@ Public Class MainForm
             imgAppxArchitectures = imgAppxArchitectureList.ToArray()
             imgAppxResourceIds = imgAppxResourceIdList.ToArray()
         End If
+        CompletedTasks(2) = True
         'ImgBW.ReportProgress(progressMin + progressDivs)
     End Sub
 
@@ -2721,6 +2737,7 @@ Public Class MainForm
                     For Each capability As DismCapability In CapabilityCollection
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                            CompletedTasks(3) = False
                             Exit Sub
                         End If
                         imgCapabilityNameList.Add(capability.Name)
@@ -2749,6 +2766,7 @@ Public Class MainForm
             Finally
                 DismApi.Shutdown()
             End Try
+            CompletedTasks(3) = True
             Exit Sub
         End If
         Debug.WriteLine("[GetImageCapabilities] Running function...")
@@ -2758,6 +2776,7 @@ Public Class MainForm
             Case 6
                 ' Exit procedure
                 Debug.WriteLine("[GetImageCapabilities] The image is Windows 10 or 11, but this version of DISM does not support this command. Exiting...")
+                CompletedTasks(3) = False
         End Select
         Debug.WriteLine("[GetImageCapabilities] Writing getter scripts...")
         Try
@@ -2771,6 +2790,7 @@ Public Class MainForm
                               ASCII)
         Catch ex As Exception
             Debug.WriteLine("[GetImageCapabilities] Failed writing getter scripts. Reason: " & ex.Message)
+            CompletedTasks(3) = False
             Exit Sub
         End Try
         Debug.WriteLine("[GetImageCapabilities] Finished writing getter scripts. Executing them...")
@@ -2820,6 +2840,7 @@ Public Class MainForm
                 Continue For
             End If
         Next
+        CompletedTasks(3) = True
         'ImgBW.ReportProgress(progressMin + progressDivs)
     End Sub
 
@@ -2844,6 +2865,7 @@ Public Class MainForm
                     For Each driver As DismDriverPackage In DriverCollection
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                            CompletedTasks(4) = False
                             Exit Sub
                         End If
                         imgDrvPublishedNameList.Add(driver.PublishedName)
@@ -2867,6 +2889,7 @@ Public Class MainForm
             Finally
                 DismApi.Shutdown()
             End Try
+            CompletedTasks(4) = True
             Exit Sub
         End If
         Debug.WriteLine("[GetImageDrivers] Running function...")
@@ -2878,6 +2901,7 @@ Public Class MainForm
                               ASCII)
         Catch ex As Exception
             Debug.WriteLine("[GetImageDrivers] Failed writing getter scripts. Reason: " & ex.Message)
+            CompletedTasks(4) = False
             Exit Sub
         End Try
         ImgProcesses.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
@@ -2995,6 +3019,7 @@ Public Class MainForm
                 Continue For
             End If
         Next
+        CompletedTasks(4) = True
         'ImgBW.ReportProgress(progressMin + progressDivs)
     End Sub
 
@@ -5496,6 +5521,7 @@ Public Class MainForm
         SaveProjectToolStripMenuItem.Enabled = False
         SaveProjectasToolStripMenuItem.Enabled = False
         BGProcDetails.Hide()
+        Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
         If OnlineManagement Then EndOnlineManagement()
     End Sub
 
@@ -5682,6 +5708,7 @@ Public Class MainForm
         TableLayoutPanel2.SetColumnSpan(Label5, 2)
         TableLayoutPanel2.SetColumnSpan(Label3, 2)
         ManageOnlineInstallationToolStripMenuItem.Enabled = True
+        Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
     End Sub
 
     Sub UpdateProjProperties(WasImageMounted As Boolean, IsReadOnly As Boolean)
@@ -7555,7 +7582,7 @@ Public Class MainForm
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
         End Select
-        If Not areBackgroundProcessesDone Then
+        If Not CompletedTasks(0) Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -7638,7 +7665,7 @@ Public Class MainForm
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
         End Select
-        If Not areBackgroundProcessesDone Then
+        If Not CompletedTasks(1) Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -7740,7 +7767,7 @@ Public Class MainForm
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
         End Select
-        If Not areBackgroundProcessesDone Then
+        If Not CompletedTasks(1) Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -7921,6 +7948,7 @@ Public Class MainForm
 
     Private Sub ImgBW_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles ImgBW.ProgressChanged
         BGProcDetails.Label2.Text = progressLabel
+        If bwBackgroundProcessAction <> 0 Then BGProcDetails.ProgressBar1.Style = ProgressBarStyle.Marquee Else BGProcDetails.ProgressBar1.Style = ProgressBarStyle.Blocks
         If regJumps Then
             BGProcDetails.ProgressBar1.Value = e.ProgressPercentage
         Else
@@ -7930,6 +7958,8 @@ Public Class MainForm
     End Sub
 
     Private Sub ImgBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ImgBW.RunWorkerCompleted
+        CompletedTasks = Enumerable.Repeat(True, CompletedTasks.Length).ToArray()
+        BGProcDetails.ProgressBar1.Style = ProgressBarStyle.Blocks
         If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
         areBackgroundProcessesDone = True
         BackgroundProcessesButton.Image = New Bitmap(My.Resources.bg_ops_complete)
@@ -7948,7 +7978,7 @@ Public Class MainForm
         End Select
         BGProcDetails.Label2.Text = progressLabel
         BGProcDetails.ProgressBar1.Value = BGProcDetails.ProgressBar1.Maximum
-        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+        If Not ProgressPanel.IsDisposed And Not ProgressPanel.Visible Then ProgressPanel.Dispose()
         If isOrphaned Then
             If BGProcDetails.Visible Then
                 BGProcDetails.ProgressBar1.Value = 0
@@ -7984,7 +8014,7 @@ Public Class MainForm
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
         End Select
-        If Not areBackgroundProcessesDone Then
+        If Not CompletedTasks(0) Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -8046,7 +8076,7 @@ Public Class MainForm
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
         End Select
-        If Not areBackgroundProcessesDone Then
+        If Not CompletedTasks(1) Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -8148,7 +8178,7 @@ Public Class MainForm
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
         End Select
-        If Not areBackgroundProcessesDone Then
+        If Not CompletedTasks(1) Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -8252,7 +8282,7 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Obteniendo paquetes aprovisionados AppX..."
         End Select
         ProgressPanel.OperationNum = 994
-        If Not areBackgroundProcessesDone Then
+        If Not CompletedTasks(2) Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -8474,7 +8504,7 @@ Public Class MainForm
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
         End Select
-        If Not areBackgroundProcessesDone Then
+        If Not CompletedTasks(3) Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -8531,7 +8561,7 @@ Public Class MainForm
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
         End Select
-        If Not areBackgroundProcessesDone Then
+        If Not CompletedTasks(3) Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -8591,7 +8621,7 @@ Public Class MainForm
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
         End Select
-        If Not areBackgroundProcessesDone Then
+        If Not CompletedTasks(4) Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
