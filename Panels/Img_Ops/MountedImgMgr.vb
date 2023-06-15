@@ -276,6 +276,13 @@ Public Class MountedImgMgr
             Next
             ignoreRepeats = True
         Catch ex As Exception
+            ' Disable all buttons
+            Button1.Enabled = False
+            Button2.Enabled = False
+            Button3.Enabled = False
+            Button4.Enabled = False
+            Button5.Enabled = False
+            Button6.Enabled = False
             Exit Try
         End Try
     End Sub
