@@ -185,6 +185,8 @@ Public Class ProgressPanel
 
     Public TaskList As New List(Of Integer)                 ' Task list
 
+    Dim AllDrivers As Boolean                               ' Detects whether the program should detect all image drivers, taken from MainForm
+
     ' Initial settings
     Dim DismExe As String
     Dim AutoLogs As Boolean
@@ -3208,7 +3210,7 @@ Public Class ProgressPanel
             Try
                 DismApi.Initialize(DismLogLevel.LogErrors)
                 Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
-                    drvCollection = DismApi.GetDrivers(imgSession, True)
+                    drvCollection = DismApi.GetDrivers(imgSession, AllDrivers)
                 End Using
             Finally
                 DismApi.Shutdown()
@@ -4830,6 +4832,7 @@ Public Class ProgressPanel
         MainForm.bwGetImageInfo = True
         MainForm.bwGetAdvImgInfo = True
         Language = MainForm.Language
+        AllDrivers = MainForm.AllDrivers
         BodyPanel.BorderStyle = BorderStyle.None
         ' Determine program colors
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
