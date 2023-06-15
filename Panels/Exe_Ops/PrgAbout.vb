@@ -229,7 +229,7 @@ Public Class PrgAbout
         Const PeHeaderOffset As Integer = 60
         Const LinkerTimestampOffset As Integer = 8
         Dim b(2047) As Byte
-        Dim s As Stream
+        Dim s As Stream = Nothing
         Try
             s = New FileStream(filePath, FileMode.Open, FileAccess.Read)
             s.Read(b, 0, 2048)
