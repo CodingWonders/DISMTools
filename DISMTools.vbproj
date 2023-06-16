@@ -117,6 +117,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="Help\Help_RegisteredAppxPkgsDlg.Designer.vb">
+      <DependentUpon>Help_RegisteredAppxPkgsDlg.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Help\Help_RegisteredAppxPkgsDlg.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="MainForm.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -518,6 +524,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Actions\Validation\Actions.Validation.resx">
       <DependentUpon>Actions.Validation.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Help\Help_RegisteredAppxPkgsDlg.resx">
+      <DependentUpon>Help_RegisteredAppxPkgsDlg.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.vb</DependentUpon>
