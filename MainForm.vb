@@ -8750,6 +8750,50 @@ Public Class MainForm
         Return Nothing
     End Function
 
+    Function GetStoreAppMainLogo(PackageName As String)
+        Try
+            If File.Exists(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml") Then
+                ' Read from manifest
+                Dim ManFile As New RichTextBox() With {
+                    .Text = File.ReadAllText(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml")
+                }
+                For Each line In ManFile.Lines
+                    If line.Contains("Logo") Then
+                        Dim SplitPaths As New List(Of String)
+                        SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
+                        SplitPaths.RemoveAt(SplitPaths.Count - 1)
+                        Dim newPath As String = String.Join("\", SplitPaths)
+                        If Directory.GetFiles(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\" & newPath, "*.png").Count > 1 Then
+                            Dim logoFiles() As String = Directory.GetFiles(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\" & newPath, "*.png")
+                            ' Choose the largest one
+                            Return logoFiles.Last
+                        Else
+                            Return Path.Combine(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName, line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim())
+                        End If
+                    End If
+                Next
+            ElseIf Directory.GetDirectories(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps", PackageName & "*", SearchOption.TopDirectoryOnly).Count > 1 Then
+                Dim pkgDirs() As String = Directory.GetDirectories(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps", PackageName & "*", SearchOption.TopDirectoryOnly)
+                For Each folder In pkgDirs
+                    If Not folder.Contains("neutral") Then
+                        ' Read from manifest
+                        Dim ManFile As New RichTextBox() With {
+                            .Text = File.ReadAllText(folder & "AppxManifest.xml")
+                        }
+                        For Each line In ManFile.Lines
+                            If line.Contains("Logo") Then
+                                Return Path.Combine(folder, line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim())
+                            End If
+                        Next
+                    End If
+                Next
+            End If
+        Catch ex As Exception
+            Return Nothing
+        End Try
+        Return Nothing
+    End Function
+
     Private Sub ViewPackageDirectoryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewPackageDirectoryToolStripMenuItem.Click
         Dim suitableFolderName As String = ""
         Try
@@ -8777,6 +8821,11 @@ Public Class MainForm
     End Sub
 
     Private Sub ResViewTSMI_Click(sender As Object, e As EventArgs) Handles ResViewTSMI.Click
+        Dim MainLogo As String = GetStoreAppMainLogo(RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text.Replace(" (Cortana)", "").Trim())
+        If MainLogo <> "" And File.Exists(MainLogo) Then
+            Process.Start(MainLogo)
+            Exit Sub
+        End If
         Dim suitableFolderName As String = ""
         Try
             suitableFolderName = GetSuitablePackageFolder(RemProvAppxPackage.ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim())
