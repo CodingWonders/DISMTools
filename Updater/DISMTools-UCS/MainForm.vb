@@ -342,7 +342,7 @@ Public Class MainForm
             File.Delete(dll)
         Next
         Directory.Delete(Application.StartupPath & "\bin", True)
-        Directory.Delete(Application.StartupPath & "\Resources", True)
+        If Directory.Exists(Application.StartupPath & "\Resources") Then Directory.Delete(Application.StartupPath & "\Resources", True)
         File.Delete(Application.StartupPath & "\DISMTools.exe")
         File.Delete(Application.StartupPath & "\LICENSE")
     End Sub
