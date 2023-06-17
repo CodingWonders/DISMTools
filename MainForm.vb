@@ -7207,7 +7207,7 @@ Public Class MainForm
                 Thread.Sleep(100)
             End While
         End If
-        If isProjectLoaded Then
+        If isProjectLoaded And Not OnlineManagement Then
             If isModified Then
                 SaveProjectQuestionDialog.ShowDialog()
                 If SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Yes Then
