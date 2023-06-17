@@ -86,6 +86,8 @@ Public Class MainForm
     Public ExtAppxGetter As Boolean = True
     Public SkipNonRemovable As Boolean = True
     Public AllDrivers As Boolean
+    Public SkipFrameworks As Boolean = True
+    Public RunAllProcs As Boolean
     ' - Startup -
     Public StartupRemount As Boolean
     Public StartupUpdateCheck As Boolean
@@ -105,9 +107,6 @@ Public Class MainForm
 
     ' Variable used for online installation management
     Public OnlineManagement As Boolean
-
-    ' Background process variables
-    'Public imgCanGetAppxPkgs As Boolean            ' Windows 8 introduced AppX packages (Metro-style apps). The AppX format is still used in Windows 10 and 11
 
     ' These are the variables that need to change when testing setting validity
     Public isExeProblematic As Boolean
@@ -197,6 +196,8 @@ Public Class MainForm
     Dim archIntg As Integer
     Dim fileCount As Integer
     Dim CurrentFileInt As Integer
+
+    Public CompletedTasks(4) As Boolean
 
     Friend NotInheritable Class NativeMethods
 
@@ -298,6 +299,7 @@ Public Class MainForm
         If DismExe <> "" Then
             DismVersionChecker = FileVersionInfo.GetVersionInfo(DismExe)
         End If
+        UnblockPSHelpers()
         If StartupRemount Then RemountOrphanedImages()
         If StartupUpdateCheck Then CheckForUpdates(dtBranch) Else UpdatePanel.Visible = False
         MountedImageDetectorBW.RunWorkerAsync()
@@ -333,7 +335,7 @@ Public Class MainForm
             MountedImageReWrList.Clear()
             MountedImageImgVersionList.Clear()
         End If
-        DismApi.Initialize(DismLogLevel.LogErrors)
+        DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
         Dim MountedImgs As DismMountedImageInfoCollection = DismApi.GetMountedImages()
         For Each imageInfo As DismMountedImageInfo In MountedImgs
             If DebugLog Then Debug.WriteLine("- Image file : " & imageInfo.ImageFilePath)
@@ -405,7 +407,7 @@ Public Class MainForm
             Thread.Sleep(100)
         End While
         If MountedImageMountDirs.Count > 0 Then
-            DismApi.Initialize(DismLogLevel.LogErrors)
+            DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
             For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
                 If MountedImageImgStatuses(x) = 1 Then
                     DismApi.RemountImage(MountedImageMountDirs(x))
@@ -447,6 +449,16 @@ Public Class MainForm
                 End If
             End If
         End Using
+    End Sub
+
+    Sub UnblockPSHelpers()
+        Dim PSUnblocker As New Process()
+        PSUnblocker.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\System32\WindowsPowerShell\v1.0\powershell.exe"
+        PSUnblocker.StartInfo.Arguments = "-executionpolicy unrestricted -command Unblock-File " & Quote & Application.StartupPath & "\bin\extps1\extappx.ps1" & Quote
+        PSUnblocker.StartInfo.CreateNoWindow = True
+        PSUnblocker.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+        PSUnblocker.Start()
+        PSUnblocker.WaitForExit()
     End Sub
 
     Sub ChangeImgStatus()
@@ -971,6 +983,16 @@ Public Class MainForm
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("DetectAllDrivers=0") Then
                     AllDrivers = False
                 End If
+                If DTSettingForm.RichTextBox1.Text.Contains("SkipFrameworks=1") Then
+                    SkipFrameworks = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("SkipFrameworks=0") Then
+                    SkipFrameworks = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("RunAllProcs=1") Then
+                    RunAllProcs = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("RunAllProcs=0") Then
+                    RunAllProcs = False
+                End If
                 If DTSettingForm.RichTextBox1.Text.Contains("RemountImages=1") Then
                     StartupRemount = True
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("RemountImages=0") Then
@@ -1080,11 +1102,12 @@ Public Class MainForm
             Button13.Enabled = False
             Exit Sub
         End If
+        Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
         ' Let user know things are working
         BackgroundProcessesButton.Visible = False
         BackgroundProcessesButton.Image = My.Resources.bg_ops
         BackgroundProcessesButton.Visible = True
-        If UseApi Then DismApi.Initialize(DismLogLevel.LogErrors)
+        If UseApi Then DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
         areBackgroundProcessesDone = False
         regJumps = False
         irregVal = 0
@@ -1140,7 +1163,7 @@ Public Class MainForm
             Case 5
                 pbOpNums += 1
         End Select
-        progressDivs = 100 / pbOpNums
+        If pbOpNums > 1 Then progressDivs = 100 / pbOpNums Else progressDivs = 0
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1332,7 +1355,7 @@ Public Class MainForm
                         progressLabel = "Obteniendo paquetes de la imagen..."
                 End Select
                 ImgBW.ReportProgress(20)
-                GetImagePackages()
+                GetImagePackages(True, OnlineMode)
             Case 2
                 Select Case Language
                     Case 0
@@ -1348,7 +1371,7 @@ Public Class MainForm
                         progressLabel = "Obteniendo características de la imagen..."
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
-                GetImageFeatures()
+                GetImageFeatures(True, OnlineMode)
             Case 3
                 If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") = True Then
                     Debug.WriteLine("[IsWindows8OrHigher] Returned True")
@@ -1367,7 +1390,7 @@ Public Class MainForm
                             progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
                     End Select
                     ImgBW.ReportProgress(progressMin + progressDivs)
-                    GetImageAppxPackages()
+                    GetImageAppxPackages(True, OnlineMode)
                 Else
                     Debug.WriteLine("[IsWindows8OrHigher] Returned False")
                 End If
@@ -1389,7 +1412,7 @@ Public Class MainForm
                             progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
                     End Select
                     ImgBW.ReportProgress(progressMin + progressDivs)
-                    GetImageCapabilities()
+                    GetImageCapabilities(True, OnlineMode)
                 Else
                     Debug.WriteLine("[IsWindows10OrHigher] Returned False")
                 End If
@@ -1408,7 +1431,7 @@ Public Class MainForm
                         progressLabel = "Obteniendo controladores de la imagen..."
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
-                GetImageDrivers()
+                GetImageDrivers(True, OnlineMode)
         End Select
         DeleteTempFiles()
         If UseApi And session IsNot Nothing Then
@@ -2191,7 +2214,7 @@ Public Class MainForm
     Sub GetImagePackages(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
         If UseApi Then
             Try
-                DismApi.Initialize(DismLogLevel.LogErrors)
+                DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
                 Using session As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(sessionMntDir))
                     Dim imgPackageNameList As New List(Of String)
                     Dim imgPackageStateList As New List(Of String)
@@ -2201,6 +2224,7 @@ Public Class MainForm
                     For Each package As DismPackage In PackageCollection
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                            CompletedTasks(0) = False
                             Exit Sub
                         End If
                         imgPackageNameList.Add(package.PackageName)
@@ -2216,6 +2240,7 @@ Public Class MainForm
             Finally
                 DismApi.Shutdown()
             End Try
+            CompletedTasks(0) = True
             Exit Sub
         End If
         Debug.WriteLine("[GetImagePackages] Running function...")
@@ -2239,6 +2264,7 @@ Public Class MainForm
                               ASCII)
         Catch ex As Exception
             Debug.WriteLine("[GetImagePackages] Failed writing getter scripts. Reason: " & ex.Message)
+            CompletedTasks(0) = False
             Exit Sub
         End Try
         Debug.WriteLine("[GetImagePackages] Finished writing getter scripts. Executing them...")
@@ -2294,6 +2320,7 @@ Public Class MainForm
                 Continue For
             End If
         Next
+        CompletedTasks(0) = True
         'imgPackageNameLastEntry = UBound(imgPackageNames)
         'ImgBW.ReportProgress(progressMin + progressDivs)
     End Sub
@@ -2304,7 +2331,7 @@ Public Class MainForm
     Sub GetImageFeatures(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
         If UseApi Then
             Try
-                DismApi.Initialize(DismLogLevel.LogErrors)
+                DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
                 Using session As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(sessionMntDir))
                     Dim imgFeatureNameList As New List(Of String)
                     Dim imgFeatureStateList As New List(Of String)
@@ -2312,6 +2339,7 @@ Public Class MainForm
                     For Each feature As DismFeature In FeatureCollection
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                            CompletedTasks(1) = False
                             Exit Sub
                         End If
                         imgFeatureNameList.Add(feature.FeatureName)
@@ -2340,6 +2368,7 @@ Public Class MainForm
             Finally
                 DismApi.Shutdown()
             End Try
+            CompletedTasks(1) = True
             Exit Sub
         End If
         Debug.WriteLine("[GetImageFeatures] Running function...")
@@ -2355,6 +2384,7 @@ Public Class MainForm
                               ASCII)
         Catch ex As Exception
             Debug.WriteLine("[GetImageFeatures] Failed writing getter scripts. Reason: " & ex.Message)
+            CompletedTasks(1) = False
             Exit Sub
         End Try
         Debug.WriteLine("[GetImageFeatures] Finished writing getter scripts. Executing them...")
@@ -2404,6 +2434,7 @@ Public Class MainForm
                 Continue For
             End If
         Next
+        CompletedTasks(1) = True
         'ImgBW.ReportProgress(progressMin + progressDivs)
     End Sub
 
@@ -2414,7 +2445,7 @@ Public Class MainForm
     Sub GetImageAppxPackages(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
         If UseApi And Environment.OSVersion.Version.Major > 6 Then
             Try
-                DismApi.Initialize(DismLogLevel.LogErrors)
+                DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
                 Using session As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(sessionMntDir))
                     Dim imgAppxDisplayNameList As New List(Of String)
                     Dim imgAppxPackageNameList As New List(Of String)
@@ -2426,6 +2457,7 @@ Public Class MainForm
                     For Each AppxPackage As DismAppxPackage In AppxPackageCollection
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                            CompletedTasks(2) = False
                             Exit Sub
                         End If
                         Select Case AppxPackage.Architecture
@@ -2458,18 +2490,20 @@ Public Class MainForm
                             Dim appxResIdRTB As New RichTextBox()
                             Dim appxVerRTB As New RichTextBox()
                             Dim appxNonRemPolRTB As New RichTextBox()
+                            Dim appxFrameworkRTB As New RichTextBox()
                             appxPkgNameRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxpkgnames")
                             appxPkgFullNameRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxpkgfullnames")
                             appxArchRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxarch")
                             appxResIdRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxresid")
                             appxVerRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxver")
-                            appxNonRemPolRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxnonrempolicy")
+                            If File.Exists(Application.StartupPath & "\bin\extps1\out\appxnonrempolicy") Then appxNonRemPolRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxnonrempolicy")
+                            If File.Exists(Application.StartupPath & "\bin\extps1\out\appxframework") Then appxFrameworkRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxframework")
                             For x = 0 To appxPkgFullNameRTB.Lines.Count - 1
                                 If imgAppxPackageNameList.Contains(appxPkgFullNameRTB.Lines(x)) Then
                                     Continue For
                                 Else
-                                    If SkipNonRemovable Then
-                                        If appxNonRemPolRTB.Lines(x) = "True" Then
+                                    If SkipNonRemovable Or (SkipFrameworks And appxFrameworkRTB.Text <> "") Then
+                                        If appxNonRemPolRTB.Lines(x) = "True" Or (SkipFrameworks And appxFrameworkRTB.Lines(x) = "True") Then
                                             Continue For
                                         Else
                                             imgAppxDisplayNameList.Add(appxPkgNameRTB.Lines(x))
@@ -2503,6 +2537,7 @@ Public Class MainForm
             Finally
                 DismApi.Shutdown()
             End Try
+            CompletedTasks(2) = True
             Exit Sub
         End If
         Debug.WriteLine("[GetImageAppxPackages] Running function...")
@@ -2514,6 +2549,7 @@ Public Class MainForm
                 Select Case FileVersion.ProductMinorPart
                     Case 1
                         Debug.WriteLine("[GetImageAppxPackages] The image is Windows 8 or later, but this version of DISM does not support this command. Exiting...")
+                        CompletedTasks(2) = False
                         Exit Sub
                 End Select
         End Select
@@ -2538,6 +2574,7 @@ Public Class MainForm
                               ASCII)
         Catch ex As Exception
             Debug.WriteLine("[GetImageAppxPackages] Failed writing getter scripts. Reason: " & ex.Message)
+            CompletedTasks(2) = False
             Exit Sub
         End Try
         Debug.WriteLine("[GetImageAppxPackages] Finished writing getter scripts. Executing them...")
@@ -2663,6 +2700,7 @@ Public Class MainForm
             imgAppxArchitectures = imgAppxArchitectureList.ToArray()
             imgAppxResourceIds = imgAppxResourceIdList.ToArray()
         End If
+        CompletedTasks(2) = True
         'ImgBW.ReportProgress(progressMin + progressDivs)
     End Sub
 
@@ -2691,7 +2729,7 @@ Public Class MainForm
     Sub GetImageCapabilities(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
         If UseApi Then
             Try
-                DismApi.Initialize(DismLogLevel.LogErrors)
+                DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
                 Using session As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(sessionMntDir))
                     Dim imgCapabilityNameList As New List(Of String)
                     Dim imgCapabilityStateList As New List(Of String)
@@ -2699,6 +2737,7 @@ Public Class MainForm
                     For Each capability As DismCapability In CapabilityCollection
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                            CompletedTasks(3) = False
                             Exit Sub
                         End If
                         imgCapabilityNameList.Add(capability.Name)
@@ -2727,6 +2766,7 @@ Public Class MainForm
             Finally
                 DismApi.Shutdown()
             End Try
+            CompletedTasks(3) = True
             Exit Sub
         End If
         Debug.WriteLine("[GetImageCapabilities] Running function...")
@@ -2736,6 +2776,7 @@ Public Class MainForm
             Case 6
                 ' Exit procedure
                 Debug.WriteLine("[GetImageCapabilities] The image is Windows 10 or 11, but this version of DISM does not support this command. Exiting...")
+                CompletedTasks(3) = False
         End Select
         Debug.WriteLine("[GetImageCapabilities] Writing getter scripts...")
         Try
@@ -2749,6 +2790,7 @@ Public Class MainForm
                               ASCII)
         Catch ex As Exception
             Debug.WriteLine("[GetImageCapabilities] Failed writing getter scripts. Reason: " & ex.Message)
+            CompletedTasks(3) = False
             Exit Sub
         End Try
         Debug.WriteLine("[GetImageCapabilities] Finished writing getter scripts. Executing them...")
@@ -2798,6 +2840,7 @@ Public Class MainForm
                 Continue For
             End If
         Next
+        CompletedTasks(3) = True
         'ImgBW.ReportProgress(progressMin + progressDivs)
     End Sub
 
@@ -2808,7 +2851,7 @@ Public Class MainForm
     Sub GetImageDrivers(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
         If UseApi Then
             Try
-                DismApi.Initialize(DismLogLevel.LogErrors)
+                DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
                 Using session As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(sessionMntDir))
                     Dim imgDrvPublishedNameList As New List(Of String)
                     Dim imgDrvOGFileNameList As New List(Of String)
@@ -2822,6 +2865,7 @@ Public Class MainForm
                     For Each driver As DismDriverPackage In DriverCollection
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                            CompletedTasks(4) = False
                             Exit Sub
                         End If
                         imgDrvPublishedNameList.Add(driver.PublishedName)
@@ -2845,6 +2889,7 @@ Public Class MainForm
             Finally
                 DismApi.Shutdown()
             End Try
+            CompletedTasks(4) = True
             Exit Sub
         End If
         Debug.WriteLine("[GetImageDrivers] Running function...")
@@ -2856,6 +2901,7 @@ Public Class MainForm
                               ASCII)
         Catch ex As Exception
             Debug.WriteLine("[GetImageDrivers] Failed writing getter scripts. Reason: " & ex.Message)
+            CompletedTasks(4) = False
             Exit Sub
         End Try
         ImgProcesses.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
@@ -2973,6 +3019,7 @@ Public Class MainForm
                 Continue For
             End If
         Next
+        CompletedTasks(4) = True
         'ImgBW.ReportProgress(progressMin + progressDivs)
     End Sub
 
@@ -3038,6 +3085,8 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText("EnhancedAppxGetter=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipNonRemovable=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "DetectAllDrivers=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipFrameworks=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "RunAllProcs=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Startup]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("RemountImages=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "CheckForUpdates=1")
@@ -3178,6 +3227,16 @@ Public Class MainForm
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "DetectAllDrivers=1")
                 Else
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "DetectAllDrivers=0")
+                End If
+                If SkipFrameworks Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipFrameworks=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipFrameworks=0")
+                End If
+                If RunAllProcs Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "RunAllProcs=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "RunAllProcs=0")
                 End If
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Startup]" & CrLf)
                 If StartupRemount Then
@@ -5408,6 +5467,9 @@ Public Class MainForm
                     MenuDesc.Text = "Listo"
             End Select
         End If
+        bwBackgroundProcessAction = 0
+        bwGetImageInfo = True
+        bwGetAdvImgInfo = True
         If imgCommitOperation = 0 Then
             ProgressPanel.OperationNum = 21
             ProgressPanel.UMountLocalDir = True
@@ -5459,6 +5521,7 @@ Public Class MainForm
         SaveProjectToolStripMenuItem.Enabled = False
         SaveProjectasToolStripMenuItem.Enabled = False
         BGProcDetails.Hide()
+        Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
         If OnlineManagement Then EndOnlineManagement()
     End Sub
 
@@ -5606,6 +5669,9 @@ Public Class MainForm
                     MenuDesc.Text = "Listo"
             End Select
         End If
+        bwBackgroundProcessAction = 0
+        bwGetImageInfo = True
+        bwGetAdvImgInfo = True
         IsImageMounted = False
         isProjectLoaded = False
         Text = "DISMTools"
@@ -5642,6 +5708,7 @@ Public Class MainForm
         TableLayoutPanel2.SetColumnSpan(Label5, 2)
         TableLayoutPanel2.SetColumnSpan(Label3, 2)
         ManageOnlineInstallationToolStripMenuItem.Enabled = True
+        Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
     End Sub
 
     Sub UpdateProjProperties(WasImageMounted As Boolean, IsReadOnly As Boolean)
@@ -7140,7 +7207,7 @@ Public Class MainForm
                 Thread.Sleep(100)
             End While
         End If
-        If isProjectLoaded Then
+        If isProjectLoaded And Not OnlineManagement Then
             If isModified Then
                 SaveProjectQuestionDialog.ShowDialog()
                 If SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Yes Then
@@ -7515,7 +7582,7 @@ Public Class MainForm
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
         End Select
-        If Not areBackgroundProcessesDone Then
+        If Not CompletedTasks(0) Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -7555,10 +7622,6 @@ Public Class MainForm
                 RemPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes"
         End Select
         RemPackage.ShowDialog()
-    End Sub
-
-    Sub RefreshInfo()
-        ImgBW.RunWorkerAsync()
     End Sub
 
     Private Sub ImgBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ImgBW.DoWork
@@ -7602,7 +7665,7 @@ Public Class MainForm
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
         End Select
-        If Not areBackgroundProcessesDone Then
+        If Not CompletedTasks(1) Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -7704,7 +7767,7 @@ Public Class MainForm
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
         End Select
-        If Not areBackgroundProcessesDone Then
+        If Not CompletedTasks(1) Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -7885,6 +7948,7 @@ Public Class MainForm
 
     Private Sub ImgBW_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles ImgBW.ProgressChanged
         BGProcDetails.Label2.Text = progressLabel
+        If bwBackgroundProcessAction <> 0 Then BGProcDetails.ProgressBar1.Style = ProgressBarStyle.Marquee Else BGProcDetails.ProgressBar1.Style = ProgressBarStyle.Blocks
         If regJumps Then
             BGProcDetails.ProgressBar1.Value = e.ProgressPercentage
         Else
@@ -7894,6 +7958,8 @@ Public Class MainForm
     End Sub
 
     Private Sub ImgBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ImgBW.RunWorkerCompleted
+        CompletedTasks = Enumerable.Repeat(True, CompletedTasks.Length).ToArray()
+        BGProcDetails.ProgressBar1.Style = ProgressBarStyle.Blocks
         If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
         areBackgroundProcessesDone = True
         BackgroundProcessesButton.Image = New Bitmap(My.Resources.bg_ops_complete)
@@ -7912,7 +7978,7 @@ Public Class MainForm
         End Select
         BGProcDetails.Label2.Text = progressLabel
         BGProcDetails.ProgressBar1.Value = BGProcDetails.ProgressBar1.Maximum
-        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+        If Not ProgressPanel.IsDisposed And Not ProgressPanel.Visible Then ProgressPanel.Dispose()
         If isOrphaned Then
             If BGProcDetails.Visible Then
                 BGProcDetails.ProgressBar1.Value = 0
@@ -7948,7 +8014,7 @@ Public Class MainForm
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
         End Select
-        If Not areBackgroundProcessesDone Then
+        If Not CompletedTasks(0) Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -8010,7 +8076,7 @@ Public Class MainForm
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
         End Select
-        If Not areBackgroundProcessesDone Then
+        If Not CompletedTasks(1) Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -8112,7 +8178,7 @@ Public Class MainForm
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
         End Select
-        If Not areBackgroundProcessesDone Then
+        If Not CompletedTasks(1) Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -8216,7 +8282,7 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Obteniendo paquetes aprovisionados AppX..."
         End Select
         ProgressPanel.OperationNum = 994
-        If Not areBackgroundProcessesDone Then
+        If Not CompletedTasks(2) Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -8438,7 +8504,7 @@ Public Class MainForm
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
         End Select
-        If Not areBackgroundProcessesDone Then
+        If Not CompletedTasks(3) Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -8495,7 +8561,7 @@ Public Class MainForm
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
         End Select
-        If Not areBackgroundProcessesDone Then
+        If Not CompletedTasks(3) Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -8555,7 +8621,7 @@ Public Class MainForm
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
         End Select
-        If Not areBackgroundProcessesDone Then
+        If Not CompletedTasks(4) Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -8684,6 +8750,50 @@ Public Class MainForm
         Return Nothing
     End Function
 
+    Function GetStoreAppMainLogo(PackageName As String)
+        Try
+            If File.Exists(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml") Then
+                ' Read from manifest
+                Dim ManFile As New RichTextBox() With {
+                    .Text = File.ReadAllText(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml")
+                }
+                For Each line In ManFile.Lines
+                    If line.Contains("Logo") Then
+                        Dim SplitPaths As New List(Of String)
+                        SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
+                        SplitPaths.RemoveAt(SplitPaths.Count - 1)
+                        Dim newPath As String = String.Join("\", SplitPaths)
+                        If Directory.GetFiles(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\" & newPath, "*.png").Count > 1 Then
+                            Dim logoFiles() As String = Directory.GetFiles(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\" & newPath, "*.png")
+                            ' Choose the largest one
+                            Return logoFiles.Last
+                        Else
+                            Return Path.Combine(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName, line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim())
+                        End If
+                    End If
+                Next
+            ElseIf Directory.GetDirectories(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps", PackageName & "*", SearchOption.TopDirectoryOnly).Count > 1 Then
+                Dim pkgDirs() As String = Directory.GetDirectories(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps", PackageName & "*", SearchOption.TopDirectoryOnly)
+                For Each folder In pkgDirs
+                    If Not folder.Contains("neutral") Then
+                        ' Read from manifest
+                        Dim ManFile As New RichTextBox() With {
+                            .Text = File.ReadAllText(folder & "AppxManifest.xml")
+                        }
+                        For Each line In ManFile.Lines
+                            If line.Contains("Logo") Then
+                                Return Path.Combine(folder, line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim())
+                            End If
+                        Next
+                    End If
+                Next
+            End If
+        Catch ex As Exception
+            Return Nothing
+        End Try
+        Return Nothing
+    End Function
+
     Private Sub ViewPackageDirectoryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewPackageDirectoryToolStripMenuItem.Click
         Dim suitableFolderName As String = ""
         Try
@@ -8711,6 +8821,11 @@ Public Class MainForm
     End Sub
 
     Private Sub ResViewTSMI_Click(sender As Object, e As EventArgs) Handles ResViewTSMI.Click
+        Dim MainLogo As String = GetStoreAppMainLogo(RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text.Replace(" (Cortana)", "").Trim())
+        If MainLogo <> "" And File.Exists(MainLogo) Then
+            Process.Start(MainLogo)
+            Exit Sub
+        End If
         Dim suitableFolderName As String = ""
         Try
             suitableFolderName = GetSuitablePackageFolder(RemProvAppxPackage.ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim())

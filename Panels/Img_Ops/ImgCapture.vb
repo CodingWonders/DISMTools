@@ -63,6 +63,7 @@ Public Class ImgCapture
             ProgressPanel.SourceImg = ProgressPanel.CaptureDestinationImage
             ProgressPanel.isOptimized = False
             ProgressPanel.isIntegrityTested = False
+            ProgressPanel.TaskList.AddRange({6, 21, 15})
         Else
             ProgressPanel.CaptureMountDestImg = False
         End If

@@ -810,9 +810,11 @@ Public Class ProjProperties
                     Case 22631 To 25000     ' 25000 is a relative number. This is because of the structural changes in Windows Insider channels, where 23xxx builds are the new Dev builds, and the Zinc development builds since 25314 are the new Canary builds
                         FeatUpd = "23H2 (Nickel)"
                     Case 25057 To 25238
-                        FeatUpd = "22H2 (Copper)"
-                    Case 25240 To 26000     ' 26000 is a relative number. We still don't know Zinc's final build
+                        FeatUpd = "23H1 (Copper)"
+                    Case 25240 To 25800     ' 25800 is a relative number. We still don't know Zinc's final build
                         FeatUpd = "23H2 (Zinc)"
+                    Case 25801 To 27000     ' 27000 is a relative number
+                        FeatUpd = "Upcoming (Gallium)"
                 End Select
             Case Else
                 Exit Sub

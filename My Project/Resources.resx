@@ -954,17 +954,23 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes
-- Fixed issues that caused the program to fail operations if there were no images mounted
-- Fixed an issue where the extended AppX package getter would fail to start
-- Fixed an issue where the program would continue creating or loading a project if the user declined the background processes cancellation confirmation
-- CODE: removed code analysis warnings CA1060 and CA2202
-- The program no longer consumes CPU power when performing operations, and will consume a lot less when running the mounted image detector
+
+- Fixed an issue where the background process cancellation dialog would be shown twice when closing the program
+- CODE: removed warning BC42104
 
 New features
 
-- The mounted image detector now detects image versions using the DISM API
-- You can now view the index description and version information when mounting an image
-- You can now enter online installation management mode from the File menu</value>
+- The program will soon detect Windows builds from the Gallium development semester
+- Mounting a captured image is no longer experimental, with the addition of task lists
+- The program now saves the logs of internal DISM functions in its file, stored in "logs\dism.log"
+- Many enhancements were made to AppX components:
+  - The program now unblocks the extended AppX package getter at startup
+  - The program can now skip AppX framework packages detected by the extended package getter
+  - Help is now available for the topic: "How does the program determine whether an application is registered to a user?"
+  - The program now opens the store assets of most AppX packages in the default photo viewer
+- Background processes have also had improvements:
+  - You no longer have to wait for background processes to finish to perform tasks with a Windows image or installation
+  - After performing an operation, the program will no longer run all background processes. It will now run only those that have seen changes</value>
   </data>
   <data name="secprogress_classic" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\secprogress_classic.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
