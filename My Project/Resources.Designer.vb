@@ -1627,11 +1627,17 @@ Namespace My.Resources
         
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
-        '''- Fixed issues that caused the program to fail operations if there were no images mounted
-        '''- Fixed an issue where the extended AppX package getter would fail to start
-        '''- Fixed an issue where the program would continue creating or loading a project if the user declined the background processes cancellation confirmation
-        '''- CODE: removed code analysis warnings CA1060 and CA2202
-        '''- The program no longer consumes CPU power when performing operations, and will consume a lot less when running the mounted [resto de la cadena truncado]&quot;;.
+        '''
+        '''- Fixed an issue where the background process cancellation dialog would be shown twice when closing the program
+        '''- CODE: removed warning BC42104
+        '''
+        '''New features
+        '''
+        '''- The program will soon detect Windows builds from the Gallium development semester
+        '''- Mounting a captured image is no longer experimental, with the addition of task lists
+        '''- The program now saves the logs of internal DISM functions in its file, stored in &quot;logs\dism.log&quot;
+        '''- Many enhancements were made to AppX components:
+        '''  - The prog [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
