@@ -295,7 +295,7 @@ Public Class MainForm
     Sub ExpandContents()
         Dim Expander As New Process()
         Expander.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
-        Expander.StartInfo.Arguments = "-command Expand-Archive -Path " & Quote & Application.StartupPath & "\new\DISMTools.zip" & Quote & " -DestinationPath " & Quote & Application.StartupPath & "\new"
+        Expander.StartInfo.Arguments = "-command Expand-Archive -Path '" & Application.StartupPath & "\new\DISMTools.zip' -DestinationPath '" & Application.StartupPath & "\new'"
         Expander.StartInfo.CreateNoWindow = True
         Expander.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
         Expander.Start()
@@ -324,13 +324,13 @@ Public Class MainForm
         If Not Directory.Exists(Application.StartupPath & "\old") Then Directory.CreateDirectory(Application.StartupPath & "\old")
         Directory.CreateDirectory(Application.StartupPath & "\old\Resources")
         Directory.CreateDirectory(Application.StartupPath & "\old\bin")
-        Backupper.StartInfo.Arguments = "-command Copy-Item -Path *.dll -Destination " & Quote & Application.StartupPath & "\old" & Quote
+        Backupper.StartInfo.Arguments = "-command Copy-Item -Path *.dll -Destination '" & Application.StartupPath & "\old'"
         Backupper.Start()
         Backupper.WaitForExit()
-        Backupper.StartInfo.Arguments = "-command Copy-Item -Path " & Quote & Application.StartupPath & "\Resources" & Quote & " -Destination " & Quote & Application.StartupPath & "\old\Resources" & Quote & " -Recurse -Force"
+        Backupper.StartInfo.Arguments = "-command Copy-Item -Path '" & Application.StartupPath & "\Resources' -Destination '" & Application.StartupPath & "\old\Resources' -Recurse -Force"
         Backupper.Start()
         Backupper.WaitForExit()
-        Backupper.StartInfo.Arguments = "-command Copy-Item -Path " & Quote & Application.StartupPath & "\bin" & Quote & " -Destination " & Quote & Application.StartupPath & "\old\bin" & Quote & " -Recurse -Force"
+        Backupper.StartInfo.Arguments = "-command Copy-Item -Path '" & Application.StartupPath & "\bin' -Destination '" & Application.StartupPath & "\old\bin' -Recurse -Force"
         Backupper.Start()
         Backupper.WaitForExit()
         File.Copy(Application.StartupPath & "\LICENSE", Application.StartupPath & "\old\LICENSE")
@@ -350,15 +350,18 @@ Public Class MainForm
     Sub InstallNewVersion()
         Dim Updater As New Process()
         Updater.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
-        Updater.StartInfo.CreateNoWindow = True
-        Updater.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-        Updater.StartInfo.Arguments = "-command Copy-Item -Path " & Quote & Application.StartupPath & "\new\*" & Quote & " -Exclude DISMTools.zip"
+        Updater.StartInfo.WorkingDirectory = Application.StartupPath
+        If Not Debugger.IsAttached Then
+            Updater.StartInfo.CreateNoWindow = True
+            Updater.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+        End If
+        Updater.StartInfo.Arguments = "-command Copy-Item -Path '" & Application.StartupPath & "\new\*' -Exclude DISMTools.zip" & If(Debugger.IsAttached, " -Verbose", "")
         Updater.Start()
         Updater.WaitForExit()
-        Updater.StartInfo.Arguments = "-command Copy-Item -Path " & Quote & Application.StartupPath & "\new\Resources" & Quote & " -Destination " & Quote & Application.StartupPath & "\Resources" & Quote & " -Recurse -Force"
+        Updater.StartInfo.Arguments = "-command Copy-Item -Path '" & Application.StartupPath & "\new\Resources' -Destination '" & Application.StartupPath & "' -Recurse -Force" & If(Debugger.IsAttached, " -Verbose", "")
         Updater.Start()
         Updater.WaitForExit()
-        Updater.StartInfo.Arguments = "-command Copy-Item -Path " & Quote & Application.StartupPath & "\new\bin" & Quote & " -Destination " & Quote & Application.StartupPath & "\bin" & Quote & " -Recurse -Force"
+        Updater.StartInfo.Arguments = "-command Copy-Item -Path '" & Application.StartupPath & "\new\bin' -Destination '" & Application.StartupPath & "' -Recurse -Force" & If(Debugger.IsAttached, " -Verbose", "")
         Updater.Start()
         Updater.WaitForExit()
     End Sub
