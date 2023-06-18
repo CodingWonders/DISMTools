@@ -187,6 +187,12 @@ Public Class ProgressPanel
 
     Dim AllDrivers As Boolean                               ' Detects whether the program should detect all image drivers, taken from MainForm
 
+    Public ActionRunning As Boolean                         ' Detects whether an Action file is being run
+    Public IsInValidationMode As Boolean                    ' Detects whether an Action file is being validated
+
+    Public Actions_ImageFile As String
+    Public Actions_ImageIndex As Integer
+
     ' Initial settings
     Dim DismExe As String
     Dim AutoLogs As Boolean
@@ -4930,28 +4936,80 @@ Public Class ProgressPanel
         EnglishOut = MainForm.EnglishOutput
         If UseScratchDir And AutoScratch And OnlineMgmt And Not Directory.Exists(Application.StartupPath & "\scratch") Then Directory.CreateDirectory(Application.StartupPath & "\scratch")
         GatherInitialSwitches()
-        If TaskList.Count > 2 Then
-            AllPB.Maximum = TaskList.Count * 100
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
-                            taskCountLbl.Text = "Tasks: 1/" & TaskList.Count
-                        Case "ESN"
-                            taskCountLbl.Text = "Tareas: 1/" & TaskList.Count
-                    End Select
-                Case 1
-                    taskCountLbl.Text = "Tasks: 1/" & TaskList.Count
-                Case 2
-                    taskCountLbl.Text = "Tareas: 1/" & TaskList.Count
-            End Select
-            OperationNum = 1000
+        If ActionRunning Then
+            InitializeActionRuntime(IsInValidationMode)
         Else
-            GetTasks(OperationNum)
+            If TaskList.Count > 2 Then
+                AllPB.Maximum = TaskList.Count * 100
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                taskCountLbl.Text = "Tasks: 1/" & TaskList.Count
+                            Case "ESN"
+                                taskCountLbl.Text = "Tareas: 1/" & TaskList.Count
+                        End Select
+                    Case 1
+                        taskCountLbl.Text = "Tasks: 1/" & TaskList.Count
+                    Case 2
+                        taskCountLbl.Text = "Tareas: 1/" & TaskList.Count
+                End Select
+                OperationNum = 1000
+            Else
+                GetTasks(OperationNum)
+            End If
         End If
         taskCountLbl.Visible = True
         ProgressBW.RunWorkerAsync()
     End Sub
+
+#Region "Actions"
+
+    ' This is temporary stuff. This will become improved
+
+    Sub InitializeActionRuntime(Validate As Boolean)
+        LogView.AppendText("Running the Action file " & If(Validate, "with validation", "") & "...")
+        If Validate Then ValidationForm.Show()
+    End Sub
+
+    Sub ReadActionFile(ActionFile As String)
+        Dim Reader As New RichTextBox With {.Text = File.ReadAllText(ActionFile)}
+        For x = 0 To Reader.Lines.Count - 1
+            If String.IsNullOrWhiteSpace(Reader.Lines(x)) Then
+                Continue For
+            ElseIf Reader.Lines(x).StartsWith("Section Properties()") And IsInValidationMode Then
+                GetTestImageInfo(x, ActionFile)
+            ElseIf Reader.Lines(x).StartsWith("Section Main()") Then
+                GetTasks(x, ActionFile)
+            End If
+        Next
+    End Sub
+
+    Sub GetTasks(StarterLine As Integer, ActionFile As String)
+        Dim Reader As New RichTextBox With {.Text = File.ReadAllText(ActionFile)}
+        For x = StarterLine To Reader.Text.IndexOf("End Section")
+            If String.IsNullOrWhiteSpace(Reader.Lines(x)) Or Reader.Lines(x).StartsWith("'") Then
+                Continue For
+            Else
+                If Reader.Lines(x).Replace(" ", "").Trim().StartsWith("Image.Mount") Then
+                    TaskList.Add(15)
+                End If
+            End If
+        Next
+    End Sub
+
+    Sub GetTestImageInfo(StarterLine As Integer, ActionFile As String)
+        Dim Reader As New RichTextBox With {.Text = File.ReadAllText(ActionFile)}
+        For x = StarterLine To Reader.Text.IndexOf("End Section")
+            If Reader.Lines(x).Replace(" ", "").Trim().StartsWith("Action.TestImage.FileName", StringComparison.OrdinalIgnoreCase) Then
+                Actions_ImageFile = Reader.Text.Substring(Reader.Lines(x).IndexOf("="))
+            ElseIf Reader.Lines(x).Replace(" ", "").Trim().StartsWith("Action.TestImage.ImageIndex", StringComparison.OrdinalIgnoreCase) Then
+                Actions_ImageIndex = CInt(Reader.Text.Substring(Reader.Lines(x).IndexOf("=")))
+            End If
+        Next
+    End Sub
+
+#End Region
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
         If File.Exists(Application.StartupPath & "\logs\" & dateStr) Then

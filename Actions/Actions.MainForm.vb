@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports ScintillaNET
+Imports System.Text.Encoding
 
 Public Class Actions_MainForm
 
@@ -167,5 +168,16 @@ Public Class Actions_MainForm
 
     Private Sub ToolStripButton3_Click(sender As Object, e As EventArgs) Handles ToolStripButton3.Click
         OpenFileDialog1.ShowDialog()
+    End Sub
+
+    Private Sub ToolStripButton4_Click(sender As Object, e As EventArgs) Handles ToolStripButton4.Click
+        If SaveFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            File.WriteAllText(SaveFileDialog1.FileName, Scintilla1.Text, ASCII)
+        End If
+    End Sub
+
+    Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
+
+
     End Sub
 End Class
