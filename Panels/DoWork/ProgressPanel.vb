@@ -4944,6 +4944,7 @@ Public Class ProgressPanel
         If ActionRunning Then
             InitializeActionRuntime(IsInValidationMode)
             ReadActionFile(ActionFile)
+            Exit Sub
         Else
             If TaskList.Count > 2 Then
                 AllPB.Maximum = TaskList.Count * 100
@@ -5000,12 +5001,32 @@ Public Class ProgressPanel
                 If Reader.Lines(x).Replace(" ", "").Trim().StartsWith("Image.Mount", StringComparison.OrdinalIgnoreCase) Then
                     TaskList.Add(15)
                     ParseParameters(Reader.Lines(x).Replace("Image.Mount", "").Trim())
+                    ValidationForm.ListView1.Items.Add(New ListViewItem(New String() {"Mount image: " & ActionParameters(0), "Pending"}))
+                    SourceImg = ActionParameters(0)
+                    ImgIndex = ActionParameters(1)
+                    MountDir = ActionParameters(2)
+                    isReadOnly = False
+                    isOptimized = False
+                    isIntegrityTested = False
+                    Select Case ActionParameters.Count
+                        Case 4
+                            isReadOnly = If(ActionParameters(3).Equals("True", StringComparison.OrdinalIgnoreCase), True, False)
+                        Case 5
+                            isReadOnly = If(ActionParameters(4).Equals("True", StringComparison.OrdinalIgnoreCase), True, False)
+                        Case 6
+                            isReadOnly = If(ActionParameters(5).Equals("True", StringComparison.OrdinalIgnoreCase), True, False)
+                    End Select
                 ElseIf Reader.Lines(x).Replace(" ", "").Trim().StartsWith("Image.Remount", StringComparison.OrdinalIgnoreCase) Then
                     TaskList.Add(18)
                     ParseParameters(Reader.Lines(x).Replace("Image.Remount", "").Trim())
+                    ValidationForm.ListView1.Items.Add(New ListViewItem(New String() {"Remount image: " & ActionParameters(0), "Pending"}))
+                    MountDir = ActionParameters(0)
                 ElseIf Reader.Lines(x).Replace(" ", "").Trim().StartsWith("Project.Create", StringComparison.OrdinalIgnoreCase) Then
                     TaskList.Add(0)
                     ParseParameters(Reader.Lines(x).Replace("Project.Create", "").Trim())
+                    ValidationForm.ListView1.Items.Add(New ListViewItem(New String() {"Create project: " & ActionParameters(0), "Pending"}))
+                    projName = ActionParameters(0)
+                    projPath = ActionParameters(1)
                 ElseIf Reader.Lines(x).Equals("End Section", StringComparison.OrdinalIgnoreCase) Then
                     Exit For
                 End If

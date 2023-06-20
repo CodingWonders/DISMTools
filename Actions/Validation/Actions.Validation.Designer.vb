@@ -22,6 +22,7 @@ Partial Class ValidationForm
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Label2 = New System.Windows.Forms.Label()
@@ -33,7 +34,13 @@ Partial Class ValidationForm
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.Label6 = New System.Windows.Forms.Label()
+        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.PositionToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LeftToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RightToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.UndockedToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.ContextMenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label1
@@ -123,6 +130,7 @@ Partial Class ValidationForm
         'PictureBox1
         '
         Me.PictureBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PictureBox1.Image = Global.DISMTools.My.Resources.Resources.menu_light
         Me.PictureBox1.Location = New System.Drawing.Point(288, 12)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(24, 24)
@@ -139,6 +147,37 @@ Partial Class ValidationForm
         Me.Label6.Size = New System.Drawing.Size(292, 29)
         Me.Label6.TabIndex = 5
         Me.Label6.Text = "<su> were successful, <warn> finished with warnings, <err> were not successful"
+        '
+        'ContextMenuStrip1
+        '
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.PositionToolStripMenuItem})
+        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(118, 26)
+        '
+        'PositionToolStripMenuItem
+        '
+        Me.PositionToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LeftToolStripMenuItem, Me.RightToolStripMenuItem, Me.UndockedToolStripMenuItem})
+        Me.PositionToolStripMenuItem.Name = "PositionToolStripMenuItem"
+        Me.PositionToolStripMenuItem.Size = New System.Drawing.Size(117, 22)
+        Me.PositionToolStripMenuItem.Text = "Position"
+        '
+        'LeftToolStripMenuItem
+        '
+        Me.LeftToolStripMenuItem.Name = "LeftToolStripMenuItem"
+        Me.LeftToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.LeftToolStripMenuItem.Text = "Left"
+        '
+        'RightToolStripMenuItem
+        '
+        Me.RightToolStripMenuItem.Name = "RightToolStripMenuItem"
+        Me.RightToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RightToolStripMenuItem.Text = "Right"
+        '
+        'UndockedToolStripMenuItem
+        '
+        Me.UndockedToolStripMenuItem.Name = "UndockedToolStripMenuItem"
+        Me.UndockedToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.UndockedToolStripMenuItem.Text = "Undocked"
         '
         'ValidationForm
         '
@@ -164,6 +203,7 @@ Partial Class ValidationForm
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.ContextMenuStrip1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -179,4 +219,9 @@ Partial Class ValidationForm
     Friend WithEvents ColumnHeader2 As System.Windows.Forms.ColumnHeader
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
     Friend WithEvents Label6 As System.Windows.Forms.Label
+    Friend WithEvents ContextMenuStrip1 As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents PositionToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents LeftToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents RightToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents UndockedToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class
