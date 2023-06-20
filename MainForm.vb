@@ -302,7 +302,11 @@ Public Class MainForm
         End If
         UnblockPSHelpers()
         If StartupRemount Then RemountOrphanedImages()
-        If StartupUpdateCheck Then CheckForUpdates(dtBranch) Else UpdatePanel.Visible = False
+        If StartupUpdateCheck Then
+            UpdCheckerBW.RunWorkerAsync()
+        Else
+            UpdatePanel.Visible = False
+        End If
         MountedImageDetectorBW.RunWorkerAsync()
         If dtBranch.Contains("preview") And Not Debugger.IsAttached Then
             VersionTSMI.Visible = True
@@ -419,6 +423,20 @@ Public Class MainForm
     End Sub
 
     Sub CheckForUpdates(branch As String)
+        UpdateLink.LinkArea = New LinkArea(0, 0)
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        UpdateLink.Text = "Checking for updates..."
+                    Case "ESN"
+                        UpdateLink.Text = "Comprobando actualizaciones..."
+                End Select
+            Case 1
+                UpdateLink.Text = "Checking for updates..."
+            Case 2
+                UpdateLink.Text = "Comprobando actualizaciones..."
+        End Select
         Dim latestVer As String = ""
         Using client As New WebClient()
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
@@ -446,6 +464,23 @@ Public Class MainForm
                     UpdatePanel.Visible = False
                 Else
                     Debug.WriteLine("There are updates available. Showing update recommendation...")
+                    Select Case Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    UpdateLink.Text = "A new version is available for download and installation. Click here to learn more"
+                                    UpdateLink.LinkArea = New LinkArea(58, 24)
+                                Case "ESN"
+                                    UpdateLink.Text = "Hay una nueva versión disponible para su descarga e instalación. Haga clic aquí para saber más"
+                                    UpdateLink.LinkArea = New LinkArea(65, 29)
+                            End Select
+                        Case 1
+                            UpdateLink.Text = "A new version is available for download and installation. Click here to learn more"
+                            UpdateLink.LinkArea = New LinkArea(58, 24)
+                        Case 2
+                            UpdateLink.Text = "Hay una nueva versión disponible para su descarga e instalación. Haga clic aquí para saber más"
+                            UpdateLink.LinkArea = New LinkArea(65, 29)
+                    End Select
                     UpdatePanel.Visible = True
                 End If
             End If
@@ -9320,5 +9355,13 @@ Public Class MainForm
         End If
         ActiveInstAccessWarn.Label2.Visible = False
         BeginOnlineManagement(Not showMessage)
+    End Sub
+
+    Private Sub UpdCheckupPanel_Paint(sender As Object, e As PaintEventArgs)
+        ControlPaint.DrawBorder(e.Graphics, Panel1.ClientRectangle, Color.FromArgb(0, 122, 204), ButtonBorderStyle.Solid)
+    End Sub
+
+    Private Sub UpdCheckerBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles UpdCheckerBW.DoWork
+        CheckForUpdates(dtBranch)
     End Sub
 End Class
