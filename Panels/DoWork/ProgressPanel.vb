@@ -158,6 +158,7 @@ Imports System.IO
 Imports System.Net
 Imports System.Text.Encoding
 Imports Microsoft.Dism
+Imports System.Text.RegularExpressions
 
 Public Class ProgressPanel
 
@@ -192,6 +193,10 @@ Public Class ProgressPanel
 
     Public Actions_ImageFile As String
     Public Actions_ImageIndex As Integer
+
+    Public ActionFile As String
+
+    Public ActionParameters As New List(Of String)
 
     ' Initial settings
     Dim DismExe As String
@@ -4938,6 +4943,7 @@ Public Class ProgressPanel
         GatherInitialSwitches()
         If ActionRunning Then
             InitializeActionRuntime(IsInValidationMode)
+            ReadActionFile(ActionFile)
         Else
             If TaskList.Count > 2 Then
                 AllPB.Maximum = TaskList.Count * 100
@@ -4987,12 +4993,21 @@ Public Class ProgressPanel
 
     Sub GetTasks(StarterLine As Integer, ActionFile As String)
         Dim Reader As New RichTextBox With {.Text = File.ReadAllText(ActionFile)}
-        For x = StarterLine To Reader.Text.IndexOf("End Section")
+        For x = StarterLine To Reader.Lines.Count - 1
             If String.IsNullOrWhiteSpace(Reader.Lines(x)) Or Reader.Lines(x).StartsWith("'") Then
                 Continue For
             Else
-                If Reader.Lines(x).Replace(" ", "").Trim().StartsWith("Image.Mount") Then
+                If Reader.Lines(x).Replace(" ", "").Trim().StartsWith("Image.Mount", StringComparison.OrdinalIgnoreCase) Then
                     TaskList.Add(15)
+                    ParseParameters(Reader.Lines(x).Replace("Image.Mount", "").Trim())
+                ElseIf Reader.Lines(x).Replace(" ", "").Trim().StartsWith("Image.Remount", StringComparison.OrdinalIgnoreCase) Then
+                    TaskList.Add(18)
+                    ParseParameters(Reader.Lines(x).Replace("Image.Remount", "").Trim())
+                ElseIf Reader.Lines(x).Replace(" ", "").Trim().StartsWith("Project.Create", StringComparison.OrdinalIgnoreCase) Then
+                    TaskList.Add(0)
+                    ParseParameters(Reader.Lines(x).Replace("Project.Create", "").Trim())
+                ElseIf Reader.Lines(x).Equals("End Section", StringComparison.OrdinalIgnoreCase) Then
+                    Exit For
                 End If
             End If
         Next
@@ -5000,13 +5015,21 @@ Public Class ProgressPanel
 
     Sub GetTestImageInfo(StarterLine As Integer, ActionFile As String)
         Dim Reader As New RichTextBox With {.Text = File.ReadAllText(ActionFile)}
-        For x = StarterLine To Reader.Text.IndexOf("End Section")
+        For x = StarterLine To Reader.Lines.Count - 1
             If Reader.Lines(x).Replace(" ", "").Trim().StartsWith("Action.TestImage.FileName", StringComparison.OrdinalIgnoreCase) Then
-                Actions_ImageFile = Reader.Text.Substring(Reader.Lines(x).IndexOf("="))
+                Actions_ImageFile = Reader.Lines(x).Substring(Reader.Lines(x).IndexOf("=")).Replace("=", "").Trim().Replace(Quote, "").Trim()
             ElseIf Reader.Lines(x).Replace(" ", "").Trim().StartsWith("Action.TestImage.ImageIndex", StringComparison.OrdinalIgnoreCase) Then
-                Actions_ImageIndex = CInt(Reader.Text.Substring(Reader.Lines(x).IndexOf("=")))
+                Actions_ImageIndex = CInt(Reader.Lines(x).Substring(Reader.Lines(x).IndexOf("=")).Replace("=", "").Trim().Replace(Quote, "").Trim())
+            ElseIf Reader.Lines(x).Equals("End Section", StringComparison.OrdinalIgnoreCase) Then
+                Exit For
             End If
         Next
+    End Sub
+
+    Sub ParseParameters(Line As String)
+        Dim newLine As String = Line.Trim(New Char() {"("c, ")"c})
+        Dim regex As New Regex(",(?=(?:[^""]*""[^""]*"")*[^""]*$)")
+        ActionParameters = regex.Split(newLine).ToList()
     End Sub
 
 #End Region

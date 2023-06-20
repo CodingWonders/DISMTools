@@ -4,6 +4,8 @@ Imports System.Text.Encoding
 
 Public Class Actions_MainForm
 
+    Public ActionFile As String
+
     Sub InitScintilla(fntName As String, fntSize As Integer)
         ' Initialize Scintilla editor
         Scintilla1.StyleResetDefault()
@@ -164,6 +166,7 @@ Public Class Actions_MainForm
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
         Scintilla1.Text = File.ReadAllText(OpenFileDialog1.FileName)
         Text = "Actions - " & Path.GetFileName(OpenFileDialog1.FileName)
+        ActionFile = OpenFileDialog1.FileName
     End Sub
 
     Private Sub ToolStripButton3_Click(sender As Object, e As EventArgs) Handles ToolStripButton3.Click
@@ -173,11 +176,15 @@ Public Class Actions_MainForm
     Private Sub ToolStripButton4_Click(sender As Object, e As EventArgs) Handles ToolStripButton4.Click
         If SaveFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
             File.WriteAllText(SaveFileDialog1.FileName, Scintilla1.Text, ASCII)
+            ActionFile = SaveFileDialog1.FileName
         End If
     End Sub
 
     Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
-
-
+        ProgressPanel.ActionFile = ActionFile
+        ProgressPanel.ActionRunning = True
+        ProgressPanel.IsInValidationMode = True
+        WindowState = FormWindowState.Minimized
+        ProgressPanel.ShowDialog(MainForm)
     End Sub
 End Class
