@@ -739,6 +739,9 @@
     <None Include="Helpers\extps1\extappx.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Helpers\extps1\mImgMgr.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Installer\Default.isl" />
     <None Include="Installer\Setup.e32" />
     <None Include="Installer\SetupLdr.e32" />
