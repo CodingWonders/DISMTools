@@ -1648,16 +1648,13 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''- Fixed an issue where the background process cancellation dialog would be shown twice when closing the program
-        '''- CODE: removed warning BC42104
+        '''No bugs were fixed in this release
         '''
         '''New features
         '''
-        '''- The program will soon detect Windows builds from the Gallium development semester
-        '''- Mounting a captured image is no longer experimental, with the addition of task lists
-        '''- The program now saves the logs of internal DISM functions in its file, stored in &quot;logs\dism.log&quot;
-        '''- Many enhancements were made to AppX components:
-        '''  - The prog [resto de la cadena truncado]&quot;;.
+        '''- The update check routine is now a background process. This fixes long startup issues caused by slow download speeds
+        '''- Initial work was done to implement the Actions automation system runtime
+        '''- The mounted image manager has been ported to the command line as a utility you can invoke from the Command Console by typing &quot;mimgmgr&quot;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

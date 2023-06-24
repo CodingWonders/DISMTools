@@ -955,22 +955,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes
 
-- Fixed an issue where the background process cancellation dialog would be shown twice when closing the program
-- CODE: removed warning BC42104
+No bugs were fixed in this release
 
 New features
 
-- The program will soon detect Windows builds from the Gallium development semester
-- Mounting a captured image is no longer experimental, with the addition of task lists
-- The program now saves the logs of internal DISM functions in its file, stored in "logs\dism.log"
-- Many enhancements were made to AppX components:
-  - The program now unblocks the extended AppX package getter at startup
-  - The program can now skip AppX framework packages detected by the extended package getter
-  - Help is now available for the topic: "How does the program determine whether an application is registered to a user?"
-  - The program now opens the store assets of most AppX packages in the default photo viewer
-- Background processes have also had improvements:
-  - You no longer have to wait for background processes to finish to perform tasks with a Windows image or installation
-  - After performing an operation, the program will no longer run all background processes. It will now run only those that have seen changes</value>
+- The update check routine is now a background process. This fixes long startup issues caused by slow download speeds
+- Initial work was done to implement the Actions automation system runtime
+- The mounted image manager has been ported to the command line as a utility you can invoke from the Command Console by typing "mimgmgr"</value>
   </data>
   <data name="secprogress_classic" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\secprogress_classic.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
