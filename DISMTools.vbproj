@@ -739,6 +739,9 @@
     <None Include="Helpers\extps1\extappx.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Helpers\extps1\mImgMgr.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Installer\Default.isl" />
     <None Include="Installer\Setup.e32" />
     <None Include="Installer\SetupLdr.e32" />
@@ -830,6 +833,8 @@
     <None Include="Resources\setting_migration.ico" />
     <None Include="Resources\secprogress_classic.png" />
     <None Include="Resources\secprogress_modern.png" />
+    <None Include="Resources\menus\menu_light.png" />
+    <None Include="Resources\menus\menu_dark.png" />
     <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
     <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
     <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />

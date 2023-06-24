@@ -1,7 +1,10 @@
 ﻿Imports System.IO
 Imports ScintillaNET
+Imports System.Text.Encoding
 
 Public Class Actions_MainForm
+
+    Public ActionFile As String
 
     Sub InitScintilla(fntName As String, fntSize As Integer)
         ' Initialize Scintilla editor
@@ -162,10 +165,50 @@ Public Class Actions_MainForm
 
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
         Scintilla1.Text = File.ReadAllText(OpenFileDialog1.FileName)
-        Text = "Actions - " & Path.GetFileName(OpenFileDialog1.FileName)
+        ActionFile = OpenFileDialog1.FileName
+        Text = "Actions - " & Path.GetFileName(ActionFile)
     End Sub
 
     Private Sub ToolStripButton3_Click(sender As Object, e As EventArgs) Handles ToolStripButton3.Click
         OpenFileDialog1.ShowDialog()
+    End Sub
+
+    Private Sub ToolStripButton4_Click(sender As Object, e As EventArgs) Handles ToolStripButton4.Click
+        If ActionFile Is Nothing Or Not File.Exists(ActionFile) Then
+            If SaveFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                File.WriteAllText(SaveFileDialog1.FileName, Scintilla1.Text, ASCII)
+                ActionFile = SaveFileDialog1.FileName
+            End If
+        Else
+            File.WriteAllText(ActionFile, Scintilla1.Text, ASCII)
+        End If
+        Text = "Actions - " & Path.GetFileName(ActionFile)
+    End Sub
+
+    Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
+        If ActionFile Is Nothing Or Not File.Exists(ActionFile) Then
+            If SaveFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                File.WriteAllText(SaveFileDialog1.FileName, Scintilla1.Text, ASCII)
+                ActionFile = SaveFileDialog1.FileName
+            Else
+                Exit Sub
+            End If
+            Text = "Actions - " & Path.GetFileName(ActionFile)
+        End If
+        ProgressPanel.ActionFile = ActionFile
+        ProgressPanel.ActionRunning = True
+        ProgressPanel.IsInValidationMode = True
+        WindowState = FormWindowState.Minimized
+        ProgressPanel.ShowDialog(MainForm)
+    End Sub
+
+    Private Sub Scintilla1_TextChanged(sender As Object, e As EventArgs) Handles Scintilla1.TextChanged
+        If ActionFile IsNot Nothing And File.Exists(ActionFile) Then
+            If File.ReadAllText(ActionFile).ToString() = Scintilla1.Text Then
+                Text = "Actions - " & Path.GetFileName(ActionFile)
+            Else
+                Text = "Actions - " & Path.GetFileName(ActionFile) & "*"
+            End If
+        End If
     End Sub
 End Class

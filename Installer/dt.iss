@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "DISMTools"
-#define MyAppVersion "0.3 Preview"
+#define MyAppVersion "0.3"
 #define MyAppPublisher "CodingWonders Software"
 #define MyAppURL "https://github.com/CodingWonders/DISMTools"
 #define MyAppExeName "DISMTools.exe"
@@ -37,6 +37,12 @@ ArchitecturesInstallIn64BitMode=x64
 CloseApplications=yes
 WizardImageFile=mainImg.bmp
 WizardSmallImageFile=logo.bmp
+
+; Setup version info
+VersionInfoProductVersion={#MyAppVersion}
+VersionInfoProductTextVersion={#MyAppVersion}
+VersionInfoVersion={#MyAppVersion}
+VersionInfoTextVersion={#MyAppVersion}
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"

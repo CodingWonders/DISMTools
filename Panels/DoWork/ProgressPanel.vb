@@ -158,6 +158,7 @@ Imports System.IO
 Imports System.Net
 Imports System.Text.Encoding
 Imports Microsoft.Dism
+Imports System.Text.RegularExpressions
 
 Public Class ProgressPanel
 
@@ -186,6 +187,16 @@ Public Class ProgressPanel
     Public TaskList As New List(Of Integer)                 ' Task list
 
     Dim AllDrivers As Boolean                               ' Detects whether the program should detect all image drivers, taken from MainForm
+
+    Public ActionRunning As Boolean                         ' Detects whether an Action file is being run
+    Public IsInValidationMode As Boolean                    ' Detects whether an Action file is being validated
+
+    Public Actions_ImageFile As String
+    Public Actions_ImageIndex As Integer
+
+    Public ActionFile As String
+
+    Public ActionParameters As New List(Of String)
 
     ' Initial settings
     Dim DismExe As String
@@ -4930,28 +4941,119 @@ Public Class ProgressPanel
         EnglishOut = MainForm.EnglishOutput
         If UseScratchDir And AutoScratch And OnlineMgmt And Not Directory.Exists(Application.StartupPath & "\scratch") Then Directory.CreateDirectory(Application.StartupPath & "\scratch")
         GatherInitialSwitches()
-        If TaskList.Count > 2 Then
-            AllPB.Maximum = TaskList.Count * 100
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
-                            taskCountLbl.Text = "Tasks: 1/" & TaskList.Count
-                        Case "ESN"
-                            taskCountLbl.Text = "Tareas: 1/" & TaskList.Count
-                    End Select
-                Case 1
-                    taskCountLbl.Text = "Tasks: 1/" & TaskList.Count
-                Case 2
-                    taskCountLbl.Text = "Tareas: 1/" & TaskList.Count
-            End Select
-            OperationNum = 1000
+        If ActionRunning Then
+            InitializeActionRuntime(IsInValidationMode)
+            ReadActionFile(ActionFile)
+            Exit Sub
         Else
-            GetTasks(OperationNum)
+            If TaskList.Count > 2 Then
+                AllPB.Maximum = TaskList.Count * 100
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                taskCountLbl.Text = "Tasks: 1/" & TaskList.Count
+                            Case "ESN"
+                                taskCountLbl.Text = "Tareas: 1/" & TaskList.Count
+                        End Select
+                    Case 1
+                        taskCountLbl.Text = "Tasks: 1/" & TaskList.Count
+                    Case 2
+                        taskCountLbl.Text = "Tareas: 1/" & TaskList.Count
+                End Select
+                OperationNum = 1000
+            Else
+                GetTasks(OperationNum)
+            End If
         End If
         taskCountLbl.Visible = True
         ProgressBW.RunWorkerAsync()
     End Sub
+
+#Region "Actions"
+
+    ' This is temporary stuff. This will become improved
+
+    Sub InitializeActionRuntime(Validate As Boolean)
+        LogView.AppendText("Running the Action file " & If(Validate, "with validation", "") & "...")
+        If Validate Then ValidationForm.Show()
+    End Sub
+
+    Sub ReadActionFile(ActionFile As String)
+        Dim Reader As New RichTextBox With {.Text = File.ReadAllText(ActionFile)}
+        For x = 0 To Reader.Lines.Count - 1
+            If String.IsNullOrWhiteSpace(Reader.Lines(x)) Then
+                Continue For
+            ElseIf Reader.Lines(x).StartsWith("Section Properties()") And IsInValidationMode Then
+                GetTestImageInfo(x, ActionFile)
+            ElseIf Reader.Lines(x).StartsWith("Section Main()") Then
+                GetTasks(x, ActionFile)
+            End If
+        Next
+    End Sub
+
+    Sub GetTasks(StarterLine As Integer, ActionFile As String)
+        Dim Reader As New RichTextBox With {.Text = File.ReadAllText(ActionFile)}
+        For x = StarterLine To Reader.Lines.Count - 1
+            If String.IsNullOrWhiteSpace(Reader.Lines(x)) Or Reader.Lines(x).StartsWith("'") Then
+                Continue For
+            Else
+                If Reader.Lines(x).Replace(" ", "").Trim().StartsWith("Image.Mount", StringComparison.OrdinalIgnoreCase) Then
+                    TaskList.Add(15)
+                    ParseParameters(Reader.Lines(x).Replace("Image.Mount", "").Trim())
+                    ValidationForm.ListView1.Items.Add(New ListViewItem(New String() {"Mount image: " & ActionParameters(0), "Pending"}))
+                    SourceImg = ActionParameters(0)
+                    ImgIndex = ActionParameters(1)
+                    MountDir = ActionParameters(2)
+                    isReadOnly = False
+                    isOptimized = False
+                    isIntegrityTested = False
+                    Select Case ActionParameters.Count
+                        Case 4
+                            isReadOnly = If(ActionParameters(3).Equals("True", StringComparison.OrdinalIgnoreCase), True, False)
+                        Case 5
+                            isReadOnly = If(ActionParameters(4).Equals("True", StringComparison.OrdinalIgnoreCase), True, False)
+                        Case 6
+                            isReadOnly = If(ActionParameters(5).Equals("True", StringComparison.OrdinalIgnoreCase), True, False)
+                    End Select
+                ElseIf Reader.Lines(x).Replace(" ", "").Trim().StartsWith("Image.Remount", StringComparison.OrdinalIgnoreCase) Then
+                    TaskList.Add(18)
+                    ParseParameters(Reader.Lines(x).Replace("Image.Remount", "").Trim())
+                    ValidationForm.ListView1.Items.Add(New ListViewItem(New String() {"Remount image: " & ActionParameters(0), "Pending"}))
+                    MountDir = ActionParameters(0)
+                ElseIf Reader.Lines(x).Replace(" ", "").Trim().StartsWith("Project.Create", StringComparison.OrdinalIgnoreCase) Then
+                    TaskList.Add(0)
+                    ParseParameters(Reader.Lines(x).Replace("Project.Create", "").Trim())
+                    ValidationForm.ListView1.Items.Add(New ListViewItem(New String() {"Create project: " & ActionParameters(0), "Pending"}))
+                    projName = ActionParameters(0)
+                    projPath = ActionParameters(1)
+                ElseIf Reader.Lines(x).Equals("End Section", StringComparison.OrdinalIgnoreCase) Then
+                    Exit For
+                End If
+            End If
+        Next
+    End Sub
+
+    Sub GetTestImageInfo(StarterLine As Integer, ActionFile As String)
+        Dim Reader As New RichTextBox With {.Text = File.ReadAllText(ActionFile)}
+        For x = StarterLine To Reader.Lines.Count - 1
+            If Reader.Lines(x).Replace(" ", "").Trim().StartsWith("Action.TestImage.FileName", StringComparison.OrdinalIgnoreCase) Then
+                Actions_ImageFile = Reader.Lines(x).Substring(Reader.Lines(x).IndexOf("=")).Replace("=", "").Trim().Replace(Quote, "").Trim()
+            ElseIf Reader.Lines(x).Replace(" ", "").Trim().StartsWith("Action.TestImage.ImageIndex", StringComparison.OrdinalIgnoreCase) Then
+                Actions_ImageIndex = CInt(Reader.Lines(x).Substring(Reader.Lines(x).IndexOf("=")).Replace("=", "").Trim().Replace(Quote, "").Trim())
+            ElseIf Reader.Lines(x).Equals("End Section", StringComparison.OrdinalIgnoreCase) Then
+                Exit For
+            End If
+        Next
+    End Sub
+
+    Sub ParseParameters(Line As String)
+        Dim newLine As String = Line.Trim(New Char() {"("c, ")"c})
+        Dim regex As New Regex(",(?=(?:[^""]*""[^""]*"")*[^""]*$)")
+        ActionParameters = regex.Split(newLine).ToList()
+    End Sub
+
+#End Region
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
         If File.Exists(Application.StartupPath & "\logs\" & dateStr) Then
