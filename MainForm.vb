@@ -490,7 +490,7 @@ Public Class MainForm
     Sub UnblockPSHelpers()
         Dim PSUnblocker As New Process()
         PSUnblocker.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\System32\WindowsPowerShell\v1.0\powershell.exe"
-        PSUnblocker.StartInfo.Arguments = "-executionpolicy unrestricted -command Unblock-File " & Quote & Application.StartupPath & "\bin\extps1\extappx.ps1" & Quote
+        PSUnblocker.StartInfo.Arguments = "-executionpolicy unrestricted -command Unblock-File " & Quote & Application.StartupPath & "\bin\extps1\*.*" & Quote
         PSUnblocker.StartInfo.CreateNoWindow = True
         PSUnblocker.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
         PSUnblocker.Start()
