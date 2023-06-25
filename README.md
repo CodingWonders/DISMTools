@@ -7,11 +7,11 @@
 ![Product image](https://user-images.githubusercontent.com/101426328/233696501-a27a1e20-f489-4010-8f3c-f060fb808fd2.png)
 
 
-DISMTools is a front-end for DISM which lets you manage your Windows Imaging (WIM) files and a whole lot more.
+DISMTools is a front-end for DISM that lets you manage your Windows Imaging (WIM) files and a whole lot more.
 
 ## Key features
 
-- DISMTools is the first project-based GUI. Projects store the mounted image, unattended answer files you want to apply (using the command line at this time), and provide a scratch directory for temporary operations
+- DISMTools is the first project-based GUI. Projects store the mounted image and unattended answer files you want to apply (using the command line at this time), while also providing a scratch directory for temporary operations
 - DISMTools is also smart, checking first if an action can be performed before doing it
 
 ## Supported actions
@@ -48,12 +48,12 @@ The following actions are supported by DISMTools:
   
 ## Unsupported actions
 
-- Getting any kind of information from packages or features (on demand)
+- Getting any information from packages or features (on demand)
 - Regional settings
 - Applying unattended answer files
 - and more, it's in beta stages
 
-These actions will be supported on future releases. They aren't implemented yet because it takes time to create working implementations that don't conflict with the rest of the program
+These actions will be supported in future releases. They aren't implemented yet because it takes time to create working implementations that don't conflict with the rest of the program
 
 ## Building
 
@@ -77,16 +77,16 @@ If you want to contribute to this project, you can do so in many ways:
 
 - Code changes: changes that WILL make it to the next release. If you want to do these, do the following:
 
-  1. Create your separate branch, based on the `dt_pre_****` one. This will make sure your change will arrive in the next preview
+  1. Create your separate branch, based on the **latest** `dt_pre_****` one (you don't want to work on your changes based on an outdated source tree). This will make sure your change can arrive in the next preview
   2. Clone the newly created branch or, if you already cloned the repository, fetch the origin (`git fetch origin`) and switch to your branch
   3. Work on your changes **and test them**. We want to make sure your changes work as expected, and there aren't any [regressions](https://en.wikipedia.org/wiki/Regression_testing) because of them
-  4. Commit your changes and create a pull request. If not set automatically, select the `dt_pre_****` branch to merge the contents to it. We'll review your changes and, if they're ready, we'll merge them.
+  4. Commit your changes and create a pull request. If not set automatically, select the **latest** `dt_pre_****` branch to merge the contents to it. We'll review your changes and, if they're ready, we'll merge them.
 
 - Documentation and/or artwork: if you like the visual side of things more, you can contribute to the Wiki. For more information, read [the following issue](https://github.com/CodingWonders/DISMTools/issues/2)
 
 ## Testing the latest
 
-We continue development of the next version in the Preview branch. To go to it, select "dt_preview" from the branch list. Commits are done every day, and new builds are released every Sunday.
+We continue the development of the next version in the Preview branch. To go to it, select "dt_preview" from the branch list. Commits are done every day, and new builds are released every Sunday.
 
 However, if you want to download the latest release AS SOON AS the project is built with new changes, you can download the [nightly installer](https://github.com/CodingWonders/DISMTools/raw/dt_pre_2371/Installer/Output/dt_setup.exe).
 
