@@ -294,7 +294,17 @@ Public Class MainForm
             BranchTSMI.Visible = True
             Text &= " (debug mode)"
         End If
-        LoadDTSettings(1)
+        ' Read settings file
+        If File.Exists(Application.StartupPath & "\settings.ini") Then
+            Dim SettingReader As New RichTextBox() With {.Text = File.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)}
+            If SettingReader.Text.Contains("SaveOnSettingsIni=1") Then
+                LoadDTSettings(1)
+            ElseIf SettingReader.Text.Contains("SaveOnSettingsIni=0") Then
+                LoadDTSettings(0)
+            End If
+        Else
+            GenerateDTSettings()
+        End If
         imgStatus = 0
         ChangeImgStatus()
         If DismExe <> "" Then
@@ -846,9 +856,68 @@ Public Class MainForm
         ' LoadMode = 1; load from INI file
         If LoadMode = 0 Then
             Try
-
+                Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("preview"), "Preview", "Stable")
+                Dim Key As RegistryKey = Registry.CurrentUser.OpenSubKey(KeyStr)
+                Dim PrgKey As RegistryKey = Key.OpenSubKey("Program")
+                If CInt(PrgKey.GetValue("Volatile")) = 1 Then
+                    VolatileMode = True
+                    Exit Sub
+                Else
+                    VolatileMode = False
+                End If
+                DismExe = PrgKey.GetValue("DismExe").ToString().Replace(Quote, "").Trim()
+                SaveOnSettingsIni = (CInt(PrgKey.GetValue("SaveOnSettingsIni")) = 1)
+                PrgKey.Close()
+                Dim PersKey As RegistryKey = Key.OpenSubKey("Personalization")
+                ColorMode = PersKey.GetValue("ColorMode")
+                Language = PersKey.GetValue("Language")
+                LogFont = PersKey.GetValue("LogFont").ToString()
+                LogFontSize = CInt(PersKey.GetValue("LogFontSi"))
+                LogFontIsBold = (CInt(PersKey.GetValue("LogFontBold")) = 1)
+                ProgressPanelStyle = CInt(PersKey.GetValue("SecondaryProgressPanelStyle"))
+                AllCaps = (CInt(PersKey.GetValue("AllCaps")) = 1)
+                PersKey.Close()
+                Dim LogKey As RegistryKey = Key.OpenSubKey("Logs")
+                LogFile = LogKey.GetValue("LogFile").ToString().Replace(Quote, "").Trim()
+                LogLevel = CInt(LogKey.GetValue("LogLevel"))
+                AutoLogs = (CInt(LogKey.GetValue("AutoLogs")) = 1)
+                LogKey.Close()
+                Dim ImgOpKey As RegistryKey = Key.OpenSubKey("ImgOps")
+                QuietOperations = (CInt(ImgOpKey.GetValue("Quiet")) = 1)
+                SysNoRestart = (CInt(ImgOpKey.GetValue("NoRestart")) = 1)
+                ImgOpKey.Close()
+                Dim ScrDirKey As RegistryKey = Key.OpenSubKey("ScratchDir")
+                UseScratch = (CInt(ScrDirKey.GetValue("UseScratch")) = 1)
+                AutoScrDir = (CInt(ScrDirKey.GetValue("AutoScratch")) = 1)
+                ScratchDir = ScrDirKey.GetValue("ScratchDirLocation").ToString().Replace(Quote, "").Trim()
+                ScrDirKey.Close()
+                Dim OutKey As RegistryKey = Key.OpenSubKey("Output")
+                EnglishOutput = (CInt(OutKey.GetValue("EnglishOutput")) = 1)
+                ReportView = CInt(OutKey.GetValue("ReportView"))
+                OutKey.Close()
+                Dim BGKey As RegistryKey = Key.OpenSubKey("BgProcesses")
+                NotificationShow = (CInt(BGKey.GetValue("ShowNotification")) = 1)
+                NotificationFrequency = CInt(BGKey.GetValue("NotifyFrequency"))
+                BGKey.Close()
+                Dim AdvBGKey As RegistryKey = Key.OpenSubKey("AdvBgProcesses")
+                ExtAppxGetter = (CInt(AdvBGKey.GetValue("EnhancedAppxGetter")) = 1)
+                SkipNonRemovable = (CInt(AdvBGKey.GetValue("SkipNonRemovable")) = 1)
+                AllDrivers = (CInt(AdvBGKey.GetValue("DetectAllDrivers")) = 1)
+                SkipFrameworks = (CInt(AdvBGKey.GetValue("SkipFrameworks")) = 1)
+                RunAllProcs = (CInt(AdvBGKey.GetValue("RunAllProcs")) = 1)
+                AdvBGKey.Close()
+                Dim StartupKey As RegistryKey = Key.OpenSubKey("Startup")
+                StartupRemount = (CInt(StartupKey.GetValue("RemountImages")) = 1)
+                StartupUpdateCheck = (CInt(StartupKey.GetValue("CheckForUpdates")) = 1)
+                StartupKey.Close()
+                Key.Close()
+                ' Apply program colors immediately
+                ChangePrgColors(ColorMode)
+                ' Apply language settings immediately
+                ChangeLangs(Language)
             Catch ex As Exception
-
+                LoadDTSettings(1)
+                Exit Sub
             End Try
         ElseIf LoadMode = 1 Then
             If File.Exists(Application.StartupPath & "\" & "settings.ini") Then
@@ -3088,6 +3157,7 @@ Public Class MainForm
         Try
             Dim ColorModeRk As RegistryKey = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", False)
             Dim ColorMode As String = ColorModeRk.GetValue("AppsUseLightTheme").ToString()
+            ColorModeRk.Close()
             DTSettingForm.RichTextBox2.AppendText("ColorMode=0")
         Catch ex As Exception
             ' Rollback to light theme
