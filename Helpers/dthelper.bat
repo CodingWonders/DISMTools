@@ -56,6 +56,10 @@ echo.
 doskey pwd=cd
 doskey getappxpkg=powershell -executionpolicy unrestricted "bin\extps1\extappx.ps1"
 doskey mimgmgr=powershell -executionpolicy unrestricted "bin\extps1\mImgMgr.ps1"
+doskey cat=type $1
+doskey ls=dir $1
+doskey clear=cls
+doskey history=doskey /history
 if exist ".\extbatch" (
     path %cd%"\extbatch";"%windir%\system32";"%windir%\system32\wbem";"%windir%\system32\WindowsPowerShell\v1.0"
 ) else (
