@@ -45,6 +45,7 @@ The following actions are supported by DISMTools:
 - Other
   - Get complete information of an image
   - Using the project's or program's scratch directory
+  - Basic automation
   
 ## Unsupported actions
 
