@@ -388,11 +388,12 @@ Public Class AddProvAppxPackage
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
         ListBox1.Items.Clear()
         Button4.Enabled = False
+        Button5.Enabled = False
     End Sub
 
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
         If Not ListBox1.SelectedItem = "" Then
-            ListBox1.Items.Remove(ListBox1.SelectedIndex)
+            ListBox1.Items.Remove(ListBox1.SelectedItem)
         End If
         If ListBox1.SelectedItem = "" Then
             Button5.Enabled = False
@@ -1639,5 +1640,24 @@ Public Class AddProvAppxPackage
 
     Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
         CustomDataFileOFD.ShowDialog()
+    End Sub
+
+    Private Sub ListBox1_DragEnter(sender As Object, e As DragEventArgs) Handles ListBox1.DragEnter
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            e.Effect = DragDropEffects.Copy
+        End If
+    End Sub
+
+    Private Sub ListBox1_DragDrop(sender As Object, e As DragEventArgs) Handles ListBox1.DragDrop
+        Dim DependencyFiles() As String = e.Data.GetData(DataFormats.FileDrop)
+        For Each Dependency In DependencyFiles
+            If Not ListBox1.Items.Contains(Dependency) And (Path.GetExtension(Dependency).EndsWith("appx", StringComparison.OrdinalIgnoreCase) Or _
+                                                            Path.GetExtension(Dependency).EndsWith("msix", StringComparison.OrdinalIgnoreCase) Or _
+                                                            Path.GetExtension(Dependency).EndsWith("appxbundle", StringComparison.OrdinalIgnoreCase) Or _
+                                                            Path.GetExtension(Dependency).EndsWith("msixbundle", StringComparison.OrdinalIgnoreCase)) Then
+                ListBox1.Items.Add(Dependency)
+            End If
+        Next
+        If ListBox1.Items.Count > 0 Then Button4.Enabled = True
     End Sub
 End Class
