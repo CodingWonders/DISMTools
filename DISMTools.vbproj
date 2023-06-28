@@ -116,7 +116,6 @@
     <Compile Include="Actions\Validation\Actions.Validation.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Help\Help_RegisteredAppxPkgsDlg.Designer.vb">
       <DependentUpon>Help_RegisteredAppxPkgsDlg.vb</DependentUpon>
     </Compile>
