@@ -328,7 +328,7 @@ Public Class MainForm
             HomePanel.Visible = False
             Visible = True
             ProgressPanel.OperationNum = 990
-            LoadDTProj(argProjPath, Path.GetFileNameWithoutExtension(argProjPath), True)
+            LoadDTProj(argProjPath, Path.GetFileNameWithoutExtension(argProjPath), True, False)
         End If
         If argOnline Then
             BeginOnlineManagement(True)
@@ -5116,7 +5116,7 @@ Public Class MainForm
         End If
     End Sub
 
-    Sub LoadDTProj(DTProjPath As String, DTProjFileName As String, BypassFileDialog As Boolean)
+    Sub LoadDTProj(DTProjPath As String, DTProjFileName As String, BypassFileDialog As Boolean, SkipBGProcs As Boolean)
         If File.Exists(DTProjPath) Then
             CheckDTProjHeaders(DTProjPath)
             If isSqlServerDTProj Then
@@ -5156,7 +5156,7 @@ Public Class MainForm
                 PopulateProjectTree(prjName)
                 isProjectLoaded = True
                 IsImageMounted = False
-                UpdateProjProperties(False, False)
+                UpdateProjProperties(False, False, SkipBGProcs)
                 Button1.Enabled = True
                 Button2.Enabled = False
                 Button3.Enabled = False
@@ -5261,27 +5261,27 @@ Public Class MainForm
                             ' whether the image's Windows folder exists
                             IsImageMounted = True
                             If imgRW = "Yes" Then
-                                UpdateProjProperties(True, False)
+                                UpdateProjProperties(True, False, SkipBGProcs)
                             ElseIf imgRW = "No" Then
-                                UpdateProjProperties(True, True)
+                                UpdateProjProperties(True, True, SkipBGProcs)
                             Else
                                 ' Assume it has read-write permissions
-                                UpdateProjProperties(True, False)
+                                UpdateProjProperties(True, False, SkipBGProcs)
                             End If
                         ElseIf Directory.Exists(MountDir & "\Windows") Then
                             ' This is for these cases where image was mounted to outside the project
                             IsImageMounted = True
                             If imgRW = "Yes" Then
-                                UpdateProjProperties(True, False)
+                                UpdateProjProperties(True, False, SkipBGProcs)
                             ElseIf imgRW = "No" Then
-                                UpdateProjProperties(True, True)
+                                UpdateProjProperties(True, True, SkipBGProcs)
                             Else
                                 ' Assume it has read-write permissions
-                                UpdateProjProperties(True, False)
+                                UpdateProjProperties(True, False, SkipBGProcs)
                             End If
                         Else
                             IsImageMounted = False
-                            UpdateProjProperties(False, False)
+                            UpdateProjProperties(False, False, SkipBGProcs)
                         End If
                         If IsImageMounted Then
                             Button1.Enabled = False
@@ -5400,12 +5400,12 @@ Public Class MainForm
                         ' whether the image's Windows folder exists
                         IsImageMounted = True
                         If imgRW = "Yes" Then
-                            UpdateProjProperties(True, False)
+                            UpdateProjProperties(True, False, SkipBGProcs)
                         ElseIf imgRW = "No" Then
-                            UpdateProjProperties(True, True)
+                            UpdateProjProperties(True, True, SkipBGProcs)
                         Else
                             ' Assume it has read-write permissions
-                            UpdateProjProperties(True, False)
+                            UpdateProjProperties(True, False, SkipBGProcs)
                         End If
                     ElseIf Directory.Exists(MountDir & "\Windows") Then
                         ' This is for these cases where image was mounted to outside the project
@@ -5476,6 +5476,7 @@ Public Class MainForm
     End Sub
 
     Sub SaveDTProj()
+        If ProjectValueLoadForm.RichTextBox1.Text = "" Then ProjectValueLoadForm.RichTextBox1.Text = File.ReadAllText(projPath & "\settings\project.ini", UTF8)
         ' Clear Rich Text Boxes
         'ProjectValueLoadForm.RichTextBox2.Text = ""
         'ProjectValueLoadForm.RichTextBox3.Text = ""
@@ -5909,7 +5910,7 @@ Public Class MainForm
         Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
     End Sub
 
-    Sub UpdateProjProperties(WasImageMounted As Boolean, IsReadOnly As Boolean)
+    Sub UpdateProjProperties(WasImageMounted As Boolean, IsReadOnly As Boolean, Optional SkipBGProcs As Boolean = False)
         If WasImageMounted Then
             Select Case Language
                 Case 0
@@ -5961,7 +5962,7 @@ Public Class MainForm
         Else
             RemountImageWithWritePermissionsToolStripMenuItem.Enabled = False
         End If
-
+        If SkipBGProcs Then Exit Sub
         ' Set image properties
         If expBackgroundProcesses Then
             ImgBW.RunWorkerAsync()
@@ -7295,7 +7296,7 @@ Public Class MainForm
         If OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
             If File.Exists(OpenFileDialog1.FileName) Then
                 ProgressPanel.OperationNum = 990
-                LoadDTProj(OpenFileDialog1.FileName, Path.GetFileNameWithoutExtension(OpenFileDialog1.FileName), False)
+                LoadDTProj(OpenFileDialog1.FileName, Path.GetFileNameWithoutExtension(OpenFileDialog1.FileName), False, False)
             End If
         End If
     End Sub
@@ -8680,7 +8681,7 @@ Public Class MainForm
                 If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement, False, True), False)
                 If ImgBW.IsBusy Then Exit Sub
                 ProgressPanel.OperationNum = 990
-                LoadDTProj(OpenFileDialog1.FileName, Path.GetFileNameWithoutExtension(OpenFileDialog1.FileName), False)
+                LoadDTProj(OpenFileDialog1.FileName, Path.GetFileNameWithoutExtension(OpenFileDialog1.FileName), False, False)
             End If
         End If
     End Sub

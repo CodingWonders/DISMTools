@@ -4401,7 +4401,7 @@ Public Class ProgressPanel
     End Sub
 
     Private Sub ProgressBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ProgressBW.RunWorkerCompleted
-        TaskList.Clear()
+        If Not ActionRunning Then TaskList.Clear()
         If IsSuccessful Then
             If OperationNum = 9 Then LogView.AppendText(CrLf & _
                                "The volume images have been deleted. If you want to remount this image into a DISMTools project, choose the " & Quote & "Mount image" & Quote & " option, or use this command if you want to mount it elsewhere:" & CrLf & _
@@ -4420,7 +4420,7 @@ Public Class ProgressPanel
                 Thread.Sleep(2000)
             End If
             If OperationNum = 0 Then
-                MainForm.LoadDTProj(projPath & "\" & projName & "\" & projName & ".dtproj", projName, True)
+                MainForm.LoadDTProj(projPath & "\" & projName & "\" & projName & ".dtproj", projName, True, False)
             ElseIf OperationNum = 6 Then
                 If CaptureMountDestImg Then
                     MainForm.SourceImg = SourceImg
@@ -4630,18 +4630,24 @@ Public Class ProgressPanel
                         End If
                         MainForm.DetectMountedImages(False)
                     ElseIf TaskList.Last = 15 Then
+                        If ActionRunning And MountDir.Contains(projPath) Then
+                            MainForm.LoadDTProj(projPath & "\" & projName & "\" & projName & ".dtproj", projName, True, True)
+                        End If
                         MainForm.bwBackgroundProcessAction = 0
                         MainForm.SourceImg = SourceImg
                         MainForm.ImgIndex = ImgIndex
                         MainForm.MountDir = MountDir
                         MainForm.DetectMountedImages(False)
                         If isReadOnly Then
-                            MainForm.UpdateProjProperties(True, True)
+                            MainForm.UpdateProjProperties(True, True, ActionRunning)
                         Else
-                            MainForm.UpdateProjProperties(True, False)
+                            MainForm.UpdateProjProperties(True, False, ActionRunning)
                         End If
                         ' This is a crucial change, so save things immediately
                         MainForm.SaveDTProj()
+                        If ActionRunning And MountDir.Contains(projPath) Then
+                            MainForm.UnloadDTProj(False, True, False)
+                        End If
                     End If
                 End If
             End If
@@ -4658,6 +4664,7 @@ Public Class ProgressPanel
                 Case 2
                     MainForm.MenuDesc.Text = "Listo"
             End Select
+            ActionRunning = False
             MainForm.StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
             MainForm.ToolStripButton4.Visible = False
             Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
@@ -5018,9 +5025,9 @@ Public Class ProgressPanel
                     TaskList.Add(15)
                     ParseParameters(Reader.Lines(x).Replace("Image.Mount", "").Trim())
                     ValidationForm.ListView1.Items.Add(New ListViewItem(New String() {"Mount image: " & ActionParameters(0), "Pending"}))
-                    SourceImg = ActionParameters(0)
-                    ImgIndex = ActionParameters(1)
-                    MountDir = ActionParameters(2)
+                    SourceImg = ActionParameters(0).Replace(Quote, "").Trim()
+                    ImgIndex = CInt(ActionParameters(1).Remove(0, 1).Replace(Quote, "").Trim())
+                    MountDir = ActionParameters(2).Remove(0, 1).Replace(Quote, "").Trim()
                     isReadOnly = False
                     isOptimized = False
                     isIntegrityTested = False
