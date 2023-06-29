@@ -4665,6 +4665,7 @@ Public Class ProgressPanel
                     MainForm.MenuDesc.Text = "Listo"
             End Select
             ActionRunning = False
+            TaskList.Clear()
             MainForm.StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
             MainForm.ToolStripButton4.Visible = False
             Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
@@ -5043,7 +5044,7 @@ Public Class ProgressPanel
                     TaskList.Add(18)
                     ParseParameters(Reader.Lines(x).Replace("Image.Remount", "").Trim())
                     ValidationForm.ListView1.Items.Add(New ListViewItem(New String() {"Remount image: " & ActionParameters(0), "Pending"}))
-                    MountDir = ActionParameters(0)
+                    MountDir = ActionParameters(0).Replace(Quote, "").Trim()
                 ElseIf Reader.Lines(x).Replace(" ", "").Trim().StartsWith("Project.Create", StringComparison.OrdinalIgnoreCase) Then
                     TaskList.Add(0)
                     ParseParameters(Reader.Lines(x).Replace("Project.Create", "").Trim())

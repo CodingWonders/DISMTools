@@ -910,6 +910,16 @@ Public Class MainForm
                 StartupRemount = (CInt(StartupKey.GetValue("RemountImages")) = 1)
                 StartupUpdateCheck = (CInt(StartupKey.GetValue("CheckForUpdates")) = 1)
                 StartupKey.Close()
+                Dim WndKey As RegistryKey = Key.OpenSubKey("WndParams")
+                Width = CInt(WndKey.GetValue("WndWidth"))
+                Height = CInt(WndKey.GetValue("WndHeight"))
+                StartPosition = If(CInt(WndKey.GetValue("WndCenter")) = 1, FormStartPosition.CenterScreen, FormStartPosition.Manual)
+                If StartPosition = FormStartPosition.CenterScreen Then Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2)
+                If StartPosition <> FormStartPosition.CenterScreen Then
+                    Left = CInt(WndKey.GetValue("WndLeft"))
+                    Top = CInt(WndKey.GetValue("WndTop"))
+                End If
+                WndKey.Close()
                 Key.Close()
                 ' Apply program colors immediately
                 ChangePrgColors(ColorMode)
@@ -976,6 +986,17 @@ Public Class MainForm
                         LogFile = line.Replace("LogFile=", "").Trim().Replace(Quote, "").Trim()
                     ElseIf line.StartsWith("ScratchDirLocation=", StringComparison.OrdinalIgnoreCase) Then
                         ScratchDir = line.Replace("ScratchDirLocation=", "").Trim().Replace(Quote, "").Trim()
+                    ElseIf line.StartsWith("WndWidth=", StringComparison.OrdinalIgnoreCase) Then
+                        Width = CInt(line.Replace("WndWidth=", "").Trim())
+                    ElseIf line.StartsWith("WndHeight=", StringComparison.OrdinalIgnoreCase) Then
+                        Height = CInt(line.Replace("WndHeight=", "").Trim())
+                    ElseIf line.StartsWith("WndCenter=", StringComparison.OrdinalIgnoreCase) Then
+                        StartPosition = If(CInt(line.Replace("WndCenter=", "").Trim()) = 1, FormStartPosition.CenterScreen, FormStartPosition.Manual)
+                        If StartPosition = FormStartPosition.CenterScreen Then Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2)
+                    ElseIf line.StartsWith("WndLeft=", StringComparison.OrdinalIgnoreCase) Then
+                        If StartPosition <> FormStartPosition.CenterScreen Then Left = CInt(line.Replace("WndLeft=", "").Trim())
+                    ElseIf line.StartsWith("WndTop=", StringComparison.OrdinalIgnoreCase) Then
+                        If StartPosition <> FormStartPosition.CenterScreen Then Top = CInt(line.Replace("WndTop=", "").Trim())
                     End If
                 Next
                 If DTSettingForm.RichTextBox1.Text.Contains("LogFontBold=0") Then
@@ -3196,6 +3217,12 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Startup]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("RemountImages=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "CheckForUpdates=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[WndParams]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("WndWidth=1280")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "WndHeight=720")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "WndCenter=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "WndLeft=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "WndTop=0")
         File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
         Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("preview"), "Preview", "Stable")
         Dim Key As RegistryKey = Registry.CurrentUser.CreateSubKey(KeyStr)
@@ -3246,6 +3273,13 @@ Public Class MainForm
         StartupKey.SetValue("RemountImages", If(StartupRemount, 1, 0), RegistryValueKind.DWord)
         StartupKey.SetValue("CheckForUpdates", If(StartupUpdateCheck, 1, 0), RegistryValueKind.DWord)
         StartupKey.Close()
+        Dim WndKey As RegistryKey = Key.CreateSubKey("WndParams")
+        WndKey.SetValue("WndWidth", 1280, RegistryValueKind.DWord)
+        WndKey.SetValue("WndHeight", 720, RegistryValueKind.DWord)
+        WndKey.SetValue("WndCenter", 1, RegistryValueKind.DWord)
+        WndKey.SetValue("WndLeft", 0, RegistryValueKind.DWord)
+        WndKey.SetValue("WndTop", 0, RegistryValueKind.DWord)
+        WndKey.Close()
         Key.Close()
     End Sub
 
@@ -3405,6 +3439,16 @@ Public Class MainForm
                 Else
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "CheckForUpdates=0")
                 End If
+                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[WndParams]" & CrLf)
+                DTSettingForm.RichTextBox2.AppendText("WndWidth=" & Width)
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "WndHeight=" & Height)
+                If Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2) Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "WndCenter=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "WndCenter=0")
+                End If
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "WndLeft=" & Left)
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "WndTop=" & Top)
                 File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
             Else
                 Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("preview"), "Preview", "Stable")
@@ -3456,6 +3500,17 @@ Public Class MainForm
                 StartupKey.SetValue("RemountImages", If(StartupRemount, 1, 0), RegistryValueKind.DWord)
                 StartupKey.SetValue("CheckForUpdates", If(StartupUpdateCheck, 1, 0), RegistryValueKind.DWord)
                 StartupKey.Close()
+                Dim WndKey As RegistryKey = Key.CreateSubKey("WndParams")
+                WndKey.SetValue("WndWidth", Width, RegistryValueKind.DWord)
+                WndKey.SetValue("WndHeight", Height, RegistryValueKind.DWord)
+                If Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2) Then
+                    WndKey.SetValue("WndCenter", 1, RegistryValueKind.DWord)
+                Else
+                    WndKey.SetValue("WndCenter", 0, RegistryValueKind.DWord)
+                End If
+                WndKey.SetValue("WndLeft", Left, RegistryValueKind.DWord)
+                WndKey.SetValue("WndTop", Top, RegistryValueKind.DWord)
+                WndKey.Close()
                 Key.Close()
             End If
         End If
