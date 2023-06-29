@@ -9087,7 +9087,21 @@ Public Class MainForm
             ' Continue
         End Try
         If suitableFolderName <> "" Then
-            If Directory.Exists(suitableFolderName & "\Assets") Then Process.Start(suitableFolderName & "\Assets")
+            If File.Exists(suitableFolderName & "\AppxManifest.xml") Then
+                Dim ManFile As New RichTextBox() With {
+                    .Text = File.ReadAllText(suitableFolderName & "\AppxManifest.xml")
+                }
+                For Each line In ManFile.Lines
+                    If line.Contains("<Logo>") Then
+                        Dim SplitPaths As New List(Of String)
+                        SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
+                        SplitPaths.RemoveAt(SplitPaths.Count - 1)
+                        Dim newPath As String = String.Join("\", SplitPaths)
+                        Process.Start(suitableFolderName & "\" & newPath)
+                        Exit For
+                    End If
+                Next
+            End If
             Exit Sub
         End If
         If OnlineManagement Then

@@ -37,6 +37,7 @@ ArchitecturesInstallIn64BitMode=x64
 CloseApplications=yes
 WizardImageFile=mainImg.bmp
 WizardSmallImageFile=logo.bmp
+SetupIconFile=dt_inst.ico
 
 ; Setup version info
 VersionInfoProductVersion={#MyAppVersion}
