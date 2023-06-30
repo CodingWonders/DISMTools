@@ -60,15 +60,12 @@ These actions will be supported in future releases. They aren't implemented yet 
 
 If you want to grab a copy straight from the source code, follow these instructions:
 
-- **Requirements**: 7-Zip
+- **Requirements**: 7-Zip, .NET Framework 4.8 Developer Pack
 
 1. You begin by either cloning the project or downloading a ZIP of the source code. Go to "Code", and select an option from there
 2. Prepare the NuGet packages by running `nugetpkgprep.bat` in the location you cloned the repository to
-3. Open the solution in Visual Studio 2012 or later
-
-    > You will need to install the .NET Framework 4.8 Developer Pack
-    
-3. Finally, go to "Build > Build solution", or press CTRL-Shift-B
+3. Open the solution in Visual Studio 2012 or later    
+4. Finally, go to "Build > Build solution", or press CTRL-Shift-B
 
 **NOTE:** in the event that the program detects an update and lets you download an older version, we suggest that you should disregard its advice (it's not like it will affect the binary being compiled, as it will be recompiled when you build the project, but it will make you waste time)
 
