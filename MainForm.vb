@@ -197,6 +197,12 @@ Public Class MainForm
     Dim fileCount As Integer
     Dim CurrentFileInt As Integer
 
+    ' Window parameters
+    Dim WndWidth As Integer
+    Dim WndHeight As Integer
+    Dim WndLeft As Integer
+    Dim WndTop As Integer
+
     Public CompletedTasks(4) As Boolean
 
     Friend NotInheritable Class NativeMethods
@@ -324,6 +330,10 @@ Public Class MainForm
             VersionTSMI.Visible = False
         End If
         If Not Debugger.IsAttached Then SplashScreen.Close()
+        WndWidth = Width
+        WndHeight = Height
+        WndLeft = Left
+        WndTop = Top
         If argProjPath <> "" Then
             HomePanel.Visible = False
             Visible = True
@@ -3456,15 +3466,15 @@ Public Class MainForm
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "CheckForUpdates=0")
                 End If
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[WndParams]" & CrLf)
-                DTSettingForm.RichTextBox2.AppendText("WndWidth=" & Width)
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "WndHeight=" & Height)
+                DTSettingForm.RichTextBox2.AppendText("WndWidth=" & WndWidth)
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "WndHeight=" & WndHeight)
                 If Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2) Then
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "WndCenter=1")
                 Else
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "WndCenter=0")
                 End If
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "WndLeft=" & Left)
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "WndTop=" & Top)
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "WndLeft=" & WndLeft)
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "WndTop=" & WndTop)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "WndMaximized=" & If(WindowState = FormWindowState.Maximized, "1", "0"))
                 File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
             Else
@@ -3518,15 +3528,15 @@ Public Class MainForm
                 StartupKey.SetValue("CheckForUpdates", If(StartupUpdateCheck, 1, 0), RegistryValueKind.DWord)
                 StartupKey.Close()
                 Dim WndKey As RegistryKey = Key.CreateSubKey("WndParams")
-                WndKey.SetValue("WndWidth", Width, RegistryValueKind.DWord)
-                WndKey.SetValue("WndHeight", Height, RegistryValueKind.DWord)
+                WndKey.SetValue("WndWidth", WndWidth, RegistryValueKind.DWord)
+                WndKey.SetValue("WndHeight", WndHeight, RegistryValueKind.DWord)
                 If Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2) Then
                     WndKey.SetValue("WndCenter", 1, RegistryValueKind.DWord)
                 Else
                     WndKey.SetValue("WndCenter", 0, RegistryValueKind.DWord)
                 End If
-                WndKey.SetValue("WndLeft", Left, RegistryValueKind.DWord)
-                WndKey.SetValue("WndTop", Top, RegistryValueKind.DWord)
+                WndKey.SetValue("WndLeft", WndLeft, RegistryValueKind.DWord)
+                WndKey.SetValue("WndTop", WndTop, RegistryValueKind.DWord)
                 WndKey.SetValue("WndMaximized", If(WindowState = FormWindowState.Maximized, 1, 0), RegistryValueKind.DWord)
                 WndKey.Close()
                 Key.Close()
@@ -8119,6 +8129,10 @@ Public Class MainForm
     End Sub
 
     Private Sub MainForm_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged
+        If WindowState <> FormWindowState.Maximized Then
+            WndWidth = Width
+            WndHeight = Height
+        End If
         If Visible And ColorMode = 0 Then
             ChangePrgColors(0)
         End If
@@ -8187,6 +8201,10 @@ Public Class MainForm
     End Sub
 
     Private Sub MainForm_Move(sender As Object, e As EventArgs) Handles MyBase.Move
+        If WindowState <> FormWindowState.Maximized Then
+            WndLeft = Left
+            WndTop = Top
+        End If
         If BGProcNotify.Visible Then
             If Environment.OSVersion.Version.Major = 10 Then    ' The Left property also includes the window shadows on Windows 10 and 11
                 BGProcNotify.Location = New Point(Left + 8, Top + StatusStrip.Top - (7 + StatusStrip.Height))
