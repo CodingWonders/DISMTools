@@ -1648,13 +1648,17 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''No bugs were fixed in this release
+        '''- Fixed an issue where the progress panel would perform a mounted image manager operation but would not be shown if an action was performed too quickly
         '''
         '''New features
         '''
-        '''- The update check routine is now a background process. This fixes long startup issues caused by slow download speeds
-        '''- Initial work was done to implement the Actions automation system runtime
-        '''- The mounted image manager has been ported to the command line as a utility you can invoke from the Command Console by typing &quot;mimgmgr&quot;.
+        '''Settings
+        '''
+        '''- The program can now load and save settings to and from the registry. In portable copies, this ability is disabled (for obvious reasons)
+        '''- On new installations and downloads, the successful project load notification is now shown once by default
+        '''- Window location and size parameters are now saved
+        '''
+        '''AppX packages        ''' [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

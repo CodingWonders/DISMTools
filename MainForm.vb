@@ -197,6 +197,12 @@ Public Class MainForm
     Dim fileCount As Integer
     Dim CurrentFileInt As Integer
 
+    ' Window parameters
+    Dim WndWidth As Integer
+    Dim WndHeight As Integer
+    Dim WndLeft As Integer
+    Dim WndTop As Integer
+
     Public CompletedTasks(4) As Boolean
 
     Friend NotInheritable Class NativeMethods
@@ -294,7 +300,18 @@ Public Class MainForm
             BranchTSMI.Visible = True
             Text &= " (debug mode)"
         End If
-        LoadDTSettings(1)
+        ' Read settings file
+        If File.Exists(Application.StartupPath & "\settings.ini") Then
+            Dim SettingReader As New RichTextBox() With {.Text = File.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)}
+            If SettingReader.Text.Contains("SaveOnSettingsIni=1") Then
+                LoadDTSettings(1)
+            ElseIf SettingReader.Text.Contains("SaveOnSettingsIni=0") Then
+                LoadDTSettings(0)
+            End If
+        Else
+            GenerateDTSettings()
+            LoadDTSettings(1)
+        End If
         imgStatus = 0
         ChangeImgStatus()
         If DismExe <> "" Then
@@ -314,11 +331,15 @@ Public Class MainForm
             VersionTSMI.Visible = False
         End If
         If Not Debugger.IsAttached Then SplashScreen.Close()
+        WndWidth = Width
+        WndHeight = Height
+        WndLeft = Left
+        WndTop = Top
         If argProjPath <> "" Then
             HomePanel.Visible = False
             Visible = True
             ProgressPanel.OperationNum = 990
-            LoadDTProj(argProjPath, Path.GetFileNameWithoutExtension(argProjPath), True)
+            LoadDTProj(argProjPath, Path.GetFileNameWithoutExtension(argProjPath), True, False)
         End If
         If argOnline Then
             BeginOnlineManagement(True)
@@ -845,10 +866,85 @@ Public Class MainForm
         ' LoadMode = 0; load from registry
         ' LoadMode = 1; load from INI file
         If LoadMode = 0 Then
+            If File.Exists(Application.StartupPath & "\portable") Then
+                SaveOnSettingsIni = True
+                LoadDTSettings(1)
+                Exit Sub
+            End If
             Try
-
+                Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("preview"), "Preview", "Stable")
+                Dim Key As RegistryKey = Registry.CurrentUser.OpenSubKey(KeyStr)
+                Dim PrgKey As RegistryKey = Key.OpenSubKey("Program")
+                If CInt(PrgKey.GetValue("Volatile")) = 1 Then
+                    VolatileMode = True
+                    Exit Sub
+                Else
+                    VolatileMode = False
+                End If
+                DismExe = PrgKey.GetValue("DismExe").ToString().Replace(Quote, "").Trim()
+                SaveOnSettingsIni = (CInt(PrgKey.GetValue("SaveOnSettingsIni")) = 1)
+                PrgKey.Close()
+                Dim PersKey As RegistryKey = Key.OpenSubKey("Personalization")
+                ColorMode = PersKey.GetValue("ColorMode")
+                Language = PersKey.GetValue("Language")
+                LogFont = PersKey.GetValue("LogFont").ToString()
+                LogFontSize = CInt(PersKey.GetValue("LogFontSi"))
+                LogFontIsBold = (CInt(PersKey.GetValue("LogFontBold")) = 1)
+                ProgressPanelStyle = CInt(PersKey.GetValue("SecondaryProgressPanelStyle"))
+                AllCaps = (CInt(PersKey.GetValue("AllCaps")) = 1)
+                PersKey.Close()
+                Dim LogKey As RegistryKey = Key.OpenSubKey("Logs")
+                LogFile = LogKey.GetValue("LogFile").ToString().Replace(Quote, "").Trim()
+                LogLevel = CInt(LogKey.GetValue("LogLevel"))
+                AutoLogs = (CInt(LogKey.GetValue("AutoLogs")) = 1)
+                LogKey.Close()
+                Dim ImgOpKey As RegistryKey = Key.OpenSubKey("ImgOps")
+                QuietOperations = (CInt(ImgOpKey.GetValue("Quiet")) = 1)
+                SysNoRestart = (CInt(ImgOpKey.GetValue("NoRestart")) = 1)
+                ImgOpKey.Close()
+                Dim ScrDirKey As RegistryKey = Key.OpenSubKey("ScratchDir")
+                UseScratch = (CInt(ScrDirKey.GetValue("UseScratch")) = 1)
+                AutoScrDir = (CInt(ScrDirKey.GetValue("AutoScratch")) = 1)
+                ScratchDir = ScrDirKey.GetValue("ScratchDirLocation").ToString().Replace(Quote, "").Trim()
+                ScrDirKey.Close()
+                Dim OutKey As RegistryKey = Key.OpenSubKey("Output")
+                EnglishOutput = (CInt(OutKey.GetValue("EnglishOutput")) = 1)
+                ReportView = CInt(OutKey.GetValue("ReportView"))
+                OutKey.Close()
+                Dim BGKey As RegistryKey = Key.OpenSubKey("BgProcesses")
+                NotificationShow = (CInt(BGKey.GetValue("ShowNotification")) = 1)
+                NotificationFrequency = CInt(BGKey.GetValue("NotifyFrequency"))
+                BGKey.Close()
+                Dim AdvBGKey As RegistryKey = Key.OpenSubKey("AdvBgProcesses")
+                ExtAppxGetter = (CInt(AdvBGKey.GetValue("EnhancedAppxGetter")) = 1)
+                SkipNonRemovable = (CInt(AdvBGKey.GetValue("SkipNonRemovable")) = 1)
+                AllDrivers = (CInt(AdvBGKey.GetValue("DetectAllDrivers")) = 1)
+                SkipFrameworks = (CInt(AdvBGKey.GetValue("SkipFrameworks")) = 1)
+                RunAllProcs = (CInt(AdvBGKey.GetValue("RunAllProcs")) = 1)
+                AdvBGKey.Close()
+                Dim StartupKey As RegistryKey = Key.OpenSubKey("Startup")
+                StartupRemount = (CInt(StartupKey.GetValue("RemountImages")) = 1)
+                StartupUpdateCheck = (CInt(StartupKey.GetValue("CheckForUpdates")) = 1)
+                StartupKey.Close()
+                Dim WndKey As RegistryKey = Key.OpenSubKey("WndParams")
+                Width = CInt(WndKey.GetValue("WndWidth"))
+                Height = CInt(WndKey.GetValue("WndHeight"))
+                StartPosition = If(CInt(WndKey.GetValue("WndCenter")) = 1, FormStartPosition.CenterScreen, FormStartPosition.Manual)
+                If StartPosition = FormStartPosition.CenterScreen Then Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2)
+                If StartPosition <> FormStartPosition.CenterScreen Then
+                    Left = CInt(WndKey.GetValue("WndLeft"))
+                    Top = CInt(WndKey.GetValue("WndTop"))
+                End If
+                WindowState = If(CInt(WndKey.GetValue("WndMaximized")) = 1, FormWindowState.Maximized, FormWindowState.Normal)
+                WndKey.Close()
+                Key.Close()
+                ' Apply program colors immediately
+                ChangePrgColors(ColorMode)
+                ' Apply language settings immediately
+                ChangeLangs(Language)
             Catch ex As Exception
-
+                LoadDTSettings(1)
+                Exit Sub
             End Try
         ElseIf LoadMode = 1 Then
             If File.Exists(Application.StartupPath & "\" & "settings.ini") Then
@@ -862,7 +958,7 @@ Public Class MainForm
                     Exit Sub
                 End If
                 DismExe = DTSettingForm.RichTextBox1.Lines(3).Replace("DismExe=", "").Trim().Replace(Quote, "").Trim()
-                If DTSettingForm.RichTextBox1.Text.Contains("SaveOnSettingsIni=0") Then
+                If DTSettingForm.RichTextBox1.Text.Contains("SaveOnSettingsIni=0") And Not File.Exists(Application.StartupPath & "\portable") Then
                     SaveOnSettingsIni = False
                     LoadDTSettings(0)
                     Exit Sub
@@ -907,6 +1003,17 @@ Public Class MainForm
                         LogFile = line.Replace("LogFile=", "").Trim().Replace(Quote, "").Trim()
                     ElseIf line.StartsWith("ScratchDirLocation=", StringComparison.OrdinalIgnoreCase) Then
                         ScratchDir = line.Replace("ScratchDirLocation=", "").Trim().Replace(Quote, "").Trim()
+                    ElseIf line.StartsWith("WndWidth=", StringComparison.OrdinalIgnoreCase) Then
+                        Width = CInt(line.Replace("WndWidth=", "").Trim())
+                    ElseIf line.StartsWith("WndHeight=", StringComparison.OrdinalIgnoreCase) Then
+                        Height = CInt(line.Replace("WndHeight=", "").Trim())
+                    ElseIf line.StartsWith("WndCenter=", StringComparison.OrdinalIgnoreCase) Then
+                        StartPosition = If(CInt(line.Replace("WndCenter=", "").Trim()) = 1, FormStartPosition.CenterScreen, FormStartPosition.Manual)
+                        If StartPosition = FormStartPosition.CenterScreen Then Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2)
+                    ElseIf line.StartsWith("WndLeft=", StringComparison.OrdinalIgnoreCase) Then
+                        If StartPosition <> FormStartPosition.CenterScreen Then Left = CInt(line.Replace("WndLeft=", "").Trim())
+                    ElseIf line.StartsWith("WndTop=", StringComparison.OrdinalIgnoreCase) Then
+                        If StartPosition <> FormStartPosition.CenterScreen Then Top = CInt(line.Replace("WndTop=", "").Trim())
                     End If
                 Next
                 If DTSettingForm.RichTextBox1.Text.Contains("LogFontBold=0") Then
@@ -1038,6 +1145,11 @@ Public Class MainForm
                     StartupUpdateCheck = True
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("CheckForUpdates=0") Then
                     StartupUpdateCheck = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("WndMaximized=1") Then
+                    WindowState = FormWindowState.Maximized
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("WndMaximized=0") Then
+                    WindowState = FormWindowState.Normal
                 End If
             Else
                 GenerateDTSettings()
@@ -3088,6 +3200,7 @@ Public Class MainForm
         Try
             Dim ColorModeRk As RegistryKey = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", False)
             Dim ColorMode As String = ColorModeRk.GetValue("AppsUseLightTheme").ToString()
+            ColorModeRk.Close()
             DTSettingForm.RichTextBox2.AppendText("ColorMode=0")
         Catch ex As Exception
             ' Rollback to light theme
@@ -3116,7 +3229,7 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "ReportView=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[BgProcesses]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("ShowNotification=1")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "NotifyFrequency=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "NotifyFrequency=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[AdvBgProcesses]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("EnhancedAppxGetter=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipNonRemovable=1")
@@ -3126,7 +3239,81 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Startup]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("RemountImages=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "CheckForUpdates=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[WndParams]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("WndWidth=1280")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "WndHeight=720")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "WndCenter=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "WndLeft=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "WndTop=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "WndMaximized=0")
         File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
+        If File.Exists(Application.StartupPath & "\portable") Then Exit Sub
+        Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("preview"), "Preview", "Stable")
+        Dim Key As RegistryKey = Registry.CurrentUser.CreateSubKey(KeyStr)
+        Dim PrgKey As RegistryKey = Key.CreateSubKey("Program")
+        PrgKey.SetValue("DismExe", Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe" & Quote, RegistryValueKind.ExpandString)
+        PrgKey.SetValue("SaveOnSettingsIni", 1, RegistryValueKind.DWord)
+        PrgKey.SetValue("Volatile", 0, RegistryValueKind.DWord)
+        PrgKey.Close()
+        Dim PersKey As RegistryKey = Key.CreateSubKey("Personalization")
+        Try
+            Dim ColorModeRk As RegistryKey = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", False)
+            Dim ColorMode As String = ColorModeRk.GetValue("AppsUseLightTheme").ToString()
+            ColorModeRk.Close()
+            PersKey.SetValue("ColorMode", 0, RegistryValueKind.DWord)
+        Catch ex As Exception
+            ' Rollback to light theme
+            PersKey.SetValue("ColorMode", 1, RegistryValueKind.DWord)
+        End Try
+        PersKey.SetValue("Language", 0, RegistryValueKind.DWord)
+        PersKey.SetValue("LogFont", "Courier New", RegistryValueKind.String)
+        PersKey.SetValue("LogFontSi", 10, RegistryValueKind.DWord)
+        PersKey.SetValue("LogFontBold", 0, RegistryValueKind.DWord)
+        PersKey.SetValue("SecondaryProgressPanelStyle", 1, RegistryValueKind.DWord)
+        PersKey.SetValue("AllCaps", 0, RegistryValueKind.DWord)
+        PersKey.Close()
+        Dim LogKey As RegistryKey = Key.CreateSubKey("Logs")
+        LogKey.SetValue("LogFile", Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\logs\DISM\DISM.log" & Quote, RegistryValueKind.ExpandString)
+        LogKey.SetValue("LogLevel", 3, RegistryValueKind.DWord)
+        LogKey.SetValue("AutoLogs", 1, RegistryValueKind.DWord)
+        LogKey.Close()
+        Dim ImgOpKey As RegistryKey = Key.CreateSubKey("ImgOps")
+        ImgOpKey.SetValue("Quiet", 0, RegistryValueKind.DWord)
+        ImgOpKey.SetValue("NoRestart", 0, RegistryValueKind.DWord)
+        ImgOpKey.Close()
+        Dim ScrDirKey As RegistryKey = Key.CreateSubKey("ScratchDir")
+        ScrDirKey.SetValue("UseScratch", 0, RegistryValueKind.DWord)
+        ScrDirKey.SetValue("AutoScratch", 1, RegistryValueKind.DWord)
+        ScrDirKey.SetValue("ScratchDirLocation", "", RegistryValueKind.ExpandString)
+        ScrDirKey.Close()
+        Dim OutKey As RegistryKey = Key.CreateSubKey("Output")
+        OutKey.SetValue("EnglishOutput", 1, RegistryValueKind.DWord)
+        OutKey.SetValue("ReportView", 0, RegistryValueKind.DWord)
+        OutKey.Close()
+        Dim BGKey As RegistryKey = Key.CreateSubKey("BgProcesses")
+        BGKey.SetValue("ShowNotification", 1, RegistryValueKind.DWord)
+        BGKey.SetValue("NotifyFrequency", 1, RegistryValueKind.DWord)
+        BGKey.Close()
+        Dim AdvBGKey As RegistryKey = Key.CreateSubKey("AdvBgProcesses")
+        AdvBGKey.SetValue("EnhancedAppxGetter", 1, RegistryValueKind.DWord)
+        AdvBGKey.SetValue("SkipNonRemovable", 1, RegistryValueKind.DWord)
+        AdvBGKey.SetValue("DetectAllDrivers", 0, RegistryValueKind.DWord)
+        AdvBGKey.SetValue("SkipFrameworks", 1, RegistryValueKind.DWord)
+        AdvBGKey.SetValue("RunAllProcs", 0, RegistryValueKind.DWord)
+        AdvBGKey.Close()
+        Dim StartupKey As RegistryKey = Key.CreateSubKey("Startup")
+        StartupKey.SetValue("RemountImages", 1, RegistryValueKind.DWord)
+        StartupKey.SetValue("CheckForUpdates", 1, RegistryValueKind.DWord)
+        StartupKey.Close()
+        Dim WndKey As RegistryKey = Key.CreateSubKey("WndParams")
+        WndKey.SetValue("WndWidth", 1280, RegistryValueKind.DWord)
+        WndKey.SetValue("WndHeight", 720, RegistryValueKind.DWord)
+        WndKey.SetValue("WndCenter", 1, RegistryValueKind.DWord)
+        WndKey.SetValue("WndLeft", 0, RegistryValueKind.DWord)
+        WndKey.SetValue("WndTop", 0, RegistryValueKind.DWord)
+        WndKey.SetValue("WndMaximized", 0, RegistryValueKind.DWord)
+        WndKey.Close()
+        Key.Close()
     End Sub
 
     Sub SaveDTSettings()
@@ -3285,16 +3472,81 @@ Public Class MainForm
                 Else
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "CheckForUpdates=0")
                 End If
+                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[WndParams]" & CrLf)
+                DTSettingForm.RichTextBox2.AppendText("WndWidth=" & WndWidth)
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "WndHeight=" & WndHeight)
+                If Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2) Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "WndCenter=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "WndCenter=0")
+                End If
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "WndLeft=" & WndLeft)
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "WndTop=" & WndTop)
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "WndMaximized=" & If(WindowState = FormWindowState.Maximized, "1", "0"))
                 File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
             Else
-                ' This procedure should not be called yet
-                Try
-                    Registry.CurrentUser.OpenSubKey("Software\DISMTools", True)
-                Catch RegNotFound As NullReferenceException
-                    Registry.CurrentUser.CreateSubKey("Software\DISMTools", True)
-                    Registry.CurrentUser.OpenSubKey("Software\DISMTools", True)
-                End Try
-
+                Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("preview"), "Preview", "Stable")
+                Dim Key As RegistryKey = Registry.CurrentUser.CreateSubKey(KeyStr)
+                Dim PrgKey As RegistryKey = Key.CreateSubKey("Program")
+                PrgKey.SetValue("DismExe", Quote & DismExe & Quote, RegistryValueKind.ExpandString)
+                PrgKey.SetValue("SaveOnSettingsIni", If(SaveOnSettingsIni, 1, 0), RegistryValueKind.DWord)
+                PrgKey.SetValue("Volatile", If(VolatileMode, 1, 0), RegistryValueKind.DWord)
+                PrgKey.Close()
+                Dim PersKey As RegistryKey = Key.CreateSubKey("Personalization")
+                PersKey.SetValue("ColorMode", ColorMode, RegistryValueKind.DWord)
+                PersKey.SetValue("Language", Language, RegistryValueKind.DWord)
+                PersKey.SetValue("LogFont", LogFont, RegistryValueKind.String)
+                PersKey.SetValue("LogFontSi", LogFontSize, RegistryValueKind.DWord)
+                PersKey.SetValue("LogFontBold", If(LogFontIsBold, 1, 0), RegistryValueKind.DWord)
+                PersKey.SetValue("SecondaryProgressPanelStyle", ProgressPanelStyle, RegistryValueKind.DWord)
+                PersKey.SetValue("AllCaps", If(AllCaps, 1, 0), RegistryValueKind.DWord)
+                PersKey.Close()
+                Dim LogKey As RegistryKey = Key.CreateSubKey("Logs")
+                LogKey.SetValue("LogFile", LogFile, RegistryValueKind.ExpandString)
+                LogKey.SetValue("LogLevel", LogLevel, RegistryValueKind.DWord)
+                LogKey.SetValue("AutoLogs", If(AutoLogs, 1, 0), RegistryValueKind.DWord)
+                LogKey.Close()
+                Dim ImgOpKey As RegistryKey = Key.CreateSubKey("ImgOps")
+                ImgOpKey.SetValue("Quiet", If(QuietOperations, 1, 0), RegistryValueKind.DWord)
+                ImgOpKey.SetValue("NoRestart", If(SysNoRestart, 1, 0), RegistryValueKind.DWord)
+                ImgOpKey.Close()
+                Dim ScrDirKey As RegistryKey = Key.CreateSubKey("ScratchDir")
+                ScrDirKey.SetValue("UseScratch", If(UseScratch, 1, 0), RegistryValueKind.DWord)
+                ScrDirKey.SetValue("AutoScratch", If(AutoScrDir, 1, 0), RegistryValueKind.DWord)
+                ScrDirKey.SetValue("ScratchDirLocation", ScratchDir, RegistryValueKind.ExpandString)
+                ScrDirKey.Close()
+                Dim OutKey As RegistryKey = Key.CreateSubKey("Output")
+                OutKey.SetValue("EnglishOutput", If(EnglishOutput, 1, 0), RegistryValueKind.DWord)
+                OutKey.SetValue("ReportView", ReportView, RegistryValueKind.DWord)
+                OutKey.Close()
+                Dim BGKey As RegistryKey = Key.CreateSubKey("BgProcesses")
+                BGKey.SetValue("ShowNotification", If(NotificationShow, 1, 0), RegistryValueKind.DWord)
+                BGKey.SetValue("NotifyFrequency", NotificationFrequency, RegistryValueKind.DWord)
+                BGKey.Close()
+                Dim AdvBGKey As RegistryKey = Key.CreateSubKey("AdvBgProcesses")
+                AdvBGKey.SetValue("EnhancedAppxGetter", If(ExtAppxGetter, 1, 0), RegistryValueKind.DWord)
+                AdvBGKey.SetValue("SkipNonRemovable", If(SkipNonRemovable, 1, 0), RegistryValueKind.DWord)
+                AdvBGKey.SetValue("DetectAllDrivers", If(AllDrivers, 1, 0), RegistryValueKind.DWord)
+                AdvBGKey.SetValue("SkipFrameworks", If(SkipFrameworks, 1, 0), RegistryValueKind.DWord)
+                AdvBGKey.SetValue("RunAllProcs", If(RunAllProcs, 1, 0), RegistryValueKind.DWord)
+                AdvBGKey.Close()
+                Dim StartupKey As RegistryKey = Key.CreateSubKey("Startup")
+                StartupKey.SetValue("RemountImages", If(StartupRemount, 1, 0), RegistryValueKind.DWord)
+                StartupKey.SetValue("CheckForUpdates", If(StartupUpdateCheck, 1, 0), RegistryValueKind.DWord)
+                StartupKey.Close()
+                Dim WndKey As RegistryKey = Key.CreateSubKey("WndParams")
+                WndKey.SetValue("WndWidth", WndWidth, RegistryValueKind.DWord)
+                WndKey.SetValue("WndHeight", WndHeight, RegistryValueKind.DWord)
+                If Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2) Then
+                    WndKey.SetValue("WndCenter", 1, RegistryValueKind.DWord)
+                Else
+                    WndKey.SetValue("WndCenter", 0, RegistryValueKind.DWord)
+                End If
+                WndKey.SetValue("WndLeft", WndLeft, RegistryValueKind.DWord)
+                WndKey.SetValue("WndTop", WndTop, RegistryValueKind.DWord)
+                WndKey.SetValue("WndMaximized", If(WindowState = FormWindowState.Maximized, 1, 0), RegistryValueKind.DWord)
+                WndKey.Close()
+                Key.Close()
             End If
         End If
 
@@ -4954,7 +5206,7 @@ Public Class MainForm
         End If
     End Sub
 
-    Sub LoadDTProj(DTProjPath As String, DTProjFileName As String, BypassFileDialog As Boolean)
+    Sub LoadDTProj(DTProjPath As String, DTProjFileName As String, BypassFileDialog As Boolean, SkipBGProcs As Boolean)
         If File.Exists(DTProjPath) Then
             CheckDTProjHeaders(DTProjPath)
             If isSqlServerDTProj Then
@@ -4994,7 +5246,7 @@ Public Class MainForm
                 PopulateProjectTree(prjName)
                 isProjectLoaded = True
                 IsImageMounted = False
-                UpdateProjProperties(False, False)
+                UpdateProjProperties(False, False, SkipBGProcs)
                 Button1.Enabled = True
                 Button2.Enabled = False
                 Button3.Enabled = False
@@ -5099,27 +5351,27 @@ Public Class MainForm
                             ' whether the image's Windows folder exists
                             IsImageMounted = True
                             If imgRW = "Yes" Then
-                                UpdateProjProperties(True, False)
+                                UpdateProjProperties(True, False, SkipBGProcs)
                             ElseIf imgRW = "No" Then
-                                UpdateProjProperties(True, True)
+                                UpdateProjProperties(True, True, SkipBGProcs)
                             Else
                                 ' Assume it has read-write permissions
-                                UpdateProjProperties(True, False)
+                                UpdateProjProperties(True, False, SkipBGProcs)
                             End If
                         ElseIf Directory.Exists(MountDir & "\Windows") Then
                             ' This is for these cases where image was mounted to outside the project
                             IsImageMounted = True
                             If imgRW = "Yes" Then
-                                UpdateProjProperties(True, False)
+                                UpdateProjProperties(True, False, SkipBGProcs)
                             ElseIf imgRW = "No" Then
-                                UpdateProjProperties(True, True)
+                                UpdateProjProperties(True, True, SkipBGProcs)
                             Else
                                 ' Assume it has read-write permissions
-                                UpdateProjProperties(True, False)
+                                UpdateProjProperties(True, False, SkipBGProcs)
                             End If
                         Else
                             IsImageMounted = False
-                            UpdateProjProperties(False, False)
+                            UpdateProjProperties(False, False, SkipBGProcs)
                         End If
                         If IsImageMounted Then
                             Button1.Enabled = False
@@ -5238,12 +5490,12 @@ Public Class MainForm
                         ' whether the image's Windows folder exists
                         IsImageMounted = True
                         If imgRW = "Yes" Then
-                            UpdateProjProperties(True, False)
+                            UpdateProjProperties(True, False, SkipBGProcs)
                         ElseIf imgRW = "No" Then
-                            UpdateProjProperties(True, True)
+                            UpdateProjProperties(True, True, SkipBGProcs)
                         Else
                             ' Assume it has read-write permissions
-                            UpdateProjProperties(True, False)
+                            UpdateProjProperties(True, False, SkipBGProcs)
                         End If
                     ElseIf Directory.Exists(MountDir & "\Windows") Then
                         ' This is for these cases where image was mounted to outside the project
@@ -5314,6 +5566,7 @@ Public Class MainForm
     End Sub
 
     Sub SaveDTProj()
+        If ProjectValueLoadForm.RichTextBox1.Text = "" Then ProjectValueLoadForm.RichTextBox1.Text = File.ReadAllText(projPath & "\settings\project.ini", UTF8)
         ' Clear Rich Text Boxes
         'ProjectValueLoadForm.RichTextBox2.Text = ""
         'ProjectValueLoadForm.RichTextBox3.Text = ""
@@ -5747,7 +6000,7 @@ Public Class MainForm
         Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
     End Sub
 
-    Sub UpdateProjProperties(WasImageMounted As Boolean, IsReadOnly As Boolean)
+    Sub UpdateProjProperties(WasImageMounted As Boolean, IsReadOnly As Boolean, Optional SkipBGProcs As Boolean = False)
         If WasImageMounted Then
             Select Case Language
                 Case 0
@@ -5799,7 +6052,7 @@ Public Class MainForm
         Else
             RemountImageWithWritePermissionsToolStripMenuItem.Enabled = False
         End If
-
+        If SkipBGProcs Then Exit Sub
         ' Set image properties
         If expBackgroundProcesses Then
             ImgBW.RunWorkerAsync()
@@ -7133,7 +7386,7 @@ Public Class MainForm
         If OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
             If File.Exists(OpenFileDialog1.FileName) Then
                 ProgressPanel.OperationNum = 990
-                LoadDTProj(OpenFileDialog1.FileName, Path.GetFileNameWithoutExtension(OpenFileDialog1.FileName), False)
+                LoadDTProj(OpenFileDialog1.FileName, Path.GetFileNameWithoutExtension(OpenFileDialog1.FileName), False, False)
             End If
         End If
     End Sub
@@ -7883,6 +8136,10 @@ Public Class MainForm
     End Sub
 
     Private Sub MainForm_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged
+        If WindowState <> FormWindowState.Maximized Then
+            WndWidth = Width
+            WndHeight = Height
+        End If
         If Visible And ColorMode = 0 Then
             ChangePrgColors(0)
         End If
@@ -7951,6 +8208,10 @@ Public Class MainForm
     End Sub
 
     Private Sub MainForm_Move(sender As Object, e As EventArgs) Handles MyBase.Move
+        If WindowState <> FormWindowState.Maximized Then
+            WndLeft = Left
+            WndTop = Top
+        End If
         If BGProcNotify.Visible Then
             If Environment.OSVersion.Version.Major = 10 Then    ' The Left property also includes the window shadows on Windows 10 and 11
                 BGProcNotify.Location = New Point(Left + 8, Top + StatusStrip.Top - (7 + StatusStrip.Height))
@@ -8481,6 +8742,7 @@ Public Class MainForm
     End Sub
 
     Private Sub CommitAndUnmountTSMI_Click(sender As Object, e As EventArgs) Handles CommitAndUnmountTSMI.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.OperationNum = 21
         ProgressPanel.UMountLocalDir = False
         ProgressPanel.RandomMountDir = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text   ' Hope there isn't anything to set here
@@ -8491,6 +8753,7 @@ Public Class MainForm
     End Sub
 
     Private Sub DiscardAndUnmountTSMI_Click(sender As Object, e As EventArgs) Handles DiscardAndUnmountTSMI.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.OperationNum = 21
         ProgressPanel.UMountLocalDir = False
         ProgressPanel.RandomMountDir = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text   ' Hope there isn't anything to set here
@@ -8518,7 +8781,7 @@ Public Class MainForm
                 If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement, False, True), False)
                 If ImgBW.IsBusy Then Exit Sub
                 ProgressPanel.OperationNum = 990
-                LoadDTProj(OpenFileDialog1.FileName, Path.GetFileNameWithoutExtension(OpenFileDialog1.FileName), False)
+                LoadDTProj(OpenFileDialog1.FileName, Path.GetFileNameWithoutExtension(OpenFileDialog1.FileName), False, False)
             End If
         End If
     End Sub
@@ -8869,7 +9132,21 @@ Public Class MainForm
             ' Continue
         End Try
         If suitableFolderName <> "" Then
-            If Directory.Exists(suitableFolderName & "\Assets") Then Process.Start(suitableFolderName & "\Assets")
+            If File.Exists(suitableFolderName & "\AppxManifest.xml") Then
+                Dim ManFile As New RichTextBox() With {
+                    .Text = File.ReadAllText(suitableFolderName & "\AppxManifest.xml")
+                }
+                For Each line In ManFile.Lines
+                    If line.Contains("<Logo>") Then
+                        Dim SplitPaths As New List(Of String)
+                        SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
+                        SplitPaths.RemoveAt(SplitPaths.Count - 1)
+                        Dim newPath As String = String.Join("\", SplitPaths)
+                        Process.Start(suitableFolderName & "\" & newPath)
+                        Exit For
+                    End If
+                Next
+            End If
             Exit Sub
         End If
         If OnlineManagement Then

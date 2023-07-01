@@ -3,16 +3,18 @@
 # Import the DISM module
 Import-Module Dism
 
-$mImage = Get-WindowsImage -Mounted
-$selImage = 0
+$global:mImage = Get-WindowsImage -Mounted
+$global:selImage = 0
+$newImg = 0
+$selImgPath = ''
 $ver = '0.3'
 
 function Mark-Image {
     # Refresh the mounted image variable
-    $mImage = Get-WindowsImage -Mounted
-    if ($mImage.Count -ge 1)
+    $global:mImage = Get-WindowsImage -Mounted
+    if ($global:mImage.Count -ge 1)
     {
-        Write-Host -NoNewline "Mark image number [1 - $($mImage.Count)] or press [B] to go back: "
+        Write-Host -NoNewline "Mark image number [1 - $($global:mImage.Count)] or press [B] to go back: "
     }
     else
     {
@@ -20,9 +22,10 @@ function Mark-Image {
     }
 
     $option = Read-Host
-    if ((-not [System.String]::IsNullOrWhitespace($option)) -and $option -le $mImage.Count)
+    if ((-not [System.String]::IsNullOrWhitespace($option)) -and $option -le $global:mImage.Count)
     {
-        $selImage = $option
+        $global:selImage = $option
+        $selImgPath = $global:mImage[$global:selImage - 1].ImagePath
         MainMenu
     }
     elseif ($option -eq "B")
@@ -43,8 +46,8 @@ function Mark-Image {
 
 function Unmount-Image {
     Clear-Host
-    Write-Host "Image about to be unmounted: $($mImage[$selImage - 1].ImagePath)"`n
-    if ($mImage[$selImage - 1].MountMode -eq 1)
+    Write-Host "Image about to be unmounted: $($global:mImage[$global:selImage - 1].ImagePath)"`n
+    if ($global:mImage[$global:selImage - 1].MountMode -eq 1)
     {
         Write-Host "This image is mounted with read-only permissions. You can't commit changes to it."`n
     }
@@ -57,26 +60,26 @@ function Unmount-Image {
     {
         "C" {
             Clear-Host
-            if ($mImage[$selImage - 1].MountMode -eq 1)
+            if ($global:mImage[$global:selImage - 1].MountMode -eq 1)
             {
                 Write-Host "This image is mounted with read-only permissions. Changes cannot be committed to this image."`n`n"If you want to make changes to this image, you must enable write permissions by pressing the [E] key in the main menu."`n -ForegroundColor White -BackgroundColor DarkRed
                 Write-Host "Press ENTER to continue..."
                 Read-Host | Out-Null
                 Unmount-Image
             }
-            Write-Host "Unmounting Windows image:"`n"- Image file and index: $($mImage[$selImage - 1].ImagePath) (index $($mImage[$selImage - 1].ImageIndex))"`n"- Mount directory: $($mImage[$selImage - 1].MountPath)"`n"- Operation: Commit"`n"- Additional opperations: don't check integrity, don't append to new index"
-            Dismount-WindowsImage -Path $mImage[$selImage - 1].MountPath -Save
+            Write-Host "Unmounting Windows image:"`n"- Image file and index: $($global:mImage[$global:selImage - 1].ImagePath) (index $($global:mImage[$global:selImage - 1].ImageIndex))"`n"- Mount directory: $($global:mImage[$global:selImage - 1].MountPath)"`n"- Operation: Commit"`n"- Additional opperations: don't check integrity, don't append to new index"
+            Dismount-WindowsImage -Path $global:mImage[$global:selImage - 1].MountPath -Save
             Write-Host "The image should be unmounted. If you want to continue managing your mounted images, you must mark another one. Press ENTER to continue..."
-            $selImage = 0
+            $global:selImage = 0
             Read-Host | Out-Null
             MainMenu
         }
         "D" {
             Clear-Host
-            Write-Host "Unmounting Windows image:"`n"- Image file and index: $($mImage[$selImage - 1].ImagePath) (index $($mImage[$selImage - 1].ImageIndex))"`n"- Mount directory: $($mImage[$selImage - 1].MountPath)"`n"- Operation: Discard"
-            Dismount-WindowsImage -Path $mImage[$selImage - 1].MountPath -Discard
+            Write-Host "Unmounting Windows image:"`n"- Image file and index: $($global:mImage[$global:selImage - 1].ImagePath) (index $($global:mImage[$global:selImage - 1].ImageIndex))"`n"- Mount directory: $($global:mImage[$global:selImage - 1].MountPath)"`n"- Operation: Discard"
+            Dismount-WindowsImage -Path $global:mImage[$global:selImage - 1].MountPath -Discard
             Write-Host "The image should be unmounted. If you want to continue managing your mounted images, you must mark another one. Press ENTER to continue..."
-            $selImage = 0
+            $global:selImage = 0
             Read-Host | Out-Null
             MainMenu
         }
@@ -95,14 +98,14 @@ function Unmount-Image {
 function Unmount-Settings($checkIntegrity, $appendIndex)
 {
     Clear-Host
-    if ($mImage[$selImage - 1].MountMode -eq 1)
+    if ($global:mImage[$global:selImage - 1].MountMode -eq 1)
     {
         Write-Host "Unmount settings apply to the commit operation. This image was mounted with read-only permissions. Changes cannot be committed to this image."`n`n"If you want to make changes to this image, you must enable write permissions by pressing the [E] key in the main menu."`n -ForegroundColor White -BackgroundColor DarkRed
         Write-Host "Press ENTER to continue..."
         Read-Host | Out-Null
         Unmount-Image
     }
-    Write-Host "Unmount settings for image: $($mImage[$selImage - 1].ImagePath)"`n
+    Write-Host "Unmount settings for image: $($global:mImage[$global:selImage - 1].ImagePath)"`n
     if ($checkIntegrity)
     {
         Write-Host " [X] Check image integrity (press C to modify this setting)"
@@ -132,22 +135,22 @@ function Unmount-Settings($checkIntegrity, $appendIndex)
             Unmount-Settings $checkIntegrity, $appendIndex
         }
         "P" {
-            $cmd = 'Dismount-WindowsImage -Path $mImage[$selImage - 1].MountPath -Save $(if ($checkIntegrity) { -CheckIntegrity }) $(if ($appendIndex) { -Append })'
+            $cmd = 'Dismount-WindowsImage -Path $global:mImage[$global:selImage - 1].MountPath -Save $(if ($checkIntegrity) { -CheckIntegrity }) $(if ($appendIndex) { -Append })'
         }
     }
 }
 
 function Enable-WritePerms {
     Clear-Host
-    Write-Host "Image to enable write permissions to: $($mImage[$selImage - 1].ImagePath)"`n`n"This option will unmount the image specified and (try to) remount it with write permissions."`n`n"PLEASE BE SURE THAT THE SPECIFIED IMAGE STILL EXISTS IN ITS DIRECTORY. If it is located in an external drive or network share, make sure it is either plugged in or online at all times."`n
+    Write-Host "Image to enable write permissions to: $($global:mImage[$global:selImage - 1].ImagePath)"`n`n"This option will unmount the image specified and (try to) remount it with write permissions."`n`n"PLEASE BE SURE THAT THE SPECIFIED IMAGE STILL EXISTS IN ITS DIRECTORY. If it is located in an external drive or network share, make sure it is either plugged in or online at all times."`n
     $option = Read-Host "Proceed (Y/N)?"
     switch ($option)
     {
         "Y" {
             Write-Host "0  % - Unmounting specified image... (step 1 of 2)"
-            Dismount-WindowsImage -Path $mImage[$selImage - 1].MountPath -Discard
+            Dismount-WindowsImage -Path $global:mImage[$global:selImage - 1].MountPath -Discard
             Write-Host "50 % - Remounting specified image with write permissions... (step 2 of 2)"
-            Mount-WindowsImage -ImagePath $mImage[$selImage - 1].ImagePath -Index $mImage[$selImage - 1].ImageIndex -Path $mImage[$selImage - 1].MountPath
+            Mount-WindowsImage -ImagePath $global:mImage[$global:selImage - 1].ImagePath -Index $global:mImage[$global:selImage - 1].ImageIndex -Path $global:mImage[$global:selImage - 1].MountPath
             Write-Host "100% - This operation has completed and the image should have been mounted with write permissions."`n`n"Press ENTER to continue..."
             Read-Host | Out-Null
             MainMenu
@@ -162,36 +165,63 @@ function Enable-WritePerms {
 }
 
 function Update-Listing {
-    $mImage = Get-WindowsImage -Mounted
+    $global:mImage = Get-WindowsImage -Mounted
     # MainMenu
 }
 
 function Get-MenuItems {
     Write-Host "[M]: Mark image for management"
-    if ($selImage -ne 0)
+    if ($global:selImage -ne 0)
     {
         # Begin doing the actual stuff
         Write-Host "[U]: Unmount image"
-        if ($mImage[$selImage - 1].MountStatus -eq 1)
+        if ($global:mImage[$global:selImage - 1].MountStatus -eq 1)
         {
             Write-Host "[R]: Reload servicing"
         }
-        elseif ($mImage[$selImage - 1].MountStatus -eq 2)
+        elseif ($global:mImage[$global:selImage - 1].MountStatus -eq 2)
         {
             Write-Host "[R]: Repair component store"
         }
-        if ($mImage[$selImage - 1].MountMode -eq 1)
+        if ($global:mImage[$global:selImage - 1].MountMode -eq 1)
         {
             Write-Host "[E]: Enable write permissions"
         }
         Write-Host "[A]: Access mount directory"
-        if ((Get-WindowsImage -ImagePath $mImage[$selImage - 1].ImagePath | Select-Object -ExpandProperty ImageIndex).Count -gt 1)
+        if ((Get-WindowsImage -ImagePath $global:mImage[$global:selImage - 1].ImagePath | Select-Object -ExpandProperty ImageIndex).Count -gt 1)
         {
             Write-Host "[V]: Remove volume images..."
         }
     }
     Write-Host "[L]: Update mounted image listing"
     Write-Host "[X]: Exit"
+}
+
+function Detect-MountedImageIndexChanges {
+    $global:mImage = Get-WindowsImage -Mounted
+    if ($global:mImage[$global:selImage - 1].ImagePath -eq $selImgPath)
+    {
+        # All good
+        return
+    }
+    else
+    {
+        if ($($global:mImage | Where-Object { $_.ImagePath -eq $selImgPath } | Select-Object -ExpandProperty ImagePath) -ne $selImgPath)
+        {
+            $global:selImage = 0
+            Write-Host "The image you have marked has been unmounted by an external program. You can't manage this image until you mount it again, and you must mark another image now." -ForegroundColor White -BackgroundColor Red
+            return
+        }
+        # Iterate through each mounted image so that we can switch to the appropriate one
+        for ($i = 0; $i -lt $global:mImage.Count; $i++)
+        {
+            if ($global:mImage[$i].ImagePath -eq $selImgPath)
+            {
+                $global:selImage = $i + 1
+                Write-Host "The image you have marked has moved indexes, so the mounted image manager switched to the index the image is now in."`n"You can continue to do your management tasks." -ForegroundColor White -BackgroundColor DarkBlue
+            }
+        }
+    }
 }
 
 function MainMenu {
@@ -202,13 +232,16 @@ function MainMenu {
     # List mounted Windows images
     Get-WindowsImage -Mounted | Format-Table
     Write-Host `n`n`n
-    if ($selImage -eq 0)
+    if ($global:selImage -eq 0)
     {
         Write-Host "No image has been marked for management. Press the [M] key to mark a mounted image..."
     }
     else
     {
-        Write-Host "Selected image: image $selImage ($($mImage[$selImage - 1].ImagePath))"
+        Detect-MountedImageIndexChanges
+        # Detect whether the previously marked image is 0 and refresh the menu
+        if ($global:selImage -eq 0) { MainMenu }
+        Write-Host "Selected image: image $global:selImage ($($global:mImage[$global:selImage - 1].ImagePath))"
     }
     Write-Host `n
     Get-MenuItems
@@ -219,19 +252,19 @@ function MainMenu {
         "M" { Mark-Image }
         "U" { Unmount-Image }
         "R" {
-            if ($mImage[$selImage - 1].MountStatus -eq 1)
+            if ($global:mImage[$global:selImage - 1].MountStatus -eq 1)
             {
                 Write-Host `n"Reloading servicing for this image..."
-                Mount-WindowsImage -Path $mImage[$selImage - 1].MountPath -Remount
+                Mount-WindowsImage -Path $global:mImage[$global:selImage - 1].MountPath -Remount
                 Write-Host `n"The servicing session for this image should have been reloaded."`n
                 Write-Host "Press ENTER to continue..."
                 Read-Host | Out-Null
                 MainMenu
             }
-            elseif ($mImage[$selImage - 1].MountStatus -eq 2)
+            elseif ($global:mImage[$global:selImage - 1].MountStatus -eq 2)
             {
                 Write-Host `n"Repairing the component store of this image..."
-                Repair-WindowsImage -Path $mImage[$selImage - 1].MountPath -RestoreHealth
+                Repair-WindowsImage -Path $global:mImage[$global:selImage - 1].MountPath -RestoreHealth
                 Write-Host `n"The component store of this image should have been repaired."`n
                 Write-Host "Press ENTER to continue..."
                 Read-Host | Out-Null
@@ -243,14 +276,14 @@ function MainMenu {
             }
         }
         "E" {
-            if ($mImage[$selImage - 1].MountMode -eq 0)
+            if ($global:mImage[$global:selImage - 1].MountMode -eq 0)
             {
                 MainMenu
             }
             Enable-WritePerms
         }
         "A" { 
-            Start-Process -FilePath $(([System.Environment]::GetFolderPath([System.Environment+SpecialFolder]::Windows)) + '\explorer.exe') -ArgumentList $($mImage[$selImage - 1].MountPath)
+            Start-Process -FilePath $(([System.Environment]::GetFolderPath([System.Environment+SpecialFolder]::Windows)) + '\explorer.exe') -ArgumentList $($global:mImage[$global:selImage - 1].MountPath)
             MainMenu
         }
         "L" {

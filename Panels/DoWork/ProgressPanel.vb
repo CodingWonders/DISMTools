@@ -623,7 +623,7 @@ Public Class ProgressPanel
             RunOps(Task)
             AllPB.Value = prevValue + (AllPB.Maximum / taskList.Count)
             prevValue = AllPB.Value
-            currentTCont += 1
+            If Not currentTCont = taskList.Count Then currentTCont += 1
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -4361,7 +4361,7 @@ Public Class ProgressPanel
     End Sub
 
     Private Sub ProgressBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ProgressBW.DoWork
-        If TaskList.Count > 2 Then
+        If TaskList.Count > 2 Or (ActionRunning And TaskList.Count >= 1) Then
             RunTaskList(TaskList)
         Else
             RunOps(OperationNum)
@@ -4401,7 +4401,7 @@ Public Class ProgressPanel
     End Sub
 
     Private Sub ProgressBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ProgressBW.RunWorkerCompleted
-        TaskList.Clear()
+        If Not ActionRunning Then TaskList.Clear()
         If IsSuccessful Then
             If OperationNum = 9 Then LogView.AppendText(CrLf & _
                                "The volume images have been deleted. If you want to remount this image into a DISMTools project, choose the " & Quote & "Mount image" & Quote & " option, or use this command if you want to mount it elsewhere:" & CrLf & _
@@ -4420,7 +4420,7 @@ Public Class ProgressPanel
                 Thread.Sleep(2000)
             End If
             If OperationNum = 0 Then
-                MainForm.LoadDTProj(projPath & "\" & projName & "\" & projName & ".dtproj", projName, True)
+                MainForm.LoadDTProj(projPath & "\" & projName & "\" & projName & ".dtproj", projName, True, False)
             ElseIf OperationNum = 6 Then
                 If CaptureMountDestImg Then
                     MainForm.SourceImg = SourceImg
@@ -4616,31 +4616,39 @@ Public Class ProgressPanel
                 ' This is a crucial change, so save things immediately
                 MainForm.SaveDTProj()
             ElseIf OperationNum = 1000 Then
-                If TaskList.Last = 21 Then
-                    If MainForm.isProjectLoaded And MountDir = MainForm.MountDir Or RandomMountDir = MainForm.MountDir Then
-                        MainForm.UpdateProjProperties(False, False)
-                        MainForm.MountDir = "N/A"
+                If TaskList.Count > 0 Then
+                    If TaskList.Last = 21 Then
+                        If MainForm.isProjectLoaded And MountDir = MainForm.MountDir Or RandomMountDir = MainForm.MountDir Then
+                            MainForm.UpdateProjProperties(False, False)
+                            MainForm.MountDir = "N/A"
+                            ' This is a crucial change, so save things immediately
+                            MainForm.SaveDTProj()
+                            ImgMount.TextBox1.Text = ""     ' The program has a bug where mounting the same image after doing this results in the image file being ""
+                            If MainForm.imgCommitOperation <> -1 Then
+                                MainForm.imgCommitOperation = -1    ' Let program close on later occassions
+                            End If
+                        End If
+                        MainForm.DetectMountedImages(False)
+                    ElseIf TaskList.Last = 15 Then
+                        If ActionRunning And MountDir.Contains(projPath) Then
+                            MainForm.LoadDTProj(projPath & "\" & projName & "\" & projName & ".dtproj", projName, True, True)
+                        End If
+                        MainForm.bwBackgroundProcessAction = 0
+                        MainForm.SourceImg = SourceImg
+                        MainForm.ImgIndex = ImgIndex
+                        MainForm.MountDir = MountDir
+                        MainForm.DetectMountedImages(False)
+                        If isReadOnly Then
+                            MainForm.UpdateProjProperties(True, True, ActionRunning)
+                        Else
+                            MainForm.UpdateProjProperties(True, False, ActionRunning)
+                        End If
                         ' This is a crucial change, so save things immediately
                         MainForm.SaveDTProj()
-                        ImgMount.TextBox1.Text = ""     ' The program has a bug where mounting the same image after doing this results in the image file being ""
-                        If MainForm.imgCommitOperation <> -1 Then
-                            MainForm.imgCommitOperation = -1    ' Let program close on later occassions
+                        If ActionRunning And MountDir.Contains(projPath) Then
+                            MainForm.UnloadDTProj(False, True, False)
                         End If
                     End If
-                    MainForm.DetectMountedImages(False)
-                ElseIf TaskList.Last = 15 Then
-                    MainForm.bwBackgroundProcessAction = 0
-                    MainForm.SourceImg = SourceImg
-                    MainForm.ImgIndex = ImgIndex
-                    MainForm.MountDir = MountDir
-                    MainForm.DetectMountedImages(False)
-                    If isReadOnly Then
-                        MainForm.UpdateProjProperties(True, True)
-                    Else
-                        MainForm.UpdateProjProperties(True, False)
-                    End If
-                    ' This is a crucial change, so save things immediately
-                    MainForm.SaveDTProj()
                 End If
             End If
             Select Case MainForm.Language
@@ -4656,6 +4664,8 @@ Public Class ProgressPanel
                 Case 2
                     MainForm.MenuDesc.Text = "Listo"
             End Select
+            ActionRunning = False
+            TaskList.Clear()
             MainForm.StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
             MainForm.ToolStripButton4.Visible = False
             Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
@@ -4942,9 +4952,23 @@ Public Class ProgressPanel
         If UseScratchDir And AutoScratch And OnlineMgmt And Not Directory.Exists(Application.StartupPath & "\scratch") Then Directory.CreateDirectory(Application.StartupPath & "\scratch")
         GatherInitialSwitches()
         If ActionRunning Then
+            OperationNum = 1000
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            taskCountLbl.Text = "Tasks: 1/" & TaskList.Count
+                        Case "ESN"
+                            taskCountLbl.Text = "Tareas: 1/" & TaskList.Count
+                    End Select
+                Case 1
+                    taskCountLbl.Text = "Tasks: 1/" & TaskList.Count
+                Case 2
+                    taskCountLbl.Text = "Tareas: 1/" & TaskList.Count
+            End Select
             InitializeActionRuntime(IsInValidationMode)
             ReadActionFile(ActionFile)
-            Exit Sub
+            'Exit Sub
         Else
             If TaskList.Count > 2 Then
                 AllPB.Maximum = TaskList.Count * 100
@@ -5002,9 +5026,9 @@ Public Class ProgressPanel
                     TaskList.Add(15)
                     ParseParameters(Reader.Lines(x).Replace("Image.Mount", "").Trim())
                     ValidationForm.ListView1.Items.Add(New ListViewItem(New String() {"Mount image: " & ActionParameters(0), "Pending"}))
-                    SourceImg = ActionParameters(0)
-                    ImgIndex = ActionParameters(1)
-                    MountDir = ActionParameters(2)
+                    SourceImg = ActionParameters(0).Replace(Quote, "").Trim()
+                    ImgIndex = CInt(ActionParameters(1).Remove(0, 1).Replace(Quote, "").Trim())
+                    MountDir = ActionParameters(2).Remove(0, 1).Replace(Quote, "").Trim()
                     isReadOnly = False
                     isOptimized = False
                     isIntegrityTested = False
@@ -5020,13 +5044,13 @@ Public Class ProgressPanel
                     TaskList.Add(18)
                     ParseParameters(Reader.Lines(x).Replace("Image.Remount", "").Trim())
                     ValidationForm.ListView1.Items.Add(New ListViewItem(New String() {"Remount image: " & ActionParameters(0), "Pending"}))
-                    MountDir = ActionParameters(0)
+                    MountDir = ActionParameters(0).Replace(Quote, "").Trim()
                 ElseIf Reader.Lines(x).Replace(" ", "").Trim().StartsWith("Project.Create", StringComparison.OrdinalIgnoreCase) Then
                     TaskList.Add(0)
                     ParseParameters(Reader.Lines(x).Replace("Project.Create", "").Trim())
                     ValidationForm.ListView1.Items.Add(New ListViewItem(New String() {"Create project: " & ActionParameters(0), "Pending"}))
-                    projName = ActionParameters(0)
-                    projPath = ActionParameters(1)
+                    projName = ActionParameters(0).Replace(Quote, "").Trim()
+                    projPath = ActionParameters(1).Remove(0, 1).Replace(Quote, "").Trim()
                 ElseIf Reader.Lines(x).Equals("End Section", StringComparison.OrdinalIgnoreCase) Then
                     Exit For
                 End If
@@ -5065,5 +5089,9 @@ Public Class ProgressPanel
 
     Private Sub BodyPanel_Paint(sender As Object, e As PaintEventArgs) Handles BodyPanel.Paint
         ControlPaint.DrawBorder(e.Graphics, BodyPanel.ClientRectangle, Color.FromArgb(0, 122, 204), ButtonBorderStyle.Solid)
+    End Sub
+
+    Private Sub ProgressPanel_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        If ValidationForm.Visible Then ValidationForm.Close()
     End Sub
 End Class

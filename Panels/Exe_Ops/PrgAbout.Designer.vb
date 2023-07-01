@@ -662,6 +662,7 @@ Partial Class PrgAbout
         Me.PictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
         Me.PictureBox3.TabIndex = 9
         Me.PictureBox3.TabStop = False
+        Me.PictureBox3.Visible = False
         '
         'UpdCheckBtn
         '

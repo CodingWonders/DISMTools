@@ -13,6 +13,21 @@
     <MyType>WindowsForms</MyType>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <TargetFrameworkProfile />
+    <PublishUrl>publicar\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -116,7 +131,6 @@
     <Compile Include="Actions\Validation\Actions.Validation.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Help\Help_RegisteredAppxPkgsDlg.Designer.vb">
       <DependentUpon>Help_RegisteredAppxPkgsDlg.vb</DependentUpon>
     </Compile>
@@ -835,6 +849,9 @@
     <None Include="Resources\secprogress_modern.png" />
     <None Include="Resources\menus\menu_light.png" />
     <None Include="Resources\menus\menu_dark.png" />
+    <None Include="portable">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
     <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
     <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />
@@ -1111,12 +1128,28 @@
     <Folder Include="Updater\" />
     <Folder Include="wimlib\" />
   </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
     <PostBuildEvent>SET DELETELOGDIR="Yes"
 SET ISPREVIEW="Yes"
 SET GEN_INSTALLER="Yes"
 ECHO Generating program structure...
+IF EXIST "$(SolutionDir)portable" (
+	COPY "$(SolutionDir)portable" . /Y
+	ATTRIB portable +H
+)
 IF NOT EXIST bin (
 	md bin
 	md bin\exthelpers
@@ -1169,6 +1202,10 @@ IF %25GEN_INSTALLER%25=="Yes" (
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>ECHO Deleting bin folder...
+IF EXIST "portable" (
+	ATTRIB portable -h
+	DEL portable
+)
 IF EXIST bin (
 	rd bin /s /q
 )

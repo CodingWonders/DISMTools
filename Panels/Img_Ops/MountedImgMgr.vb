@@ -199,6 +199,7 @@ Public Class MountedImgMgr
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.MountDir = ListView1.FocusedItem.SubItems(2).Text
         ProgressPanel.OperationNum = 18
         ProgressPanel.ShowDialog()
