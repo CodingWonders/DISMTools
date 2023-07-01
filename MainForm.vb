@@ -310,6 +310,7 @@ Public Class MainForm
             End If
         Else
             GenerateDTSettings()
+            LoadDTSettings(1)
         End If
         imgStatus = 0
         ChangeImgStatus()
@@ -865,6 +866,11 @@ Public Class MainForm
         ' LoadMode = 0; load from registry
         ' LoadMode = 1; load from INI file
         If LoadMode = 0 Then
+            If File.Exists(Application.StartupPath & "\portable") Then
+                SaveOnSettingsIni = True
+                LoadDTSettings(1)
+                Exit Sub
+            End If
             Try
                 Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("preview"), "Preview", "Stable")
                 Dim Key As RegistryKey = Registry.CurrentUser.OpenSubKey(KeyStr)
@@ -952,7 +958,7 @@ Public Class MainForm
                     Exit Sub
                 End If
                 DismExe = DTSettingForm.RichTextBox1.Lines(3).Replace("DismExe=", "").Trim().Replace(Quote, "").Trim()
-                If DTSettingForm.RichTextBox1.Text.Contains("SaveOnSettingsIni=0") Then
+                If DTSettingForm.RichTextBox1.Text.Contains("SaveOnSettingsIni=0") And Not File.Exists(Application.StartupPath & "\portable") Then
                     SaveOnSettingsIni = False
                     LoadDTSettings(0)
                     Exit Sub
@@ -3241,6 +3247,7 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "WndTop=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "WndMaximized=0")
         File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
+        If File.Exists(Application.StartupPath & "\portable") Then Exit Sub
         Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("preview"), "Preview", "Stable")
         Dim Key As RegistryKey = Registry.CurrentUser.CreateSubKey(KeyStr)
         Dim PrgKey As RegistryKey = Key.CreateSubKey("Program")

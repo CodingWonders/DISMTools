@@ -726,6 +726,7 @@ Public Class Options
         ComboBox3.Items.AddRange(Languages)
         ComboBox5.Items.AddRange(LogViews)
         ComboBox6.Items.AddRange(NotFreqs)
+        If File.Exists(Application.StartupPath & "\portable") Then ComboBox1.Items.RemoveAt(1)
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True
