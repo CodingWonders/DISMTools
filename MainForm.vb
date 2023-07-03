@@ -979,8 +979,6 @@ Public Class MainForm
                 ChangePrgColors(ColorMode)
                 ' Detect language settings: 0 - Detect system language (using "ThreeLetterWindowsLanguageName")
                 '                         nnn - Apply specific language
-                ' Do note that this version does not support languages other than English so, if INI contains
-                ' "Language=2" or something else, it will ignore it and use English
                 If DTSettingForm.RichTextBox1.Text.Contains("Language=0") Then
                     ' The note above also applies to the Automatic language setting
                     Language = 0
