@@ -1,13 +1,24 @@
 ﻿# DISMTools 0.3 - Mounted Image Manager CLI version
 
+# Detect PS version first, as some parameters require PowerShell 5 or newer
+if ($PSVersionTable.PSVersion.Major -lt 5)
+{
+    Write-Host "You need to run this script in PowerShell 5 or newer. Press ENTER to continue..."
+    Read-Host | Out-Null
+    exit 1
+}
+
 # Import the DISM module
 Import-Module Dism
 
 $global:mImage = Get-WindowsImage -Mounted
 $global:selImage = 0
+$global:imgInfo = ''
 $newImg = 0
 $selImgPath = ''
 $ver = '0.3'
+$global:img_removalIndexes = New-Object System.Collections.ArrayList
+$global:img_remIndexesBck = New-Object System.Collections.ArrayList
 
 function Mark-Image {
     # Refresh the mounted image variable
@@ -164,6 +175,159 @@ function Enable-WritePerms {
     }
 }
 
+function Remove-VolumeImages {
+    Clear-Host
+    Write-Host "List of volume images in image file:"
+    $global:imgInfo = Get-WindowsImage -ImagePath $global:mImage[$global:selImage - 1].ImagePath
+    if (($global:imgInfo | Select-Object -ExpandProperty ImageIndex).Count -le 1)
+    {
+        Write-Host "This image only contains one index, so you can't remove volume images from this image file."`n`n -ForegroundColor White -BackgroundColor DarkYellow
+        Write-Host "Press ENTER to continue..."
+        Read-Host | Out-Null
+        MainMenu
+    }
+    $global:imgInfo | Format-Table ImageIndex, ImageName
+    Write-Host `n"Marked indexes to remove: " -NoNewline
+    if ($global:img_removalIndexes.Count -lt 1)
+    {
+        Write-Host "none"
+    }
+    else
+    {
+        Write-Host `n
+        for ($i = 0; $i -lt $global:img_removalIndexes.Count; $i++)
+        {
+            Write-Host " - Index $($global:img_removalIndexes[$i]) ($($global:imgInfo[$global:img_removalIndexes[$i] - 1].ImageName))"
+        }
+    }
+    Write-Host `n
+    # Add menu items
+    Write-Host "[M]: Mark indexes to remove"
+    Write-Host "[P]: Proceed with volume image removal"`n
+    Write-Host "[B]: Go back"
+    Write-Host `n
+    $option = Read-Host -Prompt "Select an option and press ENTER"
+    switch ($option)
+    {
+        "M" {
+            Write-Host `n"Mark volume images to remove based on their indexes."`n"For this image, you must choose anything between 1 and $(($global:imgInfo | Select-Object -ExpandProperty ImageIndex).Count) and separate multiple entries with commas (,). Then, press ENTER."`n"You can also type 'B' and press ENTER to go back."`n
+            $images = Read-Host -Prompt "Volume images to remove"
+            if ($images.Equals("B", [System.StringComparison]::OrdinalIgnoreCase))
+            {
+                Remove-VolumeImages
+            }
+            else
+            {
+                $global:img_removalIndexes = $images.Split(",")
+                $global:img_remIndexesBck = $images.Split(",")
+                if ($global:img_removalIndexes.Count -ge $(($global:imgInfo | Select-Object -ExpandProperty ImageIndex).Count))
+                {
+                    # Clear lists, as the user has typed more entries than image indexes available,
+                    # or has typed all indexes (leaving the image with no indexes).
+                    $global:img_removalIndexes = $global:img_removalIndexes.Clear()
+                    $global:img_remIndexesBck = $global:img_remIndexesBck.Clear()
+                    # Go back
+                    Remove-VolumeImages
+                }
+                # The user might have added an index higher than the index count, or might have done some trickery.
+                # Go through each answer and delete invalid entries.
+                for ($i = 0; $i -lt $global:img_remIndexesBck.Count; $i++)
+                {
+                    if ($global:img_remIndexesBck[$i] -gt $(($global:imgInfo | Select-Object -ExpandProperty ImageIndex).Count))
+                    {
+                        for ($j = 0; $j -lt $global:img_removalIndexes.Count; $j++)
+                        {
+                            if ($global:img_remIndexesBck[$i] -eq $global:img_removalIndexes[$j])
+                            {
+                                $global:img_removalIndexes = $global:img_removalIndexes.RemoveAt($global:img_removalIndexes[$j])
+                            }
+                        }
+                    }
+                }
+                Remove-VolumeImages
+            }
+        }
+        "P" {
+            if ($global:img_removalIndexes.Count -ge 1)
+            {            
+                Write-Host `n"The marked image will be unmounted discarding changes. Make sure you commit your changes to it before removing its volume images."
+                $option = Read-Host -Prompt "Do you want to proceed? (Y/N)"
+                switch ($option)
+                {
+                    "Y" {
+                        Write-Host "Unmounting image discarding changes..."
+                        Dismount-WindowsImage -Path $global:mImage[$global:selImage - 1].MountPath -Discard
+                        if ($?)
+                        {
+                            Write-Host "Removing volume images..."`n
+                            for ($i = 0; $i -lt $global:img_removalIndexes.Count; $i++)
+                            {
+                                Write-Host "$([System.Math]::Round(($i / $global:img_removalIndexes.Count) * 100))% - Removing volume image... (index: $($global:img_removalIndexes[$i]), name: $($global:imgInfo[$global:img_removalIndexes[$i] - 1].ImageName))    " -NoNewline
+                                Remove-WindowsImage -ImagePath $global:mImage[$global:selImage - 1].ImagePath -Name $global:imgInfo[$global:img_removalIndexes[$i] - 1].ImageName | Out-Null
+                                if ($?)
+                                {
+                                    Write-Host "SUCCESS" -ForegroundColor White -BackgroundColor DarkGreen
+                                }
+                                else
+                                {
+                                    Write-Host "FAILURE" -ForegroundColor White -BackgroundColor DarkRed
+                                }
+                            }
+                            # Et voilà !
+                            Write-Host "100% - Complete"`n
+                            Write-Host "Press ENTER to continue..."
+                            Read-Host | Out-Null
+                            MainMenu
+                        }
+                        else
+                        {
+                            Write-Host "The unmount operation has failed. Refer to the error shown above for more information."`n`n"Read the error, then press ENTER to continue"
+                            Read-Host | Out-Null
+                            Remove-VolumeImages
+                        }
+                    }
+                    "N" {
+                        Remove-VolumeImages
+                    }
+                    default {
+                        Remove-VolumeImages
+                    }
+                }
+            }
+            else
+            {
+                Remove-VolumeImages
+            }
+        }
+        "B" {
+            if ($global:img_removalIndexes.Count -ge 1)
+            {
+                Write-Host `n"The volume images you have marked for removal will be unmarked."`n
+                $option = Read-Host -Prompt "Do you want to continue? (Y/N)"
+                switch ($option)
+                {
+                    "Y" {
+                        $global:img_removalIndexes = $global:img_removalIndexes.Clear()
+                        $global:img_remIndexesBck = $global:img_remIndexesBck.Clear()
+                        MainMenu
+                    }
+                    "N" {
+                        Remove-VolumeImages
+                    }
+                    default {
+                        # Go back
+                        Remove-VolumeImages
+                    }
+                }
+            }
+            MainMenu
+        }
+        default {
+            Remove-VolumeImages
+        }
+    }
+}
+
 function Update-Listing {
     $global:mImage = Get-WindowsImage -Mounted
     # MainMenu
@@ -285,6 +449,9 @@ function MainMenu {
         "A" { 
             Start-Process -FilePath $(([System.Environment]::GetFolderPath([System.Environment+SpecialFolder]::Windows)) + '\explorer.exe') -ArgumentList $($global:mImage[$global:selImage - 1].MountPath)
             MainMenu
+        }
+        "V" {
+            Remove-VolumeImages
         }
         "L" {
             Write-Host `n"Updating mounted image listing..." 

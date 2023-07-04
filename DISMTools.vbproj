@@ -757,6 +757,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Installer\Default.isl" />
+    <None Include="Installer\French.isl" />
+    <None Include="Installer\German.isl" />
+    <None Include="Installer\Italian.isl" />
+    <None Include="Installer\Portuguese.isl" />
     <None Include="Installer\Setup.e32" />
     <None Include="Installer\SetupLdr.e32" />
     <None Include="Installer\Spanish.isl" />
