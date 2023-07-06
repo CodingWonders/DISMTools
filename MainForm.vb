@@ -335,6 +335,10 @@ Public Class MainForm
         WndHeight = Height
         WndLeft = Left
         WndTop = Top
+        If Left < 0 And Top < 0 Then
+            ' Center form
+            Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2)
+        End If
         If argProjPath <> "" Then
             HomePanel.Visible = False
             Visible = True
