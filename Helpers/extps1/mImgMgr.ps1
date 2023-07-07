@@ -382,7 +382,7 @@ function Detect-MountedImageIndexChanges {
             if ($global:mImage[$i].ImagePath -eq $selImgPath)
             {
                 $global:selImage = $i + 1
-                Write-Host "The image you have marked has moved indexes, so the mounted image manager switched to the index the image is now in."`n"You can continue to do your management tasks." -ForegroundColor White -BackgroundColor DarkBlue
+                Write-Host "The image you have marked has moved indexes, so the mounted image manager switched to the index the image is now in."`n"You can continue to do your management tasks."`n -ForegroundColor White -BackgroundColor DarkBlue
             }
         }
     }

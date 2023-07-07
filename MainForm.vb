@@ -1421,7 +1421,7 @@ Public Class MainForm
                     If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                     Exit Sub
                 End If
-                If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") = True Then
+                If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") And Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
                     Debug.WriteLine("[IsWindows8OrHigher] Returned True")
                     pbOpNums += 1
                     Select Case Language
@@ -1446,7 +1446,7 @@ Public Class MainForm
                 Else
                     Debug.WriteLine("[IsWindows8OrHigher] Returned False")
                 End If
-                If IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") = True Then
+                If IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") And Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
                     Debug.WriteLine("[IsWindows10OrHigher] Returned True")
                     pbOpNums += 1
                     Select Case Language
@@ -1854,7 +1854,7 @@ Public Class MainForm
                 If IsImageMounted Then
                     Try
                         For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
-                            If MountedImageImgFiles(x) = MountDir Then
+                            If MountedImageMountDirs(x) = MountDir Then
                                 Dim ImageInfoCollection As DismImageInfoCollection = DismApi.GetImageInfo(MountedImageImgFiles(x))
                                 For Each imageInfo As DismImageInfo In ImageInfoCollection
                                     If imageInfo.ImageIndex = MountedImageImgIndexes(x) Then
@@ -8561,10 +8561,42 @@ Public Class MainForm
     End Sub
 
     Private Sub AddProvisionedAppxPackage_Click(sender As Object, e As EventArgs) Handles AddProvisionedAppxPackage.Click
-        AddProvAppxPackage.ShowDialog()
+        If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+            AddProvAppxPackage.ShowDialog()
+        Else
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+            End Select
+        End If
     End Sub
 
     Private Sub RemoveProvisionedAppxPackage_Click(sender As Object, e As EventArgs) Handles RemoveProvisionedAppxPackage.Click
+        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+            End Select
+            Exit Sub
+        End If
         ElementCount = 0
         RemProvAppxPackage.ListView1.Items.Clear()
         Select Case Language
@@ -8789,6 +8821,22 @@ Public Class MainForm
     End Sub
 
     Private Sub AddCapability_Click(sender As Object, e As EventArgs) Handles AddCapability.Click
+        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+            End Select
+            Exit Sub
+        End If
         ElementCount = 0
         AddCapabilities.ListView1.Items.Clear()
         ProgressPanel.OperationNum = 994
@@ -8846,6 +8894,22 @@ Public Class MainForm
     End Sub
 
     Private Sub RemoveCapability_Click(sender As Object, e As EventArgs) Handles RemoveCapability.Click
+        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+            End Select
+            Exit Sub
+        End If
         ElementCount = 0
         RemCapabilities.ListView1.Items.Clear()
         ProgressPanel.OperationNum = 994
