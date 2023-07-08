@@ -375,6 +375,10 @@ Public Class MainForm
         If Not IsPortable Then
             File.SetAttributes(Application.StartupPath & "\portable", FileAttributes.Normal)
             File.Delete(Application.StartupPath & "\portable")
+        Else
+            If Not File.GetAttributes(Application.StartupPath & "\portable") = FileAttributes.Hidden Then
+                File.SetAttributes(Application.StartupPath & "\portable", FileAttributes.Hidden)
+            End If
         End If
     End Sub
 
