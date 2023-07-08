@@ -100,6 +100,7 @@ Partial Class ProjProperties
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
+        Me.LanguageList = New System.Windows.Forms.ListBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -301,6 +302,7 @@ Partial Class ProjProperties
         '
         'TabPage2
         '
+        Me.TabPage2.Controls.Add(Me.LanguageList)
         Me.TabPage2.Controls.Add(Me.RemountImgBtn)
         Me.TabPage2.Controls.Add(Me.RecoverButton)
         Me.TabPage2.Controls.Add(Me.RWRemountBtn)
@@ -897,6 +899,15 @@ Partial Class ProjProperties
         Me.Label4.TabIndex = 5
         Me.Label4.Text = "Getting project and image information. Please wait..."
         '
+        'LanguageList
+        '
+        Me.LanguageList.FormattingEnabled = True
+        Me.LanguageList.Location = New System.Drawing.Point(613, 262)
+        Me.LanguageList.Name = "LanguageList"
+        Me.LanguageList.ScrollAlwaysVisible = True
+        Me.LanguageList.Size = New System.Drawing.Size(278, 95)
+        Me.LanguageList.TabIndex = 20
+        '
         'ProjProperties
         '
         Me.AcceptButton = Me.OK_Button
@@ -1013,5 +1024,6 @@ Partial Class ProjProperties
     Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents RecoverButton As System.Windows.Forms.Button
     Friend WithEvents RemountImgBtn As System.Windows.Forms.Button
+    Friend WithEvents LanguageList As System.Windows.Forms.ListBox
 
 End Class
