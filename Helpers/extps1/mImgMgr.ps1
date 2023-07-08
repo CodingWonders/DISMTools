@@ -20,6 +20,10 @@ $ver = '0.3'
 $global:img_removalIndexes = New-Object System.Collections.ArrayList
 $global:img_remIndexesBck = New-Object System.Collections.ArrayList
 
+# Unmount setting variables
+$global:checkIntegrity = $false
+$global:appendIndex = $false
+
 function Mark-Image {
     # Refresh the mounted image variable
     $global:mImage = Get-WindowsImage -Mounted
@@ -106,8 +110,7 @@ function Unmount-Image {
     }
 }
 
-function Unmount-Settings($checkIntegrity, $appendIndex)
-{
+function Unmount-Settings {
     Clear-Host
     if ($global:mImage[$global:selImage - 1].MountMode -eq 1)
     {
@@ -117,7 +120,7 @@ function Unmount-Settings($checkIntegrity, $appendIndex)
         Unmount-Image
     }
     Write-Host "Unmount settings for image: $($global:mImage[$global:selImage - 1].ImagePath)"`n
-    if ($checkIntegrity)
+    if ($global:checkIntegrity)
     {
         Write-Host " [X] Check image integrity (press C to modify this setting)"
     }
@@ -125,7 +128,7 @@ function Unmount-Settings($checkIntegrity, $appendIndex)
     {
         Write-Host " [ ] Check image integrity (press C to modify this setting)"
     }
-    if ($appendIndex)
+    if ($global:appendIndex)
     {
         Write-Host " [X] Append changes to new image index (press A to modify this setting)"
     }
@@ -138,15 +141,49 @@ function Unmount-Settings($checkIntegrity, $appendIndex)
     switch ($option)
     {
         "C" {
-            $checkIntegrity = -not $checkIntegrity
-            Unmount-Settings $checkIntegrity, $appendIndex
+            $global:checkIntegrity = -not $global:checkIntegrity
+            Unmount-Settings
         }
         "A" {
-            $appendIndex = -not $appendIndex
-            Unmount-Settings $checkIntegrity, $appendIndex
+            $global:appendIndex = -not $global:appendIndex
+            Unmount-Settings
         }
         "P" {
-            $cmd = 'Dismount-WindowsImage -Path $global:mImage[$global:selImage - 1].MountPath -Save $(if ($checkIntegrity) { -CheckIntegrity }) $(if ($appendIndex) { -Append })'
+            Write-Host `n"Unmounting image with specified settings..."`n
+            if (($global:appendIndex) -and ($global:checkIntegrity))
+            {
+                Dismount-WindowsImage -Path $global:mImage[$global:selImage - 1].MountPath -Save -CheckIntegrity -Append
+            }
+            elseif ($global:appendIndex)
+            {
+                Dismount-WindowsImage -Path $global:mImage[$global:selImage - 1].MountPath -Save -Append
+            }
+            elseif ($global:checkIntegrity)
+            {
+                Dismount-WindowsImage -Path $global:mImage[$global:selImage - 1].MountPath -Save -CheckIntegrity
+            }
+            else
+            {
+                Dismount-WindowsImage -Path $global:mImage[$global:selImage - 1].MountPath -Save
+            }
+            # Detect error code
+            if ($?)
+            {
+                Write-Host "The operation completed successfully"
+            }
+            else
+            {
+                Write-Host "The operation has failed"
+            }
+            Write-Host `n"Press ENTER to continue..."
+            Read-Host | Out-Null
+            MainMenu
+        }
+        "B" {
+            MainMenu
+        }
+        default {
+            Unmount-Settings
         }
     }
 }
@@ -296,6 +333,8 @@ function Remove-VolumeImages {
             }
             else
             {
+                Write-Host "Please mark the volume images to remove from this image, and try again." -ForegroundColor White -BackgroundColor DarkYellow
+                Read-Host | Out-Null
                 Remove-VolumeImages
             }
         }
