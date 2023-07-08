@@ -5036,15 +5036,34 @@ Public Class ProgressPanel
                         Case 4
                             isReadOnly = If(ActionParameters(3).Equals("True", StringComparison.OrdinalIgnoreCase), True, False)
                         Case 5
-                            isReadOnly = If(ActionParameters(4).Equals("True", StringComparison.OrdinalIgnoreCase), True, False)
+                            isReadOnly = If(ActionParameters(3).Equals("True", StringComparison.OrdinalIgnoreCase), True, False)
+                            isOptimized = If(ActionParameters(4).Equals("True", StringComparison.OrdinalIgnoreCase), True, False)
                         Case 6
-                            isReadOnly = If(ActionParameters(5).Equals("True", StringComparison.OrdinalIgnoreCase), True, False)
+                            isReadOnly = If(ActionParameters(3).Equals("True", StringComparison.OrdinalIgnoreCase), True, False)
+                            isOptimized = If(ActionParameters(4).Equals("True", StringComparison.OrdinalIgnoreCase), True, False)
+                            isIntegrityTested = If(ActionParameters(5).Equals("True", StringComparison.OrdinalIgnoreCase), True, False)
                     End Select
                 ElseIf Reader.Lines(x).Replace(" ", "").Trim().StartsWith("Image.Remount", StringComparison.OrdinalIgnoreCase) Then
                     TaskList.Add(18)
                     ParseParameters(Reader.Lines(x).Replace("Image.Remount", "").Trim())
                     ValidationForm.ListView1.Items.Add(New ListViewItem(New String() {"Remount image: " & ActionParameters(0), "Pending"}))
                     MountDir = ActionParameters(0).Replace(Quote, "").Trim()
+                ElseIf Reader.Lines(x).Replace(" ", "").Trim().StartsWith("Image.Unmount", StringComparison.OrdinalIgnoreCase) Then
+                    TaskList.Add(21)
+                    ParseParameters(Reader.Lines(x).Replace("Image.Unmount", "").Trim())
+                    ValidationForm.ListView1.Items.Add(New ListViewItem(New String() {"Unmount image on mount directory: " & ActionParameters(0), "Pending"}))
+                    UMountLocalDir = False
+                    RandomMountDir = ActionParameters(0).Replace(Quote, "").Trim()
+                    UMountOp = If(ActionParameters(1).Remove(0, 1).Replace(Quote, "").Trim().Equals("True", StringComparison.OrdinalIgnoreCase), 0, 1)
+                    If UMountOp = 0 Then
+                        Select Case ActionParameters.Count
+                            Case 2
+                                CheckImgIntegrity = If(ActionParameters(2).Remove(0, 1).Replace(Quote, "").Trim().Equals("True", StringComparison.OrdinalIgnoreCase), True, False)
+                            Case 3
+                                CheckImgIntegrity = If(ActionParameters(2).Remove(0, 1).Replace(Quote, "").Trim().Equals("True", StringComparison.OrdinalIgnoreCase), True, False)
+                                SaveToNewIndex = If(ActionParameters(3).Remove(0, 1).Replace(Quote, "").Trim().Equals("True", StringComparison.OrdinalIgnoreCase), True, False)
+                        End Select
+                    End If
                 ElseIf Reader.Lines(x).Replace(" ", "").Trim().StartsWith("Project.Create", StringComparison.OrdinalIgnoreCase) Then
                     TaskList.Add(0)
                     ParseParameters(Reader.Lines(x).Replace("Project.Create", "").Trim())

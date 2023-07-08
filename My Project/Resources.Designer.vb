@@ -1648,17 +1648,22 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''- Fixed an issue where the progress panel would perform a mounted image manager operation but would not be shown if an action was performed too quickly
+        '''- Fixed an issue where the main program window would not be repositioned when outside of the bounds of the primary screen
+        '''- Fixed an issue where the program would detect AppX packages and capabilities on Windows PE images, and fail those background processes due to missing image modules
         '''
         '''New features
         '''
-        '''Settings
+        '''Installer
         '''
-        '''- The program can now load and save settings to and from the registry. In portable copies, this ability is disabled (for obvious reasons)
-        '''- On new installations and downloads, the successful project load notification is now shown once by default
-        '''- Window location and size parameters are now saved
+        '''- Setup now supports more languages: French, Italian, Portuguese, and German
         '''
-        '''AppX packages        ''' [resto de la cadena truncado]&quot;;.
+        '''Automation
+        '''
+        '''- Image unmount operations are now supported by the Action runtime
+        '''
+        '''CLI tools
+        '''
+        '''-  [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

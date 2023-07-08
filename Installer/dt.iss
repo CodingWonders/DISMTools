@@ -46,8 +46,12 @@ VersionInfoVersion={#MyAppVersion}
 VersionInfoTextVersion={#MyAppVersion}
 
 [Languages]
-Name: "english"; MessagesFile: "compiler:Default.isl"
-Name: "spanish"; MessagesFile: "compiler:Spanish.isl"
+Name: "en"; MessagesFile: "compiler:Default.isl"
+Name: "es"; MessagesFile: "compiler:Spanish.isl"
+Name: "fr"; MessagesFile: "compiler:French.isl"
+Name: "de"; MessagesFile: "compiler:German.isl"
+Name: "it"; MessagesFile: "compiler:Italian.isl"
+Name: "pt"; MessagesFile: "compiler:Portuguese.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked

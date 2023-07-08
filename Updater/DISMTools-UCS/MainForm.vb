@@ -23,6 +23,8 @@ Public Class MainForm
 
     Dim ReleaseDownloader As New WebClient()
 
+    Dim IsPortable As Boolean
+
     Private Sub minBox_MouseEnter(sender As Object, e As EventArgs) Handles minBox.MouseEnter
         minBox.Image = My.Resources.minBox_focus
     End Sub
@@ -97,6 +99,7 @@ Public Class MainForm
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Control.CheckForIllegalCrossThreadCalls = False
+        If File.Exists(Application.StartupPath & "\portable") Then IsPortable = True
         Label1.Text = "DISMTools Update Check System - Version " & Application.ProductVersion
         If Directory.Exists(Application.StartupPath & "\new") Then Directory.Delete(Application.StartupPath & "\new", True)
         GetArguments()
@@ -369,6 +372,10 @@ Public Class MainForm
     Sub CleanBackupFiles()
         Directory.Delete(Application.StartupPath & "\new", True)
         Directory.Delete(Application.StartupPath & "\old", True)
+        If Not IsPortable Then
+            File.SetAttributes(Application.StartupPath & "\portable", FileAttributes.Normal)
+            File.Delete(Application.StartupPath & "\portable")
+        End If
     End Sub
 
     Private Sub UpdaterBW_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles UpdaterBW.ProgressChanged

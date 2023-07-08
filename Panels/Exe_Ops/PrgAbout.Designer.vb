@@ -145,6 +145,7 @@ Partial Class PrgAbout
         Me.Label15.Size = New System.Drawing.Size(105, 13)
         Me.Label15.TabIndex = 4
         Me.Label15.Text = "Build date goes here"
+        Me.Label15.Visible = False
         '
         'ModernPanelContainer
         '
