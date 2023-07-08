@@ -205,6 +205,8 @@ Public Class MainForm
 
     Public CompletedTasks(4) As Boolean
 
+    Dim HasRemounted As Boolean
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -300,6 +302,7 @@ Public Class MainForm
             BranchTSMI.Visible = True
             Text &= " (debug mode)"
         End If
+        Visible = False
         ' Read settings file
         If File.Exists(Application.StartupPath & "\settings.ini") Then
             Dim SettingReader As New RichTextBox() With {.Text = File.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)}
@@ -318,7 +321,11 @@ Public Class MainForm
             DismVersionChecker = FileVersionInfo.GetVersionInfo(DismExe)
         End If
         UnblockPSHelpers()
-        If StartupRemount Then RemountOrphanedImages()
+        If StartupRemount Then RemountOrphanedImages() Else HasRemounted = True
+        While Not HasRemounted
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         If StartupUpdateCheck Then
             UpdCheckerBW.RunWorkerAsync()
         Else
@@ -339,9 +346,10 @@ Public Class MainForm
             ' Center form
             Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2)
         End If
+        Visible = True
         If argProjPath <> "" Then
             HomePanel.Visible = False
-            Visible = True
+            'Visible = True
             ProgressPanel.OperationNum = 990
             LoadDTProj(argProjPath, Path.GetFileNameWithoutExtension(argProjPath), True, False)
         End If
@@ -445,6 +453,7 @@ Public Class MainForm
             Next
             DismApi.Shutdown()
         End If
+        HasRemounted = True
     End Sub
 
     Sub CheckForUpdates(branch As String)
