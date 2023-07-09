@@ -2290,6 +2290,17 @@ Public Class MainForm
                     Case Is >= 21996                            ' Windows 11 / Cobalt_Refresh / Nickel / Copper / WinPE 10.0
 
                 End Select
+            ElseIf NTKeVerInfo.ProductMajorPart < 6 Then
+                ' Windows XP/Server 2003 or older WIM files created by XP2ESD or other XP -> WIM projects. Directly unmount it
+                ProgressPanel.UMountLocalDir = True
+                ProgressPanel.RandomMountDir = ""   ' Hope there isn't anything to set here
+                ProgressPanel.MountDir = MountDir
+                ProgressPanel.UMountOp = 1
+                ProgressPanel.CheckImgIntegrity = False
+                ProgressPanel.SaveToNewIndex = False
+                ProgressPanel.UMountImgIndex = ImgIndex
+                ProgressPanel.OperationNum = 21
+                ProgressPanel.ShowDialog()
             End If
         Catch ex As Exception
 
