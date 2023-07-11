@@ -401,6 +401,7 @@ function Get-MenuItems {
 }
 
 function Detect-MountedImageIndexChanges {
+    if ($global:selImage -eq 0) { return }
     $global:mImage = Get-WindowsImage -Mounted
     if ($global:mImage[$global:selImage - 1].ImagePath -eq $selImgPath)
     {
@@ -412,7 +413,7 @@ function Detect-MountedImageIndexChanges {
         if ($($global:mImage | Where-Object { $_.ImagePath -eq $selImgPath } | Select-Object -ExpandProperty ImagePath) -ne $selImgPath)
         {
             $global:selImage = 0
-            Write-Host "The image you have marked has been unmounted by an external program. You can't manage this image until you mount it again, and you must mark another image now." -ForegroundColor White -BackgroundColor Red
+            Write-Host "The image you have marked has been unmounted by an external program. You can't manage this image until you mount it again, and you must mark another image now."`n -ForegroundColor White -BackgroundColor Red
             return
         }
         # Iterate through each mounted image so that we can switch to the appropriate one
@@ -422,6 +423,7 @@ function Detect-MountedImageIndexChanges {
             {
                 $global:selImage = $i + 1
                 Write-Host "The image you have marked has moved indexes, so the mounted image manager switched to the index the image is now in."`n"You can continue to do your management tasks."`n -ForegroundColor White -BackgroundColor DarkBlue
+                return
             }
         }
     }
@@ -435,15 +437,15 @@ function MainMenu {
     # List mounted Windows images
     Get-WindowsImage -Mounted | Format-Table
     Write-Host `n`n`n
+    Detect-MountedImageIndexChanges
     if ($global:selImage -eq 0)
     {
         Write-Host "No image has been marked for management. Press the [M] key to mark a mounted image..."
     }
     else
     {
-        Detect-MountedImageIndexChanges
         # Detect whether the previously marked image is 0 and refresh the menu
-        if ($global:selImage -eq 0) { MainMenu }
+        #if ($global:selImage -eq 0) { MainMenu }
         Write-Host "Selected image: image $global:selImage ($($global:mImage[$global:selImage - 1].ImagePath))"
     }
     Write-Host `n
