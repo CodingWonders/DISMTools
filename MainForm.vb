@@ -1435,7 +1435,7 @@ Public Class MainForm
                     If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                     Exit Sub
                 End If
-                If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") And Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+                If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") And (imgEdition IsNot Nothing And Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase)) Then
                     Debug.WriteLine("[IsWindows8OrHigher] Returned True")
                     pbOpNums += 1
                     Select Case Language

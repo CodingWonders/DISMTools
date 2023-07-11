@@ -9,9 +9,9 @@
 #              .^"""""`.            ."""""""",,,,,,,,,,,,,,,.    ------------------------------------------------------
 #                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2023 CodingWonders Software                    |
 #                  .^"""""^.    '`^^"",:,,,,,,,,,,,,,,,,,".      ------------------------------------------------------
-#                    .^"""""^.`+]>,^^"",,:,,,,,,,,,,,,,`.        | This script is provided AS IS, without any         |
-#                      .^""";_]]]?)}:^^""",,,`'````'..           | warranty.                                          |
-#                        .;-]]]?(xxxx}:^^^^'                     ------------------------------------------------------
+#                    .^"""""^.`+]>,^^"",,:,,,,,,,,,,,,,`.        
+#                      .^""";_]]]?)}:^^""",,,`'````'..           
+#                        .;-]]]?(xxxx}:^^^^'                     
 #                       `+]]]?(xxxxxxxr},'                       
 #                     .`:+]?)xxxxxxxxxxxr<.                      
 #                   .`^^^^:(xxxxxxxxxxxxxxr>.                    
@@ -20,9 +20,9 @@
 #             .`^^^^^^^^^^^^^^^'`[xxxxxxxxxxxxxxr<.              
 #           .`^^^^^^^^^^^^^^^'    `}xxxxxxxxxxxxxxr<.            
 #          `^^":ll:"^^^^^^^'        `}xxxxxxxxxxxxxxr,           
-#         '^^^I-??]l^^^^^'            `[xxxxxxxxxxxxxx.          
-#         '^^^,<??~,^^^'                `{xxxxxxxxxxxx.          
-#          `^^^^^^^^^'                    `{xxxxxxxxr,           
+#         '^^^I-??]l^^^^^'            `[xxxxxxxxxxxxxx.          This script is provided AS IS, without any warranty. It shouldn't
+#         '^^^,<??~,^^^'                `{xxxxxxxxxxxx.          do any damage to your computer, but you still need to be careful over
+#          `^^^^^^^^^'                    `{xxxxxxxxr,           what you do with it.
 #           .'`^^^`'                        `i1jrt[:.            
                                                            
 
@@ -110,8 +110,16 @@ function Unmount-Image {
             }
             Write-Host "Unmounting Windows image:"`n"- Image file and index: $($global:mImage[$global:selImage - 1].ImagePath) (index $($global:mImage[$global:selImage - 1].ImageIndex))"`n"- Mount directory: $($global:mImage[$global:selImage - 1].MountPath)"`n"- Operation: Commit"`n"- Additional opperations: don't check integrity, don't append to new index"
             Dismount-WindowsImage -Path $global:mImage[$global:selImage - 1].MountPath -Save
-            Write-Host "The image should be unmounted. If you want to continue managing your mounted images, you must mark another one. Press ENTER to continue..."
-            $global:selImage = 0
+            if ($?)
+            {
+                Write-Host "This image has been unmounted successfully. " -NoNewline
+            }
+            else
+            {
+                Write-Host "We could not unmount this image. Refer to the log file for more information. " -NoNewline                
+            }
+            Write-Host "Press ENTER to continue..."
+            if ($?) { $global:selImage = 0 }
             Read-Host | Out-Null
             MainMenu
         }
@@ -119,8 +127,16 @@ function Unmount-Image {
             Clear-Host
             Write-Host "Unmounting Windows image:"`n"- Image file and index: $($global:mImage[$global:selImage - 1].ImagePath) (index $($global:mImage[$global:selImage - 1].ImageIndex))"`n"- Mount directory: $($global:mImage[$global:selImage - 1].MountPath)"`n"- Operation: Discard"
             Dismount-WindowsImage -Path $global:mImage[$global:selImage - 1].MountPath -Discard
-            Write-Host "The image should be unmounted. If you want to continue managing your mounted images, you must mark another one. Press ENTER to continue..."
-            $global:selImage = 0
+            if ($?)
+            {
+                Write-Host "This image has been unmounted successfully. " -NoNewline
+            }
+            else
+            {
+                Write-Host "We could not unmount this image. Refer to the log file for more information. " -NoNewline
+            }
+            Write-Host "Press ENTER to continue..."
+            if ($?) { $global:selImage = 0 }
             Read-Host | Out-Null
             MainMenu
         }
@@ -192,10 +208,9 @@ function Unmount-Settings {
             {
                 Dismount-WindowsImage -Path $global:mImage[$global:selImage - 1].MountPath -Save
             }
-            # Detect error code
             if ($?)
             {
-                Write-Host "The operation completed successfully"
+                Write-Host "This image has been unmounted successfully. " -NoNewline
             }
             else
             {
