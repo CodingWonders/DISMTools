@@ -1435,52 +1435,61 @@ Public Class MainForm
                     If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                     Exit Sub
                 End If
-                If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") And (imgEdition IsNot Nothing And Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase)) Then
-                    Debug.WriteLine("[IsWindows8OrHigher] Returned True")
-                    pbOpNums += 1
-                    Select Case Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
-                                    progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
-                                Case "ESN"
-                                    progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
-                            End Select
-                        Case 1
-                            progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
-                        Case 2
-                            progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
-                    End Select
-                    ImgBW.ReportProgress(progressMin + progressDivs)
-                    GetImageAppxPackages(True, OnlineMode)
-                    If ImgBW.CancellationPending Then
-                        If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
-                        Exit Sub
+                If imgEdition Is Nothing Then imgEdition = ""
+                If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+                    If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+                        Debug.WriteLine("[IsWindows8OrHigher] Returned True")
+                        pbOpNums += 1
+                        Select Case Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
+                                    Case "ESN"
+                                        progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
+                                End Select
+                            Case 1
+                                progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
+                            Case 2
+                                progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
+                        End Select
+                        ImgBW.ReportProgress(progressMin + progressDivs)
+                        GetImageAppxPackages(True, OnlineMode)
+                        If ImgBW.CancellationPending Then
+                            If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                            Exit Sub
+                        End If
+                    Else
+                        Debug.WriteLine("[IsWindows8OrHigher] Returned False")
                     End If
                 Else
                     Debug.WriteLine("[IsWindows8OrHigher] Returned False")
                 End If
                 If IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") And Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
-                    Debug.WriteLine("[IsWindows10OrHigher] Returned True")
-                    pbOpNums += 1
-                    Select Case Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
-                                    progressLabel = "Getting image Features on Demand (capabilities)..."
-                                Case "ESN"
-                                    progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
-                            End Select
-                        Case 1
-                            progressLabel = "Getting image Features on Demand (capabilities)..."
-                        Case 2
-                            progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
-                    End Select
-                    ImgBW.ReportProgress(progressMin + progressDivs)
-                    GetImageCapabilities(True, OnlineMode)
-                    If ImgBW.CancellationPending Then
-                        If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
-                        Exit Sub
+                    If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+                        Debug.WriteLine("[IsWindows10OrHigher] Returned True")
+                        pbOpNums += 1
+                        Select Case Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        progressLabel = "Getting image Features on Demand (capabilities)..."
+                                    Case "ESN"
+                                        progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
+                                End Select
+                            Case 1
+                                progressLabel = "Getting image Features on Demand (capabilities)..."
+                            Case 2
+                                progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
+                        End Select
+                        ImgBW.ReportProgress(progressMin + progressDivs)
+                        GetImageCapabilities(True, OnlineMode)
+                        If ImgBW.CancellationPending Then
+                            If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                            Exit Sub
+                        End If
+                    Else
+                        Debug.WriteLine("[IsWindows10OrHigher] Returned False")
                     End If
                 Else
                     Debug.WriteLine("[IsWindows10OrHigher] Returned False")
