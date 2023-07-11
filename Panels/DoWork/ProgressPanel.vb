@@ -1292,21 +1292,15 @@ Public Class ProgressPanel
             End Select
             LogView.AppendText(CrLf & "Reloading servicing session..." & CrLf &
                                "- Mount directory: " & MountDir)
-            DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-            Select Case DismVersionChecker.ProductMajorPart
-                Case 6
-                    Select Case DismVersionChecker.ProductMinorPart
-                        Case 1
-                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /remount-wim /mountdir=" & Quote & MountDir & Quote
-                        Case Is >= 2
-                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /remount-image /mountdir=" & Quote & MountDir & Quote
-                    End Select
-                Case 10
-                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /remount-image /mountdir=" & Quote & MountDir & Quote
-            End Select
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            Try
+                DismApi.Initialize(If(LogLevel = 1, DismLogLevel.LogErrors, If(LogLevel = 2, DismLogLevel.LogErrorsWarnings, If(LogLevel = 3, DismLogLevel.LogErrorsWarningsInfo, DismLogLevel.LogErrorsWarningsInfo))), If(AutoLogs, Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now), LogPath))
+                DismApi.RemountImage(MountDir)
+            Catch ex As DismException
+                errCode = ex.ErrorCode
+                IsSuccessful = False
+            Finally
+                DismApi.Shutdown()
+            End Try
             CurrentPB.Value = 50
             AllPB.Value = CurrentPB.Value
             Select Case Language
@@ -1323,7 +1317,10 @@ Public Class ProgressPanel
                     currentTask.Text = "Recopilando nivel de error..."
             End Select
             LogView.AppendText(CrLf & "Gathering error level...")
-            GetErrorCode(False)
+            If errCode Is Nothing Then
+                errCode = 0
+                IsSuccessful = True
+            End If
             If errCode.Length >= 8 Then
                 LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
             Else
