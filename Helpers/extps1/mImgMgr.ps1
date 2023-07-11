@@ -1,4 +1,30 @@
-﻿# DISMTools 0.3 - Mounted Image Manager CLI version
+﻿#                                              ....              
+#                                         .'^""""""^.            
+#      '^`'.                            '^"""""""^.              
+#     .^"""""`'                       .^"""""""^.                ------------------------------------------------------
+#      .^""""""`                      ^"""""""`                  | DISMTools 0.3                                      |
+#       ."""""""^.                   `""""""""'           `,`    | Open-source Windows image management, evolved      |
+#         '`""""""`.                 """""""""^         `,,,"    ------------------------------------------------------
+#            '^"""""`.               ^""""""""""'.   .`,,,,,^    | Mounted image manager (CLI version)                |
+#              .^"""""`.            ."""""""",,,,,,,,,,,,,,,.    ------------------------------------------------------
+#                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2023 CodingWonders Software                    |
+#                  .^"""""^.    '`^^"",:,,,,,,,,,,,,,,,,,".      ------------------------------------------------------
+#                    .^"""""^.`+]>,^^"",,:,,,,,,,,,,,,,`.        | This script is provided AS IS, without any         |
+#                      .^""";_]]]?)}:^^""",,,`'````'..           | warranty.                                          |
+#                        .;-]]]?(xxxx}:^^^^'                     ------------------------------------------------------
+#                       `+]]]?(xxxxxxxr},'                       
+#                     .`:+]?)xxxxxxxxxxxr<.                      
+#                   .`^^^^:(xxxxxxxxxxxxxxr>.                    
+#                 .`^^^^^^^^I(xxxxxxxxxxxxxxr<.                  
+#               .`^^^^^^^^^^^^I(xxxxxxxxxxxxxxr<.                
+#             .`^^^^^^^^^^^^^^^'`[xxxxxxxxxxxxxxr<.              
+#           .`^^^^^^^^^^^^^^^'    `}xxxxxxxxxxxxxxr<.            
+#          `^^":ll:"^^^^^^^'        `}xxxxxxxxxxxxxxr,           
+#         '^^^I-??]l^^^^^'            `[xxxxxxxxxxxxxx.          
+#         '^^^,<??~,^^^'                `{xxxxxxxxxxxx.          
+#          `^^^^^^^^^'                    `{xxxxxxxxr,           
+#           .'`^^^`'                        `i1jrt[:.            
+                                                           
 
 # Detect PS version first, as some parameters require PowerShell 5 or newer
 if ($PSVersionTable.PSVersion.Major -lt 5)
