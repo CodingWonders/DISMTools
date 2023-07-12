@@ -1890,6 +1890,7 @@ Public Class MainForm
                                         imgPType = imageInfo.ProductType
                                         imgPSuite = imageInfo.ProductSuite
                                         imgSysRoot = imageInfo.SystemRoot
+                                        If imgLangs <> "" Then imgLangs = ""
                                         For Each imageLang In imageInfo.Languages
                                             imgLangs &= imageLang.Name & If(imageInfo.DefaultLanguage.Name = imageLang.Name, " (default)", "") & ", "
                                         Next
@@ -5372,7 +5373,7 @@ Public Class MainForm
                             ' Like before, the conversion could not be possible
                         End Try
                         imgLangs = ProjectValueLoadForm.RichTextBox24.Text
-                        imgRW = ProjectValueLoadForm.RichTextBox25.Text
+                        imgRW = ""
 
                         ' Set initial settings for background processes
                         bwAllBackgroundProcesses = True
@@ -5511,7 +5512,7 @@ Public Class MainForm
                         ' Like before, the conversion could not be possible
                     End Try
                     imgLangs = ProjectValueLoadForm.RichTextBox24.Text
-                    imgRW = ProjectValueLoadForm.RichTextBox25.Text
+                    imgRW = ""
 
                     ' Set initial settings for background processes
                     bwAllBackgroundProcesses = True
@@ -5677,6 +5678,7 @@ Public Class MainForm
 
         ProjectValueLoadForm.RichTextBox24.Text = imgLangs
         ProjectValueLoadForm.RichTextBox25.Text = imgRW
+        ProjectValueLoadForm.RichTextBox26.Text = ""
         ProjectValueLoadForm.RichTextBox26.AppendText("[ProjOptions]" & CrLf & ProjectValueLoadForm.RichTextBox1.Lines(1) & CrLf & ProjectValueLoadForm.RichTextBox1.Lines(2) & CrLf & ProjectValueLoadForm.RichTextBox1.Lines(3) & CrLf & CrLf & _
                                                       "[ImageOptions]" & CrLf & _
                                                       "ImageFile=" & ProjectValueLoadForm.RichTextBox5.Text & CrLf & _
@@ -5698,9 +5700,7 @@ Public Class MainForm
                                                       "ImageFileCount=" & ProjectValueLoadForm.RichTextBox21.Text & CrLf & _
                                                       "ImageEpochCreate=" & ProjectValueLoadForm.RichTextBox22.Text & CrLf & _
                                                       "ImageEpochModify=" & ProjectValueLoadForm.RichTextBox23.Text & CrLf & _
-                                                      "ImageLang=" & ProjectValueLoadForm.RichTextBox24.Text & CrLf & CrLf & _
-                                                      "[Params]" & CrLf & _
-                                                      "ImageReadWrite=" & ProjectValueLoadForm.RichTextBox25.Text)
+                                                      "ImageLang=" & ProjectValueLoadForm.RichTextBox24.Text)
         Try
             ProjectValueLoadForm.EpochRTB2.Text = DateTimeOffset.FromUnixTimeSeconds(CType(ProjectValueLoadForm.RichTextBox22.Text, Long)).ToString().Replace(" +00:00", "").Trim()
             ProjectValueLoadForm.EpochRTB3.Text = DateTimeOffset.FromUnixTimeSeconds(CType(ProjectValueLoadForm.RichTextBox23.Text, Long)).ToString().Replace(" +00:00", "").Trim()

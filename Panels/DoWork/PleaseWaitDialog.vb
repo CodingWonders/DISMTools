@@ -136,7 +136,7 @@ Public Class PleaseWaitDialog
             ProjectValueLoadForm.RichTextBox22.Text = ProjectValueLoadForm.RichTextBox1.Lines(23).ToString().Replace("ImageEpochCreate=", "").Trim()
             ProjectValueLoadForm.RichTextBox23.Text = ProjectValueLoadForm.RichTextBox1.Lines(24).ToString().Replace("ImageEpochModify=", "").Trim()
             ProjectValueLoadForm.RichTextBox24.Text = ProjectValueLoadForm.RichTextBox1.Lines(25).ToString().Replace("ImageLang=", "").Trim().Replace(Quote, "").Trim()
-            ProjectValueLoadForm.RichTextBox25.Text = ProjectValueLoadForm.RichTextBox1.Lines(28).ToString().Replace("ImageReadWrite=", "").Trim().Replace(Quote, "").Trim()
+            'ProjectValueLoadForm.RichTextBox25.Text = ProjectValueLoadForm.RichTextBox1.Lines(28).ToString().Replace("ImageReadWrite=", "").Trim().Replace(Quote, "").Trim()
             ProjectValueLoadForm.EpochRTB1.Text = DateTimeOffset.FromUnixTimeSeconds(CInt(ProjectValueLoadForm.RichTextBox4.Text)).ToString().Replace(" +00:00", "").Trim()
             Try     ' These are separate, as they aren't set when the project creates
                 ProjectValueLoadForm.EpochRTB2.Text = DateTimeOffset.FromUnixTimeSeconds(CInt(ProjectValueLoadForm.RichTextBox22.Text)).ToString().Replace(" +00:00", "").Trim()
