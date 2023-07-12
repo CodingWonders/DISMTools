@@ -1296,7 +1296,7 @@ Public Class ProgressPanel
                 DismApi.Initialize(If(LogLevel = 1, DismLogLevel.LogErrors, If(LogLevel = 2, DismLogLevel.LogErrorsWarnings, If(LogLevel = 3, DismLogLevel.LogErrorsWarningsInfo, DismLogLevel.LogErrorsWarningsInfo))), If(AutoLogs, Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now), LogPath))
                 DismApi.RemountImage(MountDir)
             Catch ex As DismException
-                errCode = ex.ErrorCode
+                errCode = Hex(ex.ErrorCode)
                 IsSuccessful = False
             Finally
                 DismApi.Shutdown()

@@ -238,8 +238,20 @@ function Enable-WritePerms {
         "Y" {
             Write-Host "0  % - Unmounting specified image... (step 1 of 2)"
             Dismount-WindowsImage -Path $global:mImage[$global:selImage - 1].MountPath -Discard
+            if ($? -eq $false)
+            {
+                Write-Host "The unmount operation has failed. Read the log file for more information."`n`n"Press ENTER to continue..."
+                Read-Host
+                MainMenu
+            }
             Write-Host "50 % - Remounting specified image with write permissions... (step 2 of 2)"
             Mount-WindowsImage -ImagePath $global:mImage[$global:selImage - 1].ImagePath -Index $global:mImage[$global:selImage - 1].ImageIndex -Path $global:mImage[$global:selImage - 1].MountPath
+            if ($? -eq $false)
+            {
+                Write-Host "The mount operation has failed. Read the log file for more information."`n`n"Press ENTER to continue..."
+                Read-Host
+                MainMenu
+            }
             Write-Host "100% - This operation has completed and the image should have been mounted with write permissions."`n`n"Press ENTER to continue..."
             Read-Host | Out-Null
             MainMenu
