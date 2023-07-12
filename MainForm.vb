@@ -7629,6 +7629,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.MountDir = MountDir
         ' TODO: Add additional options later
         ProgressPanel.OperationNum = 8
@@ -7872,6 +7873,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Button11_Click(sender As Object, e As EventArgs) Handles Button11.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.MountDir = MountDir
         ProgressPanel.OperationNum = 18
         ProgressPanel.ShowDialog(Me)
@@ -8206,11 +8208,13 @@ Public Class MainForm
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         imgCommitOperation = 0
         UnloadDTProj(False, True, True)
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         imgCommitOperation = 1
         UnloadDTProj(False, True, True)
     End Sub
