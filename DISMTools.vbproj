@@ -1196,6 +1196,7 @@ IF %25GEN_INSTALLER%25=="Yes" (
 	echo Copying program files...
 	IF NOT EXIST "$(SolutionDir)Installer\files" (md "$(SolutionDir)Installer\files")
 	XCOPY "$(TargetDir)*.*" "$(SolutionDir)Installer\files" /cehyi
+	IF EXIST "$(SolutionDir)Installer\files\VS*.tmp" (del "$(SolutionDir)Installer\files\VS*.tmp" /f /q)
 	IF EXIST "$(SolutionDir)Installer\iscc.exe" (
 		echo Building the installer...
 		"$(SolutionDir)Installer\iscc.exe" "$(SolutionDir)Installer\dt.iss"
