@@ -768,7 +768,14 @@ Public Class ProjProperties
     Private Sub RemountImgBtn_Click(sender As Object, e As EventArgs) Handles RemountImgBtn.Click
         ProgressPanel.OperationNum = 18     ' Reload image for new servicing session
         ProgressPanel.MountDir = MainForm.MountDir
-        ProgressPanel.ShowDialog()
+        Visible = False
+        ProgressPanel.ShowDialog(MainForm)
+        Visible = True
+        If Not Directory.Exists(MainForm.projPath & "\tempinfo") Then
+            Directory.CreateDirectory(MainForm.projPath & "\tempinfo").Attributes = FileAttributes.Hidden
+        End If
+        LanguageList.Items.Clear()
+        DetectImageProperties()
     End Sub
 
     Private Sub RecoverButton_Click(sender As Object, e As EventArgs) Handles RecoverButton.Click

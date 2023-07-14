@@ -274,7 +274,6 @@ Public Class ProgressPanel
 
     ' OperationNum: 18
     Public remountisReadOnly As Boolean                     ' Determine whether the remount happened because of a read-only mounted image
-    Public isTriggeredByPropertyDialog As Boolean = False
 
     ' OperationNum: 21
     Public UMountImgIndex As Integer
@@ -4468,18 +4467,10 @@ Public Class ProgressPanel
                     MainForm.bwBackgroundProcessAction = 0
                     MainForm.bwGetImageInfo = True
                     MainForm.bwGetAdvImgInfo = True
-                    If ProjProperties.Visible Then
-                        isTriggeredByPropertyDialog = True
-                        ProjProperties.Close()
-                    End If
                     If remountisReadOnly Then
                         MainForm.UpdateProjProperties(True, True)
                     Else
                         MainForm.UpdateProjProperties(True, False)
-                    End If
-                    If isTriggeredByPropertyDialog Then
-                        ProjProperties.TabControl1.SelectedIndex = 1
-                        ProjProperties.ShowDialog(MainForm)
                     End If
                     MainForm.isModified = False
                 End If
