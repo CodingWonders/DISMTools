@@ -4357,7 +4357,7 @@ Public Class ProgressPanel
     End Sub
 
     Private Sub ProgressBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ProgressBW.DoWork
-        If TaskList.Count > 2 Or (ActionRunning And TaskList.Count >= 1) Then
+        If TaskList.Count >= 2 Or (ActionRunning And TaskList.Count >= 1) Then
             RunTaskList(TaskList)
         Else
             RunOps(OperationNum)
@@ -4958,7 +4958,7 @@ Public Class ProgressPanel
             ReadActionFile(ActionFile)
             'Exit Sub
         Else
-            If TaskList.Count > 2 Then
+            If TaskList.Count >= 2 Then
                 AllPB.Maximum = TaskList.Count * 100
                 Select Case MainForm.Language
                     Case 0

@@ -241,7 +241,7 @@ function Enable-WritePerms {
             if ($? -eq $false)
             {
                 Write-Host "The unmount operation has failed. Read the log file for more information."`n`n"Press ENTER to continue..."
-                Read-Host
+                Read-Host | Out-Null
                 MainMenu
             }
             Write-Host "50 % - Remounting specified image with write permissions... (step 2 of 2)"
@@ -249,7 +249,7 @@ function Enable-WritePerms {
             if ($? -eq $false)
             {
                 Write-Host "The mount operation has failed. Read the log file for more information."`n`n"Press ENTER to continue..."
-                Read-Host
+                Read-Host | Out-Null
                 MainMenu
             }
             Write-Host "100% - This operation has completed and the image should have been mounted with write permissions."`n`n"Press ENTER to continue..."
@@ -514,7 +514,14 @@ function MainMenu {
             {
                 Write-Host `n"Reloading servicing for this image..."
                 Mount-WindowsImage -Path $global:mImage[$global:selImage - 1].MountPath -Remount
-                Write-Host `n"The servicing session for this image should have been reloaded."`n
+                if ($?)
+                {
+                    Write-Host `n"The servicing session for this image has been reloaded successfully."`n
+                }
+                else
+                {
+                    Write-Host `n"The servicing session for this image could not be reloaded. Refer to the log file for more information"`n                    
+                }
                 Write-Host "Press ENTER to continue..."
                 Read-Host | Out-Null
                 MainMenu
@@ -523,7 +530,14 @@ function MainMenu {
             {
                 Write-Host `n"Repairing the component store of this image..."
                 Repair-WindowsImage -Path $global:mImage[$global:selImage - 1].MountPath -RestoreHealth
-                Write-Host `n"The component store of this image should have been repaired."`n
+                if ($?)
+                {
+                    Write-Host `n"The component store of this image has been repaired successfully."`n
+                }
+                else
+                {
+                    Write-Host `n"The component store of this image could not be repaired. Refer to the log file for more information."`n
+                }
                 Write-Host "Press ENTER to continue..."
                 Read-Host | Out-Null
                 MainMenu
@@ -540,8 +554,11 @@ function MainMenu {
             }
             Enable-WritePerms
         }
-        "A" { 
-            Start-Process -FilePath $(([System.Environment]::GetFolderPath([System.Environment+SpecialFolder]::Windows)) + '\explorer.exe') -ArgumentList $($global:mImage[$global:selImage - 1].MountPath)
+        "A" {
+            if (($global:selImage -gt 0) -and (Test-Path -Path $($global:mImage[$global:selImage - 1].MountPath)))
+            {
+                Start-Process -FilePath $(([System.Environment]::GetFolderPath([System.Environment+SpecialFolder]::Windows)) + '\explorer.exe') -ArgumentList $($global:mImage[$global:selImage - 1].MountPath)
+            }
             MainMenu
         }
         "V" {

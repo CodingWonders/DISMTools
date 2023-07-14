@@ -1676,6 +1676,9 @@ Public Class MainForm
                                 End If
                             Next
                             RemountImageWithWritePermissionsToolStripMenuItem.Enabled = If(MountedImageMountedReWr(x) = 0, False, True)
+                            Button2.Enabled = If(MountedImageMountedReWr(x) = 0, True, False)
+                            Button3.Enabled = If(MountedImageMountedReWr(x) = 0, True, False)
+                            Button4.Enabled = If(MountedImageMountedReWr(x) = 0, True, False)
                             Exit For
                         End If
                     Next
@@ -1959,9 +1962,9 @@ Public Class MainForm
                         Exit Try
                     End Try
                     Button1.Enabled = False
-                    Button2.Enabled = True
-                    Button3.Enabled = True
-                    Button4.Enabled = True
+                    'Button2.Enabled = True
+                    'Button3.Enabled = True
+                    'Button4.Enabled = True
                     Button5.Enabled = True
                     Button6.Enabled = True
                     Button7.Enabled = True
@@ -2321,9 +2324,9 @@ Public Class MainForm
 
         End Try
         Button1.Enabled = False
-        Button2.Enabled = True
-        Button3.Enabled = True
-        Button4.Enabled = True
+        'Button2.Enabled = True
+        'Button3.Enabled = True
+        'Button4.Enabled = True
         Button5.Enabled = True
         Button6.Enabled = True
         Button7.Enabled = True
@@ -9744,5 +9747,52 @@ Public Class MainForm
 
     Private Sub UpdCheckerBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles UpdCheckerBW.DoWork
         CheckForUpdates(dtBranch)
+    End Sub
+
+    Private Sub RemountImageWithWritePermissionsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RemountImageWithWritePermissionsToolStripMenuItem.Click
+        ' Go through each mounted image until we find it
+        If MountedImageMountDirs.Count > 0 Then
+            If MountedImageMountDirs.Contains(MountDir) Then
+                For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
+                    If MountedImageMountDirs(x) = MountDir Then
+                        EnableWritePermissions(MountedImageImgFiles(x), CInt(MountedImageImgIndexes(x)), MountedImageMountDirs(x))
+                        Exit For
+                    End If
+                Next
+            End If
+        End If
+    End Sub
+
+    Sub EnableWritePermissions(SourceImage As String, SourceIndex As Integer, DestinationPath As String)
+        If File.Exists(SourceImage) Then
+            If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+            ' Configure settings to remount image with write permissions
+
+            ' Unmount image discarding changes
+            ProgressPanel.UMountLocalDir = True
+            ProgressPanel.MountDir = DestinationPath
+            ProgressPanel.UMountImgIndex = SourceIndex
+            ProgressPanel.UMountOp = 1
+
+            ' Mount the same image to the same directory with (hopefully) write permissions
+            ProgressPanel.SourceImg = SourceImage
+            ProgressPanel.ImgIndex = SourceIndex
+            ProgressPanel.isReadOnly = False
+            ProgressPanel.isOptimized = False
+            ProgressPanel.isIntegrityTested = False
+
+            ' Add tasks to task list
+            ProgressPanel.TaskList.AddRange({21, 15})
+            ProgressPanel.OperationNum = 15
+
+            If WindowState = FormWindowState.Minimized Then WindowState = FormWindowState.Normal
+            ProgressPanel.ShowDialog(Me)
+
+            If isProjectLoaded And IsImageMounted And MountDir = DestinationPath Then
+                UpdateProjProperties(True, False, False)
+            Else
+                If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
+            End If
+        End If
     End Sub
 End Class

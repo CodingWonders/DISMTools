@@ -762,7 +762,23 @@ Public Class ProjProperties
     End Sub
 
     Private Sub RWRemountBtn_Click(sender As Object, e As EventArgs) Handles RWRemountBtn.Click
-
+        Visible = False
+        If MainForm.MountedImageMountDirs.Count > 0 Then
+            If MainForm.MountedImageMountDirs.Contains(MainForm.MountDir) Then
+                For x = 0 To Array.LastIndexOf(MainForm.MountedImageMountDirs, MainForm.MountedImageMountDirs.Last)
+                    If MainForm.MountedImageMountDirs(x) = MainForm.MountDir Then
+                        MainForm.EnableWritePermissions(MainForm.MountedImageImgFiles(x), CInt(MainForm.MountedImageImgIndexes(x)), MainForm.MountedImageMountDirs(x))
+                        Exit For
+                    End If
+                Next
+            End If
+        End If
+        Visible = True
+        If Not Directory.Exists(MainForm.projPath & "\tempinfo") Then
+            Directory.CreateDirectory(MainForm.projPath & "\tempinfo").Attributes = FileAttributes.Hidden
+        End If
+        LanguageList.Items.Clear()
+        DetectImageProperties()
     End Sub
 
     Private Sub RemountImgBtn_Click(sender As Object, e As EventArgs) Handles RemountImgBtn.Click
@@ -779,7 +795,10 @@ Public Class ProjProperties
     End Sub
 
     Private Sub RecoverButton_Click(sender As Object, e As EventArgs) Handles RecoverButton.Click
-
+        Visible = False
+        ImgCleanup.ComboBox1.SelectedIndex = 6
+        ImgCleanup.ShowDialog(MainForm)
+        Visible = True
     End Sub
 
     Private Sub LinkLabel2_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel2.LinkClicked
