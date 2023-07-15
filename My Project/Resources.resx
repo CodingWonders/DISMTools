@@ -1048,22 +1048,40 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes
 
-- Fixed an issue where the main program window would not be repositioned when outside of the bounds of the primary screen
-- Fixed an issue where the program would detect AppX packages and capabilities on Windows PE images, and fail those background processes due to missing image modules
+- Fixed an issue in the CLI version of the mounted image manager where main menu errors would not display correctly
+- Fixed an issue where projects would not load if the read-write parameter wasn't found in their settings files
+- Fixed an issue where AppX packages and capabilities would not be detected in the online installation management mode
+- Fixed more issues regarding the improper disposal of the progress panel
+- The CLI version of the mounted image manager no longer makes assumptions as to whether a command ran successfully or not
 
 New features
 
+Image compatibility
+
+- The program will now discard any WIM file containing a Windows XP, Server 2003, or older Windows installation; as they weren't supposed to be serviced using DISM
+
+Image properties
+
+- Feature update detection has been improved to support Windows builds from the Gallium development semester
+- The installed languages of an image are now shown in a list, as opposed to in a text box
+- You can now reload the servicing, repair the component store, and enable write permissions to an image from the properties dialog
+
+Image tasks
+
+- You can now enable write permissions to a read-only Windows image from within the main program
+- The image cleanup dialog now remembers the task you've selected
+
+DISM API
+
+- Reloading the servicing session of a Windows image is now done using the DISM API
+
 Installer
 
-- Setup now supports more languages: French, Italian, Portuguese, and German
+- The installer now creates the necessary registry keys
 
-Automation
+Branding
 
-- Image unmount operations are now supported by the Action runtime
-
-CLI tools
-
-- Some enhancements were made to the CLI version of the mounted image manager: volume image removal is now implemented, and image unmount settings have been drastically enhanced, making them functional</value>
+- Branding is becoming finalized</value>
   </data>
   <data name="secprogress_classic" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\secprogress_classic.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
