@@ -41,6 +41,7 @@ Partial Class ProjProperties
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
+        Me.LanguageList = New System.Windows.Forms.ListBox()
         Me.RemountImgBtn = New System.Windows.Forms.Button()
         Me.RecoverButton = New System.Windows.Forms.Button()
         Me.RWRemountBtn = New System.Windows.Forms.Button()
@@ -100,7 +101,6 @@ Partial Class ProjProperties
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
-        Me.LanguageList = New System.Windows.Forms.ListBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -366,6 +366,15 @@ Partial Class ProjProperties
         Me.TabPage2.Text = "Image"
         Me.TabPage2.UseVisualStyleBackColor = True
         '
+        'LanguageList
+        '
+        Me.LanguageList.FormattingEnabled = True
+        Me.LanguageList.Location = New System.Drawing.Point(613, 262)
+        Me.LanguageList.Name = "LanguageList"
+        Me.LanguageList.ScrollAlwaysVisible = True
+        Me.LanguageList.Size = New System.Drawing.Size(278, 95)
+        Me.LanguageList.TabIndex = 20
+        '
         'RemountImgBtn
         '
         Me.RemountImgBtn.AutoEllipsis = True
@@ -411,6 +420,7 @@ Partial Class ProjProperties
         Me.imgLangText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.imgLangText.Size = New System.Drawing.Size(278, 96)
         Me.imgLangText.TabIndex = 17
+        Me.imgLangText.Visible = False
         '
         'Label62
         '
@@ -898,15 +908,6 @@ Partial Class ProjProperties
         Me.Label4.Size = New System.Drawing.Size(261, 13)
         Me.Label4.TabIndex = 5
         Me.Label4.Text = "Getting project and image information. Please wait..."
-        '
-        'LanguageList
-        '
-        Me.LanguageList.FormattingEnabled = True
-        Me.LanguageList.Location = New System.Drawing.Point(613, 262)
-        Me.LanguageList.Name = "LanguageList"
-        Me.LanguageList.ScrollAlwaysVisible = True
-        Me.LanguageList.Size = New System.Drawing.Size(278, 95)
-        Me.LanguageList.TabIndex = 20
         '
         'ProjProperties
         '
