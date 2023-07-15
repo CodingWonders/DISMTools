@@ -511,6 +511,16 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property dt_branding() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("dt_branding", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Icon similar a (Icono).
         '''</summary>
         Friend ReadOnly Property dtproj() As System.Drawing.Icon
@@ -1648,22 +1658,11 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''- Fixed an issue where the main program window would not be repositioned when outside of the bounds of the primary screen
-        '''- Fixed an issue where the program would detect AppX packages and capabilities on Windows PE images, and fail those background processes due to missing image modules
-        '''
-        '''New features
-        '''
-        '''Installer
-        '''
-        '''- Setup now supports more languages: French, Italian, Portuguese, and German
-        '''
-        '''Automation
-        '''
-        '''- Image unmount operations are now supported by the Action runtime
-        '''
-        '''CLI tools
-        '''
-        '''-  [resto de la cadena truncado]&quot;;.
+        '''- Fixed an issue in the CLI version of the mounted image manager where main menu errors would not display correctly
+        '''- Fixed an issue where projects would not load if the read-write parameter wasn&apos;t found in their settings files
+        '''- Fixed an issue where AppX packages and capabilities would not be detected in the online installation management mode
+        '''- Fixed more issues regarding the improper disposal of the progress panel
+        '''- The CLI version of the mounted image manager no longer makes assumptions  [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

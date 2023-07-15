@@ -205,6 +205,8 @@ Public Class MainForm
 
     Public CompletedTasks(4) As Boolean
 
+    Dim HasRemounted As Boolean
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -300,6 +302,7 @@ Public Class MainForm
             BranchTSMI.Visible = True
             Text &= " (debug mode)"
         End If
+        Visible = False
         ' Read settings file
         If File.Exists(Application.StartupPath & "\settings.ini") Then
             Dim SettingReader As New RichTextBox() With {.Text = File.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)}
@@ -318,7 +321,11 @@ Public Class MainForm
             DismVersionChecker = FileVersionInfo.GetVersionInfo(DismExe)
         End If
         UnblockPSHelpers()
-        If StartupRemount Then RemountOrphanedImages()
+        If StartupRemount Then RemountOrphanedImages() Else HasRemounted = True
+        While Not HasRemounted
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         If StartupUpdateCheck Then
             UpdCheckerBW.RunWorkerAsync()
         Else
@@ -339,9 +346,10 @@ Public Class MainForm
             ' Center form
             Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2)
         End If
+        Visible = True
         If argProjPath <> "" Then
             HomePanel.Visible = False
-            Visible = True
+            'Visible = True
             ProgressPanel.OperationNum = 990
             LoadDTProj(argProjPath, Path.GetFileNameWithoutExtension(argProjPath), True, False)
         End If
@@ -437,14 +445,20 @@ Public Class MainForm
             Thread.Sleep(100)
         End While
         If MountedImageMountDirs.Count > 0 Then
-            DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
-            For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
-                If MountedImageImgStatuses(x) = 1 Then
-                    DismApi.RemountImage(MountedImageMountDirs(x))
-                End If
-            Next
-            DismApi.Shutdown()
+            Try
+                DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
+                For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
+                    If MountedImageImgStatuses(x) = 1 Then
+                        DismApi.RemountImage(MountedImageMountDirs(x))
+                    End If
+                Next
+            Catch ex As Exception
+                Debug.WriteLine("Could not remount all orphaned images. Reason:" & CrLf & ex.ToString())
+            Finally
+                DismApi.Shutdown()
+            End Try
         End If
+        HasRemounted = True
     End Sub
 
     Sub CheckForUpdates(branch As String)
@@ -1421,52 +1435,61 @@ Public Class MainForm
                     If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                     Exit Sub
                 End If
-                If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") And Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
-                    Debug.WriteLine("[IsWindows8OrHigher] Returned True")
-                    pbOpNums += 1
-                    Select Case Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
-                                    progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
-                                Case "ESN"
-                                    progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
-                            End Select
-                        Case 1
-                            progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
-                        Case 2
-                            progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
-                    End Select
-                    ImgBW.ReportProgress(progressMin + progressDivs)
-                    GetImageAppxPackages(True, OnlineMode)
-                    If ImgBW.CancellationPending Then
-                        If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
-                        Exit Sub
+                If imgEdition Is Nothing Then imgEdition = ""
+                If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+                    If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+                        Debug.WriteLine("[IsWindows8OrHigher] Returned True")
+                        pbOpNums += 1
+                        Select Case Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
+                                    Case "ESN"
+                                        progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
+                                End Select
+                            Case 1
+                                progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
+                            Case 2
+                                progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
+                        End Select
+                        ImgBW.ReportProgress(progressMin + progressDivs)
+                        GetImageAppxPackages(True, OnlineMode)
+                        If ImgBW.CancellationPending Then
+                            If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                            Exit Sub
+                        End If
+                    Else
+                        Debug.WriteLine("[IsWindows8OrHigher] Returned False")
                     End If
                 Else
                     Debug.WriteLine("[IsWindows8OrHigher] Returned False")
                 End If
                 If IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") And Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
-                    Debug.WriteLine("[IsWindows10OrHigher] Returned True")
-                    pbOpNums += 1
-                    Select Case Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
-                                    progressLabel = "Getting image Features on Demand (capabilities)..."
-                                Case "ESN"
-                                    progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
-                            End Select
-                        Case 1
-                            progressLabel = "Getting image Features on Demand (capabilities)..."
-                        Case 2
-                            progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
-                    End Select
-                    ImgBW.ReportProgress(progressMin + progressDivs)
-                    GetImageCapabilities(True, OnlineMode)
-                    If ImgBW.CancellationPending Then
-                        If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
-                        Exit Sub
+                    If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+                        Debug.WriteLine("[IsWindows10OrHigher] Returned True")
+                        pbOpNums += 1
+                        Select Case Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        progressLabel = "Getting image Features on Demand (capabilities)..."
+                                    Case "ESN"
+                                        progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
+                                End Select
+                            Case 1
+                                progressLabel = "Getting image Features on Demand (capabilities)..."
+                            Case 2
+                                progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
+                        End Select
+                        ImgBW.ReportProgress(progressMin + progressDivs)
+                        GetImageCapabilities(True, OnlineMode)
+                        If ImgBW.CancellationPending Then
+                            If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                            Exit Sub
+                        End If
+                    Else
+                        Debug.WriteLine("[IsWindows10OrHigher] Returned False")
                     End If
                 Else
                     Debug.WriteLine("[IsWindows10OrHigher] Returned False")
@@ -1653,6 +1676,9 @@ Public Class MainForm
                                 End If
                             Next
                             RemountImageWithWritePermissionsToolStripMenuItem.Enabled = If(MountedImageMountedReWr(x) = 0, False, True)
+                            Button2.Enabled = If(MountedImageMountedReWr(x) = 0, True, False)
+                            Button3.Enabled = If(MountedImageMountedReWr(x) = 0, True, False)
+                            Button4.Enabled = If(MountedImageMountedReWr(x) = 0, True, False)
                             Exit For
                         End If
                     Next
@@ -1867,6 +1893,7 @@ Public Class MainForm
                                         imgPType = imageInfo.ProductType
                                         imgPSuite = imageInfo.ProductSuite
                                         imgSysRoot = imageInfo.SystemRoot
+                                        If imgLangs <> "" Then imgLangs = ""
                                         For Each imageLang In imageInfo.Languages
                                             imgLangs &= imageLang.Name & If(imageInfo.DefaultLanguage.Name = imageLang.Name, " (default)", "") & ", "
                                         Next
@@ -1935,9 +1962,9 @@ Public Class MainForm
                         Exit Try
                     End Try
                     Button1.Enabled = False
-                    Button2.Enabled = True
-                    Button3.Enabled = True
-                    Button4.Enabled = True
+                    'Button2.Enabled = True
+                    'Button3.Enabled = True
+                    'Button4.Enabled = True
                     Button5.Enabled = True
                     Button6.Enabled = True
                     Button7.Enabled = True
@@ -2281,14 +2308,25 @@ Public Class MainForm
                     Case Is >= 21996                            ' Windows 11 / Cobalt_Refresh / Nickel / Copper / WinPE 10.0
 
                 End Select
+            ElseIf NTKeVerInfo.ProductMajorPart < 6 Then
+                ' Windows XP/Server 2003 or older WIM files created by XP2ESD or other XP -> WIM projects. Directly unmount it
+                ProgressPanel.UMountLocalDir = True
+                ProgressPanel.RandomMountDir = ""   ' Hope there isn't anything to set here
+                ProgressPanel.MountDir = MountDir
+                ProgressPanel.UMountOp = 1
+                ProgressPanel.CheckImgIntegrity = False
+                ProgressPanel.SaveToNewIndex = False
+                ProgressPanel.UMountImgIndex = ImgIndex
+                ProgressPanel.OperationNum = 21
+                ProgressPanel.ShowDialog()
             End If
         Catch ex As Exception
 
         End Try
         Button1.Enabled = False
-        Button2.Enabled = True
-        Button3.Enabled = True
-        Button4.Enabled = True
+        'Button2.Enabled = True
+        'Button3.Enabled = True
+        'Button4.Enabled = True
         Button5.Enabled = True
         Button6.Enabled = True
         Button7.Enabled = True
@@ -5338,7 +5376,7 @@ Public Class MainForm
                             ' Like before, the conversion could not be possible
                         End Try
                         imgLangs = ProjectValueLoadForm.RichTextBox24.Text
-                        imgRW = ProjectValueLoadForm.RichTextBox25.Text
+                        imgRW = ""
 
                         ' Set initial settings for background processes
                         bwAllBackgroundProcesses = True
@@ -5477,7 +5515,7 @@ Public Class MainForm
                         ' Like before, the conversion could not be possible
                     End Try
                     imgLangs = ProjectValueLoadForm.RichTextBox24.Text
-                    imgRW = ProjectValueLoadForm.RichTextBox25.Text
+                    imgRW = ""
 
                     ' Set initial settings for background processes
                     bwAllBackgroundProcesses = True
@@ -5643,6 +5681,7 @@ Public Class MainForm
 
         ProjectValueLoadForm.RichTextBox24.Text = imgLangs
         ProjectValueLoadForm.RichTextBox25.Text = imgRW
+        ProjectValueLoadForm.RichTextBox26.Text = ""
         ProjectValueLoadForm.RichTextBox26.AppendText("[ProjOptions]" & CrLf & ProjectValueLoadForm.RichTextBox1.Lines(1) & CrLf & ProjectValueLoadForm.RichTextBox1.Lines(2) & CrLf & ProjectValueLoadForm.RichTextBox1.Lines(3) & CrLf & CrLf & _
                                                       "[ImageOptions]" & CrLf & _
                                                       "ImageFile=" & ProjectValueLoadForm.RichTextBox5.Text & CrLf & _
@@ -5664,9 +5703,7 @@ Public Class MainForm
                                                       "ImageFileCount=" & ProjectValueLoadForm.RichTextBox21.Text & CrLf & _
                                                       "ImageEpochCreate=" & ProjectValueLoadForm.RichTextBox22.Text & CrLf & _
                                                       "ImageEpochModify=" & ProjectValueLoadForm.RichTextBox23.Text & CrLf & _
-                                                      "ImageLang=" & ProjectValueLoadForm.RichTextBox24.Text & CrLf & CrLf & _
-                                                      "[Params]" & CrLf & _
-                                                      "ImageReadWrite=" & ProjectValueLoadForm.RichTextBox25.Text)
+                                                      "ImageLang=" & ProjectValueLoadForm.RichTextBox24.Text)
         Try
             ProjectValueLoadForm.EpochRTB2.Text = DateTimeOffset.FromUnixTimeSeconds(CType(ProjectValueLoadForm.RichTextBox22.Text, Long)).ToString().Replace(" +00:00", "").Trim()
             ProjectValueLoadForm.EpochRTB3.Text = DateTimeOffset.FromUnixTimeSeconds(CType(ProjectValueLoadForm.RichTextBox23.Text, Long)).ToString().Replace(" +00:00", "").Trim()
@@ -7595,6 +7632,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.MountDir = MountDir
         ' TODO: Add additional options later
         ProgressPanel.OperationNum = 8
@@ -7838,6 +7876,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Button11_Click(sender As Object, e As EventArgs) Handles Button11.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.MountDir = MountDir
         ProgressPanel.OperationNum = 18
         ProgressPanel.ShowDialog(Me)
@@ -8172,11 +8211,13 @@ Public Class MainForm
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         imgCommitOperation = 0
         UnloadDTProj(False, True, True)
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         imgCommitOperation = 1
         UnloadDTProj(False, True, True)
     End Sub
@@ -9706,5 +9747,52 @@ Public Class MainForm
 
     Private Sub UpdCheckerBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles UpdCheckerBW.DoWork
         CheckForUpdates(dtBranch)
+    End Sub
+
+    Private Sub RemountImageWithWritePermissionsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RemountImageWithWritePermissionsToolStripMenuItem.Click
+        ' Go through each mounted image until we find it
+        If MountedImageMountDirs.Count > 0 Then
+            If MountedImageMountDirs.Contains(MountDir) Then
+                For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
+                    If MountedImageMountDirs(x) = MountDir Then
+                        EnableWritePermissions(MountedImageImgFiles(x), CInt(MountedImageImgIndexes(x)), MountedImageMountDirs(x))
+                        Exit For
+                    End If
+                Next
+            End If
+        End If
+    End Sub
+
+    Sub EnableWritePermissions(SourceImage As String, SourceIndex As Integer, DestinationPath As String)
+        If File.Exists(SourceImage) Then
+            If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+            ' Configure settings to remount image with write permissions
+
+            ' Unmount image discarding changes
+            ProgressPanel.UMountLocalDir = True
+            ProgressPanel.MountDir = DestinationPath
+            ProgressPanel.UMountImgIndex = SourceIndex
+            ProgressPanel.UMountOp = 1
+
+            ' Mount the same image to the same directory with (hopefully) write permissions
+            ProgressPanel.SourceImg = SourceImage
+            ProgressPanel.ImgIndex = SourceIndex
+            ProgressPanel.isReadOnly = False
+            ProgressPanel.isOptimized = False
+            ProgressPanel.isIntegrityTested = False
+
+            ' Add tasks to task list
+            ProgressPanel.TaskList.AddRange({21, 15})
+            ProgressPanel.OperationNum = 15
+
+            If WindowState = FormWindowState.Minimized Then WindowState = FormWindowState.Normal
+            ProgressPanel.ShowDialog(Me)
+
+            If isProjectLoaded And IsImageMounted And MountDir = DestinationPath Then
+                UpdateProjProperties(True, False, False)
+            Else
+                If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
+            End If
+        End If
     End Sub
 End Class

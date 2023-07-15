@@ -856,6 +856,7 @@
     <None Include="portable">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Resources\startup\dt_branding.png" />
     <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
     <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
     <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />
@@ -1195,6 +1196,7 @@ IF %25GEN_INSTALLER%25=="Yes" (
 	echo Copying program files...
 	IF NOT EXIST "$(SolutionDir)Installer\files" (md "$(SolutionDir)Installer\files")
 	XCOPY "$(TargetDir)*.*" "$(SolutionDir)Installer\files" /cehyi
+	IF EXIST "$(SolutionDir)Installer\files\VS*.tmp" (del "$(SolutionDir)Installer\files\VS*.tmp" /f /q)
 	IF EXIST "$(SolutionDir)Installer\iscc.exe" (
 		echo Building the installer...
 		"$(SolutionDir)Installer\iscc.exe" "$(SolutionDir)Installer\dt.iss"

@@ -138,7 +138,7 @@ Public Class MountedImgMgr
             Else
                 Button2.Enabled = False
             End If
-            IIf(MainForm.MountedImageMountedReWr(ListView1.FocusedItem.Index) = 1, Button3.Enabled = True, Button3.Enabled = False)
+            Button3.Enabled = If(MainForm.MountedImageMountedReWr(ListView1.FocusedItem.Index) = 1, True, False)
             Button4.Enabled = True
             Button5.Enabled = True
             If MainForm.isProjectLoaded And MainForm.MountDir = "N/A" Or Not Directory.Exists(MainForm.MountDir & "\Windows") Then
@@ -200,10 +200,17 @@ Public Class MountedImgMgr
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
-        ProgressPanel.MountDir = ListView1.FocusedItem.SubItems(2).Text
-        ProgressPanel.OperationNum = 18
-        ProgressPanel.ShowDialog()
-        Button2.Enabled = False
+        If MainForm.MountedImageImgStatuses(ListView1.FocusedItem.Index) = 1 Then
+            ProgressPanel.MountDir = ListView1.FocusedItem.SubItems(2).Text
+            ProgressPanel.OperationNum = 18
+            ProgressPanel.ShowDialog()
+            Button2.Enabled = False
+        ElseIf MainForm.MountedImageImgStatuses(ListView1.FocusedItem.Index) = 2 Then
+            Visible = False
+            ImgCleanup.ComboBox1.SelectedIndex = 6
+            ImgCleanup.ShowDialog(MainForm)
+            Visible = True
+        End If
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -296,5 +303,11 @@ Public Class MountedImgMgr
         End While
         ImgIndexDelete.TextBox1.Text = ListView1.FocusedItem.SubItems(0).Text
         ImgIndexDelete.ShowDialog()
+    End Sub
+
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        If MainForm.MountedImageMountDirs.Count > 0 Then
+            MainForm.EnableWritePermissions(ListView1.FocusedItem.SubItems(0).Text, CInt(ListView1.FocusedItem.SubItems(1).Text), ListView1.FocusedItem.SubItems(2).Text)
+        End If
     End Sub
 End Class

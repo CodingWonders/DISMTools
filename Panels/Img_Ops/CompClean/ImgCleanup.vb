@@ -7,6 +7,8 @@ Public Class ImgCleanup
 
     Dim Tasks() As String = New String(6) {"Revert pending actions", "Clean up Service Pack backup files", "Clean up component store", "Analyze component store", "Check component store", "Scan component store for corruption", "Repair component store"}
 
+    Dim SelTask As Integer = -1
+
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         ProgressPanel.CleanupTask = ComboBox1.SelectedIndex
         Select Case ComboBox1.SelectedIndex
@@ -277,6 +279,8 @@ Public Class ImgCleanup
         End If
 
         CheckBox5.Enabled = MainForm.OnlineManagement = True
+
+        If SelTask >= 0 And SelTask < ComboBox1.Items.Count Then ComboBox1.SelectedIndex = SelTask
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
@@ -487,5 +491,9 @@ Public Class ImgCleanup
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
         TextBoxSourcePanel.Visible = True
         WimFileSourcePanel.Visible = False
+    End Sub
+
+    Private Sub ImgCleanup_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        SelTask = ComboBox1.SelectedIndex
     End Sub
 End Class

@@ -274,7 +274,6 @@ Public Class ProgressPanel
 
     ' OperationNum: 18
     Public remountisReadOnly As Boolean                     ' Determine whether the remount happened because of a read-only mounted image
-    Public isTriggeredByPropertyDialog As Boolean = False
 
     ' OperationNum: 21
     Public UMountImgIndex As Integer
@@ -1292,21 +1291,15 @@ Public Class ProgressPanel
             End Select
             LogView.AppendText(CrLf & "Reloading servicing session..." & CrLf &
                                "- Mount directory: " & MountDir)
-            DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-            Select Case DismVersionChecker.ProductMajorPart
-                Case 6
-                    Select Case DismVersionChecker.ProductMinorPart
-                        Case 1
-                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /remount-wim /mountdir=" & Quote & MountDir & Quote
-                        Case Is >= 2
-                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /remount-image /mountdir=" & Quote & MountDir & Quote
-                    End Select
-                Case 10
-                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /remount-image /mountdir=" & Quote & MountDir & Quote
-            End Select
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            Try
+                DismApi.Initialize(If(LogLevel = 1, DismLogLevel.LogErrors, If(LogLevel = 2, DismLogLevel.LogErrorsWarnings, If(LogLevel = 3, DismLogLevel.LogErrorsWarningsInfo, DismLogLevel.LogErrorsWarningsInfo))), If(AutoLogs, Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now), LogPath))
+                DismApi.RemountImage(MountDir)
+            Catch ex As DismException
+                errCode = Hex(ex.ErrorCode)
+                IsSuccessful = False
+            Finally
+                DismApi.Shutdown()
+            End Try
             CurrentPB.Value = 50
             AllPB.Value = CurrentPB.Value
             Select Case Language
@@ -1323,7 +1316,10 @@ Public Class ProgressPanel
                     currentTask.Text = "Recopilando nivel de error..."
             End Select
             LogView.AppendText(CrLf & "Gathering error level...")
-            GetErrorCode(False)
+            If errCode Is Nothing Then
+                errCode = 0
+                IsSuccessful = True
+            End If
             If errCode.Length >= 8 Then
                 LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
             Else
@@ -4361,7 +4357,7 @@ Public Class ProgressPanel
     End Sub
 
     Private Sub ProgressBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ProgressBW.DoWork
-        If TaskList.Count > 2 Or (ActionRunning And TaskList.Count >= 1) Then
+        If TaskList.Count >= 2 Or (ActionRunning And TaskList.Count >= 1) Then
             RunTaskList(TaskList)
         Else
             RunOps(OperationNum)
@@ -4471,18 +4467,10 @@ Public Class ProgressPanel
                     MainForm.bwBackgroundProcessAction = 0
                     MainForm.bwGetImageInfo = True
                     MainForm.bwGetAdvImgInfo = True
-                    If ProjProperties.Visible Then
-                        isTriggeredByPropertyDialog = True
-                        ProjProperties.Close()
-                    End If
                     If remountisReadOnly Then
                         MainForm.UpdateProjProperties(True, True)
                     Else
                         MainForm.UpdateProjProperties(True, False)
-                    End If
-                    If isTriggeredByPropertyDialog Then
-                        ProjProperties.TabControl1.SelectedIndex = 1
-                        ProjProperties.ShowDialog(MainForm)
                     End If
                     MainForm.isModified = False
                 End If
@@ -4970,7 +4958,7 @@ Public Class ProgressPanel
             ReadActionFile(ActionFile)
             'Exit Sub
         Else
-            If TaskList.Count > 2 Then
+            If TaskList.Count >= 2 Then
                 AllPB.Maximum = TaskList.Count * 100
                 Select Case MainForm.Language
                     Case 0

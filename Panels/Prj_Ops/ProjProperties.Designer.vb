@@ -41,6 +41,7 @@ Partial Class ProjProperties
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
+        Me.LanguageList = New System.Windows.Forms.ListBox()
         Me.RemountImgBtn = New System.Windows.Forms.Button()
         Me.RecoverButton = New System.Windows.Forms.Button()
         Me.RWRemountBtn = New System.Windows.Forms.Button()
@@ -301,6 +302,7 @@ Partial Class ProjProperties
         '
         'TabPage2
         '
+        Me.TabPage2.Controls.Add(Me.LanguageList)
         Me.TabPage2.Controls.Add(Me.RemountImgBtn)
         Me.TabPage2.Controls.Add(Me.RecoverButton)
         Me.TabPage2.Controls.Add(Me.RWRemountBtn)
@@ -364,6 +366,15 @@ Partial Class ProjProperties
         Me.TabPage2.Text = "Image"
         Me.TabPage2.UseVisualStyleBackColor = True
         '
+        'LanguageList
+        '
+        Me.LanguageList.FormattingEnabled = True
+        Me.LanguageList.Location = New System.Drawing.Point(613, 262)
+        Me.LanguageList.Name = "LanguageList"
+        Me.LanguageList.ScrollAlwaysVisible = True
+        Me.LanguageList.Size = New System.Drawing.Size(278, 95)
+        Me.LanguageList.TabIndex = 20
+        '
         'RemountImgBtn
         '
         Me.RemountImgBtn.AutoEllipsis = True
@@ -409,6 +420,7 @@ Partial Class ProjProperties
         Me.imgLangText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.imgLangText.Size = New System.Drawing.Size(278, 96)
         Me.imgLangText.TabIndex = 17
+        Me.imgLangText.Visible = False
         '
         'Label62
         '
@@ -1013,5 +1025,6 @@ Partial Class ProjProperties
     Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents RecoverButton As System.Windows.Forms.Button
     Friend WithEvents RemountImgBtn As System.Windows.Forms.Button
+    Friend WithEvents LanguageList As System.Windows.Forms.ListBox
 
 End Class

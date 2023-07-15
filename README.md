@@ -90,6 +90,4 @@ However, if you want to download the latest release AS SOON AS the project is bu
 
 ## Stay in touch
 
-~~Be sure to [follow our official subreddit](https://reddit.com/r/DISMTools) for release announcements and other cool stuff!~~
-
-The community will suffer from a blackout, to support the protest of Reddit's API changes. In the event that we need to do more of these, we'll look into more ways you can use to stay in touch.
+Be sure to [follow our official subreddit](https://reddit.com/r/DISMTools) for release announcements and other cool stuff!

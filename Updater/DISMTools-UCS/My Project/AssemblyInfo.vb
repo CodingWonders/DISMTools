@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("")> 
 <Assembly: AssemblyProduct("Update Check System for DISMTools")> 
-<Assembly: AssemblyCopyright("© CodingWonders. 2023 (github.com/CodingWonders)")> 
+<Assembly: AssemblyCopyright("© 2023 CodingWonders Software")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
