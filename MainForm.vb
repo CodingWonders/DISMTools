@@ -290,6 +290,7 @@ Public Class MainForm
             MsgBox("This program must be run as an administrator." & CrLf & "There are certain software configurations in which Windows will run this program without admin privileges, so you must ask for them manually." & CrLf & CrLf & "Right-click the executable, and select " & Quote & "Run as administrator" & Quote, vbOKOnly + vbCritical, "DISMTools")
             Environment.Exit(1)
         End If
+        Visible = False
         Debug.WriteLine("DISMTools, version " & My.Application.Info.Version.ToString() & " (" & dtBranch & ")" & CrLf & _
                         "Loading program settings..." & CrLf)
         GetArguments()
@@ -302,7 +303,6 @@ Public Class MainForm
             BranchTSMI.Visible = True
             Text &= " (debug mode)"
         End If
-        Visible = False
         ' Read settings file
         If File.Exists(Application.StartupPath & "\settings.ini") Then
             Dim SettingReader As New RichTextBox() With {.Text = File.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)}
