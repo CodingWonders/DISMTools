@@ -195,6 +195,12 @@
     <Compile Include="Panels\Exe_Ops\PrgAbout.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\FirstUse\IncompleteSetupDlg.Designer.vb">
+      <DependentUpon>IncompleteSetupDlg.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\FirstUse\IncompleteSetupDlg.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\FirstUse\PrgSetup.Designer.vb">
       <DependentUpon>PrgSetup.vb</DependentUpon>
     </Compile>
@@ -568,6 +574,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Exe_Ops\PrgAbout.resx">
       <DependentUpon>PrgAbout.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\FirstUse\IncompleteSetupDlg.resx">
+      <DependentUpon>IncompleteSetupDlg.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\FirstUse\PrgSetup.resx">
       <DependentUpon>PrgSetup.vb</DependentUpon>
