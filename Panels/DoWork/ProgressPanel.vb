@@ -1609,6 +1609,7 @@ Public Class ProgressPanel
                 CurrentPB.Maximum = pkgCount
                 For x = 0 To Array.LastIndexOf(pkgs, pkgLastCheckedPackageName)
                     If x + 1 > CurrentPB.Maximum Then Exit For
+                    CommandArgs = BckArgs
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1665,6 +1666,15 @@ Public Class ProgressPanel
                                 End If
                             End If
                         End Using
+                    Catch ex As Exception
+                        LogView.AppendText(CrLf & ex.Message)
+                        If PkgErrorText.RichTextBox1.Text = "" Then
+                            PkgErrorText.RichTextBox1.AppendText("0x800F8023")
+                        Else
+                            PkgErrorText.RichTextBox1.AppendText(CrLf & "0x800F8023")
+                        End If
+                        pkgFailedAdditions += 1
+                        pkgIsApplicable = False
                     Finally
                         DismApi.Shutdown()
                     End Try
@@ -1765,6 +1775,7 @@ Public Class ProgressPanel
             If pkgRemovalOp = 0 Then
                 For x = 0 To Array.LastIndexOf(pkgRemovalNames, pkgRemovalLastName)
                     If x + 1 > CurrentPB.Maximum Then Exit For
+                    CommandArgs = BckArgs
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1846,6 +1857,7 @@ Public Class ProgressPanel
             ElseIf pkgRemovalOp = 1 Then
                 For x = 0 To Array.LastIndexOf(pkgRemovalFiles, pkgRemovalLastFile)
                     If x + 1 > CurrentPB.Maximum Then Exit For
+                    CommandArgs = BckArgs
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2016,6 +2028,7 @@ Public Class ProgressPanel
             CurrentPB.Maximum = featEnablementCount
             For x = 0 To Array.LastIndexOf(featEnablementNames, featEnablementLastName)
                 If x + 1 > CurrentPB.Maximum Then Exit For
+                CommandArgs = BckArgs
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2155,6 +2168,7 @@ Public Class ProgressPanel
             CurrentPB.Maximum = featDisablementCount
             For x = 0 To Array.LastIndexOf(featDisablementNames, featDisablementLastName)
                 If x + 1 > CurrentPB.Maximum Then Exit For
+                CommandArgs = BckArgs
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
