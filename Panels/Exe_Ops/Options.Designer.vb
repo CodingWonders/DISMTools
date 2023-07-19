@@ -138,6 +138,10 @@ Partial Class Options
         Me.CheckBox8 = New System.Windows.Forms.CheckBox()
         Me.Label35 = New System.Windows.Forms.Label()
         Me.TabPage10 = New System.Windows.Forms.TabPage()
+        Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.Label46 = New System.Windows.Forms.Label()
+        Me.PictureBox8 = New System.Windows.Forms.PictureBox()
+        Me.Panel2 = New System.Windows.Forms.Panel()
         Me.GroupBox5 = New System.Windows.Forms.GroupBox()
         Me.CheckBox11 = New System.Windows.Forms.CheckBox()
         Me.Button9 = New System.Windows.Forms.Button()
@@ -150,10 +154,6 @@ Partial Class Options
         Me.Label43 = New System.Windows.Forms.Label()
         Me.PrefReset = New System.Windows.Forms.Button()
         Me.LogSFD = New System.Windows.Forms.SaveFileDialog()
-        Me.Label46 = New System.Windows.Forms.Label()
-        Me.PictureBox8 = New System.Windows.Forms.PictureBox()
-        Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.Panel3 = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -184,11 +184,11 @@ Partial Class Options
         Me.TabPage9.SuspendLayout()
         Me.GroupBox4.SuspendLayout()
         Me.TabPage10.SuspendLayout()
-        Me.GroupBox5.SuspendLayout()
-        Me.TabPage11.SuspendLayout()
+        Me.Panel3.SuspendLayout()
         CType(Me.PictureBox8, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel2.SuspendLayout()
-        Me.Panel3.SuspendLayout()
+        Me.GroupBox5.SuspendLayout()
+        Me.TabPage11.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -1445,6 +1445,42 @@ Partial Class Options
         Me.TabPage10.Text = "File associations"
         Me.TabPage10.UseVisualStyleBackColor = True
         '
+        'Panel3
+        '
+        Me.Panel3.Controls.Add(Me.Label46)
+        Me.Panel3.Controls.Add(Me.PictureBox8)
+        Me.Panel3.Location = New System.Drawing.Point(1, 375)
+        Me.Panel3.Name = "Panel3"
+        Me.Panel3.Size = New System.Drawing.Size(749, 57)
+        Me.Panel3.TabIndex = 13
+        '
+        'Label46
+        '
+        Me.Label46.Location = New System.Drawing.Point(44, 19)
+        Me.Label46.Name = "Label46"
+        Me.Label46.Size = New System.Drawing.Size(682, 32)
+        Me.Label46.TabIndex = 11
+        Me.Label46.Text = "These settings aren't applicable to non-portable installations"
+        '
+        'PictureBox8
+        '
+        Me.PictureBox8.Image = Global.DISMTools.My.Resources.Resources.info_16px
+        Me.PictureBox8.Location = New System.Drawing.Point(22, 18)
+        Me.PictureBox8.Name = "PictureBox8"
+        Me.PictureBox8.Size = New System.Drawing.Size(16, 16)
+        Me.PictureBox8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox8.TabIndex = 10
+        Me.PictureBox8.TabStop = False
+        '
+        'Panel2
+        '
+        Me.Panel2.Controls.Add(Me.GroupBox5)
+        Me.Panel2.Controls.Add(Me.Label40)
+        Me.Panel2.Location = New System.Drawing.Point(0, 0)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(751, 242)
+        Me.Panel2.TabIndex = 12
+        '
         'GroupBox5
         '
         Me.GroupBox5.Controls.Add(Me.CheckBox11)
@@ -1565,42 +1601,6 @@ Partial Class Options
         Me.LogSFD.Filter = "All files|*.*"
         Me.LogSFD.Title = "Specify the location of the log file"
         '
-        'Label46
-        '
-        Me.Label46.Location = New System.Drawing.Point(44, 19)
-        Me.Label46.Name = "Label46"
-        Me.Label46.Size = New System.Drawing.Size(682, 32)
-        Me.Label46.TabIndex = 11
-        Me.Label46.Text = "These settings aren't applicable to non-portable installations"
-        '
-        'PictureBox8
-        '
-        Me.PictureBox8.Image = Global.DISMTools.My.Resources.Resources.info_16px
-        Me.PictureBox8.Location = New System.Drawing.Point(22, 18)
-        Me.PictureBox8.Name = "PictureBox8"
-        Me.PictureBox8.Size = New System.Drawing.Size(16, 16)
-        Me.PictureBox8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.PictureBox8.TabIndex = 10
-        Me.PictureBox8.TabStop = False
-        '
-        'Panel2
-        '
-        Me.Panel2.Controls.Add(Me.GroupBox5)
-        Me.Panel2.Controls.Add(Me.Label40)
-        Me.Panel2.Location = New System.Drawing.Point(0, 0)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(751, 242)
-        Me.Panel2.TabIndex = 12
-        '
-        'Panel3
-        '
-        Me.Panel3.Controls.Add(Me.Label46)
-        Me.Panel3.Controls.Add(Me.PictureBox8)
-        Me.Panel3.Location = New System.Drawing.Point(1, 375)
-        Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(749, 57)
-        Me.Panel3.TabIndex = 13
-        '
         'Options
         '
         Me.AcceptButton = Me.OK_Button
@@ -1665,15 +1665,15 @@ Partial Class Options
         Me.GroupBox4.ResumeLayout(False)
         Me.GroupBox4.PerformLayout()
         Me.TabPage10.ResumeLayout(False)
+        Me.Panel3.ResumeLayout(False)
+        Me.Panel3.PerformLayout()
+        CType(Me.PictureBox8, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel2.ResumeLayout(False)
+        Me.Panel2.PerformLayout()
         Me.GroupBox5.ResumeLayout(False)
         Me.GroupBox5.PerformLayout()
         Me.TabPage11.ResumeLayout(False)
         Me.TabPage11.PerformLayout()
-        CType(Me.PictureBox8, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.Panel2.ResumeLayout(False)
-        Me.Panel2.PerformLayout()
-        Me.Panel3.ResumeLayout(False)
-        Me.Panel3.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub

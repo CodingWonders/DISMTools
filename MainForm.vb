@@ -3593,7 +3593,8 @@ Public Class MainForm
     End Sub
 
     Sub ResetDTSettings()
-
+        GenerateDTSettings()
+        LoadDTSettings(If(SaveOnSettingsIni, 1, 0))
     End Sub
 
     ''' <summary>

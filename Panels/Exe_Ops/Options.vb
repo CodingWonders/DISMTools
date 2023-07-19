@@ -1444,4 +1444,12 @@ Public Class Options
             SecProgressStylePreview.Image = My.Resources.secprogress_classic
         End If
     End Sub
+
+    Private Sub PrefReset_Click(sender As Object, e As EventArgs) Handles PrefReset.Click
+        SettingsResetDlg.ShowDialog()
+        If SettingsResetDlg.DialogResult = Windows.Forms.DialogResult.OK Then
+            MainForm.ResetDTSettings()
+            Cancel_Button.PerformClick()
+        End If
+    End Sub
 End Class

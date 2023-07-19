@@ -332,4 +332,11 @@ Public Class PrgSetup
         End Select
         MainForm.LogLevel = TrackBar1.Value + 1
     End Sub
+
+    Private Sub Cancel_Button_Click(sender As Object, e As EventArgs) Handles Cancel_Button.Click
+        IncompleteSetupDlg.ShowDialog()
+        If IncompleteSetupDlg.DialogResult = Windows.Forms.DialogResult.OK Then
+            Close()
+        End If
+    End Sub
 End Class
