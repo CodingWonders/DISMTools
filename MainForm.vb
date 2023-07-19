@@ -305,6 +305,7 @@ Public Class MainForm
         End If
         ' Read settings file
         If File.Exists(Application.StartupPath & "\settings.ini") Then
+            PerformSettingFileValidation()
             Dim SettingReader As New RichTextBox() With {.Text = File.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)}
             If SettingReader.Text.Contains("SaveOnSettingsIni=1") Then
                 LoadDTSettings(1)
@@ -312,8 +313,9 @@ Public Class MainForm
                 LoadDTSettings(0)
             End If
         Else
-            GenerateDTSettings()
-            LoadDTSettings(1)
+            'GenerateDTSettings()
+            'LoadDTSettings(1)
+            PrgSetup.ShowDialog()
         End If
         imgStatus = 0
         ChangeImgStatus()
@@ -976,6 +978,7 @@ Public Class MainForm
                     Exit Sub
                 End If
                 DismExe = DTSettingForm.RichTextBox1.Lines(3).Replace("DismExe=", "").Trim().Replace(Quote, "").Trim()
+                If DismExe.StartsWith("{common:WinDir}", StringComparison.OrdinalIgnoreCase) Then DismExe = DismExe.Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
                 If DTSettingForm.RichTextBox1.Text.Contains("SaveOnSettingsIni=0") And Not File.Exists(Application.StartupPath & "\portable") Then
                     SaveOnSettingsIni = False
                     LoadDTSettings(0)
@@ -1017,6 +1020,7 @@ Public Class MainForm
                     ElseIf line.StartsWith("LogFile=", StringComparison.OrdinalIgnoreCase) Then
                         ' Detect log file path. If file does not exist, create one
                         LogFile = line.Replace("LogFile=", "").Trim().Replace(Quote, "").Trim()
+                        If LogFile.StartsWith("{common:WinDir", StringComparison.OrdinalIgnoreCase) Then LogFile = LogFile.Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
                     ElseIf line.StartsWith("ScratchDirLocation=", StringComparison.OrdinalIgnoreCase) Then
                         ScratchDir = line.Replace("ScratchDirLocation=", "").Trim().Replace(Quote, "").Trim()
                     ElseIf line.StartsWith("WndWidth=", StringComparison.OrdinalIgnoreCase) Then
@@ -3233,7 +3237,7 @@ Public Class MainForm
 
     Sub GenerateDTSettings()
         DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.3) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & "\Windows\system32\dism.exe" & Quote)
+        DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & "{common:WinDir}\Windows\system32\dism.exe" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "Volatile=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Personalization]" & CrLf)
@@ -3253,7 +3257,7 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SecondaryProgressPanelStyle=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\Logs\DISM\DISM.log" & Quote)
+        DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & "{common:WinDir}\Logs\DISM\DISM.log" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=3")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoLogs=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ImgOps]" & CrLf)
@@ -3595,6 +3599,24 @@ Public Class MainForm
     Sub ResetDTSettings()
         GenerateDTSettings()
         LoadDTSettings(If(SaveOnSettingsIni, 1, 0))
+    End Sub
+
+    ''' <summary>
+    ''' Detects properties of the file to determine whether automatic migration needs to be performed
+    ''' </summary>
+    ''' <remarks>If the file does not exist, the initial setup wizard launches</remarks>
+    Sub PerformSettingFileValidation()
+        If File.Exists(Application.StartupPath & "\settings.ini") Then
+            Dim bldDate As Date = PrgAbout.RetrieveLinkerTimestamp(Application.StartupPath & "\DISMTools.exe")
+            If File.GetLastWriteTime(Application.StartupPath & "\settings.ini") < bldDate Then
+                ' Perform setting file migration
+                MigrationForm.ShowDialog()
+                Thread.Sleep(1500)
+            End If
+        Else
+            ' Show setup window
+            PrgSetup.ShowDialog()
+        End If
     End Sub
 
     ''' <summary>
