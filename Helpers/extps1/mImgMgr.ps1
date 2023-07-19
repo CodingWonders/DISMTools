@@ -103,7 +103,7 @@ function Unmount-Image {
             Clear-Host
             if ($global:mImage[$global:selImage - 1].MountMode -eq 1)
             {
-                Write-Host "This image is mounted with read-only permissions. Changes cannot be committed to this image."`n`n"If you want to make changes to this image, you must enable write permissions by pressing the [E] key in the main menu."`n -ForegroundColor White -BackgroundColor DarkRed
+                Write-Host "This image is mounted with read-only permissions. Changes cannot be committed to this image."`n`n"If you want to make changes to this image, you must enable write permissions by pressing the [E] key in the main menu."`n -ForegroundColor Black -BackgroundColor DarkRed
                 Write-Host "Press ENTER to continue..."
                 Read-Host | Out-Null
                 Unmount-Image
@@ -156,7 +156,7 @@ function Unmount-Settings {
     Clear-Host
     if ($global:mImage[$global:selImage - 1].MountMode -eq 1)
     {
-        Write-Host "Unmount settings apply to the commit operation. This image was mounted with read-only permissions. Changes cannot be committed to this image."`n`n"If you want to make changes to this image, you must enable write permissions by pressing the [E] key in the main menu."`n -ForegroundColor White -BackgroundColor DarkRed
+        Write-Host "Unmount settings apply to the commit operation. This image was mounted with read-only permissions. Changes cannot be committed to this image."`n`n"If you want to make changes to this image, you must enable write permissions by pressing the [E] key in the main menu."`n -ForegroundColor Black -BackgroundColor DarkRed
         Write-Host "Press ENTER to continue..."
         Read-Host | Out-Null
         Unmount-Image
@@ -271,7 +271,7 @@ function Remove-VolumeImages {
     $global:imgInfo = Get-WindowsImage -ImagePath $global:mImage[$global:selImage - 1].ImagePath
     if (($global:imgInfo | Select-Object -ExpandProperty ImageIndex).Count -le 1)
     {
-        Write-Host "This image only contains one index, so you can't remove volume images from this image file."`n`n -ForegroundColor White -BackgroundColor DarkYellow
+        Write-Host "This image only contains one index, so you can't remove volume images from this image file."`n`n -ForegroundColor Black -BackgroundColor DarkYellow
         Write-Host "Press ENTER to continue..."
         Read-Host | Out-Null
         MainMenu
@@ -360,7 +360,7 @@ function Remove-VolumeImages {
                                 }
                                 else
                                 {
-                                    Write-Host "FAILURE" -ForegroundColor White -BackgroundColor DarkRed
+                                    Write-Host "FAILURE" -ForegroundColor Black -BackgroundColor DarkRed
                                 }
                             }
                             # Et voilà !
@@ -386,7 +386,7 @@ function Remove-VolumeImages {
             }
             else
             {
-                Write-Host "Please mark the volume images to remove from this image, and try again." -ForegroundColor White -BackgroundColor DarkYellow
+                Write-Host "Please mark the volume images to remove from this image, and try again." -ForegroundColor Black -BackgroundColor DarkYellow
                 Read-Host | Out-Null
                 Remove-VolumeImages
             }
