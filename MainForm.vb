@@ -1876,6 +1876,8 @@ Public Class MainForm
                 Button16.Enabled = False
                 ExplorerView.Enabled = False
                 ProjNameEditBtn.Visible = False
+                ' Set edition variable according to the EditionID registry value
+                imgEdition = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion").GetValue("EditionID")
                 Exit Sub
             Else
                 If IsImageMounted Then
