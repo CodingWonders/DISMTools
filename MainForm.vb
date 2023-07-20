@@ -1638,26 +1638,23 @@ Public Class MainForm
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENG"
                                 Label14.Text = "(Online installation)"
-                                Label18.Text = "(Online installation)"
                                 Label20.Text = "(Online installation)"
                                 projName.Text = "(Online installation)"
                             Case "ESN"
                                 Label14.Text = "(Instalación activa)"
-                                Label18.Text = "(Instalación activa)"
                                 Label20.Text = "(Instalación activa)"
                                 projName.Text = "(Instalación activa)"
                         End Select
                     Case 1
                         Label14.Text = "(Online installation)"
-                        Label18.Text = "(Online installation)"
                         Label20.Text = "(Online installation)"
                         projName.Text = "(Online installation)"
                     Case 2
                         Label14.Text = "(Instalación activa)"
-                        Label18.Text = "(Instalación activa)"
                         Label20.Text = "(Instalación activa)"
                         projName.Text = "(Instalación activa)"
                 End Select
+                Label18.Text = My.Computer.Info.OSFullName
                 Label12.Text = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows))
                 Label3.Text = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows))
             Else
@@ -5219,6 +5216,38 @@ Public Class MainForm
                 NewFileToolStripMenuItem.Text = "Nuevo archivo..."
                 ExistingFileToolStripMenuItem.Text = "Archivo existente..."
         End Select
+
+        If OnlineManagement Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            Label5.Text = "Yes"
+                            Text = "Online installation - DISMTools"
+                            Label14.Text = "(Online installation)"
+                            Label20.Text = "(Online installation)"
+                            projName.Text = "(Online installation)"
+                        Case "ESN"
+                            Label5.Text = "Sí"
+                            Text = "Instalación activa - DISMTools"
+                            Label14.Text = "(Instalación activa)"
+                            Label20.Text = "(Instalación activa)"
+                            projName.Text = "(Instalación activa)"
+                    End Select
+                Case 1
+                    Label5.Text = "Yes"
+                    Text = "Online installation - DISMTools"
+                    Label14.Text = "(Online installation)"
+                    Label20.Text = "(Online installation)"
+                    projName.Text = "(Online installation)"
+                Case 2
+                    Label5.Text = "Sí"
+                    Text = "Instalación activa - DISMTools"
+                    Label14.Text = "(Instalación activa)"
+                    Label20.Text = "(Instalación activa)"
+                    projName.Text = "(Instalación activa)"
+            End Select
+        End If
     End Sub
 
     'Sub GenReportTab(ReportType As Integer, TableFormat As Integer)            ' Hold this for a future release
