@@ -9126,6 +9126,13 @@ Public Class MainForm
         BeginOnlineManagement(True)
     End Sub
 
+    ''' <summary>
+    ''' Gets the application display name from the AppX package manifest
+    ''' </summary>
+    ''' <param name="PackageName">The package name of an application</param>
+    ''' <param name="DisplayName">The display name of an application. This parameter is required when there are multiple directories with their names containing <paramref name="PackageName">the package name</paramref></param>
+    ''' <returns>pkgName: the suitable package display name</returns>
+    ''' <remarks>If pkgName returns Nothing, the callers will hide those options calling this function</remarks>
     Function GetPackageDisplayName(PackageName As String, Optional DisplayName As String = "")
         If File.Exists(Application.StartupPath & "\AppxManifest.xml") Then File.Delete(Application.StartupPath & "\AppxManifest.xml")
         If File.Exists(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml") Then
@@ -9190,6 +9197,12 @@ Public Class MainForm
         Return Nothing
     End Function
 
+    ''' <summary>
+    ''' Gets the path of the main logo of an installed provisioned AppX package
+    ''' </summary>
+    ''' <param name="PackageName">The name of the AppX package</param>
+    ''' <returns>This function returns a path to the logo asset of an application</returns>
+    ''' <remarks>This can be a little wonky and may not show the main asset. However, since this allows the program to launch an image viewer afterwards, you can browse other assets</remarks>
     Function GetStoreAppMainLogo(PackageName As String)
         Try
             If File.Exists(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml") Then

@@ -38,6 +38,8 @@ if ($PSVersionTable.PSVersion.Major -lt 5)
 Import-Module Dism
 
 $global:mImage = Get-WindowsImage -Mounted
+# Backup variable
+$global:mImages = Get-WindowsImage -Mounted
 $global:selImage = 0
 $global:imgInfo = ''
 $newImg = 0
@@ -53,6 +55,18 @@ $global:appendIndex = $false
 function Mark-Image {
     # Refresh the mounted image variable
     $global:mImage = Get-WindowsImage -Mounted
+    if ($global:mImage.Count -ne $global:mImages.Count)
+    {
+        # Show mounted image list once again, as indexes may have changed
+
+        $global:mImages = Get-WindowsImage -Mounted
+        Clear-Host
+        # Print version info
+        Write-Output "DISMTools $ver - Mounted image manager"
+        # List mounted Windows images
+        Get-WindowsImage -Mounted | Format-Table
+        Write-Host `n`n`n
+    }
     if ($global:mImage.Count -ge 1)
     {
         Write-Host -NoNewline "Mark image number [1 - $($global:mImage.Count)] or press [B] to go back: "
