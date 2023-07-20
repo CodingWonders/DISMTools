@@ -9127,6 +9127,7 @@ Public Class MainForm
     End Sub
 
     Function GetPackageDisplayName(PackageName As String, Optional DisplayName As String = "")
+        If File.Exists(Application.StartupPath & "\AppxManifest.xml") Then File.Delete(Application.StartupPath & "\AppxManifest.xml")
         If File.Exists(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml") Then
             ' Copy manifest to startup dir
             File.Copy(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml", Application.StartupPath & "\AppxManifest.xml")
@@ -9136,9 +9137,14 @@ Public Class MainForm
             ' Go through each line until we find the properties tag
             For x = 0 To XMLReaderRTB.Lines.Count - 1
                 If XMLReaderRTB.Lines(x).EndsWith("<Properties>") Then
-                    Dim pkgName As String = XMLReaderRTB.Lines(x + If(XMLReaderRTB.Lines(x + 1).Contains("Framework"), 2, 1)).Replace("/", "").Trim().Replace("<DisplayName>", "").Trim()
-                    File.Delete(Application.StartupPath & "\AppxManifest.xml")
-                    Return pkgName
+                    ' Go through each line until we find the display name
+                    For y = x To XMLReaderRTB.Lines.Count - 1
+                        If XMLReaderRTB.Lines(y).Replace("<", "").Trim().Replace(">", "").Trim().Replace(" ", "").Trim().StartsWith("DisplayName", StringComparison.OrdinalIgnoreCase) Then
+                            Dim pkgName As String = XMLReaderRTB.Lines(y).Replace("<DisplayName>", "").Trim().Replace("</DisplayName>", "").Trim()
+                            File.Delete(Application.StartupPath & "\AppxManifest.xml")
+                            Return pkgName
+                        End If
+                    Next
                 End If
             Next
         Else
@@ -9155,9 +9161,14 @@ Public Class MainForm
                         ' Go through each line until we find the properties tag
                         For x = 0 To XMLReaderRTB.Lines.Count - 1
                             If XMLReaderRTB.Lines(x).EndsWith("<Properties>") Then
-                                Dim pkgName As String = XMLReaderRTB.Lines(x + If(XMLReaderRTB.Lines(x + 1).Contains("Framework"), 2, 1)).Replace("/", "").Trim().Replace("<DisplayName>", "").Trim()
-                                File.Delete(Application.StartupPath & "\AppxManifest.xml")
-                                Return pkgName
+                                ' Go through each line until we find the display name
+                                For y = x To XMLReaderRTB.Lines.Count - 1
+                                    If XMLReaderRTB.Lines(y).Replace("<", "").Trim().Replace(">", "").Trim().Replace(" ", "").Trim().StartsWith("DisplayName", StringComparison.OrdinalIgnoreCase) Then
+                                        Dim pkgName As String = XMLReaderRTB.Lines(y).Replace("<DisplayName>", "").Trim().Replace("</DisplayName>", "").Trim()
+                                        File.Delete(Application.StartupPath & "\AppxManifest.xml")
+                                        Return pkgName
+                                    End If
+                                Next
                             End If
                         Next
                     End If
