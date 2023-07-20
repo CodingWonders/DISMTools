@@ -4504,7 +4504,7 @@ Public Class ProgressPanel
                 End If
                 MainForm.DetectMountedImages(False)
             ElseIf OperationNum = 26 Then
-                MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
                 If Not MainForm.RunAllProcs Then MainForm.bwBackgroundProcessAction = 1
                 MainForm.UpdateProjProperties(True, False)
                 AddPackageReport.Label4.Text = MountDir
@@ -4531,7 +4531,7 @@ Public Class ProgressPanel
                 AddPackageReport.Show()
             ElseIf OperationNum = 27 Then
                 If Not MainForm.RunAllProcs Then MainForm.bwBackgroundProcessAction = 1
-                MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 30 Then
                 If Not MainForm.RunAllProcs Then
@@ -4539,7 +4539,7 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 2
                 End If
-                MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 31 Then
                 If Not MainForm.RunAllProcs Then
@@ -4547,10 +4547,10 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 2
                 End If
-                MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 33 Then
-                MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 37 Then
                 If Not MainForm.RunAllProcs Then
@@ -4558,7 +4558,7 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 3
                 End If
-                MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 38 Then
                 If Not MainForm.RunAllProcs Then
@@ -4566,7 +4566,7 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 3
                 End If
-                MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 64 Then
                 If Not MainForm.RunAllProcs Then
@@ -4574,7 +4574,7 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 4
                 End If
-                MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 68 Then
                 If Not MainForm.RunAllProcs Then
@@ -4582,7 +4582,7 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 4
                 End If
-                MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 75 Then
                 If Not MainForm.RunAllProcs Then
@@ -4590,7 +4590,7 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 5
                 End If
-                MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 76 Then
                 If Not MainForm.RunAllProcs Then
@@ -4598,7 +4598,7 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 5
                 End If
-                MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 991 Then
                 Visible = False
