@@ -67,7 +67,7 @@ function Mark-Image {
         Get-WindowsImage -Mounted | Format-Table
         Write-Host `n`n`n
     }
-    if ($global:mImage.Count -ge 1)
+    if ($global:mImage.Count -gt 1)
     {
         Write-Host -NoNewline "Mark image number [1 - $($global:mImage.Count)] or press [B] to go back: "
     }
