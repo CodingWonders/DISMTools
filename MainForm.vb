@@ -3528,6 +3528,12 @@ Public Class MainForm
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "WndMaximized=" & If(WindowState = FormWindowState.Maximized, "1", "0"))
                 File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
             Else
+                ' Tell settings file to use this method
+                Dim SettingRtb As New RichTextBox() With {
+                    .Text = File.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)
+                }
+                SettingRtb.Text = SettingRtb.Text.Replace("SaveOnSettingsIni=1", "SaveOnSettingsIni=0").Trim()
+                File.WriteAllText(Application.StartupPath & "\settings.ini", SettingRtb.Text, ASCII)
                 Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("preview"), "Preview", "Stable")
                 Dim Key As RegistryKey = Registry.CurrentUser.CreateSubKey(KeyStr)
                 Dim PrgKey As RegistryKey = Key.CreateSubKey("Program")
