@@ -1658,11 +1658,11 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''- Fixed an issue in the CLI version of the mounted image manager where main menu errors would not display correctly
-        '''- Fixed an issue where projects would not load if the read-write parameter wasn&apos;t found in their settings files
-        '''- Fixed an issue where AppX packages and capabilities would not be detected in the online installation management mode
-        '''- Fixed more issues regarding the improper disposal of the progress panel
-        '''- The CLI version of the mounted image manager no longer makes assumptions  [resto de la cadena truncado]&quot;;.
+        '''- Fixed an issue where package addition would fail if there were a version mismatch between a package and the Windows image
+        '''- Fixed an issue where AppX package display names weren&apos;t obtained correctly in some cases
+        '''- Fixed an issue that would make the AppX package display name detection process fail if there was a manifest file stored in the application directory
+        '''- Fixed an issue where project creation would fail in online installation management mode
+        '''- Fixed an issue where the image edition [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
