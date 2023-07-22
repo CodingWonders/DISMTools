@@ -31,6 +31,7 @@ if ($PSVersionTable.PSVersion.Major -lt 5)
 {
     Write-Host "You need to run this script in PowerShell 5 or newer. Press ENTER to continue..."
     Read-Host | Out-Null
+    $host.UI.RawUI.WindowTitle = "DISMTools Command Console"
     exit 1
 }
 
@@ -51,6 +52,9 @@ $global:img_remIndexesBck = New-Object System.Collections.ArrayList
 # Unmount setting variables
 $global:checkIntegrity = $false
 $global:appendIndex = $false
+
+# Set window title
+$host.UI.RawUI.WindowTitle = "Mounted image manager"
 
 function Mark-Image {
     # Refresh the mounted image variable
@@ -583,7 +587,10 @@ function MainMenu {
             Update-Listing
             MainMenu
         }
-        "X" { exit 0 }
+        "X" {
+            $host.UI.RawUI.WindowTitle = "DISMTools Command Console"
+            exit 0
+        }
         default { MainMenu }
     }
 }
