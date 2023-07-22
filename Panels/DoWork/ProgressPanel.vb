@@ -1609,6 +1609,7 @@ Public Class ProgressPanel
                 CurrentPB.Maximum = pkgCount
                 For x = 0 To Array.LastIndexOf(pkgs, pkgLastCheckedPackageName)
                     If x + 1 > CurrentPB.Maximum Then Exit For
+                    CommandArgs = BckArgs
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1665,6 +1666,15 @@ Public Class ProgressPanel
                                 End If
                             End If
                         End Using
+                    Catch ex As Exception
+                        LogView.AppendText(CrLf & ex.Message)
+                        If PkgErrorText.RichTextBox1.Text = "" Then
+                            PkgErrorText.RichTextBox1.AppendText("0x800F8023")
+                        Else
+                            PkgErrorText.RichTextBox1.AppendText(CrLf & "0x800F8023")
+                        End If
+                        pkgFailedAdditions += 1
+                        pkgIsApplicable = False
                     Finally
                         DismApi.Shutdown()
                     End Try
@@ -1765,6 +1775,7 @@ Public Class ProgressPanel
             If pkgRemovalOp = 0 Then
                 For x = 0 To Array.LastIndexOf(pkgRemovalNames, pkgRemovalLastName)
                     If x + 1 > CurrentPB.Maximum Then Exit For
+                    CommandArgs = BckArgs
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1846,6 +1857,7 @@ Public Class ProgressPanel
             ElseIf pkgRemovalOp = 1 Then
                 For x = 0 To Array.LastIndexOf(pkgRemovalFiles, pkgRemovalLastFile)
                     If x + 1 > CurrentPB.Maximum Then Exit For
+                    CommandArgs = BckArgs
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2016,6 +2028,7 @@ Public Class ProgressPanel
             CurrentPB.Maximum = featEnablementCount
             For x = 0 To Array.LastIndexOf(featEnablementNames, featEnablementLastName)
                 If x + 1 > CurrentPB.Maximum Then Exit For
+                CommandArgs = BckArgs
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2155,6 +2168,7 @@ Public Class ProgressPanel
             CurrentPB.Maximum = featDisablementCount
             For x = 0 To Array.LastIndexOf(featDisablementNames, featDisablementLastName)
                 If x + 1 > CurrentPB.Maximum Then Exit For
+                CommandArgs = BckArgs
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -4490,7 +4504,7 @@ Public Class ProgressPanel
                 End If
                 MainForm.DetectMountedImages(False)
             ElseIf OperationNum = 26 Then
-                MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
                 If Not MainForm.RunAllProcs Then MainForm.bwBackgroundProcessAction = 1
                 MainForm.UpdateProjProperties(True, False)
                 AddPackageReport.Label4.Text = MountDir
@@ -4517,7 +4531,7 @@ Public Class ProgressPanel
                 AddPackageReport.Show()
             ElseIf OperationNum = 27 Then
                 If Not MainForm.RunAllProcs Then MainForm.bwBackgroundProcessAction = 1
-                MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 30 Then
                 If Not MainForm.RunAllProcs Then
@@ -4525,7 +4539,7 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 2
                 End If
-                MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 31 Then
                 If Not MainForm.RunAllProcs Then
@@ -4533,10 +4547,10 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 2
                 End If
-                MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 33 Then
-                MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 37 Then
                 If Not MainForm.RunAllProcs Then
@@ -4544,7 +4558,7 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 3
                 End If
-                MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 38 Then
                 If Not MainForm.RunAllProcs Then
@@ -4552,7 +4566,7 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 3
                 End If
-                MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 64 Then
                 If Not MainForm.RunAllProcs Then
@@ -4560,7 +4574,7 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 4
                 End If
-                MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 68 Then
                 If Not MainForm.RunAllProcs Then
@@ -4568,7 +4582,7 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 4
                 End If
-                MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 75 Then
                 If Not MainForm.RunAllProcs Then
@@ -4576,7 +4590,7 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 5
                 End If
-                MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 76 Then
                 If Not MainForm.RunAllProcs Then
@@ -4584,7 +4598,7 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 5
                 End If
-                MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 991 Then
                 Visible = False

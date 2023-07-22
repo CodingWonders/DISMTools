@@ -290,6 +290,7 @@ Public Class MainForm
             MsgBox("This program must be run as an administrator." & CrLf & "There are certain software configurations in which Windows will run this program without admin privileges, so you must ask for them manually." & CrLf & CrLf & "Right-click the executable, and select " & Quote & "Run as administrator" & Quote, vbOKOnly + vbCritical, "DISMTools")
             Environment.Exit(1)
         End If
+        Visible = False
         Debug.WriteLine("DISMTools, version " & My.Application.Info.Version.ToString() & " (" & dtBranch & ")" & CrLf & _
                         "Loading program settings..." & CrLf)
         GetArguments()
@@ -302,9 +303,9 @@ Public Class MainForm
             BranchTSMI.Visible = True
             Text &= " (debug mode)"
         End If
-        Visible = False
         ' Read settings file
         If File.Exists(Application.StartupPath & "\settings.ini") Then
+            PerformSettingFileValidation()
             Dim SettingReader As New RichTextBox() With {.Text = File.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)}
             If SettingReader.Text.Contains("SaveOnSettingsIni=1") Then
                 LoadDTSettings(1)
@@ -312,8 +313,9 @@ Public Class MainForm
                 LoadDTSettings(0)
             End If
         Else
-            GenerateDTSettings()
-            LoadDTSettings(1)
+            'GenerateDTSettings()
+            'LoadDTSettings(1)
+            PrgSetup.ShowDialog()
         End If
         imgStatus = 0
         ChangeImgStatus()
@@ -976,6 +978,7 @@ Public Class MainForm
                     Exit Sub
                 End If
                 DismExe = DTSettingForm.RichTextBox1.Lines(3).Replace("DismExe=", "").Trim().Replace(Quote, "").Trim()
+                If DismExe.StartsWith("{common:WinDir}", StringComparison.OrdinalIgnoreCase) Then DismExe = DismExe.Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
                 If DTSettingForm.RichTextBox1.Text.Contains("SaveOnSettingsIni=0") And Not File.Exists(Application.StartupPath & "\portable") Then
                     SaveOnSettingsIni = False
                     LoadDTSettings(0)
@@ -1017,6 +1020,7 @@ Public Class MainForm
                     ElseIf line.StartsWith("LogFile=", StringComparison.OrdinalIgnoreCase) Then
                         ' Detect log file path. If file does not exist, create one
                         LogFile = line.Replace("LogFile=", "").Trim().Replace(Quote, "").Trim()
+                        If LogFile.StartsWith("{common:WinDir", StringComparison.OrdinalIgnoreCase) Then LogFile = LogFile.Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
                     ElseIf line.StartsWith("ScratchDirLocation=", StringComparison.OrdinalIgnoreCase) Then
                         ScratchDir = line.Replace("ScratchDirLocation=", "").Trim().Replace(Quote, "").Trim()
                     ElseIf line.StartsWith("WndWidth=", StringComparison.OrdinalIgnoreCase) Then
@@ -1634,26 +1638,23 @@ Public Class MainForm
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENG"
                                 Label14.Text = "(Online installation)"
-                                Label18.Text = "(Online installation)"
                                 Label20.Text = "(Online installation)"
                                 projName.Text = "(Online installation)"
                             Case "ESN"
                                 Label14.Text = "(Instalación activa)"
-                                Label18.Text = "(Instalación activa)"
                                 Label20.Text = "(Instalación activa)"
                                 projName.Text = "(Instalación activa)"
                         End Select
                     Case 1
                         Label14.Text = "(Online installation)"
-                        Label18.Text = "(Online installation)"
                         Label20.Text = "(Online installation)"
                         projName.Text = "(Online installation)"
                     Case 2
                         Label14.Text = "(Instalación activa)"
-                        Label18.Text = "(Instalación activa)"
                         Label20.Text = "(Instalación activa)"
                         projName.Text = "(Instalación activa)"
                 End Select
+                Label18.Text = My.Computer.Info.OSFullName
                 Label12.Text = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows))
                 Label3.Text = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows))
             Else
@@ -1875,6 +1876,8 @@ Public Class MainForm
                 Button16.Enabled = False
                 ExplorerView.Enabled = False
                 ProjNameEditBtn.Visible = False
+                ' Set edition variable according to the EditionID registry value
+                imgEdition = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion").GetValue("EditionID")
                 Exit Sub
             Else
                 If IsImageMounted Then
@@ -3233,7 +3236,7 @@ Public Class MainForm
 
     Sub GenerateDTSettings()
         DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.3) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & "\Windows\system32\dism.exe" & Quote)
+        DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & "{common:WinDir}\Windows\system32\dism.exe" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "Volatile=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Personalization]" & CrLf)
@@ -3253,7 +3256,7 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SecondaryProgressPanelStyle=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\Logs\DISM\DISM.log" & Quote)
+        DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & "{common:WinDir}\Logs\DISM\DISM.log" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=3")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoLogs=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ImgOps]" & CrLf)
@@ -3525,6 +3528,12 @@ Public Class MainForm
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "WndMaximized=" & If(WindowState = FormWindowState.Maximized, "1", "0"))
                 File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
             Else
+                ' Tell settings file to use this method
+                Dim SettingRtb As New RichTextBox() With {
+                    .Text = File.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)
+                }
+                SettingRtb.Text = SettingRtb.Text.Replace("SaveOnSettingsIni=1", "SaveOnSettingsIni=0").Trim()
+                File.WriteAllText(Application.StartupPath & "\settings.ini", SettingRtb.Text, ASCII)
                 Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("preview"), "Preview", "Stable")
                 Dim Key As RegistryKey = Registry.CurrentUser.CreateSubKey(KeyStr)
                 Dim PrgKey As RegistryKey = Key.CreateSubKey("Program")
@@ -3593,7 +3602,26 @@ Public Class MainForm
     End Sub
 
     Sub ResetDTSettings()
+        GenerateDTSettings()
+        LoadDTSettings(If(SaveOnSettingsIni, 1, 0))
+    End Sub
 
+    ''' <summary>
+    ''' Detects properties of the file to determine whether automatic migration needs to be performed
+    ''' </summary>
+    ''' <remarks>If the file does not exist, the initial setup wizard launches</remarks>
+    Sub PerformSettingFileValidation()
+        If File.Exists(Application.StartupPath & "\settings.ini") Then
+            Dim bldDate As Date = PrgAbout.RetrieveLinkerTimestamp(Application.StartupPath & "\DISMTools.exe")
+            If File.GetLastWriteTime(Application.StartupPath & "\settings.ini") < bldDate Then
+                ' Perform setting file migration
+                MigrationForm.ShowDialog()
+                Thread.Sleep(1500)
+            End If
+        Else
+            ' Show setup window
+            PrgSetup.ShowDialog()
+        End If
     End Sub
 
     ''' <summary>
@@ -4111,7 +4139,6 @@ Public Class MainForm
                     DeleteImage.Text = "Delete volume images from WIM file..."
                     ExportImage.Text = "Export image..."
                     GetImageInfo.Text = "Get image information..."
-                    GetMountedImageInfo.Text = "Get currently mounted image information..."
                     GetWIMBootEntry.Text = "Get WIMBoot configuration entries..."
                     ListImage.Text = "List files and directories in image..."
                     MountImage.Text = "Mount image..."
@@ -4393,7 +4420,6 @@ Public Class MainForm
                     DeleteImage.Text = "Eliminar imágenes de volumen de un archivo WIM..."
                     ExportImage.Text = "Exportar imagen..."
                     GetImageInfo.Text = "Obtener información de imagen..."
-                    GetMountedImageInfo.Text = "Obtener información de imágenes montadas actualmente..."
                     GetWIMBootEntry.Text = "Obtener entradas de configuración WIMBoot..."
                     ListImage.Text = "Enumerar archivos y directorios de un archivo WIM..."
                     MountImage.Text = "Montar imagen..."
@@ -4680,7 +4706,6 @@ Public Class MainForm
                 DeleteImage.Text = "Delete volume images from WIM file..."
                 ExportImage.Text = "Export image..."
                 GetImageInfo.Text = "Get image information..."
-                GetMountedImageInfo.Text = "Get currently mounted image information..."
                 GetWIMBootEntry.Text = "Get WIMBoot configuration entries..."
                 ListImage.Text = "List files and directories in image..."
                 MountImage.Text = "Mount image..."
@@ -4962,7 +4987,6 @@ Public Class MainForm
                 DeleteImage.Text = "Eliminar imágenes de volumen de un archivo WIM..."
                 ExportImage.Text = "Exportar imagen..."
                 GetImageInfo.Text = "Obtener información de imagen..."
-                GetMountedImageInfo.Text = "Obtener información de imágenes montadas actualmente..."
                 GetWIMBootEntry.Text = "Obtener entradas de configuración WIMBoot..."
                 ListImage.Text = "Enumerar archivos y directorios de un archivo WIM..."
                 MountImage.Text = "Montar imagen..."
@@ -5196,6 +5220,38 @@ Public Class MainForm
                 NewFileToolStripMenuItem.Text = "Nuevo archivo..."
                 ExistingFileToolStripMenuItem.Text = "Archivo existente..."
         End Select
+
+        If OnlineManagement Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            Label5.Text = "Yes"
+                            Text = "Online installation - DISMTools"
+                            Label14.Text = "(Online installation)"
+                            Label20.Text = "(Online installation)"
+                            projName.Text = "(Online installation)"
+                        Case "ESN"
+                            Label5.Text = "Sí"
+                            Text = "Instalación activa - DISMTools"
+                            Label14.Text = "(Instalación activa)"
+                            Label20.Text = "(Instalación activa)"
+                            projName.Text = "(Instalación activa)"
+                    End Select
+                Case 1
+                    Label5.Text = "Yes"
+                    Text = "Online installation - DISMTools"
+                    Label14.Text = "(Online installation)"
+                    Label20.Text = "(Online installation)"
+                    projName.Text = "(Online installation)"
+                Case 2
+                    Label5.Text = "Sí"
+                    Text = "Instalación activa - DISMTools"
+                    Label14.Text = "(Instalación activa)"
+                    Label20.Text = "(Instalación activa)"
+                    projName.Text = "(Instalación activa)"
+            End Select
+        End If
     End Sub
 
     'Sub GenReportTab(ReportType As Integer, TableFormat As Integer)            ' Hold this for a future release
@@ -6954,7 +7010,7 @@ Public Class MainForm
         ShowChildDescs(True, 1)
     End Sub
 
-    Private Sub HideChildDescsTrigger(sender As Object, e As EventArgs) Handles AppendImage.MouseLeave, ApplyFFU.MouseLeave, ApplyImage.MouseLeave, CaptureCustomImage.MouseLeave, CaptureFFU.MouseLeave, CaptureImage.MouseLeave, CleanupMountpoints.MouseLeave, CommitImage.MouseLeave, DeleteImage.MouseLeave, ExportImage.MouseLeave, GetImageInfo.MouseLeave, GetMountedImageInfo.MouseLeave, GetWIMBootEntry.MouseLeave, ListImage.MouseLeave, MountImage.MouseLeave, OptimizeFFU.MouseLeave, OptimizeImage.MouseLeave, RemountImage.MouseLeave, SplitFFU.MouseLeave, SplitImage.MouseLeave, UnmountImage.MouseLeave, UpdateWIMBootEntry.MouseLeave, ApplySiloedPackage.MouseLeave, GetPackages.MouseLeave, GetPackageInfo.MouseLeave, AddPackage.MouseLeave, RemovePackage.MouseLeave, GetFeatures.MouseLeave, GetFeatureInfo.MouseLeave, EnableFeature.MouseLeave, DisableFeature.MouseLeave, CleanupImage.MouseLeave, AddProvisionedAppxPackage.MouseLeave, GetProvisioningPackageInfo.MouseLeave, ApplyCustomDataImage.MouseLeave, GetProvisionedAppxPackages.MouseLeave, AddProvisionedAppxPackage.MouseLeave, RemoveProvisionedAppxPackage.MouseLeave, OptimizeProvisionedAppxPackages.MouseLeave, SetProvisionedAppxDataFile.MouseLeave, CheckAppPatch.MouseLeave, GetAppPatchInfo.MouseLeave, GetAppPatches.MouseLeave, GetAppInfo.MouseLeave, GetApps.MouseLeave, ExportDefaultAppAssociations.MouseLeave, GetDefaultAppAssociations.MouseLeave, ImportDefaultAppAssociations.MouseLeave, RemoveDefaultAppAssociations.MouseLeave, GetIntl.MouseLeave, SetUILangFallback.MouseLeave, SetSysUILang.MouseLeave, SetSysLocale.MouseLeave, SetUserLocale.MouseLeave, SetInputLocale.MouseLeave, SetAllIntl.MouseLeave, SetTimeZone.MouseLeave, SetSKUIntlDefaults.MouseLeave, SetLayeredDriver.MouseLeave, GenLangINI.MouseLeave, SetSetupUILang.MouseLeave, AddCapability.MouseLeave, ExportSource.MouseLeave, GetCapabilities.MouseLeave, GetCapabilityInfo.MouseLeave, RemoveCapability.MouseLeave, GetCurrentEdition.MouseLeave, GetTargetEditions.MouseLeave, SetEdition.MouseLeave, SetProductKey.MouseLeave, GetDrivers.MouseLeave, GetDriverInfo.MouseLeave, AddDriver.MouseLeave, RemoveDriver.MouseLeave, ExportDriver.MouseLeave, ApplyUnattend.MouseLeave, GetPESettings.MouseLeave, GetTargetPath.MouseLeave, GetScratchSpace.MouseLeave, SetScratchSpace.MouseLeave, SetTargetPath.MouseLeave, GetOSUninstallWindow.MouseLeave, InitiateOSUninstall.MouseLeave, RemoveOSUninstall.MouseLeave, SetOSUninstallWindow.MouseLeave, SetReservedStorageState.MouseLeave, GetReservedStorageState.MouseLeave, NewProjectToolStripMenuItem.MouseLeave, OpenExistingProjectToolStripMenuItem.MouseLeave, SaveProjectToolStripMenuItem.MouseLeave, SaveProjectasToolStripMenuItem.MouseLeave, ExitToolStripMenuItem.MouseLeave, ViewProjectFilesInFileExplorerToolStripMenuItem.MouseLeave, UnloadProjectToolStripMenuItem.MouseLeave, SwitchImageIndexesToolStripMenuItem.MouseLeave, ProjectPropertiesToolStripMenuItem.MouseLeave, ImagePropertiesToolStripMenuItem.MouseLeave, ImageManagementToolStripMenuItem.MouseLeave, OSPackagesToolStripMenuItem.MouseLeave, ProvisioningPackagesToolStripMenuItem.MouseLeave, AppPackagesToolStripMenuItem.MouseLeave, AppPatchesToolStripMenuItem.MouseLeave, DefaultAppAssociationsToolStripMenuItem.MouseLeave, LanguagesAndRegionSettingsToolStripMenuItem.MouseLeave, CapabilitiesToolStripMenuItem.MouseLeave, WindowsEditionsToolStripMenuItem.MouseLeave, DriversToolStripMenuItem.MouseLeave, UnattendedAnswerFilesToolStripMenuItem.MouseLeave, WindowsPEServicingToolStripMenuItem.MouseLeave, OSUninstallToolStripMenuItem.MouseLeave, ReservedStorageToolStripMenuItem.MouseLeave, ImageConversionToolStripMenuItem.MouseLeave, WIMESDToolStripMenuItem.MouseLeave, RemountImageWithWritePermissionsToolStripMenuItem.MouseLeave, CommandShellToolStripMenuItem.MouseLeave, OptionsToolStripMenuItem.MouseLeave, HelpTopicsToolStripMenuItem.MouseLeave, GlossaryToolStripMenuItem.MouseLeave, CommandHelpToolStripMenuItem.MouseLeave, AboutDISMToolsToolStripMenuItem.MouseLeave, UnattendedAnswerFileManagerToolStripMenuItem.MouseLeave, AddEdge.MouseLeave, AddEdgeBrowser.MouseLeave, AddEdgeWebView.MouseLeave, ReportManagerToolStripMenuItem.MouseLeave, MergeSWM.MouseLeave, MountedImageManagerTSMI.MouseLeave, ReportFeedbackToolStripMenuItem.MouseLeave, ManageOnlineInstallationToolStripMenuItem.MouseLeave, AddProvisioningPackage.MouseLeave
+    Private Sub HideChildDescsTrigger(sender As Object, e As EventArgs) Handles AppendImage.MouseLeave, ApplyFFU.MouseLeave, ApplyImage.MouseLeave, CaptureCustomImage.MouseLeave, CaptureFFU.MouseLeave, CaptureImage.MouseLeave, CleanupMountpoints.MouseLeave, CommitImage.MouseLeave, DeleteImage.MouseLeave, ExportImage.MouseLeave, GetImageInfo.MouseLeave, GetWIMBootEntry.MouseLeave, ListImage.MouseLeave, MountImage.MouseLeave, OptimizeFFU.MouseLeave, OptimizeImage.MouseLeave, RemountImage.MouseLeave, SplitFFU.MouseLeave, SplitImage.MouseLeave, UnmountImage.MouseLeave, UpdateWIMBootEntry.MouseLeave, ApplySiloedPackage.MouseLeave, GetPackages.MouseLeave, GetPackageInfo.MouseLeave, AddPackage.MouseLeave, RemovePackage.MouseLeave, GetFeatures.MouseLeave, GetFeatureInfo.MouseLeave, EnableFeature.MouseLeave, DisableFeature.MouseLeave, CleanupImage.MouseLeave, AddProvisionedAppxPackage.MouseLeave, GetProvisioningPackageInfo.MouseLeave, ApplyCustomDataImage.MouseLeave, GetProvisionedAppxPackages.MouseLeave, AddProvisionedAppxPackage.MouseLeave, RemoveProvisionedAppxPackage.MouseLeave, OptimizeProvisionedAppxPackages.MouseLeave, SetProvisionedAppxDataFile.MouseLeave, CheckAppPatch.MouseLeave, GetAppPatchInfo.MouseLeave, GetAppPatches.MouseLeave, GetAppInfo.MouseLeave, GetApps.MouseLeave, ExportDefaultAppAssociations.MouseLeave, GetDefaultAppAssociations.MouseLeave, ImportDefaultAppAssociations.MouseLeave, RemoveDefaultAppAssociations.MouseLeave, GetIntl.MouseLeave, SetUILangFallback.MouseLeave, SetSysUILang.MouseLeave, SetSysLocale.MouseLeave, SetUserLocale.MouseLeave, SetInputLocale.MouseLeave, SetAllIntl.MouseLeave, SetTimeZone.MouseLeave, SetSKUIntlDefaults.MouseLeave, SetLayeredDriver.MouseLeave, GenLangINI.MouseLeave, SetSetupUILang.MouseLeave, AddCapability.MouseLeave, ExportSource.MouseLeave, GetCapabilities.MouseLeave, GetCapabilityInfo.MouseLeave, RemoveCapability.MouseLeave, GetCurrentEdition.MouseLeave, GetTargetEditions.MouseLeave, SetEdition.MouseLeave, SetProductKey.MouseLeave, GetDrivers.MouseLeave, GetDriverInfo.MouseLeave, AddDriver.MouseLeave, RemoveDriver.MouseLeave, ExportDriver.MouseLeave, ApplyUnattend.MouseLeave, GetPESettings.MouseLeave, GetTargetPath.MouseLeave, GetScratchSpace.MouseLeave, SetScratchSpace.MouseLeave, SetTargetPath.MouseLeave, GetOSUninstallWindow.MouseLeave, InitiateOSUninstall.MouseLeave, RemoveOSUninstall.MouseLeave, SetOSUninstallWindow.MouseLeave, SetReservedStorageState.MouseLeave, GetReservedStorageState.MouseLeave, NewProjectToolStripMenuItem.MouseLeave, OpenExistingProjectToolStripMenuItem.MouseLeave, SaveProjectToolStripMenuItem.MouseLeave, SaveProjectasToolStripMenuItem.MouseLeave, ExitToolStripMenuItem.MouseLeave, ViewProjectFilesInFileExplorerToolStripMenuItem.MouseLeave, UnloadProjectToolStripMenuItem.MouseLeave, SwitchImageIndexesToolStripMenuItem.MouseLeave, ProjectPropertiesToolStripMenuItem.MouseLeave, ImagePropertiesToolStripMenuItem.MouseLeave, ImageManagementToolStripMenuItem.MouseLeave, OSPackagesToolStripMenuItem.MouseLeave, ProvisioningPackagesToolStripMenuItem.MouseLeave, AppPackagesToolStripMenuItem.MouseLeave, AppPatchesToolStripMenuItem.MouseLeave, DefaultAppAssociationsToolStripMenuItem.MouseLeave, LanguagesAndRegionSettingsToolStripMenuItem.MouseLeave, CapabilitiesToolStripMenuItem.MouseLeave, WindowsEditionsToolStripMenuItem.MouseLeave, DriversToolStripMenuItem.MouseLeave, UnattendedAnswerFilesToolStripMenuItem.MouseLeave, WindowsPEServicingToolStripMenuItem.MouseLeave, OSUninstallToolStripMenuItem.MouseLeave, ReservedStorageToolStripMenuItem.MouseLeave, ImageConversionToolStripMenuItem.MouseLeave, WIMESDToolStripMenuItem.MouseLeave, RemountImageWithWritePermissionsToolStripMenuItem.MouseLeave, CommandShellToolStripMenuItem.MouseLeave, OptionsToolStripMenuItem.MouseLeave, HelpTopicsToolStripMenuItem.MouseLeave, GlossaryToolStripMenuItem.MouseLeave, CommandHelpToolStripMenuItem.MouseLeave, AboutDISMToolsToolStripMenuItem.MouseLeave, UnattendedAnswerFileManagerToolStripMenuItem.MouseLeave, AddEdge.MouseLeave, AddEdgeBrowser.MouseLeave, AddEdgeWebView.MouseLeave, ReportManagerToolStripMenuItem.MouseLeave, MergeSWM.MouseLeave, MountedImageManagerTSMI.MouseLeave, ReportFeedbackToolStripMenuItem.MouseLeave, ManageOnlineInstallationToolStripMenuItem.MouseLeave, AddProvisioningPackage.MouseLeave
         HideChildDescs()
     End Sub
 
@@ -6998,7 +7054,7 @@ Public Class MainForm
         ShowChildDescs(True, 11)
     End Sub
 
-    Private Sub GetMountedImageInfo_MouseEnter(sender As Object, e As EventArgs) Handles GetMountedImageInfo.MouseEnter
+    Private Sub GetMountedImageInfo_MouseEnter(sender As Object, e As EventArgs)
         ShowChildDescs(True, 12)
     End Sub
 
@@ -9103,7 +9159,15 @@ Public Class MainForm
         BeginOnlineManagement(True)
     End Sub
 
+    ''' <summary>
+    ''' Gets the application display name from the AppX package manifest
+    ''' </summary>
+    ''' <param name="PackageName">The package name of an application</param>
+    ''' <param name="DisplayName">The display name of an application. This parameter is required when there are multiple directories with their names containing <paramref name="PackageName">the package name</paramref></param>
+    ''' <returns>pkgName: the suitable package display name</returns>
+    ''' <remarks>If pkgName returns Nothing, the callers will hide those options calling this function</remarks>
     Function GetPackageDisplayName(PackageName As String, Optional DisplayName As String = "")
+        If File.Exists(Application.StartupPath & "\AppxManifest.xml") Then File.Delete(Application.StartupPath & "\AppxManifest.xml")
         If File.Exists(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml") Then
             ' Copy manifest to startup dir
             File.Copy(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml", Application.StartupPath & "\AppxManifest.xml")
@@ -9113,9 +9177,14 @@ Public Class MainForm
             ' Go through each line until we find the properties tag
             For x = 0 To XMLReaderRTB.Lines.Count - 1
                 If XMLReaderRTB.Lines(x).EndsWith("<Properties>") Then
-                    Dim pkgName As String = XMLReaderRTB.Lines(x + If(XMLReaderRTB.Lines(x + 1).Contains("Framework"), 2, 1)).Replace("/", "").Trim().Replace("<DisplayName>", "").Trim()
-                    File.Delete(Application.StartupPath & "\AppxManifest.xml")
-                    Return pkgName
+                    ' Go through each line until we find the display name
+                    For y = x To XMLReaderRTB.Lines.Count - 1
+                        If XMLReaderRTB.Lines(y).Replace("<", "").Trim().Replace(">", "").Trim().Replace(" ", "").Trim().StartsWith("DisplayName", StringComparison.OrdinalIgnoreCase) Then
+                            Dim pkgName As String = XMLReaderRTB.Lines(y).Replace("<DisplayName>", "").Trim().Replace("</DisplayName>", "").Trim()
+                            File.Delete(Application.StartupPath & "\AppxManifest.xml")
+                            Return pkgName
+                        End If
+                    Next
                 End If
             Next
         Else
@@ -9132,9 +9201,14 @@ Public Class MainForm
                         ' Go through each line until we find the properties tag
                         For x = 0 To XMLReaderRTB.Lines.Count - 1
                             If XMLReaderRTB.Lines(x).EndsWith("<Properties>") Then
-                                Dim pkgName As String = XMLReaderRTB.Lines(x + If(XMLReaderRTB.Lines(x + 1).Contains("Framework"), 2, 1)).Replace("/", "").Trim().Replace("<DisplayName>", "").Trim()
-                                File.Delete(Application.StartupPath & "\AppxManifest.xml")
-                                Return pkgName
+                                ' Go through each line until we find the display name
+                                For y = x To XMLReaderRTB.Lines.Count - 1
+                                    If XMLReaderRTB.Lines(y).Replace("<", "").Trim().Replace(">", "").Trim().Replace(" ", "").Trim().StartsWith("DisplayName", StringComparison.OrdinalIgnoreCase) Then
+                                        Dim pkgName As String = XMLReaderRTB.Lines(y).Replace("<DisplayName>", "").Trim().Replace("</DisplayName>", "").Trim()
+                                        File.Delete(Application.StartupPath & "\AppxManifest.xml")
+                                        Return pkgName
+                                    End If
+                                Next
                             End If
                         Next
                     End If
@@ -9156,6 +9230,12 @@ Public Class MainForm
         Return Nothing
     End Function
 
+    ''' <summary>
+    ''' Gets the path of the main logo of an installed provisioned AppX package
+    ''' </summary>
+    ''' <param name="PackageName">The name of the AppX package</param>
+    ''' <returns>This function returns a path to the logo asset of an application</returns>
+    ''' <remarks>This can be a little wonky and may not show the main asset. However, since this allows the program to launch an image viewer afterwards, you can browse other assets</remarks>
     Function GetStoreAppMainLogo(PackageName As String)
         Try
             If File.Exists(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml") Then

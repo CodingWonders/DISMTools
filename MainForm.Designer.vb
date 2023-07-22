@@ -56,7 +56,6 @@ Partial Class MainForm
         Me.DeleteImage = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExportImage = New System.Windows.Forms.ToolStripMenuItem()
         Me.GetImageInfo = New System.Windows.Forms.ToolStripMenuItem()
-        Me.GetMountedImageInfo = New System.Windows.Forms.ToolStripMenuItem()
         Me.GetWIMBootEntry = New System.Windows.Forms.ToolStripMenuItem()
         Me.ListImage = New System.Windows.Forms.ToolStripMenuItem()
         Me.MountImage = New System.Windows.Forms.ToolStripMenuItem()
@@ -582,7 +581,7 @@ Partial Class MainForm
         '
         'ImageManagementToolStripMenuItem
         '
-        Me.ImageManagementToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AppendImage, Me.ApplyFFU, Me.ApplyImage, Me.CaptureCustomImage, Me.CaptureFFU, Me.CaptureImage, Me.CleanupMountpoints, Me.CommitImage, Me.DeleteImage, Me.ExportImage, Me.GetImageInfo, Me.GetMountedImageInfo, Me.GetWIMBootEntry, Me.ListImage, Me.MountImage, Me.OptimizeFFU, Me.OptimizeImage, Me.RemountImage, Me.SplitFFU, Me.SplitImage, Me.UnmountImage, Me.UpdateWIMBootEntry, Me.ApplySiloedPackage})
+        Me.ImageManagementToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AppendImage, Me.ApplyFFU, Me.ApplyImage, Me.CaptureCustomImage, Me.CaptureFFU, Me.CaptureImage, Me.CleanupMountpoints, Me.CommitImage, Me.DeleteImage, Me.ExportImage, Me.GetImageInfo, Me.GetWIMBootEntry, Me.ListImage, Me.MountImage, Me.OptimizeFFU, Me.OptimizeImage, Me.RemountImage, Me.SplitFFU, Me.SplitImage, Me.UnmountImage, Me.UpdateWIMBootEntry, Me.ApplySiloedPackage})
         Me.ImageManagementToolStripMenuItem.Name = "ImageManagementToolStripMenuItem"
         Me.ImageManagementToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
         Me.ImageManagementToolStripMenuItem.Text = "Image management"
@@ -590,139 +589,133 @@ Partial Class MainForm
         'AppendImage
         '
         Me.AppendImage.Name = "AppendImage"
-        Me.AppendImage.Size = New System.Drawing.Size(305, 22)
+        Me.AppendImage.Size = New System.Drawing.Size(289, 22)
         Me.AppendImage.Text = "Append capture directory to image..."
         '
         'ApplyFFU
         '
         Me.ApplyFFU.Name = "ApplyFFU"
-        Me.ApplyFFU.Size = New System.Drawing.Size(305, 22)
+        Me.ApplyFFU.Size = New System.Drawing.Size(289, 22)
         Me.ApplyFFU.Text = "Apply FFU or SFU file..."
         '
         'ApplyImage
         '
         Me.ApplyImage.Name = "ApplyImage"
-        Me.ApplyImage.Size = New System.Drawing.Size(305, 22)
+        Me.ApplyImage.Size = New System.Drawing.Size(289, 22)
         Me.ApplyImage.Text = "Apply WIM or SWM file..."
         '
         'CaptureCustomImage
         '
         Me.CaptureCustomImage.Name = "CaptureCustomImage"
-        Me.CaptureCustomImage.Size = New System.Drawing.Size(305, 22)
+        Me.CaptureCustomImage.Size = New System.Drawing.Size(289, 22)
         Me.CaptureCustomImage.Text = "Capture incremental changes to file..."
         '
         'CaptureFFU
         '
         Me.CaptureFFU.Name = "CaptureFFU"
-        Me.CaptureFFU.Size = New System.Drawing.Size(305, 22)
+        Me.CaptureFFU.Size = New System.Drawing.Size(289, 22)
         Me.CaptureFFU.Text = "Capture partitions to FFU file..."
         '
         'CaptureImage
         '
         Me.CaptureImage.Name = "CaptureImage"
-        Me.CaptureImage.Size = New System.Drawing.Size(305, 22)
+        Me.CaptureImage.Size = New System.Drawing.Size(289, 22)
         Me.CaptureImage.Text = "Capture image of a drive to WIM file..."
         '
         'CleanupMountpoints
         '
         Me.CleanupMountpoints.Name = "CleanupMountpoints"
-        Me.CleanupMountpoints.Size = New System.Drawing.Size(305, 22)
+        Me.CleanupMountpoints.Size = New System.Drawing.Size(289, 22)
         Me.CleanupMountpoints.Text = "Delete resources from corrupted image..."
         '
         'CommitImage
         '
         Me.CommitImage.Name = "CommitImage"
-        Me.CommitImage.Size = New System.Drawing.Size(305, 22)
+        Me.CommitImage.Size = New System.Drawing.Size(289, 22)
         Me.CommitImage.Text = "Apply changes to image..."
         '
         'DeleteImage
         '
         Me.DeleteImage.Name = "DeleteImage"
-        Me.DeleteImage.Size = New System.Drawing.Size(305, 22)
+        Me.DeleteImage.Size = New System.Drawing.Size(289, 22)
         Me.DeleteImage.Text = "Delete volume image from WIM file..."
         '
         'ExportImage
         '
         Me.ExportImage.Name = "ExportImage"
-        Me.ExportImage.Size = New System.Drawing.Size(305, 22)
+        Me.ExportImage.Size = New System.Drawing.Size(289, 22)
         Me.ExportImage.Text = "Export image..."
         '
         'GetImageInfo
         '
         Me.GetImageInfo.Name = "GetImageInfo"
-        Me.GetImageInfo.Size = New System.Drawing.Size(305, 22)
+        Me.GetImageInfo.Size = New System.Drawing.Size(289, 22)
         Me.GetImageInfo.Text = "Get image information..."
-        '
-        'GetMountedImageInfo
-        '
-        Me.GetMountedImageInfo.Name = "GetMountedImageInfo"
-        Me.GetMountedImageInfo.Size = New System.Drawing.Size(305, 22)
-        Me.GetMountedImageInfo.Text = "Get currently mounted image information..."
         '
         'GetWIMBootEntry
         '
         Me.GetWIMBootEntry.Name = "GetWIMBootEntry"
-        Me.GetWIMBootEntry.Size = New System.Drawing.Size(305, 22)
+        Me.GetWIMBootEntry.Size = New System.Drawing.Size(289, 22)
         Me.GetWIMBootEntry.Text = "Get WIMBoot configuration entries..."
         '
         'ListImage
         '
         Me.ListImage.Name = "ListImage"
-        Me.ListImage.Size = New System.Drawing.Size(305, 22)
+        Me.ListImage.Size = New System.Drawing.Size(289, 22)
         Me.ListImage.Text = "List files and directories in image..."
         '
         'MountImage
         '
         Me.MountImage.Name = "MountImage"
-        Me.MountImage.Size = New System.Drawing.Size(305, 22)
+        Me.MountImage.Size = New System.Drawing.Size(289, 22)
         Me.MountImage.Text = "Mount image..."
         '
         'OptimizeFFU
         '
         Me.OptimizeFFU.Name = "OptimizeFFU"
-        Me.OptimizeFFU.Size = New System.Drawing.Size(305, 22)
+        Me.OptimizeFFU.Size = New System.Drawing.Size(289, 22)
         Me.OptimizeFFU.Text = "Optimize FFU file..."
         '
         'OptimizeImage
         '
         Me.OptimizeImage.Name = "OptimizeImage"
-        Me.OptimizeImage.Size = New System.Drawing.Size(305, 22)
+        Me.OptimizeImage.Size = New System.Drawing.Size(289, 22)
         Me.OptimizeImage.Text = "Optimize image..."
         '
         'RemountImage
         '
         Me.RemountImage.Name = "RemountImage"
-        Me.RemountImage.Size = New System.Drawing.Size(305, 22)
+        Me.RemountImage.Size = New System.Drawing.Size(289, 22)
         Me.RemountImage.Text = "Remount image for servicing..."
         '
         'SplitFFU
         '
         Me.SplitFFU.Name = "SplitFFU"
-        Me.SplitFFU.Size = New System.Drawing.Size(305, 22)
+        Me.SplitFFU.Size = New System.Drawing.Size(289, 22)
         Me.SplitFFU.Text = "Splt FFU file into SFU files..."
         '
         'SplitImage
         '
         Me.SplitImage.Name = "SplitImage"
-        Me.SplitImage.Size = New System.Drawing.Size(305, 22)
+        Me.SplitImage.Size = New System.Drawing.Size(289, 22)
         Me.SplitImage.Text = "Split WIM file into SWM files..."
         '
         'UnmountImage
         '
         Me.UnmountImage.Name = "UnmountImage"
-        Me.UnmountImage.Size = New System.Drawing.Size(305, 22)
+        Me.UnmountImage.Size = New System.Drawing.Size(289, 22)
         Me.UnmountImage.Text = "Unmount image..."
         '
         'UpdateWIMBootEntry
         '
         Me.UpdateWIMBootEntry.Name = "UpdateWIMBootEntry"
-        Me.UpdateWIMBootEntry.Size = New System.Drawing.Size(305, 22)
+        Me.UpdateWIMBootEntry.Size = New System.Drawing.Size(289, 22)
         Me.UpdateWIMBootEntry.Text = "Update WIMBoot configuration entry..."
         '
         'ApplySiloedPackage
         '
         Me.ApplySiloedPackage.Name = "ApplySiloedPackage"
-        Me.ApplySiloedPackage.Size = New System.Drawing.Size(305, 22)
+        Me.ApplySiloedPackage.Size = New System.Drawing.Size(289, 22)
         Me.ApplySiloedPackage.Text = "Apply siloed provisioning package..."
         '
         'OSPackagesToolStripMenuItem
@@ -2329,7 +2322,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.44444!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.55556!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 87.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 91.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -2364,9 +2357,9 @@ Partial Class MainForm
         Me.LinkLabel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel1.Location = New System.Drawing.Point(78, 146)
+        Me.LinkLabel1.Location = New System.Drawing.Point(76, 146)
         Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(175, 254)
+        Me.LinkLabel1.Size = New System.Drawing.Size(177, 254)
         Me.LinkLabel1.TabIndex = 5
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "Click here to mount an image"
@@ -2376,9 +2369,9 @@ Partial Class MainForm
         Me.Panel8.Controls.Add(Me.projName)
         Me.Panel8.Controls.Add(Me.projNameText)
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel8.Location = New System.Drawing.Point(78, 3)
+        Me.Panel8.Location = New System.Drawing.Point(76, 3)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(87, 23)
+        Me.Panel8.Size = New System.Drawing.Size(85, 23)
         Me.Panel8.TabIndex = 8
         '
         'projName
@@ -2387,7 +2380,7 @@ Partial Class MainForm
         Me.projName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projName.Location = New System.Drawing.Point(0, 0)
         Me.projName.Name = "projName"
-        Me.projName.Size = New System.Drawing.Size(87, 23)
+        Me.projName.Size = New System.Drawing.Size(85, 23)
         Me.projName.TabIndex = 2
         Me.projName.Text = "projName"
         Me.projName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -2397,7 +2390,7 @@ Partial Class MainForm
         Me.projNameText.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projNameText.Location = New System.Drawing.Point(0, 0)
         Me.projNameText.Name = "projNameText"
-        Me.projNameText.Size = New System.Drawing.Size(87, 21)
+        Me.projNameText.Size = New System.Drawing.Size(85, 21)
         Me.projNameText.TabIndex = 4
         Me.projNameText.Text = "projName"
         Me.projNameText.Visible = False
@@ -2408,9 +2401,9 @@ Partial Class MainForm
         Me.Label5.AutoSize = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label5, 2)
         Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label5.Location = New System.Drawing.Point(78, 131)
+        Me.Label5.Location = New System.Drawing.Point(76, 131)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(175, 15)
+        Me.Label5.Size = New System.Drawing.Size(177, 15)
         Me.Label5.TabIndex = 2
         Me.Label5.Text = "imgStatus"
         '
@@ -2420,7 +2413,7 @@ Partial Class MainForm
         Me.Label2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label2.Location = New System.Drawing.Point(3, 29)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(69, 102)
+        Me.Label2.Size = New System.Drawing.Size(67, 102)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "Location:"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2430,9 +2423,9 @@ Partial Class MainForm
         Me.Label3.AutoEllipsis = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label3, 2)
         Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label3.Location = New System.Drawing.Point(78, 29)
+        Me.Label3.Location = New System.Drawing.Point(76, 29)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(175, 102)
+        Me.Label3.Size = New System.Drawing.Size(177, 102)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "projPath"
         '
@@ -2443,7 +2436,7 @@ Partial Class MainForm
         Me.Label4.Location = New System.Drawing.Point(3, 131)
         Me.Label4.Name = "Label4"
         Me.TableLayoutPanel2.SetRowSpan(Me.Label4, 2)
-        Me.Label4.Size = New System.Drawing.Size(69, 269)
+        Me.Label4.Size = New System.Drawing.Size(67, 269)
         Me.Label4.TabIndex = 1
         Me.Label4.Text = "Images mounted?"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2454,7 +2447,7 @@ Partial Class MainForm
         Me.Panel9.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel9.Location = New System.Drawing.Point(3, 3)
         Me.Panel9.Name = "Panel9"
-        Me.Panel9.Size = New System.Drawing.Size(69, 23)
+        Me.Panel9.Size = New System.Drawing.Size(67, 23)
         Me.Panel9.TabIndex = 9
         '
         'Label1
@@ -2462,7 +2455,7 @@ Partial Class MainForm
         Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label1.Location = New System.Drawing.Point(0, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(69, 23)
+        Me.Label1.Size = New System.Drawing.Size(67, 23)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Name:"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -3619,7 +3612,6 @@ Partial Class MainForm
     Friend WithEvents DeleteImage As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ExportImage As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents GetImageInfo As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents GetMountedImageInfo As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents GetWIMBootEntry As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ListImage As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MountImage As System.Windows.Forms.ToolStripMenuItem

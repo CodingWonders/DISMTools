@@ -53,7 +53,10 @@ Public Class PrgSetup
     End Sub
 
     Private Sub closeBox_Click(sender As Object, e As EventArgs) Handles closeBox.Click
-        Close()
+        IncompleteSetupDlg.ShowDialog()
+        If IncompleteSetupDlg.DialogResult = Windows.Forms.DialogResult.OK Then
+            Close()
+        End If
     End Sub
 
     Private Sub wndControlPanel_MouseDown(sender As Object, e As MouseEventArgs) Handles wndControlPanel.MouseDown
@@ -111,13 +114,20 @@ Public Class PrgSetup
                 ModulesPanel.Visible = False
                 FinishPanel.Visible = False
             Case 3
-                MainForm.LogFile = TextBox2.Text
-                MainForm.LogLevel = TrackBar1.Value + 1
+                ' Modules are not ready yet, so skip page
+                'MainForm.LogFile = TextBox2.Text
+                'MainForm.LogLevel = TrackBar1.Value + 1
+                'WelcomePanel.Visible = False
+                'CustomizationPanel.Visible = False
+                'LogsPanel.Visible = False
+                'ModulesPanel.Visible = True
+                'FinishPanel.Visible = False
+                pageInt += 1
                 WelcomePanel.Visible = False
                 CustomizationPanel.Visible = False
                 LogsPanel.Visible = False
-                ModulesPanel.Visible = True
-                FinishPanel.Visible = False
+                ModulesPanel.Visible = False
+                FinishPanel.Visible = True
             Case 4
                 WelcomePanel.Visible = False
                 CustomizationPanel.Visible = False
@@ -163,10 +173,17 @@ Public Class PrgSetup
                 ModulesPanel.Visible = False
                 FinishPanel.Visible = False
             Case 3
+                ' Same
+                'WelcomePanel.Visible = False
+                'CustomizationPanel.Visible = False
+                'LogsPanel.Visible = False
+                'ModulesPanel.Visible = True
+                'FinishPanel.Visible = False
+                pageInt -= 1
                 WelcomePanel.Visible = False
                 CustomizationPanel.Visible = False
-                LogsPanel.Visible = False
-                ModulesPanel.Visible = True
+                LogsPanel.Visible = True
+                ModulesPanel.Visible = False
                 FinishPanel.Visible = False
             Case 4
                 WelcomePanel.Visible = False
@@ -314,5 +331,12 @@ Public Class PrgSetup
                 End Select
         End Select
         MainForm.LogLevel = TrackBar1.Value + 1
+    End Sub
+
+    Private Sub Cancel_Button_Click(sender As Object, e As EventArgs) Handles Cancel_Button.Click
+        IncompleteSetupDlg.ShowDialog()
+        If IncompleteSetupDlg.DialogResult = Windows.Forms.DialogResult.OK Then
+            Close()
+        End If
     End Sub
 End Class

@@ -138,6 +138,10 @@ Partial Class Options
         Me.CheckBox8 = New System.Windows.Forms.CheckBox()
         Me.Label35 = New System.Windows.Forms.Label()
         Me.TabPage10 = New System.Windows.Forms.TabPage()
+        Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.Label46 = New System.Windows.Forms.Label()
+        Me.PictureBox8 = New System.Windows.Forms.PictureBox()
+        Me.Panel2 = New System.Windows.Forms.Panel()
         Me.GroupBox5 = New System.Windows.Forms.GroupBox()
         Me.CheckBox11 = New System.Windows.Forms.CheckBox()
         Me.Button9 = New System.Windows.Forms.Button()
@@ -180,6 +184,9 @@ Partial Class Options
         Me.TabPage9.SuspendLayout()
         Me.GroupBox4.SuspendLayout()
         Me.TabPage10.SuspendLayout()
+        Me.Panel3.SuspendLayout()
+        CType(Me.PictureBox8, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel2.SuspendLayout()
         Me.GroupBox5.SuspendLayout()
         Me.TabPage11.SuspendLayout()
         Me.SuspendLayout()
@@ -1429,14 +1436,50 @@ Partial Class Options
         '
         'TabPage10
         '
-        Me.TabPage10.Controls.Add(Me.GroupBox5)
-        Me.TabPage10.Controls.Add(Me.Label40)
+        Me.TabPage10.Controls.Add(Me.Panel3)
+        Me.TabPage10.Controls.Add(Me.Panel2)
         Me.TabPage10.Location = New System.Drawing.Point(4, 22)
         Me.TabPage10.Name = "TabPage10"
         Me.TabPage10.Size = New System.Drawing.Size(751, 433)
         Me.TabPage10.TabIndex = 0
         Me.TabPage10.Text = "File associations"
         Me.TabPage10.UseVisualStyleBackColor = True
+        '
+        'Panel3
+        '
+        Me.Panel3.Controls.Add(Me.Label46)
+        Me.Panel3.Controls.Add(Me.PictureBox8)
+        Me.Panel3.Location = New System.Drawing.Point(1, 375)
+        Me.Panel3.Name = "Panel3"
+        Me.Panel3.Size = New System.Drawing.Size(749, 57)
+        Me.Panel3.TabIndex = 13
+        '
+        'Label46
+        '
+        Me.Label46.Location = New System.Drawing.Point(44, 19)
+        Me.Label46.Name = "Label46"
+        Me.Label46.Size = New System.Drawing.Size(682, 32)
+        Me.Label46.TabIndex = 11
+        Me.Label46.Text = "These settings aren't applicable to non-portable installations"
+        '
+        'PictureBox8
+        '
+        Me.PictureBox8.Image = Global.DISMTools.My.Resources.Resources.info_16px
+        Me.PictureBox8.Location = New System.Drawing.Point(22, 18)
+        Me.PictureBox8.Name = "PictureBox8"
+        Me.PictureBox8.Size = New System.Drawing.Size(16, 16)
+        Me.PictureBox8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox8.TabIndex = 10
+        Me.PictureBox8.TabStop = False
+        '
+        'Panel2
+        '
+        Me.Panel2.Controls.Add(Me.GroupBox5)
+        Me.Panel2.Controls.Add(Me.Label40)
+        Me.Panel2.Location = New System.Drawing.Point(0, 0)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(751, 242)
+        Me.Panel2.TabIndex = 12
         '
         'GroupBox5
         '
@@ -1622,7 +1665,11 @@ Partial Class Options
         Me.GroupBox4.ResumeLayout(False)
         Me.GroupBox4.PerformLayout()
         Me.TabPage10.ResumeLayout(False)
-        Me.TabPage10.PerformLayout()
+        Me.Panel3.ResumeLayout(False)
+        Me.Panel3.PerformLayout()
+        CType(Me.PictureBox8, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel2.ResumeLayout(False)
+        Me.Panel2.PerformLayout()
         Me.GroupBox5.ResumeLayout(False)
         Me.GroupBox5.PerformLayout()
         Me.TabPage11.ResumeLayout(False)
@@ -1757,5 +1804,9 @@ Partial Class Options
     Friend WithEvents RadioButton6 As System.Windows.Forms.RadioButton
     Friend WithEvents RadioButton5 As System.Windows.Forms.RadioButton
     Friend WithEvents Label45 As System.Windows.Forms.Label
+    Friend WithEvents Label46 As System.Windows.Forms.Label
+    Friend WithEvents PictureBox8 As System.Windows.Forms.PictureBox
+    Friend WithEvents Panel2 As System.Windows.Forms.Panel
+    Friend WithEvents Panel3 As System.Windows.Forms.Panel
 
 End Class

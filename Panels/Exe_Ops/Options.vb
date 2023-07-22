@@ -337,6 +337,7 @@ Public Class Options
                         Label43.Text = "Set options you would like to perform when the program starts up:"
                         Label44.Text = "The program will use the scratch directory provided by the project if one is loaded. If you are in online installation management mode, the program will use its scratch directory"
                         Label45.Text = "Secondary progress panel style:"
+                        Label46.Text = "These settings aren't applicable to non-portable installations"
                         Button1.Text = "Browse..."
                         Button2.Text = "View DISM component versions"
                         Button3.Text = "Browse..."
@@ -431,6 +432,7 @@ Public Class Options
                         Label43.Text = "Establezca las opciones que le gustaría realizar cuando el programa inicie:"
                         Label44.Text = "El programa usará el directorio temporal proporcionado por el proyecto si se cargó alguno. Si está en modo de administración de instalaciones en línea, el programa utilizará su directorio temporal"
                         Label45.Text = "Estilo del panel de progreso secundario:"
+                        Label46.Text = "Estas configuraciones no son aplicables a instalaciones no portátiles"
                         Button1.Text = "Examinar..."
                         Button2.Text = "Ver versiones de componentes"
                         Button3.Text = "Examinar..."
@@ -526,6 +528,7 @@ Public Class Options
                 Label43.Text = "Set options you would like to perform when the program starts up:"
                 Label44.Text = "The program will use the scratch directory provided by the project if one is loaded. If you are in online installation management mode, the program will use its scratch directory"
                 Label45.Text = "Secondary progress panel style:"
+                Label46.Text = "These settings aren't applicable to non-portable installations"
                 Button1.Text = "Browse..."
                 Button2.Text = "View DISM component versions"
                 Button3.Text = "Browse..."
@@ -620,6 +623,7 @@ Public Class Options
                 Label43.Text = "Establezca las opciones que le gustaría realizar cuando el programa inicie:"
                 Label44.Text = "El programa usará el directorio temporal proporcionado por el proyecto si se cargó alguno. Si está en modo de administración de instalaciones en línea, el programa utilizará su directorio temporal"
                 Label45.Text = "Estilo del panel de progreso secundario:"
+                Label46.Text = "Estas configuraciones no son aplicables a instalaciones no portátiles"
                 Button1.Text = "Examinar..."
                 Button2.Text = "Ver versiones de componentes"
                 Button3.Text = "Examinar..."
@@ -855,6 +859,13 @@ Public Class Options
         CheckBox11.Enabled = If(DetectFileAssociations(), False, True)
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If Not File.Exists(Application.StartupPath & "\portable") Then
+            Panel2.Enabled = False
+            Panel3.Visible = True
+        Else
+            Panel2.Enabled = True
+            Panel3.Visible = False
+        End If
     End Sub
 
     Sub GetSystemFonts()
@@ -1431,6 +1442,14 @@ Public Class Options
             SecProgressStylePreview.Image = My.Resources.secprogress_modern
         Else
             SecProgressStylePreview.Image = My.Resources.secprogress_classic
+        End If
+    End Sub
+
+    Private Sub PrefReset_Click(sender As Object, e As EventArgs) Handles PrefReset.Click
+        SettingsResetDlg.ShowDialog()
+        If SettingsResetDlg.DialogResult = Windows.Forms.DialogResult.OK Then
+            MainForm.ResetDTSettings()
+            Cancel_Button.PerformClick()
         End If
     End Sub
 End Class

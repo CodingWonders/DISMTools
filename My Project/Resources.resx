@@ -1048,40 +1048,35 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes
 
-- Fixed an issue in the CLI version of the mounted image manager where main menu errors would not display correctly
-- Fixed an issue where projects would not load if the read-write parameter wasn't found in their settings files
-- Fixed an issue where AppX packages and capabilities would not be detected in the online installation management mode
-- Fixed more issues regarding the improper disposal of the progress panel
-- The CLI version of the mounted image manager no longer makes assumptions as to whether a command ran successfully or not
+- Fixed an issue where package addition would fail if there were a version mismatch between a package and the Windows image
+- Fixed an issue where AppX package display names weren't obtained correctly in some cases
+- Fixed an issue that would make the AppX package display name detection process fail if there was a manifest file stored in the application directory
+- Fixed an issue where project creation would fail in online installation management mode
+- Fixed an issue where the image edition would not be detected in online installation management mode, which would cause the program to not detect AppX packages and capabilities after unloading a project with a Windows PE image mounted
+- Fixed an issue where the program tried to save the online installation management mode pseudo-project after performing an operation
+- Fixed issues that would make the program require a feature source for online installations when the Windows Update contact option was unchecked and that would make the program continue with "Removed" features without a required source if the feature source path check box was disabled
+- Fixed an issue where the program would default to saving settings to the settings file, even if the user decided to save these to the registry
 
 New features
 
-Image compatibility
+Settings
 
-- The program will now discard any WIM file containing a Windows XP, Server 2003, or older Windows installation; as they weren't supposed to be serviced using DISM
+- Setting reset functionality has been implemented
+- Setting file migration now occurs automatically if its modified date is older than the build date of the program
+- The initial setup wizard will now show automatically if no settings file is found
+- The settings file now uses a variable for the Windows directory
 
-Image properties
+Online installation management mode
 
-- Feature update detection has been improved to support Windows builds from the Gallium development semester
-- The installed languages of an image are now shown in a list, as opposed to in a text box
-- You can now reload the servicing, repair the component store, and enable write permissions to an image from the properties dialog
+- Translations are now applicable to this mode
+- The program now displays the operating system name instead of "(Online installation)"
 
-Image tasks
+CLI tools
 
-- You can now enable write permissions to a read-only Windows image from within the main program
-- The image cleanup dialog now remembers the task you've selected
-
-DISM API
-
-- Reloading the servicing session of a Windows image is now done using the DISM API
-
-Installer
-
-- The installer now creates the necessary registry keys
-
-Branding
-
-- Branding is becoming finalized</value>
+Mounted image manager:
+- More appropriate foreground colors have been chosen for warnings when running under the Windows Console Host
+- If images have been mounted or unmounted before marking a mounted image, the script will show an updated list before accepting any input
+- A custom window title is now used</value>
   </data>
   <data name="secprogress_classic" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\secprogress_classic.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
