@@ -2370,6 +2370,7 @@ Partial Class MainForm
         Me.Panel8.Controls.Add(Me.projNameText)
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel8.Location = New System.Drawing.Point(76, 3)
+
         Me.Panel8.Name = "Panel8"
         Me.Panel8.Size = New System.Drawing.Size(85, 23)
         Me.Panel8.TabIndex = 8
@@ -2611,8 +2612,8 @@ Partial Class MainForm
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TableLayoutPanel1.ColumnCount = 2
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 39.2!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60.8!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 39.2000008!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60.7999992!))
         Me.TableLayoutPanel1.Controls.Add(Me.Label15, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Label21, 0, 4)
         Me.TableLayoutPanel1.Controls.Add(Me.Label14, 1, 0)
