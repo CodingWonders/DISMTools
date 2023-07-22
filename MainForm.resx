@@ -291,27 +291,6 @@ These options, and the program information, can be found by opening the Help men
         JCQkJEQxb97/AOrW4M1DfY/XAAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="ProjNameEditBtn.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAOBJREFUOE+9
-        0j1qAlEAReFRRJFY6Rrcg2BC3IWp7NyLpakCgrYGiwgqWGhhLGwkQTdhFXAFAc9RByTgc9J44cOZgft+
-        je6ZFGp4Pj//Kw+Y4gvfGCLxIJbX+IAlbfCImyngE864gyUH2KKKYCwv8QZLT3AQB3M7wS0U4X5bx7dT
-        MphjgawfriUutxHPYrmPMYLlEjzlV1yW3zFBzg/XkscKHcTlNLpw2d5GME04iyXjbw+JymaE+unxuOwB
-        ZnBlN+PB7FHGC7wmr9CrTBT/IL/4gTM3EDywv3GmClz6PRNFB8zFJJ/8AljkAAAAAElFTkSuQmCC
-</value>
-  </data>
-  <metadata name="ToolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>249, 17</value>
-  </metadata>
-  <metadata name="ToolStrip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>866, 17</value>
-  </metadata>
-  <metadata name="prjTreeStatus.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>132, 17</value>
-  </metadata>
-  <metadata name="StatusStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>356, 17</value>
-  </metadata>
   <data name="TabPageIcon1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABGdBTUEAALGPC/xhBQAAAxpJREFUaEPt
@@ -329,6 +308,15 @@ These options, and the program information, can be found by opening the Help men
         HUDdNklBGQiaKlOAQ3deE0upkS9AaC5e7gdA0sCcp4m3w//1czooHWH9AcBLfYXxx0lD8/4DsJTqX7I+
         QgAYkztAubwBzlRFAmBBvgBcKTVZAFiSLwBXak0OABYlBuAU021SabVRACgDwCgAfgcYwAVL+99aihQp
         UqRol8XYH06lvF6eDoFzAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="ProjNameEditBtn.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAOBJREFUOE+9
+        0j1qAlEAReFRRJFY6Rrcg2BC3IWp7NyLpakCgrYGiwgqWGhhLGwkQTdhFXAFAc9RByTgc9J44cOZgft+
+        je6ZFGp4Pj//Kw+Y4gvfGCLxIJbX+IAlbfCImyngE864gyUH2KKKYCwv8QZLT3AQB3M7wS0U4X5bx7dT
+        MphjgawfriUutxHPYrmPMYLlEjzlV1yW3zFBzg/XkscKHcTlNLpw2d5GME04iyXjbw+JymaE+unxuOwB
+        ZnBlN+PB7FHGC7wmr9CrTBT/IL/4gTM3EDywv3GmClz6PRNFB8zFJJ/8AljkAAAAAElFTkSuQmCC
 </value>
   </data>
   <data name="TabPageIcon2.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -575,6 +563,9 @@ These options, and the program information, can be found by opening the Help men
         Qk0zMROjjRC/AXrluL77bLkAAAAAAElFTkSuQmCC
 </value>
   </data>
+  <metadata name="ToolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>249, 17</value>
+  </metadata>
   <data name="ToolStripButton1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
@@ -634,6 +625,9 @@ These options, and the program information, can be found by opening the Help men
   </data>
   <metadata name="prjTreeStatus.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>132, 17</value>
+  </metadata>
+  <metadata name="StatusStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>356, 17</value>
   </metadata>
   <data name="BackgroundProcessesButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
