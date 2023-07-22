@@ -119,7 +119,7 @@ Public Class MainForm
     Public isSqlServerDTProj As Boolean
 
     ' Set branch name and codenames
-    Public dtBranch As String = "dt_preview"
+    Public dtBranch As String = "stable"
 
     ' Arrays and other variables used on background processes
     Public imgPackageNames(65535) As String
@@ -315,6 +315,7 @@ Public Class MainForm
             'GenerateDTSettings()
             'LoadDTSettings(1)
             PrgSetup.ShowDialog()
+            LoadDTSettings(1)
         End If
         imgStatus = 0
         ChangeImgStatus()
@@ -3355,7 +3356,7 @@ Public Class MainForm
 
     Sub GenerateDTSettings()
         DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.3) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & "{common:WinDir}\Windows\system32\dism.exe" & Quote)
+        DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & "{common:WinDir}\system32\dism.exe" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "Volatile=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Personalization]" & CrLf)
