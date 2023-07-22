@@ -7,6 +7,8 @@ Public Class ImgCleanup
 
     Dim Tasks() As String = New String(6) {"Revert pending actions", "Clean up Service Pack backup files", "Clean up component store", "Analyze component store", "Check component store", "Scan component store for corruption", "Repair component store"}
 
+    Dim SelTask As Integer = -1
+
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         ProgressPanel.CleanupTask = ComboBox1.SelectedIndex
         Select Case ComboBox1.SelectedIndex
@@ -17,23 +19,23 @@ Public Class ImgCleanup
                 ProgressPanel.DeferCleanupOps = If(CheckBox2.Checked And CheckBox3.Checked, True, False)
             Case 6
                 ProgressPanel.UseCompRepairSource = CheckBox4.Checked = True
-                If CheckBox4.Checked And TextBox1.Text = "" Or Not File.Exists(TextBox1.Text) Then
+                If CheckBox4.Checked And RichTextBox1.Text = "" Then
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                 Case "ENG"
-                                    MsgBox("No valid source has been provided for component store repair." & CrLf & CrLf & If(TextBox1.Text = "", "Please provide a source and try again.", "Please make sure the specified source exists in the file system and try again."), vbOKOnly + vbCritical, "Image cleanup")
+                                    MsgBox("No valid source has been provided for component store repair." & CrLf & CrLf & If(RichTextBox1.Text = "", "Please provide a source and try again.", "Please make sure the specified source exists in the file system and try again."), vbOKOnly + vbCritical, "Image cleanup")
                                 Case "ESN"
-                                    MsgBox("No se ha proporcionado un origen válido para la reparación del almacén de componentes." & CrLf & CrLf & If(TextBox1.Text = "", "Proporcione un origen e inténtelo de nuevo", "Asegúrese de que el origen especificado exista en el sistema de archivos e inténtelo de nuevo."), vbOKOnly + vbCritical, "Limpieza de imagen")
+                                    MsgBox("No se ha proporcionado un origen válido para la reparación del almacén de componentes." & CrLf & CrLf & If(RichTextBox1.Text = "", "Proporcione un origen e inténtelo de nuevo", "Asegúrese de que el origen especificado exista en el sistema de archivos e inténtelo de nuevo."), vbOKOnly + vbCritical, "Limpieza de imagen")
                             End Select
                         Case 1
-                            MsgBox("No valid source has been provided for component store repair." & CrLf & CrLf & If(TextBox1.Text = "", "Please provide a source and try again.", "Please make sure the specified source exists in the file system and try again."), vbOKOnly + vbCritical, "Image cleanup")
+                            MsgBox("No valid source has been provided for component store repair." & CrLf & CrLf & If(RichTextBox1.Text = "", "Please provide a source and try again.", "Please make sure the specified source exists in the file system and try again."), vbOKOnly + vbCritical, "Image cleanup")
                         Case 2
-                            MsgBox("No se ha proporcionado un origen válido para la reparación del almacén de componentes." & CrLf & CrLf & If(TextBox1.Text = "", "Proporcione un origen e inténtelo de nuevo", "Asegúrese de que el origen especificado exista en el sistema de archivos e inténtelo de nuevo."), vbOKOnly + vbCritical, "Limpieza de imagen")
+                            MsgBox("No se ha proporcionado un origen válido para la reparación del almacén de componentes." & CrLf & CrLf & If(RichTextBox1.Text = "", "Proporcione un origen e inténtelo de nuevo", "Asegúrese de que el origen especificado exista en el sistema de archivos e inténtelo de nuevo."), vbOKOnly + vbCritical, "Limpieza de imagen")
                     End Select
                     Exit Sub
                 End If
-                ProgressPanel.ComponentRepairSource = TextBox1.Text
+                ProgressPanel.ComponentRepairSource = RichTextBox1.Text
                 ProgressPanel.LimitWUAccess = CheckBox5.Checked = True
         End Select
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
@@ -79,6 +81,7 @@ Public Class ImgCleanup
                         ComboBox1.Items.AddRange(Tasks)
                         HealthRestoreSourceOFD.Title = "Specify the source from which we will restore the component store health"
                         Button1.Text = "Browse..."
+                        Button2.Text = "Detect from group policy"
                         CheckBox1.Text = "Hide service pack from the Installed Updates list"
                         CheckBox2.Text = "Reset base of superseded components"
                         CheckBox3.Text = "Defer long-running cleanup operations"
@@ -110,6 +113,7 @@ Public Class ImgCleanup
                         ComboBox1.Items.AddRange(Tasks)
                         HealthRestoreSourceOFD.Title = "Especifique el origen desde donde restauraremos la salud del almacén de componentes"
                         Button1.Text = "Examinar..."
+                        Button2.Text = "Detectar políticas de grupo"
                         CheckBox1.Text = "Ocultar Service Pack del listado de Actualizaciones instaladas"
                         CheckBox2.Text = "Restablecer la base de componentes sustituidos"
                         CheckBox3.Text = "Diferir operaciones largas de limpieza"
@@ -142,6 +146,7 @@ Public Class ImgCleanup
                 ComboBox1.Items.AddRange(Tasks)
                 HealthRestoreSourceOFD.Title = "Specify the source from which we will restore the component store health"
                 Button1.Text = "Browse..."
+                Button2.Text = "Detect from group policy"
                 CheckBox1.Text = "Hide service pack from the Installed Updates list"
                 CheckBox2.Text = "Reset base of superseded components"
                 CheckBox3.Text = "Defer long-running cleanup operations"
@@ -173,13 +178,14 @@ Public Class ImgCleanup
                 ComboBox1.Items.AddRange(Tasks)
                 HealthRestoreSourceOFD.Title = "Especifique el origen desde donde restauraremos la salud del almacén de componentes"
                 Button1.Text = "Examinar..."
+                Button2.Text = "Detectar políticas de grupo"
                 CheckBox1.Text = "Ocultar Service Pack del listado de Actualizaciones instaladas"
                 CheckBox2.Text = "Restablecer la base de componentes sustituidos"
                 CheckBox3.Text = "Diferir operaciones largas de limpieza"
                 CheckBox4.Text = "Usar origen diferente para la reparación de componentes"
                 CheckBox5.Text = "Limitar acceso a Windows Update"
         End Select
-        If My.Computer.Info.OSFullName.Contains("Windows 10") Or My.Computer.Info.OSFullName.Contains("Windows 11") Then
+        If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True
         End If
@@ -194,61 +200,87 @@ Public Class ImgCleanup
         End If
         ComboBox1.BackColor = BackColor
         ComboBox1.ForeColor = ForeColor
-        TextBox1.BackColor = BackColor
-        TextBox1.ForeColor = ForeColor
+        RichTextBox1.BackColor = BackColor
+        RichTextBox1.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
+        PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.image_dark, My.Resources.image_light)
+        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         ' Determine when the last base reset was run
-        Using reg As New Process
-            reg.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe"
-            reg.StartInfo.Arguments = "load HKLM\MountedSoft " & Quote & MainForm.MountDir & "\Windows\system32\config\software" & Quote
-            reg.StartInfo.CreateNoWindow = True
-            reg.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-            reg.Start()
-            Do Until reg.HasExited
-                If reg.HasExited Then Exit Do
-            Loop
-            If reg.ExitCode = 0 Then
-                Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("MountedSoft\Microsoft\Windows\CurrentVersion\Component Based Servicing", False)
-                Dim LastResetBase_UTC As String = ""
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "Could not get last base reset date. It is possible that no base resets were made").ToString()
-                            Case "ESN"
-                                LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "No se pudo obtener la fecha de restablecimiento de base. Es posible que no se haya hecho ningún restablecimiento").ToString()
-                        End Select
-                    Case 1
-                        LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "Could not get last base reset date. It is possible that no base resets were made").ToString()
-                    Case 2
-                        LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "No se pudo obtener la fecha de restablecimiento de base. Es posible que no se haya hecho ningún restablecimiento").ToString()
-                End Select
-                regKey.Close()
-                Dim charArray() As Char = LastResetBase_UTC.ToCharArray()
-                If LastResetBase_UTC.Contains("/") Then charArray(10) = " "
-                LastResetBase_UTC = New String(charArray)
-                Label6.Text = LastResetBase_UTC
-                reg.StartInfo.Arguments = "unload HKLM\MountedSoft"
+        If MainForm.OnlineManagement Then
+            Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing", False)
+            Dim LastResetBase_UTC As String = ""
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "Could not get last base reset date. It is possible that no base resets were made").ToString()
+                        Case "ESN"
+                            LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "No se pudo obtener la fecha de restablecimiento de base. Es posible que no se haya hecho ningún restablecimiento").ToString()
+                    End Select
+                Case 1
+                    LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "Could not get last base reset date. It is possible that no base resets were made").ToString()
+                Case 2
+                    LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "No se pudo obtener la fecha de restablecimiento de base. Es posible que no se haya hecho ningún restablecimiento").ToString()
+            End Select
+            regKey.Close()
+            Dim charArray() As Char = LastResetBase_UTC.ToCharArray()
+            If LastResetBase_UTC.Contains("/") Then charArray(10) = " "
+            LastResetBase_UTC = New String(charArray)
+            Label6.Text = LastResetBase_UTC
+        Else
+            Using reg As New Process
+                reg.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe"
+                reg.StartInfo.Arguments = "load HKLM\MountedSoft " & Quote & MainForm.MountDir & "\Windows\system32\config\software" & Quote
+                reg.StartInfo.CreateNoWindow = True
+                reg.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
                 reg.Start()
-                Do Until reg.HasExited
-                    If reg.HasExited Then Exit Do
-                Loop
-            Else
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Label6.Text = "Could not get last base reset date"
-                            Case "ESN"
-                                Label6.Text = "No se pudo obtener la fecha del último restablecimiento de base"
-                        End Select
-                    Case 1
-                        Label6.Text = "Could not get last base reset date"
-                    Case 2
-                        Label6.Text = "No se pudo obtener la fecha del último restablecimiento de base"
-                End Select
-            End If
-        End Using
+                reg.WaitForExit()
+                If reg.ExitCode = 0 Then
+                    Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("MountedSoft\Microsoft\Windows\CurrentVersion\Component Based Servicing", False)
+                    Dim LastResetBase_UTC As String = ""
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "Could not get last base reset date. It is possible that no base resets were made").ToString()
+                                Case "ESN"
+                                    LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "No se pudo obtener la fecha de restablecimiento de base. Es posible que no se haya hecho ningún restablecimiento").ToString()
+                            End Select
+                        Case 1
+                            LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "Could not get last base reset date. It is possible that no base resets were made").ToString()
+                        Case 2
+                            LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "No se pudo obtener la fecha de restablecimiento de base. Es posible que no se haya hecho ningún restablecimiento").ToString()
+                    End Select
+                    regKey.Close()
+                    Dim charArray() As Char = LastResetBase_UTC.ToCharArray()
+                    If LastResetBase_UTC.Contains("/") Then charArray(10) = " "
+                    LastResetBase_UTC = New String(charArray)
+                    Label6.Text = LastResetBase_UTC
+                    reg.StartInfo.Arguments = "unload HKLM\MountedSoft"
+                    reg.Start()
+                    reg.WaitForExit()
+                Else
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    Label6.Text = "Could not get last base reset date"
+                                Case "ESN"
+                                    Label6.Text = "No se pudo obtener la fecha del último restablecimiento de base"
+                            End Select
+                        Case 1
+                            Label6.Text = "Could not get last base reset date"
+                        Case 2
+                            Label6.Text = "No se pudo obtener la fecha del último restablecimiento de base"
+                    End Select
+                End If
+            End Using
+        End If
+
+        CheckBox5.Enabled = MainForm.OnlineManagement = True
+
+        If SelTask >= 0 And SelTask < ComboBox1.Items.Count Then ComboBox1.SelectedIndex = SelTask
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
@@ -428,8 +460,9 @@ Public Class ImgCleanup
 
     Private Sub CheckBox4_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox4.CheckedChanged
         Label11.Enabled = CheckBox4.Checked = True
-        TextBox1.Enabled = CheckBox4.Checked = True
+        RichTextBox1.Enabled = CheckBox4.Checked = True
         Button1.Enabled = CheckBox4.Checked = True
+        Button2.Enabled = CheckBox4.Checked = True
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -437,6 +470,30 @@ Public Class ImgCleanup
     End Sub
 
     Private Sub HealthRestoreSourceOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles HealthRestoreSourceOFD.FileOk
-        TextBox1.Text = HealthRestoreSourceOFD.FileName
+        RichTextBox1.Text = HealthRestoreSourceOFD.FileName
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        RichTextBox1.Text = MainForm.GetSrcFromGPO()
+        If RichTextBox1.Text.StartsWith("wim:\", StringComparison.OrdinalIgnoreCase) Then
+            TextBoxSourcePanel.Visible = False
+            WimFileSourcePanel.Visible = True
+            Dim parts() As String = RichTextBox1.Text.Split(":")
+            Label14.Text = parts(parts.Length - 1)
+            Label13.Text = parts(1).Replace("\", "").Trim() & ":" & parts(2)
+            If Label13.Text.EndsWith(":" & parts(parts.Length - 1)) Then Label13.Text = Label13.Text.Replace(":" & parts(parts.Length - 1), "").Trim()
+        Else
+            TextBoxSourcePanel.Visible = True
+            WimFileSourcePanel.Visible = False
+        End If
+    End Sub
+
+    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+        TextBoxSourcePanel.Visible = True
+        WimFileSourcePanel.Visible = False
+    End Sub
+
+    Private Sub ImgCleanup_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        SelTask = ComboBox1.SelectedIndex
     End Sub
 End Class

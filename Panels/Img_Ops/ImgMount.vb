@@ -102,6 +102,8 @@ Public Class ImgMount
                         OK_Button.Text = "OK"
                         ListView1.Columns(0).Text = "Index"
                         ListView1.Columns(1).Text = "Image name"
+                        ListView1.Columns(2).Text = "Image description"
+                        ListView1.Columns(3).Text = "Image version"
                         CheckBox1.Text = "Mount with read only permissions"
                         CheckBox3.Text = "Optimize mount times"
                         CheckBox4.Text = "Check image integrity"
@@ -124,6 +126,8 @@ Public Class ImgMount
                         OK_Button.Text = "Aceptar"
                         ListView1.Columns(0).Text = "Índice"
                         ListView1.Columns(1).Text = "Nombre de imagen"
+                        ListView1.Columns(2).Text = "Descripción de la imagen"
+                        ListView1.Columns(3).Text = "Versión de la imagen"
                         CheckBox1.Text = "Montar con permisos de solo lectura"
                         CheckBox3.Text = "Optimizar tiempos de montaje"
                         CheckBox4.Text = "Comprobar integridad de la imagen"
@@ -147,6 +151,8 @@ Public Class ImgMount
                 OK_Button.Text = "OK"
                 ListView1.Columns(0).Text = "Index"
                 ListView1.Columns(1).Text = "Image name"
+                ListView1.Columns(2).Text = "Image description"
+                ListView1.Columns(3).Text = "Image version"
                 CheckBox1.Text = "Mount with read only permissions"
                 CheckBox3.Text = "Optimize mount times"
                 CheckBox4.Text = "Check image integrity"
@@ -169,6 +175,8 @@ Public Class ImgMount
                 OK_Button.Text = "Aceptar"
                 ListView1.Columns(0).Text = "Índice"
                 ListView1.Columns(1).Text = "Nombre de imagen"
+                ListView1.Columns(2).Text = "Descripción de la imagen"
+                ListView1.Columns(3).Text = "Versión de la imagen"
                 CheckBox1.Text = "Montar con permisos de solo lectura"
                 CheckBox3.Text = "Optimizar tiempos de montaje"
                 CheckBox4.Text = "Comprobar integridad de la imagen"
@@ -213,10 +221,12 @@ Public Class ImgMount
             Case 10
                 IndexOperationMode = 0
         End Select
-        If My.Computer.Info.OSFullName.Contains("Windows 10") Or My.Computer.Info.OSFullName.Contains("Windows 11") Then
+        If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True
         End If
+        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -250,23 +260,23 @@ Public Class ImgMount
             Dim imgInfoCollection As DismImageInfoCollection = DismApi.GetImageInfo(ImgFile)
             NumericUpDown1.Maximum = imgInfoCollection.Count
             For Each imgInfo As DismImageInfo In imgInfoCollection
-                ListView1.Items.Add(New ListViewItem(New String() {imgInfo.ImageIndex, imgInfo.ImageName}))
+                ListView1.Items.Add(New ListViewItem(New String() {imgInfo.ImageIndex, imgInfo.ImageName, imgInfo.ImageDescription, imgInfo.ProductVersion.ToString()}))
             Next
             DismApi.Shutdown()
         Catch ex As AccessViolationException
             If IndexOperationMode = 0 Then
-                File.WriteAllText(".\bin\exthelpers\temp.bat", _
+                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", _
                                   "@echo off" & CrLf & _
                                   "dism /English /get-imageinfo /imagefile=" & ImgFile & " | find /c " & Quote & "Index" & Quote & " > .\indexcount", ASCII)
             ElseIf IndexOperationMode = 1 Then
-                File.WriteAllText(".\bin\exthelpers\temp.bat", _
+                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", _
                                   "@echo off" & CrLf & _
                                   "dism /English /get-wiminfo /wimfile=" & ImgFile & " | find /c " & Quote & "Index" & Quote & " > .\indexcount", ASCII)
             End If
-            Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
-            MainForm.imgIndexCount = CInt(My.Computer.FileSystem.ReadAllText(".\indexcount"))
+            Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
+            MainForm.imgIndexCount = CInt(My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\indexcount"))
             NumericUpDown1.Maximum = MainForm.imgIndexCount
-            File.Delete(".\indexcount")
+            File.Delete(Application.StartupPath & "\indexcount")
         End Try
     End Sub
 

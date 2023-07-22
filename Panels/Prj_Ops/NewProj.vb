@@ -60,12 +60,13 @@ Public Class NewProj
             End Select
         End If
         ProgressPanel.OperationNum = 0
-        ProgressPanel.projName = TextBox1.Text
-        ProgressPanel.projPath = TextBox2.Text
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         If MainForm.isProjectLoaded Then
-            MainForm.UnloadDTProj(False, True, False)
+            If MainForm.OnlineManagement Then MainForm.EndOnlineManagement() Else MainForm.UnloadDTProj(False, True, False)
+            If MainForm.ImgBW.IsBusy Then Exit Sub
         End If
+        ProgressPanel.projName = TextBox1.Text
+        ProgressPanel.projPath = TextBox2.Text
         Visible = False
         ProgressPanel.ShowDialog(MainForm)
         Me.Close()
@@ -130,7 +131,7 @@ Public Class NewProj
                 GroupBox1.Text = "Proyecto"
                 FolderBrowserDialog1.Description = "Seleccione una carpeta donde almacenar este proyecto:"
         End Select
-        If My.Computer.Info.OSFullName.Contains("Windows 10") Or My.Computer.Info.OSFullName.Contains("Windows 11") Then
+        If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True
         End If
@@ -138,19 +139,21 @@ Public Class NewProj
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
             BackColor = Color.FromArgb(31, 31, 31)
             ForeColor = Color.White
-            TextBox2.BackColor = Color.FromArgb(31, 31, 31)
+            TextBox1.BackColor = Color.FromArgb(31, 31, 31)
             TextBox2.BackColor = Color.FromArgb(31, 31, 31)
             GroupBox1.ForeColor = Color.White
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Win10Title.BackColor = Color.White
             BackColor = Color.FromArgb(238, 238, 242)
             ForeColor = Color.Black
-            TextBox2.BackColor = Color.FromArgb(238, 238, 242)
+            TextBox1.BackColor = Color.FromArgb(238, 238, 242)
             TextBox2.BackColor = Color.FromArgb(238, 238, 242)
             GroupBox1.ForeColor = Color.Black
         End If
+        TextBox1.ForeColor = ForeColor
         TextBox2.ForeColor = ForeColor
-        TextBox2.ForeColor = ForeColor
+        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click

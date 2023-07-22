@@ -123,38 +123,36 @@ Public Class PkgParentNameLookupDlg
         Else
             PackageListerBW.RunWorkerAsync()
         End If
+        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
     End Sub
 
     Private Sub PackageListerBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles PackageListerBW.DoWork
-        File.WriteAllText(".\temp.bat",
+        File.WriteAllText(Application.StartupPath & "\temp.bat",
                   "@echo off" & CrLf &
                   "dism /English /image=" & pkgSource & " /get-packages | findstr /c:" & Quote & "Package Identity : " & Quote & " > .\pkgnames")
         pkgProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
-        pkgArgs = "/c " & Directory.GetCurrentDirectory() & "\temp.bat"
+        pkgArgs = "/c " & Application.StartupPath & "\temp.bat"
         pkgProc.StartInfo.Arguments = pkgArgs
         pkgProc.StartInfo.CreateNoWindow = True
         pkgProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
         pkgProc.Start()
-        Do Until pkgProc.HasExited
-            If pkgProc.HasExited Then
-                Exit Do
-            End If
-        Loop
+        pkgProc.WaitForExit()
         If Decimal.ToInt32(pkgProc.ExitCode) = 0 Then
             RemPackage.CheckedListBox1.Items.Clear()
             RemPackage.CheckedListBox2.Items.Clear()
             Debug.WriteLine("[INFO] Package names were successfully gathered. The program should return to normal state")
-            Debug.WriteLine("Listing package names:" & CrLf & My.Computer.FileSystem.ReadAllText(".\pkgnames"))
+            Debug.WriteLine("Listing package names:" & CrLf & My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\pkgnames"))
             Dim pkgNames As New RichTextBox
-            pkgNames.Text = My.Computer.FileSystem.ReadAllText(".\pkgnames")
+            pkgNames.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\pkgnames")
             For x = 0 To pkgNames.Lines.Count - 1
                 If pkgNames.Lines(x) = "" Then
                     Continue For
                 End If
                 ListBox1.Items.Add(pkgNames.Lines(x).Replace("Package Identity : ", "").Trim())
             Next
-            File.Delete(".\temp.bat")
-            File.Delete(".\pkgnames")
+            File.Delete(Application.StartupPath & "\temp.bat")
+            File.Delete(Application.StartupPath & "\pkgnames")
         Else
             Debug.WriteLine("[FAIL] Package names were not gathered. Please verify everything's working")
         End If

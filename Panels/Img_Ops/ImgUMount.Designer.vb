@@ -150,7 +150,7 @@ Partial Class ImgUMount
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 7
-        Me.Button1.Text = "Browse..."
+        Me.Button1.Text = "Pick..."
         Me.Button1.UseVisualStyleBackColor = True
         '
         'TextBox1

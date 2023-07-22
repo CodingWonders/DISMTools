@@ -294,9 +294,9 @@ Partial Class ImgCapture
         Me.CheckBox8.AutoSize = True
         Me.CheckBox8.Location = New System.Drawing.Point(322, 173)
         Me.CheckBox8.Name = "CheckBox8"
-        Me.CheckBox8.Size = New System.Drawing.Size(290, 17)
+        Me.CheckBox8.Size = New System.Drawing.Size(205, 17)
         Me.CheckBox8.TabIndex = 10
-        Me.CheckBox8.Text = "Mount destination image for later use (EXPERIMENTAL)"
+        Me.CheckBox8.Text = "Mount destination image for later use"
         Me.CheckBox8.UseVisualStyleBackColor = True
         '
         'CheckBox7

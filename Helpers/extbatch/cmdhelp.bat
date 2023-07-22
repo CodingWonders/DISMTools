@@ -68,6 +68,8 @@ if "%1%"=="append-image" (
     goto cmd_enable_feature
 ) else if "%1%"=="disable-feature" (
 	goto cmd_disable_feature
+) else if "%1%"=="cleanup-image" (
+    goto cmd_cleanup_image
 ) else if "%1%"=="--go-online" (
     goto online_help
 ) else (
@@ -1501,8 +1503,97 @@ exit /b
 
 
 :cmd_disable_feature
+echo.
+echo             Command: disable-feature
+echo.
+echo         Description: Disables the specified feature in the image
+echo.
+echo              Syntax: "dism /disable-feature /featurename:<name_in_img> (/packagename:<name_in_img>) (/remove)"
+echo.
+echo NOTES:
+echo - You can specify the "/FeatureName" multiple times in one command line
+echo - Unless the package is a Windows Foundation Package, use "/PackageName" to specify the parent package of the feature
+echo - To remove a feature without removing its manifest from the image, use "/Remove". The feature will be listed as "Removed"
+echo.
+echo ARGUMENTS:
+echo.
+echo    PARAMETER                                                     DESCRIPTION
+echo   -------------------------------------------------------------------------------------------------------------------
+echo                                      There are no parameters for this command
+echo.
+echo EXAMPLES:
+echo.
+echo     "DISM.exe /Online /Disable-Feature /FeatureName:Hearts"
+echo.
+echo     "DISM.exe /Online /Disable-Feature /FeatureName:Calc /PackageName:Microsoft.Windows.Calc.Demo~6595b6144ccf1df~x86~en~1.0.0.0"
+echo.
+exit /b
 
-
+:cmd_cleanup_image
+echo.
+echo             Command: cleanup-image
+echo.
+echo         Description: Performs cleanup or recovery operations on the image
+echo.
+echo              Syntax: "dism /cleanup-image [/revertpendingactions | /spsuperseded (/hidesp)] | /startcomponentcleanup"
+echo                      " (/resetbase (/defer)) | /analyzecomponentstore | /checkhealth | /scanhealth | /restorehealth"
+echo                      " (/source:<filepath>) (/limitaccess)"
+echo.
+echo NOTES:
+echo - "/AnalyzeComponentStore" and "/ResetBase" can be used with Windows 8.1 and later, or Windows PE 5.0 or later images
+echo - "/Defer" can be specified with "/ResetBase", starting with Windows 10, version 1607
+echo.
+echo ARGUMENTS:
+echo.
+echo    PARAMETER                                                     DESCRIPTION
+echo   -------------------------------------------------------------------------------------------------------------------
+echo    /revertpendingactions                                         If you experience a boot failure, this option can
+echo                                                                  try to recover the system, by reverting all pending
+echo                                                                  actions from the previous servicing operations if
+echo                                                                  they are the culprit.
+echo.
+echo    /spsuperseded                                                 Removes any backup files created during the
+echo                                                                  installation of a Service Pack. "/HideSP" lets you
+echo                                                                  prevent the Service Pack from being listed in the
+echo                                                                  Installed Updates Control Panel. Service Packs can't
+echo                                                                  be uninstalled after this operation is completed.
+echo.
+echo    /startcomponentcleanup                                        Cleans up the superseded components and reduces the
+echo                                                                  size of the component store. "/ResetBase" resets the
+echo                                                                  base of superseded components, further reducing the
+echo                                                                  component store size. Installed Windows updates
+echo                                                                  can't be uninstalled after running this operation.
+echo                                                                  "/Defer" can be used with "/ResetBase" to defer
+echo                                                                  long-running cleanup operations to the next
+echo                                                                  automatic maintenance.
+echo.
+echo    /analyzecomponentstore                                        Creates a report of the component store.
+echo.
+echo    /checkhealth                                                  Checks whether the image has been flagged as
+echo                                                                  corrupted by a failed process and whether the
+echo                                                                  corruption can be repaired.
+echo.
+echo    /scanhealth                                                   Scans the image for component store corruption. This
+echo                                                                  operation will take several minutes.
+echo.
+echo    /restorehealth                                                Scans the image for component store corruption, and
+echo                                                                  then performs repair operations automatically.
+echo                                                                  - "/Source" lets you specify the location of good
+echo                                                                    versions of files that can be used for the repair
+echo                                                                  - "/LimitAccess" prevents DISM from contacting
+echo                                                                    Windows Update for repair of online images
+echo.
+echo EXAMPLES:
+echo.
+echo     "Dism /Image=C:\test\offline /Cleanup-Image /RevertPendingActions"
+echo.
+echo     "Dism /Image=C:\test\offline /Cleanup-Image /SPSuperseded /HideSP"
+echo.
+echo     "Dism /Online /Cleanup-Image /ScanHealth"
+echo.
+echo     "Dism /Online /Cleanup-Image /RestoreHealth"
+echo.
+exit /b
 
 :online_help
 echo Accessing Microsoft online documentation...

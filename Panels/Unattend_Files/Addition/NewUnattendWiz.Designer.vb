@@ -55,6 +55,27 @@ Partial Class NewUnattendWiz
         Me.Label1 = New System.Windows.Forms.Label()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.ExpressPanelContainer = New System.Windows.Forms.Panel()
+        Me.IncompleteWarningPanel = New System.Windows.Forms.Panel()
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.TargetOSSelectionPanel = New System.Windows.Forms.Panel()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.Label15 = New System.Windows.Forms.Label()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.Label14 = New System.Windows.Forms.Label()
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.CheckBox2 = New System.Windows.Forms.CheckBox()
+        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.RadioButton2 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton1 = New System.Windows.Forms.RadioButton()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.PictureBox4 = New System.Windows.Forms.PictureBox()
         Me.ActivationPanel = New System.Windows.Forms.Panel()
         Me.KeyCopyButton = New System.Windows.Forms.Button()
         Me.CheckBox5 = New System.Windows.Forms.CheckBox()
@@ -88,27 +109,6 @@ Partial Class NewUnattendWiz
         Me.RadioButton3 = New System.Windows.Forms.RadioButton()
         Me.Label16 = New System.Windows.Forms.Label()
         Me.PictureBox5 = New System.Windows.Forms.PictureBox()
-        Me.IncompleteWarningPanel = New System.Windows.Forms.Panel()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.TargetOSSelectionPanel = New System.Windows.Forms.Panel()
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.Label15 = New System.Windows.Forms.Label()
-        Me.Label13 = New System.Windows.Forms.Label()
-        Me.Label14 = New System.Windows.Forms.Label()
-        Me.Label12 = New System.Windows.Forms.Label()
-        Me.CheckBox2 = New System.Windows.Forms.CheckBox()
-        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
-        Me.Label11 = New System.Windows.Forms.Label()
-        Me.Label10 = New System.Windows.Forms.Label()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.RadioButton2 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton1 = New System.Windows.Forms.RadioButton()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.PictureBox4 = New System.Windows.Forms.PictureBox()
         Me.EndUserLicenseAgreementPanel = New System.Windows.Forms.Panel()
         Me.Label24 = New System.Windows.Forms.Label()
         Me.Label23 = New System.Windows.Forms.Label()
@@ -294,17 +294,17 @@ Partial Class NewUnattendWiz
         Me.PictureBox23 = New System.Windows.Forms.PictureBox()
         Me.EditorPanelContainer = New System.Windows.Forms.Panel()
         Me.Scintilla1 = New ScintillaNET.Scintilla()
-        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
-        Me.NewTSB = New System.Windows.Forms.ToolStripButton()
-        Me.OpenTSB = New System.Windows.Forms.ToolStripButton()
-        Me.SaveTSB = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripComboBox1 = New System.Windows.Forms.ToolStripComboBox()
-        Me.ToolStripComboBox2 = New System.Windows.Forms.ToolStripComboBox()
-        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
-        Me.HelpTSB = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.DarkToolStrip1 = New DarkUI.Controls.DarkToolStrip()
+        Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripButton3 = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripButton4 = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
+        Me.FontFamilyTSCB = New System.Windows.Forms.ToolStripComboBox()
+        Me.FontSizeTSCB = New System.Windows.Forms.ToolStripComboBox()
+        Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripButton5 = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripButton6 = New System.Windows.Forms.ToolStripButton()
         Me.HeaderPanel = New System.Windows.Forms.Panel()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
@@ -327,12 +327,12 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelTrigger.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ExpressPanelContainer.SuspendLayout()
-        Me.ActivationPanel.SuspendLayout()
-        CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.IncompleteWarningPanel.SuspendLayout()
         Me.TargetOSSelectionPanel.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.ActivationPanel.SuspendLayout()
+        CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.EndUserLicenseAgreementPanel.SuspendLayout()
         CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.CompPersonalizationPanel.SuspendLayout()
@@ -408,7 +408,7 @@ Partial Class NewUnattendWiz
         Me.SettingRecapPanel.SuspendLayout()
         CType(Me.PictureBox23, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.EditorPanelContainer.SuspendLayout()
-        Me.ToolStrip1.SuspendLayout()
+        Me.DarkToolStrip1.SuspendLayout()
         Me.HeaderPanel.SuspendLayout()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.FooterContainer.SuspendLayout()
@@ -441,6 +441,7 @@ Partial Class NewUnattendWiz
         '
         'StepsTreeView
         '
+        Me.StepsTreeView.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.StepsTreeView.Dock = System.Windows.Forms.DockStyle.Fill
         Me.StepsTreeView.HideSelection = False
         Me.StepsTreeView.ItemHeight = 24
@@ -583,6 +584,225 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer.Name = "ExpressPanelContainer"
         Me.ExpressPanelContainer.Size = New System.Drawing.Size(752, 417)
         Me.ExpressPanelContainer.TabIndex = 1
+        '
+        'IncompleteWarningPanel
+        '
+        Me.IncompleteWarningPanel.Controls.Add(Me.CheckBox1)
+        Me.IncompleteWarningPanel.Controls.Add(Me.Label5)
+        Me.IncompleteWarningPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.IncompleteWarningPanel.Location = New System.Drawing.Point(0, 0)
+        Me.IncompleteWarningPanel.Name = "IncompleteWarningPanel"
+        Me.IncompleteWarningPanel.Size = New System.Drawing.Size(752, 417)
+        Me.IncompleteWarningPanel.TabIndex = 0
+        '
+        'CheckBox1
+        '
+        Me.CheckBox1.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.Location = New System.Drawing.Point(95, 240)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(222, 17)
+        Me.CheckBox1.TabIndex = 1
+        Me.CheckBox1.Text = "I have read and understood this warning"
+        Me.CheckBox1.UseVisualStyleBackColor = True
+        '
+        'Label5
+        '
+        Me.Label5.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.Label5.Location = New System.Drawing.Point(92, 121)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(568, 115)
+        Me.Label5.TabIndex = 0
+        Me.Label5.Text = resources.GetString("Label5.Text")
+        '
+        'TargetOSSelectionPanel
+        '
+        Me.TargetOSSelectionPanel.Controls.Add(Me.GroupBox1)
+        Me.TargetOSSelectionPanel.Controls.Add(Me.CheckBox2)
+        Me.TargetOSSelectionPanel.Controls.Add(Me.ComboBox1)
+        Me.TargetOSSelectionPanel.Controls.Add(Me.Label11)
+        Me.TargetOSSelectionPanel.Controls.Add(Me.Label10)
+        Me.TargetOSSelectionPanel.Controls.Add(Me.Label8)
+        Me.TargetOSSelectionPanel.Controls.Add(Me.Label9)
+        Me.TargetOSSelectionPanel.Controls.Add(Me.Label7)
+        Me.TargetOSSelectionPanel.Controls.Add(Me.RadioButton2)
+        Me.TargetOSSelectionPanel.Controls.Add(Me.RadioButton1)
+        Me.TargetOSSelectionPanel.Controls.Add(Me.Label6)
+        Me.TargetOSSelectionPanel.Controls.Add(Me.PictureBox4)
+        Me.TargetOSSelectionPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TargetOSSelectionPanel.Location = New System.Drawing.Point(0, 0)
+        Me.TargetOSSelectionPanel.Name = "TargetOSSelectionPanel"
+        Me.TargetOSSelectionPanel.Size = New System.Drawing.Size(752, 417)
+        Me.TargetOSSelectionPanel.TabIndex = 2
+        '
+        'GroupBox1
+        '
+        Me.GroupBox1.Controls.Add(Me.Button1)
+        Me.GroupBox1.Controls.Add(Me.Label15)
+        Me.GroupBox1.Controls.Add(Me.Label13)
+        Me.GroupBox1.Controls.Add(Me.Label14)
+        Me.GroupBox1.Controls.Add(Me.Label12)
+        Me.GroupBox1.Location = New System.Drawing.Point(238, 271)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(276, 129)
+        Me.GroupBox1.TabIndex = 9
+        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = "Target OS details"
+        '
+        'Button1
+        '
+        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button1.Location = New System.Drawing.Point(27, 90)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(222, 23)
+        Me.Button1.TabIndex = 7
+        Me.Button1.Text = "Get more information about this OS"
+        Me.Button1.UseVisualStyleBackColor = True
+        '
+        'Label15
+        '
+        Me.Label15.AutoSize = True
+        Me.Label15.Location = New System.Drawing.Point(96, 52)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(69, 13)
+        Me.Label15.TabIndex = 6
+        Me.Label15.Text = "<keVersion>"
+        '
+        'Label13
+        '
+        Me.Label13.AutoSize = True
+        Me.Label13.Location = New System.Drawing.Point(108, 32)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(57, 13)
+        Me.Label13.TabIndex = 6
+        Me.Label13.Text = "<reldate>"
+        '
+        'Label14
+        '
+        Me.Label14.AutoSize = True
+        Me.Label14.Location = New System.Drawing.Point(28, 52)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(62, 13)
+        Me.Label14.TabIndex = 6
+        Me.Label14.Text = "NT version:"
+        '
+        'Label12
+        '
+        Me.Label12.AutoSize = True
+        Me.Label12.Location = New System.Drawing.Point(28, 32)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(74, 13)
+        Me.Label12.TabIndex = 6
+        Me.Label12.Text = "Release date:"
+        '
+        'CheckBox2
+        '
+        Me.CheckBox2.AutoSize = True
+        Me.CheckBox2.Location = New System.Drawing.Point(272, 248)
+        Me.CheckBox2.Name = "CheckBox2"
+        Me.CheckBox2.Size = New System.Drawing.Size(298, 17)
+        Me.CheckBox2.TabIndex = 8
+        Me.CheckBox2.Text = "I want to make an installation of an older OS unattended"
+        Me.CheckBox2.UseVisualStyleBackColor = True
+        '
+        'ComboBox1
+        '
+        Me.ComboBox1.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.ComboBox1.FormattingEnabled = True
+        Me.ComboBox1.Items.AddRange(New Object() {"Windows 7", "Windows Server 2008 R2", "Windows 8", "Windows Server 2012", "Windows 8.1", "Windows Server 2012 R2", "Windows 10", "Windows 11", "Windows Server 2016", "Windows Server 2019"})
+        Me.ComboBox1.Location = New System.Drawing.Point(272, 220)
+        Me.ComboBox1.Name = "ComboBox1"
+        Me.ComboBox1.Size = New System.Drawing.Size(343, 21)
+        Me.ComboBox1.TabIndex = 7
+        Me.ComboBox1.Text = "Windows 7"
+        '
+        'Label11
+        '
+        Me.Label11.AutoSize = True
+        Me.Label11.Location = New System.Drawing.Point(137, 224)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(129, 13)
+        Me.Label11.TabIndex = 6
+        Me.Label11.Text = "Target operating system:"
+        '
+        'Label10
+        '
+        Me.Label10.AutoEllipsis = True
+        Me.Label10.Location = New System.Drawing.Point(357, 166)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(281, 13)
+        Me.Label10.TabIndex = 5
+        Me.Label10.Text = "<TargetOS>"
+        '
+        'Label8
+        '
+        Me.Label8.Location = New System.Drawing.Point(115, 166)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(236, 13)
+        Me.Label8.TabIndex = 5
+        Me.Label8.Text = "Recommended target OS:"
+        Me.Label8.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'Label9
+        '
+        Me.Label9.AutoEllipsis = True
+        Me.Label9.Location = New System.Drawing.Point(357, 146)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(281, 13)
+        Me.Label9.TabIndex = 5
+        Me.Label9.Text = "<imgversion>"
+        '
+        'Label7
+        '
+        Me.Label7.Location = New System.Drawing.Point(115, 146)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(236, 13)
+        Me.Label7.TabIndex = 5
+        Me.Label7.Text = "Mounted image version:"
+        Me.Label7.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'RadioButton2
+        '
+        Me.RadioButton2.AutoSize = True
+        Me.RadioButton2.Location = New System.Drawing.Point(84, 190)
+        Me.RadioButton2.Name = "RadioButton2"
+        Me.RadioButton2.Size = New System.Drawing.Size(184, 17)
+        Me.RadioButton2.TabIndex = 4
+        Me.RadioButton2.Text = "Let me choose the target version"
+        Me.RadioButton2.UseVisualStyleBackColor = True
+        '
+        'RadioButton1
+        '
+        Me.RadioButton1.AutoSize = True
+        Me.RadioButton1.Checked = True
+        Me.RadioButton1.Location = New System.Drawing.Point(84, 118)
+        Me.RadioButton1.Name = "RadioButton1"
+        Me.RadioButton1.Size = New System.Drawing.Size(374, 17)
+        Me.RadioButton1.TabIndex = 4
+        Me.RadioButton1.TabStop = True
+        Me.RadioButton1.Text = "Let the program detect the version automatically for me (Recommended)"
+        Me.RadioButton1.UseVisualStyleBackColor = True
+        '
+        'Label6
+        '
+        Me.Label6.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label6.AutoEllipsis = True
+        Me.Label6.Location = New System.Drawing.Point(54, 16)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(682, 94)
+        Me.Label6.TabIndex = 3
+        Me.Label6.Text = resources.GetString("Label6.Text")
+        '
+        'PictureBox4
+        '
+        Me.PictureBox4.Image = Global.DISMTools.My.Resources.Resources.targetos
+        Me.PictureBox4.Location = New System.Drawing.Point(16, 16)
+        Me.PictureBox4.Name = "PictureBox4"
+        Me.PictureBox4.Size = New System.Drawing.Size(32, 32)
+        Me.PictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox4.TabIndex = 0
+        Me.PictureBox4.TabStop = False
         '
         'ActivationPanel
         '
@@ -948,225 +1168,6 @@ Partial Class NewUnattendWiz
         Me.PictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
         Me.PictureBox5.TabIndex = 1
         Me.PictureBox5.TabStop = False
-        '
-        'IncompleteWarningPanel
-        '
-        Me.IncompleteWarningPanel.Controls.Add(Me.CheckBox1)
-        Me.IncompleteWarningPanel.Controls.Add(Me.Label5)
-        Me.IncompleteWarningPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.IncompleteWarningPanel.Location = New System.Drawing.Point(0, 0)
-        Me.IncompleteWarningPanel.Name = "IncompleteWarningPanel"
-        Me.IncompleteWarningPanel.Size = New System.Drawing.Size(752, 417)
-        Me.IncompleteWarningPanel.TabIndex = 0
-        '
-        'CheckBox1
-        '
-        Me.CheckBox1.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(95, 240)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(222, 17)
-        Me.CheckBox1.TabIndex = 1
-        Me.CheckBox1.Text = "I have read and understood this warning"
-        Me.CheckBox1.UseVisualStyleBackColor = True
-        '
-        'Label5
-        '
-        Me.Label5.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.Label5.Location = New System.Drawing.Point(92, 121)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(568, 115)
-        Me.Label5.TabIndex = 0
-        Me.Label5.Text = resources.GetString("Label5.Text")
-        '
-        'TargetOSSelectionPanel
-        '
-        Me.TargetOSSelectionPanel.Controls.Add(Me.GroupBox1)
-        Me.TargetOSSelectionPanel.Controls.Add(Me.CheckBox2)
-        Me.TargetOSSelectionPanel.Controls.Add(Me.ComboBox1)
-        Me.TargetOSSelectionPanel.Controls.Add(Me.Label11)
-        Me.TargetOSSelectionPanel.Controls.Add(Me.Label10)
-        Me.TargetOSSelectionPanel.Controls.Add(Me.Label8)
-        Me.TargetOSSelectionPanel.Controls.Add(Me.Label9)
-        Me.TargetOSSelectionPanel.Controls.Add(Me.Label7)
-        Me.TargetOSSelectionPanel.Controls.Add(Me.RadioButton2)
-        Me.TargetOSSelectionPanel.Controls.Add(Me.RadioButton1)
-        Me.TargetOSSelectionPanel.Controls.Add(Me.Label6)
-        Me.TargetOSSelectionPanel.Controls.Add(Me.PictureBox4)
-        Me.TargetOSSelectionPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TargetOSSelectionPanel.Location = New System.Drawing.Point(0, 0)
-        Me.TargetOSSelectionPanel.Name = "TargetOSSelectionPanel"
-        Me.TargetOSSelectionPanel.Size = New System.Drawing.Size(752, 417)
-        Me.TargetOSSelectionPanel.TabIndex = 2
-        '
-        'GroupBox1
-        '
-        Me.GroupBox1.Controls.Add(Me.Button1)
-        Me.GroupBox1.Controls.Add(Me.Label15)
-        Me.GroupBox1.Controls.Add(Me.Label13)
-        Me.GroupBox1.Controls.Add(Me.Label14)
-        Me.GroupBox1.Controls.Add(Me.Label12)
-        Me.GroupBox1.Location = New System.Drawing.Point(238, 271)
-        Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(276, 129)
-        Me.GroupBox1.TabIndex = 9
-        Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Target OS details"
-        '
-        'Button1
-        '
-        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button1.Location = New System.Drawing.Point(27, 90)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(222, 23)
-        Me.Button1.TabIndex = 7
-        Me.Button1.Text = "Get more information about this OS"
-        Me.Button1.UseVisualStyleBackColor = True
-        '
-        'Label15
-        '
-        Me.Label15.AutoSize = True
-        Me.Label15.Location = New System.Drawing.Point(96, 52)
-        Me.Label15.Name = "Label15"
-        Me.Label15.Size = New System.Drawing.Size(69, 13)
-        Me.Label15.TabIndex = 6
-        Me.Label15.Text = "<keVersion>"
-        '
-        'Label13
-        '
-        Me.Label13.AutoSize = True
-        Me.Label13.Location = New System.Drawing.Point(108, 32)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(57, 13)
-        Me.Label13.TabIndex = 6
-        Me.Label13.Text = "<reldate>"
-        '
-        'Label14
-        '
-        Me.Label14.AutoSize = True
-        Me.Label14.Location = New System.Drawing.Point(28, 52)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(62, 13)
-        Me.Label14.TabIndex = 6
-        Me.Label14.Text = "NT version:"
-        '
-        'Label12
-        '
-        Me.Label12.AutoSize = True
-        Me.Label12.Location = New System.Drawing.Point(28, 32)
-        Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(74, 13)
-        Me.Label12.TabIndex = 6
-        Me.Label12.Text = "Release date:"
-        '
-        'CheckBox2
-        '
-        Me.CheckBox2.AutoSize = True
-        Me.CheckBox2.Location = New System.Drawing.Point(272, 248)
-        Me.CheckBox2.Name = "CheckBox2"
-        Me.CheckBox2.Size = New System.Drawing.Size(298, 17)
-        Me.CheckBox2.TabIndex = 8
-        Me.CheckBox2.Text = "I want to make an installation of an older OS unattended"
-        Me.CheckBox2.UseVisualStyleBackColor = True
-        '
-        'ComboBox1
-        '
-        Me.ComboBox1.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {"Windows 7", "Windows Server 2008 R2", "Windows 8", "Windows Server 2012", "Windows 8.1", "Windows Server 2012 R2", "Windows 10", "Windows 11", "Windows Server 2016", "Windows Server 2019"})
-        Me.ComboBox1.Location = New System.Drawing.Point(272, 220)
-        Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(343, 21)
-        Me.ComboBox1.TabIndex = 7
-        Me.ComboBox1.Text = "Windows 7"
-        '
-        'Label11
-        '
-        Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(137, 224)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(129, 13)
-        Me.Label11.TabIndex = 6
-        Me.Label11.Text = "Target operating system:"
-        '
-        'Label10
-        '
-        Me.Label10.AutoEllipsis = True
-        Me.Label10.Location = New System.Drawing.Point(357, 166)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(281, 13)
-        Me.Label10.TabIndex = 5
-        Me.Label10.Text = "<TargetOS>"
-        '
-        'Label8
-        '
-        Me.Label8.Location = New System.Drawing.Point(115, 166)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(236, 13)
-        Me.Label8.TabIndex = 5
-        Me.Label8.Text = "Recommended target OS:"
-        Me.Label8.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
-        'Label9
-        '
-        Me.Label9.AutoEllipsis = True
-        Me.Label9.Location = New System.Drawing.Point(357, 146)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(281, 13)
-        Me.Label9.TabIndex = 5
-        Me.Label9.Text = "<imgversion>"
-        '
-        'Label7
-        '
-        Me.Label7.Location = New System.Drawing.Point(115, 146)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(236, 13)
-        Me.Label7.TabIndex = 5
-        Me.Label7.Text = "Mounted image version:"
-        Me.Label7.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
-        'RadioButton2
-        '
-        Me.RadioButton2.AutoSize = True
-        Me.RadioButton2.Location = New System.Drawing.Point(84, 190)
-        Me.RadioButton2.Name = "RadioButton2"
-        Me.RadioButton2.Size = New System.Drawing.Size(184, 17)
-        Me.RadioButton2.TabIndex = 4
-        Me.RadioButton2.Text = "Let me choose the target version"
-        Me.RadioButton2.UseVisualStyleBackColor = True
-        '
-        'RadioButton1
-        '
-        Me.RadioButton1.AutoSize = True
-        Me.RadioButton1.Checked = True
-        Me.RadioButton1.Location = New System.Drawing.Point(84, 118)
-        Me.RadioButton1.Name = "RadioButton1"
-        Me.RadioButton1.Size = New System.Drawing.Size(374, 17)
-        Me.RadioButton1.TabIndex = 4
-        Me.RadioButton1.TabStop = True
-        Me.RadioButton1.Text = "Let the program detect the version automatically for me (Recommended)"
-        Me.RadioButton1.UseVisualStyleBackColor = True
-        '
-        'Label6
-        '
-        Me.Label6.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label6.AutoEllipsis = True
-        Me.Label6.Location = New System.Drawing.Point(54, 16)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(682, 94)
-        Me.Label6.TabIndex = 3
-        Me.Label6.Text = resources.GetString("Label6.Text")
-        '
-        'PictureBox4
-        '
-        Me.PictureBox4.Image = Global.DISMTools.My.Resources.Resources.targetos
-        Me.PictureBox4.Location = New System.Drawing.Point(16, 16)
-        Me.PictureBox4.Name = "PictureBox4"
-        Me.PictureBox4.Size = New System.Drawing.Size(32, 32)
-        Me.PictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.PictureBox4.TabIndex = 0
-        Me.PictureBox4.TabStop = False
         '
         'EndUserLicenseAgreementPanel
         '
@@ -3196,7 +3197,7 @@ Partial Class NewUnattendWiz
         'EditorPanelContainer
         '
         Me.EditorPanelContainer.Controls.Add(Me.Scintilla1)
-        Me.EditorPanelContainer.Controls.Add(Me.ToolStrip1)
+        Me.EditorPanelContainer.Controls.Add(Me.DarkToolStrip1)
         Me.EditorPanelContainer.Dock = System.Windows.Forms.DockStyle.Fill
         Me.EditorPanelContainer.Location = New System.Drawing.Point(256, 104)
         Me.EditorPanelContainer.Name = "EditorPanelContainer"
@@ -3208,99 +3209,125 @@ Partial Class NewUnattendWiz
         '
         Me.Scintilla1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Scintilla1.IndentationGuides = ScintillaNET.IndentView.LookBoth
-        Me.Scintilla1.Location = New System.Drawing.Point(0, 25)
+        Me.Scintilla1.Location = New System.Drawing.Point(0, 28)
         Me.Scintilla1.Name = "Scintilla1"
-        Me.Scintilla1.Size = New System.Drawing.Size(752, 392)
+        Me.Scintilla1.Size = New System.Drawing.Size(752, 389)
         Me.Scintilla1.TabIndex = 2
         Me.Scintilla1.Text = "<?xml version=""1.0"" encoding=""utf-8""?>" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "<unattend xmlns=""urn:schemas-microsoft-co" & _
     "m:unattend"">" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "</unattend>"
         '
-        'ToolStrip1
+        'DarkToolStrip1
         '
-        Me.ToolStrip1.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewTSB, Me.OpenTSB, Me.SaveTSB, Me.ToolStripSeparator1, Me.ToolStripComboBox1, Me.ToolStripComboBox2, Me.ToolStripSeparator2, Me.ToolStripButton1, Me.HelpTSB, Me.ToolStripSeparator3})
-        Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
-        Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.Size = New System.Drawing.Size(752, 25)
-        Me.ToolStrip1.TabIndex = 0
-        Me.ToolStrip1.Text = "ToolStrip1"
+        Me.DarkToolStrip1.AutoSize = False
+        Me.DarkToolStrip1.BackColor = System.Drawing.Color.FromArgb(CType(CType(31, Byte), Integer), CType(CType(31, Byte), Integer), CType(CType(31, Byte), Integer))
+        Me.DarkToolStrip1.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.DarkToolStrip1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer))
+        Me.DarkToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
+        Me.DarkToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton2, Me.ToolStripButton3, Me.ToolStripButton4, Me.ToolStripSeparator4, Me.FontFamilyTSCB, Me.FontSizeTSCB, Me.ToolStripSeparator5, Me.ToolStripButton5, Me.ToolStripSeparator6, Me.ToolStripButton6})
+        Me.DarkToolStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.DarkToolStrip1.Name = "DarkToolStrip1"
+        Me.DarkToolStrip1.Padding = New System.Windows.Forms.Padding(5, 0, 1, 0)
+        Me.DarkToolStrip1.Size = New System.Drawing.Size(752, 28)
+        Me.DarkToolStrip1.TabIndex = 3
+        Me.DarkToolStrip1.Text = "DarkToolStrip1"
         '
-        'NewTSB
+        'ToolStripButton2
         '
-        Me.NewTSB.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.NewTSB.Image = Global.DISMTools.My.Resources.Resources.newfile
-        Me.NewTSB.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.NewTSB.Name = "NewTSB"
-        Me.NewTSB.Size = New System.Drawing.Size(23, 22)
-        Me.NewTSB.Text = "&Nuevo"
+        Me.ToolStripButton2.BackColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(63, Byte), Integer), CType(CType(65, Byte), Integer))
+        Me.ToolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer))
+        Me.ToolStripButton2.Image = Global.DISMTools.My.Resources.Resources.newfile_dark
+        Me.ToolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton2.Name = "ToolStripButton2"
+        Me.ToolStripButton2.Size = New System.Drawing.Size(23, 25)
+        Me.ToolStripButton2.Text = "New"
         '
-        'OpenTSB
+        'ToolStripButton3
         '
-        Me.OpenTSB.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.OpenTSB.Image = Global.DISMTools.My.Resources.Resources.openfile
-        Me.OpenTSB.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.OpenTSB.Name = "OpenTSB"
-        Me.OpenTSB.Size = New System.Drawing.Size(23, 22)
-        Me.OpenTSB.Text = "&Abrir"
+        Me.ToolStripButton3.BackColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(63, Byte), Integer), CType(CType(65, Byte), Integer))
+        Me.ToolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton3.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer))
+        Me.ToolStripButton3.Image = Global.DISMTools.My.Resources.Resources.openfile_dark
+        Me.ToolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton3.Name = "ToolStripButton3"
+        Me.ToolStripButton3.Size = New System.Drawing.Size(23, 25)
+        Me.ToolStripButton3.Text = "Open..."
         '
-        'SaveTSB
+        'ToolStripButton4
         '
-        Me.SaveTSB.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.SaveTSB.Image = Global.DISMTools.My.Resources.Resources.save_glyph
-        Me.SaveTSB.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.SaveTSB.Name = "SaveTSB"
-        Me.SaveTSB.Size = New System.Drawing.Size(23, 22)
-        Me.SaveTSB.Text = "&Guardar"
+        Me.ToolStripButton4.BackColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(63, Byte), Integer), CType(CType(65, Byte), Integer))
+        Me.ToolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton4.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer))
+        Me.ToolStripButton4.Image = Global.DISMTools.My.Resources.Resources.save_glyph_dark
+        Me.ToolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton4.Name = "ToolStripButton4"
+        Me.ToolStripButton4.Size = New System.Drawing.Size(23, 25)
+        Me.ToolStripButton4.Text = "Save as..."
         '
-        'ToolStripSeparator1
+        'ToolStripSeparator4
         '
-        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 25)
+        Me.ToolStripSeparator4.BackColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(63, Byte), Integer), CType(CType(65, Byte), Integer))
+        Me.ToolStripSeparator4.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer))
+        Me.ToolStripSeparator4.Margin = New System.Windows.Forms.Padding(0, 0, 2, 0)
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(6, 28)
         '
-        'ToolStripComboBox1
+        'FontFamilyTSCB
         '
-        Me.ToolStripComboBox1.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ToolStripComboBox1.Name = "ToolStripComboBox1"
-        Me.ToolStripComboBox1.Size = New System.Drawing.Size(121, 25)
-        Me.ToolStripComboBox1.Text = "Courier New"
+        Me.FontFamilyTSCB.BackColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(63, Byte), Integer), CType(CType(65, Byte), Integer))
+        Me.FontFamilyTSCB.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.FontFamilyTSCB.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer))
+        Me.FontFamilyTSCB.Name = "FontFamilyTSCB"
+        Me.FontFamilyTSCB.Size = New System.Drawing.Size(121, 28)
         '
-        'ToolStripComboBox2
+        'FontSizeTSCB
         '
-        Me.ToolStripComboBox2.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ToolStripComboBox2.Items.AddRange(New Object() {"8", "9", "10", "11", "12", "14", "16", "18", "20", "24", "28", "36", "48", "72", "96"})
-        Me.ToolStripComboBox2.Name = "ToolStripComboBox2"
-        Me.ToolStripComboBox2.Size = New System.Drawing.Size(75, 25)
-        Me.ToolStripComboBox2.Text = "10"
+        Me.FontSizeTSCB.BackColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(63, Byte), Integer), CType(CType(65, Byte), Integer))
+        Me.FontSizeTSCB.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.FontSizeTSCB.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer))
+        Me.FontSizeTSCB.Items.AddRange(New Object() {"8", "9", "10", "11", "12", "14", "16", "18", "20", "24", "28", "36", "48", "72", "96"})
+        Me.FontSizeTSCB.Name = "FontSizeTSCB"
+        Me.FontSizeTSCB.Size = New System.Drawing.Size(75, 28)
+        Me.FontSizeTSCB.Text = "10"
         '
-        'ToolStripSeparator2
+        'ToolStripSeparator5
         '
-        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 25)
+        Me.ToolStripSeparator5.BackColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(63, Byte), Integer), CType(CType(65, Byte), Integer))
+        Me.ToolStripSeparator5.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer))
+        Me.ToolStripSeparator5.Margin = New System.Windows.Forms.Padding(0, 0, 2, 0)
+        Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(6, 28)
         '
-        'ToolStripButton1
+        'ToolStripButton5
         '
-        Me.ToolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton1.Image = Global.DISMTools.My.Resources.Resources.wordwrap
-        Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton1.Name = "ToolStripButton1"
-        Me.ToolStripButton1.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton1.Text = "ToolStripButton1"
+        Me.ToolStripButton5.BackColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(63, Byte), Integer), CType(CType(65, Byte), Integer))
+        Me.ToolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton5.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer))
+        Me.ToolStripButton5.Image = Global.DISMTools.My.Resources.Resources.wordwrap_dark
+        Me.ToolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton5.Name = "ToolStripButton5"
+        Me.ToolStripButton5.Size = New System.Drawing.Size(23, 25)
+        Me.ToolStripButton5.Text = "Word wrap"
         '
-        'HelpTSB
+        'ToolStripSeparator6
         '
-        Me.HelpTSB.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
-        Me.HelpTSB.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.HelpTSB.Image = Global.DISMTools.My.Resources.Resources.help_glyph
-        Me.HelpTSB.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.HelpTSB.Name = "HelpTSB"
-        Me.HelpTSB.Size = New System.Drawing.Size(23, 22)
-        Me.HelpTSB.Text = "Ay&uda"
+        Me.ToolStripSeparator6.BackColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(63, Byte), Integer), CType(CType(65, Byte), Integer))
+        Me.ToolStripSeparator6.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer))
+        Me.ToolStripSeparator6.Margin = New System.Windows.Forms.Padding(0, 0, 2, 0)
+        Me.ToolStripSeparator6.Name = "ToolStripSeparator6"
+        Me.ToolStripSeparator6.Size = New System.Drawing.Size(6, 28)
         '
-        'ToolStripSeparator3
+        'ToolStripButton6
         '
-        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 25)
+        Me.ToolStripButton6.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.ToolStripButton6.BackColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(63, Byte), Integer), CType(CType(65, Byte), Integer))
+        Me.ToolStripButton6.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton6.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer))
+        Me.ToolStripButton6.Image = Global.DISMTools.My.Resources.Resources.help_glyph_dark
+        Me.ToolStripButton6.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton6.Name = "ToolStripButton6"
+        Me.ToolStripButton6.Size = New System.Drawing.Size(23, 25)
+        Me.ToolStripButton6.Text = "Help"
         '
         'HeaderPanel
         '
@@ -3472,8 +3499,8 @@ Partial Class NewUnattendWiz
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1008, 561)
-        Me.Controls.Add(Me.ExpressPanelContainer)
         Me.Controls.Add(Me.EditorPanelContainer)
+        Me.Controls.Add(Me.ExpressPanelContainer)
         Me.Controls.Add(Me.LocationPanel)
         Me.Controls.Add(Me.HeaderPanel)
         Me.Controls.Add(Me.FooterContainer)
@@ -3496,9 +3523,6 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelTrigger.PerformLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ExpressPanelContainer.ResumeLayout(False)
-        Me.ActivationPanel.ResumeLayout(False)
-        Me.ActivationPanel.PerformLayout()
-        CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).EndInit()
         Me.IncompleteWarningPanel.ResumeLayout(False)
         Me.IncompleteWarningPanel.PerformLayout()
         Me.TargetOSSelectionPanel.ResumeLayout(False)
@@ -3506,6 +3530,9 @@ Partial Class NewUnattendWiz
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.ActivationPanel.ResumeLayout(False)
+        Me.ActivationPanel.PerformLayout()
+        CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).EndInit()
         Me.EndUserLicenseAgreementPanel.ResumeLayout(False)
         Me.EndUserLicenseAgreementPanel.PerformLayout()
         CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).EndInit()
@@ -3604,9 +3631,8 @@ Partial Class NewUnattendWiz
         Me.SettingRecapPanel.PerformLayout()
         CType(Me.PictureBox23, System.ComponentModel.ISupportInitialize).EndInit()
         Me.EditorPanelContainer.ResumeLayout(False)
-        Me.EditorPanelContainer.PerformLayout()
-        Me.ToolStrip1.ResumeLayout(False)
-        Me.ToolStrip1.PerformLayout()
+        Me.DarkToolStrip1.ResumeLayout(False)
+        Me.DarkToolStrip1.PerformLayout()
         Me.HeaderPanel.ResumeLayout(False)
         Me.HeaderPanel.PerformLayout()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()
@@ -3880,17 +3906,17 @@ Partial Class NewUnattendWiz
     Friend WithEvents KeyInputBox3 As System.Windows.Forms.TextBox
     Friend WithEvents KeyInputBox2 As System.Windows.Forms.TextBox
     Friend WithEvents KeyInputBox1 As System.Windows.Forms.TextBox
-    Friend WithEvents ToolStrip1 As System.Windows.Forms.ToolStrip
-    Friend WithEvents NewTSB As System.Windows.Forms.ToolStripButton
-    Friend WithEvents OpenTSB As System.Windows.Forms.ToolStripButton
-    Friend WithEvents SaveTSB As System.Windows.Forms.ToolStripButton
-    Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents HelpTSB As System.Windows.Forms.ToolStripButton
-    Friend WithEvents ToolStripComboBox1 As System.Windows.Forms.ToolStripComboBox
-    Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents ToolStripButton1 As System.Windows.Forms.ToolStripButton
-    Friend WithEvents ToolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents Scintilla1 As ScintillaNET.Scintilla
-    Friend WithEvents ToolStripComboBox2 As System.Windows.Forms.ToolStripComboBox
     Friend WithEvents KeyCopyButton As System.Windows.Forms.Button
+    Friend WithEvents DarkToolStrip1 As DarkUI.Controls.DarkToolStrip
+    Friend WithEvents ToolStripButton2 As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripButton3 As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripButton4 As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents FontFamilyTSCB As System.Windows.Forms.ToolStripComboBox
+    Friend WithEvents FontSizeTSCB As System.Windows.Forms.ToolStripComboBox
+    Friend WithEvents ToolStripSeparator5 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents ToolStripButton5 As System.Windows.Forms.ToolStripButton
+    Friend WithEvents ToolStripSeparator6 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents ToolStripButton6 As System.Windows.Forms.ToolStripButton
 End Class

@@ -27,14 +27,10 @@ Partial Class PrgAbout
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.PreviewPanel = New System.Windows.Forms.Panel()
-        Me.Label14 = New System.Windows.Forms.Label()
-        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.Label15 = New System.Windows.Forms.Label()
         Me.ModernPanelContainer = New System.Windows.Forms.Panel()
         Me.CreditsPanel = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
-        Me.LinkLabel11 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel8 = New System.Windows.Forms.LinkLabel()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
@@ -55,6 +51,11 @@ Partial Class PrgAbout
         Me.LinkLabel7 = New System.Windows.Forms.LinkLabel()
         Me.Label12 = New System.Windows.Forms.Label()
         Me.Label17 = New System.Windows.Forms.Label()
+        Me.Label19 = New System.Windows.Forms.Label()
+        Me.LinkLabel12 = New System.Windows.Forms.LinkLabel()
+        Me.Label20 = New System.Windows.Forms.Label()
+        Me.LinkLabel13 = New System.Windows.Forms.LinkLabel()
+        Me.LinkLabel11 = New System.Windows.Forms.LinkLabel()
         Me.Label18 = New System.Windows.Forms.Label()
         Me.LicensesPanel = New System.Windows.Forms.Panel()
         Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
@@ -64,16 +65,19 @@ Partial Class PrgAbout
         Me.LinkLabel3 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
+        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
+        Me.PictureBox3 = New System.Windows.Forms.PictureBox()
+        Me.UpdCheckBtn = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.PreviewPanel.SuspendLayout()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ModernPanelContainer.SuspendLayout()
         Me.CreditsPanel.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
         Me.LicensesPanel.SuspendLayout()
         Me.WhatsNewPanel.SuspendLayout()
         Me.TableLayoutPanel3.SuspendLayout()
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -131,39 +135,6 @@ Partial Class PrgAbout
         Me.Label2.Text = "DISMTools lets you deploy, manage, and service Windows images with ease, thanks t" & _
     "o a GUI."
         '
-        'PreviewPanel
-        '
-        Me.PreviewPanel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.PreviewPanel.BackColor = System.Drawing.Color.Transparent
-        Me.PreviewPanel.Controls.Add(Me.Label14)
-        Me.PreviewPanel.Controls.Add(Me.PictureBox2)
-        Me.PreviewPanel.Location = New System.Drawing.Point(12, 315)
-        Me.PreviewPanel.Name = "PreviewPanel"
-        Me.PreviewPanel.Size = New System.Drawing.Size(388, 72)
-        Me.PreviewPanel.TabIndex = 7
-        Me.PreviewPanel.Visible = False
-        '
-        'Label14
-        '
-        Me.Label14.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label14.Location = New System.Drawing.Point(39, 8)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(332, 64)
-        Me.Label14.TabIndex = 1
-        Me.Label14.Text = "You are currently using a preview build, which may not be ready for production ye" & _
-    "t. You may encounter more bugs along the way." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Use at your own risk."
-        '
-        'PictureBox2
-        '
-        Me.PictureBox2.Image = Global.DISMTools.My.Resources.Resources.preview_light
-        Me.PictureBox2.Location = New System.Drawing.Point(8, 8)
-        Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(24, 24)
-        Me.PictureBox2.TabIndex = 0
-        Me.PictureBox2.TabStop = False
-        '
         'Label15
         '
         Me.Label15.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
@@ -171,9 +142,10 @@ Partial Class PrgAbout
         Me.Label15.BackColor = System.Drawing.Color.Transparent
         Me.Label15.Location = New System.Drawing.Point(23, 408)
         Me.Label15.Name = "Label15"
-        Me.Label15.Size = New System.Drawing.Size(121, 13)
+        Me.Label15.Size = New System.Drawing.Size(105, 13)
         Me.Label15.TabIndex = 4
-        Me.Label15.Text = "DISMTools - version {0}"
+        Me.Label15.Text = "Build date goes here"
+        Me.Label15.Visible = False
         '
         'ModernPanelContainer
         '
@@ -207,8 +179,7 @@ Partial Class PrgAbout
         Me.TableLayoutPanel2.ColumnCount = 2
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 86.0!))
-        Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel11, 0, 14)
-        Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel8, 0, 12)
+        Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel8, 0, 14)
         Me.TableLayoutPanel2.Controls.Add(Me.Label9, 0, 6)
         Me.TableLayoutPanel2.Controls.Add(Me.Label3, 0, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.Label4, 0, 1)
@@ -221,18 +192,25 @@ Partial Class PrgAbout
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel6, 1, 6)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel9, 1, 7)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel10, 1, 8)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label10, 0, 9)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label10, 0, 11)
         Me.TableLayoutPanel2.Controls.Add(Me.Label13, 0, 7)
         Me.TableLayoutPanel2.Controls.Add(Me.Label16, 0, 8)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label11, 0, 10)
-        Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel7, 1, 10)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label12, 0, 11)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label17, 0, 13)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label18, 0, 14)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label11, 0, 12)
+        Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel7, 1, 12)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label12, 0, 13)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label17, 0, 15)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label19, 0, 9)
+        Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel12, 1, 9)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label20, 0, 10)
+        Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel13, 1, 10)
+        Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel11, 1, 16)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label18, 0, 16)
         Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel2.Location = New System.Drawing.Point(0, 0)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
-        Me.TableLayoutPanel2.RowCount = 16
+        Me.TableLayoutPanel2.RowCount = 18
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
@@ -252,20 +230,6 @@ Partial Class PrgAbout
         Me.TableLayoutPanel2.Size = New System.Drawing.Size(420, 354)
         Me.TableLayoutPanel2.TabIndex = 1
         '
-        'LinkLabel11
-        '
-        Me.LinkLabel11.AutoSize = True
-        Me.LinkLabel11.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.LinkLabel11.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel11.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel11.Location = New System.Drawing.Point(337, 289)
-        Me.LinkLabel11.Name = "LinkLabel11"
-        Me.LinkLabel11.Size = New System.Drawing.Size(80, 30)
-        Me.LinkLabel11.TabIndex = 9
-        Me.LinkLabel11.TabStop = True
-        Me.LinkLabel11.Text = "Microsoft, Kýnan Antos"
-        Me.LinkLabel11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
         'LinkLabel8
         '
         Me.LinkLabel8.AutoSize = True
@@ -274,7 +238,7 @@ Partial Class PrgAbout
         Me.LinkLabel8.LinkArea = New System.Windows.Forms.LinkArea(59, 29)
         Me.LinkLabel8.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel8.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel8.Location = New System.Drawing.Point(3, 231)
+        Me.LinkLabel8.Location = New System.Drawing.Point(3, 261)
         Me.LinkLabel8.Name = "LinkLabel8"
         Me.LinkLabel8.Size = New System.Drawing.Size(414, 37)
         Me.LinkLabel8.TabIndex = 7
@@ -429,7 +393,7 @@ Partial Class PrgAbout
         '
         Me.Label10.AutoSize = True
         Me.Label10.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label10.Location = New System.Drawing.Point(3, 174)
+        Me.Label10.Location = New System.Drawing.Point(3, 204)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(168, 21)
         Me.Label10.TabIndex = 1
@@ -456,7 +420,7 @@ Partial Class PrgAbout
         'Label11
         '
         Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(3, 195)
+        Me.Label11.Location = New System.Drawing.Point(3, 225)
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(130, 15)
         Me.Label11.TabIndex = 6
@@ -468,9 +432,9 @@ Partial Class PrgAbout
         Me.LinkLabel7.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel7.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel7.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel7.Location = New System.Drawing.Point(337, 174)
+        Me.LinkLabel7.Location = New System.Drawing.Point(337, 225)
         Me.LinkLabel7.Name = "LinkLabel7"
-        Me.LinkLabel7.Size = New System.Drawing.Size(80, 21)
+        Me.LinkLabel7.Size = New System.Drawing.Size(80, 15)
         Me.LinkLabel7.TabIndex = 4
         Me.LinkLabel7.TabStop = True
         Me.LinkLabel7.Text = "Microsoft"
@@ -481,7 +445,7 @@ Partial Class PrgAbout
         Me.Label12.AutoSize = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label12, 2)
         Me.Label12.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label12.Location = New System.Drawing.Point(3, 210)
+        Me.Label12.Location = New System.Drawing.Point(3, 240)
         Me.Label12.Name = "Label12"
         Me.Label12.Size = New System.Drawing.Size(310, 21)
         Me.Label12.TabIndex = 1
@@ -491,16 +455,76 @@ Partial Class PrgAbout
         '
         Me.Label17.AutoSize = True
         Me.Label17.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label17.Location = New System.Drawing.Point(3, 268)
+        Me.Label17.Location = New System.Drawing.Point(3, 298)
         Me.Label17.Name = "Label17"
         Me.Label17.Size = New System.Drawing.Size(129, 21)
         Me.Label17.TabIndex = 1
         Me.Label17.Text = "Branding assets"
         '
+        'Label19
+        '
+        Me.Label19.AutoSize = True
+        Me.Label19.Location = New System.Drawing.Point(3, 174)
+        Me.Label19.Name = "Label19"
+        Me.Label19.Size = New System.Drawing.Size(42, 15)
+        Me.Label19.TabIndex = 2
+        Me.Label19.Text = "DarkUI"
+        '
+        'LinkLabel12
+        '
+        Me.LinkLabel12.AutoSize = True
+        Me.LinkLabel12.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.LinkLabel12.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel12.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel12.Location = New System.Drawing.Point(337, 174)
+        Me.LinkLabel12.Name = "LinkLabel12"
+        Me.LinkLabel12.Size = New System.Drawing.Size(80, 15)
+        Me.LinkLabel12.TabIndex = 9
+        Me.LinkLabel12.TabStop = True
+        Me.LinkLabel12.Text = "Visit website"
+        Me.LinkLabel12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'Label20
+        '
+        Me.Label20.AutoSize = True
+        Me.Label20.Location = New System.Drawing.Point(3, 189)
+        Me.Label20.Name = "Label20"
+        Me.Label20.Size = New System.Drawing.Size(89, 15)
+        Me.Label20.TabIndex = 2
+        Me.Label20.Text = "DockPanelSuite"
+        '
+        'LinkLabel13
+        '
+        Me.LinkLabel13.AutoSize = True
+        Me.LinkLabel13.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.LinkLabel13.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel13.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel13.Location = New System.Drawing.Point(337, 189)
+        Me.LinkLabel13.Name = "LinkLabel13"
+        Me.LinkLabel13.Size = New System.Drawing.Size(80, 15)
+        Me.LinkLabel13.TabIndex = 9
+        Me.LinkLabel13.TabStop = True
+        Me.LinkLabel13.Text = "Visit website"
+        Me.LinkLabel13.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'LinkLabel11
+        '
+        Me.LinkLabel11.AutoSize = True
+        Me.LinkLabel11.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.LinkLabel11.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel11.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel11.Location = New System.Drawing.Point(337, 319)
+        Me.LinkLabel11.Name = "LinkLabel11"
+        Me.LinkLabel11.Size = New System.Drawing.Size(80, 30)
+        Me.LinkLabel11.TabIndex = 9
+        Me.LinkLabel11.TabStop = True
+        Me.LinkLabel11.Text = "Microsoft, Kýnan Antos"
+        Me.LinkLabel11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'Label18
         '
         Me.Label18.AutoSize = True
-        Me.Label18.Location = New System.Drawing.Point(3, 289)
+        Me.Label18.Location = New System.Drawing.Point(3, 319)
         Me.Label18.Name = "Label18"
         Me.Label18.Size = New System.Drawing.Size(181, 15)
         Me.Label18.TabIndex = 2
@@ -618,6 +642,38 @@ Partial Class PrgAbout
         Me.LinkLabel1.Text = "CREDITS"
         Me.LinkLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
+        'PictureBox2
+        '
+        Me.PictureBox2.BackColor = System.Drawing.Color.Transparent
+        Me.PictureBox2.Image = Global.DISMTools.My.Resources.Resources.gh_repo
+        Me.PictureBox2.Location = New System.Drawing.Point(26, 370)
+        Me.PictureBox2.Name = "PictureBox2"
+        Me.PictureBox2.Size = New System.Drawing.Size(24, 24)
+        Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox2.TabIndex = 9
+        Me.PictureBox2.TabStop = False
+        '
+        'PictureBox3
+        '
+        Me.PictureBox3.BackColor = System.Drawing.Color.Transparent
+        Me.PictureBox3.Image = Global.DISMTools.My.Resources.Resources.subreddit
+        Me.PictureBox3.Location = New System.Drawing.Point(56, 370)
+        Me.PictureBox3.Name = "PictureBox3"
+        Me.PictureBox3.Size = New System.Drawing.Size(24, 24)
+        Me.PictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox3.TabIndex = 9
+        Me.PictureBox3.TabStop = False
+        '
+        'UpdCheckBtn
+        '
+        Me.UpdCheckBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.UpdCheckBtn.Location = New System.Drawing.Point(585, 403)
+        Me.UpdCheckBtn.Name = "UpdCheckBtn"
+        Me.UpdCheckBtn.Size = New System.Drawing.Size(168, 23)
+        Me.UpdCheckBtn.TabIndex = 10
+        Me.UpdCheckBtn.Text = "Check for updates"
+        Me.UpdCheckBtn.UseVisualStyleBackColor = True
+        '
         'PrgAbout
         '
         Me.AcceptButton = Me.OK_Button
@@ -625,7 +681,9 @@ Partial Class PrgAbout
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackgroundImage = Global.DISMTools.My.Resources.Resources.aboutscr_bg
         Me.ClientSize = New System.Drawing.Size(844, 441)
-        Me.Controls.Add(Me.PreviewPanel)
+        Me.Controls.Add(Me.UpdCheckBtn)
+        Me.Controls.Add(Me.PictureBox3)
+        Me.Controls.Add(Me.PictureBox2)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label15)
@@ -642,8 +700,6 @@ Partial Class PrgAbout
         Me.Text = "About this program"
         Me.TableLayoutPanel1.ResumeLayout(False)
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.PreviewPanel.ResumeLayout(False)
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ModernPanelContainer.ResumeLayout(False)
         Me.CreditsPanel.ResumeLayout(False)
         Me.TableLayoutPanel2.ResumeLayout(False)
@@ -652,6 +708,8 @@ Partial Class PrgAbout
         Me.WhatsNewPanel.ResumeLayout(False)
         Me.TableLayoutPanel3.ResumeLayout(False)
         Me.TableLayoutPanel3.PerformLayout()
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -661,9 +719,6 @@ Partial Class PrgAbout
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents PreviewPanel As System.Windows.Forms.Panel
-    Friend WithEvents PictureBox2 As System.Windows.Forms.PictureBox
-    Friend WithEvents Label14 As System.Windows.Forms.Label
     Friend WithEvents Label15 As System.Windows.Forms.Label
     Friend WithEvents ModernPanelContainer As System.Windows.Forms.Panel
     Friend WithEvents LicensesPanel As System.Windows.Forms.Panel
@@ -696,7 +751,14 @@ Partial Class PrgAbout
     Friend WithEvents Label12 As System.Windows.Forms.Label
     Friend WithEvents RichTextBox2 As System.Windows.Forms.RichTextBox
     Friend WithEvents LinkLabel11 As System.Windows.Forms.LinkLabel
+    Friend WithEvents LinkLabel12 As System.Windows.Forms.LinkLabel
+    Friend WithEvents LinkLabel13 As System.Windows.Forms.LinkLabel
     Friend WithEvents Label17 As System.Windows.Forms.Label
     Friend WithEvents Label18 As System.Windows.Forms.Label
+    Friend WithEvents Label19 As System.Windows.Forms.Label
+    Friend WithEvents Label20 As System.Windows.Forms.Label
+    Friend WithEvents PictureBox2 As System.Windows.Forms.PictureBox
+    Friend WithEvents PictureBox3 As System.Windows.Forms.PictureBox
+    Friend WithEvents UpdCheckBtn As System.Windows.Forms.Button
 
 End Class

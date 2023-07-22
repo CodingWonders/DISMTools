@@ -5,6 +5,7 @@ Imports Microsoft.VisualBasic.ControlChars
 Imports System.Text.Encoding
 Imports Microsoft.Win32
 Imports Microsoft.Dism
+Imports System.Runtime.InteropServices
 
 Public Class MainForm
 
@@ -64,7 +65,7 @@ Public Class MainForm
     Public Language As Integer
     Public LogFont As String
     Public LogFile As String
-    Public LogLevel As Integer
+    Public LogLevel As Integer = 3
     Public ImgOperationMode As Integer
     Public QuietOperations As Boolean
     Public SysNoRestart As Boolean
@@ -80,6 +81,23 @@ Public Class MainForm
     Public NotificationShow As Boolean
     Public NotificationFrequency As Integer
     Public NotificationTimes As Integer = 0
+    ' 0.3 settings
+    ' - Background processes -
+    Public ExtAppxGetter As Boolean = True
+    Public SkipNonRemovable As Boolean = True
+    Public AllDrivers As Boolean
+    Public SkipFrameworks As Boolean = True
+    Public RunAllProcs As Boolean
+    ' - Startup -
+    Public StartupRemount As Boolean
+    Public StartupUpdateCheck As Boolean
+    ' - Secondary progress panel -
+    Public ProgressPanelStyle As Integer = 1        ' 0 (Legacy, 0.1 - 0.2.2), 1 (Modern, >= 0.3)
+    ' - Progress panel -
+    Public AutoLogs As Boolean
+    Public AutoScrDir As Boolean
+    ' - Appearance -
+    Public AllCaps As Boolean
 
     ' Background process initiator settings
     Public bwBackgroundProcessAction As Integer
@@ -87,8 +105,8 @@ Public Class MainForm
     Public bwGetImageInfo As Boolean
     Public bwGetAdvImgInfo As Boolean
 
-    ' Background process variables
-    Public imgCanGetAppxPkgs As Boolean            ' Windows 8 introduced AppX packages (Metro-style apps). The AppX format is still used in Windows 10 and 11
+    ' Variable used for online installation management
+    Public OnlineManagement As Boolean
 
     ' These are the variables that need to change when testing setting validity
     Public isExeProblematic As Boolean
@@ -101,7 +119,7 @@ Public Class MainForm
     Public isSqlServerDTProj As Boolean
 
     ' Set branch name and codenames
-    Public dtBranch As String = "stable"
+    Public dtBranch As String = "dt_preview"
 
     ' Arrays and other variables used on background processes
     Public imgPackageNames(65535) As String
@@ -129,6 +147,7 @@ Public Class MainForm
     Public imgDrvProviderNames(65535) As String
     Public imgDrvDates(65535) As String
     Public imgDrvVersions(65535) As String
+    Public imgDrvBootCriticalStatus(65535) As Boolean
 
     Public imgPackageNameLastEntry As String
 
@@ -151,50 +170,193 @@ Public Class MainForm
     Public MountedImageImgIndexes(65535) As String
     Public MountedImageMountedReWr(65535) As String
     Public MountedImageImgStatuses(65535) As String
+    ' New variables for 0.3
+    Public MountedImageImgVersions(65535) As String
     ' Private lists for DetectMountedImages function
     Dim MountedImageImgFileList As New List(Of String)
     Dim MountedImageImgIndexList As New List(Of String)
     Dim MountedImageMountDirList As New List(Of String)
     Dim MountedImageImgStatusList As New List(Of String)
     Dim MountedImageReWrList As New List(Of String)
+    Dim MountedImageImgVersionList As New List(Of String)
 
     ' Perform image unmount operations when pressing on buttons
     Public imgCommitOperation As Integer = -1 ' 0: commit; 1: discard
 
     Dim DismVersionChecker As FileVersionInfo
+    Dim argProjPath As String = ""                                       ' String used to know which project to load if it's specified in an argument
+    Dim argOnline As Boolean                                             ' Determine if program will be launched in online installation mode
 
     Dim sessionMntDir As String = ""
 
+    ' ADK copier variables
+    Dim adkCopyArg As Integer
+    Dim currentArch As String
+    Dim archIntg As Integer
+    Dim fileCount As Integer
+    Dim CurrentFileInt As Integer
+
+    ' Window parameters
+    Dim WndWidth As Integer
+    Dim WndHeight As Integer
+    Dim WndLeft As Integer
+    Dim WndTop As Integer
+
+    Public CompletedTasks(4) As Boolean
+
+    Dim HasRemounted As Boolean
+
+    Friend NotInheritable Class NativeMethods
+
+        Private Sub New()
+        End Sub
+
+        <DllImport("dwmapi.dll")>
+        Shared Function DwmSetWindowAttribute(hwnd As IntPtr, attr As Integer, ByRef attrValue As Integer, attrSize As Integer) As Integer
+        End Function
+
+    End Class
+
+    Const DWMWA_USE_IMMERSIVE_DARK_MODE As Integer = 20
+    Const WS_EX_COMPOSITED As Integer = &H2000000
+    Const GWL_EXSTYLE As Integer = -20
+
+    Shared Sub EnableDarkTitleBar(hwnd As IntPtr, isDarkMode As Boolean)
+        Dim attribute As Integer = If(isDarkMode, 1, 0)
+        Dim result As Integer = NativeMethods.DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, attribute, 4)
+    End Sub
+
+    Function GetWindowHandle(ctrl As Control) As IntPtr
+        Return ctrl.Handle
+    End Function
+
+    Function IsWindowsVersionOrGreater(majorVersion As Integer, minorVersion As Integer, buildNumber As Integer) As Boolean
+        Dim version = Environment.OSVersion.Version
+        Return version.Major > majorVersion OrElse (version.Major = majorVersion AndAlso version.Minor > minorVersion) OrElse (version.Major = majorVersion AndAlso version.Minor = minorVersion AndAlso version.Build >= buildNumber)
+    End Function
+
+    Sub GetArguments()
+        Dim args() As String = Environment.GetCommandLineArgs()
+        If args.Length = 1 Then
+            Exit Sub
+        Else
+            For Each arg In args
+                If arg.StartsWith("/setup", StringComparison.OrdinalIgnoreCase) Then
+                    PrgSetup.ShowDialog()
+                ElseIf arg.StartsWith("/load", StringComparison.OrdinalIgnoreCase) Then
+                    If File.Exists(arg.Replace("/load=", "").Trim()) And Directory.Exists(Path.GetDirectoryName(arg.Replace("/load=", "").Trim())) Then
+                        argProjPath = arg.Replace("/load=", "").Trim()
+                    Else
+                        Select Case Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        MsgBox("An invalid project has been specified", vbOKOnly + vbCritical, Text)
+                                    Case "ESN"
+                                        MsgBox("Se ha especificado un proyecto no válido", vbOKOnly + vbCritical, Text)
+                                End Select
+                            Case 1
+                                MsgBox("An invalid project has been specified", vbOKOnly + vbCritical, Text)
+                            Case 2
+                                MsgBox("Se ha especificado un proyecto no válido", vbOKOnly + vbCritical, Text)
+                        End Select
+                    End If
+                ElseIf arg.StartsWith("/online", StringComparison.OrdinalIgnoreCase) Then
+                    If argProjPath = "" Then
+                        argOnline = True
+                    Else
+                        ' Add warning later
+                    End If
+                ElseIf arg.StartsWith("/migrate", StringComparison.OrdinalIgnoreCase) Then
+                    MigrationForm.ShowDialog()
+                    Thread.Sleep(1500)
+                End If
+            Next
+        End If
+    End Sub
+    
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Because of the DISM API, Windows 7 compatibility is out the window (no pun intended)
         If Environment.OSVersion.Version.Major = 6 And Environment.OSVersion.Version.Minor < 2 Then
             MsgBox("This program is incompatible with Windows 7 and Server 2008 R2." & CrLf & "This program uses the DISM API, which requires files from the Assessment and Deployment Kit (ADK). However, support for Windows 7 is not included." & CrLf & CrLf & "The program will be closed.", vbOKOnly + vbCritical, "DISMTools")
             Environment.Exit(1)
         End If
+        If Not Directory.Exists(Application.StartupPath & "\logs") Then Directory.CreateDirectory(Application.StartupPath & "\logs")
+        If Not Debugger.IsAttached Then SplashScreen.Show()
+        Thread.Sleep(2000)
         ' I once tested this on a computer which didn't require me to ask for admin privileges. This is a requirement of DISM. Check this
         If Not My.User.IsInRole(ApplicationServices.BuiltInRole.Administrator) Then
             MsgBox("This program must be run as an administrator." & CrLf & "There are certain software configurations in which Windows will run this program without admin privileges, so you must ask for them manually." & CrLf & CrLf & "Right-click the executable, and select " & Quote & "Run as administrator" & Quote, vbOKOnly + vbCritical, "DISMTools")
             Environment.Exit(1)
         End If
+        Visible = False
         Debug.WriteLine("DISMTools, version " & My.Application.Info.Version.ToString() & " (" & dtBranch & ")" & CrLf & _
                         "Loading program settings..." & CrLf)
+        GetArguments()
         ' Detect mounted images
         DetectMountedImages(True)
         Debug.WriteLine(CrLf & "Finished detecting mounted images. Continuing program startup..." & CrLf)
         Control.CheckForIllegalCrossThreadCalls = False
         BranchTSMI.Text = dtBranch
         If Debugger.IsAttached Then
-            expBackgroundProcesses = True
             BranchTSMI.Visible = True
             Text &= " (debug mode)"
         End If
-        LoadDTSettings(1)
+        ' Read settings file
+        If File.Exists(Application.StartupPath & "\settings.ini") Then
+            PerformSettingFileValidation()
+            Dim SettingReader As New RichTextBox() With {.Text = File.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)}
+            If SettingReader.Text.Contains("SaveOnSettingsIni=1") Then
+                LoadDTSettings(1)
+            ElseIf SettingReader.Text.Contains("SaveOnSettingsIni=0") Then
+                LoadDTSettings(0)
+            End If
+        Else
+            'GenerateDTSettings()
+            'LoadDTSettings(1)
+            PrgSetup.ShowDialog()
+        End If
         imgStatus = 0
         ChangeImgStatus()
         If DismExe <> "" Then
             DismVersionChecker = FileVersionInfo.GetVersionInfo(DismExe)
         End If
+        UnblockPSHelpers()
+        If StartupRemount Then RemountOrphanedImages() Else HasRemounted = True
+        While Not HasRemounted
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        If StartupUpdateCheck Then
+            UpdCheckerBW.RunWorkerAsync()
+        Else
+            UpdatePanel.Visible = False
+        End If
         MountedImageDetectorBW.RunWorkerAsync()
+        If dtBranch.Contains("preview") And Not Debugger.IsAttached Then
+            VersionTSMI.Visible = True
+        Else
+            VersionTSMI.Visible = False
+        End If
+        If Not Debugger.IsAttached Then SplashScreen.Close()
+        WndWidth = Width
+        WndHeight = Height
+        WndLeft = Left
+        WndTop = Top
+        If Left < 0 And Top < 0 Then
+            ' Center form
+            Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2)
+        End If
+        Visible = True
+        If argProjPath <> "" Then
+            HomePanel.Visible = False
+            'Visible = True
+            ProgressPanel.OperationNum = 990
+            LoadDTProj(argProjPath, Path.GetFileNameWithoutExtension(argProjPath), True, False)
+        End If
+        If argOnline Then
+            BeginOnlineManagement(True)
+        End If
     End Sub
 
     ''' <summary>
@@ -210,8 +372,9 @@ Public Class MainForm
             MountedImageMountDirList.Clear()
             MountedImageImgStatusList.Clear()
             MountedImageReWrList.Clear()
+            MountedImageImgVersionList.Clear()
         End If
-        DismApi.Initialize(DismLogLevel.LogErrors)
+        DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
         Dim MountedImgs As DismMountedImageInfoCollection = DismApi.GetMountedImages()
         For Each imageInfo As DismMountedImageInfo In MountedImgs
             If DebugLog Then Debug.WriteLine("- Image file : " & imageInfo.ImageFilePath)
@@ -226,12 +389,28 @@ Public Class MainForm
             MountedImageImgStatusList.Add(imageInfo.MountStatus)
             MountedImageReWrList.Add(imageInfo.MountMode)
         Next
-        DismApi.Shutdown()
         MountedImageImgFiles = MountedImageImgFileList.ToArray()
         MountedImageImgIndexes = MountedImageImgIndexList.ToArray()
         MountedImageMountDirs = MountedImageMountDirList.ToArray()
         MountedImageImgStatuses = MountedImageImgStatusList.ToArray()
         MountedImageMountedReWr = MountedImageReWrList.ToArray()
+        If MountedImageImgFileList.Count > 0 Then
+            For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
+                Try
+                    Dim infoCollection As DismImageInfoCollection = DismApi.GetImageInfo(MountedImageImgFiles(x))
+                    For Each imageInfo As DismImageInfo In infoCollection
+                        If imageInfo.ImageIndex = MountedImageImgIndexes(x) Then
+                            MountedImageImgVersionList.Add(imageInfo.ProductVersion.ToString())
+                        End If
+                    Next
+                Catch ex As Exception
+                    If DebugLog Then Debug.WriteLine("[DetectMountedImages] Exception: " & ex.Message & " has occurred when detecting the image version. Proceeding with detecting image version with ntoskrnl...")
+                    MountedImageImgVersionList.Add(FileVersionInfo.GetVersionInfo(MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion)
+                End Try
+            Next
+        End If
+        DismApi.Shutdown()
+        MountedImageImgVersions = MountedImageImgVersionList.ToArray()
         ' Fill mounted image manager list
         MountedImgMgr.ListView1.Items.Clear()
         Try
@@ -240,20 +419,122 @@ Public Class MainForm
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENG"
-                                MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "OK", If(MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MountedImageMountedReWr(x) = 0, "Yes", "No"), If(File.Exists(MountedImageMountDirs(x) & "\Windows\System32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion, "Could not get version info")}))
+                                MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "OK", If(MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MountedImageMountedReWr(x) = 0, "Yes", "No"), MountedImageImgVersions(x)}))
                             Case "ESN"
-                                MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "Correcto", If(MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MountedImageMountedReWr(x) = 0, "Sí", "No"), If(File.Exists(MountedImageMountDirs(x) & "\Windows\System32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion, "No se pudo obtener información de la versión")}))
+                                MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "Correcto", If(MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MountedImageMountedReWr(x) = 0, "Sí", "No"), MountedImageImgVersions(x)}))
                         End Select
                     Case 1
-                        MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "OK", If(MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MountedImageMountedReWr(x) = 0, "Yes", "No"), If(File.Exists(MountedImageMountDirs(x) & "\Windows\System32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion, "Could not get version info")}))
+                        MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "OK", If(MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MountedImageMountedReWr(x) = 0, "Yes", "No"), MountedImageImgVersions(x)}))
                     Case 2
-                        MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "Correcto", If(MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MountedImageMountedReWr(x) = 0, "Sí", "No"), If(File.Exists(MountedImageMountDirs(x) & "\Windows\System32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion, "No se pudo obtener información de la versión")}))
+                        MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "Correcto", If(MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MountedImageMountedReWr(x) = 0, "Sí", "No"), MountedImageImgVersions(x)}))
                 End Select
             Next
         Catch ex As Exception
             Exit Try
         End Try
         MountedImgMgr.Refresh()
+    End Sub
+
+    ''' <summary>
+    ''' Remounts orphaned images (images in need of a servicing session reload)
+    ''' </summary>
+    ''' <remarks></remarks>
+    Sub RemountOrphanedImages()
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        If MountedImageMountDirs.Count > 0 Then
+            Try
+                DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
+                For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
+                    If MountedImageImgStatuses(x) = 1 Then
+                        DismApi.RemountImage(MountedImageMountDirs(x))
+                    End If
+                Next
+            Catch ex As Exception
+                Debug.WriteLine("Could not remount all orphaned images. Reason:" & CrLf & ex.ToString())
+            Finally
+                DismApi.Shutdown()
+            End Try
+        End If
+        HasRemounted = True
+    End Sub
+
+    Sub CheckForUpdates(branch As String)
+        UpdateLink.LinkArea = New LinkArea(0, 0)
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        UpdateLink.Text = "Checking for updates..."
+                    Case "ESN"
+                        UpdateLink.Text = "Comprobando actualizaciones..."
+                End Select
+            Case 1
+                UpdateLink.Text = "Checking for updates..."
+            Case 2
+                UpdateLink.Text = "Comprobando actualizaciones..."
+        End Select
+        Dim latestVer As String = ""
+        Using client As New WebClient()
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+            Try
+                client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/DISMTools/" & branch & "/Updater/DISMTools-UCS/update-bin/" & If(branch.Contains("preview"), "preview.ini", "stable.ini"), Application.StartupPath & "\info.ini")
+            Catch ex As WebException
+                Debug.WriteLine("We couldn't fetch the necessary update information. Reason:" & CrLf & ex.Status.ToString())
+                Exit Sub
+            End Try
+            Debug.WriteLine("Reading update information...")
+            If File.Exists(Application.StartupPath & "\info.ini") Then
+                Dim infoRTB As New RichTextBox With {
+                    .Text = File.ReadAllText(Application.StartupPath & "\info.ini")
+                }
+                For Each Line In infoRTB.Lines
+                    If Line.StartsWith("LatestVer") Then
+                        latestVer = Line.Replace("LatestVer = ", "").Trim()
+                    End If
+                Next
+                File.Delete(Application.StartupPath & "\info.ini")
+                Debug.WriteLine("Comparing versions...")
+                Dim fv As String = My.Application.Info.Version.ToString()
+                If fv = latestVer Then
+                    Debug.WriteLine("There aren't any updates available")
+                    UpdatePanel.Visible = False
+                Else
+                    Debug.WriteLine("There are updates available. Showing update recommendation...")
+                    Select Case Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    UpdateLink.Text = "A new version is available for download and installation. Click here to learn more"
+                                    UpdateLink.LinkArea = New LinkArea(58, 24)
+                                Case "ESN"
+                                    UpdateLink.Text = "Hay una nueva versión disponible para su descarga e instalación. Haga clic aquí para saber más"
+                                    UpdateLink.LinkArea = New LinkArea(65, 29)
+                            End Select
+                        Case 1
+                            UpdateLink.Text = "A new version is available for download and installation. Click here to learn more"
+                            UpdateLink.LinkArea = New LinkArea(58, 24)
+                        Case 2
+                            UpdateLink.Text = "Hay una nueva versión disponible para su descarga e instalación. Haga clic aquí para saber más"
+                            UpdateLink.LinkArea = New LinkArea(65, 29)
+                    End Select
+                    UpdatePanel.Visible = True
+                End If
+            End If
+        End Using
+    End Sub
+
+    Sub UnblockPSHelpers()
+        Dim PSUnblocker As New Process()
+        PSUnblocker.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\System32\WindowsPowerShell\v1.0\powershell.exe"
+        PSUnblocker.StartInfo.Arguments = "-executionpolicy unrestricted -command Unblock-File " & Quote & Application.StartupPath & "\bin\extps1\*.*" & Quote
+        PSUnblocker.StartInfo.CreateNoWindow = True
+        PSUnblocker.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+        PSUnblocker.Start()
+        PSUnblocker.WaitForExit()
     End Sub
 
     Sub ChangeImgStatus()
@@ -604,14 +885,89 @@ Public Class MainForm
         ' LoadMode = 0; load from registry
         ' LoadMode = 1; load from INI file
         If LoadMode = 0 Then
+            If File.Exists(Application.StartupPath & "\portable") Then
+                SaveOnSettingsIni = True
+                LoadDTSettings(1)
+                Exit Sub
+            End If
             Try
-
+                Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("preview"), "Preview", "Stable")
+                Dim Key As RegistryKey = Registry.CurrentUser.OpenSubKey(KeyStr)
+                Dim PrgKey As RegistryKey = Key.OpenSubKey("Program")
+                If CInt(PrgKey.GetValue("Volatile")) = 1 Then
+                    VolatileMode = True
+                    Exit Sub
+                Else
+                    VolatileMode = False
+                End If
+                DismExe = PrgKey.GetValue("DismExe").ToString().Replace(Quote, "").Trim()
+                SaveOnSettingsIni = (CInt(PrgKey.GetValue("SaveOnSettingsIni")) = 1)
+                PrgKey.Close()
+                Dim PersKey As RegistryKey = Key.OpenSubKey("Personalization")
+                ColorMode = PersKey.GetValue("ColorMode")
+                Language = PersKey.GetValue("Language")
+                LogFont = PersKey.GetValue("LogFont").ToString()
+                LogFontSize = CInt(PersKey.GetValue("LogFontSi"))
+                LogFontIsBold = (CInt(PersKey.GetValue("LogFontBold")) = 1)
+                ProgressPanelStyle = CInt(PersKey.GetValue("SecondaryProgressPanelStyle"))
+                AllCaps = (CInt(PersKey.GetValue("AllCaps")) = 1)
+                PersKey.Close()
+                Dim LogKey As RegistryKey = Key.OpenSubKey("Logs")
+                LogFile = LogKey.GetValue("LogFile").ToString().Replace(Quote, "").Trim()
+                LogLevel = CInt(LogKey.GetValue("LogLevel"))
+                AutoLogs = (CInt(LogKey.GetValue("AutoLogs")) = 1)
+                LogKey.Close()
+                Dim ImgOpKey As RegistryKey = Key.OpenSubKey("ImgOps")
+                QuietOperations = (CInt(ImgOpKey.GetValue("Quiet")) = 1)
+                SysNoRestart = (CInt(ImgOpKey.GetValue("NoRestart")) = 1)
+                ImgOpKey.Close()
+                Dim ScrDirKey As RegistryKey = Key.OpenSubKey("ScratchDir")
+                UseScratch = (CInt(ScrDirKey.GetValue("UseScratch")) = 1)
+                AutoScrDir = (CInt(ScrDirKey.GetValue("AutoScratch")) = 1)
+                ScratchDir = ScrDirKey.GetValue("ScratchDirLocation").ToString().Replace(Quote, "").Trim()
+                ScrDirKey.Close()
+                Dim OutKey As RegistryKey = Key.OpenSubKey("Output")
+                EnglishOutput = (CInt(OutKey.GetValue("EnglishOutput")) = 1)
+                ReportView = CInt(OutKey.GetValue("ReportView"))
+                OutKey.Close()
+                Dim BGKey As RegistryKey = Key.OpenSubKey("BgProcesses")
+                NotificationShow = (CInt(BGKey.GetValue("ShowNotification")) = 1)
+                NotificationFrequency = CInt(BGKey.GetValue("NotifyFrequency"))
+                BGKey.Close()
+                Dim AdvBGKey As RegistryKey = Key.OpenSubKey("AdvBgProcesses")
+                ExtAppxGetter = (CInt(AdvBGKey.GetValue("EnhancedAppxGetter")) = 1)
+                SkipNonRemovable = (CInt(AdvBGKey.GetValue("SkipNonRemovable")) = 1)
+                AllDrivers = (CInt(AdvBGKey.GetValue("DetectAllDrivers")) = 1)
+                SkipFrameworks = (CInt(AdvBGKey.GetValue("SkipFrameworks")) = 1)
+                RunAllProcs = (CInt(AdvBGKey.GetValue("RunAllProcs")) = 1)
+                AdvBGKey.Close()
+                Dim StartupKey As RegistryKey = Key.OpenSubKey("Startup")
+                StartupRemount = (CInt(StartupKey.GetValue("RemountImages")) = 1)
+                StartupUpdateCheck = (CInt(StartupKey.GetValue("CheckForUpdates")) = 1)
+                StartupKey.Close()
+                Dim WndKey As RegistryKey = Key.OpenSubKey("WndParams")
+                Width = CInt(WndKey.GetValue("WndWidth"))
+                Height = CInt(WndKey.GetValue("WndHeight"))
+                StartPosition = If(CInt(WndKey.GetValue("WndCenter")) = 1, FormStartPosition.CenterScreen, FormStartPosition.Manual)
+                If StartPosition = FormStartPosition.CenterScreen Then Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2)
+                If StartPosition <> FormStartPosition.CenterScreen Then
+                    Left = CInt(WndKey.GetValue("WndLeft"))
+                    Top = CInt(WndKey.GetValue("WndTop"))
+                End If
+                WindowState = If(CInt(WndKey.GetValue("WndMaximized")) = 1, FormWindowState.Maximized, FormWindowState.Normal)
+                WndKey.Close()
+                Key.Close()
+                ' Apply program colors immediately
+                ChangePrgColors(ColorMode)
+                ' Apply language settings immediately
+                ChangeLangs(Language)
             Catch ex As Exception
-
+                LoadDTSettings(1)
+                Exit Sub
             End Try
         ElseIf LoadMode = 1 Then
-            If File.Exists(".\settings.ini") Then
-                DTSettingForm.RichTextBox1.Text = My.Computer.FileSystem.ReadAllText(".\settings.ini", UTF8)
+            If File.Exists(Application.StartupPath & "\" & "settings.ini") Then
+                DTSettingForm.RichTextBox1.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)
                 ' Perform the Volatile mode check before applying any settings
                 If DTSettingForm.RichTextBox1.Text.Contains("Volatile=0") Then
                     VolatileMode = False
@@ -621,7 +977,8 @@ Public Class MainForm
                     Exit Sub
                 End If
                 DismExe = DTSettingForm.RichTextBox1.Lines(3).Replace("DismExe=", "").Trim().Replace(Quote, "").Trim()
-                If DTSettingForm.RichTextBox1.Text.Contains("SaveOnSettingsIni=0") Then
+                If DismExe.StartsWith("{common:WinDir}", StringComparison.OrdinalIgnoreCase) Then DismExe = DismExe.Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
+                If DTSettingForm.RichTextBox1.Text.Contains("SaveOnSettingsIni=0") And Not File.Exists(Application.StartupPath & "\portable") Then
                     SaveOnSettingsIni = False
                     LoadDTSettings(0)
                     Exit Sub
@@ -642,8 +999,6 @@ Public Class MainForm
                 ChangePrgColors(ColorMode)
                 ' Detect language settings: 0 - Detect system language (using "ThreeLetterWindowsLanguageName")
                 '                         nnn - Apply specific language
-                ' Do note that this version does not support languages other than English so, if INI contains
-                ' "Language=2" or something else, it will ignore it and use English
                 If DTSettingForm.RichTextBox1.Text.Contains("Language=0") Then
                     ' The note above also applies to the Automatic language setting
                     Language = 0
@@ -656,15 +1011,50 @@ Public Class MainForm
                 ChangeLangs(Language)
                 ' Detect log font setting. Do note that, if a system does not contain the font set in this program,
                 ' it will revert to "Courier New"
-                LogFont = DTSettingForm.RichTextBox1.Lines(10).Replace("LogFont=", "").Trim().Replace(Quote, "").Trim()
-                LogFontSize = CInt(DTSettingForm.RichTextBox1.Lines(11).Replace("LogFontSi=", "").Trim())
+                For Each line In DTSettingForm.RichTextBox1.Lines
+                    If line.StartsWith("LogFont=", StringComparison.OrdinalIgnoreCase) Then
+                        LogFont = line.Replace("LogFont=", "").Trim().Replace(Quote, "").Trim()
+                    ElseIf line.StartsWith("LogFontSi=", StringComparison.OrdinalIgnoreCase) Then
+                        LogFontSize = CInt(line.Replace("LogFontSi=", "").Trim())
+                    ElseIf line.StartsWith("LogFile=", StringComparison.OrdinalIgnoreCase) Then
+                        ' Detect log file path. If file does not exist, create one
+                        LogFile = line.Replace("LogFile=", "").Trim().Replace(Quote, "").Trim()
+                        If LogFile.StartsWith("{common:WinDir", StringComparison.OrdinalIgnoreCase) Then LogFile = LogFile.Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
+                    ElseIf line.StartsWith("ScratchDirLocation=", StringComparison.OrdinalIgnoreCase) Then
+                        ScratchDir = line.Replace("ScratchDirLocation=", "").Trim().Replace(Quote, "").Trim()
+                    ElseIf line.StartsWith("WndWidth=", StringComparison.OrdinalIgnoreCase) Then
+                        Width = CInt(line.Replace("WndWidth=", "").Trim())
+                    ElseIf line.StartsWith("WndHeight=", StringComparison.OrdinalIgnoreCase) Then
+                        Height = CInt(line.Replace("WndHeight=", "").Trim())
+                    ElseIf line.StartsWith("WndCenter=", StringComparison.OrdinalIgnoreCase) Then
+                        StartPosition = If(CInt(line.Replace("WndCenter=", "").Trim()) = 1, FormStartPosition.CenterScreen, FormStartPosition.Manual)
+                        If StartPosition = FormStartPosition.CenterScreen Then Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2)
+                    ElseIf line.StartsWith("WndLeft=", StringComparison.OrdinalIgnoreCase) Then
+                        If StartPosition <> FormStartPosition.CenterScreen Then Left = CInt(line.Replace("WndLeft=", "").Trim())
+                    ElseIf line.StartsWith("WndTop=", StringComparison.OrdinalIgnoreCase) Then
+                        If StartPosition <> FormStartPosition.CenterScreen Then Top = CInt(line.Replace("WndTop=", "").Trim())
+                    End If
+                Next
                 If DTSettingForm.RichTextBox1.Text.Contains("LogFontBold=0") Then
                     LogFontIsBold = False
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("LogFontBold=1") Then
                     LogFontIsBold = True
                 End If
-                ' Detect log file path. If file does not exist, create one
-                LogFile = DTSettingForm.RichTextBox1.Lines(15).Replace("LogFile=", "").Trim().Replace(Quote, "").Trim()
+                If DTSettingForm.RichTextBox1.Text.Contains("SecondaryProgressPanelStyle=0") Then
+                    ProgressPanelStyle = 0
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("SecondaryProgressPanelStyle=1") Then
+                    ProgressPanelStyle = 1
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("AllCaps=0") Then
+                    AllCaps = False
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("AllCaps=1") Then
+                    AllCaps = True
+                    FileToolStripMenuItem.Text = FileToolStripMenuItem.Text.ToUpper()
+                    ProjectToolStripMenuItem.Text = ProjectToolStripMenuItem.Text.ToUpper()
+                    CommandsToolStripMenuItem.Text = CommandsToolStripMenuItem.Text.ToUpper()
+                    ToolsToolStripMenuItem.Text = ToolsToolStripMenuItem.Text.ToUpper()
+                    HelpToolStripMenuItem.Text = HelpToolStripMenuItem.Text.ToUpper()
+                End If
                 ' Detect log file level: 1 - Errors only
                 '                        2 - Errors and warnings
                 '                        3 - Errors, warnings and informations
@@ -677,6 +1067,11 @@ Public Class MainForm
                     LogLevel = 3
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("LogLevel=4") Then
                     LogLevel = 4
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("AutoLogs=0") Then
+                    AutoLogs = 0
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("AutoLogs=1") Then
+                    AutoLogs = 1
                 End If
                 ' Detect image operation mode: 0 - Offline mode (mounted Windows image)
                 '                              1 - Online mode
@@ -703,8 +1098,12 @@ Public Class MainForm
                     UseScratch = False
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("UseScratch=1") Then
                     UseScratch = True
-                    ' Detect scratch directory
-                    ScratchDir = DTSettingForm.RichTextBox1.Lines(23).Replace("ScratchDirLocation=", "").Trim().Replace(Quote, "").Trim()
+                End If
+                ' Detect scratch directory
+                If DTSettingForm.RichTextBox1.Text.Contains("AutoScratch=1") Then
+                    AutoScrDir = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("AutoScratch=0") Then
+                    AutoScrDir = False
                 End If
                 ' Detect whether output should be in English
                 If DTSettingForm.RichTextBox1.Text.Contains("EnglishOutput=0") Then
@@ -731,6 +1130,46 @@ Public Class MainForm
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("NotifyFrequency=1") Then
                     NotificationFrequency = 1
                 End If
+                If DTSettingForm.RichTextBox1.Text.Contains("EnhancedAppxGetter=1") Then
+                    ExtAppxGetter = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("EnhancedAppxGetter=0") Then
+                    ExtAppxGetter = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("SkipNonRemovable=1") Then
+                    SkipNonRemovable = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("SkipNonRemovable=0") Then
+                    SkipNonRemovable = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("DetectAllDrivers=1") Then
+                    AllDrivers = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("DetectAllDrivers=0") Then
+                    AllDrivers = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("SkipFrameworks=1") Then
+                    SkipFrameworks = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("SkipFrameworks=0") Then
+                    SkipFrameworks = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("RunAllProcs=1") Then
+                    RunAllProcs = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("RunAllProcs=0") Then
+                    RunAllProcs = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("RemountImages=1") Then
+                    StartupRemount = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("RemountImages=0") Then
+                    StartupRemount = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("CheckForUpdates=1") Then
+                    StartupUpdateCheck = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("CheckForUpdates=0") Then
+                    StartupUpdateCheck = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("WndMaximized=1") Then
+                    WindowState = FormWindowState.Maximized
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("WndMaximized=0") Then
+                    WindowState = FormWindowState.Normal
+                End If
             Else
                 GenerateDTSettings()
                 LoadDTSettings(1)
@@ -756,7 +1195,11 @@ Public Class MainForm
                             "EnglishOutput        =    " & EnglishOutput & CrLf & _
                             "ReportView           =    " & ReportView & CrLf & _
                             "NotificationShow     =    " & NotificationShow & CrLf & _
-                            "NotificationFrequency=    " & NotificationFrequency)
+                            "NotificationFrequency=    " & NotificationFrequency & CrLf & _
+                            "ExtAppxGetter        =    " & ExtAppxGetter & CrLf & _
+                            "SkipNonRemovable     =    " & SkipNonRemovable & CrLf & _
+                            "AllDrivers           =    " & AllDrivers & CrLf & _
+                            "StartupRemount       =    " & StartupRemount)
         End If
         ' Test setting validity
         If Not File.Exists(DismExe) Then
@@ -807,44 +1250,63 @@ Public Class MainForm
     ''' <param name="GatherBasicInfo">When true, this procedure gets the basic image information (image file, index, mountpoint and status)</param>
     ''' <param name="GatherAdvancedInfo">When true, this procedure gets all image information unrelated to packages, features, capabilities, or drivers</param>
     ''' <param name="UseApi">(Optional) Uses the DISM API to get image information and to reduce the time these processes take</param>
+    ''' <param name="OnlineMode">(Optional) Detects properties of an active Windows installation if this value is True. Otherwise, if it is False or is not set, it won't pass this option</param>
     ''' <remarks>Depending on the parameter of bgProcOptn, and on the power of the system, the background processes may take a longer time to finish</remarks>
-    Sub RunBackgroundProcesses(bgProcOptn As Integer, GatherBasicInfo As Boolean, GatherAdvancedInfo As Boolean, Optional UseApi As Boolean = False)
+    Sub RunBackgroundProcesses(bgProcOptn As Integer, GatherBasicInfo As Boolean, GatherAdvancedInfo As Boolean, Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
+        If Not IsImageMounted Then
+            Button1.Enabled = True
+            Button2.Enabled = False
+            Button3.Enabled = False
+            Button4.Enabled = False
+            Button5.Enabled = False
+            Button6.Enabled = False
+            Button7.Enabled = False
+            Button8.Enabled = False
+            Button9.Enabled = False
+            Button10.Enabled = False
+            Button11.Enabled = False
+            Button12.Enabled = False
+            Button13.Enabled = False
+            Exit Sub
+        End If
+        Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
         ' Let user know things are working
         BackgroundProcessesButton.Visible = False
         BackgroundProcessesButton.Image = My.Resources.bg_ops
         BackgroundProcessesButton.Visible = True
-        If UseApi Then DismApi.Initialize(DismLogLevel.LogErrors)
+        If UseApi Then DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
         areBackgroundProcessesDone = False
         regJumps = False
         irregVal = 0
         pbOpNums = 0
         Dim session As DismSession = Nothing
         If UseApi Then
-            Try
-                For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
-                    If MountedImageMountDirs(x) = MountDir Then
-                        Select Case Language
-                            Case 0
-                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
-                                        progressLabel = "Creating session for this image..."
-                                    Case "ESN"
-                                        progressLabel = "Creando sesión para esta imagen..."
-                                End Select
-                            Case 1
-                                progressLabel = "Creating session for this image..."
-                            Case 2
-                                progressLabel = "Creando sesión para esta imagen..."
-                        End Select
-                        ImgBW.ReportProgress(0)
-                        sessionMntDir = MountedImageMountDirs(x)
-                        'session = DismApi.OpenOfflineSession(MountedImageMountDirs(x))
-                        Exit For
-                    End If
-                Next
-            Catch ex As Exception
+            If Not OnlineMode Then
+                Try
+                    For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
+                        If MountedImageMountDirs(x) = MountDir Then
+                            Select Case Language
+                                Case 0
+                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                        Case "ENG"
+                                            progressLabel = "Creating session for this image..."
+                                        Case "ESN"
+                                            progressLabel = "Creando sesión para esta imagen..."
+                                    End Select
+                                Case 1
+                                    progressLabel = "Creating session for this image..."
+                                Case 2
+                                    progressLabel = "Creando sesión para esta imagen..."
+                            End Select
+                            ImgBW.ReportProgress(0)
+                            sessionMntDir = MountedImageMountDirs(x)
+                            Exit For
+                        End If
+                    Next
+                Catch ex As Exception
 
-            End Try
+                End Try
+            End If
         End If
         ' Determine which actions are being done
         If GatherBasicInfo Then
@@ -868,7 +1330,7 @@ Public Class MainForm
             Case 5
                 pbOpNums += 1
         End Select
-        progressDivs = 100 / pbOpNums
+        If pbOpNums > 1 Then progressDivs = 100 / pbOpNums Else progressDivs = 0
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -898,7 +1360,7 @@ Public Class MainForm
                     progressLabel = "Obteniendo información básica de la imagen..."
             End Select
             ImgBW.ReportProgress(progressMin + progressDivs)
-            GetBasicImageInfo(True)
+            GetBasicImageInfo(True, OnlineMode)
             If isOrphaned Then
                 'If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                 Exit Sub
@@ -907,7 +1369,7 @@ Public Class MainForm
                 'If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                 Exit Sub
             End If
-            DetectNTVersion(MountDir & "\Windows\system32\ntoskrnl.exe")
+            DetectNTVersion(If(OnlineMode, Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe", MountDir & "\Windows\system32\ntoskrnl.exe"))
             If GatherAdvancedInfo Then
                 Select Case Language
                     Case 0
@@ -923,10 +1385,10 @@ Public Class MainForm
                         progressLabel = "Obteniendo información avanzada de la imagen..."
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
-                GetAdvancedImageInfo(True)
+                GetAdvancedImageInfo(True, OnlineMode)
             End If
         End If
-        Directory.CreateDirectory(".\tempinfo")
+        Directory.CreateDirectory(Application.StartupPath & "\tempinfo")
         ' Parameters for bgProcOptn:
         ' 0 (meta-optn): run every background process
         ' 1: run package background processes
@@ -952,7 +1414,7 @@ Public Class MainForm
                         progressLabel = "Obteniendo paquetes de la imagen..."
                 End Select
                 ImgBW.ReportProgress(20)
-                GetImagePackages(True)
+                GetImagePackages(True, OnlineMode)
                 If ImgBW.CancellationPending Then
                     If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                     Exit Sub
@@ -971,57 +1433,66 @@ Public Class MainForm
                         progressLabel = "Obteniendo características de la imagen..."
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
-                GetImageFeatures(True)
+                GetImageFeatures(True, OnlineMode)
                 If ImgBW.CancellationPending Then
                     If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                     Exit Sub
                 End If
-                If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") = True Then
-                    Debug.WriteLine("[IsWindows8OrHigher] Returned True")
-                    pbOpNums += 1
-                    Select Case Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
-                                    progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
-                                Case "ESN"
-                                    progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
-                            End Select
-                        Case 1
-                            progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
-                        Case 2
-                            progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
-                    End Select
-                    ImgBW.ReportProgress(progressMin + progressDivs)
-                    GetImageAppxPackages(True)
-                    If ImgBW.CancellationPending Then
-                        If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
-                        Exit Sub
+                If imgEdition Is Nothing Then imgEdition = ""
+                If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+                    If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+                        Debug.WriteLine("[IsWindows8OrHigher] Returned True")
+                        pbOpNums += 1
+                        Select Case Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
+                                    Case "ESN"
+                                        progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
+                                End Select
+                            Case 1
+                                progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
+                            Case 2
+                                progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
+                        End Select
+                        ImgBW.ReportProgress(progressMin + progressDivs)
+                        GetImageAppxPackages(True, OnlineMode)
+                        If ImgBW.CancellationPending Then
+                            If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                            Exit Sub
+                        End If
+                    Else
+                        Debug.WriteLine("[IsWindows8OrHigher] Returned False")
                     End If
                 Else
                     Debug.WriteLine("[IsWindows8OrHigher] Returned False")
                 End If
-                If IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") = True Then
-                    Debug.WriteLine("[IsWindows10OrHigher] Returned True")
-                    pbOpNums += 1
-                    Select Case Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
-                                    progressLabel = "Getting image Features on Demand (capabilities)..."
-                                Case "ESN"
-                                    progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
-                            End Select
-                        Case 1
-                            progressLabel = "Getting image Features on Demand (capabilities)..."
-                        Case 2
-                            progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
-                    End Select
-                    ImgBW.ReportProgress(progressMin + progressDivs)
-                    GetImageCapabilities(True)
-                    If ImgBW.CancellationPending Then
-                        If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
-                        Exit Sub
+                If IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") And Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+                    If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+                        Debug.WriteLine("[IsWindows10OrHigher] Returned True")
+                        pbOpNums += 1
+                        Select Case Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        progressLabel = "Getting image Features on Demand (capabilities)..."
+                                    Case "ESN"
+                                        progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
+                                End Select
+                            Case 1
+                                progressLabel = "Getting image Features on Demand (capabilities)..."
+                            Case 2
+                                progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
+                        End Select
+                        ImgBW.ReportProgress(progressMin + progressDivs)
+                        GetImageCapabilities(True, OnlineMode)
+                        If ImgBW.CancellationPending Then
+                            If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                            Exit Sub
+                        End If
+                    Else
+                        Debug.WriteLine("[IsWindows10OrHigher] Returned False")
                     End If
                 Else
                     Debug.WriteLine("[IsWindows10OrHigher] Returned False")
@@ -1030,17 +1501,17 @@ Public Class MainForm
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENG"
-                                progressLabel = "Getting image third-party drivers..."
+                                progressLabel = "Getting image drivers..."
                             Case "ESN"
-                                progressLabel = "Obteniendo controladores de terceros de la imagen..."
+                                progressLabel = "Obteniendo controladores de la imagen..."
                         End Select
                     Case 1
-                        progressLabel = "Getting image third-party drivers..."
+                        progressLabel = "Getting image drivers..."
                     Case 2
-                        progressLabel = "Obteniendo controladores de terceros de la imagen..."
+                        progressLabel = "Obteniendo controladores de la imagen..."
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
-                GetImageDrivers(True)
+                GetImageDrivers(True, OnlineMode)
                 If ImgBW.CancellationPending Then
                     If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                     Exit Sub
@@ -1060,7 +1531,7 @@ Public Class MainForm
                         progressLabel = "Obteniendo paquetes de la imagen..."
                 End Select
                 ImgBW.ReportProgress(20)
-                GetImagePackages()
+                GetImagePackages(True, OnlineMode)
             Case 2
                 Select Case Language
                     Case 0
@@ -1076,7 +1547,7 @@ Public Class MainForm
                         progressLabel = "Obteniendo características de la imagen..."
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
-                GetImageFeatures()
+                GetImageFeatures(True, OnlineMode)
             Case 3
                 If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") = True Then
                     Debug.WriteLine("[IsWindows8OrHigher] Returned True")
@@ -1095,7 +1566,7 @@ Public Class MainForm
                             progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
                     End Select
                     ImgBW.ReportProgress(progressMin + progressDivs)
-                    GetImageAppxPackages()
+                    GetImageAppxPackages(True, OnlineMode)
                 Else
                     Debug.WriteLine("[IsWindows8OrHigher] Returned False")
                 End If
@@ -1117,7 +1588,7 @@ Public Class MainForm
                             progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
                     End Select
                     ImgBW.ReportProgress(progressMin + progressDivs)
-                    GetImageCapabilities()
+                    GetImageCapabilities(True, OnlineMode)
                 Else
                     Debug.WriteLine("[IsWindows10OrHigher] Returned False")
                 End If
@@ -1126,17 +1597,17 @@ Public Class MainForm
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENG"
-                                progressLabel = "Getting image third-party drivers..."
+                                progressLabel = "Getting image drivers..."
                             Case "ESN"
-                                progressLabel = "Obteniendo controladores de terceros de la imagen..."
+                                progressLabel = "Obteniendo controladores de la imagen..."
                         End Select
                     Case 1
-                        progressLabel = "Getting image third-party drivers..."
+                        progressLabel = "Getting image drivers..."
                     Case 2
-                        progressLabel = "Obteniendo controladores de terceros de la imagen..."
+                        progressLabel = "Obteniendo controladores de la imagen..."
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
-                GetImageDrivers()
+                GetImageDrivers(True, OnlineMode)
         End Select
         DeleteTempFiles()
         If UseApi And session IsNot Nothing Then
@@ -1148,7 +1619,7 @@ Public Class MainForm
     ''' Gets basic image information, such as its index, its file path, or its mount dir
     ''' </summary>
     ''' <remarks>Depending on the GatherBasicInfo flag in RunBackgroundProcesses, this function will run or not</remarks>
-    Sub GetBasicImageInfo(Optional Streamlined As Boolean = False)
+    Sub GetBasicImageInfo(Optional Streamlined As Boolean = False, Optional OnlineMode As Boolean = False)
         ' Set image properties
         Label14.Text = ProgressPanel.ImgIndex
         Label12.Text = ProgressPanel.MountDir
@@ -1159,30 +1630,62 @@ Public Class MainForm
             Label12.Text = MountDir
         End If
         If Streamlined Then
-            Try
-                For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
-                    If MountedImageImgFiles(x) = SourceImg Then
-                        Label14.Text = MountedImageImgIndexes(x)
-                        Label12.Text = MountedImageMountDirs(x)
-                        If MountedImageImgStatuses(x) = 0 Then
-                            isOrphaned = False
-                        ElseIf MountedImageImgStatuses(x) = 1 Then
-                            isOrphaned = True
-                        End If
-                        Dim ImageInfoCollection As DismImageInfoCollection = DismApi.GetImageInfo(MountedImageImgFiles(x))
-                        For Each imageInfo As DismImageInfo In ImageInfoCollection
-                            Label17.Text = imageInfo.ProductVersion.ToString()
-                            Label18.Text = imageInfo.ImageName
-                            Label20.Text = imageInfo.ImageDescription
+            If OnlineMode Then
+                Label17.Text = Environment.OSVersion.Version.Major & "." & Environment.OSVersion.Version.Minor & "." & Environment.OSVersion.Version.Build & "." & FileVersionInfo.GetVersionInfo(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe").ProductPrivatePart
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                Label14.Text = "(Online installation)"
+                                Label20.Text = "(Online installation)"
+                                projName.Text = "(Online installation)"
+                            Case "ESN"
+                                Label14.Text = "(Instalación activa)"
+                                Label20.Text = "(Instalación activa)"
+                                projName.Text = "(Instalación activa)"
+                        End Select
+                    Case 1
+                        Label14.Text = "(Online installation)"
+                        Label20.Text = "(Online installation)"
+                        projName.Text = "(Online installation)"
+                    Case 2
+                        Label14.Text = "(Instalación activa)"
+                        Label20.Text = "(Instalación activa)"
+                        projName.Text = "(Instalación activa)"
+                End Select
+                Label18.Text = My.Computer.Info.OSFullName
+                Label12.Text = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows))
+                Label3.Text = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows))
+            Else
+                Try
+                    For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
+                        If MountedImageImgFiles(x) = SourceImg Then
+                            Label14.Text = MountedImageImgIndexes(x)
+                            Label12.Text = MountedImageMountDirs(x)
+                            If MountedImageImgStatuses(x) = 0 Then
+                                isOrphaned = False
+                            ElseIf MountedImageImgStatuses(x) = 1 Then
+                                isOrphaned = True
+                            End If
+                            Dim ImageInfoCollection As DismImageInfoCollection = DismApi.GetImageInfo(MountedImageImgFiles(x))
+                            For Each imageInfo As DismImageInfo In ImageInfoCollection
+                                If imageInfo.ImageIndex = MountedImageImgIndexes(x) Then
+                                    Label17.Text = imageInfo.ProductVersion.ToString()
+                                    Label18.Text = imageInfo.ImageName
+                                    Label20.Text = imageInfo.ImageDescription
+                                End If
+                            Next
+                            RemountImageWithWritePermissionsToolStripMenuItem.Enabled = If(MountedImageMountedReWr(x) = 0, False, True)
+                            Button2.Enabled = If(MountedImageMountedReWr(x) = 0, True, False)
+                            Button3.Enabled = If(MountedImageMountedReWr(x) = 0, True, False)
+                            Button4.Enabled = If(MountedImageMountedReWr(x) = 0, True, False)
                             Exit For
-                        Next
-                        RemountImageWithWritePermissionsToolStripMenuItem.Enabled = If(MountedImageMountedReWr(x) = 0, False, True)
-                        Exit For
-                    End If
-                Next
-            Catch ex As Exception
+                        End If
+                    Next
+                Catch ex As Exception
 
-            End Try
+                End Try
+            End If
             Exit Sub
         End If
         Try
@@ -1196,44 +1699,44 @@ Public Class MainForm
                     Case 6
                         Select Case DismVersionChecker.ProductMinorPart
                             Case 1
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-wiminfo /wimfile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " > imgname", _
                                                   ASCII)
                             Case Is >= 2
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " > imgname", _
                                                   ASCII)
                         End Select
                     Case 10
-                        File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                           "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " > imgname", _
                                           ASCII)
                 End Select
-                Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
-                Label18.Text = My.Computer.FileSystem.ReadAllText(".\imgname").Replace("Name : ", "").Trim()
-                File.Delete(".\imgname")
-                File.Delete(".\bin\exthelpers\temp.bat")
+                Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
+                Label18.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\imgname").Replace("Name : ", "").Trim()
+                File.Delete(Application.StartupPath & "\imgname")
+                File.Delete(Application.StartupPath & "\bin\exthelpers\temp.bat")
                 Select Case DismVersionChecker.ProductMajorPart
                     Case 6
                         Select Case DismVersionChecker.ProductMinorPart
                             Case 1
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-wiminfo /wimfile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
                                                   ASCII)
                             Case Is >= 2
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
                                                   ASCII)
                         End Select
                     Case 10
-                        File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                           "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
                                           ASCII)
                 End Select
-                Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
-                Label20.Text = My.Computer.FileSystem.ReadAllText(".\imgdesc").Replace("Description : ", "").Trim()
-                File.Delete(".\imgdesc")
-                File.Delete(".\bin\exthelpers\temp.bat")
+                Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
+                Label20.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\imgdesc").Replace("Description : ", "").Trim()
+                File.Delete(Application.StartupPath & "\imgdesc")
+                File.Delete(Application.StartupPath & "\bin\exthelpers\temp.bat")
                 If Label18.Text = "" Or Label20.Text = "" Then
                     Label18.Text = imgMountedName
                     Label20.Text = imgMountedDesc
@@ -1249,44 +1752,44 @@ Public Class MainForm
                     Case 6
                         Select Case DismVersionChecker.ProductMinorPart
                             Case 1
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Name" & Quote & " > imgname", _
                                                   ASCII)
                             Case Is >= 2
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Name" & Quote & " > imgname", _
                                                   ASCII)
                         End Select
                     Case 10
-                        File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                           "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Name" & Quote & " > imgname", _
                                           ASCII)
                 End Select
-                Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
-                Label18.Text = My.Computer.FileSystem.ReadAllText(".\imgname").Replace("Name : ", "").Trim()
-                File.Delete(".\imgname")
-                File.Delete(".\bin\exthelpers\temp.bat")
+                Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
+                Label18.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\imgname").Replace("Name : ", "").Trim()
+                File.Delete(Application.StartupPath & "\imgname")
+                File.Delete(Application.StartupPath & "\bin\exthelpers\temp.bat")
                 Select Case DismVersionChecker.ProductMajorPart
                     Case 6
                         Select Case DismVersionChecker.ProductMinorPart
                             Case 1
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
                                                   ASCII)
                             Case Is >= 2
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
                                                   ASCII)
                         End Select
                     Case 10
-                        File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                           "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
                                           ASCII)
                 End Select
-                Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
-                Label20.Text = My.Computer.FileSystem.ReadAllText(".\imgdesc").Replace("Description : ", "").Trim()
-                File.Delete(".\imgdesc")
-                File.Delete(".\bin\exthelpers\temp.bat")
+                Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
+                Label20.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\imgdesc").Replace("Description : ", "").Trim()
+                File.Delete(Application.StartupPath & "\imgdesc")
+                File.Delete(Application.StartupPath & "\bin\exthelpers\temp.bat")
                 If Label18.Text = "" Or Label20.Text = "" Then
                     Label18.Text = imgMountedName
                     Label20.Text = imgMountedDesc
@@ -1303,42 +1806,42 @@ Public Class MainForm
             Case 6
                 Select Case DismVersionChecker.ProductMinorPart
                     Case 1
-                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                           "@echo off" & CrLf & _
                                           "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus", ASCII)
                     Case Is >= 2
-                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                           "@echo off" & CrLf & _
                                           "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus", ASCII)
                 End Select
             Case 10
-                File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                   "@echo off" & CrLf & _
                                   "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus", ASCII)
         End Select
-        Process.Start(".\bin\exthelpers\imginfo.bat").WaitForExit()
+        Process.Start(Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
         mountedImgStatus = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgmountedstatus", ASCII).Replace("Status : ", "").Trim()
-        File.Delete(".\bin\exthelpers\imginfo.bat")
+        File.Delete(Application.StartupPath & "\bin\exthelpers\imginfo.bat")
         Select Case DismVersionChecker.ProductMajorPart
             Case 6
                 Select Case DismVersionChecker.ProductMinorPart
                     Case 1
-                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                           "@echo off" & CrLf & _
                                           "dism /English /get-wiminfo /wimfile=" & SourceImg & " | find /c " & Quote & "Index" & Quote & " > " & projPath & "\tempinfo\indexcount", ASCII)
                     Case Is >= 2
-                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                           "@echo off" & CrLf & _
                                           "dism /English /get-imageinfo /imagefile=" & SourceImg & " | find /c " & Quote & "Index" & Quote & " > " & projPath & "\tempinfo\indexcount", ASCII)
                 End Select
             Case 10
-                File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                   "@echo off" & CrLf & _
                                   "dism /English /get-imageinfo /imagefile=" & SourceImg & " | find /c " & Quote & "Index" & Quote & " > " & projPath & "\tempinfo\indexcount", ASCII)
         End Select
-        Process.Start(".\bin\exthelpers\imginfo.bat").WaitForExit()
+        Process.Start(Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
         imgIndexCount = CInt(My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\indexcount", ASCII))
-        File.Delete(".\bin\exthelpers\imginfo.bat")
+        File.Delete(Application.StartupPath & "\bin\exthelpers\imginfo.bat")
         For Each FoundFile In My.Computer.FileSystem.GetFiles(projPath & "\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
             File.Delete(FoundFile)
         Next
@@ -1359,122 +1862,141 @@ Public Class MainForm
     ''' Gets advanced image information, such as number of files and directories, image name, and more
     ''' </summary>
     ''' <remarks>This is called when bgGetAdvImgInfo is True</remarks>
-    Sub GetAdvancedImageInfo(Optional UseApi As Boolean = False)
+    Sub GetAdvancedImageInfo(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
+        Button14.Enabled = True
+        Button15.Enabled = True
+        Button16.Enabled = True
+        ExplorerView.Enabled = True
+        ProjNameEditBtn.Visible = True
         If UseApi Then
-            If IsImageMounted Then
-                Try
-                    For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
-                        If MountedImageImgFiles(x) = MountDir Then
-                            Dim ImageInfoCollection As DismImageInfoCollection = DismApi.GetImageInfo(MountedImageImgFiles(x))
-                            For Each imageInfo As DismImageInfo In ImageInfoCollection
-                                imgMountedName = imageInfo.ImageName
-                                imgMountedDesc = imageInfo.ImageDescription
-                                imgHal = If(Not imageInfo.Hal = "", imageInfo.Hal, "Undefined by the image")
-                                imgSPBuild = imageInfo.ProductVersion.Revision
-                                imgSPLvl = imageInfo.SpLevel
-                                imgEdition = imageInfo.EditionId
-                                imgPType = imageInfo.ProductType
-                                imgPSuite = imageInfo.ProductSuite
-                                imgSysRoot = imageInfo.SystemRoot
-                                For Each imageLang In imageInfo.Languages
-                                    imgLangs &= imageLang.Name & If(imageInfo.DefaultLanguage.Name = imageLang.Name, " (default)", "") & ", "
-                                Next
-                                Dim langArr() As Char = imgLangs.ToCharArray()
-                                langArr(langArr.Count - 2) = ""
-                                imgLangs = New String(langArr)
-                                imgFormat = Path.GetExtension(MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper() & " file"
-                                imgRW = If(MountedImageMountedReWr(x) = 0, "Yes", "No")
-                                imgDirs = imageInfo.CustomizedInfo.DirectoryCount
-                                imgFiles = imageInfo.CustomizedInfo.FileCount
-                                imgCreation = imageInfo.CustomizedInfo.CreatedTime
-                                imgModification = imageInfo.CustomizedInfo.ModifiedTime
-                                Exit For
-                            Next
-                        End If
-                    Next
-                Catch ex As Exception
-                    Exit Try
-                End Try
-                ' Time to use the DISM executable
-                Try     ' Try getting image properties
-                    If Not Directory.Exists(projPath & "\tempinfo") Then
-                        Directory.CreateDirectory(projPath & "\tempinfo").Attributes = FileAttributes.Hidden
-                    End If
-                    Select Case DismVersionChecker.ProductMajorPart
-                        Case 6
-                            Select Case DismVersionChecker.ProductMinorPart
-                                Case 1
-                                    File.WriteAllText(".\bin\exthelpers\imginfo.bat",
-                                                      "@echo off" & CrLf &
-                                                      "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot", ASCII)
-                                Case Is >= 2
-                                    File.WriteAllText(".\bin\exthelpers\imginfo.bat",
-                                                      "@echo off" & CrLf &
-                                                      "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot", ASCII)
-                            End Select
-                        Case 10
-                            File.WriteAllText(".\bin\exthelpers\imginfo.bat",
-                                              "@echo off" & CrLf &
-                                              "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot", ASCII)
-                    End Select
-                    If Debugger.IsAttached Then
-                        Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\imginfo.bat").WaitForExit()
-                    End If
-                    Using WIMBootProc As New Process()
-                        WIMBootProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
-                        WIMBootProc.StartInfo.Arguments = "/c " & Quote & Directory.GetCurrentDirectory() & "\bin\exthelpers\imginfo.bat" & Quote
-                        WIMBootProc.StartInfo.CreateNoWindow = True
-                        WIMBootProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-                        WIMBootProc.Start()
-                        Do Until WIMBootProc.HasExited
-                            If WIMBootProc.HasExited Then Exit Do
-                        Loop
-                    End Using
-                    'Process.Start(".\bin\exthelpers\imginfo.bat").WaitForExit()
-                    Try
-                        imgWimBootStatus = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgwimboot", ASCII).Replace("WIM Bootable : ", "").Trim()
-                        If Not ImgBW.IsBusy Then
-                            For Each foundFile In My.Computer.FileSystem.GetFiles(projPath & "\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
-                                File.Delete(foundFile)
-                            Next
-                            Directory.Delete(projPath & "\tempinfo")
-                        End If
-                        File.Delete(".\bin\exthelpers\imginfo.bat")
-                    Catch ex As Exception
-
-                    End Try
-                Catch ex As Exception
-                    Exit Try
-                End Try
-                Button1.Enabled = False
-                Button2.Enabled = True
-                Button3.Enabled = True
-                Button4.Enabled = True
-                Button5.Enabled = True
-                Button6.Enabled = True
-                Button7.Enabled = True
-                Button8.Enabled = True
-                Button9.Enabled = True
-                Button10.Enabled = True
-                Button11.Enabled = True
-                Button12.Enabled = True
-                Button13.Enabled = True
+            If OnlineMode Then
+                Button14.Enabled = False
+                Button15.Enabled = False
+                Button16.Enabled = False
+                ExplorerView.Enabled = False
+                ProjNameEditBtn.Visible = False
+                ' Set edition variable according to the EditionID registry value
+                imgEdition = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion").GetValue("EditionID")
+                Exit Sub
             Else
-                Button1.Enabled = True
-                Button2.Enabled = False
-                Button3.Enabled = False
-                Button4.Enabled = False
-                Button5.Enabled = False
-                Button6.Enabled = False
-                Button7.Enabled = False
-                Button8.Enabled = False
-                Button9.Enabled = False
-                Button10.Enabled = False
-                Button11.Enabled = False
-                Button12.Enabled = False
-                Button13.Enabled = False
+                If IsImageMounted Then
+                    Try
+                        For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
+                            If MountedImageMountDirs(x) = MountDir Then
+                                Dim ImageInfoCollection As DismImageInfoCollection = DismApi.GetImageInfo(MountedImageImgFiles(x))
+                                For Each imageInfo As DismImageInfo In ImageInfoCollection
+                                    If imageInfo.ImageIndex = MountedImageImgIndexes(x) Then
+                                        imgMountedName = imageInfo.ImageName
+                                        imgMountedDesc = imageInfo.ImageDescription
+                                        imgHal = If(Not imageInfo.Hal = "", imageInfo.Hal, "Undefined by the image")
+                                        imgSPBuild = imageInfo.ProductVersion.Revision
+                                        imgSPLvl = imageInfo.SpLevel
+                                        imgEdition = imageInfo.EditionId
+                                        imgPType = imageInfo.ProductType
+                                        imgPSuite = imageInfo.ProductSuite
+                                        imgSysRoot = imageInfo.SystemRoot
+                                        If imgLangs <> "" Then imgLangs = ""
+                                        For Each imageLang In imageInfo.Languages
+                                            imgLangs &= imageLang.Name & If(imageInfo.DefaultLanguage.Name = imageLang.Name, " (default)", "") & ", "
+                                        Next
+                                        Dim langArr() As Char = imgLangs.ToCharArray()
+                                        langArr(langArr.Count - 2) = ""
+                                        imgLangs = New String(langArr)
+                                        imgFormat = Path.GetExtension(MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper() & " file"
+                                        imgRW = If(MountedImageMountedReWr(x) = 0, "Yes", "No")
+                                        imgDirs = imageInfo.CustomizedInfo.DirectoryCount
+                                        imgFiles = imageInfo.CustomizedInfo.FileCount
+                                        imgCreation = imageInfo.CustomizedInfo.CreatedTime
+                                        imgModification = imageInfo.CustomizedInfo.ModifiedTime
+                                    End If
+                                Next
+                            End If
+                        Next
+                    Catch ex As Exception
+                        Exit Try
+                    End Try
+                    ' Time to use the DISM executable
+                    Try     ' Try getting image properties
+                        If Not Directory.Exists(projPath & "\tempinfo") Then
+                            Directory.CreateDirectory(projPath & "\tempinfo").Attributes = FileAttributes.Hidden
+                        End If
+                        Select Case DismVersionChecker.ProductMajorPart
+                            Case 6
+                                Select Case DismVersionChecker.ProductMinorPart
+                                    Case 1
+                                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat",
+                                                          "@echo off" & CrLf &
+                                                          "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot", ASCII)
+                                    Case Is >= 2
+                                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat",
+                                                          "@echo off" & CrLf &
+                                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot", ASCII)
+                                End Select
+                            Case 10
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat",
+                                                  "@echo off" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot", ASCII)
+                        End Select
+                        If Debugger.IsAttached Then
+                            Process.Start("\Windows\system32\notepad.exe", Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
+                        End If
+                        Using WIMBootProc As New Process()
+                            WIMBootProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
+                            WIMBootProc.StartInfo.Arguments = "/c " & Quote & Application.StartupPath & "\bin\exthelpers\imginfo.bat" & Quote
+                            WIMBootProc.StartInfo.CreateNoWindow = True
+                            WIMBootProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+                            WIMBootProc.Start()
+                            WIMBootProc.WaitForExit()
+                        End Using
+                        Try
+                            imgWimBootStatus = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgwimboot", ASCII).Replace("WIM Bootable : ", "").Trim()
+                            If Not ImgBW.IsBusy Then
+                                For Each foundFile In My.Computer.FileSystem.GetFiles(projPath & "\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
+                                    File.Delete(foundFile)
+                                Next
+                                Directory.Delete(projPath & "\tempinfo")
+                            End If
+                            File.Delete(Application.StartupPath & "\bin\exthelpers\imginfo.bat")
+                        Catch ex As Exception
+
+                        End Try
+                    Catch ex As Exception
+                        Exit Try
+                    End Try
+                    Button1.Enabled = False
+                    'Button2.Enabled = True
+                    'Button3.Enabled = True
+                    'Button4.Enabled = True
+                    Button5.Enabled = True
+                    Button6.Enabled = True
+                    Button7.Enabled = True
+                    Button8.Enabled = True
+                    Button9.Enabled = True
+                    Button10.Enabled = True
+                    Button11.Enabled = True
+                    Button12.Enabled = True
+                    Button13.Enabled = True
+                    MountImageToolStripMenuItem.Enabled = False
+                    UnmountImageToolStripMenuItem.Enabled = True
+                Else
+                    Button1.Enabled = True
+                    Button2.Enabled = False
+                    Button3.Enabled = False
+                    Button4.Enabled = False
+                    Button5.Enabled = False
+                    Button6.Enabled = False
+                    Button7.Enabled = False
+                    Button8.Enabled = False
+                    Button9.Enabled = False
+                    Button10.Enabled = False
+                    Button11.Enabled = False
+                    Button12.Enabled = False
+                    Button13.Enabled = False
+                    MountImageToolStripMenuItem.Enabled = True
+                    UnmountImageToolStripMenuItem.Enabled = False
+                End If
+                Exit Sub
             End If
-            Exit Sub
         End If
         If IsImageMounted Then
             Try     ' Try getting image properties
@@ -1485,90 +2007,90 @@ Public Class MainForm
                     Case 6
                         Select Case DismVersionChecker.ProductMinorPart
                             Case 1
-                                File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                                   "@echo off" & CrLf & _
                                                   "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf & _
                                                   "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf & _
                                                   "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Image Index" & Quote & " /b > " & projPath & "\tempinfo\imgindex" & CrLf & _
                                                   "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Mounted Read/Write" & Quote & " /b > " & projPath & "\tempinfo\imgrw" & CrLf & _
                                                   "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & projPath & "\tempinfo\imgmountedname" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & projPath & "\tempinfo\imgmounteddesc" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & projPath & "\tempinfo\imgsize" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & projPath & "\tempinfo\imgarch" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & projPath & "\tempinfo\imghal" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & projPath & "\tempinfo\imgspbuild" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & projPath & "\tempinfo\imgsplevel" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & projPath & "\tempinfo\imgedition" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & projPath & "\tempinfo\imginst" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & projPath & "\tempinfo\imgptype" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & projPath & "\tempinfo\imgpsuite" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & projPath & "\tempinfo\imgsysroot" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & projPath & "\tempinfo\imgdirs" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & projPath & "\tempinfo\imgfiles" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & projPath & "\tempinfo\imgcreation" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & projPath & "\tempinfo\imgmodification" & CrLf & _
-                                                  "dism /English /image=" & MountDir & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & projPath & "\tempinfo\imglangs", ASCII)
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & projPath & "\tempinfo\imgmountedname" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & projPath & "\tempinfo\imgmounteddesc" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & projPath & "\tempinfo\imgsize" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & projPath & "\tempinfo\imgarch" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & projPath & "\tempinfo\imghal" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & projPath & "\tempinfo\imgspbuild" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & projPath & "\tempinfo\imgsplevel" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & projPath & "\tempinfo\imgedition" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & projPath & "\tempinfo\imginst" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & projPath & "\tempinfo\imgptype" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & projPath & "\tempinfo\imgpsuite" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & projPath & "\tempinfo\imgsysroot" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & projPath & "\tempinfo\imgdirs" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & projPath & "\tempinfo\imgfiles" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & projPath & "\tempinfo\imgcreation" & CrLf & _
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & projPath & "\tempinfo\imgmodification" & CrLf & _
+                                                  "dism /English /image=" & Quote & MountDir & Quote & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & projPath & "\tempinfo\imglangs", ASCII)
                             Case Is >= 2
-                                File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                                   "@echo off" & CrLf & _
                                                   "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf & _
                                                   "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf & _
                                                   "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image Index" & Quote & " /b > " & projPath & "\tempinfo\imgindex" & CrLf & _
                                                   "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mounted Read/Write" & Quote & " /b > " & projPath & "\tempinfo\imgrw" & CrLf & _
                                                   "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & projPath & "\tempinfo\imgmountedname" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & projPath & "\tempinfo\imgmounteddesc" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & projPath & "\tempinfo\imgsize" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & projPath & "\tempinfo\imgarch" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & projPath & "\tempinfo\imghal" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & projPath & "\tempinfo\imgspbuild" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & projPath & "\tempinfo\imgsplevel" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & projPath & "\tempinfo\imgedition" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & projPath & "\tempinfo\imginst" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & projPath & "\tempinfo\imgptype" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & projPath & "\tempinfo\imgpsuite" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & projPath & "\tempinfo\imgsysroot" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & projPath & "\tempinfo\imgdirs" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & projPath & "\tempinfo\imgfiles" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & projPath & "\tempinfo\imgcreation" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & projPath & "\tempinfo\imgmodification" & CrLf & _
-                                                  "dism /English /image=" & MountDir & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & projPath & "\tempinfo\imglangs", ASCII)
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & projPath & "\tempinfo\imgmountedname" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & projPath & "\tempinfo\imgmounteddesc" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & projPath & "\tempinfo\imgsize" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & projPath & "\tempinfo\imgarch" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & projPath & "\tempinfo\imghal" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & projPath & "\tempinfo\imgspbuild" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & projPath & "\tempinfo\imgsplevel" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & projPath & "\tempinfo\imgedition" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & projPath & "\tempinfo\imginst" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & projPath & "\tempinfo\imgptype" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & projPath & "\tempinfo\imgpsuite" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & projPath & "\tempinfo\imgsysroot" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & projPath & "\tempinfo\imgdirs" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & projPath & "\tempinfo\imgfiles" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & projPath & "\tempinfo\imgcreation" & CrLf & _
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & projPath & "\tempinfo\imgmodification" & CrLf & _
+                                                  "dism /English /image=" & Quote & MountDir & Quote & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & projPath & "\tempinfo\imglangs", ASCII)
                         End Select
                     Case 10
-                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                           "@echo off" & CrLf & _
                                           "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf & _
                                           "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf & _
                                           "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image Index" & Quote & " /b > " & projPath & "\tempinfo\imgindex" & CrLf & _
                                           "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mounted Read/Write" & Quote & " /b > " & projPath & "\tempinfo\imgrw" & CrLf & _
                                           "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & projPath & "\tempinfo\imgmountedname" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & projPath & "\tempinfo\imgmounteddesc" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & projPath & "\tempinfo\imgsize" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & projPath & "\tempinfo\imgarch" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & projPath & "\tempinfo\imghal" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & projPath & "\tempinfo\imgspbuild" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & projPath & "\tempinfo\imgsplevel" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & projPath & "\tempinfo\imgedition" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & projPath & "\tempinfo\imginst" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & projPath & "\tempinfo\imgptype" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & projPath & "\tempinfo\imgpsuite" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & projPath & "\tempinfo\imgsysroot" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & projPath & "\tempinfo\imgdirs" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & projPath & "\tempinfo\imgfiles" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & projPath & "\tempinfo\imgcreation" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & projPath & "\tempinfo\imgmodification" & CrLf & _
-                                          "dism /English /image=" & MountDir & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & projPath & "\tempinfo\imglangs", ASCII)
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & projPath & "\tempinfo\imgmountedname" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & projPath & "\tempinfo\imgmounteddesc" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & projPath & "\tempinfo\imgsize" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & projPath & "\tempinfo\imgarch" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & projPath & "\tempinfo\imghal" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & projPath & "\tempinfo\imgspbuild" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & projPath & "\tempinfo\imgsplevel" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & projPath & "\tempinfo\imgedition" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & projPath & "\tempinfo\imginst" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & projPath & "\tempinfo\imgptype" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & projPath & "\tempinfo\imgpsuite" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & projPath & "\tempinfo\imgsysroot" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & projPath & "\tempinfo\imgdirs" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & projPath & "\tempinfo\imgfiles" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & projPath & "\tempinfo\imgcreation" & CrLf & _
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & projPath & "\tempinfo\imgmodification" & CrLf & _
+                                          "dism /English /image=" & Quote & MountDir & Quote & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & projPath & "\tempinfo\imglangs", ASCII)
                 End Select
 
                 If Debugger.IsAttached Then
-                    Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\imginfo.bat").WaitForExit()
+                    Process.Start("\Windows\system32\notepad.exe", Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
                 End If
-                Process.Start(".\bin\exthelpers\imginfo.bat").WaitForExit()
+                Process.Start(Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
                 'imgName = SourceImg
                 'ImgIndex = ImgIndex
                 'imgMountDir = MountDir
@@ -1609,7 +2131,7 @@ Public Class MainForm
                         File.Delete(foundFile)
                     Next
                     Directory.Delete(projPath & "\tempinfo")
-                    File.Delete(".\bin\exthelpers\imginfo.bat")
+                    File.Delete(Application.StartupPath & "\bin\exthelpers\imginfo.bat")
                 Catch ex As Exception
 
                 End Try
@@ -1698,6 +2220,33 @@ Public Class MainForm
         End If
     End Sub
 
+    Sub DetectVersions(DismVer As Version, NTVer As Version)
+        ' This procedure is not called yet
+        ' Restore enabled properties of each menu item
+        For Each Item As ToolStripDropDownItem In CommandsToolStripMenuItem.DropDownItems
+            Item.Enabled = True
+            Try
+                For Each DropDownItem As ToolStripDropDownItem In Item.DropDownItems
+                    DropDownItem.Enabled = True
+                Next
+            Catch ex As Exception
+                Continue For
+            End Try
+        Next
+        ' Next, detect the DISM version, so that we can determine which things are applicable
+        Select Case DismVer.Major
+            Case 6
+                Select Case DismVer.Minor
+                    Case 1
+
+                    Case Is >= 2
+
+                End Select
+            Case 10
+
+        End Select
+    End Sub
+
     ''' <summary>
     ''' Detects the image's version by gathering the product version from its "ntoskrnl.exe" file in MountDir\Windows\System32
     ''' </summary>
@@ -1709,7 +2258,7 @@ Public Class MainForm
             NTKeVerInfo = FileVersionInfo.GetVersionInfo(NTKeExe)
             If NTKeVerInfo.ProductMajorPart = 6 Then
                 If NTKeVerInfo.ProductMinorPart = 0 Then        ' Windows Vista / WinPE 2.x
-                    ' Let the user know the incompatibility
+                    ' Let the user know about the incompatibility
                     If Not ProgressPanel.IsDisposed Then
                         ToolStripButton4.Visible = False
                         ProgressPanel.Dispose()
@@ -1718,7 +2267,20 @@ Public Class MainForm
                     ImgWinVistaIncompatibilityDialog.ShowDialog(Me)
                     If ImgWinVistaIncompatibilityDialog.DialogResult = Windows.Forms.DialogResult.OK Then
                         ' Disable every option
-
+                        Button1.Enabled = False
+                        Button2.Enabled = False
+                        Button3.Enabled = False
+                        Button4.Enabled = True
+                        Button5.Enabled = False
+                        Button6.Enabled = False
+                        Button7.Enabled = False
+                        Button8.Enabled = False
+                        Button9.Enabled = False
+                        Button10.Enabled = False
+                        Button11.Enabled = False
+                        Button12.Enabled = False
+                        Button13.Enabled = False
+                        Exit Sub
                     ElseIf ImgWinVistaIncompatibilityDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
                         ' Unmount the image
                         ProgressPanel.UMountLocalDir = True
@@ -1740,6 +2302,7 @@ Public Class MainForm
                 ElseIf NTKeVerInfo.ProductMinorPart = 4 Then    ' Windows 10 (Technical Preview)
 
                 End If
+
             ElseIf NTKeVerInfo.ProductMajorPart = 10 Then
                 Select Case NTKeVerInfo.ProductBuildPart
                     Case 9888 To 21390                          ' Windows 10 / Server 2016,2019,2022 / Cobalt_SunValley / Win10X / WinPE 10.0
@@ -1747,10 +2310,34 @@ Public Class MainForm
                     Case Is >= 21996                            ' Windows 11 / Cobalt_Refresh / Nickel / Copper / WinPE 10.0
 
                 End Select
+            ElseIf NTKeVerInfo.ProductMajorPart < 6 Then
+                ' Windows XP/Server 2003 or older WIM files created by XP2ESD or other XP -> WIM projects. Directly unmount it
+                ProgressPanel.UMountLocalDir = True
+                ProgressPanel.RandomMountDir = ""   ' Hope there isn't anything to set here
+                ProgressPanel.MountDir = MountDir
+                ProgressPanel.UMountOp = 1
+                ProgressPanel.CheckImgIntegrity = False
+                ProgressPanel.SaveToNewIndex = False
+                ProgressPanel.UMountImgIndex = ImgIndex
+                ProgressPanel.OperationNum = 21
+                ProgressPanel.ShowDialog()
             End If
         Catch ex As Exception
 
         End Try
+        Button1.Enabled = False
+        'Button2.Enabled = True
+        'Button3.Enabled = True
+        'Button4.Enabled = True
+        Button5.Enabled = True
+        Button6.Enabled = True
+        Button7.Enabled = True
+        Button8.Enabled = True
+        Button9.Enabled = True
+        Button10.Enabled = True
+        Button11.Enabled = True
+        Button12.Enabled = True
+        Button13.Enabled = True
     End Sub
 
     ''' <summary>
@@ -1770,9 +2357,15 @@ Public Class MainForm
                                         "                     Image is running a Windows version older than Windows 8")
                         Return False
                     Case Is >= 2
-                        Debug.WriteLine("[IsWindows8OrHigher] 6.2 >= 6.2 -> True" & CrLf & _
-                                        "                     Image is running Windows 8")
-                        Return True
+                        Debug.WriteLine("[IsWindows8OrHigher] 6.2 >= 6.2 -> True")
+                        Select Case KeFVI.ProductBuildPart
+                            Case Is >= 8102
+                                Debug.WriteLine("                     Image is running Windows Developer Preview or later")
+                                Return True
+                            Case Else
+                                Debug.WriteLine("                     Image is not running Windows Developer Preview or later")
+                                Return False
+                        End Select
                 End Select
             Case 10
                 Debug.WriteLine("[IsWindows8OrHigher] " & KeFVI.ProductMajorPart & "." & KeFVI.ProductMinorPart & " >= 6.2 -> True" & CrLf & _
@@ -1794,12 +2387,12 @@ Public Class MainForm
         Dim KeFVI As FileVersionInfo = FileVersionInfo.GetVersionInfo(NTKeExe)
         Select Case KeFVI.ProductMajorPart
             Case Is <= 6
-                Debug.WriteLine("[IsWindows8OrHigher] 6.x == 10.0 => False" & CrLf & _
-                                "                     Image is running a Windows version older than Windows 10")
+                Debug.WriteLine("[IsWindows10OrHigher] 6.x == 10.0 => False" & CrLf & _
+                                "                      Image is running a Windows version older than Windows 10")
                 Return False
             Case 10
-                Debug.WriteLine("[IsWindows8OrHigher] 10.0 == 10.0 => True" & CrLf & _
-                                "                     Image is running Windows 10 or Windows 11")
+                Debug.WriteLine("[IsWindows10OrHigher] 10.0 == 10.0 => True" & CrLf & _
+                                "                      Image is running Windows 10 or Windows 11")
                 Return True
         End Select
         Return False
@@ -1808,11 +2401,11 @@ Public Class MainForm
     ''' <summary>
     ''' Gets installed packages in an image and puts them in separate arrays
     ''' </summary>
-    Sub GetImagePackages(Optional UseApi As Boolean = False)
+    Sub GetImagePackages(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
         If UseApi Then
             Try
-                DismApi.Initialize(DismLogLevel.LogErrors)
-                Using session As DismSession = DismApi.OpenOfflineSession(sessionMntDir)
+                DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
+                Using session As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(sessionMntDir))
                     Dim imgPackageNameList As New List(Of String)
                     Dim imgPackageStateList As New List(Of String)
                     Dim imgPackageRelTypeList As New List(Of String)
@@ -1821,6 +2414,7 @@ Public Class MainForm
                     For Each package As DismPackage In PackageCollection
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                            CompletedTasks(0) = False
                             Exit Sub
                         End If
                         imgPackageNameList.Add(package.PackageName)
@@ -1836,6 +2430,7 @@ Public Class MainForm
             Finally
                 DismApi.Shutdown()
             End Try
+            CompletedTasks(0) = True
             Exit Sub
             'Try
 
@@ -1872,40 +2467,37 @@ Public Class MainForm
         Debug.WriteLine("[GetImagePackages] Running function...")
         Debug.WriteLine("[GetImagePackages] Writing getter scripts...")
         Try
-            File.WriteAllText(".\bin\exthelpers\pkgnames.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\pkgnames.bat", _
                               "@echo off" & CrLf & _
-                              "dism /English /image=" & MountDir & " /get-packages | findstr /c:" & Quote & "Package Identity : " & Quote & " > .\tempinfo\pkgnames", _
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-packages | findstr /c:" & Quote & "Package Identity : " & Quote & " > .\tempinfo\pkgnames", _
                               ASCII)
-            File.WriteAllText(".\bin\exthelpers\pkgstate.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\pkgstate.bat", _
                               "@echo off" & CrLf & _
-                              "dism /English /image=" & MountDir & " /get-packages | findstr /c:" & Quote & "State : " & Quote & " > .\tempinfo\pkgstate", _
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-packages | findstr /c:" & Quote & "State : " & Quote & " > .\tempinfo\pkgstate", _
                               ASCII)
-            File.WriteAllText(".\bin\exthelpers\pkgreltype.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\pkgreltype.bat", _
                               "@echo off" & CrLf & _
-                              "dism /English /image=" & MountDir & " /get-packages | findstr /c:" & Quote & "Release Type : " & Quote & " > .\tempinfo\pkgreltype", _
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-packages | findstr /c:" & Quote & "Release Type : " & Quote & " > .\tempinfo\pkgreltype", _
                               ASCII)
-            File.WriteAllText(".\bin\exthelpers\pkginsttime.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\pkginsttime.bat", _
                               "@echo off" & CrLf & _
-                              "dism /English /image=" & MountDir & " /get-packages | findstr /c:" & Quote & "Install Time : " & Quote & " > .\tempinfo\pkginsttime", _
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-packages | findstr /c:" & Quote & "Install Time : " & Quote & " > .\tempinfo\pkginsttime", _
                               ASCII)
         Catch ex As Exception
             Debug.WriteLine("[GetImagePackages] Failed writing getter scripts. Reason: " & ex.Message)
+            CompletedTasks(0) = False
             Exit Sub
         End Try
         Debug.WriteLine("[GetImagePackages] Finished writing getter scripts. Executing them...")
         ImgProcesses.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
         ImgProcesses.StartInfo.CreateNoWindow = True
         ImgProcesses.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-        For Each pkgScript In My.Computer.FileSystem.GetFiles(".\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly, "*.bat")
+        For Each pkgScript In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly, "*.bat")
             If Path.GetFileName(pkgScript).StartsWith("pkg") Then
                 Debug.WriteLine("[GetImagePackages] RunCommand -> " & Path.GetFileName(pkgScript))
                 ImgProcesses.StartInfo.Arguments = "/c " & pkgScript
                 ImgProcesses.Start()
-                Do Until ImgProcesses.HasExited
-                    If ImgProcesses.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                ImgProcesses.WaitForExit()
                 If ImgProcesses.ExitCode = 0 Then
                     Continue For
                 End If
@@ -1917,7 +2509,7 @@ Public Class MainForm
         Dim FileGetterRTB As New RichTextBox()
         Dim TypeLookups() As String = New String(3) {"Package Identity : ", "State : ", "Release Type : ", "Install Time : "}
         Dim lineToAppend As String = ""
-        For Each pkgFile In My.Computer.FileSystem.GetFiles(".\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
+        For Each pkgFile In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
             If Path.GetFileName(pkgFile).StartsWith("pkg") Then
                 Debug.WriteLine("[GetImagePackages] FillArray -> (values_from: " & Path.GetFileName(pkgFile) & ")")
                 FileGetterRTB.Clear()
@@ -1949,6 +2541,7 @@ Public Class MainForm
                 Continue For
             End If
         Next
+        CompletedTasks(0) = True
         'imgPackageNameLastEntry = UBound(imgPackageNames)
         'ImgBW.ReportProgress(progressMin + progressDivs)
     End Sub
@@ -1956,17 +2549,18 @@ Public Class MainForm
     ''' <summary>
     ''' Gets present features in an image and puts them in separate arrays
     ''' </summary>
-    Sub GetImageFeatures(Optional UseApi As Boolean = False)
+    Sub GetImageFeatures(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
         If UseApi Then
             Try
-                DismApi.Initialize(DismLogLevel.LogErrors)
-                Using session As DismSession = DismApi.OpenOfflineSession(sessionMntDir)
+                DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
+                Using session As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(sessionMntDir))
                     Dim imgFeatureNameList As New List(Of String)
                     Dim imgFeatureStateList As New List(Of String)
                     Dim FeatureCollection As DismFeatureCollection = DismApi.GetFeatures(session)
                     For Each feature As DismFeature In FeatureCollection
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                            CompletedTasks(1) = False
                             Exit Sub
                         End If
                         imgFeatureNameList.Add(feature.FeatureName)
@@ -1995,6 +2589,7 @@ Public Class MainForm
             Finally
                 DismApi.Shutdown()
             End Try
+            CompletedTasks(1) = True
             Exit Sub
             'Try
             '    If session IsNot Nothing Then
@@ -2011,32 +2606,29 @@ Public Class MainForm
         Debug.WriteLine("[GetImageFeatures] Running function...")
         Debug.WriteLine("[GetImageFeatures] Writing getter scripts...")
         Try
-            File.WriteAllText(".\bin\exthelpers\featnames.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\featnames.bat", _
                               "@echo off" & CrLf & _
-                              "dism /English /image=" & MountDir & " /get-features | findstr /c:" & Quote & "Feature Name : " & Quote & " > .\tempinfo\featnames", _
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-features | findstr /c:" & Quote & "Feature Name : " & Quote & " > .\tempinfo\featnames", _
                               ASCII)
-            File.WriteAllText(".\bin\exthelpers\featstate.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\featstate.bat", _
                               "@echo off" & CrLf & _
-                              "dism /English /image=" & MountDir & " /get-features | findstr /c:" & Quote & "State : " & Quote & " > .\tempinfo\featstate", _
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-features | findstr /c:" & Quote & "State : " & Quote & " > .\tempinfo\featstate", _
                               ASCII)
         Catch ex As Exception
             Debug.WriteLine("[GetImageFeatures] Failed writing getter scripts. Reason: " & ex.Message)
+            CompletedTasks(1) = False
             Exit Sub
         End Try
         Debug.WriteLine("[GetImageFeatures] Finished writing getter scripts. Executing them...")
         ImgProcesses.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
         ImgProcesses.StartInfo.CreateNoWindow = True
         ImgProcesses.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-        For Each featScript In My.Computer.FileSystem.GetFiles(".\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly, "*.bat")
+        For Each featScript In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly, "*.bat")
             If Path.GetFileName(featScript).StartsWith("feat") Then
                 Debug.WriteLine("[GetImageFeatures] RunCommand -> " & Path.GetFileName(featScript))
                 ImgProcesses.StartInfo.Arguments = "/c " & featScript
                 ImgProcesses.Start()
-                Do Until ImgProcesses.HasExited
-                    If ImgProcesses.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                ImgProcesses.WaitForExit()
                 If ImgProcesses.ExitCode = 0 Then
                     Continue For
                 End If
@@ -2048,7 +2640,7 @@ Public Class MainForm
         Dim FileGetterRTB As New RichTextBox()
         Dim TypeLookups() As String = New String(1) {"Feature Name : ", "State : "}
         Dim lineToAppend As String = ""
-        For Each featFile In My.Computer.FileSystem.GetFiles(".\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
+        For Each featFile In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
             If Path.GetFileName(featFile).StartsWith("feat") Then
                 Debug.WriteLine("[GetImageFeatures] FillArray -> (values_from: " & Path.GetFileName(featFile) & ")")
                 FileGetterRTB.Clear()
@@ -2074,6 +2666,7 @@ Public Class MainForm
                 Continue For
             End If
         Next
+        CompletedTasks(1) = True
         'ImgBW.ReportProgress(progressMin + progressDivs)
     End Sub
 
@@ -2081,11 +2674,11 @@ Public Class MainForm
     ''' Gets installed provisioned APPX packages in an image and puts them in separate arrays
     ''' </summary>
     ''' <remarks>This is only for Windows 8 and newer</remarks>
-    Sub GetImageAppxPackages(Optional UseApi As Boolean = False)
+    Sub GetImageAppxPackages(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
         If UseApi And Environment.OSVersion.Version.Major > 6 Then
             Try
-                DismApi.Initialize(DismLogLevel.LogErrors)
-                Using session As DismSession = DismApi.OpenOfflineSession(sessionMntDir)
+                DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
+                Using session As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(sessionMntDir))
                     Dim imgAppxDisplayNameList As New List(Of String)
                     Dim imgAppxPackageNameList As New List(Of String)
                     Dim imgAppxVersionList As New List(Of String)
@@ -2096,6 +2689,7 @@ Public Class MainForm
                     For Each AppxPackage As DismAppxPackage In AppxPackageCollection
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                            CompletedTasks(2) = False
                             Exit Sub
                         End If
                         Select Case AppxPackage.Architecture
@@ -2119,6 +2713,53 @@ Public Class MainForm
                         imgAppxResourceIdList.Add(AppxPackage.ResourceId)
                         imgAppxVersionList.Add(AppxPackage.Version.ToString())
                     Next
+                    If OnlineMode And ExtAppxGetter Then
+                        PSExtAppxGetter()
+                        If Directory.Exists(Application.StartupPath & "\bin\extps1\out") And My.Computer.FileSystem.GetFiles(Application.StartupPath & "\bin\extps1\out").Count > 0 Then
+                            Dim appxPkgNameRTB As New RichTextBox()
+                            Dim appxPkgFullNameRTB As New RichTextBox()
+                            Dim appxArchRTB As New RichTextBox()
+                            Dim appxResIdRTB As New RichTextBox()
+                            Dim appxVerRTB As New RichTextBox()
+                            Dim appxNonRemPolRTB As New RichTextBox()
+                            Dim appxFrameworkRTB As New RichTextBox()
+                            appxPkgNameRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxpkgnames")
+                            appxPkgFullNameRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxpkgfullnames")
+                            appxArchRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxarch")
+                            appxResIdRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxresid")
+                            appxVerRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxver")
+                            If File.Exists(Application.StartupPath & "\bin\extps1\out\appxnonrempolicy") Then appxNonRemPolRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxnonrempolicy")
+                            If File.Exists(Application.StartupPath & "\bin\extps1\out\appxframework") Then appxFrameworkRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxframework")
+                            For x = 0 To appxPkgFullNameRTB.Lines.Count - 1
+                                If imgAppxPackageNameList.Contains(appxPkgFullNameRTB.Lines(x)) Then
+                                    Continue For
+                                Else
+                                    If SkipNonRemovable Or (SkipFrameworks And appxFrameworkRTB.Text <> "") Then
+                                        If appxNonRemPolRTB.Lines(x) = "True" Or (SkipFrameworks And appxFrameworkRTB.Lines(x) = "True") Then
+                                            Continue For
+                                        Else
+                                            imgAppxDisplayNameList.Add(appxPkgNameRTB.Lines(x))
+                                            imgAppxPackageNameList.Add(appxPkgFullNameRTB.Lines(x))
+                                            imgAppxArchitectureList.Add(appxArchRTB.Lines(x))
+                                            imgAppxResourceIdList.Add(appxResIdRTB.Lines(x))
+                                            imgAppxVersionList.Add(appxVerRTB.Lines(x))
+                                        End If
+                                    Else
+                                        imgAppxDisplayNameList.Add(appxPkgNameRTB.Lines(x))
+                                        imgAppxPackageNameList.Add(appxPkgFullNameRTB.Lines(x))
+                                        imgAppxArchitectureList.Add(appxArchRTB.Lines(x))
+                                        imgAppxResourceIdList.Add(appxResIdRTB.Lines(x))
+                                        imgAppxVersionList.Add(appxVerRTB.Lines(x))
+                                    End If
+                                End If
+                            Next
+                            Try
+                                Directory.Delete(Application.StartupPath & "\bin\extps1\out", True)
+                            Catch ex As Exception
+                                ' Leave directory for later
+                            End Try
+                        End If
+                    End If
                     imgAppxArchitectures = imgAppxArchitectureList.ToArray()
                     imgAppxDisplayNames = imgAppxDisplayNameList.ToArray()
                     imgAppxPackageNames = imgAppxPackageNameList.ToArray()
@@ -2128,54 +2769,8 @@ Public Class MainForm
             Finally
                 DismApi.Shutdown()
             End Try
+            CompletedTasks(2) = True
             Exit Sub
-            'If session IsNot Nothing And Environment.OSVersion.Version.Major > 6 Then
-            '    Dim imgAppxDisplayNameList As New List(Of String)
-            '    Dim imgAppxPackageNameList As New List(Of String)
-            '    Dim imgAppxVersionList As New List(Of String)
-            '    Dim imgAppxArchitectureList As New List(Of String)
-            '    Dim imgAppxResourceIdList As New List(Of String)
-            '    Dim imgAppxRegionList As New List(Of String)
-            '    Dim AppxPackageCollection As DismAppxPackageCollection = DismApi.GetProvisionedAppxPackages(session)
-            '    For Each AppxPackage As DismAppxPackage In AppxPackageCollection
-            '        If ImgBW.CancellationPending Then
-            '            If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
-            '            Exit Sub
-            '        End If
-            '        Select Case AppxPackage.Architecture
-            '            Case DismProcessorArchitecture.None
-            '                imgAppxArchitectureList.Add("Unknown")
-            '            Case DismProcessorArchitecture.Intel
-            '                imgAppxArchitectureList.Add("x86")
-            '            Case DismProcessorArchitecture.ARM
-            '                imgAppxArchitectureList.Add("ARM")
-            '            Case DismProcessorArchitecture.IA64
-            '                imgAppxArchitectureList.Add("IA64")
-            '            Case DismProcessorArchitecture.AMD64
-            '                imgAppxArchitectureList.Add("x64")
-            '            Case DismProcessorArchitecture.Neutral
-            '                imgAppxArchitectureList.Add("Neutral")
-            '            Case DismProcessorArchitecture.ARM64
-            '                imgAppxArchitectureList.Add("ARM64")
-            '        End Select
-            '        imgAppxDisplayNameList.Add(AppxPackage.DisplayName)
-            '        imgAppxPackageNameList.Add(AppxPackage.PackageName)
-            '        imgAppxResourceIdList.Add(AppxPackage.ResourceId)
-            '        imgAppxVersionList.Add(AppxPackage.Version.ToString())
-            '    Next
-            '    imgAppxArchitectures = imgAppxArchitectureList.ToArray()
-            '    imgAppxDisplayNames = imgAppxDisplayNameList.ToArray()
-            '    imgAppxPackageNames = imgAppxPackageNameList.ToArray()
-            '    imgAppxResourceIds = imgAppxResourceIdList.ToArray()
-            '    imgAppxVersions = imgAppxVersionList.ToArray()
-            '    Exit Sub
-            'Else
-            '    Try
-            '        Throw New Exception("No valid DISM session has been provided")
-            '    Catch ex As Exception
-            '        DismApi.CloseSession(session)
-            '    End Try
-            'End If
         End If
         Debug.WriteLine("[GetImageAppxPackages] Running function...")
         ' The mounted image may be Windows 8 or later, but DISM may be from Windows 7. Get this information before running this procedure
@@ -2186,46 +2781,44 @@ Public Class MainForm
                 Select Case FileVersion.ProductMinorPart
                     Case 1
                         Debug.WriteLine("[GetImageAppxPackages] The image is Windows 8 or later, but this version of DISM does not support this command. Exiting...")
+                        CompletedTasks(2) = False
                         Exit Sub
                 End Select
         End Select
         Debug.WriteLine("[GetImageAppxPackages] Writing getter scripts...")
         Try
-            File.WriteAllText(".\bin\exthelpers\appxnames.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\appxnames.bat", _
                               "@echo off" & CrLf & _
-                              "dism /English /image=" & Quote & MountDir & Quote & " /get-provisionedappxpackages | findstr /c:" & Quote & "DisplayName : " & Quote & " > .\tempinfo\appxdisplaynames" & CrLf & _
-                              "dism /English /image=" & Quote & MountDir & Quote & " /get-provisionedappxpackages | findstr /c:" & Quote & "PackageName : " & Quote & " > .\tempinfo\appxpackagenames", _
+                              "dism /English " & If(OnlineMode, " /online", " /image=" & Quote & MountDir & Quote) & " /get-provisionedappxpackages | findstr /c:" & Quote & "DisplayName : " & Quote & " > .\tempinfo\appxdisplaynames" & CrLf & _
+                              "dism /English " & If(OnlineMode, " /online", " /image=" & Quote & MountDir & Quote) & " /get-provisionedappxpackages | findstr /c:" & Quote & "PackageName : " & Quote & " > .\tempinfo\appxpackagenames", _
                               ASCII)
-            File.WriteAllText(".\bin\exthelpers\appxversions.bat", _
-                              "dism /English /image=" & Quote & MountDir & Quote & " /get-provisionedappxpackages | findstr /c:" & Quote & "Version : " & Quote & " > .\tempinfo\appxversions", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\appxversions.bat", _
+                              "dism /English " & If(OnlineMode, " /online", " /image=" & Quote & MountDir & Quote) & " /get-provisionedappxpackages | findstr /c:" & Quote & "Version : " & Quote & " > .\tempinfo\appxversions", _
                               ASCII)
-            File.WriteAllText(".\bin\exthelpers\appxarches.bat", _
-                              "dism /English /image=" & Quote & MountDir & Quote & " /get-provisionedappxpackages | findstr /c:" & Quote & "Architecture : " & Quote & " > .\tempinfo\appxarchitectures", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\appxarches.bat", _
+                              "dism /English " & If(OnlineMode, " /online", " /image=" & Quote & MountDir & Quote) & " /get-provisionedappxpackages | findstr /c:" & Quote & "Architecture : " & Quote & " > .\tempinfo\appxarchitectures", _
                               ASCII)
-            File.WriteAllText(".\bin\exthelpers\appxresids.bat", _
-                              "dism /English /image=" & Quote & MountDir & Quote & " /get-provisionedappxpackages | findstr /c:" & Quote & "ResourceId : " & Quote & " > .\tempinfo\appxresids", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\appxresids.bat", _
+                              "dism /English " & If(OnlineMode, " /online", " /image=" & Quote & MountDir & Quote) & " /get-provisionedappxpackages | findstr /c:" & Quote & "ResourceId : " & Quote & " > .\tempinfo\appxresids", _
                               ASCII)
-            File.WriteAllText(".\bin\exthelpers\appxregions.bat", _
-                              "dism /English /image=" & Quote & MountDir & Quote & " /get-provisionedappxpackages | findstr /c:" & Quote & "Regions : " & Quote & " > .\tempinfo\appxregions", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\appxregions.bat", _
+                              "dism /English " & If(OnlineMode, " /online", " /image=" & Quote & MountDir & Quote) & " /get-provisionedappxpackages | findstr /c:" & Quote & "Regions : " & Quote & " > .\tempinfo\appxregions", _
                               ASCII)
         Catch ex As Exception
             Debug.WriteLine("[GetImageAppxPackages] Failed writing getter scripts. Reason: " & ex.Message)
+            CompletedTasks(2) = False
             Exit Sub
         End Try
         Debug.WriteLine("[GetImageAppxPackages] Finished writing getter scripts. Executing them...")
         ImgProcesses.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
         ImgProcesses.StartInfo.CreateNoWindow = True
         ImgProcesses.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-        For Each appxScript In My.Computer.FileSystem.GetFiles(".\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly, "*.bat")
+        For Each appxScript In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly, "*.bat")
             If Path.GetFileName(appxScript).StartsWith("appx") Then
                 Debug.WriteLine("[GetImageAppxPackages] RunCommand -> " & Path.GetFileName(appxScript))
                 ImgProcesses.StartInfo.Arguments = "/c " & appxScript
                 ImgProcesses.Start()
-                Do Until ImgProcesses.HasExited
-                    If ImgProcesses.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                ImgProcesses.WaitForExit()
                 If ImgProcesses.ExitCode = 0 Then
                     Continue For
                 End If
@@ -2237,7 +2830,7 @@ Public Class MainForm
         Dim FileGetterRTB As New RichTextBox()
         Dim TypeLookups() As String = New String(5) {"DisplayName : ", "PackageName : ", "Version : ", "Architecture : ", "ResourceId : ", "Regions : "}
         Dim lineToAppend As String = ""
-        For Each appxFile In My.Computer.FileSystem.GetFiles(".\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
+        For Each appxFile In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
             If Path.GetFileName(appxFile).StartsWith("appx") Then
                 Debug.WriteLine("[GetImageAppxPackages] FillArray -> (values_from: " & Path.GetFileName(appxFile) & ")")
                 FileGetterRTB.Clear()
@@ -2279,24 +2872,104 @@ Public Class MainForm
                 Continue For
             End If
         Next
+        If OnlineMode And ExtAppxGetter Then
+            Dim imgAppxDisplayNameList As New List(Of String)
+            Dim imgAppxPackageNameList As New List(Of String)
+            Dim imgAppxVersionList As New List(Of String)
+            Dim imgAppxArchitectureList As New List(Of String)
+            Dim imgAppxResourceIdList As New List(Of String)
+            imgAppxDisplayNameList = imgAppxDisplayNames.ToList()
+            imgAppxPackageNameList = imgAppxPackageNames.ToList()
+            imgAppxVersionList = imgAppxVersions.ToList()
+            imgAppxArchitectureList = imgAppxArchitectures.ToList()
+            imgAppxResourceIdList = imgAppxResourceIds.ToList()
+            PSExtAppxGetter()
+            If Directory.Exists(Application.StartupPath & "\bin\extps1\out") And My.Computer.FileSystem.GetFiles(Application.StartupPath & "\bin\extps1\out").Count > 0 Then
+                Dim appxPkgNameRTB As New RichTextBox()
+                Dim appxPkgFullNameRTB As New RichTextBox()
+                Dim appxArchRTB As New RichTextBox()
+                Dim appxResIdRTB As New RichTextBox()
+                Dim appxVerRTB As New RichTextBox()
+                Dim appxNonRemPolRTB As New RichTextBox()
+                appxPkgNameRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxpkgnames")
+                appxPkgFullNameRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxpkgfullnames")
+                appxArchRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxarch")
+                appxResIdRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxresid")
+                appxVerRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxver")
+                If File.Exists(Application.StartupPath & "\bin\extps1\out\appxnonrempolicy") Then appxNonRemPolRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxnonrempolicy")
+                For x = 0 To appxPkgFullNameRTB.Lines.Count - 1
+                    If imgAppxPackageNameList.Contains(appxPkgFullNameRTB.Lines(x)) Then
+                        Continue For
+                    Else
+                        If SkipNonRemovable And File.Exists(Application.StartupPath & "\bin\extps1\out\appxnonrempolicy") Then
+                            If appxNonRemPolRTB.Lines(x) = "True" Then
+                                Continue For
+                            Else
+                                imgAppxDisplayNameList.Add(appxPkgNameRTB.Lines(x))
+                                imgAppxPackageNameList.Add(appxPkgFullNameRTB.Lines(x))
+                                imgAppxArchitectureList.Add(appxArchRTB.Lines(x))
+                                imgAppxResourceIdList.Add(appxResIdRTB.Lines(x))
+                                imgAppxVersionList.Add(appxVerRTB.Lines(x))
+                            End If
+                        Else
+                            imgAppxDisplayNameList.Add(appxPkgNameRTB.Lines(x))
+                            imgAppxPackageNameList.Add(appxPkgFullNameRTB.Lines(x))
+                            imgAppxArchitectureList.Add(appxArchRTB.Lines(x))
+                            imgAppxResourceIdList.Add(appxResIdRTB.Lines(x))
+                            imgAppxVersionList.Add(appxVerRTB.Lines(x))
+                        End If
+                    End If
+                Next
+                Try
+                    Directory.Delete(Application.StartupPath & "\bin\extps1\out", True)
+                Catch ex As Exception
+                    ' Leave directory for later
+                End Try
+            End If
+            imgAppxDisplayNames = imgAppxDisplayNameList.ToArray()
+            imgAppxPackageNames = imgAppxPackageNameList.ToArray()
+            imgAppxVersions = imgAppxVersionList.ToArray()
+            imgAppxArchitectures = imgAppxArchitectureList.ToArray()
+            imgAppxResourceIds = imgAppxResourceIdList.ToArray()
+        End If
+        CompletedTasks(2) = True
         'ImgBW.ReportProgress(progressMin + progressDivs)
+    End Sub
+
+    Sub PSExtAppxGetter()
+        Dim PSExtAppxProc As New Process
+        PSExtAppxProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
+        PSExtAppxProc.StartInfo.WorkingDirectory = Application.StartupPath
+        ' The "executionpolicy" argument is passed to PowerShell as a temporary execution policy setting that happens once.
+        ' More on that here: https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.3#set-a-different-policy-for-one-session
+        PSExtAppxProc.StartInfo.Arguments = "-executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\extappx.ps1" & Quote
+        If Not Debugger.IsAttached Then
+            PSExtAppxProc.StartInfo.CreateNoWindow = True
+            PSExtAppxProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+        End If
+        PSExtAppxProc.Start()
+        PSExtAppxProc.WaitForExit()
+        If PSExtAppxProc.ExitCode = 0 Then
+
+        End If
     End Sub
 
     ''' <summary>
     ''' Gets installed Features on Demand (capabilities) in an image and puts them in separate arrays
     ''' </summary>
     ''' <remarks>This is only for Windows 10 or newer</remarks>
-    Sub GetImageCapabilities(Optional UseApi As Boolean = False)
+    Sub GetImageCapabilities(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
         If UseApi Then
             Try
-                DismApi.Initialize(DismLogLevel.LogErrors)
-                Using session As DismSession = DismApi.OpenOfflineSession(sessionMntDir)
+                DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
+                Using session As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(sessionMntDir))
                     Dim imgCapabilityNameList As New List(Of String)
                     Dim imgCapabilityStateList As New List(Of String)
                     Dim CapabilityCollection As DismCapabilityCollection = DismApi.GetCapabilities(session)
                     For Each capability As DismCapability In CapabilityCollection
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                            CompletedTasks(3) = False
                             Exit Sub
                         End If
                         imgCapabilityNameList.Add(capability.Name)
@@ -2325,6 +2998,7 @@ Public Class MainForm
             Finally
                 DismApi.Shutdown()
             End Try
+            CompletedTasks(3) = True
             Exit Sub
             'Try
 
@@ -2374,35 +3048,33 @@ Public Class MainForm
             Case 6
                 ' Exit procedure
                 Debug.WriteLine("[GetImageCapabilities] The image is Windows 10 or 11, but this version of DISM does not support this command. Exiting...")
+                CompletedTasks(3) = False
         End Select
         Debug.WriteLine("[GetImageCapabilities] Writing getter scripts...")
         Try
-            File.WriteAllText(".\bin\exthelpers\capids.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\capids.bat", _
                               "@echo off" & CrLf & _
-                              "dism /English /image=" & MountDir & " /get-capabilities | findstr /c:" & Quote & "Capability Identity : " & Quote & " > .\tempinfo\capids", _
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-capabilities | findstr /c:" & Quote & "Capability Identity : " & Quote & " > .\tempinfo\capids", _
                               ASCII)
-            File.WriteAllText(".\bin\exthelpers\capstate.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\capstate.bat", _
                               "@echo off" & CrLf & _
-                              "dism /English /image=" & MountDir & " /get-capabilities | findstr /c:" & Quote & "State : " & Quote & " > .\tempinfo\capstate", _
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-capabilities | findstr /c:" & Quote & "State : " & Quote & " > .\tempinfo\capstate", _
                               ASCII)
         Catch ex As Exception
             Debug.WriteLine("[GetImageCapabilities] Failed writing getter scripts. Reason: " & ex.Message)
+            CompletedTasks(3) = False
             Exit Sub
         End Try
         Debug.WriteLine("[GetImageCapabilities] Finished writing getter scripts. Executing them...")
         ImgProcesses.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
         ImgProcesses.StartInfo.CreateNoWindow = True
         ImgProcesses.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-        For Each capScript In My.Computer.FileSystem.GetFiles(".\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly, "*.bat")
+        For Each capScript In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly, "*.bat")
             If Path.GetFileName(capScript).StartsWith("cap") Then
                 Debug.WriteLine("[GetImageCapabilities] RunCommand -> " & Path.GetFileName(capScript))
                 ImgProcesses.StartInfo.Arguments = "/c " & capScript
                 ImgProcesses.Start()
-                Do Until ImgProcesses.HasExited
-                    If ImgProcesses.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                ImgProcesses.WaitForExit()
                 If ImgProcesses.ExitCode = 0 Then
                     Continue For
                 End If
@@ -2414,7 +3086,7 @@ Public Class MainForm
         Dim FileGetterRTB As New RichTextBox()
         Dim TypeLookups() As String = New String(1) {"Capability Identity : ", "State : "}
         Dim lineToAppend As String = ""
-        For Each capFile In My.Computer.FileSystem.GetFiles(".\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
+        For Each capFile In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
             If Path.GetFileName(capFile).StartsWith("cap") Then
                 Debug.WriteLine("[GetImageCapabilities] FillArray -> (values_from: " & Path.GetFileName(capFile) & ")")
                 FileGetterRTB.Clear()
@@ -2440,6 +3112,7 @@ Public Class MainForm
                 Continue For
             End If
         Next
+        CompletedTasks(3) = True
         'ImgBW.ReportProgress(progressMin + progressDivs)
     End Sub
 
@@ -2447,11 +3120,11 @@ Public Class MainForm
     ''' Gets installed third-party drivers in an image and puts them in separate arrays
     ''' </summary>
     ''' <remarks>This procedure will detect the number of third-party drivers. If the image contains none, this procedure will end</remarks>
-    Sub GetImageDrivers(Optional UseApi As Boolean = False)
+    Sub GetImageDrivers(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
         If UseApi Then
             Try
-                DismApi.Initialize(DismLogLevel.LogErrors)
-                Using session As DismSession = DismApi.OpenOfflineSession(sessionMntDir)
+                DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
+                Using session As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(sessionMntDir))
                     Dim imgDrvPublishedNameList As New List(Of String)
                     Dim imgDrvOGFileNameList As New List(Of String)
                     Dim imgDrvInboxList As New List(Of String)
@@ -2459,10 +3132,12 @@ Public Class MainForm
                     Dim imgDrvProviderNameList As New List(Of String)
                     Dim imgDrvDateList As New List(Of String)
                     Dim imgDrvVersionList As New List(Of String)
-                    Dim DriverCollection As DismDriverPackageCollection = DismApi.GetDrivers(session, True)
+                    Dim imgDrvBootCriticalStatusList As New List(Of Boolean)
+                    Dim DriverCollection As DismDriverPackageCollection = DismApi.GetDrivers(session, AllDrivers)
                     For Each driver As DismDriverPackage In DriverCollection
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
+                            CompletedTasks(4) = False
                             Exit Sub
                         End If
                         imgDrvPublishedNameList.Add(driver.PublishedName)
@@ -2472,6 +3147,7 @@ Public Class MainForm
                         imgDrvProviderNameList.Add(driver.ProviderName)
                         imgDrvDateList.Add(driver.Date.ToString())
                         imgDrvVersionList.Add(driver.Version.ToString())
+                        imgDrvBootCriticalStatusList.Add(driver.BootCritical)
                     Next
                     imgDrvPublishedNames = imgDrvPublishedNameList.ToArray()
                     imgDrvOGFileNames = imgDrvOGFileNameList.ToArray()
@@ -2480,10 +3156,12 @@ Public Class MainForm
                     imgDrvProviderNames = imgDrvProviderNameList.ToArray()
                     imgDrvDates = imgDrvDateList.ToArray()
                     imgDrvVersions = imgDrvVersionList.ToArray()
+                    imgDrvBootCriticalStatus = imgDrvBootCriticalStatusList.ToArray()
                 End Using
             Finally
                 DismApi.Shutdown()
             End Try
+            CompletedTasks(4) = True
             Exit Sub
             'Try
             '    If session IsNot Nothing Then
@@ -2527,27 +3205,24 @@ Public Class MainForm
         Debug.WriteLine("[GetImageDrivers] Running function...")
         Debug.WriteLine("[GetImageDrivers] Determining whether there are third-party drivers in image...")
         Try
-            File.WriteAllText(".\bin\exthelpers\drvnums.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvnums.bat", _
                               "@echo off" & CrLf & _
-                              "dism /English /image=" & MountDir & " /get-drivers | find /c " & Quote & "Published Name : " & Quote & " > .\tempinfo\drvnums", _
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | find /c " & Quote & "Published Name : " & Quote & " > .\tempinfo\drvnums", _
                               ASCII)
         Catch ex As Exception
             Debug.WriteLine("[GetImageDrivers] Failed writing getter scripts. Reason: " & ex.Message)
+            CompletedTasks(4) = False
             Exit Sub
         End Try
         ImgProcesses.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
         ImgProcesses.StartInfo.CreateNoWindow = True
         ImgProcesses.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-        ImgProcesses.StartInfo.Arguments = "/c " & Directory.GetCurrentDirectory() & "\bin\exthelpers\drvnums.bat"
+        ImgProcesses.StartInfo.Arguments = "/c " & Application.StartupPath & "\bin\exthelpers\drvnums.bat"
         ImgProcesses.Start()
-        Do Until ImgProcesses.HasExited
-            If ImgProcesses.HasExited Then
-                Exit Do
-            End If
-        Loop
-        File.Delete(".\bin\exthelpers\drvnums.bat")
+        ImgProcesses.WaitForExit()
+        File.Delete(Application.StartupPath & "\bin\exthelpers\drvnums.bat")
         If ImgProcesses.ExitCode = 0 Then
-            Dim drvCount As Integer = CInt(My.Computer.FileSystem.ReadAllText(".\tempinfo\drvnums"))
+            Dim drvCount As Integer = CInt(My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\tempinfo\drvnums"))
             If drvCount = 0 Then
                 Debug.WriteLine("[GetImageDrivers] There are no available third-party drivers in this image. Exiting function...")
                 Exit Sub
@@ -2555,33 +3230,33 @@ Public Class MainForm
         End If
         Debug.WriteLine("[GetImageDrivers] Writing getter scripts...")
         Try
-            File.WriteAllText(".\bin\exthelpers\drvpublishednames.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvpublishednames.bat", _
                               "@echo off" & CrLf & _
-                              "dism /English /image=" & MountDir & " /get-drivers | findstr /c:" & Quote & "Published Name : " & Quote & " > .\tempinfo\drvpublishednames", _
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Published Name : " & Quote & " > .\tempinfo\drvpublishednames", _
                               ASCII)
-            File.WriteAllText(".\bin\exthelpers\drvogfilenames.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvogfilenames.bat", _
                               "@echo off" & CrLf & _
-                              "dism /English /image=" & MountDir & " /get-drivers | findstr /c:" & Quote & "Original File Name : " & Quote & " > .\tempinfo\drvogfilenames", _
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Original File Name : " & Quote & " > .\tempinfo\drvogfilenames", _
                               ASCII)
-            File.WriteAllText(".\bin\exthelpers\drvinbox.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvinbox.bat", _
                               "@echo off" & CrLf & _
-                              "dism /English /image=" & MountDir & " /get-drivers | findstr /c:" & Quote & "Inbox : " & Quote & " > .\tempinfo\drvinbox", _
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Inbox : " & Quote & " > .\tempinfo\drvinbox", _
                               ASCII)
-            File.WriteAllText(".\bin\exthelpers\drvclassnames.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvclassnames.bat", _
                               "@echo off" & CrLf & _
-                              "dism /English /image=" & MountDir & " /get-drivers | findstr /c:" & Quote & "Class Name : " & Quote & " > .\tempinfo\drvclassnames", _
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Class Name : " & Quote & " > .\tempinfo\drvclassnames", _
                               ASCII)
-            File.WriteAllText(".\bin\exthelpers\drvprovnames.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvprovnames.bat", _
                               "@echo off" & CrLf & _
-                              "dism /English /image=" & MountDir & " /get-drivers | findstr /c:" & Quote & "Provider Name : " & Quote & " > .\tempinfo\drvprovnames", _
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Provider Name : " & Quote & " > .\tempinfo\drvprovnames", _
                               ASCII)
-            File.WriteAllText(".\bin\exthelpers\drvdates.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvdates.bat", _
                               "@echo off" & CrLf & _
-                              "dism /English /image=" & MountDir & " /get-drivers | findstr /c:" & Quote & "Date : " & Quote & " > .\tempinfo\drvdates", _
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Date : " & Quote & " > .\tempinfo\drvdates", _
                               ASCII)
-            File.WriteAllText(".\bin\exthelpers\drvversions.bat", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvversions.bat", _
                               "@echo off" & CrLf & _
-                              "dism /English /image=" & MountDir & " /get-drivers | findstr /c:" & Quote & "Version : " & Quote & " > .\tempinfo\drvversions", _
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Version : " & Quote & " > .\tempinfo\drvversions", _
                               ASCII)
         Catch ex As Exception
             Debug.WriteLine("[GetImageDrivers] Failed writing getter scripts. Reason: " & ex.Message)
@@ -2591,16 +3266,12 @@ Public Class MainForm
         ImgProcesses.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
         ImgProcesses.StartInfo.CreateNoWindow = True
         ImgProcesses.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-        For Each drvScript In My.Computer.FileSystem.GetFiles(".\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly, "*.bat")
+        For Each drvScript In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly, "*.bat")
             If Path.GetFileName(drvScript).StartsWith("drv") Then
                 Debug.WriteLine("[GetImageDrivers] RunCommand -> " & Path.GetFileName(drvScript))
                 ImgProcesses.StartInfo.Arguments = "/c " & drvScript
                 ImgProcesses.Start()
-                Do Until ImgProcesses.HasExited
-                    If ImgProcesses.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                ImgProcesses.WaitForExit()
                 If ImgProcesses.ExitCode = 0 Then
                     Continue For
                 End If
@@ -2612,7 +3283,7 @@ Public Class MainForm
         Dim FileGetterRTB As New RichTextBox()
         Dim TypeLookups() As String = New String(6) {"Published Name : ", "Original File Name : ", "Inbox : ", "Class Name : ", "Provider Name : ", "Date : ", "Version : "}
         Dim lineToAppend As String = ""
-        For Each drvFile In My.Computer.FileSystem.GetFiles(".\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
+        For Each drvFile In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
             If Path.GetFileName(drvFile).StartsWith("drv") Then
                 Debug.WriteLine("[GetImageDrivers] FillArray -> (values_from: " & Path.GetFileName(drvFile) & ")")
                 FileGetterRTB.Clear()
@@ -2658,6 +3329,7 @@ Public Class MainForm
                 Continue For
             End If
         Next
+        CompletedTasks(4) = True
         'ImgBW.ReportProgress(progressMin + progressDivs)
     End Sub
 
@@ -2669,9 +3341,9 @@ Public Class MainForm
             Exit Sub
         End If
         Try
-            Directory.Delete(".\tempinfo", True)
+            Directory.Delete(Application.StartupPath & "\tempinfo", True)
             ' Keep the "exthelpers" folder in case background processes need to be run again
-            For Each TempFile In My.Computer.FileSystem.GetFiles(".\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly)
+            For Each TempFile In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly)
                 File.Delete(TempFile)
             Next
         Catch ex As Exception
@@ -2682,14 +3354,15 @@ Public Class MainForm
 #End Region
 
     Sub GenerateDTSettings()
-        DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.2.2) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & "\Windows\system32\dism.exe" & Quote)
+        DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.3) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & "{common:WinDir}\Windows\system32\dism.exe" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "Volatile=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Personalization]" & CrLf)
         Try
             Dim ColorModeRk As RegistryKey = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", False)
             Dim ColorMode As String = ColorModeRk.GetValue("AppsUseLightTheme").ToString()
+            ColorModeRk.Close()
             DTSettingForm.RichTextBox2.AppendText("ColorMode=0")
         Catch ex As Exception
             ' Rollback to light theme
@@ -2699,23 +3372,110 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFont=" & Quote & "Courier New" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontSi=10")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontBold=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "SecondaryProgressPanelStyle=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & "\Windows\Logs\DISM\DISM.log" & Quote)
+        DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & "{common:WinDir}\Logs\DISM\DISM.log" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=3")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoLogs=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ImgOps]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("ImgOperationMode=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "Quiet=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "NoRestart=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ScratchDir]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("UseScratch=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoScratch=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "ScratchDirLocation=" & Quote & "" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Output]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("EnglishOutput=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "ReportView=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[BgProcesses]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("ShowNotification=1")
-        DTSettingForm.RichTextBox2.AppendText("NotifyFrequency=0")
-        File.WriteAllText(".\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "NotifyFrequency=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[AdvBgProcesses]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("EnhancedAppxGetter=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipNonRemovable=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "DetectAllDrivers=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipFrameworks=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "RunAllProcs=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Startup]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("RemountImages=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "CheckForUpdates=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[WndParams]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("WndWidth=1280")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "WndHeight=720")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "WndCenter=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "WndLeft=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "WndTop=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "WndMaximized=0")
+        File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
+        If File.Exists(Application.StartupPath & "\portable") Then Exit Sub
+        Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("preview"), "Preview", "Stable")
+        Dim Key As RegistryKey = Registry.CurrentUser.CreateSubKey(KeyStr)
+        Dim PrgKey As RegistryKey = Key.CreateSubKey("Program")
+        PrgKey.SetValue("DismExe", Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe" & Quote, RegistryValueKind.ExpandString)
+        PrgKey.SetValue("SaveOnSettingsIni", 1, RegistryValueKind.DWord)
+        PrgKey.SetValue("Volatile", 0, RegistryValueKind.DWord)
+        PrgKey.Close()
+        Dim PersKey As RegistryKey = Key.CreateSubKey("Personalization")
+        Try
+            Dim ColorModeRk As RegistryKey = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", False)
+            Dim ColorMode As String = ColorModeRk.GetValue("AppsUseLightTheme").ToString()
+            ColorModeRk.Close()
+            PersKey.SetValue("ColorMode", 0, RegistryValueKind.DWord)
+        Catch ex As Exception
+            ' Rollback to light theme
+            PersKey.SetValue("ColorMode", 1, RegistryValueKind.DWord)
+        End Try
+        PersKey.SetValue("Language", 0, RegistryValueKind.DWord)
+        PersKey.SetValue("LogFont", "Courier New", RegistryValueKind.String)
+        PersKey.SetValue("LogFontSi", 10, RegistryValueKind.DWord)
+        PersKey.SetValue("LogFontBold", 0, RegistryValueKind.DWord)
+        PersKey.SetValue("SecondaryProgressPanelStyle", 1, RegistryValueKind.DWord)
+        PersKey.SetValue("AllCaps", 0, RegistryValueKind.DWord)
+        PersKey.Close()
+        Dim LogKey As RegistryKey = Key.CreateSubKey("Logs")
+        LogKey.SetValue("LogFile", Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\logs\DISM\DISM.log" & Quote, RegistryValueKind.ExpandString)
+        LogKey.SetValue("LogLevel", 3, RegistryValueKind.DWord)
+        LogKey.SetValue("AutoLogs", 1, RegistryValueKind.DWord)
+        LogKey.Close()
+        Dim ImgOpKey As RegistryKey = Key.CreateSubKey("ImgOps")
+        ImgOpKey.SetValue("Quiet", 0, RegistryValueKind.DWord)
+        ImgOpKey.SetValue("NoRestart", 0, RegistryValueKind.DWord)
+        ImgOpKey.Close()
+        Dim ScrDirKey As RegistryKey = Key.CreateSubKey("ScratchDir")
+        ScrDirKey.SetValue("UseScratch", 0, RegistryValueKind.DWord)
+        ScrDirKey.SetValue("AutoScratch", 1, RegistryValueKind.DWord)
+        ScrDirKey.SetValue("ScratchDirLocation", "", RegistryValueKind.ExpandString)
+        ScrDirKey.Close()
+        Dim OutKey As RegistryKey = Key.CreateSubKey("Output")
+        OutKey.SetValue("EnglishOutput", 1, RegistryValueKind.DWord)
+        OutKey.SetValue("ReportView", 0, RegistryValueKind.DWord)
+        OutKey.Close()
+        Dim BGKey As RegistryKey = Key.CreateSubKey("BgProcesses")
+        BGKey.SetValue("ShowNotification", 1, RegistryValueKind.DWord)
+        BGKey.SetValue("NotifyFrequency", 1, RegistryValueKind.DWord)
+        BGKey.Close()
+        Dim AdvBGKey As RegistryKey = Key.CreateSubKey("AdvBgProcesses")
+        AdvBGKey.SetValue("EnhancedAppxGetter", 1, RegistryValueKind.DWord)
+        AdvBGKey.SetValue("SkipNonRemovable", 1, RegistryValueKind.DWord)
+        AdvBGKey.SetValue("DetectAllDrivers", 0, RegistryValueKind.DWord)
+        AdvBGKey.SetValue("SkipFrameworks", 1, RegistryValueKind.DWord)
+        AdvBGKey.SetValue("RunAllProcs", 0, RegistryValueKind.DWord)
+        AdvBGKey.Close()
+        Dim StartupKey As RegistryKey = Key.CreateSubKey("Startup")
+        StartupKey.SetValue("RemountImages", 1, RegistryValueKind.DWord)
+        StartupKey.SetValue("CheckForUpdates", 1, RegistryValueKind.DWord)
+        StartupKey.Close()
+        Dim WndKey As RegistryKey = Key.CreateSubKey("WndParams")
+        WndKey.SetValue("WndWidth", 1280, RegistryValueKind.DWord)
+        WndKey.SetValue("WndHeight", 720, RegistryValueKind.DWord)
+        WndKey.SetValue("WndCenter", 1, RegistryValueKind.DWord)
+        WndKey.SetValue("WndLeft", 0, RegistryValueKind.DWord)
+        WndKey.SetValue("WndTop", 0, RegistryValueKind.DWord)
+        WndKey.SetValue("WndMaximized", 0, RegistryValueKind.DWord)
+        WndKey.Close()
+        Key.Close()
     End Sub
 
     Sub SaveDTSettings()
@@ -2723,11 +3483,11 @@ Public Class MainForm
             Exit Sub
         Else
             If SaveOnSettingsIni Then
-                If File.Exists(".\settings.ini") Then
-                    File.Delete(".\settings.ini")
+                If File.Exists(Application.StartupPath & "\settings.ini") Then
+                    File.Delete(Application.StartupPath & "\settings.ini")
                 End If
                 DTSettingForm.RichTextBox2.Clear()
-                DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.2.2) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
+                DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.3) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
                 DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & DismExe & Quote)
                 If SaveOnSettingsIni Then
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=1")
@@ -2748,14 +3508,24 @@ Public Class MainForm
                     Case 2
                         DTSettingForm.RichTextBox2.AppendText("ColorMode=2")
                 End Select
-                ' This version does not support additional languages
-                DTSettingForm.RichTextBox2.AppendText(CrLf & "Language=1")
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "Language=" & Language)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFont=" & Quote & LogFont & Quote)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontSi=" & LogFontSize)
                 If LogFontIsBold Then
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontBold=1")
                 Else
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontBold=0")
+                End If
+                Select Case ProgressPanelStyle
+                    Case 0
+                        DTSettingForm.RichTextBox2.AppendText(CrLf & "SecondaryProgressPanelStyle=0")
+                    Case 1
+                        DTSettingForm.RichTextBox2.AppendText(CrLf & "SecondaryProgressPanelStyle=1")
+                End Select
+                If AllCaps Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=0")
                 End If
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
                 DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & LogFile & Quote)
@@ -2769,6 +3539,11 @@ Public Class MainForm
                     Case 4
                         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=4")
                 End Select
+                If AutoLogs Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoLogs=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoLogs=0")
+                End If
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ImgOps]" & CrLf)
                 Select Case ImgOperationMode
                     Case 0
@@ -2791,6 +3566,11 @@ Public Class MainForm
                     DTSettingForm.RichTextBox2.AppendText("UseScratch=1")
                 Else
                     DTSettingForm.RichTextBox2.AppendText("UseScratch=0")
+                End If
+                If AutoScrDir Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoScratch=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoScratch=0")
                 End If
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "ScratchDirLocation=" & Quote & ScratchDir & Quote)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Output]" & CrLf)
@@ -2817,23 +3597,150 @@ Public Class MainForm
                     Case 1
                         DTSettingForm.RichTextBox2.AppendText(CrLf & "NotifyFrequency=1")
                 End Select
-                File.WriteAllText(".\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
+                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[AdvBgProcesses]" & CrLf)
+                If ExtAppxGetter Then
+                    DTSettingForm.RichTextBox2.AppendText("EnhancedAppxGetter=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText("EnhancedAppxGetter=0")
+                End If
+                If SkipNonRemovable Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipNonRemovable=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipNonRemovable=0")
+                End If
+                If AllDrivers Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "DetectAllDrivers=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "DetectAllDrivers=0")
+                End If
+                If SkipFrameworks Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipFrameworks=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "SkipFrameworks=0")
+                End If
+                If RunAllProcs Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "RunAllProcs=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "RunAllProcs=0")
+                End If
+                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Startup]" & CrLf)
+                If StartupRemount Then
+                    DTSettingForm.RichTextBox2.AppendText("RemountImages=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText("RemountImages=0")
+                End If
+                If StartupUpdateCheck Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "CheckForUpdates=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "CheckForUpdates=0")
+                End If
+                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[WndParams]" & CrLf)
+                DTSettingForm.RichTextBox2.AppendText("WndWidth=" & WndWidth)
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "WndHeight=" & WndHeight)
+                If Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2) Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "WndCenter=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "WndCenter=0")
+                End If
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "WndLeft=" & WndLeft)
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "WndTop=" & WndTop)
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "WndMaximized=" & If(WindowState = FormWindowState.Maximized, "1", "0"))
+                File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
             Else
-                ' This procedure should not be called yet
-                Try
-                    Registry.CurrentUser.OpenSubKey("Software\DISMTools", True)
-                Catch RegNotFound As NullReferenceException
-                    Registry.CurrentUser.CreateSubKey("Software\DISMTools", True)
-                    Registry.CurrentUser.OpenSubKey("Software\DISMTools", True)
-                End Try
-
+                ' Tell settings file to use this method
+                Dim SettingRtb As New RichTextBox() With {
+                    .Text = File.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)
+                }
+                SettingRtb.Text = SettingRtb.Text.Replace("SaveOnSettingsIni=1", "SaveOnSettingsIni=0").Trim()
+                File.WriteAllText(Application.StartupPath & "\settings.ini", SettingRtb.Text, ASCII)
+                Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("preview"), "Preview", "Stable")
+                Dim Key As RegistryKey = Registry.CurrentUser.CreateSubKey(KeyStr)
+                Dim PrgKey As RegistryKey = Key.CreateSubKey("Program")
+                PrgKey.SetValue("DismExe", Quote & DismExe & Quote, RegistryValueKind.ExpandString)
+                PrgKey.SetValue("SaveOnSettingsIni", If(SaveOnSettingsIni, 1, 0), RegistryValueKind.DWord)
+                PrgKey.SetValue("Volatile", If(VolatileMode, 1, 0), RegistryValueKind.DWord)
+                PrgKey.Close()
+                Dim PersKey As RegistryKey = Key.CreateSubKey("Personalization")
+                PersKey.SetValue("ColorMode", ColorMode, RegistryValueKind.DWord)
+                PersKey.SetValue("Language", Language, RegistryValueKind.DWord)
+                PersKey.SetValue("LogFont", LogFont, RegistryValueKind.String)
+                PersKey.SetValue("LogFontSi", LogFontSize, RegistryValueKind.DWord)
+                PersKey.SetValue("LogFontBold", If(LogFontIsBold, 1, 0), RegistryValueKind.DWord)
+                PersKey.SetValue("SecondaryProgressPanelStyle", ProgressPanelStyle, RegistryValueKind.DWord)
+                PersKey.SetValue("AllCaps", If(AllCaps, 1, 0), RegistryValueKind.DWord)
+                PersKey.Close()
+                Dim LogKey As RegistryKey = Key.CreateSubKey("Logs")
+                LogKey.SetValue("LogFile", LogFile, RegistryValueKind.ExpandString)
+                LogKey.SetValue("LogLevel", LogLevel, RegistryValueKind.DWord)
+                LogKey.SetValue("AutoLogs", If(AutoLogs, 1, 0), RegistryValueKind.DWord)
+                LogKey.Close()
+                Dim ImgOpKey As RegistryKey = Key.CreateSubKey("ImgOps")
+                ImgOpKey.SetValue("Quiet", If(QuietOperations, 1, 0), RegistryValueKind.DWord)
+                ImgOpKey.SetValue("NoRestart", If(SysNoRestart, 1, 0), RegistryValueKind.DWord)
+                ImgOpKey.Close()
+                Dim ScrDirKey As RegistryKey = Key.CreateSubKey("ScratchDir")
+                ScrDirKey.SetValue("UseScratch", If(UseScratch, 1, 0), RegistryValueKind.DWord)
+                ScrDirKey.SetValue("AutoScratch", If(AutoScrDir, 1, 0), RegistryValueKind.DWord)
+                ScrDirKey.SetValue("ScratchDirLocation", ScratchDir, RegistryValueKind.ExpandString)
+                ScrDirKey.Close()
+                Dim OutKey As RegistryKey = Key.CreateSubKey("Output")
+                OutKey.SetValue("EnglishOutput", If(EnglishOutput, 1, 0), RegistryValueKind.DWord)
+                OutKey.SetValue("ReportView", ReportView, RegistryValueKind.DWord)
+                OutKey.Close()
+                Dim BGKey As RegistryKey = Key.CreateSubKey("BgProcesses")
+                BGKey.SetValue("ShowNotification", If(NotificationShow, 1, 0), RegistryValueKind.DWord)
+                BGKey.SetValue("NotifyFrequency", NotificationFrequency, RegistryValueKind.DWord)
+                BGKey.Close()
+                Dim AdvBGKey As RegistryKey = Key.CreateSubKey("AdvBgProcesses")
+                AdvBGKey.SetValue("EnhancedAppxGetter", If(ExtAppxGetter, 1, 0), RegistryValueKind.DWord)
+                AdvBGKey.SetValue("SkipNonRemovable", If(SkipNonRemovable, 1, 0), RegistryValueKind.DWord)
+                AdvBGKey.SetValue("DetectAllDrivers", If(AllDrivers, 1, 0), RegistryValueKind.DWord)
+                AdvBGKey.SetValue("SkipFrameworks", If(SkipFrameworks, 1, 0), RegistryValueKind.DWord)
+                AdvBGKey.SetValue("RunAllProcs", If(RunAllProcs, 1, 0), RegistryValueKind.DWord)
+                AdvBGKey.Close()
+                Dim StartupKey As RegistryKey = Key.CreateSubKey("Startup")
+                StartupKey.SetValue("RemountImages", If(StartupRemount, 1, 0), RegistryValueKind.DWord)
+                StartupKey.SetValue("CheckForUpdates", If(StartupUpdateCheck, 1, 0), RegistryValueKind.DWord)
+                StartupKey.Close()
+                Dim WndKey As RegistryKey = Key.CreateSubKey("WndParams")
+                WndKey.SetValue("WndWidth", WndWidth, RegistryValueKind.DWord)
+                WndKey.SetValue("WndHeight", WndHeight, RegistryValueKind.DWord)
+                If Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2) Then
+                    WndKey.SetValue("WndCenter", 1, RegistryValueKind.DWord)
+                Else
+                    WndKey.SetValue("WndCenter", 0, RegistryValueKind.DWord)
+                End If
+                WndKey.SetValue("WndLeft", WndLeft, RegistryValueKind.DWord)
+                WndKey.SetValue("WndTop", WndTop, RegistryValueKind.DWord)
+                WndKey.SetValue("WndMaximized", If(WindowState = FormWindowState.Maximized, 1, 0), RegistryValueKind.DWord)
+                WndKey.Close()
+                Key.Close()
             End If
         End If
 
     End Sub
 
     Sub ResetDTSettings()
+        GenerateDTSettings()
+        LoadDTSettings(If(SaveOnSettingsIni, 1, 0))
+    End Sub
 
+    ''' <summary>
+    ''' Detects properties of the file to determine whether automatic migration needs to be performed
+    ''' </summary>
+    ''' <remarks>If the file does not exist, the initial setup wizard launches</remarks>
+    Sub PerformSettingFileValidation()
+        If File.Exists(Application.StartupPath & "\settings.ini") Then
+            Dim bldDate As Date = PrgAbout.RetrieveLinkerTimestamp(Application.StartupPath & "\DISMTools.exe")
+            If File.GetLastWriteTime(Application.StartupPath & "\settings.ini") < bldDate Then
+                ' Perform setting file migration
+                MigrationForm.ShowDialog()
+                Thread.Sleep(1500)
+            End If
+        Else
+            ' Show setup window
+            PrgSetup.ShowDialog()
+        End If
     End Sub
 
     ''' <summary>
@@ -2849,6 +3756,7 @@ Public Class MainForm
                     Dim ColorMode As String = ColorModeRk.GetValue("AppsUseLightTheme").ToString()
                     ColorModeRk.Close()
                     If ColorMode = "0" Then
+                        If IsWindowsVersionOrGreater(10, 0, 18362) Then EnableDarkTitleBar(Handle, True)
                         BackColor = Color.FromArgb(48, 48, 48)
                         ForeColor = Color.White
                         HomePanel.BackColor = Color.FromArgb(40, 40, 43)
@@ -2933,12 +3841,33 @@ Public Class MainForm
                         PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         FeatureInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                        AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                        TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         PkgInfoCMS.ForeColor = Color.White
                         FeatureInfoCMS.ForeColor = Color.White
                         ImgUMountPopupCMS.ForeColor = Color.White
+                        AppxPackagePopupCMS.ForeColor = Color.White
+                        TreeViewCMS.ForeColor = Color.White
+                        Dim items = TreeViewCMS.Items
+                        Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
+                        For Each item As ToolStripDropDownItem In mItem
+                            If item.DropDownItems.Count > 0 Then
+                                Dim ditems = item.DropDownItems
+                                Dim dmItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(ditems)
+                                Try
+                                    For Each dropDownItem As ToolStripDropDownItem In dmItem
+                                        dropDownItem.BackColor = Color.FromArgb(27, 27, 28)
+                                        dropDownItem.ForeColor = Color.White
+                                    Next
+                                Catch ex As Exception
+                                    Continue For
+                                End Try
+                            End If
+                        Next
                         InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph_dark)
                         BranchTSMI.Image = New Bitmap(My.Resources.branch_dark)
                     ElseIf ColorMode = "1" Then
+                        If IsWindowsVersionOrGreater(10, 0, 18362) Then EnableDarkTitleBar(Handle, False)
                         BackColor = Color.FromArgb(239, 239, 242)
                         ForeColor = Color.Black
                         HomePanel.BackColor = Color.White
@@ -3023,9 +3952,29 @@ Public Class MainForm
                         PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         FeatureInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                        AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                        TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         PkgInfoCMS.ForeColor = Color.Black
                         FeatureInfoCMS.ForeColor = Color.Black
                         ImgUMountPopupCMS.ForeColor = Color.Black
+                        AppxPackagePopupCMS.ForeColor = Color.Black
+                        TreeViewCMS.ForeColor = Color.Black
+                        Dim items = TreeViewCMS.Items
+                        Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
+                        For Each item As ToolStripDropDownItem In mItem
+                            If item.DropDownItems.Count > 0 Then
+                                Dim ditems = item.DropDownItems
+                                Dim dmItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(ditems)
+                                Try
+                                    For Each dropDownItem As ToolStripDropDownItem In dmItem
+                                        dropDownItem.BackColor = Color.FromArgb(231, 232, 236)
+                                        dropDownItem.ForeColor = Color.Black
+                                    Next
+                                Catch ex As Exception
+                                    Continue For
+                                End Try
+                            End If
+                        Next
                         InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph)
                         BranchTSMI.Image = New Bitmap(My.Resources.branch)
                     End If
@@ -3033,6 +3982,7 @@ Public Class MainForm
                     ChangePrgColors(1)
                 End Try
             Case 1
+                If IsWindowsVersionOrGreater(10, 0, 18362) Then EnableDarkTitleBar(Handle, False)
                 BackColor = Color.FromArgb(239, 239, 242)
                 ForeColor = Color.Black
                 HomePanel.BackColor = Color.White
@@ -3117,12 +4067,33 @@ Public Class MainForm
                 PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 FeatureInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 PkgInfoCMS.ForeColor = Color.Black
                 FeatureInfoCMS.ForeColor = Color.Black
                 ImgUMountPopupCMS.ForeColor = Color.Black
+                AppxPackagePopupCMS.ForeColor = Color.Black
+                TreeViewCMS.ForeColor = Color.Black
+                Dim items = TreeViewCMS.Items
+                Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
+                For Each item As ToolStripDropDownItem In mItem
+                    If item.DropDownItems.Count > 0 Then
+                        Dim ditems = item.DropDownItems
+                        Dim dmItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(ditems)
+                        Try
+                            For Each dropDownItem As ToolStripDropDownItem In dmItem
+                                dropDownItem.BackColor = Color.FromArgb(231, 232, 236)
+                                dropDownItem.ForeColor = Color.Black
+                            Next
+                        Catch ex As Exception
+                            Continue For
+                        End Try
+                    End If
+                Next
                 InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph)
                 BranchTSMI.Image = New Bitmap(My.Resources.branch)
             Case 2
+                If IsWindowsVersionOrGreater(10, 0, 18362) Then EnableDarkTitleBar(Handle, True)
                 BackColor = Color.FromArgb(48, 48, 48)
                 ForeColor = Color.White
                 HomePanel.BackColor = Color.FromArgb(40, 40, 43)
@@ -3207,9 +4178,29 @@ Public Class MainForm
                 PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 FeatureInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 PkgInfoCMS.ForeColor = Color.White
                 FeatureInfoCMS.ForeColor = Color.White
                 ImgUMountPopupCMS.ForeColor = Color.White
+                AppxPackagePopupCMS.ForeColor = Color.White
+                TreeViewCMS.ForeColor = Color.White
+                Dim items = TreeViewCMS.Items
+                Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
+                For Each item As ToolStripDropDownItem In mItem
+                    If item.DropDownItems.Count > 0 Then
+                        Dim ditems = item.DropDownItems
+                        Dim dmItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(ditems)
+                        Try
+                            For Each dropDownItem As ToolStripDropDownItem In dmItem
+                                dropDownItem.BackColor = Color.FromArgb(27, 27, 28)
+                                dropDownItem.ForeColor = Color.White
+                            Next
+                        Catch ex As Exception
+                            Continue For
+                        End Try
+                    End If
+                Next
                 InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph_dark)
                 BranchTSMI.Image = New Bitmap(My.Resources.branch_dark)
         End Select
@@ -3230,6 +4221,7 @@ Public Class MainForm
                     ' Menu - File
                     NewProjectToolStripMenuItem.Text = "&New project..."
                     OpenExistingProjectToolStripMenuItem.Text = "&Open existing project"
+                    ManageOnlineInstallationToolStripMenuItem.Text = "&Manage online installation"
                     SaveProjectToolStripMenuItem.Text = "&Save project..."
                     SaveProjectasToolStripMenuItem.Text = "Save project &as..."
                     ExitToolStripMenuItem.Text = "E&xit"
@@ -3266,7 +4258,6 @@ Public Class MainForm
                     DeleteImage.Text = "Delete volume images from WIM file..."
                     ExportImage.Text = "Export image..."
                     GetImageInfo.Text = "Get image information..."
-                    GetMountedImageInfo.Text = "Get currently mounted image information..."
                     GetWIMBootEntry.Text = "Get WIMBoot configuration entries..."
                     ListImage.Text = "List files and directories in image..."
                     MountImage.Text = "Mount image..."
@@ -3385,6 +4376,7 @@ Public Class MainForm
                     Label11.Text = "Coming soon!"
                     NewProjLink.Text = "New project..."
                     ExistingProjLink.Text = "Open existing project..."
+                    OnlineInstMgmt.Text = "Manage online installation"
                     ' Start Panel tabs
                     WelcomeTab.Text = "Welcome"
                     NewsFeedTab.Text = "Latest news"
@@ -3392,8 +4384,8 @@ Public Class MainForm
                     ' Welcome tab contents
                     Label24.Text = "Welcome to DISMTools"
                     Label25.Text = "The graphical front-end to perform DISM operations."
-                    Label26.Text = "This is alpha software"
-                    Label27.Text = "Currently, this program is in alpha. This means lots of things will not work as expected. There will also be lots of bugs, and, generally, the program is incomplete (as you can see right now)"
+                    Label26.Text = "This is beta software"
+                    Label27.Text = "Currently, this program is in beta. This means lots of things will not work as expected. There will also be lots of bugs, and, generally, the program is incomplete (as you can see right now)"
                     Label28.Text = "This program is open-source"
                     Label29.Text = "This program is open-source, meaning you can take a look at how it works and understand it better."
                     Label30.Text = "Be sure to know what you are doing"
@@ -3428,12 +4420,15 @@ Public Class MainForm
                     Label1.Text = "Name:"
                     Label2.Text = "Location:"
                     Label4.Text = "Images mounted?"
+                    Label5.Text = If(IsImageMounted, "Yes", "No")
                     LinkLabel1.Text = "Click here to mount an image"
                     Label23.Text = "No image has been mounted"
                     LinkLabel2.Text = "You need to mount an image in order to view its information here. Click here to mount an image."
                     LinkLabel2.LinkArea = New LinkArea(72, 4)
                     LinkLabel3.Text = "Or, if you have a mounted image, open an existing mount directory"
                     LinkLabel3.LinkArea = New LinkArea(33, 32)
+                    UpdateLink.Text = "A new version is available for download and installation. Click here to learn more"
+                    UpdateLink.LinkArea = New LinkArea(58, 24)
                     Label15.Text = "Image index:"
                     Label13.Text = "Mount point:"
                     Label16.Text = "Version:"
@@ -3464,12 +4459,37 @@ Public Class MainForm
                     CommitAndUnmountTSMI.Text = "Commit changes and unmount image"
                     DiscardAndUnmountTSMI.Text = "Discard changes and unmount image"
                     UnmountSettingsToolStripMenuItem.Text = "Unmount settings..."
+                    ViewPackageDirectoryToolStripMenuItem.Text = "View package directory"
                     ' OpenFileDialogs and FolderBrowsers
                     OpenFileDialog1.Title = "Specify the project file to load"
                     LocalMountDirFBD.Description = "Please specify the mount directory you want to load into this project:"
                     If Not ImgBW.IsBusy And areBackgroundProcessesDone Then
                         BGProcDetails.Label2.Text = "Image processes have completed"
                     End If
+                    MenuDesc.Text = "Ready"
+                    ' Tree view context menu
+                    AccessDirectoryToolStripMenuItem.Text = "Access directory"
+                    UnloadProjectToolStripMenuItem1.Text = "Unload project"
+                    CopyDeploymentToolsToolStripMenuItem.Text = "Copy deployment tools"
+                    OfAllArchitecturesToolStripMenuItem.Text = "Of all architectures"
+                    OfSelectedArchitectureToolStripMenuItem.Text = "Of selected architecture"
+                    ForX86ArchitectureToolStripMenuItem.Text = "For x86 architecture"
+                    ForAmd64ArchitectureToolStripMenuItem.Text = "For AMD64 architecture"
+                    ForARMArchitectureToolStripMenuItem.Text = "For ARM architecture"
+                    ForARM64ArchitectureToolStripMenuItem.Text = "For ARM64 architecture"
+                    ImageOperationsToolStripMenuItem.Text = "Image operations"
+                    MountImageToolStripMenuItem.Text = "Mount image..."
+                    UnmountImageToolStripMenuItem.Text = "Unmount image..."
+                    RemoveVolumeImagesToolStripMenuItem.Text = "Remove volume images..."
+                    SwitchImageIndexesToolStripMenuItem1.Text = "Switch image indexes..."
+                    UnattendedAnswerFilesToolStripMenuItem1.Text = "Unattended answer files"
+                    ManageToolStripMenuItem.Text = "Manage"
+                    CreationWizardToolStripMenuItem.Text = "Create"
+                    ScratchDirectorySettingsToolStripMenuItem.Text = "Configure scratch directory"
+                    ManageReportsToolStripMenuItem.Text = "Manage reports"
+                    AddToolStripMenuItem.Text = "Add"
+                    NewFileToolStripMenuItem.Text = "New file..."
+                    ExistingFileToolStripMenuItem.Text = "Existing file..."
                 ElseIf My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "ESN" Then
                     ' Top-level menu items
                     FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -3482,6 +4502,7 @@ Public Class MainForm
                     ' Menu - File
                     NewProjectToolStripMenuItem.Text = "&Nuevo proyecto..."
                     OpenExistingProjectToolStripMenuItem.Text = "&Abrir proyecto existente"
+                    ManageOnlineInstallationToolStripMenuItem.Text = "Administrar &instalación activa"
                     SaveProjectToolStripMenuItem.Text = "&Guardar proyecto..."
                     SaveProjectasToolStripMenuItem.Text = "Guardar proyecto &como..."
                     ExitToolStripMenuItem.Text = "Sa&lir"
@@ -3518,7 +4539,6 @@ Public Class MainForm
                     DeleteImage.Text = "Eliminar imágenes de volumen de un archivo WIM..."
                     ExportImage.Text = "Exportar imagen..."
                     GetImageInfo.Text = "Obtener información de imagen..."
-                    GetMountedImageInfo.Text = "Obtener información de imágenes montadas actualmente..."
                     GetWIMBootEntry.Text = "Obtener entradas de configuración WIMBoot..."
                     ListImage.Text = "Enumerar archivos y directorios de un archivo WIM..."
                     MountImage.Text = "Montar imagen..."
@@ -3637,6 +4657,7 @@ Public Class MainForm
                     Label11.Text = "¡Próximamente!"
                     NewProjLink.Text = "Nuevo proyecto..."
                     ExistingProjLink.Text = "Abrir proyecto existente..."
+                    OnlineInstMgmt.Text = "Administrar instalación activa"
                     ' Start Panel tabs
                     WelcomeTab.Text = "Bienvenido"
                     NewsFeedTab.Text = "Últimas noticias"
@@ -3644,8 +4665,8 @@ Public Class MainForm
                     ' Welcome tab contents
                     Label24.Text = "Bienvenido a DISMTools"
                     Label25.Text = "La interfaz gráfica para realizar operaciones de DISM."
-                    Label26.Text = "Este es un software en alpha"
-                    Label27.Text = "Ahora mismo este programa está en alpha. Esto significa que muchas cosas no funcionarán como esperado. También habrán muchos errores y, en general, este programa no está completo (como puede ver ahora mismo)"
+                    Label26.Text = "Este es un software en beta"
+                    Label27.Text = "Ahora mismo este programa está en beta. Esto significa que muchas cosas no funcionarán como esperado. También habrán muchos errores y, en general, este programa no está completo (como puede ver ahora mismo)"
                     Label28.Text = "Este programa es de código abierto"
                     Label29.Text = "Este programa es de código abierto, lo que le permite observar cómo funciona y entenderlo mejor."
                     Label30.Text = "Asegúrese de saber lo que hace"
@@ -3680,12 +4701,15 @@ Public Class MainForm
                     Label1.Text = "Nombre:"
                     Label2.Text = "Ubicación:"
                     Label4.Text = "¿Hay imágenes montadas?"
+                    Label5.Text = If(IsImageMounted, "Sí", "No")
                     LinkLabel1.Text = "Haga clic aquí para montar una imagen"
                     Label23.Text = "No se ha montado una imagen"
                     LinkLabel2.Text = "Necesita montar una imagen para ver su información aquí. Haga clic aquí para montar una imagen."
                     LinkLabel2.LinkArea = New LinkArea(67, 4)
                     LinkLabel3.Text = "O, si tiene una imagen montada, abra un directorio de montaje existente"
                     LinkLabel3.LinkArea = New LinkArea(32, 40)
+                    UpdateLink.Text = "Hay una nueva versión disponible para su descarga e instalación. Haga clic aquí para saber más"
+                    UpdateLink.LinkArea = New LinkArea(65, 29)
                     Label15.Text = "Índice:"
                     Label13.Text = "Punto de montaje:"
                     Label16.Text = "Versión:"
@@ -3716,12 +4740,37 @@ Public Class MainForm
                     CommitAndUnmountTSMI.Text = "Guardar cambios y desmontar imagen"
                     DiscardAndUnmountTSMI.Text = "Descartar cambios y desmontar imagen"
                     UnmountSettingsToolStripMenuItem.Text = "Configuración de desmontaje..."
+                    ViewPackageDirectoryToolStripMenuItem.Text = "Ver directorio del paquete"
                     ' OpenFileDialogs and FolderBrowsers
                     OpenFileDialog1.Title = "Especifique el archivo de proyecto a cargar"
                     LocalMountDirFBD.Description = "Especifique el directorio de montaje que desea cargar en este proyecto:"
                     If Not ImgBW.IsBusy And areBackgroundProcessesDone Then
                         BGProcDetails.Label2.Text = "Los procesos de la imagen han completado"
                     End If
+                    MenuDesc.Text = "Listo"
+                    ' Tree view context menu
+                    AccessDirectoryToolStripMenuItem.Text = "Acceder directorio"
+                    UnloadProjectToolStripMenuItem1.Text = "Descargar proyecto"
+                    CopyDeploymentToolsToolStripMenuItem.Text = "Copiar herramientas de implementación"
+                    OfAllArchitecturesToolStripMenuItem.Text = "De todas las arquitecturas"
+                    OfSelectedArchitectureToolStripMenuItem.Text = "De la arquitectura seleccionada"
+                    ForX86ArchitectureToolStripMenuItem.Text = "Para arquitectura x86"
+                    ForAmd64ArchitectureToolStripMenuItem.Text = "Para arquitectura AMD64"
+                    ForARMArchitectureToolStripMenuItem.Text = "Para arquitectura ARM"
+                    ForARM64ArchitectureToolStripMenuItem.Text = "Para arquitectura ARM64"
+                    ImageOperationsToolStripMenuItem.Text = "Operaciones de la imagen"
+                    MountImageToolStripMenuItem.Text = "Montar imagen..."
+                    UnmountImageToolStripMenuItem.Text = "Desmontar imagen..."
+                    RemoveVolumeImagesToolStripMenuItem.Text = "Eliminar imágenes de volumen..."
+                    SwitchImageIndexesToolStripMenuItem1.Text = "Cambiar índices de imagen..."
+                    UnattendedAnswerFilesToolStripMenuItem1.Text = "Archivos de respuesta desatendida"
+                    ManageToolStripMenuItem.Text = "Administrar"
+                    CreationWizardToolStripMenuItem.Text = "Crear"
+                    ScratchDirectorySettingsToolStripMenuItem.Text = "Configurar directorio temporal"
+                    ManageReportsToolStripMenuItem.Text = "Administrar informes"
+                    AddToolStripMenuItem.Text = "Añadir"
+                    NewFileToolStripMenuItem.Text = "Nuevo archivo..."
+                    ExistingFileToolStripMenuItem.Text = "Archivo existente..."
                 Else
                     Language = 1
                     ChangeLangs(Language)
@@ -3739,6 +4788,7 @@ Public Class MainForm
                 ' Menu - File
                 NewProjectToolStripMenuItem.Text = "&New project..."
                 OpenExistingProjectToolStripMenuItem.Text = "&Open existing project"
+                ManageOnlineInstallationToolStripMenuItem.Text = "&Manage online installation"
                 SaveProjectToolStripMenuItem.Text = "&Save project..."
                 SaveProjectasToolStripMenuItem.Text = "Save project &as..."
                 ExitToolStripMenuItem.Text = "E&xit"
@@ -3775,7 +4825,6 @@ Public Class MainForm
                 DeleteImage.Text = "Delete volume images from WIM file..."
                 ExportImage.Text = "Export image..."
                 GetImageInfo.Text = "Get image information..."
-                GetMountedImageInfo.Text = "Get currently mounted image information..."
                 GetWIMBootEntry.Text = "Get WIMBoot configuration entries..."
                 ListImage.Text = "List files and directories in image..."
                 MountImage.Text = "Mount image..."
@@ -3894,6 +4943,7 @@ Public Class MainForm
                 Label11.Text = "Coming soon!"
                 NewProjLink.Text = "New project..."
                 ExistingProjLink.Text = "Open existing project..."
+                OnlineInstMgmt.Text = "Manage online installation"
                 ' Start Panel tabs
                 WelcomeTab.Text = "Welcome"
                 NewsFeedTab.Text = "Latest news"
@@ -3901,8 +4951,8 @@ Public Class MainForm
                 ' Welcome tab contents
                 Label24.Text = "Welcome to DISMTools"
                 Label25.Text = "The graphical front-end to perform DISM operations."
-                Label26.Text = "This is alpha software"
-                Label27.Text = "Currently, this program is in alpha. This means lots of things will not work as expected. There will also be lots of bugs, and, generally, the program is incomplete (as you can see right now)"
+                Label26.Text = "This is beta software"
+                Label27.Text = "Currently, this program is in beta. This means lots of things will not work as expected. There will also be lots of bugs, and, generally, the program is incomplete (as you can see right now)"
                 Label28.Text = "This program is open-source"
                 Label29.Text = "This program is open-source, meaning you can take a look at how it works and understand it better."
                 Label30.Text = "Be sure to know what you are doing"
@@ -3937,12 +4987,15 @@ Public Class MainForm
                 Label1.Text = "Name:"
                 Label2.Text = "Location:"
                 Label4.Text = "Images mounted?"
+                Label5.Text = If(IsImageMounted, "Yes", "No")
                 LinkLabel1.Text = "Click here to mount an image"
                 Label23.Text = "No image has been mounted"
                 LinkLabel2.Text = "You need to mount an image in order to view its information here. Click here to mount an image."
                 LinkLabel2.LinkArea = New LinkArea(72, 4)
                 LinkLabel3.Text = "Or, if you have a mounted image, open an existing mount directory"
                 LinkLabel3.LinkArea = New LinkArea(33, 32)
+                UpdateLink.Text = "A new version is available for download and installation. Click here to learn more"
+                UpdateLink.LinkArea = New LinkArea(58, 24)
                 Label15.Text = "Image index:"
                 Label13.Text = "Mount point:"
                 Label16.Text = "Version:"
@@ -3973,12 +5026,37 @@ Public Class MainForm
                 CommitAndUnmountTSMI.Text = "Commit changes and unmount image"
                 DiscardAndUnmountTSMI.Text = "Discard changes and unmount image"
                 UnmountSettingsToolStripMenuItem.Text = "Unmount settings..."
+                ViewPackageDirectoryToolStripMenuItem.Text = "View package directory"
                 ' OpenFileDialogs and FolderBrowsers
                 OpenFileDialog1.Title = "Specify the project file to load"
                 LocalMountDirFBD.Description = "Please specify the mount directory you want to load into this project:"
                 If Not ImgBW.IsBusy And areBackgroundProcessesDone Then
                     BGProcDetails.Label2.Text = "Image processes have completed"
                 End If
+                MenuDesc.Text = "Ready"
+                ' Tree view context menu
+                AccessDirectoryToolStripMenuItem.Text = "Access directory"
+                UnloadProjectToolStripMenuItem1.Text = "Unload project"
+                CopyDeploymentToolsToolStripMenuItem.Text = "Copy deployment tools"
+                OfAllArchitecturesToolStripMenuItem.Text = "Of all architectures"
+                OfSelectedArchitectureToolStripMenuItem.Text = "Of selected architecture"
+                ForX86ArchitectureToolStripMenuItem.Text = "For x86 architecture"
+                ForAmd64ArchitectureToolStripMenuItem.Text = "For AMD64 architecture"
+                ForARMArchitectureToolStripMenuItem.Text = "For ARM architecture"
+                ForARM64ArchitectureToolStripMenuItem.Text = "For ARM64 architecture"
+                ImageOperationsToolStripMenuItem.Text = "Image operations"
+                MountImageToolStripMenuItem.Text = "Mount image..."
+                UnmountImageToolStripMenuItem.Text = "Unmount image..."
+                RemoveVolumeImagesToolStripMenuItem.Text = "Remove volume images..."
+                SwitchImageIndexesToolStripMenuItem1.Text = "Switch image indexes..."
+                UnattendedAnswerFilesToolStripMenuItem1.Text = "Unattended answer files"
+                ManageToolStripMenuItem.Text = "Manage"
+                CreationWizardToolStripMenuItem.Text = "Create"
+                ScratchDirectorySettingsToolStripMenuItem.Text = "Configure scratch directory"
+                ManageReportsToolStripMenuItem.Text = "Manage reports"
+                AddToolStripMenuItem.Text = "Add"
+                NewFileToolStripMenuItem.Text = "New file..."
+                ExistingFileToolStripMenuItem.Text = "Existing file..."
             Case 2
                 ' Top-level menu items
                 FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -3991,6 +5069,7 @@ Public Class MainForm
                 ' Menu - File
                 NewProjectToolStripMenuItem.Text = "&Nuevo proyecto..."
                 OpenExistingProjectToolStripMenuItem.Text = "&Abrir proyecto existente"
+                ManageOnlineInstallationToolStripMenuItem.Text = "Administrar &instalación activa"
                 SaveProjectToolStripMenuItem.Text = "&Guardar proyecto..."
                 SaveProjectasToolStripMenuItem.Text = "Guardar proyecto &como..."
                 ExitToolStripMenuItem.Text = "Sa&lir"
@@ -4027,7 +5106,6 @@ Public Class MainForm
                 DeleteImage.Text = "Eliminar imágenes de volumen de un archivo WIM..."
                 ExportImage.Text = "Exportar imagen..."
                 GetImageInfo.Text = "Obtener información de imagen..."
-                GetMountedImageInfo.Text = "Obtener información de imágenes montadas actualmente..."
                 GetWIMBootEntry.Text = "Obtener entradas de configuración WIMBoot..."
                 ListImage.Text = "Enumerar archivos y directorios de un archivo WIM..."
                 MountImage.Text = "Montar imagen..."
@@ -4146,6 +5224,7 @@ Public Class MainForm
                 Label11.Text = "¡Próximamente!"
                 NewProjLink.Text = "Nuevo proyecto..."
                 ExistingProjLink.Text = "Abrir proyecto existente..."
+                OnlineInstMgmt.Text = "Administrar instalación activa"
                 ' Start Panel tabs
                 WelcomeTab.Text = "Bienvenido"
                 NewsFeedTab.Text = "Últimas noticias"
@@ -4153,8 +5232,8 @@ Public Class MainForm
                 ' Welcome tab contents
                 Label24.Text = "Bienvenido a DISMTools"
                 Label25.Text = "La interfaz gráfica para realizar operaciones de DISM."
-                Label26.Text = "Este es un software en alpha"
-                Label27.Text = "Ahora mismo este programa está en alpha. Esto significa que muchas cosas no funcionarán como esperado. También habrán muchos errores y, en general, este programa no está completo (como puede ver ahora mismo)"
+                Label26.Text = "Este es un software en beta"
+                Label27.Text = "Ahora mismo este programa está en beta. Esto significa que muchas cosas no funcionarán como esperado. También habrán muchos errores y, en general, este programa no está completo (como puede ver ahora mismo)"
                 Label28.Text = "Este programa es de código abierto"
                 Label29.Text = "Este programa es de código abierto, lo que le permite observar cómo funciona y entenderlo mejor."
                 Label30.Text = "Asegúrese de saber lo que hace"
@@ -4189,12 +5268,15 @@ Public Class MainForm
                 Label1.Text = "Nombre:"
                 Label2.Text = "Ubicación:"
                 Label4.Text = "¿Hay imágenes montadas?"
+                Label5.Text = If(IsImageMounted, "Sí", "No")
                 LinkLabel1.Text = "Haga clic aquí para montar una imagen"
                 Label23.Text = "No se ha montado una imagen"
                 LinkLabel2.Text = "Necesita montar una imagen para ver su información aquí. Haga clic aquí para montar una imagen."
                 LinkLabel2.LinkArea = New LinkArea(67, 4)
                 LinkLabel3.Text = "O, si tiene una imagen montada, abra un directorio de montaje existente"
                 LinkLabel3.LinkArea = New LinkArea(32, 40)
+                UpdateLink.Text = "Hay una nueva versión disponible para su descarga e instalación. Haga clic aquí para saber más"
+                UpdateLink.LinkArea = New LinkArea(65, 29)
                 Label15.Text = "Índice:"
                 Label13.Text = "Punto de montaje:"
                 Label16.Text = "Versión:"
@@ -4225,13 +5307,70 @@ Public Class MainForm
                 CommitAndUnmountTSMI.Text = "Guardar cambios y desmontar imagen"
                 DiscardAndUnmountTSMI.Text = "Descartar cambios y desmontar imagen"
                 UnmountSettingsToolStripMenuItem.Text = "Configuración de desmontaje..."
+                ViewPackageDirectoryToolStripMenuItem.Text = "Ver directorio del paquete"
                 ' OpenFileDialogs and FolderBrowsers
                 OpenFileDialog1.Title = "Especifique el archivo de proyecto a cargar"
                 LocalMountDirFBD.Description = "Especifique el directorio de montaje que desea cargar en este proyecto:"
                 If Not ImgBW.IsBusy And areBackgroundProcessesDone Then
                     BGProcDetails.Label2.Text = "Los procesos de la imagen han completado"
                 End If
+                MenuDesc.Text = "Listo"
+                ' Tree view context menu
+                AccessDirectoryToolStripMenuItem.Text = "Acceder directorio"
+                UnloadProjectToolStripMenuItem1.Text = "Descargar proyecto"
+                CopyDeploymentToolsToolStripMenuItem.Text = "Copiar herramientas de implementación"
+                OfAllArchitecturesToolStripMenuItem.Text = "De todas las arquitecturas"
+                OfSelectedArchitectureToolStripMenuItem.Text = "De la arquitectura seleccionada"
+                ForX86ArchitectureToolStripMenuItem.Text = "Para arquitectura x86"
+                ForAmd64ArchitectureToolStripMenuItem.Text = "Para arquitectura AMD64"
+                ForARMArchitectureToolStripMenuItem.Text = "Para arquitectura ARM"
+                ForARM64ArchitectureToolStripMenuItem.Text = "Para arquitectura ARM64"
+                ImageOperationsToolStripMenuItem.Text = "Operaciones de la imagen"
+                MountImageToolStripMenuItem.Text = "Montar imagen..."
+                UnmountImageToolStripMenuItem.Text = "Desmontar imagen..."
+                RemoveVolumeImagesToolStripMenuItem.Text = "Eliminar imágenes de volumen..."
+                SwitchImageIndexesToolStripMenuItem1.Text = "Cambiar índices de imagen..."
+                UnattendedAnswerFilesToolStripMenuItem1.Text = "Archivos de respuesta desatendida"
+                ManageToolStripMenuItem.Text = "Administrar"
+                CreationWizardToolStripMenuItem.Text = "Crear"
+                ScratchDirectorySettingsToolStripMenuItem.Text = "Configurar directorio temporal"
+                ManageReportsToolStripMenuItem.Text = "Administrar informes"
+                AddToolStripMenuItem.Text = "Añadir"
+                NewFileToolStripMenuItem.Text = "Nuevo archivo..."
+                ExistingFileToolStripMenuItem.Text = "Archivo existente..."
         End Select
+
+        If OnlineManagement Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            Label5.Text = "Yes"
+                            Text = "Online installation - DISMTools"
+                            Label14.Text = "(Online installation)"
+                            Label20.Text = "(Online installation)"
+                            projName.Text = "(Online installation)"
+                        Case "ESN"
+                            Label5.Text = "Sí"
+                            Text = "Instalación activa - DISMTools"
+                            Label14.Text = "(Instalación activa)"
+                            Label20.Text = "(Instalación activa)"
+                            projName.Text = "(Instalación activa)"
+                    End Select
+                Case 1
+                    Label5.Text = "Yes"
+                    Text = "Online installation - DISMTools"
+                    Label14.Text = "(Online installation)"
+                    Label20.Text = "(Online installation)"
+                    projName.Text = "(Online installation)"
+                Case 2
+                    Label5.Text = "Sí"
+                    Text = "Instalación activa - DISMTools"
+                    Label14.Text = "(Instalación activa)"
+                    Label20.Text = "(Instalación activa)"
+                    projName.Text = "(Instalación activa)"
+            End Select
+        End If
     End Sub
 
     'Sub GenReportTab(ReportType As Integer, TableFormat As Integer)            ' Hold this for a future release
@@ -4282,7 +5421,7 @@ Public Class MainForm
         End If
     End Sub
 
-    Sub LoadDTProj(DTProjPath As String, DTProjFileName As String, BypassFileDialog As Boolean)
+    Sub LoadDTProj(DTProjPath As String, DTProjFileName As String, BypassFileDialog As Boolean, SkipBGProcs As Boolean)
         If File.Exists(DTProjPath) Then
             CheckDTProjHeaders(DTProjPath)
             If isSqlServerDTProj Then
@@ -4322,7 +5461,7 @@ Public Class MainForm
                 PopulateProjectTree(prjName)
                 isProjectLoaded = True
                 IsImageMounted = False
-                UpdateProjProperties(False, False)
+                UpdateProjProperties(False, False, SkipBGProcs)
                 Button1.Enabled = True
                 Button2.Enabled = False
                 Button3.Enabled = False
@@ -4340,6 +5479,144 @@ Public Class MainForm
                 If OpenFileDialog1.FileName = "" Then
                     If BypassFileDialog = False Then
                         Exit Sub
+                    Else
+                        prjName = Path.GetFileNameWithoutExtension(DTProjPath)
+                        Text = prjName & " - DISMTools"
+                        If Debugger.IsAttached Then
+                            Text &= " (debug mode)"
+                        End If
+                        Label3.Text = DTProjPath
+                        projPath = DTProjPath
+                        projPath = projPath.Replace("\" & DTProjFileName & ".dtproj", "").Trim()
+                        Select Case Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        PleaseWaitDialog.Label2.Text = "Loading project: " & Quote & prjName & Quote
+                                    Case "ESN"
+                                        PleaseWaitDialog.Label2.Text = "Cargando proyecto: " & Quote & prjName & Quote
+                                End Select
+                            Case 1
+                                PleaseWaitDialog.Label2.Text = "Loading project: " & Quote & prjName & Quote
+                            Case 2
+                                PleaseWaitDialog.Label2.Text = "Cargando proyecto: " & Quote & prjName & Quote
+                        End Select
+                        'PleaseWaitDialog.Label2.Text = "Loading project: " & Quote & prjName & Quote
+                        PleaseWaitDialog.ShowDialog(Me)
+                        projName.Text = prjName
+                        If IsImageMounted Then
+                            ImageNotMountedPanel.Visible = False
+                            ImagePanel.Visible = True
+                        Else
+                            ImageNotMountedPanel.Visible = True
+                            ImagePanel.Visible = False
+                        End If
+                        PopulateProjectTree(prjName)
+                        isProjectLoaded = True
+
+                        ' Load values (use same code as saving, but reversed)
+                        SourceImg = ProjectValueLoadForm.RichTextBox5.Text
+                        Try
+                            ImgIndex = CInt(ProjectValueLoadForm.RichTextBox6.Text)
+                        Catch ex As Exception
+                            ' The conversion could not be possible. Maybe because it's "N/A" on the RTB?
+                        End Try
+                        MountDir = ProjectValueLoadForm.RichTextBox7.Text
+                        imgVersion = ProjectValueLoadForm.RichTextBox8.Text
+                        imgMountedName = ProjectValueLoadForm.RichTextBox9.Text
+                        imgMountedDesc = ProjectValueLoadForm.RichTextBox10.Text
+                        imgWimBootStatus = ProjectValueLoadForm.RichTextBox11.Text
+                        imgArch = ProjectValueLoadForm.RichTextBox12.Text
+                        imgHal = ProjectValueLoadForm.RichTextBox13.Text
+                        imgSPBuild = ProjectValueLoadForm.RichTextBox14.Text
+                        imgSPLvl = ProjectValueLoadForm.RichTextBox15.Text
+                        imgEdition = ProjectValueLoadForm.RichTextBox16.Text
+                        imgPType = ProjectValueLoadForm.RichTextBox17.Text
+                        imgPSuite = ProjectValueLoadForm.RichTextBox18.Text
+                        imgSysRoot = ProjectValueLoadForm.RichTextBox19.Text
+                        Try
+                            imgDirs = ProjectValueLoadForm.RichTextBox20.Text
+                        Catch ex As Exception
+                            ' Like before, the conversion could not be possible
+                        End Try
+                        Try
+                            imgFiles = ProjectValueLoadForm.RichTextBox21.Text
+                        Catch ex As Exception
+                            ' Like before, the conversion could not be possible
+                        End Try
+                        Try
+                            CreationTime = DateTimeOffset.FromUnixTimeSeconds(CType(ProjectValueLoadForm.RichTextBox22.Text, Long)).ToString().Replace(" +00:00", "").Trim()
+                            ModifyTime = DateTimeOffset.FromUnixTimeSeconds(CType(ProjectValueLoadForm.RichTextBox23.Text, Long)).ToString().Replace(" +00:00", "").Trim()
+                        Catch ex As Exception
+                            ' Like before, the conversion could not be possible
+                        End Try
+                        imgLangs = ProjectValueLoadForm.RichTextBox24.Text
+                        imgRW = ""
+
+                        ' Set initial settings for background processes
+                        bwAllBackgroundProcesses = True
+                        bwGetImageInfo = True
+                        bwGetAdvImgInfo = True
+                        bwBackgroundProcessAction = 0
+
+                        ' Detect individual stuff
+                        If Directory.Exists(projPath & "\mount" & "\Windows") Then
+                            ' Detect whether image is mounted by checking its Windows directory.
+                            ' This will be changed in the future but, because this is in alpha, scan
+                            ' whether the image's Windows folder exists
+                            IsImageMounted = True
+                            If imgRW = "Yes" Then
+                                UpdateProjProperties(True, False, SkipBGProcs)
+                            ElseIf imgRW = "No" Then
+                                UpdateProjProperties(True, True, SkipBGProcs)
+                            Else
+                                ' Assume it has read-write permissions
+                                UpdateProjProperties(True, False, SkipBGProcs)
+                            End If
+                        ElseIf Directory.Exists(MountDir & "\Windows") Then
+                            ' This is for these cases where image was mounted to outside the project
+                            IsImageMounted = True
+                            If imgRW = "Yes" Then
+                                UpdateProjProperties(True, False, SkipBGProcs)
+                            ElseIf imgRW = "No" Then
+                                UpdateProjProperties(True, True, SkipBGProcs)
+                            Else
+                                ' Assume it has read-write permissions
+                                UpdateProjProperties(True, False, SkipBGProcs)
+                            End If
+                        Else
+                            IsImageMounted = False
+                            UpdateProjProperties(False, False, SkipBGProcs)
+                        End If
+                        If IsImageMounted Then
+                            Button1.Enabled = False
+                            Button2.Enabled = True
+                            Button3.Enabled = True
+                            Button4.Enabled = True
+                            Button5.Enabled = True
+                            Button6.Enabled = True
+                            Button7.Enabled = True
+                            Button8.Enabled = True
+                            Button9.Enabled = True
+                            Button10.Enabled = True
+                            Button11.Enabled = True
+                            Button12.Enabled = True
+                            Button13.Enabled = True
+                        Else
+                            Button1.Enabled = True
+                            Button2.Enabled = False
+                            Button3.Enabled = False
+                            Button4.Enabled = False
+                            Button5.Enabled = False
+                            Button6.Enabled = False
+                            Button7.Enabled = False
+                            Button8.Enabled = False
+                            Button9.Enabled = False
+                            Button10.Enabled = False
+                            Button11.Enabled = False
+                            Button12.Enabled = False
+                            Button13.Enabled = False
+                        End If
                     End If
                 Else
                     prjName = Path.GetFileNameWithoutExtension(DTProjPath)
@@ -4413,7 +5690,7 @@ Public Class MainForm
                         ' Like before, the conversion could not be possible
                     End Try
                     imgLangs = ProjectValueLoadForm.RichTextBox24.Text
-                    imgRW = ProjectValueLoadForm.RichTextBox25.Text
+                    imgRW = ""
 
                     ' Set initial settings for background processes
                     bwAllBackgroundProcesses = True
@@ -4428,12 +5705,12 @@ Public Class MainForm
                         ' whether the image's Windows folder exists
                         IsImageMounted = True
                         If imgRW = "Yes" Then
-                            UpdateProjProperties(True, False)
+                            UpdateProjProperties(True, False, SkipBGProcs)
                         ElseIf imgRW = "No" Then
-                            UpdateProjProperties(True, True)
+                            UpdateProjProperties(True, True, SkipBGProcs)
                         Else
                             ' Assume it has read-write permissions
-                            UpdateProjProperties(True, False)
+                            UpdateProjProperties(True, False, SkipBGProcs)
                         End If
                     ElseIf Directory.Exists(MountDir & "\Windows") Then
                         ' This is for these cases where image was mounted to outside the project
@@ -4504,6 +5781,7 @@ Public Class MainForm
     End Sub
 
     Sub SaveDTProj()
+        If ProjectValueLoadForm.RichTextBox1.Text = "" Then ProjectValueLoadForm.RichTextBox1.Text = File.ReadAllText(projPath & "\settings\project.ini", UTF8)
         ' Clear Rich Text Boxes
         'ProjectValueLoadForm.RichTextBox2.Text = ""
         'ProjectValueLoadForm.RichTextBox3.Text = ""
@@ -4578,6 +5856,7 @@ Public Class MainForm
 
         ProjectValueLoadForm.RichTextBox24.Text = imgLangs
         ProjectValueLoadForm.RichTextBox25.Text = imgRW
+        ProjectValueLoadForm.RichTextBox26.Text = ""
         ProjectValueLoadForm.RichTextBox26.AppendText("[ProjOptions]" & CrLf & ProjectValueLoadForm.RichTextBox1.Lines(1) & CrLf & ProjectValueLoadForm.RichTextBox1.Lines(2) & CrLf & ProjectValueLoadForm.RichTextBox1.Lines(3) & CrLf & CrLf & _
                                                       "[ImageOptions]" & CrLf & _
                                                       "ImageFile=" & ProjectValueLoadForm.RichTextBox5.Text & CrLf & _
@@ -4599,9 +5878,7 @@ Public Class MainForm
                                                       "ImageFileCount=" & ProjectValueLoadForm.RichTextBox21.Text & CrLf & _
                                                       "ImageEpochCreate=" & ProjectValueLoadForm.RichTextBox22.Text & CrLf & _
                                                       "ImageEpochModify=" & ProjectValueLoadForm.RichTextBox23.Text & CrLf & _
-                                                      "ImageLang=" & ProjectValueLoadForm.RichTextBox24.Text & CrLf & CrLf & _
-                                                      "[Params]" & CrLf & _
-                                                      "ImageReadWrite=" & ProjectValueLoadForm.RichTextBox25.Text)
+                                                      "ImageLang=" & ProjectValueLoadForm.RichTextBox24.Text)
         Try
             ProjectValueLoadForm.EpochRTB2.Text = DateTimeOffset.FromUnixTimeSeconds(CType(ProjectValueLoadForm.RichTextBox22.Text, Long)).ToString().Replace(" +00:00", "").Trim()
             ProjectValueLoadForm.EpochRTB3.Text = DateTimeOffset.FromUnixTimeSeconds(CType(ProjectValueLoadForm.RichTextBox23.Text, Long)).ToString().Replace(" +00:00", "").Trim()
@@ -4628,6 +5905,74 @@ Public Class MainForm
     ''' <param name="UnmountImg">Determines whether the program should unmount the image before unloading the project</param>
     ''' <remarks>The program, attending to the parameters shown above, will unload the project</remarks>
     Sub UnloadDTProj(IsBeingClosed As Boolean, SaveProject As Boolean, UnmountImg As Boolean)
+        If ImgBW.IsBusy Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            If MsgBox("Background processes are still gathering information about this image. Do you want to cancel them?", vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
+                                ImgBW.CancelAsync()
+                            Else
+                                Exit Sub
+                            End If
+                        Case "ESN"
+                            If MsgBox("Procesos en segundo plano todavía están recopilando información de esta imagen. ¿Desea cancelarlos?", vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
+                                ImgBW.CancelAsync()
+                            Else
+                                Exit Sub
+                            End If
+                    End Select
+                Case 1
+                    If MsgBox("Background processes are still gathering information about this image. Do you want to cancel them?", vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
+                        ImgBW.CancelAsync()
+                    Else
+                        Exit Sub
+                    End If
+                Case 2
+                    If MsgBox("Procesos en segundo plano todavía están recopilando información de esta imagen. ¿Desea cancelarlos?", vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
+                        ImgBW.CancelAsync()
+                    Else
+                        Exit Sub
+                    End If
+            End Select
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MenuDesc.Text = "Cancelling background processes. Please wait..."
+                        Case "ESN"
+                            MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
+                    End Select
+                Case 1
+                    MenuDesc.Text = "Cancelling background processes. Please wait..."
+                Case 2
+                    MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
+            End Select
+            While ImgBW.IsBusy()
+                ToolStripButton3.Enabled = False
+                UnloadBtn.Enabled = False
+                Application.DoEvents()
+                Thread.Sleep(100)
+            End While
+            ToolStripButton3.Enabled = True
+            UnloadBtn.Enabled = True
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MenuDesc.Text = "Ready"
+                        Case "ESN"
+                            MenuDesc.Text = "Listo"
+                    End Select
+                Case 1
+                    MenuDesc.Text = "Ready"
+                Case 2
+                    MenuDesc.Text = "Listo"
+            End Select
+        End If
+        bwBackgroundProcessAction = 0
+        bwGetImageInfo = True
+        bwGetAdvImgInfo = True
         If imgCommitOperation = 0 Then
             ProgressPanel.OperationNum = 21
             ProgressPanel.UMountLocalDir = True
@@ -4679,9 +6024,197 @@ Public Class MainForm
         SaveProjectToolStripMenuItem.Enabled = False
         SaveProjectasToolStripMenuItem.Enabled = False
         BGProcDetails.Hide()
+        Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
+        If OnlineManagement Then EndOnlineManagement()
     End Sub
 
-    Sub UpdateProjProperties(WasImageMounted As Boolean, IsReadOnly As Boolean)
+    Sub BeginOnlineManagement(ShowDialog As Boolean)
+        If ShowDialog Then ActiveInstAccessWarn.ShowDialog()
+        IsImageMounted = True
+        isProjectLoaded = True
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Text = "Online installation - DISMTools"
+                    Case "ESN"
+                        Text = "Instalación activa - DISMTools"
+                End Select
+            Case 1
+                Text = "Online installation - DISMTools"
+            Case 2
+                Text = "Instalación activa - DISMTools"
+        End Select
+        OnlineManagement = True
+        ' Initialize background processes
+        bwAllBackgroundProcesses = True
+        bwGetImageInfo = True
+        bwGetAdvImgInfo = True
+        bwBackgroundProcessAction = 0
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Label5.Text = "Yes"
+                    Case "ESN"
+                        Label5.Text = "Sí"
+                End Select
+            Case 1
+                Label5.Text = "Yes"
+            Case 2
+                Label5.Text = "Sí"
+        End Select
+        HomePanel.Visible = False
+        PrjPanel.Visible = True
+        SplitPanels.Visible = True
+        RemountImageWithWritePermissionsToolStripMenuItem.Enabled = False
+        SaveProjectToolStripMenuItem.Enabled = False
+        SaveProjectasToolStripMenuItem.Enabled = False
+        LinkLabel1.Visible = False
+        ImageNotMountedPanel.Visible = False
+        ImagePanel.Visible = True
+        CommandsToolStripMenuItem.Visible = True
+        Thread.Sleep(250)
+        Refresh()
+        ' Saving a project is not possible in online mode
+        ToolStripButton2.Enabled = False
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Label14.Text = "(Online installation)"
+                        Label12.Text = "(Online installation)"
+                    Case "ESN"
+                        Label14.Text = "(Instalación activa)"
+                        Label12.Text = "(Instalación activa)"
+                End Select
+            Case 1
+                Label14.Text = "(Online installation)"
+                Label12.Text = "(Online installation)"
+            Case 2
+                Label14.Text = "(Instalación activa)"
+                Label12.Text = "(Instalación activa)"
+        End Select
+        GroupBox1.Enabled = False
+        Panel2.Visible = False
+        ProjNameEditBtn.Visible = False
+        TableLayoutPanel2.ColumnCount = 2
+        TableLayoutPanel2.SetColumnSpan(Label5, 1)
+        TableLayoutPanel2.SetColumnSpan(Label3, 1)
+        ManageOnlineInstallationToolStripMenuItem.Enabled = False
+        ImgBW.RunWorkerAsync()
+        Exit Sub
+    End Sub
+
+    Sub EndOnlineManagement()
+        If ImgBW.IsBusy Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            If MsgBox("Background processes are still gathering information about this image. Do you want to cancel them?", vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
+                                ImgBW.CancelAsync()
+                            Else
+                                Exit Sub
+                            End If
+                        Case "ESN"
+                            If MsgBox("Procesos en segundo plano todavía están recopilando información de esta imagen. ¿Desea cancelarlos?", vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
+                                ImgBW.CancelAsync()
+                            Else
+                                Exit Sub
+                            End If
+                    End Select
+                Case 1
+                    If MsgBox("Background processes are still gathering information about this image. Do you want to cancel them?", vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
+                        ImgBW.CancelAsync()
+                    Else
+                        Exit Sub
+                    End If
+                Case 2
+                    If MsgBox("Procesos en segundo plano todavía están recopilando información de esta imagen. ¿Desea cancelarlos?", vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
+                        ImgBW.CancelAsync()
+                    Else
+                        Exit Sub
+                    End If
+            End Select
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MenuDesc.Text = "Cancelling background processes. Please wait..."
+                        Case "ESN"
+                            MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
+                    End Select
+                Case 1
+                    MenuDesc.Text = "Cancelling background processes. Please wait..."
+                Case 2
+                    MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
+            End Select
+            While ImgBW.IsBusy()
+                ToolStripButton3.Enabled = False
+                UnloadBtn.Enabled = False
+                Application.DoEvents()
+                Thread.Sleep(100)
+            End While
+            ToolStripButton3.Enabled = True
+            UnloadBtn.Enabled = True
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MenuDesc.Text = "Ready"
+                        Case "ESN"
+                            MenuDesc.Text = "Listo"
+                    End Select
+                Case 1
+                    MenuDesc.Text = "Ready"
+                Case 2
+                    MenuDesc.Text = "Listo"
+            End Select
+        End If
+        bwBackgroundProcessAction = 0
+        bwGetImageInfo = True
+        bwGetAdvImgInfo = True
+        IsImageMounted = False
+        isProjectLoaded = False
+        Text = "DISMTools"
+        OnlineManagement = False
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Label5.Text = "Yes"
+                    Case "ESN"
+                        Label5.Text = "Sí"
+                End Select
+            Case 1
+                Label5.Text = "Yes"
+            Case 2
+                Label5.Text = "Sí"
+        End Select
+        HomePanel.Visible = True
+        PrjPanel.Visible = False
+        SplitPanels.Visible = False
+        RemountImageWithWritePermissionsToolStripMenuItem.Enabled = False
+        LinkLabel1.Visible = False
+        ImageNotMountedPanel.Visible = False
+        ImagePanel.Visible = True
+        CommandsToolStripMenuItem.Visible = False
+        ProjectToolStripMenuItem.Visible = False
+        Thread.Sleep(250)
+        Refresh()
+        ToolStripButton2.Enabled = True
+        GroupBox1.Enabled = True
+        Panel2.Visible = True
+        ProjNameEditBtn.Visible = True
+        TableLayoutPanel2.ColumnCount = 3
+        TableLayoutPanel2.SetColumnSpan(Label5, 2)
+        TableLayoutPanel2.SetColumnSpan(Label3, 2)
+        ManageOnlineInstallationToolStripMenuItem.Enabled = True
+        Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
+    End Sub
+
+    Sub UpdateProjProperties(WasImageMounted As Boolean, IsReadOnly As Boolean, Optional SkipBGProcs As Boolean = False)
         If WasImageMounted Then
             Select Case Language
                 Case 0
@@ -4733,9 +6266,9 @@ Public Class MainForm
         Else
             RemountImageWithWritePermissionsToolStripMenuItem.Enabled = False
         End If
-
+        If SkipBGProcs Then Exit Sub
         ' Set image properties
-        If WasImageMounted And expBackgroundProcesses Then
+        If expBackgroundProcesses Then
             ImgBW.RunWorkerAsync()
             Exit Sub
         End If
@@ -4758,44 +6291,44 @@ Public Class MainForm
                     Case 6
                         Select Case DismVersionChecker.ProductMinorPart
                             Case 1
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-wiminfo /wimfile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " > imgname", _
                                                   ASCII)
                             Case Is >= 2
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " > imgname", _
                                                   ASCII)
                         End Select
                     Case 10
-                        File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                           "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " > imgname", _
                                           ASCII)
                 End Select
-                Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
-                Label18.Text = My.Computer.FileSystem.ReadAllText(".\imgname").Replace("Name : ", "").Trim()
-                File.Delete(".\imgname")
-                File.Delete(".\bin\exthelpers\temp.bat")
+                Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
+                Label18.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\imgname").Replace("Name : ", "").Trim()
+                File.Delete(Application.StartupPath & "\imgname")
+                File.Delete(Application.StartupPath & "\bin\exthelpers\temp.bat")
                 Select Case DismVersionChecker.ProductMajorPart
                     Case 6
                         Select Case DismVersionChecker.ProductMinorPart
                             Case 1
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-wiminfo /wimfile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
                                                   ASCII)
                             Case Is >= 2
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
                                                   ASCII)
                         End Select
                     Case 10
-                        File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                           "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
                                           ASCII)
                 End Select
-                Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
-                Label20.Text = My.Computer.FileSystem.ReadAllText(".\imgdesc").Replace("Description : ", "").Trim()
-                File.Delete(".\imgdesc")
-                File.Delete(".\bin\exthelpers\temp.bat")
+                Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
+                Label20.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\imgdesc").Replace("Description : ", "").Trim()
+                File.Delete(Application.StartupPath & "\imgdesc")
+                File.Delete(Application.StartupPath & "\bin\exthelpers\temp.bat")
                 If Label18.Text = "" Or Label20.Text = "" Then
                     Label18.Text = imgMountedName
                     Label20.Text = imgMountedDesc
@@ -4811,44 +6344,44 @@ Public Class MainForm
                     Case 6
                         Select Case DismVersionChecker.ProductMinorPart
                             Case 1
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Name" & Quote & " > imgname", _
                                                   ASCII)
                             Case Is >= 2
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Name" & Quote & " > imgname", _
                                                   ASCII)
                         End Select
                     Case 10
-                        File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                           "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Name" & Quote & " > imgname", _
                                           ASCII)
                 End Select
-                Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
-                Label18.Text = My.Computer.FileSystem.ReadAllText(".\imgname").Replace("Name : ", "").Trim()
-                File.Delete(".\imgname")
-                File.Delete(".\bin\exthelpers\temp.bat")
+                Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
+                Label18.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\imgname").Replace("Name : ", "").Trim()
+                File.Delete(Application.StartupPath & "\imgname")
+                File.Delete(Application.StartupPath & "\bin\exthelpers\temp.bat")
                 Select Case DismVersionChecker.ProductMajorPart
                     Case 6
                         Select Case DismVersionChecker.ProductMinorPart
                             Case 1
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
                                                   ASCII)
                             Case Is >= 2
-                                File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                                   "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
                                                   ASCII)
                         End Select
                     Case 10
-                        File.WriteAllText(".\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
                                           "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
                                           ASCII)
                 End Select
-                Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
-                Label20.Text = My.Computer.FileSystem.ReadAllText(".\imgdesc").Replace("Description : ", "").Trim()
-                File.Delete(".\imgdesc")
-                File.Delete(".\bin\exthelpers\temp.bat")
+                Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
+                Label20.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\imgdesc").Replace("Description : ", "").Trim()
+                File.Delete(Application.StartupPath & "\imgdesc")
+                File.Delete(Application.StartupPath & "\bin\exthelpers\temp.bat")
                 If Label18.Text = "" Or Label20.Text = "" Then
                     Label18.Text = imgMountedName
                     Label20.Text = imgMountedDesc
@@ -4864,42 +6397,42 @@ Public Class MainForm
             Case 6
                 Select Case DismVersionChecker.ProductMinorPart
                     Case 1
-                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                           "@echo off" & CrLf & _
                                           "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus", ASCII)
                     Case Is >= 2
-                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                           "@echo off" & CrLf & _
                                           "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus", ASCII)
                 End Select
             Case 10
-                File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                   "@echo off" & CrLf & _
                                   "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus", ASCII)
         End Select
-        Process.Start(".\bin\exthelpers\imginfo.bat").WaitForExit()
+        Process.Start(Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
         mountedImgStatus = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgmountedstatus", ASCII).Replace("Status : ", "").Trim()
-        File.Delete(".\bin\exthelpers\imginfo.bat")
+        File.Delete(Application.StartupPath & "\bin\exthelpers\imginfo.bat")
         Select Case DismVersionChecker.ProductMajorPart
             Case 6
                 Select Case DismVersionChecker.ProductMinorPart
                     Case 1
-                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                           "@echo off" & CrLf & _
                                           "dism /English /get-wiminfo /wimfile=" & SourceImg & " | find /c " & Quote & "Index" & Quote & " > " & projPath & "\tempinfo\indexcount", ASCII)
                     Case Is >= 2
-                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                           "@echo off" & CrLf & _
                                           "dism /English /get-imageinfo /imagefile=" & SourceImg & " | find /c " & Quote & "Index" & Quote & " > " & projPath & "\tempinfo\indexcount", ASCII)
                 End Select
             Case 10
-                File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                   "@echo off" & CrLf & _
                                   "dism /English /get-imageinfo /imagefile=" & SourceImg & " | find /c " & Quote & "Index" & Quote & " > " & projPath & "\tempinfo\indexcount", ASCII)
         End Select
-        Process.Start(".\bin\exthelpers\imginfo.bat").WaitForExit()
+        Process.Start(Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
         imgIndexCount = CInt(My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\indexcount", ASCII))
-        File.Delete(".\bin\exthelpers\imginfo.bat")
+        File.Delete(Application.StartupPath & "\bin\exthelpers\imginfo.bat")
         For Each FoundFile In My.Computer.FileSystem.GetFiles(projPath & "\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
             File.Delete(FoundFile)
         Next
@@ -4934,7 +6467,7 @@ Public Class MainForm
                     Case 6
                         Select Case DismVersionChecker.ProductMinorPart
                             Case 1
-                                File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                                   "@echo off" & CrLf & _
                                                   "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf & _
                                                   "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf & _
@@ -4960,7 +6493,7 @@ Public Class MainForm
                                                   "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & projPath & "\tempinfo\imgmodification" & CrLf & _
                                                   "dism /English /image=" & MountDir & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & projPath & "\tempinfo\imglangs", ASCII)
                             Case Is >= 2
-                                File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                                   "@echo off" & CrLf & _
                                                   "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf & _
                                                   "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf & _
@@ -4987,7 +6520,7 @@ Public Class MainForm
                                                   "dism /English /image=" & MountDir & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & projPath & "\tempinfo\imglangs", ASCII)
                         End Select
                     Case 10
-                        File.WriteAllText(".\bin\exthelpers\imginfo.bat", _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
                                           "@echo off" & CrLf & _
                                           "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf & _
                                           "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf & _
@@ -5015,9 +6548,9 @@ Public Class MainForm
                 End Select
 
                 If Debugger.IsAttached Then
-                    Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\imginfo.bat").WaitForExit()
+                    Process.Start("\Windows\system32\notepad.exe", Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
                 End If
-                Process.Start(".\bin\exthelpers\imginfo.bat").WaitForExit()
+                Process.Start(Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
                 'imgName = SourceImg
                 'ImgIndex = ImgIndex
                 'imgMountDir = MountDir
@@ -5058,7 +6591,7 @@ Public Class MainForm
                         File.Delete(foundFile)
                     Next
                     Directory.Delete(projPath & "\tempinfo")
-                    File.Delete(".\bin\exthelpers\imginfo.bat")
+                    File.Delete(Application.StartupPath & "\bin\exthelpers\imginfo.bat")
                 Catch ex As Exception
 
                 End Try
@@ -5164,7 +6697,7 @@ Public Class MainForm
                             prjTreeView.Nodes("parent").Nodes.Add("reports", "Project reports")
                         Case "ESN"
                             prjTreeView.Nodes.Add("parent", "Proyecto: " & Quote & MainProjNameNode & Quote)
-                            prjTreeView.Nodes("parent").Nodes.Add("dandi", "Herramientas de implementación KEI")
+                            prjTreeView.Nodes("parent").Nodes.Add("dandi", "Herramientas de implementación")
                             prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_x86", "Herramientas de implementación (x86)")
                             prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_amd64", "Herramientas de implementación (AMD64)")
                             prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm", "Herramientas de implementación (ARM)")
@@ -5187,7 +6720,7 @@ Public Class MainForm
                     prjTreeView.Nodes("parent").Nodes.Add("reports", "Project reports")
                 Case 2
                     prjTreeView.Nodes.Add("parent", "Proyecto: " & Quote & MainProjNameNode & Quote)
-                    prjTreeView.Nodes("parent").Nodes.Add("dandi", "Herramientas de implementación KEI")
+                    prjTreeView.Nodes("parent").Nodes.Add("dandi", "Herramientas de implementación")
                     prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_x86", "Herramientas de implementación para x86")
                     prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_amd64", "Herramientas de implementación para AMD64")
                     prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm", "Herramientas de implementación para ARM")
@@ -5443,46 +6976,48 @@ Public Class MainForm
                 Case 2
                     MenuDesc.Text = "Opens an existing DISMTools project. The current project will be unloaded"
                 Case 3
-                    MenuDesc.Text = "Saves the changes of this project"
+                    MenuDesc.Text = "Enters online installation management mode"
                 Case 4
-                    MenuDesc.Text = "Saves this project on another location"
+                    MenuDesc.Text = "Saves the changes of this project"
                 Case 5
-                    MenuDesc.Text = "Closes the program. If a project is loaded, you will be asked whether or not you would like to save it"
+                    MenuDesc.Text = "Saves this project on another location"
                 Case 6
-                    MenuDesc.Text = "Opens the File Explorer to view the project files"
+                    MenuDesc.Text = "Closes the program. If a project is loaded, you will be asked whether or not you would like to save it"
                 Case 7
-                    MenuDesc.Text = "Unloads this project. If changes were made, you will be asked whether or not you would like to save it"
+                    MenuDesc.Text = "Opens the File Explorer to view the project files"
                 Case 8
-                    MenuDesc.Text = "Switches the mounted image index"
+                    MenuDesc.Text = "Unloads this project. If changes were made, you will be asked whether or not you would like to save it"
                 Case 9
-                    MenuDesc.Text = "Launches the project section of the project properties dialog"
+                    MenuDesc.Text = "Switches the mounted image index"
                 Case 10
-                    MenuDesc.Text = "Launches the image section of the project properties dialog"
+                    MenuDesc.Text = "Launches the project section of the project properties dialog"
                 Case 11
-                    MenuDesc.Text = "Performs image format conversion from WIM to ESD and vice versa"
+                    MenuDesc.Text = "Launches the image section of the project properties dialog"
                 Case 12
-                    MenuDesc.Text = "Merges two or more SWM files into a single WIM file"
+                    MenuDesc.Text = "Performs image format conversion from WIM to ESD and vice versa"
                 Case 13
-                    MenuDesc.Text = "Remounts the image with read-write permissions to allow making modifications to it"
+                    MenuDesc.Text = "Merges two or more SWM files into a single WIM file"
                 Case 14
-                    MenuDesc.Text = "Opens the Command Console"
+                    MenuDesc.Text = "Remounts the image with read-write permissions to allow making modifications to it"
                 Case 15
-                    MenuDesc.Text = "Lets you manage unattended answer files for this project"
+                    MenuDesc.Text = "Opens the Command Console"
                 Case 16
-                    MenuDesc.Text = "Lets you manage project reports"
+                    MenuDesc.Text = "Lets you manage unattended answer files for this project"
                 Case 17
-                    MenuDesc.Text = "Shows an overview of the mounted images"
+                    MenuDesc.Text = "Lets you manage project reports"
                 Case 18
-                    MenuDesc.Text = "Configures settings for the program"
+                    MenuDesc.Text = "Shows an overview of the mounted images"
                 Case 19
-                    MenuDesc.Text = "Opens the help topics for this program"
+                    MenuDesc.Text = "Configures settings for the program"
                 Case 20
-                    MenuDesc.Text = "Opens the glossary, if you don't understand a concept"
+                    MenuDesc.Text = "Opens the help topics for this program"
                 Case 21
-                    MenuDesc.Text = "Shows the Command Help, letting you use commands to perform the same actions"
+                    MenuDesc.Text = "Opens the glossary, if you don't understand a concept"
                 Case 22
-                    MenuDesc.Text = "Shows program information"
+                    MenuDesc.Text = "Shows the Command Help, letting you use commands to perform the same actions"
                 Case 23
+                    MenuDesc.Text = "Shows program information"
+                Case 24
                     MenuDesc.Text = "Lets you report feedback through a new GitHub issue (a GitHub account is needed)"
             End Select
         End If
@@ -5502,6 +7037,21 @@ Public Class MainForm
             Case 2
                 MenuDesc.Text = "Listo"
         End Select
+        If ImgBW.CancellationPending Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MenuDesc.Text = "Cancelling background processes. Please wait..."
+                        Case "ESN"
+                            MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
+                    End Select
+                Case 1
+                    MenuDesc.Text = "Cancelling background processes. Please wait..."
+                Case 2
+                    MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
+            End Select
+        End If
     End Sub
 
     Sub HideChildDescs()
@@ -5518,6 +7068,21 @@ Public Class MainForm
             Case 2
                 MenuDesc.Text = "Listo"
         End Select
+        If ImgBW.CancellationPending Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MenuDesc.Text = "Cancelling background processes. Please wait..."
+                        Case "ESN"
+                            MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
+                    End Select
+                Case 1
+                    MenuDesc.Text = "Cancelling background processes. Please wait..."
+                Case 2
+                    MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
+            End Select
+        End If
     End Sub
 
     Private Sub FileToolStripMenuItem_MouseEnter(sender As Object, e As EventArgs) Handles FileToolStripMenuItem.MouseEnter
@@ -5564,7 +7129,7 @@ Public Class MainForm
         ShowChildDescs(True, 1)
     End Sub
 
-    Private Sub HideChildDescsTrigger(sender As Object, e As EventArgs) Handles AppendImage.MouseLeave, ApplyFFU.MouseLeave, ApplyImage.MouseLeave, CaptureCustomImage.MouseLeave, CaptureFFU.MouseLeave, CaptureImage.MouseLeave, CleanupMountpoints.MouseLeave, CommitImage.MouseLeave, DeleteImage.MouseLeave, ExportImage.MouseLeave, GetImageInfo.MouseLeave, GetMountedImageInfo.MouseLeave, GetWIMBootEntry.MouseLeave, ListImage.MouseLeave, MountImage.MouseLeave, OptimizeFFU.MouseLeave, OptimizeImage.MouseLeave, RemountImage.MouseLeave, SplitFFU.MouseLeave, SplitImage.MouseLeave, UnmountImage.MouseLeave, UpdateWIMBootEntry.MouseLeave, ApplySiloedPackage.MouseLeave, GetPackages.MouseLeave, GetPackageInfo.MouseLeave, AddPackage.MouseLeave, RemovePackage.MouseLeave, GetFeatures.MouseLeave, GetFeatureInfo.MouseLeave, EnableFeature.MouseLeave, DisableFeature.MouseLeave, CleanupImage.MouseLeave, AddProvisionedAppxPackage.MouseLeave, GetProvisioningPackageInfo.MouseLeave, ApplyCustomDataImage.MouseLeave, GetProvisionedAppxPackages.MouseLeave, AddProvisionedAppxPackage.MouseLeave, RemoveProvisionedAppxPackage.MouseLeave, OptimizeProvisionedAppxPackages.MouseLeave, SetProvisionedAppxDataFile.MouseLeave, CheckAppPatch.MouseLeave, GetAppPatchInfo.MouseLeave, GetAppPatches.MouseLeave, GetAppInfo.MouseLeave, GetApps.MouseLeave, ExportDefaultAppAssociations.MouseLeave, GetDefaultAppAssociations.MouseLeave, ImportDefaultAppAssociations.MouseLeave, RemoveDefaultAppAssociations.MouseLeave, GetIntl.MouseLeave, SetUILangFallback.MouseLeave, SetSysUILang.MouseLeave, SetSysLocale.MouseLeave, SetUserLocale.MouseLeave, SetInputLocale.MouseLeave, SetAllIntl.MouseLeave, SetTimeZone.MouseLeave, SetSKUIntlDefaults.MouseLeave, SetLayeredDriver.MouseLeave, GenLangINI.MouseLeave, SetSetupUILang.MouseLeave, AddCapability.MouseLeave, ExportSource.MouseLeave, GetCapabilities.MouseLeave, GetCapabilityInfo.MouseLeave, RemoveCapability.MouseLeave, GetCurrentEdition.MouseLeave, GetTargetEditions.MouseLeave, SetEdition.MouseLeave, SetProductKey.MouseLeave, GetDrivers.MouseLeave, GetDriverInfo.MouseLeave, AddDriver.MouseLeave, RemoveDriver.MouseLeave, ExportDriver.MouseLeave, ApplyUnattend.MouseLeave, GetPESettings.MouseLeave, GetTargetPath.MouseLeave, GetScratchSpace.MouseLeave, SetScratchSpace.MouseLeave, SetTargetPath.MouseLeave, GetOSUninstallWindow.MouseLeave, InitiateOSUninstall.MouseLeave, RemoveOSUninstall.MouseLeave, SetOSUninstallWindow.MouseLeave, SetReservedStorageState.MouseLeave, GetReservedStorageState.MouseLeave, NewProjectToolStripMenuItem.MouseLeave, OpenExistingProjectToolStripMenuItem.MouseLeave, SaveProjectToolStripMenuItem.MouseLeave, SaveProjectasToolStripMenuItem.MouseLeave, ExitToolStripMenuItem.MouseLeave, ViewProjectFilesInFileExplorerToolStripMenuItem.MouseLeave, UnloadProjectToolStripMenuItem.MouseLeave, SwitchImageIndexesToolStripMenuItem.MouseLeave, ProjectPropertiesToolStripMenuItem.MouseLeave, ImagePropertiesToolStripMenuItem.MouseLeave, ImageManagementToolStripMenuItem.MouseLeave, OSPackagesToolStripMenuItem.MouseLeave, ProvisioningPackagesToolStripMenuItem.MouseLeave, AppPackagesToolStripMenuItem.MouseLeave, AppPatchesToolStripMenuItem.MouseLeave, DefaultAppAssociationsToolStripMenuItem.MouseLeave, LanguagesAndRegionSettingsToolStripMenuItem.MouseLeave, CapabilitiesToolStripMenuItem.MouseLeave, WindowsEditionsToolStripMenuItem.MouseLeave, DriversToolStripMenuItem.MouseLeave, UnattendedAnswerFilesToolStripMenuItem.MouseLeave, WindowsPEServicingToolStripMenuItem.MouseLeave, OSUninstallToolStripMenuItem.MouseLeave, ReservedStorageToolStripMenuItem.MouseLeave, ImageConversionToolStripMenuItem.MouseLeave, WIMESDToolStripMenuItem.MouseLeave, RemountImageWithWritePermissionsToolStripMenuItem.MouseLeave, CommandShellToolStripMenuItem.MouseLeave, OptionsToolStripMenuItem.MouseLeave, HelpTopicsToolStripMenuItem.MouseLeave, GlossaryToolStripMenuItem.MouseLeave, CommandHelpToolStripMenuItem.MouseLeave, AboutDISMToolsToolStripMenuItem.MouseLeave, UnattendedAnswerFileManagerToolStripMenuItem.MouseLeave, AddEdge.MouseLeave, AddEdgeBrowser.MouseLeave, AddEdgeWebView.MouseLeave, ReportManagerToolStripMenuItem.MouseLeave, MergeSWM.MouseLeave, MountedImageManagerTSMI.MouseLeave, ReportFeedbackToolStripMenuItem.MouseLeave
+    Private Sub HideChildDescsTrigger(sender As Object, e As EventArgs) Handles AppendImage.MouseLeave, ApplyFFU.MouseLeave, ApplyImage.MouseLeave, CaptureCustomImage.MouseLeave, CaptureFFU.MouseLeave, CaptureImage.MouseLeave, CleanupMountpoints.MouseLeave, CommitImage.MouseLeave, DeleteImage.MouseLeave, ExportImage.MouseLeave, GetImageInfo.MouseLeave, GetWIMBootEntry.MouseLeave, ListImage.MouseLeave, MountImage.MouseLeave, OptimizeFFU.MouseLeave, OptimizeImage.MouseLeave, RemountImage.MouseLeave, SplitFFU.MouseLeave, SplitImage.MouseLeave, UnmountImage.MouseLeave, UpdateWIMBootEntry.MouseLeave, ApplySiloedPackage.MouseLeave, GetPackages.MouseLeave, GetPackageInfo.MouseLeave, AddPackage.MouseLeave, RemovePackage.MouseLeave, GetFeatures.MouseLeave, GetFeatureInfo.MouseLeave, EnableFeature.MouseLeave, DisableFeature.MouseLeave, CleanupImage.MouseLeave, AddProvisionedAppxPackage.MouseLeave, GetProvisioningPackageInfo.MouseLeave, ApplyCustomDataImage.MouseLeave, GetProvisionedAppxPackages.MouseLeave, AddProvisionedAppxPackage.MouseLeave, RemoveProvisionedAppxPackage.MouseLeave, OptimizeProvisionedAppxPackages.MouseLeave, SetProvisionedAppxDataFile.MouseLeave, CheckAppPatch.MouseLeave, GetAppPatchInfo.MouseLeave, GetAppPatches.MouseLeave, GetAppInfo.MouseLeave, GetApps.MouseLeave, ExportDefaultAppAssociations.MouseLeave, GetDefaultAppAssociations.MouseLeave, ImportDefaultAppAssociations.MouseLeave, RemoveDefaultAppAssociations.MouseLeave, GetIntl.MouseLeave, SetUILangFallback.MouseLeave, SetSysUILang.MouseLeave, SetSysLocale.MouseLeave, SetUserLocale.MouseLeave, SetInputLocale.MouseLeave, SetAllIntl.MouseLeave, SetTimeZone.MouseLeave, SetSKUIntlDefaults.MouseLeave, SetLayeredDriver.MouseLeave, GenLangINI.MouseLeave, SetSetupUILang.MouseLeave, AddCapability.MouseLeave, ExportSource.MouseLeave, GetCapabilities.MouseLeave, GetCapabilityInfo.MouseLeave, RemoveCapability.MouseLeave, GetCurrentEdition.MouseLeave, GetTargetEditions.MouseLeave, SetEdition.MouseLeave, SetProductKey.MouseLeave, GetDrivers.MouseLeave, GetDriverInfo.MouseLeave, AddDriver.MouseLeave, RemoveDriver.MouseLeave, ExportDriver.MouseLeave, ApplyUnattend.MouseLeave, GetPESettings.MouseLeave, GetTargetPath.MouseLeave, GetScratchSpace.MouseLeave, SetScratchSpace.MouseLeave, SetTargetPath.MouseLeave, GetOSUninstallWindow.MouseLeave, InitiateOSUninstall.MouseLeave, RemoveOSUninstall.MouseLeave, SetOSUninstallWindow.MouseLeave, SetReservedStorageState.MouseLeave, GetReservedStorageState.MouseLeave, NewProjectToolStripMenuItem.MouseLeave, OpenExistingProjectToolStripMenuItem.MouseLeave, SaveProjectToolStripMenuItem.MouseLeave, SaveProjectasToolStripMenuItem.MouseLeave, ExitToolStripMenuItem.MouseLeave, ViewProjectFilesInFileExplorerToolStripMenuItem.MouseLeave, UnloadProjectToolStripMenuItem.MouseLeave, SwitchImageIndexesToolStripMenuItem.MouseLeave, ProjectPropertiesToolStripMenuItem.MouseLeave, ImagePropertiesToolStripMenuItem.MouseLeave, ImageManagementToolStripMenuItem.MouseLeave, OSPackagesToolStripMenuItem.MouseLeave, ProvisioningPackagesToolStripMenuItem.MouseLeave, AppPackagesToolStripMenuItem.MouseLeave, AppPatchesToolStripMenuItem.MouseLeave, DefaultAppAssociationsToolStripMenuItem.MouseLeave, LanguagesAndRegionSettingsToolStripMenuItem.MouseLeave, CapabilitiesToolStripMenuItem.MouseLeave, WindowsEditionsToolStripMenuItem.MouseLeave, DriversToolStripMenuItem.MouseLeave, UnattendedAnswerFilesToolStripMenuItem.MouseLeave, WindowsPEServicingToolStripMenuItem.MouseLeave, OSUninstallToolStripMenuItem.MouseLeave, ReservedStorageToolStripMenuItem.MouseLeave, ImageConversionToolStripMenuItem.MouseLeave, WIMESDToolStripMenuItem.MouseLeave, RemountImageWithWritePermissionsToolStripMenuItem.MouseLeave, CommandShellToolStripMenuItem.MouseLeave, OptionsToolStripMenuItem.MouseLeave, HelpTopicsToolStripMenuItem.MouseLeave, GlossaryToolStripMenuItem.MouseLeave, CommandHelpToolStripMenuItem.MouseLeave, AboutDISMToolsToolStripMenuItem.MouseLeave, UnattendedAnswerFileManagerToolStripMenuItem.MouseLeave, AddEdge.MouseLeave, AddEdgeBrowser.MouseLeave, AddEdgeWebView.MouseLeave, ReportManagerToolStripMenuItem.MouseLeave, MergeSWM.MouseLeave, MountedImageManagerTSMI.MouseLeave, ReportFeedbackToolStripMenuItem.MouseLeave, ManageOnlineInstallationToolStripMenuItem.MouseLeave, AddProvisioningPackage.MouseLeave
         HideChildDescs()
     End Sub
 
@@ -5608,7 +7173,7 @@ Public Class MainForm
         ShowChildDescs(True, 11)
     End Sub
 
-    Private Sub GetMountedImageInfo_MouseEnter(sender As Object, e As EventArgs) Handles GetMountedImageInfo.MouseEnter
+    Private Sub GetMountedImageInfo_MouseEnter(sender As Object, e As EventArgs)
         ShowChildDescs(True, 12)
     End Sub
 
@@ -5936,100 +7501,106 @@ Public Class MainForm
         ShowChildDescs(False, 2)
     End Sub
 
-    Private Sub SaveProject_MouseEnter(sender As Object, e As EventArgs) Handles SaveProjectToolStripMenuItem.MouseEnter
+    Private Sub ManageOnlineInstallation_MouseEnter(sender As Object, e As EventArgs) Handles ManageOnlineInstallationToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 3)
     End Sub
 
-    Private Sub SaveProjAs_MouseEnter(sender As Object, e As EventArgs) Handles SaveProjectasToolStripMenuItem.MouseEnter
+    Private Sub SaveProject_MouseEnter(sender As Object, e As EventArgs) Handles SaveProjectToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 4)
     End Sub
 
-    Private Sub ExitProg_MouseEnter(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.MouseEnter
+    Private Sub SaveProjAs_MouseEnter(sender As Object, e As EventArgs) Handles SaveProjectasToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 5)
     End Sub
 
-    Private Sub ProjectInExplorer_MouseEnter(sender As Object, e As EventArgs) Handles ViewProjectFilesInFileExplorerToolStripMenuItem.MouseEnter
+    Private Sub ExitProg_MouseEnter(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 6)
     End Sub
 
-    Private Sub UnloadProject_MouseEnter(sender As Object, e As EventArgs) Handles UnloadProjectToolStripMenuItem.MouseEnter
+    Private Sub ProjectInExplorer_MouseEnter(sender As Object, e As EventArgs) Handles ViewProjectFilesInFileExplorerToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 7)
     End Sub
 
-    Private Sub SwitchIndexes_MouseEnter(sender As Object, e As EventArgs) Handles SwitchImageIndexesToolStripMenuItem.MouseEnter
+    Private Sub UnloadProject_MouseEnter(sender As Object, e As EventArgs) Handles UnloadProjectToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 8)
     End Sub
 
-    Private Sub ProjProps_MouseEnter(sender As Object, e As EventArgs) Handles ProjectPropertiesToolStripMenuItem.MouseEnter
+    Private Sub SwitchIndexes_MouseEnter(sender As Object, e As EventArgs) Handles SwitchImageIndexesToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 9)
     End Sub
 
-    Private Sub ImgProps_MouseEnter(sender As Object, e As EventArgs) Handles ImagePropertiesToolStripMenuItem.MouseEnter
+    Private Sub ProjProps_MouseEnter(sender As Object, e As EventArgs) Handles ProjectPropertiesToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 10)
     End Sub
 
-    Private Sub ImgConversion_MouseEnter(sender As Object, e As EventArgs) Handles ImageConversionToolStripMenuItem.MouseEnter, WIMESDToolStripMenuItem.MouseEnter
+    Private Sub ImgProps_MouseEnter(sender As Object, e As EventArgs) Handles ImagePropertiesToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 11)
     End Sub
 
-    Private Sub MergeSWM_MouseEnter(sender As Object, e As EventArgs) Handles MergeSWM.MouseEnter
+    Private Sub ImgConversion_MouseEnter(sender As Object, e As EventArgs) Handles ImageConversionToolStripMenuItem.MouseEnter, WIMESDToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 12)
     End Sub
 
-    Private Sub RemountImg_MouseEnter(sender As Object, e As EventArgs) Handles RemountImageWithWritePermissionsToolStripMenuItem.MouseEnter
+    Private Sub MergeSWM_MouseEnter(sender As Object, e As EventArgs) Handles MergeSWM.MouseEnter
         ShowChildDescs(False, 13)
     End Sub
 
-    Private Sub CmdConsole_MouseEnter(sender As Object, e As EventArgs) Handles CommandShellToolStripMenuItem.MouseEnter
+    Private Sub RemountImg_MouseEnter(sender As Object, e As EventArgs) Handles RemountImageWithWritePermissionsToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 14)
     End Sub
 
-    Private Sub UAFileMan_MouseEnter(sender As Object, e As EventArgs) Handles UnattendedAnswerFileManagerToolStripMenuItem.MouseEnter
+    Private Sub CmdConsole_MouseEnter(sender As Object, e As EventArgs) Handles CommandShellToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 15)
     End Sub
 
-    Private Sub ReportManagerToolStripMenuItem_MouseEnter(sender As Object, e As EventArgs) Handles ReportManagerToolStripMenuItem.MouseEnter
+    Private Sub UAFileMan_MouseEnter(sender As Object, e As EventArgs) Handles UnattendedAnswerFileManagerToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 16)
     End Sub
 
-    Private Sub MountedImageManagerTSMI_MouseEnter(sender As Object, e As EventArgs) Handles MountedImageManagerTSMI.MouseEnter
+    Private Sub ReportManagerToolStripMenuItem_MouseEnter(sender As Object, e As EventArgs) Handles ReportManagerToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 17)
     End Sub
 
-    Private Sub ProgSettings_MouseEnter(sender As Object, e As EventArgs) Handles OptionsToolStripMenuItem.MouseEnter
+    Private Sub MountedImageManagerTSMI_MouseEnter(sender As Object, e As EventArgs) Handles MountedImageManagerTSMI.MouseEnter
         ShowChildDescs(False, 18)
     End Sub
 
-    Private Sub HelpTopics_MouseEnter(sender As Object, e As EventArgs) Handles HelpTopicsToolStripMenuItem.MouseEnter
+    Private Sub ProgSettings_MouseEnter(sender As Object, e As EventArgs) Handles OptionsToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 19)
     End Sub
 
-    Private Sub Glossary_MouseEnter(sender As Object, e As EventArgs) Handles GlossaryToolStripMenuItem.MouseEnter
+    Private Sub HelpTopics_MouseEnter(sender As Object, e As EventArgs) Handles HelpTopicsToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 20)
     End Sub
 
-    Private Sub CmdHelp_MouseEnter(sender As Object, e As EventArgs) Handles CommandHelpToolStripMenuItem.MouseEnter
+    Private Sub Glossary_MouseEnter(sender As Object, e As EventArgs) Handles GlossaryToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 21)
     End Sub
 
-    Private Sub ProgInfo_MouseEnter(sender As Object, e As EventArgs) Handles AboutDISMToolsToolStripMenuItem.MouseEnter
+    Private Sub CmdHelp_MouseEnter(sender As Object, e As EventArgs) Handles CommandHelpToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 22)
     End Sub
 
-    Private Sub ReportFeedbackToolStripMenuItem_MouseEnter(sender As Object, e As EventArgs) Handles ReportFeedbackToolStripMenuItem.MouseEnter
+    Private Sub ProgInfo_MouseEnter(sender As Object, e As EventArgs) Handles AboutDISMToolsToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 23)
+    End Sub
+
+    Private Sub ReportFeedbackToolStripMenuItem_MouseEnter(sender As Object, e As EventArgs) Handles ReportFeedbackToolStripMenuItem.MouseEnter
+        ShowChildDescs(False, 24)
     End Sub
 #End Region
 
     Private Sub NewProjLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles NewProjLink.LinkClicked
+        If Not HomePanel.Visible Then Exit Sub
         NewProj.ShowDialog()
     End Sub
 
     Private Sub ExistingProjLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles ExistingProjLink.LinkClicked
+        If Not HomePanel.Visible Then Exit Sub
         If OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
             If File.Exists(OpenFileDialog1.FileName) Then
                 ProgressPanel.OperationNum = 990
-                LoadDTProj(OpenFileDialog1.FileName, Path.GetFileNameWithoutExtension(OpenFileDialog1.FileName), False)
+                LoadDTProj(OpenFileDialog1.FileName, Path.GetFileNameWithoutExtension(OpenFileDialog1.FileName), False, False)
             End If
         End If
     End Sub
@@ -6052,6 +7623,10 @@ Public Class MainForm
 
     Private Sub Button14_Click(sender As Object, e As EventArgs) Handles Button14.Click, ProjectPropertiesToolStripMenuItem.Click
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         ProjProperties.TabControl1.SelectedIndex = 0
         Select Case Language
             Case 0
@@ -6066,7 +7641,7 @@ Public Class MainForm
             Case 2
                 ProjProperties.Label1.Text = "Propiedades de " & ProjProperties.TabControl1.SelectedTab.Text.ToLower()
         End Select
-        If My.Computer.Info.OSFullName.Contains("Windows 10") Or My.Computer.Info.OSFullName.Contains("Windows 11") Then
+        If Environment.OSVersion.Version.Major = 10 Then
             ProjProperties.Text = ""
         Else
             ProjProperties.Text = ProjProperties.Label1.Text
@@ -6076,6 +7651,10 @@ Public Class MainForm
 
     Private Sub Button15_Click(sender As Object, e As EventArgs) Handles ImagePropertiesToolStripMenuItem.Click, Button15.Click
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         ProjProperties.TabControl1.SelectedIndex = 1
         Select Case Language
             Case 0
@@ -6090,7 +7669,7 @@ Public Class MainForm
             Case 2
                 ProjProperties.Label1.Text = "Propiedades de " & ProjProperties.TabControl1.SelectedTab.Text.ToLower()
         End Select
-        If My.Computer.Info.OSFullName.Contains("Windows 10") Or My.Computer.Info.OSFullName.Contains("Windows 11") Then
+        If Environment.OSVersion.Version.Major = 10 Then
             ProjProperties.Text = ""
         Else
             ProjProperties.Text = ProjProperties.Label1.Text
@@ -6115,15 +7694,23 @@ Public Class MainForm
         ElseIf SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
             Exit Sub
         End If
-        'If isModified Then
-
-        'Else
-        '    UnloadDTProj(False, False)
-        'End If
     End Sub
 
     Private Sub MainForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        If isProjectLoaded Then
+        If OnlineManagement Then
+            EndOnlineManagement()
+            MountedImageDetectorBW.CancelAsync()
+            While MountedImageDetectorBW.IsBusy
+                Application.DoEvents()
+                Thread.Sleep(100)
+            End While
+            If MountedImgMgr.DetectorBW.IsBusy Then MountedImgMgr.DetectorBW.CancelAsync()
+            While MountedImgMgr.DetectorBW.IsBusy
+                Application.DoEvents()
+                Thread.Sleep(100)
+            End While
+        End If
+        If isProjectLoaded And Not OnlineManagement Then
             If isModified Then
                 SaveProjectQuestionDialog.ShowDialog()
                 If SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Yes Then
@@ -6145,11 +7732,24 @@ Public Class MainForm
                 UnloadDTProj(True, False, False)
             End If
         End If
+        If ImgBW.IsBusy Then
+            e.Cancel = True
+            Beep()
+            Exit Sub
+        End If
         If Not VolatileMode Then
             SaveDTSettings()
         End If
         MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         If MountedImgMgr.DetectorBW.IsBusy Then MountedImgMgr.DetectorBW.CancelAsync()
+        While MountedImgMgr.DetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
     End Sub
 
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
@@ -6157,6 +7757,10 @@ Public Class MainForm
     End Sub
 
     Private Sub ToolStripButton3_Click(sender As Object, e As EventArgs) Handles ToolStripButton3.Click
+        If OnlineManagement Then
+            EndOnlineManagement()
+            Exit Sub
+        End If
         If isModified Then
             SaveProjectQuestionDialog.ShowDialog()
             If SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Yes Then
@@ -6180,7 +7784,7 @@ Public Class MainForm
     End Sub
 
     Private Sub CommandShellToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CommandShellToolStripMenuItem.Click
-        Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe", "/k .\bin\dthelper.bat /sh")
+        Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe", "/k " & Quote & Application.StartupPath & "\bin\dthelper.bat" & Quote & " /sh")
     End Sub
 
     Private Sub Button16_Click(sender As Object, e As EventArgs) Handles Button16.Click
@@ -6195,10 +7799,15 @@ Public Class MainForm
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         ImgMount.ShowDialog()
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.MountDir = MountDir
         ' TODO: Add additional options later
         ProgressPanel.OperationNum = 8
@@ -6216,13 +7825,46 @@ Public Class MainForm
     Private Sub prjTreeView_AfterExpand(sender As Object, e As TreeViewEventArgs) Handles prjTreeView.AfterExpand
         Try
             If prjTreeView.SelectedNode.IsExpanded Then
-                ExpandCollapseTSB.Text = "Collapse"
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                ExpandCollapseTSB.Text = "Collapse"
+                                ExpandToolStripMenuItem.Text = "Collapse item"
+                            Case "ESN"
+                                ExpandCollapseTSB.Text = "Contraer"
+                                ExpandToolStripMenuItem.Text = "Contraer objeto"
+                        End Select
+                    Case 1
+                        ExpandCollapseTSB.Text = "Collapse"
+                        ExpandToolStripMenuItem.Text = "Collapse item"
+                    Case 2
+                        ExpandCollapseTSB.Text = "Contraer"
+                        ExpandToolStripMenuItem.Text = "Contraer objeto"
+                End Select
                 If BackColor = Color.FromArgb(48, 48, 48) Then
                     ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph_dark)
                 ElseIf BackColor = Color.White Then
                     ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph)
                 End If
             Else
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                ExpandCollapseTSB.Text = "Expand"
+                                ExpandToolStripMenuItem.Text = "Expand item"
+                            Case "ESN"
+                                ExpandCollapseTSB.Text = "Expandir"
+                                ExpandToolStripMenuItem.Text = "Expandir objeto"
+                        End Select
+                    Case 1
+                        ExpandCollapseTSB.Text = "Expand"
+                        ExpandToolStripMenuItem.Text = "Expand item"
+                    Case 2
+                        ExpandCollapseTSB.Text = "Expandir"
+                        ExpandToolStripMenuItem.Text = "Expandir objeto"
+                End Select
                 ExpandCollapseTSB.Text = "Expand"
                 If BackColor = Color.FromArgb(48, 48, 48) Then
                     ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
@@ -6244,13 +7886,17 @@ Public Class MainForm
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENG"
                                 ExpandCollapseTSB.Text = "Collapse"
+                                ExpandToolStripMenuItem.Text = "Collapse item"
                             Case "ESN"
                                 ExpandCollapseTSB.Text = "Contraer"
+                                ExpandToolStripMenuItem.Text = "Contraer objeto"
                         End Select
                     Case 1
                         ExpandCollapseTSB.Text = "Collapse"
+                        ExpandToolStripMenuItem.Text = "Collapse item"
                     Case 2
                         ExpandCollapseTSB.Text = "Contraer"
+                        ExpandToolStripMenuItem.Text = "Contraer objeto"
                 End Select
                 If BackColor = Color.FromArgb(48, 48, 48) Then
                     ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph_dark)
@@ -6263,13 +7909,17 @@ Public Class MainForm
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENG"
                                 ExpandCollapseTSB.Text = "Expand"
+                                ExpandToolStripMenuItem.Text = "Expand item"
                             Case "ESN"
                                 ExpandCollapseTSB.Text = "Expandir"
+                                ExpandToolStripMenuItem.Text = "Expandir objeto"
                         End Select
                     Case 1
                         ExpandCollapseTSB.Text = "Expand"
+                        ExpandToolStripMenuItem.Text = "Expand item"
                     Case 2
                         ExpandCollapseTSB.Text = "Expandir"
+                        ExpandToolStripMenuItem.Text = "Expandir objeto"
                 End Select
                 If BackColor = Color.FromArgb(48, 48, 48) Then
                     ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
@@ -6283,13 +7933,17 @@ Public Class MainForm
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
                             ExpandCollapseTSB.Text = "Expand"
+                            ExpandToolStripMenuItem.Text = "Expand item"
                         Case "ESN"
                             ExpandCollapseTSB.Text = "Expandir"
+                            ExpandToolStripMenuItem.Text = "Expandir objeto"
                     End Select
                 Case 1
                     ExpandCollapseTSB.Text = "Expand"
+                    ExpandToolStripMenuItem.Text = "Expand item"
                 Case 2
                     ExpandCollapseTSB.Text = "Expandir"
+                    ExpandToolStripMenuItem.Text = "Expandir objeto"
             End Select
             If BackColor = Color.FromArgb(48, 48, 48) Then
                 ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
@@ -6306,13 +7960,17 @@ Public Class MainForm
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
                             ExpandCollapseTSB.Text = "Collapse"
+                            ExpandToolStripMenuItem.Text = "Collapse item"
                         Case "ESN"
                             ExpandCollapseTSB.Text = "Contraer"
+                            ExpandToolStripMenuItem.Text = "Contraer objeto"
                     End Select
                 Case 1
                     ExpandCollapseTSB.Text = "Collapse"
+                    ExpandToolStripMenuItem.Text = "Collapse item"
                 Case 2
                     ExpandCollapseTSB.Text = "Contraer"
+                    ExpandToolStripMenuItem.Text = "Contraer objeto"
             End Select
             If BackColor = Color.FromArgb(48, 48, 48) Then
                 ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph_dark)
@@ -6325,13 +7983,17 @@ Public Class MainForm
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
                             ExpandCollapseTSB.Text = "Expand"
+                            ExpandToolStripMenuItem.Text = "Expand item"
                         Case "ESN"
                             ExpandCollapseTSB.Text = "Expandir"
+                            ExpandToolStripMenuItem.Text = "Expandir objeto"
                     End Select
                 Case 1
                     ExpandCollapseTSB.Text = "Expand"
+                    ExpandToolStripMenuItem.Text = "Expand item"
                 Case 2
                     ExpandCollapseTSB.Text = "Expandir"
+                    ExpandToolStripMenuItem.Text = "Expandir objeto"
             End Select
             If BackColor = Color.FromArgb(48, 48, 48) Then
                 ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
@@ -6341,8 +8003,10 @@ Public Class MainForm
         End If
         If prjTreeView.SelectedNode.Nodes.Count = 0 Then
             ExpandCollapseTSB.Enabled = False
+            ExpandToolStripMenuItem.Enabled = False
         Else
             ExpandCollapseTSB.Enabled = True
+            ExpandToolStripMenuItem.Enabled = True
         End If
     End Sub
 
@@ -6370,7 +8034,7 @@ Public Class MainForm
         AddPackageDlg.ShowDialog()
     End Sub
 
-    Private Sub AboutDISMToolsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AboutDISMToolsToolStripMenuItem.Click
+    Private Sub AboutDISMToolsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AboutDISMToolsToolStripMenuItem.Click, VersionTSMI.Click
         PrgAbout.ShowDialog()
     End Sub
 
@@ -6387,6 +8051,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Button11_Click(sender As Object, e As EventArgs) Handles Button11.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.MountDir = MountDir
         ProgressPanel.OperationNum = 18
         ProgressPanel.ShowDialog(Me)
@@ -6422,7 +8087,7 @@ Public Class MainForm
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
         End Select
-        If Not areBackgroundProcessesDone Then
+        If Not CompletedTasks(0) Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -6464,21 +8129,21 @@ Public Class MainForm
         RemPackage.ShowDialog()
     End Sub
 
-    Sub RefreshInfo()
-        ImgBW.RunWorkerAsync()
-    End Sub
-
     Private Sub ImgBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ImgBW.DoWork
         MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         If bwAllBackgroundProcesses Then
             If bwGetImageInfo Then
                 If bwGetAdvImgInfo Then
-                    RunBackgroundProcesses(bwBackgroundProcessAction, True, True, True)
+                    RunBackgroundProcesses(bwBackgroundProcessAction, True, True, True, OnlineManagement)
                 Else
-                    RunBackgroundProcesses(bwBackgroundProcessAction, True, False, True)
+                    RunBackgroundProcesses(bwBackgroundProcessAction, True, False, True, OnlineManagement)
                 End If
             Else
-                RunBackgroundProcesses(bwBackgroundProcessAction, False, False, True)
+                RunBackgroundProcesses(bwBackgroundProcessAction, False, False, True, OnlineManagement)
             End If
         Else
 
@@ -6505,7 +8170,7 @@ Public Class MainForm
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
         End Select
-        If Not areBackgroundProcessesDone Then
+        If Not CompletedTasks(1) Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -6607,7 +8272,7 @@ Public Class MainForm
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
         End Select
-        If Not areBackgroundProcessesDone Then
+        If Not CompletedTasks(1) Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -6687,6 +8352,13 @@ Public Class MainForm
     End Sub
 
     Private Sub MainForm_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged
+        If WindowState <> FormWindowState.Maximized Then
+            WndWidth = Width
+            WndHeight = Height
+        End If
+        If Visible And ColorMode = 0 Then
+            ChangePrgColors(0)
+        End If
         If GroupBox1.Left < 0 Then
             SplitPanels.SplitterDistance = 264
         End If
@@ -6714,11 +8386,13 @@ Public Class MainForm
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         imgCommitOperation = 0
         UnloadDTProj(False, True, True)
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         imgCommitOperation = 1
         UnloadDTProj(False, True, True)
     End Sub
@@ -6752,6 +8426,10 @@ Public Class MainForm
     End Sub
 
     Private Sub MainForm_Move(sender As Object, e As EventArgs) Handles MyBase.Move
+        If WindowState <> FormWindowState.Maximized Then
+            WndLeft = Left
+            WndTop = Top
+        End If
         If BGProcNotify.Visible Then
             If Environment.OSVersion.Version.Major = 10 Then    ' The Left property also includes the window shadows on Windows 10 and 11
                 BGProcNotify.Location = New Point(Left + 8, Top + StatusStrip.Top - (7 + StatusStrip.Height))
@@ -6785,6 +8463,7 @@ Public Class MainForm
 
     Private Sub ImgBW_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles ImgBW.ProgressChanged
         BGProcDetails.Label2.Text = progressLabel
+        If bwBackgroundProcessAction <> 0 Then BGProcDetails.ProgressBar1.Style = ProgressBarStyle.Marquee Else BGProcDetails.ProgressBar1.Style = ProgressBarStyle.Blocks
         If regJumps Then
             BGProcDetails.ProgressBar1.Value = e.ProgressPercentage
         Else
@@ -6794,6 +8473,8 @@ Public Class MainForm
     End Sub
 
     Private Sub ImgBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ImgBW.RunWorkerCompleted
+        CompletedTasks = Enumerable.Repeat(True, CompletedTasks.Length).ToArray()
+        BGProcDetails.ProgressBar1.Style = ProgressBarStyle.Blocks
         If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
         areBackgroundProcessesDone = True
         BackgroundProcessesButton.Image = New Bitmap(My.Resources.bg_ops_complete)
@@ -6812,7 +8493,7 @@ Public Class MainForm
         End Select
         BGProcDetails.Label2.Text = progressLabel
         BGProcDetails.ProgressBar1.Value = BGProcDetails.ProgressBar1.Maximum
-        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+        If Not ProgressPanel.IsDisposed And Not ProgressPanel.Visible Then ProgressPanel.Dispose()
         If isOrphaned Then
             If BGProcDetails.Visible Then
                 BGProcDetails.ProgressBar1.Value = 0
@@ -6848,7 +8529,7 @@ Public Class MainForm
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
         End Select
-        If Not areBackgroundProcessesDone Then
+        If Not CompletedTasks(0) Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -6910,7 +8591,7 @@ Public Class MainForm
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
         End Select
-        If Not areBackgroundProcessesDone Then
+        If Not CompletedTasks(1) Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -7012,7 +8693,7 @@ Public Class MainForm
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
         End Select
-        If Not areBackgroundProcessesDone Then
+        If Not CompletedTasks(1) Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -7096,10 +8777,42 @@ Public Class MainForm
     End Sub
 
     Private Sub AddProvisionedAppxPackage_Click(sender As Object, e As EventArgs) Handles AddProvisionedAppxPackage.Click
-        AddProvAppxPackage.ShowDialog()
+        If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+            AddProvAppxPackage.ShowDialog()
+        Else
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+            End Select
+        End If
     End Sub
 
     Private Sub RemoveProvisionedAppxPackage_Click(sender As Object, e As EventArgs) Handles RemoveProvisionedAppxPackage.Click
+        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+            End Select
+            Exit Sub
+        End If
         ElementCount = 0
         RemProvAppxPackage.ListView1.Items.Clear()
         Select Case Language
@@ -7116,7 +8829,7 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Obteniendo paquetes aprovisionados AppX..."
         End Select
         ProgressPanel.OperationNum = 994
-        If Not areBackgroundProcessesDone Then
+        If Not CompletedTasks(2) Then
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -7161,6 +8874,9 @@ Public Class MainForm
         Catch ex As Exception
             Exit Try
         End Try
+        If ElementCount <= 0 Then
+            ElementCount = RemProvAppxPackage.ListView1.Items.Count
+        End If
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -7218,22 +8934,9 @@ Public Class MainForm
     End Sub
 
     Private Sub MountedImageDetectorBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles MountedImageDetectorBW.DoWork
-        Dim timer As New Stopwatch
         Do
-            timer.Start()
-            Do
-                If MountedImageDetectorBW.CancellationPending Or ImgBW.IsBusy Then
-                    timer.Stop()
-                    timer.Reset()
-                    Exit Sub
-                End If
-                If timer.ElapsedMilliseconds >= 100 Then
-                    timer.Stop()
-                    DetectMountedImages(False)
-                    timer.Reset()
-                    Exit Do
-                End If
-            Loop
+            If MountedImageDetectorBW.CancellationPending Or ImgBW.IsBusy Then Exit Do
+            DetectMountedImages(False)
         Loop
     End Sub
 
@@ -7289,6 +8992,7 @@ Public Class MainForm
     End Sub
 
     Private Sub CommitAndUnmountTSMI_Click(sender As Object, e As EventArgs) Handles CommitAndUnmountTSMI.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.OperationNum = 21
         ProgressPanel.UMountLocalDir = False
         ProgressPanel.RandomMountDir = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text   ' Hope there isn't anything to set here
@@ -7299,6 +9003,7 @@ Public Class MainForm
     End Sub
 
     Private Sub DiscardAndUnmountTSMI_Click(sender As Object, e As EventArgs) Handles DiscardAndUnmountTSMI.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.OperationNum = 21
         ProgressPanel.UMountLocalDir = False
         ProgressPanel.RandomMountDir = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text   ' Hope there isn't anything to set here
@@ -7323,9 +9028,969 @@ Public Class MainForm
     Private Sub OpenExistingProjectToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OpenExistingProjectToolStripMenuItem.Click
         If OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
             If File.Exists(OpenFileDialog1.FileName) Then
-                If isProjectLoaded Then UnloadDTProj(False, True, False)
+                If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement, False, True), False)
+                If ImgBW.IsBusy Then Exit Sub
                 ProgressPanel.OperationNum = 990
-                LoadDTProj(OpenFileDialog1.FileName, Path.GetFileNameWithoutExtension(OpenFileDialog1.FileName), False)
+                LoadDTProj(OpenFileDialog1.FileName, Path.GetFileNameWithoutExtension(OpenFileDialog1.FileName), False, False)
+            End If
+        End If
+    End Sub
+
+    Private Sub AddCapability_Click(sender As Object, e As EventArgs) Handles AddCapability.Click
+        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+            End Select
+            Exit Sub
+        End If
+        ElementCount = 0
+        AddCapabilities.ListView1.Items.Clear()
+        ProgressPanel.OperationNum = 994
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
+        End Select
+        If Not CompletedTasks(3) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        Try
+            For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
+                If imgCapabilityState(x) = "Installed" Or imgCapabilityState(x) = "Install Pending" Then
+                    Continue For
+                End If
+                AddCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapabilityIds(x), imgCapabilityState(x)}))
+            Next
+        Catch ex As Exception
+            Exit Try
+        End Try
+        Try
+            For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
+                If imgCapabilityIds(x) = "" Then
+                    Exit For
+                End If
+                ElementCount += 1
+            Next
+        Catch ex As Exception
+            Exit Try
+        End Try
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        AddCapabilities.Label4.Text = "This image contains " & ElementCount & " capabilities."
+                    Case "ESN"
+                        AddCapabilities.Label4.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
+                End Select
+            Case 1
+                AddCapabilities.Label4.Text = "This image contains " & ElementCount & " capabilities."
+            Case 2
+                AddCapabilities.Label4.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
+        End Select
+        AddCapabilities.ShowDialog()
+    End Sub
+
+    Private Sub RemoveCapability_Click(sender As Object, e As EventArgs) Handles RemoveCapability.Click
+        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+            End Select
+            Exit Sub
+        End If
+        ElementCount = 0
+        RemCapabilities.ListView1.Items.Clear()
+        ProgressPanel.OperationNum = 994
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
+        End Select
+        If Not CompletedTasks(3) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        Try
+            For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
+                If imgCapabilityState(x) = "Removed" Or imgCapabilityState(x) = "Not present" Or imgCapabilityState(x) = "Uninstalled" Then
+                    Continue For
+                End If
+                RemCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapabilityIds(x), imgCapabilityState(x)}))
+            Next
+        Catch ex As Exception
+            Exit Try
+        End Try
+        Try
+            For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
+                If imgCapabilityIds(x) = "" Then
+                    Exit For
+                End If
+                ElementCount += 1
+            Next
+        Catch ex As Exception
+            Exit Try
+        End Try
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        RemCapabilities.Label2.Text = "This image contains " & ElementCount & " capabilities."
+                    Case "ESN"
+                        RemCapabilities.Label2.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
+                End Select
+            Case 1
+                RemCapabilities.Label2.Text = "This image contains " & ElementCount & " capabilities."
+            Case 2
+                RemCapabilities.Label2.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
+        End Select
+        RemCapabilities.ShowDialog()
+    End Sub
+
+    Private Sub AddDriver_Click(sender As Object, e As EventArgs) Handles AddDriver.Click
+        AddDrivers.ShowDialog()
+    End Sub
+
+    Private Sub RemoveDriver_Click(sender As Object, e As EventArgs) Handles RemoveDriver.Click
+        RemDrivers.ListView1.Items.Clear()
+        ProgressPanel.OperationNum = 994
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
+        End Select
+        If Not CompletedTasks(4) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        Try
+            For x = 0 To Array.LastIndexOf(imgDrvPublishedNames, imgDrvPublishedNames.Last)
+                If RemDrivers.CheckBox1.Checked Then
+                    If imgDrvBootCriticalStatus(x) Then Continue For
+                End If
+                If RemDrivers.CheckBox2.Checked Then
+                    If CBool(imgDrvInbox(x)) Then Continue For
+                End If
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), imgDrvOGFileNames(x), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Yes", "No"), If(imgDrvBootCriticalStatus(x), "Yes", "No"), imgDrvVersions(x), imgDrvDates(x)}))
+                            Case "ESN"
+                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), imgDrvOGFileNames(x), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sí", "No"), imgDrvVersions(x), imgDrvDates(x)}))
+                        End Select
+                    Case 1
+                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), imgDrvOGFileNames(x), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Yes", "No"), If(imgDrvBootCriticalStatus(x), "Yes", "No"), imgDrvVersions(x), imgDrvDates(x)}))
+                    Case 2
+                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), imgDrvOGFileNames(x), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sí", "No"), imgDrvVersions(x), imgDrvDates(x)}))
+                End Select
+            Next
+        Catch ex As Exception
+            Exit Try
+        End Try
+        RemDrivers.ShowDialog()
+    End Sub
+
+    Private Sub ActionEditorToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ActionEditorToolStripMenuItem.Click
+        Actions_MainForm.Show()
+    End Sub
+
+    ''' <summary>
+    ''' Detects the source for optional feature installs and component repairs from the "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Servicing" registry key
+    ''' </summary>
+    ''' <returns>Returns GPOSource as the aforementioned source if this function runs correctly. Otherwise, it returns Nothing</returns>
+    ''' <remarks>"LocalSourcePath" is updated every time a source is specified in the group policy editor. "GPOSource" pulls the value from "LocalSourcePath", which can be a local folder, a remote server or a Windows image (if it begins with "wim:\")</remarks>
+    Function GetSrcFromGPO() As String
+        Try
+            Dim GPOSourceRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Servicing", False)
+            Dim GPOSource As String = GPOSourceRk.GetValue("LocalSourcePath").ToString()
+            GPOSourceRk.Close()
+            Return GPOSource
+        Catch ex As Exception
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MsgBox("Could not gather source from group policy. Reason:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detect from group policy")
+                        Case "ESN"
+                            MsgBox("No se pudo recopilar el origen de las políticas de grupo. Razón:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detectar políticas de grupo")
+                    End Select
+                Case 1
+                    MsgBox("Could not gather source from group policy. Reason:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detect from group policy")
+                Case 2
+                    MsgBox("No se pudo recopilar el origen de las políticas de grupo. Razón:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detectar políticas de grupo")
+            End Select
+            Return Nothing
+        End Try
+        Return Nothing
+    End Function
+
+    Private Sub AddProvisioningPackage_Click(sender As Object, e As EventArgs) Handles AddProvisioningPackage.Click
+        AddProvisioningPkg.ShowDialog()
+    End Sub
+
+    Private Sub OnlineInstMgmt_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles OnlineInstMgmt.LinkClicked
+        If Not HomePanel.Visible Then Exit Sub
+        ActiveInstAccessWarn.Label2.Visible = False
+        BeginOnlineManagement(True)
+    End Sub
+
+    ''' <summary>
+    ''' Gets the application display name from the AppX package manifest
+    ''' </summary>
+    ''' <param name="PackageName">The package name of an application</param>
+    ''' <param name="DisplayName">The display name of an application. This parameter is required when there are multiple directories with their names containing <paramref name="PackageName">the package name</paramref></param>
+    ''' <returns>pkgName: the suitable package display name</returns>
+    ''' <remarks>If pkgName returns Nothing, the callers will hide those options calling this function</remarks>
+    Function GetPackageDisplayName(PackageName As String, Optional DisplayName As String = "")
+        If File.Exists(Application.StartupPath & "\AppxManifest.xml") Then File.Delete(Application.StartupPath & "\AppxManifest.xml")
+        If File.Exists(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml") Then
+            ' Copy manifest to startup dir
+            File.Copy(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml", Application.StartupPath & "\AppxManifest.xml")
+            Dim XMLReaderRTB As New RichTextBox With {
+                .Text = File.ReadAllText(Application.StartupPath & "\AppxManifest.xml")
+            }
+            ' Go through each line until we find the properties tag
+            For x = 0 To XMLReaderRTB.Lines.Count - 1
+                If XMLReaderRTB.Lines(x).EndsWith("<Properties>") Then
+                    ' Go through each line until we find the display name
+                    For y = x To XMLReaderRTB.Lines.Count - 1
+                        If XMLReaderRTB.Lines(y).Replace("<", "").Trim().Replace(">", "").Trim().Replace(" ", "").Trim().StartsWith("DisplayName", StringComparison.OrdinalIgnoreCase) Then
+                            Dim pkgName As String = XMLReaderRTB.Lines(y).Replace("<DisplayName>", "").Trim().Replace("</DisplayName>", "").Trim()
+                            File.Delete(Application.StartupPath & "\AppxManifest.xml")
+                            Return pkgName
+                        End If
+                    Next
+                End If
+            Next
+        Else
+            If Directory.GetDirectories(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps", DisplayName & "*", SearchOption.TopDirectoryOnly).Count > 1 Then
+                ' Skip architecture neutral packages
+                Dim pkgDirs() As String = Directory.GetDirectories(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps", DisplayName & "*", SearchOption.TopDirectoryOnly)
+                For Each folder In pkgDirs
+                    If Not folder.Contains("neutral") Then
+                        ' Copy manifest to startup dir
+                        File.Copy(folder & "\AppxManifest.xml", Application.StartupPath & "\AppxManifest.xml")
+                        Dim XMLReaderRTB As New RichTextBox With {
+                            .Text = File.ReadAllText(Application.StartupPath & "\AppxManifest.xml")
+                        }
+                        ' Go through each line until we find the properties tag
+                        For x = 0 To XMLReaderRTB.Lines.Count - 1
+                            If XMLReaderRTB.Lines(x).EndsWith("<Properties>") Then
+                                ' Go through each line until we find the display name
+                                For y = x To XMLReaderRTB.Lines.Count - 1
+                                    If XMLReaderRTB.Lines(y).Replace("<", "").Trim().Replace(">", "").Trim().Replace(" ", "").Trim().StartsWith("DisplayName", StringComparison.OrdinalIgnoreCase) Then
+                                        Dim pkgName As String = XMLReaderRTB.Lines(y).Replace("<DisplayName>", "").Trim().Replace("</DisplayName>", "").Trim()
+                                        File.Delete(Application.StartupPath & "\AppxManifest.xml")
+                                        Return pkgName
+                                    End If
+                                Next
+                            End If
+                        Next
+                    End If
+                Next
+            End If
+        End If
+        Return Nothing
+    End Function
+
+    Function GetSuitablePackageFolder(PackageName As String)
+        If Directory.GetDirectories(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps", PackageName & "*", SearchOption.TopDirectoryOnly).Count > 1 Then
+            Dim pkgDirs() As String = Directory.GetDirectories(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps", PackageName & "*", SearchOption.TopDirectoryOnly)
+            For Each folder In pkgDirs
+                If Not folder.Contains("neutral") Then
+                    Return folder
+                End If
+            Next
+        End If
+        Return Nothing
+    End Function
+
+    ''' <summary>
+    ''' Gets the path of the main logo of an installed provisioned AppX package
+    ''' </summary>
+    ''' <param name="PackageName">The name of the AppX package</param>
+    ''' <returns>This function returns a path to the logo asset of an application</returns>
+    ''' <remarks>This can be a little wonky and may not show the main asset. However, since this allows the program to launch an image viewer afterwards, you can browse other assets</remarks>
+    Function GetStoreAppMainLogo(PackageName As String)
+        Try
+            If File.Exists(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml") Then
+                ' Read from manifest
+                Dim ManFile As New RichTextBox() With {
+                    .Text = File.ReadAllText(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml")
+                }
+                For Each line In ManFile.Lines
+                    If line.Contains("Logo") Then
+                        Dim SplitPaths As New List(Of String)
+                        SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
+                        SplitPaths.RemoveAt(SplitPaths.Count - 1)
+                        Dim newPath As String = String.Join("\", SplitPaths)
+                        If Directory.GetFiles(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\" & newPath, "*.png").Count > 1 Then
+                            Dim logoFiles() As String = Directory.GetFiles(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\" & newPath, "*.png")
+                            ' Choose the largest one
+                            Return logoFiles.Last
+                        Else
+                            Return Path.Combine(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName, line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim())
+                        End If
+                    End If
+                Next
+            ElseIf Directory.GetDirectories(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps", PackageName & "*", SearchOption.TopDirectoryOnly).Count > 1 Then
+                Dim pkgDirs() As String = Directory.GetDirectories(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps", PackageName & "*", SearchOption.TopDirectoryOnly)
+                For Each folder In pkgDirs
+                    If Not folder.Contains("neutral") Then
+                        ' Read from manifest
+                        Dim ManFile As New RichTextBox() With {
+                            .Text = File.ReadAllText(folder & "AppxManifest.xml")
+                        }
+                        For Each line In ManFile.Lines
+                            If line.Contains("Logo") Then
+                                Return Path.Combine(folder, line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim())
+                            End If
+                        Next
+                    End If
+                Next
+            End If
+        Catch ex As Exception
+            Return Nothing
+        End Try
+        Return Nothing
+    End Function
+
+    Private Sub ViewPackageDirectoryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewPackageDirectoryToolStripMenuItem.Click
+        Dim suitableFolderName As String = ""
+        Try
+            suitableFolderName = GetSuitablePackageFolder(RemProvAppxPackage.ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim())
+        Catch ex As Exception
+            ' Continue
+        End Try
+        If suitableFolderName <> "" Then
+            Process.Start(suitableFolderName)
+            Exit Sub
+        End If
+        If OnlineManagement Then
+            If Directory.Exists(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\Program Files\WindowsApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text) Then
+                Process.Start(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\Program Files\WindowsApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text)
+            ElseIf Directory.Exists(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\Windows\SystemApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text) Then
+                Process.Start(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\Windows\SystemApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text)
+            End If
+        Else
+            If Directory.Exists(MountDir & "\Program Files\WindowsApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text) Then
+                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", MountDir & "\Program Files\WindowsApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text)
+            ElseIf Directory.Exists(MountDir & "\Windows\SystemApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text) Then
+                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", MountDir & "\Windows\SystemApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text)
+            End If
+        End If
+    End Sub
+
+    Private Sub ResViewTSMI_Click(sender As Object, e As EventArgs) Handles ResViewTSMI.Click
+        Dim MainLogo As String = GetStoreAppMainLogo(RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text.Replace(" (Cortana)", "").Trim())
+        If MainLogo <> "" And File.Exists(MainLogo) Then
+            Process.Start(MainLogo)
+            Exit Sub
+        End If
+        Dim suitableFolderName As String = ""
+        Try
+            suitableFolderName = GetSuitablePackageFolder(RemProvAppxPackage.ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim())
+        Catch ex As Exception
+            ' Continue
+        End Try
+        If suitableFolderName <> "" Then
+            If File.Exists(suitableFolderName & "\AppxManifest.xml") Then
+                Dim ManFile As New RichTextBox() With {
+                    .Text = File.ReadAllText(suitableFolderName & "\AppxManifest.xml")
+                }
+                For Each line In ManFile.Lines
+                    If line.Contains("<Logo>") Then
+                        Dim SplitPaths As New List(Of String)
+                        SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
+                        SplitPaths.RemoveAt(SplitPaths.Count - 1)
+                        Dim newPath As String = String.Join("\", SplitPaths)
+                        Process.Start(suitableFolderName & "\" & newPath)
+                        Exit For
+                    End If
+                Next
+            End If
+            Exit Sub
+        End If
+        If OnlineManagement Then
+            If Directory.Exists(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\Program Files\WindowsApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text & "\Assets") Then
+                Process.Start(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\Program Files\WindowsApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text & "\Assets")
+            ElseIf Directory.Exists(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\Windows\SystemApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text & "\Assets") Then
+                Process.Start(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\Windows\SystemApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text & "\Assets")
+            End If
+        Else
+            If Directory.Exists(MountDir & "\Program Files\WindowsApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text & "\Assets") Then
+                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", MountDir & "\Program Files\WindowsApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text & "\Assets")
+            ElseIf Directory.Exists(MountDir & "\Windows\SystemApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text & "\Assets") Then
+                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", MountDir & "\Windows\SystemApps\" & RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text & "\Assets")
+            End If
+        End If
+    End Sub
+
+    Private Sub ExitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.Click
+        Close()
+    End Sub
+
+    Private Sub UpdateLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles UpdateLink.LinkClicked
+        If Not HomePanel.Visible Then Exit Sub
+        If File.Exists(Application.StartupPath & "\update.exe") Then File.Delete(Application.StartupPath & "\update.exe")
+        Try
+            Using client As New WebClient()
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                client.DownloadFile("https://github.com/CodingWonders/DISMTools/raw/" & dtBranch & "/Updater/DISMTools-UCS/update-bin/update.exe", Application.StartupPath & "\update.exe")
+            End Using
+        Catch ex As WebException
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MsgBox("We couldn't download the update checker. Reason:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Check for updates")
+                        Case "ESN"
+                            MsgBox("No pudimos descargar el comprobador de actualizaciones. Razón:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Comprobar actualizaciones")
+                    End Select
+                Case 1
+                    MsgBox("We couldn't download the update checker. Reason:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Check for updates")
+                Case 2
+                    MsgBox("No pudimos descargar el comprobador de actualizaciones. Razón:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Comprobar actualizaciones")
+            End Select
+            Exit Sub
+        End Try
+        If File.Exists(Application.StartupPath & "\update.exe") Then Process.Start(Application.StartupPath & "\update.exe", "/" & dtBranch)
+    End Sub
+
+    Private Sub prjTreeView_NodeMouseClick(sender As Object, e As TreeNodeMouseClickEventArgs) Handles prjTreeView.NodeMouseClick
+        If e.Button = Windows.Forms.MouseButtons.Right Then
+            prjTreeView.SelectedNode = e.Node
+            If e.Node.Name.StartsWith("dandi") Then
+                OfSelectedArchitectureToolStripMenuItem.Enabled = Not e.Node.Name.Equals("dandi")
+                CopyDeploymentToolsToolStripMenuItem.Enabled = True
+                ImageOperationsToolStripMenuItem.Enabled = False
+                UnattendedAnswerFilesToolStripMenuItem1.Enabled = False
+                ScratchDirectorySettingsToolStripMenuItem.Enabled = False
+                ManageReportsToolStripMenuItem.Enabled = False
+            ElseIf e.Node.Name = "mount" Then
+                CopyDeploymentToolsToolStripMenuItem.Enabled = False
+                ImageOperationsToolStripMenuItem.Enabled = True
+                UnattendedAnswerFilesToolStripMenuItem1.Enabled = False
+                ScratchDirectorySettingsToolStripMenuItem.Enabled = False
+                ManageReportsToolStripMenuItem.Enabled = False
+            ElseIf e.Node.Name = "unattend_xml" Then
+                CopyDeploymentToolsToolStripMenuItem.Enabled = False
+                ImageOperationsToolStripMenuItem.Enabled = False
+                UnattendedAnswerFilesToolStripMenuItem1.Enabled = True
+                ScratchDirectorySettingsToolStripMenuItem.Enabled = False
+                ManageReportsToolStripMenuItem.Enabled = False
+            ElseIf e.Node.Name = "scr_temp" Then
+                CopyDeploymentToolsToolStripMenuItem.Enabled = False
+                ImageOperationsToolStripMenuItem.Enabled = False
+                UnattendedAnswerFilesToolStripMenuItem1.Enabled = False
+                ScratchDirectorySettingsToolStripMenuItem.Enabled = True
+                ManageReportsToolStripMenuItem.Enabled = False
+            ElseIf e.Node.Name = "reports" Then
+                CopyDeploymentToolsToolStripMenuItem.Enabled = False
+                ImageOperationsToolStripMenuItem.Enabled = False
+                UnattendedAnswerFilesToolStripMenuItem1.Enabled = False
+                ScratchDirectorySettingsToolStripMenuItem.Enabled = False
+                ManageReportsToolStripMenuItem.Enabled = True
+            Else
+                CopyDeploymentToolsToolStripMenuItem.Enabled = False
+                ImageOperationsToolStripMenuItem.Enabled = False
+                UnattendedAnswerFilesToolStripMenuItem1.Enabled = False
+                ScratchDirectorySettingsToolStripMenuItem.Enabled = False
+                ManageReportsToolStripMenuItem.Enabled = False
+            End If
+            Dim pnt As Point = e.Location
+            TreeViewCMS.Show(sender, pnt)
+        End If
+    End Sub
+
+    Private Sub ADKCopierBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ADKCopierBW.DoWork
+        If prjTreeView.SelectedNode.Name.StartsWith("dandi") Then
+            Try
+                Dim adkInst As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\WIMMount")
+                Dim adk As String = adkInst.GetValue("AdkInstallation").ToString()
+                If adk = "1" Then
+                    ' Copy deployment tools. This will default to "Program Files\Windows Kits\10"
+                    Select Case adkCopyArg
+                        Case 0
+                            ' Copy all architectures
+                            If Directory.Exists(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools") Then
+                                Dim arches() As String = New String(3) {"x86", "amd64", "arm", "arm64"}
+                                For x = 0 To Array.LastIndexOf(arches, arches.Last)
+                                    archIntg = x + 1
+                                    currentArch = arches(x)
+                                    ' Count files
+                                    fileCount = My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\" & arches(x), FileIO.SearchOption.SearchAllSubDirectories).Count
+                                    Select Case Language
+                                        Case 0
+                                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                                Case "ENG"
+                                                    MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
+                                                Case "ESN"
+                                                    MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
+                                            End Select
+                                        Case 1
+                                            MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
+                                        Case 2
+                                            MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
+                                    End Select
+                                    CurrentFileInt = 0
+                                    For Each folder In My.Computer.FileSystem.GetDirectories(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\" & arches(x), FileIO.SearchOption.SearchAllSubDirectories)
+                                        Directory.CreateDirectory(folder.Replace(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\" & arches(x), projPath & "\DandI\" & arches(x)))
+                                    Next
+                                    For Each archFile In My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\" & arches(x), FileIO.SearchOption.SearchAllSubDirectories)
+                                        ADKCopierBW.ReportProgress(Math.Round(CurrentFileInt / fileCount, 2) * 100)
+                                        File.Copy(archFile, archFile.Replace(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\" & arches(x), projPath & "\DandI\" & arches(x)), True)
+                                        CurrentFileInt += 1
+                                    Next
+                                Next
+                            End If
+                        Case 1
+                            ' Copy x86 architecture
+                            ' Count files
+                            Dim fileCount As Integer = My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\x86", FileIO.SearchOption.SearchAllSubDirectories).Count
+                            Select Case Language
+                                Case 0
+                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                        Case "ENG"
+                                            MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
+                                        Case "ESN"
+                                            MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
+                                    End Select
+                                Case 1
+                                    MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
+                                Case 2
+                                    MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
+                            End Select
+                            Dim CurrentFileInt As Integer = 0
+                            For Each folder In My.Computer.FileSystem.GetDirectories(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\x86", FileIO.SearchOption.SearchAllSubDirectories)
+                                Directory.CreateDirectory(folder.Replace(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\x86", projPath & "\DandI\x86"))
+                            Next
+                            For Each archFile In My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\x86", FileIO.SearchOption.SearchAllSubDirectories)
+                                ADKCopierBW.ReportProgress(Math.Round(CurrentFileInt / fileCount, 2) * 100)
+                                File.Copy(archFile, archFile.Replace(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\x86", projPath & "\DandI\x86"), True)
+                                CurrentFileInt += 1
+                            Next
+                        Case 2
+                            ' Copy AMD64 architecture
+                            ' Count files
+                            Dim fileCount As Integer = My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64", FileIO.SearchOption.SearchAllSubDirectories).Count
+                            Select Case Language
+                                Case 0
+                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                        Case "ENG"
+                                            MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
+                                        Case "ESN"
+                                            MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
+                                    End Select
+                                Case 1
+                                    MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
+                                Case 2
+                                    MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
+                            End Select
+                            Dim CurrentFileInt As Integer = 0
+                            For Each folder In My.Computer.FileSystem.GetDirectories(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64", FileIO.SearchOption.SearchAllSubDirectories)
+                                Directory.CreateDirectory(folder.Replace(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64", projPath & "\DandI\amd64"))
+                            Next
+                            For Each archFile In My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64", FileIO.SearchOption.SearchAllSubDirectories)
+                                ADKCopierBW.ReportProgress(Math.Round(CurrentFileInt / fileCount, 2) * 100)
+                                File.Copy(archFile, archFile.Replace(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64", projPath & "\DandI\amd64"), True)
+                                CurrentFileInt += 1
+                            Next
+                        Case 3
+                            ' Copy ARM architecture
+                            ' Count files
+                            Dim fileCount As Integer = My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm", FileIO.SearchOption.SearchAllSubDirectories).Count
+                            Select Case Language
+                                Case 0
+                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                        Case "ENG"
+                                            MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
+                                        Case "ESN"
+                                            MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
+                                    End Select
+                                Case 1
+                                    MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
+                                Case 2
+                                    MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
+                            End Select
+                            Dim CurrentFileInt As Integer = 0
+                            For Each folder In My.Computer.FileSystem.GetDirectories(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm", FileIO.SearchOption.SearchAllSubDirectories)
+                                Directory.CreateDirectory(folder.Replace(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm", projPath & "\DandI\arm"))
+                            Next
+                            For Each archFile In My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm", FileIO.SearchOption.SearchAllSubDirectories)
+                                ADKCopierBW.ReportProgress(Math.Round(CurrentFileInt / fileCount, 2) * 100)
+                                File.Copy(archFile, archFile.Replace(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm", projPath & "\DandI\arm"), True)
+                                CurrentFileInt += 1
+                            Next
+                        Case 4
+                            ' Copy ARM64 architecture
+                            ' Count files
+                            Dim fileCount As Integer = My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm64", FileIO.SearchOption.SearchAllSubDirectories).Count
+                            Select Case Language
+                                Case 0
+                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                        Case "ENG"
+                                            MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
+                                        Case "ESN"
+                                            MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
+                                    End Select
+                                Case 1
+                                    MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
+                                Case 2
+                                    MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
+                            End Select
+                            Dim CurrentFileInt As Integer = 0
+                            For Each folder In My.Computer.FileSystem.GetDirectories(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm64", FileIO.SearchOption.SearchAllSubDirectories)
+                                Directory.CreateDirectory(folder.Replace(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm64", projPath & "\DandI\arm64"))
+                            Next
+                            For Each archFile In My.Computer.FileSystem.GetFiles(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm64", FileIO.SearchOption.SearchAllSubDirectories)
+                                ADKCopierBW.ReportProgress(Math.Round(CurrentFileInt / fileCount, 2) * 100)
+                                File.Copy(archFile, archFile.Replace(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm64", projPath & "\DandI\arm64"), True)
+                                CurrentFileInt += 1
+                            Next
+                    End Select
+                End If
+            Catch ex As Exception
+
+            End Try
+        End If
+    End Sub
+
+    Private Sub OfAllArchitecturesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OfAllArchitecturesToolStripMenuItem.Click
+        adkCopyArg = 0
+        ADKCopierBW.RunWorkerAsync()
+    End Sub
+
+    Private Sub OfSelectedArchitectureToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OfSelectedArchitectureToolStripMenuItem.Click
+        If prjTreeView.SelectedNode.Name.EndsWith("x86") Then
+            adkCopyArg = 1
+        ElseIf prjTreeView.SelectedNode.Name.EndsWith("amd64") Then
+            adkCopyArg = 2
+        ElseIf prjTreeView.SelectedNode.Name.EndsWith("arm") Then
+            adkCopyArg = 3
+        ElseIf prjTreeView.SelectedNode.Name.EndsWith("arm64") Then
+            adkCopyArg = 4
+        End If
+        ADKCopierBW.RunWorkerAsync()
+    End Sub
+
+    Private Sub ForX86ArchitectureToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ForX86ArchitectureToolStripMenuItem.Click
+        adkCopyArg = 1
+        ADKCopierBW.RunWorkerAsync()
+    End Sub
+
+    Private Sub ForAmd64ArchitectureToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ForAmd64ArchitectureToolStripMenuItem.Click
+        adkCopyArg = 2
+        ADKCopierBW.RunWorkerAsync()
+    End Sub
+
+    Private Sub ForARMArchitectureToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ForARMArchitectureToolStripMenuItem.Click
+        adkCopyArg = 3
+        ADKCopierBW.RunWorkerAsync()
+    End Sub
+
+    Private Sub ForARM64ArchitectureToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ForARM64ArchitectureToolStripMenuItem.Click
+        adkCopyArg = 4
+        ADKCopierBW.RunWorkerAsync()
+    End Sub
+
+    Private Sub ADKCopierBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ADKCopierBW.RunWorkerCompleted
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        MenuDesc.Text = "Deployment tools were copied to the project successfully"
+                    Case "ESN"
+                        MenuDesc.Text = "Las herramientas de implementación fueron copiadas al proyecto satisfactoriamente"
+                End Select
+            Case 1
+                MenuDesc.Text = "Deployment tools were copied to the project successfully"
+            Case 2
+                MenuDesc.Text = "Las herramientas de implementación fueron copiadas al proyecto satisfactoriamente"
+        End Select
+    End Sub
+
+    Private Sub ADKCopierBW_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles ADKCopierBW.ProgressChanged
+        Select Case adkCopyArg
+            Case 0
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                MenuDesc.Text = "Copying deployment tools for architecture (" & currentArch & ", " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
+                            Case "ESN"
+                                MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (" & currentArch & ", " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
+                        End Select
+                    Case 1
+                        MenuDesc.Text = "Copying deployment tools for architecture (" & currentArch & ", " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
+                    Case 2
+                        MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (" & currentArch & ", " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
+                End Select
+            Case 1
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                MenuDesc.Text = "Copying deployment tools for architecture (x86, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
+                            Case "ESN"
+                                MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (x86, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
+                        End Select
+                    Case 1
+                        MenuDesc.Text = "Copying deployment tools for architecture (x86, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
+                    Case 2
+                        MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (x86, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
+                End Select
+            Case 2
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                MenuDesc.Text = "Copying deployment tools for architecture (amd64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
+                            Case "ESN"
+                                MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (amd64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
+                        End Select
+                    Case 1
+                        MenuDesc.Text = "Copying deployment tools for architecture (amd64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
+                    Case 2
+                        MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (amd64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
+                End Select
+            Case 3
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                MenuDesc.Text = "Copying deployment tools for architecture (arm, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
+                            Case "ESN"
+                                MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (arm, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
+                        End Select
+                    Case 1
+                        MenuDesc.Text = "Copying deployment tools for architecture (arm, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
+                    Case 2
+                        MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (arm, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
+                End Select
+            Case 4
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                MenuDesc.Text = "Copying deployment tools for architecture (arm64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
+                            Case "ESN"
+                                MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (arm64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
+                        End Select
+                    Case 1
+                        MenuDesc.Text = "Copying deployment tools for architecture (arm64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
+                    Case 2
+                        MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (arm64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
+                End Select
+        End Select
+    End Sub
+
+    Private Sub ExpandToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExpandToolStripMenuItem.Click
+        ExpandCollapseTSB.PerformClick()
+    End Sub
+
+    Private Sub AccessDirectoryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AccessDirectoryToolStripMenuItem.Click
+        If prjTreeView.SelectedNode.Name = "parent" Then
+            Process.Start(projPath)
+        ElseIf prjTreeView.SelectedNode.Name = "dandi" Then
+            Process.Start(projPath & "\dandi")
+        ElseIf prjTreeView.SelectedNode.Name.EndsWith("x86") Then
+            Process.Start(projPath & "\dandi\x86")
+        ElseIf prjTreeView.SelectedNode.Name.EndsWith("amd64") Then
+            Process.Start(projPath & "\dandi\amd64")
+        ElseIf prjTreeView.SelectedNode.Name.EndsWith("arm") Then
+            Process.Start(projPath & "\dandi\arm")
+        ElseIf prjTreeView.SelectedNode.Name.EndsWith("arm64") Then
+            Process.Start(projPath & "\dandi\arm64")
+        ElseIf prjTreeView.SelectedNode.Name = "mount" Then
+            Process.Start(projPath & "\mount")
+        ElseIf prjTreeView.SelectedNode.Name = "unattend_xml" Then
+            Process.Start(projPath & "\unattend_xml")
+        ElseIf prjTreeView.SelectedNode.Name = "scr_temp" Then
+            Process.Start(projPath & "\scr_temp")
+        ElseIf prjTreeView.SelectedNode.Name = "reports" Then
+            Process.Start(projPath & "\reports")
+        End If
+    End Sub
+
+    Private Sub UnloadProjectToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles UnloadProjectToolStripMenuItem1.Click
+        ToolStripButton3.PerformClick()
+    End Sub
+
+    Private Sub ScratchDirectorySettingsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ScratchDirectorySettingsToolStripMenuItem.Click
+        Options.TabControl1.SelectedIndex = 4
+        Options.ShowDialog()
+    End Sub
+
+    Private Sub ManageToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageToolStripMenuItem.Click
+        UnattendMgr.Show()
+    End Sub
+
+    Private Sub CreationWizardToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreationWizardToolStripMenuItem.Click
+        NewUnattendWiz.Show()
+    End Sub
+
+    Private Sub MountImageToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MountImageToolStripMenuItem.Click
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        ImgMount.ShowDialog()
+    End Sub
+
+    Private Sub UnmountImageToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UnmountImageToolStripMenuItem.Click
+        ImgUMount.RadioButton1.Checked = True
+        ImgUMount.RadioButton2.Checked = False
+        ImgUMount.ShowDialog()
+    End Sub
+
+    Private Sub RemoveVolumeImagesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RemoveVolumeImagesToolStripMenuItem.Click
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Threading.Thread.Sleep(100)
+        End While
+        For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
+            If MountedImageMountDirs(x) = MountDir Then
+                ImgIndexDelete.TextBox1.Text = MountedImageImgFiles(x)
+                Exit For
+            End If
+        Next
+        ImgIndexDelete.ShowDialog()
+    End Sub
+
+    Private Sub SwitchImageIndexesToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles SwitchImageIndexesToolStripMenuItem1.Click
+        MountedImageDetectorBW.CancelAsync()
+        ProgressPanel.OperationNum = 995
+        PleaseWaitDialog.indexesSourceImg = SourceImg
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting image indexes..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting image indexes..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
+        End Select
+        PleaseWaitDialog.ShowDialog(Me)
+        If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
+        If PleaseWaitDialog.imgIndexes > 1 Then
+            ImgIndexSwitch.ShowDialog()
+        End If
+    End Sub
+
+    Private Sub ManageOnlineInstallationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageOnlineInstallationToolStripMenuItem.Click
+        Dim showMessage As Boolean = isProjectLoaded
+        If isProjectLoaded Then
+            ActiveInstAccessWarn.Label2.Visible = True
+            ActiveInstAccessWarn.ShowDialog()
+            If ActiveInstAccessWarn.DialogResult = Windows.Forms.DialogResult.OK Then UnloadDTProj(False, True, False)
+            If ImgBW.IsBusy Then Exit Sub
+        End If
+        ActiveInstAccessWarn.Label2.Visible = False
+        BeginOnlineManagement(Not showMessage)
+    End Sub
+
+    Private Sub UpdCheckupPanel_Paint(sender As Object, e As PaintEventArgs)
+        ControlPaint.DrawBorder(e.Graphics, Panel1.ClientRectangle, Color.FromArgb(0, 122, 204), ButtonBorderStyle.Solid)
+    End Sub
+
+    Private Sub UpdCheckerBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles UpdCheckerBW.DoWork
+        CheckForUpdates(dtBranch)
+    End Sub
+
+    Private Sub RemountImageWithWritePermissionsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RemountImageWithWritePermissionsToolStripMenuItem.Click
+        ' Go through each mounted image until we find it
+        If MountedImageMountDirs.Count > 0 Then
+            If MountedImageMountDirs.Contains(MountDir) Then
+                For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
+                    If MountedImageMountDirs(x) = MountDir Then
+                        EnableWritePermissions(MountedImageImgFiles(x), CInt(MountedImageImgIndexes(x)), MountedImageMountDirs(x))
+                        Exit For
+                    End If
+                Next
+            End If
+        End If
+    End Sub
+
+    Sub EnableWritePermissions(SourceImage As String, SourceIndex As Integer, DestinationPath As String)
+        If File.Exists(SourceImage) Then
+            If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+            ' Configure settings to remount image with write permissions
+
+            ' Unmount image discarding changes
+            ProgressPanel.UMountLocalDir = True
+            ProgressPanel.MountDir = DestinationPath
+            ProgressPanel.UMountImgIndex = SourceIndex
+            ProgressPanel.UMountOp = 1
+
+            ' Mount the same image to the same directory with (hopefully) write permissions
+            ProgressPanel.SourceImg = SourceImage
+            ProgressPanel.ImgIndex = SourceIndex
+            ProgressPanel.isReadOnly = False
+            ProgressPanel.isOptimized = False
+            ProgressPanel.isIntegrityTested = False
+
+            ' Add tasks to task list
+            ProgressPanel.TaskList.AddRange({21, 15})
+            ProgressPanel.OperationNum = 15
+
+            If WindowState = FormWindowState.Minimized Then WindowState = FormWindowState.Normal
+            ProgressPanel.ShowDialog(Me)
+
+            If isProjectLoaded And IsImageMounted And MountDir = DestinationPath Then
+                UpdateProjProperties(True, False, False)
+            Else
+                If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
             End If
         End If
     End Sub

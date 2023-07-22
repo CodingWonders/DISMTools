@@ -800,7 +800,124 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</value>
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+- DarkUI
+
+MIT License
+
+Copyright (c) 2017 Robin
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+- DockPanelSuite
+
+The MIT License
+
+Copyright (c) 2007 Weifen Luo (email: weifenluo@yahoo.com)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+- 7-Zip
+
+  7-Zip
+  ~~~~~
+  License for use and distribution
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  7-Zip Copyright (C) 1999-2023 Igor Pavlov.
+
+  The licenses for files are:
+
+    1) 7z.dll:
+         - The "GNU LGPL" as main license for most of the code
+         - The "GNU LGPL" with "unRAR license restriction" for some code
+         - The "BSD 3-clause License" for some code
+    2) All other files: the "GNU LGPL".
+
+  Redistributions in binary form must reproduce related license information from this file.
+
+  Note:
+    You can use 7-Zip on any computer, including a computer in a commercial
+    organization. You don't need to register or pay for 7-Zip.
+
+
+  GNU LGPL information
+  --------------------
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+
+    You can receive a copy of the GNU Lesser General Public License from
+    http://www.gnu.org/
+
+
+
+
+  BSD 3-clause License
+  --------------------
+
+    The "BSD 3-clause License" is used for the code in 7z.dll that implements LZFSE data decompression.
+    That code was derived from the code in the "LZFSE compression library" developed by Apple Inc,
+    that also uses the "BSD 3-clause License":
+
+    ----
+    Copyright (c) 2015-2016, Apple Inc. All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+    1.  Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+    2.  Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer
+        in the documentation and/or other materials provided with the distribution.
+
+    3.  Neither the name of the copyright holder(s) nor the names of any contributors may be used to endorse or promote products derived
+        from this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+    COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+    (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+    HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+    ----
+
+
+
+
+  unRAR license restriction
+  -------------------------
+
+    The decompression engine for RAR archives was developed using source
+    code of unRAR program.
+    All copyrights to original unRAR code are owned by Alexander Roshal.
+
+    The license for original unRAR code has the following restriction:
+
+      The unRAR sources cannot be used to re-create the RAR compression algorithm,
+      which is proprietary. Distribution of modified unRAR sources in separate form
+      or as a part of other software is permitted, provided that it is clearly
+      stated in the documentation and source comments that the code may
+      not be used to develop a RAR (WinRAR) compatible archiver.
+
+
+  --
+  Igor Pavlov</value>
   </data>
   <data name="help_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\help_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -874,48 +991,106 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <data name="preview_unavail_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\StoreLogoAssetPreviewer\preview_unavail_light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="action_testing_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\menus\action_testing_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="action_testing_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\menus\action_testing_light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="closebox_down" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FirstUse\closebox_down.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="closebox_focus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FirstUse\closebox_focus.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="edit_action_props_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\menus\edit_action_props_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="edit_action_props_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\menus\edit_action_props_light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="gh_repo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\about\gh_repo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="image_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\image_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="image_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\image_light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="product_overview" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FirstUse\product_overview.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="subreddit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\about\subreddit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="add_drv" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\add_drv.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="rem_drv" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\rem_drv.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="dtproj" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\dtproj.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="startup_bg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\startup\startup_bg.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="preview_flag" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\startup\preview_flag.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="version" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\startup\version.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="validation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\actions\validation.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Changes from last preview
-- Fixed an issue where the progress panel would not update the language settings properly
-- Enhanced language support
-- Fixed an issue which kept operations from performing when the log file directory was deleted
-- Fixed an issue which showed removed (already-disabled) features in the feature disablement dialog
-- Fixed an issue where the program would not perform operations with any operation value containing spaces
-- The "New project..." and "Open existing project..." menu entries are now functional, and the latter now allows for fast project switching
+    <value>Bugfixes
 
-Preview release feature recap
+- Fixed an issue where package addition would fail if there were a version mismatch between a package and the Windows image
+- Fixed an issue where AppX package display names weren't obtained correctly in some cases
+- Fixed an issue that would make the AppX package display name detection process fail if there was a manifest file stored in the application directory
+- Fixed an issue where project creation would fail in online installation management mode
+- Fixed an issue where the image edition would not be detected in online installation management mode, which would cause the program to not detect AppX packages and capabilities after unloading a project with a Windows PE image mounted
+- Fixed an issue where the program tried to save the online installation management mode pseudo-project after performing an operation
+- Fixed issues that would make the program require a feature source for online installations when the Windows Update contact option was unchecked and that would make the program continue with "Removed" features without a required source if the feature source path check box was disabled
+- Fixed an issue where the program would default to saving settings to the settings file, even if the user decided to save these to the registry
 
-Overall bugfixes
-- Fixed an issue where the program would not get image properties if multiple images were mounted
-- Fixed an issue with the background processes window where, if the main window was moved before opening it, it would show in the wrong location
-- Fixed an issue where the Settings window would appear in the top-left corner of the screen when showing image detection settings with the main window minimized
-- Fixed a critical issue where the program would crash when clicking "Project properties" if the mounted image detector was running 
-- Fixed an issue where the program assumed there was an image mounted on a newly created project
-- Fixed an issue where the background processes would start when a servicing session of an image not loaded was reloaded from the mounted image manager
-- Fixed an issue where the program always assumed every image loaded had read-only permissions
-- Fixed an issue where the mounted image detector would not start after loading the Project/Image properties dialog
-- Fixed an issue where the image unmount dialog assumed every directory was a mount directory
-- Fixed a critical issue where the program would crash when loading the image index removal dialog (Preview 3 -&gt; Preview 4)
-- Fixed an issue that didn't disable the actions in the mounted image manager when no item was selected
-- Added exception control for Windows 8 hosts when getting AppX packages of an image
+New features
 
-Overall new features
+Settings
 
-Language support
-- Added almost-complete language support
-- Added options to detect system language
+- Setting reset functionality has been implemented
+- Setting file migration now occurs automatically if its modified date is older than the build date of the program
+- The initial setup wizard will now show automatically if no settings file is found
+- The settings file now uses a variable for the Windows directory
 
-Project creation
-- Project creation doesn't require the target directory to exist before proceeding, as it can now be created automatically, if you so choose
+Online installation management mode
 
-DISM API
-- This API is now used in more places, such as the volume image removal dialog, the image index switcher, or image mounting
+- Translations are now applicable to this mode
+- The program now displays the operating system name instead of "(Online installation)"
 
-AppX package addition
-- Added the store logo asset previewer, which completes the properties panel and gives you a chance to view a higher-res version of an application's store logo asset
-- Added support for drag-and-drop, compatible with all application package types (APPX/MSIX/APPXBUNDLE/MSIXBUNDLE, whether packed or unpacked)
+CLI tools
 
-Image mounting
-- You don't need to click "List indexes" to get a glance of all indexes of an image anymore. They are now automatically shown as soon as you specify an existing image</value>
+Mounted image manager:
+- More appropriate foreground colors have been chosen for warnings when running under the Windows Console Host
+- If images have been mounted or unmounted before marking a mounted image, the script will show an updated list before accepting any input
+- A custom window title is now used</value>
+  </data>
+  <data name="secprogress_classic" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\secprogress_classic.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="secprogress_modern" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\secprogress_modern.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="menu_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\menus\menu_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="menu_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\menus\menu_light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="dt_branding" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\startup\dt_branding.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

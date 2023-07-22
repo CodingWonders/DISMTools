@@ -26,6 +26,10 @@ Public Class ProjProperties
     ''' <remarks></remarks>
     Sub DetectImageProperties()
         If MainForm.MountedImageDetectorBW.IsBusy Then MainForm.MountedImageDetectorBW.CancelAsync()
+        While MainForm.MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Threading.Thread.Sleep(100)
+        End While
         DismApi.Initialize(DismLogLevel.LogErrors)
         ' Detect mounted images to find the loaded one
         Try
@@ -107,118 +111,135 @@ Public Class ProjProperties
 
                     Dim infoCollection As DismImageInfoCollection = DismApi.GetImageInfo(MainForm.MountedImageImgFiles(x))
                     For Each info As DismImageInfo In infoCollection
-                        imgVersion.Text = info.ProductVersion.ToString()
-                        DetectFeatureUpdate(info.ProductVersion)
-                        imgMountedName.Text = info.ImageName
-                        imgMountedDesc.Text = info.ImageDescription
-                        imgSize.Text = info.ImageSize.ToString("N0") & " bytes (~" & Math.Round(info.ImageSize / (1024 ^ 3), 2) & " GB)"
-                        If info.Architecture = DismProcessorArchitecture.None Then
-                            imgArch.Text = "Unknown"
-                        ElseIf info.Architecture = DismProcessorArchitecture.Neutral Then
-                            imgArch.Text = "Neutral"
-                        ElseIf info.Architecture = DismProcessorArchitecture.Intel Then
-                            imgArch.Text = "x86"
-                        ElseIf info.Architecture = DismProcessorArchitecture.IA64 Then
-                            ' I'm not sure what systems run Itanium versions of Windows, but still
-                            imgArch.Text = "Itanium (64-bit)"
-                        ElseIf info.Architecture = DismProcessorArchitecture.ARM64 Then
-                            imgArch.Text = "ARM64"
-                        ElseIf info.Architecture = DismProcessorArchitecture.ARM Then
-                            ' This must be the case on Windows RT images
-                            imgArch.Text = "ARM"
-                        ElseIf info.Architecture = DismProcessorArchitecture.AMD64 Then
-                            imgArch.Text = "x64"
-                        End If
-                        Select Case MainForm.Language
-                            Case 0
-                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
-                                        imgHal.Text = If(Not info.Hal = "", info.Hal, "Undefined by the image")
-                                    Case "ESN"
-                                        imgHal.Text = If(Not info.Hal = "", info.Hal, "No definida por la imagen")
-                                End Select
-                            Case 1
-                                imgHal.Text = If(Not info.Hal = "", info.Hal, "Undefined by the image")
-                            Case 2
-                                imgHal.Text = If(Not info.Hal = "", info.Hal, "No definida por la imagen")
-                        End Select
-                        imgSPBuild.Text = info.ProductVersion.Revision
-                        imgSPLvl.Text = info.SpLevel
-                        imgEdition.Text = info.EditionId
-                        imgPType.Text = info.ProductType
-                        imgPSuite.Text = info.ProductSuite
-                        imgSysRoot.Text = info.SystemRoot
-                        imgLangText.Clear()
-                        For Each language In info.Languages
-                            If imgLangText.Text = "" Then
-                                Select Case MainForm.Language
-                                    Case 0
-                                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                            Case "ENG"
-                                                imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (default)", "") & ", "
-                                            Case "ESN"
-                                                imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (predeterminado)", "") & ", "
-                                        End Select
-                                    Case 1
-                                        imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (default)", "") & ", "
-                                    Case 2
-                                        imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (predeterminado)", "") & ", "
-                                End Select
-                            Else
-                                Select Case MainForm.Language
-                                    Case 0
-                                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                            Case "ENG"
-                                                imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (default)", "") & ", ")
-                                            Case "ESN"
-                                                imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (predeterminado)", "") & ", ")
-                                        End Select
-                                    Case 1
-                                        imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (default)", "") & ", ")
-                                    Case 2
-                                        imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (predeterminado)", "") & ", ")
-                                End Select
+                        If info.ImageIndex = MainForm.MountedImageImgIndexes(x) Then
+                            imgVersion.Text = info.ProductVersion.ToString()
+                            DetectFeatureUpdate(info.ProductVersion)
+                            imgMountedName.Text = info.ImageName
+                            imgMountedDesc.Text = info.ImageDescription
+                            imgSize.Text = info.ImageSize.ToString("N0") & " bytes (~" & Math.Round(info.ImageSize / (1024 ^ 3), 2) & " GB)"
+                            If info.Architecture = DismProcessorArchitecture.None Then
+                                imgArch.Text = "Unknown"
+                            ElseIf info.Architecture = DismProcessorArchitecture.Neutral Then
+                                imgArch.Text = "Neutral"
+                            ElseIf info.Architecture = DismProcessorArchitecture.Intel Then
+                                imgArch.Text = "x86"
+                            ElseIf info.Architecture = DismProcessorArchitecture.IA64 Then
+                                ' I'm not sure what systems run Itanium versions of Windows, but still
+                                imgArch.Text = "Itanium (64-bit)"
+                            ElseIf info.Architecture = DismProcessorArchitecture.ARM64 Then
+                                imgArch.Text = "ARM64"
+                            ElseIf info.Architecture = DismProcessorArchitecture.ARM Then
+                                ' This must be the case on Windows RT images
+                                imgArch.Text = "ARM"
+                            ElseIf info.Architecture = DismProcessorArchitecture.AMD64 Then
+                                imgArch.Text = "x64"
                             End If
-                        Next
-                        Dim langarr() As Char = imgLangText.Text.ToCharArray()
-                        langarr(langarr.Count - 2) = ""
-                        imgLangText.Text = New String(langarr)
-                        Select Case MainForm.Language
-                            Case 0
-                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
-                                        imgFormat.Text = Path.GetExtension(MainForm.MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper() & " file"
-                                    Case "ESN"
-                                        imgFormat.Text = "Archivo " & Path.GetExtension(MainForm.MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper()
+                            Select Case MainForm.Language
+                                Case 0
+                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                        Case "ENG"
+                                            imgHal.Text = If(Not info.Hal = "", info.Hal, "Undefined by the image")
+                                        Case "ESN"
+                                            imgHal.Text = If(Not info.Hal = "", info.Hal, "No definida por la imagen")
+                                    End Select
+                                Case 1
+                                    imgHal.Text = If(Not info.Hal = "", info.Hal, "Undefined by the image")
+                                Case 2
+                                    imgHal.Text = If(Not info.Hal = "", info.Hal, "No definida por la imagen")
+                            End Select
+                            imgSPBuild.Text = info.ProductVersion.Revision
+                            imgSPLvl.Text = info.SpLevel
+                            imgEdition.Text = info.EditionId
+                            imgPType.Text = info.ProductType
+                            imgPSuite.Text = info.ProductSuite
+                            imgSysRoot.Text = info.SystemRoot
+                            imgLangText.Clear()
+                            For Each language In info.Languages
+                                ' Leave this temporarily
+                                If imgLangText.Text = "" Then
+                                    Select Case MainForm.Language
+                                        Case 0
+                                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                                Case "ENG"
+                                                    imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (default)", "") & ", "
+                                                Case "ESN"
+                                                    imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (predeterminado)", "") & ", "
+                                            End Select
+                                        Case 1
+                                            imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (default)", "") & ", "
+                                        Case 2
+                                            imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (predeterminado)", "") & ", "
+                                    End Select
+                                Else
+                                    Select Case MainForm.Language
+                                        Case 0
+                                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                                Case "ENG"
+                                                    imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (default)", "") & ", ")
+                                                Case "ESN"
+                                                    imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (predeterminado)", "") & ", ")
+                                            End Select
+                                        Case 1
+                                            imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (default)", "") & ", ")
+                                        Case 2
+                                            imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (predeterminado)", "") & ", ")
+                                    End Select
+                                End If
+
+                                ' Our new, recommended way
+                                Select Case MainForm.Language
+                                    Case 0
+                                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                            Case "ENG"
+                                                LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(info.DefaultLanguage.Name = language.Name, ", default", "") & ")")
+                                            Case "ESN"
+                                                LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(info.DefaultLanguage.Name = language.Name, ", predeterminado", "") & ")")
+                                        End Select
+                                    Case 1
+                                        LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(info.DefaultLanguage.Name = language.Name, ", default", "") & ")")
+                                    Case 2
+                                        LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(info.DefaultLanguage.Name = language.Name, ", predeterminado", "") & ")")
                                 End Select
-                            Case 1
-                                imgFormat.Text = Path.GetExtension(MainForm.MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper() & " file"
-                            Case 2
-                                imgFormat.Text = "Archivo " & Path.GetExtension(MainForm.MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper()
-                        End Select
-                        Select Case MainForm.Language
-                            Case 0
-                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
-                                        imgRW.Text = If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No")
-                                    Case "ESN"
-                                        imgRW.Text = If(MainForm.MountedImageMountedReWr(x) = 0, "Sí", "No")
-                                End Select
-                            Case 1
-                                imgRW.Text = If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No")
-                            Case 2
-                                imgRW.Text = If(MainForm.MountedImageMountedReWr(x) = 0, "Sí", "No")
-                        End Select
-                        If MainForm.MountedImageMountedReWr(x) = 0 Then
-                            RWRemountBtn.Visible = False
-                        Else
-                            RWRemountBtn.Visible = True
+                            Next
+                            Dim langarr() As Char = imgLangText.Text.ToCharArray()
+                            langarr(langarr.Count - 2) = ""
+                            imgLangText.Text = New String(langarr)
+                            Select Case MainForm.Language
+                                Case 0
+                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                        Case "ENG"
+                                            imgFormat.Text = Path.GetExtension(MainForm.MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper() & " file"
+                                        Case "ESN"
+                                            imgFormat.Text = "Archivo " & Path.GetExtension(MainForm.MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper()
+                                    End Select
+                                Case 1
+                                    imgFormat.Text = Path.GetExtension(MainForm.MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper() & " file"
+                                Case 2
+                                    imgFormat.Text = "Archivo " & Path.GetExtension(MainForm.MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper()
+                            End Select
+                            Select Case MainForm.Language
+                                Case 0
+                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                        Case "ENG"
+                                            imgRW.Text = If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No")
+                                        Case "ESN"
+                                            imgRW.Text = If(MainForm.MountedImageMountedReWr(x) = 0, "Sí", "No")
+                                    End Select
+                                Case 1
+                                    imgRW.Text = If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No")
+                                Case 2
+                                    imgRW.Text = If(MainForm.MountedImageMountedReWr(x) = 0, "Sí", "No")
+                            End Select
+                            If MainForm.MountedImageMountedReWr(x) = 0 Then
+                                RWRemountBtn.Visible = False
+                            Else
+                                RWRemountBtn.Visible = True
+                            End If
+                            imgDirs.Text = info.CustomizedInfo.DirectoryCount
+                            imgFiles.Text = info.CustomizedInfo.FileCount
+                            imgCreation.Text = info.CustomizedInfo.CreatedTime
+                            imgModification.Text = info.CustomizedInfo.ModifiedTime
                         End If
-                        imgDirs.Text = info.CustomizedInfo.DirectoryCount
-                        imgFiles.Text = info.CustomizedInfo.FileCount
-                        imgCreation.Text = info.CustomizedInfo.CreatedTime
-                        imgModification.Text = info.CustomizedInfo.ModifiedTime
-                        Exit For
                     Next
                 End If
             Next
@@ -235,31 +256,29 @@ Public Class ProjProperties
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
                         Case 1
-                            File.WriteAllText(".\bin\exthelpers\imginfo.bat",
+                            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat",
                                               "@echo off" & CrLf &
                                               "dism /English /get-wiminfo /wimfile=" & Quote & MainForm.SourceImg & Quote & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot", ASCII)
                         Case Is >= 2
-                            File.WriteAllText(".\bin\exthelpers\imginfo.bat",
+                            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat",
                                               "@echo off" & CrLf &
                                               "dism /English /get-imageinfo /imagefile=" & Quote & MainForm.SourceImg & Quote & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot", ASCII)
                     End Select
                 Case 10
-                    File.WriteAllText(".\bin\exthelpers\imginfo.bat",
+                    File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat",
                                       "@echo off" & CrLf &
                                       "dism /English /get-imageinfo /imagefile=" & Quote & MainForm.SourceImg & Quote & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot", ASCII)
             End Select
             If Debugger.IsAttached Then
-                Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\imginfo.bat").WaitForExit()
+                Process.Start("\Windows\system32\notepad.exe", Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
             End If
             Using WIMBootProc As New Process()
                 WIMBootProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
-                WIMBootProc.StartInfo.Arguments = "/c " & Quote & Directory.GetCurrentDirectory() & "\bin\exthelpers\imginfo.bat" & Quote
+                WIMBootProc.StartInfo.Arguments = "/c " & Quote & Application.StartupPath & "\bin\exthelpers\imginfo.bat" & Quote
                 WIMBootProc.StartInfo.CreateNoWindow = True
                 WIMBootProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
                 WIMBootProc.Start()
-                Do Until WIMBootProc.HasExited
-                    If WIMBootProc.HasExited Then Exit Do
-                Loop
+                WIMBootProc.WaitForExit()
             End Using
             Try
                 imgWimBootStatus.Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\tempinfo\imgwimboot", ASCII).Replace("WIM Bootable : ", "").Trim()
@@ -269,7 +288,7 @@ Public Class ProjProperties
                     Next
                     Directory.Delete(MainForm.projPath & "\tempinfo")
                 End If
-                File.Delete(".\bin\exthelpers\imginfo.bat")
+                File.Delete(Application.StartupPath & "\bin\exthelpers\imginfo.bat")
             Catch ex As Exception
 
             End Try
@@ -465,6 +484,7 @@ Public Class ProjProperties
             TabPage1.BackColor = Color.FromArgb(31, 31, 31)
             TabPage2.BackColor = Color.FromArgb(31, 31, 31)
             imgLangText.BackColor = Color.FromArgb(31, 31, 31)
+            LanguageList.BackColor = Color.FromArgb(31, 31, 31)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Win10Title.BackColor = Color.White
             BackColor = Color.FromArgb(238, 238, 242)
@@ -472,8 +492,12 @@ Public Class ProjProperties
             TabPage1.BackColor = Color.FromArgb(238, 238, 242)
             TabPage2.BackColor = Color.FromArgb(238, 238, 242)
             imgLangText.BackColor = Color.FromArgb(238, 238, 242)
+            LanguageList.BackColor = Color.FromArgb(238, 238, 242)
         End If
+        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         imgLangText.ForeColor = ForeColor
+        LanguageList.ForeColor = ForeColor
         DismVersionChecker = FileVersionInfo.GetVersionInfo(MainForm.DismExe)
         imgMountDir.Text = ""
         imgIndex.Text = ""
@@ -499,8 +523,9 @@ Public Class ProjProperties
         imgFormat.Text = ""
         imgRW.Text = ""
         imgLangText.Text = ""
+        LanguageList.Items.Clear()
         Visible = True
-        If My.Computer.Info.OSFullName.Contains("Windows 10") Or My.Computer.Info.OSFullName.Contains("Windows 11") Then
+        If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True
         End If
@@ -729,7 +754,7 @@ Public Class ProjProperties
             Case 2
                 Label1.Text = "Propiedades de " & TabControl1.SelectedTab.Text.ToLower()
         End Select
-        If My.Computer.Info.OSFullName.Contains("Windows 10") Or My.Computer.Info.OSFullName.Contains("Windows 11") Then
+        If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
         Else
             Text = Label1.Text
@@ -737,17 +762,43 @@ Public Class ProjProperties
     End Sub
 
     Private Sub RWRemountBtn_Click(sender As Object, e As EventArgs) Handles RWRemountBtn.Click
-
+        Visible = False
+        If MainForm.MountedImageMountDirs.Count > 0 Then
+            If MainForm.MountedImageMountDirs.Contains(MainForm.MountDir) Then
+                For x = 0 To Array.LastIndexOf(MainForm.MountedImageMountDirs, MainForm.MountedImageMountDirs.Last)
+                    If MainForm.MountedImageMountDirs(x) = MainForm.MountDir Then
+                        MainForm.EnableWritePermissions(MainForm.MountedImageImgFiles(x), CInt(MainForm.MountedImageImgIndexes(x)), MainForm.MountedImageMountDirs(x))
+                        Exit For
+                    End If
+                Next
+            End If
+        End If
+        Visible = True
+        If Not Directory.Exists(MainForm.projPath & "\tempinfo") Then
+            Directory.CreateDirectory(MainForm.projPath & "\tempinfo").Attributes = FileAttributes.Hidden
+        End If
+        LanguageList.Items.Clear()
+        DetectImageProperties()
     End Sub
 
     Private Sub RemountImgBtn_Click(sender As Object, e As EventArgs) Handles RemountImgBtn.Click
         ProgressPanel.OperationNum = 18     ' Reload image for new servicing session
         ProgressPanel.MountDir = MainForm.MountDir
-        ProgressPanel.ShowDialog()
+        Visible = False
+        ProgressPanel.ShowDialog(MainForm)
+        Visible = True
+        If Not Directory.Exists(MainForm.projPath & "\tempinfo") Then
+            Directory.CreateDirectory(MainForm.projPath & "\tempinfo").Attributes = FileAttributes.Hidden
+        End If
+        LanguageList.Items.Clear()
+        DetectImageProperties()
     End Sub
 
     Private Sub RecoverButton_Click(sender As Object, e As EventArgs) Handles RecoverButton.Click
-
+        Visible = False
+        ImgCleanup.ComboBox1.SelectedIndex = 6
+        ImgCleanup.ShowDialog(MainForm)
+        Visible = True
     End Sub
 
     Private Sub LinkLabel2_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel2.LinkClicked
@@ -800,12 +851,16 @@ Public Class ProjProperties
                         FeatUpd = "21H2 (Iron)"
                     Case 21242 To 22000     ' Also includes Windows 11 Cobalt (21H2)
                         FeatUpd = "21H2 (Cobalt)"
-                    Case 22350 To 25000     ' 25000 is a relative number. This is because of the structural changes in Windows Insider channels, where 23xxx builds are the new Dev builds, and the Zinc development builds since 25314 are the new Canary builds
+                    Case 22350 To 22630     ' This goes until Windows 11 build 22631 (2022 Update Moment 4)
                         FeatUpd = "22H2 (Nickel)"
+                    Case 22631 To 25000     ' 25000 is a relative number. This is because of the structural changes in Windows Insider channels, where 23xxx builds are the new Dev builds, and the Zinc development builds since 25314 are the new Canary builds
+                        FeatUpd = "23H2 (Nickel)"
                     Case 25057 To 25238
-                        FeatUpd = "22H2 (Copper)"
-                    Case 25240 To 26000     ' 26000 is a relative number. We still don't know Zinc's final build
+                        FeatUpd = "23H1 (Copper)"
+                    Case 25240 To 25400     ' 25400 is a relative number. 25398 is the final build of Zinc
                         FeatUpd = "23H2 (Zinc)"
+                    Case 25801 To 27000     ' 27000 is a relative number
+                        FeatUpd = "24H2 (Gallium)"
                 End Select
             Case Else
                 Exit Sub

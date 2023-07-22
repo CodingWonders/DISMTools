@@ -77,30 +77,24 @@ Public Class ApplicationDriveSpecifier
         TextBox1.ForeColor = ForeColor
         RichTextBox1.ForeColor = ForeColor
         Dim WmicProc As Process = Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe", "/c .\bin\dthelper.bat /drinfo")
-        Do Until WmicProc.HasExited
-            If WmicProc.HasExited Then
-                Exit Do
-            End If
-        Loop
+        WmicProc.WaitForExit()
         Try
-            RichTextBox1.Text = File.ReadAllText(".\wmic")
-            File.Delete(".\wmic")
+            RichTextBox1.Text = File.ReadAllText(Application.StartupPath & "\wmic")
+            File.Delete(Application.StartupPath & "\wmic")
         Catch ex As Exception
 
         End Try
+        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         BringToFront()
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         Dim WmicProc As Process = Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe", "/c .\bin\dthelper.bat /drinfo")
-        Do Until WmicProc.HasExited
-            If WmicProc.HasExited Then
-                Exit Do
-            End If
-        Loop
+        WmicProc.WaitForExit()
         Try
-            RichTextBox1.Text = File.ReadAllText(".\wmic")
-            File.Delete(".\wmic")
+            RichTextBox1.Text = File.ReadAllText(Application.StartupPath & "\wmic")
+            File.Delete(Application.StartupPath & "\wmic")
         Catch ex As Exception
 
         End Try

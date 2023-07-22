@@ -52,6 +52,12 @@ Public Class NewUnattendWiz
     Dim PasswordExpiry As Boolean
     Dim JoinCeip As Boolean
 
+    ''' <summary>
+    ''' Initializes the Scintilla editor
+    ''' </summary>
+    ''' <param name="fntName">The name of the font used in the Scintilla editor</param>
+    ''' <param name="fntSize">The size of the font used in the Scintilla editor</param>
+    ''' <remarks></remarks>
     Sub InitScintilla(fntName As String, fntSize As Integer)
         ' Initialize Scintilla editor
         Scintilla1.StyleResetDefault()
@@ -142,6 +148,9 @@ Public Class NewUnattendWiz
         Marker.SetForeColor(Color.Black)
         Marker.SetAlpha(100)
 
+        ' Set editor caret settings
+        Scintilla1.CaretForeColor = ForeColor
+
 
         ' Configure code folding margins
         Scintilla1.Margins(3).Type = MarginType.Symbol
@@ -169,13 +178,36 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub NewUnattendWiz_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
+            BackColor = Color.FromArgb(31, 31, 31)
+            ForeColor = Color.White
+            StepsTreeView.BackColor = Color.FromArgb(31, 31, 31)
+        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
+            BackColor = Color.FromArgb(238, 238, 242)
+            ForeColor = Color.Black
+            StepsTreeView.BackColor = Color.FromArgb(238, 238, 242)
+        End If
+        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        GroupBox1.ForeColor = ForeColor
+        GroupBox2.ForeColor = ForeColor
+        GroupBox3.ForeColor = ForeColor
+        GroupBox4.ForeColor = ForeColor
+        GroupBox5.ForeColor = ForeColor
+        GroupBox6.ForeColor = ForeColor
+        SidePanel.BackColor = BackColor
+        StepsTreeView.ForeColor = ForeColor
+        PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.editor_mode_select, My.Resources.editor_mode)
         ' Fill in font combinations
-        ToolStripComboBox1.Items.Clear()
+        FontFamilyTSCB.Items.Clear()
         For Each fntFamily As FontFamily In FontFamily.Families
-            ToolStripComboBox1.Items.Add(fntFamily.Name)
+            FontFamilyTSCB.Items.Add(fntFamily.Name)
         Next
         InitScintilla("Courier New", 10)
         StepsTreeView.ExpandAll()
+
+        FontFamilyTSCB.SelectedItem = "Courier New"
+        SetNodeColors(StepsTreeView.Nodes, BackColor, ForeColor)
     End Sub
 
     Private Sub StepsTreeView_AfterSelect(sender As Object, e As TreeViewEventArgs) Handles StepsTreeView.AfterSelect
@@ -186,7 +218,7 @@ Public Class NewUnattendWiz
         If ExpressPanelContainer.Visible Then
             ExpressPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.HotTrack)
         Else
-            ExpressPanelTrigger.BackColor = Color.Gainsboro
+            ExpressPanelTrigger.BackColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(48, 48, 48), Color.Gainsboro)
         End If
     End Sub
 
@@ -202,7 +234,7 @@ Public Class NewUnattendWiz
         If ExpressPanelContainer.Visible Then
             ExpressPanelTrigger.BackColor = Color.SteelBlue
         Else
-            ExpressPanelTrigger.BackColor = Color.Silver
+            ExpressPanelTrigger.BackColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(36, 36, 36), Color.Silver)
         End If
     End Sub
 
@@ -210,7 +242,7 @@ Public Class NewUnattendWiz
         If ExpressPanelContainer.Visible Then
             ExpressPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.HotTrack)
         Else
-            ExpressPanelTrigger.BackColor = Color.Gainsboro
+            ExpressPanelTrigger.BackColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(48, 48, 48), Color.Gainsboro)
         End If
     End Sub
 
@@ -221,12 +253,12 @@ Public Class NewUnattendWiz
         ExpressPanelContainer.Visible = True
         ExpressPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.Highlight)
         ExpressPanelTrigger.ForeColor = Color.White
-        PictureBox1.Image = New Bitmap(My.Resources.express_mode_select)
+        PictureBox1.Image = My.Resources.express_mode_select
         EditorPanelTrigger.BackColor = SidePanel.BackColor
-        EditorPanelTrigger.ForeColor = Color.Black
-        PictureBox2.Image = New Bitmap(My.Resources.editor_mode)
+        EditorPanelTrigger.ForeColor = Color.LightGray
+        PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.editor_mode_select, My.Resources.editor_mode)
         LocationPanel.Visible = True
-        PictureBox3.Image = New Bitmap(My.Resources.express_mode_fc)
+        PictureBox3.Image = My.Resources.express_mode_fc
         Label3.Text = "Express mode"
         Label4.Text = "If you haven't created unattended answer files before, use this wizard to create one"
     End Sub
@@ -235,7 +267,7 @@ Public Class NewUnattendWiz
         If EditorPanelContainer.Visible Then
             EditorPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.HotTrack)
         Else
-            EditorPanelTrigger.BackColor = Color.Gainsboro
+            EditorPanelTrigger.BackColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(48, 48, 48), Color.Gainsboro)
         End If
     End Sub
 
@@ -251,7 +283,7 @@ Public Class NewUnattendWiz
         If EditorPanelContainer.Visible Then
             EditorPanelTrigger.BackColor = Color.SteelBlue
         Else
-            EditorPanelTrigger.BackColor = Color.Silver
+            EditorPanelTrigger.BackColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(36, 36, 36), Color.Silver)
         End If
     End Sub
 
@@ -259,7 +291,7 @@ Public Class NewUnattendWiz
         If EditorPanelContainer.Visible Then
             EditorPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.HotTrack)
         Else
-            EditorPanelTrigger.BackColor = Color.Gainsboro
+            EditorPanelTrigger.BackColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(48, 48, 48), Color.Gainsboro)
         End If
     End Sub
 
@@ -269,13 +301,13 @@ Public Class NewUnattendWiz
         EditorPanelContainer.Visible = True
         ExpressPanelContainer.Visible = False
         ExpressPanelTrigger.BackColor = SidePanel.BackColor
-        ExpressPanelTrigger.ForeColor = Color.Black
-        PictureBox1.Image = New Bitmap(My.Resources.express_mode)
+        ExpressPanelTrigger.ForeColor = Color.LightGray
+        PictureBox1.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.express_mode_select, My.Resources.express_mode)
         EditorPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.Highlight)
         EditorPanelTrigger.ForeColor = Color.White
-        PictureBox2.Image = New Bitmap(My.Resources.editor_mode_select)
+        PictureBox2.Image = My.Resources.editor_mode_select
         LocationPanel.Visible = False
-        PictureBox3.Image = New Bitmap(My.Resources.editor_mode_fc)
+        PictureBox3.Image = My.Resources.editor_mode_fc
         Label3.Text = "Editor mode"
         Label4.Text = "Create your unattended answer files from scratch and save them anywhere"
     End Sub
@@ -1095,9 +1127,27 @@ Public Class NewUnattendWiz
                             ComboBox2.Items.Add("Windows 11 Enterprise")
                     End Select
             End Select
+            If KeVersion.ProductMajorPart = 6 And KeVersion.ProductMinorPart = 2 Or KeVersion.ProductMinorPart = 3 Then
+                GroupBox6.Visible = True
+                PictureBox19.Location = New Point(133, 84)
+                Label78.Location = New Point(33, 189)
+                TextBox4.Location = New Point(34, 208)
+                Label79.Location = New Point(33, 234)
+                TextBox5.Location = New Point(34, 253)
+                Label80.Location = New Point(33, 281)
+            Else
+                GroupBox6.Visible = False
+                PictureBox19.Location = New Point(328, 84)
+                Label78.Location = New Point(228, 189)
+                TextBox4.Location = New Point(229, 208)
+                Label79.Location = New Point(228, 234)
+                TextBox5.Location = New Point(229, 253)
+                Label80.Location = New Point(228, 281)
+            End If
         Else
             Select Case ComboBox1.SelectedIndex
                 Case 0
+                    IsWindows8 = False
                     ComboBox2.Items.Add("Windows 7 Starter")
                     ComboBox2.Items.Add("Windows 7 Home Basic")
                     ComboBox2.Items.Add("Windows 7 Home Premium")
@@ -1117,6 +1167,7 @@ Public Class NewUnattendWiz
                     ComboBox2.Items.Add("Windows 7 Ultimate E")
                     ComboBox2.Items.Add("Windows 7 Enterprise E")
                 Case 1
+                    IsWindows8 = False
                     ComboBox2.Items.Add("Windows Server 2008 R2 Foundation")
                     ComboBox2.Items.Add("Windows Server 2008 R2 Standard")
                     ComboBox2.Items.Add("Windows Server 2008 R2 Web")
@@ -1127,6 +1178,7 @@ Public Class NewUnattendWiz
                     ComboBox2.Items.Add("Microsoft Hyper-V Server 2008 R2")
                     ComboBox2.Items.Add("Windows MultiPoint Server 2010")
                 Case 2
+                    IsWindows8 = True
                     ComboBox2.Items.Add("Windows 8")
                     ComboBox2.Items.Add("Windows RT 8")
                     ComboBox2.Items.Add("Windows 8 with Bing")
@@ -1138,6 +1190,7 @@ Public Class NewUnattendWiz
                     ComboBox2.Items.Add("Windows 8 Pro N")
                     ComboBox2.Items.Add("Windows 8 Enterprise N")
                 Case 3
+                    IsWindows8 = True
                     ComboBox2.Items.Add("Windows Server 2012 Foundation")
                     ComboBox2.Items.Add("Windows Server 2012 Standard")
                     ComboBox2.Items.Add("Windows Server 2012 Datacenter")
@@ -1147,6 +1200,7 @@ Public Class NewUnattendWiz
                     ComboBox2.Items.Add("Windows Server 2012 Standard Core")
                     ComboBox2.Items.Add("Windows Server 2012 Datacenter Core")
                 Case 4
+                    IsWindows8 = True
                     ComboBox2.Items.Add("Windows 8.1")
                     ComboBox2.Items.Add("Windows RT 8.1")
                     ComboBox2.Items.Add("Windows 8.1 with Bing")
@@ -1158,6 +1212,7 @@ Public Class NewUnattendWiz
                     ComboBox2.Items.Add("Windows 8.1 Pro N")
                     ComboBox2.Items.Add("Windows 8.1 Enterprise N")
                 Case 5
+                    IsWindows8 = True
                     ComboBox2.Items.Add("Windows Server 2012 R2 Essentials")
                     ComboBox2.Items.Add("Windows Server 2012 R2 Foundation")
                     ComboBox2.Items.Add("Windows Server 2012 R2 Standard")
@@ -1172,23 +1227,44 @@ Public Class NewUnattendWiz
                     ComboBox2.Items.Add("Windows Server 2012 R2 Storage Server Standard Core")
                     ComboBox2.Items.Add("Windows Server 2012 R2 Storage Server Workgroup Core")
                 Case 6
+                    IsWindows8 = False
                     ComboBox2.Items.Add("Windows 10 Home")
                     ComboBox2.Items.Add("Windows 10 Pro")
                     ComboBox2.Items.Add("Windows 10 Education")
                     ComboBox2.Items.Add("Windows 10 Enterprise")
                 Case 7
+                    IsWindows8 = False
                     ComboBox2.Items.Add("Windows 11 Home")
                     ComboBox2.Items.Add("Windows 11 Pro")
                     ComboBox2.Items.Add("Windows 11 Education")
                     ComboBox2.Items.Add("Windows 11 Enterprise")
                 Case 8
+                    IsWindows8 = False
                     ComboBox2.Items.Add("Windows Server 2016 Essentials")
                     ComboBox2.Items.Add("Windows Server 2016 Standard")
                     ComboBox2.Items.Add("Windows Server 2016 Datacenter")
                 Case 9
+                    IsWindows8 = False
                     ComboBox2.Items.Add("Windows Server 2019 Standard")
                     ComboBox2.Items.Add("Windows Server 2019 Datacenter")
             End Select
+            If IsWindows8 Then
+                GroupBox6.Visible = True
+                PictureBox19.Location = New Point(133, 84)
+                Label78.Location = New Point(33, 189)
+                TextBox4.Location = New Point(34, 208)
+                Label79.Location = New Point(33, 234)
+                TextBox5.Location = New Point(34, 253)
+                Label80.Location = New Point(33, 281)
+            Else
+                GroupBox6.Visible = False
+                PictureBox19.Location = New Point(328, 84)
+                Label78.Location = New Point(228, 189)
+                TextBox4.Location = New Point(229, 208)
+                Label79.Location = New Point(228, 234)
+                TextBox5.Location = New Point(229, 253)
+                Label80.Location = New Point(228, 281)
+            End If
         End If
         Thread.Sleep(2000)
         ExpressStatusLbl.Visible = False
@@ -2128,9 +2204,9 @@ Public Class NewUnattendWiz
         ChangeGenericKey()
     End Sub
 
-    Private Sub FontChange(sender As Object, e As EventArgs) Handles ToolStripComboBox1.SelectedIndexChanged, ToolStripComboBox2.SelectedIndexChanged
+    Private Sub FontChange(sender As Object, e As EventArgs) Handles FontFamilyTSCB.SelectedIndexChanged, FontSizeTSCB.SelectedIndexChanged
         ' Change Scintilla editor font
-        InitScintilla(ToolStripComboBox1.SelectedItem, ToolStripComboBox2.SelectedItem)
+        InitScintilla(FontFamilyTSCB.SelectedItem, FontSizeTSCB.SelectedItem)
     End Sub
 
     Private Sub ProductKeyChanged(sender As Object, e As EventArgs) Handles KeyInputBox1.TextChanged, KeyInputBox2.TextChanged, KeyInputBox3.TextChanged, KeyInputBox4.TextChanged, KeyInputBox5.TextChanged
@@ -2204,5 +2280,22 @@ Public Class NewUnattendWiz
             notify.BalloonTipTitle = "The key has been copied to the clipboard"
             notify.ShowBalloonTip(3000)
         End If
+    End Sub
+
+    Private Sub ToolStripButton5_Click(sender As Object, e As EventArgs) Handles ToolStripButton5.Click
+        If ToolStripButton5.Checked Then
+            ToolStripButton5.Checked = False
+        Else
+            ToolStripButton5.Checked = True
+        End If
+        Scintilla1.WrapMode = If(ToolStripButton5.Checked, WrapMode.Word, WrapMode.None)
+    End Sub
+
+    Sub SetNodeColors(nodes As TreeNodeCollection, bg As Color, fg As Color)
+        For Each node As TreeNode In nodes
+            node.BackColor = BackColor
+            node.ForeColor = ForeColor
+            SetNodeColors(node.Nodes, BackColor, ForeColor)
+        Next
     End Sub
 End Class

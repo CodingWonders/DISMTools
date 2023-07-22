@@ -622,7 +622,7 @@ Partial Class AddProvAppxPackage
         '
         'AppxDependencyOFD
         '
-        Me.AppxDependencyOFD.Filter = "Dependency files|*.appx"
+        Me.AppxDependencyOFD.Filter = "Dependency files|*.appx;*.msix"
         Me.AppxDependencyOFD.SupportMultiDottedExtensions = True
         Me.AppxDependencyOFD.Title = "Browse for files applications depend on"
         '

@@ -28,6 +28,8 @@ Partial Class MainForm
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.NewProjectToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenExistingProjectToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator26 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ManageOnlineInstallationToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.SaveProjectToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SaveProjectasToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -54,7 +56,6 @@ Partial Class MainForm
         Me.DeleteImage = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExportImage = New System.Windows.Forms.ToolStripMenuItem()
         Me.GetImageInfo = New System.Windows.Forms.ToolStripMenuItem()
-        Me.GetMountedImageInfo = New System.Windows.Forms.ToolStripMenuItem()
         Me.GetWIMBootEntry = New System.Windows.Forms.ToolStripMenuItem()
         Me.ListImage = New System.Windows.Forms.ToolStripMenuItem()
         Me.MountImage = New System.Windows.Forms.ToolStripMenuItem()
@@ -167,6 +168,8 @@ Partial Class MainForm
         Me.ReportManagerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MountedImageManagerTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ActionEditorToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator22 = New System.Windows.Forms.ToolStripSeparator()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpTopicsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -174,9 +177,10 @@ Partial Class MainForm
         Me.CommandHelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator10 = New System.Windows.Forms.ToolStripSeparator()
         Me.AboutDISMToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator21 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ReportFeedbackToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BranchTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.VersionTSMI = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ReportFeedbackToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.InvalidSettingsTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ISFix = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator19 = New System.Windows.Forms.ToolStripSeparator()
@@ -235,7 +239,10 @@ Partial Class MainForm
         Me.Label7 = New System.Windows.Forms.Label()
         Me.Button18 = New System.Windows.Forms.Button()
         Me.SidePanel = New System.Windows.Forms.Panel()
+        Me.UpdatePanel = New System.Windows.Forms.Panel()
+        Me.UpdateLink = New System.Windows.Forms.LinkLabel()
         Me.Label11 = New System.Windows.Forms.Label()
+        Me.OnlineInstMgmt = New System.Windows.Forms.LinkLabel()
         Me.ExistingProjLink = New System.Windows.Forms.LinkLabel()
         Me.NewProjLink = New System.Windows.Forms.LinkLabel()
         Me.Label10 = New System.Windows.Forms.Label()
@@ -346,6 +353,44 @@ Partial Class MainForm
         Me.DiscardAndUnmountTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator20 = New System.Windows.Forms.ToolStripSeparator()
         Me.UnmountSettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AppxPackagePopupCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ViewPackageDirectoryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ResViewTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TreeViewCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ExpandToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AccessDirectoryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator23 = New System.Windows.Forms.ToolStripSeparator()
+        Me.UnloadProjectToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator24 = New System.Windows.Forms.ToolStripSeparator()
+        Me.CopyDeploymentToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.OfAllArchitecturesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.OfSelectedArchitectureToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator25 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ForX86ArchitectureToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ForAmd64ArchitectureToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ForARMArchitectureToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ForARM64ArchitectureToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator27 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ImageOperationsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MountImageToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.UnmountImageToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator29 = New System.Windows.Forms.ToolStripSeparator()
+        Me.RemoveVolumeImagesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SwitchImageIndexesToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator30 = New System.Windows.Forms.ToolStripSeparator()
+        Me.UnattendedAnswerFilesToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ManageToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CreationWizardToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator31 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ScratchDirectorySettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator32 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ManageReportsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator33 = New System.Windows.Forms.ToolStripSeparator()
+        Me.AddToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.NewFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ExistingFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ADKCopierBW = New System.ComponentModel.BackgroundWorker()
+        Me.UpdCheckerBW = New System.ComponentModel.BackgroundWorker()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -367,6 +412,7 @@ Partial Class MainForm
         Me.Panel1.SuspendLayout()
         Me.Panel4.SuspendLayout()
         Me.SidePanel.SuspendLayout()
+        Me.UpdatePanel.SuspendLayout()
         Me.Panel3.SuspendLayout()
         CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PrjPanel.SuspendLayout()
@@ -403,6 +449,8 @@ Partial Class MainForm
         Me.PkgInfoCMS.SuspendLayout()
         Me.FeatureInfoCMS.SuspendLayout()
         Me.ImgUMountPopupCMS.SuspendLayout()
+        Me.AppxPackagePopupCMS.SuspendLayout()
+        Me.TreeViewCMS.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
@@ -411,13 +459,13 @@ Partial Class MainForm
         Me.MenuStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(1008, 24)
+        Me.MenuStrip1.Size = New System.Drawing.Size(1264, 24)
         Me.MenuStrip1.TabIndex = 1
         Me.MenuStrip1.Text = "MenuStrip1"
         '
         'FileToolStripMenuItem
         '
-        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewProjectToolStripMenuItem, Me.OpenExistingProjectToolStripMenuItem, Me.ToolStripSeparator1, Me.SaveProjectToolStripMenuItem, Me.SaveProjectasToolStripMenuItem, Me.ToolStripSeparator2, Me.ExitToolStripMenuItem})
+        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewProjectToolStripMenuItem, Me.OpenExistingProjectToolStripMenuItem, Me.ToolStripSeparator26, Me.ManageOnlineInstallationToolStripMenuItem, Me.ToolStripSeparator1, Me.SaveProjectToolStripMenuItem, Me.SaveProjectasToolStripMenuItem, Me.ToolStripSeparator2, Me.ExitToolStripMenuItem})
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
         Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
         Me.FileToolStripMenuItem.Text = "&File"
@@ -425,43 +473,54 @@ Partial Class MainForm
         'NewProjectToolStripMenuItem
         '
         Me.NewProjectToolStripMenuItem.Name = "NewProjectToolStripMenuItem"
-        Me.NewProjectToolStripMenuItem.Size = New System.Drawing.Size(187, 22)
+        Me.NewProjectToolStripMenuItem.Size = New System.Drawing.Size(214, 22)
         Me.NewProjectToolStripMenuItem.Text = "&New project..."
         '
         'OpenExistingProjectToolStripMenuItem
         '
         Me.OpenExistingProjectToolStripMenuItem.Name = "OpenExistingProjectToolStripMenuItem"
-        Me.OpenExistingProjectToolStripMenuItem.Size = New System.Drawing.Size(187, 22)
+        Me.OpenExistingProjectToolStripMenuItem.Size = New System.Drawing.Size(214, 22)
         Me.OpenExistingProjectToolStripMenuItem.Text = "&Open existing project"
+        '
+        'ToolStripSeparator26
+        '
+        Me.ToolStripSeparator26.Name = "ToolStripSeparator26"
+        Me.ToolStripSeparator26.Size = New System.Drawing.Size(211, 6)
+        '
+        'ManageOnlineInstallationToolStripMenuItem
+        '
+        Me.ManageOnlineInstallationToolStripMenuItem.Name = "ManageOnlineInstallationToolStripMenuItem"
+        Me.ManageOnlineInstallationToolStripMenuItem.Size = New System.Drawing.Size(214, 22)
+        Me.ManageOnlineInstallationToolStripMenuItem.Text = "&Manage online installation"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(184, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(211, 6)
         '
         'SaveProjectToolStripMenuItem
         '
         Me.SaveProjectToolStripMenuItem.Enabled = False
         Me.SaveProjectToolStripMenuItem.Name = "SaveProjectToolStripMenuItem"
-        Me.SaveProjectToolStripMenuItem.Size = New System.Drawing.Size(187, 22)
+        Me.SaveProjectToolStripMenuItem.Size = New System.Drawing.Size(214, 22)
         Me.SaveProjectToolStripMenuItem.Text = "&Save project..."
         '
         'SaveProjectasToolStripMenuItem
         '
         Me.SaveProjectasToolStripMenuItem.Enabled = False
         Me.SaveProjectasToolStripMenuItem.Name = "SaveProjectasToolStripMenuItem"
-        Me.SaveProjectasToolStripMenuItem.Size = New System.Drawing.Size(187, 22)
+        Me.SaveProjectasToolStripMenuItem.Size = New System.Drawing.Size(214, 22)
         Me.SaveProjectasToolStripMenuItem.Text = "Save project &as..."
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(184, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(211, 6)
         '
         'ExitToolStripMenuItem
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(187, 22)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(214, 22)
         Me.ExitToolStripMenuItem.Text = "E&xit"
         '
         'ProjectToolStripMenuItem
@@ -522,7 +581,7 @@ Partial Class MainForm
         '
         'ImageManagementToolStripMenuItem
         '
-        Me.ImageManagementToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AppendImage, Me.ApplyFFU, Me.ApplyImage, Me.CaptureCustomImage, Me.CaptureFFU, Me.CaptureImage, Me.CleanupMountpoints, Me.CommitImage, Me.DeleteImage, Me.ExportImage, Me.GetImageInfo, Me.GetMountedImageInfo, Me.GetWIMBootEntry, Me.ListImage, Me.MountImage, Me.OptimizeFFU, Me.OptimizeImage, Me.RemountImage, Me.SplitFFU, Me.SplitImage, Me.UnmountImage, Me.UpdateWIMBootEntry, Me.ApplySiloedPackage})
+        Me.ImageManagementToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AppendImage, Me.ApplyFFU, Me.ApplyImage, Me.CaptureCustomImage, Me.CaptureFFU, Me.CaptureImage, Me.CleanupMountpoints, Me.CommitImage, Me.DeleteImage, Me.ExportImage, Me.GetImageInfo, Me.GetWIMBootEntry, Me.ListImage, Me.MountImage, Me.OptimizeFFU, Me.OptimizeImage, Me.RemountImage, Me.SplitFFU, Me.SplitImage, Me.UnmountImage, Me.UpdateWIMBootEntry, Me.ApplySiloedPackage})
         Me.ImageManagementToolStripMenuItem.Name = "ImageManagementToolStripMenuItem"
         Me.ImageManagementToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
         Me.ImageManagementToolStripMenuItem.Text = "Image management"
@@ -530,139 +589,133 @@ Partial Class MainForm
         'AppendImage
         '
         Me.AppendImage.Name = "AppendImage"
-        Me.AppendImage.Size = New System.Drawing.Size(305, 22)
+        Me.AppendImage.Size = New System.Drawing.Size(289, 22)
         Me.AppendImage.Text = "Append capture directory to image..."
         '
         'ApplyFFU
         '
         Me.ApplyFFU.Name = "ApplyFFU"
-        Me.ApplyFFU.Size = New System.Drawing.Size(305, 22)
+        Me.ApplyFFU.Size = New System.Drawing.Size(289, 22)
         Me.ApplyFFU.Text = "Apply FFU or SFU file..."
         '
         'ApplyImage
         '
         Me.ApplyImage.Name = "ApplyImage"
-        Me.ApplyImage.Size = New System.Drawing.Size(305, 22)
+        Me.ApplyImage.Size = New System.Drawing.Size(289, 22)
         Me.ApplyImage.Text = "Apply WIM or SWM file..."
         '
         'CaptureCustomImage
         '
         Me.CaptureCustomImage.Name = "CaptureCustomImage"
-        Me.CaptureCustomImage.Size = New System.Drawing.Size(305, 22)
+        Me.CaptureCustomImage.Size = New System.Drawing.Size(289, 22)
         Me.CaptureCustomImage.Text = "Capture incremental changes to file..."
         '
         'CaptureFFU
         '
         Me.CaptureFFU.Name = "CaptureFFU"
-        Me.CaptureFFU.Size = New System.Drawing.Size(305, 22)
+        Me.CaptureFFU.Size = New System.Drawing.Size(289, 22)
         Me.CaptureFFU.Text = "Capture partitions to FFU file..."
         '
         'CaptureImage
         '
         Me.CaptureImage.Name = "CaptureImage"
-        Me.CaptureImage.Size = New System.Drawing.Size(305, 22)
+        Me.CaptureImage.Size = New System.Drawing.Size(289, 22)
         Me.CaptureImage.Text = "Capture image of a drive to WIM file..."
         '
         'CleanupMountpoints
         '
         Me.CleanupMountpoints.Name = "CleanupMountpoints"
-        Me.CleanupMountpoints.Size = New System.Drawing.Size(305, 22)
+        Me.CleanupMountpoints.Size = New System.Drawing.Size(289, 22)
         Me.CleanupMountpoints.Text = "Delete resources from corrupted image..."
         '
         'CommitImage
         '
         Me.CommitImage.Name = "CommitImage"
-        Me.CommitImage.Size = New System.Drawing.Size(305, 22)
+        Me.CommitImage.Size = New System.Drawing.Size(289, 22)
         Me.CommitImage.Text = "Apply changes to image..."
         '
         'DeleteImage
         '
         Me.DeleteImage.Name = "DeleteImage"
-        Me.DeleteImage.Size = New System.Drawing.Size(305, 22)
+        Me.DeleteImage.Size = New System.Drawing.Size(289, 22)
         Me.DeleteImage.Text = "Delete volume image from WIM file..."
         '
         'ExportImage
         '
         Me.ExportImage.Name = "ExportImage"
-        Me.ExportImage.Size = New System.Drawing.Size(305, 22)
+        Me.ExportImage.Size = New System.Drawing.Size(289, 22)
         Me.ExportImage.Text = "Export image..."
         '
         'GetImageInfo
         '
         Me.GetImageInfo.Name = "GetImageInfo"
-        Me.GetImageInfo.Size = New System.Drawing.Size(305, 22)
+        Me.GetImageInfo.Size = New System.Drawing.Size(289, 22)
         Me.GetImageInfo.Text = "Get image information..."
-        '
-        'GetMountedImageInfo
-        '
-        Me.GetMountedImageInfo.Name = "GetMountedImageInfo"
-        Me.GetMountedImageInfo.Size = New System.Drawing.Size(305, 22)
-        Me.GetMountedImageInfo.Text = "Get currently mounted image information..."
         '
         'GetWIMBootEntry
         '
         Me.GetWIMBootEntry.Name = "GetWIMBootEntry"
-        Me.GetWIMBootEntry.Size = New System.Drawing.Size(305, 22)
+        Me.GetWIMBootEntry.Size = New System.Drawing.Size(289, 22)
         Me.GetWIMBootEntry.Text = "Get WIMBoot configuration entries..."
         '
         'ListImage
         '
         Me.ListImage.Name = "ListImage"
-        Me.ListImage.Size = New System.Drawing.Size(305, 22)
+        Me.ListImage.Size = New System.Drawing.Size(289, 22)
         Me.ListImage.Text = "List files and directories in image..."
         '
         'MountImage
         '
         Me.MountImage.Name = "MountImage"
-        Me.MountImage.Size = New System.Drawing.Size(305, 22)
+        Me.MountImage.Size = New System.Drawing.Size(289, 22)
         Me.MountImage.Text = "Mount image..."
         '
         'OptimizeFFU
         '
         Me.OptimizeFFU.Name = "OptimizeFFU"
-        Me.OptimizeFFU.Size = New System.Drawing.Size(305, 22)
+        Me.OptimizeFFU.Size = New System.Drawing.Size(289, 22)
         Me.OptimizeFFU.Text = "Optimize FFU file..."
         '
         'OptimizeImage
         '
         Me.OptimizeImage.Name = "OptimizeImage"
-        Me.OptimizeImage.Size = New System.Drawing.Size(305, 22)
+        Me.OptimizeImage.Size = New System.Drawing.Size(289, 22)
         Me.OptimizeImage.Text = "Optimize image..."
         '
         'RemountImage
         '
         Me.RemountImage.Name = "RemountImage"
-        Me.RemountImage.Size = New System.Drawing.Size(305, 22)
+        Me.RemountImage.Size = New System.Drawing.Size(289, 22)
         Me.RemountImage.Text = "Remount image for servicing..."
         '
         'SplitFFU
         '
         Me.SplitFFU.Name = "SplitFFU"
-        Me.SplitFFU.Size = New System.Drawing.Size(305, 22)
+        Me.SplitFFU.Size = New System.Drawing.Size(289, 22)
         Me.SplitFFU.Text = "Splt FFU file into SFU files..."
         '
         'SplitImage
         '
         Me.SplitImage.Name = "SplitImage"
-        Me.SplitImage.Size = New System.Drawing.Size(305, 22)
+        Me.SplitImage.Size = New System.Drawing.Size(289, 22)
         Me.SplitImage.Text = "Split WIM file into SWM files..."
         '
         'UnmountImage
         '
         Me.UnmountImage.Name = "UnmountImage"
-        Me.UnmountImage.Size = New System.Drawing.Size(305, 22)
+        Me.UnmountImage.Size = New System.Drawing.Size(289, 22)
         Me.UnmountImage.Text = "Unmount image..."
         '
         'UpdateWIMBootEntry
         '
         Me.UpdateWIMBootEntry.Name = "UpdateWIMBootEntry"
-        Me.UpdateWIMBootEntry.Size = New System.Drawing.Size(305, 22)
+        Me.UpdateWIMBootEntry.Size = New System.Drawing.Size(289, 22)
         Me.UpdateWIMBootEntry.Text = "Update WIMBoot configuration entry..."
         '
         'ApplySiloedPackage
         '
         Me.ApplySiloedPackage.Name = "ApplySiloedPackage"
-        Me.ApplySiloedPackage.Size = New System.Drawing.Size(305, 22)
+        Me.ApplySiloedPackage.Size = New System.Drawing.Size(289, 22)
         Me.ApplySiloedPackage.Text = "Apply siloed provisioning package..."
         '
         'OSPackagesToolStripMenuItem
@@ -1198,7 +1251,7 @@ Partial Class MainForm
         '
         'ToolsToolStripMenuItem
         '
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImageConversionToolStripMenuItem, Me.ToolStripSeparator12, Me.MergeSWM, Me.ToolStripSeparator18, Me.RemountImageWithWritePermissionsToolStripMenuItem, Me.ToolStripSeparator13, Me.CommandShellToolStripMenuItem, Me.ToolStripSeparator16, Me.UnattendedAnswerFileManagerToolStripMenuItem, Me.ReportManagerToolStripMenuItem, Me.MountedImageManagerTSMI, Me.ToolStripSeparator9, Me.OptionsToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImageConversionToolStripMenuItem, Me.ToolStripSeparator12, Me.MergeSWM, Me.ToolStripSeparator18, Me.RemountImageWithWritePermissionsToolStripMenuItem, Me.ToolStripSeparator13, Me.CommandShellToolStripMenuItem, Me.ToolStripSeparator16, Me.UnattendedAnswerFileManagerToolStripMenuItem, Me.ReportManagerToolStripMenuItem, Me.MountedImageManagerTSMI, Me.ToolStripSeparator9, Me.ActionEditorToolStripMenuItem, Me.ToolStripSeparator22, Me.OptionsToolStripMenuItem})
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(46, 20)
         Me.ToolsToolStripMenuItem.Text = "&Tools"
@@ -1278,6 +1331,17 @@ Partial Class MainForm
         Me.ToolStripSeparator9.Name = "ToolStripSeparator9"
         Me.ToolStripSeparator9.Size = New System.Drawing.Size(277, 6)
         '
+        'ActionEditorToolStripMenuItem
+        '
+        Me.ActionEditorToolStripMenuItem.Name = "ActionEditorToolStripMenuItem"
+        Me.ActionEditorToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
+        Me.ActionEditorToolStripMenuItem.Text = "Action editor"
+        '
+        'ToolStripSeparator22
+        '
+        Me.ToolStripSeparator22.Name = "ToolStripSeparator22"
+        Me.ToolStripSeparator22.Size = New System.Drawing.Size(277, 6)
+        '
         'OptionsToolStripMenuItem
         '
         Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
@@ -1286,7 +1350,7 @@ Partial Class MainForm
         '
         'HelpToolStripMenuItem
         '
-        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HelpTopicsToolStripMenuItem, Me.GlossaryToolStripMenuItem, Me.CommandHelpToolStripMenuItem, Me.ToolStripSeparator10, Me.AboutDISMToolsToolStripMenuItem})
+        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HelpTopicsToolStripMenuItem, Me.GlossaryToolStripMenuItem, Me.CommandHelpToolStripMenuItem, Me.ToolStripSeparator10, Me.AboutDISMToolsToolStripMenuItem, Me.ToolStripSeparator21, Me.ReportFeedbackToolStripMenuItem})
         Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
         Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
         Me.HelpToolStripMenuItem.Text = "&Help"
@@ -1295,38 +1359,49 @@ Partial Class MainForm
         '
         Me.HelpTopicsToolStripMenuItem.Name = "HelpTopicsToolStripMenuItem"
         Me.HelpTopicsToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1
-        Me.HelpTopicsToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
+        Me.HelpTopicsToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
         Me.HelpTopicsToolStripMenuItem.Text = "Help Topics"
         '
         'GlossaryToolStripMenuItem
         '
         Me.GlossaryToolStripMenuItem.Name = "GlossaryToolStripMenuItem"
         Me.GlossaryToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.F1), System.Windows.Forms.Keys)
-        Me.GlossaryToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
+        Me.GlossaryToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
         Me.GlossaryToolStripMenuItem.Text = "Glossary"
         '
         'CommandHelpToolStripMenuItem
         '
         Me.CommandHelpToolStripMenuItem.Name = "CommandHelpToolStripMenuItem"
         Me.CommandHelpToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Shift Or System.Windows.Forms.Keys.F1), System.Windows.Forms.Keys)
-        Me.CommandHelpToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
+        Me.CommandHelpToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
         Me.CommandHelpToolStripMenuItem.Text = "Command help..."
         '
         'ToolStripSeparator10
         '
         Me.ToolStripSeparator10.Name = "ToolStripSeparator10"
-        Me.ToolStripSeparator10.Size = New System.Drawing.Size(228, 6)
+        Me.ToolStripSeparator10.Size = New System.Drawing.Size(283, 6)
         '
         'AboutDISMToolsToolStripMenuItem
         '
         Me.AboutDISMToolsToolStripMenuItem.Name = "AboutDISMToolsToolStripMenuItem"
-        Me.AboutDISMToolsToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
+        Me.AboutDISMToolsToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
         Me.AboutDISMToolsToolStripMenuItem.Text = "About DISMTools"
+        '
+        'ToolStripSeparator21
+        '
+        Me.ToolStripSeparator21.Name = "ToolStripSeparator21"
+        Me.ToolStripSeparator21.Size = New System.Drawing.Size(283, 6)
+        '
+        'ReportFeedbackToolStripMenuItem
+        '
+        Me.ReportFeedbackToolStripMenuItem.Name = "ReportFeedbackToolStripMenuItem"
+        Me.ReportFeedbackToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
+        Me.ReportFeedbackToolStripMenuItem.Text = "Report feedback (opens in web browser)"
         '
         'BranchTSMI
         '
         Me.BranchTSMI.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
-        Me.BranchTSMI.Image = Global.DISMTools.My.Resources.Resources.branch
+        Me.BranchTSMI.Image = CType(resources.GetObject("BranchTSMI.Image"), System.Drawing.Image)
         Me.BranchTSMI.Name = "BranchTSMI"
         Me.BranchTSMI.Size = New System.Drawing.Size(72, 20)
         Me.BranchTSMI.Text = "Branch"
@@ -1335,24 +1410,18 @@ Partial Class MainForm
         'VersionTSMI
         '
         Me.VersionTSMI.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
-        Me.VersionTSMI.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ReportFeedbackToolStripMenuItem})
         Me.VersionTSMI.Name = "VersionTSMI"
-        Me.VersionTSMI.Size = New System.Drawing.Size(57, 20)
-        Me.VersionTSMI.Text = "ALPHA"
+        Me.VersionTSMI.Size = New System.Drawing.Size(66, 20)
+        Me.VersionTSMI.Text = "PREVIEW"
         Me.VersionTSMI.ToolTipText = "This is an alpha release. In it, you will encounter lots of bugs and incomplete f" & _
     "eatures."
-        '
-        'ReportFeedbackToolStripMenuItem
-        '
-        Me.ReportFeedbackToolStripMenuItem.Name = "ReportFeedbackToolStripMenuItem"
-        Me.ReportFeedbackToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
-        Me.ReportFeedbackToolStripMenuItem.Text = "Report feedback (opens in web browser)"
+        Me.VersionTSMI.Visible = False
         '
         'InvalidSettingsTSMI
         '
         Me.InvalidSettingsTSMI.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.InvalidSettingsTSMI.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ISFix, Me.ToolStripSeparator19, Me.ISHelp})
-        Me.InvalidSettingsTSMI.Image = Global.DISMTools.My.Resources.Resources.setting_error_glyph
+        Me.InvalidSettingsTSMI.Image = CType(resources.GetObject("InvalidSettingsTSMI.Image"), System.Drawing.Image)
         Me.InvalidSettingsTSMI.Name = "InvalidSettingsTSMI"
         Me.InvalidSettingsTSMI.Size = New System.Drawing.Size(220, 20)
         Me.InvalidSettingsTSMI.Text = "Invalid settings have been detected"
@@ -1382,7 +1451,7 @@ Partial Class MainForm
         Me.HomePanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.HomePanel.Location = New System.Drawing.Point(0, 24)
         Me.HomePanel.Name = "HomePanel"
-        Me.HomePanel.Size = New System.Drawing.Size(1008, 537)
+        Me.HomePanel.Size = New System.Drawing.Size(1264, 657)
         Me.HomePanel.TabIndex = 3
         '
         'WelcomePanel
@@ -1394,14 +1463,14 @@ Partial Class MainForm
         Me.WelcomePanel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.WelcomePanel.Location = New System.Drawing.Point(256, 0)
         Me.WelcomePanel.Name = "WelcomePanel"
-        Me.WelcomePanel.Size = New System.Drawing.Size(752, 537)
+        Me.WelcomePanel.Size = New System.Drawing.Size(1008, 657)
         Me.WelcomePanel.TabIndex = 1
         '
         'Button17
         '
         Me.Button17.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button17.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button17.Location = New System.Drawing.Point(554, 7)
+        Me.Button17.Location = New System.Drawing.Point(810, 7)
         Me.Button17.Name = "Button17"
         Me.Button17.Size = New System.Drawing.Size(187, 23)
         Me.Button17.TabIndex = 1
@@ -1420,7 +1489,7 @@ Partial Class MainForm
         Me.WelcomeTabControl.Location = New System.Drawing.Point(10, 12)
         Me.WelcomeTabControl.Name = "WelcomeTabControl"
         Me.WelcomeTabControl.SelectedIndex = 0
-        Me.WelcomeTabControl.Size = New System.Drawing.Size(733, 513)
+        Me.WelcomeTabControl.Size = New System.Drawing.Size(989, 633)
         Me.WelcomeTabControl.TabIndex = 0
         '
         'WelcomeTab
@@ -1442,14 +1511,14 @@ Partial Class MainForm
         Me.WelcomeTab.Location = New System.Drawing.Point(4, 24)
         Me.WelcomeTab.Name = "WelcomeTab"
         Me.WelcomeTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.WelcomeTab.Size = New System.Drawing.Size(725, 485)
+        Me.WelcomeTab.Size = New System.Drawing.Size(981, 605)
         Me.WelcomeTab.TabIndex = 0
         Me.WelcomeTab.Text = "Welcome"
         Me.WelcomeTab.UseVisualStyleBackColor = True
         '
         'PictureBox2
         '
-        Me.PictureBox2.Image = Global.DISMTools.My.Resources.Resources.icons8_code_32px
+        Me.PictureBox2.Image = CType(resources.GetObject("PictureBox2.Image"), System.Drawing.Image)
         Me.PictureBox2.Location = New System.Drawing.Point(32, 176)
         Me.PictureBox2.Name = "PictureBox2"
         Me.PictureBox2.Size = New System.Drawing.Size(32, 32)
@@ -1459,7 +1528,7 @@ Partial Class MainForm
         '
         'PictureBox4
         '
-        Me.PictureBox4.Image = Global.DISMTools.My.Resources.Resources.getting_started
+        Me.PictureBox4.Image = CType(resources.GetObject("PictureBox4.Image"), System.Drawing.Image)
         Me.PictureBox4.Location = New System.Drawing.Point(32, 359)
         Me.PictureBox4.Name = "PictureBox4"
         Me.PictureBox4.Size = New System.Drawing.Size(32, 32)
@@ -1469,7 +1538,7 @@ Partial Class MainForm
         '
         'PictureBox3
         '
-        Me.PictureBox3.Image = Global.DISMTools.My.Resources.Resources.caution
+        Me.PictureBox3.Image = CType(resources.GetObject("PictureBox3.Image"), System.Drawing.Image)
         Me.PictureBox3.Location = New System.Drawing.Point(32, 265)
         Me.PictureBox3.Name = "PictureBox3"
         Me.PictureBox3.Size = New System.Drawing.Size(32, 32)
@@ -1479,7 +1548,7 @@ Partial Class MainForm
         '
         'PictureBox1
         '
-        Me.PictureBox1.Image = Global.DISMTools.My.Resources.Resources.ver_stability
+        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
         Me.PictureBox1.Location = New System.Drawing.Point(32, 83)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(32, 32)
@@ -1519,9 +1588,9 @@ Partial Class MainForm
         Me.Label27.Name = "Label27"
         Me.Label27.Size = New System.Drawing.Size(631, 52)
         Me.Label27.TabIndex = 3
-        Me.Label27.Text = "Currently, this program is in alpha. This means lots of things will not work as e" & _
-    "xpected. There will also be lots of bugs, and, generally, the program is incompl" & _
-    "ete (as you can see right now)"
+        Me.Label27.Text = "Currently, this program is in beta. This means lots of things will not work as ex" & _
+    "pected. There will also be lots of bugs, and, generally, the program is incomple" & _
+    "te (as you can see right now)"
         '
         'Label28
         '
@@ -1567,9 +1636,9 @@ Partial Class MainForm
         Me.Label26.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Bold)
         Me.Label26.Location = New System.Drawing.Point(70, 83)
         Me.Label26.Name = "Label26"
-        Me.Label26.Size = New System.Drawing.Size(225, 30)
+        Me.Label26.Size = New System.Drawing.Size(214, 30)
         Me.Label26.TabIndex = 1
-        Me.Label26.Text = "This is alpha software"
+        Me.Label26.Text = "This is beta software"
         '
         'Label24
         '
@@ -1586,7 +1655,7 @@ Partial Class MainForm
         Me.NewsFeedTab.Location = New System.Drawing.Point(4, 24)
         Me.NewsFeedTab.Name = "NewsFeedTab"
         Me.NewsFeedTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.NewsFeedTab.Size = New System.Drawing.Size(725, 485)
+        Me.NewsFeedTab.Size = New System.Drawing.Size(981, 605)
         Me.NewsFeedTab.TabIndex = 1
         Me.NewsFeedTab.Text = "Latest news"
         Me.NewsFeedTab.UseVisualStyleBackColor = True
@@ -1596,7 +1665,7 @@ Partial Class MainForm
         Me.VideosTab.Location = New System.Drawing.Point(4, 24)
         Me.VideosTab.Name = "VideosTab"
         Me.VideosTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.VideosTab.Size = New System.Drawing.Size(725, 485)
+        Me.VideosTab.Size = New System.Drawing.Size(981, 605)
         Me.VideosTab.TabIndex = 2
         Me.VideosTab.Text = "Tutorial videos"
         Me.VideosTab.UseVisualStyleBackColor = True
@@ -1610,7 +1679,7 @@ Partial Class MainForm
         Me.StartPanel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.StartPanel.Location = New System.Drawing.Point(0, 0)
         Me.StartPanel.Name = "StartPanel"
-        Me.StartPanel.Size = New System.Drawing.Size(752, 537)
+        Me.StartPanel.Size = New System.Drawing.Size(1008, 657)
         Me.StartPanel.TabIndex = 2
         Me.StartPanel.Visible = False
         '
@@ -1622,7 +1691,7 @@ Partial Class MainForm
         Me.StartPanelPContainer.Dock = System.Windows.Forms.DockStyle.Fill
         Me.StartPanelPContainer.Location = New System.Drawing.Point(0, 76)
         Me.StartPanelPContainer.Name = "StartPanelPContainer"
-        Me.StartPanelPContainer.Size = New System.Drawing.Size(752, 461)
+        Me.StartPanelPContainer.Size = New System.Drawing.Size(1008, 581)
         Me.StartPanelPContainer.TabIndex = 5
         '
         'GetStartedPanel
@@ -1632,7 +1701,7 @@ Partial Class MainForm
         Me.GetStartedPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GetStartedPanel.Location = New System.Drawing.Point(0, 0)
         Me.GetStartedPanel.Name = "GetStartedPanel"
-        Me.GetStartedPanel.Size = New System.Drawing.Size(752, 461)
+        Me.GetStartedPanel.Size = New System.Drawing.Size(1008, 581)
         Me.GetStartedPanel.TabIndex = 0
         '
         'GetStartedContainer
@@ -1642,7 +1711,7 @@ Partial Class MainForm
         Me.GetStartedContainer.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GetStartedContainer.Location = New System.Drawing.Point(0, 38)
         Me.GetStartedContainer.Name = "GetStartedContainer"
-        Me.GetStartedContainer.Size = New System.Drawing.Size(752, 423)
+        Me.GetStartedContainer.Size = New System.Drawing.Size(1008, 543)
         Me.GetStartedContainer.TabIndex = 6
         '
         'Panel6
@@ -1664,7 +1733,7 @@ Partial Class MainForm
         Me.Panel6.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel6.Location = New System.Drawing.Point(0, 0)
         Me.Panel6.Name = "Panel6"
-        Me.Panel6.Size = New System.Drawing.Size(752, 423)
+        Me.Panel6.Size = New System.Drawing.Size(1008, 543)
         Me.Panel6.TabIndex = 0
         '
         'LinkLabel11
@@ -1828,7 +1897,7 @@ Partial Class MainForm
         Me.Panel7.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel7.Location = New System.Drawing.Point(0, 0)
         Me.Panel7.Name = "Panel7"
-        Me.Panel7.Size = New System.Drawing.Size(752, 423)
+        Me.Panel7.Size = New System.Drawing.Size(1008, 543)
         Me.Panel7.TabIndex = 1
         '
         'Panel5
@@ -1838,7 +1907,7 @@ Partial Class MainForm
         Me.Panel5.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel5.Location = New System.Drawing.Point(0, 0)
         Me.Panel5.Name = "Panel5"
-        Me.Panel5.Size = New System.Drawing.Size(752, 38)
+        Me.Panel5.Size = New System.Drawing.Size(1008, 38)
         Me.Panel5.TabIndex = 5
         '
         'Label34
@@ -1868,7 +1937,7 @@ Partial Class MainForm
         Me.TutorialVideoPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TutorialVideoPanel.Location = New System.Drawing.Point(0, 0)
         Me.TutorialVideoPanel.Name = "TutorialVideoPanel"
-        Me.TutorialVideoPanel.Size = New System.Drawing.Size(752, 461)
+        Me.TutorialVideoPanel.Size = New System.Drawing.Size(1008, 581)
         Me.TutorialVideoPanel.TabIndex = 0
         '
         'LatestNewsPanel
@@ -1876,7 +1945,7 @@ Partial Class MainForm
         Me.LatestNewsPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LatestNewsPanel.Location = New System.Drawing.Point(0, 0)
         Me.LatestNewsPanel.Name = "LatestNewsPanel"
-        Me.LatestNewsPanel.Size = New System.Drawing.Size(752, 461)
+        Me.LatestNewsPanel.Size = New System.Drawing.Size(1008, 581)
         Me.LatestNewsPanel.TabIndex = 0
         '
         'Panel1
@@ -1887,7 +1956,7 @@ Partial Class MainForm
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel1.Location = New System.Drawing.Point(0, 38)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(752, 38)
+        Me.Panel1.Size = New System.Drawing.Size(1008, 38)
         Me.Panel1.TabIndex = 4
         '
         'Label8
@@ -1930,7 +1999,7 @@ Partial Class MainForm
         Me.Panel4.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel4.Location = New System.Drawing.Point(0, 0)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(752, 38)
+        Me.Panel4.Size = New System.Drawing.Size(1008, 38)
         Me.Panel4.TabIndex = 2
         '
         'Label7
@@ -1947,7 +2016,7 @@ Partial Class MainForm
         '
         Me.Button18.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button18.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button18.Location = New System.Drawing.Point(554, 7)
+        Me.Button18.Location = New System.Drawing.Point(810, 7)
         Me.Button18.Name = "Button18"
         Me.Button18.Size = New System.Drawing.Size(187, 23)
         Me.Button18.TabIndex = 1
@@ -1957,7 +2026,9 @@ Partial Class MainForm
         'SidePanel
         '
         Me.SidePanel.BackColor = System.Drawing.Color.White
+        Me.SidePanel.Controls.Add(Me.UpdatePanel)
         Me.SidePanel.Controls.Add(Me.Label11)
+        Me.SidePanel.Controls.Add(Me.OnlineInstMgmt)
         Me.SidePanel.Controls.Add(Me.ExistingProjLink)
         Me.SidePanel.Controls.Add(Me.NewProjLink)
         Me.SidePanel.Controls.Add(Me.Label10)
@@ -1968,17 +2039,56 @@ Partial Class MainForm
         Me.SidePanel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.SidePanel.Location = New System.Drawing.Point(0, 0)
         Me.SidePanel.Name = "SidePanel"
-        Me.SidePanel.Size = New System.Drawing.Size(256, 537)
+        Me.SidePanel.Size = New System.Drawing.Size(256, 657)
         Me.SidePanel.TabIndex = 0
+        '
+        'UpdatePanel
+        '
+        Me.UpdatePanel.Controls.Add(Me.UpdateLink)
+        Me.UpdatePanel.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.UpdatePanel.Location = New System.Drawing.Point(0, 573)
+        Me.UpdatePanel.Name = "UpdatePanel"
+        Me.UpdatePanel.Size = New System.Drawing.Size(256, 84)
+        Me.UpdatePanel.TabIndex = 5
+        '
+        'UpdateLink
+        '
+        Me.UpdateLink.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.UpdateLink.AutoEllipsis = True
+        Me.UpdateLink.LinkArea = New System.Windows.Forms.LinkArea(58, 24)
+        Me.UpdateLink.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.UpdateLink.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.UpdateLink.Location = New System.Drawing.Point(16, 14)
+        Me.UpdateLink.Name = "UpdateLink"
+        Me.UpdateLink.Size = New System.Drawing.Size(223, 56)
+        Me.UpdateLink.TabIndex = 0
+        Me.UpdateLink.TabStop = True
+        Me.UpdateLink.Text = "A new version is available for download and installation. Click here to learn mor" & _
+    "e"
+        Me.UpdateLink.UseCompatibleTextRendering = True
         '
         'Label11
         '
-        Me.Label11.Location = New System.Drawing.Point(34, 203)
+        Me.Label11.Location = New System.Drawing.Point(34, 209)
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(188, 20)
         Me.Label11.TabIndex = 3
         Me.Label11.Text = "Coming soon!"
         Me.Label11.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        '
+        'OnlineInstMgmt
+        '
+        Me.OnlineInstMgmt.AutoSize = True
+        Me.OnlineInstMgmt.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.OnlineInstMgmt.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.OnlineInstMgmt.Location = New System.Drawing.Point(31, 150)
+        Me.OnlineInstMgmt.Name = "OnlineInstMgmt"
+        Me.OnlineInstMgmt.Size = New System.Drawing.Size(147, 15)
+        Me.OnlineInstMgmt.TabIndex = 2
+        Me.OnlineInstMgmt.TabStop = True
+        Me.OnlineInstMgmt.Text = "Manage online installation"
         '
         'ExistingProjLink
         '
@@ -2008,7 +2118,7 @@ Partial Class MainForm
         '
         Me.Label10.AutoSize = True
         Me.Label10.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label10.Location = New System.Drawing.Point(14, 170)
+        Me.Label10.Location = New System.Drawing.Point(14, 176)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(116, 21)
         Me.Label10.TabIndex = 1
@@ -2035,7 +2145,7 @@ Partial Class MainForm
         '
         'PictureBox5
         '
-        Me.PictureBox5.Image = Global.DISMTools.My.Resources.Resources.logo_mainscr_light
+        Me.PictureBox5.Image = CType(resources.GetObject("PictureBox5.Image"), System.Drawing.Image)
         Me.PictureBox5.Location = New System.Drawing.Point(32, 14)
         Me.PictureBox5.Name = "PictureBox5"
         Me.PictureBox5.Size = New System.Drawing.Size(192, 36)
@@ -2049,7 +2159,7 @@ Partial Class MainForm
         Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 21.0!))
-        Me.TableLayoutPanel3.Location = New System.Drawing.Point(18, 198)
+        Me.TableLayoutPanel3.Location = New System.Drawing.Point(18, 204)
         Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
         Me.TableLayoutPanel3.RowCount = 10
         Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.0!))
@@ -2075,7 +2185,7 @@ Partial Class MainForm
         Me.PrjPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PrjPanel.Location = New System.Drawing.Point(0, 24)
         Me.PrjPanel.Name = "PrjPanel"
-        Me.PrjPanel.Size = New System.Drawing.Size(1008, 537)
+        Me.PrjPanel.Size = New System.Drawing.Size(1264, 657)
         Me.PrjPanel.TabIndex = 4
         '
         'SplitPanels
@@ -2094,7 +2204,7 @@ Partial Class MainForm
         '
         Me.SplitPanels.Panel2.Controls.Add(Me.TabControl2)
         Me.SplitPanels.Panel2MinSize = 384
-        Me.SplitPanels.Size = New System.Drawing.Size(752, 486)
+        Me.SplitPanels.Size = New System.Drawing.Size(1008, 606)
         Me.SplitPanels.SplitterDistance = 264
         Me.SplitPanels.SplitterWidth = 2
         Me.SplitPanels.TabIndex = 1
@@ -2109,7 +2219,7 @@ Partial Class MainForm
         Me.TabControl1.Multiline = True
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(264, 486)
+        Me.TabControl1.Size = New System.Drawing.Size(264, 606)
         Me.TabControl1.TabIndex = 0
         '
         'TabPage1
@@ -2122,7 +2232,7 @@ Partial Class MainForm
         Me.TabPage1.Location = New System.Drawing.Point(4, 22)
         Me.TabPage1.Name = "TabPage1"
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(256, 460)
+        Me.TabPage1.Size = New System.Drawing.Size(256, 580)
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Project"
         Me.TabPage1.UseVisualStyleBackColor = True
@@ -2132,7 +2242,7 @@ Partial Class MainForm
         Me.UnloadBtn.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.UnloadBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.UnloadBtn.Location = New System.Drawing.Point(36, 418)
+        Me.UnloadBtn.Location = New System.Drawing.Point(36, 538)
         Me.UnloadBtn.Name = "UnloadBtn"
         Me.UnloadBtn.Size = New System.Drawing.Size(185, 28)
         Me.UnloadBtn.TabIndex = 1
@@ -2144,7 +2254,7 @@ Partial Class MainForm
         Me.ExplorerView.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ExplorerView.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.ExplorerView.Location = New System.Drawing.Point(36, 384)
+        Me.ExplorerView.Location = New System.Drawing.Point(36, 504)
         Me.ExplorerView.Name = "ExplorerView"
         Me.ExplorerView.Size = New System.Drawing.Size(185, 28)
         Me.ExplorerView.TabIndex = 1
@@ -2156,7 +2266,7 @@ Partial Class MainForm
         Me.Button14.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button14.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button14.Location = New System.Drawing.Point(36, 350)
+        Me.Button14.Location = New System.Drawing.Point(36, 470)
         Me.Button14.Name = "Button14"
         Me.Button14.Size = New System.Drawing.Size(185, 28)
         Me.Button14.TabIndex = 1
@@ -2176,7 +2286,7 @@ Partial Class MainForm
         '
         'TabPageIcon1
         '
-        Me.TabPageIcon1.Image = Global.DISMTools.My.Resources.Resources.project
+        Me.TabPageIcon1.Image = CType(resources.GetObject("TabPageIcon1.Image"), System.Drawing.Image)
         Me.TabPageIcon1.Location = New System.Drawing.Point(8, 8)
         Me.TabPageIcon1.Name = "TabPageIcon1"
         Me.TabPageIcon1.Size = New System.Drawing.Size(48, 48)
@@ -2210,9 +2320,9 @@ Partial Class MainForm
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TableLayoutPanel2.ColumnCount = 3
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.3333282!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.6666718!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.44444!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.55556!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 91.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -2228,13 +2338,13 @@ Partial Class MainForm
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 102.0!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15.0!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(256, 280)
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(256, 400)
         Me.TableLayoutPanel2.TabIndex = 8
         '
         'ProjNameEditBtn
         '
         Me.ProjNameEditBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ProjNameEditBtn.Image = Global.DISMTools.My.Resources.Resources.proj_name_edit
+        Me.ProjNameEditBtn.Image = CType(resources.GetObject("ProjNameEditBtn.Image"), System.Drawing.Image)
         Me.ProjNameEditBtn.Location = New System.Drawing.Point(229, 3)
         Me.ProjNameEditBtn.Name = "ProjNameEditBtn"
         Me.ProjNameEditBtn.Size = New System.Drawing.Size(24, 23)
@@ -2247,9 +2357,9 @@ Partial Class MainForm
         Me.LinkLabel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel1.Location = New System.Drawing.Point(99, 146)
+        Me.LinkLabel1.Location = New System.Drawing.Point(76, 146)
         Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(154, 134)
+        Me.LinkLabel1.Size = New System.Drawing.Size(177, 254)
         Me.LinkLabel1.TabIndex = 5
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "Click here to mount an image"
@@ -2259,9 +2369,10 @@ Partial Class MainForm
         Me.Panel8.Controls.Add(Me.projName)
         Me.Panel8.Controls.Add(Me.projNameText)
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel8.Location = New System.Drawing.Point(99, 3)
+        Me.Panel8.Location = New System.Drawing.Point(76, 3)
+
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(93, 23)
+        Me.Panel8.Size = New System.Drawing.Size(85, 23)
         Me.Panel8.TabIndex = 8
         '
         'projName
@@ -2270,7 +2381,7 @@ Partial Class MainForm
         Me.projName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projName.Location = New System.Drawing.Point(0, 0)
         Me.projName.Name = "projName"
-        Me.projName.Size = New System.Drawing.Size(93, 23)
+        Me.projName.Size = New System.Drawing.Size(85, 23)
         Me.projName.TabIndex = 2
         Me.projName.Text = "projName"
         Me.projName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -2280,7 +2391,7 @@ Partial Class MainForm
         Me.projNameText.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projNameText.Location = New System.Drawing.Point(0, 0)
         Me.projNameText.Name = "projNameText"
-        Me.projNameText.Size = New System.Drawing.Size(93, 21)
+        Me.projNameText.Size = New System.Drawing.Size(85, 21)
         Me.projNameText.TabIndex = 4
         Me.projNameText.Text = "projName"
         Me.projNameText.Visible = False
@@ -2291,9 +2402,9 @@ Partial Class MainForm
         Me.Label5.AutoSize = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label5, 2)
         Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label5.Location = New System.Drawing.Point(99, 131)
+        Me.Label5.Location = New System.Drawing.Point(76, 131)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(154, 15)
+        Me.Label5.Size = New System.Drawing.Size(177, 15)
         Me.Label5.TabIndex = 2
         Me.Label5.Text = "imgStatus"
         '
@@ -2303,7 +2414,7 @@ Partial Class MainForm
         Me.Label2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label2.Location = New System.Drawing.Point(3, 29)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(90, 102)
+        Me.Label2.Size = New System.Drawing.Size(67, 102)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "Location:"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2313,9 +2424,9 @@ Partial Class MainForm
         Me.Label3.AutoEllipsis = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label3, 2)
         Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label3.Location = New System.Drawing.Point(99, 29)
+        Me.Label3.Location = New System.Drawing.Point(76, 29)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(154, 102)
+        Me.Label3.Size = New System.Drawing.Size(177, 102)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "projPath"
         '
@@ -2326,7 +2437,7 @@ Partial Class MainForm
         Me.Label4.Location = New System.Drawing.Point(3, 131)
         Me.Label4.Name = "Label4"
         Me.TableLayoutPanel2.SetRowSpan(Me.Label4, 2)
-        Me.Label4.Size = New System.Drawing.Size(90, 149)
+        Me.Label4.Size = New System.Drawing.Size(67, 269)
         Me.Label4.TabIndex = 1
         Me.Label4.Text = "Images mounted?"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2337,7 +2448,7 @@ Partial Class MainForm
         Me.Panel9.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel9.Location = New System.Drawing.Point(3, 3)
         Me.Panel9.Name = "Panel9"
-        Me.Panel9.Size = New System.Drawing.Size(90, 23)
+        Me.Panel9.Size = New System.Drawing.Size(67, 23)
         Me.Panel9.TabIndex = 9
         '
         'Label1
@@ -2345,7 +2456,7 @@ Partial Class MainForm
         Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label1.Location = New System.Drawing.Point(0, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(90, 23)
+        Me.Label1.Size = New System.Drawing.Size(67, 23)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Name:"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -2357,7 +2468,7 @@ Partial Class MainForm
         Me.TabPage2.Location = New System.Drawing.Point(4, 22)
         Me.TabPage2.Name = "TabPage2"
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(256, 460)
+        Me.TabPage2.Size = New System.Drawing.Size(256, 580)
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "Image"
         Me.TabPage2.UseVisualStyleBackColor = True
@@ -2370,7 +2481,7 @@ Partial Class MainForm
         Me.ImageNotMountedPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ImageNotMountedPanel.Location = New System.Drawing.Point(3, 3)
         Me.ImageNotMountedPanel.Name = "ImageNotMountedPanel"
-        Me.ImageNotMountedPanel.Size = New System.Drawing.Size(250, 454)
+        Me.ImageNotMountedPanel.Size = New System.Drawing.Size(250, 574)
         Me.ImageNotMountedPanel.TabIndex = 0
         '
         'LinkLabel3
@@ -2380,7 +2491,7 @@ Partial Class MainForm
         Me.LinkLabel3.LinkArea = New System.Windows.Forms.LinkArea(33, 32)
         Me.LinkLabel3.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel3.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel3.Location = New System.Drawing.Point(21, 401)
+        Me.LinkLabel3.Location = New System.Drawing.Point(21, 521)
         Me.LinkLabel3.Name = "LinkLabel3"
         Me.LinkLabel3.Size = New System.Drawing.Size(210, 44)
         Me.LinkLabel3.TabIndex = 2
@@ -2396,7 +2507,7 @@ Partial Class MainForm
         Me.LinkLabel2.LinkArea = New System.Windows.Forms.LinkArea(72, 4)
         Me.LinkLabel2.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel2.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel2.Location = New System.Drawing.Point(21, 231)
+        Me.LinkLabel2.Location = New System.Drawing.Point(21, 291)
         Me.LinkLabel2.Name = "LinkLabel2"
         Me.LinkLabel2.Size = New System.Drawing.Size(210, 44)
         Me.LinkLabel2.TabIndex = 1
@@ -2411,7 +2522,7 @@ Partial Class MainForm
         Me.Label23.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label23.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label23.ForeColor = System.Drawing.Color.Crimson
-        Me.Label23.Location = New System.Drawing.Point(20, 180)
+        Me.Label23.Location = New System.Drawing.Point(20, 240)
         Me.Label23.Name = "Label23"
         Me.Label23.Size = New System.Drawing.Size(211, 51)
         Me.Label23.TabIndex = 0
@@ -2427,7 +2538,7 @@ Partial Class MainForm
         Me.ImagePanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ImagePanel.Location = New System.Drawing.Point(3, 3)
         Me.ImagePanel.Name = "ImagePanel"
-        Me.ImagePanel.Size = New System.Drawing.Size(250, 454)
+        Me.ImagePanel.Size = New System.Drawing.Size(250, 574)
         Me.ImagePanel.TabIndex = 9
         '
         'Button16
@@ -2435,7 +2546,7 @@ Partial Class MainForm
         Me.Button16.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button16.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button16.Location = New System.Drawing.Point(33, 415)
+        Me.Button16.Location = New System.Drawing.Point(33, 535)
         Me.Button16.Name = "Button16"
         Me.Button16.Size = New System.Drawing.Size(185, 28)
         Me.Button16.TabIndex = 8
@@ -2455,7 +2566,7 @@ Partial Class MainForm
         '
         'TabPageIcon2
         '
-        Me.TabPageIcon2.Image = Global.DISMTools.My.Resources.Resources.image
+        Me.TabPageIcon2.Image = CType(resources.GetObject("TabPageIcon2.Image"), System.Drawing.Image)
         Me.TabPageIcon2.Location = New System.Drawing.Point(8, 8)
         Me.TabPageIcon2.Name = "TabPageIcon2"
         Me.TabPageIcon2.Size = New System.Drawing.Size(48, 48)
@@ -2488,7 +2599,7 @@ Partial Class MainForm
         Me.Button15.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button15.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button15.Location = New System.Drawing.Point(33, 384)
+        Me.Button15.Location = New System.Drawing.Point(33, 504)
         Me.Button15.Name = "Button15"
         Me.Button15.Size = New System.Drawing.Size(185, 28)
         Me.Button15.TabIndex = 8
@@ -2521,7 +2632,7 @@ Partial Class MainForm
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 84.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 121.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(250, 314)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(250, 434)
         Me.TableLayoutPanel1.TabIndex = 9
         '
         'Label15
@@ -2539,7 +2650,7 @@ Partial Class MainForm
         Me.Label21.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label21.Location = New System.Drawing.Point(3, 201)
         Me.Label21.Name = "Label21"
-        Me.Label21.Size = New System.Drawing.Size(92, 121)
+        Me.Label21.Size = New System.Drawing.Size(92, 233)
         Me.Label21.TabIndex = 3
         Me.Label21.Text = "Description:"
         Me.Label21.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2611,7 +2722,7 @@ Partial Class MainForm
         Me.Label20.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label20.Location = New System.Drawing.Point(101, 201)
         Me.Label20.Name = "Label20"
-        Me.Label20.Size = New System.Drawing.Size(146, 121)
+        Me.Label20.Size = New System.Drawing.Size(146, 233)
         Me.Label20.TabIndex = 6
         Me.Label20.Text = "imgDesc"
         '
@@ -2633,7 +2744,7 @@ Partial Class MainForm
         Me.TabControl2.Location = New System.Drawing.Point(0, 0)
         Me.TabControl2.Name = "TabControl2"
         Me.TabControl2.SelectedIndex = 0
-        Me.TabControl2.Size = New System.Drawing.Size(486, 486)
+        Me.TabControl2.Size = New System.Drawing.Size(742, 606)
         Me.TabControl2.TabIndex = 3
         '
         'TabPage3
@@ -2643,7 +2754,7 @@ Partial Class MainForm
         Me.TabPage3.Location = New System.Drawing.Point(4, 22)
         Me.TabPage3.Name = "TabPage3"
         Me.TabPage3.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage3.Size = New System.Drawing.Size(478, 460)
+        Me.TabPage3.Size = New System.Drawing.Size(734, 580)
         Me.TabPage3.TabIndex = 0
         Me.TabPage3.Text = "Actions"
         Me.TabPage3.UseVisualStyleBackColor = True
@@ -2656,7 +2767,7 @@ Partial Class MainForm
         Me.OldActionPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.OldActionPanel.Location = New System.Drawing.Point(3, 3)
         Me.OldActionPanel.Name = "OldActionPanel"
-        Me.OldActionPanel.Size = New System.Drawing.Size(472, 454)
+        Me.OldActionPanel.Size = New System.Drawing.Size(728, 574)
         Me.OldActionPanel.TabIndex = 3
         '
         'GroupBox3
@@ -2665,7 +2776,7 @@ Partial Class MainForm
         Me.GroupBox3.Controls.Add(Me.Button8)
         Me.GroupBox3.Controls.Add(Me.Button9)
         Me.GroupBox3.Controls.Add(Me.Button10)
-        Me.GroupBox3.Location = New System.Drawing.Point(6, 327)
+        Me.GroupBox3.Location = New System.Drawing.Point(134, 387)
         Me.GroupBox3.Name = "GroupBox3"
         Me.GroupBox3.Size = New System.Drawing.Size(460, 92)
         Me.GroupBox3.TabIndex = 2
@@ -2675,7 +2786,7 @@ Partial Class MainForm
         'Button8
         '
         Me.Button8.Enabled = False
-        Me.Button8.Image = Global.DISMTools.My.Resources.Resources.get_feat_info
+        Me.Button8.Image = CType(resources.GetObject("Button8.Image"), System.Drawing.Image)
         Me.Button8.Location = New System.Drawing.Point(118, 20)
         Me.Button8.Name = "Button8"
         Me.Button8.Size = New System.Drawing.Size(201, 63)
@@ -2687,7 +2798,7 @@ Partial Class MainForm
         'Button9
         '
         Me.Button9.Enabled = False
-        Me.Button9.Image = Global.DISMTools.My.Resources.Resources.disable_feature
+        Me.Button9.Image = CType(resources.GetObject("Button9.Image"), System.Drawing.Image)
         Me.Button9.Location = New System.Drawing.Point(325, 20)
         Me.Button9.Name = "Button9"
         Me.Button9.Size = New System.Drawing.Size(129, 63)
@@ -2699,7 +2810,7 @@ Partial Class MainForm
         'Button10
         '
         Me.Button10.Enabled = False
-        Me.Button10.Image = Global.DISMTools.My.Resources.Resources.enable_feature
+        Me.Button10.Image = CType(resources.GetObject("Button10.Image"), System.Drawing.Image)
         Me.Button10.Location = New System.Drawing.Point(6, 20)
         Me.Button10.Name = "Button10"
         Me.Button10.Size = New System.Drawing.Size(106, 63)
@@ -2717,7 +2828,7 @@ Partial Class MainForm
         Me.GroupBox1.Controls.Add(Me.Button2)
         Me.GroupBox1.Controls.Add(Me.Button3)
         Me.GroupBox1.Controls.Add(Me.Button4)
-        Me.GroupBox1.Location = New System.Drawing.Point(6, 35)
+        Me.GroupBox1.Location = New System.Drawing.Point(134, 95)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(460, 159)
         Me.GroupBox1.TabIndex = 2
@@ -2727,7 +2838,7 @@ Partial Class MainForm
         'Button13
         '
         Me.Button13.Enabled = False
-        Me.Button13.Image = Global.DISMTools.My.Resources.Resources.switch_indexes
+        Me.Button13.Image = CType(resources.GetObject("Button13.Image"), System.Drawing.Image)
         Me.Button13.Location = New System.Drawing.Point(233, 89)
         Me.Button13.Name = "Button13"
         Me.Button13.Size = New System.Drawing.Size(221, 63)
@@ -2739,7 +2850,7 @@ Partial Class MainForm
         'Button11
         '
         Me.Button11.Enabled = False
-        Me.Button11.Image = Global.DISMTools.My.Resources.Resources.servsession_reload
+        Me.Button11.Image = CType(resources.GetObject("Button11.Image"), System.Drawing.Image)
         Me.Button11.Location = New System.Drawing.Point(6, 89)
         Me.Button11.Name = "Button11"
         Me.Button11.Size = New System.Drawing.Size(221, 63)
@@ -2750,7 +2861,7 @@ Partial Class MainForm
         '
         'Button1
         '
-        Me.Button1.Image = Global.DISMTools.My.Resources.Resources.mount_img
+        Me.Button1.Image = CType(resources.GetObject("Button1.Image"), System.Drawing.Image)
         Me.Button1.Location = New System.Drawing.Point(6, 20)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(106, 63)
@@ -2762,7 +2873,7 @@ Partial Class MainForm
         'Button2
         '
         Me.Button2.Enabled = False
-        Me.Button2.Image = Global.DISMTools.My.Resources.Resources.commit_img
+        Me.Button2.Image = CType(resources.GetObject("Button2.Image"), System.Drawing.Image)
         Me.Button2.Location = New System.Drawing.Point(118, 20)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(145, 63)
@@ -2804,7 +2915,7 @@ Partial Class MainForm
         Me.GroupBox2.Controls.Add(Me.Button7)
         Me.GroupBox2.Controls.Add(Me.Button5)
         Me.GroupBox2.Controls.Add(Me.Button12)
-        Me.GroupBox2.Location = New System.Drawing.Point(6, 200)
+        Me.GroupBox2.Location = New System.Drawing.Point(134, 260)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(460, 121)
         Me.GroupBox2.TabIndex = 2
@@ -2814,7 +2925,7 @@ Partial Class MainForm
         'Button6
         '
         Me.Button6.Enabled = False
-        Me.Button6.Image = Global.DISMTools.My.Resources.Resources.get_pkg_info
+        Me.Button6.Image = CType(resources.GetObject("Button6.Image"), System.Drawing.Image)
         Me.Button6.Location = New System.Drawing.Point(118, 20)
         Me.Button6.Name = "Button6"
         Me.Button6.Size = New System.Drawing.Size(201, 63)
@@ -2826,7 +2937,7 @@ Partial Class MainForm
         'Button7
         '
         Me.Button7.Enabled = False
-        Me.Button7.Image = Global.DISMTools.My.Resources.Resources.rem_pkg
+        Me.Button7.Image = CType(resources.GetObject("Button7.Image"), System.Drawing.Image)
         Me.Button7.Location = New System.Drawing.Point(325, 20)
         Me.Button7.Name = "Button7"
         Me.Button7.Size = New System.Drawing.Size(129, 63)
@@ -2838,7 +2949,7 @@ Partial Class MainForm
         'Button5
         '
         Me.Button5.Enabled = False
-        Me.Button5.Image = Global.DISMTools.My.Resources.Resources.add_pkg
+        Me.Button5.Image = CType(resources.GetObject("Button5.Image"), System.Drawing.Image)
         Me.Button5.Location = New System.Drawing.Point(6, 20)
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(106, 63)
@@ -2866,7 +2977,7 @@ Partial Class MainForm
         Me.NewActionPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.NewActionPanel.Location = New System.Drawing.Point(3, 3)
         Me.NewActionPanel.Name = "NewActionPanel"
-        Me.NewActionPanel.Size = New System.Drawing.Size(472, 454)
+        Me.NewActionPanel.Size = New System.Drawing.Size(728, 574)
         Me.NewActionPanel.TabIndex = 3
         '
         'NewActions_Header
@@ -2875,7 +2986,7 @@ Partial Class MainForm
         Me.NewActions_Header.Dock = System.Windows.Forms.DockStyle.Top
         Me.NewActions_Header.Location = New System.Drawing.Point(0, 0)
         Me.NewActions_Header.Name = "NewActions_Header"
-        Me.NewActions_Header.Size = New System.Drawing.Size(472, 96)
+        Me.NewActions_Header.Size = New System.Drawing.Size(728, 96)
         Me.NewActions_Header.TabIndex = 0
         '
         'Label6
@@ -2893,7 +3004,7 @@ Partial Class MainForm
         Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripSeparator14, Me.ToolStripButton3, Me.ToolStripSeparator15, Me.ToolStripButton4})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.Size = New System.Drawing.Size(752, 25)
+        Me.ToolStrip1.Size = New System.Drawing.Size(1008, 25)
         Me.ToolStrip1.TabIndex = 2
         Me.ToolStrip1.Text = "ToolStrip1"
         '
@@ -2902,7 +3013,7 @@ Partial Class MainForm
         Me.ToolStripButton1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.ToolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.ToolStripButton1.Enabled = False
-        Me.ToolStripButton1.Image = Global.DISMTools.My.Resources.Resources.close_glyph
+        Me.ToolStripButton1.Image = CType(resources.GetObject("ToolStripButton1.Image"), System.Drawing.Image)
         Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton1.Name = "ToolStripButton1"
         Me.ToolStripButton1.Size = New System.Drawing.Size(23, 22)
@@ -2911,7 +3022,7 @@ Partial Class MainForm
         'ToolStripButton2
         '
         Me.ToolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton2.Image = Global.DISMTools.My.Resources.Resources.save_glyph
+        Me.ToolStripButton2.Image = CType(resources.GetObject("ToolStripButton2.Image"), System.Drawing.Image)
         Me.ToolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton2.Name = "ToolStripButton2"
         Me.ToolStripButton2.Size = New System.Drawing.Size(23, 22)
@@ -2924,7 +3035,7 @@ Partial Class MainForm
         '
         'ToolStripButton3
         '
-        Me.ToolStripButton3.Image = Global.DISMTools.My.Resources.Resources.prj_unload_glyph
+        Me.ToolStripButton3.Image = CType(resources.GetObject("ToolStripButton3.Image"), System.Drawing.Image)
         Me.ToolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton3.Name = "ToolStripButton3"
         Me.ToolStripButton3.Size = New System.Drawing.Size(105, 22)
@@ -2941,7 +3052,7 @@ Partial Class MainForm
         '
         Me.ToolStripButton4.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.ToolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton4.Image = Global.DISMTools.My.Resources.Resources.progress_window
+        Me.ToolStripButton4.Image = CType(resources.GetObject("ToolStripButton4.Image"), System.Drawing.Image)
         Me.ToolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton4.Name = "ToolStripButton4"
         Me.ToolStripButton4.Size = New System.Drawing.Size(23, 22)
@@ -2954,9 +3065,9 @@ Partial Class MainForm
         Me.Panel2.Controls.Add(Me.ToolStrip2)
         Me.Panel2.Controls.Add(Me.prjTreeStatus)
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Panel2.Location = New System.Drawing.Point(752, 0)
+        Me.Panel2.Location = New System.Drawing.Point(1008, 0)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(256, 511)
+        Me.Panel2.Size = New System.Drawing.Size(256, 631)
         Me.Panel2.TabIndex = 1
         '
         'prjTreeView
@@ -2964,7 +3075,7 @@ Partial Class MainForm
         Me.prjTreeView.Dock = System.Windows.Forms.DockStyle.Fill
         Me.prjTreeView.Location = New System.Drawing.Point(0, 25)
         Me.prjTreeView.Name = "prjTreeView"
-        Me.prjTreeView.Size = New System.Drawing.Size(256, 486)
+        Me.prjTreeView.Size = New System.Drawing.Size(256, 606)
         Me.prjTreeView.TabIndex = 3
         '
         'ToolStrip2
@@ -2980,7 +3091,7 @@ Partial Class MainForm
         'RefreshViewTSB
         '
         Me.RefreshViewTSB.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.RefreshViewTSB.Image = Global.DISMTools.My.Resources.Resources.refresh_glyph
+        Me.RefreshViewTSB.Image = CType(resources.GetObject("RefreshViewTSB.Image"), System.Drawing.Image)
         Me.RefreshViewTSB.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.RefreshViewTSB.Name = "RefreshViewTSB"
         Me.RefreshViewTSB.Size = New System.Drawing.Size(23, 22)
@@ -2993,7 +3104,7 @@ Partial Class MainForm
         '
         'ExpandCollapseTSB
         '
-        Me.ExpandCollapseTSB.Image = Global.DISMTools.My.Resources.Resources.expand_glyph
+        Me.ExpandCollapseTSB.Image = CType(resources.GetObject("ExpandCollapseTSB.Image"), System.Drawing.Image)
         Me.ExpandCollapseTSB.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ExpandCollapseTSB.Name = "ExpandCollapseTSB"
         Me.ExpandCollapseTSB.Size = New System.Drawing.Size(66, 22)
@@ -3004,7 +3115,7 @@ Partial Class MainForm
         Me.prjTreeStatus.BackColor = System.Drawing.SystemColors.Control
         Me.prjTreeStatus.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.prjTreeStatus.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel2, Me.ToolStripProgressBar1})
-        Me.prjTreeStatus.Location = New System.Drawing.Point(0, 489)
+        Me.prjTreeStatus.Location = New System.Drawing.Point(0, 608)
         Me.prjTreeStatus.Name = "prjTreeStatus"
         Me.prjTreeStatus.Size = New System.Drawing.Size(256, 22)
         Me.prjTreeStatus.SizingGrip = False
@@ -3025,11 +3136,12 @@ Partial Class MainForm
         '
         'StatusStrip
         '
+        Me.StatusStrip.AutoSize = False
         Me.StatusStrip.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.StatusStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BackgroundProcessesButton, Me.MenuDesc})
-        Me.StatusStrip.Location = New System.Drawing.Point(0, 511)
+        Me.StatusStrip.Location = New System.Drawing.Point(0, 631)
         Me.StatusStrip.Name = "StatusStrip"
-        Me.StatusStrip.Size = New System.Drawing.Size(1008, 26)
+        Me.StatusStrip.Size = New System.Drawing.Size(1264, 26)
         Me.StatusStrip.TabIndex = 0
         Me.StatusStrip.Text = "Status"
         '
@@ -3037,7 +3149,7 @@ Partial Class MainForm
         '
         Me.BackgroundProcessesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.BackgroundProcessesButton.DropDownButtonWidth = 0
-        Me.BackgroundProcessesButton.Image = Global.DISMTools.My.Resources.Resources.bg_ops_complete
+        Me.BackgroundProcessesButton.Image = CType(resources.GetObject("BackgroundProcessesButton.Image"), System.Drawing.Image)
         Me.BackgroundProcessesButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None
         Me.BackgroundProcessesButton.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.BackgroundProcessesButton.Name = "BackgroundProcessesButton"
@@ -3153,19 +3265,242 @@ Partial Class MainForm
         Me.UnmountSettingsToolStripMenuItem.Size = New System.Drawing.Size(252, 22)
         Me.UnmountSettingsToolStripMenuItem.Text = "Unmount settings..."
         '
+        'AppxPackagePopupCMS
+        '
+        Me.AppxPackagePopupCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ViewPackageDirectoryToolStripMenuItem, Me.ResViewTSMI})
+        Me.AppxPackagePopupCMS.Name = "AppxPackagePopupCMS"
+        Me.AppxPackagePopupCMS.Size = New System.Drawing.Size(197, 48)
+        '
+        'ViewPackageDirectoryToolStripMenuItem
+        '
+        Me.ViewPackageDirectoryToolStripMenuItem.Image = Global.DISMTools.My.Resources.Resources.openfile
+        Me.ViewPackageDirectoryToolStripMenuItem.Name = "ViewPackageDirectoryToolStripMenuItem"
+        Me.ViewPackageDirectoryToolStripMenuItem.Size = New System.Drawing.Size(196, 22)
+        Me.ViewPackageDirectoryToolStripMenuItem.Text = "View package directory"
+        '
+        'ResViewTSMI
+        '
+        Me.ResViewTSMI.Name = "ResViewTSMI"
+        Me.ResViewTSMI.Size = New System.Drawing.Size(196, 22)
+        Me.ResViewTSMI.Text = "View resources for "
+        '
+        'TreeViewCMS
+        '
+        Me.TreeViewCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExpandToolStripMenuItem, Me.AccessDirectoryToolStripMenuItem, Me.ToolStripSeparator23, Me.UnloadProjectToolStripMenuItem1, Me.ToolStripSeparator24, Me.CopyDeploymentToolsToolStripMenuItem, Me.ToolStripSeparator27, Me.ImageOperationsToolStripMenuItem, Me.ToolStripSeparator30, Me.UnattendedAnswerFilesToolStripMenuItem1, Me.ToolStripSeparator31, Me.ScratchDirectorySettingsToolStripMenuItem, Me.ToolStripSeparator32, Me.ManageReportsToolStripMenuItem, Me.ToolStripSeparator33, Me.AddToolStripMenuItem})
+        Me.TreeViewCMS.Name = "TreeViewCMS"
+        Me.TreeViewCMS.Size = New System.Drawing.Size(219, 244)
+        '
+        'ExpandToolStripMenuItem
+        '
+        Me.ExpandToolStripMenuItem.Name = "ExpandToolStripMenuItem"
+        Me.ExpandToolStripMenuItem.Size = New System.Drawing.Size(218, 22)
+        Me.ExpandToolStripMenuItem.Text = "Expand item"
+        '
+        'AccessDirectoryToolStripMenuItem
+        '
+        Me.AccessDirectoryToolStripMenuItem.Name = "AccessDirectoryToolStripMenuItem"
+        Me.AccessDirectoryToolStripMenuItem.Size = New System.Drawing.Size(218, 22)
+        Me.AccessDirectoryToolStripMenuItem.Text = "Access directory"
+        '
+        'ToolStripSeparator23
+        '
+        Me.ToolStripSeparator23.Name = "ToolStripSeparator23"
+        Me.ToolStripSeparator23.Size = New System.Drawing.Size(215, 6)
+        '
+        'UnloadProjectToolStripMenuItem1
+        '
+        Me.UnloadProjectToolStripMenuItem1.Name = "UnloadProjectToolStripMenuItem1"
+        Me.UnloadProjectToolStripMenuItem1.Size = New System.Drawing.Size(218, 22)
+        Me.UnloadProjectToolStripMenuItem1.Text = "Unload project"
+        '
+        'ToolStripSeparator24
+        '
+        Me.ToolStripSeparator24.Name = "ToolStripSeparator24"
+        Me.ToolStripSeparator24.Size = New System.Drawing.Size(215, 6)
+        '
+        'CopyDeploymentToolsToolStripMenuItem
+        '
+        Me.CopyDeploymentToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OfAllArchitecturesToolStripMenuItem, Me.OfSelectedArchitectureToolStripMenuItem, Me.ToolStripSeparator25, Me.ForX86ArchitectureToolStripMenuItem, Me.ForAmd64ArchitectureToolStripMenuItem, Me.ForARMArchitectureToolStripMenuItem, Me.ForARM64ArchitectureToolStripMenuItem})
+        Me.CopyDeploymentToolsToolStripMenuItem.Name = "CopyDeploymentToolsToolStripMenuItem"
+        Me.CopyDeploymentToolsToolStripMenuItem.Size = New System.Drawing.Size(218, 22)
+        Me.CopyDeploymentToolsToolStripMenuItem.Text = "Copy deployment tools"
+        '
+        'OfAllArchitecturesToolStripMenuItem
+        '
+        Me.OfAllArchitecturesToolStripMenuItem.Name = "OfAllArchitecturesToolStripMenuItem"
+        Me.OfAllArchitecturesToolStripMenuItem.Size = New System.Drawing.Size(199, 22)
+        Me.OfAllArchitecturesToolStripMenuItem.Text = "Of all architectures"
+        '
+        'OfSelectedArchitectureToolStripMenuItem
+        '
+        Me.OfSelectedArchitectureToolStripMenuItem.Name = "OfSelectedArchitectureToolStripMenuItem"
+        Me.OfSelectedArchitectureToolStripMenuItem.Size = New System.Drawing.Size(199, 22)
+        Me.OfSelectedArchitectureToolStripMenuItem.Text = "Of selected architecture"
+        '
+        'ToolStripSeparator25
+        '
+        Me.ToolStripSeparator25.Name = "ToolStripSeparator25"
+        Me.ToolStripSeparator25.Size = New System.Drawing.Size(196, 6)
+        '
+        'ForX86ArchitectureToolStripMenuItem
+        '
+        Me.ForX86ArchitectureToolStripMenuItem.Name = "ForX86ArchitectureToolStripMenuItem"
+        Me.ForX86ArchitectureToolStripMenuItem.Size = New System.Drawing.Size(199, 22)
+        Me.ForX86ArchitectureToolStripMenuItem.Text = "For x86 architecture"
+        '
+        'ForAmd64ArchitectureToolStripMenuItem
+        '
+        Me.ForAmd64ArchitectureToolStripMenuItem.Name = "ForAmd64ArchitectureToolStripMenuItem"
+        Me.ForAmd64ArchitectureToolStripMenuItem.Size = New System.Drawing.Size(199, 22)
+        Me.ForAmd64ArchitectureToolStripMenuItem.Text = "For AMD64 architecture"
+        '
+        'ForARMArchitectureToolStripMenuItem
+        '
+        Me.ForARMArchitectureToolStripMenuItem.Name = "ForARMArchitectureToolStripMenuItem"
+        Me.ForARMArchitectureToolStripMenuItem.Size = New System.Drawing.Size(199, 22)
+        Me.ForARMArchitectureToolStripMenuItem.Text = "For ARM architecture"
+        '
+        'ForARM64ArchitectureToolStripMenuItem
+        '
+        Me.ForARM64ArchitectureToolStripMenuItem.Name = "ForARM64ArchitectureToolStripMenuItem"
+        Me.ForARM64ArchitectureToolStripMenuItem.Size = New System.Drawing.Size(199, 22)
+        Me.ForARM64ArchitectureToolStripMenuItem.Text = "For ARM64 architecture"
+        '
+        'ToolStripSeparator27
+        '
+        Me.ToolStripSeparator27.Name = "ToolStripSeparator27"
+        Me.ToolStripSeparator27.Size = New System.Drawing.Size(215, 6)
+        '
+        'ImageOperationsToolStripMenuItem
+        '
+        Me.ImageOperationsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MountImageToolStripMenuItem, Me.UnmountImageToolStripMenuItem, Me.ToolStripSeparator29, Me.RemoveVolumeImagesToolStripMenuItem, Me.SwitchImageIndexesToolStripMenuItem1})
+        Me.ImageOperationsToolStripMenuItem.Name = "ImageOperationsToolStripMenuItem"
+        Me.ImageOperationsToolStripMenuItem.Size = New System.Drawing.Size(218, 22)
+        Me.ImageOperationsToolStripMenuItem.Text = "Image operations"
+        '
+        'MountImageToolStripMenuItem
+        '
+        Me.MountImageToolStripMenuItem.Name = "MountImageToolStripMenuItem"
+        Me.MountImageToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
+        Me.MountImageToolStripMenuItem.Text = "Mount image..."
+        '
+        'UnmountImageToolStripMenuItem
+        '
+        Me.UnmountImageToolStripMenuItem.Name = "UnmountImageToolStripMenuItem"
+        Me.UnmountImageToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
+        Me.UnmountImageToolStripMenuItem.Text = "Unmount image..."
+        '
+        'ToolStripSeparator29
+        '
+        Me.ToolStripSeparator29.Name = "ToolStripSeparator29"
+        Me.ToolStripSeparator29.Size = New System.Drawing.Size(207, 6)
+        '
+        'RemoveVolumeImagesToolStripMenuItem
+        '
+        Me.RemoveVolumeImagesToolStripMenuItem.Name = "RemoveVolumeImagesToolStripMenuItem"
+        Me.RemoveVolumeImagesToolStripMenuItem.Size = New System.Drawing.Size(210, 22)
+        Me.RemoveVolumeImagesToolStripMenuItem.Text = "Remove volume images..."
+        '
+        'SwitchImageIndexesToolStripMenuItem1
+        '
+        Me.SwitchImageIndexesToolStripMenuItem1.Name = "SwitchImageIndexesToolStripMenuItem1"
+        Me.SwitchImageIndexesToolStripMenuItem1.Size = New System.Drawing.Size(210, 22)
+        Me.SwitchImageIndexesToolStripMenuItem1.Text = "Switch image indexes..."
+        '
+        'ToolStripSeparator30
+        '
+        Me.ToolStripSeparator30.Name = "ToolStripSeparator30"
+        Me.ToolStripSeparator30.Size = New System.Drawing.Size(215, 6)
+        '
+        'UnattendedAnswerFilesToolStripMenuItem1
+        '
+        Me.UnattendedAnswerFilesToolStripMenuItem1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ManageToolStripMenuItem, Me.CreationWizardToolStripMenuItem})
+        Me.UnattendedAnswerFilesToolStripMenuItem1.Name = "UnattendedAnswerFilesToolStripMenuItem1"
+        Me.UnattendedAnswerFilesToolStripMenuItem1.Size = New System.Drawing.Size(218, 22)
+        Me.UnattendedAnswerFilesToolStripMenuItem1.Text = "Unattended answer files"
+        '
+        'ManageToolStripMenuItem
+        '
+        Me.ManageToolStripMenuItem.Name = "ManageToolStripMenuItem"
+        Me.ManageToolStripMenuItem.Size = New System.Drawing.Size(117, 22)
+        Me.ManageToolStripMenuItem.Text = "Manage"
+        '
+        'CreationWizardToolStripMenuItem
+        '
+        Me.CreationWizardToolStripMenuItem.Name = "CreationWizardToolStripMenuItem"
+        Me.CreationWizardToolStripMenuItem.Size = New System.Drawing.Size(117, 22)
+        Me.CreationWizardToolStripMenuItem.Text = "Create"
+        '
+        'ToolStripSeparator31
+        '
+        Me.ToolStripSeparator31.Name = "ToolStripSeparator31"
+        Me.ToolStripSeparator31.Size = New System.Drawing.Size(215, 6)
+        '
+        'ScratchDirectorySettingsToolStripMenuItem
+        '
+        Me.ScratchDirectorySettingsToolStripMenuItem.Name = "ScratchDirectorySettingsToolStripMenuItem"
+        Me.ScratchDirectorySettingsToolStripMenuItem.Size = New System.Drawing.Size(218, 22)
+        Me.ScratchDirectorySettingsToolStripMenuItem.Text = "Configure scratch directory"
+        '
+        'ToolStripSeparator32
+        '
+        Me.ToolStripSeparator32.Name = "ToolStripSeparator32"
+        Me.ToolStripSeparator32.Size = New System.Drawing.Size(215, 6)
+        '
+        'ManageReportsToolStripMenuItem
+        '
+        Me.ManageReportsToolStripMenuItem.Name = "ManageReportsToolStripMenuItem"
+        Me.ManageReportsToolStripMenuItem.Size = New System.Drawing.Size(218, 22)
+        Me.ManageReportsToolStripMenuItem.Text = "Manage reports"
+        '
+        'ToolStripSeparator33
+        '
+        Me.ToolStripSeparator33.Name = "ToolStripSeparator33"
+        Me.ToolStripSeparator33.Size = New System.Drawing.Size(215, 6)
+        '
+        'AddToolStripMenuItem
+        '
+        Me.AddToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewFileToolStripMenuItem, Me.ExistingFileToolStripMenuItem})
+        Me.AddToolStripMenuItem.Name = "AddToolStripMenuItem"
+        Me.AddToolStripMenuItem.Size = New System.Drawing.Size(218, 22)
+        Me.AddToolStripMenuItem.Text = "Add"
+        '
+        'NewFileToolStripMenuItem
+        '
+        Me.NewFileToolStripMenuItem.Name = "NewFileToolStripMenuItem"
+        Me.NewFileToolStripMenuItem.Size = New System.Drawing.Size(143, 22)
+        Me.NewFileToolStripMenuItem.Text = "New file..."
+        '
+        'ExistingFileToolStripMenuItem
+        '
+        Me.ExistingFileToolStripMenuItem.Name = "ExistingFileToolStripMenuItem"
+        Me.ExistingFileToolStripMenuItem.Size = New System.Drawing.Size(143, 22)
+        Me.ExistingFileToolStripMenuItem.Text = "Existing file..."
+        '
+        'ADKCopierBW
+        '
+        Me.ADKCopierBW.WorkerReportsProgress = True
+        Me.ADKCopierBW.WorkerSupportsCancellation = True
+        '
+        'UpdCheckerBW
+        '
+        Me.UpdCheckerBW.WorkerReportsProgress = True
+        Me.UpdCheckerBW.WorkerSupportsCancellation = True
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1008, 561)
+        Me.ClientSize = New System.Drawing.Size(1264, 681)
         Me.Controls.Add(Me.HomePanel)
         Me.Controls.Add(Me.PrjPanel)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.MaximumSize = New System.Drawing.Size(4096, 4096)
         Me.MinimumSize = New System.Drawing.Size(1024, 600)
         Me.Name = "MainForm"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
         Me.Text = "DISMTools"
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
@@ -3195,6 +3530,7 @@ Partial Class MainForm
         Me.Panel4.PerformLayout()
         Me.SidePanel.ResumeLayout(False)
         Me.SidePanel.PerformLayout()
+        Me.UpdatePanel.ResumeLayout(False)
         Me.Panel3.ResumeLayout(False)
         Me.Panel3.PerformLayout()
         CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).EndInit()
@@ -3243,6 +3579,8 @@ Partial Class MainForm
         Me.PkgInfoCMS.ResumeLayout(False)
         Me.FeatureInfoCMS.ResumeLayout(False)
         Me.ImgUMountPopupCMS.ResumeLayout(False)
+        Me.AppxPackagePopupCMS.ResumeLayout(False)
+        Me.TreeViewCMS.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -3275,7 +3613,6 @@ Partial Class MainForm
     Friend WithEvents DeleteImage As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ExportImage As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents GetImageInfo As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents GetMountedImageInfo As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents GetWIMBootEntry As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ListImage As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MountImage As System.Windows.Forms.ToolStripMenuItem
@@ -3514,7 +3851,6 @@ Partial Class MainForm
     Friend WithEvents ToolStripSeparator19 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ISHelp As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents BranchTSMI As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ReportFeedbackToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ImgBW As System.ComponentModel.BackgroundWorker
     Friend WithEvents ImgProcesses As Process
     Friend WithEvents BackgroundProcessesButton As System.Windows.Forms.ToolStripSplitButton
@@ -3569,4 +3905,51 @@ Partial Class MainForm
     Friend WithEvents Panel8 As System.Windows.Forms.Panel
     Friend WithEvents Panel9 As System.Windows.Forms.Panel
     Friend WithEvents TableLayoutPanel3 As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents ReportFeedbackToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator21 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents ActionEditorToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator22 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents OnlineInstMgmt As System.Windows.Forms.LinkLabel
+    Friend WithEvents AppxPackagePopupCMS As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents ViewPackageDirectoryToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ResViewTSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents UpdatePanel As System.Windows.Forms.Panel
+    Friend WithEvents UpdateLink As System.Windows.Forms.LinkLabel
+    Friend WithEvents TreeViewCMS As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents ExpandToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents AccessDirectoryToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator23 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents UnloadProjectToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator24 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents CopyDeploymentToolsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents OfAllArchitecturesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents OfSelectedArchitectureToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator25 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents ForX86ArchitectureToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ForAmd64ArchitectureToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ForARMArchitectureToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ForARM64ArchitectureToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator27 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents ImageOperationsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MountImageToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents UnmountImageToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator29 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents RemoveVolumeImagesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents SwitchImageIndexesToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator30 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents UnattendedAnswerFilesToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ManageToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents CreationWizardToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator31 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents ScratchDirectorySettingsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator32 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents ManageReportsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator33 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents AddToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents NewFileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ExistingFileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ADKCopierBW As System.ComponentModel.BackgroundWorker
+    Friend WithEvents ToolStripSeparator26 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents ManageOnlineInstallationToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents UpdCheckerBW As System.ComponentModel.BackgroundWorker
 End Class

@@ -1,10 +1,10 @@
-:: DISMTools Helper Script - version 0.2.2
+:: DISMTools Helper Script - version 0.3
 @echo off
 
 
 :init
 :: Set initial vars
-set script_ver=v0.2.2
+set script_ver=v0.3
 set outputmode=0
 :: outputmode=0 (output to file)
 ::            1 (output to console)
@@ -54,8 +54,14 @@ echo Ready to accept user input.
 echo If you are new to the command line, or just want to know how to do a specific task, type CMDHELP (case-insensitive) to show the DISMTools Command Help (console view).
 echo.
 doskey pwd=cd
+doskey getappxpkg=powershell -executionpolicy unrestricted "bin\extps1\extappx.ps1"
+doskey mimgmgr=powershell -executionpolicy unrestricted "bin\extps1\mImgMgr.ps1"
+doskey cat=type $1
+doskey ls=dir $1
+doskey clear=cls
+doskey history=doskey /history
 if exist ".\extbatch" (
-    path %cd%"\extbatch";"\Windows\system32";"\Windows\system32\wbem"
+    path %cd%"\extbatch";"%windir%\system32";"%windir%\system32\wbem";"%windir%\system32\WindowsPowerShell\v1.0"
 ) else (
-    path %cd%".\bin\extbatch";"\Windows\system32";"\Windows\system32\wbem"
+    path %cd%".\bin\extbatch";"%windir%\system32";"%windir%\system32\wbem";"%windir%\system32\WindowsPowerShell\v1.0"
 )

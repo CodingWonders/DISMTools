@@ -70,5 +70,7 @@ Public Class SaveProjectQuestionDialog
             CheckBox1.Checked = False
             Label2.Visible = False
         End If
+        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
     End Sub
 End Class

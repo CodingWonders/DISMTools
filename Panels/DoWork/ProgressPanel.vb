@@ -157,7 +157,8 @@ Imports System.Threading
 Imports System.IO
 Imports System.Net
 Imports System.Text.Encoding
-
+Imports Microsoft.Dism
+Imports System.Text.RegularExpressions
 
 Public Class ProgressPanel
 
@@ -170,13 +171,47 @@ Public Class ProgressPanel
 
     Public errCode As String
 
-    Public CommandArgs As String = ""                       ' Ubiquitous accross OperationNums. DO NOT DELETE !!!
+    Public CommandArgs As String = ""                       ' Ubiquitous across OperationNums. DO NOT DELETE !!!
     Public DismVersionChecker As FileVersionInfo
     Public DismProgram As String
 
     Dim dateStr As String = "DISMTools-"
 
     Dim Language As Integer = 0                             ' Form language, taken from MainForm
+
+    Dim imgSession As DismSession = Nothing                 ' Image session for the DISM API
+    Dim mntString As String = ""                            ' Mount directory, necessary for the DISM API
+
+    Dim OnlineMgmt As Boolean                               ' Determine whether to perform actions to the active installation or the mounted Windows image
+
+    Public TaskList As New List(Of Integer)                 ' Task list
+
+    Dim AllDrivers As Boolean                               ' Detects whether the program should detect all image drivers, taken from MainForm
+
+    Public ActionRunning As Boolean                         ' Detects whether an Action file is being run
+    Public IsInValidationMode As Boolean                    ' Detects whether an Action file is being validated
+
+    Public Actions_ImageFile As String
+    Public Actions_ImageIndex As Integer
+
+    Public ActionFile As String
+
+    Public ActionParameters As New List(Of String)
+
+    ' Initial settings
+    Dim DismExe As String
+    Dim AutoLogs As Boolean
+    Dim LogPath As String
+    Dim LogLevel As Integer
+    Dim QuietOps As Boolean
+    Dim SkipSysRestart As Boolean
+    Dim UseScratchDir As Boolean
+    Dim AutoScratch As Boolean
+    Dim ScratchDirPath As String
+    Dim EnglishOut As Boolean
+    ' Backup command arguments
+    Dim BckArgs As String
+
 
     ' OperationNum: 0
     Public projName As String
@@ -239,7 +274,6 @@ Public Class ProgressPanel
 
     ' OperationNum: 18
     Public remountisReadOnly As Boolean                     ' Determine whether the remount happened because of a read-only mounted image
-    Public isTriggeredByPropertyDialog As Boolean = False
 
     ' OperationNum: 21
     Public UMountImgIndex As Integer
@@ -321,6 +355,11 @@ Public Class ProgressPanel
     Public ComponentRepairSource As String                  ' A custom source that will be used for component store repair
     Public LimitWUAccess As Boolean                         ' Determines whether to limit access to Windows Update and strictly use the custom source (only for online images)
 
+    ' OperationNum: 33
+    Public ppkgAdditionPackagePath As String                ' The path of the provisioning package to add
+    Public ppkgAdditionCatalogPath As String                ' The path of the catalog file to add
+    Public ppkgAdditionCommit As Boolean                    ' Determines whether to commit the image after adding the provisioning package
+
     ' OperationNum: 37
     Public appxAdditionPackages(65535) As String            ' Array used to store AppX packages to add
     Public appxAdditionDependencies(65535) As String        ' Array used to store dependencies of AppX packages
@@ -344,6 +383,42 @@ Public Class ProgressPanel
     Public appxRemovalCount As Integer                      ' Count number of AppX packages to remove
     Dim appxSuccessfulRemovals As Integer                   ' Successful AppX package removal count
     Dim appxFailedRemovals As Integer                       ' Failed AppX package addition count
+
+    ' OperationNum: 64
+    Public capAdditionIds(65535) As String                  ' Array used to store IDs of capabilities to add
+    Public capAdditionLastId As String                      ' Last capability ID selected
+    Public capAdditionUseSource As Boolean                  ' Determine whether to use a custom source for capability addition
+    Public capAdditionSource As String                      ' Capability addition source
+    Public capAdditionCount As Integer                      ' Total number of capabilities to add
+    Public capAdditionLimitWUAccess As Boolean              ' Determine whether to limit access to Windows Update and stick to the source specified (online images only)
+    Public capAdditionCommit As Boolean                     ' Determine whether to commit image after adding capabilities
+    Public capSuccessfulAdditions As Integer                ' Number of successful capability additions
+    Public capFailedAdditions As Integer                    ' Number of failed capability additions
+
+    ' OperationNum: 68
+    Public capRemovalIds(65535) As String                   ' Array used to store IDs of capabilities to remove
+    Public capRemovalLastId As String                       ' Last capability ID selected for removal
+    Public capRemovalCount As Integer                       ' Total number of capabilities to remove
+    Public capSuccessfulRemovals As Integer                 ' Number of successful capability removals
+    Public capFailedRemovals As Integer                     ' Number of failed capability removals
+
+    ' OperationNum: 75
+    Public drvAdditionPkgs(65535) As String                 ' Array used to store all drivers to add, whether they are in specified folders or not
+    Public drvAdditionLastPkg As String                     ' Last driver package specified for addition
+    Public drvAdditionFolderRecursiveScan(65535) As String  ' Folders the program needs to scan recursively on
+    Public drvAdditionCount As Integer                      ' Total number of driver packages to add
+    Public drvAdditionForceUnsigned As Boolean              ' Determine whether to add unsigned drivers on 64-bit images
+    Public drvAdditionCommit As Boolean                     ' Determine whether to save image changes after adding driver packages
+    Public drvSuccessfulAdditions As Integer                ' Number of successful driver package additions
+    Public drvFailedAdditions As Integer                    ' Number of failed driver package additions
+
+    ' OperationNum: 76
+    Public drvRemovalPkgs(65535) As String                  ' Array used to store all drivers to remove
+    Public drvRemovalLastPkg As String                      ' Last driver package specified for removal
+    Public drvRemovalCount As Integer                       ' Total number of driver packages to remove
+    Public drvSuccessfulRemovals As Integer                 ' Number of successful driver package removals
+    Public drvFailedRemovals As Integer                     ' Number of failed driver package removals
+    Dim drvCollection As DismDriverPackageCollection        ' Collection of image drivers for driver package removal
 
     ' <Space for other OperationNums>
     ' OperationNum: 87
@@ -375,7 +450,6 @@ Public Class ProgressPanel
             ProgressBW.CancelAsync()
         ElseIf Cancel_Button.Text = "OK" Or Cancel_Button.Text = "Aceptar" Then
             MainForm.ToolStripButton4.Visible = False
-            Dispose()
             Close()
         End If
     End Sub
@@ -459,6 +533,12 @@ Public Class ProgressPanel
             taskCount = 1
         ElseIf opNum = 32 Then
             taskCount = 1
+        ElseIf opNum = 33 Then
+            If ppkgAdditionCommit Then
+                taskCount = 2
+            Else
+                taskCount = 1
+            End If
         ElseIf opNum = 37 Then
             If appxAdditionCommit Then
                 taskCount = 2
@@ -466,6 +546,22 @@ Public Class ProgressPanel
                 taskCount = 1
             End If
         ElseIf opNum = 38 Then
+            taskCount = 1
+        ElseIf opNum = 64 Then
+            If capAdditionCommit Then
+                taskCount = 2
+            Else
+                taskCount = 1
+            End If
+        ElseIf opNum = 75 Then
+            If drvAdditionCommit Then
+                taskCount = 2
+            Else
+                taskCount = 1
+            End If
+        ElseIf opNum = 76 Then
+            taskCount = 1
+        ElseIf opNum = 78 Then
             taskCount = 1
         ElseIf opNum = 87 Then
             taskCount = 1
@@ -493,8 +589,13 @@ Public Class ProgressPanel
         CenterToParent()
     End Sub
 
+    ''' <summary>
+    ''' Gathers the initial list of settings to use for DISM
+    ''' </summary>
+    ''' <remarks>These settings can be configured at any time using the Options dialog</remarks>
     Sub GatherInitialSwitches()
-        ' This procedure is not yet called. Use default settings for now
+        CommandArgs = "/logpath=" & Quote & If(AutoLogs, Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now), LogPath) & Quote & " /loglevel=" & LogLevel & If(UseScratchDir, If(AutoScratch, If(OnlineMgmt, " /scratchdir=" & Quote & Application.StartupPath & "\scratch" & Quote, " /scratchdir=" & Quote & projPath & "\scr_temp"), If(ScratchDirPath <> "", " /scratchdir=" & Quote & ScratchDirPath & Quote, "")), "") & If(EnglishOut, " /english", "")
+        BckArgs = CommandArgs
     End Sub
 
     ''' <summary>
@@ -504,7 +605,7 @@ Public Class ProgressPanel
     ''' <returns>This function returns a file name that can be used in log files, file-system friendly on both Unix and Windows</returns>
     ''' <remarks></remarks>
     Function GetCurrentDateAndTime(CurrentDate As Date) As String
-        dateStr &= CurrentDate.ToString()
+        dateStr = "DISMTools-" & CurrentDate.ToString()
         ' Make sure the file with the name is file-system friendly
         If dateStr.Contains("/") Or dateStr.Contains(":") Then
             dateStr = dateStr.Replace("/", "-").Trim().Replace(":", "-").Trim()
@@ -513,12 +614,40 @@ Public Class ProgressPanel
         Return dateStr
     End Function
 
+    Sub RunTaskList(taskList As List(Of Integer))
+        Dim successfulTasks As Integer = 0
+        Dim failedTasks As Integer = 0
+        Dim prevValue As Integer = 0
+        For Each Task In taskList
+            RunOps(Task)
+            AllPB.Value = prevValue + (AllPB.Maximum / taskList.Count)
+            prevValue = AllPB.Value
+            If Not currentTCont = taskList.Count Then currentTCont += 1
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskList.Count
+                        Case "ESN"
+                            taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskList.Count
+                    End Select
+                Case 1
+                    taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskList.Count
+                Case 2
+                    taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskList.Count
+            End Select
+            If IsSuccessful Then successfulTasks += 1 Else failedTasks += 1
+        Next
+        If successfulTasks > failedTasks Then IsSuccessful = True Else IsSuccessful = False
+    End Sub
+
     Sub RunOps(opNum As Integer)
         If DismProgram = "" Then DismProgram = MainForm.DismExe
         DismVersionChecker = FileVersionInfo.GetVersionInfo(DismProgram)
         CurrentPB.Value = 0
         PkgErrorText.RichTextBox1.Clear()
         FeatErrorText.RichTextBox1.Clear()
+        DismApi.Initialize(DismLogLevel.LogErrors)
         If opNum = 0 Then
             Select Case Language
                 Case 0
@@ -665,10 +794,10 @@ Public Class ProgressPanel
                         Case 1
                             ' It seems like it's not available :(
                         Case Is >= 2
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /apply-image /imagefile=" & Quote & ApplicationSourceImg & Quote & " /index=" & ApplicationIndex
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /apply-image /imagefile=" & Quote & ApplicationSourceImg & Quote & " /index=" & ApplicationIndex
                     End Select
                 Case 10
-                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /apply-image /imagefile=" & Quote & ApplicationSourceImg & Quote & " /index=" & ApplicationIndex
+                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /apply-image /imagefile=" & Quote & ApplicationSourceImg & Quote & " /index=" & ApplicationIndex
             End Select
             ' Detect additional options and set CommandArgs
             If ApplicationDestDrive = "" Then
@@ -731,11 +860,7 @@ Public Class ProgressPanel
             End If
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
-            Do Until DISMProc.HasExited
-                If DISMProc.HasExited Then
-                    Exit Do
-                End If
-            Loop
+            DISMProc.WaitForExit()
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -785,10 +910,10 @@ Public Class ProgressPanel
                         Case 1
                             ' Not available
                         Case Is >= 2
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /capture-image /imagefile=" & Quote & CaptureDestinationImage & Quote & " /capturedir=" & Quote & CaptureSourceDir & Quote & " /name=" & Quote & CaptureName & Quote
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /capture-image /imagefile=" & Quote & CaptureDestinationImage & Quote & " /capturedir=" & Quote & CaptureSourceDir & Quote & " /name=" & Quote & CaptureName & Quote
                     End Select
                 Case 10
-                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /capture-image /imagefile=" & Quote & CaptureDestinationImage & Quote & " /capturedir=" & Quote & CaptureSourceDir & Quote & " /name=" & Quote & CaptureName & Quote
+                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /capture-image /imagefile=" & Quote & CaptureDestinationImage & Quote & " /capturedir=" & Quote & CaptureSourceDir & Quote & " /name=" & Quote & CaptureName & Quote
             End Select
             ' Get additional options
             If CaptureDescription = "" Then
@@ -857,11 +982,7 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & "Capturing image...")
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
-            Do Until DISMProc.HasExited
-                If DISMProc.HasExited Then
-                    Exit Do
-                End If
-            Loop
+            DISMProc.WaitForExit()
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -882,22 +1003,22 @@ Public Class ProgressPanel
             Else
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
-            If CaptureMountDestImg Then
-                AllPB.Value = AllPB.Value + (AllPB.Maximum / taskCount)
-                currentTCont += 1
-                taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
-                If ImgIndex = 0 Then
-                    ImgIndex = 1
-                    UMountImgIndex = ImgIndex
-                End If
-                RunOps(21)
-                AllPB.Value = AllPB.Value + (AllPB.Maximum / taskCount)
-                currentTCont += 1
-                taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
-                RunOps(15)
-                'MainForm.UpdateProjProperties(False, False)
-                'MainForm.SaveDTProj()
-            End If
+            'If CaptureMountDestImg Then
+            '    AllPB.Value = AllPB.Value + (AllPB.Maximum / taskCount)
+            '    currentTCont += 1
+            '    taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
+            '    If ImgIndex = 0 Then
+            '        ImgIndex = 1
+            '        UMountImgIndex = ImgIndex
+            '    End If
+            '    RunOps(21)
+            '    AllPB.Value = AllPB.Value + (AllPB.Maximum / taskCount)
+            '    currentTCont += 1
+            '    taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
+            '    RunOps(15)
+            '    'MainForm.UpdateProjProperties(False, False)
+            '    'MainForm.SaveDTProj()
+            'End If
         ElseIf opNum = 8 Then
             Select Case Language
                 Case 0
@@ -924,21 +1045,17 @@ Public Class ProgressPanel
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
                         Case 1
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /commit-wim /mountdir=" & Quote & MountDir & Quote
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /commit-wim /mountdir=" & Quote & MountDir & Quote
                         Case Is >= 2
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /commit-image /mountdir=" & Quote & MountDir & Quote
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /commit-image /mountdir=" & Quote & MountDir & Quote
                     End Select
                 Case 10
-                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /commit-image /mountdir=" & Quote & MountDir & Quote
+                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /commit-image /mountdir=" & Quote & MountDir & Quote
             End Select
             ' TODO: Add additional options later
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
-            Do Until DISMProc.HasExited
-                If DISMProc.HasExited Then
-                    Exit Do
-                End If
-            Loop
+            DISMProc.WaitForExit()
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1008,6 +1125,7 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & _
                                "Removing volume images..." & CrLf)
             For x = 0 To Array.LastIndexOf(imgIndexDeletionNames, imgIndexDeletionLastName)
+                If x + 1 > CurrentPB.Maximum Then Exit For
                 CurrentPB.Value = x + 1
                 Select Case Language
                     Case 0
@@ -1025,17 +1143,13 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & _
                                    "- " & imgIndexDeletionNames(x) & "...")
                 DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /delete-image /imagefile=" & Quote & imgIndexDeletionSourceImg & Quote & " /name=" & Quote & imgIndexDeletionNames(x) & Quote
+                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /delete-image /imagefile=" & Quote & imgIndexDeletionSourceImg & Quote & " /name=" & Quote & imgIndexDeletionNames(x) & Quote
                 If imgIndexDeletionIntCheck Then
                     CommandArgs &= " /checkintegrity"
                 End If
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
-                Do Until DISMProc.HasExited
-                    If DISMProc.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                DISMProc.WaitForExit()
                 If Hex(DISMProc.ExitCode).Length < 8 Then
                     LogView.AppendText(" Error level : " & DISMProc.ExitCode)
                 Else
@@ -1046,7 +1160,7 @@ Public Class ProgressPanel
             AllPB.Value = 100
             GetErrorCode(False)
         ElseIf opNum = 11 Then
-            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /Get-ImageInfo"
+            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /Get-ImageInfo"
             allTasks.Text = "Getting information..."
             currentTask.Text = "Getting image information..."
             LogView.AppendText(CrLf & "Getting information from image..." & CrLf & "Options:" & CrLf)
@@ -1078,7 +1192,7 @@ Public Class ProgressPanel
                 End If
             End If
             ' Run process. Right now, use an external process to do all the job
-            File.WriteAllText(".\bin\exthelpers\temp.bat",
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat",
                               "@echo off" & CrLf &
                               "dism " & CommandArgs & " > ",
                               ASCII)
@@ -1109,12 +1223,12 @@ Public Class ProgressPanel
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
                         Case 1
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-wim /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " /mountdir=" & Quote & MountDir & Quote
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-wim /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " /mountdir=" & Quote & MountDir & Quote
                         Case Is >= 2
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-image /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " /mountdir=" & Quote & MountDir & Quote
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-image /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " /mountdir=" & Quote & MountDir & Quote
                     End Select
                 Case 10
-                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-image /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " /mountdir=" & Quote & MountDir & Quote
+                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-image /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " /mountdir=" & Quote & MountDir & Quote
             End Select
             If isReadOnly Then
                 LogView.AppendText(CrLf & "- Mount image with read-only permissions? Yes")
@@ -1136,11 +1250,7 @@ Public Class ProgressPanel
             End If
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
-            Do Until DISMProc.HasExited
-                If DISMProc.HasExited Then
-                    Exit Do
-                End If
-            Loop
+            DISMProc.WaitForExit()
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1181,25 +1291,15 @@ Public Class ProgressPanel
             End Select
             LogView.AppendText(CrLf & "Reloading servicing session..." & CrLf &
                                "- Mount directory: " & MountDir)
-            DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-            Select Case DismVersionChecker.ProductMajorPart
-                Case 6
-                    Select Case DismVersionChecker.ProductMinorPart
-                        Case 1
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /remount-wim /mountdir=" & Quote & MountDir & Quote
-                        Case Is >= 2
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /remount-image /mountdir=" & Quote & MountDir & Quote
-                    End Select
-                Case 10
-                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /remount-image /mountdir=" & Quote & MountDir & Quote
-            End Select
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            Do Until DISMProc.HasExited
-                If DISMProc.HasExited Then
-                    Exit Do
-                End If
-            Loop
+            Try
+                DismApi.Initialize(If(LogLevel = 1, DismLogLevel.LogErrors, If(LogLevel = 2, DismLogLevel.LogErrorsWarnings, If(LogLevel = 3, DismLogLevel.LogErrorsWarningsInfo, DismLogLevel.LogErrorsWarningsInfo))), If(AutoLogs, Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now), LogPath))
+                DismApi.RemountImage(MountDir)
+            Catch ex As DismException
+                errCode = Hex(ex.ErrorCode)
+                IsSuccessful = False
+            Finally
+                DismApi.Shutdown()
+            End Try
             CurrentPB.Value = 50
             AllPB.Value = CurrentPB.Value
             Select Case Language
@@ -1216,7 +1316,10 @@ Public Class ProgressPanel
                     currentTask.Text = "Recopilando nivel de error..."
             End Select
             LogView.AppendText(CrLf & "Gathering error level...")
-            GetErrorCode(False)
+            If errCode Is Nothing Then
+                errCode = 0
+                IsSuccessful = True
+            End If
             If errCode.Length >= 8 Then
                 LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
             Else
@@ -1259,20 +1362,16 @@ Public Class ProgressPanel
                         Case 6
                             Select Case DismVersionChecker.ProductMinorPart
                                 Case 1
-                                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & MountDir & Quote & " /commit"
+                                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & MountDir & Quote & " /commit"
                                 Case Is >= 2
-                                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /commit"
+                                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /commit"
                             End Select
                         Case 10
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /commit"
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /commit"
                     End Select
                     DISMProc.StartInfo.Arguments = CommandArgs
                     DISMProc.Start()
-                    Do Until DISMProc.HasExited
-                        If DISMProc.HasExited Then
-                            Exit Do
-                        End If
-                    Loop
+                    DISMProc.WaitForExit()
                     If DISMProc.ExitCode = Decimal.ToInt32(-1052638964) Then
                         LogView.AppendText(CrLf & CrLf & "Saving changes to the image has failed. Discarding changes...")
                         ' It mostly came from a read-only source. Discard changes
@@ -1281,27 +1380,23 @@ Public Class ProgressPanel
                             Case 6
                                 Select Case DismVersionChecker.ProductMinorPart
                                     Case 1
-                                        CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & MountDir & Quote & " /discard"
+                                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & MountDir & Quote & " /discard"
                                     Case Is >= 2
-                                        CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /discard"
+                                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /discard"
                                 End Select
                             Case 10
-                                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /discard"
+                                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /discard"
                         End Select
                         DISMProc.StartInfo.Arguments = CommandArgs
                         DISMProc.Start()
-                        Do Until DISMProc.HasExited
-                            If DISMProc.HasExited Then
-                                Exit Do
-                            End If
-                        Loop
+                        DISMProc.WaitForExit()
                     End If
                 Catch ex As Exception
-                    File.WriteAllText(".\bin\exthelpers\temp.bat",
+                    File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat",
                                       "@echo off" & CrLf &
                                       "dism /English /unmount-image /mountdir=" & MountDir,
                                       ASCII)
-                    Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
+                    Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
                 End Try
                 Select Case Language
                     Case 0
@@ -1331,22 +1426,22 @@ Public Class ProgressPanel
                             Select Case DismVersionChecker.ProductMinorPart
                                 Case 1
                                     If UMountLocalDir Then
-                                        CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & MountDir & Quote
+                                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & MountDir & Quote
                                     Else
-                                        CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & RandomMountDir & Quote
+                                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & RandomMountDir & Quote
                                     End If
                                 Case Is >= 2
                                     If UMountLocalDir Then
-                                        CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote
+                                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote
                                     Else
-                                        CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & RandomMountDir & Quote
+                                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & RandomMountDir & Quote
                                     End If
                             End Select
                         Case 10
                             If UMountLocalDir Then
-                                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote
+                                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote
                             Else
-                                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & RandomMountDir & Quote
+                                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & RandomMountDir & Quote
                             End If
                     End Select
                     If UMountOp = 0 Then
@@ -1370,11 +1465,7 @@ Public Class ProgressPanel
                     End If
                     DISMProc.StartInfo.Arguments = CommandArgs
                     DISMProc.Start()
-                    Do Until DISMProc.HasExited
-                        If DISMProc.HasExited Then
-                            Exit Do
-                        End If
-                    Loop
+                    DISMProc.WaitForExit()
                 Catch ex As Exception
                     ' Let's try this before setting things up here
                 End Try
@@ -1488,7 +1579,7 @@ Public Class ProgressPanel
                                "Processing " & pkgCount & " packages..." & CrLf)
             If pkgAdditionOp = 0 Then
                 DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /add-package /packagepath=" & Quote & pkgSource & Quote
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-package /packagepath=" & Quote & pkgSource & Quote
                 If pkgIgnoreApplicabilityChecks Then
                     CommandArgs &= " /ignorecheck"
                 End If
@@ -1497,11 +1588,7 @@ Public Class ProgressPanel
                 End If
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
-                Do Until DISMProc.HasExited
-                    If DISMProc.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                DISMProc.WaitForExit()
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1521,6 +1608,8 @@ Public Class ProgressPanel
             ElseIf pkgAdditionOp = 1 Then
                 CurrentPB.Maximum = pkgCount
                 For x = 0 To Array.LastIndexOf(pkgs, pkgLastCheckedPackageName)
+                    If x + 1 > CurrentPB.Maximum Then Exit For
+                    CommandArgs = BckArgs
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1537,136 +1626,79 @@ Public Class ProgressPanel
                     CurrentPB.Value = x + 1
                     LogView.AppendText(CrLf &
                                        "Package " & (x + 1) & " of " & pkgCount)        ' You don't want to see "Package 0 of 407", right?
-                    Directory.CreateDirectory(".\tempinfo")
+                    Directory.CreateDirectory(Application.StartupPath & "\tempinfo")
                     pkgPossibleMsuFile = Path.GetFileName(pkgs(x)).ToString()
                     If pkgPossibleMsuFile.EndsWith(".msu") Then
                         LogView.AppendText(CrLf & "WARNING: the package currently about to be processed is a MSU file. Proceeding with special addition mode...")
                         AddFromMsu(pkgs(x))
                         Continue For
                     End If
-                    File.WriteAllText(".\bin\exthelpers\pkginfo.bat",
-                                      "@echo off" & CrLf &
-                                      "dism /English /image=" & Quote & MountDir & Quote & " /get-packageinfo /packagepath=" & Quote & pkgs(x) & Quote & " | findstr /c:" & Quote & "Package Identity" & Quote & " > .\tempinfo\pkgname" & CrLf &
-                                      "dism /English /image=" & Quote & MountDir & Quote & " /get-packageinfo /packagepath=" & Quote & pkgs(x) & Quote & " | findstr /c:" & Quote & "Description" & Quote & " > .\tempinfo\pkgdesc" & CrLf &
-                                      "dism /English /image=" & Quote & MountDir & Quote & " /get-packageinfo /packagepath=" & Quote & pkgs(x) & Quote & " | findstr /c:" & Quote & "Applicable" & Quote & " > .\tempinfo\pkgapplicability" & CrLf &
-                                      "dism /English /image=" & Quote & MountDir & Quote & " /get-packageinfo /packagepath=" & Quote & pkgs(x) & Quote & " | findstr /c:" & Quote & "State" & Quote & " > .\tempinfo\pkgstate",
-                                      ASCII)
-                    If IsDebugged Then
-                        Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\pkginfo.bat").WaitForExit()
-                    End If
-                    Process.Start(".\bin\exthelpers\pkginfo.bat").WaitForExit()
-                    pkgName = My.Computer.FileSystem.ReadAllText(".\tempinfo\pkgname", ASCII).Replace("Package Identity : ", "").Trim()
-                    pkgDesc = My.Computer.FileSystem.ReadAllText(".\tempinfo\pkgdesc", ASCII).Replace("Description : ", "").Trim()
-                    pkgApplicabilityStatus = My.Computer.FileSystem.ReadAllText(".\tempinfo\pkgapplicability", ASCII).Replace("Applicable : ", "").Trim()
-                    pkgInstallationState = My.Computer.FileSystem.ReadAllText(".\tempinfo\pkgstate", ASCII).Replace("State : ", "").Trim()
-                    LogView.AppendText(CrLf & CrLf &
-                                       "- Package name: " & pkgName & CrLf &
-                                       "- Package description: " & pkgDesc & CrLf)
-                    If pkgApplicabilityStatus = "Yes" Then
-                        pkgIsApplicable = True
-                        LogView.AppendText("- Package is applicable to this image? Yes" & CrLf)
-                    Else
-                        pkgIsApplicable = False
-                        LogView.AppendText("- Package is applicable to this image? No" & CrLf)
-                    End If
-                    If pkgInstallationState = "Not Present" Or pkgInstallationState = "" Then
-                        pkgIsAlreadyAdded = False
-                        LogView.AppendText("- Package is already added? No" & CrLf)
-                    ElseIf pkgInstallationState = "Install Pending" Then
-                        pkgIsAlreadyAdded = True
-                        LogView.AppendText("- Package is already added? Yes" & CrLf)
-                    ElseIf pkgInstallationState = "Installed" Then
-                        pkgIsAlreadyAdded = True
-                        LogView.AppendText("- Package is already added? Yes" & CrLf)
-                    End If
+
+                    ' Get package information with the DISM API
+                    Dim pkgIsApplicable As Boolean
+                    Dim pkgIsInstalled As Boolean
                     Try
-                        Directory.Delete(".\tempinfo", True)
+                        DismApi.Initialize(DismLogLevel.LogErrors)
+                        Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
+                            Dim pkgInfo As DismPackageInfo = DismApi.GetPackageInfoByPath(imgSession, pkgs(x))
+                            LogView.AppendText(CrLf & CrLf & _
+                                               "- Package name: " & pkgInfo.PackageName & CrLf & _
+                                               "- Package description: " & pkgInfo.Description & CrLf & _
+                                               "- This package is a " & If(pkgInfo.ReleaseType = DismReleaseType.ServicePack, "Service Pack", pkgInfo.ReleaseType.ToString().ToLower()) & CrLf & _
+                                               "- Package is applicable to this image? " & If(pkgInfo.Applicable, "Yes", "No") & CrLf & _
+                                               "- Package is already installed? " & If(pkgInfo.PackageState = DismPackageFeatureState.Installed Or pkgInfo.PackageState = DismPackageFeatureState.InstallPending, "Yes", "No") & CrLf)
+                            pkgIsApplicable = pkgInfo.Applicable
+                            If pkgInfo.PackageState = DismPackageFeatureState.Installed Or pkgInfo.PackageState = DismPackageFeatureState.InstallPending Then pkgIsInstalled = True Else pkgIsInstalled = False
+                            If pkgInfo.Applicable Then
+                                If pkgInfo.PackageState = DismPackageFeatureState.Installed Or pkgInfo.PackageState = DismPackageFeatureState.InstallPending Then
+                                    LogView.AppendText(CrLf & "Package is already added. Skipping installation of this package...")
+                                    pkgFailedAdditions += 1
+                                End If
+                            Else
+                                If Not pkgIgnoreApplicabilityChecks Then
+                                    LogView.AppendText(CrLf & "Package is not applicable to this image. Skipping installation of this package...")
+                                    If PkgErrorText.RichTextBox1.Text = "" Then
+                                        PkgErrorText.RichTextBox1.AppendText("0x800F8023")
+                                    Else
+                                        PkgErrorText.RichTextBox1.AppendText(CrLf & "0x800F8023")
+                                    End If
+                                    pkgFailedAdditions += 1
+                                End If
+                            End If
+                        End Using
                     Catch ex As Exception
-
+                        LogView.AppendText(CrLf & ex.Message)
+                        If PkgErrorText.RichTextBox1.Text = "" Then
+                            PkgErrorText.RichTextBox1.AppendText("0x800F8023")
+                        Else
+                            PkgErrorText.RichTextBox1.AppendText(CrLf & "0x800F8023")
+                        End If
+                        pkgFailedAdditions += 1
+                        pkgIsApplicable = False
+                    Finally
+                        DismApi.Shutdown()
                     End Try
-
-                    ' Preparing to add pkg
-                    If pkgIsApplicable Then
-                        ' Determine whether package is already added (either Install Pending or Installed)
-                        If pkgIsAlreadyAdded Then
-                            LogView.AppendText(CrLf & "Package is already added. Skipping installation of this package...")
-                            pkgFailedAdditions += 1
-                            'CurrentPB.Value = x + 1
-                            Continue For
-                        Else
-                            LogView.AppendText(CrLf & "Processing package...")
-                            DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /add-package /packagepath=" & Quote & pkgs(x) & Quote
-                            If pkgIgnoreApplicabilityChecks Then
-                                CommandArgs &= " /ignorecheck"
-                            End If
-                            If pkgPreventIfPendingOnline Then
-                                CommandArgs &= " /preventpending"
-                            End If
-                            DISMProc.StartInfo.Arguments = CommandArgs
-                            DISMProc.Start()
-                            Do Until DISMProc.HasExited
-                                If DISMProc.HasExited Then
-                                    Exit Do
-                                End If
-                            Loop
-                            LogView.AppendText(CrLf & "Getting error level...")
-                            GetPkgErrorLevel()
-                            LogView.AppendText(" Error level: " & errCode)
-                            If PkgErrorText.RichTextBox1.Text = "" Then
-                                PkgErrorText.RichTextBox1.AppendText(errCode)
-                            Else
-                                PkgErrorText.RichTextBox1.AppendText(CrLf & errCode)
-                            End If
-                        End If
-                    Else
-                        If pkgIgnoreApplicabilityChecks Then
-                            LogView.AppendText(CrLf & "Trying to process package...")
-                            DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /add-package /packagepath=" & Quote & pkgs(x) & Quote & " /ignorecheck"
-                            If pkgPreventIfPendingOnline Then
-                                CommandArgs &= " /preventpending"
-                            End If
-                            DISMProc.StartInfo.Arguments = CommandArgs
-                            DISMProc.Start()
-                            Do Until DISMProc.HasExited
-                                If DISMProc.HasExited Then
-                                    Exit Do
-                                End If
-                            Loop
-                            LogView.AppendText(CrLf & "Getting error level...")
-                            GetPkgErrorLevel()
-                            If errCode.Length >= 8 Then
-                                LogView.AppendText(CrLf & CrLf & " Error level : 0x" & errCode)
-                            Else
-                                LogView.AppendText(CrLf & CrLf & " Error level : " & errCode)
-                            End If
-                            If PkgErrorText.RichTextBox1.Text = "" Then
-                                If errCode.Length >= 8 Then
-                                    PkgErrorText.RichTextBox1.AppendText("0x" & errCode)
-                                Else
-                                    PkgErrorText.RichTextBox1.AppendText(errCode)
-                                End If
-                            Else
-                                If errCode.Length >= 8 Then
-                                    PkgErrorText.RichTextBox1.AppendText(CrLf & "0x" & errCode)
-                                Else
-                                    PkgErrorText.RichTextBox1.AppendText(CrLf & errCode)
-                                End If
-                            End If
-                        Else
-                            LogView.AppendText(CrLf & "Package is not applicable to this image. Skipping installation of this package...")
-                            If PkgErrorText.RichTextBox1.Text = "" Then
-                                PkgErrorText.RichTextBox1.AppendText("0x800F8023")
-                            Else
-                                PkgErrorText.RichTextBox1.AppendText(CrLf & "0x800F8023")
-                            End If
-                            pkgFailedAdditions += 1
-                            'CurrentPB.Value = x + 1
-                            Continue For
-                        End If
+                    If Not pkgIsApplicable Or pkgIsInstalled Then Continue For
+                    LogView.AppendText(CrLf & "Processing package...")
+                    DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+                    CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-package /packagepath=" & Quote & pkgs(x) & Quote
+                    If pkgIgnoreApplicabilityChecks Then
+                        CommandArgs &= " /ignorecheck"
                     End If
-                    'CurrentPB.Value = x + 1
+                    If pkgPreventIfPendingOnline Then
+                        CommandArgs &= " /preventpending"
+                    End If
+                    DISMProc.StartInfo.Arguments = CommandArgs
+                    DISMProc.Start()
+                    DISMProc.WaitForExit()
+                    LogView.AppendText(CrLf & "Getting error level...")
+                    GetPkgErrorLevel()
+                    LogView.AppendText(" Error level: " & errCode)
+                    If PkgErrorText.RichTextBox1.Text = "" Then
+                        PkgErrorText.RichTextBox1.AppendText(errCode)
+                    Else
+                        PkgErrorText.RichTextBox1.AppendText(CrLf & errCode)
+                    End If
                 Next
                 CurrentPB.Value = CurrentPB.Maximum
                 LogView.AppendText(CrLf & "Gathering error level for selected packages..." & CrLf)
@@ -1742,6 +1774,8 @@ Public Class ProgressPanel
             CurrentPB.Maximum = pkgRemovalCount
             If pkgRemovalOp = 0 Then
                 For x = 0 To Array.LastIndexOf(pkgRemovalNames, pkgRemovalLastName)
+                    If x + 1 > CurrentPB.Maximum Then Exit For
+                    CommandArgs = BckArgs
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1758,43 +1792,36 @@ Public Class ProgressPanel
                     LogView.AppendText(CrLf &
                                        "Package " & (x + 1) & " of " & pkgRemovalCount)
                     CurrentPB.Value = x + 1
-                    Directory.CreateDirectory(".\tempinfo")
-                    File.WriteAllText(".\bin\exthelpers\pkginfo.bat",
-                                      "@echo off" & CrLf &
-                                      "dism /English /image=" & Quote & MountDir & Quote & " /get-packageinfo /packagename=" & pkgRemovalNames(x) & " | findstr /c:" & Quote & "Package Identity" & Quote & " > .\tempinfo\pkgname" & CrLf &
-                                      "dism /English /image=" & Quote & MountDir & Quote & " /get-packageinfo /packagename=" & pkgRemovalNames(x) & " | findstr /c:" & Quote & "State" & Quote & " > .\tempinfo\pkgstate",
-                                      ASCII)
-                    If IsDebugged Then
-                        Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\pkginfo.bat").WaitForExit()
-                    End If
-                    Process.Start(".\bin\exthelpers\pkginfo.bat").WaitForExit()
-                    pkgRemovalName = My.Computer.FileSystem.ReadAllText(".\tempinfo\pkgname", ASCII).Replace("Package Identity : ", "").Trim()
-                    pkgRemovalState = My.Computer.FileSystem.ReadAllText(".\tempinfo\pkgstate", ASCII).Replace("State : ", "").Trim()
-                    LogView.AppendText(CrLf & CrLf &
-                                       "- Package name: " & pkgRemovalName)
-                    If pkgRemovalState = "Installed" Then
-                        LogView.AppendText(CrLf & "- Package state: installed")
-                    ElseIf pkgRemovalState = "Uninstall Pending" Then
-                        LogView.AppendText(CrLf & "- Package state: an uninstall is pending")
-                    ElseIf pkgRemovalState = "Install Pending" Then
-                        LogView.AppendText(CrLf & "- Package state: an install is pending")
-                    End If
-                    If pkgRemovalState = "Uninstall Pending" Or pkgRemovalState = "Install Pending" Or pkgRemovalState = "Not Present" Then
-                        pkgIsReadyForRemoval = False
-                    Else
-                        pkgIsReadyForRemoval = True
-                    End If
+                    Directory.CreateDirectory(Application.StartupPath & "\tempinfo")
+                    Try
+                        DismApi.Initialize(DismLogLevel.LogErrors)
+                        Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
+                            Dim pkgInfo As DismPackageInfo = DismApi.GetPackageInfoByName(imgSession, pkgRemovalNames(x))
+                            LogView.AppendText(CrLf & CrLf & _
+                                               "- Package name: " & pkgInfo.PackageName & CrLf)
+                            If pkgInfo.PackageState = DismPackageFeatureState.Installed Then
+                                LogView.AppendText("- Package state: installed" & CrLf)
+                            ElseIf pkgInfo.PackageState = DismPackageFeatureState.UninstallPending Then
+                                LogView.AppendText("- Package state: an uninstall is pending" & CrLf)
+                            ElseIf pkgInfo.PackageState = DismPackageFeatureState.InstallPending Then
+                                LogView.AppendText("- Package state: an install is pending" & CrLf)
+                            End If
+                            If pkgInfo.PackageState = DismPackageFeatureState.Installed Or pkgInfo.PackageState = DismPackageFeatureState.InstallPending Then
+                                pkgIsReadyForRemoval = True
+                            Else
+                                pkgIsReadyForRemoval = False
+                            End If
+                        End Using
+                    Finally
+                        DismApi.Shutdown()
+                    End Try
                     If pkgIsReadyForRemoval Then
                         LogView.AppendText(CrLf & "Processing package removal...")
                         DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                        CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /remove-package /packagename=" & pkgRemovalNames(x)
+                        CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /remove-package /packagename=" & pkgRemovalNames(x)
                         DISMProc.StartInfo.Arguments = CommandArgs
                         DISMProc.Start()
-                        Do Until DISMProc.HasExited
-                            If DISMProc.HasExited Then
-                                Exit Do
-                            End If
-                        Loop
+                        DISMProc.WaitForExit()
                         LogView.AppendText(CrLf & "Getting error level...")
                         errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
                         If DISMProc.ExitCode = 0 Then
@@ -1808,7 +1835,6 @@ Public Class ProgressPanel
                         Else
                             LogView.AppendText(CrLf & CrLf & " Error level : " & errCode)
                         End If
-                        LogView.AppendText(" Error level: " & errCode)
                         If PkgErrorText.RichTextBox1.Text = "" Then
                             If errCode.Length >= 8 Then
                                 PkgErrorText.RichTextBox1.AppendText("0x" & errCode)
@@ -1823,17 +1849,15 @@ Public Class ProgressPanel
                             End If
                         End If
                     Else
-                        If pkgRemovalState = "Not Present" Then
-                            LogView.AppendText(CrLf & "This package is not present on the mounted image. Skipping removal of this package...")
-                        Else
-                            LogView.AppendText(CrLf & "This package requires the image be online before removing it. Skipping removal of this package...")
-                        End If
+                        LogView.AppendText(CrLf & "This package can't be removed. Skipping removal of this package...")
                         pkgFailedRemovals += 1
                         Continue For
                     End If
                 Next
             ElseIf pkgRemovalOp = 1 Then
                 For x = 0 To Array.LastIndexOf(pkgRemovalFiles, pkgRemovalLastFile)
+                    If x + 1 > CurrentPB.Maximum Then Exit For
+                    CommandArgs = BckArgs
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1850,43 +1874,36 @@ Public Class ProgressPanel
                     LogView.AppendText(CrLf &
                                        "Package " & (x + 1) & " of " & pkgRemovalCount)
                     CurrentPB.Value = x + 1
-                    Directory.CreateDirectory(".\tempinfo")
-                    File.WriteAllText(".\bin\exthelpers\pkginfo.bat",
-                                      "@echo off" & CrLf &
-                                      "dism /English /image=" & Quote & MountDir & Quote & " /get-packageinfo /packagepath=" & pkgRemovalFiles(x) & " | findstr /c:" & Quote & "Package Identity" & Quote & " > .\tempinfo\pkgname" & CrLf &
-                                      "dism /English /image=" & Quote & MountDir & Quote & " /get-packageinfo /packagepath=" & pkgRemovalFiles(x) & " | findstr /c:" & Quote & "State" & Quote & " > .\tempinfo\pkgstate",
-                                      ASCII)
-                    If IsDebugged Then
-                        Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\pkginfo.bat").WaitForExit()
-                    End If
-                    Process.Start(".\bin\exthelpers\pkginfo.bat").WaitForExit()
-                    pkgRemovalName = My.Computer.FileSystem.ReadAllText(".\tempinfo\pkgname", ASCII).Replace("Package Identity : ", "").Trim()
-                    pkgRemovalState = My.Computer.FileSystem.ReadAllText(".\tempinfo\pkgstate", ASCII).Replace("State : ", "").Trim()
-                    LogView.AppendText(CrLf & CrLf &
-                                       "- Package name: " & pkgName)
-                    If pkgRemovalState = "Installed" Then
-                        LogView.AppendText(CrLf & "- Package state: installed")
-                    ElseIf pkgRemovalState = "Uninstall Pending" Then
-                        LogView.AppendText(CrLf & "- Package state: an uninstall is pending")
-                    ElseIf pkgRemovalState = "Install Pending" Then
-                        LogView.AppendText(CrLf & "- Package state: an install is pending")
-                    End If
-                    If pkgRemovalState = "Uninstall Pending" Or pkgRemovalState = "Install Pending" Or pkgRemovalState = "Not Present" Then
-                        pkgIsReadyForRemoval = False
-                    Else
-                        pkgIsReadyForRemoval = True
-                    End If
+                    Directory.CreateDirectory(Application.StartupPath & "\tempinfo")
+                    Try
+                        DismApi.Initialize(DismLogLevel.LogErrors)
+                        Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
+                            Dim pkgInfo As DismPackageInfo = DismApi.GetPackageInfoByPath(imgSession, pkgRemovalFiles(x))
+                            LogView.AppendText(CrLf & CrLf & _
+                                               "- Package name: " & pkgInfo.PackageName & CrLf)
+                            If pkgInfo.PackageState = DismPackageFeatureState.Installed Then
+                                LogView.AppendText("- Package state: installed" & CrLf)
+                            ElseIf pkgInfo.PackageState = DismPackageFeatureState.UninstallPending Then
+                                LogView.AppendText("- Package state: an uninstall is pending" & CrLf)
+                            ElseIf pkgInfo.PackageState = DismPackageFeatureState.InstallPending Then
+                                LogView.AppendText("- Package state: an install is pending" & CrLf)
+                            End If
+                            If pkgInfo.PackageState = DismPackageFeatureState.Installed Or pkgInfo.PackageState = DismPackageFeatureState.InstallPending Then
+                                pkgIsReadyForRemoval = True
+                            Else
+                                pkgIsReadyForRemoval = False
+                            End If
+                        End Using
+                    Finally
+                        DismApi.Shutdown()
+                    End Try
                     If pkgIsReadyForRemoval Then
                         LogView.AppendText(CrLf & "Processing package removal...")
                         DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                        CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /remove-package /packagepath=" & pkgRemovalFiles(x)
+                        CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /remove-package /packagepath=" & pkgRemovalFiles(x)
                         DISMProc.StartInfo.Arguments = CommandArgs
                         DISMProc.Start()
-                        Do Until DISMProc.HasExited
-                            If DISMProc.HasExited Then
-                                Exit Do
-                            End If
-                        Loop
+                        DISMProc.WaitForExit()
                         LogView.AppendText(CrLf & "Getting error level...")
                         errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
                         If DISMProc.ExitCode = 0 Then
@@ -1914,17 +1931,13 @@ Public Class ProgressPanel
                             End If
                         End If
                     Else
-                        If pkgRemovalState = "Not Present" Then
-                            LogView.AppendText(CrLf & "This package is not present on the mounted image. Skipping removal of this package...")
-                        Else
-                            LogView.AppendText(CrLf & "This package requires the image be online before removing it. Skipping removal of this package...")
-                        End If
+                        LogView.AppendText(CrLf & "This package can't be removed. Skipping removal of this package...")
                         pkgFailedRemovals += 1
                         Continue For
                     End If
                 Next
             End If
-            Directory.Delete(".\tempinfo", True)
+            Directory.Delete(Application.StartupPath & "\tempinfo", True)
             CurrentPB.Value = CurrentPB.Maximum
             LogView.AppendText(CrLf & "Gathering error level for selected packages..." & CrLf)
             For x = 0 To PkgErrorText.RichTextBox1.Lines.Count - 1
@@ -1982,12 +1995,10 @@ Public Class ProgressPanel
             Else
                 LogView.AppendText(CrLf & "- Enable all parent features? No")
             End If
-            If featContactWindowsUpdate Then
-                If featCanContactWU Then
-                    LogView.AppendText(CrLf & "- Contact Windows Update? Yes")
-                Else
-                    LogView.AppendText(CrLf & "- Contact Windows Update? No, this is not an online installation")
-                End If
+            If featContactWindowsUpdate And OnlineMgmt Then
+                LogView.AppendText(CrLf & "- Contact Windows Update? Yes")
+            ElseIf featContactWindowsUpdate And OnlineMgmt = False Then
+                LogView.AppendText(CrLf & "- Contact Windows Update? No, this is not an online installation")
             Else
                 LogView.AppendText(CrLf & "- Contact Windows Update? No")
             End If
@@ -2016,6 +2027,8 @@ Public Class ProgressPanel
             End Select
             CurrentPB.Maximum = featEnablementCount
             For x = 0 To Array.LastIndexOf(featEnablementNames, featEnablementLastName)
+                If x + 1 > CurrentPB.Maximum Then Exit For
+                CommandArgs = BckArgs
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2032,22 +2045,18 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf &
                                    "Feature " & (x + 1) & " of " & featEnablementCount)
                 CurrentPB.Value = x + 1
-                Directory.CreateDirectory(".\tempinfo")
-                File.WriteAllText(".\bin\exthelpers\featinfo.bat",
-                                  "@echo off" & CrLf &
-                                  "dism /English /image=" & Quote & MountDir & Quote & " /get-featureinfo /featurename=" & featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim() & " | findstr /c:" & Quote & "Feature Name" & Quote & " > .\tempinfo\featname" & CrLf &
-                                  "dism /English /image=" & Quote & MountDir & Quote & " /get-featureinfo /featurename=" & featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim() & " | findstr /c:" & Quote & "Description" & Quote & " > .\tempinfo\featdesc",
-                                  ASCII)
-                If IsDebugged Then
-                    Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\featinfo.bat").WaitForExit()
-                End If
-                Process.Start(".\bin\exthelpers\featinfo.bat").WaitForExit()
-                Dim featName As String = My.Computer.FileSystem.ReadAllText(".\tempinfo\featname").Replace("Feature Name : ", "").Trim()
-                Dim featDesc As String = My.Computer.FileSystem.ReadAllText(".\tempinfo\featdesc").Replace("Description : ", "").Trim()
-                LogView.AppendText(CrLf & CrLf &
-                                   "- Feature name: " & featName & CrLf &
-                                   "- Feature description: " & featDesc & CrLf)
-                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /enable-feature /featurename=" & featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
+                Try
+                    DismApi.Initialize(DismLogLevel.LogErrors)
+                    Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
+                        Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim())
+                        LogView.AppendText(CrLf & CrLf &
+                                           "- Feature name: " & featInfo.FeatureName & CrLf &
+                                           "- Feature description: " & featInfo.Description & CrLf)
+                    End Using
+                Finally
+                    DismApi.Shutdown()
+                End Try
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /enable-feature /featurename=" & featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
                 If featisParentPkgNameUsed And featParentPkgName <> "" Then
                     CommandArgs &= " /packagename=" & featParentPkgName
                 End If
@@ -2057,16 +2066,12 @@ Public Class ProgressPanel
                 If featParentIsEnabled Then
                     CommandArgs &= " /all"
                 End If
-                If Not featContactWindowsUpdate And CommandArgs.Contains("/online") Then
+                If Not featContactWindowsUpdate And OnlineMgmt Then
                     CommandArgs &= " /limitaccess"
                 End If
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
-                Do Until DISMProc.HasExited
-                    If DISMProc.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                DISMProc.WaitForExit()
                 LogView.AppendText(CrLf & "Getting error level...")
                 GetFeatErrorLevel()
                 If errCode.Length >= 8 Then
@@ -2088,7 +2093,6 @@ Public Class ProgressPanel
                     End If
                 End If
             Next
-            Directory.Delete(".\tempinfo", True)
             CurrentPB.Value = CurrentPB.Maximum
             LogView.AppendText(CrLf & "Gathering error level for selected features..." & CrLf)
             For x = 0 To FeatErrorText.RichTextBox1.Lines.Count - 1
@@ -2163,6 +2167,8 @@ Public Class ProgressPanel
             End Select
             CurrentPB.Maximum = featDisablementCount
             For x = 0 To Array.LastIndexOf(featDisablementNames, featDisablementLastName)
+                If x + 1 > CurrentPB.Maximum Then Exit For
+                CommandArgs = BckArgs
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2179,22 +2185,19 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf &
                                    "Feature " & (x + 1) & " of " & featDisablementCount)
                 CurrentPB.Value = x + 1
-                Directory.CreateDirectory(".\tempinfo")
-                File.WriteAllText(".\bin\exthelpers\featinfo.bat",
-                                  "@echo off" & CrLf &
-                                  "dism /English /image=" & Quote & MountDir & Quote & " /get-featureinfo /featurename=" & featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim() & " | findstr /c:" & Quote & "Feature Name" & Quote & " > .\tempinfo\featname" & CrLf &
-                                  "dism /English /image=" & Quote & MountDir & Quote & " /get-featureinfo /featurename=" & featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim() & " | findstr /c:" & Quote & "Description" & Quote & " > .\tempinfo\featdesc",
-                                  ASCII)
-                If IsDebugged Then
-                    Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\featinfo.bat").WaitForExit()
-                End If
-                Process.Start(".\bin\exthelpers\featinfo.bat").WaitForExit()
-                Dim featName As String = My.Computer.FileSystem.ReadAllText(".\tempinfo\featname").Replace("Feature Name : ", "").Trim()
-                Dim featDesc As String = My.Computer.FileSystem.ReadAllText(".\tempinfo\featdesc").Replace("Description : ", "").Trim()
-                LogView.AppendText(CrLf & CrLf &
-                                   "- Feature name: " & featName & CrLf &
-                                   "- Feature description: " & featDesc & CrLf)
-                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /disable-feature /featurename=" & featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
+                Try
+                    DismApi.Initialize(DismLogLevel.LogErrors)
+                    Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
+                        Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim())
+                        LogView.AppendText(CrLf & CrLf &
+                                           "- Feature name: " & featInfo.FeatureName & CrLf &
+                                           "- Feature description: " & featInfo.Description & CrLf)
+
+                    End Using
+                Finally
+                    DismApi.Shutdown()
+                End Try
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /disable-feature /featurename=" & featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
                 If featDisablementParentPkgUsed And featDisablementParentPkg <> "" Then
                     CommandArgs &= " /packagename=" & featParentPkgName
                 End If
@@ -2203,11 +2206,7 @@ Public Class ProgressPanel
                 End If
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
-                Do Until DISMProc.HasExited
-                    If DISMProc.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                DISMProc.WaitForExit()
                 LogView.AppendText(CrLf & "Getting error level...")
                 'GetFeatErrorLevel()
                 errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
@@ -2235,7 +2234,6 @@ Public Class ProgressPanel
                     End If
                 End If
             Next
-            Directory.Delete(".\tempinfo", True)
             CurrentPB.Value = CurrentPB.Maximum
             LogView.AppendText(CrLf & "Gathering error level for selected features..." & CrLf)
             For x = 0 To FeatErrorText.RichTextBox1.Lines.Count - 1
@@ -2263,7 +2261,7 @@ Public Class ProgressPanel
             End Select
             ' Initialize command
             DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /cleanup-image"
+            CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /cleanup-image"
             Select Case CleanupTask
                 Case 0
                     Select Case Language
@@ -2391,14 +2389,12 @@ Public Class ProgressPanel
                                        "Repairing the component store..." & CrLf & _
                                        "Options:" & CrLf & _
                                        "- Use different source? " & If(UseCompRepairSource, "Yes (" & Quote & ComponentRepairSource & Quote & ")", "No") & CrLf & _
-                                       "- Limit Windows Update access? " & If(LimitWUAccess, "Yes", "No"))
-                    CommandArgs &= " /restorehealth" & If(UseCompRepairSource And File.Exists(ComponentRepairSource), " /source=" & Quote & ComponentRepairSource & Quote, "") & If(LimitWUAccess, " /limitaccess", "")
+                                       "- Limit Windows Update access? " & If(LimitWUAccess And OnlineMgmt, "Yes", If(LimitWUAccess And Not OnlineMgmt, "No, this is not an online installation", "No")))
+                    CommandArgs &= " /restorehealth" & If(UseCompRepairSource And File.Exists(ComponentRepairSource), " /source=" & Quote & ComponentRepairSource & Quote, "") & If(LimitWUAccess And OnlineMgmt, " /limitaccess", "")
             End Select
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
-            Do Until DISMProc.HasExited
-                If DISMProc.HasExited Then Exit Do
-            Loop
+            DISMProc.WaitForExit()
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2419,6 +2415,66 @@ Public Class ProgressPanel
             Else
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
+        ElseIf opNum = 33 Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Adding provisioning package..."
+                            currentTask.Text = "Adding provisioning package to the image..."
+                        Case "ESN"
+                            allTasks.Text = "Añadiendo paquete de aprovisionamiento..."
+                            currentTask.Text = "Añadiendo paquete de aprovisionamiento a la imagen..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Adding provisioning package..."
+                    currentTask.Text = "Adding provisioning package to the image..."
+                Case 2
+                    allTasks.Text = "Añadiendo paquete de aprovisionamiento..."
+                    currentTask.Text = "Añadiendo paquete de aprovisionamiento a la imagen..."
+            End Select
+            LogView.AppendText("Adding provisioning package to the image..." & CrLf & _
+                               "Options:" & CrLf & CrLf & _
+                               "- Provisioning package: " & Quote & ppkgAdditionPackagePath & Quote & CrLf & _
+                               "- Catalog file: " & If(ppkgAdditionCatalogPath = "", "none specified", Quote & ppkgAdditionCatalogPath & Quote) & CrLf & _
+                               "- Commit image after adding provisioning package? " & If(ppkgAdditionCommit, "Yes", "No"))
+            DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+            CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-provisioningpackage /packagepath=" & Quote & ppkgAdditionPackagePath & Quote & If(ppkgAdditionCatalogPath <> "" And File.Exists(ppkgAdditionCatalogPath), " /catalogpath=" & Quote & ppkgAdditionCatalogPath & Quote, "")
+            DISMProc.StartInfo.Arguments = CommandArgs
+            DISMProc.Start()
+            DISMProc.WaitForExit()
+            LogView.AppendText(CrLf & "Getting error level...")
+            If Hex(DISMProc.ExitCode).Length < 8 Then
+                errCode = DISMProc.ExitCode
+            Else
+                errCode = Hex(DISMProc.ExitCode)
+            End If
+            If errCode.Length >= 8 Then
+                LogView.AppendText(" Error level : 0x" & errCode)
+            Else
+                LogView.AppendText(" Error level : " & errCode)
+            End If
+            If ppkgAdditionCommit Then
+                AllPB.Value = AllPB.Maximum / taskCount
+                currentTCont += 1
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
+                            Case "ESN"
+                                taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                        End Select
+                    Case 1
+                        taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
+                    Case 2
+                        taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                End Select
+                RunOps(8)
+            Else
+                AllPB.Value = 100
+            End If
+            GetErrorCode(False)
         ElseIf opNum = 37 Then
             Select Case Language
                 Case 0
@@ -2483,6 +2539,8 @@ Public Class ProgressPanel
             End Select
             CurrentPB.Maximum = appxAdditionCount
             For x = 0 To Array.LastIndexOf(appxAdditionPackages, appxAdditionLastPackage)
+                If x + 1 > CurrentPB.Maximum Then Exit For
+                CommandArgs = BckArgs
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2506,7 +2564,7 @@ Public Class ProgressPanel
                 End If
                 ' Initialize command
                 DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /add-provisionedappxpackage "
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-provisionedappxpackage "
                 If File.GetAttributes(appxAdditionPackages(x)) = FileAttributes.Directory Then
                     CommandArgs &= "/folderpath=" & Quote & appxAdditionPackages(x) & Quote
                 Else
@@ -2549,18 +2607,16 @@ Public Class ProgressPanel
                         End If
                     End If
                 End If
-                If appxAdditionUseAllRegions Then
+                If appxAdditionUseAllRegions And FileVersionInfo.GetVersionInfo(DismProgram).ProductMajorPart = 10 Then
                     CommandArgs &= " /region:all"
-                Else
+                ElseIf Not appxAdditionUseAllRegions And FileVersionInfo.GetVersionInfo(DismProgram).ProductMajorPart = 10 Then
                     CommandArgs &= " /region:" & Quote & appxAdditionRegions & Quote
+                ElseIf FileVersionInfo.GetVersionInfo(DismProgram).ProductMajorPart < 10 Then
+                    ' Don't set region parameter
                 End If
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
-                Do Until DISMProc.HasExited
-                    If DISMProc.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                DISMProc.WaitForExit()
                 LogView.AppendText(CrLf & "Getting error level...")
                 If Hex(DISMProc.ExitCode).Length < 8 Then
                     errCode = DISMProc.ExitCode
@@ -2659,6 +2715,8 @@ Public Class ProgressPanel
             End Select
             CurrentPB.Maximum = appxRemovalCount
             For x = 0 To Array.LastIndexOf(appxRemovalPackages, appxRemovalLastPackage)
+                If x + 1 > CurrentPB.Maximum Then Exit For
+                CommandArgs = BckArgs
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2700,14 +2758,10 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & _
                                    "Processing package...")
                 DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & Quote & MountDir & Quote & " /remove-provisionedappxpackage /packagename=" & appxRemovalPackages(x)
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /remove-provisionedappxpackage /packagename=" & appxRemovalPackages(x)
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
-                Do Until DISMProc.HasExited
-                    If DISMProc.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                DISMProc.WaitForExit()
                 LogView.AppendText(CrLf & "Getting error level...")
                 If Hex(DISMProc.ExitCode).Length < 8 Then
                     errCode = DISMProc.ExitCode
@@ -2750,20 +2804,555 @@ Public Class ProgressPanel
             ElseIf appxSuccessfulRemovals <= 0 Then
                 GetErrorCode(False)
             End If
+        ElseIf opNum = 64 Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Adding capabilities..."
+                            currentTask.Text = "Preparing to add capabilities..."
+                        Case "ESN"
+                            allTasks.Text = "Añadiendo funcionalidades..."
+                            currentTask.Text = "Preparándonos para añadir funcionalidades..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Adding capabilities..."
+                    currentTask.Text = "Preparing to add capabilities..."
+                Case 2
+                    allTasks.Text = "Añadiendo funcionalidades..."
+                    currentTask.Text = "Preparándonos para añadir funcionalidades..."
+            End Select
+            LogView.AppendText(CrLf & "Adding capabilities to mounted image..." & CrLf & _
+                               "Options:" & CrLf & _
+                               "- Use a source for capability addition? " & If(capAdditionUseSource, "Yes", "No") & CrLf & _
+                               "- Capability source: " & If(capAdditionUseSource, Quote & capAdditionSource & Quote, "No source has been provided") & CrLf & _
+                               "- Limit access to Windows Update? " & If(capAdditionLimitWUAccess And OnlineMgmt, "Yes", If(capAdditionLimitWUAccess And Not OnlineMgmt, "No, this is not an online installation", "No")) & CrLf & _
+                               "- Commit image after adding capabilities? " & If(capAdditionCommit, "Yes", "No") & CrLf)
+            If capAdditionUseSource And Not Directory.Exists(capAdditionSource) Then
+                LogView.AppendText(CrLf & _
+                                   "Warning: the specified source does not exist in the file system, and it will be skipped")
+            End If
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            currentTask.Text = "Adding capabilities..."
+                        Case "ESN"
+                            currentTask.Text = "Añadiendo funcionalidades..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Adding capabilities..."
+                Case 2
+                    currentTask.Text = "Añadiendo funcionalidades..."
+            End Select
+            LogView.AppendText(CrLf & "Enumerating capabilities to add. Please wait..." & CrLf & _
+                               "Total number of capabilities: " & capAdditionCount)
+            CurrentPB.Maximum = capAdditionCount
+            For x = 0 To Array.LastIndexOf(capAdditionIds, capAdditionLastId)
+                If x + 1 > CurrentPB.Maximum Then Exit For
+                CommandArgs = BckArgs
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                currentTask.Text = "Adding capability " & (x + 1) & " of " & capAdditionCount & "..."
+                            Case "ESN"
+                                currentTask.Text = "Añadiendo funcionalidad " & (x + 1) & " de " & capAdditionCount & "..."
+                        End Select
+                    Case 1
+                        currentTask.Text = "Adding capability " & (x + 1) & " of " & capAdditionCount & "..."
+                    Case 2
+                        currentTask.Text = "Añadiendo funcionalidad " & (x + 1) & " de " & capAdditionCount & "..."
+                End Select
+                CurrentPB.Value = x + 1
+                LogView.AppendText(CrLf & _
+                                   "Capability " & (x + 1) & " of " & capAdditionCount)
+                ' Get capability information
+                ' Try opening the session. If API is not initialized, initialize it
+                Try
+                    DismApi.Initialize(DismLogLevel.LogErrors)
+                    Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
+                        ' Get capability information
+                        Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, capAdditionIds(x))
+                        LogView.AppendText(CrLf & CrLf & _
+                                           "- Capability identity: " & capInfo.DisplayName & CrLf & _
+                                           "- Capability description: " & capInfo.Description & CrLf)
+                    End Using
+                Finally
+                    DismApi.Shutdown()
+                End Try
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-capability /capabilityname=" & capAdditionIds(x)
+                If capAdditionUseSource And Directory.Exists(capAdditionSource) Then
+                    CommandArgs &= " /source=" & Quote & capAdditionSource & Quote
+                End If
+                If capAdditionLimitWUAccess And OnlineMgmt Then CommandArgs &= " /limitaccess"
+                DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+                DISMProc.StartInfo.Arguments = CommandArgs
+                DISMProc.Start()
+                DISMProc.WaitForExit()
+                LogView.AppendText(CrLf & "Getting error level...")
+                errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
+                If DISMProc.ExitCode = 0 Then
+                    capSuccessfulAdditions += 1
+                Else
+                    capFailedAdditions += 1
+                End If
+                If errCode.Length >= 8 Then
+                    LogView.AppendText(" Error level : 0x" & errCode)
+                Else
+                    LogView.AppendText(" Error level : " & errCode)
+                End If
+                If FeatErrorText.RichTextBox1.Text = "" Then
+                    If errCode.Length >= 8 Then
+                        FeatErrorText.RichTextBox1.AppendText("0x" & errCode)
+                    Else
+                        FeatErrorText.RichTextBox1.AppendText(errCode)
+                    End If
+                Else
+                    If errCode.Length >= 8 Then
+                        FeatErrorText.RichTextBox1.AppendText(CrLf & "0x" & errCode)
+                    Else
+                        FeatErrorText.RichTextBox1.AppendText(CrLf & errCode)
+                    End If
+                End If
+            Next
+            CurrentPB.Value = CurrentPB.Maximum
+            LogView.AppendText(CrLf & "Gathering error level for selected capabilities..." & CrLf)
+            For x = 0 To FeatErrorText.RichTextBox1.Lines.Count - 1
+                LogView.AppendText(CrLf & "- Capability no. " & (x + 1) & ": " & FeatErrorText.RichTextBox1.Lines(x))
+            Next
+            Thread.Sleep(2000)
+            If capAdditionCommit Then
+                AllPB.Value = AllPB.Maximum / taskCount
+                currentTCont += 1
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
+                            Case "ESN"
+                                taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                        End Select
+                    Case 1
+                        taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
+                    Case 2
+                        taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                End Select
+                RunOps(8)
+            End If
+            If capSuccessfulAdditions > 0 Then
+                GetErrorCode(True)
+            ElseIf capSuccessfulAdditions <= 0 Then
+                GetErrorCode(False)
+            End If
+        ElseIf opNum = 68 Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Removing capabilities..."
+                            currentTask.Text = "Preparing to remove capabilities..."
+                        Case "ESN"
+                            allTasks.Text = "Eliminando funcionalidades..."
+                            currentTask.Text = "Preparándonos para eliminar funcionalidades..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Removing capabilities..."
+                    currentTask.Text = "Preparing to remove capabilities..."
+                Case 2
+                    allTasks.Text = "Eliminando funcionalidades..."
+                    currentTask.Text = "Preparándonos para eliminar funcionalidades..."
+            End Select
+            LogView.AppendText(CrLf & "Removing capabilities from mounted image..." & CrLf)
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            currentTask.Text = "Removing capabilities..."
+                        Case "ESN"
+                            currentTask.Text = "Eliminando funcionalidades..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Removing capabilities..."
+                Case 2
+                    currentTask.Text = "Eliminando funcionalidades..."
+            End Select
+            LogView.AppendText(CrLf & "Enumerating capabilities to remove. Please wait..." & CrLf & _
+                               "Total number of capabilities: " & capRemovalCount)
+            CurrentPB.Maximum = capRemovalCount
+            For x = 0 To Array.LastIndexOf(capRemovalIds, capRemovalLastId)
+                If x + 1 > CurrentPB.Maximum Then Exit For
+                CommandArgs = BckArgs
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                currentTask.Text = "Removing capability " & (x + 1) & " of " & capRemovalCount & "..."
+                            Case "ESN"
+                                currentTask.Text = "Eliminando funcionalidad " & (x + 1) & " de " & capRemovalCount & "..."
+                        End Select
+                    Case 1
+                        currentTask.Text = "Removing capability " & (x + 1) & " of " & capRemovalCount & "..."
+                    Case 2
+                        currentTask.Text = "Eliminando funcionalidad " & (x + 1) & " de " & capRemovalCount & "..."
+                End Select
+                CurrentPB.Value = x + 1
+                LogView.AppendText(CrLf & _
+                                   "Capability " & (x + 1) & " of " & capRemovalCount)
+                Try
+                    DismApi.Initialize(DismLogLevel.LogErrors)
+                    Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
+                        Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, capRemovalIds(x))
+                        LogView.AppendText(CrLf & CrLf & _
+                                           "- Capability identity: " & capInfo.DisplayName & CrLf & _
+                                           "- Capability description: " & capInfo.Description & CrLf)
+                    End Using
+                Finally
+                    DismApi.Shutdown()
+                End Try
+                DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /remove-capability /capabilityname=" & capRemovalIds(x)
+                DISMProc.StartInfo.Arguments = CommandArgs
+                DISMProc.Start()
+                DISMProc.WaitForExit()
+                LogView.AppendText(CrLf & "Getting error level...")
+                errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
+                If DISMProc.ExitCode = 0 Then
+                    capSuccessfulRemovals += 1
+                Else
+                    capFailedRemovals += 1
+                End If
+                If errCode.Length >= 8 Then
+                    LogView.AppendText(" Error level : 0x" & errCode)
+                Else
+                    LogView.AppendText(" Error level : " & errCode)
+                End If
+                If FeatErrorText.RichTextBox1.Text = "" Then
+                    If errCode.Length >= 8 Then
+                        FeatErrorText.RichTextBox1.AppendText("0x" & errCode)
+                    Else
+                        FeatErrorText.RichTextBox1.AppendText(errCode)
+                    End If
+                Else
+                    If errCode.Length >= 8 Then
+                        FeatErrorText.RichTextBox1.AppendText(CrLf & "0x" & errCode)
+                    Else
+                        FeatErrorText.RichTextBox1.AppendText(CrLf & errCode)
+                    End If
+                End If
+            Next
+            CurrentPB.Value = CurrentPB.Maximum
+            LogView.AppendText(CrLf & "Gathering error level for selected capabilities..." & CrLf)
+            For x = 0 To FeatErrorText.RichTextBox1.Lines.Count - 1
+                LogView.AppendText(CrLf & "- Capability no. " & (x + 1) & ": " & FeatErrorText.RichTextBox1.Lines(x))
+            Next
+            Thread.Sleep(2000)
+            If capSuccessfulRemovals > 0 Then
+                GetErrorCode(True)
+            ElseIf capSuccessfulRemovals <= 0 Then
+                GetErrorCode(False)
+            End If
+        ElseIf opNum = 75 Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Adding drivers..."
+                            currentTask.Text = "Preparing to add drivers..."
+                        Case "ESN"
+                            allTasks.Text = "Añadiendo controladores..."
+                            currentTask.Text = "Preparándonos para añadir controladores..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Adding drivers..."
+                    currentTask.Text = "Preparing to add drivers..."
+                Case 2
+                    allTasks.Text = "Añadiendo controladores..."
+                    currentTask.Text = "Preparándonos para añadir controladores..."
+            End Select
+            LogView.AppendText(CrLf & "Adding driver packages to mounted image..." & CrLf & _
+                               "Options:" & CrLf & _
+                               "- Force installation of unsigned drivers? " & If(drvAdditionForceUnsigned, "Yes", "No") & CrLf & _
+                               "- Commit image after adding driver packages? " & If(drvAdditionCommit, "Yes", "No") & CrLf)
+            If drvAdditionForceUnsigned Then
+                LogView.AppendText(CrLf & _
+                                   "Warning: the option to force installation of unsigned drivers has been checked. Do note that unsigned drivers might cause instability on the resulting Windows image.")
+            End If
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            currentTask.Text = "Adding drivers..."
+                        Case "ESN"
+                            currentTask.Text = "Añadiendo controladores..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Adding drivers..."
+                Case 2
+                    currentTask.Text = "Añadiendo controladores..."
+            End Select
+            LogView.AppendText(CrLf & "Enumerating drivers to add. Please wait..." & CrLf & _
+                               "Total number of drivers: " & drvAdditionCount)
+            CurrentPB.Maximum = drvAdditionCount
+            For x = 0 To Array.LastIndexOf(drvAdditionPkgs, drvAdditionLastPkg)
+                If x + 1 > CurrentPB.Maximum Then Exit For
+                CommandArgs = BckArgs
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                currentTask.Text = "Adding driver " & (x + 1) & " of " & drvAdditionCount & "..."
+                            Case "ESN"
+                                currentTask.Text = "Añadiendo controlador " & (x + 1) & " de " & drvAdditionCount & "..."
+                        End Select
+                    Case 1
+                        currentTask.Text = "Adding driver " & (x + 1) & " of " & drvAdditionCount & "..."
+                    Case 2
+                        currentTask.Text = "Añadiendo controlador " & (x + 1) & " de " & drvAdditionCount & "..."
+                End Select
+                CurrentPB.Value = x + 1
+                LogView.AppendText(CrLf & _
+                                   "Driver " & (x + 1) & " of " & drvAdditionCount)
+                ' Get driver information
+                If Not File.GetAttributes(drvAdditionPkgs(x)) = FileAttributes.Directory Then
+                    Try
+                        DismApi.Initialize(DismLogLevel.LogErrors)
+                        Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
+                            Dim drvInfoCollection As DismDriverCollection = DismApi.GetDriverInfo(imgSession, drvAdditionPkgs(x))
+                            If drvInfoCollection.Count > 0 Then
+                                For Each drvInfo As DismDriver In drvInfoCollection
+                                    LogView.AppendText(CrLf & CrLf & _
+                                                       "- Hardware description: " & drvInfo.HardwareDescription & CrLf & _
+                                                       "- Hardware ID: " & drvInfo.HardwareId & CrLf & _
+                                                       "- Additional IDs" & CrLf & _
+                                                       "  - Compatible IDs: " & drvInfo.CompatibleIds & CrLf & _
+                                                       "  - Excluded IDs: " & drvInfo.ExcludeIds & CrLf & _
+                                                       "- Hardware manufacturer: " & drvInfo.ManufacturerName)
+                                Next
+                            Else
+                                LogView.AppendText(CrLf & CrLf & _
+                                                   "We couldn't get information of this driver package. Proceeding anyway...")
+                            End If
+                        End Using
+                    Finally
+                        DismApi.Shutdown()
+                    End Try
+                Else
+                    LogView.AppendText(CrLf & CrLf & _
+                                       "The driver package currently about to be processed is a folder, so information about it can't be obtained. Proceeding anyway...")
+                End If
+                DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-driver /driver=" & Quote & drvAdditionPkgs(x) & Quote
+                If drvAdditionForceUnsigned Then
+                    CommandArgs &= " /forceunsigned"
+                End If
+                If File.GetAttributes(drvAdditionPkgs(x)) = FileAttributes.Directory And drvAdditionFolderRecursiveScan.Contains(drvAdditionPkgs(x)) Then
+                    LogView.AppendText(CrLf & "This folder will be scanned recursively. Driver addition may take a longer time...")
+                End If
+                DISMProc.StartInfo.Arguments = CommandArgs
+                DISMProc.Start()
+                DISMProc.WaitForExit()
+                LogView.AppendText(CrLf & "Getting error level...")
+                errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
+                If DISMProc.ExitCode = 0 Then
+                    drvSuccessfulAdditions += 1
+                Else
+                    drvFailedAdditions += 1
+                End If
+                If errCode.Length >= 8 Then
+                    LogView.AppendText(" Error level : 0x" & errCode)
+                Else
+                    LogView.AppendText(" Error level : " & errCode)
+                End If
+                If PkgErrorText.RichTextBox1.Text = "" Then
+                    If errCode.Length >= 8 Then
+                        PkgErrorText.RichTextBox1.AppendText("0x" & errCode)
+                    Else
+                        PkgErrorText.RichTextBox1.AppendText(errCode)
+                    End If
+                Else
+                    If errCode.Length >= 8 Then
+                        PkgErrorText.RichTextBox1.AppendText(CrLf & "0x" & errCode)
+                    Else
+                        PkgErrorText.RichTextBox1.AppendText(CrLf & errCode)
+                    End If
+                End If
+            Next
+            CurrentPB.Value = CurrentPB.Maximum
+            LogView.AppendText(CrLf & "Gathering error level for selected drivers..." & CrLf)
+            For x = 0 To PkgErrorText.RichTextBox1.Lines.Count - 1
+                LogView.AppendText(CrLf & "- Driver no. " & (x + 1) & ": " & PkgErrorText.RichTextBox1.Lines(x))
+            Next
+            Thread.Sleep(2000)
+            If drvAdditionCommit Then
+                AllPB.Value = AllPB.Maximum / taskCount
+                currentTCont += 1
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
+                            Case "ESN"
+                                taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                        End Select
+                    Case 1
+                        taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
+                    Case 2
+                        taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                End Select
+                RunOps(8)
+            End If
+            If drvSuccessfulAdditions > 0 Then
+                GetErrorCode(True)
+            ElseIf drvSuccessfulAdditions <= 0 Then
+                GetErrorCode(False)
+            End If
+        ElseIf opNum = 76 Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Removing drivers..."
+                            currentTask.Text = "Preparing to remove drivers..."
+                        Case "ESN"
+                            allTasks.Text = "Eliminando controladores..."
+                            currentTask.Text = "Preparándonos para eliminar controladores..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Removing drivers..."
+                    currentTask.Text = "Preparing to remove drivers..."
+                Case 2
+                    allTasks.Text = "Eliminando controladores..."
+                    currentTask.Text = "Preparándonos para eliminar controladores..."
+            End Select
+            LogView.AppendText(CrLf & "Removing driver packages from mounted image..." & CrLf)
+            ' Get all driver packages
+            LogView.AppendText(CrLf & "Getting image drivers. This may take some time..." & CrLf)
+            Try
+                DismApi.Initialize(DismLogLevel.LogErrors)
+                Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
+                    drvCollection = DismApi.GetDrivers(imgSession, AllDrivers)
+                End Using
+            Finally
+                DismApi.Shutdown()
+            End Try
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            currentTask.Text = "Removing drivers..."
+                        Case "ESN"
+                            currentTask.Text = "Eliminando controladores..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Removing drivers..."
+                Case 2
+                    currentTask.Text = "Eliminando controladores..."
+            End Select
+            LogView.AppendText(CrLf & "Enumerating drivers to remove. Please wait..." & CrLf & _
+                               "Total number of drivers: " & drvRemovalCount)
+            CurrentPB.Maximum = drvRemovalCount
+            For x = 0 To Array.LastIndexOf(drvRemovalPkgs, drvRemovalLastPkg)
+                If x + 1 > CurrentPB.Maximum Then Exit For
+                CommandArgs = BckArgs
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                currentTask.Text = "Removing driver " & (x + 1) & " of " & drvRemovalCount & "..."
+                            Case "ESN"
+                                currentTask.Text = "Eliminando controlador " & (x + 1) & " de " & drvRemovalCount & "..."
+                        End Select
+                    Case 1
+                        currentTask.Text = "Removing driver " & (x + 1) & " of " & drvRemovalCount & "..."
+                    Case 2
+                        currentTask.Text = "Eliminando controlador " & (x + 1) & " de " & drvRemovalCount & "..."
+                End Select
+                CurrentPB.Value = x + 1
+                LogView.AppendText(CrLf & _
+                                   "Driver " & (x + 1) & " of " & drvRemovalCount)
+                ' Get driver information
+                Try
+                    DismApi.Initialize(DismLogLevel.LogErrors)
+                    Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
+                        For Each drv As DismDriverPackage In drvCollection
+                            If drv.PublishedName = drvRemovalPkgs(x) Then
+                                LogView.AppendText(CrLf & CrLf & _
+                                                   "- Published name: " & drv.PublishedName & CrLf & _
+                                                   "- Provider name: " & drv.ProviderName & CrLf & _
+                                                   "- Class name: " & drv.ClassName & CrLf & _
+                                                   "- Class description: " & drv.ClassDescription & CrLf & _
+                                                   "- Class GUID: " & drv.ClassGuid & CrLf & _
+                                                   "- Version and date: " & drv.Version.ToString() & "/" & drv.Date.ToString() & CrLf & _
+                                                   "- Is part of the Windows distribution? " & If(drv.InBox, "Yes", "No") & CrLf & _
+                                                   "- Is critical to the boot process? " & If(drv.BootCritical, "Yes", "No"))
+                                If drv.InBox Then
+                                    LogView.AppendText(CrLf & CrLf & _
+                                                       "Warning: this driver package is part of the Windows distribution. Some areas may no longer work after this driver has been removed")
+                                End If
+                                If drv.BootCritical Then
+                                    LogView.AppendText(CrLf & CrLf & _
+                                                       "Warning: this driver package is critical to the boot process. The target image may no longer boot or work correctly after this driver has been removed")
+                                End If
+                                Exit For
+                            End If
+                        Next
+                    End Using
+                Finally
+                    DismApi.Shutdown()
+                End Try
+                DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /remove-driver /driver=" & Quote & drvRemovalPkgs(x) & Quote
+                DISMProc.StartInfo.Arguments = CommandArgs
+                DISMProc.Start()
+                DISMProc.WaitForExit()
+                LogView.AppendText(CrLf & "Getting error level...")
+                errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
+                If DISMProc.ExitCode = 0 Then
+                    drvSuccessfulRemovals += 1
+                Else
+                    drvFailedRemovals += 1
+                End If
+                If errCode.Length >= 8 Then
+                    LogView.AppendText(" Error level : 0x" & errCode)
+                Else
+                    LogView.AppendText(" Error level : " & errCode)
+                End If
+                If PkgErrorText.RichTextBox1.Text = "" Then
+                    If errCode.Length >= 8 Then
+                        PkgErrorText.RichTextBox1.AppendText("0x" & errCode)
+                    Else
+                        PkgErrorText.RichTextBox1.AppendText(errCode)
+                    End If
+                Else
+                    If errCode.Length >= 8 Then
+                        PkgErrorText.RichTextBox1.AppendText(CrLf & "0x" & errCode)
+                    Else
+                        PkgErrorText.RichTextBox1.AppendText(CrLf & errCode)
+                    End If
+                End If
+            Next
+            CurrentPB.Value = CurrentPB.Maximum
+            LogView.AppendText(CrLf & "Gathering error level for selected drivers..." & CrLf)
+            For x = 0 To PkgErrorText.RichTextBox1.Lines.Count - 1
+                LogView.AppendText(CrLf & "- Driver no. " & (x + 1) & ": " & PkgErrorText.RichTextBox1.Lines(x))
+            Next
+            Thread.Sleep(2000)
+            If drvSuccessfulRemovals > 0 Then
+                GetErrorCode(True)
+            ElseIf drvSuccessfulRemovals <= 0 Then
+                GetErrorCode(False)
+            End If
         ElseIf opNum = 87 Then
             allTasks.Text = "Setting the uninstall window..."
             currentTask.Text = "Setting the amount of days an uninstall can happen..."
             LogView.AppendText(CrLf & "Setting the amount of days an uninstall can happen..." & CrLf &
                                "Number of days: " & osUninstDayCount)
             DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /online /set-osuninstallwindow /value:" & osUninstDayCount
+            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /online /set-osuninstallwindow /value:" & osUninstDayCount
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
-            Do Until DISMProc.HasExited
-                If DISMProc.HasExited Then
-                    Exit Do
-                End If
-            Loop
+            DISMProc.WaitForExit()
             currentTask.Text = "Gathering error level..."
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
@@ -2811,10 +3400,10 @@ Public Class ProgressPanel
                         Case 1
                             ' Not available
                         Case Is >= 2
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSrcFile & Quote & " /sourceindex=1 /destinationimagefile=" & Quote & imgDestFile & Quote
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSrcFile & Quote & " /sourceindex=1 /destinationimagefile=" & Quote & imgDestFile & Quote
                     End Select
                 Case 10
-                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSrcFile & Quote & " /sourceindex=1 /destinationimagefile=" & Quote & imgDestFile & Quote
+                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSrcFile & Quote & " /sourceindex=1 /destinationimagefile=" & Quote & imgDestFile & Quote
             End Select
             If imgConversionMode = 0 Then
                 CommandArgs &= " /compress:recovery"
@@ -2823,11 +3412,7 @@ Public Class ProgressPanel
             End If
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
-            Do Until DISMProc.HasExited
-                If DISMProc.HasExited Then
-                    Exit Do
-                End If
-            Loop
+            DISMProc.WaitForExit()
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2880,18 +3465,14 @@ Public Class ProgressPanel
                         Case 1
                             ' Not available
                         Case Is >= 2
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSwmSource & Quote & " /swmfile=" & Quote & Path.GetDirectoryName(imgSwmSource) & "\" & Path.GetFileNameWithoutExtension(imgSwmSource) & "*.swm" & Quote & " /sourceindex=1 /destinationimagefile=" & Quote & imgWimDestination & Quote & " /compress=max /checkintegrity"
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSwmSource & Quote & " /swmfile=" & Quote & Path.GetDirectoryName(imgSwmSource) & "\" & Path.GetFileNameWithoutExtension(imgSwmSource) & "*.swm" & Quote & " /sourceindex=1 /destinationimagefile=" & Quote & imgWimDestination & Quote & " /compress=max /checkintegrity"
                     End Select
                 Case 10
-                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSwmSource & Quote & " /swmfile=" & Quote & Path.GetDirectoryName(imgSwmSource) & "\" & Path.GetFileNameWithoutExtension(imgSwmSource) & "*.swm" & Quote & " /sourceindex=1 /destinationimagefile=" & Quote & imgWimDestination & Quote & " /compress=max /checkintegrity"
+                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSwmSource & Quote & " /swmfile=" & Quote & Path.GetDirectoryName(imgSwmSource) & "\" & Path.GetFileNameWithoutExtension(imgSwmSource) & "*.swm" & Quote & " /sourceindex=1 /destinationimagefile=" & Quote & imgWimDestination & Quote & " /compress=max /checkintegrity"
             End Select
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
-            Do Until DISMProc.HasExited
-                If DISMProc.HasExited Then
-                    Exit Do
-                End If
-            Loop
+            DISMProc.WaitForExit()
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2947,12 +3528,12 @@ Public Class ProgressPanel
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
                         Case 1
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & SwitchTarget & Quote
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & SwitchTarget & Quote
                         Case Is >= 2
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & SwitchTarget & Quote
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & SwitchTarget & Quote
                     End Select
                 Case 10
-                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & SwitchTarget & Quote
+                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & SwitchTarget & Quote
             End Select
             If SwitchCommitSourceIndex Then
                 CommandArgs &= " /commit"
@@ -2961,11 +3542,7 @@ Public Class ProgressPanel
             End If
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
-            Do Until DISMProc.HasExited
-                If DISMProc.HasExited Then
-                    Exit Do
-                End If
-            Loop
+            DISMProc.WaitForExit()
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3005,20 +3582,16 @@ Public Class ProgressPanel
                     Case 6
                         Select Case DismVersionChecker.ProductMinorPart
                             Case 1
-                                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & SwitchTarget & Quote & " /discard"
+                                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-wim /mountdir=" & Quote & SwitchTarget & Quote & " /discard"
                             Case Is >= 2
-                                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & SwitchTarget & Quote & " /discard"
+                                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & SwitchTarget & Quote & " /discard"
                         End Select
                     Case 10
-                        CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & SwitchTarget & Quote & " /discard"
+                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & SwitchTarget & Quote & " /discard"
                 End Select
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
-                Do Until DISMProc.HasExited
-                    If DISMProc.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                DISMProc.WaitForExit()
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3067,23 +3640,19 @@ Public Class ProgressPanel
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
                         Case 1
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-wim /wimfile=" & Quote & SwitchSourceImg & Quote & " /index=" & SwitchTargetIndex & " /mountdir=" & Quote & SwitchTarget & Quote
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-wim /wimfile=" & Quote & SwitchSourceImg & Quote & " /index=" & SwitchTargetIndex & " /mountdir=" & Quote & SwitchTarget & Quote
                         Case Is >= 2
-                            CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-image /imagefile=" & Quote & SwitchSourceImg & Quote & " /index=" & SwitchTargetIndex & " /mountdir=" & Quote & SwitchTarget & Quote
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-image /imagefile=" & Quote & SwitchSourceImg & Quote & " /index=" & SwitchTargetIndex & " /mountdir=" & Quote & SwitchTarget & Quote
                     End Select
                 Case 10
-                    CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-image /imagefile=" & Quote & SwitchSourceImg & Quote & " /index=" & SwitchTargetIndex & " /mountdir=" & Quote & SwitchTarget & Quote
+                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-image /imagefile=" & Quote & SwitchSourceImg & Quote & " /index=" & SwitchTargetIndex & " /mountdir=" & Quote & SwitchTarget & Quote
             End Select
             If SwitchMountAsReadOnly Then
                 CommandArgs &= " /readonly"
             End If
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
-            Do Until DISMProc.HasExited
-                If DISMProc.HasExited Then
-                    Exit Do
-                End If
-            Loop
+            DISMProc.WaitForExit()
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3130,10 +3699,10 @@ Public Class ProgressPanel
             Directory.Delete(pkgSource & "\MsuExtract\" & MsuName, True)
         End If
         Directory.CreateDirectory(pkgSource & "\MsuExtract\" & MsuName)
-        File.WriteAllText(".\bin\exthelpers\temp.bat", _
+        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", _
                           "@echo off" & CrLf & _
-                          ".\bin\utils\7z x " & MsuFile & " -o" & pkgSource & "\MsuExtract\" & MsuName, ASCII)
-        Process.Start(".\bin\exthelpers\temp.bat").WaitForExit()
+                          Application.StartupPath & "\bin\utils\7z x " & MsuFile & " -o" & pkgSource & "\MsuExtract\" & MsuName, ASCII)
+        Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
         If MsuName.StartsWith("windows6.1") Then    ' Windows 7
             If MsuName.Contains("-v") Then
                 ' There may be no hotfix for Windows 7 that has "-v<n>"
@@ -3174,7 +3743,7 @@ Public Class ProgressPanel
         CabFile &= ".cab"
         pkgToAdd = pkgSource & "\MsuExtract\" & MsuName & "\" & CabFile
         ' Add MSU file
-        File.WriteAllText(".\bin\exthelpers\pkginfo.bat", _
+        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\pkginfo.bat", _
                           "@echo off" & CrLf & _
                           "dism /English /image=" & MountDir & " /get-packageinfo /packagepath=" & pkgToAdd & " | findstr /c:" & Quote & "Package Identity" & Quote & " > .\tempinfo\pkgname" & CrLf & _
                           "dism /English /image=" & MountDir & " /get-packageinfo /packagepath=" & pkgToAdd & " | findstr /c:" & Quote & "Description" & Quote & " > .\tempinfo\pkgdesc" & CrLf & _
@@ -3182,13 +3751,13 @@ Public Class ProgressPanel
                           "dism /English /image=" & MountDir & " /get-packageinfo /packagepath=" & pkgToAdd & " | findstr /c:" & Quote & "State" & Quote & " > .\tempinfo\pkgstate", _
                           ASCII)
         If IsDebugged Then
-            Process.Start("\Windows\system32\notepad.exe", ".\bin\exthelpers\pkginfo.bat").WaitForExit()
+            Process.Start("\Windows\system32\notepad.exe", Application.StartupPath & "\bin\exthelpers\pkginfo.bat").WaitForExit()
         End If
-        Process.Start(".\bin\exthelpers\pkginfo.bat").WaitForExit()
-        pkgName = My.Computer.FileSystem.ReadAllText(".\tempinfo\pkgname", ASCII).Replace("Package Identity : ", "").Trim()
-        pkgDesc = My.Computer.FileSystem.ReadAllText(".\tempinfo\pkgdesc", ASCII).Replace("Description : ", "").Trim()
-        pkgApplicabilityStatus = My.Computer.FileSystem.ReadAllText(".\tempinfo\pkgapplicability", ASCII).Replace("Applicable : ", "").Trim()
-        pkgInstallationState = My.Computer.FileSystem.ReadAllText(".\tempinfo\pkgstate", ASCII).Replace("State : ", "").Trim()
+        Process.Start(Application.StartupPath & "\bin\exthelpers\pkginfo.bat").WaitForExit()
+        pkgName = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\tempinfo\pkgname", ASCII).Replace("Package Identity : ", "").Trim()
+        pkgDesc = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\tempinfo\pkgdesc", ASCII).Replace("Description : ", "").Trim()
+        pkgApplicabilityStatus = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\tempinfo\pkgapplicability", ASCII).Replace("Applicable : ", "").Trim()
+        pkgInstallationState = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\tempinfo\pkgstate", ASCII).Replace("State : ", "").Trim()
         LogView.AppendText(CrLf & CrLf & _
                            "- Package name: " & pkgName & CrLf & _
                            "- Package description: " & pkgDesc & CrLf)
@@ -3210,7 +3779,7 @@ Public Class ProgressPanel
             LogView.AppendText("- Package is already added? Yes" & CrLf)
         End If
         Try
-            Directory.Delete(".\tempinfo", True)
+            Directory.Delete(Application.StartupPath & "\tempinfo", True)
         Catch ex As Exception
 
         End Try
@@ -3225,7 +3794,7 @@ Public Class ProgressPanel
             Else
                 LogView.AppendText(CrLf & "Processing package...")
                 DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & MountDir & " /add-package /packagepath=" & pkgToAdd
+                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & MountDir & " /add-package /packagepath=" & pkgToAdd
                 If pkgIgnoreApplicabilityChecks Then
                     CommandArgs &= " /ignorecheck"
                 End If
@@ -3234,11 +3803,7 @@ Public Class ProgressPanel
                 End If
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
-                Do Until DISMProc.HasExited
-                    If DISMProc.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                DISMProc.WaitForExit()
                 LogView.AppendText(CrLf & "Getting error level...")
                 GetPkgErrorLevel()
                 LogView.AppendText(" Error level: " & errCode)
@@ -3252,17 +3817,13 @@ Public Class ProgressPanel
             If pkgIgnoreApplicabilityChecks Then
                 LogView.AppendText(CrLf & "Trying to process package...")
                 DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
-                CommandArgs = "/logpath=" & Quote & Directory.GetCurrentDirectory() & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & MountDir & " /add-package /packagepath=" & pkgToAdd & " /ignorecheck"
+                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /image=" & MountDir & " /add-package /packagepath=" & pkgToAdd & " /ignorecheck"
                 If pkgPreventIfPendingOnline Then
                     CommandArgs &= " /preventpending"
                 End If
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
-                Do Until DISMProc.HasExited
-                    If DISMProc.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                DISMProc.WaitForExit()
                 LogView.AppendText(CrLf & "Getting error level...")
                 GetPkgErrorLevel()
                 LogView.AppendText(" Error level: " & errCode)
@@ -3522,21 +4083,17 @@ Public Class ProgressPanel
                 End If
             End If
         Else
-            If Directory.Exists(".\appxscan") Then Directory.Delete(".\appxscan", True)
-            Directory.CreateDirectory(".\appxscan")
-            AppxScanner.StartInfo.FileName = ".\bin\utils\7z.exe"
-            AppxScanner.StartInfo.Arguments = "e " & Quote & Package & Quote & " " & Quote & If(Path.GetExtension(Package).EndsWith("bundle"), "appxmetadata\appxbundlemanifest.xml", "appxmanifest.xml") & Quote & " -o.\appxscan"
+            If Directory.Exists(Application.StartupPath & "\appxscan") Then Directory.Delete(Application.StartupPath & "\appxscan", True)
+            Directory.CreateDirectory(Application.StartupPath & "\appxscan")
+            AppxScanner.StartInfo.FileName = Application.StartupPath & "\bin\utils\7z.exe"
+            AppxScanner.StartInfo.Arguments = "e " & Quote & Package & Quote & " " & Quote & If(Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase), "appxmetadata\appxbundlemanifest.xml", "appxmanifest.xml") & Quote & " -o" & Quote & Application.StartupPath & "\appxscan" & Quote
             AppxScanner.StartInfo.CreateNoWindow = True
             AppxScanner.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
             AppxScanner.Start()
-            Do Until AppxScanner.HasExited
-                If AppxScanner.HasExited Then
-                    Exit Do
-                End If
-            Loop
+            AppxScanner.WaitForExit()
             If AppxScanner.ExitCode = 0 Then
-                If Path.GetExtension(Package).EndsWith("bundle") Then
-                    ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(".\appxscan\AppxBundleManifest.xml")
+                If Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase) Then
+                    ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\appxscan\AppxBundleManifest.xml")
                     If ScannerRTB.Lines(2).EndsWith("<!--") Then
                         ' XML comment
                         Dim IdScanner As String = ScannerRTB.Lines(9)
@@ -3668,7 +4225,7 @@ Public Class ProgressPanel
                         Next
                     End If
                 Else
-                    ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(".\appxscan\AppxManifest.xml")
+                    ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\appxscan\AppxManifest.xml")
                     If ScannerRTB.Lines(2).EndsWith("<!--") Then
                         Dim IdScanner As String = ScannerRTB.Lines(9)
                         Dim CharIndex As Integer = 0
@@ -3808,18 +4365,59 @@ Public Class ProgressPanel
                            "- Application name: " & currentAppxName & CrLf & _
                            "- Application publisher: " & currentAppxPublisher & CrLf & _
                            "- Application version: " & currentAppxVersion & CrLf)
-        If Directory.Exists(".\appxscan") Then
-            Directory.Delete(".\appxscan", True)
+        If Directory.Exists(Application.StartupPath & "\appxscan") Then
+            Directory.Delete(Application.StartupPath & "\appxscan", True)
         End If
     End Sub
 
     Private Sub ProgressBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ProgressBW.DoWork
-        RunOps(OperationNum)
+        If TaskList.Count >= 2 Or (ActionRunning And TaskList.Count >= 1) Then
+            RunTaskList(TaskList)
+        Else
+            RunOps(OperationNum)
+        End If
+    End Sub
+
+    Sub SaveLog(LogFile As String)
+        If Not File.Exists(LogFile) Then
+            ' Create file
+            Try
+                File.WriteAllText(LogFile, String.Empty)
+            Catch ex As Exception
+                LogView.AppendText(CrLf & _
+                                   "Warning: the contents of the log window could not be saved to the log file. Reason: " & CrLf & ex.ToString())
+                Exit Sub
+            End Try
+        End If
+        Dim logWindowReader As New RichTextBox() With {
+            .Text = My.Computer.FileSystem.ReadAllText(LogFile, ASCII)
+        }
+        If logWindowReader.Text <> "" Then
+            logWindowReader.AppendText(CrLf & "==================== DISMTools Log Window Contents (" & DateTime.Now.ToString() & ") ====================")
+        Else
+            logWindowReader.AppendText("======================== DISMTools Log File ========================" & CrLf & _
+                                       "This is an automatically generated log file created by DISMTools." & CrLf & _
+                                       "This file can be viewed at any time to view successful and/or" & CrLf & _
+                                       "failed tasks." & CrLf & CrLf & _
+                                       "This log file is updated every time an operation is performed." & CrLf & _
+                                       "However, it does not contain the actual DISM log file, which is" & CrLf & _
+                                       "also automatically generated each time DISM is run from this" & CrLf & _
+                                       "program. These log files are named: " & CrLf & _
+                                       "                    " & Quote & "DISMTools-<date/time>.log" & Quote & "                    " & CrLf & _
+                                       "====================================================================")
+        End If
+        logWindowReader.AppendText(CrLf & LogView.Text)
+        File.WriteAllText(LogFile, logWindowReader.Text, ASCII)
     End Sub
 
     Private Sub ProgressBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ProgressBW.RunWorkerCompleted
+        If Not ActionRunning Then TaskList.Clear()
         If IsSuccessful Then
+            If OperationNum = 9 Then LogView.AppendText(CrLf & _
+                               "The volume images have been deleted. If you want to remount this image into a DISMTools project, choose the " & Quote & "Mount image" & Quote & " option, or use this command if you want to mount it elsewhere:" & CrLf & _
+                               "  dism /mount-image /imagefile:" & Quote & imgIndexDeletionSourceImg & Quote & " /index:<preferred index> /mountdir:<preferred mountpoint>")
             'Visible = False
+            SaveLog(Application.StartupPath & "\logs\DISMTools.log")
             Try
                 CurrentPB.Value = 100
             Catch ex As Exception
@@ -3832,7 +4430,7 @@ Public Class ProgressPanel
                 Thread.Sleep(2000)
             End If
             If OperationNum = 0 Then
-                MainForm.LoadDTProj(projPath & "\" & projName & "\" & projName & ".dtproj", projName, True)
+                MainForm.LoadDTProj(projPath & "\" & projName & "\" & projName & ".dtproj", projName, True, False)
             ElseIf OperationNum = 6 Then
                 If CaptureMountDestImg Then
                     MainForm.SourceImg = SourceImg
@@ -3848,9 +4446,6 @@ Public Class ProgressPanel
             ElseIf OperationNum = 8 Then
                 MainForm.SaveDTProj()
             ElseIf OperationNum = 9 Then
-                LogView.AppendText(CrLf & _
-                                   "The volume images have been deleted. If you want to remount this image into a DISMTools project, choose the " & Quote & "Mount image" & Quote & " option, or use this command if you want to mount it elsewhere:" & CrLf & _
-                                   "  dism /mount-image /imagefile:" & Quote & imgIndexDeletionSourceImg & Quote & " /index:<preferred index> /mountdir:<preferred mountpoint>")
                 If imgIndexDeletionUnmount Then
                     ' Detect mounted images if the program needed to unmount the source image
                     MainForm.DetectMountedImages(False)
@@ -3869,6 +4464,9 @@ Public Class ProgressPanel
                 MainForm.SourceImg = SourceImg
                 MainForm.ImgIndex = ImgIndex
                 MainForm.MountDir = MountDir
+                MainForm.bwBackgroundProcessAction = 0
+                MainForm.bwGetImageInfo = True
+                MainForm.bwGetAdvImgInfo = True
                 MainForm.DetectMountedImages(False)
                 If isReadOnly Then
                     MainForm.UpdateProjProperties(True, True)
@@ -3880,23 +4478,21 @@ Public Class ProgressPanel
             ElseIf OperationNum = 18 Then
                 MainForm.DetectMountedImages(False)
                 If MainForm.isProjectLoaded And MountDir = MainForm.MountDir Then
-                    If ProjProperties.Visible Then
-                        isTriggeredByPropertyDialog = True
-                        ProjProperties.Close()
-                    End If
+                    MainForm.bwBackgroundProcessAction = 0
+                    MainForm.bwGetImageInfo = True
+                    MainForm.bwGetAdvImgInfo = True
                     If remountisReadOnly Then
                         MainForm.UpdateProjProperties(True, True)
                     Else
                         MainForm.UpdateProjProperties(True, False)
                     End If
-                    If isTriggeredByPropertyDialog Then
-                        ProjProperties.TabControl1.SelectedIndex = 1
-                        ProjProperties.ShowDialog(MainForm)
-                    End If
                     MainForm.isModified = False
                 End If
             ElseIf OperationNum = 21 Then
-                If MainForm.isProjectLoaded Then
+                If MainForm.isProjectLoaded And MountDir = MainForm.MountDir Or RandomMountDir = MainForm.MountDir Then
+                    MainForm.bwBackgroundProcessAction = 0
+                    MainForm.bwGetImageInfo = True
+                    MainForm.bwGetAdvImgInfo = True
                     MainForm.UpdateProjProperties(False, False)
                     MainForm.MountDir = "N/A"
                     ' This is a crucial change, so save things immediately
@@ -3908,6 +4504,8 @@ Public Class ProgressPanel
                 End If
                 MainForm.DetectMountedImages(False)
             ElseIf OperationNum = 26 Then
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
+                If Not MainForm.RunAllProcs Then MainForm.bwBackgroundProcessAction = 1
                 MainForm.UpdateProjProperties(True, False)
                 AddPackageReport.Label4.Text = MountDir
                 AddPackageReport.Label6.Text = pkgSource
@@ -3932,15 +4530,75 @@ Public Class ProgressPanel
                 'AddPackageReport.ProgressBar1.Value = AddPackageReport.pkgSuccessFailureRatio
                 AddPackageReport.Show()
             ElseIf OperationNum = 27 Then
+                If Not MainForm.RunAllProcs Then MainForm.bwBackgroundProcessAction = 1
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 30 Then
+                If Not MainForm.RunAllProcs Then
+                    MainForm.bwGetImageInfo = False
+                    MainForm.bwGetAdvImgInfo = False
+                    MainForm.bwBackgroundProcessAction = 2
+                End If
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 31 Then
+                If Not MainForm.RunAllProcs Then
+                    MainForm.bwGetImageInfo = False
+                    MainForm.bwGetAdvImgInfo = False
+                    MainForm.bwBackgroundProcessAction = 2
+                End If
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
+                MainForm.UpdateProjProperties(True, False)
+            ElseIf OperationNum = 33 Then
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 37 Then
-                MainForm.SaveDTProj()
+                If Not MainForm.RunAllProcs Then
+                    MainForm.bwGetImageInfo = False
+                    MainForm.bwGetAdvImgInfo = False
+                    MainForm.bwBackgroundProcessAction = 3
+                End If
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 38 Then
+                If Not MainForm.RunAllProcs Then
+                    MainForm.bwGetImageInfo = False
+                    MainForm.bwGetAdvImgInfo = False
+                    MainForm.bwBackgroundProcessAction = 3
+                End If
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
+                MainForm.UpdateProjProperties(True, False)
+            ElseIf OperationNum = 64 Then
+                If Not MainForm.RunAllProcs Then
+                    MainForm.bwGetImageInfo = False
+                    MainForm.bwGetAdvImgInfo = False
+                    MainForm.bwBackgroundProcessAction = 4
+                End If
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
+                MainForm.UpdateProjProperties(True, False)
+            ElseIf OperationNum = 68 Then
+                If Not MainForm.RunAllProcs Then
+                    MainForm.bwGetImageInfo = False
+                    MainForm.bwGetAdvImgInfo = False
+                    MainForm.bwBackgroundProcessAction = 4
+                End If
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
+                MainForm.UpdateProjProperties(True, False)
+            ElseIf OperationNum = 75 Then
+                If Not MainForm.RunAllProcs Then
+                    MainForm.bwGetImageInfo = False
+                    MainForm.bwGetAdvImgInfo = False
+                    MainForm.bwBackgroundProcessAction = 5
+                End If
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
+                MainForm.UpdateProjProperties(True, False)
+            ElseIf OperationNum = 76 Then
+                If Not MainForm.RunAllProcs Then
+                    MainForm.bwGetImageInfo = False
+                    MainForm.bwGetAdvImgInfo = False
+                    MainForm.bwBackgroundProcessAction = 5
+                End If
+                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 991 Then
                 Visible = False
@@ -3951,6 +4609,7 @@ Public Class ProgressPanel
             ElseIf OperationNum = 996 Then
                 MainForm.ImgIndex = SwitchTargetIndex
                 MainForm.imgMountedName = SwitchTargetIndexName
+                MainForm.SaveDTProj()
                 If SwitchMountAsReadOnly Then
                     MainForm.UpdateProjProperties(True, True)
                 Else
@@ -3958,6 +4617,41 @@ Public Class ProgressPanel
                 End If
                 ' This is a crucial change, so save things immediately
                 MainForm.SaveDTProj()
+            ElseIf OperationNum = 1000 Then
+                If TaskList.Count > 0 Then
+                    If TaskList.Last = 21 Then
+                        If MainForm.isProjectLoaded And MountDir = MainForm.MountDir Or RandomMountDir = MainForm.MountDir Then
+                            MainForm.UpdateProjProperties(False, False)
+                            MainForm.MountDir = "N/A"
+                            ' This is a crucial change, so save things immediately
+                            MainForm.SaveDTProj()
+                            ImgMount.TextBox1.Text = ""     ' The program has a bug where mounting the same image after doing this results in the image file being ""
+                            If MainForm.imgCommitOperation <> -1 Then
+                                MainForm.imgCommitOperation = -1    ' Let program close on later occassions
+                            End If
+                        End If
+                        MainForm.DetectMountedImages(False)
+                    ElseIf TaskList.Last = 15 Then
+                        If ActionRunning And MountDir.Contains(projPath) Then
+                            MainForm.LoadDTProj(projPath & "\" & projName & "\" & projName & ".dtproj", projName, True, True)
+                        End If
+                        MainForm.bwBackgroundProcessAction = 0
+                        MainForm.SourceImg = SourceImg
+                        MainForm.ImgIndex = ImgIndex
+                        MainForm.MountDir = MountDir
+                        MainForm.DetectMountedImages(False)
+                        If isReadOnly Then
+                            MainForm.UpdateProjProperties(True, True, ActionRunning)
+                        Else
+                            MainForm.UpdateProjProperties(True, False, ActionRunning)
+                        End If
+                        ' This is a crucial change, so save things immediately
+                        MainForm.SaveDTProj()
+                        If ActionRunning And MountDir.Contains(projPath) Then
+                            MainForm.UnloadDTProj(False, True, False)
+                        End If
+                    End If
+                End If
             End If
             Select Case MainForm.Language
                 Case 0
@@ -3972,10 +4666,11 @@ Public Class ProgressPanel
                 Case 2
                     MainForm.MenuDesc.Text = "Listo"
             End Select
+            ActionRunning = False
+            TaskList.Clear()
             MainForm.StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
             MainForm.ToolStripButton4.Visible = False
             Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
-            Dispose()
             Close()
         Else
             MainForm.ToolStripButton4.Visible = False
@@ -4071,6 +4766,8 @@ Public Class ProgressPanel
             ElseIf errCode = "800F0806" Then
                 ' There are pending image operations
                 LogView.AppendText(CrLf & "The operation could not be performed because this image has pending online operations. Applying and booting up the image might fix this issue.")
+            ElseIf errCode = "BC2" Then
+                LogView.AppendText(CrLf & "The specified operation completed successfully, but requires a restart in order to be fully applied. Save your work and restart when ready")
             Else
                 ' Errors that weren't added to the database
                 LogView.AppendText(CrLf & "This error has not yet been added to the database, so a useful description can't be shown now. Try running the command manually and, if you see the same error, try looking it up on the Internet.")
@@ -4089,6 +4786,7 @@ Public Class ProgressPanel
                     MainForm.MenuDesc.Text = "Listo"
             End Select
             MainForm.StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
+            SaveLog(Application.StartupPath & "\logs\DISMTools.log")
         End If
     End Sub
 
@@ -4118,6 +4816,8 @@ Public Class ProgressPanel
                         LogButton.Text = If(Height = 240, "Show log", "Hide log")
                         LinkLabel1.Text = "Show DISM log file (advanced)"
                         GroupBox1.Text = "Log"
+                        allTasks.Text = "Please wait..."
+                        currentTask.Text = "Please wait..."
                     Case "ESN"
                         Text = "Progreso"
                         Label1.Text = "Operaciones en progreso..."
@@ -4126,6 +4826,8 @@ Public Class ProgressPanel
                         LogButton.Text = If(Height = 240, "Mostrar registro", "Ocultar registro")
                         LinkLabel1.Text = "Mostrar archivo de registro de DISM (avanzado)"
                         GroupBox1.Text = "Registro"
+                        allTasks.Text = "Por favor, espere..."
+                        currentTask.Text = "Por favor, espere..."
                 End Select
             Case 1
                 Text = "Progress"
@@ -4135,6 +4837,8 @@ Public Class ProgressPanel
                 LogButton.Text = If(Height = 240, "Show log", "Hide log")
                 LinkLabel1.Text = "Show DISM log file (advanced)"
                 GroupBox1.Text = "Log"
+                allTasks.Text = "Please wait..."
+                currentTask.Text = "Please wait..."
             Case 2
                 Text = "Progreso"
                 Label1.Text = "Operaciones en progreso..."
@@ -4143,13 +4847,15 @@ Public Class ProgressPanel
                 LogButton.Text = If(Height = 240, "Mostrar registro", "Ocultar registro")
                 LinkLabel1.Text = "Mostrar archivo de registro de DISM (avanzado)"
                 GroupBox1.Text = "Registro"
+                allTasks.Text = "Por favor, espere..."
+                currentTask.Text = "Por favor, espere..."
         End Select
+        taskCountLbl.Visible = False
+        MainForm.bwBackgroundProcessAction = 0
+        MainForm.bwGetImageInfo = True
+        MainForm.bwGetAdvImgInfo = True
         Language = MainForm.Language
-        ' Cancel detector background worker which can interfere with image operations
-        MainForm.MountedImageDetectorBW.CancelAsync()
-        DismProgram = MainForm.DismExe
-        If MountDir = "" Then MountDir = MainForm.MountDir
-        DISMProc.StartInfo.CreateNoWindow = False
+        AllDrivers = MainForm.AllDrivers
         BodyPanel.BorderStyle = BorderStyle.None
         ' Determine program colors
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
@@ -4167,6 +4873,41 @@ Public Class ProgressPanel
             LogView.BackColor = Color.FromArgb(246, 246, 246)
             LogView.ForeColor = Color.Black
         End If
+        CurrentPB.Value = 0
+        AllPB.Value = 0
+        If LogView.Text <> "" Then LogView.Clear()
+        ' If running, cancel background processes
+        If MainForm.ImgBW.IsBusy Then
+            ' Make form visible sooner. We may have to set more things up here,
+            ' but we'll see
+            Visible = True
+            LogView.AppendText("Cancelling background processes...")
+            MainForm.ImgBW.CancelAsync()
+            While MainForm.ImgBW.IsBusy
+                Application.DoEvents()
+                Thread.Sleep(100)
+            End While
+        End If
+        ' Cancel detector background worker which can interfere with image operations and cause crashes due to access violations
+        MainForm.MountedImageDetectorBW.CancelAsync()
+        While MainForm.MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        If MainForm.MountedImageMountDirs.Count > 0 Then
+            ' Go through all mounted images to determine which one to get info from with the DISM API,
+            ' if a project has been loaded and if that project has a mounted image
+            If MainForm.isProjectLoaded And MainForm.IsImageMounted Then
+                For x = 0 To Array.LastIndexOf(MainForm.MountedImageMountDirs, MainForm.MountedImageMountDirs.Last)
+                    If MainForm.MountedImageMountDirs(x) = MainForm.MountDir Then
+                        mntString = MainForm.MountedImageMountDirs(x)
+                    End If
+                Next
+            End If
+        End If
+        DismProgram = MainForm.DismExe
+        If MountDir = "" Then MountDir = MainForm.MountDir
+        DISMProc.StartInfo.CreateNoWindow = False
         Try
             If MainForm.LogFontIsBold Then
                 LogView.Font = New Font(MainForm.LogFont, MainForm.LogFontSize, FontStyle.Bold)
@@ -4198,18 +4939,180 @@ Public Class ProgressPanel
         MainForm.ToolStripButton4.Visible = True
         Control.CheckForIllegalCrossThreadCalls = False
         LinkLabel1.Visible = False
-        If Not Directory.Exists(Directory.GetCurrentDirectory() & "\logs") Then Directory.CreateDirectory(Directory.GetCurrentDirectory() & "\logs")
-        GetTasks(OperationNum)
+        If Not Directory.Exists(Application.StartupPath & "\logs") Then Directory.CreateDirectory(Application.StartupPath & "\logs")
+        ' Detect settings
+        OnlineMgmt = MainForm.OnlineManagement
+        AutoLogs = MainForm.AutoLogs
+        LogPath = MainForm.LogFile
+        LogLevel = MainForm.LogLevel
+        QuietOps = MainForm.QuietOperations
+        SkipSysRestart = MainForm.SysNoRestart
+        UseScratchDir = MainForm.UseScratch
+        AutoScratch = MainForm.AutoScrDir
+        ScratchDirPath = MainForm.ScratchDir
+        EnglishOut = MainForm.EnglishOutput
+        If UseScratchDir And AutoScratch And OnlineMgmt And Not Directory.Exists(Application.StartupPath & "\scratch") Then Directory.CreateDirectory(Application.StartupPath & "\scratch")
+        GatherInitialSwitches()
+        If ActionRunning Then
+            OperationNum = 1000
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            taskCountLbl.Text = "Tasks: 1/" & TaskList.Count
+                        Case "ESN"
+                            taskCountLbl.Text = "Tareas: 1/" & TaskList.Count
+                    End Select
+                Case 1
+                    taskCountLbl.Text = "Tasks: 1/" & TaskList.Count
+                Case 2
+                    taskCountLbl.Text = "Tareas: 1/" & TaskList.Count
+            End Select
+            InitializeActionRuntime(IsInValidationMode)
+            ReadActionFile(ActionFile)
+            'Exit Sub
+        Else
+            If TaskList.Count >= 2 Then
+                AllPB.Maximum = TaskList.Count * 100
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                taskCountLbl.Text = "Tasks: 1/" & TaskList.Count
+                            Case "ESN"
+                                taskCountLbl.Text = "Tareas: 1/" & TaskList.Count
+                        End Select
+                    Case 1
+                        taskCountLbl.Text = "Tasks: 1/" & TaskList.Count
+                    Case 2
+                        taskCountLbl.Text = "Tareas: 1/" & TaskList.Count
+                End Select
+                OperationNum = 1000
+            Else
+                GetTasks(OperationNum)
+            End If
+        End If
+        taskCountLbl.Visible = True
         ProgressBW.RunWorkerAsync()
     End Sub
 
+#Region "Actions"
+
+    ' This is temporary stuff. This will become improved
+
+    Sub InitializeActionRuntime(Validate As Boolean)
+        LogView.AppendText("Running the Action file " & If(Validate, "with validation", "") & "...")
+        If Validate Then ValidationForm.Show()
+    End Sub
+
+    Sub ReadActionFile(ActionFile As String)
+        Dim Reader As New RichTextBox With {.Text = File.ReadAllText(ActionFile)}
+        For x = 0 To Reader.Lines.Count - 1
+            If String.IsNullOrWhiteSpace(Reader.Lines(x)) Then
+                Continue For
+            ElseIf Reader.Lines(x).StartsWith("Section Properties()") And IsInValidationMode Then
+                GetTestImageInfo(x, ActionFile)
+            ElseIf Reader.Lines(x).StartsWith("Section Main()") Then
+                GetTasks(x, ActionFile)
+            End If
+        Next
+    End Sub
+
+    Sub GetTasks(StarterLine As Integer, ActionFile As String)
+        Dim Reader As New RichTextBox With {.Text = File.ReadAllText(ActionFile)}
+        For x = StarterLine To Reader.Lines.Count - 1
+            If String.IsNullOrWhiteSpace(Reader.Lines(x)) Or Reader.Lines(x).StartsWith("'") Then
+                Continue For
+            Else
+                If Reader.Lines(x).Replace(" ", "").Trim().StartsWith("Image.Mount", StringComparison.OrdinalIgnoreCase) Then
+                    TaskList.Add(15)
+                    ParseParameters(Reader.Lines(x).Replace("Image.Mount", "").Trim())
+                    ValidationForm.ListView1.Items.Add(New ListViewItem(New String() {"Mount image: " & ActionParameters(0), "Pending"}))
+                    SourceImg = ActionParameters(0).Replace(Quote, "").Trim()
+                    ImgIndex = CInt(ActionParameters(1).Remove(0, 1).Replace(Quote, "").Trim())
+                    MountDir = ActionParameters(2).Remove(0, 1).Replace(Quote, "").Trim()
+                    isReadOnly = False
+                    isOptimized = False
+                    isIntegrityTested = False
+                    Select Case ActionParameters.Count
+                        Case 4
+                            isReadOnly = If(ActionParameters(3).Equals("True", StringComparison.OrdinalIgnoreCase), True, False)
+                        Case 5
+                            isReadOnly = If(ActionParameters(3).Equals("True", StringComparison.OrdinalIgnoreCase), True, False)
+                            isOptimized = If(ActionParameters(4).Equals("True", StringComparison.OrdinalIgnoreCase), True, False)
+                        Case 6
+                            isReadOnly = If(ActionParameters(3).Equals("True", StringComparison.OrdinalIgnoreCase), True, False)
+                            isOptimized = If(ActionParameters(4).Equals("True", StringComparison.OrdinalIgnoreCase), True, False)
+                            isIntegrityTested = If(ActionParameters(5).Equals("True", StringComparison.OrdinalIgnoreCase), True, False)
+                    End Select
+                ElseIf Reader.Lines(x).Replace(" ", "").Trim().StartsWith("Image.Remount", StringComparison.OrdinalIgnoreCase) Then
+                    TaskList.Add(18)
+                    ParseParameters(Reader.Lines(x).Replace("Image.Remount", "").Trim())
+                    ValidationForm.ListView1.Items.Add(New ListViewItem(New String() {"Remount image: " & ActionParameters(0), "Pending"}))
+                    MountDir = ActionParameters(0).Replace(Quote, "").Trim()
+                ElseIf Reader.Lines(x).Replace(" ", "").Trim().StartsWith("Image.Unmount", StringComparison.OrdinalIgnoreCase) Then
+                    TaskList.Add(21)
+                    ParseParameters(Reader.Lines(x).Replace("Image.Unmount", "").Trim())
+                    ValidationForm.ListView1.Items.Add(New ListViewItem(New String() {"Unmount image on mount directory: " & ActionParameters(0), "Pending"}))
+                    UMountLocalDir = False
+                    RandomMountDir = ActionParameters(0).Replace(Quote, "").Trim()
+                    UMountOp = If(ActionParameters(1).Remove(0, 1).Replace(Quote, "").Trim().Equals("True", StringComparison.OrdinalIgnoreCase), 0, 1)
+                    If UMountOp = 0 Then
+                        Select Case ActionParameters.Count
+                            Case 2
+                                CheckImgIntegrity = If(ActionParameters(2).Remove(0, 1).Replace(Quote, "").Trim().Equals("True", StringComparison.OrdinalIgnoreCase), True, False)
+                            Case 3
+                                CheckImgIntegrity = If(ActionParameters(2).Remove(0, 1).Replace(Quote, "").Trim().Equals("True", StringComparison.OrdinalIgnoreCase), True, False)
+                                SaveToNewIndex = If(ActionParameters(3).Remove(0, 1).Replace(Quote, "").Trim().Equals("True", StringComparison.OrdinalIgnoreCase), True, False)
+                        End Select
+                    End If
+                ElseIf Reader.Lines(x).Replace(" ", "").Trim().StartsWith("Project.Create", StringComparison.OrdinalIgnoreCase) Then
+                    TaskList.Add(0)
+                    ParseParameters(Reader.Lines(x).Replace("Project.Create", "").Trim())
+                    ValidationForm.ListView1.Items.Add(New ListViewItem(New String() {"Create project: " & ActionParameters(0), "Pending"}))
+                    projName = ActionParameters(0).Replace(Quote, "").Trim()
+                    projPath = ActionParameters(1).Remove(0, 1).Replace(Quote, "").Trim()
+                ElseIf Reader.Lines(x).Equals("End Section", StringComparison.OrdinalIgnoreCase) Then
+                    Exit For
+                End If
+            End If
+        Next
+    End Sub
+
+    Sub GetTestImageInfo(StarterLine As Integer, ActionFile As String)
+        Dim Reader As New RichTextBox With {.Text = File.ReadAllText(ActionFile)}
+        For x = StarterLine To Reader.Lines.Count - 1
+            If Reader.Lines(x).Replace(" ", "").Trim().StartsWith("Action.TestImage.FileName", StringComparison.OrdinalIgnoreCase) Then
+                Actions_ImageFile = Reader.Lines(x).Substring(Reader.Lines(x).IndexOf("=")).Replace("=", "").Trim().Replace(Quote, "").Trim()
+            ElseIf Reader.Lines(x).Replace(" ", "").Trim().StartsWith("Action.TestImage.ImageIndex", StringComparison.OrdinalIgnoreCase) Then
+                Actions_ImageIndex = CInt(Reader.Lines(x).Substring(Reader.Lines(x).IndexOf("=")).Replace("=", "").Trim().Replace(Quote, "").Trim())
+            ElseIf Reader.Lines(x).Equals("End Section", StringComparison.OrdinalIgnoreCase) Then
+                Exit For
+            End If
+        Next
+    End Sub
+
+    Sub ParseParameters(Line As String)
+        Dim newLine As String = Line.Trim(New Char() {"("c, ")"c})
+        Dim regex As New Regex(",(?=(?:[^""]*""[^""]*"")*[^""]*$)")
+        ActionParameters = regex.Split(newLine).ToList()
+    End Sub
+
+#End Region
+
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
-        If File.Exists(Directory.GetCurrentDirectory() & "\logs\" & dateStr) Then
-            Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\notepad.exe", Directory.GetCurrentDirectory() & "\logs\" & dateStr)
+        If File.Exists(Application.StartupPath & "\logs\" & dateStr) Then
+            Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\notepad.exe", Application.StartupPath & "\logs\" & dateStr)
+        ElseIf File.Exists(LogPath) Then
+            Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\notepad.exe", LogPath)
         End If
     End Sub
 
     Private Sub BodyPanel_Paint(sender As Object, e As PaintEventArgs) Handles BodyPanel.Paint
         ControlPaint.DrawBorder(e.Graphics, BodyPanel.ClientRectangle, Color.FromArgb(0, 122, 204), ButtonBorderStyle.Solid)
+    End Sub
+
+    Private Sub ProgressPanel_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        If ValidationForm.Visible Then ValidationForm.Close()
     End Sub
 End Class

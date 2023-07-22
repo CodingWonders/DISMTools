@@ -51,7 +51,7 @@ Partial Class MountedImgMgr
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label1.Location = New System.Drawing.Point(13, 13)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(983, 29)
+        Me.Label1.Size = New System.Drawing.Size(1239, 29)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = resources.GetString("Label1.Text")
         '
@@ -69,7 +69,7 @@ Partial Class MountedImgMgr
         Me.TableLayoutPanel1.RowCount = 2
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(980, 430)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(1236, 550)
         Me.TableLayoutPanel1.TabIndex = 2
         '
         'ListView1
@@ -78,8 +78,9 @@ Partial Class MountedImgMgr
         Me.ListView1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ListView1.FullRowSelect = True
         Me.ListView1.Location = New System.Drawing.Point(3, 3)
+        Me.ListView1.MultiSelect = False
         Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(974, 389)
+        Me.ListView1.Size = New System.Drawing.Size(1230, 509)
         Me.ListView1.TabIndex = 0
         Me.ListView1.UseCompatibleStateImageBehavior = False
         Me.ListView1.View = System.Windows.Forms.View.Details
@@ -87,17 +88,17 @@ Partial Class MountedImgMgr
         'ColumnHeader1
         '
         Me.ColumnHeader1.Text = "Image file"
-        Me.ColumnHeader1.Width = 299
+        Me.ColumnHeader1.Width = 434
         '
         'ColumnHeader2
         '
         Me.ColumnHeader2.Text = "Index"
-        Me.ColumnHeader2.Width = 40
+        Me.ColumnHeader2.Width = 72
         '
         'ColumnHeader3
         '
         Me.ColumnHeader3.Text = "Mount directory"
-        Me.ColumnHeader3.Width = 299
+        Me.ColumnHeader3.Width = 374
         '
         'ColumnHeader4
         '
@@ -106,7 +107,7 @@ Partial Class MountedImgMgr
         'ColumnHeader5
         '
         Me.ColumnHeader5.Text = "Read/write permissions?"
-        Me.ColumnHeader5.Width = 133
+        Me.ColumnHeader5.Width = 147
         '
         'ColumnHeader6
         '
@@ -129,11 +130,11 @@ Partial Class MountedImgMgr
         Me.ActionsTLP.Controls.Add(Me.Button5, 4, 0)
         Me.ActionsTLP.Controls.Add(Me.Button1, 0, 0)
         Me.ActionsTLP.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ActionsTLP.Location = New System.Drawing.Point(3, 398)
+        Me.ActionsTLP.Location = New System.Drawing.Point(3, 518)
         Me.ActionsTLP.Name = "ActionsTLP"
         Me.ActionsTLP.RowCount = 1
         Me.ActionsTLP.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ActionsTLP.Size = New System.Drawing.Size(974, 29)
+        Me.ActionsTLP.Size = New System.Drawing.Size(1230, 29)
         Me.ActionsTLP.TabIndex = 1
         '
         'Button6
@@ -142,9 +143,9 @@ Partial Class MountedImgMgr
         Me.Button6.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Button6.Enabled = False
         Me.Button6.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button6.Location = New System.Drawing.Point(813, 3)
+        Me.Button6.Location = New System.Drawing.Point(1023, 3)
         Me.Button6.Name = "Button6"
-        Me.Button6.Size = New System.Drawing.Size(158, 23)
+        Me.Button6.Size = New System.Drawing.Size(204, 23)
         Me.Button6.TabIndex = 6
         Me.Button6.Text = "Load into project"
         Me.Button6.UseVisualStyleBackColor = True
@@ -154,9 +155,9 @@ Partial Class MountedImgMgr
         Me.Button4.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Button4.Enabled = False
         Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button4.Location = New System.Drawing.Point(489, 3)
+        Me.Button4.Location = New System.Drawing.Point(615, 3)
         Me.Button4.Name = "Button4"
-        Me.Button4.Size = New System.Drawing.Size(156, 23)
+        Me.Button4.Size = New System.Drawing.Size(198, 23)
         Me.Button4.TabIndex = 5
         Me.Button4.Text = "Open mount directory"
         Me.Button4.UseVisualStyleBackColor = True
@@ -167,9 +168,9 @@ Partial Class MountedImgMgr
         Me.Button3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Button3.Enabled = False
         Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button3.Location = New System.Drawing.Point(327, 3)
+        Me.Button3.Location = New System.Drawing.Point(411, 3)
         Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(156, 23)
+        Me.Button3.Size = New System.Drawing.Size(198, 23)
         Me.Button3.TabIndex = 3
         Me.Button3.Text = "Enable write permissions"
         Me.Button3.UseVisualStyleBackColor = True
@@ -180,9 +181,9 @@ Partial Class MountedImgMgr
         Me.Button2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Button2.Enabled = False
         Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button2.Location = New System.Drawing.Point(165, 3)
+        Me.Button2.Location = New System.Drawing.Point(207, 3)
         Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(156, 23)
+        Me.Button2.Size = New System.Drawing.Size(198, 23)
         Me.Button2.TabIndex = 2
         Me.Button2.Text = "Reload servicing"
         Me.Button2.UseVisualStyleBackColor = True
@@ -193,9 +194,9 @@ Partial Class MountedImgMgr
         Me.Button5.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Button5.Enabled = False
         Me.Button5.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button5.Location = New System.Drawing.Point(651, 3)
+        Me.Button5.Location = New System.Drawing.Point(819, 3)
         Me.Button5.Name = "Button5"
-        Me.Button5.Size = New System.Drawing.Size(156, 23)
+        Me.Button5.Size = New System.Drawing.Size(198, 23)
         Me.Button5.TabIndex = 1
         Me.Button5.Text = "Remove volume images..."
         Me.Button5.UseVisualStyleBackColor = True
@@ -208,7 +209,7 @@ Partial Class MountedImgMgr
         Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button1.Location = New System.Drawing.Point(3, 3)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(156, 23)
+        Me.Button1.Size = New System.Drawing.Size(198, 23)
         Me.Button1.TabIndex = 0
         Me.Button1.Text = "Unmount image"
         Me.Button1.UseVisualStyleBackColor = True
@@ -220,9 +221,9 @@ Partial Class MountedImgMgr
         Me.LinkLabel1.LinkArea = New System.Windows.Forms.LinkArea(77, 34)
         Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel1.Location = New System.Drawing.Point(16, 489)
+        Me.LinkLabel1.Location = New System.Drawing.Point(16, 609)
         Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(980, 63)
+        Me.LinkLabel1.Size = New System.Drawing.Size(1236, 63)
         Me.LinkLabel1.TabIndex = 3
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "This view is being updated in real time, which may cause a higher CPU usage. Chan" & _
@@ -238,12 +239,13 @@ Partial Class MountedImgMgr
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1008, 561)
+        Me.ClientSize = New System.Drawing.Size(1264, 681)
         Me.Controls.Add(Me.LinkLabel1)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Controls.Add(Me.Label1)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.MaximumSize = New System.Drawing.Size(4096, 4096)
         Me.MinimumSize = New System.Drawing.Size(800, 600)
         Me.Name = "MountedImgMgr"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen

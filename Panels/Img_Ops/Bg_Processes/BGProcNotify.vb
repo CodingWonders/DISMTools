@@ -55,7 +55,6 @@ Public Class BGProcNotify
         Next opacityFade
         Timer1.Enabled = False
         Timer1.Stop()
-        Dispose()
         Close()
     End Sub
 

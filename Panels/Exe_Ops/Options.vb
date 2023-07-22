@@ -2,6 +2,7 @@
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.Globalization
+Imports Microsoft.Win32
 
 Public Class Options
 
@@ -42,6 +43,10 @@ Public Class Options
             End If
         End If
         If CheckBox4.Checked Then
+            If RadioButton3.Checked Then
+                CanExit = True
+                Exit Sub
+            End If
             If TextBox3.Text = "" Then
                 CanExit = False
                 GiveErrorExplanation(5)
@@ -90,6 +95,11 @@ Public Class Options
         Else
             MainForm.LogFontIsBold = False
         End If
+        If RadioButton5.Checked Then
+            MainForm.ProgressPanelStyle = 1
+        Else
+            MainForm.ProgressPanelStyle = 0
+        End If
         MainForm.LogFile = TextBox2.Text
         MainForm.LogLevel = TrackBar1.Value + 1
         If RadioButton1.Checked Then
@@ -112,6 +122,11 @@ Public Class Options
         Else
             MainForm.UseScratch = False
         End If
+        If RadioButton3.Checked Then
+            MainForm.AutoScrDir = True
+        Else
+            MainForm.AutoScrDir = False
+        End If
         MainForm.ScratchDir = TextBox3.Text
         If CheckBox5.Checked Then
             MainForm.EnglishOutput = True
@@ -119,6 +134,7 @@ Public Class Options
             MainForm.EnglishOutput = False
         End If
         Dim ti As TextInfo = New CultureInfo("en-US", False).TextInfo
+        MainForm.AllCaps = CheckBox9.Checked
         If CheckBox9.Checked Then
             MainForm.FileToolStripMenuItem.Text = MainForm.FileToolStripMenuItem.Text.ToUpper()
             MainForm.ProjectToolStripMenuItem.Text = MainForm.ProjectToolStripMenuItem.Text.ToUpper()
@@ -153,6 +169,9 @@ Public Class Options
             MainForm.NotificationShow = False
         End If
         MainForm.NotificationFrequency = ComboBox6.SelectedIndex
+        MainForm.StartupRemount = CheckBox12.Checked
+        MainForm.StartupUpdateCheck = CheckBox13.Checked
+        MainForm.AutoLogs = CheckBox10.Checked
         If MainForm.VolatileMode Then
             MainForm.SaveDTSettings()
         End If
@@ -169,6 +188,75 @@ Public Class Options
             Case 4
                 MsgBox("The program tried to create the specified log file, but has failed. Please try again", MsgBoxStyle.Critical, "DISMTools")
         End Select
+    End Sub
+
+    Function DetectFileAssociations() As Boolean
+        Try
+            Dim AssocRk As RegistryKey = Registry.ClassesRoot.OpenSubKey("DISMTools.Project\Shell\Open\Command", False)
+            Dim AssocCmd As String = AssocRk.GetValue(Nothing).ToString()
+            AssocRk.Close()
+            If File.Exists(AssocCmd.Replace(" " & Quote & "/load=" & Quote & "%1" & Quote & Quote, "").Trim().Replace(Quote, "").Trim()) Then
+                Return True
+            Else
+                Return False
+            End If
+        Catch ex As Exception
+            Return False
+        End Try
+        Return False
+    End Function
+
+    ''' <summary>
+    ''' Manages the file associations for files with the ".dtproj" extension
+    ''' </summary>
+    ''' <param name="AssocOp"></param>
+    ''' <param name="UseCustomIcons"></param>
+    ''' <remarks></remarks>
+    Sub ManageAssociations(AssocOp As Integer, UseCustomIcons As Boolean)
+        Select Case AssocOp
+            Case 0
+                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe", "/c assoc .dtproj=DISMTools.Project").WaitForExit()
+                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe", "/c ftype DISMTools.Project=" & Quote & Environment.CurrentDirectory & "\DISMTools.exe" & Quote & " " & Quote & "/load=" & Quote & "%1" & Quote & Quote).WaitForExit()
+                Dim AssocRk As RegistryKey = Registry.ClassesRoot.OpenSubKey("DISMTools.Project", True)
+                AssocRk.SetValue(Nothing, "DISMTools project", RegistryValueKind.String)
+                If UseCustomIcons Then
+                    If File.Exists(Environment.CurrentDirectory & "\resources\dtproj.ico") Then
+                        AssocRk.CreateSubKey("DefaultIcon")
+                        Dim DefIcon As RegistryKey = Registry.ClassesRoot.OpenSubKey("DISMTools.Project\DefaultIcon", True)
+                        DefIcon.SetValue(Nothing, Environment.CurrentDirectory & "\resources\dtproj.ico", RegistryValueKind.String)
+                        DefIcon.Close()
+                    End If
+                End If
+                AssocRk.Close()
+            Case 1
+                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe", "/c assoc .dtproj=").WaitForExit()
+                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe", "/c ftype DISMTools.Project=").WaitForExit()
+                ' Delete registry key remnants
+                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe", "delete HKCR\DISMTools.Project /f").WaitForExit()
+        End Select
+        ' Clear icon cache
+        Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ie4uinit.exe", "-ClearIconCache").WaitForExit()
+        ' Restart explorer.exe
+        Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\taskkill.exe", "/f /im explorer.exe").WaitForExit()
+        Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe")
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Label42.Text = If(DetectFileAssociations(), "associations set", "associations not set")
+                        Button9.Text = If(DetectFileAssociations(), "Remove file associations", "Set file associations")
+                    Case "ESN"
+                        Label42.Text = If(DetectFileAssociations(), "asociaciones establecidas", "asociaciones no establecidas")
+                        Button9.Text = If(DetectFileAssociations(), "Eliminar asociaciones", "Establecer asociaciones")
+                End Select
+            Case 1
+                Label42.Text = If(DetectFileAssociations(), "associations set", "associations not set")
+                Button9.Text = If(DetectFileAssociations(), "Remove file associations", "Set file associations")
+            Case 2
+                Label42.Text = If(DetectFileAssociations(), "asociaciones establecidas", "asociaciones no establecidas")
+                Button9.Text = If(DetectFileAssociations(), "Eliminar asociaciones", "Establecer asociaciones")
+        End Select
+        CheckBox11.Enabled = If(DetectFileAssociations(), False, True)
     End Sub
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
@@ -210,6 +298,8 @@ Public Class Options
                         TabPage7.Text = "Background processes"
                         TabPage8.Text = "Modules"
                         TabPage9.Text = "Image detection"
+                        TabPage10.Text = "File associations"
+                        TabPage11.Text = "Startup"
                         Label2.Text = "DISM executable path:"
                         Label3.Text = "Version:"
                         Label5.Text = "Save settings on:"
@@ -241,6 +331,13 @@ Public Class Options
                         Label35.Text = "Modify these settings only if you experience constant program or system slowdowns due to high CPU usage"
                         Label36.Text = "Review the status of this background process:"
                         Label37.Text = "Status:"
+                        Label40.Text = "File associations let you access project files directly, without having to load the program first"
+                        Label41.Text = "Association status:"
+                        Label42.Text = If(DetectFileAssociations(), "associations set", "associations not set")
+                        Label43.Text = "Set options you would like to perform when the program starts up:"
+                        Label44.Text = "The program will use the scratch directory provided by the project if one is loaded. If you are in online installation management mode, the program will use its scratch directory"
+                        Label45.Text = "Secondary progress panel style:"
+                        Label46.Text = "These settings aren't applicable to non-portable installations"
                         Button1.Text = "Browse..."
                         Button2.Text = "View DISM component versions"
                         Button3.Text = "Browse..."
@@ -248,6 +345,8 @@ Public Class Options
                         Button5.Text = "Install"
                         Button6.Text = "Check for updates"
                         Button7.Text = "Remove"
+                        Button9.Text = If(DetectFileAssociations(), "Remove file associations", "Set file associations")
+                        Button10.Text = "Advanced settings"
                         If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = "Stop" Else Button8.Text = "Start"
                         Cancel_Button.Text = "Cancel"
                         OK_Button.Text = "OK"
@@ -262,17 +361,25 @@ Public Class Options
                         CheckBox8.Text = "Detect mounted images at all times"
                         CheckBox9.Text = "Use uppercase menus"
                         CheckBox10.Text = "Automatically create logs for each operation performed"
+                        CheckBox11.Text = "Set custom file icons for DISMTools projects"
+                        CheckBox12.Text = "Remount mounted images in need of a servicing session reload"
+                        CheckBox13.Text = "Check for updates"
                         DismOFD.Title = "Specify the DISM executable to use"
                         GroupBox1.Text = "Log customization"
                         GroupBox2.Text = "Notification frequency"
                         GroupBox3.Text = "Module details"
                         GroupBox4.Text = "Background process"
+                        GroupBox5.Text = "Associations"
                         LinkLabel1.Text = "The program will enable or disable certain features according to what the DISM version supports. How is it going to affect my usage of this program, and which features will be disabled accordingly?"
                         LinkLabel1.LinkArea = New LinkArea(97, 100)
                         LinkLabel2.Text = "Learn more about background processes"
                         LogSFD.Title = "Specify the location of the log file"
                         RadioButton1.Text = "Mounted Windows image"
                         RadioButton2.Text = "Active installation"
+                        RadioButton3.Text = "Use the project or program scratch directory"
+                        RadioButton4.Text = "Use the specified scratch directory"
+                        RadioButton5.Text = "Modern"
+                        RadioButton6.Text = "Classic"
                         ScratchFBD.Description = "Specify the scratch directory the program should use:"
                     Case "ESN"
                         Text = "Opciones"
@@ -286,6 +393,8 @@ Public Class Options
                         TabPage7.Text = "Procesos en segundo plano"
                         TabPage8.Text = "Módulos"
                         TabPage9.Text = "Detección de imágenes"
+                        TabPage10.Text = "Asociaciones de archivos"
+                        TabPage11.Text = "Inicio"
                         Label2.Text = "Ruta del ejecutable:"
                         Label3.Text = "Versión:"
                         Label5.Text = "Guardar configuraciones en:"
@@ -317,6 +426,13 @@ Public Class Options
                         Label35.Text = "Modifique estas configuraciones solo si experimenta ralentizaciones constantes del programa o del sistema debido a un uso elevado de CPU"
                         Label36.Text = "Consulte el estado de este proceso en segundo plano:"
                         Label37.Text = "Estado:"
+                        Label40.Text = "Las asociaciones le permiten acceder a archivos de proyectos directamente, sin tener que cargar el programa en primer lugar"
+                        Label41.Text = "Estado de asociaciones:"
+                        Label42.Text = If(DetectFileAssociations(), "asociaciones establecidas", "asociaciones no establecidas")
+                        Label43.Text = "Establezca las opciones que le gustaría realizar cuando el programa inicie:"
+                        Label44.Text = "El programa usará el directorio temporal proporcionado por el proyecto si se cargó alguno. Si está en modo de administración de instalaciones en línea, el programa utilizará su directorio temporal"
+                        Label45.Text = "Estilo del panel de progreso secundario:"
+                        Label46.Text = "Estas configuraciones no son aplicables a instalaciones no portátiles"
                         Button1.Text = "Examinar..."
                         Button2.Text = "Ver versiones de componentes"
                         Button3.Text = "Examinar..."
@@ -324,6 +440,8 @@ Public Class Options
                         Button5.Text = "Instalar"
                         Button6.Text = "Comprobar actualizaciones"
                         Button7.Text = "Eliminar"
+                        Button9.Text = If(DetectFileAssociations(), "Eliminar asociaciones", "Establecer asociaciones")
+                        Button10.Text = "Opciones avanzadas"
                         If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = "Detener" Else Button8.Text = "Iniciar"
                         Cancel_Button.Text = "Cancelar"
                         OK_Button.Text = "Aceptar"
@@ -338,17 +456,25 @@ Public Class Options
                         CheckBox8.Text = "Detectar imágenes montadas todo el tiempo"
                         CheckBox9.Text = "Usar menús en mayúscula"
                         CheckBox10.Text = "Crear registros para cada operación realizada automáticamente"
+                        CheckBox11.Text = "Establecer iconos personalizados para proyectos de DISMTools"
+                        CheckBox12.Text = "Remontar imágenes montadas que necesitan una recarga de su sesión de servicio"
+                        CheckBox13.Text = "Comprobar actualizaciones"
                         DismOFD.Title = "Especifique el ejecutable de DISM a usar"
                         GroupBox1.Text = "Personalización del registro"
                         GroupBox2.Text = "Frecuencia de notificaciones"
                         GroupBox3.Text = "Detalles de módulo"
                         GroupBox4.Text = "Proceso en segundo plano"
+                        GroupBox5.Text = "Asociaciones"
                         LinkLabel1.Text = "El programa habilitará o deshabilitará algunas características atendiendo a lo que soporte la versión de DISM. ¿Cómo va a afectar esto mi uso del programa, y qué características serán deshabilitadas?"
                         LinkLabel1.LinkArea = New LinkArea(111, 88)
                         LinkLabel2.Text = "Conocer más sobre los procesos en segundo plano"
                         LogSFD.Title = "Especifique la ubicación del archivo de registro"
                         RadioButton1.Text = "Imagen de Windows montada"
                         RadioButton2.Text = "Instalación actual"
+                        RadioButton3.Text = "Utilizar el directorio temporal del proyecto o del programa"
+                        RadioButton4.Text = "Utilizar el directorio temporal especificado"
+                        RadioButton5.Text = "Moderno"
+                        RadioButton6.Text = "Clásico"
                         ScratchFBD.Description = "Especifique el directorio temporal que debería usar el programa:"
                 End Select
             Case 1
@@ -363,6 +489,8 @@ Public Class Options
                 TabPage7.Text = "Background processes"
                 TabPage8.Text = "Modules"
                 TabPage9.Text = "Image detection"
+                TabPage10.Text = "File associations"
+                TabPage11.Text = "Startup"
                 Label2.Text = "DISM executable path:"
                 Label3.Text = "Version:"
                 Label5.Text = "Save settings on:"
@@ -394,6 +522,13 @@ Public Class Options
                 Label35.Text = "Modify these settings only if you experience constant program or system slowdowns due to high CPU usage"
                 Label36.Text = "Review the status of this background process:"
                 Label37.Text = "Status:"
+                Label40.Text = "File associations let you access project files directly, without having to load the program first"
+                Label41.Text = "Association status:"
+                Label42.Text = If(DetectFileAssociations(), "associations set", "associations not set")
+                Label43.Text = "Set options you would like to perform when the program starts up:"
+                Label44.Text = "The program will use the scratch directory provided by the project if one is loaded. If you are in online installation management mode, the program will use its scratch directory"
+                Label45.Text = "Secondary progress panel style:"
+                Label46.Text = "These settings aren't applicable to non-portable installations"
                 Button1.Text = "Browse..."
                 Button2.Text = "View DISM component versions"
                 Button3.Text = "Browse..."
@@ -401,6 +536,8 @@ Public Class Options
                 Button5.Text = "Install"
                 Button6.Text = "Check for updates"
                 Button7.Text = "Remove"
+                Button9.Text = If(DetectFileAssociations(), "Remove file associations", "Set file associations")
+                Button10.Text = "Advanced settings"
                 If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = "Stop" Else Button8.Text = "Start"
                 Cancel_Button.Text = "Cancel"
                 OK_Button.Text = "OK"
@@ -415,17 +552,25 @@ Public Class Options
                 CheckBox8.Text = "Detect mounted images at all times"
                 CheckBox9.Text = "Use uppercase menus"
                 CheckBox10.Text = "Automatically create logs for each operation performed"
+                CheckBox11.Text = "Set custom file icons for DISMTools projects"
+                CheckBox12.Text = "Remount mounted images in need of a servicing session reload"
+                CheckBox13.Text = "Check for updates"
                 DismOFD.Title = "Specify the DISM executable to use"
                 GroupBox1.Text = "Log customization"
                 GroupBox2.Text = "Notification frequency"
                 GroupBox3.Text = "Module details"
                 GroupBox4.Text = "Background process"
+                GroupBox5.Text = "Associations"
                 LinkLabel1.Text = "The program will enable or disable certain features according to what the DISM version supports. How is it going to affect my usage of this program, and which features will be disabled accordingly?"
                 LinkLabel1.LinkArea = New LinkArea(97, 100)
                 LinkLabel2.Text = "Learn more about background processes"
                 LogSFD.Title = "Specify the location of the log file"
                 RadioButton1.Text = "Mounted Windows image"
                 RadioButton2.Text = "Active installation"
+                RadioButton3.Text = "Use the project or program scratch directory"
+                RadioButton4.Text = "Use the specified scratch directory"
+                RadioButton5.Text = "Modern"
+                RadioButton6.Text = "Classic"
                 ScratchFBD.Description = "Specify the scratch directory the program should use:"
             Case 2
                 Text = "Opciones"
@@ -439,6 +584,8 @@ Public Class Options
                 TabPage7.Text = "Procesos en segundo plano"
                 TabPage8.Text = "Módulos"
                 TabPage9.Text = "Detección de imágenes"
+                TabPage10.Text = "Asociaciones de archivos"
+                TabPage11.Text = "Inicio"
                 Label2.Text = "Ruta del ejecutable:"
                 Label3.Text = "Versión:"
                 Label5.Text = "Guardar configuraciones en:"
@@ -470,6 +617,13 @@ Public Class Options
                 Label35.Text = "Modifique estas configuraciones solo si experimenta ralentizaciones constantes del programa o del sistema debido a un uso elevado de CPU"
                 Label36.Text = "Consulte el estado de este proceso en segundo plano:"
                 Label37.Text = "Estado:"
+                Label40.Text = "Las asociaciones le permiten acceder a archivos de proyectos directamente, sin tener que cargar el programa en primer lugar"
+                Label41.Text = "Estado de asociaciones:"
+                Label42.Text = If(DetectFileAssociations(), "asociaciones establecidas", "asociaciones no establecidas")
+                Label43.Text = "Establezca las opciones que le gustaría realizar cuando el programa inicie:"
+                Label44.Text = "El programa usará el directorio temporal proporcionado por el proyecto si se cargó alguno. Si está en modo de administración de instalaciones en línea, el programa utilizará su directorio temporal"
+                Label45.Text = "Estilo del panel de progreso secundario:"
+                Label46.Text = "Estas configuraciones no son aplicables a instalaciones no portátiles"
                 Button1.Text = "Examinar..."
                 Button2.Text = "Ver versiones de componentes"
                 Button3.Text = "Examinar..."
@@ -477,6 +631,8 @@ Public Class Options
                 Button5.Text = "Instalar"
                 Button6.Text = "Comprobar actualizaciones"
                 Button7.Text = "Eliminar"
+                Button9.Text = If(DetectFileAssociations(), "Eliminar asociaciones", "Establecer asociaciones")
+                Button10.Text = "Opciones avanzadas"
                 If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = "Detener" Else Button8.Text = "Iniciar"
                 Cancel_Button.Text = "Cancelar"
                 OK_Button.Text = "Aceptar"
@@ -491,17 +647,25 @@ Public Class Options
                 CheckBox8.Text = "Detectar imágenes montadas todo el tiempo"
                 CheckBox9.Text = "Usar menús en mayúscula"
                 CheckBox10.Text = "Crear registros para cada operación realizada automáticamente"
+                CheckBox11.Text = "Establecer iconos personalizados para proyectos de DISMTools"
+                CheckBox12.Text = "Remontar imágenes montadas que necesitan una recarga de su sesión de servicio"
+                CheckBox13.Text = "Comprobar actualizaciones"
                 DismOFD.Title = "Especifique el ejecutable de DISM a usar"
                 GroupBox1.Text = "Personalización del registro"
                 GroupBox2.Text = "Frecuencia de notificaciones"
                 GroupBox3.Text = "Detalles de módulo"
                 GroupBox4.Text = "Proceso en segundo plano"
+                GroupBox5.Text = "Asociaciones"
                 LinkLabel1.Text = "El programa habilitará o deshabilitará algunas características atendiendo a lo que soporte la versión de DISM. ¿Cómo va a afectar esto mi uso del programa, y qué características serán deshabilitadas?"
                 LinkLabel1.LinkArea = New LinkArea(111, 88)
                 LinkLabel2.Text = "Conocer más sobre los procesos en segundo plano"
                 LogSFD.Title = "Especifique la ubicación del archivo de registro"
                 RadioButton1.Text = "Imagen de Windows montada"
                 RadioButton2.Text = "Instalación actual"
+                RadioButton3.Text = "Utilizar el directorio temporal del proyecto o del programa"
+                RadioButton4.Text = "Utilizar el directorio temporal especificado"
+                RadioButton5.Text = "Moderno"
+                RadioButton6.Text = "Clásico"
                 ScratchFBD.Description = "Especifique el directorio temporal que debería usar el programa:"
         End Select
         Select Case MainForm.Language
@@ -566,16 +730,17 @@ Public Class Options
         ComboBox3.Items.AddRange(Languages)
         ComboBox5.Items.AddRange(LogViews)
         ComboBox6.Items.AddRange(NotFreqs)
-        If My.Computer.Info.OSFullName.Contains("Windows 10") Or My.Computer.Info.OSFullName.Contains("Windows 11") Then
+        If File.Exists(Application.StartupPath & "\portable") Then ComboBox1.Items.RemoveAt(1)
+        If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True
         End If
         GetSystemFonts()
         ' Set default values before loading custom ones
-        TextBox1.Text = Path.GetPathRoot(Directory.GetCurrentDirectory()) & "Windows\system32\dism.exe"
+        TextBox1.Text = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
         DismVersion = FileVersionInfo.GetVersionInfo(TextBox1.Text)
         Label4.Text = DismVersion.ProductVersion
-        TextBox2.Text = Path.GetPathRoot(Directory.GetCurrentDirectory()) & "Windows\Logs\DISM\DISM.log"
+        TextBox2.Text = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\Windows\Logs\DISM\DISM.log"
         GatherCustomSettings()
 
         ' Set program colors
@@ -592,6 +757,8 @@ Public Class Options
             TabPage7.BackColor = Color.FromArgb(31, 31, 31)
             TabPage8.BackColor = Color.FromArgb(31, 31, 31)
             TabPage9.BackColor = Color.FromArgb(31, 31, 31)
+            TabPage10.BackColor = Color.FromArgb(31, 31, 31)
+            TabPage11.BackColor = Color.FromArgb(31, 31, 31)
             TextBox1.BackColor = Color.FromArgb(31, 31, 31)
             TextBox1.ForeColor = Color.White
             TextBox2.BackColor = Color.FromArgb(31, 31, 31)
@@ -622,6 +789,7 @@ Public Class Options
             GroupBox2.ForeColor = Color.White
             GroupBox3.ForeColor = Color.White
             GroupBox4.ForeColor = Color.White
+            GroupBox5.ForeColor = Color.White
             TrackBar1.BackColor = Color.FromArgb(31, 31, 31)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Win10Title.BackColor = Color.White
@@ -636,6 +804,8 @@ Public Class Options
             TabPage7.BackColor = Color.FromArgb(238, 238, 242)
             TabPage8.BackColor = Color.FromArgb(238, 238, 242)
             TabPage9.BackColor = Color.FromArgb(238, 238, 242)
+            TabPage10.BackColor = Color.FromArgb(238, 238, 242)
+            TabPage11.BackColor = Color.FromArgb(238, 238, 242)
             TextBox1.BackColor = Color.FromArgb(238, 238, 242)
             TextBox1.ForeColor = Color.Black
             TextBox2.BackColor = Color.FromArgb(238, 238, 242)
@@ -666,6 +836,7 @@ Public Class Options
             GroupBox2.ForeColor = Color.Black
             GroupBox3.ForeColor = Color.Black
             GroupBox4.ForeColor = Color.Black
+            GroupBox5.ForeColor = Color.Black
             TrackBar1.BackColor = Color.FromArgb(238, 238, 242)
         End If
         Select Case MainForm.Language
@@ -685,6 +856,16 @@ Public Class Options
                 Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "iniciado", "detenido")
                 Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Detener", "Iniciar")
         End Select
+        CheckBox11.Enabled = If(DetectFileAssociations(), False, True)
+        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If Not File.Exists(Application.StartupPath & "\portable") Then
+            Panel2.Enabled = False
+            Panel3.Visible = True
+        Else
+            Panel2.Enabled = True
+            Panel3.Visible = False
+        End If
     End Sub
 
     Sub GetSystemFonts()
@@ -692,6 +873,7 @@ Public Class Options
         For Each fntFamily As FontFamily In FontFamily.Families
             ComboBox4.Items.Add(fntFamily.Name)
         Next
+        If ComboBox4.SelectedItem = Nothing Then ComboBox4.SelectedItem = "Courier New"
     End Sub
 
     Sub GatherCustomSettings()
@@ -724,8 +906,16 @@ Public Class Options
         Else
             Toggle1.Checked = False
         End If
+        Select Case MainForm.ProgressPanelStyle
+            Case 0
+                RadioButton5.Checked = False
+                RadioButton6.Checked = True
+            Case 1
+                RadioButton5.Checked = True
+                RadioButton6.Checked = False
+        End Select
         TextBox2.Text = MainForm.LogFile
-        TrackBar1.Value = MainForm.LogLevel - 1
+        TrackBar1.Value = If(MainForm.LogLevel = TrackBar1.Minimum, MainForm.LogLevel, MainForm.LogLevel - 1)
         Select Case MainForm.ImgOperationMode
             Case 0
                 RadioButton1.Checked = True
@@ -751,6 +941,13 @@ Public Class Options
             CheckBox4.Checked = False
             TextBox3.Text = ""
         End If
+        If MainForm.AutoScrDir Then
+            RadioButton3.Checked = True
+            RadioButton4.Checked = False
+        Else
+            RadioButton3.Checked = False
+            RadioButton4.Checked = True
+        End If
         If MainForm.EnglishOutput Then
             CheckBox5.Checked = True
         Else
@@ -774,6 +971,10 @@ Public Class Options
                 ComboBox6.SelectedIndex = 1
         End Select
         GetRootSpace(TextBox3.Text)
+        CheckBox10.Checked = MainForm.AutoLogs
+        CheckBox12.Checked = MainForm.StartupRemount
+        CheckBox13.Checked = MainForm.StartupUpdateCheck
+        CheckBox9.Checked = MainForm.AllCaps
     End Sub
 
     Private Sub ComboBox5_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox5.SelectedIndexChanged
@@ -829,6 +1030,9 @@ Public Class Options
     End Sub
 
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
+        If TextBox1.Text = "" Or Not File.Exists(TextBox1.Text) Then
+            TextBox1.Text = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+        End If
         DismVersion = FileVersionInfo.GetVersionInfo(TextBox1.Text)
         Label4.Text = DismVersion.ProductVersion
     End Sub
@@ -916,17 +1120,8 @@ Public Class Options
         End Select
     End Sub
 
-    Private Sub CheckBox4_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox4.CheckedChanged
-        If CheckBox4.Checked Then
-            Label20.Enabled = True
-            Label21.Enabled = True
-            TextBox3.Enabled = True
-            Button4.Enabled = True
-            Label22.Enabled = True
-            Label23.Enabled = True
-            Label24.Enabled = True
-            PictureBox5.Enabled = True
-        Else
+    Private Sub RadioButton3_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton3.CheckedChanged
+        If RadioButton3.Checked Then
             Label20.Enabled = False
             Label21.Enabled = False
             TextBox3.Enabled = False
@@ -935,6 +1130,17 @@ Public Class Options
             Label23.Enabled = False
             Label24.Enabled = False
             PictureBox5.Enabled = False
+            Label44.Enabled = True
+        Else
+            Label20.Enabled = True
+            Label21.Enabled = True
+            TextBox3.Enabled = True
+            Button4.Enabled = True
+            Label22.Enabled = True
+            Label23.Enabled = True
+            Label24.Enabled = True
+            PictureBox5.Enabled = True
+            Label44.Enabled = False
         End If
     End Sub
 
@@ -1180,6 +1386,70 @@ Public Class Options
             GroupBox2.Enabled = True
         Else
             GroupBox2.Enabled = False
+        End If
+    End Sub
+
+    Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
+        If DetectFileAssociations() Then ManageAssociations(1, False) Else ManageAssociations(0, If(CheckBox11.Checked, True, False))
+    End Sub
+
+    Private Sub Button10_Click(sender As Object, e As EventArgs) Handles Button10.Click
+        BGProcsAdvSettings.ShowDialog()
+    End Sub
+
+    Private Sub CheckBox4_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox4.CheckedChanged
+        If CheckBox4.Checked Then
+            RadioButton3.Enabled = True
+            RadioButton4.Enabled = True
+            If RadioButton3.Checked Then
+                Label20.Enabled = False
+                Label21.Enabled = False
+                TextBox3.Enabled = False
+                Button4.Enabled = False
+                Label22.Enabled = False
+                Label23.Enabled = False
+                Label24.Enabled = False
+                PictureBox5.Enabled = False
+                Label44.Enabled = True
+            Else
+                Label20.Enabled = True
+                Label21.Enabled = True
+                TextBox3.Enabled = True
+                Button4.Enabled = True
+                Label22.Enabled = True
+                Label23.Enabled = True
+                Label24.Enabled = True
+                PictureBox5.Enabled = True
+                Label44.Enabled = False
+            End If
+        Else
+            RadioButton3.Enabled = False
+            RadioButton4.Enabled = False
+            Label20.Enabled = False
+            Label21.Enabled = False
+            TextBox3.Enabled = False
+            Button4.Enabled = False
+            Label22.Enabled = False
+            Label23.Enabled = False
+            Label24.Enabled = False
+            PictureBox5.Enabled = False
+            Label44.Enabled = False
+        End If
+    End Sub
+
+    Private Sub RadioButton5_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton5.CheckedChanged
+        If RadioButton5.Checked Then
+            SecProgressStylePreview.Image = My.Resources.secprogress_modern
+        Else
+            SecProgressStylePreview.Image = My.Resources.secprogress_classic
+        End If
+    End Sub
+
+    Private Sub PrefReset_Click(sender As Object, e As EventArgs) Handles PrefReset.Click
+        SettingsResetDlg.ShowDialog()
+        If SettingsResetDlg.DialogResult = Windows.Forms.DialogResult.OK Then
+            MainForm.ResetDTSettings()
+            Cancel_Button.PerformClick()
         End If
     End Sub
 End Class

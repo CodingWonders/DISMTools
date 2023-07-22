@@ -1,8 +1,11 @@
 ﻿Imports System.Windows.Forms
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
+Imports System.Net
 
 Public Class PrgAbout
+
+    Dim PictureToolTip As New ToolTip()
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
@@ -15,7 +18,7 @@ Public Class PrgAbout
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENG"
                         Text = "About this program"
-                        Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString()
+                        Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
                         Label2.Text = "DISMTools lets you deploy, manage, and service Windows images with ease, thanks to a GUI"
                         Label3.Text = "These resources and components were used in the creation of this program:"
                         Label4.Text = "Resources"
@@ -28,7 +31,10 @@ Public Class PrgAbout
                         Label11.Text = "Command Help source"
                         Label12.Text = "Unattended answer file creation wizard"
                         Label13.Text = "Scintilla.NET (NuGet package)"
-                        Label15.Text = "Built on " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " by msbuild"
+                        If Not MainForm.dtBranch.Contains("preview") Then
+                            Label15.Text = "Built on " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " by msbuild"
+                            Label15.Visible = True
+                        End If
                         Label16.Text = "ManagedDism (NuGet package)"
                         Label17.Text = "Branding assets"
                         Label18.Text = "Windows Home Server wallpaper"
@@ -44,10 +50,12 @@ Public Class PrgAbout
                         LinkLabel9.Text = "Visit website"
                         LinkLabel10.Text = "Visit website"
                         LinkLabel11.Text = "Microsoft, Kýnan Antos"
+                        LinkLabel12.Text = "Visit website"
+                        LinkLabel13.Text = "Visit website"
                         OK_Button.Text = "OK"
                     Case "ESN"
                         Text = "Acerca de este programa"
-                        Label1.Text = "DISMTools - versión " & My.Application.Info.Version.ToString()
+                        Label1.Text = "DISMTools - versión " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
                         Label2.Text = "DISMTools le permite implementar, administrar, y ofrecer servicio a imágenes de Windows con facilidad, gracias a una GUI"
                         Label3.Text = "Estos recursos y componentes fueron utilizados en la creación de este programa:"
                         Label4.Text = "Recursos"
@@ -58,9 +66,12 @@ Public Class PrgAbout
                         Label9.Text = "wimlib-imagex (usado en el futuro)"
                         Label10.Text = "Documentación de ayuda"
                         Label11.Text = "Fuente de ayuda de comandos"
-                        Label12.Text = "Asistente de creación de archivos de respuesta desatendida"
+                        Label12.Text = "Creación de archivos de respuesta desatendida"
                         Label13.Text = "Scintilla.NET (paquete NuGet)"
-                        Label15.Text = "Compilado el " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " por msbuild"
+                        If Not MainForm.dtBranch.Contains("preview") Then
+                            Label15.Text = "Compilado el " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " por msbuild"
+                            Label15.Visible = True
+                        End If
                         Label16.Text = "ManagedDism (paquete NuGet)"
                         Label17.Text = "Recursos publicitarios"
                         Label18.Text = "Fondo de pantalla de Windows Home Server"
@@ -76,11 +87,14 @@ Public Class PrgAbout
                         LinkLabel9.Text = "Visitar sitio"
                         LinkLabel10.Text = "Visitar sitio"
                         LinkLabel11.Text = "Microsoft, Kýnan Antos"
+                        LinkLabel12.Text = "Visitar sitio"
+                        LinkLabel13.Text = "Visitar sitio"
                         OK_Button.Text = "Aceptar"
+                        UpdCheckBtn.Text = "Comprobar actualizaciones"
                 End Select
             Case 1
                 Text = "About this program"
-                Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString()
+                Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
                 Label2.Text = "DISMTools lets you deploy, manage, and service Windows images with ease, thanks to a GUI"
                 Label3.Text = "These resources and components were used in the creation of this program:"
                 Label4.Text = "Resources"
@@ -93,7 +107,10 @@ Public Class PrgAbout
                 Label11.Text = "Command Help source"
                 Label12.Text = "Unattended answer file creation wizard"
                 Label13.Text = "Scintilla.NET (NuGet package)"
-                Label15.Text = "Built on " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " by msbuild"
+                If Not MainForm.dtBranch.Contains("preview") Then
+                    Label15.Text = "Built on " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " by msbuild"
+                    Label15.Visible = True
+                End If
                 Label16.Text = "ManagedDism (NuGet package)"
                 Label17.Text = "Branding assets"
                 Label18.Text = "Windows Home Server wallpaper"
@@ -109,10 +126,13 @@ Public Class PrgAbout
                 LinkLabel9.Text = "Visit website"
                 LinkLabel10.Text = "Visit website"
                 LinkLabel11.Text = "Microsoft, Kýnan Antos"
+                LinkLabel12.Text = "Visit website"
+                LinkLabel13.Text = "Visit website"
                 OK_Button.Text = "OK"
+                UpdCheckBtn.Text = "Check for updates"
             Case 2
                 Text = "Acerca de este programa"
-                Label1.Text = "DISMTools - versión " & My.Application.Info.Version.ToString()
+                Label1.Text = "DISMTools - versión " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
                 Label2.Text = "DISMTools le permite implementar, administrar, y ofrecer servicio a imágenes de Windows con facilidad, gracias a una GUI"
                 Label3.Text = "Estos recursos y componentes fueron utilizados en la creación de este programa:"
                 Label4.Text = "Recursos"
@@ -123,9 +143,12 @@ Public Class PrgAbout
                 Label9.Text = "wimlib-imagex (usado en el futuro)"
                 Label10.Text = "Documentación de ayuda"
                 Label11.Text = "Fuente de ayuda de comandos"
-                Label12.Text = "Asistente de creación de archivos de respuesta desatendida"
+                Label12.Text = "Creación de archivos de respuesta desatendida"
                 Label13.Text = "Scintilla.NET (paquete NuGet)"
-                Label15.Text = "Compilado el " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " por msbuild"
+                If Not MainForm.dtBranch.Contains("preview") Then
+                    Label15.Text = "Compilado el " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " por msbuild"
+                    Label15.Visible = True
+                End If
                 Label16.Text = "ManagedDism (paquete NuGet)"
                 Label17.Text = "Recursos publicitarios"
                 Label18.Text = "Fondo de pantalla de Windows Home Server"
@@ -141,14 +164,15 @@ Public Class PrgAbout
                 LinkLabel9.Text = "Visitar sitio"
                 LinkLabel10.Text = "Visitar sitio"
                 LinkLabel11.Text = "Microsoft, Kýnan Antos"
+                LinkLabel12.Text = "Visitar sitio"
+                LinkLabel13.Text = "Visitar sitio"
                 OK_Button.Text = "Aceptar"
+                UpdCheckBtn.Text = "Comprobar actualizaciones"
         End Select
         RichTextBox1.Text = My.Resources.LicenseOverview
         RichTextBox2.Text = My.Resources.WhatsNew
-
         ForeColor = Color.White
         PictureBox1.Image = If(MainForm.dtBranch.Contains("preview"), My.Resources.logo_preview, My.Resources.logo_aboutdlg_dark)
-        PictureBox2.Image = My.Resources.preview_dark
         If CreditsPanel.Visible Then
             LinkLabel1.LinkColor = Color.FromArgb(241, 241, 241)
             LinkLabel2.LinkColor = Color.FromArgb(153, 153, 153)
@@ -165,6 +189,8 @@ Public Class PrgAbout
         CreditsPanel.ForeColor = Color.White
         RichTextBox1.ForeColor = ForeColor
         RichTextBox2.ForeColor = ForeColor
+        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+        MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
     End Sub
 
     Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel4.LinkClicked
@@ -199,6 +225,14 @@ Public Class PrgAbout
         Process.Start("https://web.archive.org/web/20210907191944/https://twitter.com/prsymatic/status/1435317646346522628")
     End Sub
 
+    Private Sub LinkLabel12_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel12.LinkClicked
+        Process.Start("https://github.com/RobinPerris/DarkUI")
+    End Sub
+
+    Private Sub LinkLabel13_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel13.LinkClicked
+        Process.Start("https://github.com/DockPanelSuite/DockPanelSuite")
+    End Sub
+
     Private Sub RichTextBox1_LinkClicked(sender As Object, e As LinkClickedEventArgs) Handles RichTextBox1.LinkClicked
         Process.Start(e.LinkText)
     End Sub
@@ -207,7 +241,7 @@ Public Class PrgAbout
         Const PeHeaderOffset As Integer = 60
         Const LinkerTimestampOffset As Integer = 8
         Dim b(2047) As Byte
-        Dim s As Stream
+        Dim s As Stream = Nothing
         Try
             s = New FileStream(filePath, FileMode.Open, FileAccess.Read)
             s.Read(b, 0, 2048)
@@ -308,4 +342,78 @@ Public Class PrgAbout
         LinkLabel3.LinkColor = Color.FromArgb(241, 241, 241)
     End Sub
 #End Region
+
+    Private Sub Picture_MouseEnter(sender As Object, e As EventArgs) Handles PictureBox3.MouseEnter, PictureBox2.MouseEnter
+        Cursor = Cursors.Hand
+    End Sub
+
+    Private Sub Picture_MouseLeave(sender As Object, e As EventArgs) Handles PictureBox3.MouseLeave, PictureBox2.MouseLeave
+        Cursor = Cursors.Arrow
+    End Sub
+
+    Private Sub PictureBox2_Click(sender As Object, e As EventArgs) Handles PictureBox2.Click
+        Process.Start("https://github.com/CodingWonders/DISMTools")
+    End Sub
+
+    Private Sub PictureBox3_Click(sender As Object, e As EventArgs) Handles PictureBox3.Click
+        Process.Start("https://reddit.com/r/DISMTools")
+    End Sub
+
+    Private Sub PictureBox2_MouseHover(sender As Object, e As EventArgs) Handles PictureBox2.MouseHover
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PictureToolTip.SetToolTip(sender, "Check the project's repository on GitHub")
+                    Case "ESN"
+                        PictureToolTip.SetToolTip(sender, "Consulte el repositorio del proyecto en GitHub")
+                End Select
+            Case 1
+                PictureToolTip.SetToolTip(sender, "Check the project's repository on GitHub")
+            Case 2
+                PictureToolTip.SetToolTip(sender, "Consulte el repositorio del proyecto en GitHub")
+        End Select
+    End Sub
+
+    Private Sub PictureBox3_MouseHover(sender As Object, e As EventArgs) Handles PictureBox3.MouseHover
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PictureToolTip.SetToolTip(sender, "Check the project's official subreddit")
+                    Case "ESN"
+                        PictureToolTip.SetToolTip(sender, "Consulte el subreddit oficial del proyecto")
+                End Select
+            Case 1
+                PictureToolTip.SetToolTip(sender, "Check the project's official subreddit")
+            Case 2
+                PictureToolTip.SetToolTip(sender, "Consulte el subreddit oficial del proyecto")
+        End Select
+    End Sub
+
+    Private Sub UpdCheckBtn_Click(sender As Object, e As EventArgs) Handles UpdCheckBtn.Click
+        If File.Exists(Application.StartupPath & "\update.exe") Then File.Delete(Application.StartupPath & "\update.exe")
+        Try
+            Using client As New WebClient()
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                client.DownloadFile("https://github.com/CodingWonders/DISMTools/raw/" & MainForm.dtBranch & "/Updater/DISMTools-UCS/update-bin/update.exe", Application.StartupPath & "\update.exe")
+            End Using
+        Catch ex As WebException
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MsgBox("We couldn't download the update checker. Reason:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
+                        Case "ESN"
+                            MsgBox("No pudimos descargar el comprobador de actualizaciones. Razón:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
+                    End Select
+                Case 1
+                    MsgBox("We couldn't download the update checker. Reason:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
+                Case 2
+                    MsgBox("No pudimos descargar el comprobador de actualizaciones. Razón:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
+            End Select
+            Exit Sub
+        End Try
+        If File.Exists(Application.StartupPath & "\update.exe") Then Process.Start(Application.StartupPath & "\update.exe", "/" & MainForm.dtBranch)
+    End Sub
 End Class

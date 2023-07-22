@@ -49,11 +49,20 @@ Partial Class ImgCleanup
         Me.Panel7 = New System.Windows.Forms.Panel()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.Panel8 = New System.Windows.Forms.Panel()
+        Me.Panel9 = New System.Windows.Forms.Panel()
+        Me.TextBoxSourcePanel = New System.Windows.Forms.Panel()
+        Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
+        Me.WimFileSourcePanel = New System.Windows.Forms.Panel()
+        Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
+        Me.Label14 = New System.Windows.Forms.Label()
+        Me.Button5 = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.CheckBox5 = New System.Windows.Forms.CheckBox()
         Me.CheckBox4 = New System.Windows.Forms.CheckBox()
+        Me.Button2 = New System.Windows.Forms.Button()
         Me.Label12 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.HealthRestoreSourceOFD = New System.Windows.Forms.OpenFileDialog()
@@ -69,6 +78,11 @@ Partial Class ImgCleanup
         Me.Panel6.SuspendLayout()
         Me.Panel7.SuspendLayout()
         Me.Panel8.SuspendLayout()
+        Me.Panel9.SuspendLayout()
+        Me.TextBoxSourcePanel.SuspendLayout()
+        Me.WimFileSourcePanel.SuspendLayout()
+        Me.TableLayoutPanel3.SuspendLayout()
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -349,11 +363,12 @@ Partial Class ImgCleanup
         '
         'Panel8
         '
+        Me.Panel8.Controls.Add(Me.Panel9)
         Me.Panel8.Controls.Add(Me.Button1)
-        Me.Panel8.Controls.Add(Me.TextBox1)
         Me.Panel8.Controls.Add(Me.Label11)
         Me.Panel8.Controls.Add(Me.CheckBox5)
         Me.Panel8.Controls.Add(Me.CheckBox4)
+        Me.Panel8.Controls.Add(Me.Button2)
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel8.Location = New System.Drawing.Point(0, 0)
         Me.Panel8.Name = "Panel8"
@@ -361,24 +376,116 @@ Partial Class ImgCleanup
         Me.Panel8.TabIndex = 6
         Me.Panel8.Visible = False
         '
+        'Panel9
+        '
+        Me.Panel9.Controls.Add(Me.TextBoxSourcePanel)
+        Me.Panel9.Controls.Add(Me.WimFileSourcePanel)
+        Me.Panel9.Location = New System.Drawing.Point(102, 44)
+        Me.Panel9.Name = "Panel9"
+        Me.Panel9.Size = New System.Drawing.Size(355, 26)
+        Me.Panel9.TabIndex = 11
+        '
+        'TextBoxSourcePanel
+        '
+        Me.TextBoxSourcePanel.Controls.Add(Me.RichTextBox1)
+        Me.TextBoxSourcePanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBoxSourcePanel.Location = New System.Drawing.Point(0, 0)
+        Me.TextBoxSourcePanel.Name = "TextBoxSourcePanel"
+        Me.TextBoxSourcePanel.Size = New System.Drawing.Size(355, 26)
+        Me.TextBoxSourcePanel.TabIndex = 9
+        '
+        'RichTextBox1
+        '
+        Me.RichTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.RichTextBox1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.RichTextBox1.Enabled = False
+        Me.RichTextBox1.Location = New System.Drawing.Point(0, 0)
+        Me.RichTextBox1.Multiline = False
+        Me.RichTextBox1.Name = "RichTextBox1"
+        Me.RichTextBox1.Size = New System.Drawing.Size(355, 26)
+        Me.RichTextBox1.TabIndex = 0
+        Me.RichTextBox1.Text = ""
+        '
+        'WimFileSourcePanel
+        '
+        Me.WimFileSourcePanel.Controls.Add(Me.TableLayoutPanel3)
+        Me.WimFileSourcePanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.WimFileSourcePanel.Location = New System.Drawing.Point(0, 0)
+        Me.WimFileSourcePanel.Name = "WimFileSourcePanel"
+        Me.WimFileSourcePanel.Size = New System.Drawing.Size(355, 26)
+        Me.WimFileSourcePanel.TabIndex = 10
+        Me.WimFileSourcePanel.Visible = False
+        '
+        'TableLayoutPanel3
+        '
+        Me.TableLayoutPanel3.ColumnCount = 4
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 26.0!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 216.0!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 87.0!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45.0!))
+        Me.TableLayoutPanel3.Controls.Add(Me.Label13, 1, 0)
+        Me.TableLayoutPanel3.Controls.Add(Me.PictureBox2, 0, 0)
+        Me.TableLayoutPanel3.Controls.Add(Me.Label14, 2, 0)
+        Me.TableLayoutPanel3.Controls.Add(Me.Button5, 3, 0)
+        Me.TableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TableLayoutPanel3.Location = New System.Drawing.Point(0, 0)
+        Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
+        Me.TableLayoutPanel3.RowCount = 1
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel3.Size = New System.Drawing.Size(355, 26)
+        Me.TableLayoutPanel3.TabIndex = 0
+        '
+        'Label13
+        '
+        Me.Label13.AutoEllipsis = True
+        Me.Label13.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label13.Location = New System.Drawing.Point(29, 0)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(210, 26)
+        Me.Label13.TabIndex = 8
+        Me.Label13.Text = "Image file"
+        Me.Label13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'PictureBox2
+        '
+        Me.PictureBox2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PictureBox2.Image = Global.DISMTools.My.Resources.Resources.image_light
+        Me.PictureBox2.Location = New System.Drawing.Point(3, 3)
+        Me.PictureBox2.Name = "PictureBox2"
+        Me.PictureBox2.Size = New System.Drawing.Size(20, 20)
+        Me.PictureBox2.TabIndex = 0
+        Me.PictureBox2.TabStop = False
+        '
+        'Label14
+        '
+        Me.Label14.AutoEllipsis = True
+        Me.Label14.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label14.Location = New System.Drawing.Point(245, 0)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(81, 26)
+        Me.Label14.TabIndex = 7
+        Me.Label14.Text = "Image index"
+        Me.Label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'Button5
+        '
+        Me.Button5.Image = Global.DISMTools.My.Resources.Resources.proj_name_edit
+        Me.Button5.Location = New System.Drawing.Point(332, 3)
+        Me.Button5.Name = "Button5"
+        Me.Button5.Size = New System.Drawing.Size(20, 20)
+        Me.Button5.TabIndex = 9
+        Me.Button5.UseVisualStyleBackColor = True
+        '
         'Button1
         '
         Me.Button1.Enabled = False
         Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button1.Location = New System.Drawing.Point(644, 46)
+        Me.Button1.Location = New System.Drawing.Point(463, 46)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 3
         Me.Button1.Text = "Browse..."
         Me.Button1.UseVisualStyleBackColor = True
-        '
-        'TextBox1
-        '
-        Me.TextBox1.Enabled = False
-        Me.TextBox1.Location = New System.Drawing.Point(102, 47)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(536, 21)
-        Me.TextBox1.TabIndex = 2
         '
         'Label11
         '
@@ -410,6 +517,17 @@ Partial Class ImgCleanup
         Me.CheckBox4.TabIndex = 0
         Me.CheckBox4.Text = "Use different source for component repair"
         Me.CheckBox4.UseVisualStyleBackColor = True
+        '
+        'Button2
+        '
+        Me.Button2.Enabled = False
+        Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button2.Location = New System.Drawing.Point(544, 46)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(175, 23)
+        Me.Button2.TabIndex = 12
+        Me.Button2.Text = "Detect from group policy"
+        Me.Button2.UseVisualStyleBackColor = True
         '
         'Label12
         '
@@ -472,6 +590,11 @@ Partial Class ImgCleanup
         Me.Panel7.ResumeLayout(False)
         Me.Panel8.ResumeLayout(False)
         Me.Panel8.PerformLayout()
+        Me.Panel9.ResumeLayout(False)
+        Me.TextBoxSourcePanel.ResumeLayout(False)
+        Me.WimFileSourcePanel.ResumeLayout(False)
+        Me.TableLayoutPanel3.ResumeLayout(False)
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -504,12 +627,21 @@ Partial Class ImgCleanup
     Friend WithEvents Label10 As System.Windows.Forms.Label
     Friend WithEvents Panel8 As System.Windows.Forms.Panel
     Friend WithEvents Button1 As System.Windows.Forms.Button
-    Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
     Friend WithEvents Label11 As System.Windows.Forms.Label
     Friend WithEvents CheckBox5 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox4 As System.Windows.Forms.CheckBox
     Friend WithEvents Label12 As System.Windows.Forms.Label
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents HealthRestoreSourceOFD As System.Windows.Forms.OpenFileDialog
+    Friend WithEvents Panel9 As System.Windows.Forms.Panel
+    Friend WithEvents TextBoxSourcePanel As System.Windows.Forms.Panel
+    Friend WithEvents RichTextBox1 As System.Windows.Forms.RichTextBox
+    Friend WithEvents WimFileSourcePanel As System.Windows.Forms.Panel
+    Friend WithEvents TableLayoutPanel3 As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents Label13 As System.Windows.Forms.Label
+    Friend WithEvents PictureBox2 As System.Windows.Forms.PictureBox
+    Friend WithEvents Label14 As System.Windows.Forms.Label
+    Friend WithEvents Button5 As System.Windows.Forms.Button
+    Friend WithEvents Button2 As System.Windows.Forms.Button
 
 End Class

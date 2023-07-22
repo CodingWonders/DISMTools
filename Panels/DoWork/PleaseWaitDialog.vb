@@ -23,6 +23,22 @@ Public Class PleaseWaitDialog
     Public indexStr(1024) As String
 
     Private Sub PleaseWaitDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Select Case MainForm.ProgressPanelStyle
+            Case 0
+                PictureBox1.Visible = True
+                Label1.Visible = True
+                Label2.TextAlign = ContentAlignment.TopLeft
+                Label2.Location = New Point(52, 29)
+                Label2.Size = New Size(295, 15)
+                Label2.Font = New Font("Segoe UI", 9)
+            Case 1
+                PictureBox1.Visible = False
+                Label1.Visible = False
+                Label2.TextAlign = ContentAlignment.MiddleCenter
+                Label2.Location = New Point(8, 8)
+                Label2.Size = New Size(343, 43)
+                Label2.Font = New Font("Segoe UI", 11.25)
+        End Select
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -120,7 +136,7 @@ Public Class PleaseWaitDialog
             ProjectValueLoadForm.RichTextBox22.Text = ProjectValueLoadForm.RichTextBox1.Lines(23).ToString().Replace("ImageEpochCreate=", "").Trim()
             ProjectValueLoadForm.RichTextBox23.Text = ProjectValueLoadForm.RichTextBox1.Lines(24).ToString().Replace("ImageEpochModify=", "").Trim()
             ProjectValueLoadForm.RichTextBox24.Text = ProjectValueLoadForm.RichTextBox1.Lines(25).ToString().Replace("ImageLang=", "").Trim().Replace(Quote, "").Trim()
-            ProjectValueLoadForm.RichTextBox25.Text = ProjectValueLoadForm.RichTextBox1.Lines(28).ToString().Replace("ImageReadWrite=", "").Trim().Replace(Quote, "").Trim()
+            'ProjectValueLoadForm.RichTextBox25.Text = ProjectValueLoadForm.RichTextBox1.Lines(28).ToString().Replace("ImageReadWrite=", "").Trim().Replace(Quote, "").Trim()
             ProjectValueLoadForm.EpochRTB1.Text = DateTimeOffset.FromUnixTimeSeconds(CInt(ProjectValueLoadForm.RichTextBox4.Text)).ToString().Replace(" +00:00", "").Trim()
             Try     ' These are separate, as they aren't set when the project creates
                 ProjectValueLoadForm.EpochRTB2.Text = DateTimeOffset.FromUnixTimeSeconds(CInt(ProjectValueLoadForm.RichTextBox22.Text)).ToString().Replace(" +00:00", "").Trim()
@@ -153,37 +169,33 @@ Public Class PleaseWaitDialog
                 Visible = False
                 BGProcsBusyDialog.ShowDialog(MainForm)
             Else
-                File.WriteAllText(".\temp.bat",
+                File.WriteAllText(Application.StartupPath & "\temp.bat",
                                   "@echo off" & CrLf &
                                   "dism /English /image=" & pkgSourceImgStr & " /get-packages | findstr /c:" & Quote & "Package Identity : " & Quote & " > .\pkgnames")
                 Sup_DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
-                Sup_CommandArgs = "/c " & Directory.GetCurrentDirectory() & "\temp.bat"
+                Sup_CommandArgs = "/c " & Application.StartupPath & "\temp.bat"
                 Sup_DISMProc.StartInfo.Arguments = Sup_CommandArgs
                 Sup_DISMProc.StartInfo.CreateNoWindow = True
                 Sup_DISMProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
                 Sup_DISMProc.Start()
-                Do Until Sup_DISMProc.HasExited
-                    If Sup_DISMProc.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                Sup_DISMProc.WaitForExit()
                 If Decimal.ToInt32(Sup_DISMProc.ExitCode) = 0 Then
                     RemPackage.CheckedListBox1.Items.Clear()
                     RemPackage.CheckedListBox2.Items.Clear()
                     If Debugger.IsAttached Then
                         Debug.WriteLine("[INFO] Package names were successfully gathered. The program should return to normal state")
-                        Debug.WriteLine("Listing package names:" & CrLf & My.Computer.FileSystem.ReadAllText(".\pkgnames"))
+                        Debug.WriteLine("Listing package names:" & CrLf & My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\pkgnames"))
                     End If
                     Dim pkgNames As New RichTextBox
-                    pkgNames.Text = My.Computer.FileSystem.ReadAllText(".\pkgnames")
+                    pkgNames.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\pkgnames")
                     For x = 0 To pkgNames.Lines.Count - 1
                         If pkgNames.Lines(x) = "" Then
                             Continue For
                         End If
                         RemPackage.CheckedListBox1.Items.Add(pkgNames.Lines(x).Replace("Package Identity : ", "").Trim())
                     Next
-                    File.Delete(".\temp.bat")
-                    File.Delete(".\pkgnames")
+                    File.Delete(Application.StartupPath & "\temp.bat")
+                    File.Delete(Application.StartupPath & "\pkgnames")
                 Else
                     Debug.WriteLine("[FAIL] Package names were not gathered. Please verify everything's working")
                 End If
@@ -193,30 +205,26 @@ Public Class PleaseWaitDialog
                 Visible = False
                 BGProcsBusyDialog.ShowDialog(MainForm)
             Else
-                File.WriteAllText(".\temp.bat",
+                File.WriteAllText(Application.StartupPath & "\temp.bat",
                                   "@echo off" & CrLf &
                                   "dism /English /image=" & featSourceImg & " /get-features | findstr /c:" & Quote & "Feature Name : " & Quote & " > .\featnames" & CrLf & _
                                   "dism /English /image=" & featSourceImg & " /get-features | findstr /c:" & Quote & "State : " & Quote & " > .\featstate")
                 Sup_DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
-                Sup_DISMProc.StartInfo.Arguments = "/c " & Directory.GetCurrentDirectory() & "\temp.bat"
+                Sup_DISMProc.StartInfo.Arguments = "/c " & Application.StartupPath & "\temp.bat"
                 Sup_DISMProc.StartInfo.CreateNoWindow = True
                 Sup_DISMProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
                 Sup_DISMProc.Start()
-                Do Until Sup_DISMProc.HasExited
-                    If Sup_DISMProc.HasExited Then
-                        Exit Do
-                    End If
-                Loop
+                Sup_DISMProc.WaitForExit()
                 If Decimal.ToInt32(Sup_DISMProc.ExitCode) = 0 Then
                     EnableFeat.ListView1.Items.Clear()
                     DisableFeat.ListView1.Items.Clear()
                     Debug.WriteLine("[INFO] Feature names and their states were successfully gathered. The program should return to normal state")
                     Debug.WriteLine("Listing feature names and their states:")
                     Dim featNameRTB As New RichTextBox With {
-                        .Text = My.Computer.FileSystem.ReadAllText(".\featnames")
+                        .Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\featnames")
                     }
                     Dim featStateRTB As New RichTextBox With {
-                        .Text = My.Computer.FileSystem.ReadAllText(".\featstate")
+                        .Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\featstate")
                     }
                     Select Case featOpType
                         Case 0
@@ -234,9 +242,9 @@ Public Class PleaseWaitDialog
                                 End If
                                 EnableFeat.ListView1.Items.Add(featNameRTB.Lines(x).Replace("Feature Name : ", "").Trim().ToString()).SubItems.Add(featStateRTB.Lines(x).Replace("State : ", "").Trim().ToString())
                             Next
-                            File.Delete(".\temp.bat")
-                            File.Delete(".\featnames")
-                            File.Delete(".\featstate")
+                            File.Delete(Application.StartupPath & "\temp.bat")
+                            File.Delete(Application.StartupPath & "\featnames")
+                            File.Delete(Application.StartupPath & "\featstate")
                             EnableFeat.Label2.Text = "This image contains " & featNameRTB.Lines.Count & " features."
                         Case 1
                             If Debugger.IsAttached Then
@@ -253,9 +261,9 @@ Public Class PleaseWaitDialog
                                 End If
                                 DisableFeat.ListView1.Items.Add(featNameRTB.Lines(x).Replace("Feature Name : ", "").Trim().ToString()).SubItems.Add(featStateRTB.Lines(x).Replace("State : ", "").Trim().ToString())
                             Next
-                            File.Delete(".\temp.bat")
-                            File.Delete(".\featnames")
-                            File.Delete(".\featstate")
+                            File.Delete(Application.StartupPath & "\temp.bat")
+                            File.Delete(Application.StartupPath & "\featnames")
+                            File.Delete(Application.StartupPath & "\featstate")
                             DisableFeat.Label2.Text = "This image contains " & featNameRTB.Lines.Count & " features."
                     End Select
 
@@ -264,6 +272,12 @@ Public Class PleaseWaitDialog
                 End If
             End If
         ElseIf ProgressPanel.OperationNum = 995 Then
+            If MainForm.MountedImageDetectorBW.CancellationPending Then
+                While MainForm.MountedImageDetectorBW.IsBusy
+                    Application.DoEvents()
+                    Thread.Sleep(100)
+                End While
+            End If
             Dim imgInfoCollection As DismImageInfoCollection = Nothing
             Try
                 imgInfoCollection = DismApi.GetImageInfo(indexesSourceImg)
@@ -278,7 +292,6 @@ Public Class PleaseWaitDialog
                 Catch ex As DismOpenSessionsException
                     ' Leave session open
                 End Try
-                Close()
             Else
                 Dim indexNames As New List(Of String)
                 For Each imgInfo As DismImageInfo In imgInfoCollection

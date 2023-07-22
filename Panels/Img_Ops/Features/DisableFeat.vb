@@ -138,7 +138,7 @@ Public Class DisableFeat
         End If
         ListView1.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
-        If My.Computer.Info.OSFullName.Contains("Windows 10") Or My.Computer.Info.OSFullName.Contains("Windows 11") Then
+        If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True
         End If
@@ -155,6 +155,8 @@ Public Class DisableFeat
             Case 2
                 Label2.Text &= " Solo las características habilitadas (" & ListView1.Items.Count & ") son mostradas"
         End Select
+        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged

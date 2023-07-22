@@ -213,7 +213,7 @@ Public Class ImgIndexDelete
                 ListView2.Columns(1).Text = "Nombre de imagen"
                 GroupBox1.Text = "Imágenes de volumen"
         End Select
-        If My.Computer.Info.OSFullName.Contains("Windows 10") Or My.Computer.Info.OSFullName.Contains("Windows 11") Then
+        If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True
         End If
@@ -238,6 +238,9 @@ Public Class ImgIndexDelete
         ListView1.ForeColor = ForeColor
         ListView2.ForeColor = ForeColor
 
+        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+
         ' Set disabled ListView's backcolor. Source: https://stackoverflow.com/questions/17461902/changing-background-color-of-listview-c-sharp-when-disabled
         Dim bm As New Bitmap(ListView2.ClientSize.Width, ListView2.ClientSize.Height)
         Graphics.FromImage(bm).Clear(ListView2.BackColor)
@@ -246,6 +249,10 @@ Public Class ImgIndexDelete
 
     Sub GetImageIndexInfo(SourceImage As String)
         If MainForm.MountedImageDetectorBW.IsBusy Then MainForm.MountedImageDetectorBW.CancelAsync()
+        While MainForm.MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Threading.Thread.Sleep(100)
+        End While
         RemoveHandler ListView1.ItemChecked, AddressOf ListView1_ItemChecked
         ' Clear arrays
         Array.Clear(IndexNames, 0, IndexNames.Length)

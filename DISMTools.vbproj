@@ -13,6 +13,21 @@
     <MyType>WindowsForms</MyType>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <TargetFrameworkProfile />
+    <PublishUrl>publicar\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -57,6 +72,9 @@
     <ApplicationIcon>logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DarkUI, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\DarkUI.2.0.2\lib\DarkUI.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Dism, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5bba90053b345501, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Dism.2.5.2\lib\net40\Microsoft.Dism.dll</HintPath>
     </Reference>
@@ -66,6 +84,7 @@
     <Reference Include="System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
@@ -80,6 +99,12 @@
     </Reference>
     <Reference Include="System.Xml.Linq, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <Private>True</Private>
+    </Reference>
+    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
+      <HintPath>packages\DockPanelSuite.3.1.0\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+    </Reference>
+    <Reference Include="WeifenLuo.WinFormsUI.Docking.ThemeVS2012, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
+      <HintPath>packages\DockPanelSuite.ThemeVS2012.3.1.0\lib\net40\WeifenLuo.WinFormsUI.Docking.ThemeVS2012.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -98,6 +123,18 @@
       <DependentUpon>Actions.MainForm.vb</DependentUpon>
     </Compile>
     <Compile Include="Actions\Actions.MainForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Actions\Validation\Actions.Validation.Designer.vb">
+      <DependentUpon>Actions.Validation.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Actions\Validation\Actions.Validation.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Help\Help_RegisteredAppxPkgsDlg.Designer.vb">
+      <DependentUpon>Help_RegisteredAppxPkgsDlg.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Help\Help_RegisteredAppxPkgsDlg.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.vb">
@@ -128,6 +165,12 @@
     <Compile Include="Panels\DoWork\ProgressPanel.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Exe_Ops\BGProcs\BGProcsAdvSettings.Designer.vb">
+      <DependentUpon>BGProcsAdvSettings.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Exe_Ops\BGProcs\BGProcsAdvSettings.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Exe_Ops\DismComponents.Designer.vb">
       <DependentUpon>DismComponents.vb</DependentUpon>
     </Compile>
@@ -140,10 +183,28 @@
     <Compile Include="Panels\Exe_Ops\DTSettingForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Exe_Ops\Migration\MigrationForm.Designer.vb">
+      <DependentUpon>MigrationForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Exe_Ops\Migration\MigrationForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Exe_Ops\PrgAbout.Designer.vb">
       <DependentUpon>PrgAbout.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\Exe_Ops\PrgAbout.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Exe_Ops\SettingsResetDlg.Designer.vb">
+      <DependentUpon>SettingsResetDlg.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Exe_Ops\SettingsResetDlg.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\FirstUse\IncompleteSetupDlg.Designer.vb">
+      <DependentUpon>IncompleteSetupDlg.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\FirstUse\IncompleteSetupDlg.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\FirstUse\PrgSetup.Designer.vb">
@@ -162,6 +223,12 @@
       <DependentUpon>GetPkgInfo.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\Get_Ops\Pkgs\GetPkgInfo.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\ActiveInstAccessWarn.Designer.vb">
+      <DependentUpon>ActiveInstAccessWarn.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\ActiveInstAccessWarn.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Img_Ops\ApplicationDriveSpecifier.Designer.vb">
@@ -200,6 +267,18 @@
     <Compile Include="Panels\Img_Ops\Bg_Processes\BGProcsBusyDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Img_Ops\Capabilities\AddCapabilities.Designer.vb">
+      <DependentUpon>AddCapabilities.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Capabilities\AddCapabilities.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Capabilities\RemCapabilities.Designer.vb">
+      <DependentUpon>RemCapabilities.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Capabilities\RemCapabilities.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\CompClean\ImgCleanup.Designer.vb">
       <DependentUpon>ImgCleanup.vb</DependentUpon>
     </Compile>
@@ -210,6 +289,18 @@
       <DependentUpon>ImgWim2Esd.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\Img_Ops\Conversion\ImgWim2Esd.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Drivers\AddDrivers.Designer.vb">
+      <DependentUpon>AddDrivers.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Drivers\AddDrivers.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Drivers\RemDrivers.Designer.vb">
+      <DependentUpon>RemDrivers.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Drivers\RemDrivers.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Img_Ops\Features\DisableFeat.Designer.vb">
@@ -290,6 +381,12 @@
     <Compile Include="Panels\Img_Ops\Pkgs\RemPackage.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Img_Ops\ProvisioningPkgs\AddProvisioningPkg.Designer.vb">
+      <DependentUpon>AddProvisioningPkg.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\ProvisioningPkgs\AddProvisioningPkg.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\Switch\ImgIndexSwitch.Designer.vb">
       <DependentUpon>ImgIndexSwitch.vb</DependentUpon>
     </Compile>
@@ -348,6 +445,12 @@
       <DependentUpon>SetOSUninstWindow.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\OSUninst\SetOSUninstWindow.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\PopupDlgs\PopupImageManager.Designer.vb">
+      <DependentUpon>PopupImageManager.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\PopupDlgs\PopupImageManager.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Prj_Ops\NewProj.Designer.vb">
@@ -422,6 +525,12 @@
     <Compile Include="Panels\Report_Dlgs\Get-ImageInfo\ReportForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Startup\SplashScreen.Designer.vb">
+      <DependentUpon>SplashScreen.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Startup\SplashScreen.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Unattend_Files\Addition\NewUnattendWiz.Designer.vb">
       <DependentUpon>NewUnattendWiz.vb</DependentUpon>
     </Compile>
@@ -439,6 +548,12 @@
     <EmbeddedResource Include="Actions\Actions.MainForm.resx">
       <DependentUpon>Actions.MainForm.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Actions\Validation\Actions.Validation.resx">
+      <DependentUpon>Actions.Validation.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Help\Help_RegisteredAppxPkgsDlg.resx">
+      <DependentUpon>Help_RegisteredAppxPkgsDlg.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -451,14 +566,26 @@
     <EmbeddedResource Include="Panels\DoWork\ProgressPanel.resx">
       <DependentUpon>ProgressPanel.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Exe_Ops\BGProcs\BGProcsAdvSettings.resx">
+      <DependentUpon>BGProcsAdvSettings.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Exe_Ops\DismComponents.resx">
       <DependentUpon>DismComponents.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Exe_Ops\DTSettingForm.resx">
       <DependentUpon>DTSettingForm.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Exe_Ops\Migration\MigrationForm.resx">
+      <DependentUpon>MigrationForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Exe_Ops\PrgAbout.resx">
       <DependentUpon>PrgAbout.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Exe_Ops\SettingsResetDlg.resx">
+      <DependentUpon>SettingsResetDlg.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\FirstUse\IncompleteSetupDlg.resx">
+      <DependentUpon>IncompleteSetupDlg.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\FirstUse\PrgSetup.resx">
       <DependentUpon>PrgSetup.vb</DependentUpon>
@@ -468,6 +595,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Get_Ops\Pkgs\GetPkgInfo.resx">
       <DependentUpon>GetPkgInfo.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\ActiveInstAccessWarn.resx">
+      <DependentUpon>ActiveInstAccessWarn.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\ApplicationDriveSpecifier.resx">
       <DependentUpon>ApplicationDriveSpecifier.vb</DependentUpon>
@@ -487,11 +617,23 @@
     <EmbeddedResource Include="Panels\Img_Ops\Bg_Processes\BGProcsBusyDialog.resx">
       <DependentUpon>BGProcsBusyDialog.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Capabilities\AddCapabilities.resx">
+      <DependentUpon>AddCapabilities.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Capabilities\RemCapabilities.resx">
+      <DependentUpon>RemCapabilities.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\CompClean\ImgCleanup.resx">
       <DependentUpon>ImgCleanup.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Conversion\ImgWim2Esd.resx">
       <DependentUpon>ImgWim2Esd.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Drivers\AddDrivers.resx">
+      <DependentUpon>AddDrivers.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Drivers\RemDrivers.resx">
+      <DependentUpon>RemDrivers.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Features\DisableFeat.resx">
       <DependentUpon>DisableFeat.vb</DependentUpon>
@@ -532,6 +674,9 @@
     <EmbeddedResource Include="Panels\Img_Ops\Pkgs\RemPackage.resx">
       <DependentUpon>RemPackage.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\ProvisioningPkgs\AddProvisioningPkg.resx">
+      <DependentUpon>AddProvisioningPkg.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Switch\ImgIndexSwitch.resx">
       <DependentUpon>ImgIndexSwitch.vb</DependentUpon>
     </EmbeddedResource>
@@ -561,6 +706,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\OSUninst\SetOSUninstWindow.resx">
       <DependentUpon>SetOSUninstWindow.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\PopupDlgs\PopupImageManager.resx">
+      <DependentUpon>PopupImageManager.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Prj_Ops\NewProj.resx">
       <DependentUpon>NewProj.vb</DependentUpon>
@@ -598,6 +746,9 @@
     <EmbeddedResource Include="Panels\Report_Dlgs\Get-ImageInfo\ReportForm.resx">
       <DependentUpon>ReportForm.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Startup\SplashScreen.resx">
+      <DependentUpon>SplashScreen.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Unattend_Files\Addition\NewUnattendWiz.resx">
       <DependentUpon>NewUnattendWiz.vb</DependentUpon>
     </EmbeddedResource>
@@ -614,6 +765,23 @@
     <None Include="Helpers\extbatch\cmdhelp.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Helpers\extbatch\options.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\extappx.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\mImgMgr.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Installer\Default.isl" />
+    <None Include="Installer\French.isl" />
+    <None Include="Installer\German.isl" />
+    <None Include="Installer\Italian.isl" />
+    <None Include="Installer\Portuguese.isl" />
+    <None Include="Installer\Setup.e32" />
+    <None Include="Installer\SetupLdr.e32" />
+    <None Include="Installer\Spanish.isl" />
     <None Include="LICENSE">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -687,7 +855,70 @@
     <None Include="Resources\icons8_code_32px.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Installer\dt.iss" />
+    <Content Include="Installer\ISCC.exe" />
+    <Content Include="Installer\ISCmplr.dll" />
+    <Content Include="Installer\islzma.dll" />
+    <Content Include="Installer\islzma32.exe" />
+    <Content Include="Installer\islzma64.exe" />
+    <Content Include="Installer\ISPP.dll" />
+    <Content Include="Installer\ISPPBuiltins.iss" />
+    <Content Include="Installer\license.txt" />
     <Content Include="logo.ico" />
+    <None Include="Resources\actions\validation.png" />
+    <None Include="Resources\setting_migration.ico" />
+    <None Include="Resources\secprogress_classic.png" />
+    <None Include="Resources\secprogress_modern.png" />
+    <None Include="Resources\menus\menu_light.png" />
+    <None Include="Resources\menus\menu_dark.png" />
+    <None Include="portable">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\startup\dt_branding.png" />
+    <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
+    <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
+    <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />
+    <Content Include="ThemeVS2012\Resources\MaskArrowLeft.png" />
+    <Content Include="ThemeVS2012\Resources\MaskArrowRight.png" />
+    <Content Include="ThemeVS2012\Resources\MaskArrowTop.png" />
+    <Content Include="ThemeVS2012\Resources\MaskCoreBottom.png" />
+    <Content Include="ThemeVS2012\Resources\MaskCoreCenter.png" />
+    <Content Include="ThemeVS2012\Resources\MaskCoreLeft.png" />
+    <Content Include="ThemeVS2012\Resources\MaskCoreRight.png" />
+    <Content Include="ThemeVS2012\Resources\MaskCoreTop.png" />
+    <Content Include="ThemeVS2012\Resources\MaskDock.png" />
+    <Content Include="ThemeVS2012\Resources\MaskDockFive.png" />
+    <Content Include="ThemeVS2012\Resources\MaskTabClose.png" />
+    <Content Include="ThemeVS2012\Resources\MaskTabList.png" />
+    <Content Include="ThemeVS2012\Resources\MaskTabOverflow.png" />
+    <Content Include="ThemeVS2012\Resources\MaskToolWindowAutoHide.png" />
+    <Content Include="ThemeVS2012\Resources\MaskToolWindowClose.png" />
+    <Content Include="ThemeVS2012\Resources\MaskToolWindowDock.png" />
+    <Content Include="ThemeVS2012\Resources\MaskToolWindowOption.png" />
+    <Content Include="ThemeVS2012\Resources\MaskWindowBottom.png" />
+    <Content Include="ThemeVS2012\Resources\MaskWindowCenter.png" />
+    <Content Include="ThemeVS2012\Resources\MaskWindowLeft.png" />
+    <Content Include="ThemeVS2012\Resources\MaskWindowRight.png" />
+    <Content Include="ThemeVS2012\Resources\MaskWindowTop.png" />
+    <None Include="Resources\startup\version.png" />
+    <None Include="Resources\startup\preview_flag.png" />
+    <None Include="Resources\startup\startup_bg.png" />
+    <EmbeddedResource Include="Resources\dtproj.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <None Include="Resources\rem_drv.png" />
+    <None Include="Resources\add_drv.png" />
+    <None Include="Resources\image_light.png" />
+    <None Include="Resources\image_dark.png" />
+    <None Include="Resources\FirstUse\product_overview.png" />
+    <None Include="Resources\FirstUse\closebox_focus.png" />
+    <None Include="Resources\FirstUse\closebox_down.png" />
+    <None Include="Resources\menus\edit_action_props_dark.png" />
+    <None Include="Resources\menus\edit_action_props_light.png" />
+    <None Include="Resources\menus\action_testing_light.png" />
+    <None Include="Resources\menus\action_testing_dark.png" />
+    <None Include="Resources\about\subreddit.png" />
+    <None Include="Resources\about\gh_repo.png" />
     <None Include="Resources\logo_preview.png" />
     <None Include="Resources\StoreLogoAssetPreviewer\preview_unavail_dark.png" />
     <None Include="Resources\StoreLogoAssetPreviewer\preview_unavail_light.png" />
@@ -917,20 +1148,40 @@
   <ItemGroup>
     <Folder Include="bin\Debug\" />
     <Folder Include="Panels\Set_Ops\" />
+    <Folder Include="Updater\" />
     <Folder Include="wimlib\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
     <PostBuildEvent>SET DELETELOGDIR="Yes"
-SET ISPREVIEW="No"
+SET ISPREVIEW="Yes"
+SET GEN_INSTALLER="Yes"
 ECHO Generating program structure...
+IF EXIST "$(SolutionDir)portable" (
+	COPY "$(SolutionDir)portable" . /Y
+	ATTRIB portable +H
+)
 IF NOT EXIST bin (
 	md bin
 	md bin\exthelpers
 	md bin\extbatch
 	md bin\utils
+	md bin\extps1
 	move helpers\extbatch\*.* bin\extbatch
 	move helpers\dthelper.bat bin
+	move helpers\extps1\*.* bin\extps1
 	IF EXIST HELPERS (
 		rd HELPERS /s /q
 	)
@@ -952,17 +1203,41 @@ IF NOT EXIST logs (
 		echo If you want to delete log files, set the DELETELOGDIR post-build variable to "Yes"
 	)
 )
+IF NOT EXIST scratch (
+	md scratch
+)
 IF %25ISPREVIEW%25=="Yes" (
 	echo You will be running a preview release, which may not be ready for production. You may experience more bugs and less stability. Please switch to a stable release whenever possible.
+)
+IF %25GEN_INSTALLER%25=="Yes" (
+	echo The technology used for creating the installer is subject to a license. Refer to the "LICENSE.TXT" file in the "$(SolutionDir)Installer" directory for more information
+	echo Copying program files...
+	IF NOT EXIST "$(SolutionDir)Installer\files" (md "$(SolutionDir)Installer\files")
+	XCOPY "$(TargetDir)*.*" "$(SolutionDir)Installer\files" /cehyi
+	IF EXIST "$(SolutionDir)Installer\files\VS*.tmp" (del "$(SolutionDir)Installer\files\VS*.tmp" /f /q)
+	IF EXIST "$(SolutionDir)Installer\iscc.exe" (
+		echo Building the installer...
+		"$(SolutionDir)Installer\iscc.exe" "$(SolutionDir)Installer\dt.iss"
+	) ELSE (
+		echo Warning: the installer compiler could not be found. Deleting temporary setup files...
+		rd "$(SolutionDir)Installer\files" /s /q
+	)
 )</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>ECHO Deleting bin folder...
+IF EXIST "portable" (
+	ATTRIB portable -h
+	DEL portable
+)
 IF EXIST bin (
 	rd bin /s /q
 )
 IF EXIST temp (
 	rd temp /s /q
+)
+IF EXIST scratch (
+	rd scratch /s /q
 )</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
