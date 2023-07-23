@@ -412,28 +412,6 @@ Public Class MainForm
         End If
         DismApi.Shutdown()
         MountedImageImgVersions = MountedImageImgVersionList.ToArray()
-        ' Fill mounted image manager list
-        MountedImgMgr.ListView1.Items.Clear()
-        Try
-            For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "OK", If(MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MountedImageMountedReWr(x) = 0, "Yes", "No"), MountedImageImgVersions(x)}))
-                            Case "ESN"
-                                MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "Correcto", If(MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MountedImageMountedReWr(x) = 0, "Sí", "No"), MountedImageImgVersions(x)}))
-                        End Select
-                    Case 1
-                        MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "OK", If(MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MountedImageMountedReWr(x) = 0, "Yes", "No"), MountedImageImgVersions(x)}))
-                    Case 2
-                        MountedImgMgr.ListView1.Items.Add(New ListViewItem(New String() {MountedImageImgFiles(x), MountedImageImgIndexes(x), MountedImageMountDirs(x), If(MountedImageImgStatuses(x) = 0, "Correcto", If(MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MountedImageMountedReWr(x) = 0, "Sí", "No"), MountedImageImgVersions(x)}))
-                End Select
-            Next
-        Catch ex As Exception
-            Exit Try
-        End Try
-        MountedImgMgr.Refresh()
     End Sub
 
     ''' <summary>
