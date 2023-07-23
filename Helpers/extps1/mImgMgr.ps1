@@ -75,6 +75,12 @@ function Mark-Image {
     {
         Write-Host -NoNewline "Mark image number [1 - $($global:mImage.Count)] or press [B] to go back: "
     }
+    elseif ($global:mImage.Count -le 0)
+    {
+        Write-Host "No images have been mounted on this system. You need to mount an image before marking it here."`n`n"Press ENTER to continue..."
+        Read-Host | Out-Null
+        MainMenu
+    }
     else
     {
         Write-Host -NoNewline "Mark image number [1] or press [B] to go back: "        
@@ -444,7 +450,10 @@ function Update-Listing {
 }
 
 function Get-MenuItems {
-    Write-Host "[M]: Mark image for management"
+    if ($global:mImage.Count -ge 1)
+    {
+        Write-Host "[M]: Mark image for management"
+    }
     if ($global:selImage -ne 0)
     {
         # Begin doing the actual stuff
@@ -509,9 +518,13 @@ function MainMenu {
     Get-WindowsImage -Mounted | Format-Table
     Write-Host `n`n`n
     Detect-MountedImageIndexChanges
-    if ($global:selImage -eq 0)
+    if (($global:selImage -eq 0) -and $global:mImage.Count -ge 1)
     {
         Write-Host "No image has been marked for management. Press the [M] key to mark a mounted image..."
+    }
+    elseif (($global:selImage -eq 0) -and $global:mImage.Count -le 1)
+    {
+        Write-Host "No images have been mounted on this system. Mount an image and update the listing to be able to mark mounted images"
     }
     else
     {
