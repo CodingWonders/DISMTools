@@ -66,7 +66,7 @@ Public Class RemProvAppxPackage
                         Label1.Text = Text
                         Label3.Text = "If an application is registered to a user, you will need to run this PowerShell command in order to completely remove it:"
                         Label4.Text = "Remove-AppxPackage -Package <package name>"
-                        Label5.Text = "Otherwise, the application will be completely removed. Check the " & Quote & "Registered to any user?" & Quote & " column for more details"
+                        Label5.Text = "Otherwise, the application will not be provisioned for new users. Check the " & Quote & "Registered to any user?" & Quote & " column for more details"
                         LinkLabel1.Text = "How does the program determine whether an application is registered to a user?"
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Cancel"
@@ -81,7 +81,7 @@ Public Class RemProvAppxPackage
                         Label1.Text = Text
                         Label3.Text = "Si una aplicación está registrada a un usuario, debe ejecutar este comando de PowerShell para eliminarla completamente:"
                         Label4.Text = "Remove-AppxPackage -Package <nombre de paquete>"
-                        Label5.Text = "Si no, la aplicación será eliminada completamente. Compruebe la columna " & Quote & "¿Registrada a un usuario?" & Quote & " para más información"
+                        Label5.Text = "Si no, la aplicación no será aprovisionada para nuevos usuarios. Compruebe la columna " & Quote & "¿Registrada a un usuario?" & Quote & " para más información"
                         LinkLabel1.Text = "¿Cómo determina el programa si una aplicación está registrada a un usuario?"
                         OK_Button.Text = "Aceptar"
                         Cancel_Button.Text = "Cancelar"
@@ -97,7 +97,7 @@ Public Class RemProvAppxPackage
                 Label1.Text = Text
                 Label3.Text = "If an application is registered to a user, you will need to run this PowerShell command in order to completely remove it:"
                 Label4.Text = "Remove-AppxPackage -Package <package name>"
-                Label5.Text = "Otherwise, the application will be completely removed. Check the " & Quote & "Registered to any user?" & Quote & " column for more details"
+                Label5.Text = "Otherwise, the application will not be provisioned for new users. Check the " & Quote & "Registered to any user?" & Quote & " column for more details"
                 LinkLabel1.Text = "How does the program determine whether an application is registered to a user?"
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Cancel"
@@ -112,7 +112,7 @@ Public Class RemProvAppxPackage
                 Label1.Text = Text
                 Label3.Text = "Si una aplicación está registrada a un usuario, debe ejecutar este comando de PowerShell para eliminarla completamente:"
                 Label4.Text = "Remove-AppxPackage -Package <nombre de paquete>"
-                Label5.Text = "Si no, la aplicación será eliminada completamente. Compruebe la columna " & Quote & "¿Registrada a un usuario?" & Quote & " para más información"
+                Label5.Text = "Si no, la aplicación no será aprovisionada para nuevos usuarios. Compruebe la columna " & Quote & "¿Registrada a un usuario?" & Quote & " para más información"
                 LinkLabel1.Text = "¿Cómo determina el programa si una aplicación está registrada a un usuario?"
                 OK_Button.Text = "Aceptar"
                 Cancel_Button.Text = "Cancelar"

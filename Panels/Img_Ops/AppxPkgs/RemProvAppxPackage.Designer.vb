@@ -186,10 +186,10 @@ Partial Class RemProvAppxPackage
         Me.Label5.AutoSize = True
         Me.Label5.Location = New System.Drawing.Point(12, 487)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(559, 13)
+        Me.Label5.Size = New System.Drawing.Size(606, 13)
         Me.Label5.TabIndex = 7
-        Me.Label5.Text = "Otherwise, the application will be completely removed. Check the ""Registered to a" & _
-    "ny user?"" column for more details"
+        Me.Label5.Text = "Otherwise, the application will not be provisioned for new users. Check the ""Regi" & _
+    "stered to any user?"" column for more details"
         '
         'Label2
         '
