@@ -126,6 +126,9 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <None Include="App.config" />
+    <None Include="verinfo\stable.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="verinfo\preview.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
