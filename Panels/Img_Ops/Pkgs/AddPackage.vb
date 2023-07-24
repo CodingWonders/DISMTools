@@ -27,7 +27,7 @@ Public Class AddPackageDlg
         Else
             ProgressPanel.pkgPreventIfPendingOnline = False
         End If
-        If CheckBox3.Checked Then
+        If CheckBox3.Checked And Not MainForm.OnlineManagement Then
             ProgressPanel.imgCommitAfterOps = True
         Else
             ProgressPanel.imgCommitAfterOps = False
@@ -297,6 +297,7 @@ Public Class AddPackageDlg
                     Label4.Text = "Especifique el directorio donde se encuentran archivos CAB o MSU."
             End Select
         End If
+        CheckBox3.Enabled = MainForm.OnlineManagement = False
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
     End Sub

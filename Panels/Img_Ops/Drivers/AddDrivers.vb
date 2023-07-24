@@ -41,7 +41,7 @@ Public Class AddDrivers
             Else
                 ProgressPanel.drvAdditionForceUnsigned = False
             End If
-            If CheckBox2.Checked Then
+            If CheckBox2.Checked And Not MainForm.OnlineManagement Then
                 ProgressPanel.drvAdditionCommit = True
             Else
                 ProgressPanel.drvAdditionCommit = False
@@ -270,6 +270,7 @@ Public Class AddDrivers
             Text = ""
             Win10Title.Visible = True
         End If
+        CheckBox2.Enabled = MainForm.OnlineManagement = False
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
     End Sub

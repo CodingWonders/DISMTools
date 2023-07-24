@@ -152,7 +152,7 @@ Public Class AddProvAppxPackage
                     ProgressPanel.appxAdditionUseAllRegions = False
                     ProgressPanel.appxAdditionRegions = TextBox3.Text
                 End If
-                If CheckBox2.Checked Then
+                If CheckBox2.Checked And Not MainForm.OnlineManagement Then
                     ProgressPanel.appxAdditionCommit = True
                 Else
                     ProgressPanel.appxAdditionCommit = False
@@ -363,6 +363,7 @@ Public Class AddProvAppxPackage
             Text = ""
             Win10Title.Visible = True
         End If
+        CheckBox2.Enabled = MainForm.OnlineManagement = False
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
     End Sub

@@ -95,7 +95,7 @@ Public Class AddCapabilities
             Else
                 ProgressPanel.capAdditionLimitWUAccess = False
             End If
-            If CheckBox3.Checked Then
+            If CheckBox3.Checked And Not MainForm.OnlineManagement Then
                 ProgressPanel.capAdditionCommit = True
             Else
                 ProgressPanel.capAdditionCommit = False
@@ -245,6 +245,7 @@ Public Class AddCapabilities
         ListView1.ForeColor = ForeColor
         RichTextBox1.ForeColor = ForeColor
         CheckBox2.Enabled = MainForm.OnlineManagement = True
+        CheckBox3.Enabled = MainForm.OnlineManagement = False
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
     End Sub

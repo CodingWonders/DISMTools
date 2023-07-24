@@ -117,7 +117,7 @@ Public Class EnableFeat
                 ' Tell program to contact Windows Update, as the parameter "/LimitAccess" doesn't apply to offline images
                 ProgressPanel.featContactWindowsUpdate = True
             End If
-            If CheckBox5.Checked Then
+            If CheckBox5.Checked And Not MainForm.OnlineManagement Then
                 ProgressPanel.featCommitAfterEnablement = True
             Else
                 ProgressPanel.featCommitAfterEnablement = False
@@ -262,6 +262,7 @@ Public Class EnableFeat
                 Label2.Text &= " Solo las características deshabilitadas (" & ListView1.Items.Count & ") son mostradas"
         End Select
         CheckBox4.Enabled = MainForm.OnlineManagement = True
+        CheckBox5.Enabled = MainForm.OnlineManagement = False
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
     End Sub
