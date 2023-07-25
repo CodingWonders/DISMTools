@@ -446,6 +446,7 @@ function Remove-VolumeImages {
 
 function Update-Listing {
     $global:mImage = Get-WindowsImage -Mounted
+    $global:mImages = Get-WindowsImage -Mounted
     # MainMenu
 }
 
@@ -483,6 +484,7 @@ function Get-MenuItems {
 function Detect-MountedImageIndexChanges {
     if ($global:selImage -eq 0) { return }
     $global:mImage = Get-WindowsImage -Mounted
+    $global:mImages = Get-WindowsImage -Mounted
     if ($global:mImage[$global:selImage - 1].ImagePath -eq $selImgPath)
     {
         # All good
