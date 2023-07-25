@@ -9182,6 +9182,22 @@ Public Class MainForm
     End Sub
 
     Private Sub RemoveDriver_Click(sender As Object, e As EventArgs) Handles RemoveDriver.Click
+        If OnlineManagement Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
+            End Select
+            Exit Sub
+        End If
         RemDrivers.ListView1.Items.Clear()
         ProgressPanel.OperationNum = 994
         Select Case Language
