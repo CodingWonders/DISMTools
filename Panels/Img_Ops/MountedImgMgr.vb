@@ -214,7 +214,19 @@ Public Class MountedImgMgr
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        MainForm.ImgUMountPopupCMS.Show(sender, New Point(24, Button1.Height * 0.75))
+        If MainForm.MountedImageMountedReWr(ListView1.FocusedItem.Index) = 0 Then
+            MainForm.ImgUMountPopupCMS.Show(sender, New Point(24, Button1.Height * 0.75))
+        ElseIf MainForm.MountedImageMountedReWr(ListView1.FocusedItem.Index) = 1 Then
+            ' Unmount the image discarding changes
+            If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+            ProgressPanel.OperationNum = 21
+            ProgressPanel.UMountLocalDir = False
+            ProgressPanel.RandomMountDir = ListView1.FocusedItem.SubItems(2).Text   ' Hope there isn't anything to set here
+            ProgressPanel.UMountImgIndex = ListView1.FocusedItem.SubItems(1).Text
+            ProgressPanel.MountDir = ""
+            ProgressPanel.UMountOp = 1
+            ProgressPanel.ShowDialog()
+        End If
     End Sub
 
     Private Sub DetectorBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles DetectorBW.DoWork

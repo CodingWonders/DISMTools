@@ -539,7 +539,31 @@ function MainMenu {
     switch ($option)
     {
         "M" { Mark-Image }
-        "U" { Unmount-Image }
+        "U" {
+            if ($global:mImage[$global:selImage - 1].MountMode -eq 0)
+            {             
+                Unmount-Image
+            }
+            elseif ($global:mImage[$global:selImage - 1].MountMode -eq 1)
+            {
+                # Directly unmount the image discarding changes
+                Clear-Host
+                Write-Host "Unmounting Windows image:"`n"- Image file and index: $($global:mImage[$global:selImage - 1].ImagePath) (index $($global:mImage[$global:selImage - 1].ImageIndex))"`n"- Mount directory: $($global:mImage[$global:selImage - 1].MountPath)"`n"- Operation: Discard"
+                Dismount-WindowsImage -Path $global:mImage[$global:selImage - 1].MountPath -Discard
+                if ($?)
+                {
+                    Write-Host "This image has been unmounted successfully. " -NoNewline
+                }
+                else
+                {
+                    Write-Host "We could not unmount this image. Refer to the log file for more information. " -NoNewline
+                }
+                Write-Host "Press ENTER to continue..."
+                if ($?) { $global:selImage = 0 }
+                Read-Host | Out-Null
+                MainMenu
+            }
+        }
         "R" {
             if ($global:mImage[$global:selImage - 1].MountStatus -eq 1)
             {
