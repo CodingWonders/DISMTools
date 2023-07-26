@@ -87,7 +87,17 @@ function Mark-Image {
     }
 
     $option = Read-Host
-    if ((-not [System.String]::IsNullOrWhitespace($option)) -and $option -le $global:mImage.Count)
+    # Try converting the string to an integer
+    try
+    {
+        $option = [int]$option
+    }
+    catch
+    {
+        Write-Host "You have marked a non-existent mounted image"
+        Mark-Image
+    }
+    if ($option -le $global:mImage.Count)
     {
         $global:selImage = $option
         $selImgPath = $global:mImage[$global:selImage - 1].ImagePath
