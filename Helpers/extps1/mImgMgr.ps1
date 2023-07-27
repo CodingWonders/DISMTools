@@ -94,8 +94,15 @@ function Mark-Image {
     }
     catch
     {
-        Write-Host "You have marked a non-existent mounted image"
-        Mark-Image
+        if ($option -eq "B")
+        {
+            MainMenu
+        }
+        else
+        {
+            Write-Host "You have marked a non-existent mounted image"
+            Mark-Image
+        }
     }
     if ($option -le $global:mImage.Count)
     {
