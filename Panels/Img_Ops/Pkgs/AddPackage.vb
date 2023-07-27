@@ -7,6 +7,8 @@ Public Class AddPackageDlg
     Public pkgCount As Integer
     Public pkgs(65535) As String        ' This is hard-coded. If you have more than 65535 selected packages, the program will throw an exception
 
+    Public Language As Integer
+
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         ProgressPanel.MountDir = MainForm.MountDir
         ProgressPanel.pkgSource = TextBox1.Text
@@ -96,7 +98,7 @@ Public Class AddPackageDlg
     Sub GatherPackages(FolderToScan As String)
         CheckedListBox1.Items.Clear()
         Cursor = Cursors.WaitCursor
-        Select Case MainForm.Language
+        Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENG"
@@ -149,7 +151,7 @@ Public Class AddPackageDlg
             Loop
         End If
         If CheckedListBox1.Items.Count = 0 Then
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -164,7 +166,7 @@ Public Class AddPackageDlg
             End Select
             Beep()
         Else
-            Select Case MainForm.Language
+            Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENG"
@@ -297,6 +299,7 @@ Public Class AddPackageDlg
                     Label4.Text = "Especifique el directorio donde se encuentran archivos CAB o MSU."
             End Select
         End If
+        Language = MainForm.Language
         CheckBox3.Enabled = MainForm.OnlineManagement = False
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
