@@ -285,7 +285,7 @@ Public Class AddDrivers
     Private Sub ListView1_DragDrop(sender As Object, e As DragEventArgs) Handles ListView1.DragDrop
         Dim PackageFiles() As String = e.Data.GetData(DataFormats.FileDrop)
         For Each PkgFile In PackageFiles
-            If Not File.GetAttributes(PkgFile) = FileAttributes.Directory And Not Path.GetExtension(PkgFile).EndsWith("inf") Then Continue For
+            If Not File.GetAttributes(PkgFile) = FileAttributes.Directory And Not Path.GetExtension(PkgFile).EndsWith("inf", StringComparison.OrdinalIgnoreCase) Then Continue For
             If File.GetAttributes(PkgFile) = FileAttributes.Directory Then
                 Cursor = Cursors.WaitCursor
                 If My.Computer.FileSystem.GetFiles(PkgFile, FileIO.SearchOption.SearchAllSubDirectories, "*.inf").Count < 0 Then
