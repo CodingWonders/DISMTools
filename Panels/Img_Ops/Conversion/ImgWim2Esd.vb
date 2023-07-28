@@ -3,6 +3,7 @@
 Public Class ImgWim2Esd
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.imgSrcFile = TextBox1.Text
         ProgressPanel.imgDestFile = TextBox2.Text
         If ComboBox1.SelectedIndex = 0 Then

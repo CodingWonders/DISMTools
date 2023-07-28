@@ -8,6 +8,7 @@ Public Class EnableFeat
     Public featEnablementNames(65535) As String
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.MountDir = MainForm.MountDir
         featEnablementCount = ListView1.CheckedItems.Count
         ProgressPanel.featEnablementCount = featEnablementCount

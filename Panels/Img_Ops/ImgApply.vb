@@ -7,6 +7,7 @@ Imports Microsoft.Dism
 Public Class ImgApply
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         If TextBox1.Text = "" Or Not File.Exists(TextBox1.Text) Then
             Select Case MainForm.Language
                 Case 0

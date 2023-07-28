@@ -12,6 +12,7 @@ Public Class ImgIndexDelete
     Public IndexRemovalNames(65535) As String
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         Array.Clear(IndexRemovalNames, 0, IndexRemovalNames.Last)
         Dim imageCount As Integer = ListView1.CheckedItems.Count
         ' Detect whether volume indexes have been marked for removal
@@ -337,5 +338,10 @@ Public Class ImgIndexDelete
         Catch ex As Exception
             Exit Sub
         End Try
+        If ListView2.Items.Count < 1 Then
+            OK_Button.Enabled = False
+        Else
+            OK_Button.Enabled = True
+        End If
     End Sub
 End Class

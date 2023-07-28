@@ -11,16 +11,11 @@ Public Class ImgMount
     Dim IsReqField1Valid As Boolean
     Dim IsReqField2Valid As Boolean
     Dim IsReqField3Valid As Boolean
-    Public SourceImg As String
-    Public ImgIndex As Integer
-    Public MountDir As String
-    Public isReadOnly As Boolean
-    Public isOptimized As Boolean
-    Public isIntegrityTested As Boolean
     Dim IndexOperationMode As Integer       ' 0: Get-ImageInfo (Win8+); 1: Get-WimInfo (Win7)
     Dim DismVerChecker As FileVersionInfo
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         If Not Directory.Exists(TextBox2.Text) Then
             MountOpDirCreationDialog.ShowDialog()
             If MountOpDirCreationDialog.DialogResult = Windows.Forms.DialogResult.Yes Then
@@ -46,9 +41,12 @@ Public Class ImgMount
                 Exit Sub
             End If
         End If
-        TextBox1.Text = ProgressPanel.SourceImg
-        NumericUpDown1.Value = ImgIndex
-        TextBox2.Text = ProgressPanel.MountDir
+        'TextBox1.Text = ProgressPanel.SourceImg
+        'NumericUpDown1.Value = ImgIndex
+        'TextBox2.Text = ProgressPanel.MountDir
+        ProgressPanel.SourceImg = TextBox1.Text
+        ProgressPanel.ImgIndex = NumericUpDown1.Value
+        ProgressPanel.MountDir = TextBox2.Text
         If CheckBox1.Checked Then
             ProgressPanel.isReadOnly = True
         Else
@@ -65,7 +63,7 @@ Public Class ImgMount
             ProgressPanel.isIntegrityTested = False
         End If
         'ProgressPanel.SourceImg = SourceImg
-        ProgressPanel.ImgIndex = ImgIndex
+        'ProgressPanel.ImgIndex = ImgIndex
         'ProgressPanel.MountDir = MountDir
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         ProgressPanel.OperationNum = 15
@@ -330,7 +328,7 @@ Public Class ImgMount
             If ProgressPanel.projPath = "" Then
                 TextBox2.Text = MainForm.projPath & "\mount"
             Else
-                TextBox2.Text = ProgressPanel.projPath & ProgressPanel.projName & "\mount"
+                TextBox2.Text = ProgressPanel.projPath & "\" & ProgressPanel.projName & "\mount"
             End If
         Else
             TextBox2.Text = MainForm.projPath & "\mount"
@@ -338,7 +336,6 @@ Public Class ImgMount
     End Sub
 
     Private Sub NumericUpDown1_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown1.ValueChanged
-        ImgIndex = NumericUpDown1.Value
         ProgressPanel.ImgIndex = NumericUpDown1.Value
     End Sub
 

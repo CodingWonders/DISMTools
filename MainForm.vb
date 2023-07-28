@@ -206,6 +206,10 @@ Public Class MainForm
 
     Dim HasRemounted As Boolean
 
+    Dim IsCompatible As Boolean = True
+
+    Dim SysVer As Version
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -1232,6 +1236,7 @@ Public Class MainForm
     ''' <param name="OnlineMode">(Optional) Detects properties of an active Windows installation if this value is True. Otherwise, if it is False or is not set, it won't pass this option</param>
     ''' <remarks>Depending on the parameter of bgProcOptn, and on the power of the system, the background processes may take a longer time to finish</remarks>
     Sub RunBackgroundProcesses(bgProcOptn As Integer, GatherBasicInfo As Boolean, GatherAdvancedInfo As Boolean, Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
+        IsCompatible = True
         If Not IsImageMounted Then
             Button1.Enabled = True
             Button2.Enabled = False
@@ -1349,6 +1354,8 @@ Public Class MainForm
                 Exit Sub
             End If
             DetectNTVersion(If(OnlineMode, Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe", MountDir & "\Windows\system32\ntoskrnl.exe"))
+            ' If DetectNTVersion flags this image as incompatible, don't go any further
+            If Not IsCompatible Then Exit Sub
             If GatherAdvancedInfo Then
                 Select Case Language
                     Case 0
@@ -1649,6 +1656,7 @@ Public Class MainForm
                             Dim ImageInfoCollection As DismImageInfoCollection = DismApi.GetImageInfo(MountedImageImgFiles(x))
                             For Each imageInfo As DismImageInfo In ImageInfoCollection
                                 If imageInfo.ImageIndex = MountedImageImgIndexes(x) Then
+                                    SysVer = imageInfo.ProductVersion
                                     Label17.Text = imageInfo.ProductVersion.ToString()
                                     Label18.Text = imageInfo.ImageName
                                     Label20.Text = imageInfo.ImageDescription
@@ -2235,74 +2243,17 @@ Public Class MainForm
         Try
             Dim NTKeVerInfo As FileVersionInfo
             NTKeVerInfo = FileVersionInfo.GetVersionInfo(NTKeExe)
-            If NTKeVerInfo.ProductMajorPart = 6 Then
-                If NTKeVerInfo.ProductMinorPart = 0 Then        ' Windows Vista / WinPE 2.x
-                    ' Let the user know about the incompatibility
-                    If Not ProgressPanel.IsDisposed Then
-                        ToolStripButton4.Visible = False
-                        ProgressPanel.Dispose()
-                        ProgressPanel.Close()
-                    End If
-                    ImgWinVistaIncompatibilityDialog.ShowDialog(Me)
-                    If ImgWinVistaIncompatibilityDialog.DialogResult = Windows.Forms.DialogResult.OK Then
-                        ' Disable every option
-                        Button1.Enabled = False
-                        Button2.Enabled = False
-                        Button3.Enabled = False
-                        Button4.Enabled = True
-                        Button5.Enabled = False
-                        Button6.Enabled = False
-                        Button7.Enabled = False
-                        Button8.Enabled = False
-                        Button9.Enabled = False
-                        Button10.Enabled = False
-                        Button11.Enabled = False
-                        Button12.Enabled = False
-                        Button13.Enabled = False
-                        Exit Sub
-                    ElseIf ImgWinVistaIncompatibilityDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
-                        ' Unmount the image
-                        ProgressPanel.UMountLocalDir = True
-                        ProgressPanel.RandomMountDir = ""   ' Hope there isn't anything to set here
-                        ProgressPanel.MountDir = MountDir
-                        ProgressPanel.UMountOp = 1
-                        ProgressPanel.CheckImgIntegrity = False
-                        ProgressPanel.SaveToNewIndex = False
-                        ProgressPanel.UMountImgIndex = ImgIndex
-                        ProgressPanel.OperationNum = 21
-                        ProgressPanel.ShowDialog()
-                    End If
-                ElseIf NTKeVerInfo.ProductMinorPart = 1 Then    ' Windows 7 / WinPE 3.x
-
-                ElseIf NTKeVerInfo.ProductMinorPart = 2 Then    ' Windows 8 / WinPE 4.0
-
-                ElseIf NTKeVerInfo.ProductMinorPart = 3 Then    ' Windows 8.1 / WinPE 5.x
-
-                ElseIf NTKeVerInfo.ProductMinorPart = 4 Then    ' Windows 10 (Technical Preview)
-
+            If NTKeVerInfo.ProductMajorPart >= 6 And NTKeVerInfo.ProductBuildPart >= 6000 Then
+                If NTKeVerInfo.ProductMajorPart = 6 And NTKeVerInfo.ProductMinorPart = 0 Then
+                    IsCompatible = False
+                Else
+                    IsCompatible = True
                 End If
-
-            ElseIf NTKeVerInfo.ProductMajorPart = 10 Then
-                Select Case NTKeVerInfo.ProductBuildPart
-                    Case 9888 To 21390                          ' Windows 10 / Server 2016,2019,2022 / Cobalt_SunValley / Win10X / WinPE 10.0
-
-                    Case Is >= 21996                            ' Windows 11 / Cobalt_Refresh / Nickel / Copper / WinPE 10.0
-
-                End Select
-            ElseIf NTKeVerInfo.ProductMajorPart < 6 Then
-                ' Windows XP/Server 2003 or older WIM files created by XP2ESD or other XP -> WIM projects. Directly unmount it
-                ProgressPanel.UMountLocalDir = True
-                ProgressPanel.RandomMountDir = ""   ' Hope there isn't anything to set here
-                ProgressPanel.MountDir = MountDir
-                ProgressPanel.UMountOp = 1
-                ProgressPanel.CheckImgIntegrity = False
-                ProgressPanel.SaveToNewIndex = False
-                ProgressPanel.UMountImgIndex = ImgIndex
-                ProgressPanel.OperationNum = 21
-                ProgressPanel.ShowDialog()
+            Else
+                IsCompatible = False
             End If
         Catch ex As Exception
-
+            If IsImageMounted Then IsCompatible = False
         End Try
         Button1.Enabled = False
         'Button2.Enabled = True
@@ -8486,6 +8437,76 @@ Public Class MainForm
             ElseIf OrphanedMountedImgDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
                 UnloadDTProj(False, False, False)
                 ImgBW.CancelAsync()
+            End If
+        End If
+        If Not IsCompatible Then
+            If SysVer.Major = 6 And SysVer.Build >= 6000 Then
+                If SysVer.Minor = 0 Then        ' Windows Vista / WinPE 2.x
+                    ' Let the user know about the incompatibility
+                    If Not ProgressPanel.IsDisposed Then
+                        ToolStripButton4.Visible = False
+                        ProgressPanel.Dispose()
+                        ProgressPanel.Close()
+                    End If
+                    ImgWinVistaIncompatibilityDialog.ShowDialog(Me)
+                    If ImgWinVistaIncompatibilityDialog.DialogResult = Windows.Forms.DialogResult.OK Then
+                        ' Disable every option
+                        Button1.Enabled = False
+                        Button2.Enabled = False
+                        Button3.Enabled = False
+                        Button4.Enabled = True
+                        Button5.Enabled = False
+                        Button6.Enabled = False
+                        Button7.Enabled = False
+                        Button8.Enabled = False
+                        Button9.Enabled = False
+                        Button10.Enabled = False
+                        Button11.Enabled = False
+                        Button12.Enabled = False
+                        Button13.Enabled = False
+                        Exit Sub
+                    ElseIf ImgWinVistaIncompatibilityDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
+                        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+                        ' Unmount the image
+                        ProgressPanel.UMountLocalDir = True
+                        ProgressPanel.RandomMountDir = ""   ' Hope there isn't anything to set here
+                        ProgressPanel.MountDir = MountDir
+                        ProgressPanel.UMountOp = 1
+                        ProgressPanel.CheckImgIntegrity = False
+                        ProgressPanel.SaveToNewIndex = False
+                        ProgressPanel.UMountImgIndex = ImgIndex
+                        ProgressPanel.OperationNum = 21
+                        ProgressPanel.ShowDialog()
+                    End If
+                ElseIf SysVer.Minor = 1 Then    ' Windows 7 / WinPE 3.x
+
+                ElseIf SysVer.Minor = 2 Then    ' Windows 8 / WinPE 4.0
+
+                ElseIf SysVer.Minor = 3 Then    ' Windows 8.1 / WinPE 5.x
+
+                ElseIf SysVer.Minor = 4 Then    ' Windows 10 (Technical Preview)
+
+                End If
+
+            ElseIf SysVer.Major = 10 Then
+                Select Case SysVer.Build
+                    Case 9888 To 21390                          ' Windows 10 / Server 2016,2019,2022 / Cobalt_SunValley / Win10X / WinPE 10.0
+
+                    Case Is >= 21996                            ' Windows 11 / Cobalt_Refresh / Nickel / Copper / WinPE 10.0
+
+                End Select
+            ElseIf SysVer.Major < 6 Or (SysVer.Major = 6 And SysVer.Build < 6000) Then
+                If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+                ' Windows XP/Server 2003 or older WIM files created by XP2ESD or other XP -> WIM projects. Directly unmount it
+                ProgressPanel.UMountLocalDir = True
+                ProgressPanel.RandomMountDir = ""   ' Hope there isn't anything to set here
+                ProgressPanel.MountDir = MountDir
+                ProgressPanel.UMountOp = 1
+                ProgressPanel.CheckImgIntegrity = False
+                ProgressPanel.SaveToNewIndex = False
+                ProgressPanel.UMountImgIndex = ImgIndex
+                ProgressPanel.OperationNum = 21
+                ProgressPanel.ShowDialog()
             End If
         End If
     End Sub

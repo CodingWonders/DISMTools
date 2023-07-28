@@ -9,6 +9,7 @@ Public Class AddCapabilities
     Dim capIds(65535) As String
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         Dim capIdList As New List(Of String)
         ProgressPanel.MountDir = MainForm.MountDir
         capCount = ListView1.CheckedItems.Count

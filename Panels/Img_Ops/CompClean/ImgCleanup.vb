@@ -10,6 +10,7 @@ Public Class ImgCleanup
     Dim SelTask As Integer = -1
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.CleanupTask = ComboBox1.SelectedIndex
         Select Case ComboBox1.SelectedIndex
             Case 1

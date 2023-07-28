@@ -7,6 +7,7 @@ Public Class ImgUMount
     Dim UMountOperations() As String = New String(1) {"Save changes and unmount", "Discard changes and unmount"}
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         If RadioButton1.Checked = True Then
             ProgressPanel.UMountLocalDir = True
             ProgressPanel.RandomMountDir = ""   ' Hope there isn't anything to set here

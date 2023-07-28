@@ -4,6 +4,7 @@ Imports System.IO
 Public Class ImgCapture
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.CaptureSourceDir = TextBox1.Text
         ProgressPanel.CaptureDestinationImage = TextBox2.Text
         ProgressPanel.CaptureName = TextBox3.Text

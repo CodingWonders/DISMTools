@@ -11,6 +11,7 @@ Public Class AddDrivers
     Dim drvPkgCount As Integer
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         'Array.Clear(drvPkgs, 0, drvPkgs.Length)
         'Array.Clear(drvRecursivePkgs, 0, drvRecursivePkgs.Length)
         drvPkgList.Clear()

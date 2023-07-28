@@ -10,6 +10,7 @@ Public Class AddPackageDlg
     Public Language As Integer
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.MountDir = MainForm.MountDir
         ProgressPanel.pkgSource = TextBox1.Text
         pkgCount = CheckedListBox1.CheckedItems.Count

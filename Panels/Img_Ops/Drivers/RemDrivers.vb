@@ -7,6 +7,7 @@ Public Class RemDrivers
     Dim drvPkgCount As Integer
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.MountDir = MainForm.MountDir
         drvPkgCount = ListView1.CheckedItems.Count
         If ListView1.CheckedItems.Count > 0 Then

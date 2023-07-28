@@ -296,6 +296,8 @@ Public Class MountedImgMgr
             Next
             ignoreRepeats = True
         Catch ex As Exception
+            ' Clear ListView
+            ListView1.Items.Clear()
             ' Disable all buttons
             Button1.Enabled = False
             Button2.Enabled = False

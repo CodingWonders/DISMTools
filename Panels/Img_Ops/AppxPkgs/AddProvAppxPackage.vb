@@ -25,6 +25,7 @@ Public Class AddProvAppxPackage
     Dim previewer As New ToolTip()
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         AppxAdditionCount = ListView1.Items.Count
         AppxDependencyCount = ListBox1.Items.Count
         ProgressPanel.appxAdditionCount = AppxAdditionCount

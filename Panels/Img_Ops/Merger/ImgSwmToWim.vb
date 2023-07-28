@@ -3,6 +3,7 @@
 Public Class ImgSwmToWim
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.imgSwmSource = TextBox1.Text
         ProgressPanel.imgWimDestination = TextBox2.Text
         Me.DialogResult = System.Windows.Forms.DialogResult.OK

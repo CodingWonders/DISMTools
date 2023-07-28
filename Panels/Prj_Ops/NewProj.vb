@@ -8,6 +8,7 @@ Public Class NewProj
     Dim IsReqField2Valid As Boolean
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         If Not Directory.Exists(TextBox2.Text) Then
             Select Case MainForm.Language
                 Case 0

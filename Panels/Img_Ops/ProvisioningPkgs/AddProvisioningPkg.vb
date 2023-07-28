@@ -5,6 +5,7 @@ Imports Microsoft.VisualBasic.ControlChars
 Public Class AddProvisioningPkg
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         If TextBox1.Text <> "" Then
             If File.Exists(TextBox1.Text) Then
                 ProgressPanel.ppkgAdditionPackagePath = TextBox1.Text

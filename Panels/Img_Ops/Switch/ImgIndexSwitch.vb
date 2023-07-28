@@ -5,6 +5,7 @@ Public Class ImgIndexSwitch
     Public indexNames(1024) As String
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.SwitchSourceImg = MainForm.SourceImg
         ProgressPanel.SwitchTarget = MainForm.MountDir
         ProgressPanel.SwitchSourceIndex = MainForm.ImgIndex

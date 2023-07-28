@@ -8,6 +8,7 @@ Public Class RemPackage
     Public pkgRemovalFiles(65535) As String
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.MountDir = MainForm.MountDir
         ProgressPanel.pkgRemovalSource = TextBox1.Text
         If RadioButton1.Checked Then
