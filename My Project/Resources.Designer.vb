@@ -1656,13 +1656,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Bugfixes
+        '''  Busca una cadena traducida similar a Changes made since last preview
         '''
-        '''- Fixed an issue where package addition would fail if there were a version mismatch between a package and the Windows image
-        '''- Fixed an issue where AppX package display names weren&apos;t obtained correctly in some cases
-        '''- Fixed an issue that would make the AppX package display name detection process fail if there was a manifest file stored in the application directory
-        '''- Fixed an issue where project creation would fail in online installation management mode
-        '''- Fixed an issue where the image edition [resto de la cadena truncado]&quot;;.
+        '''Bugfixes
+        '''
+        '''- Fixed a setting generation issue regarding the &quot;{common:WinDir}&quot; variable
+        '''- Fixed a &quot;big typo&quot; from the AppX package removal dialog
+        '''- Fixed an issue where the installer reset registry settings to their default values
+        '''- Fixed an issue where the CLI version of the mounted image manager showed an updated listing and cleared the screen every time you go to mark a mounted image
+        '''- Fixed an issue where the CLI version of the mounted image manager was unable to m [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
