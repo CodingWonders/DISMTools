@@ -213,6 +213,12 @@
     <Compile Include="Panels\FirstUse\PrgSetup.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Get_Ops\Drivers\GetDriverInfo.Designer.vb">
+      <DependentUpon>GetDriverInfo.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\Drivers\GetDriverInfo.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Get_Ops\GetImgInfoDlg.Designer.vb">
       <DependentUpon>GetImgInfoDlg.vb</DependentUpon>
     </Compile>
@@ -590,6 +596,9 @@
     <EmbeddedResource Include="Panels\FirstUse\PrgSetup.resx">
       <DependentUpon>PrgSetup.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Get_Ops\Drivers\GetDriverInfo.resx">
+      <DependentUpon>GetDriverInfo.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Get_Ops\GetImgInfoDlg.resx">
       <DependentUpon>GetImgInfoDlg.vb</DependentUpon>
     </EmbeddedResource>
@@ -875,6 +884,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\startup\dt_branding.png" />
+    <None Include="Resources\get_drv_info.png" />
+    <None Include="Resources\drv_info_from_image.png" />
+    <None Include="Resources\info_from_drv_file.png" />
     <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
     <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
     <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />
