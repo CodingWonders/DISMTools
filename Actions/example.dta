@@ -1,0 +1,44 @@
+' Welcome to DISMTools Actions - version 0.1 (for DISMTools 0.3)
+' Actions is the official scripting language of DISMTools. Create Action files (with the "dta" extension) and let tasks be automated.
+' This is an example Action to help you get started.
+
+' DO NOTE THAT THE DEVELOPER DOES NOT RECOMMEND DOING THIS YET!!! Its set of actions is REALLY limited, only 4
+' commands in total. This is expected to change in future versions of this program.
+
+' Available commands:
+' - Project.Create
+' - Image.Mount
+' - Image.Remount
+' - Image.Unmount
+' Look in ProgressPanel.GetTasks() for information on how to use these.
+
+' To mount an image:
+
+'       Image.Mount("whatever.wim", 2, "D:\mount", False, True, False)
+
+' As you can see, Action files are easy to work on. This is because the scripting language is based on Visual Basic.
+
+' You work with sections just like you would with procedures or functions.
+
+Section Properties()
+    ' The Properties section is always present. This is where the Actions ISE stores the file properties.
+    ' In this section, you can ONLY access the properties of the Action namespace. You can modify these in here if you like,
+    ' or use the property editor dialog, in "Actions -> Edit file properties..."
+    Action.Name = "My first Action script"
+    Action.Description = "This is my first Action script"
+    ' Actions work with a concept called "test images". Test images let you **validate** your Action file. You can skip setting the test image,
+    ' but the ISE will still ask. If you want to set the test image, you need to provide a valid WIM or VHDX file, and its index
+    'Action.TestImage.FileName = "whatever.wim"
+    'Action.TestImage.ImageIndex = 1
+    ' This property, however, is not used when running the Action file outside of the ISE
+End Section
+
+Section Main()
+    ' This is where your code would be in. Let's start by creating a project and mounting a Windows image you'd like, with the index you like, to it.
+    Project.Create("MyProject", "C:\MyProj")
+    ' The first parameter is the project name, and the last one is its path
+    Image.Mount("whatever.wim", 2, "C:\MyProj", False, True, False)
+    ' The first parameter is the source image, the second one is the index, the third one is the mount directory; and the last ones are parameters to specify additional operations to the function
+End Section
+
+' This has been the first Actions example.

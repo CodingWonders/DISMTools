@@ -758,6 +758,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
+    <None Include="Actions\example.dta" />
     <None Include="app.config" />
     <None Include="Helpers\dthelper.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
