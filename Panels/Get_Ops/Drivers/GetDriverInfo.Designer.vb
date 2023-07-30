@@ -44,6 +44,17 @@ Partial Class GetDriverInfo
         Me.DrvPackageContainerPanel = New System.Windows.Forms.Panel()
         Me.DrvPackageInfoPanel = New System.Windows.Forms.Panel()
         Me.FlowLayoutPanel2 = New System.Windows.Forms.FlowLayoutPanel()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.Label14 = New System.Windows.Forms.Label()
+        Me.Label16 = New System.Windows.Forms.Label()
+        Me.Label15 = New System.Windows.Forms.Label()
+        Me.Label17 = New System.Windows.Forms.Label()
+        Me.Label18 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.NoDrvPanel = New System.Windows.Forms.Panel()
@@ -56,20 +67,11 @@ Partial Class GetDriverInfo
         Me.Label3 = New System.Windows.Forms.Label()
         Me.PictureBox3 = New System.Windows.Forms.PictureBox()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
-        Me.InstalledDriverLink = New System.Windows.Forms.LinkLabel()
         Me.DriverFileLink = New System.Windows.Forms.LinkLabel()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.Label10 = New System.Windows.Forms.Label()
-        Me.Label12 = New System.Windows.Forms.Label()
-        Me.Label11 = New System.Windows.Forms.Label()
-        Me.Label13 = New System.Windows.Forms.Label()
-        Me.Label14 = New System.Windows.Forms.Label()
-        Me.Label15 = New System.Windows.Forms.Label()
-        Me.Label16 = New System.Windows.Forms.Label()
-        Me.Label17 = New System.Windows.Forms.Label()
-        Me.Label18 = New System.Windows.Forms.Label()
+        Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
+        Me.InstalledDriverLink = New System.Windows.Forms.LinkLabel()
+        Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -197,6 +199,7 @@ Partial Class GetDriverInfo
         '
         'Label5
         '
+        Me.Label5.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label5.AutoSize = True
         Me.Label5.Location = New System.Drawing.Point(20, 408)
         Me.Label5.Name = "Label5"
@@ -256,6 +259,7 @@ Partial Class GetDriverInfo
         '
         'ListBox1
         '
+        Me.ListBox1.AllowDrop = True
         Me.ListBox1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ListBox1.FormattingEnabled = True
         Me.ListBox1.Location = New System.Drawing.Point(0, 0)
@@ -283,6 +287,7 @@ Partial Class GetDriverInfo
         'Button3
         '
         Me.Button3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button3.Location = New System.Drawing.Point(295, 3)
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(142, 22)
@@ -293,6 +298,7 @@ Partial Class GetDriverInfo
         'Button2
         '
         Me.Button2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button2.Location = New System.Drawing.Point(149, 3)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(140, 22)
@@ -303,6 +309,7 @@ Partial Class GetDriverInfo
         'Button1
         '
         Me.Button1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button1.Location = New System.Drawing.Point(3, 3)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(140, 22)
@@ -352,6 +359,115 @@ Partial Class GetDriverInfo
         Me.FlowLayoutPanel2.Size = New System.Drawing.Size(436, 288)
         Me.FlowLayoutPanel2.TabIndex = 1
         Me.FlowLayoutPanel2.WrapContents = False
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Location = New System.Drawing.Point(7, 6)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(113, 13)
+        Me.Label8.TabIndex = 0
+        Me.Label8.Text = "Hardware description:"
+        '
+        'Label9
+        '
+        Me.Label9.AutoEllipsis = True
+        Me.Label9.Location = New System.Drawing.Point(7, 19)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label9.Size = New System.Drawing.Size(390, 83)
+        Me.Label9.TabIndex = 0
+        Me.Label9.Text = "Label8"
+        '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Location = New System.Drawing.Point(7, 102)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label10.Size = New System.Drawing.Size(72, 17)
+        Me.Label10.TabIndex = 0
+        Me.Label10.Text = "Hardware ID:"
+        '
+        'Label11
+        '
+        Me.Label11.AutoEllipsis = True
+        Me.Label11.Location = New System.Drawing.Point(7, 119)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label11.Size = New System.Drawing.Size(390, 83)
+        Me.Label11.TabIndex = 0
+        Me.Label11.Text = "Label8"
+        '
+        'Label12
+        '
+        Me.Label12.AutoSize = True
+        Me.Label12.Location = New System.Drawing.Point(7, 202)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label12.Size = New System.Drawing.Size(77, 17)
+        Me.Label12.TabIndex = 0
+        Me.Label12.Text = "Additional IDs:"
+        '
+        'Label13
+        '
+        Me.Label13.AutoSize = True
+        Me.Label13.Location = New System.Drawing.Point(7, 219)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Padding = New System.Windows.Forms.Padding(12, 4, 0, 0)
+        Me.Label13.Size = New System.Drawing.Size(95, 17)
+        Me.Label13.TabIndex = 0
+        Me.Label13.Text = "Compatible IDs:"
+        '
+        'Label14
+        '
+        Me.Label14.AutoEllipsis = True
+        Me.Label14.Location = New System.Drawing.Point(7, 236)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Padding = New System.Windows.Forms.Padding(12, 2, 0, 0)
+        Me.Label14.Size = New System.Drawing.Size(390, 83)
+        Me.Label14.TabIndex = 0
+        Me.Label14.Text = "Label8"
+        '
+        'Label16
+        '
+        Me.Label16.AutoSize = True
+        Me.Label16.Location = New System.Drawing.Point(7, 319)
+        Me.Label16.Name = "Label16"
+        Me.Label16.Padding = New System.Windows.Forms.Padding(12, 4, 0, 0)
+        Me.Label16.Size = New System.Drawing.Size(79, 17)
+        Me.Label16.TabIndex = 0
+        Me.Label16.Text = "Exclude IDs:"
+        '
+        'Label15
+        '
+        Me.Label15.AutoEllipsis = True
+        Me.Label15.Location = New System.Drawing.Point(7, 336)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Padding = New System.Windows.Forms.Padding(12, 2, 0, 0)
+        Me.Label15.Size = New System.Drawing.Size(390, 83)
+        Me.Label15.TabIndex = 0
+        Me.Label15.Text = "Label8"
+        '
+        'Label17
+        '
+        Me.Label17.AutoSize = True
+        Me.Label17.Location = New System.Drawing.Point(7, 419)
+        Me.Label17.Name = "Label17"
+        Me.Label17.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label17.Size = New System.Drawing.Size(126, 17)
+        Me.Label17.TabIndex = 0
+        Me.Label17.Text = "Hardware manufacturer:"
+        '
+        'Label18
+        '
+        Me.Label18.AutoEllipsis = True
+        Me.Label18.Location = New System.Drawing.Point(7, 436)
+        Me.Label18.Name = "Label18"
+        Me.Label18.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label18.Size = New System.Drawing.Size(390, 52)
+        Me.Label18.TabIndex = 0
+        Me.Label18.Text = "Label8"
         '
         'Panel1
         '
@@ -479,19 +595,6 @@ Partial Class GetDriverInfo
         Me.PictureBox2.TabIndex = 2
         Me.PictureBox2.TabStop = False
         '
-        'InstalledDriverLink
-        '
-        Me.InstalledDriverLink.AutoSize = True
-        Me.InstalledDriverLink.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.InstalledDriverLink.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.InstalledDriverLink.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.InstalledDriverLink.Location = New System.Drawing.Point(128, 76)
-        Me.InstalledDriverLink.Name = "InstalledDriverLink"
-        Me.InstalledDriverLink.Size = New System.Drawing.Size(352, 13)
-        Me.InstalledDriverLink.TabIndex = 1
-        Me.InstalledDriverLink.TabStop = True
-        Me.InstalledDriverLink.Text = "I want to get information about installed drivers in the image"
-        '
         'DriverFileLink
         '
         Me.DriverFileLink.AutoSize = True
@@ -514,114 +617,29 @@ Partial Class GetDriverInfo
         Me.Label2.TabIndex = 0
         Me.Label2.Text = "What do you want to get information about?"
         '
-        'Label8
+        'OpenFileDialog1
         '
-        Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(7, 6)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(113, 13)
-        Me.Label8.TabIndex = 0
-        Me.Label8.Text = "Hardware description:"
+        Me.OpenFileDialog1.Filter = "Driver files|*.inf"
+        Me.OpenFileDialog1.SupportMultiDottedExtensions = True
+        Me.OpenFileDialog1.Title = "Locate driver files"
         '
-        'Label9
+        'InstalledDriverLink
         '
-        Me.Label9.AutoEllipsis = True
-        Me.Label9.Location = New System.Drawing.Point(7, 19)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label9.Size = New System.Drawing.Size(390, 83)
-        Me.Label9.TabIndex = 0
-        Me.Label9.Text = "Label8"
+        Me.InstalledDriverLink.AutoSize = True
+        Me.InstalledDriverLink.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.InstalledDriverLink.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.InstalledDriverLink.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.InstalledDriverLink.Location = New System.Drawing.Point(128, 76)
+        Me.InstalledDriverLink.Name = "InstalledDriverLink"
+        Me.InstalledDriverLink.Size = New System.Drawing.Size(352, 13)
+        Me.InstalledDriverLink.TabIndex = 1
+        Me.InstalledDriverLink.TabStop = True
+        Me.InstalledDriverLink.Text = "I want to get information about installed drivers in the image"
         '
-        'Label10
+        'BackgroundWorker1
         '
-        Me.Label10.AutoSize = True
-        Me.Label10.Location = New System.Drawing.Point(7, 102)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label10.Size = New System.Drawing.Size(72, 17)
-        Me.Label10.TabIndex = 0
-        Me.Label10.Text = "Hardware ID:"
-        '
-        'Label12
-        '
-        Me.Label12.AutoSize = True
-        Me.Label12.Location = New System.Drawing.Point(7, 202)
-        Me.Label12.Name = "Label12"
-        Me.Label12.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label12.Size = New System.Drawing.Size(77, 17)
-        Me.Label12.TabIndex = 0
-        Me.Label12.Text = "Additional IDs:"
-        '
-        'Label11
-        '
-        Me.Label11.AutoEllipsis = True
-        Me.Label11.Location = New System.Drawing.Point(7, 119)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label11.Size = New System.Drawing.Size(390, 83)
-        Me.Label11.TabIndex = 0
-        Me.Label11.Text = "Label8"
-        '
-        'Label13
-        '
-        Me.Label13.AutoSize = True
-        Me.Label13.Location = New System.Drawing.Point(7, 219)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Padding = New System.Windows.Forms.Padding(12, 4, 0, 0)
-        Me.Label13.Size = New System.Drawing.Size(90, 17)
-        Me.Label13.TabIndex = 0
-        Me.Label13.Text = "Compatible ID:"
-        '
-        'Label14
-        '
-        Me.Label14.AutoEllipsis = True
-        Me.Label14.Location = New System.Drawing.Point(7, 236)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Padding = New System.Windows.Forms.Padding(12, 2, 0, 0)
-        Me.Label14.Size = New System.Drawing.Size(390, 83)
-        Me.Label14.TabIndex = 0
-        Me.Label14.Text = "Label8"
-        '
-        'Label15
-        '
-        Me.Label15.AutoEllipsis = True
-        Me.Label15.Location = New System.Drawing.Point(7, 336)
-        Me.Label15.Name = "Label15"
-        Me.Label15.Padding = New System.Windows.Forms.Padding(12, 2, 0, 0)
-        Me.Label15.Size = New System.Drawing.Size(390, 83)
-        Me.Label15.TabIndex = 0
-        Me.Label15.Text = "Label8"
-        '
-        'Label16
-        '
-        Me.Label16.AutoSize = True
-        Me.Label16.Location = New System.Drawing.Point(7, 319)
-        Me.Label16.Name = "Label16"
-        Me.Label16.Padding = New System.Windows.Forms.Padding(12, 4, 0, 0)
-        Me.Label16.Size = New System.Drawing.Size(74, 17)
-        Me.Label16.TabIndex = 0
-        Me.Label16.Text = "Exclude ID:"
-        '
-        'Label17
-        '
-        Me.Label17.AutoSize = True
-        Me.Label17.Location = New System.Drawing.Point(7, 419)
-        Me.Label17.Name = "Label17"
-        Me.Label17.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label17.Size = New System.Drawing.Size(126, 17)
-        Me.Label17.TabIndex = 0
-        Me.Label17.Text = "Hardware manufacturer:"
-        '
-        'Label18
-        '
-        Me.Label18.AutoEllipsis = True
-        Me.Label18.Location = New System.Drawing.Point(7, 436)
-        Me.Label18.Name = "Label18"
-        Me.Label18.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label18.Size = New System.Drawing.Size(390, 52)
-        Me.Label18.TabIndex = 0
-        Me.Label18.Text = "Label8"
+        Me.BackgroundWorker1.WorkerReportsProgress = True
+        Me.BackgroundWorker1.WorkerSupportsCancellation = True
         '
         'GetDriverInfo
         '
@@ -681,7 +699,6 @@ Partial Class GetDriverInfo
     Friend WithEvents MenuPanel As System.Windows.Forms.Panel
     Friend WithEvents PictureBox3 As System.Windows.Forms.PictureBox
     Friend WithEvents PictureBox2 As System.Windows.Forms.PictureBox
-    Friend WithEvents InstalledDriverLink As System.Windows.Forms.LinkLabel
     Friend WithEvents DriverFileLink As System.Windows.Forms.LinkLabel
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents DriverInfoPanel As System.Windows.Forms.Panel
@@ -718,5 +735,8 @@ Partial Class GetDriverInfo
     Friend WithEvents Label15 As System.Windows.Forms.Label
     Friend WithEvents Label17 As System.Windows.Forms.Label
     Friend WithEvents Label18 As System.Windows.Forms.Label
+    Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
+    Friend WithEvents InstalledDriverLink As System.Windows.Forms.LinkLabel
+    Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
 
 End Class

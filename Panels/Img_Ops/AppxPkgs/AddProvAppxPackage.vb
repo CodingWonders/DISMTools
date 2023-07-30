@@ -1,6 +1,7 @@
 ﻿Imports System.Windows.Forms
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
+Imports DISMTools.Elements
 
 Public Class AddProvAppxPackage
 
@@ -23,6 +24,8 @@ Public Class AddProvAppxPackage
     Dim LogoAssetPopupForm As New Form()
     Dim LogoAssetPreview As New PictureBox()
     Dim previewer As New ToolTip()
+
+    Dim Packages As New List(Of AppxPackage)
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
@@ -1219,6 +1222,12 @@ Public Class AddProvAppxPackage
                     ListView1.Items.Add(New ListViewItem(New String() {Package, "Empaquetado", currentAppxName, currentAppxPublisher, currentAppxVersion}))
                 End If
         End Select
+        Dim currentPackage As New AppxPackage()
+        currentPackage.PackageFile = Package
+        currentPackage.PackageName = currentAppxName
+        currentPackage.PackagePublisher = currentAppxPublisher
+        currentPackage.PackageVersion = currentAppxVersion
+        If Not Packages.Contains(currentPackage) Then Packages.Add(currentPackage)
         Button3.Enabled = True
         If Directory.Exists(Application.StartupPath & "\appxscan") Then
             Directory.Delete(Application.StartupPath & "\appxscan", True)
