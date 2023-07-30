@@ -2,6 +2,8 @@
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
 Imports DISMTools.Elements
+Imports System.Xml
+Imports System.Xml.Serialization
 
 Public Class AddProvAppxPackage
 
@@ -431,7 +433,7 @@ Public Class AddProvAppxPackage
     End Sub
 
     ''' <summary>
-    ''' DISMTools AppX header scanner component: version 0.3
+    ''' DISMTools AppX header scanner component: version 0.3.1
     ''' </summary>
     ''' <param name="IsFolder">Determines whether the given value for "Package" is a folder</param>
     ''' <param name="Package">The name of the packed or unpacked AppX file. It may be a file containing the full structure, or a folder containing all AppX files</param>
@@ -510,68 +512,15 @@ Public Class AddProvAppxPackage
                 If ScannerRTB.Lines(2).EndsWith("<!--") Then
                     ' XML comment
                     IdScanner = ScannerRTB.Lines(9)
-                    CharIndex = 0
-                    CharNext = 0
-                    For Each Character As Char In ScannerRTB.Lines(9)
-                        CharNext = CharIndex + 1
-                        If Not IdScanner(CharIndex) = Quote Then
-                            CharIndex += 1
-                            Continue For
-                        ElseIf IdScanner(CharIndex) = Quote And IdScanner(CharNext) = " " Then
-                            CharIndex += 1
-                            Continue For
-                        Else
-                            Character = IdScanner(CharIndex + 1)
-                            If Not IdScanner(CharIndex + Stepper) = " " Then
-                                If QuoteCount = 0 Then
-                                    QuoteCount += 1
-                                    Do
-                                        If Character = Quote Then
-                                            CharIndex += Stepper - 1
-                                            Character = IdScanner(CharIndex - 1)
-                                            QuoteCount += 1
-                                            Stepper = 2
-                                            Exit Do
-                                        Else
-                                            currentAppxName &= Character.ToString()
-                                            Character = IdScanner(CharIndex + Stepper)
-                                            Stepper += 1
-                                        End If
-                                    Loop
-                                ElseIf QuoteCount = 2 Then
-                                    QuoteCount += 1
-                                    Do
-                                        If Character = Quote Then
-                                            CharIndex += Stepper - 1
-                                            Character = IdScanner(CharIndex - 1)
-                                            QuoteCount += 1
-                                            Stepper = 2
-                                            Exit Do
-                                        Else
-                                            currentAppxPublisher &= Character.ToString()
-                                            Character = IdScanner(CharIndex + Stepper)
-                                            Stepper += 1
-                                        End If
-                                    Loop
-                                ElseIf QuoteCount = 4 Then
-                                    QuoteCount += 1
-                                    Do
-                                        If Character = Quote Then
-                                            CharIndex += Stepper - 1
-                                            Character = IdScanner(CharIndex - 1)
-                                            QuoteCount += 1
-                                            Stepper = 2
-                                            Exit Do
-                                        Else
-                                            currentAppxVersion &= Character.ToString()
-                                            Character = IdScanner(CharIndex + Stepper)
-                                            Stepper += 1
-                                        End If
-                                    Loop
-                                End If
-                            End If
-                        End If
-                    Next
+                    Dim serializer As New XmlSerializer(GetType(AppxPackage))
+                    Using tReader As TextReader = New StringReader(IdScanner)
+                        Using reader As XmlReader = XmlReader.Create(tReader)
+                            Dim id = CType(serializer.Deserialize(reader), AppxPackage)
+                            currentAppxName = id.PackageName
+                            currentAppxPublisher = id.PackagePublisher
+                            currentAppxVersion = id.PackageVersion
+                        End Using
+                    End Using
                     AppxNameList.Add(currentAppxName)
                     AppxPublisherList.Add(currentAppxPublisher)
                     AppxVersionList.Add(currentAppxVersion)
@@ -580,68 +529,15 @@ Public Class AddProvAppxPackage
                     AppxVersion = AppxVersionList.ToArray()
                 ElseIf ScannerRTB.Lines(2).Contains("<Identity Name=") Then
                     IdScanner = ScannerRTB.Lines(2)
-                    CharIndex = 0
-                    CharNext = 0
-                    For Each Character As Char In ScannerRTB.Lines(2)
-                        CharNext = CharIndex + 1
-                        If Not IdScanner(CharIndex) = Quote Then
-                            CharIndex += 1
-                            Continue For
-                        ElseIf IdScanner(CharIndex) = Quote And IdScanner(CharNext) = " " Then
-                            CharIndex += 1
-                            Continue For
-                        Else
-                            Character = IdScanner(CharIndex + 1)
-                            If Not IdScanner(CharIndex + Stepper) = " " Then
-                                If QuoteCount = 0 Then
-                                    QuoteCount += 1
-                                    Do
-                                        If Character = Quote Then
-                                            CharIndex += Stepper - 1
-                                            Character = IdScanner(CharIndex - 1)
-                                            QuoteCount += 1
-                                            Stepper = 2
-                                            Exit Do
-                                        Else
-                                            currentAppxName &= Character.ToString()
-                                            Character = IdScanner(CharIndex + Stepper)
-                                            Stepper += 1
-                                        End If
-                                    Loop
-                                ElseIf QuoteCount = 2 Then
-                                    QuoteCount += 1
-                                    Do
-                                        If Character = Quote Then
-                                            CharIndex += Stepper - 1
-                                            Character = IdScanner(CharIndex - 1)
-                                            QuoteCount += 1
-                                            Stepper = 2
-                                            Exit Do
-                                        Else
-                                            currentAppxPublisher &= Character.ToString()
-                                            Character = IdScanner(CharIndex + Stepper)
-                                            Stepper += 1
-                                        End If
-                                    Loop
-                                ElseIf QuoteCount = 4 Then
-                                    QuoteCount += 1
-                                    Do
-                                        If Character = Quote Then
-                                            CharIndex += Stepper - 1
-                                            Character = IdScanner(CharIndex - 1)
-                                            QuoteCount += 1
-                                            Stepper = 2
-                                            Exit Do
-                                        Else
-                                            currentAppxVersion &= Character.ToString()
-                                            Character = IdScanner(CharIndex + Stepper)
-                                            Stepper += 1
-                                        End If
-                                    Loop
-                                End If
-                            End If
-                        End If
-                    Next
+                    Dim serializer As New XmlSerializer(GetType(AppxPackage))
+                    Using tReader As TextReader = New StringReader(IdScanner)
+                        Using reader As XmlReader = XmlReader.Create(tReader)
+                            Dim id = CType(serializer.Deserialize(reader), AppxPackage)
+                            currentAppxName = id.PackageName
+                            currentAppxPublisher = id.PackagePublisher
+                            currentAppxVersion = id.PackageVersion
+                        End Using
+                    End Using
                     AppxNameList.Add(currentAppxName)
                     AppxPublisherList.Add(currentAppxPublisher)
                     AppxVersionList.Add(currentAppxVersion)
@@ -654,68 +550,15 @@ Public Class AddProvAppxPackage
                 ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Package & "\AppxManifest.xml")
                 If ScannerRTB.Lines(2).EndsWith("<!--") Then
                     Dim IdScanner As String = ScannerRTB.Lines(9)
-                    Dim CharIndex As Integer = 0
-                    Dim CharNext As Integer
-                    For Each Character As Char In ScannerRTB.Lines(9)
-                        CharNext = CharIndex + 1
-                        If Not IdScanner(CharIndex) = Quote Then
-                            CharIndex += 1
-                            Continue For
-                        ElseIf IdScanner(CharIndex) = Quote And IdScanner(CharNext) = " " Then
-                            CharIndex += 1
-                            Continue For
-                        Else
-                            Character = IdScanner(CharIndex + 1)
-                            If Not IdScanner(CharIndex + Stepper) = " " Then
-                                If QuoteCount = 0 Then
-                                    QuoteCount += 1
-                                    Do
-                                        If Character = Quote Then
-                                            CharIndex += Stepper - 1
-                                            Character = IdScanner(CharIndex - 1)
-                                            QuoteCount += 1
-                                            Stepper = 2
-                                            Exit Do
-                                        Else
-                                            currentAppxName &= Character.ToString()
-                                            Character = IdScanner(CharIndex + Stepper)
-                                            Stepper += 1
-                                        End If
-                                    Loop
-                                ElseIf QuoteCount = 2 Then
-                                    QuoteCount += 1
-                                    Do
-                                        If Character = Quote Then
-                                            CharIndex += Stepper - 1
-                                            Character = IdScanner(CharIndex - 1)
-                                            QuoteCount += 1
-                                            Stepper = 2
-                                            Exit Do
-                                        Else
-                                            currentAppxPublisher &= Character.ToString()
-                                            Character = IdScanner(CharIndex + Stepper)
-                                            Stepper += 1
-                                        End If
-                                    Loop
-                                ElseIf QuoteCount = 4 Then
-                                    QuoteCount += 1
-                                    Do
-                                        If Character = Quote Then
-                                            CharIndex += Stepper - 1
-                                            Character = IdScanner(CharIndex - 1)
-                                            QuoteCount += 1
-                                            Stepper = 2
-                                            Exit Do
-                                        Else
-                                            currentAppxVersion &= Character.ToString()
-                                            Character = IdScanner(CharIndex + Stepper)
-                                            Stepper += 1
-                                        End If
-                                    Loop
-                                End If
-                            End If
-                        End If
-                    Next
+                    Dim serializer As New XmlSerializer(GetType(AppxPackage))
+                    Using tReader As TextReader = New StringReader(IdScanner)
+                        Using reader As XmlReader = XmlReader.Create(tReader)
+                            Dim id = CType(serializer.Deserialize(reader), AppxPackage)
+                            currentAppxName = id.PackageName
+                            currentAppxPublisher = id.PackagePublisher
+                            currentAppxVersion = id.PackageVersion
+                        End Using
+                    End Using
                     AppxNameList.Add(currentAppxName)
                     AppxPublisherList.Add(currentAppxPublisher)
                     AppxVersionList.Add(currentAppxVersion)
@@ -796,68 +639,15 @@ Public Class AddProvAppxPackage
                     If ScannerRTB.Lines(2).EndsWith("<!--") Then
                         ' XML comment
                         IdScanner = ScannerRTB.Lines(9)
-                        CharIndex = 0
-                        CharNext = 0
-                        For Each Character As Char In ScannerRTB.Lines(9)
-                            CharNext = CharIndex + 1
-                            If Not IdScanner(CharIndex) = Quote Then
-                                CharIndex += 1
-                                Continue For
-                            ElseIf IdScanner(CharIndex) = Quote And IdScanner(CharNext) = " " Then
-                                CharIndex += 1
-                                Continue For
-                            Else
-                                Character = IdScanner(CharIndex + 1)
-                                If Not IdScanner(CharIndex + Stepper) = " " Then
-                                    If QuoteCount = 0 Then
-                                        QuoteCount += 1
-                                        Do
-                                            If Character = Quote Then
-                                                CharIndex += Stepper - 1
-                                                Character = IdScanner(CharIndex - 1)
-                                                QuoteCount += 1
-                                                Stepper = 2
-                                                Exit Do
-                                            Else
-                                                currentAppxName &= Character.ToString()
-                                                Character = IdScanner(CharIndex + Stepper)
-                                                Stepper += 1
-                                            End If
-                                        Loop
-                                    ElseIf QuoteCount = 2 Then
-                                        QuoteCount += 1
-                                        Do
-                                            If Character = Quote Then
-                                                CharIndex += Stepper - 1
-                                                Character = IdScanner(CharIndex - 1)
-                                                QuoteCount += 1
-                                                Stepper = 2
-                                                Exit Do
-                                            Else
-                                                currentAppxPublisher &= Character.ToString()
-                                                Character = IdScanner(CharIndex + Stepper)
-                                                Stepper += 1
-                                            End If
-                                        Loop
-                                    ElseIf QuoteCount = 4 Then
-                                        QuoteCount += 1
-                                        Do
-                                            If Character = Quote Then
-                                                CharIndex += Stepper - 1
-                                                Character = IdScanner(CharIndex - 1)
-                                                QuoteCount += 1
-                                                Stepper = 2
-                                                Exit Do
-                                            Else
-                                                currentAppxVersion &= Character.ToString()
-                                                Character = IdScanner(CharIndex + Stepper)
-                                                Stepper += 1
-                                            End If
-                                        Loop
-                                    End If
-                                End If
-                            End If
-                        Next
+                        Dim serializer As New XmlSerializer(GetType(AppxPackage))
+                        Using tReader As TextReader = New StringReader(IdScanner)
+                            Using reader As XmlReader = XmlReader.Create(tReader)
+                                Dim id = CType(serializer.Deserialize(reader), AppxPackage)
+                                currentAppxName = id.PackageName
+                                currentAppxPublisher = id.PackagePublisher
+                                currentAppxVersion = id.PackageVersion
+                            End Using
+                        End Using
                         AppxNameList.Add(currentAppxName)
                         AppxPublisherList.Add(currentAppxPublisher)
                         AppxVersionList.Add(currentAppxVersion)
@@ -866,68 +656,15 @@ Public Class AddProvAppxPackage
                         AppxVersion = AppxVersionList.ToArray()
                     ElseIf ScannerRTB.Lines(2).Contains("<Identity Name=") Then
                         IdScanner = ScannerRTB.Lines(2)
-                        CharIndex = 0
-                        CharNext = 0
-                        For Each Character As Char In ScannerRTB.Lines(2)
-                            CharNext = CharIndex + 1
-                            If Not IdScanner(CharIndex) = Quote Then
-                                CharIndex += 1
-                                Continue For
-                            ElseIf IdScanner(CharIndex) = Quote And IdScanner(CharNext) = " " Then
-                                CharIndex += 1
-                                Continue For
-                            Else
-                                Character = IdScanner(CharIndex + 1)
-                                If Not IdScanner(CharIndex + Stepper) = " " Then
-                                    If QuoteCount = 0 Then
-                                        QuoteCount += 1
-                                        Do
-                                            If Character = Quote Then
-                                                CharIndex += Stepper - 1
-                                                Character = IdScanner(CharIndex - 1)
-                                                QuoteCount += 1
-                                                Stepper = 2
-                                                Exit Do
-                                            Else
-                                                currentAppxName &= Character.ToString()
-                                                Character = IdScanner(CharIndex + Stepper)
-                                                Stepper += 1
-                                            End If
-                                        Loop
-                                    ElseIf QuoteCount = 2 Then
-                                        QuoteCount += 1
-                                        Do
-                                            If Character = Quote Then
-                                                CharIndex += Stepper - 1
-                                                Character = IdScanner(CharIndex - 1)
-                                                QuoteCount += 1
-                                                Stepper = 2
-                                                Exit Do
-                                            Else
-                                                currentAppxPublisher &= Character.ToString()
-                                                Character = IdScanner(CharIndex + Stepper)
-                                                Stepper += 1
-                                            End If
-                                        Loop
-                                    ElseIf QuoteCount = 4 Then
-                                        QuoteCount += 1
-                                        Do
-                                            If Character = Quote Then
-                                                CharIndex += Stepper - 1
-                                                Character = IdScanner(CharIndex - 1)
-                                                QuoteCount += 1
-                                                Stepper = 2
-                                                Exit Do
-                                            Else
-                                                currentAppxVersion &= Character.ToString()
-                                                Character = IdScanner(CharIndex + Stepper)
-                                                Stepper += 1
-                                            End If
-                                        Loop
-                                    End If
-                                End If
-                            End If
-                        Next
+                        Dim serializer As New XmlSerializer(GetType(AppxPackage))
+                        Using tReader As TextReader = New StringReader(IdScanner)
+                            Using reader As XmlReader = XmlReader.Create(tReader)
+                                Dim id = CType(serializer.Deserialize(reader), AppxPackage)
+                                currentAppxName = id.PackageName
+                                currentAppxPublisher = id.PackagePublisher
+                                currentAppxVersion = id.PackageVersion
+                            End Using
+                        End Using
                         AppxNameList.Add(currentAppxName)
                         AppxPublisherList.Add(currentAppxPublisher)
                         AppxVersionList.Add(currentAppxVersion)
@@ -939,68 +676,15 @@ Public Class AddProvAppxPackage
                     ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\appxscan\AppxManifest.xml")
                     If ScannerRTB.Lines(2).EndsWith("<!--") Then
                         Dim IdScanner As String = ScannerRTB.Lines(9)
-                        Dim CharIndex As Integer = 0
-                        Dim CharNext As Integer
-                        For Each Character As Char In ScannerRTB.Lines(9)
-                            CharNext = CharIndex + 1
-                            If Not IdScanner(CharIndex) = Quote Then
-                                CharIndex += 1
-                                Continue For
-                            ElseIf IdScanner(CharIndex) = Quote And IdScanner(CharNext) = " " Then
-                                CharIndex += 1
-                                Continue For
-                            Else
-                                Character = IdScanner(CharIndex + 1)
-                                If Not IdScanner(CharIndex + Stepper) = " " Then
-                                    If QuoteCount = 0 Then
-                                        QuoteCount += 1
-                                        Do
-                                            If Character = Quote Then
-                                                CharIndex += Stepper - 1
-                                                Character = IdScanner(CharIndex - 1)
-                                                QuoteCount += 1
-                                                Stepper = 2
-                                                Exit Do
-                                            Else
-                                                currentAppxName &= Character.ToString()
-                                                Character = IdScanner(CharIndex + Stepper)
-                                                Stepper += 1
-                                            End If
-                                        Loop
-                                    ElseIf QuoteCount = 2 Then
-                                        QuoteCount += 1
-                                        Do
-                                            If Character = Quote Then
-                                                CharIndex += Stepper - 1
-                                                Character = IdScanner(CharIndex - 1)
-                                                QuoteCount += 1
-                                                Stepper = 2
-                                                Exit Do
-                                            Else
-                                                currentAppxPublisher &= Character.ToString()
-                                                Character = IdScanner(CharIndex + Stepper)
-                                                Stepper += 1
-                                            End If
-                                        Loop
-                                    ElseIf QuoteCount = 4 Then
-                                        QuoteCount += 1
-                                        Do
-                                            If Character = Quote Then
-                                                CharIndex += Stepper - 1
-                                                Character = IdScanner(CharIndex - 1)
-                                                QuoteCount += 1
-                                                Stepper = 2
-                                                Exit Do
-                                            Else
-                                                currentAppxVersion &= Character.ToString()
-                                                Character = IdScanner(CharIndex + Stepper)
-                                                Stepper += 1
-                                            End If
-                                        Loop
-                                    End If
-                                End If
-                            End If
-                        Next
+                        Dim serializer As New XmlSerializer(GetType(AppxPackage))
+                        Using tReader As TextReader = New StringReader(IdScanner)
+                            Using reader As XmlReader = XmlReader.Create(tReader)
+                                Dim id = CType(serializer.Deserialize(reader), AppxPackage)
+                                currentAppxName = id.PackageName
+                                currentAppxPublisher = id.PackagePublisher
+                                currentAppxVersion = id.PackageVersion
+                            End Using
+                        End Using
                         AppxNameList.Add(currentAppxName)
                         AppxPublisherList.Add(currentAppxPublisher)
                         AppxVersionList.Add(currentAppxVersion)
@@ -1009,68 +693,15 @@ Public Class AddProvAppxPackage
                         AppxVersion = AppxVersionList.ToArray()
                     ElseIf ScannerRTB.Lines(2).Contains("<Identity Name=") Then
                         Dim IdScanner As String = ScannerRTB.Lines(2)
-                        Dim CharIndex As Integer = 0
-                        Dim CharNext As Integer
-                        For Each Character As Char In ScannerRTB.Lines(2)
-                            CharNext = CharIndex + 1
-                            If Not IdScanner(CharIndex) = Quote Then
-                                CharIndex += 1
-                                Continue For
-                            ElseIf IdScanner(CharIndex) = Quote And IdScanner(CharNext) = " " Then
-                                CharIndex += 1
-                                Continue For
-                            Else
-                                Character = IdScanner(CharIndex + 1)
-                                If Not IdScanner(CharIndex + Stepper) = " " Then
-                                    If QuoteCount = 0 Then
-                                        QuoteCount += 1
-                                        Do
-                                            If Character = Quote Then
-                                                CharIndex += Stepper - 1
-                                                Character = IdScanner(CharIndex - 1)
-                                                QuoteCount += 1
-                                                Stepper = 2
-                                                Exit Do
-                                            Else
-                                                currentAppxName &= Character.ToString()
-                                                Character = IdScanner(CharIndex + Stepper)
-                                                Stepper += 1
-                                            End If
-                                        Loop
-                                    ElseIf QuoteCount = 2 Then
-                                        QuoteCount += 1
-                                        Do
-                                            If Character = Quote Then
-                                                CharIndex += Stepper - 1
-                                                Character = IdScanner(CharIndex - 1)
-                                                QuoteCount += 1
-                                                Stepper = 2
-                                                Exit Do
-                                            Else
-                                                currentAppxPublisher &= Character.ToString()
-                                                Character = IdScanner(CharIndex + Stepper)
-                                                Stepper += 1
-                                            End If
-                                        Loop
-                                    ElseIf QuoteCount = 4 Then
-                                        QuoteCount += 1
-                                        Do
-                                            If Character = Quote Then
-                                                CharIndex += Stepper - 1
-                                                Character = IdScanner(CharIndex - 1)
-                                                QuoteCount += 1
-                                                Stepper = 2
-                                                Exit Do
-                                            Else
-                                                currentAppxVersion &= Character.ToString()
-                                                Character = IdScanner(CharIndex + Stepper)
-                                                Stepper += 1
-                                            End If
-                                        Loop
-                                    End If
-                                End If
-                            End If
-                        Next
+                        Dim serializer As New XmlSerializer(GetType(AppxPackage))
+                        Using tReader As TextReader = New StringReader(IdScanner)
+                            Using reader As XmlReader = XmlReader.Create(tReader)
+                                Dim id = CType(serializer.Deserialize(reader), AppxPackage)
+                                currentAppxName = id.PackageName
+                                currentAppxPublisher = id.PackagePublisher
+                                currentAppxVersion = id.PackageVersion
+                            End Using
+                        End Using
                         AppxNameList.Add(currentAppxName)
                         AppxPublisherList.Add(currentAppxPublisher)
                         AppxVersionList.Add(currentAppxVersion)
