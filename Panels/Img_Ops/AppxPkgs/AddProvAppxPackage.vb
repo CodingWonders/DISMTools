@@ -73,7 +73,7 @@ Public Class AddProvAppxPackage
                 Else
                     ProgressPanel.appxAdditionLastDependency = ""
                 End If
-                If RadioButton1.Checked Then
+                If CheckBox3.Checked Then
                     If TextBox1.Text = "" Then
                         Select Case MainForm.Language
                             Case 0
@@ -151,7 +151,7 @@ Public Class AddProvAppxPackage
                     ProgressPanel.appxAdditionUseCustomDataFile = False
                     ProgressPanel.appxAdditionCustomDataFile = ""
                 End If
-                If RadioButton3.Checked Then
+                If CheckBox4.Checked Then
                     ProgressPanel.appxAdditionUseAllRegions = True
                     ProgressPanel.appxAdditionRegions = "all"
                 Else
@@ -164,6 +164,7 @@ Public Class AddProvAppxPackage
                     ProgressPanel.appxAdditionCommit = False
                 End If
             End If
+            ProgressPanel.appxAdditionPackageList = Packages
         End If
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         ProgressPanel.OperationNum = 37
@@ -186,9 +187,8 @@ Public Class AddProvAppxPackage
                         Label1.Text = Text
                         Label2.Text = "Please add packed or unpacked AppX packages by using the buttons below, or by dropping them to the list view below:"
                         Label3.Text = "An AppX package may need some dependencies for it to be installed correctly. If so, you can specify a list of dependencies now:"
-                        Label4.Text = "The dependencies specified will be used on all selected AppX packages"
                         Label5.Text = "To specify multiple app regions, separate them with a semicolon (;)"
-                        Label6.Text = "Select an entry in the list view to show the details of an app"
+                        Label6.Text = "Select an entry in the list view to show the details of an app and to configure addition settings"
                         Button1.Text = "Add file"
                         Button2.Text = "Add folder"
                         Button3.Text = "Remove all entries"
@@ -203,7 +203,6 @@ Public Class AddProvAppxPackage
                         CheckBox1.Text = "Provide a custom data file:"
                         CheckBox2.Text = "Commit image after adding AppX packages"
                         CustomDataFileOFD.Title = "Specify a custom data file"
-                        GroupBox1.Text = "Source AppX files*"
                         GroupBox2.Text = "AppX dependencies"
                         GroupBox3.Text = "AppX regions"
                         LicenseFileOFD.Title = "Specify a license file"
@@ -214,19 +213,16 @@ Public Class AddProvAppxPackage
                         ListView1.Columns(2).Text = "Application name"
                         ListView1.Columns(3).Text = "Application publisher"
                         ListView1.Columns(4).Text = "Application version"
-                        RadioButton1.Text = "License file*:"
-                        RadioButton2.Text = "Skip license file"
-                        RadioButton3.Text = "Make apps available for all regions"
-                        RadioButton4.Text = "Specify app regions"
+                        CheckBox3.Text = "License file:"
+                        CheckBox4.Text = "Make app available for all regions"
                         UnpackedAppxFolderFBD.Description = "Please specify a folder containing unpacked AppX files:"
                     Case "ESN"
                         Text = "Añadir paquetes aprovisionados AppX"
                         Label1.Text = Text
                         Label2.Text = "Añada archivos AppX empaquetados o desempaquetados usando los botones de abajo, o soltándolos en la lista de abajo:"
                         Label3.Text = "Un paquete AppX podría necesitar algunas dependencias para que sea instalado correctamente. Si es así, puede especificarlas ahora:"
-                        Label4.Text = "Las dependencias especificadas serán usadas en todos los paquetes AppX seleccionados"
                         Label5.Text = "Para especificar regiones de aplicación múltiples, sepáralos con un punto y coma (;)"
-                        Label6.Text = "Seleccione una entrada en la lista para mostrar los detalles de una aplicación"
+                        Label6.Text = "Seleccione una entrada en la lista para mostrar los detalles de una aplicación y para configurar opciones de adición"
                         Button1.Text = "Añadir archivo"
                         Button2.Text = "Añadir carpeta"
                         Button3.Text = "Eliminar todas las entradas"
@@ -241,7 +237,6 @@ Public Class AddProvAppxPackage
                         CheckBox1.Text = "Proporcionar un archivo de datos:"
                         CheckBox2.Text = "Guardar imagen tras añadir paquetes AppX"
                         CustomDataFileOFD.Title = "Especificar un archivo de datos personalizados"
-                        GroupBox1.Text = "Archivos AppX de origen*"
                         GroupBox2.Text = "Dependencias de aplicaciones"
                         GroupBox3.Text = "Regiones de aplicaciones"
                         LicenseFileOFD.Title = "Especificar un archivo de licencia"
@@ -252,10 +247,8 @@ Public Class AddProvAppxPackage
                         ListView1.Columns(2).Text = "Nombre de aplicación"
                         ListView1.Columns(3).Text = "Publicador de aplicación"
                         ListView1.Columns(4).Text = "Versión de aplicación"
-                        RadioButton1.Text = "Archivo de licencia*:"
-                        RadioButton2.Text = "Omitir archivo de licencia"
-                        RadioButton3.Text = "Hacer aplicaciones disponibles para todas las regiones"
-                        RadioButton4.Text = "Especificar regiones de aplicaciones"
+                        CheckBox3.Text = "Archivo de licencia:"
+                        CheckBox4.Text = "Hacer aplicación disponible para todas las regiones"
                         UnpackedAppxFolderFBD.Description = "Especifique un directorio contenedor de archivos de una aplicación AppX:"
                 End Select
             Case 1
@@ -263,9 +256,8 @@ Public Class AddProvAppxPackage
                 Label1.Text = Text
                 Label2.Text = "Please add packed or unpacked AppX packages by using the buttons below, or by dropping them to the list view below:"
                 Label3.Text = "An AppX package may need some dependencies for it to be installed correctly. If so, you can specify a list of dependencies now:"
-                Label4.Text = "The dependencies specified will be used on all selected AppX packages"
                 Label5.Text = "To specify multiple app regions, separate them with a semicolon (;)"
-                Label6.Text = "Select an entry in the list view to show the details of an app"
+                Label6.Text = "Select an entry in the list view to show the details of an app and to configure addition settings"
                 Button1.Text = "Add file"
                 Button2.Text = "Add folder"
                 Button3.Text = "Remove all entries"
@@ -280,7 +272,6 @@ Public Class AddProvAppxPackage
                 CheckBox1.Text = "Provide a custom data file:"
                 CheckBox2.Text = "Commit image after adding AppX packages"
                 CustomDataFileOFD.Title = "Specify a custom data file"
-                GroupBox1.Text = "Source AppX files*"
                 GroupBox2.Text = "AppX dependencies"
                 GroupBox3.Text = "AppX regions"
                 LicenseFileOFD.Title = "Specify a license file"
@@ -291,19 +282,16 @@ Public Class AddProvAppxPackage
                 ListView1.Columns(2).Text = "Application name"
                 ListView1.Columns(3).Text = "Application publisher"
                 ListView1.Columns(4).Text = "Application version"
-                RadioButton1.Text = "License file*:"
-                RadioButton2.Text = "Skip license file"
-                RadioButton3.Text = "Make apps available for all regions"
-                RadioButton4.Text = "Specify app regions"
+                CheckBox3.Text = "License file:"
+                CheckBox4.Text = "Make app available for all regions"
                 UnpackedAppxFolderFBD.Description = "Please specify a folder containing unpacked AppX files:"
             Case 2
                 Text = "Añadir paquetes aprovisionados AppX"
                 Label1.Text = Text
                 Label2.Text = "Añada archivos AppX empaquetados o desempaquetados usando los botones de abajo, o soltándolos en la lista de abajo:"
                 Label3.Text = "Un paquete AppX podría necesitar algunas dependencias para que sea instalado correctamente. Si es así, puede especificarlas ahora:"
-                Label4.Text = "Las dependencias especificadas serán usadas en todos los paquetes AppX seleccionados"
                 Label5.Text = "Para especificar regiones de aplicación múltiples, sepáralos con un punto y coma (;)"
-                Label6.Text = "Seleccione una entrada en la lista para mostrar los detalles de una aplicación"
+                Label6.Text = "Seleccione una entrada en la lista para mostrar los detalles de una aplicación y para configurar opciones de adición"
                 Button1.Text = "Añadir archivo"
                 Button2.Text = "Añadir carpeta"
                 Button3.Text = "Eliminar todas las entradas"
@@ -318,7 +306,6 @@ Public Class AddProvAppxPackage
                 CheckBox1.Text = "Proporcionar un archivo de datos:"
                 CheckBox2.Text = "Guardar imagen tras añadir paquetes AppX"
                 CustomDataFileOFD.Title = "Especificar un archivo de datos personalizados"
-                GroupBox1.Text = "Archivos AppX de origen*"
                 GroupBox2.Text = "Dependencias de aplicaciones"
                 GroupBox3.Text = "Regiones de aplicaciones"
                 LicenseFileOFD.Title = "Especificar un archivo de licencia"
@@ -329,17 +316,14 @@ Public Class AddProvAppxPackage
                 ListView1.Columns(2).Text = "Nombre de aplicación"
                 ListView1.Columns(3).Text = "Publicador de aplicación"
                 ListView1.Columns(4).Text = "Versión de aplicación"
-                RadioButton1.Text = "Archivo de licencia*:"
-                RadioButton2.Text = "Omitir archivo de licencia"
-                RadioButton3.Text = "Hacer aplicaciones disponibles para todas las regiones"
-                RadioButton4.Text = "Especificar regiones de aplicaciones"
+                CheckBox3.Text = "Archivo de licencia:"
+                CheckBox4.Text = "Hacer aplicación disponible para todas las regiones"
                 UnpackedAppxFolderFBD.Description = "Especifique un directorio contenedor de archivos de una aplicación AppX:"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
             BackColor = Color.FromArgb(31, 31, 31)
             ForeColor = Color.White
-            GroupBox1.ForeColor = Color.White
             GroupBox2.ForeColor = Color.White
             GroupBox3.ForeColor = Color.White
             ListView1.BackColor = Color.FromArgb(31, 31, 31)
@@ -351,7 +335,6 @@ Public Class AddProvAppxPackage
             Win10Title.BackColor = Color.White
             BackColor = Color.FromArgb(238, 238, 242)
             ForeColor = Color.Black
-            GroupBox1.ForeColor = Color.Black
             GroupBox2.ForeColor = Color.Black
             GroupBox3.ForeColor = Color.Black
             ListView1.BackColor = Color.FromArgb(238, 238, 242)
@@ -372,6 +355,7 @@ Public Class AddProvAppxPackage
         CheckBox2.Enabled = MainForm.OnlineManagement = False
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -385,6 +369,7 @@ Public Class AddProvAppxPackage
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        Packages.Clear()
         ListView1.Items.Clear()
         Button3.Enabled = False
         Button9.Enabled = False
@@ -394,12 +379,19 @@ Public Class AddProvAppxPackage
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
         ListBox1.Items.Clear()
+        Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies.Clear()
         Button4.Enabled = False
         Button5.Enabled = False
     End Sub
 
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
         If Not ListBox1.SelectedItem = "" Then
+            'Dim dep As New AppxDependency()
+            'dep.DependencyFile.Add(ListBox1.SelectedItem)
+            Dim deps As New List(Of AppxDependency)
+            deps = Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies
+            deps.RemoveAt(ListBox1.SelectedIndex)
+            Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies = deps
             ListBox1.Items.Remove(ListBox1.SelectedItem)
         End If
         If ListBox1.SelectedItem = "" Then
@@ -418,9 +410,24 @@ Public Class AddProvAppxPackage
     End Sub
 
     Private Sub AppxDependencyOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles AppxDependencyOFD.FileOk
-        ListBox1.Items.Add(AppxDependencyOFD.FileName)
-        If ListBox1.Items.Count > 0 Then
-            Button4.Enabled = True
+        If ListView1.SelectedItems.Count = 1 Then
+            Dim dep As New AppxDependency()
+            dep.DependencyFile = AppxDependencyOFD.FileName
+            If Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies.Count > 0 And Not Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies.Contains(dep) Then
+                Dim deps As New List(Of AppxDependency)
+                deps = Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies
+                deps.Add(dep)
+                Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies = deps
+            ElseIf Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies.Count = 0 Then
+                Dim deps As New List(Of AppxDependency)
+                deps = Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies
+                deps.Add(dep)
+                Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies = deps
+            End If
+            ListBox1.Items.Add(AppxDependencyOFD.FileName)
+            If ListBox1.Items.Count > 0 Then
+                Button4.Enabled = True
+            End If
         End If
     End Sub
 
@@ -974,6 +981,7 @@ Public Class AddProvAppxPackage
 
     Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
         If ListView1.FocusedItem.Text <> "" Then
+            Packages.RemoveAt(ListView1.FocusedItem.Index)
             ListView1.Items.Remove(ListView1.FocusedItem)
         End If
     End Sub
@@ -982,8 +990,8 @@ Public Class AddProvAppxPackage
         Process.Start("https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes")
     End Sub
 
-    Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
-        If RadioButton1.Checked Then
+    Private Sub CheckBox3_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox3.CheckedChanged
+        If CheckBox3.Checked Then
             TextBox1.Enabled = True
             Button7.Enabled = True
         Else
@@ -1002,8 +1010,8 @@ Public Class AddProvAppxPackage
         End If
     End Sub
 
-    Private Sub RadioButton3_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton3.CheckedChanged
-        If RadioButton3.Checked Then
+    Private Sub CheckBox4_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox4.CheckedChanged
+        If CheckBox4.Checked Then
             TextBox3.Enabled = False
             Label5.Enabled = False
             LinkLabel1.Enabled = False
@@ -1026,6 +1034,8 @@ Public Class AddProvAppxPackage
         End Try
         NoAppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, True, False)
         AppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, False, True)
+        AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
+        FlowLayoutPanel1.Visible = If(ListView1.SelectedItems.Count <= 0, False, True)
         If ListView1.SelectedItems.Count > 0 Then
             Try
                 Label7.Text = ListView1.FocusedItem.SubItems(2).Text
@@ -1071,6 +1081,23 @@ Public Class AddProvAppxPackage
         Catch ex As Exception
             PictureBox2.SizeMode = PictureBoxSizeMode.CenterImage
             PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.preview_unavail_dark, My.Resources.preview_unavail_light)
+        End Try
+
+        ' Detect properties obtained by the AppxPackage Element
+        Try
+            If ListView1.SelectedItems.Count = 1 Then
+                ListBox1.Items.Clear()
+                If Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies.Count > 0 Then
+                    For Each Dependency As AppxDependency In Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies
+                        ListBox1.Items.Add(Dependency.DependencyFile)
+                    Next
+                End If
+            End If
+        Catch ex As Exception
+            NoAppxFilePanel.Visible = True
+            AppxFilePanel.Visible = False
+            AppxDetailsPanel.Height = 520
+            FlowLayoutPanel1.Visible = False
         End Try
     End Sub
 
@@ -1291,12 +1318,26 @@ Public Class AddProvAppxPackage
     End Sub
 
     Private Sub ListBox1_DragDrop(sender As Object, e As DragEventArgs) Handles ListBox1.DragDrop
+        If ListView1.SelectedItems.Count < 1 Then Exit Sub
         Dim DependencyFiles() As String = e.Data.GetData(DataFormats.FileDrop)
         For Each Dependency In DependencyFiles
             If Not ListBox1.Items.Contains(Dependency) And (Path.GetExtension(Dependency).EndsWith("appx", StringComparison.OrdinalIgnoreCase) Or _
                                                             Path.GetExtension(Dependency).EndsWith("msix", StringComparison.OrdinalIgnoreCase) Or _
                                                             Path.GetExtension(Dependency).EndsWith("appxbundle", StringComparison.OrdinalIgnoreCase) Or _
                                                             Path.GetExtension(Dependency).EndsWith("msixbundle", StringComparison.OrdinalIgnoreCase)) Then
+                Dim dep As New AppxDependency()
+                dep.DependencyFile = Dependency
+                If Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies.Count > 0 And Not Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies.Contains(dep) Then
+                    Dim deps As New List(Of AppxDependency)
+                    deps = Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies
+                    deps.Add(dep)
+                    Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies = deps
+                ElseIf Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies.Count = 0 Then
+                    Dim deps As New List(Of AppxDependency)
+                    deps = Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies
+                    deps.Add(dep)
+                    Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies = deps
+                End If
                 ListBox1.Items.Add(Dependency)
             End If
         Next

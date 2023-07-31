@@ -47,6 +47,8 @@ Namespace Elements
         ''' <remarks></remarks>
         Public Property PackageSpecifiedDependencies As New List(Of AppxDependency)
 
+        Public Property PackageLicenseFile As String
+
         Public Property PackageCustomDataFile As String
 
         Public Property PackageRegions As String
@@ -63,7 +65,7 @@ Namespace Elements
         ''' The dependency file specified by the user
         ''' </summary>
         ''' <remarks></remarks>
-        Public Property DependencyFile As New List(Of String)
+        Public Property DependencyFile As String
 
         ''' <summary>
         ''' The name of the AppX dependency
