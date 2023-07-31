@@ -79,20 +79,7 @@ If you want to contribute to this project, you can do so in many ways:
   3. Work on your changes **and test them**. We want to make sure your changes work as expected, and there aren't any [regressions](https://en.wikipedia.org/wiki/Regression_testing) because of them
   4. Commit your changes and create a pull request. If not set automatically, select the **latest** `dt_pre_****` branch to merge the contents to it. We'll review your changes and, if they're ready, we'll merge them.
 
-- Documentation and/or artwork: if you like the visual side of things more, you can contribute to the Wiki. For more information, read [the following issue](https://github.com/CodingWonders/DISMTools/issues/2)
-
-## Contributions
-
-If you want to contribute to this project, you can do so in many ways:
-
-- Code changes: changes that WILL make it to the next release. If you want to do these, do the following:
-
-  1. Create your separate branch, based on the **latest** `dt_pre_****` one (you don't want to work on your changes based on an outdated source tree). This will make sure your change can arrive in the next preview
-  2. Clone the newly created branch or, if you already cloned the repository, fetch the origin (`git fetch origin`) and switch to your branch
-  3. Work on your changes **and test them**. We want to make sure your changes work as expected, and there aren't any [regressions](https://en.wikipedia.org/wiki/Regression_testing) because of them
-  4. Commit your changes and create a pull request. If not set automatically, select the **latest** `dt_pre_****` branch to merge the contents to it. We'll review your changes and, if they're ready, we'll merge them.
-
-- Documentation and/or artwork: if you like the visual side of things more, you can contribute to the Wiki. For more information, read [the following issue](https://github.com/CodingWonders/DISMTools/issues/2)
+- Documentation and/or artwork: if you like the visual side of things more, ~~you can contribute to the Wiki. For more information, read [the following issue](https://github.com/CodingWonders/DISMTools/issues/2)~~ A better help system will be introduced
 
 ## Testing the latest
 
