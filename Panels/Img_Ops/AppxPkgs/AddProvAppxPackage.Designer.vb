@@ -75,7 +75,6 @@ Partial Class AddProvAppxPackage
         Me.FlowLayoutPanel1 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
-        Me.Panel2 = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -89,7 +88,6 @@ Partial Class AddProvAppxPackage
         Me.GroupBox3.SuspendLayout()
         Me.FlowLayoutPanel1.SuspendLayout()
         Me.Panel1.SuspendLayout()
-        Me.Panel2.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -458,8 +456,9 @@ Partial Class AddProvAppxPackage
         '
         'CheckBox1
         '
+        Me.CheckBox1.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.CheckBox1.AutoEllipsis = True
-        Me.CheckBox1.Location = New System.Drawing.Point(8, 9)
+        Me.CheckBox1.Location = New System.Drawing.Point(9, 34)
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(110, 17)
         Me.CheckBox1.TabIndex = 7
@@ -468,15 +467,17 @@ Partial Class AddProvAppxPackage
         '
         'TextBox1
         '
-        Me.TextBox1.Location = New System.Drawing.Point(96, 11)
+        Me.TextBox1.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.TextBox1.Location = New System.Drawing.Point(97, 7)
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.Size = New System.Drawing.Size(317, 21)
         Me.TextBox1.TabIndex = 8
         '
         'Button7
         '
+        Me.Button7.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Button7.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button7.Location = New System.Drawing.Point(419, 10)
+        Me.Button7.Location = New System.Drawing.Point(420, 6)
         Me.Button7.Name = "Button7"
         Me.Button7.Size = New System.Drawing.Size(75, 23)
         Me.Button7.TabIndex = 9
@@ -485,17 +486,19 @@ Partial Class AddProvAppxPackage
         '
         'TextBox2
         '
+        Me.TextBox2.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.TextBox2.Enabled = False
-        Me.TextBox2.Location = New System.Drawing.Point(124, 7)
+        Me.TextBox2.Location = New System.Drawing.Point(125, 32)
         Me.TextBox2.Name = "TextBox2"
         Me.TextBox2.Size = New System.Drawing.Size(289, 21)
         Me.TextBox2.TabIndex = 8
         '
         'Button8
         '
+        Me.Button8.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Button8.Enabled = False
         Me.Button8.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button8.Location = New System.Drawing.Point(419, 6)
+        Me.Button8.Location = New System.Drawing.Point(420, 31)
         Me.Button8.Name = "Button8"
         Me.Button8.Size = New System.Drawing.Size(75, 23)
         Me.Button8.TabIndex = 9
@@ -508,9 +511,9 @@ Partial Class AddProvAppxPackage
         Me.GroupBox3.Controls.Add(Me.LinkLabel1)
         Me.GroupBox3.Controls.Add(Me.TextBox3)
         Me.GroupBox3.Controls.Add(Me.Label5)
-        Me.GroupBox3.Location = New System.Drawing.Point(3, 320)
+        Me.GroupBox3.Location = New System.Drawing.Point(3, 297)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(504, 136)
+        Me.GroupBox3.Size = New System.Drawing.Size(504, 143)
         Me.GroupBox3.TabIndex = 5
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "AppX regions"
@@ -618,7 +621,6 @@ Partial Class AddProvAppxPackage
         Me.FlowLayoutPanel1.AutoScroll = True
         Me.FlowLayoutPanel1.Controls.Add(Me.GroupBox2)
         Me.FlowLayoutPanel1.Controls.Add(Me.Panel1)
-        Me.FlowLayoutPanel1.Controls.Add(Me.Panel2)
         Me.FlowLayoutPanel1.Controls.Add(Me.GroupBox3)
         Me.FlowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
         Me.FlowLayoutPanel1.Location = New System.Drawing.Point(525, 137)
@@ -629,33 +631,27 @@ Partial Class AddProvAppxPackage
         '
         'Panel1
         '
+        Me.Panel1.Controls.Add(Me.CheckBox1)
+        Me.Panel1.Controls.Add(Me.TextBox2)
         Me.Panel1.Controls.Add(Me.CheckBox3)
+        Me.Panel1.Controls.Add(Me.Button8)
         Me.Panel1.Controls.Add(Me.TextBox1)
         Me.Panel1.Controls.Add(Me.Button7)
         Me.Panel1.Location = New System.Drawing.Point(3, 230)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(504, 43)
+        Me.Panel1.Size = New System.Drawing.Size(504, 61)
         Me.Panel1.TabIndex = 10
         '
         'CheckBox3
         '
+        Me.CheckBox3.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.CheckBox3.AutoSize = True
-        Me.CheckBox3.Location = New System.Drawing.Point(8, 13)
+        Me.CheckBox3.Location = New System.Drawing.Point(9, 9)
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(82, 17)
         Me.CheckBox3.TabIndex = 10
         Me.CheckBox3.Text = "License file:"
         Me.CheckBox3.UseVisualStyleBackColor = True
-        '
-        'Panel2
-        '
-        Me.Panel2.Controls.Add(Me.CheckBox1)
-        Me.Panel2.Controls.Add(Me.TextBox2)
-        Me.Panel2.Controls.Add(Me.Button8)
-        Me.Panel2.Location = New System.Drawing.Point(3, 279)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(504, 35)
-        Me.Panel2.TabIndex = 11
         '
         'AddProvAppxPackage
         '
@@ -696,8 +692,6 @@ Partial Class AddProvAppxPackage
         Me.FlowLayoutPanel1.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
-        Me.Panel2.ResumeLayout(False)
-        Me.Panel2.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -753,7 +747,6 @@ Partial Class AddProvAppxPackage
     Friend WithEvents ColumnHeader5 As System.Windows.Forms.ColumnHeader
     Friend WithEvents FlowLayoutPanel1 As System.Windows.Forms.FlowLayoutPanel
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
-    Friend WithEvents Panel2 As System.Windows.Forms.Panel
     Friend WithEvents CheckBox3 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox4 As System.Windows.Forms.CheckBox
 
