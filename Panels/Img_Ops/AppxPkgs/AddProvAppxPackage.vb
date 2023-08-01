@@ -779,6 +779,12 @@ Public Class AddProvAppxPackage
                         Item.SubItems(2).Text = currentAppxName
                         Item.SubItems(3).Text = currentAppxPublisher
                         Item.SubItems(4).Text = currentAppxVersion
+
+                        ' Configure Element list
+                        Packages(Item.Index).PackageFile = Package
+                        Packages(Item.Index).PackageName = currentAppxName
+                        Packages(Item.Index).PackagePublisher = currentAppxPublisher
+                        Packages(Item.Index).PackageVersion = currentAppxVersion
                     Else
                         If Directory.Exists(Application.StartupPath & "\appxscan") Then
                             Directory.Delete(Application.StartupPath & "\appxscan", True)
@@ -822,6 +828,12 @@ Public Class AddProvAppxPackage
                         Item.SubItems(2).Text = currentAppxName
                         Item.SubItems(3).Text = currentAppxPublisher
                         Item.SubItems(4).Text = currentAppxVersion
+
+                        ' Configure Element list
+                        Packages(Item.Index).PackageFile = Package
+                        Packages(Item.Index).PackageName = currentAppxName
+                        Packages(Item.Index).PackagePublisher = currentAppxPublisher
+                        Packages(Item.Index).PackageVersion = currentAppxVersion
                     Else
                         If Directory.Exists(Application.StartupPath & "\appxscan") Then
                             Directory.Delete(Application.StartupPath & "\appxscan", True)

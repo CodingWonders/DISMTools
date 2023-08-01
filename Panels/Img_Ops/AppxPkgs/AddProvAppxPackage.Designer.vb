@@ -61,6 +61,7 @@ Partial Class AddProvAppxPackage
         Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.Button8 = New System.Windows.Forms.Button()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.CheckBox4 = New System.Windows.Forms.CheckBox()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.TextBox3 = New System.Windows.Forms.TextBox()
         Me.Label5 = New System.Windows.Forms.Label()
@@ -73,9 +74,8 @@ Partial Class AddProvAppxPackage
         Me.AppxScanner = New System.Diagnostics.Process()
         Me.FlowLayoutPanel1 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.Panel2 = New System.Windows.Forms.Panel()
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
-        Me.CheckBox4 = New System.Windows.Forms.CheckBox()
+        Me.Panel2 = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -515,6 +515,18 @@ Partial Class AddProvAppxPackage
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "AppX regions"
         '
+        'CheckBox4
+        '
+        Me.CheckBox4.AutoSize = True
+        Me.CheckBox4.Checked = True
+        Me.CheckBox4.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox4.Location = New System.Drawing.Point(30, 30)
+        Me.CheckBox4.Name = "CheckBox4"
+        Me.CheckBox4.Size = New System.Drawing.Size(185, 17)
+        Me.CheckBox4.TabIndex = 9
+        Me.CheckBox4.Text = "Make app available for all regions"
+        Me.CheckBox4.UseVisualStyleBackColor = True
+        '
         'LinkLabel1
         '
         Me.LinkLabel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
@@ -625,16 +637,6 @@ Partial Class AddProvAppxPackage
         Me.Panel1.Size = New System.Drawing.Size(504, 43)
         Me.Panel1.TabIndex = 10
         '
-        'Panel2
-        '
-        Me.Panel2.Controls.Add(Me.CheckBox1)
-        Me.Panel2.Controls.Add(Me.TextBox2)
-        Me.Panel2.Controls.Add(Me.Button8)
-        Me.Panel2.Location = New System.Drawing.Point(3, 279)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(504, 35)
-        Me.Panel2.TabIndex = 11
-        '
         'CheckBox3
         '
         Me.CheckBox3.AutoSize = True
@@ -645,17 +647,15 @@ Partial Class AddProvAppxPackage
         Me.CheckBox3.Text = "License file:"
         Me.CheckBox3.UseVisualStyleBackColor = True
         '
-        'CheckBox4
+        'Panel2
         '
-        Me.CheckBox4.AutoSize = True
-        Me.CheckBox4.Checked = True
-        Me.CheckBox4.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox4.Location = New System.Drawing.Point(30, 30)
-        Me.CheckBox4.Name = "CheckBox4"
-        Me.CheckBox4.Size = New System.Drawing.Size(185, 17)
-        Me.CheckBox4.TabIndex = 9
-        Me.CheckBox4.Text = "Make app available for all regions"
-        Me.CheckBox4.UseVisualStyleBackColor = True
+        Me.Panel2.Controls.Add(Me.CheckBox1)
+        Me.Panel2.Controls.Add(Me.TextBox2)
+        Me.Panel2.Controls.Add(Me.Button8)
+        Me.Panel2.Location = New System.Drawing.Point(3, 279)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(504, 35)
+        Me.Panel2.TabIndex = 11
         '
         'AddProvAppxPackage
         '
