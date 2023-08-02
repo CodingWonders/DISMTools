@@ -35,6 +35,9 @@ Namespace Elements
         <XmlAttribute("Version")>
         Public Property PackageVersion As String
 
+        <XmlAttribute("ProcessorArchitecture")>
+        Public Property PackageArchitecture As String
+
         ''' <summary>
         ''' The dependencies required by the application and specified in its manifest file
         ''' </summary>

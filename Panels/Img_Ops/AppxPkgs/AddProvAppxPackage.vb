@@ -472,6 +472,7 @@ Public Class AddProvAppxPackage
         Dim currentAppxName As String = ""
         Dim currentAppxPublisher As String = ""
         Dim currentAppxVersion As String = ""
+        Dim currentAppxArchitecture As String = ""
         Dim pkgName As String = ""
         If IsFolder Then
             If File.Exists(Package & "\AppxMetadata\AppxBundleManifest.xml") Then
@@ -527,6 +528,7 @@ Public Class AddProvAppxPackage
                             currentAppxName = id.PackageName
                             currentAppxPublisher = id.PackagePublisher
                             currentAppxVersion = id.PackageVersion
+                            currentAppxArchitecture = id.PackageArchitecture
                         End Using
                     End Using
                     AppxNameList.Add(currentAppxName)
@@ -544,6 +546,7 @@ Public Class AddProvAppxPackage
                             currentAppxName = id.PackageName
                             currentAppxPublisher = id.PackagePublisher
                             currentAppxVersion = id.PackageVersion
+                            currentAppxArchitecture = id.PackageArchitecture
                         End Using
                     End Using
                     AppxNameList.Add(currentAppxName)
@@ -565,6 +568,7 @@ Public Class AddProvAppxPackage
                             currentAppxName = id.PackageName
                             currentAppxPublisher = id.PackagePublisher
                             currentAppxVersion = id.PackageVersion
+                            currentAppxArchitecture = id.PackageArchitecture
                         End Using
                     End Using
                     AppxNameList.Add(currentAppxName)
@@ -654,6 +658,7 @@ Public Class AddProvAppxPackage
                                 currentAppxName = id.PackageName
                                 currentAppxPublisher = id.PackagePublisher
                                 currentAppxVersion = id.PackageVersion
+                                currentAppxArchitecture = id.PackageArchitecture
                             End Using
                         End Using
                         AppxNameList.Add(currentAppxName)
@@ -671,6 +676,7 @@ Public Class AddProvAppxPackage
                                 currentAppxName = id.PackageName
                                 currentAppxPublisher = id.PackagePublisher
                                 currentAppxVersion = id.PackageVersion
+                                currentAppxArchitecture = id.PackageArchitecture
                             End Using
                         End Using
                         AppxNameList.Add(currentAppxName)
@@ -691,6 +697,7 @@ Public Class AddProvAppxPackage
                                 currentAppxName = id.PackageName
                                 currentAppxPublisher = id.PackagePublisher
                                 currentAppxVersion = id.PackageVersion
+                                currentAppxArchitecture = id.PackageArchitecture
                             End Using
                         End Using
                         AppxNameList.Add(currentAppxName)
@@ -708,6 +715,7 @@ Public Class AddProvAppxPackage
                                 currentAppxName = id.PackageName
                                 currentAppxPublisher = id.PackagePublisher
                                 currentAppxVersion = id.PackageVersion
+                                currentAppxArchitecture = id.PackageArchitecture
                             End Using
                         End Using
                         AppxNameList.Add(currentAppxName)
@@ -727,7 +735,7 @@ Public Class AddProvAppxPackage
         If ListView1.Items.Count > 0 Then
             ' Iterate through the ListView items until we can find an entry with properties similar to those currently obtained
             For Each Item As ListViewItem In ListView1.Items
-                If Item.SubItems(2).Text = currentAppxName And Item.SubItems(3).Text = currentAppxPublisher And Item.SubItems(4).Text = currentAppxVersion Then
+                If Item.SubItems(2).Text = currentAppxName And Item.SubItems(3).Text = currentAppxPublisher And Item.SubItems(4).Text = currentAppxVersion And Packages(Item.Index).PackageArchitecture = currentAppxArchitecture Then
                     ' Cancel everything
                     Select Case MainForm.Language
                         Case 0
@@ -878,6 +886,7 @@ Public Class AddProvAppxPackage
         currentPackage.PackageName = currentAppxName
         currentPackage.PackagePublisher = currentAppxPublisher
         currentPackage.PackageVersion = currentAppxVersion
+        currentPackage.PackageArchitecture = currentAppxArchitecture
         If Not Packages.Contains(currentPackage) Then Packages.Add(currentPackage)
         Button3.Enabled = True
         If Directory.Exists(Application.StartupPath & "\appxscan") Then
