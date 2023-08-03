@@ -5906,7 +5906,7 @@ Public Class MainForm
             ProgressPanel.UMountImgIndex = ImgIndex
             ProgressPanel.MountDir = MountDir
             ProgressPanel.UMountOp = 0
-            ProgressPanel.ShowDialog()
+            ProgressPanel.ShowDialog(Me)
             Exit Sub
         ElseIf imgCommitOperation = 1 Then
             ProgressPanel.OperationNum = 21
@@ -5915,7 +5915,7 @@ Public Class MainForm
             ProgressPanel.UMountImgIndex = ImgIndex
             ProgressPanel.MountDir = MountDir
             ProgressPanel.UMountOp = 1
-            ProgressPanel.ShowDialog()
+            ProgressPanel.ShowDialog(Me)
             Exit Sub
         End If
         If SaveProject Then
