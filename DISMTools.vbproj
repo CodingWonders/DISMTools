@@ -866,10 +866,10 @@
     <None Include="Resources\icons8_code_32px.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="7z\x64\7z.dll" />
-    <Content Include="7z\x64\7z.exe" />
-    <Content Include="7z\x86\7z.dll" />
-    <Content Include="7z\x86\7z.exe" />
+    <Content Include="7z\amd64\7z.dll" />
+    <Content Include="7z\amd64\7z.exe" />
+    <Content Include="7z\i386\7z.dll" />
+    <Content Include="7z\i386\7z.exe" />
     <Content Include="Installer\dt.iss" />
     <Content Include="Installer\ISCC.exe" />
     <Content Include="Installer\ISCmplr.dll" />
