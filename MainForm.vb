@@ -8973,7 +8973,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ReportFeedbackToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ReportFeedbackToolStripMenuItem.Click
-        Process.Start("https://github.com/CodingWonders/DISMTools/issues/new")
+        Process.Start("https://github.com/CodingWonders/DISMTools/issues/new/choose")
     End Sub
 
     Private Sub UnmountImage_Click(sender As Object, e As EventArgs) Handles UnmountImage.Click, UnmountSettingsToolStripMenuItem.Click
