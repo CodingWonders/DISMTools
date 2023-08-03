@@ -246,6 +246,7 @@ Public Class MainForm
         Else
             For Each arg In args
                 If arg.StartsWith("/setup", StringComparison.OrdinalIgnoreCase) Then
+                    SplashScreen.Hide()
                     PrgSetup.ShowDialog()
                 ElseIf arg.StartsWith("/load", StringComparison.OrdinalIgnoreCase) Then
                     If File.Exists(arg.Replace("/load=", "").Trim()) And Directory.Exists(Path.GetDirectoryName(arg.Replace("/load=", "").Trim())) Then
