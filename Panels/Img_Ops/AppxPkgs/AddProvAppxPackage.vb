@@ -599,7 +599,7 @@ Public Class AddProvAppxPackage
         Else
             If Directory.Exists(Application.StartupPath & "\appxscan") Then Directory.Delete(Application.StartupPath & "\appxscan", True)
             Directory.CreateDirectory(Application.StartupPath & "\appxscan")
-            AppxScanner.StartInfo.FileName = Application.StartupPath & "\bin\utils\7z.exe"
+            AppxScanner.StartInfo.FileName = Application.StartupPath & "\bin\utils\" & If(Environment.Is64BitOperatingSystem, "x64", "x86") & "\7z.exe"
             AppxScanner.StartInfo.Arguments = "e " & Quote & Package & Quote & " " & Quote & If(Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase), "appxmetadata\appxbundlemanifest.xml", "appxmanifest.xml") & Quote & " -o" & Quote & Application.StartupPath & "\appxscan" & Quote
             AppxScanner.StartInfo.CreateNoWindow = True
             AppxScanner.StartInfo.WindowStyle = ProcessWindowStyle.Hidden

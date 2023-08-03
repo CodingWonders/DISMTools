@@ -3695,9 +3695,15 @@ Public Class ProgressPanel
             Directory.Delete(pkgSource & "\MsuExtract\" & MsuName, True)
         End If
         Directory.CreateDirectory(pkgSource & "\MsuExtract\" & MsuName)
-        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", _
-                          "@echo off" & CrLf & _
-                          Application.StartupPath & "\bin\utils\7z x " & MsuFile & " -o" & pkgSource & "\MsuExtract\" & MsuName, ASCII)
+        If Environment.Is64BitOperatingSystem Then
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", _
+                              "@echo off" & CrLf & _
+                              Application.StartupPath & "\bin\utils\x64\7z.exe x " & MsuFile & " -o" & pkgSource & "\MsuExtract\" & MsuName, ASCII)
+        Else
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", _
+                              "@echo off" & CrLf & _
+                              Application.StartupPath & "\bin\utils\x86\7z.exe x " & MsuFile & " -o" & pkgSource & "\MsuExtract\" & MsuName, ASCII)
+        End If
         Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
         If MsuName.StartsWith("windows6.1") Then    ' Windows 7
             If MsuName.Contains("-v") Then

@@ -866,6 +866,10 @@
     <None Include="Resources\icons8_code_32px.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="7z\x64\7z.dll" />
+    <Content Include="7z\x64\7z.exe" />
+    <Content Include="7z\x86\7z.dll" />
+    <Content Include="7z\x86\7z.exe" />
     <Content Include="Installer\dt.iss" />
     <Content Include="Installer\ISCC.exe" />
     <Content Include="Installer\ISCmplr.dll" />
@@ -1202,9 +1206,9 @@ IF NOT EXIST bin (
 ) ELSE (
 	echo A bin folder already exists
 )
-IF EXIST "\Program Files\7-Zip" (
-	COPY "\Program Files\7-Zip\7z.exe" $(TargetDir)bin\utils\7z.exe
-	COPY "\Program Files\7-Zip\7z.dll" $(TargetDir)bin\utils\7z.dll
+IF EXIST "$(SolutionDir)7z" (
+	XCOPY "$(SolutionDir)7z\amd64\*" "$(TargetDir)bin\utils\x64" /cehyi
+	XCOPY "$(SolutionDir)7z\i386\*" "$(TargetDir)bin\utils\x86" /cehyi
 )
 IF NOT EXIST logs (
 	md logs
