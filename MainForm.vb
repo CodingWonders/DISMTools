@@ -1384,6 +1384,38 @@ Public Class MainForm
         ' 3: run AppX package background processes
         ' 4: run FoD background processes
         ' 5: run driver background processes
+        Select Case bgProcOptn
+            Case 1
+                CompletedTasks(0) = False
+                CompletedTasks(1) = True
+                CompletedTasks(2) = True
+                CompletedTasks(3) = True
+                CompletedTasks(4) = True
+            Case 2
+                CompletedTasks(0) = True
+                CompletedTasks(1) = False
+                CompletedTasks(2) = True
+                CompletedTasks(3) = True
+                CompletedTasks(4) = True
+            Case 3
+                CompletedTasks(0) = True
+                CompletedTasks(1) = True
+                CompletedTasks(2) = False
+                CompletedTasks(3) = True
+                CompletedTasks(4) = True
+            Case 4
+                CompletedTasks(0) = True
+                CompletedTasks(1) = True
+                CompletedTasks(2) = True
+                CompletedTasks(3) = False
+                CompletedTasks(4) = True
+            Case 5
+                CompletedTasks(0) = True
+                CompletedTasks(1) = True
+                CompletedTasks(2) = True
+                CompletedTasks(3) = True
+                CompletedTasks(4) = False
+        End Select
         regJumps = True
         progressMin = 20
         Select Case bgProcOptn
