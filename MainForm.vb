@@ -49,6 +49,8 @@ Public Class MainForm
     Public CreationTime As String
     Public ModifyTime As String
 
+    Public imgInstType As String       ' Image installation type, used to determine whether an image contains a Server Core/Nano Server installation
+
     ' Var used to detect whether the image is orphaned (needs servicing session reload)
     Public isOrphaned As Boolean    ' This variable is true when the host system is shut down or restarted (the servicing session stops abruptly)
     Public mountedImgStatus As String
@@ -1460,7 +1462,7 @@ Public Class MainForm
                 End If
                 If imgEdition Is Nothing Then imgEdition = ""
                 If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
-                    If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+                    If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And Not (imgInstType.Contains("Nano") Or imgInstType.Contains("Core")) Then
                         Debug.WriteLine("[IsWindows8OrHigher] Returned True")
                         pbOpNums += 1
                         Select Case Language
@@ -1489,7 +1491,7 @@ Public Class MainForm
                     Debug.WriteLine("[IsWindows8OrHigher] Returned False")
                 End If
                 If IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") And Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
-                    If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+                    If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And Not imgInstType.Contains("Nano") Then
                         Debug.WriteLine("[IsWindows10OrHigher] Returned True")
                         pbOpNums += 1
                         Select Case Language
@@ -1898,6 +1900,9 @@ Public Class MainForm
                 ProjNameEditBtn.Visible = False
                 ' Set edition variable according to the EditionID registry value
                 imgEdition = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion").GetValue("EditionID")
+
+                ' Set installation type variable according to the InstallationType registry value
+                imgInstType = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion").GetValue("InstallationType")
                 Exit Sub
             Else
                 If IsImageMounted Then
@@ -1929,6 +1934,7 @@ Public Class MainForm
                                         imgFiles = imageInfo.CustomizedInfo.FileCount
                                         imgCreation = imageInfo.CustomizedInfo.CreatedTime
                                         imgModification = imageInfo.CustomizedInfo.ModifiedTime
+                                        imgInstType = imageInfo.InstallationType
                                     End If
                                 Next
                             End If
