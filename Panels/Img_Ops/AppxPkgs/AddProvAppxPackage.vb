@@ -474,11 +474,12 @@ Public Class AddProvAppxPackage
         Dim currentAppxVersion As String = ""
         Dim currentAppxArchitecture As String = ""
         Dim pkgName As String = ""
+        Dim IdScanner As String
         If IsFolder Then
             If File.Exists(Package & "\AppxMetadata\AppxBundleManifest.xml") Then
                 ' AppXBundle file
                 ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Package & "\AppxMetadata\AppxBundleManifest.xml")
-                Dim IdScanner As String = ScannerRTB.Lines(If(ScannerRTB.Lines(2).EndsWith("<!--"), 10, 4))
+                IdScanner = ScannerRTB.Lines(If(ScannerRTB.Lines(2).EndsWith("<!--"), 10, 4))
                 Dim CharIndex As Integer = 0
                 Dim CharNext As Integer
                 For Each Character As Char In ScannerRTB.Lines(If(ScannerRTB.Lines(2).EndsWith("<!--"), 10, 4))
@@ -518,66 +519,53 @@ Public Class AddProvAppxPackage
                 pkgName = pkgName.Replace(" ", "%20").Trim()
                 QuoteCount = 0
                 Stepper = 2
-                If ScannerRTB.Lines(2).EndsWith("<!--") Then
-                    ' XML comment
-                    IdScanner = ScannerRTB.Lines(9)
-                    Dim serializer As New XmlSerializer(GetType(AppxPackage))
-                    Using tReader As TextReader = New StringReader(IdScanner)
-                        Using reader As XmlReader = XmlReader.Create(tReader)
-                            Dim id = CType(serializer.Deserialize(reader), AppxPackage)
-                            currentAppxName = id.PackageName
-                            currentAppxPublisher = id.PackagePublisher
-                            currentAppxVersion = id.PackageVersion
-                            currentAppxArchitecture = id.PackageArchitecture
+                For x = 0 To ScannerRTB.Lines.Count - 1
+                    If ScannerRTB.Lines(x).Contains("<Identity") Then
+                        IdScanner = ScannerRTB.Lines(x)
+                        Dim serializer As New XmlSerializer(GetType(AppxPackage))
+                        Using tReader As TextReader = New StringReader(IdScanner)
+                            Using reader As XmlReader = XmlReader.Create(tReader)
+                                Dim id = CType(serializer.Deserialize(reader), AppxPackage)
+                                currentAppxName = id.PackageName
+                                currentAppxPublisher = id.PackagePublisher
+                                currentAppxVersion = id.PackageVersion
+                                currentAppxArchitecture = id.PackageArchitecture
+                            End Using
                         End Using
-                    End Using
-                    AppxNameList.Add(currentAppxName)
-                    AppxPublisherList.Add(currentAppxPublisher)
-                    AppxVersionList.Add(currentAppxVersion)
-                    AppxNames = AppxNameList.ToArray()
-                    AppxPublishers = AppxPublisherList.ToArray()
-                    AppxVersion = AppxVersionList.ToArray()
-                ElseIf ScannerRTB.Lines(2).Contains("<Identity Name=") Then
-                    IdScanner = ScannerRTB.Lines(2)
-                    Dim serializer As New XmlSerializer(GetType(AppxPackage))
-                    Using tReader As TextReader = New StringReader(IdScanner)
-                        Using reader As XmlReader = XmlReader.Create(tReader)
-                            Dim id = CType(serializer.Deserialize(reader), AppxPackage)
-                            currentAppxName = id.PackageName
-                            currentAppxPublisher = id.PackagePublisher
-                            currentAppxVersion = id.PackageVersion
-                            currentAppxArchitecture = id.PackageArchitecture
-                        End Using
-                    End Using
-                    AppxNameList.Add(currentAppxName)
-                    AppxPublisherList.Add(currentAppxPublisher)
-                    AppxVersionList.Add(currentAppxVersion)
-                    AppxNames = AppxNameList.ToArray()
-                    AppxPublishers = AppxPublisherList.ToArray()
-                    AppxVersion = AppxVersionList.ToArray()
-                End If
+                        AppxNameList.Add(currentAppxName)
+                        AppxPublisherList.Add(currentAppxPublisher)
+                        AppxVersionList.Add(currentAppxVersion)
+                        AppxNames = AppxNameList.ToArray()
+                        AppxPublishers = AppxPublisherList.ToArray()
+                        AppxVersion = AppxVersionList.ToArray()
+                        Exit For
+                    End If
+                Next
             ElseIf File.Exists(Package & "\AppxManifest.xml") Then
                 ' AppX file
                 ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Package & "\AppxManifest.xml")
-                If ScannerRTB.Lines(2).EndsWith("<!--") Then
-                    Dim IdScanner As String = ScannerRTB.Lines(9)
-                    Dim serializer As New XmlSerializer(GetType(AppxPackage))
-                    Using tReader As TextReader = New StringReader(IdScanner)
-                        Using reader As XmlReader = XmlReader.Create(tReader)
-                            Dim id = CType(serializer.Deserialize(reader), AppxPackage)
-                            currentAppxName = id.PackageName
-                            currentAppxPublisher = id.PackagePublisher
-                            currentAppxVersion = id.PackageVersion
-                            currentAppxArchitecture = id.PackageArchitecture
+                For x = 0 To ScannerRTB.Lines.Count - 1
+                    If ScannerRTB.Lines(x).Contains("<Identity") Then
+                        IdScanner = ScannerRTB.Lines(x)
+                        Dim serializer As New XmlSerializer(GetType(AppxPackage))
+                        Using tReader As TextReader = New StringReader(IdScanner)
+                            Using reader As XmlReader = XmlReader.Create(tReader)
+                                Dim id = CType(serializer.Deserialize(reader), AppxPackage)
+                                currentAppxName = id.PackageName
+                                currentAppxPublisher = id.PackagePublisher
+                                currentAppxVersion = id.PackageVersion
+                                currentAppxArchitecture = id.PackageArchitecture
+                            End Using
                         End Using
-                    End Using
-                    AppxNameList.Add(currentAppxName)
-                    AppxPublisherList.Add(currentAppxPublisher)
-                    AppxVersionList.Add(currentAppxVersion)
-                    AppxNames = AppxNameList.ToArray()
-                    AppxPublishers = AppxPublisherList.ToArray()
-                    AppxVersion = AppxVersionList.ToArray()
-                End If
+                        AppxNameList.Add(currentAppxName)
+                        AppxPublisherList.Add(currentAppxPublisher)
+                        AppxVersionList.Add(currentAppxVersion)
+                        AppxNames = AppxNameList.ToArray()
+                        AppxPublishers = AppxPublisherList.ToArray()
+                        AppxVersion = AppxVersionList.ToArray()
+                        Exit For
+                    End If
+                Next
             Else
                 ' Unrecognized type
                 Select Case MainForm.Language
@@ -608,7 +596,7 @@ Public Class AddProvAppxPackage
             If AppxScanner.ExitCode = 0 Then
                 If Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase) Then
                     ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\appxscan\AppxBundleManifest.xml")
-                    Dim IdScanner As String = ScannerRTB.Lines(If(ScannerRTB.Lines(2).EndsWith("<!--"), 10, 4))
+                    IdScanner = ScannerRTB.Lines(If(ScannerRTB.Lines(2).EndsWith("<!--"), 10, 4))
                     Dim CharIndex As Integer = 0
                     Dim CharNext As Integer
                     For Each Character As Char In ScannerRTB.Lines(If(ScannerRTB.Lines(2).EndsWith("<!--"), 10, 4))
@@ -648,83 +636,52 @@ Public Class AddProvAppxPackage
                     pkgName = pkgName.Replace(" ", "%20").Trim()
                     QuoteCount = 0
                     Stepper = 2
-                    If ScannerRTB.Lines(2).EndsWith("<!--") Then
-                        ' XML comment
-                        IdScanner = ScannerRTB.Lines(9)
-                        Dim serializer As New XmlSerializer(GetType(AppxPackage))
-                        Using tReader As TextReader = New StringReader(IdScanner)
-                            Using reader As XmlReader = XmlReader.Create(tReader)
-                                Dim id = CType(serializer.Deserialize(reader), AppxPackage)
-                                currentAppxName = id.PackageName
-                                currentAppxPublisher = id.PackagePublisher
-                                currentAppxVersion = id.PackageVersion
-                                currentAppxArchitecture = id.PackageArchitecture
+                    For x = 0 To ScannerRTB.Lines.Count - 1
+                        If ScannerRTB.Lines(x).Contains("<Identity") Then
+                            IdScanner = ScannerRTB.Lines(x)
+                            Dim serializer As New XmlSerializer(GetType(AppxPackage))
+                            Using tReader As TextReader = New StringReader(IdScanner)
+                                Using reader As XmlReader = XmlReader.Create(tReader)
+                                    Dim id = CType(serializer.Deserialize(reader), AppxPackage)
+                                    currentAppxName = id.PackageName
+                                    currentAppxPublisher = id.PackagePublisher
+                                    currentAppxVersion = id.PackageVersion
+                                    currentAppxArchitecture = id.PackageArchitecture
+                                End Using
                             End Using
-                        End Using
-                        AppxNameList.Add(currentAppxName)
-                        AppxPublisherList.Add(currentAppxPublisher)
-                        AppxVersionList.Add(currentAppxVersion)
-                        AppxNames = AppxNameList.ToArray()
-                        AppxPublishers = AppxPublisherList.ToArray()
-                        AppxVersion = AppxVersionList.ToArray()
-                    ElseIf ScannerRTB.Lines(2).Contains("<Identity Name=") Then
-                        IdScanner = ScannerRTB.Lines(2)
-                        Dim serializer As New XmlSerializer(GetType(AppxPackage))
-                        Using tReader As TextReader = New StringReader(IdScanner)
-                            Using reader As XmlReader = XmlReader.Create(tReader)
-                                Dim id = CType(serializer.Deserialize(reader), AppxPackage)
-                                currentAppxName = id.PackageName
-                                currentAppxPublisher = id.PackagePublisher
-                                currentAppxVersion = id.PackageVersion
-                                currentAppxArchitecture = id.PackageArchitecture
-                            End Using
-                        End Using
-                        AppxNameList.Add(currentAppxName)
-                        AppxPublisherList.Add(currentAppxPublisher)
-                        AppxVersionList.Add(currentAppxVersion)
-                        AppxNames = AppxNameList.ToArray()
-                        AppxPublishers = AppxPublisherList.ToArray()
-                        AppxVersion = AppxVersionList.ToArray()
-                    End If
+                            AppxNameList.Add(currentAppxName)
+                            AppxPublisherList.Add(currentAppxPublisher)
+                            AppxVersionList.Add(currentAppxVersion)
+                            AppxNames = AppxNameList.ToArray()
+                            AppxPublishers = AppxPublisherList.ToArray()
+                            AppxVersion = AppxVersionList.ToArray()
+                            Exit For
+                        End If
+                    Next
                 Else
                     ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\appxscan\AppxManifest.xml")
-                    If ScannerRTB.Lines(2).EndsWith("<!--") Then
-                        Dim IdScanner As String = ScannerRTB.Lines(9)
-                        Dim serializer As New XmlSerializer(GetType(AppxPackage))
-                        Using tReader As TextReader = New StringReader(IdScanner)
-                            Using reader As XmlReader = XmlReader.Create(tReader)
-                                Dim id = CType(serializer.Deserialize(reader), AppxPackage)
-                                currentAppxName = id.PackageName
-                                currentAppxPublisher = id.PackagePublisher
-                                currentAppxVersion = id.PackageVersion
-                                currentAppxArchitecture = id.PackageArchitecture
+                    For x = 0 To ScannerRTB.Lines.Count - 1
+                        If ScannerRTB.Lines(x).Contains("<Identity") Then
+                            IdScanner = ScannerRTB.Lines(x)
+                            Dim serializer As New XmlSerializer(GetType(AppxPackage))
+                            Using tReader As TextReader = New StringReader(IdScanner)
+                                Using reader As XmlReader = XmlReader.Create(tReader)
+                                    Dim id = CType(serializer.Deserialize(reader), AppxPackage)
+                                    currentAppxName = id.PackageName
+                                    currentAppxPublisher = id.PackagePublisher
+                                    currentAppxVersion = id.PackageVersion
+                                    currentAppxArchitecture = id.PackageArchitecture
+                                End Using
                             End Using
-                        End Using
-                        AppxNameList.Add(currentAppxName)
-                        AppxPublisherList.Add(currentAppxPublisher)
-                        AppxVersionList.Add(currentAppxVersion)
-                        AppxNames = AppxNameList.ToArray()
-                        AppxPublishers = AppxPublisherList.ToArray()
-                        AppxVersion = AppxVersionList.ToArray()
-                    ElseIf ScannerRTB.Lines(2).Contains("<Identity Name=") Then
-                        Dim IdScanner As String = ScannerRTB.Lines(2)
-                        Dim serializer As New XmlSerializer(GetType(AppxPackage))
-                        Using tReader As TextReader = New StringReader(IdScanner)
-                            Using reader As XmlReader = XmlReader.Create(tReader)
-                                Dim id = CType(serializer.Deserialize(reader), AppxPackage)
-                                currentAppxName = id.PackageName
-                                currentAppxPublisher = id.PackagePublisher
-                                currentAppxVersion = id.PackageVersion
-                                currentAppxArchitecture = id.PackageArchitecture
-                            End Using
-                        End Using
-                        AppxNameList.Add(currentAppxName)
-                        AppxPublisherList.Add(currentAppxPublisher)
-                        AppxVersionList.Add(currentAppxVersion)
-                        AppxNames = AppxNameList.ToArray()
-                        AppxPublishers = AppxPublisherList.ToArray()
-                        AppxVersion = AppxVersionList.ToArray()
-                    End If
+                            AppxNameList.Add(currentAppxName)
+                            AppxPublisherList.Add(currentAppxPublisher)
+                            AppxVersionList.Add(currentAppxVersion)
+                            AppxNames = AppxNameList.ToArray()
+                            AppxPublishers = AppxPublisherList.ToArray()
+                            AppxVersion = AppxVersionList.ToArray()
+                            Exit For
+                        End If
+                    Next
                 End If
                 GetApplicationStoreLogoAssets(pkgName, False, If(Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase), True, False), Package, currentAppxName)
             Else
