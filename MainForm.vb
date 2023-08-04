@@ -319,6 +319,7 @@ Public Class MainForm
         Else
             'GenerateDTSettings()
             'LoadDTSettings(1)
+            SplashScreen.Hide()
             PrgSetup.ShowDialog()
             LoadDTSettings(1)
         End If
@@ -3670,6 +3671,7 @@ Public Class MainForm
             End If
         Else
             ' Show setup window
+            SplashScreen.Hide()
             PrgSetup.ShowDialog()
         End If
     End Sub
