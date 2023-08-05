@@ -131,6 +131,7 @@
     <Compile Include="Actions\Validation\Actions.Validation.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Elements\AppxPackage.vb" />
     <Compile Include="Help\Help_RegisteredAppxPkgsDlg.Designer.vb">
       <DependentUpon>Help_RegisteredAppxPkgsDlg.vb</DependentUpon>
     </Compile>
@@ -211,6 +212,12 @@
       <DependentUpon>PrgSetup.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\FirstUse\PrgSetup.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\Drivers\GetDriverInfo.Designer.vb">
+      <DependentUpon>GetDriverInfo.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\Drivers\GetDriverInfo.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Get_Ops\GetImgInfoDlg.Designer.vb">
@@ -590,6 +597,9 @@
     <EmbeddedResource Include="Panels\FirstUse\PrgSetup.resx">
       <DependentUpon>PrgSetup.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Get_Ops\Drivers\GetDriverInfo.resx">
+      <DependentUpon>GetDriverInfo.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Get_Ops\GetImgInfoDlg.resx">
       <DependentUpon>GetImgInfoDlg.vb</DependentUpon>
     </EmbeddedResource>
@@ -758,6 +768,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
+    <None Include="Actions\example.dta" />
     <None Include="app.config" />
     <None Include="Helpers\dthelper.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -855,6 +866,10 @@
     <None Include="Resources\icons8_code_32px.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="7z\amd64\7z.dll" />
+    <Content Include="7z\amd64\7z.exe" />
+    <Content Include="7z\i386\7z.dll" />
+    <Content Include="7z\i386\7z.exe" />
     <Content Include="Installer\dt.iss" />
     <Content Include="Installer\ISCC.exe" />
     <Content Include="Installer\ISCmplr.dll" />
@@ -875,6 +890,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\startup\dt_branding.png" />
+    <None Include="Resources\get_drv_info.png" />
+    <None Include="Resources\drv_info_from_image.png" />
+    <None Include="Resources\info_from_drv_file.png" />
     <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
     <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
     <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />
@@ -1188,9 +1206,9 @@ IF NOT EXIST bin (
 ) ELSE (
 	echo A bin folder already exists
 )
-IF EXIST "\Program Files\7-Zip" (
-	COPY "\Program Files\7-Zip\7z.exe" $(TargetDir)bin\utils\7z.exe
-	COPY "\Program Files\7-Zip\7z.dll" $(TargetDir)bin\utils\7z.dll
+IF EXIST "$(SolutionDir)7z" (
+	XCOPY "$(SolutionDir)7z\amd64\*" "$(TargetDir)bin\utils\x64" /cehyi
+	XCOPY "$(SolutionDir)7z\i386\*" "$(TargetDir)bin\utils\x86" /cehyi
 )
 IF NOT EXIST logs (
 	md logs

@@ -860,7 +860,7 @@ Public Class ProjProperties
                     Case 25240 To 25400     ' 25400 is a relative number. 25398 is the final build of Zinc
                         FeatUpd = "23H2 (Zinc)"
                     Case 25801 To 27000     ' 27000 is a relative number
-                        FeatUpd = "24H2 (Gallium)"
+                        FeatUpd = "24H1 (Gallium)"
                 End Select
             Case Else
                 Exit Sub

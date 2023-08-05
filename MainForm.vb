@@ -49,6 +49,8 @@ Public Class MainForm
     Public CreationTime As String
     Public ModifyTime As String
 
+    Public imgInstType As String       ' Image installation type, used to determine whether an image contains a Server Core/Nano Server installation
+
     ' Var used to detect whether the image is orphaned (needs servicing session reload)
     Public isOrphaned As Boolean    ' This variable is true when the host system is shut down or restarted (the servicing session stops abruptly)
     Public mountedImgStatus As String
@@ -246,6 +248,7 @@ Public Class MainForm
         Else
             For Each arg In args
                 If arg.StartsWith("/setup", StringComparison.OrdinalIgnoreCase) Then
+                    SplashScreen.Hide()
                     PrgSetup.ShowDialog()
                 ElseIf arg.StartsWith("/load", StringComparison.OrdinalIgnoreCase) Then
                     If File.Exists(arg.Replace("/load=", "").Trim()) And Directory.Exists(Path.GetDirectoryName(arg.Replace("/load=", "").Trim())) Then
@@ -318,6 +321,7 @@ Public Class MainForm
         Else
             'GenerateDTSettings()
             'LoadDTSettings(1)
+            SplashScreen.Hide()
             PrgSetup.ShowDialog()
             LoadDTSettings(1)
         End If
@@ -1382,6 +1386,38 @@ Public Class MainForm
         ' 3: run AppX package background processes
         ' 4: run FoD background processes
         ' 5: run driver background processes
+        Select Case bgProcOptn
+            Case 1
+                CompletedTasks(0) = False
+                CompletedTasks(1) = True
+                CompletedTasks(2) = True
+                CompletedTasks(3) = True
+                CompletedTasks(4) = True
+            Case 2
+                CompletedTasks(0) = True
+                CompletedTasks(1) = False
+                CompletedTasks(2) = True
+                CompletedTasks(3) = True
+                CompletedTasks(4) = True
+            Case 3
+                CompletedTasks(0) = True
+                CompletedTasks(1) = True
+                CompletedTasks(2) = False
+                CompletedTasks(3) = True
+                CompletedTasks(4) = True
+            Case 4
+                CompletedTasks(0) = True
+                CompletedTasks(1) = True
+                CompletedTasks(2) = True
+                CompletedTasks(3) = False
+                CompletedTasks(4) = True
+            Case 5
+                CompletedTasks(0) = True
+                CompletedTasks(1) = True
+                CompletedTasks(2) = True
+                CompletedTasks(3) = True
+                CompletedTasks(4) = False
+        End Select
         regJumps = True
         progressMin = 20
         Select Case bgProcOptn
@@ -1426,7 +1462,7 @@ Public Class MainForm
                 End If
                 If imgEdition Is Nothing Then imgEdition = ""
                 If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
-                    If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+                    If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And Not (imgInstType.Contains("Nano") Or imgInstType.Contains("Core")) Then
                         Debug.WriteLine("[IsWindows8OrHigher] Returned True")
                         pbOpNums += 1
                         Select Case Language
@@ -1455,7 +1491,7 @@ Public Class MainForm
                     Debug.WriteLine("[IsWindows8OrHigher] Returned False")
                 End If
                 If IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") And Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
-                    If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+                    If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And Not imgInstType.Contains("Nano") Then
                         Debug.WriteLine("[IsWindows10OrHigher] Returned True")
                         pbOpNums += 1
                         Select Case Language
@@ -1864,6 +1900,9 @@ Public Class MainForm
                 ProjNameEditBtn.Visible = False
                 ' Set edition variable according to the EditionID registry value
                 imgEdition = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion").GetValue("EditionID")
+
+                ' Set installation type variable according to the InstallationType registry value
+                imgInstType = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion").GetValue("InstallationType")
                 Exit Sub
             Else
                 If IsImageMounted Then
@@ -1895,6 +1934,7 @@ Public Class MainForm
                                         imgFiles = imageInfo.CustomizedInfo.FileCount
                                         imgCreation = imageInfo.CustomizedInfo.CreatedTime
                                         imgModification = imageInfo.CustomizedInfo.ModifiedTime
+                                        imgInstType = imageInfo.InstallationType
                                     End If
                                 Next
                             End If
@@ -3669,6 +3709,7 @@ Public Class MainForm
             End If
         Else
             ' Show setup window
+            SplashScreen.Hide()
             PrgSetup.ShowDialog()
         End If
     End Sub
@@ -4256,8 +4297,7 @@ Public Class MainForm
                     SetEdition.Text = "Upgrade image..."
                     SetProductKey.Text = "Set product key..."
                     ' Menu - Commands - Drivers
-                    GetDrivers.Text = "Get basic driver information..."
-                    GetDriverInfo.Text = "Get detailed driver information..."
+                    GetDrivers.Text = "Get driver information..."
                     AddDriver.Text = "Add driver..."
                     RemoveDriver.Text = "Remove driver..."
                     ExportDriver.Text = "Export driver packages..."
@@ -4537,8 +4577,7 @@ Public Class MainForm
                     SetEdition.Text = "Actualizar imagen..."
                     SetProductKey.Text = "Establecer clave de producto..."
                     ' Menu - Commands - Drivers
-                    GetDrivers.Text = "Obtener información básica de controladores..."
-                    GetDriverInfo.Text = "Obtener información detallada de controladores..."
+                    GetDrivers.Text = "Obtener información de controladores..."
                     AddDriver.Text = "Añadir controlador..."
                     RemoveDriver.Text = "Eliminar controlador..."
                     ExportDriver.Text = "Exportar paquetes de controlador..."
@@ -4823,8 +4862,7 @@ Public Class MainForm
                 SetEdition.Text = "Upgrade image..."
                 SetProductKey.Text = "Set product key..."
                 ' Menu - Commands - Drivers
-                GetDrivers.Text = "Get basic driver information..."
-                GetDriverInfo.Text = "Get detailed driver information..."
+                GetDrivers.Text = "Get driver information..."
                 AddDriver.Text = "Add driver..."
                 RemoveDriver.Text = "Remove driver..."
                 ExportDriver.Text = "Export driver packages..."
@@ -5104,8 +5142,7 @@ Public Class MainForm
                 SetEdition.Text = "Actualizar imagen..."
                 SetProductKey.Text = "Establecer clave de producto..."
                 ' Menu - Commands - Drivers
-                GetDrivers.Text = "Obtener información básica de controladores..."
-                GetDriverInfo.Text = "Obtener información detallada de controladores..."
+                GetDrivers.Text = "Obtener información de controladores..."
                 AddDriver.Text = "Añadir controlador..."
                 RemoveDriver.Text = "Eliminar controlador..."
                 ExportDriver.Text = "Exportar paquetes de controlador..."
@@ -5910,7 +5947,7 @@ Public Class MainForm
             ProgressPanel.UMountImgIndex = ImgIndex
             ProgressPanel.MountDir = MountDir
             ProgressPanel.UMountOp = 0
-            ProgressPanel.ShowDialog()
+            ProgressPanel.ShowDialog(Me)
             Exit Sub
         ElseIf imgCommitOperation = 1 Then
             ProgressPanel.OperationNum = 21
@@ -5919,7 +5956,7 @@ Public Class MainForm
             ProgressPanel.UMountImgIndex = ImgIndex
             ProgressPanel.MountDir = MountDir
             ProgressPanel.UMountOp = 1
-            ProgressPanel.ShowDialog()
+            ProgressPanel.ShowDialog(Me)
             Exit Sub
         End If
         If SaveProject Then
@@ -7061,7 +7098,7 @@ Public Class MainForm
         ShowChildDescs(True, 1)
     End Sub
 
-    Private Sub HideChildDescsTrigger(sender As Object, e As EventArgs) Handles AppendImage.MouseLeave, ApplyFFU.MouseLeave, ApplyImage.MouseLeave, CaptureCustomImage.MouseLeave, CaptureFFU.MouseLeave, CaptureImage.MouseLeave, CleanupMountpoints.MouseLeave, CommitImage.MouseLeave, DeleteImage.MouseLeave, ExportImage.MouseLeave, GetImageInfo.MouseLeave, GetWIMBootEntry.MouseLeave, ListImage.MouseLeave, MountImage.MouseLeave, OptimizeFFU.MouseLeave, OptimizeImage.MouseLeave, RemountImage.MouseLeave, SplitFFU.MouseLeave, SplitImage.MouseLeave, UnmountImage.MouseLeave, UpdateWIMBootEntry.MouseLeave, ApplySiloedPackage.MouseLeave, GetPackages.MouseLeave, GetPackageInfo.MouseLeave, AddPackage.MouseLeave, RemovePackage.MouseLeave, GetFeatures.MouseLeave, GetFeatureInfo.MouseLeave, EnableFeature.MouseLeave, DisableFeature.MouseLeave, CleanupImage.MouseLeave, AddProvisionedAppxPackage.MouseLeave, GetProvisioningPackageInfo.MouseLeave, ApplyCustomDataImage.MouseLeave, GetProvisionedAppxPackages.MouseLeave, AddProvisionedAppxPackage.MouseLeave, RemoveProvisionedAppxPackage.MouseLeave, OptimizeProvisionedAppxPackages.MouseLeave, SetProvisionedAppxDataFile.MouseLeave, CheckAppPatch.MouseLeave, GetAppPatchInfo.MouseLeave, GetAppPatches.MouseLeave, GetAppInfo.MouseLeave, GetApps.MouseLeave, ExportDefaultAppAssociations.MouseLeave, GetDefaultAppAssociations.MouseLeave, ImportDefaultAppAssociations.MouseLeave, RemoveDefaultAppAssociations.MouseLeave, GetIntl.MouseLeave, SetUILangFallback.MouseLeave, SetSysUILang.MouseLeave, SetSysLocale.MouseLeave, SetUserLocale.MouseLeave, SetInputLocale.MouseLeave, SetAllIntl.MouseLeave, SetTimeZone.MouseLeave, SetSKUIntlDefaults.MouseLeave, SetLayeredDriver.MouseLeave, GenLangINI.MouseLeave, SetSetupUILang.MouseLeave, AddCapability.MouseLeave, ExportSource.MouseLeave, GetCapabilities.MouseLeave, GetCapabilityInfo.MouseLeave, RemoveCapability.MouseLeave, GetCurrentEdition.MouseLeave, GetTargetEditions.MouseLeave, SetEdition.MouseLeave, SetProductKey.MouseLeave, GetDrivers.MouseLeave, GetDriverInfo.MouseLeave, AddDriver.MouseLeave, RemoveDriver.MouseLeave, ExportDriver.MouseLeave, ApplyUnattend.MouseLeave, GetPESettings.MouseLeave, GetTargetPath.MouseLeave, GetScratchSpace.MouseLeave, SetScratchSpace.MouseLeave, SetTargetPath.MouseLeave, GetOSUninstallWindow.MouseLeave, InitiateOSUninstall.MouseLeave, RemoveOSUninstall.MouseLeave, SetOSUninstallWindow.MouseLeave, SetReservedStorageState.MouseLeave, GetReservedStorageState.MouseLeave, NewProjectToolStripMenuItem.MouseLeave, OpenExistingProjectToolStripMenuItem.MouseLeave, SaveProjectToolStripMenuItem.MouseLeave, SaveProjectasToolStripMenuItem.MouseLeave, ExitToolStripMenuItem.MouseLeave, ViewProjectFilesInFileExplorerToolStripMenuItem.MouseLeave, UnloadProjectToolStripMenuItem.MouseLeave, SwitchImageIndexesToolStripMenuItem.MouseLeave, ProjectPropertiesToolStripMenuItem.MouseLeave, ImagePropertiesToolStripMenuItem.MouseLeave, ImageManagementToolStripMenuItem.MouseLeave, OSPackagesToolStripMenuItem.MouseLeave, ProvisioningPackagesToolStripMenuItem.MouseLeave, AppPackagesToolStripMenuItem.MouseLeave, AppPatchesToolStripMenuItem.MouseLeave, DefaultAppAssociationsToolStripMenuItem.MouseLeave, LanguagesAndRegionSettingsToolStripMenuItem.MouseLeave, CapabilitiesToolStripMenuItem.MouseLeave, WindowsEditionsToolStripMenuItem.MouseLeave, DriversToolStripMenuItem.MouseLeave, UnattendedAnswerFilesToolStripMenuItem.MouseLeave, WindowsPEServicingToolStripMenuItem.MouseLeave, OSUninstallToolStripMenuItem.MouseLeave, ReservedStorageToolStripMenuItem.MouseLeave, ImageConversionToolStripMenuItem.MouseLeave, WIMESDToolStripMenuItem.MouseLeave, RemountImageWithWritePermissionsToolStripMenuItem.MouseLeave, CommandShellToolStripMenuItem.MouseLeave, OptionsToolStripMenuItem.MouseLeave, HelpTopicsToolStripMenuItem.MouseLeave, GlossaryToolStripMenuItem.MouseLeave, CommandHelpToolStripMenuItem.MouseLeave, AboutDISMToolsToolStripMenuItem.MouseLeave, UnattendedAnswerFileManagerToolStripMenuItem.MouseLeave, AddEdge.MouseLeave, AddEdgeBrowser.MouseLeave, AddEdgeWebView.MouseLeave, ReportManagerToolStripMenuItem.MouseLeave, MergeSWM.MouseLeave, MountedImageManagerTSMI.MouseLeave, ReportFeedbackToolStripMenuItem.MouseLeave, ManageOnlineInstallationToolStripMenuItem.MouseLeave, AddProvisioningPackage.MouseLeave
+    Private Sub HideChildDescsTrigger(sender As Object, e As EventArgs) Handles AppendImage.MouseLeave, ApplyFFU.MouseLeave, ApplyImage.MouseLeave, CaptureCustomImage.MouseLeave, CaptureFFU.MouseLeave, CaptureImage.MouseLeave, CleanupMountpoints.MouseLeave, CommitImage.MouseLeave, DeleteImage.MouseLeave, ExportImage.MouseLeave, GetImageInfo.MouseLeave, GetWIMBootEntry.MouseLeave, ListImage.MouseLeave, MountImage.MouseLeave, OptimizeFFU.MouseLeave, OptimizeImage.MouseLeave, RemountImage.MouseLeave, SplitFFU.MouseLeave, SplitImage.MouseLeave, UnmountImage.MouseLeave, UpdateWIMBootEntry.MouseLeave, ApplySiloedPackage.MouseLeave, GetPackages.MouseLeave, GetPackageInfo.MouseLeave, AddPackage.MouseLeave, RemovePackage.MouseLeave, GetFeatures.MouseLeave, GetFeatureInfo.MouseLeave, EnableFeature.MouseLeave, DisableFeature.MouseLeave, CleanupImage.MouseLeave, AddProvisionedAppxPackage.MouseLeave, GetProvisioningPackageInfo.MouseLeave, ApplyCustomDataImage.MouseLeave, GetProvisionedAppxPackages.MouseLeave, AddProvisionedAppxPackage.MouseLeave, RemoveProvisionedAppxPackage.MouseLeave, OptimizeProvisionedAppxPackages.MouseLeave, SetProvisionedAppxDataFile.MouseLeave, CheckAppPatch.MouseLeave, GetAppPatchInfo.MouseLeave, GetAppPatches.MouseLeave, GetAppInfo.MouseLeave, GetApps.MouseLeave, ExportDefaultAppAssociations.MouseLeave, GetDefaultAppAssociations.MouseLeave, ImportDefaultAppAssociations.MouseLeave, RemoveDefaultAppAssociations.MouseLeave, GetIntl.MouseLeave, SetUILangFallback.MouseLeave, SetSysUILang.MouseLeave, SetSysLocale.MouseLeave, SetUserLocale.MouseLeave, SetInputLocale.MouseLeave, SetAllIntl.MouseLeave, SetTimeZone.MouseLeave, SetSKUIntlDefaults.MouseLeave, SetLayeredDriver.MouseLeave, GenLangINI.MouseLeave, SetSetupUILang.MouseLeave, AddCapability.MouseLeave, ExportSource.MouseLeave, GetCapabilities.MouseLeave, GetCapabilityInfo.MouseLeave, RemoveCapability.MouseLeave, GetCurrentEdition.MouseLeave, GetTargetEditions.MouseLeave, SetEdition.MouseLeave, SetProductKey.MouseLeave, GetDrivers.MouseLeave, AddDriver.MouseLeave, RemoveDriver.MouseLeave, ExportDriver.MouseLeave, ApplyUnattend.MouseLeave, GetPESettings.MouseLeave, GetTargetPath.MouseLeave, GetScratchSpace.MouseLeave, SetScratchSpace.MouseLeave, SetTargetPath.MouseLeave, GetOSUninstallWindow.MouseLeave, InitiateOSUninstall.MouseLeave, RemoveOSUninstall.MouseLeave, SetOSUninstallWindow.MouseLeave, SetReservedStorageState.MouseLeave, GetReservedStorageState.MouseLeave, NewProjectToolStripMenuItem.MouseLeave, OpenExistingProjectToolStripMenuItem.MouseLeave, SaveProjectToolStripMenuItem.MouseLeave, SaveProjectasToolStripMenuItem.MouseLeave, ExitToolStripMenuItem.MouseLeave, ViewProjectFilesInFileExplorerToolStripMenuItem.MouseLeave, UnloadProjectToolStripMenuItem.MouseLeave, SwitchImageIndexesToolStripMenuItem.MouseLeave, ProjectPropertiesToolStripMenuItem.MouseLeave, ImagePropertiesToolStripMenuItem.MouseLeave, ImageManagementToolStripMenuItem.MouseLeave, OSPackagesToolStripMenuItem.MouseLeave, ProvisioningPackagesToolStripMenuItem.MouseLeave, AppPackagesToolStripMenuItem.MouseLeave, AppPatchesToolStripMenuItem.MouseLeave, DefaultAppAssociationsToolStripMenuItem.MouseLeave, LanguagesAndRegionSettingsToolStripMenuItem.MouseLeave, CapabilitiesToolStripMenuItem.MouseLeave, WindowsEditionsToolStripMenuItem.MouseLeave, DriversToolStripMenuItem.MouseLeave, UnattendedAnswerFilesToolStripMenuItem.MouseLeave, WindowsPEServicingToolStripMenuItem.MouseLeave, OSUninstallToolStripMenuItem.MouseLeave, ReservedStorageToolStripMenuItem.MouseLeave, ImageConversionToolStripMenuItem.MouseLeave, WIMESDToolStripMenuItem.MouseLeave, RemountImageWithWritePermissionsToolStripMenuItem.MouseLeave, CommandShellToolStripMenuItem.MouseLeave, OptionsToolStripMenuItem.MouseLeave, HelpTopicsToolStripMenuItem.MouseLeave, GlossaryToolStripMenuItem.MouseLeave, CommandHelpToolStripMenuItem.MouseLeave, AboutDISMToolsToolStripMenuItem.MouseLeave, UnattendedAnswerFileManagerToolStripMenuItem.MouseLeave, AddEdge.MouseLeave, AddEdgeBrowser.MouseLeave, AddEdgeWebView.MouseLeave, ReportManagerToolStripMenuItem.MouseLeave, MergeSWM.MouseLeave, MountedImageManagerTSMI.MouseLeave, ReportFeedbackToolStripMenuItem.MouseLeave, ManageOnlineInstallationToolStripMenuItem.MouseLeave, AddProvisioningPackage.MouseLeave
         HideChildDescs()
     End Sub
 
@@ -7349,7 +7386,7 @@ Public Class MainForm
         ShowChildDescs(True, 72)
     End Sub
 
-    Private Sub GetDriverInfo_MouseEnter(sender As Object, e As EventArgs) Handles GetDriverInfo.MouseEnter
+    Private Sub GetDriverInfo_MouseEnter(sender As Object, e As EventArgs)
         ShowChildDescs(True, 73)
     End Sub
 
@@ -8976,7 +9013,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ReportFeedbackToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ReportFeedbackToolStripMenuItem.Click
-        Process.Start("https://github.com/CodingWonders/DISMTools/issues/new")
+        Process.Start("https://github.com/CodingWonders/DISMTools/issues/new/choose")
     End Sub
 
     Private Sub UnmountImage_Click(sender As Object, e As EventArgs) Handles UnmountImage.Click, UnmountSettingsToolStripMenuItem.Click
@@ -10027,5 +10064,14 @@ Public Class MainForm
                 If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
             End If
         End If
+    End Sub
+
+    Private Sub GetDrivers_Click(sender As Object, e As EventArgs) Handles GetDrivers.Click
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(500)
+        End While
+        GetDriverInfo.ShowDialog()
     End Sub
 End Class

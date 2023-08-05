@@ -28,7 +28,6 @@ Partial Class AddProvAppxPackage
         Me.Win10Title = New System.Windows.Forms.Panel()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.AppxDetailsPanel = New System.Windows.Forms.Panel()
         Me.NoAppxFilePanel = New System.Windows.Forms.Panel()
         Me.Label6 = New System.Windows.Forms.Label()
@@ -55,20 +54,16 @@ Partial Class AddProvAppxPackage
         Me.Button5 = New System.Windows.Forms.Button()
         Me.Button6 = New System.Windows.Forms.Button()
         Me.ListBox1 = New System.Windows.Forms.ListBox()
-        Me.Label4 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
-        Me.RadioButton1 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton2 = New System.Windows.Forms.RadioButton()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Button7 = New System.Windows.Forms.Button()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.Button8 = New System.Windows.Forms.Button()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.CheckBox4 = New System.Windows.Forms.CheckBox()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.TextBox3 = New System.Windows.Forms.TextBox()
-        Me.RadioButton4 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton3 = New System.Windows.Forms.RadioButton()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.AppxFileOFD = New System.Windows.Forms.OpenFileDialog()
@@ -77,10 +72,12 @@ Partial Class AddProvAppxPackage
         Me.CustomDataFileOFD = New System.Windows.Forms.OpenFileDialog()
         Me.UnpackedAppxFolderFBD = New System.Windows.Forms.FolderBrowserDialog()
         Me.AppxScanner = New System.Diagnostics.Process()
+        Me.FlowLayoutPanel1 = New System.Windows.Forms.FlowLayoutPanel()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.CheckBox3 = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.GroupBox1.SuspendLayout()
         Me.AppxDetailsPanel.SuspendLayout()
         Me.NoAppxFilePanel.SuspendLayout()
         Me.AppxFilePanel.SuspendLayout()
@@ -89,6 +86,8 @@ Partial Class AddProvAppxPackage
         Me.GroupBox2.SuspendLayout()
         Me.TableLayoutPanel3.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
+        Me.FlowLayoutPanel1.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -160,26 +159,15 @@ Partial Class AddProvAppxPackage
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Add provisioned AppX packages"
         '
-        'GroupBox1
-        '
-        Me.GroupBox1.Controls.Add(Me.AppxDetailsPanel)
-        Me.GroupBox1.Controls.Add(Me.TableLayoutPanel2)
-        Me.GroupBox1.Controls.Add(Me.ListView1)
-        Me.GroupBox1.Controls.Add(Me.Label2)
-        Me.GroupBox1.Location = New System.Drawing.Point(12, 54)
-        Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(520, 555)
-        Me.GroupBox1.TabIndex = 5
-        Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Source AppX files*"
-        '
         'AppxDetailsPanel
         '
+        Me.AppxDetailsPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.AppxDetailsPanel.Controls.Add(Me.NoAppxFilePanel)
         Me.AppxDetailsPanel.Controls.Add(Me.AppxFilePanel)
-        Me.AppxDetailsPanel.Location = New System.Drawing.Point(10, 464)
+        Me.AppxDetailsPanel.Location = New System.Drawing.Point(525, 54)
         Me.AppxDetailsPanel.Name = "AppxDetailsPanel"
-        Me.AppxDetailsPanel.Size = New System.Drawing.Size(501, 83)
+        Me.AppxDetailsPanel.Size = New System.Drawing.Size(527, 83)
         Me.AppxDetailsPanel.TabIndex = 3
         '
         'NoAppxFilePanel
@@ -188,18 +176,18 @@ Partial Class AddProvAppxPackage
         Me.NoAppxFilePanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.NoAppxFilePanel.Location = New System.Drawing.Point(0, 0)
         Me.NoAppxFilePanel.Name = "NoAppxFilePanel"
-        Me.NoAppxFilePanel.Size = New System.Drawing.Size(501, 83)
+        Me.NoAppxFilePanel.Size = New System.Drawing.Size(527, 83)
         Me.NoAppxFilePanel.TabIndex = 0
         '
         'Label6
         '
-        Me.Label6.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label6.Location = New System.Drawing.Point(3, 26)
+        Me.Label6.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.Label6.Location = New System.Drawing.Point(0, 26)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(495, 30)
+        Me.Label6.Size = New System.Drawing.Size(527, 30)
         Me.Label6.TabIndex = 0
-        Me.Label6.Text = "Select an entry in the list view to show the details of an app"
+        Me.Label6.Text = "Select an entry in the list view to show the details of an app and to configure a" & _
+    "ddition settings"
         Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'AppxFilePanel
@@ -211,13 +199,14 @@ Partial Class AddProvAppxPackage
         Me.AppxFilePanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.AppxFilePanel.Location = New System.Drawing.Point(0, 0)
         Me.AppxFilePanel.Name = "AppxFilePanel"
-        Me.AppxFilePanel.Size = New System.Drawing.Size(501, 83)
+        Me.AppxFilePanel.Size = New System.Drawing.Size(527, 83)
         Me.AppxFilePanel.TabIndex = 1
         Me.AppxFilePanel.Visible = False
         '
         'PictureBox2
         '
-        Me.PictureBox2.Location = New System.Drawing.Point(422, 4)
+        Me.PictureBox2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PictureBox2.Location = New System.Drawing.Point(448, 4)
         Me.PictureBox2.Name = "PictureBox2"
         Me.PictureBox2.Size = New System.Drawing.Size(76, 76)
         Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
@@ -226,31 +215,37 @@ Partial Class AddProvAppxPackage
         '
         'Label9
         '
+        Me.Label9.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label9.AutoEllipsis = True
         Me.Label9.Font = New System.Drawing.Font("Tahoma", 8.25!)
         Me.Label9.Location = New System.Drawing.Point(8, 44)
         Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(408, 13)
+        Me.Label9.Size = New System.Drawing.Size(434, 13)
         Me.Label9.TabIndex = 0
         Me.Label9.Text = "AppxVersion"
         '
         'Label8
         '
+        Me.Label8.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label8.AutoEllipsis = True
         Me.Label8.Font = New System.Drawing.Font("Tahoma", 8.25!)
         Me.Label8.Location = New System.Drawing.Point(8, 30)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(408, 13)
+        Me.Label8.Size = New System.Drawing.Size(434, 13)
         Me.Label8.TabIndex = 0
         Me.Label8.Text = "AppxPublisher"
         '
         'Label7
         '
+        Me.Label7.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label7.AutoEllipsis = True
         Me.Label7.Font = New System.Drawing.Font("Tahoma", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label7.Location = New System.Drawing.Point(8, 8)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(408, 19)
+        Me.Label7.Size = New System.Drawing.Size(434, 19)
         Me.Label7.TabIndex = 0
         Me.Label7.Text = "AppxTitle"
         '
@@ -267,7 +262,7 @@ Partial Class AddProvAppxPackage
         Me.TableLayoutPanel2.Controls.Add(Me.Button3, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.Button2, 1, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.Button1, 0, 0)
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(10, 429)
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(15, 546)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
         Me.TableLayoutPanel2.RowCount = 1
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -328,9 +323,9 @@ Partial Class AddProvAppxPackage
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3, Me.ColumnHeader4, Me.ColumnHeader5})
         Me.ListView1.FullRowSelect = True
-        Me.ListView1.Location = New System.Drawing.Point(10, 58)
+        Me.ListView1.Location = New System.Drawing.Point(15, 88)
         Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(501, 365)
+        Me.ListView1.Size = New System.Drawing.Size(501, 452)
         Me.ListView1.TabIndex = 1
         Me.ListView1.UseCompatibleStateImageBehavior = False
         Me.ListView1.View = System.Windows.Forms.View.Details
@@ -364,7 +359,7 @@ Partial Class AddProvAppxPackage
         '
         Me.Label2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label2.Location = New System.Drawing.Point(7, 24)
+        Me.Label2.Location = New System.Drawing.Point(12, 54)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(507, 30)
         Me.Label2.TabIndex = 0
@@ -375,11 +370,10 @@ Partial Class AddProvAppxPackage
         '
         Me.GroupBox2.Controls.Add(Me.TableLayoutPanel3)
         Me.GroupBox2.Controls.Add(Me.ListBox1)
-        Me.GroupBox2.Controls.Add(Me.Label4)
         Me.GroupBox2.Controls.Add(Me.Label3)
-        Me.GroupBox2.Location = New System.Drawing.Point(538, 54)
+        Me.GroupBox2.Location = New System.Drawing.Point(3, 3)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(514, 243)
+        Me.GroupBox2.Size = New System.Drawing.Size(504, 221)
         Me.GroupBox2.TabIndex = 5
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "AppX dependencies"
@@ -399,7 +393,7 @@ Partial Class AddProvAppxPackage
         Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
         Me.TableLayoutPanel3.RowCount = 1
         Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel3.Size = New System.Drawing.Size(494, 28)
+        Me.TableLayoutPanel3.Size = New System.Drawing.Size(484, 28)
         Me.TableLayoutPanel3.TabIndex = 3
         '
         'Button4
@@ -407,9 +401,9 @@ Partial Class AddProvAppxPackage
         Me.Button4.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Button4.Enabled = False
         Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button4.Location = New System.Drawing.Point(331, 3)
+        Me.Button4.Location = New System.Drawing.Point(325, 3)
         Me.Button4.Name = "Button4"
-        Me.Button4.Size = New System.Drawing.Size(160, 22)
+        Me.Button4.Size = New System.Drawing.Size(156, 22)
         Me.Button4.TabIndex = 2
         Me.Button4.Text = "Remove all dependencies"
         Me.Button4.UseVisualStyleBackColor = True
@@ -419,9 +413,9 @@ Partial Class AddProvAppxPackage
         Me.Button5.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Button5.Enabled = False
         Me.Button5.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button5.Location = New System.Drawing.Point(167, 3)
+        Me.Button5.Location = New System.Drawing.Point(164, 3)
         Me.Button5.Name = "Button5"
-        Me.Button5.Size = New System.Drawing.Size(158, 22)
+        Me.Button5.Size = New System.Drawing.Size(155, 22)
         Me.Button5.TabIndex = 1
         Me.Button5.Text = "Remove dependency"
         Me.Button5.UseVisualStyleBackColor = True
@@ -432,7 +426,7 @@ Partial Class AddProvAppxPackage
         Me.Button6.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button6.Location = New System.Drawing.Point(3, 3)
         Me.Button6.Name = "Button6"
-        Me.Button6.Size = New System.Drawing.Size(158, 22)
+        Me.Button6.Size = New System.Drawing.Size(155, 22)
         Me.Button6.TabIndex = 0
         Me.Button6.Text = "Add dependency..."
         Me.Button6.UseVisualStyleBackColor = True
@@ -440,23 +434,14 @@ Partial Class AddProvAppxPackage
         'ListBox1
         '
         Me.ListBox1.AllowDrop = True
+        Me.ListBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ListBox1.FormattingEnabled = True
         Me.ListBox1.Location = New System.Drawing.Point(10, 58)
         Me.ListBox1.Name = "ListBox1"
         Me.ListBox1.ScrollAlwaysVisible = True
-        Me.ListBox1.Size = New System.Drawing.Size(494, 121)
+        Me.ListBox1.Size = New System.Drawing.Size(484, 121)
         Me.ListBox1.TabIndex = 1
-        '
-        'Label4
-        '
-        Me.Label4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(7, 222)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(344, 13)
-        Me.Label4.TabIndex = 0
-        Me.Label4.Text = "The dependencies specified will be used on all selected AppX packages"
         '
         'Label3
         '
@@ -464,54 +449,37 @@ Partial Class AddProvAppxPackage
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label3.Location = New System.Drawing.Point(7, 24)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(501, 30)
+        Me.Label3.Size = New System.Drawing.Size(491, 30)
         Me.Label3.TabIndex = 0
         Me.Label3.Text = "An AppX package may need some dependencies for it to be installed correctly. If s" & _
     "o, you can specify a list of dependencies now:"
         '
-        'RadioButton1
-        '
-        Me.RadioButton1.AutoEllipsis = True
-        Me.RadioButton1.Checked = True
-        Me.RadioButton1.Location = New System.Drawing.Point(548, 304)
-        Me.RadioButton1.Name = "RadioButton1"
-        Me.RadioButton1.Size = New System.Drawing.Size(87, 17)
-        Me.RadioButton1.TabIndex = 6
-        Me.RadioButton1.TabStop = True
-        Me.RadioButton1.Text = "License file*:"
-        Me.RadioButton1.UseVisualStyleBackColor = True
-        '
-        'RadioButton2
-        '
-        Me.RadioButton2.AutoSize = True
-        Me.RadioButton2.Location = New System.Drawing.Point(548, 330)
-        Me.RadioButton2.Name = "RadioButton2"
-        Me.RadioButton2.Size = New System.Drawing.Size(96, 17)
-        Me.RadioButton2.TabIndex = 6
-        Me.RadioButton2.Text = "Skip license file"
-        Me.RadioButton2.UseVisualStyleBackColor = True
-        '
         'CheckBox1
         '
+        Me.CheckBox1.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.CheckBox1.AutoEllipsis = True
-        Me.CheckBox1.Location = New System.Drawing.Point(548, 355)
+        Me.CheckBox1.Location = New System.Drawing.Point(9, 34)
         Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(154, 17)
+        Me.CheckBox1.Size = New System.Drawing.Size(110, 17)
         Me.CheckBox1.TabIndex = 7
-        Me.CheckBox1.Text = "Provide a custom data file:"
+        Me.CheckBox1.Text = "Custom data file:"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'TextBox1
         '
-        Me.TextBox1.Location = New System.Drawing.Point(641, 303)
+        Me.TextBox1.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.TextBox1.Enabled = False
+        Me.TextBox1.Location = New System.Drawing.Point(125, 7)
         Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(330, 21)
+        Me.TextBox1.Size = New System.Drawing.Size(289, 21)
         Me.TextBox1.TabIndex = 8
         '
         'Button7
         '
+        Me.Button7.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.Button7.Enabled = False
         Me.Button7.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button7.Location = New System.Drawing.Point(977, 302)
+        Me.Button7.Location = New System.Drawing.Point(420, 6)
         Me.Button7.Name = "Button7"
         Me.Button7.Size = New System.Drawing.Size(75, 23)
         Me.Button7.TabIndex = 9
@@ -520,17 +488,19 @@ Partial Class AddProvAppxPackage
         '
         'TextBox2
         '
+        Me.TextBox2.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.TextBox2.Enabled = False
-        Me.TextBox2.Location = New System.Drawing.Point(708, 352)
+        Me.TextBox2.Location = New System.Drawing.Point(125, 32)
         Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(263, 21)
+        Me.TextBox2.Size = New System.Drawing.Size(289, 21)
         Me.TextBox2.TabIndex = 8
         '
         'Button8
         '
+        Me.Button8.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Button8.Enabled = False
         Me.Button8.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button8.Location = New System.Drawing.Point(977, 351)
+        Me.Button8.Location = New System.Drawing.Point(420, 31)
         Me.Button8.Name = "Button8"
         Me.Button8.Size = New System.Drawing.Size(75, 23)
         Me.Button8.TabIndex = 9
@@ -539,26 +509,39 @@ Partial Class AddProvAppxPackage
         '
         'GroupBox3
         '
+        Me.GroupBox3.Controls.Add(Me.CheckBox4)
         Me.GroupBox3.Controls.Add(Me.LinkLabel1)
         Me.GroupBox3.Controls.Add(Me.TextBox3)
-        Me.GroupBox3.Controls.Add(Me.RadioButton4)
-        Me.GroupBox3.Controls.Add(Me.RadioButton3)
         Me.GroupBox3.Controls.Add(Me.Label5)
-        Me.GroupBox3.Location = New System.Drawing.Point(538, 380)
+        Me.GroupBox3.Location = New System.Drawing.Point(3, 297)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(514, 194)
+        Me.GroupBox3.Size = New System.Drawing.Size(504, 143)
         Me.GroupBox3.TabIndex = 5
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "AppX regions"
         '
+        'CheckBox4
+        '
+        Me.CheckBox4.AutoSize = True
+        Me.CheckBox4.Checked = True
+        Me.CheckBox4.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox4.Location = New System.Drawing.Point(30, 30)
+        Me.CheckBox4.Name = "CheckBox4"
+        Me.CheckBox4.Size = New System.Drawing.Size(185, 17)
+        Me.CheckBox4.TabIndex = 9
+        Me.CheckBox4.Text = "Make app available for all regions"
+        Me.CheckBox4.UseVisualStyleBackColor = True
+        '
         'LinkLabel1
         '
+        Me.LinkLabel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.LinkLabel1.LinkArea = New System.Windows.Forms.LinkArea(108, 10)
         Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel1.Location = New System.Drawing.Point(49, 126)
+        Me.LinkLabel1.Location = New System.Drawing.Point(49, 103)
         Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(455, 37)
+        Me.LinkLabel1.Size = New System.Drawing.Size(445, 37)
         Me.LinkLabel1.TabIndex = 8
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "App regions need to be in the form of ISO 3166-1 Alpha 2 or Alpha-3 codes. To lea" & _
@@ -567,48 +550,28 @@ Partial Class AddProvAppxPackage
         '
         'TextBox3
         '
+        Me.TextBox3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBox3.Enabled = False
-        Me.TextBox3.Location = New System.Drawing.Point(49, 76)
+        Me.TextBox3.Location = New System.Drawing.Point(49, 53)
         Me.TextBox3.Name = "TextBox3"
-        Me.TextBox3.Size = New System.Drawing.Size(452, 21)
+        Me.TextBox3.Size = New System.Drawing.Size(442, 21)
         Me.TextBox3.TabIndex = 7
-        '
-        'RadioButton4
-        '
-        Me.RadioButton4.AutoSize = True
-        Me.RadioButton4.Location = New System.Drawing.Point(30, 53)
-        Me.RadioButton4.Name = "RadioButton4"
-        Me.RadioButton4.Size = New System.Drawing.Size(119, 17)
-        Me.RadioButton4.TabIndex = 6
-        Me.RadioButton4.Text = "Specify app regions"
-        Me.RadioButton4.UseVisualStyleBackColor = True
-        '
-        'RadioButton3
-        '
-        Me.RadioButton3.AutoSize = True
-        Me.RadioButton3.Checked = True
-        Me.RadioButton3.Location = New System.Drawing.Point(30, 30)
-        Me.RadioButton3.Name = "RadioButton3"
-        Me.RadioButton3.Size = New System.Drawing.Size(189, 17)
-        Me.RadioButton3.TabIndex = 6
-        Me.RadioButton3.TabStop = True
-        Me.RadioButton3.Text = "Make apps available for all regions"
-        Me.RadioButton3.UseVisualStyleBackColor = True
         '
         'Label5
         '
         Me.Label5.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label5.Location = New System.Drawing.Point(46, 102)
+        Me.Label5.Location = New System.Drawing.Point(46, 79)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(455, 13)
+        Me.Label5.Size = New System.Drawing.Size(445, 13)
         Me.Label5.TabIndex = 0
         Me.Label5.Text = "To specify multiple app regions, separate them with a semicolon (;)"
         '
         'CheckBox2
         '
         Me.CheckBox2.AutoSize = True
-        Me.CheckBox2.Location = New System.Drawing.Point(539, 584)
+        Me.CheckBox2.Location = New System.Drawing.Point(12, 587)
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(230, 17)
         Me.CheckBox2.TabIndex = 10
@@ -655,6 +618,43 @@ Partial Class AddProvAppxPackage
         Me.AppxScanner.StartInfo.UserName = ""
         Me.AppxScanner.SynchronizingObject = Me
         '
+        'FlowLayoutPanel1
+        '
+        Me.FlowLayoutPanel1.AutoScroll = True
+        Me.FlowLayoutPanel1.Controls.Add(Me.GroupBox2)
+        Me.FlowLayoutPanel1.Controls.Add(Me.Panel1)
+        Me.FlowLayoutPanel1.Controls.Add(Me.GroupBox3)
+        Me.FlowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
+        Me.FlowLayoutPanel1.Location = New System.Drawing.Point(525, 137)
+        Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
+        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(527, 437)
+        Me.FlowLayoutPanel1.TabIndex = 11
+        Me.FlowLayoutPanel1.WrapContents = False
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.CheckBox1)
+        Me.Panel1.Controls.Add(Me.TextBox2)
+        Me.Panel1.Controls.Add(Me.CheckBox3)
+        Me.Panel1.Controls.Add(Me.Button8)
+        Me.Panel1.Controls.Add(Me.TextBox1)
+        Me.Panel1.Controls.Add(Me.Button7)
+        Me.Panel1.Location = New System.Drawing.Point(3, 230)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(504, 61)
+        Me.Panel1.TabIndex = 10
+        '
+        'CheckBox3
+        '
+        Me.CheckBox3.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.CheckBox3.AutoSize = True
+        Me.CheckBox3.Location = New System.Drawing.Point(9, 9)
+        Me.CheckBox3.Name = "CheckBox3"
+        Me.CheckBox3.Size = New System.Drawing.Size(82, 17)
+        Me.CheckBox3.TabIndex = 10
+        Me.CheckBox3.Text = "License file:"
+        Me.CheckBox3.UseVisualStyleBackColor = True
+        '
         'AddProvAppxPackage
         '
         Me.AcceptButton = Me.OK_Button
@@ -662,19 +662,14 @@ Partial Class AddProvAppxPackage
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(1064, 621)
+        Me.Controls.Add(Me.AppxDetailsPanel)
         Me.Controls.Add(Me.CheckBox2)
-        Me.Controls.Add(Me.Button8)
-        Me.Controls.Add(Me.TextBox2)
-        Me.Controls.Add(Me.Button7)
-        Me.Controls.Add(Me.TextBox1)
-        Me.Controls.Add(Me.CheckBox1)
-        Me.Controls.Add(Me.RadioButton2)
-        Me.Controls.Add(Me.RadioButton1)
-        Me.Controls.Add(Me.GroupBox3)
-        Me.Controls.Add(Me.GroupBox2)
-        Me.Controls.Add(Me.GroupBox1)
+        Me.Controls.Add(Me.TableLayoutPanel2)
+        Me.Controls.Add(Me.ListView1)
+        Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Win10Title)
         Me.Controls.Add(Me.TableLayoutPanel1)
+        Me.Controls.Add(Me.FlowLayoutPanel1)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.MaximizeBox = False
@@ -687,17 +682,18 @@ Partial Class AddProvAppxPackage
         Me.Win10Title.ResumeLayout(False)
         Me.Win10Title.PerformLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.GroupBox1.ResumeLayout(False)
         Me.AppxDetailsPanel.ResumeLayout(False)
         Me.NoAppxFilePanel.ResumeLayout(False)
         Me.AppxFilePanel.ResumeLayout(False)
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.GroupBox2.ResumeLayout(False)
-        Me.GroupBox2.PerformLayout()
         Me.TableLayoutPanel3.ResumeLayout(False)
         Me.GroupBox3.ResumeLayout(False)
         Me.GroupBox3.PerformLayout()
+        Me.FlowLayoutPanel1.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -708,7 +704,6 @@ Partial Class AddProvAppxPackage
     Friend WithEvents Win10Title As System.Windows.Forms.Panel
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
     Friend WithEvents Label1 As System.Windows.Forms.Label
-    Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents Button3 As System.Windows.Forms.Button
@@ -719,14 +714,11 @@ Partial Class AddProvAppxPackage
     Friend WithEvents ColumnHeader2 As System.Windows.Forms.ColumnHeader
     Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
     Friend WithEvents ListBox1 As System.Windows.Forms.ListBox
-    Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents TableLayoutPanel3 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents Button4 As System.Windows.Forms.Button
     Friend WithEvents Button5 As System.Windows.Forms.Button
     Friend WithEvents Button6 As System.Windows.Forms.Button
-    Friend WithEvents RadioButton1 As System.Windows.Forms.RadioButton
-    Friend WithEvents RadioButton2 As System.Windows.Forms.RadioButton
     Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
     Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
     Friend WithEvents Button7 As System.Windows.Forms.Button
@@ -735,8 +727,6 @@ Partial Class AddProvAppxPackage
     Friend WithEvents GroupBox3 As System.Windows.Forms.GroupBox
     Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
     Friend WithEvents TextBox3 As System.Windows.Forms.TextBox
-    Friend WithEvents RadioButton4 As System.Windows.Forms.RadioButton
-    Friend WithEvents RadioButton3 As System.Windows.Forms.RadioButton
     Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents CheckBox2 As System.Windows.Forms.CheckBox
     Friend WithEvents AppxFileOFD As System.Windows.Forms.OpenFileDialog
@@ -757,5 +747,9 @@ Partial Class AddProvAppxPackage
     Friend WithEvents ColumnHeader3 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader4 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader5 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents FlowLayoutPanel1 As System.Windows.Forms.FlowLayoutPanel
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents CheckBox3 As System.Windows.Forms.CheckBox
+    Friend WithEvents CheckBox4 As System.Windows.Forms.CheckBox
 
 End Class

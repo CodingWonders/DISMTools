@@ -1,6 +1,9 @@
 ﻿Imports System.Windows.Forms
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
+Imports DISMTools.Elements
+Imports System.Xml
+Imports System.Xml.Serialization
 
 Public Class AddProvAppxPackage
 
@@ -23,6 +26,8 @@ Public Class AddProvAppxPackage
     Dim LogoAssetPopupForm As New Form()
     Dim LogoAssetPreview As New PictureBox()
     Dim previewer As New ToolTip()
+
+    Dim Packages As New List(Of AppxPackage)
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
@@ -68,7 +73,7 @@ Public Class AddProvAppxPackage
                 Else
                     ProgressPanel.appxAdditionLastDependency = ""
                 End If
-                If RadioButton1.Checked Then
+                If CheckBox3.Checked Then
                     If TextBox1.Text = "" Then
                         Select Case MainForm.Language
                             Case 0
@@ -146,7 +151,7 @@ Public Class AddProvAppxPackage
                     ProgressPanel.appxAdditionUseCustomDataFile = False
                     ProgressPanel.appxAdditionCustomDataFile = ""
                 End If
-                If RadioButton3.Checked Then
+                If CheckBox4.Checked Then
                     ProgressPanel.appxAdditionUseAllRegions = True
                     ProgressPanel.appxAdditionRegions = "all"
                 Else
@@ -159,6 +164,7 @@ Public Class AddProvAppxPackage
                     ProgressPanel.appxAdditionCommit = False
                 End If
             End If
+            ProgressPanel.appxAdditionPackageList = Packages
         End If
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         ProgressPanel.OperationNum = 37
@@ -181,9 +187,8 @@ Public Class AddProvAppxPackage
                         Label1.Text = Text
                         Label2.Text = "Please add packed or unpacked AppX packages by using the buttons below, or by dropping them to the list view below:"
                         Label3.Text = "An AppX package may need some dependencies for it to be installed correctly. If so, you can specify a list of dependencies now:"
-                        Label4.Text = "The dependencies specified will be used on all selected AppX packages"
                         Label5.Text = "To specify multiple app regions, separate them with a semicolon (;)"
-                        Label6.Text = "Select an entry in the list view to show the details of an app"
+                        Label6.Text = "Select an entry in the list view to show the details of an app and to configure addition settings"
                         Button1.Text = "Add file"
                         Button2.Text = "Add folder"
                         Button3.Text = "Remove all entries"
@@ -195,10 +200,9 @@ Public Class AddProvAppxPackage
                         Button9.Text = "Remove selected entry"
                         Cancel_Button.Text = "Cancel"
                         OK_Button.Text = "OK"
-                        CheckBox1.Text = "Provide a custom data file:"
+                        CheckBox1.Text = "Custom data file:"
                         CheckBox2.Text = "Commit image after adding AppX packages"
                         CustomDataFileOFD.Title = "Specify a custom data file"
-                        GroupBox1.Text = "Source AppX files*"
                         GroupBox2.Text = "AppX dependencies"
                         GroupBox3.Text = "AppX regions"
                         LicenseFileOFD.Title = "Specify a license file"
@@ -209,19 +213,16 @@ Public Class AddProvAppxPackage
                         ListView1.Columns(2).Text = "Application name"
                         ListView1.Columns(3).Text = "Application publisher"
                         ListView1.Columns(4).Text = "Application version"
-                        RadioButton1.Text = "License file*:"
-                        RadioButton2.Text = "Skip license file"
-                        RadioButton3.Text = "Make apps available for all regions"
-                        RadioButton4.Text = "Specify app regions"
+                        CheckBox3.Text = "License file:"
+                        CheckBox4.Text = "Make app available for all regions"
                         UnpackedAppxFolderFBD.Description = "Please specify a folder containing unpacked AppX files:"
                     Case "ESN"
                         Text = "Añadir paquetes aprovisionados AppX"
                         Label1.Text = Text
                         Label2.Text = "Añada archivos AppX empaquetados o desempaquetados usando los botones de abajo, o soltándolos en la lista de abajo:"
                         Label3.Text = "Un paquete AppX podría necesitar algunas dependencias para que sea instalado correctamente. Si es así, puede especificarlas ahora:"
-                        Label4.Text = "Las dependencias especificadas serán usadas en todos los paquetes AppX seleccionados"
                         Label5.Text = "Para especificar regiones de aplicación múltiples, sepáralos con un punto y coma (;)"
-                        Label6.Text = "Seleccione una entrada en la lista para mostrar los detalles de una aplicación"
+                        Label6.Text = "Seleccione una entrada en la lista para mostrar los detalles de una aplicación y para configurar opciones de adición"
                         Button1.Text = "Añadir archivo"
                         Button2.Text = "Añadir carpeta"
                         Button3.Text = "Eliminar todas las entradas"
@@ -233,10 +234,9 @@ Public Class AddProvAppxPackage
                         Button9.Text = "Eliminar entrada seleccionada"
                         Cancel_Button.Text = "Cancelar"
                         OK_Button.Text = "Aceptar"
-                        CheckBox1.Text = "Proporcionar un archivo de datos:"
+                        CheckBox1.Text = "Archivo de datos:"
                         CheckBox2.Text = "Guardar imagen tras añadir paquetes AppX"
                         CustomDataFileOFD.Title = "Especificar un archivo de datos personalizados"
-                        GroupBox1.Text = "Archivos AppX de origen*"
                         GroupBox2.Text = "Dependencias de aplicaciones"
                         GroupBox3.Text = "Regiones de aplicaciones"
                         LicenseFileOFD.Title = "Especificar un archivo de licencia"
@@ -247,10 +247,8 @@ Public Class AddProvAppxPackage
                         ListView1.Columns(2).Text = "Nombre de aplicación"
                         ListView1.Columns(3).Text = "Publicador de aplicación"
                         ListView1.Columns(4).Text = "Versión de aplicación"
-                        RadioButton1.Text = "Archivo de licencia*:"
-                        RadioButton2.Text = "Omitir archivo de licencia"
-                        RadioButton3.Text = "Hacer aplicaciones disponibles para todas las regiones"
-                        RadioButton4.Text = "Especificar regiones de aplicaciones"
+                        CheckBox3.Text = "Archivo de licencia:"
+                        CheckBox4.Text = "Hacer aplicación disponible para todas las regiones"
                         UnpackedAppxFolderFBD.Description = "Especifique un directorio contenedor de archivos de una aplicación AppX:"
                 End Select
             Case 1
@@ -258,9 +256,8 @@ Public Class AddProvAppxPackage
                 Label1.Text = Text
                 Label2.Text = "Please add packed or unpacked AppX packages by using the buttons below, or by dropping them to the list view below:"
                 Label3.Text = "An AppX package may need some dependencies for it to be installed correctly. If so, you can specify a list of dependencies now:"
-                Label4.Text = "The dependencies specified will be used on all selected AppX packages"
                 Label5.Text = "To specify multiple app regions, separate them with a semicolon (;)"
-                Label6.Text = "Select an entry in the list view to show the details of an app"
+                Label6.Text = "Select an entry in the list view to show the details of an app and to configure addition settings"
                 Button1.Text = "Add file"
                 Button2.Text = "Add folder"
                 Button3.Text = "Remove all entries"
@@ -272,10 +269,9 @@ Public Class AddProvAppxPackage
                 Button9.Text = "Remove selected entry"
                 Cancel_Button.Text = "Cancel"
                 OK_Button.Text = "OK"
-                CheckBox1.Text = "Provide a custom data file:"
+                CheckBox1.Text = "Custom data file:"
                 CheckBox2.Text = "Commit image after adding AppX packages"
                 CustomDataFileOFD.Title = "Specify a custom data file"
-                GroupBox1.Text = "Source AppX files*"
                 GroupBox2.Text = "AppX dependencies"
                 GroupBox3.Text = "AppX regions"
                 LicenseFileOFD.Title = "Specify a license file"
@@ -286,19 +282,16 @@ Public Class AddProvAppxPackage
                 ListView1.Columns(2).Text = "Application name"
                 ListView1.Columns(3).Text = "Application publisher"
                 ListView1.Columns(4).Text = "Application version"
-                RadioButton1.Text = "License file*:"
-                RadioButton2.Text = "Skip license file"
-                RadioButton3.Text = "Make apps available for all regions"
-                RadioButton4.Text = "Specify app regions"
+                CheckBox3.Text = "License file:"
+                CheckBox4.Text = "Make app available for all regions"
                 UnpackedAppxFolderFBD.Description = "Please specify a folder containing unpacked AppX files:"
             Case 2
                 Text = "Añadir paquetes aprovisionados AppX"
                 Label1.Text = Text
                 Label2.Text = "Añada archivos AppX empaquetados o desempaquetados usando los botones de abajo, o soltándolos en la lista de abajo:"
                 Label3.Text = "Un paquete AppX podría necesitar algunas dependencias para que sea instalado correctamente. Si es así, puede especificarlas ahora:"
-                Label4.Text = "Las dependencias especificadas serán usadas en todos los paquetes AppX seleccionados"
                 Label5.Text = "Para especificar regiones de aplicación múltiples, sepáralos con un punto y coma (;)"
-                Label6.Text = "Seleccione una entrada en la lista para mostrar los detalles de una aplicación"
+                Label6.Text = "Seleccione una entrada en la lista para mostrar los detalles de una aplicación y para configurar opciones de adición"
                 Button1.Text = "Añadir archivo"
                 Button2.Text = "Añadir carpeta"
                 Button3.Text = "Eliminar todas las entradas"
@@ -310,10 +303,9 @@ Public Class AddProvAppxPackage
                 Button9.Text = "Eliminar entrada seleccionada"
                 Cancel_Button.Text = "Cancelar"
                 OK_Button.Text = "Aceptar"
-                CheckBox1.Text = "Proporcionar un archivo de datos:"
+                CheckBox1.Text = "Archivo de datos:"
                 CheckBox2.Text = "Guardar imagen tras añadir paquetes AppX"
                 CustomDataFileOFD.Title = "Especificar un archivo de datos personalizados"
-                GroupBox1.Text = "Archivos AppX de origen*"
                 GroupBox2.Text = "Dependencias de aplicaciones"
                 GroupBox3.Text = "Regiones de aplicaciones"
                 LicenseFileOFD.Title = "Especificar un archivo de licencia"
@@ -324,17 +316,14 @@ Public Class AddProvAppxPackage
                 ListView1.Columns(2).Text = "Nombre de aplicación"
                 ListView1.Columns(3).Text = "Publicador de aplicación"
                 ListView1.Columns(4).Text = "Versión de aplicación"
-                RadioButton1.Text = "Archivo de licencia*:"
-                RadioButton2.Text = "Omitir archivo de licencia"
-                RadioButton3.Text = "Hacer aplicaciones disponibles para todas las regiones"
-                RadioButton4.Text = "Especificar regiones de aplicaciones"
+                CheckBox3.Text = "Archivo de licencia:"
+                CheckBox4.Text = "Hacer aplicación disponible para todas las regiones"
                 UnpackedAppxFolderFBD.Description = "Especifique un directorio contenedor de archivos de una aplicación AppX:"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
             BackColor = Color.FromArgb(31, 31, 31)
             ForeColor = Color.White
-            GroupBox1.ForeColor = Color.White
             GroupBox2.ForeColor = Color.White
             GroupBox3.ForeColor = Color.White
             ListView1.BackColor = Color.FromArgb(31, 31, 31)
@@ -346,7 +335,6 @@ Public Class AddProvAppxPackage
             Win10Title.BackColor = Color.White
             BackColor = Color.FromArgb(238, 238, 242)
             ForeColor = Color.Black
-            GroupBox1.ForeColor = Color.Black
             GroupBox2.ForeColor = Color.Black
             GroupBox3.ForeColor = Color.Black
             ListView1.BackColor = Color.FromArgb(238, 238, 242)
@@ -367,6 +355,8 @@ Public Class AddProvAppxPackage
         CheckBox2.Enabled = MainForm.OnlineManagement = False
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
+        GroupBox3.Enabled = If(FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart < 10, False, True)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -380,6 +370,7 @@ Public Class AddProvAppxPackage
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        Packages.Clear()
         ListView1.Items.Clear()
         Button3.Enabled = False
         Button9.Enabled = False
@@ -389,12 +380,19 @@ Public Class AddProvAppxPackage
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
         ListBox1.Items.Clear()
+        Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies.Clear()
         Button4.Enabled = False
         Button5.Enabled = False
     End Sub
 
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
         If Not ListBox1.SelectedItem = "" Then
+            'Dim dep As New AppxDependency()
+            'dep.DependencyFile.Add(ListBox1.SelectedItem)
+            Dim deps As New List(Of AppxDependency)
+            deps = Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies
+            deps.RemoveAt(ListBox1.SelectedIndex)
+            Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies = deps
             ListBox1.Items.Remove(ListBox1.SelectedItem)
         End If
         If ListBox1.SelectedItem = "" Then
@@ -413,22 +411,41 @@ Public Class AddProvAppxPackage
     End Sub
 
     Private Sub AppxDependencyOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles AppxDependencyOFD.FileOk
-        ListBox1.Items.Add(AppxDependencyOFD.FileName)
-        If ListBox1.Items.Count > 0 Then
-            Button4.Enabled = True
+        If ListView1.SelectedItems.Count = 1 Then
+            Dim dep As New AppxDependency()
+            dep.DependencyFile = AppxDependencyOFD.FileName
+            If Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies.Count > 0 And Not Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies.Contains(dep) Then
+                Dim deps As New List(Of AppxDependency)
+                deps = Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies
+                deps.Add(dep)
+                Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies = deps
+            ElseIf Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies.Count = 0 Then
+                Dim deps As New List(Of AppxDependency)
+                deps = Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies
+                deps.Add(dep)
+                Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies = deps
+            End If
+            ListBox1.Items.Add(AppxDependencyOFD.FileName)
+            If ListBox1.Items.Count > 0 Then
+                Button4.Enabled = True
+            End If
         End If
     End Sub
 
     Private Sub LicenseFileOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles LicenseFileOFD.FileOk
-        TextBox1.Text = LicenseFileOFD.FileName
+        If ListView1.SelectedItems.Count = 1 Then
+            TextBox1.Text = LicenseFileOFD.FileName
+        End If
     End Sub
 
     Private Sub CustomDataFileOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles CustomDataFileOFD.FileOk
-        TextBox2.Text = CustomDataFileOFD.FileName
+        If ListView1.SelectedItems.Count = 1 Then
+            TextBox2.Text = CustomDataFileOFD.FileName
+        End If
     End Sub
 
     ''' <summary>
-    ''' DISMTools AppX header scanner component: version 0.3
+    ''' DISMTools AppX header scanner component: version 0.3.1
     ''' </summary>
     ''' <param name="IsFolder">Determines whether the given value for "Package" is a folder</param>
     ''' <param name="Package">The name of the packed or unpacked AppX file. It may be a file containing the full structure, or a folder containing all AppX files</param>
@@ -459,12 +476,14 @@ Public Class AddProvAppxPackage
         Dim currentAppxName As String = ""
         Dim currentAppxPublisher As String = ""
         Dim currentAppxVersion As String = ""
+        Dim currentAppxArchitecture As String = ""
         Dim pkgName As String = ""
+        Dim IdScanner As String
         If IsFolder Then
             If File.Exists(Package & "\AppxMetadata\AppxBundleManifest.xml") Then
                 ' AppXBundle file
                 ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Package & "\AppxMetadata\AppxBundleManifest.xml")
-                Dim IdScanner As String = ScannerRTB.Lines(If(ScannerRTB.Lines(2).EndsWith("<!--"), 10, 4))
+                IdScanner = ScannerRTB.Lines(If(ScannerRTB.Lines(2).EndsWith("<!--"), 10, 4))
                 Dim CharIndex As Integer = 0
                 Dim CharNext As Integer
                 For Each Character As Char In ScannerRTB.Lines(If(ScannerRTB.Lines(2).EndsWith("<!--"), 10, 4))
@@ -504,222 +523,53 @@ Public Class AddProvAppxPackage
                 pkgName = pkgName.Replace(" ", "%20").Trim()
                 QuoteCount = 0
                 Stepper = 2
-                If ScannerRTB.Lines(2).EndsWith("<!--") Then
-                    ' XML comment
-                    IdScanner = ScannerRTB.Lines(9)
-                    CharIndex = 0
-                    CharNext = 0
-                    For Each Character As Char In ScannerRTB.Lines(9)
-                        CharNext = CharIndex + 1
-                        If Not IdScanner(CharIndex) = Quote Then
-                            CharIndex += 1
-                            Continue For
-                        ElseIf IdScanner(CharIndex) = Quote And IdScanner(CharNext) = " " Then
-                            CharIndex += 1
-                            Continue For
-                        Else
-                            Character = IdScanner(CharIndex + 1)
-                            If Not IdScanner(CharIndex + Stepper) = " " Then
-                                If QuoteCount = 0 Then
-                                    QuoteCount += 1
-                                    Do
-                                        If Character = Quote Then
-                                            CharIndex += Stepper - 1
-                                            Character = IdScanner(CharIndex - 1)
-                                            QuoteCount += 1
-                                            Stepper = 2
-                                            Exit Do
-                                        Else
-                                            currentAppxName &= Character.ToString()
-                                            Character = IdScanner(CharIndex + Stepper)
-                                            Stepper += 1
-                                        End If
-                                    Loop
-                                ElseIf QuoteCount = 2 Then
-                                    QuoteCount += 1
-                                    Do
-                                        If Character = Quote Then
-                                            CharIndex += Stepper - 1
-                                            Character = IdScanner(CharIndex - 1)
-                                            QuoteCount += 1
-                                            Stepper = 2
-                                            Exit Do
-                                        Else
-                                            currentAppxPublisher &= Character.ToString()
-                                            Character = IdScanner(CharIndex + Stepper)
-                                            Stepper += 1
-                                        End If
-                                    Loop
-                                ElseIf QuoteCount = 4 Then
-                                    QuoteCount += 1
-                                    Do
-                                        If Character = Quote Then
-                                            CharIndex += Stepper - 1
-                                            Character = IdScanner(CharIndex - 1)
-                                            QuoteCount += 1
-                                            Stepper = 2
-                                            Exit Do
-                                        Else
-                                            currentAppxVersion &= Character.ToString()
-                                            Character = IdScanner(CharIndex + Stepper)
-                                            Stepper += 1
-                                        End If
-                                    Loop
-                                End If
-                            End If
-                        End If
-                    Next
-                    AppxNameList.Add(currentAppxName)
-                    AppxPublisherList.Add(currentAppxPublisher)
-                    AppxVersionList.Add(currentAppxVersion)
-                    AppxNames = AppxNameList.ToArray()
-                    AppxPublishers = AppxPublisherList.ToArray()
-                    AppxVersion = AppxVersionList.ToArray()
-                ElseIf ScannerRTB.Lines(2).Contains("<Identity Name=") Then
-                    IdScanner = ScannerRTB.Lines(2)
-                    CharIndex = 0
-                    CharNext = 0
-                    For Each Character As Char In ScannerRTB.Lines(2)
-                        CharNext = CharIndex + 1
-                        If Not IdScanner(CharIndex) = Quote Then
-                            CharIndex += 1
-                            Continue For
-                        ElseIf IdScanner(CharIndex) = Quote And IdScanner(CharNext) = " " Then
-                            CharIndex += 1
-                            Continue For
-                        Else
-                            Character = IdScanner(CharIndex + 1)
-                            If Not IdScanner(CharIndex + Stepper) = " " Then
-                                If QuoteCount = 0 Then
-                                    QuoteCount += 1
-                                    Do
-                                        If Character = Quote Then
-                                            CharIndex += Stepper - 1
-                                            Character = IdScanner(CharIndex - 1)
-                                            QuoteCount += 1
-                                            Stepper = 2
-                                            Exit Do
-                                        Else
-                                            currentAppxName &= Character.ToString()
-                                            Character = IdScanner(CharIndex + Stepper)
-                                            Stepper += 1
-                                        End If
-                                    Loop
-                                ElseIf QuoteCount = 2 Then
-                                    QuoteCount += 1
-                                    Do
-                                        If Character = Quote Then
-                                            CharIndex += Stepper - 1
-                                            Character = IdScanner(CharIndex - 1)
-                                            QuoteCount += 1
-                                            Stepper = 2
-                                            Exit Do
-                                        Else
-                                            currentAppxPublisher &= Character.ToString()
-                                            Character = IdScanner(CharIndex + Stepper)
-                                            Stepper += 1
-                                        End If
-                                    Loop
-                                ElseIf QuoteCount = 4 Then
-                                    QuoteCount += 1
-                                    Do
-                                        If Character = Quote Then
-                                            CharIndex += Stepper - 1
-                                            Character = IdScanner(CharIndex - 1)
-                                            QuoteCount += 1
-                                            Stepper = 2
-                                            Exit Do
-                                        Else
-                                            currentAppxVersion &= Character.ToString()
-                                            Character = IdScanner(CharIndex + Stepper)
-                                            Stepper += 1
-                                        End If
-                                    Loop
-                                End If
-                            End If
-                        End If
-                    Next
-                    AppxNameList.Add(currentAppxName)
-                    AppxPublisherList.Add(currentAppxPublisher)
-                    AppxVersionList.Add(currentAppxVersion)
-                    AppxNames = AppxNameList.ToArray()
-                    AppxPublishers = AppxPublisherList.ToArray()
-                    AppxVersion = AppxVersionList.ToArray()
-                End If
+                For x = 0 To ScannerRTB.Lines.Count - 1
+                    If ScannerRTB.Lines(x).Contains("<Identity") Then
+                        IdScanner = ScannerRTB.Lines(x)
+                        Dim serializer As New XmlSerializer(GetType(AppxPackage))
+                        Using tReader As TextReader = New StringReader(IdScanner)
+                            Using reader As XmlReader = XmlReader.Create(tReader)
+                                Dim id = CType(serializer.Deserialize(reader), AppxPackage)
+                                currentAppxName = id.PackageName
+                                currentAppxPublisher = id.PackagePublisher
+                                currentAppxVersion = id.PackageVersion
+                                currentAppxArchitecture = id.PackageArchitecture
+                            End Using
+                        End Using
+                        AppxNameList.Add(currentAppxName)
+                        AppxPublisherList.Add(currentAppxPublisher)
+                        AppxVersionList.Add(currentAppxVersion)
+                        AppxNames = AppxNameList.ToArray()
+                        AppxPublishers = AppxPublisherList.ToArray()
+                        AppxVersion = AppxVersionList.ToArray()
+                        Exit For
+                    End If
+                Next
             ElseIf File.Exists(Package & "\AppxManifest.xml") Then
                 ' AppX file
                 ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Package & "\AppxManifest.xml")
-                If ScannerRTB.Lines(2).EndsWith("<!--") Then
-                    Dim IdScanner As String = ScannerRTB.Lines(9)
-                    Dim CharIndex As Integer = 0
-                    Dim CharNext As Integer
-                    For Each Character As Char In ScannerRTB.Lines(9)
-                        CharNext = CharIndex + 1
-                        If Not IdScanner(CharIndex) = Quote Then
-                            CharIndex += 1
-                            Continue For
-                        ElseIf IdScanner(CharIndex) = Quote And IdScanner(CharNext) = " " Then
-                            CharIndex += 1
-                            Continue For
-                        Else
-                            Character = IdScanner(CharIndex + 1)
-                            If Not IdScanner(CharIndex + Stepper) = " " Then
-                                If QuoteCount = 0 Then
-                                    QuoteCount += 1
-                                    Do
-                                        If Character = Quote Then
-                                            CharIndex += Stepper - 1
-                                            Character = IdScanner(CharIndex - 1)
-                                            QuoteCount += 1
-                                            Stepper = 2
-                                            Exit Do
-                                        Else
-                                            currentAppxName &= Character.ToString()
-                                            Character = IdScanner(CharIndex + Stepper)
-                                            Stepper += 1
-                                        End If
-                                    Loop
-                                ElseIf QuoteCount = 2 Then
-                                    QuoteCount += 1
-                                    Do
-                                        If Character = Quote Then
-                                            CharIndex += Stepper - 1
-                                            Character = IdScanner(CharIndex - 1)
-                                            QuoteCount += 1
-                                            Stepper = 2
-                                            Exit Do
-                                        Else
-                                            currentAppxPublisher &= Character.ToString()
-                                            Character = IdScanner(CharIndex + Stepper)
-                                            Stepper += 1
-                                        End If
-                                    Loop
-                                ElseIf QuoteCount = 4 Then
-                                    QuoteCount += 1
-                                    Do
-                                        If Character = Quote Then
-                                            CharIndex += Stepper - 1
-                                            Character = IdScanner(CharIndex - 1)
-                                            QuoteCount += 1
-                                            Stepper = 2
-                                            Exit Do
-                                        Else
-                                            currentAppxVersion &= Character.ToString()
-                                            Character = IdScanner(CharIndex + Stepper)
-                                            Stepper += 1
-                                        End If
-                                    Loop
-                                End If
-                            End If
-                        End If
-                    Next
-                    AppxNameList.Add(currentAppxName)
-                    AppxPublisherList.Add(currentAppxPublisher)
-                    AppxVersionList.Add(currentAppxVersion)
-                    AppxNames = AppxNameList.ToArray()
-                    AppxPublishers = AppxPublisherList.ToArray()
-                    AppxVersion = AppxVersionList.ToArray()
-                End If
+                For x = 0 To ScannerRTB.Lines.Count - 1
+                    If ScannerRTB.Lines(x).Contains("<Identity") Then
+                        IdScanner = ScannerRTB.Lines(x)
+                        Dim serializer As New XmlSerializer(GetType(AppxPackage))
+                        Using tReader As TextReader = New StringReader(IdScanner)
+                            Using reader As XmlReader = XmlReader.Create(tReader)
+                                Dim id = CType(serializer.Deserialize(reader), AppxPackage)
+                                currentAppxName = id.PackageName
+                                currentAppxPublisher = id.PackagePublisher
+                                currentAppxVersion = id.PackageVersion
+                                currentAppxArchitecture = id.PackageArchitecture
+                            End Using
+                        End Using
+                        AppxNameList.Add(currentAppxName)
+                        AppxPublisherList.Add(currentAppxPublisher)
+                        AppxVersionList.Add(currentAppxVersion)
+                        AppxNames = AppxNameList.ToArray()
+                        AppxPublishers = AppxPublisherList.ToArray()
+                        AppxVersion = AppxVersionList.ToArray()
+                        Exit For
+                    End If
+                Next
             Else
                 ' Unrecognized type
                 Select Case MainForm.Language
@@ -741,7 +591,7 @@ Public Class AddProvAppxPackage
         Else
             If Directory.Exists(Application.StartupPath & "\appxscan") Then Directory.Delete(Application.StartupPath & "\appxscan", True)
             Directory.CreateDirectory(Application.StartupPath & "\appxscan")
-            AppxScanner.StartInfo.FileName = Application.StartupPath & "\bin\utils\7z.exe"
+            AppxScanner.StartInfo.FileName = Application.StartupPath & "\bin\utils\" & If(Environment.Is64BitOperatingSystem, "x64", "x86") & "\7z.exe"
             AppxScanner.StartInfo.Arguments = "e " & Quote & Package & Quote & " " & Quote & If(Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase), "appxmetadata\appxbundlemanifest.xml", "appxmanifest.xml") & Quote & " -o" & Quote & Application.StartupPath & "\appxscan" & Quote
             AppxScanner.StartInfo.CreateNoWindow = True
             AppxScanner.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
@@ -750,7 +600,7 @@ Public Class AddProvAppxPackage
             If AppxScanner.ExitCode = 0 Then
                 If Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase) Then
                     ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\appxscan\AppxBundleManifest.xml")
-                    Dim IdScanner As String = ScannerRTB.Lines(If(ScannerRTB.Lines(2).EndsWith("<!--"), 10, 4))
+                    IdScanner = ScannerRTB.Lines(If(ScannerRTB.Lines(2).EndsWith("<!--"), 10, 4))
                     Dim CharIndex As Integer = 0
                     Dim CharNext As Integer
                     For Each Character As Char In ScannerRTB.Lines(If(ScannerRTB.Lines(2).EndsWith("<!--"), 10, 4))
@@ -790,291 +640,52 @@ Public Class AddProvAppxPackage
                     pkgName = pkgName.Replace(" ", "%20").Trim()
                     QuoteCount = 0
                     Stepper = 2
-                    If ScannerRTB.Lines(2).EndsWith("<!--") Then
-                        ' XML comment
-                        IdScanner = ScannerRTB.Lines(9)
-                        CharIndex = 0
-                        CharNext = 0
-                        For Each Character As Char In ScannerRTB.Lines(9)
-                            CharNext = CharIndex + 1
-                            If Not IdScanner(CharIndex) = Quote Then
-                                CharIndex += 1
-                                Continue For
-                            ElseIf IdScanner(CharIndex) = Quote And IdScanner(CharNext) = " " Then
-                                CharIndex += 1
-                                Continue For
-                            Else
-                                Character = IdScanner(CharIndex + 1)
-                                If Not IdScanner(CharIndex + Stepper) = " " Then
-                                    If QuoteCount = 0 Then
-                                        QuoteCount += 1
-                                        Do
-                                            If Character = Quote Then
-                                                CharIndex += Stepper - 1
-                                                Character = IdScanner(CharIndex - 1)
-                                                QuoteCount += 1
-                                                Stepper = 2
-                                                Exit Do
-                                            Else
-                                                currentAppxName &= Character.ToString()
-                                                Character = IdScanner(CharIndex + Stepper)
-                                                Stepper += 1
-                                            End If
-                                        Loop
-                                    ElseIf QuoteCount = 2 Then
-                                        QuoteCount += 1
-                                        Do
-                                            If Character = Quote Then
-                                                CharIndex += Stepper - 1
-                                                Character = IdScanner(CharIndex - 1)
-                                                QuoteCount += 1
-                                                Stepper = 2
-                                                Exit Do
-                                            Else
-                                                currentAppxPublisher &= Character.ToString()
-                                                Character = IdScanner(CharIndex + Stepper)
-                                                Stepper += 1
-                                            End If
-                                        Loop
-                                    ElseIf QuoteCount = 4 Then
-                                        QuoteCount += 1
-                                        Do
-                                            If Character = Quote Then
-                                                CharIndex += Stepper - 1
-                                                Character = IdScanner(CharIndex - 1)
-                                                QuoteCount += 1
-                                                Stepper = 2
-                                                Exit Do
-                                            Else
-                                                currentAppxVersion &= Character.ToString()
-                                                Character = IdScanner(CharIndex + Stepper)
-                                                Stepper += 1
-                                            End If
-                                        Loop
-                                    End If
-                                End If
-                            End If
-                        Next
-                        AppxNameList.Add(currentAppxName)
-                        AppxPublisherList.Add(currentAppxPublisher)
-                        AppxVersionList.Add(currentAppxVersion)
-                        AppxNames = AppxNameList.ToArray()
-                        AppxPublishers = AppxPublisherList.ToArray()
-                        AppxVersion = AppxVersionList.ToArray()
-                    ElseIf ScannerRTB.Lines(2).Contains("<Identity Name=") Then
-                        IdScanner = ScannerRTB.Lines(2)
-                        CharIndex = 0
-                        CharNext = 0
-                        For Each Character As Char In ScannerRTB.Lines(2)
-                            CharNext = CharIndex + 1
-                            If Not IdScanner(CharIndex) = Quote Then
-                                CharIndex += 1
-                                Continue For
-                            ElseIf IdScanner(CharIndex) = Quote And IdScanner(CharNext) = " " Then
-                                CharIndex += 1
-                                Continue For
-                            Else
-                                Character = IdScanner(CharIndex + 1)
-                                If Not IdScanner(CharIndex + Stepper) = " " Then
-                                    If QuoteCount = 0 Then
-                                        QuoteCount += 1
-                                        Do
-                                            If Character = Quote Then
-                                                CharIndex += Stepper - 1
-                                                Character = IdScanner(CharIndex - 1)
-                                                QuoteCount += 1
-                                                Stepper = 2
-                                                Exit Do
-                                            Else
-                                                currentAppxName &= Character.ToString()
-                                                Character = IdScanner(CharIndex + Stepper)
-                                                Stepper += 1
-                                            End If
-                                        Loop
-                                    ElseIf QuoteCount = 2 Then
-                                        QuoteCount += 1
-                                        Do
-                                            If Character = Quote Then
-                                                CharIndex += Stepper - 1
-                                                Character = IdScanner(CharIndex - 1)
-                                                QuoteCount += 1
-                                                Stepper = 2
-                                                Exit Do
-                                            Else
-                                                currentAppxPublisher &= Character.ToString()
-                                                Character = IdScanner(CharIndex + Stepper)
-                                                Stepper += 1
-                                            End If
-                                        Loop
-                                    ElseIf QuoteCount = 4 Then
-                                        QuoteCount += 1
-                                        Do
-                                            If Character = Quote Then
-                                                CharIndex += Stepper - 1
-                                                Character = IdScanner(CharIndex - 1)
-                                                QuoteCount += 1
-                                                Stepper = 2
-                                                Exit Do
-                                            Else
-                                                currentAppxVersion &= Character.ToString()
-                                                Character = IdScanner(CharIndex + Stepper)
-                                                Stepper += 1
-                                            End If
-                                        Loop
-                                    End If
-                                End If
-                            End If
-                        Next
-                        AppxNameList.Add(currentAppxName)
-                        AppxPublisherList.Add(currentAppxPublisher)
-                        AppxVersionList.Add(currentAppxVersion)
-                        AppxNames = AppxNameList.ToArray()
-                        AppxPublishers = AppxPublisherList.ToArray()
-                        AppxVersion = AppxVersionList.ToArray()
-                    End If
+                    For x = 0 To ScannerRTB.Lines.Count - 1
+                        If ScannerRTB.Lines(x).Contains("<Identity") Then
+                            IdScanner = ScannerRTB.Lines(x)
+                            Dim serializer As New XmlSerializer(GetType(AppxPackage))
+                            Using tReader As TextReader = New StringReader(IdScanner)
+                                Using reader As XmlReader = XmlReader.Create(tReader)
+                                    Dim id = CType(serializer.Deserialize(reader), AppxPackage)
+                                    currentAppxName = id.PackageName
+                                    currentAppxPublisher = id.PackagePublisher
+                                    currentAppxVersion = id.PackageVersion
+                                    currentAppxArchitecture = id.PackageArchitecture
+                                End Using
+                            End Using
+                            AppxNameList.Add(currentAppxName)
+                            AppxPublisherList.Add(currentAppxPublisher)
+                            AppxVersionList.Add(currentAppxVersion)
+                            AppxNames = AppxNameList.ToArray()
+                            AppxPublishers = AppxPublisherList.ToArray()
+                            AppxVersion = AppxVersionList.ToArray()
+                            Exit For
+                        End If
+                    Next
                 Else
                     ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\appxscan\AppxManifest.xml")
-                    If ScannerRTB.Lines(2).EndsWith("<!--") Then
-                        Dim IdScanner As String = ScannerRTB.Lines(9)
-                        Dim CharIndex As Integer = 0
-                        Dim CharNext As Integer
-                        For Each Character As Char In ScannerRTB.Lines(9)
-                            CharNext = CharIndex + 1
-                            If Not IdScanner(CharIndex) = Quote Then
-                                CharIndex += 1
-                                Continue For
-                            ElseIf IdScanner(CharIndex) = Quote And IdScanner(CharNext) = " " Then
-                                CharIndex += 1
-                                Continue For
-                            Else
-                                Character = IdScanner(CharIndex + 1)
-                                If Not IdScanner(CharIndex + Stepper) = " " Then
-                                    If QuoteCount = 0 Then
-                                        QuoteCount += 1
-                                        Do
-                                            If Character = Quote Then
-                                                CharIndex += Stepper - 1
-                                                Character = IdScanner(CharIndex - 1)
-                                                QuoteCount += 1
-                                                Stepper = 2
-                                                Exit Do
-                                            Else
-                                                currentAppxName &= Character.ToString()
-                                                Character = IdScanner(CharIndex + Stepper)
-                                                Stepper += 1
-                                            End If
-                                        Loop
-                                    ElseIf QuoteCount = 2 Then
-                                        QuoteCount += 1
-                                        Do
-                                            If Character = Quote Then
-                                                CharIndex += Stepper - 1
-                                                Character = IdScanner(CharIndex - 1)
-                                                QuoteCount += 1
-                                                Stepper = 2
-                                                Exit Do
-                                            Else
-                                                currentAppxPublisher &= Character.ToString()
-                                                Character = IdScanner(CharIndex + Stepper)
-                                                Stepper += 1
-                                            End If
-                                        Loop
-                                    ElseIf QuoteCount = 4 Then
-                                        QuoteCount += 1
-                                        Do
-                                            If Character = Quote Then
-                                                CharIndex += Stepper - 1
-                                                Character = IdScanner(CharIndex - 1)
-                                                QuoteCount += 1
-                                                Stepper = 2
-                                                Exit Do
-                                            Else
-                                                currentAppxVersion &= Character.ToString()
-                                                Character = IdScanner(CharIndex + Stepper)
-                                                Stepper += 1
-                                            End If
-                                        Loop
-                                    End If
-                                End If
-                            End If
-                        Next
-                        AppxNameList.Add(currentAppxName)
-                        AppxPublisherList.Add(currentAppxPublisher)
-                        AppxVersionList.Add(currentAppxVersion)
-                        AppxNames = AppxNameList.ToArray()
-                        AppxPublishers = AppxPublisherList.ToArray()
-                        AppxVersion = AppxVersionList.ToArray()
-                    ElseIf ScannerRTB.Lines(2).Contains("<Identity Name=") Then
-                        Dim IdScanner As String = ScannerRTB.Lines(2)
-                        Dim CharIndex As Integer = 0
-                        Dim CharNext As Integer
-                        For Each Character As Char In ScannerRTB.Lines(2)
-                            CharNext = CharIndex + 1
-                            If Not IdScanner(CharIndex) = Quote Then
-                                CharIndex += 1
-                                Continue For
-                            ElseIf IdScanner(CharIndex) = Quote And IdScanner(CharNext) = " " Then
-                                CharIndex += 1
-                                Continue For
-                            Else
-                                Character = IdScanner(CharIndex + 1)
-                                If Not IdScanner(CharIndex + Stepper) = " " Then
-                                    If QuoteCount = 0 Then
-                                        QuoteCount += 1
-                                        Do
-                                            If Character = Quote Then
-                                                CharIndex += Stepper - 1
-                                                Character = IdScanner(CharIndex - 1)
-                                                QuoteCount += 1
-                                                Stepper = 2
-                                                Exit Do
-                                            Else
-                                                currentAppxName &= Character.ToString()
-                                                Character = IdScanner(CharIndex + Stepper)
-                                                Stepper += 1
-                                            End If
-                                        Loop
-                                    ElseIf QuoteCount = 2 Then
-                                        QuoteCount += 1
-                                        Do
-                                            If Character = Quote Then
-                                                CharIndex += Stepper - 1
-                                                Character = IdScanner(CharIndex - 1)
-                                                QuoteCount += 1
-                                                Stepper = 2
-                                                Exit Do
-                                            Else
-                                                currentAppxPublisher &= Character.ToString()
-                                                Character = IdScanner(CharIndex + Stepper)
-                                                Stepper += 1
-                                            End If
-                                        Loop
-                                    ElseIf QuoteCount = 4 Then
-                                        QuoteCount += 1
-                                        Do
-                                            If Character = Quote Then
-                                                CharIndex += Stepper - 1
-                                                Character = IdScanner(CharIndex - 1)
-                                                QuoteCount += 1
-                                                Stepper = 2
-                                                Exit Do
-                                            Else
-                                                currentAppxVersion &= Character.ToString()
-                                                Character = IdScanner(CharIndex + Stepper)
-                                                Stepper += 1
-                                            End If
-                                        Loop
-                                    End If
-                                End If
-                            End If
-                        Next
-                        AppxNameList.Add(currentAppxName)
-                        AppxPublisherList.Add(currentAppxPublisher)
-                        AppxVersionList.Add(currentAppxVersion)
-                        AppxNames = AppxNameList.ToArray()
-                        AppxPublishers = AppxPublisherList.ToArray()
-                        AppxVersion = AppxVersionList.ToArray()
-                    End If
+                    For x = 0 To ScannerRTB.Lines.Count - 1
+                        If ScannerRTB.Lines(x).Contains("<Identity") Then
+                            IdScanner = ScannerRTB.Lines(x)
+                            Dim serializer As New XmlSerializer(GetType(AppxPackage))
+                            Using tReader As TextReader = New StringReader(IdScanner)
+                                Using reader As XmlReader = XmlReader.Create(tReader)
+                                    Dim id = CType(serializer.Deserialize(reader), AppxPackage)
+                                    currentAppxName = id.PackageName
+                                    currentAppxPublisher = id.PackagePublisher
+                                    currentAppxVersion = id.PackageVersion
+                                    currentAppxArchitecture = id.PackageArchitecture
+                                End Using
+                            End Using
+                            AppxNameList.Add(currentAppxName)
+                            AppxPublisherList.Add(currentAppxPublisher)
+                            AppxVersionList.Add(currentAppxVersion)
+                            AppxNames = AppxNameList.ToArray()
+                            AppxPublishers = AppxPublisherList.ToArray()
+                            AppxVersion = AppxVersionList.ToArray()
+                            Exit For
+                        End If
+                    Next
                 End If
                 GetApplicationStoreLogoAssets(pkgName, False, If(Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase), True, False), Package, currentAppxName)
             Else
@@ -1085,7 +696,7 @@ Public Class AddProvAppxPackage
         If ListView1.Items.Count > 0 Then
             ' Iterate through the ListView items until we can find an entry with properties similar to those currently obtained
             For Each Item As ListViewItem In ListView1.Items
-                If Item.SubItems(2).Text = currentAppxName And Item.SubItems(3).Text = currentAppxPublisher And Item.SubItems(4).Text = currentAppxVersion Then
+                If Item.SubItems(2).Text = currentAppxName And Item.SubItems(3).Text = currentAppxPublisher And Item.SubItems(4).Text = currentAppxVersion And Packages(Item.Index).PackageArchitecture = currentAppxArchitecture Then
                     ' Cancel everything
                     Select Case MainForm.Language
                         Case 0
@@ -1138,6 +749,12 @@ Public Class AddProvAppxPackage
                         Item.SubItems(2).Text = currentAppxName
                         Item.SubItems(3).Text = currentAppxPublisher
                         Item.SubItems(4).Text = currentAppxVersion
+
+                        ' Configure Element list
+                        Packages(Item.Index).PackageFile = Package
+                        Packages(Item.Index).PackageName = currentAppxName
+                        Packages(Item.Index).PackagePublisher = currentAppxPublisher
+                        Packages(Item.Index).PackageVersion = currentAppxVersion
                     Else
                         If Directory.Exists(Application.StartupPath & "\appxscan") Then
                             Directory.Delete(Application.StartupPath & "\appxscan", True)
@@ -1181,6 +798,12 @@ Public Class AddProvAppxPackage
                         Item.SubItems(2).Text = currentAppxName
                         Item.SubItems(3).Text = currentAppxPublisher
                         Item.SubItems(4).Text = currentAppxVersion
+
+                        ' Configure Element list
+                        Packages(Item.Index).PackageFile = Package
+                        Packages(Item.Index).PackageName = currentAppxName
+                        Packages(Item.Index).PackagePublisher = currentAppxPublisher
+                        Packages(Item.Index).PackageVersion = currentAppxVersion
                     Else
                         If Directory.Exists(Application.StartupPath & "\appxscan") Then
                             Directory.Delete(Application.StartupPath & "\appxscan", True)
@@ -1219,6 +842,13 @@ Public Class AddProvAppxPackage
                     ListView1.Items.Add(New ListViewItem(New String() {Package, "Empaquetado", currentAppxName, currentAppxPublisher, currentAppxVersion}))
                 End If
         End Select
+        Dim currentPackage As New AppxPackage()
+        currentPackage.PackageFile = Package
+        currentPackage.PackageName = currentAppxName
+        currentPackage.PackagePublisher = currentAppxPublisher
+        currentPackage.PackageVersion = currentAppxVersion
+        currentPackage.PackageArchitecture = currentAppxArchitecture
+        If Not Packages.Contains(currentPackage) Then Packages.Add(currentPackage)
         Button3.Enabled = True
         If Directory.Exists(Application.StartupPath & "\appxscan") Then
             Directory.Delete(Application.StartupPath & "\appxscan", True)
@@ -1334,6 +964,7 @@ Public Class AddProvAppxPackage
 
     Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
         If ListView1.FocusedItem.Text <> "" Then
+            Packages.RemoveAt(ListView1.FocusedItem.Index)
             ListView1.Items.Remove(ListView1.FocusedItem)
         End If
     End Sub
@@ -1342,8 +973,8 @@ Public Class AddProvAppxPackage
         Process.Start("https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes")
     End Sub
 
-    Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
-        If RadioButton1.Checked Then
+    Private Sub CheckBox3_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox3.CheckedChanged
+        If CheckBox3.Checked Then
             TextBox1.Enabled = True
             Button7.Enabled = True
         Else
@@ -1362,8 +993,8 @@ Public Class AddProvAppxPackage
         End If
     End Sub
 
-    Private Sub RadioButton3_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton3.CheckedChanged
-        If RadioButton3.Checked Then
+    Private Sub CheckBox4_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox4.CheckedChanged
+        If CheckBox4.Checked Then
             TextBox3.Enabled = False
             Label5.Enabled = False
             LinkLabel1.Enabled = False
@@ -1386,6 +1017,8 @@ Public Class AddProvAppxPackage
         End Try
         NoAppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, True, False)
         AppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, False, True)
+        AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
+        FlowLayoutPanel1.Visible = If(ListView1.SelectedItems.Count <= 0, False, True)
         If ListView1.SelectedItems.Count > 0 Then
             Try
                 Label7.Text = ListView1.FocusedItem.SubItems(2).Text
@@ -1431,6 +1064,41 @@ Public Class AddProvAppxPackage
         Catch ex As Exception
             PictureBox2.SizeMode = PictureBoxSizeMode.CenterImage
             PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.preview_unavail_dark, My.Resources.preview_unavail_light)
+        End Try
+
+        ' Detect properties obtained by the AppxPackage Element
+        Try
+            If ListView1.SelectedItems.Count = 1 Then
+                ListBox1.Items.Clear()
+                If Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies.Count > 0 Then
+                    For Each Dependency As AppxDependency In Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies
+                        ListBox1.Items.Add(Dependency.DependencyFile)
+                    Next
+                End If
+                TextBox1.Text = Packages(ListView1.FocusedItem.Index).PackageLicenseFile
+                If Packages(ListView1.FocusedItem.Index).PackageLicenseFile <> "" And File.Exists(Packages(ListView1.FocusedItem.Index).PackageLicenseFile) Then
+                    CheckBox3.Checked = True
+                Else
+                    CheckBox3.Checked = False
+                End If
+                TextBox2.Text = Packages(ListView1.FocusedItem.Index).PackageCustomDataFile
+                If Packages(ListView1.FocusedItem.Index).PackageCustomDataFile <> "" And File.Exists(Packages(ListView1.FocusedItem.Index).PackageCustomDataFile) Then
+                    CheckBox1.Checked = True
+                Else
+                    CheckBox1.Checked = False
+                End If
+                TextBox3.Text = Packages(ListView1.FocusedItem.Index).PackageRegions
+                If TextBox3.Text = "" Then
+                    CheckBox4.Checked = True
+                Else
+                    CheckBox4.Checked = False
+                End If
+            End If
+        Catch ex As Exception
+            NoAppxFilePanel.Visible = True
+            AppxFilePanel.Visible = False
+            AppxDetailsPanel.Height = 520
+            FlowLayoutPanel1.Visible = False
         End Try
     End Sub
 
@@ -1651,15 +1319,37 @@ Public Class AddProvAppxPackage
     End Sub
 
     Private Sub ListBox1_DragDrop(sender As Object, e As DragEventArgs) Handles ListBox1.DragDrop
+        If ListView1.SelectedItems.Count < 1 Then Exit Sub
         Dim DependencyFiles() As String = e.Data.GetData(DataFormats.FileDrop)
         For Each Dependency In DependencyFiles
             If Not ListBox1.Items.Contains(Dependency) And (Path.GetExtension(Dependency).EndsWith("appx", StringComparison.OrdinalIgnoreCase) Or _
                                                             Path.GetExtension(Dependency).EndsWith("msix", StringComparison.OrdinalIgnoreCase) Or _
                                                             Path.GetExtension(Dependency).EndsWith("appxbundle", StringComparison.OrdinalIgnoreCase) Or _
                                                             Path.GetExtension(Dependency).EndsWith("msixbundle", StringComparison.OrdinalIgnoreCase)) Then
+                Dim dep As New AppxDependency()
+                dep.DependencyFile = Dependency
+                If Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies.Count > 0 And Not Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies.Contains(dep) Then
+                    Dim deps As New List(Of AppxDependency)
+                    deps = Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies
+                    deps.Add(dep)
+                    Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies = deps
+                ElseIf Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies.Count = 0 Then
+                    Dim deps As New List(Of AppxDependency)
+                    deps = Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies
+                    deps.Add(dep)
+                    Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies = deps
+                End If
                 ListBox1.Items.Add(Dependency)
             End If
         Next
         If ListBox1.Items.Count > 0 Then Button4.Enabled = True
+    End Sub
+
+    Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
+        If ListView1.SelectedItems.Count = 1 Then Packages(ListView1.FocusedItem.Index).PackageLicenseFile = TextBox1.Text
+    End Sub
+
+    Private Sub TextBox2_TextChanged(sender As Object, e As EventArgs) Handles TextBox2.TextChanged
+        If ListView1.SelectedItems.Count = 1 Then Packages(ListView1.FocusedItem.Index).PackageCustomDataFile = TextBox2.Text
     End Sub
 End Class
