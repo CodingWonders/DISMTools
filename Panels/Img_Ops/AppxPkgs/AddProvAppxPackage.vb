@@ -433,11 +433,15 @@ Public Class AddProvAppxPackage
     End Sub
 
     Private Sub LicenseFileOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles LicenseFileOFD.FileOk
-        TextBox1.Text = LicenseFileOFD.FileName
+        If ListView1.SelectedItems.Count = 1 Then
+            TextBox1.Text = LicenseFileOFD.FileName
+        End If
     End Sub
 
     Private Sub CustomDataFileOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles CustomDataFileOFD.FileOk
-        TextBox2.Text = CustomDataFileOFD.FileName
+        If ListView1.SelectedItems.Count = 1 Then
+            TextBox2.Text = CustomDataFileOFD.FileName
+        End If
     End Sub
 
     ''' <summary>
@@ -1071,6 +1075,24 @@ Public Class AddProvAppxPackage
                         ListBox1.Items.Add(Dependency.DependencyFile)
                     Next
                 End If
+                TextBox1.Text = Packages(ListView1.FocusedItem.Index).PackageLicenseFile
+                If Packages(ListView1.FocusedItem.Index).PackageLicenseFile <> "" And File.Exists(Packages(ListView1.FocusedItem.Index).PackageLicenseFile) Then
+                    CheckBox3.Checked = True
+                Else
+                    CheckBox3.Checked = False
+                End If
+                TextBox2.Text = Packages(ListView1.FocusedItem.Index).PackageCustomDataFile
+                If Packages(ListView1.FocusedItem.Index).PackageCustomDataFile <> "" And File.Exists(Packages(ListView1.FocusedItem.Index).PackageCustomDataFile) Then
+                    CheckBox1.Checked = True
+                Else
+                    CheckBox1.Checked = False
+                End If
+                TextBox3.Text = Packages(ListView1.FocusedItem.Index).PackageRegions
+                If TextBox3.Text = "" Then
+                    CheckBox4.Checked = True
+                Else
+                    CheckBox4.Checked = False
+                End If
             End If
         Catch ex As Exception
             NoAppxFilePanel.Visible = True
@@ -1321,5 +1343,13 @@ Public Class AddProvAppxPackage
             End If
         Next
         If ListBox1.Items.Count > 0 Then Button4.Enabled = True
+    End Sub
+
+    Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
+        If ListView1.SelectedItems.Count = 1 Then Packages(ListView1.FocusedItem.Index).PackageLicenseFile = TextBox1.Text
+    End Sub
+
+    Private Sub TextBox2_TextChanged(sender As Object, e As EventArgs) Handles TextBox2.TextChanged
+        If ListView1.SelectedItems.Count = 1 Then Packages(ListView1.FocusedItem.Index).PackageCustomDataFile = TextBox2.Text
     End Sub
 End Class

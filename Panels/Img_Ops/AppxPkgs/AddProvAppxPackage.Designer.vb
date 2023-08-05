@@ -468,14 +468,16 @@ Partial Class AddProvAppxPackage
         'TextBox1
         '
         Me.TextBox1.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.TextBox1.Location = New System.Drawing.Point(97, 7)
+        Me.TextBox1.Enabled = False
+        Me.TextBox1.Location = New System.Drawing.Point(125, 7)
         Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(317, 21)
+        Me.TextBox1.Size = New System.Drawing.Size(289, 21)
         Me.TextBox1.TabIndex = 8
         '
         'Button7
         '
         Me.Button7.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.Button7.Enabled = False
         Me.Button7.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button7.Location = New System.Drawing.Point(420, 6)
         Me.Button7.Name = "Button7"
