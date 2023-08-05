@@ -1686,15 +1686,11 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Changes made since last preview
+        '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''Bugfixes
-        '''
-        '''- Fixed a setting generation issue regarding the &quot;{common:WinDir}&quot; variable
-        '''- Fixed a &quot;big typo&quot; from the AppX package removal dialog
-        '''- Fixed an issue where the installer reset registry settings to their default values
-        '''- Fixed an issue where the CLI version of the mounted image manager showed an updated listing and cleared the screen every time you go to mark a mounted image
-        '''- Fixed an issue where the CLI version of the mounted image manager was unable to m [resto de la cadena truncado]&quot;;.
+        '''- Fixed an issue where the progress panel would not be positioned correctly when performing image operation-related direct actions, after waiting for background processes to be completed while their details panel was focused
+        '''- Fixed an issue where the splash screen would be in front of the initial setup screen, thanks abbodi1406 for spotting the issue!
+        '''- The program now ships 32-bit and 64-bit 7-Zip binaries, and uses the right binary according to the architecture of the OS, thanks abbodi1406  [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

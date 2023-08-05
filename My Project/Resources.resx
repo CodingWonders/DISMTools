@@ -1060,126 +1060,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <data name="dt_branding" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\startup\dt_branding.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Changes made since last preview
-
-Bugfixes
-
-- Fixed a setting generation issue regarding the "{common:WinDir}" variable
-- Fixed a "big typo" from the AppX package removal dialog
-- Fixed an issue where the installer reset registry settings to their default values
-- Fixed an issue where the CLI version of the mounted image manager showed an updated listing and cleared the screen every time you go to mark a mounted image
-- Fixed an issue where the CLI version of the mounted image manager was unable to mark images when 10 or more images were mounted
-- Fixed a translation issue in the package addition dialog
-- Fixed final improper progress panel form disposal issues
-- Fixed an issue where the mounted image manager would not clear the ListView when no images were mounted
-- Fixed an issue where the driver addition dialog would not accept driver files with an uppercase ".INF" extension
-- Fixed an issue that caused the program to hang if it couldn't detect capabilities
-- Fixed an issue that allowed you to commit online installations on element addition tasks
-- Fixed an issue that allowed you to proceed with volume image removal even if the resulting image doesn't contain any indexes
-- More checks are made before opening the AppX package removal and capability manipulation dialogs now
-
-New features
-
-- The CLI version of the mounted image manager no longer shows an image mark option when no images are mounted
-- The program no longer lets you remove or add drivers in the online installation management mode, as these functions aren't supported by DISM
-- The mounted image managers (GUI and CLI versions) directly unmount read-only mounted images now
-- An AppX package can now be selected from any column in the AppX package addition dialog
-- The program directly unmounts Windows Longhorn/Vista Beta images now, in addition to Windows XP/Server 2003 or older images, and the direct unmount functionality works properly now
-- The driver removal dialog only shows the file name of the original driver file now
-
-Overall changes
-
-Bugfixes
-
-- Fixed an issue where the program always gathered information from the first image index
-- Fixed an issue where the program would think a project with an image mounted didn't have one when an image was unmounted with the mounted image manager
-- Fixed an issue where background processes would keep running when a project was unloaded
-- Added exception control for other parts of background processes
-- Fixed an issue that happened in the options dialog where the selected item of the font ComboBox was "" at first
-- Fixed a critical issue where the DISM API would throw an invalid traces exception and fail operations
-- Fixed an issue where the log file name of the most recent log file would change to append the name of the next log file
-- Fixed an issue that made the program unmount external directories, whether they were actual mount directories or not
-- Fixed an issue where project creation would fail after cancelling the background processes
-- Fixed an issue where the program would use the old method of gathering image information on a newly created project
-- Fixed an issue where direct actions other than mounting would not be disabled after unloading an image from a project
-- Fixed an issue where adding AppX packages would fail if there were case variations in their extension
-- Fixed an issue related to setting file generation where the background process notification setting would not be in a new line
-- Fixed an issue where AppX package addition operations would fail after the /Region parameter was passed (DISM for Windows 8)
-- Fixed an issue where the program would fail AppX package detection on images running Windows versions older than Windows Developer Preview
-- Fixed several crashes that would occur when performing actions if the mounted image detector process was starting up
-- Fixed an issue that occurred in the AppX package removal dialog where it would continue even if no packages were marked for removal
-- The program no longer consumes CPU power when performing operations, and consumes significantly less CPU power when running the mounted image detector
-- Fixed issues that caused the program to fail operations if there were no images mounted
-- Fixed an issue where the program would continue creating or loading a project if the user declined the background processes cancellation confirmation
-- CODE: removed code analysis warnings CA1060, CA2202, and BC42104
-- Fixed an issue where the background process cancellation dialog would be shown twice when closing the program
-- Fixed an issue where the program would detect AppX packages and capabilities on Windows PE images, and fail those background processes due to missing image modules
-- Fixed an issue where projects would not load if the read-write parameter wasn't found in their settings files
-
-New features
-
-- Increased default window size to 1280x720
-- Package and feature manipulation operations now use the DISM API
-- The program now supports arguments that can be passed at startup:
-
-  - "/load=&lt;project&gt;", which loads the specified project automatically
-  - "/online", which loads online installation management mode automatically
-  - "/setup", which loads the initial setup wizard
-
-- Introduced the initial setup screen
-- The program now saves appropriate language codes when saving the settings file
-- Introduced a popup mounted image picker, which is now used on the image unmount dialog
-- Introduced image capability (Features on Demand) management
-- The capability addition, feature enablement, and image cleanup dialogs can now get the source from the group policy
-- Introduced driver package management
-- You can now manipulate file associations in the Options dialog (for portable installations)
-- The creation wizard now supports color modes and will switch to a dark theme to follow the program's theme settings
-- Introduced addition of provisioning packages (".ppkg" files)
-- Checks are now performed when adding applications to the queue list to prevent adding the same package or adding different versions of such packages
-- When attempting to add encrypted application packages (".eappx", ".emsix", and so on), you will now receive a warning
-- The program can now change color modes when restored from the minimized state
-- Introduced online installation management
-- You can now configure more settings of background processes
-- You can now view the directory of a package, and its resources, from the package removal dialog
-- Introduced the program update system
-- Introduced startup settings
-- Introduced the automatic program update notifier
-- The program now uses the user-specified task settings
-- Introduced setting file migration
-- You can now use the scratch directory provided by the project or by the program
-- You can now configure the style of the secondary progress panel
-- The program now applies dark mode title bars on Windows 10 May 2019 Update and later
-- You can now right-click the project tree view and copy the deployment tools to it
-- The program now saves the all-caps menu preference
-- Installers are now available
-- Added feature update detection for Windows 11 2022 Update Moment 4 and builds from the Gallium development semester
-- Added more sections to the Command Help documentation
-- The mounted image detector now gets image versions using the DISM API, but will still detect it from "ntoskrnl.exe" as a fallback mechanism
-- You can now view index description and version information when mounting an image
-- Mounting a captured image is no longer experimental, with the addition of task lists
-- The program now saves the logs of internal DISM functions in its file, stored in "logs\dism.log"
-- Background processes have also had improvements:
-
-    - You no longer have to wait for background processes to finish to perform tasks with a Windows image or installation
-    - After performing an operation, the program will no longer run all background processes. It will now run only those that have seen changes. This can be configured back to its old behavior though
-    
-- The mounted image manager has been ported to the command line as a utility you can invoke from the Command Console by typing "mimgmgr"
-- The 7-Zip component has been updated to version 23.01
-- The program can now load and save settings to and from the registry
-- On new installations and downloads, the successful project load notification is now shown once by default
-- Window location and size parameters are now saved
-- Improved dependency package management for the AppX package addition dialog
-- The Command Console has received new UNIX command aliases: "ls", "cat", "clear", "history"
-- The program will now discard any WIM file containing a Windows XP, Server 2003, or older Windows installation; as they weren't supposed to be serviced using DISM
-- The installed languages of an image are now shown in a list, as opposed to in a text box
-- You can now reload the servicing, repair the component store, and enable write permissions to an image from the properties dialog
-- You can now enable write permissions to a read-only Windows image from within the main program
-- The image cleanup dialog now remembers the task you've selected
-- Reloading the servicing session of a Windows image is now done using the DISM API
-- Setting reset functionality has been implemented
-- The settings file now uses a variable for the Windows directory</value>
-  </data>
   <data name="drv_info_from_image" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\drv_info_from_image.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -1188,5 +1068,21 @@ New features
   </data>
   <data name="info_from_drv_file" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\info_from_drv_file.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Bugfixes
+
+- Fixed an issue where the progress panel would not be positioned correctly when performing image operation-related direct actions, after waiting for background processes to be completed while their details panel was focused
+- Fixed an issue where the splash screen would be in front of the initial setup screen, thanks abbodi1406 for spotting the issue!
+- The program now ships 32-bit and 64-bit 7-Zip binaries, and uses the right binary according to the architecture of the OS, thanks abbodi1406 for spotting the issue!
+- Fixed an issue where AppX package information would not be displayed on applications packaged with the MSIX Packaging Tool
+
+New features
+
+- "Element independence" now affects the operation of adding AppX packages. Element independence allows you to set settings for individual Elements as opposed to having those apply to all Elements
+- The AppX regions group box is no longer enabled if the version of the specified DISM executable is not 10.0 or greater
+- The program no longer relies on an in-house XML deserializer and instead relies on the deserializer provided by the `System.Xml` namespace now
+- You can now perform other tasks while background processes for specific elements are being run
+- The program no longer allows you to remove AppX packages from Windows Server Core images without the Desktop Experience feature enabled</value>
   </data>
 </root>
