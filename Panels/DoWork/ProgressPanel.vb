@@ -646,6 +646,7 @@ Public Class ProgressPanel
 
     Sub RunOps(opNum As Integer)
         If DismProgram = "" Then DismProgram = MainForm.DismExe
+        If Not File.Exists(DismProgram) Then DismProgram = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
         DismVersionChecker = FileVersionInfo.GetVersionInfo(DismProgram)
         CurrentPB.Value = 0
         PkgErrorText.RichTextBox1.Clear()
@@ -790,7 +791,7 @@ Public Class ProgressPanel
                                "- Source image file: " & ApplicationSourceImg & CrLf & _
                                "- Index to apply: " & ApplicationIndex & CrLf & _
                                "- Target directory: " & ApplicationDestDir & CrLf)
-            DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+            DISMProc.StartInfo.FileName = DismProgram
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
@@ -906,7 +907,7 @@ Public Class ProgressPanel
                                "- Source directory: " & CaptureSourceDir & CrLf &
                                "- Destination image: " & CaptureDestinationImage & CrLf &
                                "- Captured image name: " & CaptureName & CrLf)
-            DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+            DISMProc.StartInfo.FileName = DismProgram
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
@@ -1043,7 +1044,7 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & "Saving changes..." & CrLf & "Options:" & CrLf &
                                "- Mount directory: " & MountDir)
 
-            DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+            DISMProc.StartInfo.FileName = DismProgram
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
@@ -1145,7 +1146,7 @@ Public Class ProgressPanel
                 End Select
                 LogView.AppendText(CrLf & _
                                    "- " & imgIndexDeletionNames(x) & "...")
-                DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+                DISMProc.StartInfo.FileName = DismProgram
                 CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /delete-image /imagefile=" & Quote & imgIndexDeletionSourceImg & Quote & " /name=" & Quote & imgIndexDeletionNames(x) & Quote
                 If imgIndexDeletionIntCheck Then
                     CommandArgs &= " /checkintegrity"
@@ -1221,7 +1222,7 @@ Public Class ProgressPanel
                                "- Image file: " & SourceImg & CrLf &
                                "- Image index: " & ImgIndex & CrLf &
                                "- Mount point: " & MountDir)
-            DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+            DISMProc.StartInfo.FileName = DismProgram
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
@@ -1360,7 +1361,7 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & "- Unmount operation: Commit")
                 ' Commit the image and unmount it
                 Try
-                    DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+                    DISMProc.StartInfo.FileName = DismProgram
                     Select Case DismVersionChecker.ProductMajorPart
                         Case 6
                             Select Case DismVersionChecker.ProductMinorPart
@@ -1378,7 +1379,7 @@ Public Class ProgressPanel
                     If DISMProc.ExitCode = Decimal.ToInt32(-1052638964) Then
                         LogView.AppendText(CrLf & CrLf & "Saving changes to the image has failed. Discarding changes...")
                         ' It mostly came from a read-only source. Discard changes
-                        DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+                        DISMProc.StartInfo.FileName = DismProgram
                         Select Case DismVersionChecker.ProductMajorPart
                             Case 6
                                 Select Case DismVersionChecker.ProductMinorPart
@@ -1423,7 +1424,7 @@ Public Class ProgressPanel
                 End If
             Else
                 Try
-                    DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+                    DISMProc.StartInfo.FileName = DismProgram
                     Select Case DismVersionChecker.ProductMajorPart
                         Case 6
                             Select Case DismVersionChecker.ProductMinorPart
@@ -1581,7 +1582,7 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & CrLf &
                                "Processing " & pkgCount & " packages..." & CrLf)
             If pkgAdditionOp = 0 Then
-                DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+                DISMProc.StartInfo.FileName = DismProgram
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-package /packagepath=" & Quote & pkgSource & Quote
                 If pkgIgnoreApplicabilityChecks Then
                     CommandArgs &= " /ignorecheck"
@@ -1683,7 +1684,7 @@ Public Class ProgressPanel
                     End Try
                     If Not pkgIsApplicable Or pkgIsInstalled Then Continue For
                     LogView.AppendText(CrLf & "Processing package...")
-                    DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+                    DISMProc.StartInfo.FileName = DismProgram
                     CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-package /packagepath=" & Quote & pkgs(x) & Quote
                     If pkgIgnoreApplicabilityChecks Then
                         CommandArgs &= " /ignorecheck"
@@ -1820,7 +1821,7 @@ Public Class ProgressPanel
                     End Try
                     If pkgIsReadyForRemoval Then
                         LogView.AppendText(CrLf & "Processing package removal...")
-                        DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+                        DISMProc.StartInfo.FileName = DismProgram
                         CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /remove-package /packagename=" & pkgRemovalNames(x)
                         DISMProc.StartInfo.Arguments = CommandArgs
                         DISMProc.Start()
@@ -1902,7 +1903,7 @@ Public Class ProgressPanel
                     End Try
                     If pkgIsReadyForRemoval Then
                         LogView.AppendText(CrLf & "Processing package removal...")
-                        DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+                        DISMProc.StartInfo.FileName = DismProgram
                         CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /remove-package /packagepath=" & pkgRemovalFiles(x)
                         DISMProc.StartInfo.Arguments = CommandArgs
                         DISMProc.Start()
@@ -2014,7 +2015,7 @@ Public Class ProgressPanel
             Thread.Sleep(500)
             LogView.AppendText(CrLf & "Total number of features to enable: " & featEnablementCount)
             ' Get command ready
-            DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+            DISMProc.StartInfo.FileName = DismProgram
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2154,7 +2155,7 @@ Public Class ProgressPanel
             Thread.Sleep(500)
             LogView.AppendText(CrLf & "Total number of features to disable: " & featDisablementCount)
             ' Get command ready
-            DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+            DISMProc.StartInfo.FileName = DismProgram
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2263,7 +2264,7 @@ Public Class ProgressPanel
                     allTasks.Text = "Limpiando la imagen..."
             End Select
             ' Initialize command
-            DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+            DISMProc.StartInfo.FileName = DismProgram
             CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /cleanup-image"
             Select Case CleanupTask
                 Case 0
@@ -2441,7 +2442,7 @@ Public Class ProgressPanel
                                "- Provisioning package: " & Quote & ppkgAdditionPackagePath & Quote & CrLf & _
                                "- Catalog file: " & If(ppkgAdditionCatalogPath = "", "none specified", Quote & ppkgAdditionCatalogPath & Quote) & CrLf & _
                                "- Commit image after adding provisioning package? " & If(ppkgAdditionCommit, "Yes", "No"))
-            DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+            DISMProc.StartInfo.FileName = DismProgram
             CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-provisioningpackage /packagepath=" & Quote & ppkgAdditionPackagePath & Quote & If(ppkgAdditionCatalogPath <> "" And File.Exists(ppkgAdditionCatalogPath), " /catalogpath=" & Quote & ppkgAdditionCatalogPath & Quote, "")
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
@@ -2567,7 +2568,7 @@ Public Class ProgressPanel
                                    "- Application version: " & appxAdditionPackageList(x).PackageVersion & CrLf)
 
                 ' Initialize command
-                DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+                DISMProc.StartInfo.FileName = DismProgram
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-provisionedappxpackage "
                 If File.GetAttributes(appxAdditionPackageList(x).PackageFile) = FileAttributes.Directory Then
                     CommandArgs &= "/folderpath=" & Quote & appxAdditionPackageList(x).PackageFile & Quote
@@ -2753,7 +2754,7 @@ Public Class ProgressPanel
                 ' Initialize command. Its syntax is simple, so don't spend too much time determining options
                 LogView.AppendText(CrLf & CrLf & _
                                    "Processing package...")
-                DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+                DISMProc.StartInfo.FileName = DismProgram
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /remove-provisionedappxpackage /packagename=" & appxRemovalPackages(x)
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
@@ -2882,7 +2883,7 @@ Public Class ProgressPanel
                     CommandArgs &= " /source=" & Quote & capAdditionSource & Quote
                 End If
                 If capAdditionLimitWUAccess And OnlineMgmt Then CommandArgs &= " /limitaccess"
-                DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+                DISMProc.StartInfo.FileName = DismProgram
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
                 DISMProc.WaitForExit()
@@ -3006,7 +3007,7 @@ Public Class ProgressPanel
                 Finally
                     DismApi.Shutdown()
                 End Try
-                DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+                DISMProc.StartInfo.FileName = DismProgram
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /remove-capability /capabilityname=" & capRemovalIds(x)
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
@@ -3137,7 +3138,7 @@ Public Class ProgressPanel
                     LogView.AppendText(CrLf & CrLf & _
                                        "The driver package currently about to be processed is a folder, so information about it can't be obtained. Proceeding anyway...")
                 End If
-                DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+                DISMProc.StartInfo.FileName = DismProgram
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-driver /driver=" & Quote & drvAdditionPkgs(x) & Quote
                 If drvAdditionForceUnsigned Then
                     CommandArgs &= " /forceunsigned"
@@ -3297,7 +3298,7 @@ Public Class ProgressPanel
                 Finally
                     DismApi.Shutdown()
                 End Try
-                DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+                DISMProc.StartInfo.FileName = DismProgram
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /remove-driver /driver=" & Quote & drvRemovalPkgs(x) & Quote
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
@@ -3344,7 +3345,7 @@ Public Class ProgressPanel
             currentTask.Text = "Setting the amount of days an uninstall can happen..."
             LogView.AppendText(CrLf & "Setting the amount of days an uninstall can happen..." & CrLf &
                                "Number of days: " & osUninstDayCount)
-            DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+            DISMProc.StartInfo.FileName = DismProgram
             CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /online /set-osuninstallwindow /value:" & osUninstDayCount
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
@@ -3389,7 +3390,7 @@ Public Class ProgressPanel
             End If
 
             ' Run commands
-            DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+            DISMProc.StartInfo.FileName = DismProgram
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
@@ -3454,7 +3455,7 @@ Public Class ProgressPanel
                                "- Destination image file: " & imgWimDestination & CrLf)
 
             ' Run commands
-            DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+            DISMProc.StartInfo.FileName = DismProgram
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
@@ -3519,7 +3520,7 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & "- Commit source index? No")
             End If
             ' Run commands
-            DISMProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+            DISMProc.StartInfo.FileName = DismProgram
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
