@@ -246,6 +246,7 @@ Public Class MainForm
         Else
             For Each arg In args
                 If arg.StartsWith("/setup", StringComparison.OrdinalIgnoreCase) Then
+                    SplashScreen.Hide()
                     PrgSetup.ShowDialog()
                 ElseIf arg.StartsWith("/load", StringComparison.OrdinalIgnoreCase) Then
                     If File.Exists(arg.Replace("/load=", "").Trim()) And Directory.Exists(Path.GetDirectoryName(arg.Replace("/load=", "").Trim())) Then
@@ -318,6 +319,7 @@ Public Class MainForm
         Else
             'GenerateDTSettings()
             'LoadDTSettings(1)
+            SplashScreen.Hide()
             PrgSetup.ShowDialog()
             LoadDTSettings(1)
         End If
@@ -3669,6 +3671,7 @@ Public Class MainForm
             End If
         Else
             ' Show setup window
+            SplashScreen.Hide()
             PrgSetup.ShowDialog()
         End If
     End Sub
