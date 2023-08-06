@@ -1085,4 +1085,22 @@ New features
 - You can now perform other tasks while background processes for specific elements are being run
 - The program no longer allows you to remove AppX packages from Windows Server Core images without the Desktop Experience feature enabled</value>
   </data>
+  <data name="jumpto" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\jumpto.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="jumpto_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\jumpto_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="next_element" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\next_element.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="next_element_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\next_element_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="prev_element" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\prev_element.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="prev_element_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\prev_element_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

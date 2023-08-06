@@ -7,7 +7,10 @@ Imports System.Threading
 Public Class GetDriverInfo
 
     Dim DriverInfoList As New List(Of DismDriverCollection)
-    Dim currentDriver As String
+
+    Dim CurrentHWTarget As Integer
+
+    Dim ButtonTT As New ToolTip()
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
@@ -34,12 +37,8 @@ Public Class GetDriverInfo
 
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
         ListBox1.Items.Add(OpenFileDialog1.FileName)
-        If BackgroundWorker1.IsBusy Then BackgroundWorker1.CancelAsync()
-        While BackgroundWorker1.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(500)
-        End While
-        BackgroundWorker1.RunWorkerAsync()
+        Button3.Enabled = True
+        GetDriverInformation()
     End Sub
 
     Private Sub InstalledDriverLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles InstalledDriverLink.LinkClicked
@@ -61,16 +60,17 @@ Public Class GetDriverInfo
         DriverInfoPanel.Visible = False
     End Sub
 
-    Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
+    Sub GetDriverInformation()
         DriverInfoList.Clear()
-        ' This code doesn't work
         Try
+            Label5.Text = "Preparing driver information processes..."
+            Application.DoEvents()
             DismApi.Initialize(DismLogLevel.LogErrors)
             Using imgSession As DismSession = DismApi.OpenOfflineSession(MainForm.MountDir)
                 For Each drvFile In ListBox1.Items
                     If File.Exists(drvFile) Then
-                        currentDriver = drvFile
-                        BackgroundWorker1.ReportProgress(0)
+                        Label5.Text = "Getting information from driver file " & Quote & Path.GetFileName(drvFile) & Quote & "..." & CrLf & "This may take some time and the program may temporarily freeze"
+                        Application.DoEvents()
                         Dim drvInfoCollection As DismDriverCollection = DismApi.GetDriverInfo(imgSession, drvFile)
                         If drvInfoCollection.Count > 0 Then DriverInfoList.Add(drvInfoCollection)
                     End If
@@ -81,14 +81,23 @@ Public Class GetDriverInfo
         Finally
             DismApi.Shutdown()
         End Try
-    End Sub
-
-    Private Sub BackgroundWorker1_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorker1.RunWorkerCompleted
         Label5.Text = "Ready"
     End Sub
 
-    Private Sub BackgroundWorker1_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles BackgroundWorker1.ProgressChanged
-        Label5.Text = "Getting information from driver file " & Quote & Path.GetFileName(currentDriver) & Quote & "..."
+    Sub DisplayDriverInformation(HWTarget As Integer)
+        Dim CurrentDriverCollection As DismDriverCollection = DriverInfoList(ListBox1.SelectedIndex)
+        For Each DriverPackageInfo As DismDriver In CurrentDriverCollection
+            If CurrentDriverCollection.IndexOf(DriverPackageInfo) = HWTarget Then
+                Label9.Text = DriverPackageInfo.HardwareDescription
+                Label11.Text = DriverPackageInfo.HardwareId
+                Label14.Text = DriverPackageInfo.CompatibleIds
+                Label15.Text = DriverPackageInfo.ExcludeIds
+                Label18.Text = DriverPackageInfo.ManufacturerName
+                If Label14.Text = "" Then Label14.Text = "None declared by the hardware manufacturer"
+                If Label15.Text = "" Then Label15.Text = "None declared by the hardware manufacturer"
+                Exit For
+            End If
+        Next
     End Sub
 
     Private Sub ListBox1_DragEnter(sender As Object, e As DragEventArgs) Handles ListBox1.DragEnter
@@ -104,15 +113,74 @@ Public Class GetDriverInfo
                 ListBox1.Items.Add(PackageFile)
             End If
         Next
-        If BackgroundWorker1.IsBusy Then BackgroundWorker1.CancelAsync()
-        While BackgroundWorker1.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(500)
-        End While
-        BackgroundWorker1.RunWorkerAsync()
+        Button3.Enabled = True
+        GetDriverInformation()
     End Sub
 
     Private Sub GetDriverInfo_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+    End Sub
+
+    Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged
+        If ListBox1.SelectedItems.Count = 1 Then
+            NoDrvPanel.Visible = False
+            DrvPackageInfoPanel.Visible = True
+            Button2.Enabled = True
+            Label7.Text = "Hardware target 1 of " & DriverInfoList(ListBox1.SelectedIndex).Count
+            CurrentHWTarget = 1
+            Button4.Enabled = False
+            DisplayDriverInformation(1)
+        Else
+            NoDrvPanel.Visible = True
+            DrvPackageInfoPanel.Visible = False
+            Button2.Enabled = False
+        End If
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        DriverInfoList.RemoveAt(ListBox1.SelectedIndex)
+        ListBox1.Items.Remove(ListBox1.SelectedItem)
+        NoDrvPanel.Visible = True
+        DrvPackageInfoPanel.Visible = False
+    End Sub
+
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        DriverInfoList.Clear()
+        ListBox1.Items.Clear()
+        Button3.Enabled = False
+        NoDrvPanel.Visible = True
+        DrvPackageInfoPanel.Visible = False
+    End Sub
+
+    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+        If CurrentHWTarget > 1 Then
+            DisplayDriverInformation(CurrentHWTarget - 1)
+            CurrentHWTarget -= 1
+            Label7.Text = "Hardware target " & CurrentHWTarget & " of " & DriverInfoList(ListBox1.SelectedIndex).Count
+            Button5.Enabled = True
+            If CurrentHWTarget = 1 Then Button4.Enabled = False
+        End If
+    End Sub
+
+    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+        If CurrentHWTarget < DriverInfoList(ListBox1.SelectedIndex).Count Then
+            DisplayDriverInformation(CurrentHWTarget + 1)
+            CurrentHWTarget += 1
+            Label7.Text = "Hardware target " & CurrentHWTarget & " of " & DriverInfoList(ListBox1.SelectedIndex).Count
+            Button4.Enabled = True
+            If CurrentHWTarget = DriverInfoList(ListBox1.SelectedIndex).Count Then Button5.Enabled = False
+        End If
+    End Sub
+
+    Private Sub Button4_MouseHover(sender As Object, e As EventArgs) Handles Button4.MouseHover
+        ButtonTT.SetToolTip(sender, "Previous hardware target")
+    End Sub
+
+    Private Sub Button5_MouseHover(sender As Object, e As EventArgs) Handles Button5.MouseHover
+        ButtonTT.SetToolTip(sender, "Next hardware target")
+    End Sub
+
+    Private Sub Button6_MouseHover(sender As Object, e As EventArgs) Handles Button6.MouseHover
+        ButtonTT.SetToolTip(sender, "Jump to specific hardware target")
     End Sub
 End Class

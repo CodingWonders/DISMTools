@@ -56,6 +56,8 @@ Partial Class GetDriverInfo
         Me.Label17 = New System.Windows.Forms.Label()
         Me.Label18 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Button5 = New System.Windows.Forms.Button()
+        Me.Button4 = New System.Windows.Forms.Button()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.NoDrvPanel = New System.Windows.Forms.Panel()
         Me.Label6 = New System.Windows.Forms.Label()
@@ -67,11 +69,11 @@ Partial Class GetDriverInfo
         Me.Label3 = New System.Windows.Forms.Label()
         Me.PictureBox3 = New System.Windows.Forms.PictureBox()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
+        Me.InstalledDriverLink = New System.Windows.Forms.LinkLabel()
         Me.DriverFileLink = New System.Windows.Forms.LinkLabel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
-        Me.InstalledDriverLink = New System.Windows.Forms.LinkLabel()
-        Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
+        Me.Button6 = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -336,6 +338,7 @@ Partial Class GetDriverInfo
         Me.DrvPackageInfoPanel.Name = "DrvPackageInfoPanel"
         Me.DrvPackageInfoPanel.Size = New System.Drawing.Size(436, 324)
         Me.DrvPackageInfoPanel.TabIndex = 2
+        Me.DrvPackageInfoPanel.Visible = False
         '
         'FlowLayoutPanel2
         '
@@ -471,12 +474,33 @@ Partial Class GetDriverInfo
         '
         'Panel1
         '
+        Me.Panel1.Controls.Add(Me.Button6)
+        Me.Panel1.Controls.Add(Me.Button5)
+        Me.Panel1.Controls.Add(Me.Button4)
         Me.Panel1.Controls.Add(Me.Label7)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(436, 36)
         Me.Panel1.TabIndex = 0
+        '
+        'Button5
+        '
+        Me.Button5.Image = Global.DISMTools.My.Resources.Resources.next_element
+        Me.Button5.Location = New System.Drawing.Point(404, 4)
+        Me.Button5.Name = "Button5"
+        Me.Button5.Size = New System.Drawing.Size(28, 28)
+        Me.Button5.TabIndex = 1
+        Me.Button5.UseVisualStyleBackColor = True
+        '
+        'Button4
+        '
+        Me.Button4.Image = Global.DISMTools.My.Resources.Resources.prev_element
+        Me.Button4.Location = New System.Drawing.Point(4, 4)
+        Me.Button4.Name = "Button4"
+        Me.Button4.Size = New System.Drawing.Size(28, 28)
+        Me.Button4.TabIndex = 1
+        Me.Button4.UseVisualStyleBackColor = True
         '
         'Label7
         '
@@ -595,6 +619,19 @@ Partial Class GetDriverInfo
         Me.PictureBox2.TabIndex = 2
         Me.PictureBox2.TabStop = False
         '
+        'InstalledDriverLink
+        '
+        Me.InstalledDriverLink.AutoSize = True
+        Me.InstalledDriverLink.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.InstalledDriverLink.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.InstalledDriverLink.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.InstalledDriverLink.Location = New System.Drawing.Point(128, 76)
+        Me.InstalledDriverLink.Name = "InstalledDriverLink"
+        Me.InstalledDriverLink.Size = New System.Drawing.Size(352, 13)
+        Me.InstalledDriverLink.TabIndex = 1
+        Me.InstalledDriverLink.TabStop = True
+        Me.InstalledDriverLink.Text = "I want to get information about installed drivers in the image"
+        '
         'DriverFileLink
         '
         Me.DriverFileLink.AutoSize = True
@@ -623,23 +660,14 @@ Partial Class GetDriverInfo
         Me.OpenFileDialog1.SupportMultiDottedExtensions = True
         Me.OpenFileDialog1.Title = "Locate driver files"
         '
-        'InstalledDriverLink
+        'Button6
         '
-        Me.InstalledDriverLink.AutoSize = True
-        Me.InstalledDriverLink.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.InstalledDriverLink.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.InstalledDriverLink.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.InstalledDriverLink.Location = New System.Drawing.Point(128, 76)
-        Me.InstalledDriverLink.Name = "InstalledDriverLink"
-        Me.InstalledDriverLink.Size = New System.Drawing.Size(352, 13)
-        Me.InstalledDriverLink.TabIndex = 1
-        Me.InstalledDriverLink.TabStop = True
-        Me.InstalledDriverLink.Text = "I want to get information about installed drivers in the image"
-        '
-        'BackgroundWorker1
-        '
-        Me.BackgroundWorker1.WorkerReportsProgress = True
-        Me.BackgroundWorker1.WorkerSupportsCancellation = True
+        Me.Button6.Image = Global.DISMTools.My.Resources.Resources.jumpto
+        Me.Button6.Location = New System.Drawing.Point(370, 4)
+        Me.Button6.Name = "Button6"
+        Me.Button6.Size = New System.Drawing.Size(28, 28)
+        Me.Button6.TabIndex = 1
+        Me.Button6.UseVisualStyleBackColor = True
         '
         'GetDriverInfo
         '
@@ -737,6 +765,8 @@ Partial Class GetDriverInfo
     Friend WithEvents Label18 As System.Windows.Forms.Label
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
     Friend WithEvents InstalledDriverLink As System.Windows.Forms.LinkLabel
-    Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
+    Friend WithEvents Button4 As System.Windows.Forms.Button
+    Friend WithEvents Button5 As System.Windows.Forms.Button
+    Friend WithEvents Button6 As System.Windows.Forms.Button
 
 End Class

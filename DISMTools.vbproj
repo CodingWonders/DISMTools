@@ -893,6 +893,12 @@
     <None Include="Resources\get_drv_info.png" />
     <None Include="Resources\drv_info_from_image.png" />
     <None Include="Resources\info_from_drv_file.png" />
+    <None Include="Resources\next_element.png" />
+    <None Include="Resources\next_element_dark.png" />
+    <None Include="Resources\prev_element.png" />
+    <None Include="Resources\prev_element_dark.png" />
+    <None Include="Resources\jumpto_dark.png" />
+    <None Include="Resources\jumpto.png" />
     <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
     <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
     <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />
