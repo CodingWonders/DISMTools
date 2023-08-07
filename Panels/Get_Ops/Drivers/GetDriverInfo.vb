@@ -79,7 +79,7 @@ Public Class GetDriverInfo
             Label5.Text = "Preparing driver information processes..."
             Application.DoEvents()
             DismApi.Initialize(DismLogLevel.LogErrors)
-            Using imgSession As DismSession = DismApi.OpenOfflineSession(MainForm.MountDir)
+            Using imgSession As DismSession = If(MainForm.OnlineManagement, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(MainForm.MountDir))
                 For Each drvFile In ListBox1.Items
                     If File.Exists(drvFile) Then
                         Label5.Text = "Getting information from driver file " & Quote & Path.GetFileName(drvFile) & Quote & "..." & CrLf & "This may take some time and the program may temporarily freeze"
