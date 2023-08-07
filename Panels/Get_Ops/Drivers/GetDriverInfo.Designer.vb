@@ -381,6 +381,7 @@ Partial Class GetDriverInfo
         Me.Label9.Size = New System.Drawing.Size(390, 83)
         Me.Label9.TabIndex = 0
         Me.Label9.Text = "Label8"
+        Me.Label9.UseMnemonic = False
         '
         'Label10
         '
@@ -401,6 +402,7 @@ Partial Class GetDriverInfo
         Me.Label11.Size = New System.Drawing.Size(390, 83)
         Me.Label11.TabIndex = 0
         Me.Label11.Text = "Label8"
+        Me.Label11.UseMnemonic = False
         '
         'Label12
         '
@@ -431,6 +433,7 @@ Partial Class GetDriverInfo
         Me.Label14.Size = New System.Drawing.Size(390, 83)
         Me.Label14.TabIndex = 0
         Me.Label14.Text = "Label8"
+        Me.Label14.UseMnemonic = False
         '
         'Label16
         '
@@ -451,6 +454,7 @@ Partial Class GetDriverInfo
         Me.Label15.Size = New System.Drawing.Size(390, 83)
         Me.Label15.TabIndex = 0
         Me.Label15.Text = "Label8"
+        Me.Label15.UseMnemonic = False
         '
         'Label17
         '
@@ -471,6 +475,7 @@ Partial Class GetDriverInfo
         Me.Label18.Size = New System.Drawing.Size(390, 52)
         Me.Label18.TabIndex = 0
         Me.Label18.Text = "Label8"
+        Me.Label18.UseMnemonic = False
         '
         'Panel1
         '
