@@ -74,6 +74,8 @@ Partial Class GetDriverInfo
         Me.Label2 = New System.Windows.Forms.Label()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.Button6 = New System.Windows.Forms.Button()
+        Me.Label19 = New System.Windows.Forms.Label()
+        Me.Label20 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -354,6 +356,8 @@ Partial Class GetDriverInfo
         Me.FlowLayoutPanel2.Controls.Add(Me.Label15)
         Me.FlowLayoutPanel2.Controls.Add(Me.Label17)
         Me.FlowLayoutPanel2.Controls.Add(Me.Label18)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label20)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label19)
         Me.FlowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.FlowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
         Me.FlowLayoutPanel2.Location = New System.Drawing.Point(0, 36)
@@ -674,6 +678,27 @@ Partial Class GetDriverInfo
         Me.Button6.TabIndex = 1
         Me.Button6.UseVisualStyleBackColor = True
         '
+        'Label19
+        '
+        Me.Label19.AutoEllipsis = True
+        Me.Label19.Location = New System.Drawing.Point(7, 505)
+        Me.Label19.Name = "Label19"
+        Me.Label19.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label19.Size = New System.Drawing.Size(390, 52)
+        Me.Label19.TabIndex = 0
+        Me.Label19.Text = "Label8"
+        Me.Label19.UseMnemonic = False
+        '
+        'Label20
+        '
+        Me.Label20.AutoSize = True
+        Me.Label20.Location = New System.Drawing.Point(7, 488)
+        Me.Label20.Name = "Label20"
+        Me.Label20.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label20.Size = New System.Drawing.Size(70, 17)
+        Me.Label20.TabIndex = 0
+        Me.Label20.Text = "Architecture:"
+        '
         'GetDriverInfo
         '
         Me.AcceptButton = Me.OK_Button
@@ -773,5 +798,7 @@ Partial Class GetDriverInfo
     Friend WithEvents Button4 As System.Windows.Forms.Button
     Friend WithEvents Button5 As System.Windows.Forms.Button
     Friend WithEvents Button6 As System.Windows.Forms.Button
+    Friend WithEvents Label20 As System.Windows.Forms.Label
+    Friend WithEvents Label19 As System.Windows.Forms.Label
 
 End Class

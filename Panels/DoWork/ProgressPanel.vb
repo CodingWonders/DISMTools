@@ -644,6 +644,26 @@ Public Class ProgressPanel
         If successfulTasks > failedTasks Then IsSuccessful = True Else IsSuccessful = False
     End Sub
 
+    Function CastDismArchitecture(Arch As DismProcessorArchitecture) As String
+        Select Case Arch
+            Case DismProcessorArchitecture.None
+                Return "Unknown"
+            Case DismProcessorArchitecture.Neutral
+                Return "Neutral"
+            Case DismProcessorArchitecture.Intel
+                Return "x86"
+            Case DismProcessorArchitecture.IA64
+                Return "Itanium"
+            Case DismProcessorArchitecture.ARM64
+                Return "ARM64"
+            Case DismProcessorArchitecture.ARM
+                Return "ARM"
+            Case DismProcessorArchitecture.AMD64
+                Return "AMD64"
+        End Select
+        Return Nothing
+    End Function
+
     Sub RunOps(opNum As Integer)
         If DismProgram = "" Then DismProgram = MainForm.DismExe
         If Not File.Exists(DismProgram) Then DismProgram = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
@@ -3116,7 +3136,7 @@ Public Class ProgressPanel
                         DismApi.Initialize(DismLogLevel.LogErrors)
                         Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
                             Dim drvInfoCollection As DismDriverCollection = DismApi.GetDriverInfo(imgSession, drvAdditionPkgs(x))
-                            If drvInfoCollection.Count > 0 Then
+                            If drvInfoCollection.Count > 0 And drvInfoCollection.Count <= 10 Then
                                 For Each drvInfo As DismDriver In drvInfoCollection
                                     LogView.AppendText(CrLf & CrLf & _
                                                        "- Hardware description: " & drvInfo.HardwareDescription & CrLf & _
@@ -3124,8 +3144,13 @@ Public Class ProgressPanel
                                                        "- Additional IDs" & CrLf & _
                                                        "  - Compatible IDs: " & drvInfo.CompatibleIds & CrLf & _
                                                        "  - Excluded IDs: " & drvInfo.ExcludeIds & CrLf & _
-                                                       "- Hardware manufacturer: " & drvInfo.ManufacturerName)
+                                                       "- Hardware manufacturer: " & drvInfo.ManufacturerName & CrLf & _
+                                                       "- Hardware architecture:" & CastDismArchitecture(drvInfo.Architecture))
                                 Next
+                            ElseIf drvInfoCollection.Count > 10 Then
+                                LogView.AppendText(CrLf & CrLf & _
+                                                   "This driver file targets more than 10 devices. To avoid creating log files large in size, we will not show information of this driver package, and will proceed anyway." & CrLf & _
+                                                   "If you want to get information of this driver package, go to Commands > Drivers > Get driver information > I want to get information about driver files, and specify this driver file.")
                             Else
                                 LogView.AppendText(CrLf & CrLf & _
                                                    "We couldn't get information of this driver package. Proceeding anyway...")

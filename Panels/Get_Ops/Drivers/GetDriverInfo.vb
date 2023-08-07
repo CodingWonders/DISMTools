@@ -105,6 +105,22 @@ Public Class GetDriverInfo
                 Label14.Text = DriverPackageInfo.CompatibleIds
                 Label15.Text = DriverPackageInfo.ExcludeIds
                 Label18.Text = DriverPackageInfo.ManufacturerName
+                Select Case DriverPackageInfo.Architecture
+                    Case DismProcessorArchitecture.None
+                        Label19.Text = "Unknown"
+                    Case DismProcessorArchitecture.Neutral
+                        Label19.Text = "Neutral"
+                    Case DismProcessorArchitecture.Intel
+                        Label19.Text = "x86"
+                    Case DismProcessorArchitecture.IA64
+                        Label19.Text = "Itanium"
+                    Case DismProcessorArchitecture.ARM64
+                        Label19.Text = "ARM64"
+                    Case DismProcessorArchitecture.ARM
+                        Label19.Text = "ARM"
+                    Case DismProcessorArchitecture.AMD64
+                        Label19.Text = "AMD64"
+                End Select
                 If Label14.Text = "" Then Label14.Text = "None declared by the hardware manufacturer"
                 If Label15.Text = "" Then Label15.Text = "None declared by the hardware manufacturer"
                 Exit For
