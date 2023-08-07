@@ -9,6 +9,7 @@ Public Class GetDriverInfo
     Dim DriverInfoList As New List(Of DismDriverCollection)
 
     Dim CurrentHWTarget As Integer
+    Dim CurrentHWFile As Integer = -1        ' This variable gets updated every time an element is selected in the driver packages list box
 
     Dim ButtonTT As New ToolTip()
 
@@ -123,6 +124,12 @@ Public Class GetDriverInfo
                 End Select
                 If Label14.Text = "" Then Label14.Text = "None declared by the hardware manufacturer"
                 If Label15.Text = "" Then Label15.Text = "None declared by the hardware manufacturer"
+                Label9.Height = Label9.PreferredHeight + 4
+                Label11.Height = Label11.PreferredHeight + 4
+                Label14.Height = Label14.PreferredHeight + 4
+                Label15.Height = Label15.PreferredHeight + 4
+                Label18.Height = Label18.PreferredHeight + 4
+                Label19.Height = Label19.PreferredHeight + 4
                 Exit For
             End If
         Next
@@ -154,10 +161,11 @@ Public Class GetDriverInfo
             NoDrvPanel.Visible = False
             DrvPackageInfoPanel.Visible = True
             Button2.Enabled = True
-            Label7.Text = "Hardware target 1 of " & DriverInfoList(ListBox1.SelectedIndex).Count
-            CurrentHWTarget = 1
+            If Not CurrentHWFile = ListBox1.SelectedIndex Then Label7.Text = "Hardware target 1 of " & DriverInfoList(ListBox1.SelectedIndex).Count
+            If Not CurrentHWFile = ListBox1.SelectedIndex Then CurrentHWTarget = 1
             Button4.Enabled = False
-            DisplayDriverInformation(1)
+            If Not CurrentHWFile = ListBox1.SelectedIndex Then DisplayDriverInformation(1)
+            CurrentHWFile = ListBox1.SelectedIndex
         Else
             NoDrvPanel.Visible = True
             DrvPackageInfoPanel.Visible = False
