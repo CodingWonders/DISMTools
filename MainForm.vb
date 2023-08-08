@@ -4592,7 +4592,7 @@ Public Class MainForm
                     ' Menu - Commands - OS uninstall
                     GetOSUninstallWindow.Text = "Obtener margen de desinstalación..."
                     InitiateOSUninstall.Text = "Iniciar desinstalación..."
-                    RemoveOSUninstall.Text = "Eliminar abilidad de desinstalación..."
+                    RemoveOSUninstall.Text = "Eliminar habilidad de desinstalación..."
                     SetOSUninstallWindow.Text = "Establecer margen de desinstalación..."
                     ' Menu - Commands - Reserved storage
                     SetReservedStorageState.Text = "Establecer estado de almacenamiento reservado..."
@@ -5157,7 +5157,7 @@ Public Class MainForm
                 ' Menu - Commands - OS uninstall
                 GetOSUninstallWindow.Text = "Obtener margen de desinstalación..."
                 InitiateOSUninstall.Text = "Iniciar desinstalación..."
-                RemoveOSUninstall.Text = "Eliminar abilidad de desinstalación..."
+                RemoveOSUninstall.Text = "Eliminar habilidad de desinstalación..."
                 SetOSUninstallWindow.Text = "Establecer margen de desinstalación..."
                 ' Menu - Commands - Reserved storage
                 SetReservedStorageState.Text = "Establecer estado de almacenamiento reservado..."
