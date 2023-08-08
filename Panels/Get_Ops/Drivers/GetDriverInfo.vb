@@ -157,21 +157,27 @@ Public Class GetDriverInfo
     End Sub
 
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged
-        If ListBox1.SelectedItems.Count = 1 Then
-            NoDrvPanel.Visible = False
-            DrvPackageInfoPanel.Visible = True
-            Button2.Enabled = True
-            If Not CurrentHWFile = ListBox1.SelectedIndex Then Label7.Text = "Hardware target 1 of " & DriverInfoList(ListBox1.SelectedIndex).Count
-            If Not CurrentHWFile = ListBox1.SelectedIndex Then CurrentHWTarget = 1
-            Button4.Enabled = False
-            Button5.Enabled = True
-            If Not CurrentHWFile = ListBox1.SelectedIndex Then DisplayDriverInformation(1)
-            CurrentHWFile = ListBox1.SelectedIndex
-        Else
+        Try
+            If ListBox1.SelectedItems.Count = 1 Then
+                NoDrvPanel.Visible = False
+                DrvPackageInfoPanel.Visible = True
+                Button2.Enabled = True
+                If Not CurrentHWFile = ListBox1.SelectedIndex Then Label7.Text = "Hardware target 1 of " & DriverInfoList(ListBox1.SelectedIndex).Count
+                If Not CurrentHWFile = ListBox1.SelectedIndex Then CurrentHWTarget = 1
+                Button4.Enabled = False
+                Button5.Enabled = True
+                If Not CurrentHWFile = ListBox1.SelectedIndex Then DisplayDriverInformation(1)
+                CurrentHWFile = ListBox1.SelectedIndex
+            Else
+                NoDrvPanel.Visible = True
+                DrvPackageInfoPanel.Visible = False
+                Button2.Enabled = False
+            End If
+        Catch ex As Exception
+            ListBox1.Items.Remove(ListBox1.SelectedItem)
             NoDrvPanel.Visible = True
             DrvPackageInfoPanel.Visible = False
-            Button2.Enabled = False
-        End If
+        End Try
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
