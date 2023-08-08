@@ -164,6 +164,7 @@ Public Class GetDriverInfo
             If Not CurrentHWFile = ListBox1.SelectedIndex Then Label7.Text = "Hardware target 1 of " & DriverInfoList(ListBox1.SelectedIndex).Count
             If Not CurrentHWFile = ListBox1.SelectedIndex Then CurrentHWTarget = 1
             Button4.Enabled = False
+            Button5.Enabled = True
             If Not CurrentHWFile = ListBox1.SelectedIndex Then DisplayDriverInformation(1)
             CurrentHWFile = ListBox1.SelectedIndex
         Else
