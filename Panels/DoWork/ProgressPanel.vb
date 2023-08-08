@@ -3145,7 +3145,7 @@ Public Class ProgressPanel
                                                        "  - Compatible IDs: " & drvInfo.CompatibleIds & CrLf & _
                                                        "  - Excluded IDs: " & drvInfo.ExcludeIds & CrLf & _
                                                        "- Hardware manufacturer: " & drvInfo.ManufacturerName & CrLf & _
-                                                       "- Hardware architecture:" & CastDismArchitecture(drvInfo.Architecture))
+                                                       "- Hardware architecture: " & CastDismArchitecture(drvInfo.Architecture))
                                 Next
                             ElseIf drvInfoCollection.Count > 10 Then
                                 LogView.AppendText(CrLf & CrLf & _
