@@ -10080,4 +10080,8 @@ Public Class MainForm
         End While
         GetDriverInfo.ShowDialog()
     End Sub
+
+    Private Sub ViewProjectFilesInFileExplorerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewProjectFilesInFileExplorerToolStripMenuItem.Click
+        ExplorerView.PerformClick()
+    End Sub
 End Class
