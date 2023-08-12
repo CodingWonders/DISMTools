@@ -1072,18 +1072,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes
 
-- Fixed an issue where the progress panel would not be positioned correctly when performing image operation-related direct actions, after waiting for background processes to be completed while their details panel was focused
-- Fixed an issue where the splash screen would be in front of the initial setup screen, thanks abbodi1406 for spotting the issue!
-- The program now ships 32-bit and 64-bit 7-Zip binaries, and uses the right binary according to the architecture of the OS, thanks abbodi1406 for spotting the issue!
-- Fixed an issue where AppX package information would not be displayed on applications packaged with the MSIX Packaging Tool
+- Fixed an issue where the program opened the resource directory of an AppX package instead of the actual resource file if the directory only contained 1 file in it
 
 New features
 
-- "Element independence" now affects the operation of adding AppX packages. Element independence allows you to set settings for individual Elements as opposed to having those apply to all Elements
-- The AppX regions group box is no longer enabled if the version of the specified DISM executable is not 10.0 or greater
-- The program no longer relies on an in-house XML deserializer and instead relies on the deserializer provided by the `System.Xml` namespace now
-- You can now perform other tasks while background processes for specific elements are being run
-- The program no longer allows you to remove AppX packages from Windows Server Core images without the Desktop Experience feature enabled</value>
+- The program no longer uses the system DISM at all times if the user specified a custom DISM executable
+- Introduced the driver information dialog
+- You can now see the architecture of a driver file when adding it
+- To avoid creating big log files, the program no longer gets driver information if a file targets more than 10 devices</value>
   </data>
   <data name="jumpto" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\jumpto.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
