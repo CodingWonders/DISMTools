@@ -911,6 +911,26 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property jumpto() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("jumpto", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property jumpto_dark() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("jumpto_dark", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Busca una cadena traducida similar a - DISMTools
         '''
         '''This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or at your option any later version.
@@ -1088,6 +1108,26 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property next_element() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("next_element", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property next_element_dark() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("next_element_dark", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property oobe_skip() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("oobe_skip", resourceCulture)
@@ -1141,6 +1181,26 @@ Namespace My.Resources
         Friend ReadOnly Property please_wait() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("please_wait", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property prev_element() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("prev_element", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property prev_element_dark() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("prev_element_dark", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -1688,9 +1748,14 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''- Fixed an issue where the progress panel would not be positioned correctly when performing image operation-related direct actions, after waiting for background processes to be completed while their details panel was focused
-        '''- Fixed an issue where the splash screen would be in front of the initial setup screen, thanks abbodi1406 for spotting the issue!
-        '''- The program now ships 32-bit and 64-bit 7-Zip binaries, and uses the right binary according to the architecture of the OS, thanks abbodi1406  [resto de la cadena truncado]&quot;;.
+        '''- Fixed an issue where the program opened the resource directory of an AppX package instead of the actual resource file if the directory only contained 1 file in it
+        '''
+        '''New features
+        '''
+        '''- The program no longer uses the system DISM at all times if the user specified a custom DISM executable
+        '''- Introduced the driver information dialog
+        '''- You can now see the architecture of a driver file when adding it
+        '''- To avoid creating big log files, the program no longer gets driver information if a file targets [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

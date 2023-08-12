@@ -4592,7 +4592,7 @@ Public Class MainForm
                     ' Menu - Commands - OS uninstall
                     GetOSUninstallWindow.Text = "Obtener margen de desinstalación..."
                     InitiateOSUninstall.Text = "Iniciar desinstalación..."
-                    RemoveOSUninstall.Text = "Eliminar abilidad de desinstalación..."
+                    RemoveOSUninstall.Text = "Eliminar habilidad de desinstalación..."
                     SetOSUninstallWindow.Text = "Establecer margen de desinstalación..."
                     ' Menu - Commands - Reserved storage
                     SetReservedStorageState.Text = "Establecer estado de almacenamiento reservado..."
@@ -5157,7 +5157,7 @@ Public Class MainForm
                 ' Menu - Commands - OS uninstall
                 GetOSUninstallWindow.Text = "Obtener margen de desinstalación..."
                 InitiateOSUninstall.Text = "Iniciar desinstalación..."
-                RemoveOSUninstall.Text = "Eliminar abilidad de desinstalación..."
+                RemoveOSUninstall.Text = "Eliminar habilidad de desinstalación..."
                 SetOSUninstallWindow.Text = "Establecer margen de desinstalación..."
                 ' Menu - Commands - Reserved storage
                 SetReservedStorageState.Text = "Establecer estado de almacenamiento reservado..."
@@ -9444,7 +9444,13 @@ Public Class MainForm
                             ' Choose the largest one
                             Return logoFiles.Last
                         Else
-                            Return Path.Combine(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName, line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim())
+                            If File.Exists(Path.Combine(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName, line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim())) Then
+                                Return Path.Combine(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName, line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim())
+                            Else
+                                ' There may be 1 asset in the folder we're looking on. Open it
+                                Dim logoFiles() As String = Directory.GetFiles(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\" & newPath, "*.png")
+                                Return logoFiles.Last
+                            End If
                         End If
                     End If
                 Next
@@ -10073,5 +10079,9 @@ Public Class MainForm
             Thread.Sleep(500)
         End While
         GetDriverInfo.ShowDialog()
+    End Sub
+
+    Private Sub ViewProjectFilesInFileExplorerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewProjectFilesInFileExplorerToolStripMenuItem.Click
+        ExplorerView.PerformClick()
     End Sub
 End Class
