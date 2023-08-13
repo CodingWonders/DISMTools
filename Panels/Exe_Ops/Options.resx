@@ -164,6 +164,13 @@ State : Disabled
 Feature Name : NetFx3
 State : Enabled</value>
   </data>
+  <data name="Label48.Text" xml:space="preserve">
+    <value>- "Automatically detect" will choose the most suitable image detection mode based on the amount of logical processors of your system
+
+- "Real-time mode" will detect mounted images in real time, which may cause a higher CPU usage
+
+- "Efficiency mode" will detect mounted images every 2 seconds. This is the recommended option for lower-end systems and virtual machines, as it uses almost no CPU power</value>
+  </data>
   <data name="Label39.Text" xml:space="preserve">
     <value>Keep in mind that this process will start once an action has finished, but will stop automatically unless the action is not image related (like mounting, unmounting or reloading servicing)
 

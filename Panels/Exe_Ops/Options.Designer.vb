@@ -154,6 +154,10 @@ Partial Class Options
         Me.Label43 = New System.Windows.Forms.Label()
         Me.PrefReset = New System.Windows.Forms.Button()
         Me.LogSFD = New System.Windows.Forms.SaveFileDialog()
+        Me.Label47 = New System.Windows.Forms.Label()
+        Me.ComboBox7 = New System.Windows.Forms.ComboBox()
+        Me.Label48 = New System.Windows.Forms.Label()
+        Me.PictureBox9 = New System.Windows.Forms.PictureBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -189,6 +193,7 @@ Partial Class Options
         Me.Panel2.SuspendLayout()
         Me.GroupBox5.SuspendLayout()
         Me.TabPage11.SuspendLayout()
+        CType(Me.PictureBox9, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -1340,6 +1345,10 @@ Partial Class Options
         '
         'TabPage9
         '
+        Me.TabPage9.Controls.Add(Me.PictureBox9)
+        Me.TabPage9.Controls.Add(Me.ComboBox7)
+        Me.TabPage9.Controls.Add(Me.Label48)
+        Me.TabPage9.Controls.Add(Me.Label47)
         Me.TabPage9.Controls.Add(Me.GroupBox4)
         Me.TabPage9.Controls.Add(Me.CheckBox8)
         Me.TabPage9.Controls.Add(Me.Label35)
@@ -1601,6 +1610,43 @@ Partial Class Options
         Me.LogSFD.Filter = "All files|*.*"
         Me.LogSFD.Title = "Specify the location of the log file"
         '
+        'Label47
+        '
+        Me.Label47.AutoEllipsis = True
+        Me.Label47.Location = New System.Drawing.Point(22, 256)
+        Me.Label47.Name = "Label47"
+        Me.Label47.Size = New System.Drawing.Size(158, 18)
+        Me.Label47.TabIndex = 2
+        Me.Label47.Text = "Image detection mode:"
+        '
+        'ComboBox7
+        '
+        Me.ComboBox7.FormattingEnabled = True
+        Me.ComboBox7.Items.AddRange(New Object() {"Automatically detect", "Real-time mode", "Efficiency mode"})
+        Me.ComboBox7.Location = New System.Drawing.Point(186, 253)
+        Me.ComboBox7.Name = "ComboBox7"
+        Me.ComboBox7.Size = New System.Drawing.Size(539, 21)
+        Me.ComboBox7.TabIndex = 3
+        Me.ComboBox7.Text = "Automatically detect"
+        '
+        'Label48
+        '
+        Me.Label48.Location = New System.Drawing.Point(47, 282)
+        Me.Label48.Name = "Label48"
+        Me.Label48.Size = New System.Drawing.Size(678, 125)
+        Me.Label48.TabIndex = 2
+        Me.Label48.Text = resources.GetString("Label48.Text")
+        '
+        'PictureBox9
+        '
+        Me.PictureBox9.Image = Global.DISMTools.My.Resources.Resources.info_16px
+        Me.PictureBox9.Location = New System.Drawing.Point(25, 282)
+        Me.PictureBox9.Name = "PictureBox9"
+        Me.PictureBox9.Size = New System.Drawing.Size(16, 16)
+        Me.PictureBox9.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox9.TabIndex = 11
+        Me.PictureBox9.TabStop = False
+        '
         'Options
         '
         Me.AcceptButton = Me.OK_Button
@@ -1674,6 +1720,7 @@ Partial Class Options
         Me.GroupBox5.PerformLayout()
         Me.TabPage11.ResumeLayout(False)
         Me.TabPage11.PerformLayout()
+        CType(Me.PictureBox9, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1808,5 +1855,9 @@ Partial Class Options
     Friend WithEvents PictureBox8 As System.Windows.Forms.PictureBox
     Friend WithEvents Panel2 As System.Windows.Forms.Panel
     Friend WithEvents Panel3 As System.Windows.Forms.Panel
+    Friend WithEvents ComboBox7 As System.Windows.Forms.ComboBox
+    Friend WithEvents Label48 As System.Windows.Forms.Label
+    Friend WithEvents Label47 As System.Windows.Forms.Label
+    Friend WithEvents PictureBox9 As System.Windows.Forms.PictureBox
 
 End Class
