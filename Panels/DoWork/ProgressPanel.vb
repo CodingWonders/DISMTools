@@ -3150,7 +3150,8 @@ Public Class ProgressPanel
                             ElseIf drvInfoCollection.Count > 10 Then
                                 LogView.AppendText(CrLf & CrLf & _
                                                    "This driver file targets more than 10 devices. To avoid creating log files large in size, we will not show information of this driver package, and will proceed anyway." & CrLf & _
-                                                   "If you want to get information of this driver package, go to Commands > Drivers > Get driver information > I want to get information about driver files, and specify this driver file.")
+                                                   "If you want to get information of this driver package, go to Commands > Drivers > Get driver information > I want to get information about driver files, and specify this driver file:" & CrLf & CrLf & _
+                                                   "    " & Path.GetFileName(drvAdditionPkgs(x)))
                             Else
                                 LogView.AppendText(CrLf & CrLf & _
                                                    "We couldn't get information of this driver package. Proceeding anyway...")
