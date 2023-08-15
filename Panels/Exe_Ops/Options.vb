@@ -13,7 +13,6 @@ Public Class Options
     Dim Languages() As String = New String(2) {"Use system language", "English", "Spanish"}
     Dim LogViews() As String = New String(1) {"list", "table"}
     Dim NotFreqs() As String = New String(1) {"Every time a project has been loaded successfully", "Once"}
-    Dim ImgDetectionModes() As String = New String(2) {"Automatically detect", "Real-time mode", "Efficiency mode"}
 
     Sub DetermineSettingValidity()
         If TextBox1.Text = "" Then
@@ -173,7 +172,6 @@ Public Class Options
         MainForm.StartupRemount = CheckBox12.Checked
         MainForm.StartupUpdateCheck = CheckBox13.Checked
         MainForm.AutoLogs = CheckBox10.Checked
-        MainForm.ImageDetectionMode = ComboBox7.SelectedIndex
         If MainForm.VolatileMode Then
             MainForm.SaveDTSettings()
         End If
@@ -280,13 +278,11 @@ Public Class Options
         ComboBox3.Items.Clear()
         ComboBox5.Items.Clear()
         ComboBox6.Items.Clear()
-        ComboBox7.Items.Clear()
         ComboBox1.SelectedText = ""
         ComboBox2.SelectedText = ""
         ComboBox3.SelectedText = ""
         ComboBox5.SelectedText = ""
         ComboBox6.SelectedText = ""
-        ComboBox7.SelectedText = ""
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -342,10 +338,6 @@ Public Class Options
                         Label44.Text = "The program will use the scratch directory provided by the project if one is loaded. If you are in online installation management mode, the program will use its scratch directory"
                         Label45.Text = "Secondary progress panel style:"
                         Label46.Text = "These settings aren't applicable to non-portable installations"
-                        Label47.Text = "Image detection mode:"
-                        Label48.Text = "- " & Quote & "Automatically detect" & Quote & " will choose the most suitable image detection mode based on the amount of logical processors of your system" & CrLf & CrLf & _
-                            "- " & Quote & "Real-time mode" & Quote & " will detect mounted images in real time, which may cause a higher CPU usage" & CrLf & CrLf & _
-                            "- " & Quote & "Efficiency mode" & Quote & " will detect mounted images every 2 seconds. This is the recommended option for lower-end systems and virtual machines, as it uses almost no CPU power"
                         Button1.Text = "Browse..."
                         Button2.Text = "View DISM component versions"
                         Button3.Text = "Browse..."
@@ -441,10 +433,6 @@ Public Class Options
                         Label44.Text = "El programa usará el directorio temporal proporcionado por el proyecto si se cargó alguno. Si está en modo de administración de instalaciones en línea, el programa utilizará su directorio temporal"
                         Label45.Text = "Estilo del panel de progreso secundario:"
                         Label46.Text = "Estas configuraciones no son aplicables a instalaciones no portátiles"
-                        Label47.Text = "Modo de detección de imágenes:"
-                        Label48.Text = "- " & Quote & "Detectar automáticamente" & Quote & " escogerá el modo de detección de imágenes más adecuado basándose en el número de procesadores lógicos de su sistema" & CrLf & CrLf & _
-                            "- " & Quote & "Modo instantáneo" & Quote & " detectará imágenes montadas en tiempo real, lo que podría causar un aumento en el uso de CPU" & CrLf & CrLf & _
-                            "- " & Quote & "Modo de eficiencia" & Quote & " detectará imágenes montadas cada 2 segundos. Esta es la opción recomendada para sistemas de gama baja y máquinas virtuales, dado a que usa casi nada de CPU"
                         Button1.Text = "Examinar..."
                         Button2.Text = "Ver versiones de componentes"
                         Button3.Text = "Examinar..."
@@ -541,10 +529,6 @@ Public Class Options
                 Label44.Text = "The program will use the scratch directory provided by the project if one is loaded. If you are in online installation management mode, the program will use its scratch directory"
                 Label45.Text = "Secondary progress panel style:"
                 Label46.Text = "These settings aren't applicable to non-portable installations"
-                Label47.Text = "Image detection mode:"
-                Label48.Text = "- " & Quote & "Automatically detect" & Quote & " will choose the most suitable image detection mode based on the amount of logical processors of your system" & CrLf & CrLf & _
-                    "- " & Quote & "Real-time mode" & Quote & " will detect mounted images in real time, which may cause a higher CPU usage" & CrLf & CrLf & _
-                    "- " & Quote & "Efficiency mode" & Quote & " will detect mounted images every 2 seconds. This is the recommended option for lower-end systems and virtual machines, as it uses almost no CPU power"
                 Button1.Text = "Browse..."
                 Button2.Text = "View DISM component versions"
                 Button3.Text = "Browse..."
@@ -640,10 +624,6 @@ Public Class Options
                 Label44.Text = "El programa usará el directorio temporal proporcionado por el proyecto si se cargó alguno. Si está en modo de administración de instalaciones en línea, el programa utilizará su directorio temporal"
                 Label45.Text = "Estilo del panel de progreso secundario:"
                 Label46.Text = "Estas configuraciones no son aplicables a instalaciones no portátiles"
-                Label47.Text = "Modo de detección de imágenes:"
-                Label48.Text = "- " & Quote & "Detectar automáticamente" & Quote & " escogerá el modo de detección de imágenes más adecuado basándose en el número de procesadores lógicos de su sistema" & CrLf & CrLf & _
-                    "- " & Quote & "Modo instantáneo" & Quote & " detectará imágenes montadas en tiempo real, lo que podría causar un aumento en el uso de CPU" & CrLf & CrLf & _
-                    "- " & Quote & "Modo de eficiencia" & Quote & " detectará imágenes montadas cada 2 segundos. Esta es la opción recomendada para sistemas de gama baja y máquinas virtuales, dado a que usa casi nada de CPU"
                 Button1.Text = "Examinar..."
                 Button2.Text = "Ver versiones de componentes"
                 Button3.Text = "Examinar..."
@@ -704,9 +684,6 @@ Public Class Options
                         LogViews(1) = "table"
                         NotFreqs(0) = "Every time a project has been loaded successfully"
                         NotFreqs(1) = "Once"
-                        ImgDetectionModes(0) = "Automatically detect"
-                        ImgDetectionModes(1) = "Real-time mode"
-                        ImgDetectionModes(2) = "Efficiency mode"
                     Case "ESN"
                         SaveLocations(0) = "Archivo de configuración"
                         SaveLocations(1) = "Registro"
@@ -720,9 +697,6 @@ Public Class Options
                         LogViews(1) = "tabla"
                         NotFreqs(0) = "Cada vez que un proyecto ha sido cargado satisfactoriamente"
                         NotFreqs(1) = "Una vez"
-                        ImgDetectionModes(0) = "Detectar automáticamente"
-                        ImgDetectionModes(1) = "Modo instantáneo"
-                        ImgDetectionModes(2) = "Modo de eficiencia"
                 End Select
             Case 1
                 SaveLocations(0) = "Settings file"
@@ -737,9 +711,6 @@ Public Class Options
                 LogViews(1) = "table"
                 NotFreqs(0) = "Every time a project has been loaded successfully"
                 NotFreqs(1) = "Once"
-                ImgDetectionModes(0) = "Automatically detect"
-                ImgDetectionModes(1) = "Real-time mode"
-                ImgDetectionModes(2) = "Efficiency mode"
             Case 2
                 SaveLocations(0) = "Archivo de configuración"
                 SaveLocations(1) = "Registro"
@@ -753,16 +724,12 @@ Public Class Options
                 LogViews(1) = "tabla"
                 NotFreqs(0) = "Cada vez que un proyecto ha sido cargado satisfactoriamente"
                 NotFreqs(1) = "Una vez"
-                ImgDetectionModes(0) = "Detectar automáticamente"
-                ImgDetectionModes(1) = "Modo instantáneo"
-                ImgDetectionModes(2) = "Modo de eficiencia"
         End Select
         ComboBox1.Items.AddRange(SaveLocations)
         ComboBox2.Items.AddRange(ColorModes)
         ComboBox3.Items.AddRange(Languages)
         ComboBox5.Items.AddRange(LogViews)
         ComboBox6.Items.AddRange(NotFreqs)
-        ComboBox7.Items.AddRange(ImgDetectionModes)
         If File.Exists(Application.StartupPath & "\portable") Then ComboBox1.Items.RemoveAt(1)
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
@@ -814,8 +781,6 @@ Public Class Options
             ComboBox5.ForeColor = Color.White
             ComboBox6.BackColor = Color.FromArgb(31, 31, 31)
             ComboBox6.ForeColor = Color.White
-            ComboBox7.BackColor = Color.FromArgb(31, 31, 31)
-            ComboBox7.ForeColor = Color.White
             ListBox1.BackColor = Color.FromArgb(31, 31, 31)
             ListBox1.ForeColor = Color.White
             NumericUpDown1.BackColor = Color.FromArgb(31, 31, 31)
@@ -863,8 +828,6 @@ Public Class Options
             ComboBox5.ForeColor = Color.Black
             ComboBox6.BackColor = Color.FromArgb(238, 238, 242)
             ComboBox6.ForeColor = Color.Black
-            ComboBox7.BackColor = Color.FromArgb(238, 238, 242)
-            ComboBox7.ForeColor = Color.Black
             ListBox1.BackColor = Color.FromArgb(238, 238, 242)
             ListBox1.ForeColor = Color.Black
             NumericUpDown1.BackColor = Color.FromArgb(238, 238, 242)
@@ -1007,7 +970,6 @@ Public Class Options
             Case 1
                 ComboBox6.SelectedIndex = 1
         End Select
-        ComboBox7.SelectedIndex = MainForm.ImageDetectionMode
         GetRootSpace(TextBox3.Text)
         CheckBox10.Checked = MainForm.AutoLogs
         CheckBox12.Checked = MainForm.StartupRemount

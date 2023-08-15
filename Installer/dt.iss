@@ -137,9 +137,6 @@ Root: HKCU; Subkey: "Software\DISMTools\Preview\Startup"; ValueType: dword; Valu
 
 Root: HKCU; Subkey: "Software\DISMTools\Preview\WndParams"; Flags: uninsdeletekey createvalueifdoesntexist
 
-Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgDetection"; Flags: uninsdeletekey createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgDetection"; ValueType: dword; ValueName: "CPUMode"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
-
 [Icons]
 Name: "{autoprograms}\{#scName}"; Filename: "{#pfDir}\{#MyAppExeName}"
 Name: "{autodesktop}\{#scName}"; Filename: "{#pfDir}\{#MyAppExeName}"; Tasks: desktopicon

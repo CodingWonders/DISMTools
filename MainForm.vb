@@ -100,9 +100,6 @@ Public Class MainForm
     Public AutoScrDir As Boolean
     ' - Appearance -
     Public AllCaps As Boolean
-    ' 0.3.1 settings
-    ' - CPU efficiency -
-    Public ImageDetectionMode As Integer        ' 0 (Auto-detect), 1 (Real-time mode), 2 (Eco mode)
 
     ' Background process initiator settings
     Public bwBackgroundProcessAction As Integer
@@ -946,9 +943,6 @@ Public Class MainForm
                 End If
                 WindowState = If(CInt(WndKey.GetValue("WndMaximized")) = 1, FormWindowState.Maximized, FormWindowState.Normal)
                 WndKey.Close()
-                Dim ImgDetectionKey As RegistryKey = Key.OpenSubKey("ImgDetection")
-                ImageDetectionMode = CInt(ImgDetectionKey.GetValue("CPUMode"))
-                ImgDetectionKey.Close()
                 Key.Close()
                 ' Apply program colors immediately
                 ChangePrgColors(ColorMode)
@@ -3627,7 +3621,6 @@ Public Class MainForm
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "WndTop=" & WndTop)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "WndMaximized=" & If(WindowState = FormWindowState.Maximized, "1", "0"))
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ImgDetection]" & CrLf)
-                DTSettingForm.RichTextBox2.AppendText("CPUMode=" & ImageDetectionMode)
                 File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
             Else
                 ' Tell settings file to use this method
@@ -3698,7 +3691,6 @@ Public Class MainForm
                 WndKey.SetValue("WndMaximized", If(WindowState = FormWindowState.Maximized, 1, 0), RegistryValueKind.DWord)
                 WndKey.Close()
                 Dim ImgDetectionKey As RegistryKey = Key.CreateSubKey("ImgDetection")
-                ImgDetectionKey.SetValue("CPUMode", ImageDetectionMode, RegistryValueKind.DWord)
                 ImgDetectionKey.Close()
                 Key.Close()
             End If
@@ -8992,14 +8984,7 @@ Public Class MainForm
         Do
             If MountedImageDetectorBW.CancellationPending Or ImgBW.IsBusy Then Exit Do
             DetectMountedImages(False)
-            If ImageDetectionMode = 0 Then
-                ' Detect logical processors
-                If Environment.ProcessorCount <= 4 Then
-                    Thread.Sleep(2000)
-                End If
-            ElseIf ImageDetectionMode = 2 Then
-                Thread.Sleep(2000)
-            End If
+            Thread.Sleep(500)
         Loop
     End Sub
 
