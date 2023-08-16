@@ -2,6 +2,7 @@
 Imports System.Windows.Forms
 Imports System.Text.Encoding
 Imports Microsoft.VisualBasic.ControlChars
+Imports System.Threading
 Imports Microsoft.Dism
 
 Public Class ImgMount
@@ -95,6 +96,7 @@ Public Class ImgMount
                         GroupBox3.Text = "Options"
                         Button1.Text = "Browse..."
                         Button2.Text = "Browse..."
+                        Button3.Text = "Convert"
                         Button5.Text = "Use defaults"
                         Cancel_Button.Text = "Cancel"
                         OK_Button.Text = "OK"
@@ -119,6 +121,7 @@ Public Class ImgMount
                         GroupBox3.Text = "Opciones"
                         Button1.Text = "Examinar..."
                         Button2.Text = "Examinar..."
+                        Button3.Text = "Convertir"
                         Button5.Text = "Predeterminados"
                         Cancel_Button.Text = "Cancelar"
                         OK_Button.Text = "Aceptar"
@@ -144,6 +147,7 @@ Public Class ImgMount
                 GroupBox3.Text = "Options"
                 Button1.Text = "Browse..."
                 Button2.Text = "Browse..."
+                Button3.Text = "Convert"
                 Button5.Text = "Use defaults"
                 Cancel_Button.Text = "Cancel"
                 OK_Button.Text = "OK"
@@ -168,6 +172,7 @@ Public Class ImgMount
                 GroupBox3.Text = "Opciones"
                 Button1.Text = "Examinar..."
                 Button2.Text = "Examinar..."
+                Button3.Text = "Convertir"
                 Button5.Text = "Predeterminados"
                 Cancel_Button.Text = "Cancelar"
                 OK_Button.Text = "Aceptar"
@@ -229,6 +234,34 @@ Public Class ImgMount
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         FileSpecDialog.ShowDialog()
+        If TextBox1.Text <> "" And Path.GetExtension(TextBox1.Text).EndsWith("esd", StringComparison.OrdinalIgnoreCase) Then
+            Button3.Visible = True
+            IsReqField1Valid = False
+            ImgWim2Esd.TextBox1.Text = TextBox1.Text
+            ImgWim2Esd.TextBox2.Text = TextBox1.Text.Replace(Path.GetExtension(TextBox1.Text), ".wim").Trim()
+            Hide()
+            ImgWim2Esd.ShowDialog(MainForm)
+            Show()
+            If ImgWim2Esd.DialogResult = Windows.Forms.DialogResult.OK And File.Exists(ImgWim2Esd.TextBox2.Text) Then
+                TextBox1.Text = ImgWim2Esd.TextBox2.Text
+            ElseIf ImgWim2Esd.DialogResult = Windows.Forms.DialogResult.Cancel Then
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                MsgBox("You need to convert this image to a WIM file in order to mount it", vbOKOnly + vbExclamation, Label1.Text)
+                            Case "ESN"
+                                MsgBox("Debe convertir esta imagen a un archivo WIM para poder montarla", vbOKOnly + vbExclamation, Label1.Text)
+                        End Select
+                    Case 1
+                        MsgBox("You need to convert this image to a WIM file in order to mount it", vbOKOnly + vbExclamation, Label1.Text)
+                    Case 2
+                        MsgBox("Debe convertir esta imagen a un archivo WIM para poder montarla", vbOKOnly + vbExclamation, Label1.Text)
+                End Select
+            End If
+        Else
+            Button3.Visible = False
+        End If
     End Sub
 
     Private Sub FileSpecDialog_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles FileSpecDialog.FileOk
@@ -253,6 +286,13 @@ Public Class ImgMount
 
     Sub GetIndexes(ImgFile As String)
         Try
+            If MainForm.MountedImageDetectorBW.IsBusy Then
+                MainForm.MountedImageDetectorBW.CancelAsync()
+                While MainForm.MountedImageDetectorBW.IsBusy
+                    Application.DoEvents()
+                    Thread.Sleep(500)
+                End While
+            End If
             ListView1.Items.Clear()
             DismApi.Initialize(DismLogLevel.LogErrors)
             Dim imgInfoCollection As DismImageInfoCollection = DismApi.GetImageInfo(ImgFile)
@@ -291,6 +331,9 @@ Public Class ImgMount
                 IsReqField1Valid = True
                 ProgressPanel.SourceImg = TextBox1.Text
                 GetIndexes(TextBox1.Text)
+                If Path.GetExtension(TextBox1.Text).EndsWith("esd", StringComparison.OrdinalIgnoreCase) Then
+                    IsReqField1Valid = False
+                End If
             Else
                 IsReqField1Valid = False
             End If
@@ -341,5 +384,31 @@ Public Class ImgMount
 
     Private Sub ImgMount_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+    End Sub
+
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        IsReqField1Valid = False
+        ImgWim2Esd.TextBox1.Text = TextBox1.Text
+        ImgWim2Esd.TextBox2.Text = TextBox1.Text.Replace(Path.GetExtension(TextBox1.Text), ".wim").Trim()
+        Hide()
+        ImgWim2Esd.ShowDialog(MainForm)
+        Show()
+        If ImgWim2Esd.DialogResult = Windows.Forms.DialogResult.OK And File.Exists(ImgWim2Esd.TextBox2.Text) Then
+            TextBox1.Text = ImgWim2Esd.TextBox2.Text
+        ElseIf ImgWim2Esd.DialogResult = Windows.Forms.DialogResult.Cancel Then
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MsgBox("You need to convert this image to a WIM file in order to mount it", vbOKOnly + vbExclamation, Label1.Text)
+                        Case "ESN"
+                            MsgBox("Debe convertir esta imagen a un archivo WIM para poder montarla", vbOKOnly + vbExclamation, Label1.Text)
+                    End Select
+                Case 1
+                    MsgBox("You need to convert this image to a WIM file in order to mount it", vbOKOnly + vbExclamation, Label1.Text)
+                Case 2
+                    MsgBox("Debe convertir esta imagen a un archivo WIM para poder montarla", vbOKOnly + vbExclamation, Label1.Text)
+            End Select
+        End If
     End Sub
 End Class
