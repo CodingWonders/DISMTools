@@ -10146,4 +10146,17 @@ Public Class MainForm
     Private Sub ViewProjectFilesInFileExplorerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewProjectFilesInFileExplorerToolStripMenuItem.Click
         ExplorerView.PerformClick()
     End Sub
+
+    Private Sub WimScriptEditorCommand_Click(sender As Object, e As EventArgs) Handles WimScriptEditorCommand.Click
+        If WimScriptEditor.Visible Then
+            If WimScriptEditor.WindowState = FormWindowState.Minimized Then
+                WimScriptEditor.WindowState = FormWindowState.Normal
+            Else
+                WimScriptEditor.BringToFront()
+            End If
+            WimScriptEditor.Focus()
+        Else
+            WimScriptEditor.Show()
+        End If
+    End Sub
 End Class
