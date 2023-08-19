@@ -429,6 +429,7 @@ Public Class ProgressPanel
 
     ' OperationNum: 991
     Public imgSrcFile As String                             ' Source image file for conversion
+    Public imgConversionIndex As Integer                    ' Index to convert to the target image format
     Public imgDestFile As String                            ' Destination image file for conversion
     Public imgConversionMode As Integer                     ' 0: WIM -> ESD; 1: WIM <- ESD
 
@@ -3150,7 +3151,8 @@ Public Class ProgressPanel
                             ElseIf drvInfoCollection.Count > 10 Then
                                 LogView.AppendText(CrLf & CrLf & _
                                                    "This driver file targets more than 10 devices. To avoid creating log files large in size, we will not show information of this driver package, and will proceed anyway." & CrLf & _
-                                                   "If you want to get information of this driver package, go to Commands > Drivers > Get driver information > I want to get information about driver files, and specify this driver file.")
+                                                   "If you want to get information of this driver package, go to Commands > Drivers > Get driver information > I want to get information about driver files, and specify this driver file:" & CrLf & CrLf & _
+                                                   "    " & Path.GetFileName(drvAdditionPkgs(x)))
                             Else
                                 LogView.AppendText(CrLf & CrLf & _
                                                    "We couldn't get information of this driver package. Proceeding anyway...")
@@ -3406,8 +3408,9 @@ Public Class ProgressPanel
                                "Options:" & CrLf)
 
             ' Gather options
-            LogView.AppendText("- Source image file: " & imgSrcFile & CrLf &
-                                   "- Destination image file: " & imgDestFile & CrLf)
+            LogView.AppendText("- Source image file: " & imgSrcFile & CrLf & _
+                               "- Index to convert: " & imgConversionIndex & CrLf & _
+                               "- Destination image file: " & imgDestFile & CrLf)
             If imgConversionMode = 0 Then
                 LogView.AppendText("- Image conversion mode: Windows Imaging (WIM) --> Electronic Software Distribution (ESD)")
             ElseIf imgConversionMode = 1 Then
@@ -3422,10 +3425,10 @@ Public Class ProgressPanel
                         Case 1
                             ' Not available
                         Case Is >= 2
-                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSrcFile & Quote & " /sourceindex=1 /destinationimagefile=" & Quote & imgDestFile & Quote
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSrcFile & Quote & " /sourceindex=" & imgConversionIndex & " /destinationimagefile=" & Quote & imgDestFile & Quote
                     End Select
                 Case 10
-                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSrcFile & Quote & " /sourceindex=1 /destinationimagefile=" & Quote & imgDestFile & Quote
+                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSrcFile & Quote & " /sourceindex=" & imgConversionIndex & " /destinationimagefile=" & Quote & imgDestFile & Quote
             End Select
             If imgConversionMode = 0 Then
                 CommandArgs &= " /compress:recovery"

@@ -205,6 +205,7 @@ Public Class MainForm
     Dim WndTop As Integer
 
     Public CompletedTasks(4) As Boolean
+    Public PendingTasks(4) As Boolean
 
     Dim HasRemounted As Boolean
 
@@ -1393,30 +1394,40 @@ Public Class MainForm
                 CompletedTasks(2) = True
                 CompletedTasks(3) = True
                 CompletedTasks(4) = True
+                ' Set pending task
+                PendingTasks(0) = True
             Case 2
                 CompletedTasks(0) = True
                 CompletedTasks(1) = False
                 CompletedTasks(2) = True
                 CompletedTasks(3) = True
                 CompletedTasks(4) = True
+                ' Set pending task
+                PendingTasks(1) = True
             Case 3
                 CompletedTasks(0) = True
                 CompletedTasks(1) = True
                 CompletedTasks(2) = False
                 CompletedTasks(3) = True
                 CompletedTasks(4) = True
+                ' Set pending task
+                PendingTasks(2) = True
             Case 4
                 CompletedTasks(0) = True
                 CompletedTasks(1) = True
                 CompletedTasks(2) = True
                 CompletedTasks(3) = False
                 CompletedTasks(4) = True
+                ' Set pending task
+                PendingTasks(3) = True
             Case 5
                 CompletedTasks(0) = True
                 CompletedTasks(1) = True
                 CompletedTasks(2) = True
                 CompletedTasks(3) = True
                 CompletedTasks(4) = False
+                ' Set pending task
+                PendingTasks(4) = True
         End Select
         regJumps = True
         progressMin = 20
@@ -1591,6 +1602,7 @@ Public Class MainForm
                     GetImageAppxPackages(True, OnlineMode)
                 Else
                     Debug.WriteLine("[IsWindows8OrHigher] Returned False")
+                    PendingTasks(2) = False
                 End If
             Case 4
                 If IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") = True Then
@@ -1613,6 +1625,7 @@ Public Class MainForm
                     GetImageCapabilities(True, OnlineMode)
                 Else
                     Debug.WriteLine("[IsWindows10OrHigher] Returned False")
+                    PendingTasks(3) = False
                 End If
             Case 5
                 Select Case Language
@@ -1631,6 +1644,27 @@ Public Class MainForm
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetImageDrivers(True, OnlineMode)
         End Select
+        If bgProcOptn <> 0 And PendingTasks.Contains(True) Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            progressLabel = "Running pending tasks. This may take some time..."
+                        Case "ESN"
+                            progressLabel = "Ejecutando tareas pendientes. Esto puede llevar algo de tiempo..."
+                    End Select
+                Case 1
+                    progressLabel = "Running pending tasks. This may take some time..."
+                Case 2
+                    progressLabel = "Ejecutando tareas pendientes. Esto puede llevar algo de tiempo..."
+            End Select
+            ImgBW.ReportProgress(99)
+            If PendingTasks(0) Then GetImagePackages(True, OnlineMode)
+            If PendingTasks(1) Then GetImageFeatures(True, OnlineMode)
+            If PendingTasks(2) Then GetImageAppxPackages(True, OnlineMode)
+            If PendingTasks(3) Then GetImageCapabilities(True, OnlineMode)
+            If PendingTasks(4) Then GetImageDrivers(True, OnlineMode)
+        End If
         DeleteTempFiles()
         If UseApi And session IsNot Nothing Then
             DismApi.CloseSession(session)
@@ -2385,6 +2419,7 @@ Public Class MainForm
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                             CompletedTasks(0) = False
+                            PendingTasks(0) = True
                             Exit Sub
                         End If
                         imgPackageNameList.Add(package.PackageName)
@@ -2401,6 +2436,7 @@ Public Class MainForm
                 DismApi.Shutdown()
             End Try
             CompletedTasks(0) = True
+            PendingTasks(0) = False
             Exit Sub
             'Try
 
@@ -2512,6 +2548,7 @@ Public Class MainForm
             End If
         Next
         CompletedTasks(0) = True
+        PendingTasks(0) = False
         'imgPackageNameLastEntry = UBound(imgPackageNames)
         'ImgBW.ReportProgress(progressMin + progressDivs)
     End Sub
@@ -2531,6 +2568,7 @@ Public Class MainForm
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                             CompletedTasks(1) = False
+                            PendingTasks(1) = True
                             Exit Sub
                         End If
                         imgFeatureNameList.Add(feature.FeatureName)
@@ -2560,6 +2598,7 @@ Public Class MainForm
                 DismApi.Shutdown()
             End Try
             CompletedTasks(1) = True
+            PendingTasks(1) = False
             Exit Sub
             'Try
             '    If session IsNot Nothing Then
@@ -2637,6 +2676,7 @@ Public Class MainForm
             End If
         Next
         CompletedTasks(1) = True
+        PendingTasks(1) = False
         'ImgBW.ReportProgress(progressMin + progressDivs)
     End Sub
 
@@ -2660,6 +2700,7 @@ Public Class MainForm
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                             CompletedTasks(2) = False
+                            PendingTasks(2) = True
                             Exit Sub
                         End If
                         Select Case AppxPackage.Architecture
@@ -2740,6 +2781,7 @@ Public Class MainForm
                 DismApi.Shutdown()
             End Try
             CompletedTasks(2) = True
+            PendingTasks(2) = False
             Exit Sub
         End If
         Debug.WriteLine("[GetImageAppxPackages] Running function...")
@@ -2752,6 +2794,7 @@ Public Class MainForm
                     Case 1
                         Debug.WriteLine("[GetImageAppxPackages] The image is Windows 8 or later, but this version of DISM does not support this command. Exiting...")
                         CompletedTasks(2) = False
+                        PendingTasks(2) = True
                         Exit Sub
                 End Select
         End Select
@@ -2777,6 +2820,7 @@ Public Class MainForm
         Catch ex As Exception
             Debug.WriteLine("[GetImageAppxPackages] Failed writing getter scripts. Reason: " & ex.Message)
             CompletedTasks(2) = False
+            PendingTasks(2) = True
             Exit Sub
         End Try
         Debug.WriteLine("[GetImageAppxPackages] Finished writing getter scripts. Executing them...")
@@ -2903,6 +2947,7 @@ Public Class MainForm
             imgAppxResourceIds = imgAppxResourceIdList.ToArray()
         End If
         CompletedTasks(2) = True
+        PendingTasks(2) = False
         'ImgBW.ReportProgress(progressMin + progressDivs)
     End Sub
 
@@ -2940,6 +2985,7 @@ Public Class MainForm
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                             CompletedTasks(3) = False
+                            PendingTasks(3) = True
                             Exit Sub
                         End If
                         imgCapabilityNameList.Add(capability.Name)
@@ -2969,6 +3015,7 @@ Public Class MainForm
                 DismApi.Shutdown()
             End Try
             CompletedTasks(3) = True
+            PendingTasks(3) = False
             Exit Sub
             'Try
 
@@ -3083,6 +3130,7 @@ Public Class MainForm
             End If
         Next
         CompletedTasks(3) = True
+        PendingTasks(3) = False
         'ImgBW.ReportProgress(progressMin + progressDivs)
     End Sub
 
@@ -3108,6 +3156,7 @@ Public Class MainForm
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                             CompletedTasks(4) = False
+                            PendingTasks(4) = True
                             Exit Sub
                         End If
                         imgDrvPublishedNameList.Add(driver.PublishedName)
@@ -3132,6 +3181,7 @@ Public Class MainForm
                 DismApi.Shutdown()
             End Try
             CompletedTasks(4) = True
+            PendingTasks(4) = False
             Exit Sub
             'Try
             '    If session IsNot Nothing Then
@@ -3300,6 +3350,7 @@ Public Class MainForm
             End If
         Next
         CompletedTasks(4) = True
+        PendingTasks(4) = False
         'ImgBW.ReportProgress(progressMin + progressDivs)
     End Sub
 
@@ -3378,6 +3429,8 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "WndLeft=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "WndTop=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "WndMaximized=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ImgDetection]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("CPUMode=0")
         File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
         If File.Exists(Application.StartupPath & "\portable") Then Exit Sub
         Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("preview"), "Preview", "Stable")
@@ -3445,6 +3498,9 @@ Public Class MainForm
         WndKey.SetValue("WndTop", 0, RegistryValueKind.DWord)
         WndKey.SetValue("WndMaximized", 0, RegistryValueKind.DWord)
         WndKey.Close()
+        Dim ImgDetectionKey As RegistryKey = Key.CreateSubKey("ImgDetection")
+        ImgDetectionKey.SetValue("CPUMode", 0, RegistryValueKind.DWord)
+        ImgDetectionKey.Close()
         Key.Close()
     End Sub
 
@@ -3615,6 +3671,7 @@ Public Class MainForm
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "WndLeft=" & WndLeft)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "WndTop=" & WndTop)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "WndMaximized=" & If(WindowState = FormWindowState.Maximized, "1", "0"))
+                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ImgDetection]" & CrLf)
                 File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
             Else
                 ' Tell settings file to use this method
@@ -3684,6 +3741,8 @@ Public Class MainForm
                 WndKey.SetValue("WndTop", WndTop, RegistryValueKind.DWord)
                 WndKey.SetValue("WndMaximized", If(WindowState = FormWindowState.Maximized, 1, 0), RegistryValueKind.DWord)
                 WndKey.Close()
+                Dim ImgDetectionKey As RegistryKey = Key.CreateSubKey("ImgDetection")
+                ImgDetectionKey.Close()
                 Key.Close()
             End If
         End If
@@ -5992,6 +6051,7 @@ Public Class MainForm
         SaveProjectasToolStripMenuItem.Enabled = False
         BGProcDetails.Hide()
         Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
+        PendingTasks = Enumerable.Repeat(True, PendingTasks.Length).ToArray()
         If OnlineManagement Then EndOnlineManagement()
     End Sub
 
@@ -6180,6 +6240,7 @@ Public Class MainForm
         TableLayoutPanel2.SetColumnSpan(Label3, 2)
         ManageOnlineInstallationToolStripMenuItem.Enabled = True
         Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
+        PendingTasks = Enumerable.Repeat(True, PendingTasks.Count).ToArray()
         MountDir = ""
     End Sub
 
@@ -8976,6 +9037,7 @@ Public Class MainForm
         Do
             If MountedImageDetectorBW.CancellationPending Or ImgBW.IsBusy Then Exit Do
             DetectMountedImages(False)
+            Thread.Sleep(500)
         Loop
     End Sub
 
@@ -10083,5 +10145,18 @@ Public Class MainForm
 
     Private Sub ViewProjectFilesInFileExplorerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewProjectFilesInFileExplorerToolStripMenuItem.Click
         ExplorerView.PerformClick()
+    End Sub
+
+    Private Sub WimScriptEditorCommand_Click(sender As Object, e As EventArgs) Handles WimScriptEditorCommand.Click
+        If WimScriptEditor.Visible Then
+            If WimScriptEditor.WindowState = FormWindowState.Minimized Then
+                WimScriptEditor.WindowState = FormWindowState.Normal
+            Else
+                WimScriptEditor.BringToFront()
+            End If
+            WimScriptEditor.Focus()
+        Else
+            WimScriptEditor.Show()
+        End If
     End Sub
 End Class

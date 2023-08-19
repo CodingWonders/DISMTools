@@ -1748,14 +1748,13 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''- Fixed an issue where the program opened the resource directory of an AppX package instead of the actual resource file if the directory only contained 1 file in it
+        '''- Fixed an issue that caused the program to make you specify a capability addition source in the online installation management mode when the &quot;Limit Windows Update access&quot; check box was unticked
         '''
         '''New features
         '''
-        '''- The program no longer uses the system DISM at all times if the user specified a custom DISM executable
-        '''- Introduced the driver information dialog
-        '''- You can now see the architecture of a driver file when adding it
-        '''- To avoid creating big log files, the program no longer gets driver information if a file targets [resto de la cadena truncado]&quot;;.
+        '''- When a driver file contains more than 10 hardware targets, the program now shows the file name of the driver file for a quicker and easier reference task
+        '''- The mounted image detector has received optimizations which cause a significant CPU usage decrease
+        '''- If an ESD file is specifi [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
