@@ -10,6 +10,7 @@ Public Class GetDriverInfo
 
     Dim CurrentHWTarget As Integer
     Dim CurrentHWFile As Integer = -1        ' This variable gets updated every time an element is selected in the driver packages list box
+    Dim JumpTo As Integer = -1               ' This variable gets updated every time a target is specified in the Jump To panel
 
     Dim ButtonTT As New ToolTip()
 
@@ -29,13 +30,16 @@ Public Class GetDriverInfo
             BackColor = Color.FromArgb(31, 31, 31)
             ForeColor = Color.White
             ListBox1.BackColor = Color.FromArgb(31, 31, 31)
+            ComboBox1.BackColor = Color.FromArgb(31, 31, 31)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Win10Title.BackColor = Color.White
             BackColor = Color.FromArgb(238, 238, 242)
             ForeColor = Color.Black
             ListBox1.BackColor = Color.FromArgb(238, 238, 242)
+            ComboBox1.BackColor = Color.FromArgb(238, 238, 242)
         End If
         ListBox1.ForeColor = ForeColor
+        ComboBox1.ForeColor = ForeColor
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True
@@ -100,7 +104,7 @@ Public Class GetDriverInfo
     Sub DisplayDriverInformation(HWTarget As Integer)
         Dim CurrentDriverCollection As DismDriverCollection = DriverInfoList(ListBox1.SelectedIndex)
         For Each DriverPackageInfo As DismDriver In CurrentDriverCollection
-            If CurrentDriverCollection.IndexOf(DriverPackageInfo) = HWTarget Then
+            If CurrentDriverCollection.IndexOf(DriverPackageInfo) = HWTarget - 1 Then
                 Label9.Text = DriverPackageInfo.HardwareDescription
                 Label11.Text = DriverPackageInfo.HardwareId
                 Label14.Text = DriverPackageInfo.CompatibleIds
@@ -135,6 +139,21 @@ Public Class GetDriverInfo
         Next
     End Sub
 
+    Sub DisplayHardwareTargetOverview()
+        ' This function is called when the user clicks on the "Jump to target" button
+        If ListBox1.SelectedItems.Count <> 1 Then
+            ' Don't continue
+            Exit Sub
+        Else
+            JumpTo = -1
+            ComboBox1.Text = ""
+            Dim CurrentDriverCollection As DismDriverCollection = DriverInfoList(ListBox1.SelectedIndex)
+            For Each DriverPackageInfo As DismDriver In CurrentDriverCollection
+                ComboBox1.Items.Add(CurrentDriverCollection.IndexOf(DriverPackageInfo) + 1 & " - " & DriverPackageInfo.HardwareDescription & " (" & DriverPackageInfo.HardwareId & ")")
+            Next
+        End If
+    End Sub
+
     Private Sub ListBox1_DragEnter(sender As Object, e As DragEventArgs) Handles ListBox1.DragEnter
         If e.Data.GetDataPresent(DataFormats.FileDrop) Then
             e.Effect = DragDropEffects.Copy
@@ -159,6 +178,7 @@ Public Class GetDriverInfo
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged
         Try
             If ListBox1.SelectedItems.Count = 1 Then
+                JumpToPanel.Visible = False
                 NoDrvPanel.Visible = False
                 DrvPackageInfoPanel.Visible = True
                 Button2.Enabled = True
@@ -225,5 +245,24 @@ Public Class GetDriverInfo
 
     Private Sub Button6_MouseHover(sender As Object, e As EventArgs) Handles Button6.MouseHover
         ButtonTT.SetToolTip(sender, "Jump to specific hardware target")
+    End Sub
+
+    Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
+        JumpTo = ComboBox1.SelectedIndex + 1
+        If JumpTo < 1 Then Exit Sub
+        Label7.Text = "Hardware target " & JumpTo & " of " & DriverInfoList(ListBox1.SelectedIndex).Count
+        CurrentHWTarget = JumpTo
+        DisplayDriverInformation(JumpTo)
+        JumpToPanel.Visible = False
+        If CurrentHWTarget = DriverInfoList(ListBox1.SelectedIndex).Count Then Button5.Enabled = False
+        If CurrentHWTarget = 1 Then Button4.Enabled = False
+    End Sub
+
+    Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
+        JumpToPanel.Visible = True
+        Button4.Enabled = True
+        Button5.Enabled = True
+        ComboBox1.Items.Clear()
+        DisplayHardwareTargetOverview()
     End Sub
 End Class

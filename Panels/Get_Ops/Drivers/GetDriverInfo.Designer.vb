@@ -55,7 +55,10 @@ Partial Class GetDriverInfo
         Me.Label15 = New System.Windows.Forms.Label()
         Me.Label17 = New System.Windows.Forms.Label()
         Me.Label18 = New System.Windows.Forms.Label()
+        Me.Label20 = New System.Windows.Forms.Label()
+        Me.Label19 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Button6 = New System.Windows.Forms.Button()
         Me.Button5 = New System.Windows.Forms.Button()
         Me.Button4 = New System.Windows.Forms.Button()
         Me.Label7 = New System.Windows.Forms.Label()
@@ -73,9 +76,9 @@ Partial Class GetDriverInfo
         Me.DriverFileLink = New System.Windows.Forms.LinkLabel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
-        Me.Button6 = New System.Windows.Forms.Button()
-        Me.Label19 = New System.Windows.Forms.Label()
-        Me.Label20 = New System.Windows.Forms.Label()
+        Me.JumpToPanel = New System.Windows.Forms.Panel()
+        Me.Label21 = New System.Windows.Forms.Label()
+        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -98,6 +101,7 @@ Partial Class GetDriverInfo
         Me.MenuPanel.SuspendLayout()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.JumpToPanel.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -481,8 +485,30 @@ Partial Class GetDriverInfo
         Me.Label18.Text = "Label8"
         Me.Label18.UseMnemonic = False
         '
+        'Label20
+        '
+        Me.Label20.AutoSize = True
+        Me.Label20.Location = New System.Drawing.Point(7, 488)
+        Me.Label20.Name = "Label20"
+        Me.Label20.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label20.Size = New System.Drawing.Size(70, 17)
+        Me.Label20.TabIndex = 0
+        Me.Label20.Text = "Architecture:"
+        '
+        'Label19
+        '
+        Me.Label19.AutoEllipsis = True
+        Me.Label19.Location = New System.Drawing.Point(7, 505)
+        Me.Label19.Name = "Label19"
+        Me.Label19.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label19.Size = New System.Drawing.Size(390, 52)
+        Me.Label19.TabIndex = 0
+        Me.Label19.Text = "Label8"
+        Me.Label19.UseMnemonic = False
+        '
         'Panel1
         '
+        Me.Panel1.Controls.Add(Me.JumpToPanel)
         Me.Panel1.Controls.Add(Me.Button6)
         Me.Panel1.Controls.Add(Me.Button5)
         Me.Panel1.Controls.Add(Me.Button4)
@@ -492,6 +518,15 @@ Partial Class GetDriverInfo
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(436, 36)
         Me.Panel1.TabIndex = 0
+        '
+        'Button6
+        '
+        Me.Button6.Image = Global.DISMTools.My.Resources.Resources.jumpto
+        Me.Button6.Location = New System.Drawing.Point(370, 4)
+        Me.Button6.Name = "Button6"
+        Me.Button6.Size = New System.Drawing.Size(28, 28)
+        Me.Button6.TabIndex = 1
+        Me.Button6.UseVisualStyleBackColor = True
         '
         'Button5
         '
@@ -669,35 +704,38 @@ Partial Class GetDriverInfo
         Me.OpenFileDialog1.SupportMultiDottedExtensions = True
         Me.OpenFileDialog1.Title = "Locate driver files"
         '
-        'Button6
+        'JumpToPanel
         '
-        Me.Button6.Image = Global.DISMTools.My.Resources.Resources.jumpto
-        Me.Button6.Location = New System.Drawing.Point(370, 4)
-        Me.Button6.Name = "Button6"
-        Me.Button6.Size = New System.Drawing.Size(28, 28)
-        Me.Button6.TabIndex = 1
-        Me.Button6.UseVisualStyleBackColor = True
+        Me.JumpToPanel.Controls.Add(Me.ComboBox1)
+        Me.JumpToPanel.Controls.Add(Me.Label21)
+        Me.JumpToPanel.Location = New System.Drawing.Point(0, 0)
+        Me.JumpToPanel.Name = "JumpToPanel"
+        Me.JumpToPanel.Size = New System.Drawing.Size(436, 36)
+        Me.JumpToPanel.TabIndex = 2
+        Me.JumpToPanel.Visible = False
         '
-        'Label19
+        'Label21
         '
-        Me.Label19.AutoEllipsis = True
-        Me.Label19.Location = New System.Drawing.Point(7, 505)
-        Me.Label19.Name = "Label19"
-        Me.Label19.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label19.Size = New System.Drawing.Size(390, 52)
-        Me.Label19.TabIndex = 0
-        Me.Label19.Text = "Label8"
-        Me.Label19.UseMnemonic = False
+        Me.Label21.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label21.AutoEllipsis = True
+        Me.Label21.AutoSize = True
+        Me.Label21.Font = New System.Drawing.Font("Tahoma", 8.25!)
+        Me.Label21.Location = New System.Drawing.Point(17, 12)
+        Me.Label21.Name = "Label21"
+        Me.Label21.Size = New System.Drawing.Size(82, 13)
+        Me.Label21.TabIndex = 1
+        Me.Label21.Text = "Jump to target:"
+        Me.Label21.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'Label20
+        'ComboBox1
         '
-        Me.Label20.AutoSize = True
-        Me.Label20.Location = New System.Drawing.Point(7, 488)
-        Me.Label20.Name = "Label20"
-        Me.Label20.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label20.Size = New System.Drawing.Size(70, 17)
-        Me.Label20.TabIndex = 0
-        Me.Label20.Text = "Architecture:"
+        Me.ComboBox1.FormattingEnabled = True
+        Me.ComboBox1.Location = New System.Drawing.Point(105, 9)
+        Me.ComboBox1.Name = "ComboBox1"
+        Me.ComboBox1.Size = New System.Drawing.Size(314, 21)
+        Me.ComboBox1.TabIndex = 2
         '
         'GetDriverInfo
         '
@@ -743,6 +781,8 @@ Partial Class GetDriverInfo
         Me.MenuPanel.PerformLayout()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.JumpToPanel.ResumeLayout(False)
+        Me.JumpToPanel.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -800,5 +840,8 @@ Partial Class GetDriverInfo
     Friend WithEvents Button6 As System.Windows.Forms.Button
     Friend WithEvents Label20 As System.Windows.Forms.Label
     Friend WithEvents Label19 As System.Windows.Forms.Label
+    Friend WithEvents JumpToPanel As System.Windows.Forms.Panel
+    Friend WithEvents ComboBox1 As System.Windows.Forms.ComboBox
+    Friend WithEvents Label21 As System.Windows.Forms.Label
 
 End Class
