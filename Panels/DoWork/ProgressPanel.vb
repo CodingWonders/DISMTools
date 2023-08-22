@@ -435,6 +435,7 @@ Public Class ProgressPanel
 
     ' OperationNum: 992
     Public imgSwmSource As String                           ' Source SWM file to merge its pattern to WIM
+    Public imgMergerIndex As Integer                        ' Index of the SWM file of which to export to the merged WIM file
     Public imgWimDestination As String                      ' Destination WIM file to merge SWM files to
 
     ' OperationNum: 996
@@ -3480,6 +3481,7 @@ Public Class ProgressPanel
                                "Options:" & CrLf)
             ' Gather options
             LogView.AppendText("- Source image file: " & imgSwmSource & CrLf & _
+                               "- Target index: " & imgMergerIndex & CrLf & _
                                "- Destination image file: " & imgWimDestination & CrLf)
 
             ' Run commands
@@ -3490,10 +3492,10 @@ Public Class ProgressPanel
                         Case 1
                             ' Not available
                         Case Is >= 2
-                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSwmSource & Quote & " /swmfile=" & Quote & Path.GetDirectoryName(imgSwmSource) & "\" & Path.GetFileNameWithoutExtension(imgSwmSource) & "*.swm" & Quote & " /sourceindex=1 /destinationimagefile=" & Quote & imgWimDestination & Quote & " /compress=max /checkintegrity"
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSwmSource & Quote & " /swmfile=" & Quote & Path.GetDirectoryName(imgSwmSource) & "\" & Path.GetFileNameWithoutExtension(imgSwmSource) & "*.swm" & Quote & " /sourceindex=" & imgMergerIndex & " /destinationimagefile=" & Quote & imgWimDestination & Quote & " /compress=max /checkintegrity"
                     End Select
                 Case 10
-                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSwmSource & Quote & " /swmfile=" & Quote & Path.GetDirectoryName(imgSwmSource) & "\" & Path.GetFileNameWithoutExtension(imgSwmSource) & "*.swm" & Quote & " /sourceindex=1 /destinationimagefile=" & Quote & imgWimDestination & Quote & " /compress=max /checkintegrity"
+                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSwmSource & Quote & " /swmfile=" & Quote & Path.GetDirectoryName(imgSwmSource) & "\" & Path.GetFileNameWithoutExtension(imgSwmSource) & "*.swm" & Quote & " /sourceindex=" & imgMergerIndex & " /destinationimagefile=" & Quote & imgWimDestination & Quote & " /compress=max /checkintegrity"
             End Select
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()

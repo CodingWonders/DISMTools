@@ -165,6 +165,7 @@ Partial Class ImgMount
         Me.Label4.TabIndex = 5
         Me.Label4.Text = "NOTE: if you want to mount an ESD file, you need to convert it to a WIM file firs" & _
     "t"
+        Me.Label4.Visible = False
         '
         'Button3
         '
@@ -358,7 +359,7 @@ Partial Class ImgMount
         '
         'FileSpecDialog
         '
-        Me.FileSpecDialog.Filter = "WIM files|*.wim|ESD files|*.esd|VHD(X) files|*.vhd;*.vhdx;"
+        Me.FileSpecDialog.Filter = "WIM files|*.wim|ESD files|*.esd|SWM files|*.swm|VHD(X) files|*.vhd;*.vhdx;"
         '
         'ImgMount
         '
