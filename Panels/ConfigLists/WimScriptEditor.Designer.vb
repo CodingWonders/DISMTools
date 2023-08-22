@@ -58,6 +58,8 @@ Partial Class WimScriptEditor
         Me.ToolStripButton5 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripButton6 = New System.Windows.Forms.ToolStripButton()
+        Me.WimScriptOFD = New System.Windows.Forms.OpenFileDialog()
+        Me.WimScriptSFD = New System.Windows.Forms.SaveFileDialog()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -466,6 +468,18 @@ Partial Class WimScriptEditor
         Me.ToolStripButton6.Size = New System.Drawing.Size(23, 25)
         Me.ToolStripButton6.Text = "Help"
         '
+        'WimScriptOFD
+        '
+        Me.WimScriptOFD.Filter = "INI files|*.ini"
+        Me.WimScriptOFD.SupportMultiDottedExtensions = True
+        Me.WimScriptOFD.Title = "Specify the configuration list to load"
+        '
+        'WimScriptSFD
+        '
+        Me.WimScriptSFD.Filter = "INI files|*.ini"
+        Me.WimScriptSFD.SupportMultiDottedExtensions = True
+        Me.WimScriptSFD.Title = "Specify the location to save the configuration list to"
+        '
         'WimScriptEditor
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -529,4 +543,6 @@ Partial Class WimScriptEditor
     Friend WithEvents ToolStripButton5 As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripSeparator6 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ToolStripButton6 As System.Windows.Forms.ToolStripButton
+    Friend WithEvents WimScriptOFD As System.Windows.Forms.OpenFileDialog
+    Friend WithEvents WimScriptSFD As System.Windows.Forms.SaveFileDialog
 End Class

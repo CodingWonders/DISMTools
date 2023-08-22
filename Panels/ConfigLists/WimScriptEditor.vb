@@ -1,8 +1,11 @@
 ﻿Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
 Imports ScintillaNET
+Imports System.Text.Encoding
 
 Public Class WimScriptEditor
+
+    Dim ConfigListFile As String
 
     Private Sub WimScriptEditor_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
@@ -203,9 +206,41 @@ Public Class WimScriptEditor
                 ListView3.Items.Remove(LVItem)
             End If
         Next
+
+        ' Indicate whether file has seen changes, if it exists
+        If ConfigListFile IsNot Nothing And File.Exists(ConfigListFile) Then
+            If File.ReadAllText(ConfigListFile).ToString() = Scintilla1.Text Then
+                Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+            Else
+                Text = Path.GetFileName(ConfigListFile) & " (modified) - DISM Configuration List Editor"
+            End If
+        End If
     End Sub
 
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
+        If (ConfigListFile Is Nothing Or Not File.Exists(ConfigListFile)) And Scintilla1.Text <> "" Then
+            Dim Result As MsgBoxResult = MsgBox("Do you want to save this configuration list file?", vbYesNoCancel + vbQuestion, Text)
+            Select Case Result
+                Case MsgBoxResult.Yes
+                    If File.Exists(ConfigListFile) Then
+                        File.WriteAllText(ConfigListFile, Scintilla1.Text, ASCII)
+                        Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                    Else
+                        If WimScriptSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                            File.WriteAllText(WimScriptSFD.FileName, Scintilla1.Text, ASCII)
+                            ConfigListFile = WimScriptSFD.FileName
+                            Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                        Else
+                            Exit Sub
+                        End If
+                    End If
+                Case MsgBoxResult.No
+                    Exit Select
+                Case MsgBoxResult.Cancel
+                    Exit Sub
+            End Select
+        End If
+
         Text = "New configuration list - DISM Configuration List Editor"
 
         ' Generate a default configuration list, as shown in the DISM configuration list documentation.
@@ -230,5 +265,81 @@ Public Class WimScriptEditor
     Private Sub FontChange(sender As Object, e As EventArgs) Handles FontFamilyTSCB.SelectedIndexChanged, FontSizeTSCB.SelectedIndexChanged
         ' Change Scintilla editor font
         InitScintilla(FontFamilyTSCB.SelectedItem, FontSizeTSCB.SelectedItem)
+    End Sub
+
+    Private Sub ToolStripButton3_Click(sender As Object, e As EventArgs) Handles ToolStripButton3.Click
+        If (ConfigListFile Is Nothing Or Not File.Exists(ConfigListFile)) And Scintilla1.Text <> "" Then
+            Dim Result As MsgBoxResult = MsgBox("Do you want to save this configuration list file?", vbYesNoCancel + vbQuestion, Text)
+            Select Case Result
+                Case MsgBoxResult.Yes
+                    If File.Exists(ConfigListFile) Then
+                        File.WriteAllText(WimScriptSFD.FileName, Scintilla1.Text, ASCII)
+                        ConfigListFile = WimScriptSFD.FileName
+                        Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                    Else
+                        If WimScriptSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                            File.WriteAllText(WimScriptSFD.FileName, Scintilla1.Text, ASCII)
+                            ConfigListFile = WimScriptSFD.FileName
+                            Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                        Else
+                            Exit Sub
+                        End If
+                    End If
+                Case MsgBoxResult.No
+                    Exit Select
+                Case MsgBoxResult.Cancel
+                    Exit Sub
+            End Select
+        Else
+            Try
+                If (ConfigListFile IsNot Nothing And File.Exists(ConfigListFile) And File.ReadAllText(ConfigListFile).ToString() <> Scintilla1.Text) Then
+                    Dim Result As MsgBoxResult = MsgBox("Do you want to save this configuration list file?", vbYesNoCancel + vbQuestion, Text)
+                    Select Case Result
+                        Case MsgBoxResult.Yes
+                            If File.Exists(ConfigListFile) Then
+                                File.WriteAllText(ConfigListFile, Scintilla1.Text, ASCII)
+                                Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                            Else
+                                If WimScriptSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                                    File.WriteAllText(WimScriptSFD.FileName, Scintilla1.Text, ASCII)
+                                    ConfigListFile = WimScriptSFD.FileName
+                                    Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                                Else
+                                    Exit Sub
+                                End If
+                            End If
+                        Case MsgBoxResult.No
+                            Exit Select
+                        Case MsgBoxResult.Cancel
+                            Exit Sub
+                    End Select
+                End If
+            Catch ex As Exception
+                Exit Try
+            End Try
+        End If
+        WimScriptOFD.ShowDialog()
+    End Sub
+
+    Private Sub ToolStripButton4_Click(sender As Object, e As EventArgs) Handles ToolStripButton4.Click
+        If ConfigListFile Is Nothing Or Not File.Exists(ConfigListFile) Then
+            If WimScriptSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                File.WriteAllText(WimScriptSFD.FileName, Scintilla1.Text, ASCII)
+                ConfigListFile = WimScriptSFD.FileName
+            End If
+        Else
+            File.WriteAllText(ConfigListFile, Scintilla1.Text, ASCII)
+        End If
+        Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+    End Sub
+
+    Private Sub WimScriptOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles WimScriptOFD.FileOk
+        Scintilla1.Text = File.ReadAllText(WimScriptOFD.FileName)
+        ConfigListFile = WimScriptOFD.FileName
+        Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+    End Sub
+
+    Private Sub ToolStripButton6_Click(sender As Object, e As EventArgs) Handles ToolStripButton6.Click
+        Process.Start("https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/dism-configuration-list-and-wimscriptini-files-winnext?view=windows-11")
     End Sub
 End Class
