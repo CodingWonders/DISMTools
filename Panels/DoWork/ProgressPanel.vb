@@ -1695,9 +1695,9 @@ Public Class ProgressPanel
                     Catch ex As Exception
                         LogView.AppendText(CrLf & ex.Message)
                         If PkgErrorText.RichTextBox1.Text = "" Then
-                            PkgErrorText.RichTextBox1.AppendText("0x800F8023")
+                            PkgErrorText.RichTextBox1.AppendText(If(Hex(ex.HResult).Length >= 8, "0x" & Hex(ex.HResult), Hex(ex.HResult)))
                         Else
-                            PkgErrorText.RichTextBox1.AppendText(CrLf & "0x800F8023")
+                            PkgErrorText.RichTextBox1.AppendText(CrLf & If(Hex(ex.HResult).Length >= 8, "0x" & Hex(ex.HResult), Hex(ex.HResult)))
                         End If
                         pkgFailedAdditions += 1
                         pkgIsApplicable = False
@@ -1819,6 +1819,8 @@ Public Class ProgressPanel
                                        "Package " & (x + 1) & " of " & pkgRemovalCount)
                     CurrentPB.Value = x + 1
                     Directory.CreateDirectory(Application.StartupPath & "\tempinfo")
+
+                    Dim pkgIsRemovable As Boolean
                     Try
                         DismApi.Initialize(DismLogLevel.LogErrors)
                         Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
@@ -1838,9 +1840,20 @@ Public Class ProgressPanel
                                 pkgIsReadyForRemoval = False
                             End If
                         End Using
+                        pkgIsRemovable = True
+                    Catch ex As Exception
+                        LogView.AppendText(CrLf & ex.Message)
+                        If PkgErrorText.RichTextBox1.Text = "" Then
+                            PkgErrorText.RichTextBox1.AppendText(If(Hex(ex.HResult).Length >= 8, "0x" & Hex(ex.HResult), Hex(ex.HResult)))
+                        Else
+                            PkgErrorText.RichTextBox1.AppendText(CrLf & If(Hex(ex.HResult).Length >= 8, "0x" & Hex(ex.HResult), Hex(ex.HResult)))
+                        End If
+                        pkgFailedRemovals += 1
+                        pkgIsRemovable = False
                     Finally
                         DismApi.Shutdown()
                     End Try
+                    If Not pkgIsRemovable Then Continue For
                     If pkgIsReadyForRemoval Then
                         LogView.AppendText(CrLf & "Processing package removal...")
                         DISMProc.StartInfo.FileName = DismProgram
@@ -1901,6 +1914,7 @@ Public Class ProgressPanel
                                        "Package " & (x + 1) & " of " & pkgRemovalCount)
                     CurrentPB.Value = x + 1
                     Directory.CreateDirectory(Application.StartupPath & "\tempinfo")
+                    Dim pkgIsRemovable As Boolean
                     Try
                         DismApi.Initialize(DismLogLevel.LogErrors)
                         Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
@@ -1920,9 +1934,20 @@ Public Class ProgressPanel
                                 pkgIsReadyForRemoval = False
                             End If
                         End Using
+                        pkgIsRemovable = True
+                    Catch ex As Exception
+                        LogView.AppendText(CrLf & ex.Message)
+                        If PkgErrorText.RichTextBox1.Text = "" Then
+                            PkgErrorText.RichTextBox1.AppendText(If(Hex(ex.HResult).Length >= 8, "0x" & Hex(ex.HResult), Hex(ex.HResult)))
+                        Else
+                            PkgErrorText.RichTextBox1.AppendText(CrLf & If(Hex(ex.HResult).Length >= 8, "0x" & Hex(ex.HResult), Hex(ex.HResult)))
+                        End If
+                        pkgFailedRemovals += 1
+                        pkgIsRemovable = False
                     Finally
                         DismApi.Shutdown()
                     End Try
+                    If Not pkgIsRemovable Then Continue For
                     If pkgIsReadyForRemoval Then
                         LogView.AppendText(CrLf & "Processing package removal...")
                         DISMProc.StartInfo.FileName = DismProgram
@@ -4199,7 +4224,7 @@ Public Class ProgressPanel
             TaskList.Clear()
             MainForm.StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
             MainForm.ToolStripButton4.Visible = False
-            Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+            If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
             Close()
         Else
             MainForm.ToolStripButton4.Visible = False
