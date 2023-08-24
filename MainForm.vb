@@ -7767,6 +7767,13 @@ Public Class MainForm
             Beep()
             Exit Sub
         End If
+        If WimScriptEditor.Visible Then
+            WimScriptEditor.Close()
+            If WimScriptEditor.Visible Then
+                e.Cancel = True
+                Exit Sub
+            End If
+        End If
         If Not VolatileMode Then
             SaveDTSettings()
         End If

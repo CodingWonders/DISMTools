@@ -31,19 +31,16 @@ Partial Class WimScriptEditor
         Me.ConfigFileSettingsPanel = New System.Windows.Forms.Panel()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.ListView3 = New System.Windows.Forms.ListView()
-        Me.Button12 = New System.Windows.Forms.Button()
         Me.Button9 = New System.Windows.Forms.Button()
         Me.Button11 = New System.Windows.Forms.Button()
         Me.Button10 = New System.Windows.Forms.Button()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.ListView2 = New System.Windows.Forms.ListView()
-        Me.Button8 = New System.Windows.Forms.Button()
         Me.Button5 = New System.Windows.Forms.Button()
         Me.Button7 = New System.Windows.Forms.Button()
         Me.Button6 = New System.Windows.Forms.Button()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.ListView1 = New System.Windows.Forms.ListView()
-        Me.Button4 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
@@ -144,7 +141,6 @@ Partial Class WimScriptEditor
         Me.GroupBox3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox3.Controls.Add(Me.ListView3)
-        Me.GroupBox3.Controls.Add(Me.Button12)
         Me.GroupBox3.Controls.Add(Me.Button9)
         Me.GroupBox3.Controls.Add(Me.Button11)
         Me.GroupBox3.Controls.Add(Me.Button10)
@@ -167,20 +163,10 @@ Partial Class WimScriptEditor
         Me.ListView3.UseCompatibleStateImageBehavior = False
         Me.ListView3.View = System.Windows.Forms.View.List
         '
-        'Button12
-        '
-        Me.Button12.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button12.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button12.Location = New System.Drawing.Point(405, 108)
-        Me.Button12.Name = "Button12"
-        Me.Button12.Size = New System.Drawing.Size(75, 23)
-        Me.Button12.TabIndex = 1
-        Me.Button12.Text = "Help"
-        Me.Button12.UseVisualStyleBackColor = True
-        '
         'Button9
         '
         Me.Button9.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button9.Enabled = False
         Me.Button9.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button9.Location = New System.Drawing.Point(405, 50)
         Me.Button9.Name = "Button9"
@@ -203,6 +189,7 @@ Partial Class WimScriptEditor
         'Button10
         '
         Me.Button10.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button10.Enabled = False
         Me.Button10.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button10.Location = New System.Drawing.Point(405, 79)
         Me.Button10.Name = "Button10"
@@ -216,7 +203,6 @@ Partial Class WimScriptEditor
         Me.GroupBox2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox2.Controls.Add(Me.ListView2)
-        Me.GroupBox2.Controls.Add(Me.Button8)
         Me.GroupBox2.Controls.Add(Me.Button5)
         Me.GroupBox2.Controls.Add(Me.Button7)
         Me.GroupBox2.Controls.Add(Me.Button6)
@@ -239,17 +225,6 @@ Partial Class WimScriptEditor
         Me.ListView2.UseCompatibleStateImageBehavior = False
         Me.ListView2.View = System.Windows.Forms.View.List
         '
-        'Button8
-        '
-        Me.Button8.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button8.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button8.Location = New System.Drawing.Point(405, 108)
-        Me.Button8.Name = "Button8"
-        Me.Button8.Size = New System.Drawing.Size(75, 23)
-        Me.Button8.TabIndex = 1
-        Me.Button8.Text = "Help"
-        Me.Button8.UseVisualStyleBackColor = True
-        '
         'Button5
         '
         Me.Button5.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -264,6 +239,7 @@ Partial Class WimScriptEditor
         'Button7
         '
         Me.Button7.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button7.Enabled = False
         Me.Button7.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button7.Location = New System.Drawing.Point(405, 79)
         Me.Button7.Name = "Button7"
@@ -275,6 +251,7 @@ Partial Class WimScriptEditor
         'Button6
         '
         Me.Button6.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button6.Enabled = False
         Me.Button6.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button6.Location = New System.Drawing.Point(405, 50)
         Me.Button6.Name = "Button6"
@@ -288,7 +265,6 @@ Partial Class WimScriptEditor
         Me.GroupBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox1.Controls.Add(Me.ListView1)
-        Me.GroupBox1.Controls.Add(Me.Button4)
         Me.GroupBox1.Controls.Add(Me.Button3)
         Me.GroupBox1.Controls.Add(Me.Button2)
         Me.GroupBox1.Controls.Add(Me.Button1)
@@ -311,20 +287,10 @@ Partial Class WimScriptEditor
         Me.ListView1.UseCompatibleStateImageBehavior = False
         Me.ListView1.View = System.Windows.Forms.View.List
         '
-        'Button4
-        '
-        Me.Button4.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button4.Location = New System.Drawing.Point(405, 108)
-        Me.Button4.Name = "Button4"
-        Me.Button4.Size = New System.Drawing.Size(75, 23)
-        Me.Button4.TabIndex = 1
-        Me.Button4.Text = "Help"
-        Me.Button4.UseVisualStyleBackColor = True
-        '
         'Button3
         '
         Me.Button3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button3.Enabled = False
         Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button3.Location = New System.Drawing.Point(405, 79)
         Me.Button3.Name = "Button3"
@@ -336,6 +302,7 @@ Partial Class WimScriptEditor
         'Button2
         '
         Me.Button2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button2.Enabled = False
         Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button2.Location = New System.Drawing.Point(405, 50)
         Me.Button2.Name = "Button2"
@@ -516,19 +483,16 @@ Partial Class WimScriptEditor
     Friend WithEvents ConfigFileSettingsPanel As System.Windows.Forms.Panel
     Friend WithEvents GroupBox3 As System.Windows.Forms.GroupBox
     Friend WithEvents ListView3 As System.Windows.Forms.ListView
-    Friend WithEvents Button12 As System.Windows.Forms.Button
     Friend WithEvents Button9 As System.Windows.Forms.Button
     Friend WithEvents Button11 As System.Windows.Forms.Button
     Friend WithEvents Button10 As System.Windows.Forms.Button
     Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
     Friend WithEvents ListView2 As System.Windows.Forms.ListView
-    Friend WithEvents Button8 As System.Windows.Forms.Button
     Friend WithEvents Button5 As System.Windows.Forms.Button
     Friend WithEvents Button7 As System.Windows.Forms.Button
     Friend WithEvents Button6 As System.Windows.Forms.Button
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
     Friend WithEvents ListView1 As System.Windows.Forms.ListView
-    Friend WithEvents Button4 As System.Windows.Forms.Button
     Friend WithEvents Button3 As System.Windows.Forms.Button
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents Button1 As System.Windows.Forms.Button
