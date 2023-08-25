@@ -7860,6 +7860,10 @@ Public Class MainForm
     End Sub
 
     Private Sub GetImageInfo_Click(sender As Object, e As EventArgs) Handles GetImageInfo.Click
+        If ImgBW.IsBusy Then
+            BGProcsBusyDialog.ShowDialog()
+            Exit Sub
+        End If
         GetImgInfoDlg.ShowDialog()
     End Sub
 
@@ -10146,6 +10150,24 @@ Public Class MainForm
     End Sub
 
     Private Sub GetDrivers_Click(sender As Object, e As EventArgs) Handles GetDrivers.Click
+        ProgressPanel.OperationNum = 994
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
+        End Select
+        If Not CompletedTasks(4) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
