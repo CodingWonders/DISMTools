@@ -213,6 +213,9 @@ Public Class MainForm
 
     Dim SysVer As Version
 
+    ' List for driver information dialog
+    Dim DriverInfoList As DismDriverPackageCollection
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -3152,6 +3155,7 @@ Public Class MainForm
                     Dim imgDrvVersionList As New List(Of String)
                     Dim imgDrvBootCriticalStatusList As New List(Of Boolean)
                     Dim DriverCollection As DismDriverPackageCollection = DismApi.GetDrivers(session, AllDrivers)
+                    DriverInfoList = DriverCollection
                     For Each driver As DismDriverPackage In DriverCollection
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
@@ -10147,6 +10151,7 @@ Public Class MainForm
             Application.DoEvents()
             Thread.Sleep(500)
         End While
+        If DriverInfoList IsNot Nothing Then GetDriverInfo.InstalledDriverInfo = DriverInfoList
         GetDriverInfo.ShowDialog()
     End Sub
 

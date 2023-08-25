@@ -31,8 +31,49 @@ Partial Class GetDriverInfo
         Me.ButtonControlPanel = New System.Windows.Forms.Panel()
         Me.DriverInfoContainerPanel = New System.Windows.Forms.Panel()
         Me.DriverInfoPanel = New System.Windows.Forms.Panel()
+        Me.Panel6 = New System.Windows.Forms.Panel()
+        Me.Button7 = New System.Windows.Forms.Button()
+        Me.Label48 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.DriverContainerPanel = New System.Windows.Forms.Panel()
+        Me.InfoFromInstalledDrvsPanel = New System.Windows.Forms.Panel()
+        Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.ListView1 = New System.Windows.Forms.ListView()
+        Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.Panel4 = New System.Windows.Forms.Panel()
+        Me.FlowLayoutPanel3 = New System.Windows.Forms.FlowLayoutPanel()
+        Me.Label22 = New System.Windows.Forms.Label()
+        Me.Label23 = New System.Windows.Forms.Label()
+        Me.Label24 = New System.Windows.Forms.Label()
+        Me.Label25 = New System.Windows.Forms.Label()
+        Me.Label26 = New System.Windows.Forms.Label()
+        Me.Label35 = New System.Windows.Forms.Label()
+        Me.Label31 = New System.Windows.Forms.Label()
+        Me.Label32 = New System.Windows.Forms.Label()
+        Me.Label41 = New System.Windows.Forms.Label()
+        Me.Label40 = New System.Windows.Forms.Label()
+        Me.Label43 = New System.Windows.Forms.Label()
+        Me.Label42 = New System.Windows.Forms.Label()
+        Me.Label47 = New System.Windows.Forms.Label()
+        Me.Label46 = New System.Windows.Forms.Label()
+        Me.Label33 = New System.Windows.Forms.Label()
+        Me.Label34 = New System.Windows.Forms.Label()
+        Me.Label28 = New System.Windows.Forms.Label()
+        Me.Label27 = New System.Windows.Forms.Label()
+        Me.Label30 = New System.Windows.Forms.Label()
+        Me.Label29 = New System.Windows.Forms.Label()
+        Me.Label39 = New System.Windows.Forms.Label()
+        Me.Label38 = New System.Windows.Forms.Label()
+        Me.Label45 = New System.Windows.Forms.Label()
+        Me.Label44 = New System.Windows.Forms.Label()
+        Me.Panel5 = New System.Windows.Forms.Panel()
+        Me.Label36 = New System.Windows.Forms.Label()
+        Me.Panel7 = New System.Windows.Forms.Panel()
+        Me.Label37 = New System.Windows.Forms.Label()
+        Me.FlowLayoutPanel4 = New System.Windows.Forms.FlowLayoutPanel()
         Me.InfoFromDrvPackagesPanel = New System.Windows.Forms.Panel()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.DrvPackagesPanel = New System.Windows.Forms.Panel()
@@ -58,6 +99,9 @@ Partial Class GetDriverInfo
         Me.Label20 = New System.Windows.Forms.Label()
         Me.Label19 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.JumpToPanel = New System.Windows.Forms.Panel()
+        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
+        Me.Label21 = New System.Windows.Forms.Label()
         Me.Button6 = New System.Windows.Forms.Button()
         Me.Button5 = New System.Windows.Forms.Button()
         Me.Button4 = New System.Windows.Forms.Button()
@@ -65,7 +109,6 @@ Partial Class GetDriverInfo
         Me.NoDrvPanel = New System.Windows.Forms.Panel()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.FlowLayoutPanel1 = New System.Windows.Forms.FlowLayoutPanel()
-        Me.InfoFromInstalledDrvsPanel = New System.Windows.Forms.Panel()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.MenuPanel = New System.Windows.Forms.Panel()
         Me.Label4 = New System.Windows.Forms.Label()
@@ -76,16 +119,25 @@ Partial Class GetDriverInfo
         Me.DriverFileLink = New System.Windows.Forms.LinkLabel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
-        Me.JumpToPanel = New System.Windows.Forms.Panel()
-        Me.Label21 = New System.Windows.Forms.Label()
-        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ButtonControlPanel.SuspendLayout()
         Me.DriverInfoContainerPanel.SuspendLayout()
         Me.DriverInfoPanel.SuspendLayout()
+        Me.Panel6.SuspendLayout()
         Me.DriverContainerPanel.SuspendLayout()
+        Me.InfoFromInstalledDrvsPanel.SuspendLayout()
+        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer2.Panel1.SuspendLayout()
+        Me.SplitContainer2.Panel2.SuspendLayout()
+        Me.SplitContainer2.SuspendLayout()
+        Me.Panel2.SuspendLayout()
+        Me.Panel3.SuspendLayout()
+        Me.Panel4.SuspendLayout()
+        Me.FlowLayoutPanel3.SuspendLayout()
+        Me.Panel5.SuspendLayout()
+        Me.Panel7.SuspendLayout()
         Me.InfoFromDrvPackagesPanel.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
@@ -97,11 +149,11 @@ Partial Class GetDriverInfo
         Me.DrvPackageInfoPanel.SuspendLayout()
         Me.FlowLayoutPanel2.SuspendLayout()
         Me.Panel1.SuspendLayout()
+        Me.JumpToPanel.SuspendLayout()
         Me.NoDrvPanel.SuspendLayout()
         Me.MenuPanel.SuspendLayout()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.JumpToPanel.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -195,6 +247,7 @@ Partial Class GetDriverInfo
         '
         'DriverInfoPanel
         '
+        Me.DriverInfoPanel.Controls.Add(Me.Panel6)
         Me.DriverInfoPanel.Controls.Add(Me.Label5)
         Me.DriverInfoPanel.Controls.Add(Me.DriverContainerPanel)
         Me.DriverInfoPanel.Controls.Add(Me.LinkLabel1)
@@ -204,6 +257,40 @@ Partial Class GetDriverInfo
         Me.DriverInfoPanel.Size = New System.Drawing.Size(1008, 461)
         Me.DriverInfoPanel.TabIndex = 3
         Me.DriverInfoPanel.Visible = False
+        '
+        'Panel6
+        '
+        Me.Panel6.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel6.Controls.Add(Me.Button7)
+        Me.Panel6.Controls.Add(Me.Label48)
+        Me.Panel6.Location = New System.Drawing.Point(17, 406)
+        Me.Panel6.Name = "Panel6"
+        Me.Panel6.Size = New System.Drawing.Size(967, 49)
+        Me.Panel6.TabIndex = 5
+        Me.Panel6.Visible = False
+        '
+        'Button7
+        '
+        Me.Button7.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button7.Location = New System.Drawing.Point(880, 13)
+        Me.Button7.Name = "Button7"
+        Me.Button7.Size = New System.Drawing.Size(75, 23)
+        Me.Button7.TabIndex = 1
+        Me.Button7.Text = "Change"
+        Me.Button7.UseVisualStyleBackColor = True
+        '
+        'Label48
+        '
+        Me.Label48.AutoEllipsis = True
+        Me.Label48.Location = New System.Drawing.Point(8, 0)
+        Me.Label48.Name = "Label48"
+        Me.Label48.Size = New System.Drawing.Size(846, 49)
+        Me.Label48.TabIndex = 0
+        Me.Label48.Text = "You have configured the background processes to not show all drivers present in t" & _
+    "his image, which includes drivers part of the Windows distribution, so you may n" & _
+    "ot see the driver you're interested in."
+        Me.Label48.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label5
         '
@@ -220,12 +307,428 @@ Partial Class GetDriverInfo
         Me.DriverContainerPanel.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.DriverContainerPanel.Controls.Add(Me.InfoFromDrvPackagesPanel)
         Me.DriverContainerPanel.Controls.Add(Me.InfoFromInstalledDrvsPanel)
+        Me.DriverContainerPanel.Controls.Add(Me.InfoFromDrvPackagesPanel)
         Me.DriverContainerPanel.Location = New System.Drawing.Point(64, 68)
         Me.DriverContainerPanel.Name = "DriverContainerPanel"
         Me.DriverContainerPanel.Size = New System.Drawing.Size(880, 324)
         Me.DriverContainerPanel.TabIndex = 3
+        '
+        'InfoFromInstalledDrvsPanel
+        '
+        Me.InfoFromInstalledDrvsPanel.Controls.Add(Me.SplitContainer2)
+        Me.InfoFromInstalledDrvsPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.InfoFromInstalledDrvsPanel.Location = New System.Drawing.Point(0, 0)
+        Me.InfoFromInstalledDrvsPanel.Name = "InfoFromInstalledDrvsPanel"
+        Me.InfoFromInstalledDrvsPanel.Size = New System.Drawing.Size(880, 324)
+        Me.InfoFromInstalledDrvsPanel.TabIndex = 0
+        Me.InfoFromInstalledDrvsPanel.Visible = False
+        '
+        'SplitContainer2
+        '
+        Me.SplitContainer2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer2.IsSplitterFixed = True
+        Me.SplitContainer2.Location = New System.Drawing.Point(0, 0)
+        Me.SplitContainer2.Name = "SplitContainer2"
+        '
+        'SplitContainer2.Panel1
+        '
+        Me.SplitContainer2.Panel1.Controls.Add(Me.Panel2)
+        '
+        'SplitContainer2.Panel2
+        '
+        Me.SplitContainer2.Panel2.Controls.Add(Me.Panel3)
+        Me.SplitContainer2.Panel2.Controls.Add(Me.FlowLayoutPanel4)
+        Me.SplitContainer2.Size = New System.Drawing.Size(880, 324)
+        Me.SplitContainer2.SplitterDistance = 440
+        Me.SplitContainer2.TabIndex = 1
+        '
+        'Panel2
+        '
+        Me.Panel2.Controls.Add(Me.ListView1)
+        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel2.Location = New System.Drawing.Point(0, 0)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(440, 324)
+        Me.Panel2.TabIndex = 1
+        '
+        'ListView1
+        '
+        Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
+        Me.ListView1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ListView1.FullRowSelect = True
+        Me.ListView1.Location = New System.Drawing.Point(0, 0)
+        Me.ListView1.Name = "ListView1"
+        Me.ListView1.Size = New System.Drawing.Size(440, 324)
+        Me.ListView1.TabIndex = 0
+        Me.ListView1.UseCompatibleStateImageBehavior = False
+        Me.ListView1.View = System.Windows.Forms.View.Details
+        '
+        'ColumnHeader1
+        '
+        Me.ColumnHeader1.Text = "Published name"
+        Me.ColumnHeader1.Width = 188
+        '
+        'ColumnHeader2
+        '
+        Me.ColumnHeader2.Text = "Original file name"
+        Me.ColumnHeader2.Width = 220
+        '
+        'Panel3
+        '
+        Me.Panel3.Controls.Add(Me.Panel4)
+        Me.Panel3.Controls.Add(Me.Panel7)
+        Me.Panel3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel3.Location = New System.Drawing.Point(0, 0)
+        Me.Panel3.Name = "Panel3"
+        Me.Panel3.Size = New System.Drawing.Size(436, 324)
+        Me.Panel3.TabIndex = 1
+        '
+        'Panel4
+        '
+        Me.Panel4.Controls.Add(Me.FlowLayoutPanel3)
+        Me.Panel4.Controls.Add(Me.Panel5)
+        Me.Panel4.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel4.Location = New System.Drawing.Point(0, 0)
+        Me.Panel4.Name = "Panel4"
+        Me.Panel4.Size = New System.Drawing.Size(436, 324)
+        Me.Panel4.TabIndex = 2
+        Me.Panel4.Visible = False
+        '
+        'FlowLayoutPanel3
+        '
+        Me.FlowLayoutPanel3.AutoScroll = True
+        Me.FlowLayoutPanel3.Controls.Add(Me.Label22)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Label23)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Label24)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Label25)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Label26)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Label35)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Label31)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Label32)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Label41)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Label40)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Label43)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Label42)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Label47)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Label46)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Label33)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Label34)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Label28)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Label27)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Label30)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Label29)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Label39)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Label38)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Label45)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Label44)
+        Me.FlowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FlowLayoutPanel3.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
+        Me.FlowLayoutPanel3.Location = New System.Drawing.Point(0, 36)
+        Me.FlowLayoutPanel3.Name = "FlowLayoutPanel3"
+        Me.FlowLayoutPanel3.Padding = New System.Windows.Forms.Padding(4, 6, 0, 0)
+        Me.FlowLayoutPanel3.Size = New System.Drawing.Size(436, 288)
+        Me.FlowLayoutPanel3.TabIndex = 1
+        Me.FlowLayoutPanel3.WrapContents = False
+        '
+        'Label22
+        '
+        Me.Label22.AutoSize = True
+        Me.Label22.Location = New System.Drawing.Point(7, 6)
+        Me.Label22.Name = "Label22"
+        Me.Label22.Size = New System.Drawing.Size(85, 13)
+        Me.Label22.TabIndex = 0
+        Me.Label22.Text = "Published name:"
+        '
+        'Label23
+        '
+        Me.Label23.AutoEllipsis = True
+        Me.Label23.Location = New System.Drawing.Point(7, 19)
+        Me.Label23.Name = "Label23"
+        Me.Label23.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label23.Size = New System.Drawing.Size(390, 83)
+        Me.Label23.TabIndex = 0
+        Me.Label23.Text = "Label8"
+        Me.Label23.UseMnemonic = False
+        '
+        'Label24
+        '
+        Me.Label24.AutoSize = True
+        Me.Label24.Location = New System.Drawing.Point(7, 102)
+        Me.Label24.Name = "Label24"
+        Me.Label24.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label24.Size = New System.Drawing.Size(93, 17)
+        Me.Label24.TabIndex = 0
+        Me.Label24.Text = "Original file name:"
+        '
+        'Label25
+        '
+        Me.Label25.AutoEllipsis = True
+        Me.Label25.Location = New System.Drawing.Point(7, 119)
+        Me.Label25.Name = "Label25"
+        Me.Label25.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label25.Size = New System.Drawing.Size(390, 83)
+        Me.Label25.TabIndex = 0
+        Me.Label25.Text = "Label8"
+        Me.Label25.UseMnemonic = False
+        '
+        'Label26
+        '
+        Me.Label26.AutoSize = True
+        Me.Label26.Location = New System.Drawing.Point(7, 202)
+        Me.Label26.Name = "Label26"
+        Me.Label26.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label26.Size = New System.Drawing.Size(80, 17)
+        Me.Label26.TabIndex = 0
+        Me.Label26.Text = "Provider name:"
+        '
+        'Label35
+        '
+        Me.Label35.AutoEllipsis = True
+        Me.Label35.Location = New System.Drawing.Point(7, 219)
+        Me.Label35.Name = "Label35"
+        Me.Label35.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label35.Size = New System.Drawing.Size(390, 83)
+        Me.Label35.TabIndex = 0
+        Me.Label35.Text = "Label8"
+        Me.Label35.UseMnemonic = False
+        '
+        'Label31
+        '
+        Me.Label31.AutoSize = True
+        Me.Label31.Location = New System.Drawing.Point(7, 302)
+        Me.Label31.Name = "Label31"
+        Me.Label31.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label31.Size = New System.Drawing.Size(65, 17)
+        Me.Label31.TabIndex = 0
+        Me.Label31.Text = "Class name:"
+        '
+        'Label32
+        '
+        Me.Label32.AutoEllipsis = True
+        Me.Label32.Location = New System.Drawing.Point(7, 319)
+        Me.Label32.Name = "Label32"
+        Me.Label32.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label32.Size = New System.Drawing.Size(390, 52)
+        Me.Label32.TabIndex = 0
+        Me.Label32.Text = "Label8"
+        Me.Label32.UseMnemonic = False
+        '
+        'Label41
+        '
+        Me.Label41.AutoSize = True
+        Me.Label41.Location = New System.Drawing.Point(7, 371)
+        Me.Label41.Name = "Label41"
+        Me.Label41.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label41.Size = New System.Drawing.Size(91, 17)
+        Me.Label41.TabIndex = 0
+        Me.Label41.Text = "Class description:"
+        '
+        'Label40
+        '
+        Me.Label40.AutoEllipsis = True
+        Me.Label40.Location = New System.Drawing.Point(7, 388)
+        Me.Label40.Name = "Label40"
+        Me.Label40.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label40.Size = New System.Drawing.Size(390, 52)
+        Me.Label40.TabIndex = 0
+        Me.Label40.Text = "Label8"
+        Me.Label40.UseMnemonic = False
+        '
+        'Label43
+        '
+        Me.Label43.AutoSize = True
+        Me.Label43.Location = New System.Drawing.Point(7, 440)
+        Me.Label43.Name = "Label43"
+        Me.Label43.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label43.Size = New System.Drawing.Size(64, 17)
+        Me.Label43.TabIndex = 0
+        Me.Label43.Text = "Class GUID:"
+        '
+        'Label42
+        '
+        Me.Label42.AutoEllipsis = True
+        Me.Label42.Location = New System.Drawing.Point(7, 457)
+        Me.Label42.Name = "Label42"
+        Me.Label42.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label42.Size = New System.Drawing.Size(390, 52)
+        Me.Label42.TabIndex = 0
+        Me.Label42.Text = "Label8"
+        Me.Label42.UseMnemonic = False
+        '
+        'Label47
+        '
+        Me.Label47.AutoSize = True
+        Me.Label47.Location = New System.Drawing.Point(7, 509)
+        Me.Label47.Name = "Label47"
+        Me.Label47.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label47.Size = New System.Drawing.Size(90, 17)
+        Me.Label47.TabIndex = 0
+        Me.Label47.Text = "Catalog file path:"
+        '
+        'Label46
+        '
+        Me.Label46.AutoEllipsis = True
+        Me.Label46.Location = New System.Drawing.Point(7, 526)
+        Me.Label46.Name = "Label46"
+        Me.Label46.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label46.Size = New System.Drawing.Size(390, 52)
+        Me.Label46.TabIndex = 0
+        Me.Label46.Text = "Label8"
+        Me.Label46.UseMnemonic = False
+        '
+        'Label33
+        '
+        Me.Label33.AutoSize = True
+        Me.Label33.Location = New System.Drawing.Point(7, 578)
+        Me.Label33.Name = "Label33"
+        Me.Label33.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label33.Size = New System.Drawing.Size(166, 17)
+        Me.Label33.TabIndex = 0
+        Me.Label33.Text = "Part of the Windows distribution?"
+        '
+        'Label34
+        '
+        Me.Label34.AutoEllipsis = True
+        Me.Label34.Location = New System.Drawing.Point(7, 595)
+        Me.Label34.Name = "Label34"
+        Me.Label34.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label34.Size = New System.Drawing.Size(390, 52)
+        Me.Label34.TabIndex = 0
+        Me.Label34.Text = "Label8"
+        Me.Label34.UseMnemonic = False
+        '
+        'Label28
+        '
+        Me.Label28.AutoSize = True
+        Me.Label28.Location = New System.Drawing.Point(7, 647)
+        Me.Label28.Name = "Label28"
+        Me.Label28.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label28.Size = New System.Drawing.Size(151, 17)
+        Me.Label28.TabIndex = 0
+        Me.Label28.Text = "Is critical to the boot process?"
+        '
+        'Label27
+        '
+        Me.Label27.AutoEllipsis = True
+        Me.Label27.Location = New System.Drawing.Point(7, 664)
+        Me.Label27.Name = "Label27"
+        Me.Label27.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label27.Size = New System.Drawing.Size(390, 52)
+        Me.Label27.TabIndex = 0
+        Me.Label27.Text = "Label8"
+        Me.Label27.UseMnemonic = False
+        '
+        'Label30
+        '
+        Me.Label30.AutoSize = True
+        Me.Label30.Location = New System.Drawing.Point(7, 716)
+        Me.Label30.Name = "Label30"
+        Me.Label30.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label30.Size = New System.Drawing.Size(46, 17)
+        Me.Label30.TabIndex = 0
+        Me.Label30.Text = "Version:"
+        '
+        'Label29
+        '
+        Me.Label29.AutoEllipsis = True
+        Me.Label29.Location = New System.Drawing.Point(7, 733)
+        Me.Label29.Name = "Label29"
+        Me.Label29.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label29.Size = New System.Drawing.Size(390, 52)
+        Me.Label29.TabIndex = 0
+        Me.Label29.Text = "Label8"
+        Me.Label29.UseMnemonic = False
+        '
+        'Label39
+        '
+        Me.Label39.AutoSize = True
+        Me.Label39.Location = New System.Drawing.Point(7, 785)
+        Me.Label39.Name = "Label39"
+        Me.Label39.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label39.Size = New System.Drawing.Size(34, 17)
+        Me.Label39.TabIndex = 0
+        Me.Label39.Text = "Date:"
+        '
+        'Label38
+        '
+        Me.Label38.AutoEllipsis = True
+        Me.Label38.Location = New System.Drawing.Point(7, 802)
+        Me.Label38.Name = "Label38"
+        Me.Label38.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label38.Size = New System.Drawing.Size(390, 52)
+        Me.Label38.TabIndex = 0
+        Me.Label38.Text = "Label8"
+        Me.Label38.UseMnemonic = False
+        '
+        'Label45
+        '
+        Me.Label45.AutoSize = True
+        Me.Label45.Location = New System.Drawing.Point(7, 854)
+        Me.Label45.Name = "Label45"
+        Me.Label45.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label45.Size = New System.Drawing.Size(121, 17)
+        Me.Label45.TabIndex = 0
+        Me.Label45.Text = "Driver signature status:"
+        '
+        'Label44
+        '
+        Me.Label44.AutoEllipsis = True
+        Me.Label44.Location = New System.Drawing.Point(7, 871)
+        Me.Label44.Name = "Label44"
+        Me.Label44.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label44.Size = New System.Drawing.Size(390, 52)
+        Me.Label44.TabIndex = 0
+        Me.Label44.Text = "Label8"
+        Me.Label44.UseMnemonic = False
+        '
+        'Panel5
+        '
+        Me.Panel5.Controls.Add(Me.Label36)
+        Me.Panel5.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel5.Location = New System.Drawing.Point(0, 0)
+        Me.Panel5.Name = "Panel5"
+        Me.Panel5.Size = New System.Drawing.Size(436, 36)
+        Me.Panel5.TabIndex = 0
+        '
+        'Label36
+        '
+        Me.Label36.AutoEllipsis = True
+        Me.Label36.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label36.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label36.Location = New System.Drawing.Point(0, 0)
+        Me.Label36.Name = "Label36"
+        Me.Label36.Size = New System.Drawing.Size(436, 36)
+        Me.Label36.TabIndex = 0
+        Me.Label36.Text = "Driver information"
+        Me.Label36.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'Panel7
+        '
+        Me.Panel7.Controls.Add(Me.Label37)
+        Me.Panel7.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel7.Location = New System.Drawing.Point(0, 0)
+        Me.Panel7.Name = "Panel7"
+        Me.Panel7.Size = New System.Drawing.Size(436, 324)
+        Me.Panel7.TabIndex = 1
+        '
+        'Label37
+        '
+        Me.Label37.AutoEllipsis = True
+        Me.Label37.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label37.Location = New System.Drawing.Point(0, 0)
+        Me.Label37.Name = "Label37"
+        Me.Label37.Size = New System.Drawing.Size(436, 324)
+        Me.Label37.TabIndex = 0
+        Me.Label37.Text = "Select an installed driver to view its information here"
+        Me.Label37.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'FlowLayoutPanel4
+        '
+        Me.FlowLayoutPanel4.Location = New System.Drawing.Point(106, 163)
+        Me.FlowLayoutPanel4.Name = "FlowLayoutPanel4"
+        Me.FlowLayoutPanel4.Size = New System.Drawing.Size(200, 100)
+        Me.FlowLayoutPanel4.TabIndex = 0
         '
         'InfoFromDrvPackagesPanel
         '
@@ -295,6 +798,7 @@ Partial Class GetDriverInfo
         'Button3
         '
         Me.Button3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Button3.Enabled = False
         Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button3.Location = New System.Drawing.Point(295, 3)
         Me.Button3.Name = "Button3"
@@ -306,6 +810,7 @@ Partial Class GetDriverInfo
         'Button2
         '
         Me.Button2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Button2.Enabled = False
         Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button2.Location = New System.Drawing.Point(149, 3)
         Me.Button2.Name = "Button2"
@@ -519,6 +1024,39 @@ Partial Class GetDriverInfo
         Me.Panel1.Size = New System.Drawing.Size(436, 36)
         Me.Panel1.TabIndex = 0
         '
+        'JumpToPanel
+        '
+        Me.JumpToPanel.Controls.Add(Me.ComboBox1)
+        Me.JumpToPanel.Controls.Add(Me.Label21)
+        Me.JumpToPanel.Location = New System.Drawing.Point(0, 0)
+        Me.JumpToPanel.Name = "JumpToPanel"
+        Me.JumpToPanel.Size = New System.Drawing.Size(436, 36)
+        Me.JumpToPanel.TabIndex = 2
+        Me.JumpToPanel.Visible = False
+        '
+        'ComboBox1
+        '
+        Me.ComboBox1.FormattingEnabled = True
+        Me.ComboBox1.Location = New System.Drawing.Point(105, 9)
+        Me.ComboBox1.Name = "ComboBox1"
+        Me.ComboBox1.Size = New System.Drawing.Size(314, 21)
+        Me.ComboBox1.TabIndex = 2
+        '
+        'Label21
+        '
+        Me.Label21.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label21.AutoEllipsis = True
+        Me.Label21.AutoSize = True
+        Me.Label21.Font = New System.Drawing.Font("Tahoma", 8.25!)
+        Me.Label21.Location = New System.Drawing.Point(17, 12)
+        Me.Label21.Name = "Label21"
+        Me.Label21.Size = New System.Drawing.Size(82, 13)
+        Me.Label21.TabIndex = 1
+        Me.Label21.Text = "Jump to target:"
+        Me.Label21.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'Button6
         '
         Me.Button6.Image = Global.DISMTools.My.Resources.Resources.jumpto
@@ -572,9 +1110,10 @@ Partial Class GetDriverInfo
         'Label6
         '
         Me.Label6.AutoEllipsis = True
-        Me.Label6.Location = New System.Drawing.Point(0, 80)
+        Me.Label6.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label6.Location = New System.Drawing.Point(0, 0)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(436, 164)
+        Me.Label6.Size = New System.Drawing.Size(436, 324)
         Me.Label6.TabIndex = 0
         Me.Label6.Text = "Add or select a driver package to view its information here"
         Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -585,15 +1124,6 @@ Partial Class GetDriverInfo
         Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
         Me.FlowLayoutPanel1.Size = New System.Drawing.Size(200, 100)
         Me.FlowLayoutPanel1.TabIndex = 0
-        '
-        'InfoFromInstalledDrvsPanel
-        '
-        Me.InfoFromInstalledDrvsPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.InfoFromInstalledDrvsPanel.Location = New System.Drawing.Point(0, 0)
-        Me.InfoFromInstalledDrvsPanel.Name = "InfoFromInstalledDrvsPanel"
-        Me.InfoFromInstalledDrvsPanel.Size = New System.Drawing.Size(880, 324)
-        Me.InfoFromInstalledDrvsPanel.TabIndex = 0
-        Me.InfoFromInstalledDrvsPanel.Visible = False
         '
         'LinkLabel1
         '
@@ -704,39 +1234,6 @@ Partial Class GetDriverInfo
         Me.OpenFileDialog1.SupportMultiDottedExtensions = True
         Me.OpenFileDialog1.Title = "Locate driver files"
         '
-        'JumpToPanel
-        '
-        Me.JumpToPanel.Controls.Add(Me.ComboBox1)
-        Me.JumpToPanel.Controls.Add(Me.Label21)
-        Me.JumpToPanel.Location = New System.Drawing.Point(0, 0)
-        Me.JumpToPanel.Name = "JumpToPanel"
-        Me.JumpToPanel.Size = New System.Drawing.Size(436, 36)
-        Me.JumpToPanel.TabIndex = 2
-        Me.JumpToPanel.Visible = False
-        '
-        'Label21
-        '
-        Me.Label21.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label21.AutoEllipsis = True
-        Me.Label21.AutoSize = True
-        Me.Label21.Font = New System.Drawing.Font("Tahoma", 8.25!)
-        Me.Label21.Location = New System.Drawing.Point(17, 12)
-        Me.Label21.Name = "Label21"
-        Me.Label21.Size = New System.Drawing.Size(82, 13)
-        Me.Label21.TabIndex = 1
-        Me.Label21.Text = "Jump to target:"
-        Me.Label21.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'ComboBox1
-        '
-        Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Location = New System.Drawing.Point(105, 9)
-        Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(314, 21)
-        Me.ComboBox1.TabIndex = 2
-        '
         'GetDriverInfo
         '
         Me.AcceptButton = Me.OK_Button
@@ -763,7 +1260,20 @@ Partial Class GetDriverInfo
         Me.DriverInfoContainerPanel.ResumeLayout(False)
         Me.DriverInfoPanel.ResumeLayout(False)
         Me.DriverInfoPanel.PerformLayout()
+        Me.Panel6.ResumeLayout(False)
         Me.DriverContainerPanel.ResumeLayout(False)
+        Me.InfoFromInstalledDrvsPanel.ResumeLayout(False)
+        Me.SplitContainer2.Panel1.ResumeLayout(False)
+        Me.SplitContainer2.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer2.ResumeLayout(False)
+        Me.Panel2.ResumeLayout(False)
+        Me.Panel3.ResumeLayout(False)
+        Me.Panel4.ResumeLayout(False)
+        Me.FlowLayoutPanel3.ResumeLayout(False)
+        Me.FlowLayoutPanel3.PerformLayout()
+        Me.Panel5.ResumeLayout(False)
+        Me.Panel7.ResumeLayout(False)
         Me.InfoFromDrvPackagesPanel.ResumeLayout(False)
         Me.SplitContainer1.Panel1.ResumeLayout(False)
         Me.SplitContainer1.Panel2.ResumeLayout(False)
@@ -776,13 +1286,13 @@ Partial Class GetDriverInfo
         Me.FlowLayoutPanel2.ResumeLayout(False)
         Me.FlowLayoutPanel2.PerformLayout()
         Me.Panel1.ResumeLayout(False)
+        Me.JumpToPanel.ResumeLayout(False)
+        Me.JumpToPanel.PerformLayout()
         Me.NoDrvPanel.ResumeLayout(False)
         Me.MenuPanel.ResumeLayout(False)
         Me.MenuPanel.PerformLayout()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.JumpToPanel.ResumeLayout(False)
-        Me.JumpToPanel.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -820,7 +1330,6 @@ Partial Class GetDriverInfo
     Friend WithEvents Button1 As System.Windows.Forms.Button
     Friend WithEvents DrvPackageInfoPanel As System.Windows.Forms.Panel
     Friend WithEvents FlowLayoutPanel2 As System.Windows.Forms.FlowLayoutPanel
-    Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents Label7 As System.Windows.Forms.Label
     Friend WithEvents Label8 As System.Windows.Forms.Label
     Friend WithEvents Label9 As System.Windows.Forms.Label
@@ -843,5 +1352,46 @@ Partial Class GetDriverInfo
     Friend WithEvents JumpToPanel As System.Windows.Forms.Panel
     Friend WithEvents ComboBox1 As System.Windows.Forms.ComboBox
     Friend WithEvents Label21 As System.Windows.Forms.Label
+    Friend WithEvents SplitContainer2 As System.Windows.Forms.SplitContainer
+    Friend WithEvents Panel2 As System.Windows.Forms.Panel
+    Friend WithEvents ListView1 As System.Windows.Forms.ListView
+    Friend WithEvents ColumnHeader1 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader2 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents Panel3 As System.Windows.Forms.Panel
+    Friend WithEvents Panel4 As System.Windows.Forms.Panel
+    Friend WithEvents FlowLayoutPanel3 As System.Windows.Forms.FlowLayoutPanel
+    Friend WithEvents Label22 As System.Windows.Forms.Label
+    Friend WithEvents Label23 As System.Windows.Forms.Label
+    Friend WithEvents Label24 As System.Windows.Forms.Label
+    Friend WithEvents Label25 As System.Windows.Forms.Label
+    Friend WithEvents Label26 As System.Windows.Forms.Label
+    Friend WithEvents Label31 As System.Windows.Forms.Label
+    Friend WithEvents Label32 As System.Windows.Forms.Label
+    Friend WithEvents Label33 As System.Windows.Forms.Label
+    Friend WithEvents Label34 As System.Windows.Forms.Label
+    Friend WithEvents Panel5 As System.Windows.Forms.Panel
+    Friend WithEvents Label36 As System.Windows.Forms.Label
+    Friend WithEvents Panel7 As System.Windows.Forms.Panel
+    Friend WithEvents Label37 As System.Windows.Forms.Label
+    Friend WithEvents FlowLayoutPanel4 As System.Windows.Forms.FlowLayoutPanel
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents Label35 As System.Windows.Forms.Label
+    Friend WithEvents Label41 As System.Windows.Forms.Label
+    Friend WithEvents Label40 As System.Windows.Forms.Label
+    Friend WithEvents Label43 As System.Windows.Forms.Label
+    Friend WithEvents Label42 As System.Windows.Forms.Label
+    Friend WithEvents Label47 As System.Windows.Forms.Label
+    Friend WithEvents Label46 As System.Windows.Forms.Label
+    Friend WithEvents Label28 As System.Windows.Forms.Label
+    Friend WithEvents Label27 As System.Windows.Forms.Label
+    Friend WithEvents Label30 As System.Windows.Forms.Label
+    Friend WithEvents Label29 As System.Windows.Forms.Label
+    Friend WithEvents Label39 As System.Windows.Forms.Label
+    Friend WithEvents Label38 As System.Windows.Forms.Label
+    Friend WithEvents Label45 As System.Windows.Forms.Label
+    Friend WithEvents Label44 As System.Windows.Forms.Label
+    Friend WithEvents Panel6 As System.Windows.Forms.Panel
+    Friend WithEvents Button7 As System.Windows.Forms.Button
+    Friend WithEvents Label48 As System.Windows.Forms.Label
 
 End Class
