@@ -213,6 +213,9 @@ Public Class MainForm
 
     Dim SysVer As Version
 
+    ' List for driver information dialog
+    Dim DriverInfoList As DismDriverPackageCollection
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -3152,6 +3155,7 @@ Public Class MainForm
                     Dim imgDrvVersionList As New List(Of String)
                     Dim imgDrvBootCriticalStatusList As New List(Of Boolean)
                     Dim DriverCollection As DismDriverPackageCollection = DismApi.GetDrivers(session, AllDrivers)
+                    DriverInfoList = DriverCollection
                     For Each driver As DismDriverPackage In DriverCollection
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
@@ -7767,6 +7771,13 @@ Public Class MainForm
             Beep()
             Exit Sub
         End If
+        If WimScriptEditor.Visible Then
+            WimScriptEditor.Close()
+            If WimScriptEditor.Visible Then
+                e.Cancel = True
+                Exit Sub
+            End If
+        End If
         If Not VolatileMode Then
             SaveDTSettings()
         End If
@@ -7849,6 +7860,10 @@ Public Class MainForm
     End Sub
 
     Private Sub GetImageInfo_Click(sender As Object, e As EventArgs) Handles GetImageInfo.Click
+        If ImgBW.IsBusy Then
+            BGProcsBusyDialog.ShowDialog()
+            Exit Sub
+        End If
         GetImgInfoDlg.ShowDialog()
     End Sub
 
@@ -10135,11 +10150,30 @@ Public Class MainForm
     End Sub
 
     Private Sub GetDrivers_Click(sender As Object, e As EventArgs) Handles GetDrivers.Click
+        ProgressPanel.OperationNum = 994
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
+        End Select
+        If Not CompletedTasks(4) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(500)
         End While
+        If DriverInfoList IsNot Nothing Then GetDriverInfo.InstalledDriverInfo = DriverInfoList
         GetDriverInfo.ShowDialog()
     End Sub
 

@@ -1,8 +1,12 @@
 ﻿Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
 Imports ScintillaNET
+Imports System.Text.Encoding
 
 Public Class WimScriptEditor
+
+    Dim ConfigListFile As String
+    Dim EditedLVI As String
 
     Private Sub WimScriptEditor_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
@@ -203,9 +207,41 @@ Public Class WimScriptEditor
                 ListView3.Items.Remove(LVItem)
             End If
         Next
+
+        ' Indicate whether file has seen changes, if it exists
+        If ConfigListFile IsNot Nothing And File.Exists(ConfigListFile) Then
+            If File.ReadAllText(ConfigListFile).ToString() = Scintilla1.Text Then
+                Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+            Else
+                Text = Path.GetFileName(ConfigListFile) & " (modified) - DISM Configuration List Editor"
+            End If
+        End If
     End Sub
 
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
+        If (ConfigListFile Is Nothing Or Not File.Exists(ConfigListFile)) And Scintilla1.Text <> "" Then
+            Dim Result As MsgBoxResult = MsgBox("Do you want to save this configuration list file?", vbYesNoCancel + vbQuestion, Text)
+            Select Case Result
+                Case MsgBoxResult.Yes
+                    If File.Exists(ConfigListFile) Then
+                        File.WriteAllText(ConfigListFile, Scintilla1.Text, ASCII)
+                        Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                    Else
+                        If WimScriptSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                            File.WriteAllText(WimScriptSFD.FileName, Scintilla1.Text, ASCII)
+                            ConfigListFile = WimScriptSFD.FileName
+                            Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                        Else
+                            Exit Sub
+                        End If
+                    End If
+                Case MsgBoxResult.No
+                    Exit Select
+                Case MsgBoxResult.Cancel
+                    Exit Sub
+            End Select
+        End If
+
         Text = "New configuration list - DISM Configuration List Editor"
 
         ' Generate a default configuration list, as shown in the DISM configuration list documentation.
@@ -230,5 +266,326 @@ Public Class WimScriptEditor
     Private Sub FontChange(sender As Object, e As EventArgs) Handles FontFamilyTSCB.SelectedIndexChanged, FontSizeTSCB.SelectedIndexChanged
         ' Change Scintilla editor font
         InitScintilla(FontFamilyTSCB.SelectedItem, FontSizeTSCB.SelectedItem)
+    End Sub
+
+    Private Sub ToolStripButton3_Click(sender As Object, e As EventArgs) Handles ToolStripButton3.Click
+        If (ConfigListFile Is Nothing Or Not File.Exists(ConfigListFile)) And Scintilla1.Text <> "" Then
+            Dim Result As MsgBoxResult = MsgBox("Do you want to save this configuration list file?", vbYesNoCancel + vbQuestion, Text)
+            Select Case Result
+                Case MsgBoxResult.Yes
+                    If File.Exists(ConfigListFile) Then
+                        File.WriteAllText(WimScriptSFD.FileName, Scintilla1.Text, ASCII)
+                        ConfigListFile = WimScriptSFD.FileName
+                        Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                    Else
+                        If WimScriptSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                            File.WriteAllText(WimScriptSFD.FileName, Scintilla1.Text, ASCII)
+                            ConfigListFile = WimScriptSFD.FileName
+                            Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                        Else
+                            Exit Sub
+                        End If
+                    End If
+                Case MsgBoxResult.No
+                    Exit Select
+                Case MsgBoxResult.Cancel
+                    Exit Sub
+            End Select
+        Else
+            Try
+                If (ConfigListFile IsNot Nothing And File.Exists(ConfigListFile) And File.ReadAllText(ConfigListFile).ToString() <> Scintilla1.Text) Then
+                    Dim Result As MsgBoxResult = MsgBox("Do you want to save this configuration list file?", vbYesNoCancel + vbQuestion, Text)
+                    Select Case Result
+                        Case MsgBoxResult.Yes
+                            If File.Exists(ConfigListFile) Then
+                                File.WriteAllText(ConfigListFile, Scintilla1.Text, ASCII)
+                                Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                            Else
+                                If WimScriptSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                                    File.WriteAllText(WimScriptSFD.FileName, Scintilla1.Text, ASCII)
+                                    ConfigListFile = WimScriptSFD.FileName
+                                    Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                                Else
+                                    Exit Sub
+                                End If
+                            End If
+                        Case MsgBoxResult.No
+                            Exit Select
+                        Case MsgBoxResult.Cancel
+                            Exit Sub
+                    End Select
+                End If
+            Catch ex As Exception
+                Exit Try
+            End Try
+        End If
+        WimScriptOFD.ShowDialog()
+    End Sub
+
+    Private Sub ToolStripButton4_Click(sender As Object, e As EventArgs) Handles ToolStripButton4.Click
+        If ConfigListFile Is Nothing Or Not File.Exists(ConfigListFile) Then
+            If WimScriptSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                File.WriteAllText(WimScriptSFD.FileName, Scintilla1.Text, ASCII)
+                ConfigListFile = WimScriptSFD.FileName
+            End If
+        Else
+            File.WriteAllText(ConfigListFile, Scintilla1.Text, ASCII)
+        End If
+        Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+    End Sub
+
+    Private Sub WimScriptOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles WimScriptOFD.FileOk
+        Scintilla1.Text = File.ReadAllText(WimScriptOFD.FileName)
+        ConfigListFile = WimScriptOFD.FileName
+        Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+    End Sub
+
+    Private Sub ToolStripButton6_Click(sender As Object, e As EventArgs) Handles ToolStripButton6.Click
+        Process.Start("https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/dism-configuration-list-and-wimscriptini-files-winnext?view=windows-11")
+    End Sub
+
+    Private Sub ToolStripButton5_Click(sender As Object, e As EventArgs) Handles ToolStripButton5.Click
+        If ToolStripButton5.Checked Then
+            ToolStripButton5.Checked = False
+        Else
+            ToolStripButton5.Checked = True
+        End If
+        Scintilla1.WrapMode = If(ToolStripButton5.Checked, WrapMode.Word, WrapMode.None)
+    End Sub
+
+#Region "Button Regions"
+
+    Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
+        If ListView1.SelectedItems.Count = 1 Then
+            Button2.Enabled = True
+            Button3.Enabled = True
+        Else
+            Button2.Enabled = False
+            Button3.Enabled = False
+        End If
+    End Sub
+
+    Private Sub ListView2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView2.SelectedIndexChanged
+        If ListView2.SelectedItems.Count = 1 Then
+            Button6.Enabled = True
+            Button7.Enabled = True
+        Else
+            Button6.Enabled = False
+            Button7.Enabled = False
+        End If
+    End Sub
+
+    Private Sub ListView3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView3.SelectedIndexChanged
+        If ListView3.SelectedItems.Count = 1 Then
+            Button10.Enabled = True
+            Button11.Enabled = True
+        Else
+            Button10.Enabled = False
+            Button11.Enabled = False
+        End If
+    End Sub
+
+    Sub UpdateConfigListContents()
+        ' Remove the TextChanged handler to avoid bad behavior (nothing showing up)
+        RemoveHandler Scintilla1.TextChanged, AddressOf Scintilla1_TextChanged
+
+        ' Clear text in Scintilla editor and add it back
+        Scintilla1.ClearAll()
+        If ListView1.Items.Count > 0 Then
+            Scintilla1.AppendText(CrLf & _
+                                  "[ExclusionList]" & CrLf)
+            For Each LVI As ListViewItem In ListView1.Items
+                Scintilla1.AppendText(LVI.Text)
+            Next
+            ' End with carriage return line feed
+            Scintilla1.AppendText(CrLf)
+        End If
+        If ListView2.Items.Count > 0 Then
+            Scintilla1.AppendText(CrLf & _
+                                  "[ExclusionException]" & CrLf)
+            For Each LVI As ListViewItem In ListView2.Items
+                Scintilla1.AppendText(LVI.Text)
+            Next
+            ' End with carriage return line feed
+            Scintilla1.AppendText(CrLf)
+        End If
+        If ListView3.Items.Count > 0 Then
+            Scintilla1.AppendText(CrLf & _
+                                  "[CompressionExclusionList]" & CrLf)
+            For Each LVI As ListViewItem In ListView3.Items
+                Scintilla1.AppendText(LVI.Text)
+            Next
+            ' End with carriage return line feed
+            Scintilla1.AppendText(CrLf)
+        End If
+
+        ' Indicate whether file has seen changes, if it exists
+        If ConfigListFile IsNot Nothing And File.Exists(ConfigListFile) Then
+            If File.ReadAllText(ConfigListFile).ToString() = Scintilla1.Text Then
+                Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+            Else
+                Text = Path.GetFileName(ConfigListFile) & " (modified) - DISM Configuration List Editor"
+            End If
+        End If
+
+        ' Add TextChanged event handler to let the user type files in the Scintilla editor again
+        AddHandler Scintilla1.TextChanged, AddressOf Scintilla1_TextChanged
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        AddListEntryDlg.IsForExclusionList = True
+        AddListEntryDlg.Text = "Add " & GroupBox1.Text.ToLower() & " entry"
+        AddListEntryDlg.Left = Left + ((SplitContainer1.SplitterDistance + Scintilla1.Width) / 2)
+        AddListEntryDlg.Top = Top + Panel2.Top + DarkToolStrip1.Height + SplitContainer1.Top + GroupBox1.Top + 8
+        AddListEntryDlg.ShowDialog()
+        If AddListEntryDlg.DialogResult = Windows.Forms.DialogResult.OK Then
+            ListView1.Items.Add(AddListEntryDlg.TextBox1.Text)
+            UpdateConfigListContents()
+        End If
+    End Sub
+
+    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+        AddListEntryDlg.IsForExclusionList = False
+        AddListEntryDlg.Text = "Add " & GroupBox2.Text.ToLower() & " entry"
+        AddListEntryDlg.Left = Left + ((SplitContainer1.SplitterDistance + Scintilla1.Width) / 2)
+        AddListEntryDlg.Top = Top + Panel2.Top + DarkToolStrip1.Height + SplitContainer1.Top + GroupBox2.Top + 8
+        AddListEntryDlg.ShowDialog()
+        If AddListEntryDlg.DialogResult = Windows.Forms.DialogResult.OK Then
+            ListView2.Items.Add(AddListEntryDlg.TextBox1.Text)
+            UpdateConfigListContents()
+        End If
+    End Sub
+
+    Private Sub Button11_Click(sender As Object, e As EventArgs) Handles Button11.Click
+        AddListEntryDlg.IsForExclusionList = False
+        AddListEntryDlg.Text = "Add " & GroupBox3.Text.ToLower() & " entry"
+        AddListEntryDlg.Left = Left + ((SplitContainer1.SplitterDistance + Scintilla1.Width) / 2)
+        AddListEntryDlg.Top = Top + Panel2.Top + DarkToolStrip1.Height + SplitContainer1.Top + GroupBox3.Top + 8
+        AddListEntryDlg.ShowDialog()
+        If AddListEntryDlg.DialogResult = Windows.Forms.DialogResult.OK Then
+            ListView3.Items.Add(AddListEntryDlg.TextBox1.Text)
+            UpdateConfigListContents()
+        End If
+    End Sub
+
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        If ListView1.SelectedItems.Count = 1 Then
+            ListView1.Items.Remove(ListView1.FocusedItem)
+            UpdateConfigListContents()
+        End If
+    End Sub
+
+    Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
+        If ListView2.SelectedItems.Count = 1 Then
+            ListView2.Items.Remove(ListView2.FocusedItem)
+            UpdateConfigListContents()
+        End If
+    End Sub
+
+    Private Sub Button10_Click(sender As Object, e As EventArgs) Handles Button10.Click
+        If ListView3.SelectedItems.Count = 1 Then
+            ListView3.Items.Remove(ListView3.FocusedItem)
+            UpdateConfigListContents()
+        End If
+    End Sub
+
+    Private Sub ListView1_BeforeLabelEdit(sender As Object, e As LabelEditEventArgs) Handles ListView1.BeforeLabelEdit
+        EditedLVI = ListView1.Items(e.Item).Text
+    End Sub
+
+    Private Sub ListView1_AfterLabelEdit(sender As Object, e As LabelEditEventArgs) Handles ListView1.AfterLabelEdit
+        Scintilla1.Text = Scintilla1.Text.Replace(EditedLVI, e.Label & CrLf).Trim()
+    End Sub
+
+    Private Sub ListView2_BeforeLabelEdit(sender As Object, e As LabelEditEventArgs) Handles ListView2.BeforeLabelEdit
+        EditedLVI = ListView2.Items(e.Item).Text
+    End Sub
+
+    Private Sub ListView2_AfterLabelEdit(sender As Object, e As LabelEditEventArgs) Handles ListView2.AfterLabelEdit
+        Scintilla1.Text = Scintilla1.Text.Replace(EditedLVI, e.Label & CrLf).Trim()
+    End Sub
+
+    Private Sub ListView3_BeforeLabelEdit(sender As Object, e As LabelEditEventArgs) Handles ListView3.BeforeLabelEdit
+        EditedLVI = ListView3.Items(e.Item).Text
+    End Sub
+
+    Private Sub ListView3_AfterLabelEdit(sender As Object, e As LabelEditEventArgs) Handles ListView3.AfterLabelEdit
+        Scintilla1.Text = Scintilla1.Text.Replace(EditedLVI, e.Label & CrLf).Trim()
+    End Sub
+
+    Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
+        If ListView3.SelectedItems.Count = 1 Then
+            Dim LVI As ListViewItem = ListView3.FocusedItem
+            LVI.BeginEdit()
+        End If
+    End Sub
+
+    Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
+        If ListView2.SelectedItems.Count = 1 Then
+            Dim LVI As ListViewItem = ListView2.FocusedItem
+            LVI.BeginEdit()
+        End If
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        If ListView1.SelectedItems.Count = 1 Then
+            Dim LVI As ListViewItem = ListView1.FocusedItem
+            LVI.BeginEdit()
+        End If
+    End Sub
+
+#End Region
+
+    Private Sub WimScriptEditor_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        If (ConfigListFile Is Nothing Or Not File.Exists(ConfigListFile)) And Scintilla1.Text <> "" Then
+            Dim Result As MsgBoxResult = MsgBox("Do you want to save this configuration list file?", vbYesNoCancel + vbQuestion, Text)
+            Select Case Result
+                Case MsgBoxResult.Yes
+                    If File.Exists(ConfigListFile) Then
+                        File.WriteAllText(WimScriptSFD.FileName, Scintilla1.Text, ASCII)
+                        ConfigListFile = WimScriptSFD.FileName
+                        Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                    Else
+                        If WimScriptSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                            File.WriteAllText(WimScriptSFD.FileName, Scintilla1.Text, ASCII)
+                            ConfigListFile = WimScriptSFD.FileName
+                            Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                        Else
+                            e.Cancel = True
+                        End If
+                    End If
+                Case MsgBoxResult.No
+                    Exit Select
+                Case MsgBoxResult.Cancel
+                    e.Cancel = True
+            End Select
+        Else
+            Try
+                If (ConfigListFile IsNot Nothing And File.Exists(ConfigListFile) And File.ReadAllText(ConfigListFile).ToString() <> Scintilla1.Text) Then
+                    Dim Result As MsgBoxResult = MsgBox("Do you want to save this configuration list file?", vbYesNoCancel + vbQuestion, Text)
+                    Select Case Result
+                        Case MsgBoxResult.Yes
+                            If File.Exists(ConfigListFile) Then
+                                File.WriteAllText(ConfigListFile, Scintilla1.Text, ASCII)
+                                Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                            Else
+                                If WimScriptSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                                    File.WriteAllText(WimScriptSFD.FileName, Scintilla1.Text, ASCII)
+                                    ConfigListFile = WimScriptSFD.FileName
+                                    Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                                Else
+                                    e.Cancel = True
+                                End If
+                            End If
+                        Case MsgBoxResult.No
+                            Exit Select
+                        Case MsgBoxResult.Cancel
+                            e.Cancel = True
+                    End Select
+                End If
+            Catch ex As Exception
+                Exit Try
+            End Try
+        End If
     End Sub
 End Class

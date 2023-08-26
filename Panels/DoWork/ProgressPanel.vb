@@ -435,6 +435,7 @@ Public Class ProgressPanel
 
     ' OperationNum: 992
     Public imgSwmSource As String                           ' Source SWM file to merge its pattern to WIM
+    Public imgMergerIndex As Integer                        ' Index of the SWM file of which to export to the merged WIM file
     Public imgWimDestination As String                      ' Destination WIM file to merge SWM files to
 
     ' OperationNum: 996
@@ -1694,9 +1695,9 @@ Public Class ProgressPanel
                     Catch ex As Exception
                         LogView.AppendText(CrLf & ex.Message)
                         If PkgErrorText.RichTextBox1.Text = "" Then
-                            PkgErrorText.RichTextBox1.AppendText("0x800F8023")
+                            PkgErrorText.RichTextBox1.AppendText(If(Hex(ex.HResult).Length >= 8, "0x" & Hex(ex.HResult), Hex(ex.HResult)))
                         Else
-                            PkgErrorText.RichTextBox1.AppendText(CrLf & "0x800F8023")
+                            PkgErrorText.RichTextBox1.AppendText(CrLf & If(Hex(ex.HResult).Length >= 8, "0x" & Hex(ex.HResult), Hex(ex.HResult)))
                         End If
                         pkgFailedAdditions += 1
                         pkgIsApplicable = False
@@ -1818,6 +1819,8 @@ Public Class ProgressPanel
                                        "Package " & (x + 1) & " of " & pkgRemovalCount)
                     CurrentPB.Value = x + 1
                     Directory.CreateDirectory(Application.StartupPath & "\tempinfo")
+
+                    Dim pkgIsRemovable As Boolean
                     Try
                         DismApi.Initialize(DismLogLevel.LogErrors)
                         Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
@@ -1837,9 +1840,20 @@ Public Class ProgressPanel
                                 pkgIsReadyForRemoval = False
                             End If
                         End Using
+                        pkgIsRemovable = True
+                    Catch ex As Exception
+                        LogView.AppendText(CrLf & ex.Message)
+                        If PkgErrorText.RichTextBox1.Text = "" Then
+                            PkgErrorText.RichTextBox1.AppendText(If(Hex(ex.HResult).Length >= 8, "0x" & Hex(ex.HResult), Hex(ex.HResult)))
+                        Else
+                            PkgErrorText.RichTextBox1.AppendText(CrLf & If(Hex(ex.HResult).Length >= 8, "0x" & Hex(ex.HResult), Hex(ex.HResult)))
+                        End If
+                        pkgFailedRemovals += 1
+                        pkgIsRemovable = False
                     Finally
                         DismApi.Shutdown()
                     End Try
+                    If Not pkgIsRemovable Then Continue For
                     If pkgIsReadyForRemoval Then
                         LogView.AppendText(CrLf & "Processing package removal...")
                         DISMProc.StartInfo.FileName = DismProgram
@@ -1900,6 +1914,7 @@ Public Class ProgressPanel
                                        "Package " & (x + 1) & " of " & pkgRemovalCount)
                     CurrentPB.Value = x + 1
                     Directory.CreateDirectory(Application.StartupPath & "\tempinfo")
+                    Dim pkgIsRemovable As Boolean
                     Try
                         DismApi.Initialize(DismLogLevel.LogErrors)
                         Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
@@ -1919,9 +1934,20 @@ Public Class ProgressPanel
                                 pkgIsReadyForRemoval = False
                             End If
                         End Using
+                        pkgIsRemovable = True
+                    Catch ex As Exception
+                        LogView.AppendText(CrLf & ex.Message)
+                        If PkgErrorText.RichTextBox1.Text = "" Then
+                            PkgErrorText.RichTextBox1.AppendText(If(Hex(ex.HResult).Length >= 8, "0x" & Hex(ex.HResult), Hex(ex.HResult)))
+                        Else
+                            PkgErrorText.RichTextBox1.AppendText(CrLf & If(Hex(ex.HResult).Length >= 8, "0x" & Hex(ex.HResult), Hex(ex.HResult)))
+                        End If
+                        pkgFailedRemovals += 1
+                        pkgIsRemovable = False
                     Finally
                         DismApi.Shutdown()
                     End Try
+                    If Not pkgIsRemovable Then Continue For
                     If pkgIsReadyForRemoval Then
                         LogView.AppendText(CrLf & "Processing package removal...")
                         DISMProc.StartInfo.FileName = DismProgram
@@ -3480,6 +3506,7 @@ Public Class ProgressPanel
                                "Options:" & CrLf)
             ' Gather options
             LogView.AppendText("- Source image file: " & imgSwmSource & CrLf & _
+                               "- Target index: " & imgMergerIndex & CrLf & _
                                "- Destination image file: " & imgWimDestination & CrLf)
 
             ' Run commands
@@ -3490,10 +3517,10 @@ Public Class ProgressPanel
                         Case 1
                             ' Not available
                         Case Is >= 2
-                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSwmSource & Quote & " /swmfile=" & Quote & Path.GetDirectoryName(imgSwmSource) & "\" & Path.GetFileNameWithoutExtension(imgSwmSource) & "*.swm" & Quote & " /sourceindex=1 /destinationimagefile=" & Quote & imgWimDestination & Quote & " /compress=max /checkintegrity"
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSwmSource & Quote & " /swmfile=" & Quote & Path.GetDirectoryName(imgSwmSource) & "\" & Path.GetFileNameWithoutExtension(imgSwmSource) & "*.swm" & Quote & " /sourceindex=" & imgMergerIndex & " /destinationimagefile=" & Quote & imgWimDestination & Quote & " /compress=max /checkintegrity"
                     End Select
                 Case 10
-                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSwmSource & Quote & " /swmfile=" & Quote & Path.GetDirectoryName(imgSwmSource) & "\" & Path.GetFileNameWithoutExtension(imgSwmSource) & "*.swm" & Quote & " /sourceindex=1 /destinationimagefile=" & Quote & imgWimDestination & Quote & " /compress=max /checkintegrity"
+                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSwmSource & Quote & " /swmfile=" & Quote & Path.GetDirectoryName(imgSwmSource) & "\" & Path.GetFileNameWithoutExtension(imgSwmSource) & "*.swm" & Quote & " /sourceindex=" & imgMergerIndex & " /destinationimagefile=" & Quote & imgWimDestination & Quote & " /compress=max /checkintegrity"
             End Select
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
@@ -4197,7 +4224,7 @@ Public Class ProgressPanel
             TaskList.Clear()
             MainForm.StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
             MainForm.ToolStripButton4.Visible = False
-            Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+            If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
             Close()
         Else
             MainForm.ToolStripButton4.Visible = False

@@ -7,9 +7,12 @@ Imports System.Threading
 Public Class GetDriverInfo
 
     Dim DriverInfoList As New List(Of DismDriverCollection)
+    Public InstalledDriverInfo As DismDriverPackageCollection
+    Dim InstalledDriverList As New List(Of DismDriverPackage)
 
     Dim CurrentHWTarget As Integer
     Dim CurrentHWFile As Integer = -1        ' This variable gets updated every time an element is selected in the driver packages list box
+    Dim JumpTo As Integer = -1               ' This variable gets updated every time a target is specified in the Jump To panel
 
     Dim ButtonTT As New ToolTip()
 
@@ -24,24 +27,220 @@ Public Class GetDriverInfo
     End Sub
 
     Private Sub GetDriverInfo_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Text = "Get driver information"
+                        Label1.Text = Text
+                        Label2.Text = "What do you want to get information about?"
+                        Label3.Text = "Click here to get information about drivers that you've installed or that came with the Windows image you're servicing"
+                        Label4.Text = "Click here to get information about drivers that you want to add to the Windows image you're servicing before proceeding with the driver addition process"
+                        Label5.Text = "Ready"
+                        Label6.Text = "Add or select a driver package to view its information here"
+                        Label7.Text = "Hardware targets"
+                        Label8.Text = "Hardware description:"
+                        Label10.Text = "Hardware ID:"
+                        Label12.Text = "Additional IDs:"
+                        Label13.Text = "Compatible IDs:"
+                        Label16.Text = "Exclude IDs:"
+                        Label17.Text = "Hardware manufacturer:"
+                        Label20.Text = "Architecture:"
+                        Label21.Text = "Jump to target:"
+                        Label22.Text = "Published name:"
+                        Label24.Text = "Original file name:"
+                        Label26.Text = "Provider name:"
+                        Label28.Text = "Is critical to the boot process?"
+                        Label30.Text = "Version:"
+                        Label31.Text = "Class name:"
+                        Label33.Text = "Part of the Windows distribution?"
+                        Label36.Text = "Driver information"
+                        Label37.Text = "Select an installed driver to view its information here"
+                        Label39.Text = "Date:"
+                        Label41.Text = "Class description:"
+                        Label43.Text = "Class GUID:"
+                        Label45.Text = "Driver signature status:"
+                        Label47.Text = "Catalog file path:"
+                        Label48.Text = "You have configured the background processes to not show all drivers present in this image, which includes drivers part of the Windows distribution, so you may not see the driver you're interested in."
+                        Button1.Text = "Add driver..."
+                        Button2.Text = "Remove selected"
+                        Button3.Text = "Remove all"
+                        Button7.Text = "Change"
+                        LinkLabel1.Text = "<- Go back"
+                        InstalledDriverLink.Text = "I want to get information about installed drivers in the image"
+                        DriverFileLink.Text = "I want to get information about driver files"
+                        ListView1.Columns(0).Text = "Published name"
+                        ListView1.Columns(1).Text = "Original file name"
+                        OpenFileDialog1.Title = "Locate driver files"
+                    Case "ESN"
+                        Text = "Obtener información de controladores"
+                        Label1.Text = Text
+                        Label2.Text = "¿Acerca de qué le gustaría obtener información?"
+                        Label3.Text = "Haga clic aquí para obtener información de controladores que ha instalado o que vengan con la imagen de Windows a la que está dando servicio"
+                        Label4.Text = "Haga clic aquí para obtener información de controladores que le gustaría añadir a la imagen de Windows a la que está dando servicio antes de proceder con el proceso de adición de controladores"
+                        Label5.Text = "Listo"
+                        Label6.Text = "Añada o seleccione un paquete de controlador para ver su información aquí"
+                        Label7.Text = "Hardware de destino"
+                        Label8.Text = "Descripción de hardware:"
+                        Label10.Text = "ID de hardware:"
+                        Label12.Text = "Identificadores adicionales:"
+                        Label13.Text = "Identificadores compatibles:"
+                        Label16.Text = "Identificadores excluidos:"
+                        Label17.Text = "Fabricante de hardware:"
+                        Label20.Text = "Arquitectura:"
+                        Label21.Text = "Saltar a hardware:"
+                        Label22.Text = "Nombre publicado:"
+                        Label24.Text = "Nombre de archivo original:"
+                        Label26.Text = "Nombre de proveedor:"
+                        Label28.Text = "¿Es crítico para el proceso de arranque?"
+                        Label30.Text = "Versión:"
+                        Label31.Text = "Nombre de clase:"
+                        Label33.Text = "¿Es parte de la distribución de Windows?"
+                        Label36.Text = "Información del controlador"
+                        Label37.Text = "Seleccione un controlador instalado para obtener su información aquí"
+                        Label39.Text = "Fecha:"
+                        Label41.Text = "Descripción de clase:"
+                        Label43.Text = "Identificador GUID de clase:"
+                        Label45.Text = "Estado de firma del controlador:"
+                        Label47.Text = "Ruta del archivo de catálogo:"
+                        Label48.Text = "Ha configurado los procesos en segundo plano de manera que no se muestren todos los controladores de esta imagen, que incluye controladores parte de la distribución de Windows, por lo que podría no ver el controlador que le interesa."
+                        Button1.Text = "Añadir controlador..."
+                        Button2.Text = "Eliminar selección"
+                        Button3.Text = "Eliminar todos"
+                        Button7.Text = "Cambiar"
+                        LinkLabel1.Text = "<- Atrás"
+                        InstalledDriverLink.Text = "Deseo obtener información acerca de controladores instalados en la imagen"
+                        DriverFileLink.Text = "Deseo obtener información acerca de archivos de controladores"
+                        ListView1.Columns(0).Text = "Nombre publicado"
+                        ListView1.Columns(1).Text = "Nombre de archivo original"
+                        OpenFileDialog1.Title = "Ubique los archivos de controladores"
+                End Select
+            Case 1
+                Text = "Get driver information"
+                Label1.Text = Text
+                Label2.Text = "What do you want to get information about?"
+                Label3.Text = "Click here to get information about drivers that you've installed or that came with the Windows image you're servicing"
+                Label4.Text = "Click here to get information about drivers that you want to add to the Windows image you're servicing before proceeding with the driver addition process"
+                Label5.Text = "Ready"
+                Label6.Text = "Add or select a driver package to view its information here"
+                Label7.Text = "Hardware targets"
+                Label8.Text = "Hardware description:"
+                Label10.Text = "Hardware ID:"
+                Label12.Text = "Additional IDs:"
+                Label13.Text = "Compatible IDs:"
+                Label16.Text = "Exclude IDs:"
+                Label17.Text = "Hardware manufacturer:"
+                Label20.Text = "Architecture:"
+                Label21.Text = "Jump to target:"
+                Label22.Text = "Published name:"
+                Label24.Text = "Original file name:"
+                Label26.Text = "Provider name:"
+                Label28.Text = "Is critical to the boot process?"
+                Label30.Text = "Version:"
+                Label31.Text = "Class name:"
+                Label33.Text = "Part of the Windows distribution?"
+                Label36.Text = "Driver information"
+                Label37.Text = "Select an installed driver to view its information here"
+                Label39.Text = "Date:"
+                Label41.Text = "Class description:"
+                Label43.Text = "Class GUID:"
+                Label45.Text = "Driver signature status:"
+                Label47.Text = "Catalog file path:"
+                Label48.Text = "You have configured the background processes to not show all drivers present in this image, which includes drivers part of the Windows distribution, so you may not see the driver you're interested in."
+                Button1.Text = "Add driver..."
+                Button2.Text = "Remove selected"
+                Button3.Text = "Remove all"
+                Button7.Text = "Change"
+                LinkLabel1.Text = "<- Go back"
+                InstalledDriverLink.Text = "I want to get information about installed drivers in the image"
+                DriverFileLink.Text = "I want to get information about driver files"
+                ListView1.Columns(0).Text = "Published name"
+                ListView1.Columns(1).Text = "Original file name"
+                OpenFileDialog1.Title = "Locate driver files"
+            Case 2
+                Text = "Obtener información de controladores"
+                Label1.Text = Text
+                Label2.Text = "¿Acerca de qué le gustaría obtener información?"
+                Label3.Text = "Haga clic aquí para obtener información de controladores que ha instalado o que vengan con la imagen de Windows a la que está dando servicio"
+                Label4.Text = "Haga clic aquí para obtener información de controladores que le gustaría añadir a la imagen de Windows a la que está dando servicio antes de proceder con el proceso de adición de controladores"
+                Label5.Text = "Listo"
+                Label6.Text = "Añada o seleccione un paquete de controlador para ver su información aquí"
+                Label7.Text = "Hardware de destino"
+                Label8.Text = "Descripción de hardware:"
+                Label10.Text = "ID de hardware:"
+                Label12.Text = "Identificadores adicionales:"
+                Label13.Text = "Identificadores compatibles:"
+                Label16.Text = "Identificadores excluidos:"
+                Label17.Text = "Fabricante de hardware:"
+                Label20.Text = "Arquitectura:"
+                Label21.Text = "Saltar a hardware:"
+                Label22.Text = "Nombre publicado:"
+                Label24.Text = "Nombre de archivo original:"
+                Label26.Text = "Nombre de proveedor:"
+                Label28.Text = "¿Es crítico para el proceso de arranque?"
+                Label30.Text = "Versión:"
+                Label31.Text = "Nombre de clase:"
+                Label33.Text = "¿Es parte de la distribución de Windows?"
+                Label36.Text = "Información del controlador"
+                Label37.Text = "Seleccione un controlador instalado para obtener su información aquí"
+                Label39.Text = "Fecha:"
+                Label41.Text = "Descripción de clase:"
+                Label43.Text = "Identificador GUID de clase:"
+                Label45.Text = "Estado de firma del controlador:"
+                Label47.Text = "Ruta del archivo de catálogo:"
+                Label48.Text = "Ha configurado los procesos en segundo plano de manera que no se muestren todos los controladores de esta imagen, que incluye controladores parte de la distribución de Windows, por lo que podría no ver el controlador que le interesa."
+                Button1.Text = "Añadir controlador..."
+                Button2.Text = "Eliminar selección"
+                Button3.Text = "Eliminar todos"
+                Button7.Text = "Cambiar"
+                LinkLabel1.Text = "<- Atrás"
+                InstalledDriverLink.Text = "Deseo obtener información acerca de controladores instalados en la imagen"
+                DriverFileLink.Text = "Deseo obtener información acerca de archivos de controladores"
+                ListView1.Columns(0).Text = "Nombre publicado"
+                ListView1.Columns(1).Text = "Nombre de archivo original"
+                OpenFileDialog1.Title = "Ubique los archivos de controladores"
+        End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
             BackColor = Color.FromArgb(31, 31, 31)
             ForeColor = Color.White
             ListBox1.BackColor = Color.FromArgb(31, 31, 31)
+            ListView1.BackColor = Color.FromArgb(31, 31, 31)
+            ComboBox1.BackColor = Color.FromArgb(31, 31, 31)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Win10Title.BackColor = Color.White
             BackColor = Color.FromArgb(238, 238, 242)
             ForeColor = Color.Black
             ListBox1.BackColor = Color.FromArgb(238, 238, 242)
+            ListView1.BackColor = Color.FromArgb(238, 238, 242)
+            ComboBox1.BackColor = Color.FromArgb(238, 238, 242)
         End If
         ListBox1.ForeColor = ForeColor
+        ListView1.ForeColor = ForeColor
+        ComboBox1.ForeColor = ForeColor
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True
         End If
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        InstalledDriverList.Clear()
+        ListView1.Items.Clear()
+        If InstalledDriverList.Count >= 0 Then
+            For Each DriverPackage As DismDriverPackage In InstalledDriverInfo
+                InstalledDriverList.Add(DriverPackage)
+                ListView1.Items.Add(New ListViewItem(New String() {DriverPackage.PublishedName, Path.GetFileName(DriverPackage.OriginalFileName)}))
+            Next
+        End If
+
+        ' Detect if the "Detect all drivers" option is checked and act accordingly
+        Panel6.Visible = MainForm.AllDrivers = False
+
+        ' Switch to the selection panels
+        Panel4.Visible = False
+        Panel7.Visible = True
+        DrvPackageInfoPanel.Visible = False
+        NoDrvPanel.Visible = True
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -59,6 +258,11 @@ Public Class GetDriverInfo
         DriverInfoPanel.Visible = True
         InfoFromInstalledDrvsPanel.Visible = True
         InfoFromDrvPackagesPanel.Visible = False
+
+        ' Detect if the "Detect all drivers" option is checked and act accordingly
+        Panel6.Visible = MainForm.AllDrivers = False
+
+        Label5.Visible = False
     End Sub
 
     Private Sub DriverFileLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles DriverFileLink.LinkClicked
@@ -66,6 +270,8 @@ Public Class GetDriverInfo
         DriverInfoPanel.Visible = True
         InfoFromInstalledDrvsPanel.Visible = False
         InfoFromDrvPackagesPanel.Visible = True
+        Panel6.Visible = False
+        Label5.Visible = True
     End Sub
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
@@ -76,13 +282,37 @@ Public Class GetDriverInfo
     Sub GetDriverInformation()
         DriverInfoList.Clear()
         Try
-            Label5.Text = "Preparing driver information processes..."
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            Label5.Text = "Preparing driver information processes..."
+                        Case "ESN"
+                            Label5.Text = "Preparando procesos de información de controladores..."
+                    End Select
+                Case 1
+                    Label5.Text = "Preparing driver information processes..."
+                Case 2
+                    Label5.Text = "Preparando procesos de información de controladores..."
+            End Select
             Application.DoEvents()
             DismApi.Initialize(DismLogLevel.LogErrors)
             Using imgSession As DismSession = If(MainForm.OnlineManagement, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(MainForm.MountDir))
                 For Each drvFile In ListBox1.Items
                     If File.Exists(drvFile) Then
-                        Label5.Text = "Getting information from driver file " & Quote & Path.GetFileName(drvFile) & Quote & "..." & CrLf & "This may take some time and the program may temporarily freeze"
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        Label5.Text = "Getting information from driver file " & Quote & Path.GetFileName(drvFile) & Quote & "..." & CrLf & "This may take some time and the program may temporarily freeze"
+                                    Case "ESN"
+                                        Label5.Text = "Obteniendo información del archivo de controlador " & Quote & Path.GetFileName(drvFile) & Quote & "..." & CrLf & "Esto puede llevar algo de tiempo y el programa podría congelarse temporalmente"
+                                End Select
+                            Case 1
+                                Label5.Text = "Getting information from driver file " & Quote & Path.GetFileName(drvFile) & Quote & "..." & CrLf & "This may take some time and the program may temporarily freeze"
+                            Case 2
+                                Label5.Text = "Obteniendo información del archivo de controlador " & Quote & Path.GetFileName(drvFile) & Quote & "..." & CrLf & "Esto puede llevar algo de tiempo y el programa podría congelarse temporalmente"
+                        End Select
                         Application.DoEvents()
                         Dim drvInfoCollection As DismDriverCollection = DismApi.GetDriverInfo(imgSession, drvFile)
                         If drvInfoCollection.Count > 0 Then DriverInfoList.Add(drvInfoCollection)
@@ -94,13 +324,25 @@ Public Class GetDriverInfo
         Finally
             DismApi.Shutdown()
         End Try
-        Label5.Text = "Ready"
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Label5.Text = "Ready"
+                    Case "ESN"
+                        Label5.Text = "Listo"
+                End Select
+            Case 1
+                Label5.Text = "Ready"
+            Case 2
+                Label5.Text = "Listo"
+        End Select
     End Sub
 
     Sub DisplayDriverInformation(HWTarget As Integer)
         Dim CurrentDriverCollection As DismDriverCollection = DriverInfoList(ListBox1.SelectedIndex)
         For Each DriverPackageInfo As DismDriver In CurrentDriverCollection
-            If CurrentDriverCollection.IndexOf(DriverPackageInfo) = HWTarget Then
+            If CurrentDriverCollection.IndexOf(DriverPackageInfo) = HWTarget - 1 Then
                 Label9.Text = DriverPackageInfo.HardwareDescription
                 Label11.Text = DriverPackageInfo.HardwareId
                 Label14.Text = DriverPackageInfo.CompatibleIds
@@ -108,7 +350,19 @@ Public Class GetDriverInfo
                 Label18.Text = DriverPackageInfo.ManufacturerName
                 Select Case DriverPackageInfo.Architecture
                     Case DismProcessorArchitecture.None
-                        Label19.Text = "Unknown"
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        Label19.Text = "Unknown"
+                                    Case "ESN"
+                                        Label19.Text = "Desconocido"
+                                End Select
+                            Case 1
+                                Label19.Text = "Unknown"
+                            Case 2
+                                Label19.Text = "Desconocido"
+                        End Select
                     Case DismProcessorArchitecture.Neutral
                         Label19.Text = "Neutral"
                     Case DismProcessorArchitecture.Intel
@@ -122,8 +376,36 @@ Public Class GetDriverInfo
                     Case DismProcessorArchitecture.AMD64
                         Label19.Text = "AMD64"
                 End Select
-                If Label14.Text = "" Then Label14.Text = "None declared by the hardware manufacturer"
-                If Label15.Text = "" Then Label15.Text = "None declared by the hardware manufacturer"
+                If Label14.Text = "" Then
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    Label14.Text = "None declared by the hardware manufacturer"
+                                Case "ESN"
+                                    Label14.Text = "Ninguno declarado por el fabricante del hardware"
+                            End Select
+                        Case 1
+                            Label14.Text = "None declared by the hardware manufacturer"
+                        Case 2
+                            Label14.Text = "Ninguno declarado por el fabricante del hardware"
+                    End Select
+                End If
+                If Label15.Text = "" Then
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    Label15.Text = "None declared by the hardware manufacturer"
+                                Case "ESN"
+                                    Label15.Text = "Ninguno declarado por el fabricante del hardware"
+                            End Select
+                        Case 1
+                            Label15.Text = "None declared by the hardware manufacturer"
+                        Case 2
+                            Label15.Text = "Ninguno declarado por el fabricante del hardware"
+                    End Select
+                End If
                 Label9.Height = Label9.PreferredHeight + 4
                 Label11.Height = Label11.PreferredHeight + 4
                 Label14.Height = Label14.PreferredHeight + 4
@@ -133,6 +415,21 @@ Public Class GetDriverInfo
                 Exit For
             End If
         Next
+    End Sub
+
+    Sub DisplayHardwareTargetOverview()
+        ' This function is called when the user clicks on the "Jump to target" button
+        If ListBox1.SelectedItems.Count <> 1 Then
+            ' Don't continue
+            Exit Sub
+        Else
+            JumpTo = -1
+            ComboBox1.Text = ""
+            Dim CurrentDriverCollection As DismDriverCollection = DriverInfoList(ListBox1.SelectedIndex)
+            For Each DriverPackageInfo As DismDriver In CurrentDriverCollection
+                ComboBox1.Items.Add(CurrentDriverCollection.IndexOf(DriverPackageInfo) + 1 & " - " & DriverPackageInfo.HardwareDescription & " (" & DriverPackageInfo.HardwareId & ")")
+            Next
+        End If
     End Sub
 
     Private Sub ListBox1_DragEnter(sender As Object, e As DragEventArgs) Handles ListBox1.DragEnter
@@ -159,10 +456,25 @@ Public Class GetDriverInfo
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged
         Try
             If ListBox1.SelectedItems.Count = 1 Then
+                JumpToPanel.Visible = False
                 NoDrvPanel.Visible = False
                 DrvPackageInfoPanel.Visible = True
                 Button2.Enabled = True
-                If Not CurrentHWFile = ListBox1.SelectedIndex Then Label7.Text = "Hardware target 1 of " & DriverInfoList(ListBox1.SelectedIndex).Count
+                If Not CurrentHWFile = ListBox1.SelectedIndex Then
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    Label7.Text = "Hardware target 1 of " & DriverInfoList(ListBox1.SelectedIndex).Count
+                                Case "ESN"
+                                    Label7.Text = "Hardware de destino 1 de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                            End Select
+                        Case 1
+                            Label7.Text = "Hardware target 1 of " & DriverInfoList(ListBox1.SelectedIndex).Count
+                        Case 2
+                            Label7.Text = "Hardware de destino 1 de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                    End Select
+                End If
                 If Not CurrentHWFile = ListBox1.SelectedIndex Then CurrentHWTarget = 1
                 Button4.Enabled = False
                 Button5.Enabled = True
@@ -183,6 +495,7 @@ Public Class GetDriverInfo
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         DriverInfoList.RemoveAt(ListBox1.SelectedIndex)
         ListBox1.Items.Remove(ListBox1.SelectedItem)
+        If ListBox1.Items.Count > 1 Then Button2.Enabled = False Else Button2.Enabled = True
         NoDrvPanel.Visible = True
         DrvPackageInfoPanel.Visible = False
     End Sub
@@ -190,6 +503,7 @@ Public Class GetDriverInfo
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
         DriverInfoList.Clear()
         ListBox1.Items.Clear()
+        Button2.Enabled = False
         Button3.Enabled = False
         NoDrvPanel.Visible = True
         DrvPackageInfoPanel.Visible = False
@@ -199,7 +513,19 @@ Public Class GetDriverInfo
         If CurrentHWTarget > 1 Then
             DisplayDriverInformation(CurrentHWTarget - 1)
             CurrentHWTarget -= 1
-            Label7.Text = "Hardware target " & CurrentHWTarget & " of " & DriverInfoList(ListBox1.SelectedIndex).Count
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            Label7.Text = "Hardware target " & CurrentHWTarget & " of " & DriverInfoList(ListBox1.SelectedIndex).Count
+                        Case "ESN"
+                            Label7.Text = "Hardware de destino " & CurrentHWTarget & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                    End Select
+                Case 1
+                    Label7.Text = "Hardware target " & CurrentHWTarget & " of " & DriverInfoList(ListBox1.SelectedIndex).Count
+                Case 2
+                    Label7.Text = "Hardware de destino " & CurrentHWTarget & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
+            End Select
             Button5.Enabled = True
             If CurrentHWTarget = 1 Then Button4.Enabled = False
         End If
@@ -209,21 +535,215 @@ Public Class GetDriverInfo
         If CurrentHWTarget < DriverInfoList(ListBox1.SelectedIndex).Count Then
             DisplayDriverInformation(CurrentHWTarget + 1)
             CurrentHWTarget += 1
-            Label7.Text = "Hardware target " & CurrentHWTarget & " of " & DriverInfoList(ListBox1.SelectedIndex).Count
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            Label7.Text = "Hardware target " & CurrentHWTarget & " of " & DriverInfoList(ListBox1.SelectedIndex).Count
+                        Case "ESN"
+                            Label7.Text = "Hardware de destino " & CurrentHWTarget & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                    End Select
+                Case 1
+                    Label7.Text = "Hardware target " & CurrentHWTarget & " of " & DriverInfoList(ListBox1.SelectedIndex).Count
+                Case 2
+                    Label7.Text = "Hardware de destino " & CurrentHWTarget & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
+            End Select
             Button4.Enabled = True
             If CurrentHWTarget = DriverInfoList(ListBox1.SelectedIndex).Count Then Button5.Enabled = False
         End If
     End Sub
 
     Private Sub Button4_MouseHover(sender As Object, e As EventArgs) Handles Button4.MouseHover
-        ButtonTT.SetToolTip(sender, "Previous hardware target")
+        Dim msg As String = ""
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        msg = "Previous hardware target"
+                    Case "ESN"
+                        msg = "Anterior hardware de destino"
+                End Select
+            Case 1
+                msg = "Previous hardware target"
+            Case 2
+                msg = "Anterior hardware de destino"
+        End Select
+        ButtonTT.SetToolTip(sender, msg)
     End Sub
 
     Private Sub Button5_MouseHover(sender As Object, e As EventArgs) Handles Button5.MouseHover
-        ButtonTT.SetToolTip(sender, "Next hardware target")
+        Dim msg As String = ""
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        msg = "Next hardware target"
+                    Case "ESN"
+                        msg = "Siguiente hardware de destino"
+                End Select
+            Case 1
+                msg = "Next hardware target"
+            Case 2
+                msg = "Siguiente hardware de destino"
+        End Select
+        ButtonTT.SetToolTip(sender, msg)
     End Sub
 
     Private Sub Button6_MouseHover(sender As Object, e As EventArgs) Handles Button6.MouseHover
-        ButtonTT.SetToolTip(sender, "Jump to specific hardware target")
+        Dim msg As String = ""
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        msg = "Jump to specific hardware target"
+                    Case "ESN"
+                        msg = "Saltar a hardware de destino específico"
+                End Select
+            Case 1
+                msg = "Jump to specific hardware target"
+            Case 2
+                msg = "Saltar a hardware de destino específico"
+        End Select
+        ButtonTT.SetToolTip(sender, msg)
+    End Sub
+
+    Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
+        JumpTo = ComboBox1.SelectedIndex + 1
+        If JumpTo < 1 Then Exit Sub
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Label7.Text = "Hardware target " & JumpTo & " of " & DriverInfoList(ListBox1.SelectedIndex).Count
+                    Case "ESN"
+                        Label7.Text = "Hardware de destino " & JumpTo & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                End Select
+            Case 1
+                Label7.Text = "Hardware target " & JumpTo & " of " & DriverInfoList(ListBox1.SelectedIndex).Count
+            Case 2
+                Label7.Text = "Hardware de destino " & JumpTo & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
+        End Select
+        CurrentHWTarget = JumpTo
+        DisplayDriverInformation(JumpTo)
+        JumpToPanel.Visible = False
+        If CurrentHWTarget = DriverInfoList(ListBox1.SelectedIndex).Count Then Button5.Enabled = False
+        If CurrentHWTarget = 1 Then Button4.Enabled = False
+    End Sub
+
+    Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
+        JumpToPanel.Visible = True
+        Button4.Enabled = True
+        Button5.Enabled = True
+        ComboBox1.Items.Clear()
+        DisplayHardwareTargetOverview()
+    End Sub
+
+    Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
+        Try
+            If ListView1.SelectedItems.Count = 1 Then
+                Panel4.Visible = True
+                Panel7.Visible = False
+                Label23.Text = InstalledDriverList(ListView1.FocusedItem.Index).PublishedName
+                Label25.Text = Path.GetFileName(InstalledDriverList(ListView1.FocusedItem.Index).OriginalFileName)
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                Label27.Text = If(InstalledDriverList(ListView1.FocusedItem.Index).BootCritical, "Yes", "No")
+                                Label34.Text = If(InstalledDriverList(ListView1.FocusedItem.Index).InBox, "Yes", "No")
+                            Case "ESN"
+                                Label27.Text = If(InstalledDriverList(ListView1.FocusedItem.Index).BootCritical, "Sí", "No")
+                                Label34.Text = If(InstalledDriverList(ListView1.FocusedItem.Index).InBox, "Sí", "No")
+                        End Select
+                    Case 1
+                        Label27.Text = If(InstalledDriverList(ListView1.FocusedItem.Index).BootCritical, "Yes", "No")
+                        Label34.Text = If(InstalledDriverList(ListView1.FocusedItem.Index).InBox, "Yes", "No")
+                    Case 2
+                        Label27.Text = If(InstalledDriverList(ListView1.FocusedItem.Index).BootCritical, "Sí", "No")
+                        Label34.Text = If(InstalledDriverList(ListView1.FocusedItem.Index).InBox, "Sí", "No")
+                End Select
+                Label29.Text = InstalledDriverList(ListView1.FocusedItem.Index).Version.ToString()
+                Label32.Text = InstalledDriverList(ListView1.FocusedItem.Index).ClassName
+                Label35.Text = InstalledDriverList(ListView1.FocusedItem.Index).ProviderName
+                Label38.Text = InstalledDriverList(ListView1.FocusedItem.Index).Date
+                Label40.Text = InstalledDriverList(ListView1.FocusedItem.Index).ClassDescription
+                Label42.Text = InstalledDriverList(ListView1.FocusedItem.Index).ClassGuid
+                Select Case InstalledDriverList(ListView1.FocusedItem.Index).DriverSignature
+                    Case DismDriverSignature.Unknown
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        Label44.Text = "Unknown"
+                                    Case "ESN"
+                                        Label44.Text = "Desconocido"
+                                End Select
+                            Case 1
+                                Label44.Text = "Unknown"
+                            Case 2
+                                Label44.Text = "Desconocido"
+                        End Select
+                    Case DismDriverSignature.Unsigned
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        Label44.Text = "Unsigned. Please check the validity and expiration date of the signing certificate"
+                                    Case "ESN"
+                                        Label44.Text = "No firmado. Compruebe la validez y la fecha de expiración del certificado del controlador"
+                                End Select
+                            Case 1
+                                Label44.Text = "Unsigned. Please check the validity and expiration date of the signing certificate"
+                            Case 2
+                                Label44.Text = "No firmado. Compruebe la validez y la fecha de expiración del certificado del controlador"
+                        End Select
+                    Case DismDriverSignature.Signed
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        Label44.Text = "Signed"
+                                    Case "ESN"
+                                        Label44.Text = "Firmado"
+                                End Select
+                            Case 1
+                                Label44.Text = "Signed"
+                            Case 2
+                                Label44.Text = "Firmado"
+                        End Select
+                End Select
+                Label46.Text = InstalledDriverList(ListView1.FocusedItem.Index).CatalogFile
+
+                ' Set preferred heights
+                Label23.Height = Label23.PreferredHeight + 4
+                Label25.Height = Label25.PreferredHeight + 4
+                Label27.Height = Label27.PreferredHeight + 4
+                Label29.Height = Label29.PreferredHeight + 4
+                Label32.Height = Label32.PreferredHeight + 4
+                Label34.Height = Label34.PreferredHeight + 4
+                Label35.Height = Label35.PreferredHeight + 4
+                Label38.Height = Label38.PreferredHeight + 4
+                Label40.Height = Label40.PreferredHeight + 4
+                Label42.Height = Label42.PreferredHeight + 4
+                Label44.Height = Label44.PreferredHeight + 4
+                Label46.Height = Label46.PreferredHeight + 4
+            Else
+                Panel4.Visible = False
+                Panel7.Visible = True
+            End If
+        Catch ex As Exception
+            Panel4.Visible = False
+            Panel7.Visible = True
+        End Try
+    End Sub
+
+    Private Sub Label25_MouseHover(sender As Object, e As EventArgs) Handles Label25.MouseHover
+        ButtonTT.SetToolTip(sender, InstalledDriverList(ListView1.FocusedItem.Index).OriginalFileName)
+    End Sub
+
+    Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
+        Visible = False
+        BGProcsAdvSettings.ShowDialog(MainForm)
+        If BGProcsAdvSettings.DialogResult = Windows.Forms.DialogResult.OK And BGProcsAdvSettings.NeedsDriverChecks Then Close() Else Visible = True
     End Sub
 End Class
