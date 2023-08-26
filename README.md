@@ -85,7 +85,9 @@ If you want to contribute to this project, you can do so in many ways:
 
 We continue the development of the next version in the Preview branch. To go to it, select "dt_preview" from the branch list. Commits are done every day, and new builds are released every Sunday.
 
-However, if you want to download the latest release AS SOON AS the project is built with new changes, you can download the [nightly installer](https://github.com/CodingWonders/DISMTools/raw/dt_pre_2384/Installer/Output/dt_setup.exe).
+However, if you want to download the latest release AS SOON AS the project is built with new changes, you can download the [nightly installer](https://github.com/CodingWonders/DISMTools/raw/dt_pre_2385_escrow/Installer/Output/dt_setup.exe).
+
+**NOTE:** this branch contains release escrow builds of DISMTools 0.3.1, and it will be deleted once this version gets published as a stable release
 
 ## Stay in touch
 

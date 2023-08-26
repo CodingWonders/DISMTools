@@ -121,7 +121,7 @@ Public Class MainForm
     Public isSqlServerDTProj As Boolean
 
     ' Set branch name and codenames
-    Public dtBranch As String = "dt_preview"
+    Public dtBranch As String = "dt_preview_escrow"
 
     ' Arrays and other variables used on background processes
     Public imgPackageNames(65535) As String
@@ -475,6 +475,7 @@ Public Class MainForm
                 client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/DISMTools/" & branch & "/Updater/DISMTools-UCS/update-bin/" & If(branch.Contains("preview"), "preview.ini", "stable.ini"), Application.StartupPath & "\info.ini")
             Catch ex As WebException
                 Debug.WriteLine("We couldn't fetch the necessary update information. Reason:" & CrLf & ex.Status.ToString())
+                UpdatePanel.Visible = False
                 Exit Sub
             End Try
             Debug.WriteLine("Reading update information...")
