@@ -12,7 +12,7 @@
 
 #define pfDir "{commonpf}\DISMTools\Preview"
 
-#define scName "DISMTools 0.3.1 Preview"
+#define scName "DISMTools Preview"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
