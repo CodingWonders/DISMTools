@@ -1748,13 +1748,12 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''- Fixed an issue that caused the program to make you specify a capability addition source in the online installation management mode when the &quot;Limit Windows Update access&quot; check box was unticked
+        '''- Fixed an issue where the driver information dialog would always display the hardware target after the one you&apos;d selected
+        '''- Fixed an issue where the mounted image detector would start even if it had already been started
+        '''- Fixed an issue where package removal would fail if its information process had thrown an exception
+        '''- If the aforementioned information process has thrown an exception, the program will now output the HResult property of the exception instead of a constant value
         '''
-        '''New features
-        '''
-        '''- When a driver file contains more than 10 hardware targets, the program now shows the file name of the driver file for a quicker and easier reference task
-        '''- The mounted image detector has received optimizations which cause a significant CPU usage decrease
-        '''- If an ESD file is specifi [resto de la cadena truncado]&quot;;.
+        '''New featu [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

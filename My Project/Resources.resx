@@ -1072,15 +1072,20 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes
 
-- Fixed an issue that caused the program to make you specify a capability addition source in the online installation management mode when the "Limit Windows Update access" check box was unticked
+- Fixed an issue where the driver information dialog would always display the hardware target after the one you'd selected
+- Fixed an issue where the mounted image detector would start even if it had already been started
+- Fixed an issue where package removal would fail if its information process had thrown an exception
+- If the aforementioned information process has thrown an exception, the program will now output the HResult property of the exception instead of a constant value
 
 New features
 
-- When a driver file contains more than 10 hardware targets, the program now shows the file name of the driver file for a quicker and easier reference task
-- The mounted image detector has received optimizations which cause a significant CPU usage decrease
-- If an ESD file is specified in the source image field of the image mount dialog, the image conversion dialog will now appear automatically
-- The image conversion dialog can now convert the index you specify, as opposed to the first index
-- If background processes were canceled prematurely and image information tasks are still pending, those tasks will now run after the task related to what has changed</value>
+- You can now jump to specific hardware targets in the driver information dialog
+- The image conversion and SWM file merger dialogs have received translations
+- The SWM file merger dialog can now merge files for the index you specify, as opposed to for the first index
+- The image mount dialog now offers an automatic merger of SWM files, if one is specified
+- You can now get information about drivers installed in the Windows image or in the active installation, and the program will now detect image drivers if the "Detect all drivers" option value is different from the one stored in the program settings
+- You can now get information about an image file on demand
+- Introduced the DISM Configuration List Editor</value>
   </data>
   <data name="jumpto" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\jumpto.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
