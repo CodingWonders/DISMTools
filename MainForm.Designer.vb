@@ -73,7 +73,6 @@ Partial Class MainForm
         Me.AddPackage = New System.Windows.Forms.ToolStripMenuItem()
         Me.RemovePackage = New System.Windows.Forms.ToolStripMenuItem()
         Me.GetFeatures = New System.Windows.Forms.ToolStripMenuItem()
-        Me.GetFeatureInfo = New System.Windows.Forms.ToolStripMenuItem()
         Me.EnableFeature = New System.Windows.Forms.ToolStripMenuItem()
         Me.DisableFeature = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
@@ -342,9 +341,6 @@ Partial Class MainForm
         Me.PkgInfoCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.PkgBasicInfo = New System.Windows.Forms.ToolStripMenuItem()
         Me.PkgDetailedInfo = New System.Windows.Forms.ToolStripMenuItem()
-        Me.FeatureInfoCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.FeatureBasicInfo = New System.Windows.Forms.ToolStripMenuItem()
-        Me.FeatureDetailedInfo = New System.Windows.Forms.ToolStripMenuItem()
         Me.ImgBW = New System.ComponentModel.BackgroundWorker()
         Me.ImgProcesses = New System.Diagnostics.Process()
         Me.LocalMountDirFBD = New System.Windows.Forms.FolderBrowserDialog()
@@ -448,7 +444,6 @@ Partial Class MainForm
         Me.prjTreeStatus.SuspendLayout()
         Me.StatusStrip.SuspendLayout()
         Me.PkgInfoCMS.SuspendLayout()
-        Me.FeatureInfoCMS.SuspendLayout()
         Me.ImgUMountPopupCMS.SuspendLayout()
         Me.AppxPackagePopupCMS.SuspendLayout()
         Me.TreeViewCMS.SuspendLayout()
@@ -721,7 +716,7 @@ Partial Class MainForm
         '
         'OSPackagesToolStripMenuItem
         '
-        Me.OSPackagesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GetPackages, Me.GetPackageInfo, Me.AddPackage, Me.RemovePackage, Me.GetFeatures, Me.GetFeatureInfo, Me.EnableFeature, Me.DisableFeature, Me.ToolStripSeparator4, Me.CleanupImage})
+        Me.OSPackagesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GetPackages, Me.GetPackageInfo, Me.AddPackage, Me.RemovePackage, Me.GetFeatures, Me.EnableFeature, Me.DisableFeature, Me.ToolStripSeparator4, Me.CleanupImage})
         Me.OSPackagesToolStripMenuItem.Name = "OSPackagesToolStripMenuItem"
         Me.OSPackagesToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
         Me.OSPackagesToolStripMenuItem.Text = "OS packages"
@@ -754,13 +749,7 @@ Partial Class MainForm
         '
         Me.GetFeatures.Name = "GetFeatures"
         Me.GetFeatures.Size = New System.Drawing.Size(292, 22)
-        Me.GetFeatures.Text = "Get basic feature information..."
-        '
-        'GetFeatureInfo
-        '
-        Me.GetFeatureInfo.Name = "GetFeatureInfo"
-        Me.GetFeatureInfo.Size = New System.Drawing.Size(292, 22)
-        Me.GetFeatureInfo.Text = "Get detailed feature information..."
+        Me.GetFeatures.Text = "Get feature information..."
         '
         'EnableFeature
         '
@@ -2328,7 +2317,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.44444!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.55556!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 118.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 119.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -2363,9 +2352,9 @@ Partial Class MainForm
         Me.LinkLabel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel1.Location = New System.Drawing.Point(64, 146)
+        Me.LinkLabel1.Location = New System.Drawing.Point(63, 146)
         Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(189, 254)
+        Me.LinkLabel1.Size = New System.Drawing.Size(190, 254)
         Me.LinkLabel1.TabIndex = 5
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "Click here to mount an image"
@@ -2375,7 +2364,7 @@ Partial Class MainForm
         Me.Panel8.Controls.Add(Me.projName)
         Me.Panel8.Controls.Add(Me.projNameText)
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel8.Location = New System.Drawing.Point(64, 3)
+        Me.Panel8.Location = New System.Drawing.Point(63, 3)
         Me.Panel8.Name = "Panel8"
         Me.Panel8.Size = New System.Drawing.Size(70, 23)
         Me.Panel8.TabIndex = 8
@@ -2407,9 +2396,9 @@ Partial Class MainForm
         Me.Label5.AutoSize = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label5, 2)
         Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label5.Location = New System.Drawing.Point(64, 131)
+        Me.Label5.Location = New System.Drawing.Point(63, 131)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(189, 15)
+        Me.Label5.Size = New System.Drawing.Size(190, 15)
         Me.Label5.TabIndex = 2
         Me.Label5.Text = "imgStatus"
         '
@@ -2419,7 +2408,7 @@ Partial Class MainForm
         Me.Label2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label2.Location = New System.Drawing.Point(3, 29)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(55, 102)
+        Me.Label2.Size = New System.Drawing.Size(54, 102)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "Location:"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2429,9 +2418,9 @@ Partial Class MainForm
         Me.Label3.AutoEllipsis = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label3, 2)
         Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label3.Location = New System.Drawing.Point(64, 29)
+        Me.Label3.Location = New System.Drawing.Point(63, 29)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(189, 102)
+        Me.Label3.Size = New System.Drawing.Size(190, 102)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "projPath"
         '
@@ -2442,7 +2431,7 @@ Partial Class MainForm
         Me.Label4.Location = New System.Drawing.Point(3, 131)
         Me.Label4.Name = "Label4"
         Me.TableLayoutPanel2.SetRowSpan(Me.Label4, 2)
-        Me.Label4.Size = New System.Drawing.Size(55, 269)
+        Me.Label4.Size = New System.Drawing.Size(54, 269)
         Me.Label4.TabIndex = 1
         Me.Label4.Text = "Images mounted?"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2453,7 +2442,7 @@ Partial Class MainForm
         Me.Panel9.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel9.Location = New System.Drawing.Point(3, 3)
         Me.Panel9.Name = "Panel9"
-        Me.Panel9.Size = New System.Drawing.Size(55, 23)
+        Me.Panel9.Size = New System.Drawing.Size(54, 23)
         Me.Panel9.TabIndex = 9
         '
         'Label1
@@ -2461,7 +2450,7 @@ Partial Class MainForm
         Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label1.Location = New System.Drawing.Point(0, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(55, 23)
+        Me.Label1.Size = New System.Drawing.Size(54, 23)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Name:"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -3195,26 +3184,6 @@ Partial Class MainForm
         Me.PkgDetailedInfo.Size = New System.Drawing.Size(276, 22)
         Me.PkgDetailedInfo.Text = "Get detailed information (specific package)"
         '
-        'FeatureInfoCMS
-        '
-        Me.FeatureInfoCMS.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.FeatureInfoCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FeatureBasicInfo, Me.FeatureDetailedInfo})
-        Me.FeatureInfoCMS.Name = "PkgInfoCMS"
-        Me.FeatureInfoCMS.ShowImageMargin = False
-        Me.FeatureInfoCMS.Size = New System.Drawing.Size(270, 48)
-        '
-        'FeatureBasicInfo
-        '
-        Me.FeatureBasicInfo.Name = "FeatureBasicInfo"
-        Me.FeatureBasicInfo.Size = New System.Drawing.Size(269, 22)
-        Me.FeatureBasicInfo.Text = "Get basic information (all features)"
-        '
-        'FeatureDetailedInfo
-        '
-        Me.FeatureDetailedInfo.Name = "FeatureDetailedInfo"
-        Me.FeatureDetailedInfo.Size = New System.Drawing.Size(269, 22)
-        Me.FeatureDetailedInfo.Text = "Get detailed information (specific feature)"
-        '
         'ImgBW
         '
         Me.ImgBW.WorkerReportsProgress = True
@@ -3582,7 +3551,6 @@ Partial Class MainForm
         Me.StatusStrip.ResumeLayout(False)
         Me.StatusStrip.PerformLayout()
         Me.PkgInfoCMS.ResumeLayout(False)
-        Me.FeatureInfoCMS.ResumeLayout(False)
         Me.ImgUMountPopupCMS.ResumeLayout(False)
         Me.AppxPackagePopupCMS.ResumeLayout(False)
         Me.TreeViewCMS.ResumeLayout(False)
@@ -3635,7 +3603,6 @@ Partial Class MainForm
     Friend WithEvents AddPackage As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents RemovePackage As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents GetFeatures As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents GetFeatureInfo As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents EnableFeature As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DisableFeature As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
@@ -3822,9 +3789,6 @@ Partial Class MainForm
     Friend WithEvents PkgInfoCMS As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents PkgBasicInfo As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents PkgDetailedInfo As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents FeatureInfoCMS As System.Windows.Forms.ContextMenuStrip
-    Friend WithEvents FeatureBasicInfo As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents FeatureDetailedInfo As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents PictureBox5 As System.Windows.Forms.PictureBox
     Friend WithEvents RemountImageWithWritePermissionsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator13 As System.Windows.Forms.ToolStripSeparator

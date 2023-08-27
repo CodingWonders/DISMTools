@@ -213,7 +213,10 @@ Public Class MainForm
 
     Dim SysVer As Version
 
-    ' List for driver information dialog
+    ' Lists for information dialogs
+    Dim PackageInfoList As DismPackageCollection
+    Dim FeatureInfoList As DismFeatureCollection
+    Dim CapabilityInfoList As DismCapabilityCollection
     Dim DriverInfoList As DismDriverPackageCollection
 
     Friend NotInheritable Class NativeMethods
@@ -2419,6 +2422,7 @@ Public Class MainForm
                     Dim imgPackageRelTypeList As New List(Of String)
                     Dim imgPackageInstTimeList As New List(Of String)
                     Dim PackageCollection As DismPackageCollection = DismApi.GetPackages(session)
+                    PackageInfoList = PackageCollection
                     For Each package As DismPackage In PackageCollection
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
@@ -2568,6 +2572,7 @@ Public Class MainForm
                     Dim imgFeatureNameList As New List(Of String)
                     Dim imgFeatureStateList As New List(Of String)
                     Dim FeatureCollection As DismFeatureCollection = DismApi.GetFeatures(session)
+                    FeatureInfoList = FeatureCollection
                     For Each feature As DismFeature In FeatureCollection
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
@@ -2985,6 +2990,7 @@ Public Class MainForm
                     Dim imgCapabilityNameList As New List(Of String)
                     Dim imgCapabilityStateList As New List(Of String)
                     Dim CapabilityCollection As DismCapabilityCollection = DismApi.GetCapabilities(session)
+                    CapabilityInfoList = CapabilityCollection
                     For Each capability As DismCapability In CapabilityCollection
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
@@ -3874,12 +3880,10 @@ Public Class MainForm
                         ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         ToolStrip2.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                        FeatureInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         PkgInfoCMS.ForeColor = Color.White
-                        FeatureInfoCMS.ForeColor = Color.White
                         ImgUMountPopupCMS.ForeColor = Color.White
                         AppxPackagePopupCMS.ForeColor = Color.White
                         TreeViewCMS.ForeColor = Color.White
@@ -3985,12 +3989,10 @@ Public Class MainForm
                         ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         ToolStrip2.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                        FeatureInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         PkgInfoCMS.ForeColor = Color.Black
-                        FeatureInfoCMS.ForeColor = Color.Black
                         ImgUMountPopupCMS.ForeColor = Color.Black
                         AppxPackagePopupCMS.ForeColor = Color.Black
                         TreeViewCMS.ForeColor = Color.Black
@@ -4100,12 +4102,10 @@ Public Class MainForm
                 ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 ToolStrip2.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                FeatureInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 PkgInfoCMS.ForeColor = Color.Black
-                FeatureInfoCMS.ForeColor = Color.Black
                 ImgUMountPopupCMS.ForeColor = Color.Black
                 AppxPackagePopupCMS.ForeColor = Color.Black
                 TreeViewCMS.ForeColor = Color.Black
@@ -4211,12 +4211,10 @@ Public Class MainForm
                 ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 ToolStrip2.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                FeatureInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 PkgInfoCMS.ForeColor = Color.White
-                FeatureInfoCMS.ForeColor = Color.White
                 ImgUMountPopupCMS.ForeColor = Color.White
                 AppxPackagePopupCMS.ForeColor = Color.White
                 TreeViewCMS.ForeColor = Color.White
@@ -4309,8 +4307,7 @@ Public Class MainForm
                     GetPackageInfo.Text = "Get detailed package information..."
                     AddPackage.Text = "Add package..."
                     RemovePackage.Text = "Remove package..."
-                    GetFeatures.Text = "Get basic feature information..."
-                    GetFeatureInfo.Text = "Get detailed feature information..."
+                    GetFeatures.Text = "Get feature information..."
                     EnableFeature.Text = "Enable feature..."
                     DisableFeature.Text = "Disable feature..."
                     CleanupImage.Text = "Perform cleanup or recovery operations..."
@@ -4488,8 +4485,6 @@ Public Class MainForm
                     ' Pop-up context menus
                     PkgBasicInfo.Text = "Get basic information (all packages)"
                     PkgDetailedInfo.Text = "Get detailed information (specific package)"
-                    FeatureBasicInfo.Text = "Get basic feature info (all features)"
-                    FeatureDetailedInfo.Text = "Get detailed feature info (specific feature)"
                     CommitAndUnmountTSMI.Text = "Commit changes and unmount image"
                     DiscardAndUnmountTSMI.Text = "Discard changes and unmount image"
                     UnmountSettingsToolStripMenuItem.Text = "Unmount settings..."
@@ -4589,8 +4584,7 @@ Public Class MainForm
                     GetPackageInfo.Text = "Obtener información detallada de paquetes..."
                     AddPackage.Text = "Añadir paquete..."
                     RemovePackage.Text = "Eliminar paquete..."
-                    GetFeatures.Text = "Obtener información básica de características..."
-                    GetFeatureInfo.Text = "Obtener información detallada de características..."
+                    GetFeatures.Text = "Obtener información de características..."
                     EnableFeature.Text = "Habilitar característica..."
                     DisableFeature.Text = "Deshabilitar característica..."
                     CleanupImage.Text = "Realizar operaciones de limpieza o recuperación..."
@@ -4768,8 +4762,6 @@ Public Class MainForm
                     ' Pop-up context menus
                     PkgBasicInfo.Text = "Obtener información básica (todos los paquetes)"
                     PkgDetailedInfo.Text = "Obtener información detallada (paquete específico)"
-                    FeatureBasicInfo.Text = "Obtener información básica de características (todas)"
-                    FeatureDetailedInfo.Text = "Obtener información detallada de características (específica)"
                     CommitAndUnmountTSMI.Text = "Guardar cambios y desmontar imagen"
                     DiscardAndUnmountTSMI.Text = "Descartar cambios y desmontar imagen"
                     UnmountSettingsToolStripMenuItem.Text = "Configuración de desmontaje..."
@@ -4874,8 +4866,7 @@ Public Class MainForm
                 GetPackageInfo.Text = "Get detailed package information..."
                 AddPackage.Text = "Add package..."
                 RemovePackage.Text = "Remove package..."
-                GetFeatures.Text = "Get basic feature information..."
-                GetFeatureInfo.Text = "Get detailed feature information..."
+                GetFeatures.Text = "Get feature information..."
                 EnableFeature.Text = "Enable feature..."
                 DisableFeature.Text = "Disable feature..."
                 CleanupImage.Text = "Perform cleanup or recovery operations..."
@@ -5053,8 +5044,6 @@ Public Class MainForm
                 ' Pop-up context menus
                 PkgBasicInfo.Text = "Get basic information (all packages)"
                 PkgDetailedInfo.Text = "Get detailed information (specific package)"
-                FeatureBasicInfo.Text = "Get basic feature info (all features)"
-                FeatureDetailedInfo.Text = "Get detailed feature info (specific feature)"
                 CommitAndUnmountTSMI.Text = "Commit changes and unmount image"
                 DiscardAndUnmountTSMI.Text = "Discard changes and unmount image"
                 UnmountSettingsToolStripMenuItem.Text = "Unmount settings..."
@@ -5154,8 +5143,7 @@ Public Class MainForm
                 GetPackageInfo.Text = "Obtener información detallada de paquetes..."
                 AddPackage.Text = "Añadir paquete..."
                 RemovePackage.Text = "Eliminar paquete..."
-                GetFeatures.Text = "Obtener información básica de características..."
-                GetFeatureInfo.Text = "Obtener información detallada de características..."
+                GetFeatures.Text = "Obtener información de características..."
                 EnableFeature.Text = "Habilitar característica..."
                 DisableFeature.Text = "Deshabilitar característica..."
                 CleanupImage.Text = "Realizar operaciones de limpieza o recuperación..."
@@ -5333,8 +5321,6 @@ Public Class MainForm
                 ' Pop-up context menus
                 PkgBasicInfo.Text = "Obtener información básica (todos los paquetes)"
                 PkgDetailedInfo.Text = "Obtener información detallada (paquete específico)"
-                FeatureBasicInfo.Text = "Obtener información básica de características (todas)"
-                FeatureDetailedInfo.Text = "Obtener información detallada de características (específica)"
                 CommitAndUnmountTSMI.Text = "Guardar cambios y desmontar imagen"
                 DiscardAndUnmountTSMI.Text = "Descartar cambios y desmontar imagen"
                 UnmountSettingsToolStripMenuItem.Text = "Configuración de desmontaje..."
@@ -7164,7 +7150,7 @@ Public Class MainForm
         ShowChildDescs(True, 1)
     End Sub
 
-    Private Sub HideChildDescsTrigger(sender As Object, e As EventArgs) Handles AppendImage.MouseLeave, ApplyFFU.MouseLeave, ApplyImage.MouseLeave, CaptureCustomImage.MouseLeave, CaptureFFU.MouseLeave, CaptureImage.MouseLeave, CleanupMountpoints.MouseLeave, CommitImage.MouseLeave, DeleteImage.MouseLeave, ExportImage.MouseLeave, GetImageInfo.MouseLeave, GetWIMBootEntry.MouseLeave, ListImage.MouseLeave, MountImage.MouseLeave, OptimizeFFU.MouseLeave, OptimizeImage.MouseLeave, RemountImage.MouseLeave, SplitFFU.MouseLeave, SplitImage.MouseLeave, UnmountImage.MouseLeave, UpdateWIMBootEntry.MouseLeave, ApplySiloedPackage.MouseLeave, GetPackages.MouseLeave, GetPackageInfo.MouseLeave, AddPackage.MouseLeave, RemovePackage.MouseLeave, GetFeatures.MouseLeave, GetFeatureInfo.MouseLeave, EnableFeature.MouseLeave, DisableFeature.MouseLeave, CleanupImage.MouseLeave, AddProvisionedAppxPackage.MouseLeave, GetProvisioningPackageInfo.MouseLeave, ApplyCustomDataImage.MouseLeave, GetProvisionedAppxPackages.MouseLeave, AddProvisionedAppxPackage.MouseLeave, RemoveProvisionedAppxPackage.MouseLeave, OptimizeProvisionedAppxPackages.MouseLeave, SetProvisionedAppxDataFile.MouseLeave, CheckAppPatch.MouseLeave, GetAppPatchInfo.MouseLeave, GetAppPatches.MouseLeave, GetAppInfo.MouseLeave, GetApps.MouseLeave, ExportDefaultAppAssociations.MouseLeave, GetDefaultAppAssociations.MouseLeave, ImportDefaultAppAssociations.MouseLeave, RemoveDefaultAppAssociations.MouseLeave, GetIntl.MouseLeave, SetUILangFallback.MouseLeave, SetSysUILang.MouseLeave, SetSysLocale.MouseLeave, SetUserLocale.MouseLeave, SetInputLocale.MouseLeave, SetAllIntl.MouseLeave, SetTimeZone.MouseLeave, SetSKUIntlDefaults.MouseLeave, SetLayeredDriver.MouseLeave, GenLangINI.MouseLeave, SetSetupUILang.MouseLeave, AddCapability.MouseLeave, ExportSource.MouseLeave, GetCapabilities.MouseLeave, GetCapabilityInfo.MouseLeave, RemoveCapability.MouseLeave, GetCurrentEdition.MouseLeave, GetTargetEditions.MouseLeave, SetEdition.MouseLeave, SetProductKey.MouseLeave, GetDrivers.MouseLeave, AddDriver.MouseLeave, RemoveDriver.MouseLeave, ExportDriver.MouseLeave, ApplyUnattend.MouseLeave, GetPESettings.MouseLeave, GetTargetPath.MouseLeave, GetScratchSpace.MouseLeave, SetScratchSpace.MouseLeave, SetTargetPath.MouseLeave, GetOSUninstallWindow.MouseLeave, InitiateOSUninstall.MouseLeave, RemoveOSUninstall.MouseLeave, SetOSUninstallWindow.MouseLeave, SetReservedStorageState.MouseLeave, GetReservedStorageState.MouseLeave, NewProjectToolStripMenuItem.MouseLeave, OpenExistingProjectToolStripMenuItem.MouseLeave, SaveProjectToolStripMenuItem.MouseLeave, SaveProjectasToolStripMenuItem.MouseLeave, ExitToolStripMenuItem.MouseLeave, ViewProjectFilesInFileExplorerToolStripMenuItem.MouseLeave, UnloadProjectToolStripMenuItem.MouseLeave, SwitchImageIndexesToolStripMenuItem.MouseLeave, ProjectPropertiesToolStripMenuItem.MouseLeave, ImagePropertiesToolStripMenuItem.MouseLeave, ImageManagementToolStripMenuItem.MouseLeave, OSPackagesToolStripMenuItem.MouseLeave, ProvisioningPackagesToolStripMenuItem.MouseLeave, AppPackagesToolStripMenuItem.MouseLeave, AppPatchesToolStripMenuItem.MouseLeave, DefaultAppAssociationsToolStripMenuItem.MouseLeave, LanguagesAndRegionSettingsToolStripMenuItem.MouseLeave, CapabilitiesToolStripMenuItem.MouseLeave, WindowsEditionsToolStripMenuItem.MouseLeave, DriversToolStripMenuItem.MouseLeave, UnattendedAnswerFilesToolStripMenuItem.MouseLeave, WindowsPEServicingToolStripMenuItem.MouseLeave, OSUninstallToolStripMenuItem.MouseLeave, ReservedStorageToolStripMenuItem.MouseLeave, ImageConversionToolStripMenuItem.MouseLeave, WIMESDToolStripMenuItem.MouseLeave, RemountImageWithWritePermissionsToolStripMenuItem.MouseLeave, CommandShellToolStripMenuItem.MouseLeave, OptionsToolStripMenuItem.MouseLeave, HelpTopicsToolStripMenuItem.MouseLeave, GlossaryToolStripMenuItem.MouseLeave, CommandHelpToolStripMenuItem.MouseLeave, AboutDISMToolsToolStripMenuItem.MouseLeave, UnattendedAnswerFileManagerToolStripMenuItem.MouseLeave, AddEdge.MouseLeave, AddEdgeBrowser.MouseLeave, AddEdgeWebView.MouseLeave, ReportManagerToolStripMenuItem.MouseLeave, MergeSWM.MouseLeave, MountedImageManagerTSMI.MouseLeave, ReportFeedbackToolStripMenuItem.MouseLeave, ManageOnlineInstallationToolStripMenuItem.MouseLeave, AddProvisioningPackage.MouseLeave
+    Private Sub HideChildDescsTrigger(sender As Object, e As EventArgs) Handles AppendImage.MouseLeave, ApplyFFU.MouseLeave, ApplyImage.MouseLeave, CaptureCustomImage.MouseLeave, CaptureFFU.MouseLeave, CaptureImage.MouseLeave, CleanupMountpoints.MouseLeave, CommitImage.MouseLeave, DeleteImage.MouseLeave, ExportImage.MouseLeave, GetImageInfo.MouseLeave, GetWIMBootEntry.MouseLeave, ListImage.MouseLeave, MountImage.MouseLeave, OptimizeFFU.MouseLeave, OptimizeImage.MouseLeave, RemountImage.MouseLeave, SplitFFU.MouseLeave, SplitImage.MouseLeave, UnmountImage.MouseLeave, UpdateWIMBootEntry.MouseLeave, ApplySiloedPackage.MouseLeave, GetPackages.MouseLeave, GetPackageInfo.MouseLeave, AddPackage.MouseLeave, RemovePackage.MouseLeave, GetFeatures.MouseLeave, EnableFeature.MouseLeave, DisableFeature.MouseLeave, CleanupImage.MouseLeave, AddProvisionedAppxPackage.MouseLeave, GetProvisioningPackageInfo.MouseLeave, ApplyCustomDataImage.MouseLeave, GetProvisionedAppxPackages.MouseLeave, AddProvisionedAppxPackage.MouseLeave, RemoveProvisionedAppxPackage.MouseLeave, OptimizeProvisionedAppxPackages.MouseLeave, SetProvisionedAppxDataFile.MouseLeave, CheckAppPatch.MouseLeave, GetAppPatchInfo.MouseLeave, GetAppPatches.MouseLeave, GetAppInfo.MouseLeave, GetApps.MouseLeave, ExportDefaultAppAssociations.MouseLeave, GetDefaultAppAssociations.MouseLeave, ImportDefaultAppAssociations.MouseLeave, RemoveDefaultAppAssociations.MouseLeave, GetIntl.MouseLeave, SetUILangFallback.MouseLeave, SetSysUILang.MouseLeave, SetSysLocale.MouseLeave, SetUserLocale.MouseLeave, SetInputLocale.MouseLeave, SetAllIntl.MouseLeave, SetTimeZone.MouseLeave, SetSKUIntlDefaults.MouseLeave, SetLayeredDriver.MouseLeave, GenLangINI.MouseLeave, SetSetupUILang.MouseLeave, AddCapability.MouseLeave, ExportSource.MouseLeave, GetCapabilities.MouseLeave, GetCapabilityInfo.MouseLeave, RemoveCapability.MouseLeave, GetCurrentEdition.MouseLeave, GetTargetEditions.MouseLeave, SetEdition.MouseLeave, SetProductKey.MouseLeave, GetDrivers.MouseLeave, AddDriver.MouseLeave, RemoveDriver.MouseLeave, ExportDriver.MouseLeave, ApplyUnattend.MouseLeave, GetPESettings.MouseLeave, GetTargetPath.MouseLeave, GetScratchSpace.MouseLeave, SetScratchSpace.MouseLeave, SetTargetPath.MouseLeave, GetOSUninstallWindow.MouseLeave, InitiateOSUninstall.MouseLeave, RemoveOSUninstall.MouseLeave, SetOSUninstallWindow.MouseLeave, SetReservedStorageState.MouseLeave, GetReservedStorageState.MouseLeave, NewProjectToolStripMenuItem.MouseLeave, OpenExistingProjectToolStripMenuItem.MouseLeave, SaveProjectToolStripMenuItem.MouseLeave, SaveProjectasToolStripMenuItem.MouseLeave, ExitToolStripMenuItem.MouseLeave, ViewProjectFilesInFileExplorerToolStripMenuItem.MouseLeave, UnloadProjectToolStripMenuItem.MouseLeave, SwitchImageIndexesToolStripMenuItem.MouseLeave, ProjectPropertiesToolStripMenuItem.MouseLeave, ImagePropertiesToolStripMenuItem.MouseLeave, ImageManagementToolStripMenuItem.MouseLeave, OSPackagesToolStripMenuItem.MouseLeave, ProvisioningPackagesToolStripMenuItem.MouseLeave, AppPackagesToolStripMenuItem.MouseLeave, AppPatchesToolStripMenuItem.MouseLeave, DefaultAppAssociationsToolStripMenuItem.MouseLeave, LanguagesAndRegionSettingsToolStripMenuItem.MouseLeave, CapabilitiesToolStripMenuItem.MouseLeave, WindowsEditionsToolStripMenuItem.MouseLeave, DriversToolStripMenuItem.MouseLeave, UnattendedAnswerFilesToolStripMenuItem.MouseLeave, WindowsPEServicingToolStripMenuItem.MouseLeave, OSUninstallToolStripMenuItem.MouseLeave, ReservedStorageToolStripMenuItem.MouseLeave, ImageConversionToolStripMenuItem.MouseLeave, WIMESDToolStripMenuItem.MouseLeave, RemountImageWithWritePermissionsToolStripMenuItem.MouseLeave, CommandShellToolStripMenuItem.MouseLeave, OptionsToolStripMenuItem.MouseLeave, HelpTopicsToolStripMenuItem.MouseLeave, GlossaryToolStripMenuItem.MouseLeave, CommandHelpToolStripMenuItem.MouseLeave, AboutDISMToolsToolStripMenuItem.MouseLeave, UnattendedAnswerFileManagerToolStripMenuItem.MouseLeave, AddEdge.MouseLeave, AddEdgeBrowser.MouseLeave, AddEdgeWebView.MouseLeave, ReportManagerToolStripMenuItem.MouseLeave, MergeSWM.MouseLeave, MountedImageManagerTSMI.MouseLeave, ReportFeedbackToolStripMenuItem.MouseLeave, ManageOnlineInstallationToolStripMenuItem.MouseLeave, AddProvisioningPackage.MouseLeave
         HideChildDescs()
     End Sub
 
@@ -7274,10 +7260,6 @@ Public Class MainForm
 
     Private Sub GetFeatures_MouseEnter(sender As Object, e As EventArgs) Handles GetFeatures.MouseEnter
         ShowChildDescs(True, 28)
-    End Sub
-
-    Private Sub GetFeatureInfo_MouseEnter(sender As Object, e As EventArgs) Handles GetFeatureInfo.MouseEnter
-        ShowChildDescs(True, 29)
     End Sub
 
     Private Sub EnableFeature_MouseEnter(sender As Object, e As EventArgs) Handles EnableFeature.MouseEnter
@@ -7450,10 +7432,6 @@ Public Class MainForm
 
     Private Sub GetDrivers_MouseEnter(sender As Object, e As EventArgs) Handles GetDrivers.MouseEnter
         ShowChildDescs(True, 72)
-    End Sub
-
-    Private Sub GetDriverInfo_MouseEnter(sender As Object, e As EventArgs)
-        ShowChildDescs(True, 73)
     End Sub
 
     Private Sub AddDriver_MouseEnter(sender As Object, e As EventArgs) Handles AddDriver.MouseEnter
@@ -7653,7 +7631,31 @@ Public Class MainForm
     End Sub
 
     Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
-        FeatureInfoCMS.Show(Button8, New Point(24, Button8.Height * 0.75))
+        ProgressPanel.OperationNum = 994
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
+        End Select
+        If Not CompletedTasks(1) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(500)
+        End While
+        If FeatureInfoList IsNot Nothing Then GetFeatureInfoDlg.InstalledFeatureInfo = FeatureInfoList
+        GetFeatureInfoDlg.ShowDialog(Me)
     End Sub
 
     Private Sub Button14_Click(sender As Object, e As EventArgs) Handles Button14.Click, ProjectPropertiesToolStripMenuItem.Click
@@ -10193,5 +10195,34 @@ Public Class MainForm
         Else
             WimScriptEditor.Show()
         End If
+    End Sub
+
+    Private Sub GetFeatures_Click(sender As Object, e As EventArgs) Handles GetFeatures.Click
+        If Not IsImageMounted Or Not OnlineManagement Then Exit Sub
+        ProgressPanel.OperationNum = 994
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
+        End Select
+        If Not CompletedTasks(1) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(500)
+        End While
+        If FeatureInfoList IsNot Nothing Then GetFeatureInfoDlg.InstalledFeatureInfo = FeatureInfoList
+        GetFeatureInfoDlg.ShowDialog(Me)
     End Sub
 End Class

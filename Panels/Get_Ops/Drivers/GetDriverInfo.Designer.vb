@@ -22,13 +22,9 @@ Partial Class GetDriverInfo
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
-        Me.OK_Button = New System.Windows.Forms.Button()
-        Me.Cancel_Button = New System.Windows.Forms.Button()
         Me.Win10Title = New System.Windows.Forms.Panel()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.ButtonControlPanel = New System.Windows.Forms.Panel()
         Me.DriverInfoContainerPanel = New System.Windows.Forms.Panel()
         Me.DriverInfoPanel = New System.Windows.Forms.Panel()
         Me.Panel6 = New System.Windows.Forms.Panel()
@@ -119,10 +115,8 @@ Partial Class GetDriverInfo
         Me.DriverFileLink = New System.Windows.Forms.LinkLabel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
-        Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.ButtonControlPanel.SuspendLayout()
         Me.DriverInfoContainerPanel.SuspendLayout()
         Me.DriverInfoPanel.SuspendLayout()
         Me.Panel6.SuspendLayout()
@@ -155,42 +149,6 @@ Partial Class GetDriverInfo
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
-        '
-        'TableLayoutPanel1
-        '
-        Me.TableLayoutPanel1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TableLayoutPanel1.ColumnCount = 2
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.Controls.Add(Me.OK_Button, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.Cancel_Button, 1, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(850, 12)
-        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 1
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(146, 29)
-        Me.TableLayoutPanel1.TabIndex = 0
-        '
-        'OK_Button
-        '
-        Me.OK_Button.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.OK_Button.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.OK_Button.Location = New System.Drawing.Point(3, 3)
-        Me.OK_Button.Name = "OK_Button"
-        Me.OK_Button.Size = New System.Drawing.Size(67, 23)
-        Me.OK_Button.TabIndex = 0
-        Me.OK_Button.Text = "OK"
-        '
-        'Cancel_Button
-        '
-        Me.Cancel_Button.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.Cancel_Button.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.Cancel_Button.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Cancel_Button.Location = New System.Drawing.Point(76, 3)
-        Me.Cancel_Button.Name = "Cancel_Button"
-        Me.Cancel_Button.Size = New System.Drawing.Size(67, 23)
-        Me.Cancel_Button.TabIndex = 1
-        Me.Cancel_Button.Text = "Cancel"
         '
         'Win10Title
         '
@@ -225,16 +183,6 @@ Partial Class GetDriverInfo
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Get driver information"
         '
-        'ButtonControlPanel
-        '
-        Me.ButtonControlPanel.Controls.Add(Me.TableLayoutPanel1)
-        Me.ButtonControlPanel.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.ButtonControlPanel.Location = New System.Drawing.Point(0, 509)
-        Me.ButtonControlPanel.Name = "ButtonControlPanel"
-        Me.ButtonControlPanel.Size = New System.Drawing.Size(1008, 52)
-        Me.ButtonControlPanel.TabIndex = 8
-        Me.ButtonControlPanel.Visible = False
-        '
         'DriverInfoContainerPanel
         '
         Me.DriverInfoContainerPanel.Controls.Add(Me.DriverInfoPanel)
@@ -242,7 +190,7 @@ Partial Class GetDriverInfo
         Me.DriverInfoContainerPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.DriverInfoContainerPanel.Location = New System.Drawing.Point(0, 48)
         Me.DriverInfoContainerPanel.Name = "DriverInfoContainerPanel"
-        Me.DriverInfoContainerPanel.Size = New System.Drawing.Size(1008, 461)
+        Me.DriverInfoContainerPanel.Size = New System.Drawing.Size(1008, 513)
         Me.DriverInfoContainerPanel.TabIndex = 9
         '
         'DriverInfoPanel
@@ -254,7 +202,7 @@ Partial Class GetDriverInfo
         Me.DriverInfoPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.DriverInfoPanel.Location = New System.Drawing.Point(0, 0)
         Me.DriverInfoPanel.Name = "DriverInfoPanel"
-        Me.DriverInfoPanel.Size = New System.Drawing.Size(1008, 461)
+        Me.DriverInfoPanel.Size = New System.Drawing.Size(1008, 513)
         Me.DriverInfoPanel.TabIndex = 3
         Me.DriverInfoPanel.Visible = False
         '
@@ -264,7 +212,7 @@ Partial Class GetDriverInfo
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel6.Controls.Add(Me.Button7)
         Me.Panel6.Controls.Add(Me.Label48)
-        Me.Panel6.Location = New System.Drawing.Point(17, 406)
+        Me.Panel6.Location = New System.Drawing.Point(17, 458)
         Me.Panel6.Name = "Panel6"
         Me.Panel6.Size = New System.Drawing.Size(967, 49)
         Me.Panel6.TabIndex = 5
@@ -296,7 +244,7 @@ Partial Class GetDriverInfo
         '
         Me.Label5.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(20, 408)
+        Me.Label5.Location = New System.Drawing.Point(20, 460)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(38, 13)
         Me.Label5.TabIndex = 4
@@ -311,7 +259,7 @@ Partial Class GetDriverInfo
         Me.DriverContainerPanel.Controls.Add(Me.InfoFromDrvPackagesPanel)
         Me.DriverContainerPanel.Location = New System.Drawing.Point(64, 68)
         Me.DriverContainerPanel.Name = "DriverContainerPanel"
-        Me.DriverContainerPanel.Size = New System.Drawing.Size(880, 324)
+        Me.DriverContainerPanel.Size = New System.Drawing.Size(880, 376)
         Me.DriverContainerPanel.TabIndex = 3
         '
         'InfoFromInstalledDrvsPanel
@@ -320,7 +268,7 @@ Partial Class GetDriverInfo
         Me.InfoFromInstalledDrvsPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.InfoFromInstalledDrvsPanel.Location = New System.Drawing.Point(0, 0)
         Me.InfoFromInstalledDrvsPanel.Name = "InfoFromInstalledDrvsPanel"
-        Me.InfoFromInstalledDrvsPanel.Size = New System.Drawing.Size(880, 324)
+        Me.InfoFromInstalledDrvsPanel.Size = New System.Drawing.Size(880, 376)
         Me.InfoFromInstalledDrvsPanel.TabIndex = 0
         Me.InfoFromInstalledDrvsPanel.Visible = False
         '
@@ -339,7 +287,7 @@ Partial Class GetDriverInfo
         '
         Me.SplitContainer2.Panel2.Controls.Add(Me.Panel3)
         Me.SplitContainer2.Panel2.Controls.Add(Me.FlowLayoutPanel4)
-        Me.SplitContainer2.Size = New System.Drawing.Size(880, 324)
+        Me.SplitContainer2.Size = New System.Drawing.Size(880, 376)
         Me.SplitContainer2.SplitterDistance = 440
         Me.SplitContainer2.TabIndex = 1
         '
@@ -349,7 +297,7 @@ Partial Class GetDriverInfo
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel2.Location = New System.Drawing.Point(0, 0)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(440, 324)
+        Me.Panel2.Size = New System.Drawing.Size(440, 376)
         Me.Panel2.TabIndex = 1
         '
         'ListView1
@@ -359,7 +307,7 @@ Partial Class GetDriverInfo
         Me.ListView1.FullRowSelect = True
         Me.ListView1.Location = New System.Drawing.Point(0, 0)
         Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(440, 324)
+        Me.ListView1.Size = New System.Drawing.Size(440, 376)
         Me.ListView1.TabIndex = 0
         Me.ListView1.UseCompatibleStateImageBehavior = False
         Me.ListView1.View = System.Windows.Forms.View.Details
@@ -381,7 +329,7 @@ Partial Class GetDriverInfo
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel3.Location = New System.Drawing.Point(0, 0)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(436, 324)
+        Me.Panel3.Size = New System.Drawing.Size(436, 376)
         Me.Panel3.TabIndex = 1
         '
         'Panel4
@@ -391,7 +339,7 @@ Partial Class GetDriverInfo
         Me.Panel4.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel4.Location = New System.Drawing.Point(0, 0)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(436, 324)
+        Me.Panel4.Size = New System.Drawing.Size(436, 376)
         Me.Panel4.TabIndex = 2
         Me.Panel4.Visible = False
         '
@@ -427,7 +375,7 @@ Partial Class GetDriverInfo
         Me.FlowLayoutPanel3.Location = New System.Drawing.Point(0, 36)
         Me.FlowLayoutPanel3.Name = "FlowLayoutPanel3"
         Me.FlowLayoutPanel3.Padding = New System.Windows.Forms.Padding(4, 6, 0, 0)
-        Me.FlowLayoutPanel3.Size = New System.Drawing.Size(436, 288)
+        Me.FlowLayoutPanel3.Size = New System.Drawing.Size(436, 340)
         Me.FlowLayoutPanel3.TabIndex = 1
         Me.FlowLayoutPanel3.WrapContents = False
         '
@@ -709,7 +657,7 @@ Partial Class GetDriverInfo
         Me.Panel7.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel7.Location = New System.Drawing.Point(0, 0)
         Me.Panel7.Name = "Panel7"
-        Me.Panel7.Size = New System.Drawing.Size(436, 324)
+        Me.Panel7.Size = New System.Drawing.Size(436, 376)
         Me.Panel7.TabIndex = 1
         '
         'Label37
@@ -718,7 +666,7 @@ Partial Class GetDriverInfo
         Me.Label37.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label37.Location = New System.Drawing.Point(0, 0)
         Me.Label37.Name = "Label37"
-        Me.Label37.Size = New System.Drawing.Size(436, 324)
+        Me.Label37.Size = New System.Drawing.Size(436, 376)
         Me.Label37.TabIndex = 0
         Me.Label37.Text = "Select an installed driver to view its information here"
         Me.Label37.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -736,7 +684,7 @@ Partial Class GetDriverInfo
         Me.InfoFromDrvPackagesPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.InfoFromDrvPackagesPanel.Location = New System.Drawing.Point(0, 0)
         Me.InfoFromDrvPackagesPanel.Name = "InfoFromDrvPackagesPanel"
-        Me.InfoFromDrvPackagesPanel.Size = New System.Drawing.Size(880, 324)
+        Me.InfoFromDrvPackagesPanel.Size = New System.Drawing.Size(880, 376)
         Me.InfoFromDrvPackagesPanel.TabIndex = 1
         '
         'SplitContainer1
@@ -754,7 +702,7 @@ Partial Class GetDriverInfo
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.DrvPackageContainerPanel)
         Me.SplitContainer1.Panel2.Controls.Add(Me.FlowLayoutPanel1)
-        Me.SplitContainer1.Size = New System.Drawing.Size(880, 324)
+        Me.SplitContainer1.Size = New System.Drawing.Size(880, 376)
         Me.SplitContainer1.SplitterDistance = 440
         Me.SplitContainer1.TabIndex = 0
         '
@@ -765,7 +713,7 @@ Partial Class GetDriverInfo
         Me.DrvPackagesPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.DrvPackagesPanel.Location = New System.Drawing.Point(0, 0)
         Me.DrvPackagesPanel.Name = "DrvPackagesPanel"
-        Me.DrvPackagesPanel.Size = New System.Drawing.Size(440, 324)
+        Me.DrvPackagesPanel.Size = New System.Drawing.Size(440, 376)
         Me.DrvPackagesPanel.TabIndex = 1
         '
         'ListBox1
@@ -775,7 +723,7 @@ Partial Class GetDriverInfo
         Me.ListBox1.FormattingEnabled = True
         Me.ListBox1.Location = New System.Drawing.Point(0, 0)
         Me.ListBox1.Name = "ListBox1"
-        Me.ListBox1.Size = New System.Drawing.Size(440, 296)
+        Me.ListBox1.Size = New System.Drawing.Size(440, 348)
         Me.ListBox1.TabIndex = 0
         '
         'TableLayoutPanel2
@@ -788,7 +736,7 @@ Partial Class GetDriverInfo
         Me.TableLayoutPanel2.Controls.Add(Me.Button2, 1, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.Button1, 0, 0)
         Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(0, 296)
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(0, 348)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
         Me.TableLayoutPanel2.RowCount = 1
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -837,7 +785,7 @@ Partial Class GetDriverInfo
         Me.DrvPackageContainerPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.DrvPackageContainerPanel.Location = New System.Drawing.Point(0, 0)
         Me.DrvPackageContainerPanel.Name = "DrvPackageContainerPanel"
-        Me.DrvPackageContainerPanel.Size = New System.Drawing.Size(436, 324)
+        Me.DrvPackageContainerPanel.Size = New System.Drawing.Size(436, 376)
         Me.DrvPackageContainerPanel.TabIndex = 1
         '
         'DrvPackageInfoPanel
@@ -847,7 +795,7 @@ Partial Class GetDriverInfo
         Me.DrvPackageInfoPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.DrvPackageInfoPanel.Location = New System.Drawing.Point(0, 0)
         Me.DrvPackageInfoPanel.Name = "DrvPackageInfoPanel"
-        Me.DrvPackageInfoPanel.Size = New System.Drawing.Size(436, 324)
+        Me.DrvPackageInfoPanel.Size = New System.Drawing.Size(436, 376)
         Me.DrvPackageInfoPanel.TabIndex = 2
         Me.DrvPackageInfoPanel.Visible = False
         '
@@ -872,7 +820,7 @@ Partial Class GetDriverInfo
         Me.FlowLayoutPanel2.Location = New System.Drawing.Point(0, 36)
         Me.FlowLayoutPanel2.Name = "FlowLayoutPanel2"
         Me.FlowLayoutPanel2.Padding = New System.Windows.Forms.Padding(4, 6, 0, 0)
-        Me.FlowLayoutPanel2.Size = New System.Drawing.Size(436, 288)
+        Me.FlowLayoutPanel2.Size = New System.Drawing.Size(436, 340)
         Me.FlowLayoutPanel2.TabIndex = 1
         Me.FlowLayoutPanel2.WrapContents = False
         '
@@ -1104,7 +1052,7 @@ Partial Class GetDriverInfo
         Me.NoDrvPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.NoDrvPanel.Location = New System.Drawing.Point(0, 0)
         Me.NoDrvPanel.Name = "NoDrvPanel"
-        Me.NoDrvPanel.Size = New System.Drawing.Size(436, 324)
+        Me.NoDrvPanel.Size = New System.Drawing.Size(436, 376)
         Me.NoDrvPanel.TabIndex = 1
         '
         'Label6
@@ -1113,7 +1061,7 @@ Partial Class GetDriverInfo
         Me.Label6.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label6.Location = New System.Drawing.Point(0, 0)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(436, 324)
+        Me.Label6.Size = New System.Drawing.Size(436, 376)
         Me.Label6.TabIndex = 0
         Me.Label6.Text = "Add or select a driver package to view its information here"
         Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -1150,7 +1098,7 @@ Partial Class GetDriverInfo
         Me.MenuPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.MenuPanel.Location = New System.Drawing.Point(0, 0)
         Me.MenuPanel.Name = "MenuPanel"
-        Me.MenuPanel.Size = New System.Drawing.Size(1008, 461)
+        Me.MenuPanel.Size = New System.Drawing.Size(1008, 513)
         Me.MenuPanel.TabIndex = 2
         '
         'Label4
@@ -1236,14 +1184,11 @@ Partial Class GetDriverInfo
         '
         'GetDriverInfo
         '
-        Me.AcceptButton = Me.OK_Button
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(1008, 561)
         Me.Controls.Add(Me.DriverInfoContainerPanel)
         Me.Controls.Add(Me.Win10Title)
-        Me.Controls.Add(Me.ButtonControlPanel)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.MaximizeBox = False
@@ -1252,11 +1197,9 @@ Partial Class GetDriverInfo
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Get driver information"
-        Me.TableLayoutPanel1.ResumeLayout(False)
         Me.Win10Title.ResumeLayout(False)
         Me.Win10Title.PerformLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.ButtonControlPanel.ResumeLayout(False)
         Me.DriverInfoContainerPanel.ResumeLayout(False)
         Me.DriverInfoPanel.ResumeLayout(False)
         Me.DriverInfoPanel.PerformLayout()
@@ -1296,13 +1239,9 @@ Partial Class GetDriverInfo
         Me.ResumeLayout(False)
 
     End Sub
-    Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
-    Friend WithEvents OK_Button As System.Windows.Forms.Button
-    Friend WithEvents Cancel_Button As System.Windows.Forms.Button
     Friend WithEvents Win10Title As System.Windows.Forms.Panel
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
     Friend WithEvents Label1 As System.Windows.Forms.Label
-    Friend WithEvents ButtonControlPanel As System.Windows.Forms.Panel
     Friend WithEvents DriverInfoContainerPanel As System.Windows.Forms.Panel
     Friend WithEvents MenuPanel As System.Windows.Forms.Panel
     Friend WithEvents PictureBox3 As System.Windows.Forms.PictureBox

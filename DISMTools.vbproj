@@ -232,6 +232,12 @@
     <Compile Include="Panels\Get_Ops\Drivers\GetDriverInfo.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Get_Ops\Features\GetFeatureInfo.Designer.vb">
+      <DependentUpon>GetFeatureInfo.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\Features\GetFeatureInfo.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Get_Ops\GetImgInfoDlg.Designer.vb">
       <DependentUpon>GetImgInfoDlg.vb</DependentUpon>
     </Compile>
@@ -617,6 +623,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Get_Ops\Drivers\GetDriverInfo.resx">
       <DependentUpon>GetDriverInfo.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Get_Ops\Features\GetFeatureInfo.resx">
+      <DependentUpon>GetFeatureInfo.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Get_Ops\GetImgInfoDlg.resx">
       <DependentUpon>GetImgInfoDlg.vb</DependentUpon>
