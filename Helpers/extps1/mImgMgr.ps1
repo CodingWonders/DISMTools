@@ -29,11 +29,21 @@
 # Detect PS version first, as some parameters require PowerShell 5 or newer
 if ($PSVersionTable.PSVersion.Major -lt 5)
 {
-    Write-Host "You need to run this script in PowerShell 5 or newer. Press ENTER to continue..."
+    Write-Host "You need to run this script in PowerShell 5 or newer. Press ENTER to exit..."
     Read-Host | Out-Null
     $host.UI.RawUI.WindowTitle = "DISMTools Command Console"
     exit 1
 }
+
+# Detect if admin privileges are present, and stop the script from running any further if they aren't present
+if (([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator) -eq $false)
+{
+    Write-Host "This script must be run with administrative privileges. Press ENTER to exit..."
+    Read-Host | Out-Null
+    $host.UI.RawUI.WindowTitle = "DISMTools Command Console"
+    exit 1    
+}
+
 
 # Import the DISM module
 Import-Module Dism
