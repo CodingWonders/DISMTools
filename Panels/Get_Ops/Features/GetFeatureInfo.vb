@@ -412,4 +412,8 @@ Public Class GetFeatureInfoDlg
             Panel7.Visible = True
         End Try
     End Sub
+
+    Private Sub GetFeatureInfoDlg_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+    End Sub
 End Class

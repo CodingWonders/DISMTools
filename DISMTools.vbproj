@@ -226,6 +226,12 @@
     <Compile Include="Panels\FirstUse\PrgSetup.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Get_Ops\Capabilities\GetCapabilityInfo.Designer.vb">
+      <DependentUpon>GetCapabilityInfo.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\Capabilities\GetCapabilityInfo.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Get_Ops\Drivers\GetDriverInfo.Designer.vb">
       <DependentUpon>GetDriverInfo.vb</DependentUpon>
     </Compile>
@@ -620,6 +626,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\FirstUse\PrgSetup.resx">
       <DependentUpon>PrgSetup.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Get_Ops\Capabilities\GetCapabilityInfo.resx">
+      <DependentUpon>GetCapabilityInfo.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Get_Ops\Drivers\GetDriverInfo.resx">
       <DependentUpon>GetDriverInfo.vb</DependentUpon>

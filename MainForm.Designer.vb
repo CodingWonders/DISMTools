@@ -120,7 +120,6 @@ Partial Class MainForm
         Me.AddCapability = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExportSource = New System.Windows.Forms.ToolStripMenuItem()
         Me.GetCapabilities = New System.Windows.Forms.ToolStripMenuItem()
-        Me.GetCapabilityInfo = New System.Windows.Forms.ToolStripMenuItem()
         Me.RemoveCapability = New System.Windows.Forms.ToolStripMenuItem()
         Me.WindowsEditionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GetCurrentEdition = New System.Windows.Forms.ToolStripMenuItem()
@@ -1011,7 +1010,7 @@ Partial Class MainForm
         '
         'CapabilitiesToolStripMenuItem
         '
-        Me.CapabilitiesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddCapability, Me.ExportSource, Me.GetCapabilities, Me.GetCapabilityInfo, Me.RemoveCapability})
+        Me.CapabilitiesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddCapability, Me.ExportSource, Me.GetCapabilities, Me.RemoveCapability})
         Me.CapabilitiesToolStripMenuItem.Name = "CapabilitiesToolStripMenuItem"
         Me.CapabilitiesToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
         Me.CapabilitiesToolStripMenuItem.Text = "Capabilities"
@@ -1019,31 +1018,25 @@ Partial Class MainForm
         'AddCapability
         '
         Me.AddCapability.Name = "AddCapability"
-        Me.AddCapability.Size = New System.Drawing.Size(266, 22)
+        Me.AddCapability.Size = New System.Drawing.Size(259, 22)
         Me.AddCapability.Text = "Add capability..."
         '
         'ExportSource
         '
         Me.ExportSource.Name = "ExportSource"
-        Me.ExportSource.Size = New System.Drawing.Size(266, 22)
+        Me.ExportSource.Size = New System.Drawing.Size(259, 22)
         Me.ExportSource.Text = "Export capabilities into repository..."
         '
         'GetCapabilities
         '
         Me.GetCapabilities.Name = "GetCapabilities"
-        Me.GetCapabilities.Size = New System.Drawing.Size(266, 22)
-        Me.GetCapabilities.Text = "Get basic capability information..."
-        '
-        'GetCapabilityInfo
-        '
-        Me.GetCapabilityInfo.Name = "GetCapabilityInfo"
-        Me.GetCapabilityInfo.Size = New System.Drawing.Size(266, 22)
-        Me.GetCapabilityInfo.Text = "Get detailed capability information..."
+        Me.GetCapabilities.Size = New System.Drawing.Size(259, 22)
+        Me.GetCapabilities.Text = "Get capability information..."
         '
         'RemoveCapability
         '
         Me.RemoveCapability.Name = "RemoveCapability"
-        Me.RemoveCapability.Size = New System.Drawing.Size(266, 22)
+        Me.RemoveCapability.Size = New System.Drawing.Size(259, 22)
         Me.RemoveCapability.Text = "Remove capability..."
         '
         'WindowsEditionsToolStripMenuItem
@@ -2317,7 +2310,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.44444!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.55556!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 119.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -2366,7 +2359,7 @@ Partial Class MainForm
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel8.Location = New System.Drawing.Point(63, 3)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(70, 23)
+        Me.Panel8.Size = New System.Drawing.Size(69, 23)
         Me.Panel8.TabIndex = 8
         '
         'projName
@@ -2375,7 +2368,7 @@ Partial Class MainForm
         Me.projName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projName.Location = New System.Drawing.Point(0, 0)
         Me.projName.Name = "projName"
-        Me.projName.Size = New System.Drawing.Size(70, 23)
+        Me.projName.Size = New System.Drawing.Size(69, 23)
         Me.projName.TabIndex = 2
         Me.projName.Text = "projName"
         Me.projName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -2385,7 +2378,7 @@ Partial Class MainForm
         Me.projNameText.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projNameText.Location = New System.Drawing.Point(0, 0)
         Me.projNameText.Name = "projNameText"
-        Me.projNameText.Size = New System.Drawing.Size(70, 21)
+        Me.projNameText.Size = New System.Drawing.Size(69, 21)
         Me.projNameText.TabIndex = 4
         Me.projNameText.Text = "projName"
         Me.projNameText.Visible = False
@@ -3650,7 +3643,6 @@ Partial Class MainForm
     Friend WithEvents AddCapability As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ExportSource As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents GetCapabilities As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents GetCapabilityInfo As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents RemoveCapability As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents WindowsEditionsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents GetCurrentEdition As System.Windows.Forms.ToolStripMenuItem
