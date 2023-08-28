@@ -1105,4 +1105,10 @@ New features
   <data name="prev_element_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\prev_element_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="info_from_pkg_file" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\info_from_pkg_file.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="pkg_info_from_image" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\pkg_info_from_image.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

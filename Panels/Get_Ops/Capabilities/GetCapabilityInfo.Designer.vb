@@ -52,6 +52,7 @@ Partial Class GetCapabilityInfoDlg
         Me.Win10Title = New System.Windows.Forms.Panel()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.Label1 = New System.Windows.Forms.Label()
+        Me.Label55 = New System.Windows.Forms.Label()
         Me.FeatureInfoPanel.SuspendLayout()
         CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer2.Panel1.SuspendLayout()
@@ -174,6 +175,7 @@ Partial Class GetCapabilityInfoDlg
         Me.FlowLayoutPanel3.Controls.Add(Me.Label40)
         Me.FlowLayoutPanel3.Controls.Add(Me.Label43)
         Me.FlowLayoutPanel3.Controls.Add(Me.Label42)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Label55)
         Me.FlowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.FlowLayoutPanel3.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
         Me.FlowLayoutPanel3.Location = New System.Drawing.Point(0, 36)
@@ -394,6 +396,16 @@ Partial Class GetCapabilityInfoDlg
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Get capability information"
         '
+        'Label55
+        '
+        Me.Label55.AutoEllipsis = True
+        Me.Label55.Location = New System.Drawing.Point(7, 194)
+        Me.Label55.Name = "Label55"
+        Me.Label55.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label55.Size = New System.Drawing.Size(405, 16)
+        Me.Label55.TabIndex = 1
+        Me.Label55.UseMnemonic = False
+        '
         'GetCapabilityInfoDlg
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -459,5 +471,6 @@ Partial Class GetCapabilityInfoDlg
     Friend WithEvents Win10Title As System.Windows.Forms.Panel
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
     Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents Label55 As System.Windows.Forms.Label
 
 End Class

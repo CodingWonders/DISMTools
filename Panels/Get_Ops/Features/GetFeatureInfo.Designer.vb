@@ -52,6 +52,7 @@ Partial Class GetFeatureInfoDlg
         Me.Label37 = New System.Windows.Forms.Label()
         Me.FlowLayoutPanel4 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label55 = New System.Windows.Forms.Label()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.FeatureInfoPanel.SuspendLayout()
@@ -197,6 +198,7 @@ Partial Class GetFeatureInfoDlg
         Me.FlowLayoutPanel3.Controls.Add(Me.Label40)
         Me.FlowLayoutPanel3.Controls.Add(Me.Label43)
         Me.FlowLayoutPanel3.Controls.Add(Me.Label42)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Label55)
         Me.FlowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.FlowLayoutPanel3.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
         Me.FlowLayoutPanel3.Location = New System.Drawing.Point(0, 36)
@@ -394,6 +396,16 @@ Partial Class GetFeatureInfoDlg
         Me.Label2.TabIndex = 6
         Me.Label2.Text = "Ready"
         '
+        'Label55
+        '
+        Me.Label55.AutoEllipsis = True
+        Me.Label55.Location = New System.Drawing.Point(7, 194)
+        Me.Label55.Name = "Label55"
+        Me.Label55.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label55.Size = New System.Drawing.Size(405, 16)
+        Me.Label55.TabIndex = 1
+        Me.Label55.UseMnemonic = False
+        '
         'GetFeatureInfoDlg
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -459,5 +471,6 @@ Partial Class GetFeatureInfoDlg
     Friend WithEvents Label37 As System.Windows.Forms.Label
     Friend WithEvents FlowLayoutPanel4 As System.Windows.Forms.FlowLayoutPanel
     Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents Label55 As System.Windows.Forms.Label
 
 End Class
