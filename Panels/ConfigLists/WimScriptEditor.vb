@@ -9,6 +9,99 @@ Public Class WimScriptEditor
     Dim EditedLVI As String
 
     Private Sub WimScriptEditor_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Text = "DISM Configuration List Editor"
+                        Label1.Text = "The Configuration List Editor allows you to exclude files and/or folders during actions that let you specify these files, like capturing an image. You can either specify the settings from the graphical interface, or you can create the configuration file manually. When you've finished, click the Save icon."
+                        GroupBox1.Text = "Exclusion list"
+                        GroupBox2.Text = "Exclusion exception list"
+                        GroupBox3.Text = "Compression exclusion list"
+                        Button1.Text = "Add..."
+                        Button2.Text = "Edit..."
+                        Button3.Text = "Remove"
+                        Button5.Text = "Add..."
+                        Button6.Text = "Edit..."
+                        Button7.Text = "Remove"
+                        Button9.Text = "Add..."
+                        Button10.Text = "Edit..."
+                        Button11.Text = "Remove"
+                        WimScriptOFD.Title = "Specify the configuration list to load"
+                        WimScriptSFD.Title = "Specify the location to save the configuration list to"
+                        ToolStripButton2.ToolTipText = "New"
+                        ToolStripButton3.ToolTipText = "Open..."
+                        ToolStripButton4.ToolTipText = "Save..."
+                        ToolStripButton5.ToolTipText = "Toggle word wrap"
+                        ToolStripButton6.ToolTipText = "Help"
+                    Case "ESN"
+                        Text = "Editor de lista de configuraciones de DISM"
+                        Label1.Text = "El Editor de Lista de configuraciones le permite excluir archivos y/o carpetas durante acciones que le permiten especificar estos archivos, como capturar una imagen. Puede especificar las configuraciones desde la interfaz gráfica, o puede crear el archivo de configuración manualmente. Cuando haya acabado, haga clic en el icono de Guardar."
+                        GroupBox1.Text = "Lista de exclusiones"
+                        GroupBox2.Text = "Lista de excepción de exclusiones"
+                        GroupBox3.Text = "Lista de exclusión de compresión"
+                        Button1.Text = "Añadir..."
+                        Button2.Text = "Editar..."
+                        Button3.Text = "Eliminar"
+                        Button5.Text = "Añadir..."
+                        Button6.Text = "Editar..."
+                        Button7.Text = "Eliminar"
+                        Button9.Text = "Añadir..."
+                        Button10.Text = "Editar..."
+                        Button11.Text = "Eliminar"
+                        WimScriptOFD.Title = "Especifique el archivo de configuración a cargar"
+                        WimScriptSFD.Title = "Especifique la ubicación donde guardar el archivo de configuración"
+                        ToolStripButton2.ToolTipText = "Nuevo"
+                        ToolStripButton3.ToolTipText = "Abrir..."
+                        ToolStripButton4.ToolTipText = "Guardar..."
+                        ToolStripButton5.ToolTipText = "Cambiar ajuste de línea"
+                        ToolStripButton6.ToolTipText = "Ayuda"
+                End Select
+            Case 1
+                Text = "DISM Configuration List Editor"
+                Label1.Text = "The Configuration List Editor allows you to exclude files and/or folders during actions that let you specify these files, like capturing an image. You can either specify the settings from the graphical interface, or you can create the configuration file manually. When you've finished, click the Save icon."
+                GroupBox1.Text = "Exclusion list"
+                GroupBox2.Text = "Exclusion exception list"
+                GroupBox3.Text = "Compression exclusion list"
+                Button1.Text = "Add..."
+                Button2.Text = "Edit..."
+                Button3.Text = "Remove"
+                Button5.Text = "Add..."
+                Button6.Text = "Edit..."
+                Button7.Text = "Remove"
+                Button9.Text = "Add..."
+                Button10.Text = "Edit..."
+                Button11.Text = "Remove"
+                WimScriptOFD.Title = "Specify the configuration list to load"
+                WimScriptSFD.Title = "Specify the location to save the configuration list to"
+                ToolStripButton2.ToolTipText = "New"
+                ToolStripButton3.ToolTipText = "Open..."
+                ToolStripButton4.ToolTipText = "Save..."
+                ToolStripButton5.ToolTipText = "Toggle word wrap"
+                ToolStripButton6.ToolTipText = "Help"
+            Case 2
+                Text = "Editor de lista de configuraciones de DISM"
+                Label1.Text = "El Editor de Lista de configuraciones le permite excluir archivos y/o carpetas durante acciones que le permiten especificar estos archivos, como capturar una imagen. Puede especificar las configuraciones desde la interfaz gráfica, o puede crear el archivo de configuración manualmente. Cuando haya acabado, haga clic en el icono de Guardar."
+                GroupBox1.Text = "Lista de exclusiones"
+                GroupBox2.Text = "Lista de excepción de exclusiones"
+                GroupBox3.Text = "Lista de exclusión de compresión"
+                Button1.Text = "Añadir..."
+                Button2.Text = "Editar..."
+                Button3.Text = "Eliminar"
+                Button5.Text = "Añadir..."
+                Button6.Text = "Editar..."
+                Button7.Text = "Eliminar"
+                Button9.Text = "Añadir..."
+                Button10.Text = "Editar..."
+                Button11.Text = "Eliminar"
+                WimScriptOFD.Title = "Especifique el archivo de configuración a cargar"
+                WimScriptSFD.Title = "Especifique la ubicación donde guardar el archivo de configuración"
+                ToolStripButton2.ToolTipText = "Nuevo"
+                ToolStripButton3.ToolTipText = "Abrir..."
+                ToolStripButton4.ToolTipText = "Guardar..."
+                ToolStripButton5.ToolTipText = "Cambiar ajuste de línea"
+                ToolStripButton6.ToolTipText = "Ayuda"
+        End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)
             ForeColor = Color.White
@@ -210,27 +303,98 @@ Public Class WimScriptEditor
 
         ' Indicate whether file has seen changes, if it exists
         If ConfigListFile IsNot Nothing And File.Exists(ConfigListFile) Then
+            Dim titleMsg As String = ""
             If File.ReadAllText(ConfigListFile).ToString() = Scintilla1.Text Then
-                Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                            Case "ESN"
+                                titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                        End Select
+                    Case 1
+                        titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                    Case 2
+                        titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                End Select
             Else
-                Text = Path.GetFileName(ConfigListFile) & " (modified) - DISM Configuration List Editor"
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                titleMsg = Path.GetFileName(ConfigListFile) & " (modified) - DISM Configuration List Editor"
+                            Case "ESN"
+                                titleMsg = Path.GetFileName(ConfigListFile) & " (modificado) - Editor de lista de configuraciones de DISM"
+                        End Select
+                    Case 1
+                        titleMsg = Path.GetFileName(ConfigListFile) & " (modified) - DISM Configuration List Editor"
+                    Case 2
+                        titleMsg = Path.GetFileName(ConfigListFile) & " (modificado) - Editor de lista de configuraciones de DISM"
+                End Select
             End If
+            Text = titleMsg
         End If
     End Sub
 
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
+        Dim msg As String = ""
+        Dim titleMsg As String = ""
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        msg = "Do you want to save this configuration list file?"
+                        titleMsg = If((ConfigListFile IsNot Nothing And File.Exists(ConfigListFile)), Path.GetFileName(ConfigListFile), "") & " - DISM Configuration List Editor"
+                    Case "ESN"
+                        msg = "¿Desea guardar este archivo de lista de configuraciones?"
+                        titleMsg = If((ConfigListFile IsNot Nothing And File.Exists(ConfigListFile)), Path.GetFileName(ConfigListFile), "") & " - Editor de lista de configuraciones de DISM"
+                End Select
+            Case 1
+                msg = "Do you want to save this configuration list file?"
+                titleMsg = If((ConfigListFile IsNot Nothing And File.Exists(ConfigListFile)), Path.GetFileName(ConfigListFile), "") & " - DISM Configuration List Editor"
+            Case 2
+                msg = "¿Desea guardar este archivo de lista de configuraciones?"
+                titleMsg = If((ConfigListFile IsNot Nothing And File.Exists(ConfigListFile)), Path.GetFileName(ConfigListFile), "") & " - Editor de lista de configuraciones de DISM"
+        End Select
         If (ConfigListFile Is Nothing Or Not File.Exists(ConfigListFile)) And Scintilla1.Text <> "" Then
-            Dim Result As MsgBoxResult = MsgBox("Do you want to save this configuration list file?", vbYesNoCancel + vbQuestion, Text)
+            Dim Result As MsgBoxResult = MsgBox(msg, vbYesNoCancel + vbQuestion, Text)
             Select Case Result
                 Case MsgBoxResult.Yes
                     If File.Exists(ConfigListFile) Then
                         File.WriteAllText(ConfigListFile, Scintilla1.Text, ASCII)
-                        Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                                    Case "ESN"
+                                        titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                                End Select
+                            Case 1
+                                titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                            Case 2
+                                titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                        End Select
+                        Text = titleMsg
                     Else
                         If WimScriptSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
                             File.WriteAllText(WimScriptSFD.FileName, Scintilla1.Text, ASCII)
                             ConfigListFile = WimScriptSFD.FileName
-                            Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                            Select Case MainForm.Language
+                                Case 0
+                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                        Case "ENG"
+                                            titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                                        Case "ESN"
+                                            titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                                    End Select
+                                Case 1
+                                    titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                                Case 2
+                                    titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                            End Select
+                            Text = titleMsg
                         Else
                             Exit Sub
                         End If
@@ -240,12 +404,79 @@ Public Class WimScriptEditor
                 Case MsgBoxResult.Cancel
                     Exit Sub
             End Select
+        Else
+            Try
+                If (ConfigListFile IsNot Nothing And File.Exists(ConfigListFile) And File.ReadAllText(ConfigListFile).ToString() <> Scintilla1.Text) Then
+                    Dim Result As MsgBoxResult = MsgBox(msg, vbYesNoCancel + vbQuestion, Text)
+                    Select Case Result
+                        Case MsgBoxResult.Yes
+                            If File.Exists(ConfigListFile) Then
+                                File.WriteAllText(ConfigListFile, Scintilla1.Text, ASCII)
+                                Select Case MainForm.Language
+                                    Case 0
+                                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                            Case "ENG"
+                                                titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                                            Case "ESN"
+                                                titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                                        End Select
+                                    Case 1
+                                        titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                                    Case 2
+                                        titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                                End Select
+                                Text = titleMsg
+                            Else
+                                If WimScriptSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                                    File.WriteAllText(WimScriptSFD.FileName, Scintilla1.Text, ASCII)
+                                    ConfigListFile = WimScriptSFD.FileName
+                                    Select Case MainForm.Language
+                                        Case 0
+                                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                                Case "ENG"
+                                                    titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                                                Case "ESN"
+                                                    titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                                            End Select
+                                        Case 1
+                                            titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                                        Case 2
+                                            titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                                    End Select
+                                    Text = titleMsg
+                                Else
+                                    Exit Sub
+                                End If
+                            End If
+                        Case MsgBoxResult.No
+                            Exit Select
+                        Case MsgBoxResult.Cancel
+                            Exit Sub
+                    End Select
+                End If
+            Catch ex As Exception
+                Exit Try
+            End Try
         End If
 
-        Text = "New configuration list - DISM Configuration List Editor"
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Text = "New configuration list - DISM Configuration List Editor"
+                    Case "ESN"
+                        Text = "Nueva lista de configuraciones - Editor de lista de configuración de DISM"
+                End Select
+            Case 1
+                Text = "New configuration list - DISM Configuration List Editor"
+            Case 2
+                Text = "Nueva lista de configuraciones - Editor de lista de configuración de DISM"
+        End Select
 
         ' Generate a default configuration list, as shown in the DISM configuration list documentation.
         ' Source: https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/dism-configuration-list-and-wimscriptini-files-winnext?view=windows-11
+
+        ConfigListFile = ""
 
         Scintilla1.Text = CrLf & _
             "[ExclusionList]" & CrLf & _
@@ -269,19 +500,64 @@ Public Class WimScriptEditor
     End Sub
 
     Private Sub ToolStripButton3_Click(sender As Object, e As EventArgs) Handles ToolStripButton3.Click
+        Dim msg As String = ""
+        Dim titleMsg As String = ""
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        msg = "Do you want to save this configuration list file?"
+                        titleMsg = If((ConfigListFile IsNot Nothing And File.Exists(ConfigListFile)), Path.GetFileName(ConfigListFile), "") & " - DISM Configuration List Editor"
+                    Case "ESN"
+                        msg = "¿Desea guardar este archivo de lista de configuraciones?"
+                        titleMsg = If((ConfigListFile IsNot Nothing And File.Exists(ConfigListFile)), Path.GetFileName(ConfigListFile), "") & Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                End Select
+            Case 1
+                msg = "Do you want to save this configuration list file?"
+                titleMsg = If((ConfigListFile IsNot Nothing And File.Exists(ConfigListFile)), Path.GetFileName(ConfigListFile), "") & Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+            Case 2
+                msg = "¿Desea guardar este archivo de lista de configuraciones?"
+                titleMsg = If((ConfigListFile IsNot Nothing And File.Exists(ConfigListFile)), Path.GetFileName(ConfigListFile), "") & Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+        End Select
         If (ConfigListFile Is Nothing Or Not File.Exists(ConfigListFile)) And Scintilla1.Text <> "" Then
-            Dim Result As MsgBoxResult = MsgBox("Do you want to save this configuration list file?", vbYesNoCancel + vbQuestion, Text)
+            Dim Result As MsgBoxResult = MsgBox(msg, vbYesNoCancel + vbQuestion, Text)
             Select Case Result
                 Case MsgBoxResult.Yes
                     If File.Exists(ConfigListFile) Then
                         File.WriteAllText(WimScriptSFD.FileName, Scintilla1.Text, ASCII)
                         ConfigListFile = WimScriptSFD.FileName
-                        Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                                    Case "ESN"
+                                        titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                                End Select
+                            Case 1
+                                titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                            Case 2
+                                titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                        End Select
+                        Text = titleMsg
                     Else
                         If WimScriptSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
                             File.WriteAllText(WimScriptSFD.FileName, Scintilla1.Text, ASCII)
                             ConfigListFile = WimScriptSFD.FileName
-                            Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                            Select Case MainForm.Language
+                                Case 0
+                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                        Case "ENG"
+                                            titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                                        Case "ESN"
+                                            titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                                    End Select
+                                Case 1
+                                    titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                                Case 2
+                                    titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                            End Select
+                            Text = titleMsg
                         Else
                             Exit Sub
                         End If
@@ -294,17 +570,43 @@ Public Class WimScriptEditor
         Else
             Try
                 If (ConfigListFile IsNot Nothing And File.Exists(ConfigListFile) And File.ReadAllText(ConfigListFile).ToString() <> Scintilla1.Text) Then
-                    Dim Result As MsgBoxResult = MsgBox("Do you want to save this configuration list file?", vbYesNoCancel + vbQuestion, Text)
+                    Dim Result As MsgBoxResult = MsgBox(msg, vbYesNoCancel + vbQuestion, Text)
                     Select Case Result
                         Case MsgBoxResult.Yes
                             If File.Exists(ConfigListFile) Then
                                 File.WriteAllText(ConfigListFile, Scintilla1.Text, ASCII)
-                                Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                                Select Case MainForm.Language
+                                    Case 0
+                                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                            Case "ENG"
+                                                titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                                            Case "ESN"
+                                                titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                                        End Select
+                                    Case 1
+                                        titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                                    Case 2
+                                        titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                                End Select
+                                Text = titleMsg
                             Else
                                 If WimScriptSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
                                     File.WriteAllText(WimScriptSFD.FileName, Scintilla1.Text, ASCII)
                                     ConfigListFile = WimScriptSFD.FileName
-                                    Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                                    Select Case MainForm.Language
+                                        Case 0
+                                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                                Case "ENG"
+                                                    titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                                                Case "ESN"
+                                                    titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                                            End Select
+                                        Case 1
+                                            titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                                        Case 2
+                                            titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                                    End Select
+                                    Text = titleMsg
                                 Else
                                     Exit Sub
                                 End If
@@ -331,13 +633,37 @@ Public Class WimScriptEditor
         Else
             File.WriteAllText(ConfigListFile, Scintilla1.Text, ASCII)
         End If
-        Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                    Case "ESN"
+                        Text = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                End Select
+            Case 1
+                Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+            Case 2
+                Text = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+        End Select
     End Sub
 
     Private Sub WimScriptOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles WimScriptOFD.FileOk
         Scintilla1.Text = File.ReadAllText(WimScriptOFD.FileName)
         ConfigListFile = WimScriptOFD.FileName
-        Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                    Case "ESN"
+                        Text = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                End Select
+            Case 1
+                Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+            Case 2
+                Text = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+        End Select
     End Sub
 
     Private Sub ToolStripButton6_Click(sender As Object, e As EventArgs) Handles ToolStripButton6.Click
@@ -422,9 +748,33 @@ Public Class WimScriptEditor
         ' Indicate whether file has seen changes, if it exists
         If ConfigListFile IsNot Nothing And File.Exists(ConfigListFile) Then
             If File.ReadAllText(ConfigListFile).ToString() = Scintilla1.Text Then
-                Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                            Case "ESN"
+                                Text = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                        End Select
+                    Case 1
+                        Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                    Case 2
+                        Text = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                End Select
             Else
-                Text = Path.GetFileName(ConfigListFile) & " (modified) - DISM Configuration List Editor"
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                Text = Path.GetFileName(ConfigListFile) & " (modified) - DISM Configuration List Editor"
+                            Case "ESN"
+                                Text = Path.GetFileName(ConfigListFile) & " (modificado) - Editor de lista de configuraciones de DISM"
+                        End Select
+                    Case 1
+                        Text = Path.GetFileName(ConfigListFile) & " (modified) - DISM Configuration List Editor"
+                    Case 2
+                        Text = Path.GetFileName(ConfigListFile) & " (modificado) - Editor de lista de configuraciones de DISM"
+                End Select
             End If
         End If
 
@@ -434,7 +784,19 @@ Public Class WimScriptEditor
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         AddListEntryDlg.IsForExclusionList = True
-        AddListEntryDlg.Text = "Add " & GroupBox1.Text.ToLower() & " entry"
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        AddListEntryDlg.Text = "Add " & GroupBox1.Text.ToLower() & " entry"
+                    Case "ESN"
+                        AddListEntryDlg.Text = "Añadir entrada de " & GroupBox1.Text.ToLower()
+                End Select
+            Case 1
+                AddListEntryDlg.Text = "Add " & GroupBox1.Text.ToLower() & " entry"
+            Case 2
+                AddListEntryDlg.Text = "Añadir entrada de " & GroupBox1.Text.ToLower()
+        End Select
         AddListEntryDlg.Left = Left + ((SplitContainer1.SplitterDistance + Scintilla1.Width) / 2)
         AddListEntryDlg.Top = Top + Panel2.Top + DarkToolStrip1.Height + SplitContainer1.Top + GroupBox1.Top + 8
         AddListEntryDlg.ShowDialog()
@@ -446,7 +808,19 @@ Public Class WimScriptEditor
 
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
         AddListEntryDlg.IsForExclusionList = False
-        AddListEntryDlg.Text = "Add " & GroupBox2.Text.ToLower() & " entry"
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        AddListEntryDlg.Text = "Add " & GroupBox2.Text.ToLower() & " entry"
+                    Case "ESN"
+                        AddListEntryDlg.Text = "Añadir entrada de " & GroupBox2.Text.ToLower()
+                End Select
+            Case 1
+                AddListEntryDlg.Text = "Add " & GroupBox2.Text.ToLower() & " entry"
+            Case 2
+                AddListEntryDlg.Text = "Añadir entrada de " & GroupBox2.Text.ToLower()
+        End Select
         AddListEntryDlg.Left = Left + ((SplitContainer1.SplitterDistance + Scintilla1.Width) / 2)
         AddListEntryDlg.Top = Top + Panel2.Top + DarkToolStrip1.Height + SplitContainer1.Top + GroupBox2.Top + 8
         AddListEntryDlg.ShowDialog()
@@ -458,7 +832,19 @@ Public Class WimScriptEditor
 
     Private Sub Button11_Click(sender As Object, e As EventArgs) Handles Button11.Click
         AddListEntryDlg.IsForExclusionList = False
-        AddListEntryDlg.Text = "Add " & GroupBox3.Text.ToLower() & " entry"
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        AddListEntryDlg.Text = "Add " & GroupBox3.Text.ToLower() & " entry"
+                    Case "ESN"
+                        AddListEntryDlg.Text = "Añadir entrada de " & GroupBox3.Text.ToLower()
+                End Select
+            Case 1
+                AddListEntryDlg.Text = "Add " & GroupBox3.Text.ToLower() & " entry"
+            Case 2
+                AddListEntryDlg.Text = "Añadir entrada de " & GroupBox3.Text.ToLower()
+        End Select
         AddListEntryDlg.Left = Left + ((SplitContainer1.SplitterDistance + Scintilla1.Width) / 2)
         AddListEntryDlg.Top = Top + Panel2.Top + DarkToolStrip1.Height + SplitContainer1.Top + GroupBox3.Top + 8
         AddListEntryDlg.ShowDialog()
@@ -537,19 +923,64 @@ Public Class WimScriptEditor
 #End Region
 
     Private Sub WimScriptEditor_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        Dim msg As String = ""
+        Dim titleMsg As String = ""
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        msg = "Do you want to save this configuration list file?"
+                        titleMsg = If((ConfigListFile IsNot Nothing And File.Exists(ConfigListFile)), Path.GetFileName(ConfigListFile), "") & " - DISM Configuration List Editor"
+                    Case "ESN"
+                        msg = "¿Desea guardar este archivo de lista de configuraciones?"
+                        titleMsg = If((ConfigListFile IsNot Nothing And File.Exists(ConfigListFile)), Path.GetFileName(ConfigListFile), "") & Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                End Select
+            Case 1
+                msg = "Do you want to save this configuration list file?"
+                titleMsg = If((ConfigListFile IsNot Nothing And File.Exists(ConfigListFile)), Path.GetFileName(ConfigListFile), "") & Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+            Case 2
+                msg = "¿Desea guardar este archivo de lista de configuraciones?"
+                titleMsg = If((ConfigListFile IsNot Nothing And File.Exists(ConfigListFile)), Path.GetFileName(ConfigListFile), "") & Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+        End Select
         If (ConfigListFile Is Nothing Or Not File.Exists(ConfigListFile)) And Scintilla1.Text <> "" Then
-            Dim Result As MsgBoxResult = MsgBox("Do you want to save this configuration list file?", vbYesNoCancel + vbQuestion, Text)
+            Dim Result As MsgBoxResult = MsgBox(msg, vbYesNoCancel + vbQuestion, Text)
             Select Case Result
                 Case MsgBoxResult.Yes
                     If File.Exists(ConfigListFile) Then
                         File.WriteAllText(WimScriptSFD.FileName, Scintilla1.Text, ASCII)
                         ConfigListFile = WimScriptSFD.FileName
-                        Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENG"
+                                        titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                                    Case "ESN"
+                                        titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                                End Select
+                            Case 1
+                                titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                            Case 2
+                                titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                        End Select
+                        Text = titleMsg
                     Else
                         If WimScriptSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
                             File.WriteAllText(WimScriptSFD.FileName, Scintilla1.Text, ASCII)
                             ConfigListFile = WimScriptSFD.FileName
-                            Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                            Select Case MainForm.Language
+                                Case 0
+                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                        Case "ENG"
+                                            titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                                        Case "ESN"
+                                            titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                                    End Select
+                                Case 1
+                                    titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                                Case 2
+                                    titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                            End Select
+                            Text = titleMsg
                         Else
                             e.Cancel = True
                         End If
@@ -562,17 +993,43 @@ Public Class WimScriptEditor
         Else
             Try
                 If (ConfigListFile IsNot Nothing And File.Exists(ConfigListFile) And File.ReadAllText(ConfigListFile).ToString() <> Scintilla1.Text) Then
-                    Dim Result As MsgBoxResult = MsgBox("Do you want to save this configuration list file?", vbYesNoCancel + vbQuestion, Text)
+                    Dim Result As MsgBoxResult = MsgBox(msg, vbYesNoCancel + vbQuestion, Text)
                     Select Case Result
                         Case MsgBoxResult.Yes
                             If File.Exists(ConfigListFile) Then
                                 File.WriteAllText(ConfigListFile, Scintilla1.Text, ASCII)
-                                Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                                Select Case MainForm.Language
+                                    Case 0
+                                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                            Case "ENG"
+                                                titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                                            Case "ESN"
+                                                titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                                        End Select
+                                    Case 1
+                                        titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                                    Case 2
+                                        titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                                End Select
+                                Text = titleMsg
                             Else
                                 If WimScriptSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
                                     File.WriteAllText(WimScriptSFD.FileName, Scintilla1.Text, ASCII)
                                     ConfigListFile = WimScriptSFD.FileName
-                                    Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                                    Select Case MainForm.Language
+                                        Case 0
+                                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                                Case "ENG"
+                                                    titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                                                Case "ESN"
+                                                    titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                                            End Select
+                                        Case 1
+                                            titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
+                                        Case 2
+                                            titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                                    End Select
+                                    Text = titleMsg
                                 Else
                                     e.Cancel = True
                                 End If

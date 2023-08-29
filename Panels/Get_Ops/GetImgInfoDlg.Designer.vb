@@ -29,6 +29,16 @@ Partial Class GetImgInfoDlg
         Me.ImageInfoPanel = New System.Windows.Forms.Panel()
         Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
         Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.ListView1 = New System.Windows.Forms.ListView()
+        Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.RadioButton2 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton1 = New System.Windows.Forms.RadioButton()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.Panel4 = New System.Windows.Forms.Panel()
         Me.FlowLayoutPanel3 = New System.Windows.Forms.FlowLayoutPanel()
@@ -55,32 +65,23 @@ Partial Class GetImgInfoDlg
         Me.Label39 = New System.Windows.Forms.Label()
         Me.Label38 = New System.Windows.Forms.Label()
         Me.Label45 = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.Label5 = New System.Windows.Forms.Label()
         Me.Label44 = New System.Windows.Forms.Label()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.LanguageList = New System.Windows.Forms.ListBox()
         Me.Panel5 = New System.Windows.Forms.Panel()
         Me.Label36 = New System.Windows.Forms.Label()
         Me.Panel7 = New System.Windows.Forms.Panel()
         Me.Label37 = New System.Windows.Forms.Label()
         Me.FlowLayoutPanel4 = New System.Windows.Forms.FlowLayoutPanel()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.RadioButton1 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton2 = New System.Windows.Forms.RadioButton()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.ListView1 = New System.Windows.Forms.ListView()
-        Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.Label10 = New System.Windows.Forms.Label()
-        Me.Label11 = New System.Windows.Forms.Label()
-        Me.Label13 = New System.Windows.Forms.Label()
-        Me.LanguageList = New System.Windows.Forms.ListBox()
+        Me.Label55 = New System.Windows.Forms.Label()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ImageInfoPanel.SuspendLayout()
@@ -89,12 +90,12 @@ Partial Class GetImgInfoDlg
         Me.SplitContainer2.Panel2.SuspendLayout()
         Me.SplitContainer2.SuspendLayout()
         Me.Panel2.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.Panel3.SuspendLayout()
         Me.Panel4.SuspendLayout()
         Me.FlowLayoutPanel3.SuspendLayout()
         Me.Panel5.SuspendLayout()
         Me.Panel7.SuspendLayout()
-        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'Win10Title
@@ -176,6 +177,98 @@ Partial Class GetImgInfoDlg
         Me.Panel2.Size = New System.Drawing.Size(440, 396)
         Me.Panel2.TabIndex = 1
         '
+        'ListView1
+        '
+        Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
+        Me.ListView1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ListView1.FullRowSelect = True
+        Me.ListView1.Location = New System.Drawing.Point(0, 148)
+        Me.ListView1.Name = "ListView1"
+        Me.ListView1.Size = New System.Drawing.Size(440, 248)
+        Me.ListView1.TabIndex = 5
+        Me.ListView1.UseCompatibleStateImageBehavior = False
+        Me.ListView1.View = System.Windows.Forms.View.Details
+        '
+        'ColumnHeader1
+        '
+        Me.ColumnHeader1.Text = "Index"
+        '
+        'ColumnHeader2
+        '
+        Me.ColumnHeader2.Text = "Image name"
+        Me.ColumnHeader2.Width = 344
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.Button1)
+        Me.Panel1.Controls.Add(Me.TextBox1)
+        Me.Panel1.Controls.Add(Me.RadioButton2)
+        Me.Panel1.Controls.Add(Me.RadioButton1)
+        Me.Panel1.Controls.Add(Me.Label3)
+        Me.Panel1.Controls.Add(Me.Label2)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel1.Location = New System.Drawing.Point(0, 0)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(440, 148)
+        Me.Panel1.TabIndex = 4
+        '
+        'Button1
+        '
+        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button1.Location = New System.Drawing.Point(348, 93)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.TabIndex = 3
+        Me.Button1.Text = "Browse..."
+        Me.Button1.UseVisualStyleBackColor = True
+        '
+        'TextBox1
+        '
+        Me.TextBox1.Location = New System.Drawing.Point(49, 94)
+        Me.TextBox1.Name = "TextBox1"
+        Me.TextBox1.Size = New System.Drawing.Size(293, 21)
+        Me.TextBox1.TabIndex = 2
+        '
+        'RadioButton2
+        '
+        Me.RadioButton2.AutoSize = True
+        Me.RadioButton2.Location = New System.Drawing.Point(32, 71)
+        Me.RadioButton2.Name = "RadioButton2"
+        Me.RadioButton2.Size = New System.Drawing.Size(95, 17)
+        Me.RadioButton2.TabIndex = 1
+        Me.RadioButton2.TabStop = True
+        Me.RadioButton2.Text = "Another image"
+        Me.RadioButton2.UseVisualStyleBackColor = True
+        '
+        'RadioButton1
+        '
+        Me.RadioButton1.AutoSize = True
+        Me.RadioButton1.Location = New System.Drawing.Point(32, 48)
+        Me.RadioButton1.Name = "RadioButton1"
+        Me.RadioButton1.Size = New System.Drawing.Size(146, 17)
+        Me.RadioButton1.TabIndex = 1
+        Me.RadioButton1.TabStop = True
+        Me.RadioButton1.Text = "Currently mounted image"
+        Me.RadioButton1.UseVisualStyleBackColor = True
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(16, 125)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(141, 13)
+        Me.Label3.TabIndex = 0
+        Me.Label3.Text = "List of indexes of image file:"
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(16, 16)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(172, 13)
+        Me.Label2.TabIndex = 0
+        Me.Label2.Text = "Image file to get information from:"
+        '
         'Panel3
         '
         Me.Panel3.Controls.Add(Me.Panel4)
@@ -234,6 +327,7 @@ Partial Class GetImgInfoDlg
         Me.FlowLayoutPanel3.Controls.Add(Me.Label10)
         Me.FlowLayoutPanel3.Controls.Add(Me.Label13)
         Me.FlowLayoutPanel3.Controls.Add(Me.LanguageList)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Label55)
         Me.FlowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.FlowLayoutPanel3.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
         Me.FlowLayoutPanel3.Location = New System.Drawing.Point(0, 36)
@@ -493,6 +587,28 @@ Partial Class GetImgInfoDlg
         Me.Label45.TabIndex = 0
         Me.Label45.Text = "Product type:"
         '
+        'Label4
+        '
+        Me.Label4.AutoEllipsis = True
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(7, 371)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label4.Size = New System.Drawing.Size(38, 15)
+        Me.Label4.TabIndex = 0
+        Me.Label4.Text = "Label8"
+        Me.Label4.UseMnemonic = False
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(7, 386)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label5.Size = New System.Drawing.Size(74, 17)
+        Me.Label5.TabIndex = 0
+        Me.Label5.Text = "Product suite:"
+        '
         'Label44
         '
         Me.Label44.AutoEllipsis = True
@@ -504,6 +620,91 @@ Partial Class GetImgInfoDlg
         Me.Label44.TabIndex = 0
         Me.Label44.Text = "Label8"
         Me.Label44.UseMnemonic = False
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Location = New System.Drawing.Point(7, 418)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label7.Size = New System.Drawing.Size(115, 17)
+        Me.Label7.TabIndex = 0
+        Me.Label7.Text = "System root directory:"
+        '
+        'Label8
+        '
+        Me.Label8.AutoEllipsis = True
+        Me.Label8.AutoSize = True
+        Me.Label8.Location = New System.Drawing.Point(7, 435)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label8.Size = New System.Drawing.Size(38, 15)
+        Me.Label8.TabIndex = 0
+        Me.Label8.Text = "Label8"
+        Me.Label8.UseMnemonic = False
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Location = New System.Drawing.Point(7, 450)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label9.Size = New System.Drawing.Size(57, 17)
+        Me.Label9.TabIndex = 0
+        Me.Label9.Text = "File count:"
+        '
+        'Label6
+        '
+        Me.Label6.AutoEllipsis = True
+        Me.Label6.AutoSize = True
+        Me.Label6.Location = New System.Drawing.Point(7, 467)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label6.Size = New System.Drawing.Size(38, 15)
+        Me.Label6.TabIndex = 0
+        Me.Label6.Text = "Label8"
+        Me.Label6.UseMnemonic = False
+        '
+        'Label11
+        '
+        Me.Label11.AutoSize = True
+        Me.Label11.Location = New System.Drawing.Point(7, 482)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label11.Size = New System.Drawing.Size(39, 17)
+        Me.Label11.TabIndex = 0
+        Me.Label11.Text = "Dates:"
+        '
+        'Label10
+        '
+        Me.Label10.AutoEllipsis = True
+        Me.Label10.AutoSize = True
+        Me.Label10.Location = New System.Drawing.Point(7, 499)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label10.Size = New System.Drawing.Size(38, 15)
+        Me.Label10.TabIndex = 0
+        Me.Label10.Text = "Label8"
+        Me.Label10.UseMnemonic = False
+        '
+        'Label13
+        '
+        Me.Label13.AutoSize = True
+        Me.Label13.Location = New System.Drawing.Point(7, 514)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label13.Size = New System.Drawing.Size(104, 17)
+        Me.Label13.TabIndex = 0
+        Me.Label13.Text = "Installed languages:"
+        '
+        'LanguageList
+        '
+        Me.LanguageList.FormattingEnabled = True
+        Me.LanguageList.Location = New System.Drawing.Point(7, 534)
+        Me.LanguageList.Name = "LanguageList"
+        Me.LanguageList.ScrollAlwaysVisible = True
+        Me.LanguageList.Size = New System.Drawing.Size(410, 95)
+        Me.LanguageList.TabIndex = 21
         '
         'Panel5
         '
@@ -553,204 +754,15 @@ Partial Class GetImgInfoDlg
         Me.FlowLayoutPanel4.Size = New System.Drawing.Size(200, 100)
         Me.FlowLayoutPanel4.TabIndex = 0
         '
-        'Label2
+        'Label55
         '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(16, 16)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(172, 13)
-        Me.Label2.TabIndex = 0
-        Me.Label2.Text = "Image file to get information from:"
-        '
-        'RadioButton1
-        '
-        Me.RadioButton1.AutoSize = True
-        Me.RadioButton1.Location = New System.Drawing.Point(32, 48)
-        Me.RadioButton1.Name = "RadioButton1"
-        Me.RadioButton1.Size = New System.Drawing.Size(146, 17)
-        Me.RadioButton1.TabIndex = 1
-        Me.RadioButton1.TabStop = True
-        Me.RadioButton1.Text = "Currently mounted image"
-        Me.RadioButton1.UseVisualStyleBackColor = True
-        '
-        'RadioButton2
-        '
-        Me.RadioButton2.AutoSize = True
-        Me.RadioButton2.Location = New System.Drawing.Point(32, 71)
-        Me.RadioButton2.Name = "RadioButton2"
-        Me.RadioButton2.Size = New System.Drawing.Size(95, 17)
-        Me.RadioButton2.TabIndex = 1
-        Me.RadioButton2.TabStop = True
-        Me.RadioButton2.Text = "Another image"
-        Me.RadioButton2.UseVisualStyleBackColor = True
-        '
-        'TextBox1
-        '
-        Me.TextBox1.Location = New System.Drawing.Point(49, 94)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(293, 21)
-        Me.TextBox1.TabIndex = 2
-        '
-        'Button1
-        '
-        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button1.Location = New System.Drawing.Point(348, 93)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
-        Me.Button1.TabIndex = 3
-        Me.Button1.Text = "Browse..."
-        Me.Button1.UseVisualStyleBackColor = True
-        '
-        'Panel1
-        '
-        Me.Panel1.Controls.Add(Me.Button1)
-        Me.Panel1.Controls.Add(Me.TextBox1)
-        Me.Panel1.Controls.Add(Me.RadioButton2)
-        Me.Panel1.Controls.Add(Me.RadioButton1)
-        Me.Panel1.Controls.Add(Me.Label3)
-        Me.Panel1.Controls.Add(Me.Label2)
-        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel1.Location = New System.Drawing.Point(0, 0)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(440, 148)
-        Me.Panel1.TabIndex = 4
-        '
-        'ListView1
-        '
-        Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
-        Me.ListView1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ListView1.FullRowSelect = True
-        Me.ListView1.Location = New System.Drawing.Point(0, 148)
-        Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(440, 248)
-        Me.ListView1.TabIndex = 5
-        Me.ListView1.UseCompatibleStateImageBehavior = False
-        Me.ListView1.View = System.Windows.Forms.View.Details
-        '
-        'ColumnHeader1
-        '
-        Me.ColumnHeader1.Text = "Index"
-        '
-        'ColumnHeader2
-        '
-        Me.ColumnHeader2.Text = "Image name"
-        Me.ColumnHeader2.Width = 344
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(16, 125)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(141, 13)
-        Me.Label3.TabIndex = 0
-        Me.Label3.Text = "List of indexes of image file:"
-        '
-        'Label4
-        '
-        Me.Label4.AutoEllipsis = True
-        Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(7, 371)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label4.Size = New System.Drawing.Size(38, 15)
-        Me.Label4.TabIndex = 0
-        Me.Label4.Text = "Label8"
-        Me.Label4.UseMnemonic = False
-        '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(7, 386)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label5.Size = New System.Drawing.Size(74, 17)
-        Me.Label5.TabIndex = 0
-        Me.Label5.Text = "Product suite:"
-        '
-        'Label6
-        '
-        Me.Label6.AutoEllipsis = True
-        Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(7, 467)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label6.Size = New System.Drawing.Size(38, 15)
-        Me.Label6.TabIndex = 0
-        Me.Label6.Text = "Label8"
-        Me.Label6.UseMnemonic = False
-        '
-        'Label7
-        '
-        Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(7, 418)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label7.Size = New System.Drawing.Size(115, 17)
-        Me.Label7.TabIndex = 0
-        Me.Label7.Text = "System root directory:"
-        '
-        'Label8
-        '
-        Me.Label8.AutoEllipsis = True
-        Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(7, 435)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label8.Size = New System.Drawing.Size(38, 15)
-        Me.Label8.TabIndex = 0
-        Me.Label8.Text = "Label8"
-        Me.Label8.UseMnemonic = False
-        '
-        'Label9
-        '
-        Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(7, 450)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label9.Size = New System.Drawing.Size(57, 17)
-        Me.Label9.TabIndex = 0
-        Me.Label9.Text = "File count:"
-        '
-        'Label10
-        '
-        Me.Label10.AutoEllipsis = True
-        Me.Label10.AutoSize = True
-        Me.Label10.Location = New System.Drawing.Point(7, 499)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label10.Size = New System.Drawing.Size(38, 15)
-        Me.Label10.TabIndex = 0
-        Me.Label10.Text = "Label8"
-        Me.Label10.UseMnemonic = False
-        '
-        'Label11
-        '
-        Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(7, 482)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label11.Size = New System.Drawing.Size(39, 17)
-        Me.Label11.TabIndex = 0
-        Me.Label11.Text = "Dates:"
-        '
-        'Label13
-        '
-        Me.Label13.AutoSize = True
-        Me.Label13.Location = New System.Drawing.Point(7, 514)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label13.Size = New System.Drawing.Size(104, 17)
-        Me.Label13.TabIndex = 0
-        Me.Label13.Text = "Installed languages:"
-        '
-        'LanguageList
-        '
-        Me.LanguageList.FormattingEnabled = True
-        Me.LanguageList.Location = New System.Drawing.Point(7, 534)
-        Me.LanguageList.Name = "LanguageList"
-        Me.LanguageList.ScrollAlwaysVisible = True
-        Me.LanguageList.Size = New System.Drawing.Size(410, 95)
-        Me.LanguageList.TabIndex = 21
+        Me.Label55.AutoEllipsis = True
+        Me.Label55.Location = New System.Drawing.Point(7, 632)
+        Me.Label55.Name = "Label55"
+        Me.Label55.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label55.Size = New System.Drawing.Size(405, 16)
+        Me.Label55.TabIndex = 22
+        Me.Label55.UseMnemonic = False
         '
         'GetImgInfoDlg
         '
@@ -776,14 +788,14 @@ Partial Class GetImgInfoDlg
         CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer2.ResumeLayout(False)
         Me.Panel2.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
         Me.Panel3.ResumeLayout(False)
         Me.Panel4.ResumeLayout(False)
         Me.FlowLayoutPanel3.ResumeLayout(False)
         Me.FlowLayoutPanel3.PerformLayout()
         Me.Panel5.ResumeLayout(False)
         Me.Panel7.ResumeLayout(False)
-        Me.Panel1.ResumeLayout(False)
-        Me.Panel1.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -846,5 +858,6 @@ Partial Class GetImgInfoDlg
     Friend WithEvents Label37 As System.Windows.Forms.Label
     Friend WithEvents FlowLayoutPanel4 As System.Windows.Forms.FlowLayoutPanel
     Friend WithEvents LanguageList As System.Windows.Forms.ListBox
+    Friend WithEvents Label55 As System.Windows.Forms.Label
 
 End Class

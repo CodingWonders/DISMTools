@@ -16,16 +16,6 @@ Public Class GetDriverInfo
 
     Dim ButtonTT As New ToolTip()
 
-    Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
-        Me.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.Close()
-    End Sub
-
-    Private Sub Cancel_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Cancel_Button.Click
-        Me.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.Close()
-    End Sub
-
     Private Sub GetDriverInfo_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language
             Case 0
@@ -282,6 +272,48 @@ Public Class GetDriverInfo
     Sub GetDriverInformation()
         DriverInfoList.Clear()
         Try
+            ' Background processes need to have completed before showing information
+            If MainForm.ImgBW.IsBusy Then
+                Dim msg As String = ""
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                msg = "Background processes need to have completed before showing package information. We'll wait until they have completed"
+                            Case "ESN"
+                                msg = "Los procesos en segundo plano deben haber completado antes de obtener información del paquete. Esperaremos hasta que hayan completado"
+                        End Select
+                    Case 1
+                        msg = "Background processes need to have completed before showing package information. We'll wait until they have completed"
+                    Case 2
+                        msg = "Los procesos en segundo plano deben haber completado antes de obtener información del paquete. Esperaremos hasta que hayan completado"
+                End Select
+                MsgBox(msg, vbOKOnly + vbInformation, Label1.Text)
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                Label5.Text = "Waiting for background processes to finish..."
+                            Case "ESN"
+                                Label5.Text = "Esperando a que terminen los procesos en segundo plano..."
+                        End Select
+                    Case 1
+                        Label5.Text = "Waiting for background processes to finish..."
+                    Case 2
+                        Label5.Text = "Esperando a que terminen los procesos en segundo plano..."
+                End Select
+                While MainForm.ImgBW.IsBusy
+                    Application.DoEvents()
+                    Thread.Sleep(500)
+                End While
+            End If
+            If MainForm.MountedImageDetectorBW.IsBusy Then
+                MainForm.MountedImageDetectorBW.CancelAsync()
+                While MainForm.MountedImageDetectorBW.IsBusy
+                    Application.DoEvents()
+                    Thread.Sleep(500)
+                End While
+            End If
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -406,12 +438,6 @@ Public Class GetDriverInfo
                             Label15.Text = "Ninguno declarado por el fabricante del hardware"
                     End Select
                 End If
-                Label9.Height = Label9.PreferredHeight + 4
-                Label11.Height = Label11.PreferredHeight + 4
-                Label14.Height = Label14.PreferredHeight + 4
-                Label15.Height = Label15.PreferredHeight + 4
-                Label18.Height = Label18.PreferredHeight + 4
-                Label19.Height = Label19.PreferredHeight + 4
                 Exit For
             End If
         Next
@@ -713,20 +739,6 @@ Public Class GetDriverInfo
                         End Select
                 End Select
                 Label46.Text = InstalledDriverList(ListView1.FocusedItem.Index).CatalogFile
-
-                ' Set preferred heights
-                Label23.Height = Label23.PreferredHeight + 4
-                Label25.Height = Label25.PreferredHeight + 4
-                Label27.Height = Label27.PreferredHeight + 4
-                Label29.Height = Label29.PreferredHeight + 4
-                Label32.Height = Label32.PreferredHeight + 4
-                Label34.Height = Label34.PreferredHeight + 4
-                Label35.Height = Label35.PreferredHeight + 4
-                Label38.Height = Label38.PreferredHeight + 4
-                Label40.Height = Label40.PreferredHeight + 4
-                Label42.Height = Label42.PreferredHeight + 4
-                Label44.Height = Label44.PreferredHeight + 4
-                Label46.Height = Label46.PreferredHeight + 4
             Else
                 Panel4.Visible = False
                 Panel7.Visible = True

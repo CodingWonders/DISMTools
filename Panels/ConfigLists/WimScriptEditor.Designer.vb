@@ -413,7 +413,7 @@ Partial Class WimScriptEditor
         Me.ToolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton5.Name = "ToolStripButton5"
         Me.ToolStripButton5.Size = New System.Drawing.Size(23, 25)
-        Me.ToolStripButton5.Text = "Word wrap"
+        Me.ToolStripButton5.Text = "Toggle word wrap"
         '
         'ToolStripSeparator6
         '
