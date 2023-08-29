@@ -31,6 +31,7 @@ Partial Class ImgMount
         Me.Label2 = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.Label4 = New System.Windows.Forms.Label()
+        Me.Button3 = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
@@ -43,6 +44,8 @@ Partial Class ImgMount
         Me.ListView1 = New System.Windows.Forms.ListView()
         Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader4 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
         Me.CheckBox4 = New System.Windows.Forms.CheckBox()
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
@@ -51,8 +54,6 @@ Partial Class ImgMount
         Me.Label11 = New System.Windows.Forms.Label()
         Me.FileSpecDialog = New System.Windows.Forms.OpenFileDialog()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
-        Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.ColumnHeader4 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -144,6 +145,7 @@ Partial Class ImgMount
         'GroupBox1
         '
         Me.GroupBox1.Controls.Add(Me.Label4)
+        Me.GroupBox1.Controls.Add(Me.Button3)
         Me.GroupBox1.Controls.Add(Me.Button1)
         Me.GroupBox1.Controls.Add(Me.TextBox1)
         Me.GroupBox1.Controls.Add(Me.Label3)
@@ -157,12 +159,24 @@ Partial Class ImgMount
         'Label4
         '
         Me.Label4.AutoEllipsis = True
-        Me.Label4.Location = New System.Drawing.Point(152, 53)
+        Me.Label4.Location = New System.Drawing.Point(16, 58)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(576, 13)
+        Me.Label4.Size = New System.Drawing.Size(657, 13)
         Me.Label4.TabIndex = 5
         Me.Label4.Text = "NOTE: if you want to mount an ESD file, you need to convert it to a WIM file firs" & _
     "t"
+        Me.Label4.Visible = False
+        '
+        'Button3
+        '
+        Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button3.Location = New System.Drawing.Point(679, 53)
+        Me.Button3.Name = "Button3"
+        Me.Button3.Size = New System.Drawing.Size(75, 23)
+        Me.Button3.TabIndex = 4
+        Me.Button3.Text = "Convert"
+        Me.Button3.UseVisualStyleBackColor = True
+        Me.Button3.Visible = False
         '
         'Button1
         '
@@ -276,6 +290,16 @@ Partial Class ImgMount
         Me.ColumnHeader2.Text = "Image name"
         Me.ColumnHeader2.Width = 256
         '
+        'ColumnHeader3
+        '
+        Me.ColumnHeader3.Text = "Image description"
+        Me.ColumnHeader3.Width = 256
+        '
+        'ColumnHeader4
+        '
+        Me.ColumnHeader4.Text = "Image version"
+        Me.ColumnHeader4.Width = 128
+        '
         'NumericUpDown1
         '
         Me.NumericUpDown1.Location = New System.Drawing.Point(152, 25)
@@ -335,17 +359,7 @@ Partial Class ImgMount
         '
         'FileSpecDialog
         '
-        Me.FileSpecDialog.Filter = "WIM files|*.wim|VHD(X) files|*.vhd;*.vhdx;"
-        '
-        'ColumnHeader3
-        '
-        Me.ColumnHeader3.Text = "Image description"
-        Me.ColumnHeader3.Width = 256
-        '
-        'ColumnHeader4
-        '
-        Me.ColumnHeader4.Text = "Image version"
-        Me.ColumnHeader4.Width = 128
+        Me.FileSpecDialog.Filter = "WIM files|*.wim|ESD files|*.esd|SWM files|*.swm|VHD(X) files|*.vhd;*.vhdx;"
         '
         'ImgMount
         '
@@ -415,5 +429,6 @@ Partial Class ImgMount
     Friend WithEvents ColumnHeader2 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader3 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader4 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents Button3 As System.Windows.Forms.Button
 
 End Class

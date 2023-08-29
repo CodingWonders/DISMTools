@@ -131,6 +131,7 @@
     <Compile Include="Actions\Validation\Actions.Validation.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Elements\AppxPackage.vb" />
     <Compile Include="Help\Help_RegisteredAppxPkgsDlg.Designer.vb">
       <DependentUpon>Help_RegisteredAppxPkgsDlg.vb</DependentUpon>
     </Compile>
@@ -158,6 +159,18 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Panels\ConfigLists\AddListEntryDlg.Designer.vb">
+      <DependentUpon>AddListEntryDlg.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\ConfigLists\AddListEntryDlg.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\ConfigLists\WimScriptEditor.Designer.vb">
+      <DependentUpon>WimScriptEditor.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\ConfigLists\WimScriptEditor.vb">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\DoWork\ProgressPanel.Designer.vb">
       <DependentUpon>ProgressPanel.vb</DependentUpon>
@@ -211,6 +224,30 @@
       <DependentUpon>PrgSetup.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\FirstUse\PrgSetup.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\AppxPkgs\GetAppxPkgInfo.Designer.vb">
+      <DependentUpon>GetAppxPkgInfo.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\AppxPkgs\GetAppxPkgInfo.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\Capabilities\GetCapabilityInfo.Designer.vb">
+      <DependentUpon>GetCapabilityInfo.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\Capabilities\GetCapabilityInfo.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\Drivers\GetDriverInfo.Designer.vb">
+      <DependentUpon>GetDriverInfo.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\Drivers\GetDriverInfo.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\Features\GetFeatureInfo.Designer.vb">
+      <DependentUpon>GetFeatureInfo.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\Features\GetFeatureInfo.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Get_Ops\GetImgInfoDlg.Designer.vb">
@@ -563,6 +600,12 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\ConfigLists\AddListEntryDlg.resx">
+      <DependentUpon>AddListEntryDlg.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\ConfigLists\WimScriptEditor.resx">
+      <DependentUpon>WimScriptEditor.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\DoWork\ProgressPanel.resx">
       <DependentUpon>ProgressPanel.vb</DependentUpon>
     </EmbeddedResource>
@@ -589,6 +632,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\FirstUse\PrgSetup.resx">
       <DependentUpon>PrgSetup.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Get_Ops\AppxPkgs\GetAppxPkgInfo.resx">
+      <DependentUpon>GetAppxPkgInfo.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Get_Ops\Capabilities\GetCapabilityInfo.resx">
+      <DependentUpon>GetCapabilityInfo.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Get_Ops\Drivers\GetDriverInfo.resx">
+      <DependentUpon>GetDriverInfo.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Get_Ops\Features\GetFeatureInfo.resx">
+      <DependentUpon>GetFeatureInfo.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Get_Ops\GetImgInfoDlg.resx">
       <DependentUpon>GetImgInfoDlg.vb</DependentUpon>
@@ -856,6 +911,10 @@
     <None Include="Resources\icons8_code_32px.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="7z\amd64\7z.dll" />
+    <Content Include="7z\amd64\7z.exe" />
+    <Content Include="7z\i386\7z.dll" />
+    <Content Include="7z\i386\7z.exe" />
     <Content Include="Installer\dt.iss" />
     <Content Include="Installer\ISCC.exe" />
     <Content Include="Installer\ISCmplr.dll" />
@@ -876,6 +935,18 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\startup\dt_branding.png" />
+    <None Include="Resources\get_drv_info.png" />
+    <None Include="Resources\drv_info_from_image.png" />
+    <None Include="Resources\info_from_drv_file.png" />
+    <None Include="Resources\next_element.png" />
+    <None Include="Resources\next_element_dark.png" />
+    <None Include="Resources\prev_element.png" />
+    <None Include="Resources\prev_element_dark.png" />
+    <None Include="Resources\jumpto_dark.png" />
+    <None Include="Resources\jumpto.png" />
+    <None Include="Resources\pkg_info_from_image.png" />
+    <None Include="Resources\info_from_pkg_file.png" />
+    <None Include="Resources\get_appxpkg_info.png" />
     <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
     <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
     <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />
@@ -1189,9 +1260,9 @@ IF NOT EXIST bin (
 ) ELSE (
 	echo A bin folder already exists
 )
-IF EXIST "\Program Files\7-Zip" (
-	COPY "\Program Files\7-Zip\7z.exe" $(TargetDir)bin\utils\7z.exe
-	COPY "\Program Files\7-Zip\7z.dll" $(TargetDir)bin\utils\7z.dll
+IF EXIST "$(SolutionDir)7z" (
+	XCOPY "$(SolutionDir)7z\amd64\*" "$(TargetDir)bin\utils\x64" /cehyi
+	XCOPY "$(SolutionDir)7z\i386\*" "$(TargetDir)bin\utils\x86" /cehyi
 )
 IF NOT EXIST logs (
 	md logs

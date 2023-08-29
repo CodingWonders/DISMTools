@@ -2,9 +2,12 @@
 
 Public Class BGProcsAdvSettings
 
+    Public NeedsDriverChecks As Boolean
+
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         MainForm.ExtAppxGetter = CheckBox1.Checked
         MainForm.SkipNonRemovable = CheckBox2.Checked
+        If Not MainForm.AllDrivers = CheckBox3.Checked Then NeedsDriverChecks = True Else NeedsDriverChecks = False
         MainForm.AllDrivers = CheckBox3.Checked
         MainForm.SkipFrameworks = CheckBox4.Checked
         MainForm.RunAllProcs = CheckBox5.Checked
@@ -12,6 +15,27 @@ Public Class BGProcsAdvSettings
             MainForm.bwBackgroundProcessAction = 0
             MainForm.bwGetImageInfo = True
             MainForm.bwGetAdvImgInfo = True
+        End If
+        If (NeedsDriverChecks And MainForm.isProjectLoaded And (MainForm.IsImageMounted Or MainForm.OnlineManagement)) And Not MainForm.ImgBW.IsBusy Then
+            Dim msg As String = ""
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            msg = "The program will now detect the drivers of the image according to the options you've specified. This may take some time."
+                        Case "ESN"
+                            msg = "El programa va a detectar los controladores de la imagen atendiendo a las opciones que ha especificado. Esto puede llevar un tiempo."
+                    End Select
+                Case 1
+                    msg = "The program will now detect the drivers of the image according to the options you've specified. This may take some time."
+                Case 2
+                    msg = "El programa va a detectar los controladores de la imagen atendiendo a las opciones que ha especificado. Esto puede llevar un tiempo."
+            End Select
+            MsgBox(msg, vbOKOnly + vbInformation, Text)
+            MainForm.bwGetImageInfo = False
+            MainForm.bwGetAdvImgInfo = False
+            MainForm.bwBackgroundProcessAction = 5
+            MainForm.UpdateProjProperties(True, False)
         End If
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()

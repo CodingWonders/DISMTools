@@ -934,6 +934,189 @@ Public Class NewUnattendWiz
         End Try
     End Sub
 
+    Sub GenerateUnattendFile()
+        ' This procedure only targets Win10 x86/x64 UEFI for now
+        Dim XmlContents As String = "<xml version=" & Quote & "1.0" & Quote & " encoding=" & Quote & "utf-8" & Quote & "?>" & CrLf & _
+            "   <unattend xmlns=" & Quote & "urn:schemas-microsoft-com:unattend" & Quote & ">" & CrLf & _
+            "       <settings pass=" & Quote & "windowsPE" & Quote & ">" & CrLf & _
+            "           <component name=" & Quote & "Microsoft-Windows-International-Core-WinPE" & Quote & " processorArchitecture=" & Quote & "amd64" & Quote & " publicKeyToken=" & Quote & "31bf3856ad364e35" & Quote & " language=" & Quote & "neutral" & Quote & " versionScope=" & Quote & "nonSxS" & Quote & " xmlns:wcm=" & Quote & "http://schemas.microsoft.com/WMIConfig/2002/State" & Quote & " xmlns:xsi=" & Quote & "http://www.w3.org/2001/XMLSchema-instance" & Quote & ">" & CrLf & _
+            "               <SetupUILanguage>" & CrLf & _
+            "                   <UILanguage>TEMP</UILanguage>" & CrLf & _
+            "               </SetupUILanguage>" & CrLf & _
+            "               <InputLocale>TEMP:TEMPTEMP</InputLocale>" & CrLf & _
+            "               <SystemLocale>TEMP</SystemLocale>" & CrLf & _
+            "               <UILanguage>TEMP</UILanguage>" & CrLf & _
+            "               <UILanguageFallback>TEMP</UILanguageFallback>" & CrLf & _
+            "               <UserLocale>TEMP</UserLocale>" & CrLf & _
+            "           </component>" & CrLf & _
+            "           <component name=" & Quote & "Microsoft-Windows-Setup" & Quote & " processorArchitecture=" & Quote & "amd64" & Quote & " publicKeyToken=" & Quote & "31bf3856ad364e35" & Quote & " language=" & Quote & "neutral" & Quote & " versionScope=" & Quote & "nonSxS" & Quote & " xmlns:wcm=" & Quote & "http://schemas.microsoft.com/WMIConfig/2002/State" & Quote & " xmlns:xsi=" & Quote & "http://www.w3.org/2001/XMLSchema-instance" & Quote & ">" & CrLf & _
+            "               <DiskConfiguration>" & CrLf & _
+            "                   <Disk wcm:action=" & Quote & "add" & Quote & ">" & CrLf & _
+            "                       <DiskID>0</DiskID>" & CrLf & _
+            "                       <WillWipeDisk>TEMP</WillWipeDisk>" & CrLf & _
+            "                       <CreatePartitions>" & CrLf & _
+            "                           <CreatePartition wcm:action=" & Quote & "add" & Quote & ">" & CrLf & _
+            "                               <Order>1</Order>" & CrLf & _
+            "                               <Type>Primary</Type>" & CrLf & _
+            "                               <Size>300</Size>" & CrLf & _
+            "                           </CreatePartition>" & CrLf & _
+            "                           <CreatePartition wcm:action=" & Quote & "add" & Quote & ">" & CrLf & _
+            "                               <Order>2</Order>" & CrLf & _
+            "                               <Type>EFI</Type>" & CrLf & _
+            "                               <Size>100</Size>" & CrLf & _
+            "                           </CreatePartition>" & CrLf & _
+            "                           <CreatePartition wcm:action=" & Quote & "add" & Quote & ">" & CrLf & _
+            "                               <Order>3</Order>" & CrLf & _
+            "                               <Type>MSR</Type>" & CrLf & _
+            "                               <Size>128</Size>" & CrLf & _
+            "                           </CreatePartition>" & CrLf & _
+            "                           <CreatePartition wcm:action=" & Quote & "add" & Quote & ">" & CrLf & _
+            "                               <Order>4</Order>" & CrLf & _
+            "                               <Type>Primary</Type>" & CrLf & _
+            "                               <Extend>True</Extend>" & CrLf & _
+            "                           </CreatePartition>" & CrLf & _
+            "                       </CreatePartitions>" & CrLf & _
+            "                       <ModifyPartitions>" & CrLf & _
+            "                           <ModifyPartition wcm:action=" & Quote & "add" & Quote & ">" & CrLf & _
+            "                               <Order>1</Order>" & CrLf & _
+            "                               <PartitionID>1</PartitionID>" & CrLf & _
+            "                               <Label>WINRE</Label>" & CrLf & _
+            "                               <Format>NTFS</Format>" & CrLf & _
+            "                               <TypeID>DE94BBA4-06D1-4D40-A16A-BFD50179D6AC</TypeID>" & CrLf & _
+            "                           <ModifyPartition>" & CrLf & _
+            "                           <ModifyPartition wcm:action=" & Quote & "add" & Quote & ">" & CrLf & _
+            "                               <Order>2</Order>" & CrLf & _
+            "                               <PartitionID>2</PartitionID>" & CrLf & _
+            "                               <Label>System</Label>" & CrLf & _
+            "                               <Format>FAT32</Format>" & CrLf & _
+            "                           </ModifyPartition>" & CrLf & _
+            "                           <ModifyPartition wcm:action=" & Quote & "add" & Quote & ">" & CrLf & _
+            "                               <Order>3</Order>" & CrLf & _
+            "                               <PartitionID>3</PartitionID>" & CrLf & _
+            "                           </ModifyPartition>" & CrLf & _
+            "                           <ModifyPartition wcm:action=" & Quote & "add" & Quote & ">" & CrLf & _
+            "                               <Order>TEMP</Order>" & CrLf & _
+            "                               <PartitionID>TEMP</PartitionID>" & CrLf & _
+            "                               <Label>TEMP</Label>" & CrLf & _
+            "                               <Letter>TEMP</Letter>" & CrLf & _
+            "                               <Format>NTFS</Format>" & CrLf & _
+            "                           </ModifyPartition>" & CrLf & _
+            "                       </ModifyPartitions> " & CrLf & _
+            "                   </Disk>" & CrLf & _
+            "               </DiskConfiguration>" & CrLf & _
+            "               <ImageInstall>" & CrLf & _
+            "                   <OSImage>" & CrLf & _
+            "                       <InstallTo>" & CrLf & _
+            "                           <DiskID>TEMP</DiskID>" & CrLf & _
+            "                           <PartitionID>TEMP</PartitionID>" & CrLf & _
+            "                       </InstallTo>" & CrLf & _
+            "                       <InstallToAvailableParition>false</InstallToAvailablePartition>" & CrLf & _
+            "                   </OSImage>" & CrLf & _
+            "               </ImageInstall>" & CrLf & _
+            "               <UserData>" & CrLf & _
+            "                   <ProductKey>" & CrLf & _
+            "                       <Key></Key>" & CrLf & _
+            "                       <WillShowUI>Never</WillShowUI>" & CrLf & _
+            "                   </ProductKey>" & CrLf & _
+            "                   <AcceptEula>TEMP</AcceptEula>" & CrLf & _
+            "                   <FullName>TEMP</FullName>" & CrLf & _
+            "                   <Organization>TEMP</Organization>" & CrLf & _
+            "               </UserData>" & CrLf & _
+            "           </component>" & CrLf & _
+            "       </settings>" & CrLf & _
+            "       <settings pass=" & Quote & "offlineServicing" & Quote & ">" & CrLf & _
+            "           <component name=" & Quote & "Microsoft-Windows-LUA-Settings" & Quote & " processorArchitecture=" & Quote & "amd64" & Quote & " publicKeyToken=" & Quote & "31bf3856ad364e35" & Quote & " language=" & Quote & "neutral" & Quote & " versionScope=" & Quote & "nonSxS" & Quote & " xmlns:wcm=" & Quote & "http://schemas.microsoft.com/WMIConfig/2002/State" & Quote & " xmlns:xsi=" & Quote & "http://www.w3.org/2001/XMLSchema-instance" & Quote & ">" & CrLf & _
+            "               <EnableLUA>TEMP</EnableLUA>" & CrLf & _
+            "           </component>" & CrLf & _
+            "       </settings>" & CrLf & _
+            "       <settings pass=" & Quote & "generalize" & Quote & ">" & CrLf & _
+            "           <component name=" & Quote & "Microsoft-Windows-Security-SPP" & Quote & " processorArchitecture=" & Quote & "amd64" & Quote & " publicKeyToken=" & Quote & "31bf3856ad364e35" & Quote & " language=" & Quote & "neutral" & Quote & " versionScope=" & Quote & "nonSxS" & Quote & " xmlns:wcm=" & Quote & "http://schemas.microsoft.com/WMIConfig/2002/State" & Quote & " xmlns:xsi=" & Quote & "http://www.w3.org/2001/XMLSchema-instance" & Quote & ">" & CrLf & _
+            "               <SkipRearm>1</SkipRearm>" & CrLf & _
+            "           </component>" & CrLf & _
+            "       </settings>" & CrLf & _
+            "       <settings pass=" & Quote & "specialize" & Quote & ">" & CrLf & _
+            "           <component name=" & Quote & "Microsoft-Windows-International-Core" & Quote & " processorArchitecture=" & Quote & "amd64" & Quote & " publicKeyToken=" & Quote & "31bf3856ad364e35" & Quote & " language=" & Quote & "neutral" & Quote & " versionScope=" & Quote & "nonSxS" & Quote & " xmlns:wcm=" & Quote & "http://schemas.microsoft.com/WMIConfig/2002/State" & Quote & " xmlns:xsi=" & Quote & "http://www.w3.org/2001/XMLSchema-instance" & Quote & ">" & CrLf & _
+            "               <InputLocale>TEMP:TEMPTEMP</InputLocale>" & CrLf & _
+            "               <SystemLocale>TEMP</SystemLocale>" & CrLf & _
+            "               <UILanguage>TEMP</UILanguage>" & CrLf & _
+            "               <UILanguageFallback>TEMP</UILanguageFallback>" & CrLf & _
+            "               <UserLocale>TEMP</UserLocale>" & CrLf & _
+            "           </component>" & CrLf & _
+            "           <component name=" & Quote & "Microsoft-Windows-Security-SPP-UX" & Quote & " processorArchitecture=" & Quote & "amd64" & Quote & " publicKeyToken=" & Quote & "31bf3856ad364e35" & Quote & " language=" & Quote & "neutral" & Quote & " versionScope=" & Quote & "nonSxS" & Quote & " xmlns:wcm=" & Quote & "http://schemas.microsoft.com/WMIConfig/2002/State" & Quote & " xmlns:xsi=" & Quote & "http://www.w3.org/2001/XMLSchema-instance" & Quote & ">" & CrLf & _
+            "               <SkipAutoActivation>TEMP</SkipAutoActivation>" & CrLf & _
+            "           </component>" & CrLf & _
+            "           <component name=" & Quote & "Microsoft-Windows-SQMApi" & Quote & " processorArchitecture=" & Quote & "amd64" & Quote & " publicKeyToken=" & Quote & "31bf3856ad364e35" & Quote & " language=" & Quote & "neutral" & Quote & " versionScope=" & Quote & "nonSxS" & Quote & " xmlns:wcm=" & Quote & "http://schemas.microsoft.com/WMIConfig/2002/State" & Quote & " xmlns:xsi=" & Quote & "http://www.w3.org/2001/XMLSchema-instance" & Quote & ">" & CrLf & _
+            "               <CEIPEnabled>TEMP</CEIPEnabled>" & CrLf & _
+            "           </component>" & CrLf & _
+            "           <component name=" & Quote & "Microsoft-Windows-Shell-Setup" & Quote & " processorArchitecture=" & Quote & "amd64" & Quote & " publicKeyToken=" & Quote & "31bf3856ad364e35" & Quote & " language=" & Quote & "neutral" & Quote & " versionScope=" & Quote & "nonSxS" & Quote & " xmlns:wcm=" & Quote & "http://schemas.microsoft.com/WMIConfig/2002/State" & Quote & " xmlns:xsi=" & Quote & "http://www.w3.org/2001/XMLSchema-instance" & Quote & ">" & CrLf & _
+            "               <ComputerName>TEMP</ComputerName>" & CrLf & _
+            "               <ProductKey>TEMP-TEMP-TEMP-TEMP-TEMP</ProductKey>" & CrLf & _
+            "           </component>" & CrLf & _
+            "       </settings>" & CrLf & _
+            "       <settings pass=" & Quote & "oobeSystem" & Quote & ">" & CrLf & _
+            "           <component name=" & Quote & "Microsoft-Windows-Shell-Setup" & Quote & " processorArchitecture=" & Quote & "amd64" & Quote & " publicKeyToken=" & Quote & "31bf3856ad364e35" & Quote & " language=" & Quote & "neutral" & Quote & " versionScope=" & Quote & "nonSxS" & Quote & " xmlns:wcm=" & Quote & "http://schemas.microsoft.com/WMIConfig/2002/State" & Quote & " xmlns:xsi=" & Quote & "http://www.w3.org/2001/XMLSchema-instance" & Quote & ">" & CrLf & _
+            "               <AutoLogon>" & CrLf & _
+            "                   <Password>" & CrLf & _
+            "                       <Value>TEMP</Value>" & CrLf & _
+            "                       <PlainText>true</PlainText>" & CrLf & _
+            "                   </Password>" & CrLf & _
+            "                   <Enabled>TEMP</Enabled>" & CrLf & _
+            "                   <Username>TEMP</Username>" & CrLf & _
+            "               </AutoLogon>" & CrLf & _
+            "               <OOBE>" & CrLf & _
+            "                   <HideEULAPage>TEMP</HideEULAPage>" & CrLf & _
+            "                   <HideOEMRegistrationScreen>true</HideOEMRegistrationScreen>" & CrLf & _
+            "                   <HideOnlineAccountScreens>true</HideOnlineAccountScreens>" & CrLf & _
+            "                   <HideWirelessSetupInOOBE>TEMP</HideWirelessSetupInOOBE>" & CrLf & _
+            "                   <NetworkLocation>TEMP</NetworkLocation>" & CrLf & _
+            "                   <SkipUserOOBE>TEMP</SkipUserOOBE>" & CrLf & _
+            "                   <SkipMachineOOBE>TEMP</SkipMachineOOBE>" & CrLf & _
+            "                   <ProtectYourPC>TEMP</ProtectYourPC>" & CrLf & _
+            "               </OOBE>" & CrLf & _
+            "               <UserAccounts>" & CrLf & _
+            "                   <LocalAccounts>" & CrLf & _
+            "                       <LocalAccount wcm:action=" & Quote & "add" & Quote & ">" & CrLf & _
+            "                           <Password>" & CrLf & _
+            "                               <Value>TEMP</Value>" & CrLf & _
+            "                               <PlainText>true</PlainText>" & CrLf & _
+            "                           </Password>" & CrLf & _
+            "                           <Description>TEMP</Description>" & CrLf & _
+            "                           <DisplayName>TEMP</DisplayName>" & CrLf & _
+            "                           <Group>TEMP</Group>" & CrLf & _
+            "                           <Name>TEMP</Name>" & CrLf & _
+            "                       </LocalAccount>" & CrLf & _
+            "                   </LocalAccounts" & CrLf & _
+            "               </UserAccounts>" & CrLf & _
+            "               <RegisteredOrganization>TEMP</RegisteredOrganization>" & CrLf & _
+            "               <RegisteredOwner>TEMP</RegisteredOwner>" & CrLf & _
+            "               <DisableAutoDaylightTimeSet>TEMP</DisableAutoDaylightTimeSet>" & CrLf & _
+            "               <FirstLogonCommands>" & CrLf & _
+            "                   <SynchronousCommand wcm:action=" & Quote & "add" & Quote & ">" & CrLf & _
+            "                       <Description>Control Panel View</Description>" & CrLf & _
+            "                       <Order>1</Order>" & CrLf & _
+            "                       <CommandLine>reg add " & Quote & "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ControlPanel" & Quote & " /v StartupPage /t REG_DWORD /d TEMP /f</CommandLine>" & CrLf & _
+            "                       <RequiresUserInput>true</RequiresUserInput>" & CrLf & _
+            "                   </SynchronousCommand>" & CrLf & _
+            "                   <SynchronousCommand wcm:action=" & Quote & "add" & Quote & ">" & CrLf & _
+            "                       <Description>Control Panel Icon Size</Description>" & CrLf & _
+            "                       <Order>2</Order>" & CrLf & _
+            "                       <CommandLine>reg add " & Quote & "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ControlPanel" & Quote & " /v AllItemsIconView /t REG_DWORD /d TEMP /f</CommandLine>" & CrLf & _
+            "                       <RequiresUserInput>false</RequiresUserInput>" & CrLf & _
+            "                   </SynchronousCommand>" & CrLf & _
+            "                   <SynchronousCommand wcm:action=" & Quote & "add" & Quote & ">" & CrLf & _
+            "                       <Description>Password Never Expires</Description>" & CrLf & _
+            "                       <Order>3</Order>" & CrLf & _
+            "                       <CommandLine>cmd /C wmic useraccount where name=" & Quote & "TEMP" & Quote & " set PasswordExpires=TEMP</CommandLine>" & CrLf & _
+            "                       <RequiresUserInput>false</RequiresUserInput>" & CrLf & _
+            "                   </SynchronousCommand>" & CrLf & _
+            "               </FirstLogonCommands>" & CrLf & _
+            "               <TimeZone>TEMP</TimeZone>" & CrLf & _
+            "           </component>" & CrLf & _
+            "       </settings>" & CrLf & _
+            "   </unattend>" & CrLf & _
+            "</xml>"
+    End Sub
+
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
         If ComboBox1.SelectedItem = "Windows XP" Then
             Label13.Text = "25/10/2001"

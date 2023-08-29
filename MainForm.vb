@@ -49,6 +49,8 @@ Public Class MainForm
     Public CreationTime As String
     Public ModifyTime As String
 
+    Public imgInstType As String       ' Image installation type, used to determine whether an image contains a Server Core/Nano Server installation
+
     ' Var used to detect whether the image is orphaned (needs servicing session reload)
     Public isOrphaned As Boolean    ' This variable is true when the host system is shut down or restarted (the servicing session stops abruptly)
     Public mountedImgStatus As String
@@ -119,7 +121,7 @@ Public Class MainForm
     Public isSqlServerDTProj As Boolean
 
     ' Set branch name and codenames
-    Public dtBranch As String = "stable"
+    Public dtBranch As String = "dt_preview"
 
     ' Arrays and other variables used on background processes
     Public imgPackageNames(65535) As String
@@ -203,12 +205,20 @@ Public Class MainForm
     Dim WndTop As Integer
 
     Public CompletedTasks(4) As Boolean
+    Public PendingTasks(4) As Boolean
 
     Dim HasRemounted As Boolean
 
     Dim IsCompatible As Boolean = True
 
     Dim SysVer As Version
+
+    ' Lists for information dialogs
+    Dim PackageInfoList As DismPackageCollection
+    Dim FeatureInfoList As DismFeatureCollection
+    Dim AppxPackageInfoList As DismAppxPackageCollection
+    Dim CapabilityInfoList As DismCapabilityCollection
+    Dim DriverInfoList As DismDriverPackageCollection
 
     Friend NotInheritable Class NativeMethods
 
@@ -469,6 +479,7 @@ Public Class MainForm
                 client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/DISMTools/" & branch & "/Updater/DISMTools-UCS/update-bin/" & If(branch.Contains("preview"), "preview.ini", "stable.ini"), Application.StartupPath & "\info.ini")
             Catch ex As WebException
                 Debug.WriteLine("We couldn't fetch the necessary update information. Reason:" & CrLf & ex.Status.ToString())
+                UpdatePanel.Visible = False
                 Exit Sub
             End Try
             Debug.WriteLine("Reading update information...")
@@ -1384,6 +1395,48 @@ Public Class MainForm
         ' 3: run AppX package background processes
         ' 4: run FoD background processes
         ' 5: run driver background processes
+        Select Case bgProcOptn
+            Case 1
+                CompletedTasks(0) = False
+                CompletedTasks(1) = True
+                CompletedTasks(2) = True
+                CompletedTasks(3) = True
+                CompletedTasks(4) = True
+                ' Set pending task
+                PendingTasks(0) = True
+            Case 2
+                CompletedTasks(0) = True
+                CompletedTasks(1) = False
+                CompletedTasks(2) = True
+                CompletedTasks(3) = True
+                CompletedTasks(4) = True
+                ' Set pending task
+                PendingTasks(1) = True
+            Case 3
+                CompletedTasks(0) = True
+                CompletedTasks(1) = True
+                CompletedTasks(2) = False
+                CompletedTasks(3) = True
+                CompletedTasks(4) = True
+                ' Set pending task
+                PendingTasks(2) = True
+            Case 4
+                CompletedTasks(0) = True
+                CompletedTasks(1) = True
+                CompletedTasks(2) = True
+                CompletedTasks(3) = False
+                CompletedTasks(4) = True
+                ' Set pending task
+                PendingTasks(3) = True
+            Case 5
+                CompletedTasks(0) = True
+                CompletedTasks(1) = True
+                CompletedTasks(2) = True
+                CompletedTasks(3) = True
+                CompletedTasks(4) = False
+                ' Set pending task
+                PendingTasks(4) = True
+        End Select
         regJumps = True
         progressMin = 20
         Select Case bgProcOptn
@@ -1428,7 +1481,7 @@ Public Class MainForm
                 End If
                 If imgEdition Is Nothing Then imgEdition = ""
                 If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
-                    If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+                    If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And Not (imgInstType.Contains("Nano") Or imgInstType.Contains("Core")) Then
                         Debug.WriteLine("[IsWindows8OrHigher] Returned True")
                         pbOpNums += 1
                         Select Case Language
@@ -1457,7 +1510,7 @@ Public Class MainForm
                     Debug.WriteLine("[IsWindows8OrHigher] Returned False")
                 End If
                 If IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") And Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
-                    If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+                    If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And Not imgInstType.Contains("Nano") Then
                         Debug.WriteLine("[IsWindows10OrHigher] Returned True")
                         pbOpNums += 1
                         Select Case Language
@@ -1557,6 +1610,7 @@ Public Class MainForm
                     GetImageAppxPackages(True, OnlineMode)
                 Else
                     Debug.WriteLine("[IsWindows8OrHigher] Returned False")
+                    PendingTasks(2) = False
                 End If
             Case 4
                 If IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") = True Then
@@ -1579,6 +1633,7 @@ Public Class MainForm
                     GetImageCapabilities(True, OnlineMode)
                 Else
                     Debug.WriteLine("[IsWindows10OrHigher] Returned False")
+                    PendingTasks(3) = False
                 End If
             Case 5
                 Select Case Language
@@ -1597,6 +1652,27 @@ Public Class MainForm
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetImageDrivers(True, OnlineMode)
         End Select
+        If bgProcOptn <> 0 And PendingTasks.Contains(True) Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            progressLabel = "Running pending tasks. This may take some time..."
+                        Case "ESN"
+                            progressLabel = "Ejecutando tareas pendientes. Esto puede llevar algo de tiempo..."
+                    End Select
+                Case 1
+                    progressLabel = "Running pending tasks. This may take some time..."
+                Case 2
+                    progressLabel = "Ejecutando tareas pendientes. Esto puede llevar algo de tiempo..."
+            End Select
+            ImgBW.ReportProgress(99)
+            If PendingTasks(0) Then GetImagePackages(True, OnlineMode)
+            If PendingTasks(1) Then GetImageFeatures(True, OnlineMode)
+            If PendingTasks(2) Then GetImageAppxPackages(True, OnlineMode)
+            If PendingTasks(3) Then GetImageCapabilities(True, OnlineMode)
+            If PendingTasks(4) Then GetImageDrivers(True, OnlineMode)
+        End If
         DeleteTempFiles()
         If UseApi And session IsNot Nothing Then
             DismApi.CloseSession(session)
@@ -1866,6 +1942,9 @@ Public Class MainForm
                 ProjNameEditBtn.Visible = False
                 ' Set edition variable according to the EditionID registry value
                 imgEdition = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion").GetValue("EditionID")
+
+                ' Set installation type variable according to the InstallationType registry value
+                imgInstType = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion").GetValue("InstallationType")
                 Exit Sub
             Else
                 If IsImageMounted Then
@@ -1897,6 +1976,7 @@ Public Class MainForm
                                         imgFiles = imageInfo.CustomizedInfo.FileCount
                                         imgCreation = imageInfo.CustomizedInfo.CreatedTime
                                         imgModification = imageInfo.CustomizedInfo.ModifiedTime
+                                        imgInstType = imageInfo.InstallationType
                                     End If
                                 Next
                             End If
@@ -2343,10 +2423,12 @@ Public Class MainForm
                     Dim imgPackageRelTypeList As New List(Of String)
                     Dim imgPackageInstTimeList As New List(Of String)
                     Dim PackageCollection As DismPackageCollection = DismApi.GetPackages(session)
+                    PackageInfoList = PackageCollection
                     For Each package As DismPackage In PackageCollection
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                             CompletedTasks(0) = False
+                            PendingTasks(0) = True
                             Exit Sub
                         End If
                         imgPackageNameList.Add(package.PackageName)
@@ -2363,6 +2445,7 @@ Public Class MainForm
                 DismApi.Shutdown()
             End Try
             CompletedTasks(0) = True
+            PendingTasks(0) = False
             Exit Sub
             'Try
 
@@ -2474,6 +2557,7 @@ Public Class MainForm
             End If
         Next
         CompletedTasks(0) = True
+        PendingTasks(0) = False
         'imgPackageNameLastEntry = UBound(imgPackageNames)
         'ImgBW.ReportProgress(progressMin + progressDivs)
     End Sub
@@ -2489,10 +2573,12 @@ Public Class MainForm
                     Dim imgFeatureNameList As New List(Of String)
                     Dim imgFeatureStateList As New List(Of String)
                     Dim FeatureCollection As DismFeatureCollection = DismApi.GetFeatures(session)
+                    FeatureInfoList = FeatureCollection
                     For Each feature As DismFeature In FeatureCollection
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                             CompletedTasks(1) = False
+                            PendingTasks(1) = True
                             Exit Sub
                         End If
                         imgFeatureNameList.Add(feature.FeatureName)
@@ -2522,6 +2608,7 @@ Public Class MainForm
                 DismApi.Shutdown()
             End Try
             CompletedTasks(1) = True
+            PendingTasks(1) = False
             Exit Sub
             'Try
             '    If session IsNot Nothing Then
@@ -2599,6 +2686,7 @@ Public Class MainForm
             End If
         Next
         CompletedTasks(1) = True
+        PendingTasks(1) = False
         'ImgBW.ReportProgress(progressMin + progressDivs)
     End Sub
 
@@ -2618,10 +2706,12 @@ Public Class MainForm
                     Dim imgAppxResourceIdList As New List(Of String)
                     Dim imgAppxRegionList As New List(Of String)
                     Dim AppxPackageCollection As DismAppxPackageCollection = DismApi.GetProvisionedAppxPackages(session)
+                    AppxPackageInfoList = AppxPackageCollection
                     For Each AppxPackage As DismAppxPackage In AppxPackageCollection
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                             CompletedTasks(2) = False
+                            PendingTasks(2) = True
                             Exit Sub
                         End If
                         Select Case AppxPackage.Architecture
@@ -2702,6 +2792,7 @@ Public Class MainForm
                 DismApi.Shutdown()
             End Try
             CompletedTasks(2) = True
+            PendingTasks(2) = False
             Exit Sub
         End If
         Debug.WriteLine("[GetImageAppxPackages] Running function...")
@@ -2714,6 +2805,7 @@ Public Class MainForm
                     Case 1
                         Debug.WriteLine("[GetImageAppxPackages] The image is Windows 8 or later, but this version of DISM does not support this command. Exiting...")
                         CompletedTasks(2) = False
+                        PendingTasks(2) = True
                         Exit Sub
                 End Select
         End Select
@@ -2739,6 +2831,7 @@ Public Class MainForm
         Catch ex As Exception
             Debug.WriteLine("[GetImageAppxPackages] Failed writing getter scripts. Reason: " & ex.Message)
             CompletedTasks(2) = False
+            PendingTasks(2) = True
             Exit Sub
         End Try
         Debug.WriteLine("[GetImageAppxPackages] Finished writing getter scripts. Executing them...")
@@ -2865,6 +2958,7 @@ Public Class MainForm
             imgAppxResourceIds = imgAppxResourceIdList.ToArray()
         End If
         CompletedTasks(2) = True
+        PendingTasks(2) = False
         'ImgBW.ReportProgress(progressMin + progressDivs)
     End Sub
 
@@ -2898,10 +2992,12 @@ Public Class MainForm
                     Dim imgCapabilityNameList As New List(Of String)
                     Dim imgCapabilityStateList As New List(Of String)
                     Dim CapabilityCollection As DismCapabilityCollection = DismApi.GetCapabilities(session)
+                    CapabilityInfoList = CapabilityCollection
                     For Each capability As DismCapability In CapabilityCollection
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                             CompletedTasks(3) = False
+                            PendingTasks(3) = True
                             Exit Sub
                         End If
                         imgCapabilityNameList.Add(capability.Name)
@@ -2931,6 +3027,7 @@ Public Class MainForm
                 DismApi.Shutdown()
             End Try
             CompletedTasks(3) = True
+            PendingTasks(3) = False
             Exit Sub
             'Try
 
@@ -3045,6 +3142,7 @@ Public Class MainForm
             End If
         Next
         CompletedTasks(3) = True
+        PendingTasks(3) = False
         'ImgBW.ReportProgress(progressMin + progressDivs)
     End Sub
 
@@ -3066,10 +3164,12 @@ Public Class MainForm
                     Dim imgDrvVersionList As New List(Of String)
                     Dim imgDrvBootCriticalStatusList As New List(Of Boolean)
                     Dim DriverCollection As DismDriverPackageCollection = DismApi.GetDrivers(session, AllDrivers)
+                    DriverInfoList = DriverCollection
                     For Each driver As DismDriverPackage In DriverCollection
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                             CompletedTasks(4) = False
+                            PendingTasks(4) = True
                             Exit Sub
                         End If
                         imgDrvPublishedNameList.Add(driver.PublishedName)
@@ -3094,6 +3194,7 @@ Public Class MainForm
                 DismApi.Shutdown()
             End Try
             CompletedTasks(4) = True
+            PendingTasks(4) = False
             Exit Sub
             'Try
             '    If session IsNot Nothing Then
@@ -3262,6 +3363,7 @@ Public Class MainForm
             End If
         Next
         CompletedTasks(4) = True
+        PendingTasks(4) = False
         'ImgBW.ReportProgress(progressMin + progressDivs)
     End Sub
 
@@ -3286,7 +3388,7 @@ Public Class MainForm
 #End Region
 
     Sub GenerateDTSettings()
-        DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.3) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.3.1) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & "{common:WinDir}\system32\dism.exe" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "Volatile=0")
@@ -3340,6 +3442,8 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "WndLeft=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "WndTop=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "WndMaximized=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ImgDetection]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("CPUMode=0")
         File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
         If File.Exists(Application.StartupPath & "\portable") Then Exit Sub
         Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("preview"), "Preview", "Stable")
@@ -3407,6 +3511,9 @@ Public Class MainForm
         WndKey.SetValue("WndTop", 0, RegistryValueKind.DWord)
         WndKey.SetValue("WndMaximized", 0, RegistryValueKind.DWord)
         WndKey.Close()
+        Dim ImgDetectionKey As RegistryKey = Key.CreateSubKey("ImgDetection")
+        ImgDetectionKey.SetValue("CPUMode", 0, RegistryValueKind.DWord)
+        ImgDetectionKey.Close()
         Key.Close()
     End Sub
 
@@ -3419,7 +3526,7 @@ Public Class MainForm
                     File.Delete(Application.StartupPath & "\settings.ini")
                 End If
                 DTSettingForm.RichTextBox2.Clear()
-                DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.3) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
+                DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.3.1) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
                 DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & DismExe & Quote)
                 If SaveOnSettingsIni Then
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=1")
@@ -3577,6 +3684,7 @@ Public Class MainForm
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "WndLeft=" & WndLeft)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "WndTop=" & WndTop)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "WndMaximized=" & If(WindowState = FormWindowState.Maximized, "1", "0"))
+                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ImgDetection]" & CrLf)
                 File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
             Else
                 ' Tell settings file to use this method
@@ -3646,6 +3754,8 @@ Public Class MainForm
                 WndKey.SetValue("WndTop", WndTop, RegistryValueKind.DWord)
                 WndKey.SetValue("WndMaximized", If(WindowState = FormWindowState.Maximized, 1, 0), RegistryValueKind.DWord)
                 WndKey.Close()
+                Dim ImgDetectionKey As RegistryKey = Key.CreateSubKey("ImgDetection")
+                ImgDetectionKey.Close()
                 Key.Close()
             End If
         End If
@@ -3772,15 +3882,15 @@ Public Class MainForm
                         ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         ToolStrip2.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                        FeatureInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                        AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         PkgInfoCMS.ForeColor = Color.White
-                        FeatureInfoCMS.ForeColor = Color.White
                         ImgUMountPopupCMS.ForeColor = Color.White
                         AppxPackagePopupCMS.ForeColor = Color.White
                         TreeViewCMS.ForeColor = Color.White
+                        AppxResCMS.ForeColor = Color.White
                         Dim items = TreeViewCMS.Items
                         Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
                         For Each item As ToolStripDropDownItem In mItem
@@ -3883,15 +3993,15 @@ Public Class MainForm
                         ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         ToolStrip2.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                        FeatureInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                        AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         PkgInfoCMS.ForeColor = Color.Black
-                        FeatureInfoCMS.ForeColor = Color.Black
                         ImgUMountPopupCMS.ForeColor = Color.Black
                         AppxPackagePopupCMS.ForeColor = Color.Black
                         TreeViewCMS.ForeColor = Color.Black
+                        AppxResCMS.ForeColor = Color.Black
                         Dim items = TreeViewCMS.Items
                         Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
                         For Each item As ToolStripDropDownItem In mItem
@@ -3998,15 +4108,15 @@ Public Class MainForm
                 ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 ToolStrip2.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                FeatureInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 PkgInfoCMS.ForeColor = Color.Black
-                FeatureInfoCMS.ForeColor = Color.Black
                 ImgUMountPopupCMS.ForeColor = Color.Black
                 AppxPackagePopupCMS.ForeColor = Color.Black
                 TreeViewCMS.ForeColor = Color.Black
+                AppxResCMS.ForeColor = Color.Black
                 Dim items = TreeViewCMS.Items
                 Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
                 For Each item As ToolStripDropDownItem In mItem
@@ -4109,15 +4219,15 @@ Public Class MainForm
                 ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 ToolStrip2.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                FeatureInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 PkgInfoCMS.ForeColor = Color.White
-                FeatureInfoCMS.ForeColor = Color.White
                 ImgUMountPopupCMS.ForeColor = Color.White
                 AppxPackagePopupCMS.ForeColor = Color.White
                 TreeViewCMS.ForeColor = Color.White
+                AppxResCMS.ForeColor = Color.White
                 Dim items = TreeViewCMS.Items
                 Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
                 For Each item As ToolStripDropDownItem In mItem
@@ -4203,12 +4313,10 @@ Public Class MainForm
                     UpdateWIMBootEntry.Text = "Update WIMBoot configuration entry..."
                     ApplySiloedPackage.Text = "Apply siloed provisioning package..."
                     ' Menu - Commands - OS packages
-                    GetPackages.Text = "Get basic package information..."
-                    GetPackageInfo.Text = "Get detailed package information..."
+                    GetPackages.Text = "Get package information..."
                     AddPackage.Text = "Add package..."
                     RemovePackage.Text = "Remove package..."
-                    GetFeatures.Text = "Get basic feature information..."
-                    GetFeatureInfo.Text = "Get detailed feature information..."
+                    GetFeatures.Text = "Get feature information..."
                     EnableFeature.Text = "Enable feature..."
                     DisableFeature.Text = "Disable feature..."
                     CleanupImage.Text = "Perform cleanup or recovery operations..."
@@ -4250,8 +4358,7 @@ Public Class MainForm
                     ' Menu - Commands - Capabilities
                     AddCapability.Text = "Add capability..."
                     ExportSource.Text = "Export capabilities into repository..."
-                    GetCapabilities.Text = "Get basic capability information..."
-                    GetCapabilityInfo.Text = "Get detailed capability information..."
+                    GetCapabilities.Text = "Get capability information..."
                     RemoveCapability.Text = "Remove capability..."
                     ' Menu - Commands - Windows editions
                     GetCurrentEdition.Text = "Get current edition..."
@@ -4259,8 +4366,7 @@ Public Class MainForm
                     SetEdition.Text = "Upgrade image..."
                     SetProductKey.Text = "Set product key..."
                     ' Menu - Commands - Drivers
-                    GetDrivers.Text = "Get basic driver information..."
-                    GetDriverInfo.Text = "Get detailed driver information..."
+                    GetDrivers.Text = "Get driver information..."
                     AddDriver.Text = "Add driver..."
                     RemoveDriver.Text = "Remove driver..."
                     ExportDriver.Text = "Export driver packages..."
@@ -4292,6 +4398,8 @@ Public Class MainForm
                     UnattendedAnswerFileManagerToolStripMenuItem.Text = "Unattended answer file manager"
                     ReportManagerToolStripMenuItem.Text = "Report manager"
                     MountedImageManagerTSMI.Text = "Mounted image manager"
+                    WimScriptEditorCommand.Text = "Configuration list editor"
+                    ActionEditorToolStripMenuItem.Text = "Action editor"
                     OptionsToolStripMenuItem.Text = "Options"
                     ' Menu - Help
                     HelpTopicsToolStripMenuItem.Text = "Help Topics"
@@ -4387,8 +4495,6 @@ Public Class MainForm
                     ' Pop-up context menus
                     PkgBasicInfo.Text = "Get basic information (all packages)"
                     PkgDetailedInfo.Text = "Get detailed information (specific package)"
-                    FeatureBasicInfo.Text = "Get basic feature info (all features)"
-                    FeatureDetailedInfo.Text = "Get detailed feature info (specific feature)"
                     CommitAndUnmountTSMI.Text = "Commit changes and unmount image"
                     DiscardAndUnmountTSMI.Text = "Discard changes and unmount image"
                     UnmountSettingsToolStripMenuItem.Text = "Unmount settings..."
@@ -4423,6 +4529,9 @@ Public Class MainForm
                     AddToolStripMenuItem.Text = "Add"
                     NewFileToolStripMenuItem.Text = "New file..."
                     ExistingFileToolStripMenuItem.Text = "Existing file..."
+                    ' Context menu of AppX information dialog
+                    SaveResourceToolStripMenuItem.Text = "Save resource..."
+                    CopyToolStripMenuItem.Text = "Copy resource"
                 ElseIf My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "ESN" Then
                     ' Top-level menu items
                     FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -4484,12 +4593,10 @@ Public Class MainForm
                     UpdateWIMBootEntry.Text = "Actualizar entradas de configuración WIMBoot..."
                     ApplySiloedPackage.Text = "Aplicar paquete de aprovisionamiento en silos..."
                     ' Menu - Commands - OS packages
-                    GetPackages.Text = "Obtener información básica de paquetes..."
-                    GetPackageInfo.Text = "Obtener información detallada de paquetes..."
+                    GetPackages.Text = "Obtener información de paquetes..."
                     AddPackage.Text = "Añadir paquete..."
                     RemovePackage.Text = "Eliminar paquete..."
-                    GetFeatures.Text = "Obtener información básica de características..."
-                    GetFeatureInfo.Text = "Obtener información detallada de características..."
+                    GetFeatures.Text = "Obtener información de características..."
                     EnableFeature.Text = "Habilitar característica..."
                     DisableFeature.Text = "Deshabilitar característica..."
                     CleanupImage.Text = "Realizar operaciones de limpieza o recuperación..."
@@ -4531,8 +4638,7 @@ Public Class MainForm
                     ' Menu - Commands - Capabilities
                     AddCapability.Text = "Añadir funcionalidad..."
                     ExportSource.Text = "Exportar funcionalidades en un repositorio..."
-                    GetCapabilities.Text = "Obtener información básica de funcionalidades..."
-                    GetCapabilityInfo.Text = "Obtener información detallada de funcionalidades..."
+                    GetCapabilities.Text = "Obtener información de funcionalidades..."
                     RemoveCapability.Text = "Eliminar funcionalidad..."
                     ' Menu - Commands - Windows editions
                     GetCurrentEdition.Text = "Obtener edición actual..."
@@ -4540,8 +4646,7 @@ Public Class MainForm
                     SetEdition.Text = "Actualizar imagen..."
                     SetProductKey.Text = "Establecer clave de producto..."
                     ' Menu - Commands - Drivers
-                    GetDrivers.Text = "Obtener información básica de controladores..."
-                    GetDriverInfo.Text = "Obtener información detallada de controladores..."
+                    GetDrivers.Text = "Obtener información de controladores..."
                     AddDriver.Text = "Añadir controlador..."
                     RemoveDriver.Text = "Eliminar controlador..."
                     ExportDriver.Text = "Exportar paquetes de controlador..."
@@ -4556,7 +4661,7 @@ Public Class MainForm
                     ' Menu - Commands - OS uninstall
                     GetOSUninstallWindow.Text = "Obtener margen de desinstalación..."
                     InitiateOSUninstall.Text = "Iniciar desinstalación..."
-                    RemoveOSUninstall.Text = "Eliminar abilidad de desinstalación..."
+                    RemoveOSUninstall.Text = "Eliminar habilidad de desinstalación..."
                     SetOSUninstallWindow.Text = "Establecer margen de desinstalación..."
                     ' Menu - Commands - Reserved storage
                     SetReservedStorageState.Text = "Establecer estado de almacenamiento reservado..."
@@ -4573,6 +4678,8 @@ Public Class MainForm
                     UnattendedAnswerFileManagerToolStripMenuItem.Text = "Administrador de archivos de respuesta desatendida"
                     ReportManagerToolStripMenuItem.Text = "Administrador de informes"
                     MountedImageManagerTSMI.Text = "Administrador de imágenes montadas"
+                    WimScriptEditorCommand.Text = "Editor de lista de configuraciones"
+                    ActionEditorToolStripMenuItem.Text = "Editor de acciones"
                     OptionsToolStripMenuItem.Text = "Opciones"
                     ' Menu - Help
                     HelpTopicsToolStripMenuItem.Text = "Ver la ayuda"
@@ -4668,8 +4775,6 @@ Public Class MainForm
                     ' Pop-up context menus
                     PkgBasicInfo.Text = "Obtener información básica (todos los paquetes)"
                     PkgDetailedInfo.Text = "Obtener información detallada (paquete específico)"
-                    FeatureBasicInfo.Text = "Obtener información básica de características (todas)"
-                    FeatureDetailedInfo.Text = "Obtener información detallada de características (específica)"
                     CommitAndUnmountTSMI.Text = "Guardar cambios y desmontar imagen"
                     DiscardAndUnmountTSMI.Text = "Descartar cambios y desmontar imagen"
                     UnmountSettingsToolStripMenuItem.Text = "Configuración de desmontaje..."
@@ -4704,6 +4809,9 @@ Public Class MainForm
                     AddToolStripMenuItem.Text = "Añadir"
                     NewFileToolStripMenuItem.Text = "Nuevo archivo..."
                     ExistingFileToolStripMenuItem.Text = "Archivo existente..."
+                    ' Context menu of AppX information dialog
+                    SaveResourceToolStripMenuItem.Text = "Guardar recurso..."
+                    CopyToolStripMenuItem.Text = "Copiar recurso"
                 Else
                     Language = 1
                     ChangeLangs(Language)
@@ -4770,12 +4878,10 @@ Public Class MainForm
                 UpdateWIMBootEntry.Text = "Update WIMBoot configuration entry..."
                 ApplySiloedPackage.Text = "Apply siloed provisioning package..."
                 ' Menu - Commands - OS packages
-                GetPackages.Text = "Get basic package information..."
-                GetPackageInfo.Text = "Get detailed package information..."
+                GetPackages.Text = "Get package information..."
                 AddPackage.Text = "Add package..."
                 RemovePackage.Text = "Remove package..."
-                GetFeatures.Text = "Get basic feature information..."
-                GetFeatureInfo.Text = "Get detailed feature information..."
+                GetFeatures.Text = "Get feature information..."
                 EnableFeature.Text = "Enable feature..."
                 DisableFeature.Text = "Disable feature..."
                 CleanupImage.Text = "Perform cleanup or recovery operations..."
@@ -4817,8 +4923,7 @@ Public Class MainForm
                 ' Menu - Commands - Capabilities
                 AddCapability.Text = "Add capability..."
                 ExportSource.Text = "Export capabilities into repository..."
-                GetCapabilities.Text = "Get basic capability information..."
-                GetCapabilityInfo.Text = "Get detailed capability information..."
+                GetCapabilities.Text = "Get capability information..."
                 RemoveCapability.Text = "Remove capability..."
                 ' Menu - Commands - Windows editions
                 GetCurrentEdition.Text = "Get current edition..."
@@ -4826,8 +4931,7 @@ Public Class MainForm
                 SetEdition.Text = "Upgrade image..."
                 SetProductKey.Text = "Set product key..."
                 ' Menu - Commands - Drivers
-                GetDrivers.Text = "Get basic driver information..."
-                GetDriverInfo.Text = "Get detailed driver information..."
+                GetDrivers.Text = "Get driver information..."
                 AddDriver.Text = "Add driver..."
                 RemoveDriver.Text = "Remove driver..."
                 ExportDriver.Text = "Export driver packages..."
@@ -4859,6 +4963,8 @@ Public Class MainForm
                 UnattendedAnswerFileManagerToolStripMenuItem.Text = "Unattended answer file manager"
                 ReportManagerToolStripMenuItem.Text = "Report manager"
                 MountedImageManagerTSMI.Text = "Mounted image manager"
+                WimScriptEditorCommand.Text = "Configuration list editor"
+                ActionEditorToolStripMenuItem.Text = "Action editor"
                 OptionsToolStripMenuItem.Text = "Options"
                 ' Menu - Help
                 HelpTopicsToolStripMenuItem.Text = "Help Topics"
@@ -4954,8 +5060,6 @@ Public Class MainForm
                 ' Pop-up context menus
                 PkgBasicInfo.Text = "Get basic information (all packages)"
                 PkgDetailedInfo.Text = "Get detailed information (specific package)"
-                FeatureBasicInfo.Text = "Get basic feature info (all features)"
-                FeatureDetailedInfo.Text = "Get detailed feature info (specific feature)"
                 CommitAndUnmountTSMI.Text = "Commit changes and unmount image"
                 DiscardAndUnmountTSMI.Text = "Discard changes and unmount image"
                 UnmountSettingsToolStripMenuItem.Text = "Unmount settings..."
@@ -4990,6 +5094,9 @@ Public Class MainForm
                 AddToolStripMenuItem.Text = "Add"
                 NewFileToolStripMenuItem.Text = "New file..."
                 ExistingFileToolStripMenuItem.Text = "Existing file..."
+                ' Context menu of AppX information dialog
+                SaveResourceToolStripMenuItem.Text = "Save resource..."
+                CopyToolStripMenuItem.Text = "Copy resource"
             Case 2
                 ' Top-level menu items
                 FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -5051,12 +5158,10 @@ Public Class MainForm
                 UpdateWIMBootEntry.Text = "Actualizar entradas de configuración WIMBoot..."
                 ApplySiloedPackage.Text = "Aplicar paquete de aprovisionamiento en silos..."
                 ' Menu - Commands - OS packages
-                GetPackages.Text = "Obtener información básica de paquetes..."
-                GetPackageInfo.Text = "Obtener información detallada de paquetes..."
+                GetPackages.Text = "Obtener información de paquetes..."
                 AddPackage.Text = "Añadir paquete..."
                 RemovePackage.Text = "Eliminar paquete..."
-                GetFeatures.Text = "Obtener información básica de características..."
-                GetFeatureInfo.Text = "Obtener información detallada de características..."
+                GetFeatures.Text = "Obtener información de características..."
                 EnableFeature.Text = "Habilitar característica..."
                 DisableFeature.Text = "Deshabilitar característica..."
                 CleanupImage.Text = "Realizar operaciones de limpieza o recuperación..."
@@ -5098,8 +5203,7 @@ Public Class MainForm
                 ' Menu - Commands - Capabilities
                 AddCapability.Text = "Añadir funcionalidad..."
                 ExportSource.Text = "Exportar funcionalidades en un repositorio..."
-                GetCapabilities.Text = "Obtener información básica de funcionalidades..."
-                GetCapabilityInfo.Text = "Obtener información detallada de funcionalidades..."
+                GetCapabilities.Text = "Obtener información de funcionalidades..."
                 RemoveCapability.Text = "Eliminar funcionalidad..."
                 ' Menu - Commands - Windows editions
                 GetCurrentEdition.Text = "Obtener edición actual..."
@@ -5107,8 +5211,7 @@ Public Class MainForm
                 SetEdition.Text = "Actualizar imagen..."
                 SetProductKey.Text = "Establecer clave de producto..."
                 ' Menu - Commands - Drivers
-                GetDrivers.Text = "Obtener información básica de controladores..."
-                GetDriverInfo.Text = "Obtener información detallada de controladores..."
+                GetDrivers.Text = "Obtener información de controladores..."
                 AddDriver.Text = "Añadir controlador..."
                 RemoveDriver.Text = "Eliminar controlador..."
                 ExportDriver.Text = "Exportar paquetes de controlador..."
@@ -5123,7 +5226,7 @@ Public Class MainForm
                 ' Menu - Commands - OS uninstall
                 GetOSUninstallWindow.Text = "Obtener margen de desinstalación..."
                 InitiateOSUninstall.Text = "Iniciar desinstalación..."
-                RemoveOSUninstall.Text = "Eliminar abilidad de desinstalación..."
+                RemoveOSUninstall.Text = "Eliminar habilidad de desinstalación..."
                 SetOSUninstallWindow.Text = "Establecer margen de desinstalación..."
                 ' Menu - Commands - Reserved storage
                 SetReservedStorageState.Text = "Establecer estado de almacenamiento reservado..."
@@ -5140,6 +5243,8 @@ Public Class MainForm
                 UnattendedAnswerFileManagerToolStripMenuItem.Text = "Administrador de archivos de respuesta desatendida"
                 ReportManagerToolStripMenuItem.Text = "Administrador de informes"
                 MountedImageManagerTSMI.Text = "Administrador de imágenes montadas"
+                WimScriptEditorCommand.Text = "Editor de lista de configuraciones"
+                ActionEditorToolStripMenuItem.Text = "Editor de acciones"
                 OptionsToolStripMenuItem.Text = "Opciones"
                 ' Menu - Help
                 HelpTopicsToolStripMenuItem.Text = "Ver la ayuda"
@@ -5235,8 +5340,6 @@ Public Class MainForm
                 ' Pop-up context menus
                 PkgBasicInfo.Text = "Obtener información básica (todos los paquetes)"
                 PkgDetailedInfo.Text = "Obtener información detallada (paquete específico)"
-                FeatureBasicInfo.Text = "Obtener información básica de características (todas)"
-                FeatureDetailedInfo.Text = "Obtener información detallada de características (específica)"
                 CommitAndUnmountTSMI.Text = "Guardar cambios y desmontar imagen"
                 DiscardAndUnmountTSMI.Text = "Descartar cambios y desmontar imagen"
                 UnmountSettingsToolStripMenuItem.Text = "Configuración de desmontaje..."
@@ -5271,6 +5374,8 @@ Public Class MainForm
                 AddToolStripMenuItem.Text = "Añadir"
                 NewFileToolStripMenuItem.Text = "Nuevo archivo..."
                 ExistingFileToolStripMenuItem.Text = "Archivo existente..."
+                SaveResourceToolStripMenuItem.Text = "Guardar recurso..."
+                CopyToolStripMenuItem.Text = "Copiar recurso"
         End Select
 
         If OnlineManagement Then
@@ -5913,7 +6018,7 @@ Public Class MainForm
             ProgressPanel.UMountImgIndex = ImgIndex
             ProgressPanel.MountDir = MountDir
             ProgressPanel.UMountOp = 0
-            ProgressPanel.ShowDialog()
+            ProgressPanel.ShowDialog(Me)
             Exit Sub
         ElseIf imgCommitOperation = 1 Then
             ProgressPanel.OperationNum = 21
@@ -5922,7 +6027,7 @@ Public Class MainForm
             ProgressPanel.UMountImgIndex = ImgIndex
             ProgressPanel.MountDir = MountDir
             ProgressPanel.UMountOp = 1
-            ProgressPanel.ShowDialog()
+            ProgressPanel.ShowDialog(Me)
             Exit Sub
         End If
         If SaveProject Then
@@ -5958,6 +6063,7 @@ Public Class MainForm
         SaveProjectasToolStripMenuItem.Enabled = False
         BGProcDetails.Hide()
         Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
+        PendingTasks = Enumerable.Repeat(True, PendingTasks.Length).ToArray()
         If OnlineManagement Then EndOnlineManagement()
     End Sub
 
@@ -6146,6 +6252,7 @@ Public Class MainForm
         TableLayoutPanel2.SetColumnSpan(Label3, 2)
         ManageOnlineInstallationToolStripMenuItem.Enabled = True
         Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
+        PendingTasks = Enumerable.Repeat(True, PendingTasks.Count).ToArray()
         MountDir = ""
     End Sub
 
@@ -6656,10 +6763,10 @@ Public Class MainForm
                 Case 2
                     prjTreeView.Nodes.Add("parent", "Proyecto: " & Quote & MainProjNameNode & Quote)
                     prjTreeView.Nodes("parent").Nodes.Add("dandi", "Herramientas de implementación")
-                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_x86", "Herramientas de implementación para x86")
-                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_amd64", "Herramientas de implementación para AMD64")
-                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm", "Herramientas de implementación para ARM")
-                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm64", "Herramientas de implementación para ARM64")
+                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_x86", "Herramientas de implementación (x86)")
+                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_amd64", "Herramientas de implementación (AMD64)")
+                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm", "Herramientas de implementación (ARM)")
+                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm64", "Herramientas de implementación (ARM64)")
                     prjTreeView.Nodes("parent").Nodes.Add("mount", "Punto de montaje")
                     prjTreeView.Nodes("parent").Nodes.Add("unattend_xml", "Archivos de respuesta desatendida")
                     prjTreeView.Nodes("parent").Nodes.Add("scr_temp", "Directorio temporal")
@@ -6766,17 +6873,13 @@ Public Class MainForm
                 Case 23
                     MenuDesc.Text = "Applies siloed provisioning packages to the image"
                 Case 24
-                    MenuDesc.Text = "Displays information about all packages in the image"
-                Case 25
-                    MenuDesc.Text = "Displays information about a package provided as a .cab file"
+                    MenuDesc.Text = "Displays information about all packages in the image or in the installation or any package file you want to add"
                 Case 26
                     MenuDesc.Text = "Installs a .cab or .msu package in the image"
                 Case 27
                     MenuDesc.Text = "Removes a .cab file package from the image"
                 Case 28
-                    MenuDesc.Text = "Displays information about all features in a package"
-                Case 29
-                    MenuDesc.Text = "Displays information about a feature"
+                    MenuDesc.Text = "Displays information about the installed features in an image or an online installation"
                 Case 30
                     MenuDesc.Text = "Enables or updates the specified feature in the image"
                 Case 31
@@ -6848,9 +6951,7 @@ Public Class MainForm
                 Case 64
                     MenuDesc.Text = "Exports a set of capabilities into a new repository"
                 Case 65
-                    MenuDesc.Text = "Gets a list of capabilities and their install status in the image"
-                Case 66
-                    MenuDesc.Text = "Gets information about a specific capability"
+                    MenuDesc.Text = "Gets information about the installed capabilities of an image or an active installation"
                 Case 67
                     MenuDesc.Text = "Removes a capability from the image"
                 Case 68
@@ -6862,9 +6963,7 @@ Public Class MainForm
                 Case 71
                     MenuDesc.Text = "Enters the product key for the current edition"
                 Case 72
-                    MenuDesc.Text = "Displays information about all driver packages in the image"
-                Case 73
-                    MenuDesc.Text = "Displays information about a specific driver package"
+                    MenuDesc.Text = "Displays information the about driver packages you specify or the installed drivers in the image or in the installation"
                 Case 74
                     MenuDesc.Text = "Adds third-party driver packages to the image"
                 Case 75
@@ -7064,7 +7163,7 @@ Public Class MainForm
         ShowChildDescs(True, 1)
     End Sub
 
-    Private Sub HideChildDescsTrigger(sender As Object, e As EventArgs) Handles AppendImage.MouseLeave, ApplyFFU.MouseLeave, ApplyImage.MouseLeave, CaptureCustomImage.MouseLeave, CaptureFFU.MouseLeave, CaptureImage.MouseLeave, CleanupMountpoints.MouseLeave, CommitImage.MouseLeave, DeleteImage.MouseLeave, ExportImage.MouseLeave, GetImageInfo.MouseLeave, GetWIMBootEntry.MouseLeave, ListImage.MouseLeave, MountImage.MouseLeave, OptimizeFFU.MouseLeave, OptimizeImage.MouseLeave, RemountImage.MouseLeave, SplitFFU.MouseLeave, SplitImage.MouseLeave, UnmountImage.MouseLeave, UpdateWIMBootEntry.MouseLeave, ApplySiloedPackage.MouseLeave, GetPackages.MouseLeave, GetPackageInfo.MouseLeave, AddPackage.MouseLeave, RemovePackage.MouseLeave, GetFeatures.MouseLeave, GetFeatureInfo.MouseLeave, EnableFeature.MouseLeave, DisableFeature.MouseLeave, CleanupImage.MouseLeave, AddProvisionedAppxPackage.MouseLeave, GetProvisioningPackageInfo.MouseLeave, ApplyCustomDataImage.MouseLeave, GetProvisionedAppxPackages.MouseLeave, AddProvisionedAppxPackage.MouseLeave, RemoveProvisionedAppxPackage.MouseLeave, OptimizeProvisionedAppxPackages.MouseLeave, SetProvisionedAppxDataFile.MouseLeave, CheckAppPatch.MouseLeave, GetAppPatchInfo.MouseLeave, GetAppPatches.MouseLeave, GetAppInfo.MouseLeave, GetApps.MouseLeave, ExportDefaultAppAssociations.MouseLeave, GetDefaultAppAssociations.MouseLeave, ImportDefaultAppAssociations.MouseLeave, RemoveDefaultAppAssociations.MouseLeave, GetIntl.MouseLeave, SetUILangFallback.MouseLeave, SetSysUILang.MouseLeave, SetSysLocale.MouseLeave, SetUserLocale.MouseLeave, SetInputLocale.MouseLeave, SetAllIntl.MouseLeave, SetTimeZone.MouseLeave, SetSKUIntlDefaults.MouseLeave, SetLayeredDriver.MouseLeave, GenLangINI.MouseLeave, SetSetupUILang.MouseLeave, AddCapability.MouseLeave, ExportSource.MouseLeave, GetCapabilities.MouseLeave, GetCapabilityInfo.MouseLeave, RemoveCapability.MouseLeave, GetCurrentEdition.MouseLeave, GetTargetEditions.MouseLeave, SetEdition.MouseLeave, SetProductKey.MouseLeave, GetDrivers.MouseLeave, GetDriverInfo.MouseLeave, AddDriver.MouseLeave, RemoveDriver.MouseLeave, ExportDriver.MouseLeave, ApplyUnattend.MouseLeave, GetPESettings.MouseLeave, GetTargetPath.MouseLeave, GetScratchSpace.MouseLeave, SetScratchSpace.MouseLeave, SetTargetPath.MouseLeave, GetOSUninstallWindow.MouseLeave, InitiateOSUninstall.MouseLeave, RemoveOSUninstall.MouseLeave, SetOSUninstallWindow.MouseLeave, SetReservedStorageState.MouseLeave, GetReservedStorageState.MouseLeave, NewProjectToolStripMenuItem.MouseLeave, OpenExistingProjectToolStripMenuItem.MouseLeave, SaveProjectToolStripMenuItem.MouseLeave, SaveProjectasToolStripMenuItem.MouseLeave, ExitToolStripMenuItem.MouseLeave, ViewProjectFilesInFileExplorerToolStripMenuItem.MouseLeave, UnloadProjectToolStripMenuItem.MouseLeave, SwitchImageIndexesToolStripMenuItem.MouseLeave, ProjectPropertiesToolStripMenuItem.MouseLeave, ImagePropertiesToolStripMenuItem.MouseLeave, ImageManagementToolStripMenuItem.MouseLeave, OSPackagesToolStripMenuItem.MouseLeave, ProvisioningPackagesToolStripMenuItem.MouseLeave, AppPackagesToolStripMenuItem.MouseLeave, AppPatchesToolStripMenuItem.MouseLeave, DefaultAppAssociationsToolStripMenuItem.MouseLeave, LanguagesAndRegionSettingsToolStripMenuItem.MouseLeave, CapabilitiesToolStripMenuItem.MouseLeave, WindowsEditionsToolStripMenuItem.MouseLeave, DriversToolStripMenuItem.MouseLeave, UnattendedAnswerFilesToolStripMenuItem.MouseLeave, WindowsPEServicingToolStripMenuItem.MouseLeave, OSUninstallToolStripMenuItem.MouseLeave, ReservedStorageToolStripMenuItem.MouseLeave, ImageConversionToolStripMenuItem.MouseLeave, WIMESDToolStripMenuItem.MouseLeave, RemountImageWithWritePermissionsToolStripMenuItem.MouseLeave, CommandShellToolStripMenuItem.MouseLeave, OptionsToolStripMenuItem.MouseLeave, HelpTopicsToolStripMenuItem.MouseLeave, GlossaryToolStripMenuItem.MouseLeave, CommandHelpToolStripMenuItem.MouseLeave, AboutDISMToolsToolStripMenuItem.MouseLeave, UnattendedAnswerFileManagerToolStripMenuItem.MouseLeave, AddEdge.MouseLeave, AddEdgeBrowser.MouseLeave, AddEdgeWebView.MouseLeave, ReportManagerToolStripMenuItem.MouseLeave, MergeSWM.MouseLeave, MountedImageManagerTSMI.MouseLeave, ReportFeedbackToolStripMenuItem.MouseLeave, ManageOnlineInstallationToolStripMenuItem.MouseLeave, AddProvisioningPackage.MouseLeave
+    Private Sub HideChildDescsTrigger(sender As Object, e As EventArgs) Handles AppendImage.MouseLeave, ApplyFFU.MouseLeave, ApplyImage.MouseLeave, CaptureCustomImage.MouseLeave, CaptureFFU.MouseLeave, CaptureImage.MouseLeave, CleanupMountpoints.MouseLeave, CommitImage.MouseLeave, DeleteImage.MouseLeave, ExportImage.MouseLeave, GetImageInfo.MouseLeave, GetWIMBootEntry.MouseLeave, ListImage.MouseLeave, MountImage.MouseLeave, OptimizeFFU.MouseLeave, OptimizeImage.MouseLeave, RemountImage.MouseLeave, SplitFFU.MouseLeave, SplitImage.MouseLeave, UnmountImage.MouseLeave, UpdateWIMBootEntry.MouseLeave, ApplySiloedPackage.MouseLeave, GetPackages.MouseLeave, AddPackage.MouseLeave, RemovePackage.MouseLeave, GetFeatures.MouseLeave, EnableFeature.MouseLeave, DisableFeature.MouseLeave, CleanupImage.MouseLeave, AddProvisionedAppxPackage.MouseLeave, GetProvisioningPackageInfo.MouseLeave, ApplyCustomDataImage.MouseLeave, GetProvisionedAppxPackages.MouseLeave, AddProvisionedAppxPackage.MouseLeave, RemoveProvisionedAppxPackage.MouseLeave, OptimizeProvisionedAppxPackages.MouseLeave, SetProvisionedAppxDataFile.MouseLeave, CheckAppPatch.MouseLeave, GetAppPatchInfo.MouseLeave, GetAppPatches.MouseLeave, GetAppInfo.MouseLeave, GetApps.MouseLeave, ExportDefaultAppAssociations.MouseLeave, GetDefaultAppAssociations.MouseLeave, ImportDefaultAppAssociations.MouseLeave, RemoveDefaultAppAssociations.MouseLeave, GetIntl.MouseLeave, SetUILangFallback.MouseLeave, SetSysUILang.MouseLeave, SetSysLocale.MouseLeave, SetUserLocale.MouseLeave, SetInputLocale.MouseLeave, SetAllIntl.MouseLeave, SetTimeZone.MouseLeave, SetSKUIntlDefaults.MouseLeave, SetLayeredDriver.MouseLeave, GenLangINI.MouseLeave, SetSetupUILang.MouseLeave, AddCapability.MouseLeave, ExportSource.MouseLeave, GetCapabilities.MouseLeave, RemoveCapability.MouseLeave, GetCurrentEdition.MouseLeave, GetTargetEditions.MouseLeave, SetEdition.MouseLeave, SetProductKey.MouseLeave, GetDrivers.MouseLeave, AddDriver.MouseLeave, RemoveDriver.MouseLeave, ExportDriver.MouseLeave, ApplyUnattend.MouseLeave, GetPESettings.MouseLeave, GetTargetPath.MouseLeave, GetScratchSpace.MouseLeave, SetScratchSpace.MouseLeave, SetTargetPath.MouseLeave, GetOSUninstallWindow.MouseLeave, InitiateOSUninstall.MouseLeave, RemoveOSUninstall.MouseLeave, SetOSUninstallWindow.MouseLeave, SetReservedStorageState.MouseLeave, GetReservedStorageState.MouseLeave, NewProjectToolStripMenuItem.MouseLeave, OpenExistingProjectToolStripMenuItem.MouseLeave, SaveProjectToolStripMenuItem.MouseLeave, SaveProjectasToolStripMenuItem.MouseLeave, ExitToolStripMenuItem.MouseLeave, ViewProjectFilesInFileExplorerToolStripMenuItem.MouseLeave, UnloadProjectToolStripMenuItem.MouseLeave, SwitchImageIndexesToolStripMenuItem.MouseLeave, ProjectPropertiesToolStripMenuItem.MouseLeave, ImagePropertiesToolStripMenuItem.MouseLeave, ImageManagementToolStripMenuItem.MouseLeave, OSPackagesToolStripMenuItem.MouseLeave, ProvisioningPackagesToolStripMenuItem.MouseLeave, AppPackagesToolStripMenuItem.MouseLeave, AppPatchesToolStripMenuItem.MouseLeave, DefaultAppAssociationsToolStripMenuItem.MouseLeave, LanguagesAndRegionSettingsToolStripMenuItem.MouseLeave, CapabilitiesToolStripMenuItem.MouseLeave, WindowsEditionsToolStripMenuItem.MouseLeave, DriversToolStripMenuItem.MouseLeave, UnattendedAnswerFilesToolStripMenuItem.MouseLeave, WindowsPEServicingToolStripMenuItem.MouseLeave, OSUninstallToolStripMenuItem.MouseLeave, ReservedStorageToolStripMenuItem.MouseLeave, ImageConversionToolStripMenuItem.MouseLeave, WIMESDToolStripMenuItem.MouseLeave, RemountImageWithWritePermissionsToolStripMenuItem.MouseLeave, CommandShellToolStripMenuItem.MouseLeave, OptionsToolStripMenuItem.MouseLeave, HelpTopicsToolStripMenuItem.MouseLeave, GlossaryToolStripMenuItem.MouseLeave, CommandHelpToolStripMenuItem.MouseLeave, AboutDISMToolsToolStripMenuItem.MouseLeave, UnattendedAnswerFileManagerToolStripMenuItem.MouseLeave, AddEdge.MouseLeave, AddEdgeBrowser.MouseLeave, AddEdgeWebView.MouseLeave, ReportManagerToolStripMenuItem.MouseLeave, MergeSWM.MouseLeave, MountedImageManagerTSMI.MouseLeave, ReportFeedbackToolStripMenuItem.MouseLeave, ManageOnlineInstallationToolStripMenuItem.MouseLeave, AddProvisioningPackage.MouseLeave
         HideChildDescs()
     End Sub
 
@@ -7160,7 +7259,7 @@ Public Class MainForm
         ShowChildDescs(True, 24)
     End Sub
 
-    Private Sub GetPackageInfo_MouseEnter(sender As Object, e As EventArgs) Handles GetPackageInfo.MouseEnter
+    Private Sub GetPackageInfo_MouseEnter(sender As Object, e As EventArgs)
         ShowChildDescs(True, 25)
     End Sub
 
@@ -7174,10 +7273,6 @@ Public Class MainForm
 
     Private Sub GetFeatures_MouseEnter(sender As Object, e As EventArgs) Handles GetFeatures.MouseEnter
         ShowChildDescs(True, 28)
-    End Sub
-
-    Private Sub GetFeatureInfo_MouseEnter(sender As Object, e As EventArgs) Handles GetFeatureInfo.MouseEnter
-        ShowChildDescs(True, 29)
     End Sub
 
     Private Sub EnableFeature_MouseEnter(sender As Object, e As EventArgs) Handles EnableFeature.MouseEnter
@@ -7324,10 +7419,6 @@ Public Class MainForm
         ShowChildDescs(True, 65)
     End Sub
 
-    Private Sub GetCapabilityInfo_MouseEnter(sender As Object, e As EventArgs) Handles GetCapabilityInfo.MouseEnter
-        ShowChildDescs(True, 66)
-    End Sub
-
     Private Sub RemoveCapability_MouseEnter(sender As Object, e As EventArgs) Handles RemoveCapability.MouseEnter
         ShowChildDescs(True, 67)
     End Sub
@@ -7350,10 +7441,6 @@ Public Class MainForm
 
     Private Sub GetDrivers_MouseEnter(sender As Object, e As EventArgs) Handles GetDrivers.MouseEnter
         ShowChildDescs(True, 72)
-    End Sub
-
-    Private Sub GetDriverInfo_MouseEnter(sender As Object, e As EventArgs) Handles GetDriverInfo.MouseEnter
-        ShowChildDescs(True, 73)
     End Sub
 
     Private Sub AddDriver_MouseEnter(sender As Object, e As EventArgs) Handles AddDriver.MouseEnter
@@ -7549,11 +7636,61 @@ Public Class MainForm
     End Sub
 
     Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
-        PkgInfoCMS.Show(Button6, New Point(24, Button6.Height * 0.75))
+        ProgressPanel.OperationNum = 993
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting package names..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting package names..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
+        End Select
+        If Not CompletedTasks(0) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        If MountedImageDetectorBW.IsBusy Then
+            MountedImageDetectorBW.CancelAsync()
+            While MountedImageDetectorBW.IsBusy
+                Application.DoEvents()
+                Thread.Sleep(500)
+            End While
+        End If
+        If PackageInfoList IsNot Nothing Then GetPkgInfoDlg.InstalledPkgInfo = PackageInfoList
+        GetPkgInfoDlg.ShowDialog(Me)
     End Sub
 
     Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
-        FeatureInfoCMS.Show(Button8, New Point(24, Button8.Height * 0.75))
+        ProgressPanel.OperationNum = 994
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
+        End Select
+        If Not CompletedTasks(1) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(500)
+        End While
+        If FeatureInfoList IsNot Nothing Then GetFeatureInfoDlg.InstalledFeatureInfo = FeatureInfoList
+        GetFeatureInfoDlg.ShowDialog(Me)
     End Sub
 
     Private Sub Button14_Click(sender As Object, e As EventArgs) Handles Button14.Click, ProjectPropertiesToolStripMenuItem.Click
@@ -7672,6 +7809,13 @@ Public Class MainForm
             Beep()
             Exit Sub
         End If
+        If WimScriptEditor.Visible Then
+            WimScriptEditor.Close()
+            If WimScriptEditor.Visible Then
+                e.Cancel = True
+                Exit Sub
+            End If
+        End If
         If Not VolatileMode Then
             SaveDTSettings()
         End If
@@ -7754,6 +7898,10 @@ Public Class MainForm
     End Sub
 
     Private Sub GetImageInfo_Click(sender As Object, e As EventArgs) Handles GetImageInfo.Click
+        If ImgBW.IsBusy Then
+            BGProcsBusyDialog.ShowDialog()
+            Exit Sub
+        End If
         GetImgInfoDlg.ShowDialog()
     End Sub
 
@@ -8282,7 +8430,7 @@ Public Class MainForm
         If SplitPanels.SplitterDistance >= 384 And GroupBox1.Left >= 0 Then
             SplitPanels.SplitterDistance = 384
         ElseIf GroupBox1.Left < 0 Then
-            SplitPanels.SplitterDistance = 264
+            SplitPanels.SplitterDistance = 300
         End If
     End Sub
 
@@ -8942,6 +9090,7 @@ Public Class MainForm
         Do
             If MountedImageDetectorBW.CancellationPending Or ImgBW.IsBusy Then Exit Do
             DetectMountedImages(False)
+            Thread.Sleep(500)
         Loop
     End Sub
 
@@ -8979,7 +9128,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ReportFeedbackToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ReportFeedbackToolStripMenuItem.Click
-        Process.Start("https://github.com/CodingWonders/DISMTools/issues/new")
+        Process.Start("https://github.com/CodingWonders/DISMTools/issues/new/choose")
     End Sub
 
     Private Sub UnmountImage_Click(sender As Object, e As EventArgs) Handles UnmountImage.Click, UnmountSettingsToolStripMenuItem.Click
@@ -9410,7 +9559,13 @@ Public Class MainForm
                             ' Choose the largest one
                             Return logoFiles.Last
                         Else
-                            Return Path.Combine(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName, line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim())
+                            If File.Exists(Path.Combine(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName, line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim())) Then
+                                Return Path.Combine(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName, line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim())
+                            Else
+                                ' There may be 1 asset in the folder we're looking on. Open it
+                                Dim logoFiles() As String = Directory.GetFiles(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\" & newPath, "*.png")
+                                Return logoFiles.Last
+                            End If
                         End If
                     End If
                 Next
@@ -9463,7 +9618,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ResViewTSMI_Click(sender As Object, e As EventArgs) Handles ResViewTSMI.Click
-        Dim MainLogo As String = GetStoreAppMainLogo(RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text.Replace(" (Cortana)", "").Trim())
+        Dim MainLogo As String = GetStoreAppMainLogo(RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text)
         If MainLogo <> "" And File.Exists(MainLogo) Then
             Process.Start(MainLogo)
             Exit Sub
@@ -10030,5 +10185,259 @@ Public Class MainForm
                 If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
             End If
         End If
+    End Sub
+
+    Private Sub GetDrivers_Click(sender As Object, e As EventArgs) Handles GetDrivers.Click
+        ProgressPanel.OperationNum = 994
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
+        End Select
+        If Not CompletedTasks(4) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(500)
+        End While
+        If DriverInfoList IsNot Nothing Then GetDriverInfo.InstalledDriverInfo = DriverInfoList
+        GetDriverInfo.ShowDialog()
+    End Sub
+
+    Private Sub ViewProjectFilesInFileExplorerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewProjectFilesInFileExplorerToolStripMenuItem.Click
+        ExplorerView.PerformClick()
+    End Sub
+
+    Private Sub WimScriptEditorCommand_Click(sender As Object, e As EventArgs) Handles WimScriptEditorCommand.Click
+        If WimScriptEditor.Visible Then
+            If WimScriptEditor.WindowState = FormWindowState.Minimized Then
+                WimScriptEditor.WindowState = FormWindowState.Normal
+            Else
+                WimScriptEditor.BringToFront()
+            End If
+            WimScriptEditor.Focus()
+        Else
+            WimScriptEditor.Show()
+        End If
+    End Sub
+
+    Private Sub GetFeatures_Click(sender As Object, e As EventArgs) Handles GetFeatures.Click
+        If Not IsImageMounted Or Not OnlineManagement Then Exit Sub
+        ProgressPanel.OperationNum = 994
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
+        End Select
+        If Not CompletedTasks(1) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(500)
+        End While
+        If FeatureInfoList IsNot Nothing Then GetFeatureInfoDlg.InstalledFeatureInfo = FeatureInfoList
+        GetFeatureInfoDlg.ShowDialog(Me)
+    End Sub
+
+    Private Sub GetCapabilities_Click(sender As Object, e As EventArgs) Handles GetCapabilities.Click
+        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+            End Select
+            Exit Sub
+        End If
+        ProgressPanel.OperationNum = 994
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
+        End Select
+        If Not CompletedTasks(3) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(500)
+        End While
+        If CapabilityInfoList IsNot Nothing Then GetCapabilityInfoDlg.InstalledCapabilityInfo = CapabilityInfoList
+        GetCapabilityInfoDlg.ShowDialog(Me)
+    End Sub
+
+    Private Sub GetPackages_Click(sender As Object, e As EventArgs) Handles GetPackages.Click
+        ProgressPanel.OperationNum = 993
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting package names..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting package names..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
+        End Select
+        If Not CompletedTasks(0) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        If MountedImageDetectorBW.IsBusy Then
+            MountedImageDetectorBW.CancelAsync()
+            While MountedImageDetectorBW.IsBusy
+                Application.DoEvents()
+                Thread.Sleep(500)
+            End While
+        End If
+        If PackageInfoList IsNot Nothing Then GetPkgInfoDlg.InstalledPkgInfo = PackageInfoList
+        GetPkgInfoDlg.ShowDialog(Me)
+    End Sub
+
+    Private Sub GetProvisionedAppxPackages_Click(sender As Object, e As EventArgs) Handles GetProvisionedAppxPackages.Click
+        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+            End Select
+            Exit Sub
+        End If
+        ProgressPanel.OperationNum = 993
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting package names..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting package names..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
+        End Select
+        If Not CompletedTasks(2) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        If AppxPackageInfoList IsNot Nothing Then GetAppxPkgInfoDlg.InstalledAppxPkgInfo = AppxPackageInfoList
+        GetAppxPkgInfoDlg.ShowDialog(Me)
+    End Sub
+
+    Private Sub SaveResourceToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaveResourceToolStripMenuItem.Click
+        AppxResSFD.FileName = GetAppxPkgInfoDlg.Label25.Text
+        AppxResSFD.ShowDialog()
+    End Sub
+
+    Private Sub AppxResSFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles AppxResSFD.FileOk
+        Try
+            GetAppxPkgInfoDlg.PictureBox2.Image.Save(AppxResSFD.FileName, Imaging.ImageFormat.Png)
+            Notifications.Visible = True
+            Notifications.Icon = Icon
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            Notifications.BalloonTipText = "The asset has been saved to the location you specified"
+                            Notifications.BalloonTipTitle = "Save successful"
+                        Case "ESN"
+                            Notifications.BalloonTipText = "El recurso ha sido guardado en la ubicación que especificó"
+                            Notifications.BalloonTipTitle = "Guardado satisfactorio"
+                    End Select
+                Case 1
+                    Notifications.BalloonTipText = "The asset has been saved to the location you specified"
+                    Notifications.BalloonTipTitle = "Save successful"
+                Case 2
+                    Notifications.BalloonTipText = "El recurso ha sido guardado en la ubicación que especificó"
+                    Notifications.BalloonTipTitle = "Guardado satisfactorio"
+            End Select
+            Notifications.ShowBalloonTip(3000)
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub CopyToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CopyToolStripMenuItem.Click
+        Try
+            Dim data As New DataObject()
+            data.SetImage(GetAppxPkgInfoDlg.PictureBox2.Image)
+            Clipboard.SetDataObject(data, True)
+            Notifications.Visible = True
+            Notifications.Icon = Icon
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            Notifications.BalloonTipText = "The asset has been copied to the clipboard"
+                            Notifications.BalloonTipTitle = "Copy successful"
+                        Case "ESN"
+                            Notifications.BalloonTipText = "El recurso ha sido copiado al portapapeles"
+                            Notifications.BalloonTipTitle = "Copia satisfactoria"
+                    End Select
+                Case 1
+                    Notifications.BalloonTipText = "The asset has been copied to the clipboard"
+                    Notifications.BalloonTipTitle = "Copy successful"
+                Case 2
+                    Notifications.BalloonTipText = "El recurso ha sido copiado al portapapeles"
+                    Notifications.BalloonTipTitle = "Copia satisfactoria"
+            End Select
+            Notifications.ShowBalloonTip(3000)
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub Notifications_BalloonTipClosed(sender As Object, e As EventArgs) Handles Notifications.BalloonTipClosed
+        Notifications.Visible = False
     End Sub
 End Class

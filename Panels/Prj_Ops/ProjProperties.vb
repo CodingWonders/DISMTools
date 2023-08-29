@@ -258,16 +258,16 @@ Public Class ProjProperties
                         Case 1
                             File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat",
                                               "@echo off" & CrLf &
-                                              "dism /English /get-wiminfo /wimfile=" & Quote & MainForm.SourceImg & Quote & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot", ASCII)
+                                              "dism /English /get-wiminfo /wimfile=" & Quote & MainForm.SourceImg & Quote & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & Quote & MainForm.projPath & "\tempinfo\imgwimboot" & Quote, ASCII)
                         Case Is >= 2
                             File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat",
                                               "@echo off" & CrLf &
-                                              "dism /English /get-imageinfo /imagefile=" & Quote & MainForm.SourceImg & Quote & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot", ASCII)
+                                              "dism /English /get-imageinfo /imagefile=" & Quote & MainForm.SourceImg & Quote & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & Quote & MainForm.projPath & "\tempinfo\imgwimboot" & Quote, ASCII)
                     End Select
                 Case 10
                     File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat",
                                       "@echo off" & CrLf &
-                                      "dism /English /get-imageinfo /imagefile=" & Quote & MainForm.SourceImg & Quote & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & MainForm.projPath & "\tempinfo\imgwimboot", ASCII)
+                                      "dism /English /get-imageinfo /imagefile=" & Quote & MainForm.SourceImg & Quote & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & Quote & MainForm.projPath & "\tempinfo\imgwimboot" & Quote, ASCII)
             End Select
             If Debugger.IsAttached Then
                 Process.Start("\Windows\system32\notepad.exe", Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
@@ -860,7 +860,7 @@ Public Class ProjProperties
                     Case 25240 To 25400     ' 25400 is a relative number. 25398 is the final build of Zinc
                         FeatUpd = "23H2 (Zinc)"
                     Case 25801 To 27000     ' 27000 is a relative number
-                        FeatUpd = "24H2 (Gallium)"
+                        FeatUpd = "24H1 (Gallium)"
                 End Select
             Case Else
                 Exit Sub

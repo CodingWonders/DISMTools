@@ -2,6 +2,7 @@
 Imports System.Windows.Forms
 Imports System.Text.Encoding
 Imports Microsoft.VisualBasic.ControlChars
+Imports System.Threading
 Imports Microsoft.Dism
 
 Public Class ImgMount
@@ -86,7 +87,13 @@ Public Class ImgMount
                         Label1.Text = Text
                         Label2.Text = "Please specify the options to mount an image:"
                         Label3.Text = "Image file*:"
-                        Label4.Text = "NOTE: if you want to mount an ESD file, you need to convert it to a WIM file first"
+                        If Path.GetExtension(TextBox1.Text).EndsWith("esd", StringComparison.OrdinalIgnoreCase) Then
+                            Label4.Text = "You need to convert this file to a WIM file in order to mount it"
+                            Button3.Text = "Convert"
+                        ElseIf Path.GetExtension(TextBox1.Text).EndsWith("swm", StringComparison.OrdinalIgnoreCase) Then
+                            Label4.Text = "You need to merge the SWM files to a WIM file in order to mount it"
+                            Button3.Text = "Merge"
+                        End If
                         Label6.Text = "Mount directory*:"
                         Label7.Text = "Index*:"
                         Label11.Text = "The fields that end in * are required"
@@ -110,7 +117,13 @@ Public Class ImgMount
                         Label1.Text = Text
                         Label2.Text = "Especifique las opciones para montar una imagen:"
                         Label3.Text = "Archivo de imagen*:"
-                        Label4.Text = "NOTA: si desea montar un archivo ESD, necesita convertirlo a un archivo WIM en primer lugar"
+                        If Path.GetExtension(TextBox1.Text).EndsWith("esd", StringComparison.OrdinalIgnoreCase) Then
+                            Label4.Text = "Necesita convertir este archivo a un archivo WIM para montarlo"
+                            Button3.Text = "Convertir"
+                        ElseIf Path.GetExtension(TextBox1.Text).EndsWith("swm", StringComparison.OrdinalIgnoreCase) Then
+                            Label4.Text = "Necesita combinar los archivos SWM a un archivo WIM para montarlo"
+                            Button3.Text = "Combinar"
+                        End If
                         Label6.Text = "Directorio de montaje*:"
                         Label7.Text = "Índice*:"
                         Label11.Text = "Los campos que terminen en * son necesarios"
@@ -135,7 +148,13 @@ Public Class ImgMount
                 Label1.Text = Text
                 Label2.Text = "Please specify the options to mount an image:"
                 Label3.Text = "Image file*:"
-                Label4.Text = "NOTE: if you want to mount an ESD file, you need to convert it to a WIM file first"
+                If Path.GetExtension(TextBox1.Text).EndsWith("esd", StringComparison.OrdinalIgnoreCase) Then
+                    Label4.Text = "You need to convert this file to a WIM file in order to mount it"
+                    Button3.Text = "Convert"
+                ElseIf Path.GetExtension(TextBox1.Text).EndsWith("swm", StringComparison.OrdinalIgnoreCase) Then
+                    Label4.Text = "You need to merge the SWM files to a WIM file in order to mount it"
+                    Button3.Text = "Merge"
+                End If
                 Label6.Text = "Mount directory*:"
                 Label7.Text = "Index*:"
                 Label11.Text = "The fields that end in * are required"
@@ -159,7 +178,13 @@ Public Class ImgMount
                 Label1.Text = Text
                 Label2.Text = "Especifique las opciones para montar una imagen:"
                 Label3.Text = "Archivo de imagen*:"
-                Label4.Text = "NOTA: si desea montar un archivo ESD, necesita convertirlo a un archivo WIM en primer lugar"
+                If Path.GetExtension(TextBox1.Text).EndsWith("esd", StringComparison.OrdinalIgnoreCase) Then
+                    Label4.Text = "Necesita convertir este archivo a un archivo WIM para montarlo"
+                    Button3.Text = "Convertir"
+                ElseIf Path.GetExtension(TextBox1.Text).EndsWith("swm", StringComparison.OrdinalIgnoreCase) Then
+                    Label4.Text = "Necesita combinar los archivos SWM a un archivo WIM para montarlo"
+                    Button3.Text = "Combinar"
+                End If
                 Label6.Text = "Directorio de montaje*:"
                 Label7.Text = "Índice*:"
                 Label11.Text = "Los campos que terminen en * son necesarios"
@@ -225,10 +250,113 @@ Public Class ImgMount
         End If
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If TextBox1.Text <> "" And File.Exists(TextBox1.Text) And MainForm.MountedImageImgFiles.Contains(TextBox1.Text) Then
+            IsReqField1Valid = False
+            OK_Button.Enabled = False
+        Else
+            IsReqField1Valid = True
+            OK_Button.Enabled = True
+        End If
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         FileSpecDialog.ShowDialog()
+        If TextBox1.Text <> "" Then
+            If Path.GetExtension(TextBox1.Text).EndsWith("esd", StringComparison.OrdinalIgnoreCase) Then
+                Button3.Visible = True
+                Label4.Visible = True
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                Label4.Text = "You need to convert this file to a WIM file in order to mount it"
+                                Button3.Text = "Convert"
+                            Case "ESN"
+                                Label4.Text = "Necesita convertir este archivo a un archivo WIM para montarlo"
+                                Button3.Text = "Convertir"
+                        End Select
+                    Case 1
+                        Label4.Text = "You need to convert this file to a WIM file in order to mount it"
+                        Button3.Text = "Convert"
+                    Case 2
+                        Label4.Text = "Necesita convertir este archivo a un archivo WIM para montarlo"
+                        Button3.Text = "Convertir"
+                End Select
+                IsReqField1Valid = False
+                ImgWim2Esd.TextBox1.Text = TextBox1.Text
+                ImgWim2Esd.TextBox2.Text = TextBox1.Text.Replace(Path.GetExtension(TextBox1.Text), ".wim").Trim()
+                Hide()
+                ImgWim2Esd.ShowDialog(MainForm)
+                Show()
+                If ImgWim2Esd.DialogResult = Windows.Forms.DialogResult.OK And File.Exists(ImgWim2Esd.TextBox2.Text) Then
+                    TextBox1.Text = ImgWim2Esd.TextBox2.Text
+                    Button3.Visible = False
+                    Label4.Visible = False
+                ElseIf ImgWim2Esd.DialogResult = Windows.Forms.DialogResult.Cancel Then
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    MsgBox("You need to convert this image to a WIM file in order to mount it", vbOKOnly + vbExclamation, Label1.Text)
+                                Case "ESN"
+                                    MsgBox("Debe convertir esta imagen a un archivo WIM para poder montarla", vbOKOnly + vbExclamation, Label1.Text)
+                            End Select
+                        Case 1
+                            MsgBox("You need to convert this image to a WIM file in order to mount it", vbOKOnly + vbExclamation, Label1.Text)
+                        Case 2
+                            MsgBox("Debe convertir esta imagen a un archivo WIM para poder montarla", vbOKOnly + vbExclamation, Label1.Text)
+                    End Select
+                End If
+            ElseIf Path.GetExtension(TextBox1.Text).EndsWith("swm", StringComparison.OrdinalIgnoreCase) Then
+                Button3.Visible = True
+                Label4.Visible = True
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                Label4.Text = "You need to merge the SWM files to a WIM file in order to mount it"
+                                Button3.Text = "Merge"
+                            Case "ESN"
+                                Label4.Text = "Necesita combinar los archivos SWM a un archivo WIM para montarlo"
+                                Button3.Text = "Combinar"
+                        End Select
+                    Case 1
+                        Label4.Text = "You need to merge the SWM files to a WIM file in order to mount it"
+                        Button3.Text = "Merge"
+                    Case 2
+                        Label4.Text = "Necesita combinar los archivos SWM a un archivo WIM para montarlo"
+                        Button3.Text = "Combinar"
+                End Select
+                IsReqField1Valid = False
+                ImgSwmToWim.TextBox1.Text = TextBox1.Text
+                ImgSwmToWim.TextBox2.Text = TextBox1.Text.Replace(Path.GetExtension(TextBox1.Text), ".wim").Trim()
+                Hide()
+                ImgSwmToWim.ShowDialog(MainForm)
+                Show()
+                If ImgSwmToWim.DialogResult = Windows.Forms.DialogResult.OK And File.Exists(ImgSwmToWim.TextBox2.Text) Then
+                    TextBox1.Text = ImgSwmToWim.TextBox2.Text
+                    Button3.Visible = False
+                    Label4.Visible = False
+                ElseIf ImgSwmToWim.DialogResult = Windows.Forms.DialogResult.Cancel Then
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENG"
+                                    MsgBox("You need to merge the SWM files to a WIM file in order to mount it", vbOKOnly + vbExclamation, Label1.Text)
+                                Case "ESN"
+                                    MsgBox("Necesita combinar los archivos SWM a un archivo WIM para montarlo", vbOKOnly + vbExclamation, Label1.Text)
+                            End Select
+                        Case 1
+                            MsgBox("You need to merge the SWM files to a WIM file in order to mount it", vbOKOnly + vbExclamation, Label1.Text)
+                        Case 2
+                            MsgBox("Necesita combinar los archivos SWM a un archivo WIM para montarlo", vbOKOnly + vbExclamation, Label1.Text)
+                    End Select
+                End If
+            End If
+        Else
+            Button3.Visible = False
+            Label4.Visible = False
+        End If
     End Sub
 
     Private Sub FileSpecDialog_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles FileSpecDialog.FileOk
@@ -253,6 +381,13 @@ Public Class ImgMount
 
     Sub GetIndexes(ImgFile As String)
         Try
+            If MainForm.MountedImageDetectorBW.IsBusy Then
+                MainForm.MountedImageDetectorBW.CancelAsync()
+                While MainForm.MountedImageDetectorBW.IsBusy
+                    Application.DoEvents()
+                    Thread.Sleep(500)
+                End While
+            End If
             ListView1.Items.Clear()
             DismApi.Initialize(DismLogLevel.LogErrors)
             Dim imgInfoCollection As DismImageInfoCollection = DismApi.GetImageInfo(ImgFile)
@@ -291,6 +426,11 @@ Public Class ImgMount
                 IsReqField1Valid = True
                 ProgressPanel.SourceImg = TextBox1.Text
                 GetIndexes(TextBox1.Text)
+                If Path.GetExtension(TextBox1.Text).EndsWith("esd", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(TextBox1.Text).EndsWith("swm", StringComparison.OrdinalIgnoreCase) Then
+                    IsReqField1Valid = False
+                ElseIf MainForm.MountedImageImgFiles.Contains(TextBox1.Text) Then
+                    IsReqField1Valid = False
+                End If
             Else
                 IsReqField1Valid = False
             End If
@@ -317,6 +457,23 @@ Public Class ImgMount
 
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
         GetFields()
+        If TextBox1.Text <> "" And File.Exists(TextBox1.Text) And MainForm.MountedImageImgFiles.Contains(TextBox1.Text) Then
+            Dim msg As String = ""
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            msg = "This image is already mounted, and cannot be mounted again. If you want to mount it to the directory you wanted, unmount the image from its original mount directory (saving the changes if you want) and open this dialog afterwards"
+                        Case "ESN"
+                            msg = "Esta imagen ya está montada, y no puede ser montada de nuevo. Si desea montarla al directorio que deseó, desmonte la imagen de su directorio de montaje original (guardando los cambios si lo prefiere) y abra este diálogo después"
+                    End Select
+                Case 1
+                    msg = "This image is already mounted, and cannot be mounted again. If you want to mount it to the directory you wanted, unmount the image from its original mount directory (saving the changes if you want) and open this dialog afterwards"
+                Case 2
+                    msg = "Esta imagen ya está montada, y no puede ser montada de nuevo. Si desea montarla al directorio que deseó, desmonte la imagen de su directorio de montaje original (guardando los cambios si lo prefiere) y abra este diálogo después"
+            End Select
+            MsgBox(msg, vbOKOnly + vbExclamation, Label1.Text)
+        End If
     End Sub
 
     Private Sub TextBox2_TextChanged(sender As Object, e As EventArgs) Handles TextBox2.TextChanged
@@ -341,5 +498,64 @@ Public Class ImgMount
 
     Private Sub ImgMount_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+    End Sub
+
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        If Path.GetExtension(TextBox1.Text).EndsWith("esd", StringComparison.OrdinalIgnoreCase) Then
+            IsReqField1Valid = False
+            ImgWim2Esd.TextBox1.Text = TextBox1.Text
+            ImgWim2Esd.TextBox2.Text = TextBox1.Text.Replace(Path.GetExtension(TextBox1.Text), ".wim").Trim()
+            Hide()
+            ImgWim2Esd.ShowDialog(MainForm)
+            Show()
+            If ImgWim2Esd.DialogResult = Windows.Forms.DialogResult.OK And File.Exists(ImgWim2Esd.TextBox2.Text) Then
+                TextBox1.Text = ImgWim2Esd.TextBox2.Text
+                Button3.Visible = False
+                Label4.Visible = False
+            ElseIf ImgWim2Esd.DialogResult = Windows.Forms.DialogResult.Cancel Then
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                MsgBox("You need to convert this image to a WIM file in order to mount it", vbOKOnly + vbExclamation, Label1.Text)
+                            Case "ESN"
+                                MsgBox("Debe convertir esta imagen a un archivo WIM para poder montarla", vbOKOnly + vbExclamation, Label1.Text)
+                        End Select
+                    Case 1
+                        MsgBox("You need to convert this image to a WIM file in order to mount it", vbOKOnly + vbExclamation, Label1.Text)
+                    Case 2
+                        MsgBox("Debe convertir esta imagen a un archivo WIM para poder montarla", vbOKOnly + vbExclamation, Label1.Text)
+                End Select
+            End If
+        ElseIf Path.GetExtension(TextBox1.Text).EndsWith("swm", StringComparison.OrdinalIgnoreCase) Then
+            IsReqField1Valid = False
+            ImgSwmToWim.TextBox1.Text = TextBox1.Text
+            ImgSwmToWim.TextBox2.Text = TextBox1.Text.Replace(Path.GetExtension(TextBox1.Text), ".wim").Trim()
+            Hide()
+            ImgSwmToWim.ShowDialog(MainForm)
+            Show()
+            If ImgSwmToWim.DialogResult = Windows.Forms.DialogResult.OK And File.Exists(ImgSwmToWim.TextBox2.Text) Then
+                TextBox1.Text = ImgSwmToWim.TextBox2.Text
+                Button3.Visible = False
+                Label4.Visible = False
+            ElseIf ImgSwmToWim.DialogResult = Windows.Forms.DialogResult.Cancel Then
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                MsgBox("You need to merge the SWM files to a WIM file in order to mount it", vbOKOnly + vbExclamation, Label1.Text)
+                            Case "ESN"
+                                MsgBox("Necesita combinar los archivos SWM a un archivo WIM para montarlo", vbOKOnly + vbExclamation, Label1.Text)
+                        End Select
+                    Case 1
+                        MsgBox("You need to merge the SWM files to a WIM file in order to mount it", vbOKOnly + vbExclamation, Label1.Text)
+                    Case 2
+                        MsgBox("Necesita combinar los archivos SWM a un archivo WIM para montarlo", vbOKOnly + vbExclamation, Label1.Text)
+                End Select
+            End If
+        Else
+            Button3.Visible = False
+            Label4.Visible = False
+        End If
     End Sub
 End Class

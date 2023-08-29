@@ -22,6 +22,7 @@ Public Class AddCapabilities
                 ProgressPanel.capAdditionIds(x) = capIds(x)
             Next
             For x = 0 To capCount - 1
+                If MainForm.OnlineManagement And Not CheckBox2.Checked Then Exit For
                 If ListView1.CheckedItems(x).SubItems(1).Text = "Not present" Then
                     If CheckBox1.Checked And RichTextBox1.Text = "" Or Not Directory.Exists(RichTextBox1.Text) Then
                         Select Case MainForm.Language
