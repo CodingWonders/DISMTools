@@ -216,6 +216,7 @@ Public Class MainForm
     ' Lists for information dialogs
     Dim PackageInfoList As DismPackageCollection
     Dim FeatureInfoList As DismFeatureCollection
+    Dim AppxPackageInfoList As DismAppxPackageCollection
     Dim CapabilityInfoList As DismCapabilityCollection
     Dim DriverInfoList As DismDriverPackageCollection
 
@@ -2705,6 +2706,7 @@ Public Class MainForm
                     Dim imgAppxResourceIdList As New List(Of String)
                     Dim imgAppxRegionList As New List(Of String)
                     Dim AppxPackageCollection As DismAppxPackageCollection = DismApi.GetProvisionedAppxPackages(session)
+                    AppxPackageInfoList = AppxPackageCollection
                     For Each AppxPackage As DismAppxPackage In AppxPackageCollection
                         If ImgBW.CancellationPending Then
                             If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
@@ -3883,10 +3885,12 @@ Public Class MainForm
                         ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                        AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         PkgInfoCMS.ForeColor = Color.White
                         ImgUMountPopupCMS.ForeColor = Color.White
                         AppxPackagePopupCMS.ForeColor = Color.White
                         TreeViewCMS.ForeColor = Color.White
+                        AppxResCMS.ForeColor = Color.White
                         Dim items = TreeViewCMS.Items
                         Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
                         For Each item As ToolStripDropDownItem In mItem
@@ -3992,10 +3996,12 @@ Public Class MainForm
                         ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                        AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         PkgInfoCMS.ForeColor = Color.Black
                         ImgUMountPopupCMS.ForeColor = Color.Black
                         AppxPackagePopupCMS.ForeColor = Color.Black
                         TreeViewCMS.ForeColor = Color.Black
+                        AppxResCMS.ForeColor = Color.Black
                         Dim items = TreeViewCMS.Items
                         Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
                         For Each item As ToolStripDropDownItem In mItem
@@ -4105,10 +4111,12 @@ Public Class MainForm
                 ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 PkgInfoCMS.ForeColor = Color.Black
                 ImgUMountPopupCMS.ForeColor = Color.Black
                 AppxPackagePopupCMS.ForeColor = Color.Black
                 TreeViewCMS.ForeColor = Color.Black
+                AppxResCMS.ForeColor = Color.Black
                 Dim items = TreeViewCMS.Items
                 Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
                 For Each item As ToolStripDropDownItem In mItem
@@ -4214,10 +4222,12 @@ Public Class MainForm
                 ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 PkgInfoCMS.ForeColor = Color.White
                 ImgUMountPopupCMS.ForeColor = Color.White
                 AppxPackagePopupCMS.ForeColor = Color.White
                 TreeViewCMS.ForeColor = Color.White
+                AppxResCMS.ForeColor = Color.White
                 Dim items = TreeViewCMS.Items
                 Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
                 For Each item As ToolStripDropDownItem In mItem
@@ -4519,6 +4529,9 @@ Public Class MainForm
                     AddToolStripMenuItem.Text = "Add"
                     NewFileToolStripMenuItem.Text = "New file..."
                     ExistingFileToolStripMenuItem.Text = "Existing file..."
+                    ' Context menu of AppX information dialog
+                    SaveResourceToolStripMenuItem.Text = "Save resource..."
+                    CopyToolStripMenuItem.Text = "Copy resource"
                 ElseIf My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "ESN" Then
                     ' Top-level menu items
                     FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -4796,6 +4809,9 @@ Public Class MainForm
                     AddToolStripMenuItem.Text = "Añadir"
                     NewFileToolStripMenuItem.Text = "Nuevo archivo..."
                     ExistingFileToolStripMenuItem.Text = "Archivo existente..."
+                    ' Context menu of AppX information dialog
+                    SaveResourceToolStripMenuItem.Text = "Guardar recurso..."
+                    CopyToolStripMenuItem.Text = "Copiar recurso"
                 Else
                     Language = 1
                     ChangeLangs(Language)
@@ -5078,6 +5094,9 @@ Public Class MainForm
                 AddToolStripMenuItem.Text = "Add"
                 NewFileToolStripMenuItem.Text = "New file..."
                 ExistingFileToolStripMenuItem.Text = "Existing file..."
+                ' Context menu of AppX information dialog
+                SaveResourceToolStripMenuItem.Text = "Save resource..."
+                CopyToolStripMenuItem.Text = "Copy resource"
             Case 2
                 ' Top-level menu items
                 FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -5355,6 +5374,8 @@ Public Class MainForm
                 AddToolStripMenuItem.Text = "Añadir"
                 NewFileToolStripMenuItem.Text = "Nuevo archivo..."
                 ExistingFileToolStripMenuItem.Text = "Archivo existente..."
+                SaveResourceToolStripMenuItem.Text = "Guardar recurso..."
+                CopyToolStripMenuItem.Text = "Copiar recurso"
         End Select
 
         If OnlineManagement Then
@@ -8409,7 +8430,7 @@ Public Class MainForm
         If SplitPanels.SplitterDistance >= 384 And GroupBox1.Left >= 0 Then
             SplitPanels.SplitterDistance = 384
         ElseIf GroupBox1.Left < 0 Then
-            SplitPanels.SplitterDistance = 264
+            SplitPanels.SplitterDistance = 300
         End If
     End Sub
 
@@ -9597,7 +9618,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ResViewTSMI_Click(sender As Object, e As EventArgs) Handles ResViewTSMI.Click
-        Dim MainLogo As String = GetStoreAppMainLogo(RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text.Replace(" (Cortana)", "").Trim())
+        Dim MainLogo As String = GetStoreAppMainLogo(RemProvAppxPackage.ListView1.FocusedItem.SubItems(0).Text)
         If MainLogo <> "" And File.Exists(MainLogo) Then
             Process.Start(MainLogo)
             Exit Sub
@@ -10312,5 +10333,111 @@ Public Class MainForm
         End If
         If PackageInfoList IsNot Nothing Then GetPkgInfoDlg.InstalledPkgInfo = PackageInfoList
         GetPkgInfoDlg.ShowDialog(Me)
+    End Sub
+
+    Private Sub GetProvisionedAppxPackages_Click(sender As Object, e As EventArgs) Handles GetProvisionedAppxPackages.Click
+        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+            End Select
+            Exit Sub
+        End If
+        ProgressPanel.OperationNum = 993
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting package names..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting package names..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
+        End Select
+        If Not CompletedTasks(2) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        If AppxPackageInfoList IsNot Nothing Then GetAppxPkgInfoDlg.InstalledAppxPkgInfo = AppxPackageInfoList
+        GetAppxPkgInfoDlg.ShowDialog(Me)
+    End Sub
+
+    Private Sub SaveResourceToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaveResourceToolStripMenuItem.Click
+        AppxResSFD.FileName = GetAppxPkgInfoDlg.Label25.Text
+        AppxResSFD.ShowDialog()
+    End Sub
+
+    Private Sub AppxResSFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles AppxResSFD.FileOk
+        Try
+            GetAppxPkgInfoDlg.PictureBox2.Image.Save(AppxResSFD.FileName, Imaging.ImageFormat.Png)
+            Notifications.Visible = True
+            Notifications.Icon = Icon
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            Notifications.BalloonTipText = "The asset has been saved to the location you specified"
+                            Notifications.BalloonTipTitle = "Save successful"
+                        Case "ESN"
+                            Notifications.BalloonTipText = "El recurso ha sido guardado en la ubicación que especificó"
+                            Notifications.BalloonTipTitle = "Guardado satisfactorio"
+                    End Select
+                Case 1
+                    Notifications.BalloonTipText = "The asset has been saved to the location you specified"
+                    Notifications.BalloonTipTitle = "Save successful"
+                Case 2
+                    Notifications.BalloonTipText = "El recurso ha sido guardado en la ubicación que especificó"
+                    Notifications.BalloonTipTitle = "Guardado satisfactorio"
+            End Select
+            Notifications.ShowBalloonTip(3000)
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub CopyToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CopyToolStripMenuItem.Click
+        Try
+            Dim data As New DataObject()
+            data.SetImage(GetAppxPkgInfoDlg.PictureBox2.Image)
+            Clipboard.SetDataObject(data, True)
+            Notifications.Visible = True
+            Notifications.Icon = Icon
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            Notifications.BalloonTipText = "The asset has been copied to the clipboard"
+                            Notifications.BalloonTipTitle = "Copy successful"
+                        Case "ESN"
+                            Notifications.BalloonTipText = "El recurso ha sido copiado al portapapeles"
+                            Notifications.BalloonTipTitle = "Copia satisfactoria"
+                    End Select
+                Case 1
+                    Notifications.BalloonTipText = "The asset has been copied to the clipboard"
+                    Notifications.BalloonTipTitle = "Copy successful"
+                Case 2
+                    Notifications.BalloonTipText = "El recurso ha sido copiado al portapapeles"
+                    Notifications.BalloonTipTitle = "Copia satisfactoria"
+            End Select
+            Notifications.ShowBalloonTip(3000)
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub Notifications_BalloonTipClosed(sender As Object, e As EventArgs) Handles Notifications.BalloonTipClosed
+        Notifications.Visible = False
     End Sub
 End Class

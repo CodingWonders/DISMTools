@@ -386,6 +386,11 @@ Partial Class MainForm
         Me.ExistingFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ADKCopierBW = New System.ComponentModel.BackgroundWorker()
         Me.UpdCheckerBW = New System.ComponentModel.BackgroundWorker()
+        Me.AppxResCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.SaveResourceToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CopyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AppxResSFD = New System.Windows.Forms.SaveFileDialog()
+        Me.Notifications = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -445,6 +450,7 @@ Partial Class MainForm
         Me.ImgUMountPopupCMS.SuspendLayout()
         Me.AppxPackagePopupCMS.SuspendLayout()
         Me.TreeViewCMS.SuspendLayout()
+        Me.AppxResCMS.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
@@ -2179,7 +2185,7 @@ Partial Class MainForm
         'SplitPanels.Panel1
         '
         Me.SplitPanels.Panel1.Controls.Add(Me.TabControl1)
-        Me.SplitPanels.Panel1MinSize = 256
+        Me.SplitPanels.Panel1MinSize = 300
         '
         'SplitPanels.Panel2
         '
@@ -2303,7 +2309,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.44444!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.55556!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 121.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 125.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -2338,9 +2344,9 @@ Partial Class MainForm
         Me.LinkLabel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel1.Location = New System.Drawing.Point(78, 146)
+        Me.LinkLabel1.Location = New System.Drawing.Point(77, 146)
         Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(211, 254)
+        Me.LinkLabel1.Size = New System.Drawing.Size(212, 254)
         Me.LinkLabel1.TabIndex = 5
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "Click here to mount an image"
@@ -2350,9 +2356,9 @@ Partial Class MainForm
         Me.Panel8.Controls.Add(Me.projName)
         Me.Panel8.Controls.Add(Me.projNameText)
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel8.Location = New System.Drawing.Point(78, 3)
+        Me.Panel8.Location = New System.Drawing.Point(77, 3)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(89, 23)
+        Me.Panel8.Size = New System.Drawing.Size(86, 23)
         Me.Panel8.TabIndex = 8
         '
         'projName
@@ -2361,7 +2367,7 @@ Partial Class MainForm
         Me.projName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projName.Location = New System.Drawing.Point(0, 0)
         Me.projName.Name = "projName"
-        Me.projName.Size = New System.Drawing.Size(89, 23)
+        Me.projName.Size = New System.Drawing.Size(86, 23)
         Me.projName.TabIndex = 2
         Me.projName.Text = "projName"
         Me.projName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -2371,7 +2377,7 @@ Partial Class MainForm
         Me.projNameText.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projNameText.Location = New System.Drawing.Point(0, 0)
         Me.projNameText.Name = "projNameText"
-        Me.projNameText.Size = New System.Drawing.Size(89, 21)
+        Me.projNameText.Size = New System.Drawing.Size(86, 21)
         Me.projNameText.TabIndex = 4
         Me.projNameText.Text = "projName"
         Me.projNameText.Visible = False
@@ -2382,9 +2388,9 @@ Partial Class MainForm
         Me.Label5.AutoSize = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label5, 2)
         Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label5.Location = New System.Drawing.Point(78, 131)
+        Me.Label5.Location = New System.Drawing.Point(77, 131)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(211, 15)
+        Me.Label5.Size = New System.Drawing.Size(212, 15)
         Me.Label5.TabIndex = 2
         Me.Label5.Text = "imgStatus"
         '
@@ -2394,7 +2400,7 @@ Partial Class MainForm
         Me.Label2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label2.Location = New System.Drawing.Point(3, 29)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(69, 102)
+        Me.Label2.Size = New System.Drawing.Size(68, 102)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "Location:"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2404,9 +2410,9 @@ Partial Class MainForm
         Me.Label3.AutoEllipsis = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label3, 2)
         Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label3.Location = New System.Drawing.Point(78, 29)
+        Me.Label3.Location = New System.Drawing.Point(77, 29)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(211, 102)
+        Me.Label3.Size = New System.Drawing.Size(212, 102)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "projPath"
         '
@@ -2417,7 +2423,7 @@ Partial Class MainForm
         Me.Label4.Location = New System.Drawing.Point(3, 131)
         Me.Label4.Name = "Label4"
         Me.TableLayoutPanel2.SetRowSpan(Me.Label4, 2)
-        Me.Label4.Size = New System.Drawing.Size(69, 269)
+        Me.Label4.Size = New System.Drawing.Size(68, 269)
         Me.Label4.TabIndex = 1
         Me.Label4.Text = "Images mounted?"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2428,7 +2434,7 @@ Partial Class MainForm
         Me.Panel9.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel9.Location = New System.Drawing.Point(3, 3)
         Me.Panel9.Name = "Panel9"
-        Me.Panel9.Size = New System.Drawing.Size(69, 23)
+        Me.Panel9.Size = New System.Drawing.Size(68, 23)
         Me.Panel9.TabIndex = 9
         '
         'Label1
@@ -2436,7 +2442,7 @@ Partial Class MainForm
         Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label1.Location = New System.Drawing.Point(0, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(69, 23)
+        Me.Label1.Size = New System.Drawing.Size(68, 23)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Name:"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -2448,7 +2454,7 @@ Partial Class MainForm
         Me.TabPage2.Location = New System.Drawing.Point(4, 22)
         Me.TabPage2.Name = "TabPage2"
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(256, 580)
+        Me.TabPage2.Size = New System.Drawing.Size(292, 580)
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "Image"
         Me.TabPage2.UseVisualStyleBackColor = True
@@ -2461,7 +2467,7 @@ Partial Class MainForm
         Me.ImageNotMountedPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ImageNotMountedPanel.Location = New System.Drawing.Point(3, 3)
         Me.ImageNotMountedPanel.Name = "ImageNotMountedPanel"
-        Me.ImageNotMountedPanel.Size = New System.Drawing.Size(250, 574)
+        Me.ImageNotMountedPanel.Size = New System.Drawing.Size(286, 574)
         Me.ImageNotMountedPanel.TabIndex = 0
         '
         'LinkLabel3
@@ -2473,7 +2479,7 @@ Partial Class MainForm
         Me.LinkLabel3.LinkColor = System.Drawing.Color.DodgerBlue
         Me.LinkLabel3.Location = New System.Drawing.Point(21, 521)
         Me.LinkLabel3.Name = "LinkLabel3"
-        Me.LinkLabel3.Size = New System.Drawing.Size(210, 44)
+        Me.LinkLabel3.Size = New System.Drawing.Size(246, 44)
         Me.LinkLabel3.TabIndex = 2
         Me.LinkLabel3.TabStop = True
         Me.LinkLabel3.Text = "Or, if you have a mounted image, open an existing mount directory"
@@ -2487,7 +2493,7 @@ Partial Class MainForm
         Me.LinkLabel2.LinkArea = New System.Windows.Forms.LinkArea(72, 4)
         Me.LinkLabel2.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel2.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel2.Location = New System.Drawing.Point(21, 291)
+        Me.LinkLabel2.Location = New System.Drawing.Point(39, 291)
         Me.LinkLabel2.Name = "LinkLabel2"
         Me.LinkLabel2.Size = New System.Drawing.Size(210, 44)
         Me.LinkLabel2.TabIndex = 1
@@ -2502,7 +2508,7 @@ Partial Class MainForm
         Me.Label23.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label23.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label23.ForeColor = System.Drawing.Color.Crimson
-        Me.Label23.Location = New System.Drawing.Point(20, 240)
+        Me.Label23.Location = New System.Drawing.Point(38, 240)
         Me.Label23.Name = "Label23"
         Me.Label23.Size = New System.Drawing.Size(211, 51)
         Me.Label23.TabIndex = 0
@@ -2518,7 +2524,7 @@ Partial Class MainForm
         Me.ImagePanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ImagePanel.Location = New System.Drawing.Point(3, 3)
         Me.ImagePanel.Name = "ImagePanel"
-        Me.ImagePanel.Size = New System.Drawing.Size(250, 574)
+        Me.ImagePanel.Size = New System.Drawing.Size(286, 574)
         Me.ImagePanel.TabIndex = 9
         '
         'Button16
@@ -2528,7 +2534,7 @@ Partial Class MainForm
         Me.Button16.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button16.Location = New System.Drawing.Point(33, 535)
         Me.Button16.Name = "Button16"
-        Me.Button16.Size = New System.Drawing.Size(185, 28)
+        Me.Button16.Size = New System.Drawing.Size(221, 28)
         Me.Button16.TabIndex = 8
         Me.Button16.Text = "Unmount image..."
         Me.Button16.UseVisualStyleBackColor = True
@@ -2541,7 +2547,7 @@ Partial Class MainForm
         Me.TabTitleSummary2.Dock = System.Windows.Forms.DockStyle.Top
         Me.TabTitleSummary2.Location = New System.Drawing.Point(0, 0)
         Me.TabTitleSummary2.Name = "TabTitleSummary2"
-        Me.TabTitleSummary2.Size = New System.Drawing.Size(250, 64)
+        Me.TabTitleSummary2.Size = New System.Drawing.Size(286, 64)
         Me.TabTitleSummary2.TabIndex = 1
         '
         'TabPageIcon2
@@ -2581,7 +2587,7 @@ Partial Class MainForm
         Me.Button15.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button15.Location = New System.Drawing.Point(33, 504)
         Me.Button15.Name = "Button15"
-        Me.Button15.Size = New System.Drawing.Size(185, 28)
+        Me.Button15.Size = New System.Drawing.Size(221, 28)
         Me.Button15.TabIndex = 8
         Me.Button15.Text = "View image properties"
         Me.Button15.UseVisualStyleBackColor = True
@@ -2612,7 +2618,7 @@ Partial Class MainForm
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 84.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 121.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(250, 434)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(286, 434)
         Me.TableLayoutPanel1.TabIndex = 9
         '
         'Label15
@@ -2620,7 +2626,7 @@ Partial Class MainForm
         Me.Label15.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label15.Location = New System.Drawing.Point(3, 0)
         Me.Label15.Name = "Label15"
-        Me.Label15.Size = New System.Drawing.Size(92, 23)
+        Me.Label15.Size = New System.Drawing.Size(106, 23)
         Me.Label15.TabIndex = 4
         Me.Label15.Text = "Image index:"
         Me.Label15.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -2630,7 +2636,7 @@ Partial Class MainForm
         Me.Label21.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label21.Location = New System.Drawing.Point(3, 201)
         Me.Label21.Name = "Label21"
-        Me.Label21.Size = New System.Drawing.Size(92, 233)
+        Me.Label21.Size = New System.Drawing.Size(106, 233)
         Me.Label21.TabIndex = 3
         Me.Label21.Text = "Description:"
         Me.Label21.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2639,9 +2645,9 @@ Partial Class MainForm
         '
         Me.Label14.AutoEllipsis = True
         Me.Label14.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label14.Location = New System.Drawing.Point(101, 0)
+        Me.Label14.Location = New System.Drawing.Point(115, 0)
         Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(146, 23)
+        Me.Label14.Size = New System.Drawing.Size(168, 23)
         Me.Label14.TabIndex = 6
         Me.Label14.Text = "imgIndex"
         Me.Label14.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -2651,7 +2657,7 @@ Partial Class MainForm
         Me.Label19.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label19.Location = New System.Drawing.Point(3, 117)
         Me.Label19.Name = "Label19"
-        Me.Label19.Size = New System.Drawing.Size(92, 84)
+        Me.Label19.Size = New System.Drawing.Size(106, 84)
         Me.Label19.TabIndex = 3
         Me.Label19.Text = "Name:"
         Me.Label19.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2661,7 +2667,7 @@ Partial Class MainForm
         Me.Label13.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label13.Location = New System.Drawing.Point(3, 23)
         Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(92, 74)
+        Me.Label13.Size = New System.Drawing.Size(106, 74)
         Me.Label13.TabIndex = 3
         Me.Label13.Text = "Mount point:"
         Me.Label13.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2670,9 +2676,9 @@ Partial Class MainForm
         '
         Me.Label12.AutoEllipsis = True
         Me.Label12.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label12.Location = New System.Drawing.Point(101, 23)
+        Me.Label12.Location = New System.Drawing.Point(115, 23)
         Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(146, 74)
+        Me.Label12.Size = New System.Drawing.Size(168, 74)
         Me.Label12.TabIndex = 5
         Me.Label12.Text = "mountPoint"
         '
@@ -2681,7 +2687,7 @@ Partial Class MainForm
         Me.Label16.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label16.Location = New System.Drawing.Point(3, 97)
         Me.Label16.Name = "Label16"
-        Me.Label16.Size = New System.Drawing.Size(92, 20)
+        Me.Label16.Size = New System.Drawing.Size(106, 20)
         Me.Label16.TabIndex = 3
         Me.Label16.Text = "Version:"
         Me.Label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -2690,9 +2696,9 @@ Partial Class MainForm
         '
         Me.Label18.AutoEllipsis = True
         Me.Label18.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label18.Location = New System.Drawing.Point(101, 117)
+        Me.Label18.Location = New System.Drawing.Point(115, 117)
         Me.Label18.Name = "Label18"
-        Me.Label18.Size = New System.Drawing.Size(146, 84)
+        Me.Label18.Size = New System.Drawing.Size(168, 84)
         Me.Label18.TabIndex = 6
         Me.Label18.Text = "imgName"
         '
@@ -2700,9 +2706,9 @@ Partial Class MainForm
         '
         Me.Label20.AutoEllipsis = True
         Me.Label20.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label20.Location = New System.Drawing.Point(101, 201)
+        Me.Label20.Location = New System.Drawing.Point(115, 201)
         Me.Label20.Name = "Label20"
-        Me.Label20.Size = New System.Drawing.Size(146, 233)
+        Me.Label20.Size = New System.Drawing.Size(168, 233)
         Me.Label20.TabIndex = 6
         Me.Label20.Text = "imgDesc"
         '
@@ -2710,9 +2716,9 @@ Partial Class MainForm
         '
         Me.Label17.AutoEllipsis = True
         Me.Label17.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label17.Location = New System.Drawing.Point(101, 97)
+        Me.Label17.Location = New System.Drawing.Point(115, 97)
         Me.Label17.Name = "Label17"
-        Me.Label17.Size = New System.Drawing.Size(146, 20)
+        Me.Label17.Size = New System.Drawing.Size(168, 20)
         Me.Label17.TabIndex = 6
         Me.Label17.Text = "imgVersion"
         Me.Label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -3447,6 +3453,32 @@ Partial Class MainForm
         Me.UpdCheckerBW.WorkerReportsProgress = True
         Me.UpdCheckerBW.WorkerSupportsCancellation = True
         '
+        'AppxResCMS
+        '
+        Me.AppxResCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SaveResourceToolStripMenuItem, Me.CopyToolStripMenuItem})
+        Me.AppxResCMS.Name = "ContextMenuStrip1"
+        Me.AppxResCMS.ShowImageMargin = False
+        Me.AppxResCMS.Size = New System.Drawing.Size(131, 48)
+        '
+        'SaveResourceToolStripMenuItem
+        '
+        Me.SaveResourceToolStripMenuItem.Name = "SaveResourceToolStripMenuItem"
+        Me.SaveResourceToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
+        Me.SaveResourceToolStripMenuItem.Text = "Save resource..."
+        '
+        'CopyToolStripMenuItem
+        '
+        Me.CopyToolStripMenuItem.Name = "CopyToolStripMenuItem"
+        Me.CopyToolStripMenuItem.Size = New System.Drawing.Size(130, 22)
+        Me.CopyToolStripMenuItem.Text = "Copy resource"
+        '
+        'AppxResSFD
+        '
+        Me.AppxResSFD.Filter = "PNG files|*.png"
+        '
+        'Notifications
+        '
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -3540,6 +3572,7 @@ Partial Class MainForm
         Me.ImgUMountPopupCMS.ResumeLayout(False)
         Me.AppxPackagePopupCMS.ResumeLayout(False)
         Me.TreeViewCMS.ResumeLayout(False)
+        Me.AppxResCMS.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -3906,4 +3939,9 @@ Partial Class MainForm
     Friend WithEvents UpdCheckerBW As System.ComponentModel.BackgroundWorker
     Friend WithEvents ToolStripSeparator28 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents WimScriptEditorCommand As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents AppxResCMS As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents SaveResourceToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents CopyToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents AppxResSFD As System.Windows.Forms.SaveFileDialog
+    Friend WithEvents Notifications As System.Windows.Forms.NotifyIcon
 End Class
