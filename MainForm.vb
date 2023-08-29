@@ -4388,6 +4388,8 @@ Public Class MainForm
                     UnattendedAnswerFileManagerToolStripMenuItem.Text = "Unattended answer file manager"
                     ReportManagerToolStripMenuItem.Text = "Report manager"
                     MountedImageManagerTSMI.Text = "Mounted image manager"
+                    WimScriptEditorCommand.Text = "Configuration list editor"
+                    ActionEditorToolStripMenuItem.Text = "Action editor"
                     OptionsToolStripMenuItem.Text = "Options"
                     ' Menu - Help
                     HelpTopicsToolStripMenuItem.Text = "Help Topics"
@@ -4663,6 +4665,8 @@ Public Class MainForm
                     UnattendedAnswerFileManagerToolStripMenuItem.Text = "Administrador de archivos de respuesta desatendida"
                     ReportManagerToolStripMenuItem.Text = "Administrador de informes"
                     MountedImageManagerTSMI.Text = "Administrador de imágenes montadas"
+                    WimScriptEditorCommand.Text = "Editor de lista de configuraciones"
+                    ActionEditorToolStripMenuItem.Text = "Editor de acciones"
                     OptionsToolStripMenuItem.Text = "Opciones"
                     ' Menu - Help
                     HelpTopicsToolStripMenuItem.Text = "Ver la ayuda"
@@ -4943,6 +4947,8 @@ Public Class MainForm
                 UnattendedAnswerFileManagerToolStripMenuItem.Text = "Unattended answer file manager"
                 ReportManagerToolStripMenuItem.Text = "Report manager"
                 MountedImageManagerTSMI.Text = "Mounted image manager"
+                WimScriptEditorCommand.Text = "Configuration list editor"
+                ActionEditorToolStripMenuItem.Text = "Action editor"
                 OptionsToolStripMenuItem.Text = "Options"
                 ' Menu - Help
                 HelpTopicsToolStripMenuItem.Text = "Help Topics"
@@ -5218,6 +5224,8 @@ Public Class MainForm
                 UnattendedAnswerFileManagerToolStripMenuItem.Text = "Administrador de archivos de respuesta desatendida"
                 ReportManagerToolStripMenuItem.Text = "Administrador de informes"
                 MountedImageManagerTSMI.Text = "Administrador de imágenes montadas"
+                WimScriptEditorCommand.Text = "Editor de lista de configuraciones"
+                ActionEditorToolStripMenuItem.Text = "Editor de acciones"
                 OptionsToolStripMenuItem.Text = "Opciones"
                 ' Menu - Help
                 HelpTopicsToolStripMenuItem.Text = "Ver la ayuda"
@@ -6734,10 +6742,10 @@ Public Class MainForm
                 Case 2
                     prjTreeView.Nodes.Add("parent", "Proyecto: " & Quote & MainProjNameNode & Quote)
                     prjTreeView.Nodes("parent").Nodes.Add("dandi", "Herramientas de implementación")
-                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_x86", "Herramientas de implementación para x86")
-                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_amd64", "Herramientas de implementación para AMD64")
-                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm", "Herramientas de implementación para ARM")
-                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm64", "Herramientas de implementación para ARM64")
+                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_x86", "Herramientas de implementación (x86)")
+                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_amd64", "Herramientas de implementación (AMD64)")
+                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm", "Herramientas de implementación (ARM)")
+                    prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_arm64", "Herramientas de implementación (ARM64)")
                     prjTreeView.Nodes("parent").Nodes.Add("mount", "Punto de montaje")
                     prjTreeView.Nodes("parent").Nodes.Add("unattend_xml", "Archivos de respuesta desatendida")
                     prjTreeView.Nodes("parent").Nodes.Add("scr_temp", "Directorio temporal")
