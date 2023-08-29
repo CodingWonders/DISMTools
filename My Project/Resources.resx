@@ -1069,24 +1069,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <data name="info_from_drv_file" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\info_from_drv_file.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Bugfixes
-
-- Fixed an issue where the driver information dialog would always display the hardware target after the one you'd selected
-- Fixed an issue where the mounted image detector would start even if it had already been started
-- Fixed an issue where package removal would fail if its information process had thrown an exception
-- If the aforementioned information process has thrown an exception, the program will now output the HResult property of the exception instead of a constant value
-
-New features
-
-- You can now jump to specific hardware targets in the driver information dialog
-- The image conversion and SWM file merger dialogs have received translations
-- The SWM file merger dialog can now merge files for the index you specify, as opposed to for the first index
-- The image mount dialog now offers an automatic merger of SWM files, if one is specified
-- You can now get information about drivers installed in the Windows image or in the active installation, and the program will now detect image drivers if the "Detect all drivers" option value is different from the one stored in the program settings
-- You can now get information about an image file on demand
-- Introduced the DISM Configuration List Editor</value>
-  </data>
   <data name="jumpto" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\jumpto.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -1113,5 +1095,62 @@ New features
   </data>
   <data name="get_appxpkg_info" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\get_appxpkg_info.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Changes from last preview
+
+Bugfixes
+
+- Fixed an issue that caused the automatic program updater to not hide if it couldn't check for updates
+- Fixed an issue where the driver information dialog didn't wait for the background processes to finish
+- Fixed a couple of bugs in the DISM Configuration List Editor
+- The splitter distance in the split panels of the project window has been increased
+- The program no longer allows you to mount an already mounted image
+- The CLI version of the mounted image manager can no longer be run without admin privileges
+- Fixed a translation inconsistency in the Spanish language
+
+New features
+
+- Added the feature, AppX package, capability, and package information dialogs
+- Added translations to the Configuration List Editor and Action Editor menu entries
+
+Overall changes
+
+Overall bugfixes
+
+NOTE: this includes bugfixes from preview releases
+
+- Fixed an issue where the progress panel would not be positioned correctly when performing image operation-related direct actions, after waiting for background processes to be completed while their details panel was focused
+- Fixed an issue where the splash screen would be in front of the initial setup screen, thanks @abbodi1406 for spotting the issue!
+- The program now ships 32-bit and 64-bit 7-Zip binaries, and uses the right binary according to the architecture of the OS, thanks @abbodi1406 for spotting the issue!
+- Fixed an issue where AppX package information would not be displayed on applications packaged with the MSIX Packaging Tool
+- Fixed an issue where the program opened the resource directory of an AppX package instead of the actual resource file if the directory only contained 1 file in it
+- Fixed an issue that caused the program to make you specify a capability addition source in the online installation management mode when the "Limit Windows Update access" check box was unticked
+- Fixed an issue where the driver information dialog would always display the hardware target after the one you'd selected
+- Fixed an issue where the mounted image detector would start even if it had already been started
+- Fixed an issue where package removal would fail if its information process had thrown an exception
+- If the aforementioned information process has thrown an exception, the program will now output the HResult property of the exception instead of a constant value
+
+Overall new features
+
+- "Element independence" now affects the operation of adding AppX packages
+- The AppX regions group box is no longer enabled if the version of the specified DISM executable is not 10.0 or greater
+- The program no longer relies on an in-house XML deserializer and instead relies on the deserializer provided by the "System.Xml" namespace now
+- You can now perform other tasks while background processes for specific elements are being run
+- The program no longer allows you to remove AppX packages from Windows Server Core images without the Desktop Experience feature enabled
+- The program no longer uses the system DISM at all times if the user had specified a custom DISM executable
+- Introduced the driver information dialog
+- You can now see the architecture of a driver file when adding it
+- To avoid creating big log files, the program no longer gets driver information if a file targets more than 10 devices
+- The mounted image detector has received optimizations which cause a significant CPU usage decrease
+- If an ESD file is specified in the source image field of the image mount dialog, the image conversion dialog will now appear automatically
+- The image conversion dialog can now convert the index you specify, as opposed to the first index
+- If background processes were canceled prematurely and image information tasks are still pending, those tasks will now run after the task related to what has changed
+- The image conversion and SWM file merger dialogs have received translations
+- The SWM file merger dialog can now merge files for the index you specify, as opposed to for the first index
+- The image mount dialog now offers an automatic merger of SWM files, if one is specified
+- You can now get information about drivers installed in the Windows image or in the active installation, and the program will now detect image drivers if the "Detect all drivers" option value is different from the one stored in the program settings
+- You can now get information about an image file on demand
+- Introduced the DISM Configuration List Editor</value>
   </data>
 </root>

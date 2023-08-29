@@ -1776,14 +1776,16 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Bugfixes
+        '''  Busca una cadena traducida similar a Changes from last preview
         '''
-        '''- Fixed an issue where the driver information dialog would always display the hardware target after the one you&apos;d selected
-        '''- Fixed an issue where the mounted image detector would start even if it had already been started
-        '''- Fixed an issue where package removal would fail if its information process had thrown an exception
-        '''- If the aforementioned information process has thrown an exception, the program will now output the HResult property of the exception instead of a constant value
+        '''Bugfixes
         '''
-        '''New featu [resto de la cadena truncado]&quot;;.
+        '''- Fixed an issue that caused the automatic program updater to not hide if it couldn&apos;t check for updates
+        '''- Fixed an issue where the driver information dialog didn&apos;t wait for the background processes to finish
+        '''- Fixed a couple of bugs in the DISM Configuration List Editor
+        '''- The splitter distance in the split panels of the project window has been increased
+        '''- The program no longer allows you to mount an already mounted image
+        '''- The CLI version of the mounted image ma [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
