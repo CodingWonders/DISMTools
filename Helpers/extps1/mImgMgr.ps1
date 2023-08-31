@@ -2,7 +2,7 @@
 #                                         .'^""""""^.            
 #      '^`'.                            '^"""""""^.              
 #     .^"""""`'                       .^"""""""^.                ------------------------------------------------------
-#      .^""""""`                      ^"""""""`                  | DISMTools 0.3.1                                    |
+#      .^""""""`                      ^"""""""`                  | DISMTools 0.3.2                                    |
 #       ."""""""^.                   `""""""""'           `,`    | Open-source Windows image management, evolved      |
 #         '`""""""`.                 """""""""^         `,,,"    ------------------------------------------------------
 #            '^"""""`.               ^""""""""""'.   .`,,,,,^    | Mounted image manager (CLI version)                |
@@ -55,7 +55,7 @@ $global:selImage = 0
 $global:imgInfo = ''
 $newImg = 0
 $selImgPath = ''
-$ver = '0.3.1'
+$ver = '0.3.2'
 $global:img_removalIndexes = New-Object System.Collections.ArrayList
 $global:img_remIndexesBck = New-Object System.Collections.ArrayList
 
