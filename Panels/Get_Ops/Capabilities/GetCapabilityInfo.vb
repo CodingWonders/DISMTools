@@ -2,128 +2,11 @@
 Imports System.Threading
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Dism
+Imports DISMTools.Utilities
 
 Public Class GetCapabilityInfoDlg
 
     Public InstalledCapabilityInfo As DismCapabilityCollection
-
-    Function CastDismCapabilityState(state As DismPackageFeatureState) As String
-        Select Case state
-            Case DismPackageFeatureState.NotPresent
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Not present"
-                            Case "ESN"
-                                Return "No presente"
-                        End Select
-                    Case 1
-                        Return "Not present"
-                    Case 2
-                        Return "No presente"
-                End Select
-            Case DismPackageFeatureState.UninstallPending
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Uninstall Pending"
-                            Case "ESN"
-                                Return "Desinstalación pendiente"
-                        End Select
-                    Case 1
-                        Return "Uninstall Pending"
-                    Case 2
-                        Return "Desinstalación pendiente"
-                End Select
-            Case DismPackageFeatureState.Staged
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Uninstalled"
-                            Case "ESN"
-                                Return "Desinstalado"
-                        End Select
-                    Case 1
-                        Return "Uninstalled"
-                    Case 2
-                        Return "Desinstalado"
-                End Select
-            Case DismPackageFeatureState.Removed Or DismPackageFeatureState.Resolved
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Removed"
-                            Case "ESN"
-                                Return "Eliminado"
-                        End Select
-                    Case 1
-                        Return "Removed"
-                    Case 2
-                        Return "Eliminado"
-                End Select
-            Case DismPackageFeatureState.Installed
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Installed"
-                            Case "ESN"
-                                Return "Instalado"
-                        End Select
-                    Case 1
-                        Return "Installed"
-                    Case 2
-                        Return "Instalado"
-                End Select
-            Case DismPackageFeatureState.InstallPending
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Install Pending"
-                            Case "ESN"
-                                Return "Instalación pendiente"
-                        End Select
-                    Case 1
-                        Return "Install Pending"
-                    Case 2
-                        Return "Instalación pendiente"
-                End Select
-            Case DismPackageFeatureState.Superseded
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Superseded"
-                            Case "ESN"
-                                Return "Sustituido"
-                        End Select
-                    Case 1
-                        Return "Superseded"
-                    Case 2
-                        Return "Sustituido"
-                End Select
-            Case DismPackageFeatureState.PartiallyInstalled
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Partially Installed"
-                            Case "ESN"
-                                Return "Instalado parcialmente"
-                        End Select
-                    Case 1
-                        Return "Partially Installed"
-                    Case 2
-                        Return "Instalado parcialmente"
-                End Select
-        End Select
-        Return Nothing
-    End Function
 
     Private Sub GetCapabilityInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
@@ -210,7 +93,7 @@ Public Class GetCapabilityInfoDlg
         Panel7.Visible = True
         ListView1.Items.Clear()
         For Each InstalledCapability As DismCapability In InstalledCapabilityInfo
-            ListView1.Items.Add(New ListViewItem(New String() {InstalledCapability.Name, CastDismCapabilityState(InstalledCapability.State)}))
+            ListView1.Items.Add(New ListViewItem(New String() {InstalledCapability.Name, Casters.CastDismPackageState(InstalledCapability.State, True)}))
         Next
     End Sub
 
@@ -293,7 +176,7 @@ Public Class GetCapabilityInfoDlg
                         Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, ListView1.FocusedItem.SubItems(0).Text)
                         Label23.Text = capInfo.Name
                         Label25.Text = capInfo.Name.Remove(InStr(capInfo.Name, "~") - 1)
-                        Label35.Text = CastDismCapabilityState(capInfo.State)
+                        Label35.Text = Casters.CastDismPackageState(capInfo.State, True)
                         Label32.Text = capInfo.DisplayName
                         Label40.Text = capInfo.Description
                         Select Case MainForm.Language

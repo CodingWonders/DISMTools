@@ -3,475 +3,12 @@ Imports System.IO
 Imports System.Threading
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Dism
+Imports DISMTools.Utilities
 
 Public Class GetPkgInfoDlg
 
     Dim PackageInfoList As New List(Of DismPackageInfoEx)
     Public InstalledPkgInfo As DismPackageCollection
-
-    Function CastDismApplicabilityStatus(Applicability As Boolean) As String
-        Select Case Applicability
-            Case True
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Yes"
-                            Case "ESN"
-                                Return "Sí"
-                        End Select
-                    Case 1
-                        Return "Yes"
-                    Case 2
-                        Return "Sí"
-                End Select
-            Case False
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "No"
-                            Case "ESN"
-                                Return "No"
-                        End Select
-                    Case 1
-                        Return "No"
-                    Case 2
-                        Return "No"
-                End Select
-        End Select
-        Return Nothing
-    End Function
-
-    Function CastDismReleaseType(RelType As DismReleaseType) As String
-        Select Case RelType
-            Case DismReleaseType.CriticalUpdate
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Critical update"
-                            Case "ESN"
-                                Return "Actualización crítica"
-                        End Select
-                    Case 1
-                        Return "Critical update"
-                    Case 2
-                        Return "Actualización crítica"
-                End Select
-            Case DismReleaseType.Driver
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Driver"
-                            Case "ESN"
-                                Return "Controlador"
-                        End Select
-                    Case 1
-                        Return "Driver"
-                    Case 2
-                        Return "Controlador"
-                End Select
-            Case DismReleaseType.FeaturePack
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Feature Pack"
-                            Case "ESN"
-                                Return "Paquete de características"
-                        End Select
-                    Case 1
-                        Return "Feature Pack"
-                    Case 2
-                        Return "Paquete de características"
-                End Select
-            Case DismReleaseType.Foundation
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Foundation package"
-                            Case "ESN"
-                                Return "Paquete de fundación"
-                        End Select
-                    Case 1
-                        Return "Foundation package"
-                    Case 2
-                        Return "Paquete de fundación"
-                End Select
-            Case DismReleaseType.Hotfix
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Hotfix"
-                            Case "ESN"
-                                Return "Corrección de fallos"
-                        End Select
-                    Case 1
-                        Return "Hotfix"
-                    Case 2
-                        Return "Corrección de fallos"
-                End Select
-            Case DismReleaseType.LanguagePack
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Language pack"
-                            Case "ESN"
-                                Return "Paquete de idiomas"
-                        End Select
-                    Case 1
-                        Return "Language pack"
-                    Case 2
-                        Return "Paquete de idiomas"
-                End Select
-            Case DismReleaseType.LocalPack
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Local pack"
-                            Case "ESN"
-                                Return "Paquete local"
-                        End Select
-                    Case 1
-                        Return "Local pack"
-                    Case 2
-                        Return "Paquete local"
-                End Select
-            Case DismReleaseType.OnDemandPack
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "On Demand pack"
-                            Case "ESN"
-                                Return "Paquete de funcionalidad"
-                        End Select
-                    Case 1
-                        Return "On Demand pack"
-                    Case 2
-                        Return "Paquete de funcionalidad"
-                End Select
-            Case DismReleaseType.Other
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Other"
-                            Case "ESN"
-                                Return "Otros"
-                        End Select
-                    Case 1
-                        Return "Other"
-                    Case 2
-                        Return "Otros"
-                End Select
-            Case DismReleaseType.Product
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Product"
-                            Case "ESN"
-                                Return "Producto"
-                        End Select
-                    Case 1
-                        Return "Product"
-                    Case 2
-                        Return "Producto"
-                End Select
-            Case DismReleaseType.SecurityUpdate
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Security update"
-                            Case "ESN"
-                                Return "Actualización de seguridad"
-                        End Select
-                    Case 1
-                        Return "Security update"
-                    Case 2
-                        Return "Actualización de seguridad"
-                End Select
-            Case DismReleaseType.ServicePack
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Service Pack"
-                            Case "ESN"
-                                Return "Service Pack"
-                        End Select
-                    Case 1
-                        Return "Service Pack"
-                    Case 2
-                        Return "Service Pack"
-                End Select
-            Case DismReleaseType.SoftwareUpdate
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Software update"
-                            Case "ESN"
-                                Return "Actualización de software"
-                        End Select
-                    Case 1
-                        Return "Software update"
-                    Case 2
-                        Return "Actualización de software"
-                End Select
-            Case DismReleaseType.Update
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Update"
-                            Case "ESN"
-                                Return "Actualización"
-                        End Select
-                    Case 1
-                        Return "Update"
-                    Case 2
-                        Return "Actualización"
-                End Select
-            Case DismReleaseType.UpdateRollup
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Update rollup"
-                            Case "ESN"
-                                Return "Actualización acumulativa"
-                        End Select
-                    Case 1
-                        Return "Update rollup"
-                    Case 2
-                        Return "Actualización acumulativa"
-                End Select
-        End Select
-        Return Nothing
-    End Function
-
-    Function CastDismRestartType(rType As DismRestartType) As String
-        Select Case rType
-            Case DismRestartType.No
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "A restart is not required"
-                            Case "ESN"
-                                Return "No se requiere un reinicio"
-                        End Select
-                    Case 1
-                        Return "A restart is not required"
-                    Case 2
-                        Return "No se requiere un reinicio"
-                End Select
-            Case DismRestartType.Possible
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "A restart may be required"
-                            Case "ESN"
-                                Return "Puede requerirse un reinicio"
-                        End Select
-                    Case 1
-                        Return "A restart may be required"
-                    Case 2
-                        Return "Puede requerirse un reinicio"
-                End Select
-            Case DismRestartType.Required
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "A restart is required"
-                            Case "ESN"
-                                Return "Se requiere un reinicio"
-                        End Select
-                    Case 1
-                        Return "A restart is required"
-                    Case 2
-                        Return "Se requiere un reinicio"
-                End Select
-        End Select
-        Return Nothing
-    End Function
-
-    Function CastDismPackageState(state As DismPackageFeatureState) As String
-        Select Case state
-            Case DismPackageFeatureState.NotPresent
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Not present"
-                            Case "ESN"
-                                Return "No presente"
-                        End Select
-                    Case 1
-                        Return "Not present"
-                    Case 2
-                        Return "No presente"
-                End Select
-            Case DismPackageFeatureState.UninstallPending
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Uninstall Pending"
-                            Case "ESN"
-                                Return "Desinstalación pendiente"
-                        End Select
-                    Case 1
-                        Return "Uninstall Pending"
-                    Case 2
-                        Return "Desinstalación pendiente"
-                End Select
-            Case DismPackageFeatureState.Staged
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Uninstalled"
-                            Case "ESN"
-                                Return "Desinstalado"
-                        End Select
-                    Case 1
-                        Return "Uninstalled"
-                    Case 2
-                        Return "Desinstalado"
-                End Select
-            Case DismPackageFeatureState.Removed Or DismPackageFeatureState.Resolved
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Removed"
-                            Case "ESN"
-                                Return "Eliminado"
-                        End Select
-                    Case 1
-                        Return "Removed"
-                    Case 2
-                        Return "Eliminado"
-                End Select
-            Case DismPackageFeatureState.Installed
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Installed"
-                            Case "ESN"
-                                Return "Instalado"
-                        End Select
-                    Case 1
-                        Return "Installed"
-                    Case 2
-                        Return "Instalado"
-                End Select
-            Case DismPackageFeatureState.InstallPending
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Install Pending"
-                            Case "ESN"
-                                Return "Instalación pendiente"
-                        End Select
-                    Case 1
-                        Return "Install Pending"
-                    Case 2
-                        Return "Instalación pendiente"
-                End Select
-            Case DismPackageFeatureState.Superseded
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Superseded"
-                            Case "ESN"
-                                Return "Sustituido"
-                        End Select
-                    Case 1
-                        Return "Superseded"
-                    Case 2
-                        Return "Sustituido"
-                End Select
-            Case DismPackageFeatureState.PartiallyInstalled
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Partially Installed"
-                            Case "ESN"
-                                Return "Instalado parcialmente"
-                        End Select
-                    Case 1
-                        Return "Partially Installed"
-                    Case 2
-                        Return "Instalado parcialmente"
-                End Select
-        End Select
-        Return Nothing
-    End Function
-
-    Function CastDismFullyOfflineInstallationType(foiType As DismFullyOfflineInstallableType) As String
-        Select Case foiType
-            Case DismFullyOfflineInstallableType.FullyOfflineNotInstallable
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "A boot up to the target image is required to fully install this package"
-                            Case "ESN"
-                                Return "Se requiere un arranque a la imagen de destino para instalar este paquete por completo"
-                        End Select
-                    Case 1
-                        Return "A boot up to the target image is required to fully install this package"
-                    Case 2
-                        Return "Se requiere un arranque a la imagen de destino para instalar este paquete por completo"
-                End Select
-            Case DismFullyOfflineInstallableType.FullyOfflineInstallableUndetermined
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "A boot up to the target image may be required to fully install this package"
-                            Case "ESN"
-                                Return "Se podría requerir un arranque a la imagen de destino para instalar este paquete por completo"
-                        End Select
-                    Case 1
-                        Return "A boot up to the target image may be required to fully install this package"
-                    Case 2
-                        Return "Se podría requerir un arranque a la imagen de destino para instalar este paquete por completo"
-                End Select
-            Case DismFullyOfflineInstallableType.FullyOfflineInstallable
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "A boot up to the target image is not required to fully install this package"
-                            Case "ESN"
-                                Return "No se requiere un arranque a la imagen de destino para instalar este paquete por completo"
-                        End Select
-                    Case 1
-                        Return "A boot up to the target image is not required to fully install this package"
-                    Case 2
-                        Return "No se requiere un arranque a la imagen de destino para instalar este paquete por completo"
-                End Select
-        End Select
-        Return Nothing
-    End Function
 
     Private Sub GetPkgInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
@@ -850,7 +387,7 @@ Public Class GetPkgInfoDlg
                         ' Use the extended version, as DISM gets extended package information
                         Dim PkgInfo As DismPackageInfoEx = DismApi.GetPackageInfoExByName(imgSession, ListBox2.SelectedItem)
                         Label23.Text = PkgInfo.PackageName
-                        Label25.Text = CastDismApplicabilityStatus(PkgInfo.Applicable)
+                        Label25.Text = Casters.CastDismApplicabilityStatus(PkgInfo.Applicable, True)
                         Label35.Text = PkgInfo.Copyright
                         Label32.Text = PkgInfo.Company
                         Label40.Text = PkgInfo.CreationTime
@@ -862,11 +399,11 @@ Public Class GetPkgInfoDlg
                         Label38.Text = PkgInfo.DisplayName
                         Label44.Text = PkgInfo.ProductName
                         Label15.Text = PkgInfo.ProductVersion.ToString()
-                        Label21.Text = CastDismReleaseType(PkgInfo.ReleaseType)
-                        Label13.Text = CastDismRestartType(PkgInfo.RestartRequired)
+                        Label21.Text = Casters.CastDismReleaseType(PkgInfo.ReleaseType, True)
+                        Label13.Text = Casters.CastDismRestartType(PkgInfo.RestartRequired, True)
                         Label49.Text = PkgInfo.SupportInformation
-                        Label51.Text = CastDismPackageState(PkgInfo.PackageState)
-                        Label53.Text = CastDismFullyOfflineInstallationType(PkgInfo.FullyOffline)
+                        Label51.Text = Casters.CastDismPackageState(PkgInfo.PackageState)
+                        Label53.Text = Casters.CastDismFullyOfflineInstallationType(PkgInfo.FullyOffline, True)
                         Label56.Text = PkgInfo.CapabilityId
                         Label57.Text = ""
                         Dim cProps As DismCustomPropertyCollection = PkgInfo.CustomProperties
@@ -894,7 +431,7 @@ Public Class GetPkgInfoDlg
                         If pkgFeats.Count > 0 Then
                             ' Output all features
                             For Each pkgFeat As DismFeature In pkgFeats
-                                Label59.Text &= "- " & pkgFeat.FeatureName & " (" & pkgFeat.State & ")" & CrLf
+                                Label59.Text &= "- " & pkgFeat.FeatureName & " (" & Casters.CastDismFeatureState(pkgFeat.State, True) & ")" & CrLf
                             Next
                         Else
                             Select Case MainForm.Language
@@ -1048,7 +585,7 @@ Public Class GetPkgInfoDlg
 
     Sub DisplayPackageFileInformation(PkgFile As Integer)
         Label9.Text = PackageInfoList(PkgFile).PackageName
-        Label11.Text = CastDismApplicabilityStatus(PackageInfoList(PkgFile).Applicable)
+        Label11.Text = Casters.CastDismApplicabilityStatus(PackageInfoList(PkgFile).Applicable, True)
         Label17.Text = PackageInfoList(PkgFile).Copyright
         Label19.Text = PackageInfoList(PkgFile).Company
         Label62.Text = PackageInfoList(PkgFile).CreationTime
@@ -1060,11 +597,11 @@ Public Class GetPkgInfoDlg
         Label74.Text = PackageInfoList(PkgFile).DisplayName
         Label76.Text = PackageInfoList(PkgFile).ProductName
         Label78.Text = PackageInfoList(PkgFile).ProductVersion.ToString()
-        Label80.Text = CastDismReleaseType(PackageInfoList(PkgFile).ReleaseType)
-        Label82.Text = CastDismRestartType(PackageInfoList(PkgFile).RestartRequired)
+        Label80.Text = Casters.CastDismReleaseType(PackageInfoList(PkgFile).ReleaseType, True)
+        Label82.Text = Casters.CastDismRestartType(PackageInfoList(PkgFile).RestartRequired, True)
         Label84.Text = PackageInfoList(PkgFile).SupportInformation
-        Label86.Text = CastDismPackageState(PackageInfoList(PkgFile).PackageState)
-        Label88.Text = CastDismFullyOfflineInstallationType(PackageInfoList(PkgFile).FullyOffline)
+        Label86.Text = Casters.CastDismPackageState(PackageInfoList(PkgFile).PackageState, True)
+        Label88.Text = Casters.CastDismFullyOfflineInstallationType(PackageInfoList(PkgFile).FullyOffline, True)
         Label90.Text = PackageInfoList(PkgFile).CapabilityId
         Label92.Text = ""
         Dim cProps As DismCustomPropertyCollection = PackageInfoList(PkgFile).CustomProperties
@@ -1092,7 +629,7 @@ Public Class GetPkgInfoDlg
         If pkgFeats.Count > 0 Then
             ' Output all features
             For Each pkgFeat As DismFeature In pkgFeats
-                Label94.Text &= "- " & pkgFeat.FeatureName & " (" & pkgFeat.State & ")" & CrLf
+                Label94.Text &= "- " & pkgFeat.FeatureName & " (" & Casters.CastDismFeatureState(pkgFeat.State, True) & ")" & CrLf
             Next
         Else
             Select Case MainForm.Language

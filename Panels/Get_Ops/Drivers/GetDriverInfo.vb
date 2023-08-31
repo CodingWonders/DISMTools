@@ -3,6 +3,7 @@ Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Dism
 Imports System.Threading
+Imports DISMTools.Utilities
 
 Public Class GetDriverInfo
 
@@ -380,34 +381,7 @@ Public Class GetDriverInfo
                 Label14.Text = DriverPackageInfo.CompatibleIds
                 Label15.Text = DriverPackageInfo.ExcludeIds
                 Label18.Text = DriverPackageInfo.ManufacturerName
-                Select Case DriverPackageInfo.Architecture
-                    Case DismProcessorArchitecture.None
-                        Select Case MainForm.Language
-                            Case 0
-                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
-                                        Label19.Text = "Unknown"
-                                    Case "ESN"
-                                        Label19.Text = "Desconocido"
-                                End Select
-                            Case 1
-                                Label19.Text = "Unknown"
-                            Case 2
-                                Label19.Text = "Desconocido"
-                        End Select
-                    Case DismProcessorArchitecture.Neutral
-                        Label19.Text = "Neutral"
-                    Case DismProcessorArchitecture.Intel
-                        Label19.Text = "x86"
-                    Case DismProcessorArchitecture.IA64
-                        Label19.Text = "Itanium"
-                    Case DismProcessorArchitecture.ARM64
-                        Label19.Text = "ARM64"
-                    Case DismProcessorArchitecture.ARM
-                        Label19.Text = "ARM"
-                    Case DismProcessorArchitecture.AMD64
-                        Label19.Text = "AMD64"
-                End Select
+                Label19.Text = Casters.CastDismArchitecture(DriverPackageInfo.Architecture, True)
                 If Label14.Text = "" Then
                     Select Case MainForm.Language
                         Case 0
@@ -694,50 +668,7 @@ Public Class GetDriverInfo
                 Label38.Text = InstalledDriverList(ListView1.FocusedItem.Index).Date
                 Label40.Text = InstalledDriverList(ListView1.FocusedItem.Index).ClassDescription
                 Label42.Text = InstalledDriverList(ListView1.FocusedItem.Index).ClassGuid
-                Select Case InstalledDriverList(ListView1.FocusedItem.Index).DriverSignature
-                    Case DismDriverSignature.Unknown
-                        Select Case MainForm.Language
-                            Case 0
-                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
-                                        Label44.Text = "Unknown"
-                                    Case "ESN"
-                                        Label44.Text = "Desconocido"
-                                End Select
-                            Case 1
-                                Label44.Text = "Unknown"
-                            Case 2
-                                Label44.Text = "Desconocido"
-                        End Select
-                    Case DismDriverSignature.Unsigned
-                        Select Case MainForm.Language
-                            Case 0
-                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
-                                        Label44.Text = "Unsigned. Please check the validity and expiration date of the signing certificate"
-                                    Case "ESN"
-                                        Label44.Text = "No firmado. Compruebe la validez y la fecha de expiración del certificado del controlador"
-                                End Select
-                            Case 1
-                                Label44.Text = "Unsigned. Please check the validity and expiration date of the signing certificate"
-                            Case 2
-                                Label44.Text = "No firmado. Compruebe la validez y la fecha de expiración del certificado del controlador"
-                        End Select
-                    Case DismDriverSignature.Signed
-                        Select Case MainForm.Language
-                            Case 0
-                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
-                                        Label44.Text = "Signed"
-                                    Case "ESN"
-                                        Label44.Text = "Firmado"
-                                End Select
-                            Case 1
-                                Label44.Text = "Signed"
-                            Case 2
-                                Label44.Text = "Firmado"
-                        End Select
-                End Select
+                Label44.Text = Casters.CastDismSignatureStatus(InstalledDriverList(ListView1.FocusedItem.Index).DriverSignature, True)
                 Label46.Text = InstalledDriverList(ListView1.FocusedItem.Index).CatalogFile
             Else
                 Panel4.Visible = False
