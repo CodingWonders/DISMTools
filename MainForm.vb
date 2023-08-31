@@ -8930,7 +8930,7 @@ Public Class MainForm
     End Sub
 
     Private Sub AddProvisionedAppxPackage_Click(sender As Object, e As EventArgs) Handles AddProvisionedAppxPackage.Click
-        If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+        If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
             AddProvAppxPackage.ShowDialog()
         Else
             Select Case Language
