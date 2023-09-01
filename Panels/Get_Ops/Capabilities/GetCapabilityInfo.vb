@@ -183,18 +183,18 @@ Public Class GetCapabilityInfoDlg
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                     Case "ENG"
-                                        Label42.Text = "Download size: " & capInfo.DownloadSize & " bytes (~" & Math.Round((capInfo.DownloadSize / 1024 ^ 2), 2) & " MB)" & CrLf & _
-                                            "Install size: " & capInfo.InstallSize & " bytes (~" & Math.Round((capInfo.InstallSize / 1024 ^ 2), 2) & " MB)"
+                                        Label42.Text = "Download size: " & capInfo.DownloadSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")" & CrLf & _
+                                            "Install size: " & capInfo.InstallSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")"
                                     Case "ESN"
-                                        Label42.Text = "Tamaño de descarga: " & capInfo.DownloadSize & " bytes (~" & Math.Round((capInfo.DownloadSize / 1024 ^ 2), 2) & " MB)" & CrLf & _
-                                            "Tamaño de instalación: " & capInfo.InstallSize & " bytes (~" & Math.Round((capInfo.InstallSize / 1024 ^ 2), 2) & " MB)"
+                                        Label42.Text = "Tamaño de descarga: " & capInfo.DownloadSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")" & CrLf & _
+                                            "Tamaño de instalación: " & capInfo.InstallSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")"
                                 End Select
                             Case 1
-                                Label42.Text = "Download size: " & capInfo.DownloadSize & " bytes (~" & Math.Round((capInfo.DownloadSize / 1024 ^ 2), 2) & " MB)" & CrLf & _
-                                    "Install size: " & capInfo.InstallSize & " bytes (~" & Math.Round((capInfo.InstallSize / 1024 ^ 2), 2) & " MB)"
+                                Label42.Text = "Download size: " & capInfo.DownloadSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")" & CrLf & _
+                                    "Install size: " & capInfo.InstallSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")"
                             Case 2
-                                Label42.Text = "Tamaño de descarga: " & capInfo.DownloadSize & " bytes (~" & Math.Round((capInfo.DownloadSize / 1024 ^ 2), 2) & " MB)" & CrLf & _
-                                    "Tamaño de instalación: " & capInfo.InstallSize & " bytes (~" & Math.Round((capInfo.InstallSize / 1024 ^ 2), 2) & " MB)"
+                                Label42.Text = "Tamaño de descarga: " & capInfo.DownloadSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")" & CrLf & _
+                                    "Tamaño de instalación: " & capInfo.InstallSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")"
                         End Select
                     End Using
                 Catch NRE As NullReferenceException

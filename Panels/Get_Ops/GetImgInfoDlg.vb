@@ -226,7 +226,7 @@ Public Class GetImgInfoDlg
         DetectFeatureUpdate(ImageInfoList(Index).ProductVersion)
         Label25.Text = ImageInfoList(Index).ImageName
         Label35.Text = ImageInfoList(Index).ImageDescription
-        Label32.Text = ImageInfoList(Index).ImageSize.ToString("N0") & " bytes (~" & Math.Round(ImageInfoList(Index).ImageSize / (1024 ^ 3), 2) & " GB)"
+        Label32.Text = ImageInfoList(Index).ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(ImageInfoList(Index).ImageSize) & ")"
         Label42.Text = Casters.CastDismArchitecture(ImageInfoList(Index).Architecture, True)
         Select Case MainForm.Language
             Case 0
