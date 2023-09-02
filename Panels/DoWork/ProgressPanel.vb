@@ -1651,7 +1651,7 @@ Public Class ProgressPanel
                             LogView.AppendText(CrLf & CrLf & _
                                                "- Package name: " & pkgInfo.PackageName & CrLf & _
                                                "- Package description: " & pkgInfo.Description & CrLf & _
-                                               "- This package is a " & If(pkgInfo.ReleaseType = DismReleaseType.ServicePack, "Service Pack", pkgInfo.ReleaseType.ToString().ToLower()) & CrLf & _
+                                               "- Package release type: " & Casters.CastDismReleaseType(pkgInfo.ReleaseType) & CrLf & _
                                                "- Package is applicable to this image? " & If(pkgInfo.Applicable, "Yes", "No") & CrLf & _
                                                "- Package is already installed? " & If(pkgInfo.PackageState = DismPackageFeatureState.Installed Or pkgInfo.PackageState = DismPackageFeatureState.InstallPending, "Yes", "No") & CrLf)
                             pkgIsApplicable = pkgInfo.Applicable
