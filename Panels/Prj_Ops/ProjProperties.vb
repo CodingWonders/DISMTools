@@ -3,6 +3,7 @@ Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.Text.Encoding
 Imports Microsoft.Dism
+Imports DISMTools.Utilities
 
 Public Class ProjProperties
 
@@ -116,7 +117,7 @@ Public Class ProjProperties
                             DetectFeatureUpdate(info.ProductVersion)
                             imgMountedName.Text = info.ImageName
                             imgMountedDesc.Text = info.ImageDescription
-                            imgSize.Text = info.ImageSize.ToString("N0") & " bytes (~" & Math.Round(info.ImageSize / (1024 ^ 3), 2) & " GB)"
+                            imgSize.Text = info.ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(info.ImageSize) & ")"
                             If info.Architecture = DismProcessorArchitecture.None Then
                                 imgArch.Text = "Unknown"
                             ElseIf info.Architecture = DismProcessorArchitecture.Neutral Then

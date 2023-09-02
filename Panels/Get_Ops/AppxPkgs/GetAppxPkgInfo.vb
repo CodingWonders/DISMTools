@@ -1,42 +1,11 @@
 ﻿Imports System.Windows.Forms
 Imports System.IO
 Imports Microsoft.Dism
+Imports DISMTools.Utilities
 
 Public Class GetAppxPkgInfoDlg
 
     Public InstalledAppxPkgInfo As DismAppxPackageCollection
-
-    Function CastDismArchitecture(arch As DismProcessorArchitecture) As String
-        Select Case arch
-            Case DismProcessorArchitecture.None
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Unknown"
-                            Case "ESN"
-                                Return "Desconocido"
-                        End Select
-                    Case 1
-                        Return "Unknown"
-                    Case 2
-                        Return "Desconocido"
-                End Select
-            Case DismProcessorArchitecture.Neutral
-                Return "Neutral"
-            Case DismProcessorArchitecture.Intel
-                Return "x86"
-            Case DismProcessorArchitecture.IA64
-                Return "Itanium"
-            Case DismProcessorArchitecture.ARM64
-                Return "ARM64"
-            Case DismProcessorArchitecture.ARM
-                Return "ARM"
-            Case DismProcessorArchitecture.AMD64
-                Return "AMD64"
-        End Select
-        Return Nothing
-    End Function
 
     Private Sub GetAppxPkgInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language
@@ -158,7 +127,7 @@ Public Class GetAppxPkgInfoDlg
             Else
                 Label23.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).PackageName
                 Label25.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).DisplayName
-                Label35.Text = CastDismArchitecture(InstalledAppxPkgInfo(ListBox1.SelectedIndex).Architecture)
+                Label35.Text = Casters.CastDismArchitecture(InstalledAppxPkgInfo(ListBox1.SelectedIndex).Architecture, True)
                 Label32.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).ResourceId
                 Label40.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).Version.ToString()
             End If

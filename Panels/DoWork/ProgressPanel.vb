@@ -160,6 +160,7 @@ Imports System.Text.Encoding
 Imports Microsoft.Dism
 Imports System.Text.RegularExpressions
 Imports DISMTools.Elements
+Imports DISMTools.Utilities
 
 Public Class ProgressPanel
 
@@ -645,26 +646,6 @@ Public Class ProgressPanel
         Next
         If successfulTasks > failedTasks Then IsSuccessful = True Else IsSuccessful = False
     End Sub
-
-    Function CastDismArchitecture(Arch As DismProcessorArchitecture) As String
-        Select Case Arch
-            Case DismProcessorArchitecture.None
-                Return "Unknown"
-            Case DismProcessorArchitecture.Neutral
-                Return "Neutral"
-            Case DismProcessorArchitecture.Intel
-                Return "x86"
-            Case DismProcessorArchitecture.IA64
-                Return "Itanium"
-            Case DismProcessorArchitecture.ARM64
-                Return "ARM64"
-            Case DismProcessorArchitecture.ARM
-                Return "ARM"
-            Case DismProcessorArchitecture.AMD64
-                Return "AMD64"
-        End Select
-        Return Nothing
-    End Function
 
     Sub RunOps(opNum As Integer)
         If DismProgram = "" Then DismProgram = MainForm.DismExe
@@ -1670,7 +1651,7 @@ Public Class ProgressPanel
                             LogView.AppendText(CrLf & CrLf & _
                                                "- Package name: " & pkgInfo.PackageName & CrLf & _
                                                "- Package description: " & pkgInfo.Description & CrLf & _
-                                               "- This package is a " & If(pkgInfo.ReleaseType = DismReleaseType.ServicePack, "Service Pack", pkgInfo.ReleaseType.ToString().ToLower()) & CrLf & _
+                                               "- Package release type: " & Casters.CastDismReleaseType(pkgInfo.ReleaseType) & CrLf & _
                                                "- Package is applicable to this image? " & If(pkgInfo.Applicable, "Yes", "No") & CrLf & _
                                                "- Package is already installed? " & If(pkgInfo.PackageState = DismPackageFeatureState.Installed Or pkgInfo.PackageState = DismPackageFeatureState.InstallPending, "Yes", "No") & CrLf)
                             pkgIsApplicable = pkgInfo.Applicable
@@ -3172,7 +3153,7 @@ Public Class ProgressPanel
                                                        "  - Compatible IDs: " & drvInfo.CompatibleIds & CrLf & _
                                                        "  - Excluded IDs: " & drvInfo.ExcludeIds & CrLf & _
                                                        "- Hardware manufacturer: " & drvInfo.ManufacturerName & CrLf & _
-                                                       "- Hardware architecture: " & CastDismArchitecture(drvInfo.Architecture))
+                                                       "- Hardware architecture: " & Casters.CastDismArchitecture(drvInfo.Architecture))
                                 Next
                             ElseIf drvInfoCollection.Count > 10 Then
                                 LogView.AppendText(CrLf & CrLf & _

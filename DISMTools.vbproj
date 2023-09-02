@@ -580,6 +580,7 @@
     <Compile Include="Panels\Unattend_Files\Management\UnattendMgr.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Utilities\DT_Utils.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Actions\Actions.MainForm.resx">

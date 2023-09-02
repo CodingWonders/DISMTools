@@ -4,6 +4,7 @@ Imports Microsoft.Dism
 Imports System.Threading
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.Text.Encoding
+Imports DISMTools.Utilities
 
 Public Class GetImgInfoDlg
 
@@ -221,32 +222,12 @@ Public Class GetImgInfoDlg
     End Sub
 
     Sub DisplayImageInfo(Index As Integer)
-        'Label23.Text = ImageInfoList(Index).ProductVersion.ToString()
-        'Label25.Text = ImageInfoList(Index).ImageName
-        'Label35.Text = ImageInfoList(Index).ImageDescription
-
         Label23.Text = ImageInfoList(Index).ProductVersion.ToString()
         DetectFeatureUpdate(ImageInfoList(Index).ProductVersion)
         Label25.Text = ImageInfoList(Index).ImageName
         Label35.Text = ImageInfoList(Index).ImageDescription
-        Label32.Text = ImageInfoList(Index).ImageSize.ToString("N0") & " bytes (~" & Math.Round(ImageInfoList(Index).ImageSize / (1024 ^ 3), 2) & " GB)"
-        If ImageInfoList(Index).Architecture = DismProcessorArchitecture.None Then
-            Label42.Text = "Unknown"
-        ElseIf ImageInfoList(Index).Architecture = DismProcessorArchitecture.Neutral Then
-            Label42.Text = "Neutral"
-        ElseIf ImageInfoList(Index).Architecture = DismProcessorArchitecture.Intel Then
-            Label42.Text = "x86"
-        ElseIf ImageInfoList(Index).Architecture = DismProcessorArchitecture.IA64 Then
-            ' I'm not sure what systems run Itanium versions of Windows, but still
-            Label42.Text = "Itanium (64-bit)"
-        ElseIf ImageInfoList(Index).Architecture = DismProcessorArchitecture.ARM64 Then
-            Label42.Text = "ARM64"
-        ElseIf ImageInfoList(Index).Architecture = DismProcessorArchitecture.ARM Then
-            ' This must be the case on Windows RT images
-            Label42.Text = "ARM"
-        ElseIf ImageInfoList(Index).Architecture = DismProcessorArchitecture.AMD64 Then
-            Label42.Text = "x64"
-        End If
+        Label32.Text = ImageInfoList(Index).ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(ImageInfoList(Index).ImageSize) & ")"
+        Label42.Text = Casters.CastDismArchitecture(ImageInfoList(Index).Architecture, True)
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
