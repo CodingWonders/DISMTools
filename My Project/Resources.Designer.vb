@@ -1776,16 +1776,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Changes from last preview
+        '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''Bugfixes
+        '''- Fixed an issue that caused the AppX package addition dialog to show up on projects with Windows 7 images loaded
         '''
-        '''- Fixed an issue that caused the automatic program updater to not hide if it couldn&apos;t check for updates
-        '''- Fixed an issue where the driver information dialog didn&apos;t wait for the background processes to finish
-        '''- Fixed a couple of bugs in the DISM Configuration List Editor
-        '''- The splitter distance in the split panels of the project window has been increased
-        '''- The program no longer allows you to mount an already mounted image
-        '''- The CLI version of the mounted image ma [resto de la cadena truncado]&quot;;.
+        '''New features
+        '''
+        '''- CODE: introduced the &quot;Utilities&quot; namespace, which removes duplicate functions and puts the original ones in a centralized location
+        '''- The package addition operation now shows a correct representation of the release type
+        '''- The capability information dialog now represents download and install sizes correctly, in case a capability&apos;s sizes need to be shown in kiloby [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
