@@ -10440,4 +10440,8 @@ Public Class MainForm
     Private Sub Notifications_BalloonTipClosed(sender As Object, e As EventArgs) Handles Notifications.BalloonTipClosed
         Notifications.Visible = False
     End Sub
+
+    Private Sub SplitImage_Click(sender As Object, e As EventArgs) Handles SplitImage.Click
+        ImgSplit.ShowDialog()
+    End Sub
 End Class

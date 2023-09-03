@@ -277,6 +277,12 @@ Public Class ProgressPanel
     ' OperationNum: 18
     Public remountisReadOnly As Boolean                     ' Determine whether the remount happened because of a read-only mounted image
 
+    ' OperationNum: 20
+    Public SWMSplitSourceFile As String                     ' Source image file to be split into SWM files
+    Public SWMSplitFileSize As Integer                      ' The maximum size in MB for each created image
+    Public SWMSplitTargetFile As String                     ' The path of the SWM files
+    Public SWMSplitCheckIntegrity As Boolean                ' Checks the integrity of the source image before splitting it
+
     ' OperationNum: 21
     Public UMountImgIndex As Integer
     Public ProgramIsBeingClosed As Boolean
@@ -518,6 +524,8 @@ Public Class ProgressPanel
         ElseIf opNum = 15 Then
             taskCount = 1
         ElseIf opNum = 18 Then
+            taskCount = 1
+        ElseIf opNum = 20 Then
             taskCount = 1
         ElseIf opNum = 21 Then
             taskCount = 1
@@ -1010,22 +1018,6 @@ Public Class ProgressPanel
             Else
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
-            'If CaptureMountDestImg Then
-            '    AllPB.Value = AllPB.Value + (AllPB.Maximum / taskCount)
-            '    currentTCont += 1
-            '    taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
-            '    If ImgIndex = 0 Then
-            '        ImgIndex = 1
-            '        UMountImgIndex = ImgIndex
-            '    End If
-            '    RunOps(21)
-            '    AllPB.Value = AllPB.Value + (AllPB.Maximum / taskCount)
-            '    currentTCont += 1
-            '    taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
-            '    RunOps(15)
-            '    'MainForm.UpdateProjProperties(False, False)
-            '    'MainForm.SaveDTProj()
-            'End If
         ElseIf opNum = 8 Then
             Select Case Language
                 Case 0
@@ -1332,6 +1324,58 @@ Public Class ProgressPanel
             Else
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
+        ElseIf opNum = 20 Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Splitting image..."
+                            currentTask.Text = "Splitting WIM file..."
+                        Case "ESN"
+                            allTasks.Text = "Dividiendo imagen..."
+                            currentTask.Text = "Dividiendo archivo WIM..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Splitting image..."
+                    currentTask.Text = "Splitting WIM file..."
+                Case 2
+                    allTasks.Text = "Dividiendo imagen..."
+                    currentTask.Text = "Dividiendo archivo WIM..."
+            End Select
+            LogView.AppendText(CrLf & "Splitting WIM file into SWM files..." & CrLf & _
+                               "- Source image file to split: " & Quote & SWMSplitSourceFile & Quote & CrLf & _
+                               "- Maximum size of the split images (in MB): " & SWMSplitFileSize & " MB" & CrLf & _
+                               "- Name and path of the target SWM file: " & Quote & SWMSplitTargetFile & Quote & CrLf & _
+                               "- Check integrity before splitting this image? " & If(SWMSplitCheckIntegrity, "Yes", "No") & CrLf & CrLf & _
+                               "Do note that, if the image contains a large file that can't fit within the maximum size, a SWM file may be larger than the rest, to accommodate it." & CrLf)
+            ' Check the DISM version, as the Windows 7 version doesn't allow this action
+            DISMProc.StartInfo.FileName = DismProgram
+            Select Case DismVersionChecker.ProductMajorPart
+                Case 6
+                    Select Case DismVersionChecker.ProductMinorPart
+                        Case 1
+                            ' Not supported
+                        Case Is >= 2
+                            CommandArgs &= " /split-image /imagefile=" & Quote & SWMSplitSourceFile & Quote & " /swmfile=" & Quote & SWMSplitTargetFile & Quote & " /filesize=" & SWMSplitFileSize & If(SWMSplitCheckIntegrity, " /checkintegrity", "")
+                    End Select
+                Case 10
+                    CommandArgs &= " /split-image /imagefile=" & Quote & SWMSplitSourceFile & Quote & " /swmfile=" & Quote & SWMSplitTargetFile & Quote & " /filesize=" & SWMSplitFileSize & If(SWMSplitCheckIntegrity, " /checkintegrity", "")
+            End Select
+            DISMProc.StartInfo.Arguments = CommandArgs
+            DISMProc.Start()
+            DISMProc.WaitForExit()
+            LogView.AppendText(CrLf & "Getting error level...")
+            If Hex(DISMProc.ExitCode).Length < 8 Then
+                errCode = DISMProc.ExitCode
+            Else
+                errCode = Hex(DISMProc.ExitCode)
+            End If
+            If errCode.Length >= 8 Then
+                LogView.AppendText(" Error level : 0x" & errCode)
+            Else
+                LogView.AppendText(" Error level : " & errCode)
+            End If
+            GetErrorCode(False)
         ElseIf opNum = 21 Then
             Select Case Language
                 Case 0
@@ -4023,6 +4067,9 @@ Public Class ProgressPanel
                     End If
                     MainForm.isModified = False
                 End If
+            ElseIf OperationNum = 20 Then
+                MainForm.DetectMountedImages(False)
+
             ElseIf OperationNum = 21 Then
                 If MainForm.isProjectLoaded And MountDir = MainForm.MountDir Or RandomMountDir = MainForm.MountDir Then
                     MainForm.bwBackgroundProcessAction = 0

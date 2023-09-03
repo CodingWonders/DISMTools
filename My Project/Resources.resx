@@ -1107,4 +1107,7 @@ New features
 - The package addition operation now shows a correct representation of the release type
 - The capability information dialog now represents download and install sizes correctly, in case a capability's sizes need to be shown in kilobytes</value>
   </data>
+  <data name="split_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\split_img.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
