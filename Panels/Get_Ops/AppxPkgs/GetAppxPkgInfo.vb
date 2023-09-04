@@ -6,6 +6,8 @@ Imports DISMTools.Utilities
 Public Class GetAppxPkgInfoDlg
 
     Public InstalledAppxPkgInfo As DismAppxPackageCollection
+    Dim mainAsset As String = ""
+    Dim assetDir As String = ""
 
     Private Sub GetAppxPkgInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language
@@ -115,8 +117,9 @@ Public Class GetAppxPkgInfoDlg
     End Sub
 
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged
-        Dim mainAsset As String = ""
-        Dim assetDir As String = ""
+        Label10.Visible = True
+        mainAsset = ""
+        assetDir = ""
         If ListBox1.SelectedItems.Count = 1 Then
             If MainForm.imgAppxPackageNames.Count > InstalledAppxPkgInfo.Count Then
                 Label23.Text = MainForm.imgAppxPackageNames(ListBox1.SelectedIndex)
@@ -187,6 +190,7 @@ Public Class GetAppxPkgInfoDlg
                     PictureBox2.SizeMode = PictureBoxSizeMode.CenterImage
                 End If
             Else
+                Label10.Visible = False
                 PictureBox2.SizeMode = PictureBoxSizeMode.CenterImage
             End If
             If mainAsset <> "" And File.Exists(mainAsset) Then PictureBox2.Image = Image.FromFile(mainAsset) Else PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.preview_unavail_dark, My.Resources.preview_unavail_light)
@@ -228,8 +232,10 @@ Public Class GetAppxPkgInfoDlg
     End Sub
 
     Private Sub PictureBox2_MouseClick(sender As Object, e As MouseEventArgs) Handles PictureBox2.MouseClick
-        If e.Button = Windows.Forms.MouseButtons.Right Then
-            MainForm.AppxResCMS.Show(sender, e.Location)
+        If mainAsset <> "" And File.Exists(mainAsset) Then
+            If e.Button = Windows.Forms.MouseButtons.Right Then
+                MainForm.AppxResCMS.Show(sender, e.Location)
+            End If
         End If
     End Sub
 End Class

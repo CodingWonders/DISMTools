@@ -10375,6 +10375,7 @@ Public Class MainForm
     End Sub
 
     Private Sub SaveResourceToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaveResourceToolStripMenuItem.Click
+        If OnlineManagement Then AppxResSFD.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures) Else AppxResSFD.InitialDirectory = projPath
         AppxResSFD.FileName = GetAppxPkgInfoDlg.Label25.Text
         AppxResSFD.ShowDialog()
     End Sub
