@@ -1,5 +1,6 @@
 ﻿Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.ControlChars
+Imports System.Threading
 
 Public Class SingleImageIndexError
 
@@ -59,5 +60,21 @@ Public Class SingleImageIndexError
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         Beep()
+    End Sub
+
+    Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
+        Visible = False
+        GetImgInfoDlg.RadioButton1.Checked = False
+        GetImgInfoDlg.RadioButton2.Checked = True
+        ' Go through the mounted image listings to find the appropriate image
+        If MainForm.MountedImageImgFiles.Count > 0 Then
+            For x = 0 To Array.LastIndexOf(MainForm.MountedImageImgFiles, MainForm.MountedImageImgFiles.Last)
+                If MainForm.MountedImageMountDirs(x) = MainForm.MountDir Then
+                    GetImgInfoDlg.TextBox1.Text = MainForm.MountedImageImgFiles(x)
+                    Exit For
+                End If
+            Next
+        End If
+        GetImgInfoDlg.ShowDialog(MainForm)
     End Sub
 End Class

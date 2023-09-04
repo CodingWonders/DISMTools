@@ -452,6 +452,6 @@ Public Class GetImgInfoDlg
     End Sub
 
     Private Sub GetImgInfoDlg_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+        If Not MainForm.MountedImageDetectorBW.IsBusy And Not PleaseWaitDialog.Visible Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
     End Sub
 End Class
