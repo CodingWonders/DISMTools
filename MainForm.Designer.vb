@@ -3254,7 +3254,7 @@ Partial Class MainForm
         '
         Me.TreeViewCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExpandToolStripMenuItem, Me.AccessDirectoryToolStripMenuItem, Me.ToolStripSeparator23, Me.UnloadProjectToolStripMenuItem1, Me.ToolStripSeparator24, Me.CopyDeploymentToolsToolStripMenuItem, Me.ToolStripSeparator27, Me.ImageOperationsToolStripMenuItem, Me.ToolStripSeparator30, Me.UnattendedAnswerFilesToolStripMenuItem1, Me.ToolStripSeparator31, Me.ScratchDirectorySettingsToolStripMenuItem, Me.ToolStripSeparator32, Me.ManageReportsToolStripMenuItem, Me.ToolStripSeparator33, Me.AddToolStripMenuItem})
         Me.TreeViewCMS.Name = "TreeViewCMS"
-        Me.TreeViewCMS.Size = New System.Drawing.Size(219, 266)
+        Me.TreeViewCMS.Size = New System.Drawing.Size(219, 244)
         '
         'ExpandToolStripMenuItem
         '

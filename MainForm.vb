@@ -10426,4 +10426,12 @@ Public Class MainForm
     Private Sub SplitImage_Click(sender As Object, e As EventArgs) Handles SplitImage.Click
         ImgSplit.ShowDialog()
     End Sub
+
+    Private Sub Notifications_BalloonTipClicked(sender As Object, e As EventArgs) Handles Notifications.BalloonTipClicked
+        If Notifications.BalloonTipText.Contains("saved") Or Notifications.BalloonTipText.Contains("guardado") Then
+            If File.Exists(AppxResSFD.FileName) Then
+                Process.Start(AppxResSFD.FileName)
+            End If
+        End If
+    End Sub
 End Class
