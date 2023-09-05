@@ -428,6 +428,11 @@ Public Class GetImgInfoDlg
         Else
             TextBox1.Enabled = True
             Button1.Enabled = True
+
+            ' If the user had specified an image file, get information of it immediately
+            If TextBox1.Text <> "" And File.Exists(TextBox1.Text) Then
+                GetImageInfo(TextBox1.Text)
+            End If
         End If
     End Sub
 
