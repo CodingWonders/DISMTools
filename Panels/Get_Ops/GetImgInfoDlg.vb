@@ -395,14 +395,14 @@ Public Class GetImgInfoDlg
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENG"
-                        Label23.Text &= CrLf & "(feature update: " & FeatUpd & ")"
+                        Label23.Text &= " (feature update: " & FeatUpd & ")"
                     Case "ESN"
-                        Label23.Text &= CrLf & "(actualización de características: " & FeatUpd & ")"
+                        Label23.Text &= " (actualización de características: " & FeatUpd & ")"
                 End Select
             Case 1
-                Label23.Text &= CrLf & "(feature update: " & FeatUpd & ")"
+                Label23.Text &= " (feature update: " & FeatUpd & ")"
             Case 2
-                Label23.Text &= CrLf & "(actualización de características: " & FeatUpd & ")"
+                Label23.Text &= " (actualización de características: " & FeatUpd & ")"
         End Select
     End Sub
 
