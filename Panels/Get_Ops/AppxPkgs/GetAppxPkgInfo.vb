@@ -210,17 +210,33 @@ Public Class GetAppxPkgInfoDlg
                             SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
                             SplitPaths.RemoveAt(SplitPaths.Count - 1)
                             Dim newPath As String = String.Join("\", SplitPaths)
-                            Label7.Text = assetDir & "\" & newPath
+                            Label7.Text = (assetDir & "\" & newPath).Replace("\\", "\").Trim()
+                            Exit For
+                        End If
+                    Next
+                End If
+            Else
+                If File.Exists(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & Label23.Text & "\AppxManifest.xml") Then
+                    Dim ManFile As New RichTextBox() With {
+                        .Text = File.ReadAllText(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & Label23.Text & "\AppxManifest.xml")
+                    }
+                    For Each line In ManFile.Lines
+                        If line.Contains("<Logo>") Then
+                            Dim SplitPaths As New List(Of String)
+                            SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
+                            SplitPaths.RemoveAt(SplitPaths.Count - 1)
+                            Dim newPath As String = String.Join("\", SplitPaths)
+                            Label7.Text = (If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & Label23.Text & "\" & newPath).Replace("\\", "\").Trim()
                             Exit For
                         End If
                     Next
                 End If
             End If
-            Label3.Text = If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & Label23.Text
+            Label3.Text = (If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & Label23.Text).Replace("\\", "\").Trim()
             Dim pkgDirs() As String = Directory.GetDirectories(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps", Label23.Text & "*", SearchOption.TopDirectoryOnly)
             For Each folder In pkgDirs
                 If Not folder.Contains("neutral") Then
-                    Label5.Text = folder & "\AppxManifest.xml"
+                    Label5.Text = (folder & "\AppxManifest.xml").Replace("\\", "\").Trim()
                 End If
             Next
             Panel4.Visible = True
