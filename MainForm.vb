@@ -1743,7 +1743,7 @@ Public Class MainForm
                             RemountImageWithWritePermissionsToolStripMenuItem.Enabled = If(MountedImageMountedReWr(x) = 0, False, True)
                             Button2.Enabled = If(MountedImageMountedReWr(x) = 0, True, False)
                             Button3.Enabled = If(MountedImageMountedReWr(x) = 0, True, False)
-                            Button4.Enabled = If(MountedImageMountedReWr(x) = 0, True, False)
+                            Button4.Enabled = True
                             Exit For
                         End If
                     Next
@@ -7867,6 +7867,17 @@ Public Class MainForm
     End Sub
 
     Private Sub Button16_Click(sender As Object, e As EventArgs) Handles Button16.Click
+        ' If it's a read only image, directly unmount it discarding changes
+        If MountedImageImgFiles.Count > 0 Then
+            For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
+                If MountedImageMountDirs(x) = MountDir Then
+                    If MountedImageMountedReWr(x) = 1 Then
+                        Button4.PerformClick()
+                        Exit Sub
+                    End If
+                End If
+            Next
+        End If
         ImgUMount.RadioButton1.Checked = True
         ImgUMount.RadioButton2.Checked = False
         ImgUMount.ShowDialog()
@@ -9052,7 +9063,7 @@ Public Class MainForm
                             If MountedImageMountDirs(x) = MountDir Then
                                 ImgIndex = MountedImageImgIndexes(x)
                                 SourceImg = MountedImageImgFiles(x)
-                                IIf(MountedImageMountedReWr(x) = "Yes", isReadOnly = False, isReadOnly = True)
+                                IIf(MountedImageMountedReWr(x) = 1, isReadOnly = False, isReadOnly = True)
                             End If
                         Next
                     Catch ex As Exception
