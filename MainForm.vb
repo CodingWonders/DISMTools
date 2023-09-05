@@ -9041,36 +9041,27 @@ Public Class MainForm
     End Sub
 
     Private Sub LinkLabel3_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel3.LinkClicked
-        If LocalMountDirFBD.ShowDialog() = Windows.Forms.DialogResult.OK And LocalMountDirFBD.SelectedPath <> "" Then
-            If MountedImageMountDirs.Contains(LocalMountDirFBD.SelectedPath) Then
-                MountDir = LocalMountDirFBD.SelectedPath
-                Try
-                    For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
-                        If MountedImageMountDirs(x) = MountDir Then
-                            ImgIndex = MountedImageImgIndexes(x)
-                            SourceImg = MountedImageImgFiles(x)
-                            IIf(MountedImageMountedReWr(x) = "Yes", isReadOnly = False, isReadOnly = True)
-                        End If
-                    Next
-                Catch ex As Exception
-                    Exit Try
-                End Try
-                UpdateProjProperties(True, If(isReadOnly, True, False))
-                SaveDTProj()
+        PopupImageManager.Location = LinkLabel3.PointToScreen(Point.Empty)
+        PopupImageManager.Top -= PopupImageManager.Height
+        If PopupImageManager.ShowDialog() = DialogResult.OK Then
+            If MountedImageMountDirs.Count > 0 Then
+                MountDir = PopupImageManager.selectedMntDir
+                If MountedImageMountDirs.Count > 0 Then
+                    Try
+                        For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
+                            If MountedImageMountDirs(x) = MountDir Then
+                                ImgIndex = MountedImageImgIndexes(x)
+                                SourceImg = MountedImageImgFiles(x)
+                                IIf(MountedImageMountedReWr(x) = "Yes", isReadOnly = False, isReadOnly = True)
+                            End If
+                        Next
+                    Catch ex As Exception
+                        Exit Try
+                    End Try
+                    UpdateProjProperties(True, If(isReadOnly, True, False))
+                    SaveDTProj()
+                End If
             Else
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                MsgBox("The selected directory doesn't contain a mounted Windows image. Please specify a mount directory and try again.", vbOKOnly + vbCritical, Text)
-                            Case "ESN"
-                                MsgBox("El directorio seleccionado no contiene una imagen de Windows montada. Especifique un directorio de montaje e inténtelo de nuevo.", vbOKOnly + vbCritical, Text)
-                        End Select
-                    Case 1
-                        MsgBox("The selected directory doesn't contain a mounted Windows image. Please specify a mount directory and try again.", vbOKOnly + vbCritical, Text)
-                    Case 2
-                        MsgBox("El directorio seleccionado no contiene una imagen de Windows montada. Especifique un directorio de montaje e inténtelo de nuevo.", vbOKOnly + vbCritical, Text)
-                End Select
                 Exit Sub
             End If
         End If
