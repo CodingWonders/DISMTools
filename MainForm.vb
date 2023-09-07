@@ -6103,6 +6103,7 @@ Public Class MainForm
             Case 2
                 Label5.Text = "Sí"
         End Select
+        UnpopulateProjectTree()
         HomePanel.Visible = False
         PrjPanel.Visible = True
         SplitPanels.Visible = True

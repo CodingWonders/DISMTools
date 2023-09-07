@@ -217,7 +217,7 @@ Public Class GetDriverInfo
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         InstalledDriverList.Clear()
         ListView1.Items.Clear()
-        If InstalledDriverList.Count >= 0 Then
+        If InstalledDriverInfo.Count > 0 Then
             For Each DriverPackage As DismDriverPackage In InstalledDriverInfo
                 InstalledDriverList.Add(DriverPackage)
                 ListView1.Items.Add(New ListViewItem(New String() {DriverPackage.PublishedName, Path.GetFileName(DriverPackage.OriginalFileName)}))
