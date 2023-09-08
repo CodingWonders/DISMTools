@@ -376,6 +376,8 @@ Public Class AddProvAppxPackage
         Button9.Enabled = False
         NoAppxFilePanel.Visible = True
         AppxFilePanel.Visible = False
+        AppxDetailsPanel.Height = 520
+        FlowLayoutPanel1.Visible = False
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
@@ -966,6 +968,10 @@ Public Class AddProvAppxPackage
         If ListView1.FocusedItem.Text <> "" Then
             Packages.RemoveAt(ListView1.FocusedItem.Index)
             ListView1.Items.Remove(ListView1.FocusedItem)
+            NoAppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, True, False)
+            AppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, False, True)
+            AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
+            FlowLayoutPanel1.Visible = If(ListView1.SelectedItems.Count <= 0, False, True)
         End If
     End Sub
 
