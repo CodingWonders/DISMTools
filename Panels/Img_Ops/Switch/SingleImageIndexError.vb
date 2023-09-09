@@ -64,17 +64,8 @@ Public Class SingleImageIndexError
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
         Visible = False
-        GetImgInfoDlg.RadioButton1.Checked = False
-        GetImgInfoDlg.RadioButton2.Checked = True
-        ' Go through the mounted image listings to find the appropriate image
-        If MainForm.MountedImageImgFiles.Count > 0 Then
-            For x = 0 To Array.LastIndexOf(MainForm.MountedImageImgFiles, MainForm.MountedImageImgFiles.Last)
-                If MainForm.MountedImageMountDirs(x) = MainForm.MountDir Then
-                    GetImgInfoDlg.TextBox1.Text = MainForm.MountedImageImgFiles(x)
-                    Exit For
-                End If
-            Next
-        End If
+        GetImgInfoDlg.RadioButton1.Checked = True
+        GetImgInfoDlg.RadioButton2.Checked = False
         GetImgInfoDlg.ShowDialog(MainForm)
     End Sub
 End Class
