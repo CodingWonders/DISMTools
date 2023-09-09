@@ -1099,13 +1099,24 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes
 
-- Fixed an issue that caused the AppX package addition dialog to show up on projects with Windows 7 images loaded
+- Fixed a translation issue in the Configuration List Editor
+- Fixed an issue where the AppX package information dialog would not show the path of the store logo assets and the path to the package manifest for some applications
+- Fixed an issue where the path roots of the AppX package information dialog contained double backslashes ("\\")
+- Fixed an issue where the driver information dialog threw an exception when loading in some cases
+- Fixed an issue where the project tree view would not be cleared when entering the online installation management mode
+- Fixed an issue where the "no selected items" panel of the AppX package addition dialog would not be resized when removing an entry or clearing all entries
+- The AppX package information dialog no longer allows you to copy the "Asset Unavailable" resource
+- The AppX package removal dialog no longer appends " (Cortana)" to the entry: "Microsoft.549981C3F5F10"
 
 New features
 
-- CODE: introduced the "Utilities" namespace, which removes duplicate functions and puts the original ones in a centralized location
-- The package addition operation now shows a correct representation of the release type
-- The capability information dialog now represents download and install sizes correctly, in case a capability's sizes need to be shown in kilobytes</value>
+- Introduced the image split dialog
+- The image information dialog can now be opened from the single image index error dialog
+- In the online installation management mode, the AppX resource save dialog now defaults to the user's Pictures library and will default to the project directory otherwise
+- The existing mount directory link now opens the mounted image picker instead of the folder browser
+- The program immediately gets information about an image file now when selecting "Another image" in the image information dialog, if it had been specified
+- You can now click the AppX resource save notification to view the resource
+- The program directly unmounts read-only mounted images discarding changes when clicking the "Unmount image" button</value>
   </data>
   <data name="split_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\split_img.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

@@ -1788,13 +1788,11 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''- Fixed an issue that caused the AppX package addition dialog to show up on projects with Windows 7 images loaded
-        '''
-        '''New features
-        '''
-        '''- CODE: introduced the &quot;Utilities&quot; namespace, which removes duplicate functions and puts the original ones in a centralized location
-        '''- The package addition operation now shows a correct representation of the release type
-        '''- The capability information dialog now represents download and install sizes correctly, in case a capability&apos;s sizes need to be shown in kiloby [resto de la cadena truncado]&quot;;.
+        '''- Fixed a translation issue in the Configuration List Editor
+        '''- Fixed an issue where the AppX package information dialog would not show the path of the store logo assets and the path to the package manifest for some applications
+        '''- Fixed an issue where the path roots of the AppX package information dialog contained double backslashes (&quot;\\&quot;)
+        '''- Fixed an issue where the driver information dialog threw an exception when loading in some cases
+        '''- Fixed an issue where the project tree view would not b [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
