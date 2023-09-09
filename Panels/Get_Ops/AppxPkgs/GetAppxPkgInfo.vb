@@ -6,6 +6,8 @@ Imports DISMTools.Utilities
 Public Class GetAppxPkgInfoDlg
 
     Public InstalledAppxPkgInfo As DismAppxPackageCollection
+    Dim mainAsset As String = ""
+    Dim assetDir As String = ""
 
     Private Sub GetAppxPkgInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language
@@ -115,8 +117,9 @@ Public Class GetAppxPkgInfoDlg
     End Sub
 
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged
-        Dim mainAsset As String = ""
-        Dim assetDir As String = ""
+        Label10.Visible = True
+        mainAsset = ""
+        assetDir = ""
         If ListBox1.SelectedItems.Count = 1 Then
             If MainForm.imgAppxPackageNames.Count > InstalledAppxPkgInfo.Count Then
                 Label23.Text = MainForm.imgAppxPackageNames(ListBox1.SelectedIndex)
@@ -187,6 +190,7 @@ Public Class GetAppxPkgInfoDlg
                     PictureBox2.SizeMode = PictureBoxSizeMode.CenterImage
                 End If
             Else
+                Label10.Visible = False
                 PictureBox2.SizeMode = PictureBoxSizeMode.CenterImage
             End If
             If mainAsset <> "" And File.Exists(mainAsset) Then PictureBox2.Image = Image.FromFile(mainAsset) Else PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.preview_unavail_dark, My.Resources.preview_unavail_light)
@@ -206,19 +210,44 @@ Public Class GetAppxPkgInfoDlg
                             SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
                             SplitPaths.RemoveAt(SplitPaths.Count - 1)
                             Dim newPath As String = String.Join("\", SplitPaths)
-                            Label7.Text = assetDir & "\" & newPath
+                            Label7.Text = (assetDir & "\" & newPath).Replace("\\", "\").Trim()
+                            Exit For
+                        End If
+                    Next
+                End If
+            Else
+                If File.Exists(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & Label23.Text & "\AppxManifest.xml") Then
+                    Dim ManFile As New RichTextBox() With {
+                        .Text = File.ReadAllText(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & Label23.Text & "\AppxManifest.xml")
+                    }
+                    For Each line In ManFile.Lines
+                        If line.Contains("<Logo>") Then
+                            Dim SplitPaths As New List(Of String)
+                            SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
+                            SplitPaths.RemoveAt(SplitPaths.Count - 1)
+                            Dim newPath As String = String.Join("\", SplitPaths)
+                            Label7.Text = (If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & Label23.Text & "\" & newPath).Replace("\\", "\").Trim()
                             Exit For
                         End If
                     Next
                 End If
             End If
-            Label3.Text = If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & Label23.Text
+            Label3.Text = (If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & Label23.Text).Replace("\\", "\").Trim()
             Dim pkgDirs() As String = Directory.GetDirectories(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps", Label23.Text & "*", SearchOption.TopDirectoryOnly)
             For Each folder In pkgDirs
                 If Not folder.Contains("neutral") Then
-                    Label5.Text = folder & "\AppxManifest.xml"
+                    Label5.Text = (folder & "\AppxManifest.xml").Replace("\\", "\").Trim()
                 End If
             Next
+            If pkgDirs.Count <= 1 And Not Label5.Text.Contains(Label23.Text) Then
+                If File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml") Then
+                    Label5.Text = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml"
+                ElseIf File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml") Then
+                    Label5.Text = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml"
+                Else
+                    Label5.Text = ""
+                End If
+            End If
             Panel4.Visible = True
             Panel7.Visible = False
         Else
@@ -228,8 +257,10 @@ Public Class GetAppxPkgInfoDlg
     End Sub
 
     Private Sub PictureBox2_MouseClick(sender As Object, e As MouseEventArgs) Handles PictureBox2.MouseClick
-        If e.Button = Windows.Forms.MouseButtons.Right Then
-            MainForm.AppxResCMS.Show(sender, e.Location)
+        If mainAsset <> "" And File.Exists(mainAsset) Then
+            If e.Button = Windows.Forms.MouseButtons.Right Then
+                MainForm.AppxResCMS.Show(sender, e.Location)
+            End If
         End If
     End Sub
 End Class

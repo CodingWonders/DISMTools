@@ -395,14 +395,14 @@ Public Class GetImgInfoDlg
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENG"
-                        Label23.Text &= CrLf & "(feature update: " & FeatUpd & ")"
+                        Label23.Text &= " (feature update: " & FeatUpd & ")"
                     Case "ESN"
-                        Label23.Text &= CrLf & "(actualización de características: " & FeatUpd & ")"
+                        Label23.Text &= " (actualización de características: " & FeatUpd & ")"
                 End Select
             Case 1
-                Label23.Text &= CrLf & "(feature update: " & FeatUpd & ")"
+                Label23.Text &= " (feature update: " & FeatUpd & ")"
             Case 2
-                Label23.Text &= CrLf & "(actualización de características: " & FeatUpd & ")"
+                Label23.Text &= " (actualización de características: " & FeatUpd & ")"
         End Select
     End Sub
 
@@ -428,6 +428,11 @@ Public Class GetImgInfoDlg
         Else
             TextBox1.Enabled = True
             Button1.Enabled = True
+
+            ' If the user had specified an image file, get information of it immediately
+            If TextBox1.Text <> "" And File.Exists(TextBox1.Text) Then
+                GetImageInfo(TextBox1.Text)
+            End If
         End If
     End Sub
 
@@ -452,6 +457,6 @@ Public Class GetImgInfoDlg
     End Sub
 
     Private Sub GetImgInfoDlg_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+        If Not MainForm.MountedImageDetectorBW.IsBusy And Not PleaseWaitDialog.Visible Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
     End Sub
 End Class

@@ -1743,7 +1743,7 @@ Public Class MainForm
                             RemountImageWithWritePermissionsToolStripMenuItem.Enabled = If(MountedImageMountedReWr(x) = 0, False, True)
                             Button2.Enabled = If(MountedImageMountedReWr(x) = 0, True, False)
                             Button3.Enabled = If(MountedImageMountedReWr(x) = 0, True, False)
-                            Button4.Enabled = If(MountedImageMountedReWr(x) = 0, True, False)
+                            Button4.Enabled = True
                             Exit For
                         End If
                     Next
@@ -6103,6 +6103,7 @@ Public Class MainForm
             Case 2
                 Label5.Text = "Sí"
         End Select
+        UnpopulateProjectTree()
         HomePanel.Visible = False
         PrjPanel.Visible = True
         SplitPanels.Visible = True
@@ -7867,6 +7868,17 @@ Public Class MainForm
     End Sub
 
     Private Sub Button16_Click(sender As Object, e As EventArgs) Handles Button16.Click
+        ' If it's a read only image, directly unmount it discarding changes
+        If MountedImageImgFiles.Count > 0 Then
+            For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
+                If MountedImageMountDirs(x) = MountDir Then
+                    If MountedImageMountedReWr(x) = 1 Then
+                        Button4.PerformClick()
+                        Exit Sub
+                    End If
+                End If
+            Next
+        End If
         ImgUMount.RadioButton1.Checked = True
         ImgUMount.RadioButton2.Checked = False
         ImgUMount.ShowDialog()
@@ -8990,16 +9002,6 @@ Public Class MainForm
             For x = 0 To Array.LastIndexOf(imgAppxPackageNames, imgAppxPackageNames.Last)
                 If imgAppxPackageNames(x) = "" Or imgAppxPackageNames(x) = "Nothing" Then
                     Continue For
-                ElseIf imgAppxPackageNames(x).Contains("549981C3F5F10") Then
-                    If Directory.Exists(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x)) Then
-                        If My.Computer.FileSystem.GetFiles(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
-                            RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x) & " (Cortana)", imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "No"}))
-                        Else
-                            RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x) & " (Cortana)", imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "Yes"}))
-                        End If
-                    Else
-                        RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x) & " (Cortana)", imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "No"}))
-                    End If
                 Else
                     If Directory.Exists(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x)) Then
                         If My.Computer.FileSystem.GetFiles(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
@@ -9051,36 +9053,27 @@ Public Class MainForm
     End Sub
 
     Private Sub LinkLabel3_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel3.LinkClicked
-        If LocalMountDirFBD.ShowDialog() = Windows.Forms.DialogResult.OK And LocalMountDirFBD.SelectedPath <> "" Then
-            If MountedImageMountDirs.Contains(LocalMountDirFBD.SelectedPath) Then
-                MountDir = LocalMountDirFBD.SelectedPath
-                Try
-                    For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
-                        If MountedImageMountDirs(x) = MountDir Then
-                            ImgIndex = MountedImageImgIndexes(x)
-                            SourceImg = MountedImageImgFiles(x)
-                            IIf(MountedImageMountedReWr(x) = "Yes", isReadOnly = False, isReadOnly = True)
-                        End If
-                    Next
-                Catch ex As Exception
-                    Exit Try
-                End Try
-                UpdateProjProperties(True, If(isReadOnly, True, False))
-                SaveDTProj()
+        PopupImageManager.Location = LinkLabel3.PointToScreen(Point.Empty)
+        PopupImageManager.Top -= PopupImageManager.Height
+        If PopupImageManager.ShowDialog() = DialogResult.OK Then
+            If MountedImageMountDirs.Count > 0 Then
+                MountDir = PopupImageManager.selectedMntDir
+                If MountedImageMountDirs.Count > 0 Then
+                    Try
+                        For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
+                            If MountedImageMountDirs(x) = MountDir Then
+                                ImgIndex = MountedImageImgIndexes(x)
+                                SourceImg = MountedImageImgFiles(x)
+                                IIf(MountedImageMountedReWr(x) = 1, isReadOnly = False, isReadOnly = True)
+                            End If
+                        Next
+                    Catch ex As Exception
+                        Exit Try
+                    End Try
+                    UpdateProjProperties(True, If(isReadOnly, True, False))
+                    SaveDTProj()
+                End If
             Else
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                MsgBox("The selected directory doesn't contain a mounted Windows image. Please specify a mount directory and try again.", vbOKOnly + vbCritical, Text)
-                            Case "ESN"
-                                MsgBox("El directorio seleccionado no contiene una imagen de Windows montada. Especifique un directorio de montaje e inténtelo de nuevo.", vbOKOnly + vbCritical, Text)
-                        End Select
-                    Case 1
-                        MsgBox("The selected directory doesn't contain a mounted Windows image. Please specify a mount directory and try again.", vbOKOnly + vbCritical, Text)
-                    Case 2
-                        MsgBox("El directorio seleccionado no contiene una imagen de Windows montada. Especifique un directorio de montaje e inténtelo de nuevo.", vbOKOnly + vbCritical, Text)
-                End Select
                 Exit Sub
             End If
         End If
@@ -10375,6 +10368,7 @@ Public Class MainForm
     End Sub
 
     Private Sub SaveResourceToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaveResourceToolStripMenuItem.Click
+        If OnlineManagement Then AppxResSFD.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures) Else AppxResSFD.InitialDirectory = projPath
         AppxResSFD.FileName = GetAppxPkgInfoDlg.Label25.Text
         AppxResSFD.ShowDialog()
     End Sub
@@ -10439,5 +10433,17 @@ Public Class MainForm
 
     Private Sub Notifications_BalloonTipClosed(sender As Object, e As EventArgs) Handles Notifications.BalloonTipClosed
         Notifications.Visible = False
+    End Sub
+
+    Private Sub SplitImage_Click(sender As Object, e As EventArgs) Handles SplitImage.Click
+        ImgSplit.ShowDialog()
+    End Sub
+
+    Private Sub Notifications_BalloonTipClicked(sender As Object, e As EventArgs) Handles Notifications.BalloonTipClicked
+        If Notifications.BalloonTipText.Contains("saved") Or Notifications.BalloonTipText.Contains("guardado") Then
+            If File.Exists(AppxResSFD.FileName) Then
+                Process.Start(AppxResSFD.FileName)
+            End If
+        End If
     End Sub
 End Class

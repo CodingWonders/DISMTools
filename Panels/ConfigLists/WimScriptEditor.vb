@@ -703,11 +703,11 @@ Public Class WimScriptEditor
 
     Private Sub ListView3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView3.SelectedIndexChanged
         If ListView3.SelectedItems.Count = 1 Then
-            Button10.Enabled = True
             Button11.Enabled = True
+            Button9.Enabled = True
         Else
-            Button10.Enabled = False
             Button11.Enabled = False
+            Button9.Enabled = False
         End If
     End Sub
 
@@ -830,7 +830,7 @@ Public Class WimScriptEditor
         End If
     End Sub
 
-    Private Sub Button11_Click(sender As Object, e As EventArgs) Handles Button11.Click
+    Private Sub Button11_Click(sender As Object, e As EventArgs) Handles Button9.Click
         AddListEntryDlg.IsForExclusionList = False
         Select Case MainForm.Language
             Case 0
@@ -868,7 +868,7 @@ Public Class WimScriptEditor
         End If
     End Sub
 
-    Private Sub Button10_Click(sender As Object, e As EventArgs) Handles Button10.Click
+    Private Sub Button10_Click(sender As Object, e As EventArgs) Handles Button11.Click
         If ListView3.SelectedItems.Count = 1 Then
             ListView3.Items.Remove(ListView3.FocusedItem)
             UpdateConfigListContents()
@@ -899,7 +899,7 @@ Public Class WimScriptEditor
         Scintilla1.Text = Scintilla1.Text.Replace(EditedLVI, e.Label & CrLf).Trim()
     End Sub
 
-    Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
+    Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button10.Click
         If ListView3.SelectedItems.Count = 1 Then
             Dim LVI As ListViewItem = ListView3.FocusedItem
             LVI.BeginEdit()

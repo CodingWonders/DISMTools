@@ -31,9 +31,9 @@ Partial Class WimScriptEditor
         Me.ConfigFileSettingsPanel = New System.Windows.Forms.Panel()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.ListView3 = New System.Windows.Forms.ListView()
+        Me.Button10 = New System.Windows.Forms.Button()
         Me.Button9 = New System.Windows.Forms.Button()
         Me.Button11 = New System.Windows.Forms.Button()
-        Me.Button10 = New System.Windows.Forms.Button()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.ListView2 = New System.Windows.Forms.ListView()
         Me.Button5 = New System.Windows.Forms.Button()
@@ -141,9 +141,9 @@ Partial Class WimScriptEditor
         Me.GroupBox3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox3.Controls.Add(Me.ListView3)
+        Me.GroupBox3.Controls.Add(Me.Button10)
         Me.GroupBox3.Controls.Add(Me.Button9)
         Me.GroupBox3.Controls.Add(Me.Button11)
-        Me.GroupBox3.Controls.Add(Me.Button10)
         Me.GroupBox3.Location = New System.Drawing.Point(8, 320)
         Me.GroupBox3.Name = "GroupBox3"
         Me.GroupBox3.Size = New System.Drawing.Size(486, 150)
@@ -163,40 +163,40 @@ Partial Class WimScriptEditor
         Me.ListView3.UseCompatibleStateImageBehavior = False
         Me.ListView3.View = System.Windows.Forms.View.List
         '
-        'Button9
-        '
-        Me.Button9.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button9.Enabled = False
-        Me.Button9.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button9.Location = New System.Drawing.Point(405, 50)
-        Me.Button9.Name = "Button9"
-        Me.Button9.Size = New System.Drawing.Size(75, 23)
-        Me.Button9.TabIndex = 1
-        Me.Button9.Text = "Edit..."
-        Me.Button9.UseVisualStyleBackColor = True
-        '
-        'Button11
-        '
-        Me.Button11.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button11.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button11.Location = New System.Drawing.Point(405, 21)
-        Me.Button11.Name = "Button11"
-        Me.Button11.Size = New System.Drawing.Size(75, 23)
-        Me.Button11.TabIndex = 1
-        Me.Button11.Text = "Add..."
-        Me.Button11.UseVisualStyleBackColor = True
-        '
         'Button10
         '
         Me.Button10.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button10.Enabled = False
         Me.Button10.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button10.Location = New System.Drawing.Point(405, 79)
+        Me.Button10.Location = New System.Drawing.Point(405, 50)
         Me.Button10.Name = "Button10"
         Me.Button10.Size = New System.Drawing.Size(75, 23)
         Me.Button10.TabIndex = 1
-        Me.Button10.Text = "Remove"
+        Me.Button10.Text = "Edit..."
         Me.Button10.UseVisualStyleBackColor = True
+        '
+        'Button9
+        '
+        Me.Button9.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button9.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button9.Location = New System.Drawing.Point(405, 21)
+        Me.Button9.Name = "Button9"
+        Me.Button9.Size = New System.Drawing.Size(75, 23)
+        Me.Button9.TabIndex = 1
+        Me.Button9.Text = "Add..."
+        Me.Button9.UseVisualStyleBackColor = True
+        '
+        'Button11
+        '
+        Me.Button11.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button11.Enabled = False
+        Me.Button11.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button11.Location = New System.Drawing.Point(405, 79)
+        Me.Button11.Name = "Button11"
+        Me.Button11.Size = New System.Drawing.Size(75, 23)
+        Me.Button11.TabIndex = 1
+        Me.Button11.Text = "Remove"
+        Me.Button11.UseVisualStyleBackColor = True
         '
         'GroupBox2
         '
@@ -483,9 +483,9 @@ Partial Class WimScriptEditor
     Friend WithEvents ConfigFileSettingsPanel As System.Windows.Forms.Panel
     Friend WithEvents GroupBox3 As System.Windows.Forms.GroupBox
     Friend WithEvents ListView3 As System.Windows.Forms.ListView
+    Friend WithEvents Button10 As System.Windows.Forms.Button
     Friend WithEvents Button9 As System.Windows.Forms.Button
     Friend WithEvents Button11 As System.Windows.Forms.Button
-    Friend WithEvents Button10 As System.Windows.Forms.Button
     Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
     Friend WithEvents ListView2 As System.Windows.Forms.ListView
     Friend WithEvents Button5 As System.Windows.Forms.Button
