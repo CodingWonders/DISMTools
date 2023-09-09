@@ -239,6 +239,15 @@ Public Class GetAppxPkgInfoDlg
                     Label5.Text = (folder & "\AppxManifest.xml").Replace("\\", "\").Trim()
                 End If
             Next
+            If pkgDirs.Count <= 1 And Not Label5.Text.Contains(Label23.Text) Then
+                If File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml") Then
+                    Label5.Text = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml"
+                ElseIf File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml") Then
+                    Label5.Text = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml"
+                Else
+                    Label5.Text = ""
+                End If
+            End If
             Panel4.Visible = True
             Panel7.Visible = False
         Else
