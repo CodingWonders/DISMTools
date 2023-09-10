@@ -1227,6 +1227,10 @@ Public Class AddProvAppxPackage
                 Path.GetExtension(PackageFile).Equals(".eappx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".emsix", StringComparison.OrdinalIgnoreCase) Or _
                 Path.GetExtension(PackageFile).Equals(".eappxbundle", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".emsixbundle", StringComparison.OrdinalIgnoreCase) Then
                 ScanAppxPackage(False, PackageFile)
+            ElseIf Path.GetExtension(PackageFile).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
+                AppInstallerDownloader.AppInstallerFile = PackageFile
+                If Not File.Exists(PackageFile.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
+                If File.Exists(PackageFile.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, PackageFile.Replace(".appinstaller", ".appxbundle").Trim())
             ElseIf File.GetAttributes(PackageFile) = FileAttributes.Directory Then
                 ' Temporary support for directories
                 If File.Exists(PackageFile & "\AppxSignature.p7x") And File.Exists(PackageFile & "\AppxMetadata\AppxBundleManifest.xml") Or File.Exists(PackageFile & "\AppxManifest.xml") Then
