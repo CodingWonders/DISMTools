@@ -2320,21 +2320,32 @@ Public Class MainForm
                             ' WIMBoot also goes away
                             GetWIMBootEntry.Enabled = False
                             UpdateWIMBootEntry.Enabled = False
+
+                            ' Microsoft Edge stuff, you know what I mean...
+                            MicrosoftEdgeToolStripMenuItem.Enabled = False
                         Case 2
                             Select Case NTVer.Build
                                 Case Is >= 8102
                                     CapabilitiesToolStripMenuItem.Enabled = False
                                     GetWIMBootEntry.Enabled = False
                                     UpdateWIMBootEntry.Enabled = False
+                                    MicrosoftEdgeToolStripMenuItem.Enabled = False
                                 Case Else
                                     AppPackagesToolStripMenuItem.Enabled = False
                                     CapabilitiesToolStripMenuItem.Enabled = False
                                     GetWIMBootEntry.Enabled = False
                                     UpdateWIMBootEntry.Enabled = False
+                                    MicrosoftEdgeToolStripMenuItem.Enabled = False
                             End Select
                         Case 3
                             CapabilitiesToolStripMenuItem.Enabled = False
-
+                            MicrosoftEdgeToolStripMenuItem.Enabled = False
+                    End Select
+                Case 10
+                    Select Case NTVer.Build
+                        Case Is < 21996
+                            ' Microsoft Edge stuff only affects Windows 11
+                            MicrosoftEdgeToolStripMenuItem.Enabled = False
                     End Select
             End Select
             ' Next, detect the DISM version, so that we can determine which things are applicable
@@ -2343,11 +2354,103 @@ Public Class MainForm
                     Select Case DismVer.ProductMinorPart
                         Case 1
                             AppendImage.Enabled = False
-                        Case Is >= 2
-
+                            ApplyFFU.Enabled = False
+                            ApplyImage.Enabled = False
+                            CaptureCustomImage.Enabled = False
+                            CaptureFFU.Enabled = False
+                            CaptureImage.Enabled = False
+                            CleanupMountpoints.Enabled = False
+                            CommitImage.Enabled = False
+                            DeleteImage.Enabled = False
+                            ExportImage.Enabled = False
+                            GetWIMBootEntry.Enabled = False
+                            ListImage.Enabled = False
+                            MountImage.Enabled = False
+                            OptimizeFFU.Enabled = False
+                            OptimizeImage.Enabled = False
+                            RemountImage.Enabled = False
+                            SplitFFU.Enabled = False
+                            SplitImage.Enabled = False
+                            UnmountImage.Enabled = False
+                            UpdateWIMBootEntry.Enabled = False
+                            ApplySiloedPackage.Enabled = False
+                            AddProvisioningPackage.Enabled = False
+                            GetProvisioningPackageInfo.Enabled = False
+                            ApplyCustomDataImage.Enabled = False
+                            GetProvisionedAppxPackages.Enabled = False
+                            AddProvisionedAppxPackage.Enabled = False
+                            RemoveProvisionedAppxPackage.Enabled = False
+                            OptimizeProvisionedAppxPackages.Enabled = False
+                            SetProvisionedAppxDataFile.Enabled = False
+                            ExportDefaultAppAssociations.Enabled = False
+                            GetDefaultAppAssociations.Enabled = False
+                            ImportDefaultAppAssociations.Enabled = False
+                            RemoveDefaultAppAssociations.Enabled = False
+                            AddCapability.Enabled = False
+                            ExportSource.Enabled = False
+                            GetCapabilities.Enabled = False
+                            RemoveCapability.Enabled = False
+                            ExportDriver.Enabled = False
+                            GetOSUninstallWindow.Enabled = False
+                            InitiateOSUninstall.Enabled = False
+                            RemoveOSUninstall.Enabled = False
+                            SetOSUninstallWindow.Enabled = False
+                            SetReservedStorageState.Enabled = False
+                            GetReservedStorageState.Enabled = False
+                            AddEdge.Enabled = False
+                            AddEdgeBrowser.Enabled = False
+                            AddEdgeWebView.Enabled = False
+                        Case 2
+                            CaptureFFU.Enabled = False
+                            GetWIMBootEntry.Enabled = False
+                            OptimizeFFU.Enabled = False
+                            OptimizeImage.Enabled = False
+                            SplitFFU.Enabled = False
+                            UpdateWIMBootEntry.Enabled = False
+                            ApplySiloedPackage.Enabled = False
+                            AddProvisioningPackage.Enabled = False
+                            GetProvisioningPackageInfo.Enabled = False
+                            ApplyCustomDataImage.Enabled = False
+                            OptimizeProvisionedAppxPackages.Enabled = False
+                            AddCapability.Enabled = False
+                            ExportSource.Enabled = False
+                            GetCapabilities.Enabled = False
+                            RemoveCapability.Enabled = False
+                            GetOSUninstallWindow.Enabled = False
+                            InitiateOSUninstall.Enabled = False
+                            RemoveOSUninstall.Enabled = False
+                            SetOSUninstallWindow.Enabled = False
+                            SetReservedStorageState.Enabled = False
+                            GetReservedStorageState.Enabled = False
+                            AddEdge.Enabled = False
+                            AddEdgeBrowser.Enabled = False
+                            AddEdgeWebView.Enabled = False
+                        Case 3
+                            CaptureFFU.Enabled = False
+                            OptimizeFFU.Enabled = False
+                            OptimizeImage.Enabled = False
+                            SplitFFU.Enabled = False
+                            ApplySiloedPackage.Enabled = False
+                            AddProvisioningPackage.Enabled = False
+                            GetProvisioningPackageInfo.Enabled = False
+                            ApplyCustomDataImage.Enabled = False
+                            OptimizeProvisionedAppxPackages.Enabled = False
+                            AddCapability.Enabled = False
+                            ExportSource.Enabled = False
+                            GetCapabilities.Enabled = False
+                            RemoveCapability.Enabled = False
+                            GetOSUninstallWindow.Enabled = False
+                            InitiateOSUninstall.Enabled = False
+                            RemoveOSUninstall.Enabled = False
+                            SetOSUninstallWindow.Enabled = False
+                            SetReservedStorageState.Enabled = False
+                            GetReservedStorageState.Enabled = False
+                            AddEdge.Enabled = False
+                            AddEdgeBrowser.Enabled = False
+                            AddEdgeWebView.Enabled = False
                     End Select
                 Case 10
-
+                    ' Everything is enabled
             End Select
         Else
 
