@@ -1934,6 +1934,7 @@ Public Class MainForm
         ExplorerView.Enabled = True
         ProjNameEditBtn.Visible = True
         If UseApi Then
+            Dim imgVersion As Version = Nothing
             If OnlineMode Then
                 Button14.Enabled = False
                 Button15.Enabled = False
@@ -1954,6 +1955,7 @@ Public Class MainForm
                                 Dim ImageInfoCollection As DismImageInfoCollection = DismApi.GetImageInfo(MountedImageImgFiles(x))
                                 For Each imageInfo As DismImageInfo In ImageInfoCollection
                                     If imageInfo.ImageIndex = MountedImageImgIndexes(x) Then
+                                        imgVersion = imageInfo.ProductVersion
                                         imgMountedName = imageInfo.ImageName
                                         imgMountedDesc = imageInfo.ImageDescription
                                         imgHal = If(Not imageInfo.Hal = "", imageInfo.Hal, "Undefined by the image")
@@ -2064,6 +2066,7 @@ Public Class MainForm
                     MountImageToolStripMenuItem.Enabled = True
                     UnmountImageToolStripMenuItem.Enabled = False
                 End If
+                If Debugger.IsAttached Then DetectVersions(FileVersionInfo.GetVersionInfo(DismExe), imgVersion)
                 Exit Sub
             End If
         End If
@@ -2289,7 +2292,7 @@ Public Class MainForm
         End If
     End Sub
 
-    Sub DetectVersions(DismVer As Version, NTVer As Version)
+    Sub DetectVersions(DismVer As FileVersionInfo, NTVer As Version)
         ' This procedure is not called yet
         ' Restore enabled properties of each menu item
         For Each Item As ToolStripDropDownItem In CommandsToolStripMenuItem.DropDownItems
@@ -2302,18 +2305,53 @@ Public Class MainForm
                 Continue For
             End Try
         Next
-        ' Next, detect the DISM version, so that we can determine which things are applicable
-        Select Case DismVer.Major
-            Case 6
-                Select Case DismVer.Minor
-                    Case 1
 
-                    Case Is >= 2
+        ' Detect if an image has been mounted, and act accordingly
+        If IsImageMounted Then
+            ' Now, detect the Windows version
+            Select Case NTVer.Major
+                Case 6
+                    Select Case NTVer.Minor
+                        Case 1
+                            ' All AppX and capability stuff goes away
+                            AppPackagesToolStripMenuItem.Enabled = False
+                            CapabilitiesToolStripMenuItem.Enabled = False
 
-                End Select
-            Case 10
+                            ' WIMBoot also goes away
+                            GetWIMBootEntry.Enabled = False
+                            UpdateWIMBootEntry.Enabled = False
+                        Case 2
+                            Select Case NTVer.Build
+                                Case Is >= 8102
+                                    CapabilitiesToolStripMenuItem.Enabled = False
+                                    GetWIMBootEntry.Enabled = False
+                                    UpdateWIMBootEntry.Enabled = False
+                                Case Else
+                                    AppPackagesToolStripMenuItem.Enabled = False
+                                    CapabilitiesToolStripMenuItem.Enabled = False
+                                    GetWIMBootEntry.Enabled = False
+                                    UpdateWIMBootEntry.Enabled = False
+                            End Select
+                        Case 3
+                            CapabilitiesToolStripMenuItem.Enabled = False
 
-        End Select
+                    End Select
+            End Select
+            ' Next, detect the DISM version, so that we can determine which things are applicable
+            Select Case DismVer.ProductMajorPart
+                Case 6
+                    Select Case DismVer.ProductMinorPart
+                        Case 1
+                            AppendImage.Enabled = False
+                        Case Is >= 2
+
+                    End Select
+                Case 10
+
+            End Select
+        Else
+
+        End If
     End Sub
 
     ''' <summary>
