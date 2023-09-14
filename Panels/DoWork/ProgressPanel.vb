@@ -430,6 +430,9 @@ Public Class ProgressPanel
     Public drvFailedRemovals As Integer                     ' Number of failed driver package removals
     Dim drvCollection As DismDriverPackageCollection        ' Collection of image drivers for driver package removal
 
+    ' OperationNum: 77
+    Public drvExportTarget As String                        ' Path the drivers will be exported to
+
     ' <Space for other OperationNums>
     ' OperationNum: 87
     Public osUninstDayCount As Integer                      ' Number of days the user has to uninstall an OS upgrade
@@ -574,6 +577,8 @@ Public Class ProgressPanel
                 taskCount = 1
             End If
         ElseIf opNum = 76 Then
+            taskCount = 1
+        ElseIf opNum = 77 Then
             taskCount = 1
         ElseIf opNum = 78 Then
             taskCount = 1
@@ -3418,6 +3423,54 @@ Public Class ProgressPanel
             ElseIf drvSuccessfulRemovals <= 0 Then
                 GetErrorCode(False)
             End If
+        ElseIf opNum = 77 Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Exporting drivers..."
+                            currentTask.Text = "Exporting third-party drivers to the specified folder..."
+                        Case "ESN"
+                            allTasks.Text = "Exportando controladores..."
+                            currentTask.Text = "Exportando controladores de terceros a la carpeta especificada..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Exporting drivers..."
+                    currentTask.Text = "Exporting third-party drivers to the specified folder..."
+                Case 2
+                    allTasks.Text = "Exportando controladores..."
+                    currentTask.Text = "Exportando controladores de terceros a la carpeta especificada..."
+            End Select
+            LogView.AppendText(CrLf & "Exporting drivers to specified folder..." & CrLf & _
+                               "- Export target: " & Quote & drvExportTarget & Quote)
+            ' Check the DISM version, as the Windows 7 version doesn't allow this action
+            DISMProc.StartInfo.FileName = DismProgram
+            Select Case DismVersionChecker.ProductMajorPart
+                Case 6
+                    Select Case DismVersionChecker.ProductMinorPart
+                        Case 1
+                            ' Not supported
+                        Case Is >= 2
+                            CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /export-driver /destination=" & Quote & drvExportTarget & Quote
+                    End Select
+                Case 10
+                    CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /export-driver /destination=" & Quote & drvExportTarget & Quote
+            End Select
+            DISMProc.StartInfo.Arguments = CommandArgs
+            DISMProc.Start()
+            DISMProc.WaitForExit()
+            LogView.AppendText(CrLf & "Getting error level...")
+            If Hex(DISMProc.ExitCode).Length < 8 Then
+                errCode = DISMProc.ExitCode
+            Else
+                errCode = Hex(DISMProc.ExitCode)
+            End If
+            If errCode.Length >= 8 Then
+                LogView.AppendText(" Error level : 0x" & errCode)
+            Else
+                LogView.AppendText(" Error level : " & errCode)
+            End If
+            GetErrorCode(False)
         ElseIf opNum = 87 Then
             allTasks.Text = "Setting the uninstall window..."
             currentTask.Text = "Setting the amount of days an uninstall can happen..."

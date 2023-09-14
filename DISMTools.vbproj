@@ -340,6 +340,12 @@
     <Compile Include="Panels\Img_Ops\Drivers\AddDrivers.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Img_Ops\Drivers\ExportDrivers.Designer.vb">
+      <DependentUpon>ExportDrivers.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Drivers\ExportDrivers.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\Drivers\RemDrivers.Designer.vb">
       <DependentUpon>RemDrivers.vb</DependentUpon>
     </Compile>
@@ -703,6 +709,9 @@
     <EmbeddedResource Include="Panels\Img_Ops\Drivers\AddDrivers.resx">
       <DependentUpon>AddDrivers.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Drivers\ExportDrivers.resx">
+      <DependentUpon>ExportDrivers.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Drivers\RemDrivers.resx">
       <DependentUpon>RemDrivers.vb</DependentUpon>
     </EmbeddedResource>
@@ -967,6 +976,7 @@
     <None Include="Resources\info_from_pkg_file.png" />
     <None Include="Resources\get_appxpkg_info.png" />
     <None Include="Resources\split_img.png" />
+    <None Include="Resources\export_driver.png" />
     <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
     <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
     <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />
