@@ -7108,7 +7108,7 @@ Public Class MainForm
                 Case 71
                     MenuDesc.Text = "Enters the product key for the current edition"
                 Case 72
-                    MenuDesc.Text = "Displays information the about driver packages you specify or the installed drivers in the image or in the installation"
+                    MenuDesc.Text = "Displays information about the driver packages you specify or the installed drivers in the image or in the installation"
                 Case 74
                     MenuDesc.Text = "Adds third-party driver packages to the image"
                 Case 75
