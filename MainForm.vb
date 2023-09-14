@@ -2323,6 +2323,13 @@ Public Class MainForm
 
                             ' Microsoft Edge stuff, you know what I mean...
                             MicrosoftEdgeToolStripMenuItem.Enabled = False
+
+                            ' Disable other stuff
+                            ExportDriver.Enabled = False
+                            ReservedStorageToolStripMenuItem.Enabled = False
+                            SetSysUILang.Enabled = False
+                            ProvisioningPackagesToolStripMenuItem.Enabled = False
+                            OSUninstallToolStripMenuItem.Enabled = False
                         Case 2
                             Select Case NTVer.Build
                                 Case Is >= 8102
@@ -2330,16 +2337,28 @@ Public Class MainForm
                                     GetWIMBootEntry.Enabled = False
                                     UpdateWIMBootEntry.Enabled = False
                                     MicrosoftEdgeToolStripMenuItem.Enabled = False
+                                    ReservedStorageToolStripMenuItem.Enabled = False
+                                    SetSysUILang.Enabled = False
+                                    ProvisioningPackagesToolStripMenuItem.Enabled = False
+                                    OSUninstallToolStripMenuItem.Enabled = False
                                 Case Else
                                     AppPackagesToolStripMenuItem.Enabled = False
                                     CapabilitiesToolStripMenuItem.Enabled = False
                                     GetWIMBootEntry.Enabled = False
                                     UpdateWIMBootEntry.Enabled = False
                                     MicrosoftEdgeToolStripMenuItem.Enabled = False
+                                    ReservedStorageToolStripMenuItem.Enabled = False
+                                    SetSysUILang.Enabled = False
+                                    ProvisioningPackagesToolStripMenuItem.Enabled = False
+                                    OSUninstallToolStripMenuItem.Enabled = False
                             End Select
                         Case 3
                             CapabilitiesToolStripMenuItem.Enabled = False
                             MicrosoftEdgeToolStripMenuItem.Enabled = False
+                            ReservedStorageToolStripMenuItem.Enabled = False
+                            SetSysUILang.Enabled = False
+                            ProvisioningPackagesToolStripMenuItem.Enabled = False
+                            OSUninstallToolStripMenuItem.Enabled = False
                     End Select
                 Case 10
                     Select Case NTVer.Build
@@ -2374,10 +2393,7 @@ Public Class MainForm
                             UnmountImage.Enabled = False
                             UpdateWIMBootEntry.Enabled = False
                             ApplySiloedPackage.Enabled = False
-                            AddProvisioningPackage.Enabled = False
-                            GetProvisioningPackageInfo.Enabled = False
-                            ApplyCustomDataImage.Enabled = False
-                            GetProvisionedAppxPackages.Enabled = False
+                            ProvisioningPackagesToolStripMenuItem.Enabled = False
                             AddProvisionedAppxPackage.Enabled = False
                             RemoveProvisionedAppxPackage.Enabled = False
                             OptimizeProvisionedAppxPackages.Enabled = False
@@ -2388,18 +2404,15 @@ Public Class MainForm
                             RemoveDefaultAppAssociations.Enabled = False
                             AddCapability.Enabled = False
                             ExportSource.Enabled = False
-                            GetCapabilities.Enabled = False
                             RemoveCapability.Enabled = False
                             ExportDriver.Enabled = False
                             GetOSUninstallWindow.Enabled = False
                             InitiateOSUninstall.Enabled = False
                             RemoveOSUninstall.Enabled = False
                             SetOSUninstallWindow.Enabled = False
-                            SetReservedStorageState.Enabled = False
-                            GetReservedStorageState.Enabled = False
-                            AddEdge.Enabled = False
-                            AddEdgeBrowser.Enabled = False
-                            AddEdgeWebView.Enabled = False
+                            ReservedStorageToolStripMenuItem.Enabled = False
+                            MicrosoftEdgeToolStripMenuItem.Enabled = False
+                            SetSysUILang.Enabled = False
                         Case 2
                             CaptureFFU.Enabled = False
                             GetWIMBootEntry.Enabled = False
@@ -2408,46 +2421,36 @@ Public Class MainForm
                             SplitFFU.Enabled = False
                             UpdateWIMBootEntry.Enabled = False
                             ApplySiloedPackage.Enabled = False
-                            AddProvisioningPackage.Enabled = False
-                            GetProvisioningPackageInfo.Enabled = False
-                            ApplyCustomDataImage.Enabled = False
+                            ProvisioningPackagesToolStripMenuItem.Enabled = False
                             OptimizeProvisionedAppxPackages.Enabled = False
                             AddCapability.Enabled = False
                             ExportSource.Enabled = False
-                            GetCapabilities.Enabled = False
                             RemoveCapability.Enabled = False
                             GetOSUninstallWindow.Enabled = False
                             InitiateOSUninstall.Enabled = False
                             RemoveOSUninstall.Enabled = False
                             SetOSUninstallWindow.Enabled = False
-                            SetReservedStorageState.Enabled = False
-                            GetReservedStorageState.Enabled = False
-                            AddEdge.Enabled = False
-                            AddEdgeBrowser.Enabled = False
-                            AddEdgeWebView.Enabled = False
+                            ReservedStorageToolStripMenuItem.Enabled = False
+                            MicrosoftEdgeToolStripMenuItem.Enabled = False
+                            SetSysUILang.Enabled = False
                         Case 3
                             CaptureFFU.Enabled = False
                             OptimizeFFU.Enabled = False
                             OptimizeImage.Enabled = False
                             SplitFFU.Enabled = False
                             ApplySiloedPackage.Enabled = False
-                            AddProvisioningPackage.Enabled = False
-                            GetProvisioningPackageInfo.Enabled = False
-                            ApplyCustomDataImage.Enabled = False
+                            ProvisioningPackagesToolStripMenuItem.Enabled = False
                             OptimizeProvisionedAppxPackages.Enabled = False
                             AddCapability.Enabled = False
                             ExportSource.Enabled = False
-                            GetCapabilities.Enabled = False
                             RemoveCapability.Enabled = False
                             GetOSUninstallWindow.Enabled = False
                             InitiateOSUninstall.Enabled = False
                             RemoveOSUninstall.Enabled = False
                             SetOSUninstallWindow.Enabled = False
-                            SetReservedStorageState.Enabled = False
-                            GetReservedStorageState.Enabled = False
-                            AddEdge.Enabled = False
-                            AddEdgeBrowser.Enabled = False
-                            AddEdgeWebView.Enabled = False
+                            ReservedStorageToolStripMenuItem.Enabled = False
+                            MicrosoftEdgeToolStripMenuItem.Enabled = False
+                            SetSysUILang.Enabled = False
                     End Select
                 Case 10
                     ' Everything is enabled
