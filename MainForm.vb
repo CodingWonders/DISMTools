@@ -220,6 +220,8 @@ Public Class MainForm
     Dim CapabilityInfoList As DismCapabilityCollection
     Dim DriverInfoList As DismDriverPackageCollection
 
+    Public imgVersionInfo As Version = Nothing
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -1696,6 +1698,7 @@ Public Class MainForm
         If Streamlined Then
             If OnlineMode Then
                 Label17.Text = Environment.OSVersion.Version.Major & "." & Environment.OSVersion.Version.Minor & "." & Environment.OSVersion.Version.Build & "." & FileVersionInfo.GetVersionInfo(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe").ProductPrivatePart
+                imgVersionInfo = Environment.OSVersion.Version
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1934,7 +1937,6 @@ Public Class MainForm
         ExplorerView.Enabled = True
         ProjNameEditBtn.Visible = True
         If UseApi Then
-            Dim imgVersion As Version = Nothing
             If OnlineMode Then
                 Button14.Enabled = False
                 Button15.Enabled = False
@@ -1946,6 +1948,8 @@ Public Class MainForm
 
                 ' Set installation type variable according to the InstallationType registry value
                 imgInstType = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion").GetValue("InstallationType")
+
+                DetectVersions(FileVersionInfo.GetVersionInfo(DismExe), imgVersionInfo)
                 Exit Sub
             Else
                 If IsImageMounted Then
@@ -1955,7 +1959,7 @@ Public Class MainForm
                                 Dim ImageInfoCollection As DismImageInfoCollection = DismApi.GetImageInfo(MountedImageImgFiles(x))
                                 For Each imageInfo As DismImageInfo In ImageInfoCollection
                                     If imageInfo.ImageIndex = MountedImageImgIndexes(x) Then
-                                        imgVersion = imageInfo.ProductVersion
+                                        imgVersionInfo = imageInfo.ProductVersion
                                         imgMountedName = imageInfo.ImageName
                                         imgMountedDesc = imageInfo.ImageDescription
                                         imgHal = If(Not imageInfo.Hal = "", imageInfo.Hal, "Undefined by the image")
@@ -2066,7 +2070,7 @@ Public Class MainForm
                     MountImageToolStripMenuItem.Enabled = True
                     UnmountImageToolStripMenuItem.Enabled = False
                 End If
-                If Debugger.IsAttached Then DetectVersions(FileVersionInfo.GetVersionInfo(DismExe), imgVersion)
+                DetectVersions(FileVersionInfo.GetVersionInfo(DismExe), imgVersionInfo)
                 Exit Sub
             End If
         End If
@@ -2293,7 +2297,6 @@ Public Class MainForm
     End Sub
 
     Sub DetectVersions(DismVer As FileVersionInfo, NTVer As Version)
-        ' This procedure is not called yet
         ' Restore enabled properties of each menu item
         For Each Item As ToolStripDropDownItem In CommandsToolStripMenuItem.DropDownItems
             Item.Enabled = True
@@ -2367,6 +2370,10 @@ Public Class MainForm
                             MicrosoftEdgeToolStripMenuItem.Enabled = False
                     End Select
             End Select
+
+            ' Disable Windows PE stuff when not working with a Windows PE image
+            WindowsPEServicingToolStripMenuItem.Enabled = imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase)
+
             ' Next, detect the DISM version, so that we can determine which things are applicable
             Select Case DismVer.ProductMajorPart
                 Case 6
@@ -2379,18 +2386,14 @@ Public Class MainForm
                             CaptureFFU.Enabled = False
                             CaptureImage.Enabled = False
                             CleanupMountpoints.Enabled = False
-                            CommitImage.Enabled = False
                             DeleteImage.Enabled = False
                             ExportImage.Enabled = False
                             GetWIMBootEntry.Enabled = False
                             ListImage.Enabled = False
-                            MountImage.Enabled = False
                             OptimizeFFU.Enabled = False
                             OptimizeImage.Enabled = False
-                            RemountImage.Enabled = False
                             SplitFFU.Enabled = False
                             SplitImage.Enabled = False
-                            UnmountImage.Enabled = False
                             UpdateWIMBootEntry.Enabled = False
                             ApplySiloedPackage.Enabled = False
                             ProvisioningPackagesToolStripMenuItem.Enabled = False
