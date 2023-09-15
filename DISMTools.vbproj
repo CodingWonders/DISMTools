@@ -262,6 +262,12 @@
     <Compile Include="Panels\Get_Ops\Pkgs\GetPkgInfo.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Get_Ops\WinPE\GetWinPESettings.Designer.vb">
+      <DependentUpon>GetWinPESettings.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\WinPE\GetWinPESettings.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\ActiveInstAccessWarn.Designer.vb">
       <DependentUpon>ActiveInstAccessWarn.vb</DependentUpon>
     </Compile>
@@ -669,6 +675,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Get_Ops\Pkgs\GetPkgInfo.resx">
       <DependentUpon>GetPkgInfo.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Get_Ops\WinPE\GetWinPESettings.resx">
+      <DependentUpon>GetWinPESettings.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\ActiveInstAccessWarn.resx">
       <DependentUpon>ActiveInstAccessWarn.vb</DependentUpon>

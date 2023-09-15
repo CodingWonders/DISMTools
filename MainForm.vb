@@ -10597,4 +10597,8 @@ Public Class MainForm
     Private Sub ExportDriver_Click(sender As Object, e As EventArgs) Handles ExportDriver.Click
         ExportDrivers.ShowDialog()
     End Sub
+
+    Private Sub GetPESettings_Click(sender As Object, e As EventArgs) Handles GetPESettings.Click
+        GetWinPESettings.ShowDialog()
+    End Sub
 End Class
