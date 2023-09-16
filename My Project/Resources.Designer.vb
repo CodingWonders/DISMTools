@@ -1798,11 +1798,14 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''- Fixed a translation issue in the Configuration List Editor
-        '''- Fixed an issue where the AppX package information dialog would not show the path of the store logo assets and the path to the package manifest for some applications
-        '''- Fixed an issue where the path roots of the AppX package information dialog contained double backslashes (&quot;\\&quot;)
-        '''- Fixed an issue where the driver information dialog threw an exception when loading in some cases
-        '''- Fixed an issue where the project tree view would not b [resto de la cadena truncado]&quot;;.
+        '''- Fixed a translation issue in the driver information menu entry
+        '''
+        '''New features
+        '''
+        '''- The AppX package addition dialog now supports adding App Installer packages (&quot;.appinstaller&quot; files)
+        '''- Menu items are now enabled and disabled according to the versions of the Windows image you&apos;re servicing and the specified DISM executable
+        '''- You can now export the third-party drivers of a Windows image or active installation
+        '''- You can now configure the target path and the scratch space of Windows PE images.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
