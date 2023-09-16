@@ -7,7 +7,22 @@ Public Class ExportDrivers
         If TextBox1.Text <> "" And Directory.Exists(TextBox1.Text) Then
             ProgressPanel.drvExportTarget = TextBox1.Text
         Else
-            ' Add error message later
+            Dim msg As String = ""
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            msg = "Please specify a target to export the drivers to and make sure that the specified target exists."
+                        Case "ESN"
+                            msg = "Especifique un destino al que exportar los controladores y asegúrese de que el destino especificado existe."
+                    End Select
+                Case 1
+                    msg = "Please specify a target to export the drivers to and make sure that the specified target exists."
+                Case 2
+                    msg = "Especifique un destino al que exportar los controladores y asegúrese de que el destino especificado existe."
+            End Select
+            MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+            Exit Sub
         End If
         ProgressPanel.OperationNum = 77
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
@@ -22,6 +37,43 @@ Public Class ExportDrivers
     End Sub
 
     Private Sub ExportDrivers_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Text = "Export drivers"
+                        Label1.Text = Text
+                        Label2.Text = "Export target:"
+                        Button1.Text = "Browse..."
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Cancel"
+                        FolderBrowserDialog1.Description = "Please specify the path where the drivers will be exported to:"
+                    Case "ESN"
+                        Text = "Exportar controladores"
+                        Label1.Text = Text
+                        Label2.Text = "Destino de exportación:"
+                        Button1.Text = "Examinar..."
+                        OK_Button.Text = "Aceptar"
+                        Cancel_Button.Text = "Cancelar"
+                        FolderBrowserDialog1.Description = "Especifique la ruta a la que los controladores serán exportados:"
+                End Select
+            Case 1
+                Text = "Export drivers"
+                Label1.Text = Text
+                Label2.Text = "Export target:"
+                Button1.Text = "Browse..."
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Cancel"
+                FolderBrowserDialog1.Description = "Please specify the path where the drivers will be exported to:"
+            Case 2
+                Text = "Exportar controladores"
+                Label1.Text = Text
+                Label2.Text = "Destino de exportación:"
+                Button1.Text = "Examinar..."
+                OK_Button.Text = "Aceptar"
+                Cancel_Button.Text = "Cancelar"
+                FolderBrowserDialog1.Description = "Especifique la ruta a la que los controladores serán exportados:"
+        End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
             BackColor = Color.FromArgb(31, 31, 31)

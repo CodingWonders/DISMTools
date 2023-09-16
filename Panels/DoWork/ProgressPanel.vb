@@ -433,6 +433,12 @@ Public Class ProgressPanel
     ' OperationNum: 77
     Public drvExportTarget As String                        ' Path the drivers will be exported to
 
+    ' OperationNum: 82
+    Public peNewScratchSpace As Integer                     ' New scratch space amount to apply to the Windows PE image
+
+    ' OperationNum: 83
+    Public peNewTargetPath As String                        ' New target path to apply to the Windows PE image
+
     ' <Space for other OperationNums>
     ' OperationNum: 87
     Public osUninstDayCount As Integer                      ' Number of days the user has to uninstall an OS upgrade
@@ -581,6 +587,10 @@ Public Class ProgressPanel
         ElseIf opNum = 77 Then
             taskCount = 1
         ElseIf opNum = 78 Then
+            taskCount = 1
+        ElseIf opNum = 82 Then
+            taskCount = 1
+        ElseIf opNum = 83 Then
             taskCount = 1
         ElseIf opNum = 87 Then
             taskCount = 1
@@ -3456,6 +3466,80 @@ Public Class ProgressPanel
                 Case 10
                     CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /export-driver /destination=" & Quote & drvExportTarget & Quote
             End Select
+            DISMProc.StartInfo.Arguments = CommandArgs
+            DISMProc.Start()
+            DISMProc.WaitForExit()
+            LogView.AppendText(CrLf & "Getting error level...")
+            If Hex(DISMProc.ExitCode).Length < 8 Then
+                errCode = DISMProc.ExitCode
+            Else
+                errCode = Hex(DISMProc.ExitCode)
+            End If
+            If errCode.Length >= 8 Then
+                LogView.AppendText(" Error level : 0x" & errCode)
+            Else
+                LogView.AppendText(" Error level : " & errCode)
+            End If
+            GetErrorCode(False)
+        ElseIf opNum = 82 Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Setting the scratch space..."
+                            currentTask.Text = "Setting the Windows PE scratch space..."
+                        Case "ESN"
+                            allTasks.Text = "Estableciendo el espacio temporal..."
+                            currentTask.Text = "Estableciendo el espacio temporal de Windows PE..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Setting the scratch space..."
+                    currentTask.Text = "Setting the Windows PE scratch space..."
+                Case 2
+                    allTasks.Text = "Estableciendo el espacio temporal..."
+                    currentTask.Text = "Estableciendo el espacio temporal de Windows PE..."
+            End Select
+            LogView.AppendText(CrLf & "Setting the Windows PE scratch space..." & CrLf & _
+                               "- New scratch space amount: " & peNewScratchSpace & " MB")
+            CommandArgs &= " /image=" & Quote & MountDir & Quote & " /set-scratchspace=" & peNewScratchSpace
+            DISMProc.StartInfo.FileName = DismProgram
+            DISMProc.StartInfo.Arguments = CommandArgs
+            DISMProc.Start()
+            DISMProc.WaitForExit()
+            LogView.AppendText(CrLf & "Getting error level...")
+            If Hex(DISMProc.ExitCode).Length < 8 Then
+                errCode = DISMProc.ExitCode
+            Else
+                errCode = Hex(DISMProc.ExitCode)
+            End If
+            If errCode.Length >= 8 Then
+                LogView.AppendText(" Error level : 0x" & errCode)
+            Else
+                LogView.AppendText(" Error level : " & errCode)
+            End If
+            GetErrorCode(False)
+        ElseIf opNum = 83 Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENG"
+                            allTasks.Text = "Setting the target path..."
+                            currentTask.Text = "Setting the Windows PE target path..."
+                        Case "ESN"
+                            allTasks.Text = "Estableciendo la ruta de destino..."
+                            currentTask.Text = "Estableciendo la ruta de destino de Windows PE..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Setting the target path..."
+                    currentTask.Text = "Setting the Windows PE target path..."
+                Case 2
+                    allTasks.Text = "Estableciendo la ruta de destino..."
+                    currentTask.Text = "Estableciendo la ruta de destino de Windows PE..."
+            End Select
+            LogView.AppendText(CrLf & "Setting the Windows PE target path..." & CrLf & _
+                               "- New target path: " & Quote & peNewTargetPath & Quote)
+            CommandArgs &= " /image=" & Quote & MountDir & Quote & " /set-targetpath=" & peNewTargetPath
+            DISMProc.StartInfo.FileName = DismProgram
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
             DISMProc.WaitForExit()

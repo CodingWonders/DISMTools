@@ -14,23 +14,61 @@ Public Class GetWinPESettings
             reg.Start()
             reg.WaitForExit()
             If reg.ExitCode <> 0 Then
-                Label5.Text = "Could not get value"
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                Label5.Text = "Could not get value"
+                            Case "ESN"
+                                Label5.Text = "No se pudo obtener el valor"
+                        End Select
+                    Case 1
+                        Label5.Text = "Could not get value"
+                    Case 2
+                        Label5.Text = "No se pudo obtener el valor"
+                End Select
                 Button1.Visible = False
             End If
             reg.StartInfo.Arguments = "load HKLM\PE_SYS " & Quote & MainForm.MountDir & "\Windows\system32\config\SYSTEM" & Quote
             reg.Start()
             reg.WaitForExit()
             If reg.ExitCode <> 0 Then
-                Label6.Text = "Could not get value"
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                Label6.Text = "Could not get value"
+                            Case "ESN"
+                                Label6.Text = "No se pudo obtener el valor"
+                        End Select
+                    Case 1
+                        Label6.Text = "Could not get value"
+                    Case 2
+                        Label6.Text = "No se pudo obtener el valor"
+                End Select
                 Button2.Visible = False
             End If
             Try
+                Dim msg As String = ""
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENG"
+                                msg = "Could not get value"
+                            Case "ESN"
+                                msg = "No se pudo obtener el valor"
+                        End Select
+                    Case 1
+                        msg = "Could not get value"
+                    Case 2
+                        msg = "No se pudo obtener el valor"
+                End Select
                 ' Get target path first
                 Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("PE_SOFT\Microsoft\Windows NT\CurrentVersion\WinPE", False)
-                Label5.Text = regKey.GetValue("InstRoot", "Could not get value").ToString()
+                Label5.Text = regKey.GetValue("InstRoot", msg).ToString()
                 regKey.Close()
                 regKey = Registry.LocalMachine.OpenSubKey("PE_SYS\ControlSet001\Services\FBWF", False)
-                Label6.Text = regKey.GetValue("WinPECacheThreshold", "Could not get value").ToString() & " MB"
+                Label6.Text = regKey.GetValue("WinPECacheThreshold", msg).ToString() & " MB"
                 regKey.Close()
             Catch ex As Exception
 
@@ -45,12 +83,53 @@ Public Class GetWinPESettings
         End Using
     End Sub
 
-    Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click, Button2.Click, Button1.Click
+    Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
     End Sub
 
     Private Sub GetWinPESettings_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        Text = "Get Windows PE settings"
+                        Label1.Text = Text
+                        Label2.Text = "These are the Windows PE settings for this image:"
+                        Label3.Text = "Target path:"
+                        Label4.Text = "Scratch space:"
+                        Button1.Text = "Change..."
+                        Button2.Text = "Change..."
+                        OK_Button.Text = "OK"
+                    Case "ESN"
+                        Text = "Obtener configuraciones de Windows PE"
+                        Label1.Text = Text
+                        Label2.Text = "Estas son las configuraciones de Windows PE para esta imagen:"
+                        Label3.Text = "Carpeta de destino:"
+                        Label4.Text = "Espacio temporal:"
+                        Button1.Text = "Cambiar..."
+                        Button2.Text = "Cambiar..."
+                        OK_Button.Text = "Aceptar"
+                End Select
+            Case 1
+                Text = "Get Windows PE settings"
+                Label1.Text = Text
+                Label2.Text = "These are the Windows PE settings for this image:"
+                Label3.Text = "Target path:"
+                Label4.Text = "Scratch space:"
+                Button1.Text = "Change..."
+                Button2.Text = "Change..."
+                OK_Button.Text = "OK"
+            Case 2
+                Text = "Obtener configuraciones de Windows PE"
+                Label1.Text = Text
+                Label2.Text = "Estas son las configuraciones de Windows PE para esta imagen:"
+                Label3.Text = "Carpeta de destino:"
+                Label4.Text = "Espacio temporal:"
+                Button1.Text = "Cambiar..."
+                Button2.Text = "Cambiar..."
+                OK_Button.Text = "Aceptar"
+        End Select
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True
@@ -73,5 +152,17 @@ Public Class GetWinPESettings
 
         ' Get Windows PE settings
         GetPESettings()
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        Visible = False
+        If SetPETargetPath.ShowDialog(MainForm) = Windows.Forms.DialogResult.OK Then GetPESettings()
+        Visible = True
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        Visible = False
+        If SetPEScratchSpace.ShowDialog(MainForm) = Windows.Forms.DialogResult.OK Then GetPESettings()
+        Visible = True
     End Sub
 End Class

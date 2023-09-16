@@ -28,12 +28,12 @@ Partial Class GetWinPESettings
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.Label6 = New System.Windows.Forms.Label()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.Label6 = New System.Windows.Forms.Label()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -112,6 +112,26 @@ Partial Class GetWinPESettings
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(543, 59)
         Me.TableLayoutPanel1.TabIndex = 8
         '
+        'Label5
+        '
+        Me.Label5.AutoEllipsis = True
+        Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label5.Location = New System.Drawing.Point(97, 0)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(343, 29)
+        Me.Label5.TabIndex = 2
+        Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Label6
+        '
+        Me.Label6.AutoEllipsis = True
+        Me.Label6.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label6.Location = New System.Drawing.Point(97, 29)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(343, 30)
+        Me.Label6.TabIndex = 3
+        Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
         'Button1
         '
         Me.Button1.Dock = System.Windows.Forms.DockStyle.Fill
@@ -155,26 +175,6 @@ Partial Class GetWinPESettings
         Me.Label4.TabIndex = 1
         Me.Label4.Text = "Scratch space:"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'Label5
-        '
-        Me.Label5.AutoEllipsis = True
-        Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label5.Location = New System.Drawing.Point(97, 0)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(343, 29)
-        Me.Label5.TabIndex = 2
-        Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'Label6
-        '
-        Me.Label6.AutoEllipsis = True
-        Me.Label6.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label6.Location = New System.Drawing.Point(97, 29)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(343, 30)
-        Me.Label6.TabIndex = 3
-        Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'GetWinPESettings
         '
