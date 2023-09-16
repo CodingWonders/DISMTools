@@ -2374,8 +2374,8 @@ Public Class MainForm
             ' Disable Windows PE stuff when not working with a Windows PE image
             WindowsPEServicingToolStripMenuItem.Enabled = imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase)
             ' Disable AppX and capability stuff when working with a Windows PE image
-            AppPackagesToolStripMenuItem.Enabled = Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase)
-            CapabilitiesToolStripMenuItem.Enabled = Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase)
+            AppPackagesToolStripMenuItem.Enabled = (Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
+            CapabilitiesToolStripMenuItem.Enabled = (Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
 
             ' Next, detect the DISM version, so that we can determine which things are applicable
             Select Case DismVer.ProductMajorPart
