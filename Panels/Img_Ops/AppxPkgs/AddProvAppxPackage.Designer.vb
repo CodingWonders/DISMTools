@@ -580,7 +580,8 @@ Partial Class AddProvAppxPackage
         '
         'AppxFileOFD
         '
-        Me.AppxFileOFD.Filter = "Applications|*.appx;*.appxbundle;*.msix;*.msixbundle"
+        Me.AppxFileOFD.Filter = "Applications|*.appx;*.appxbundle;*.msix;*.msixbundle|Application Installer packag" & _
+    "e|*.appinstaller"
         Me.AppxFileOFD.SupportMultiDottedExtensions = True
         Me.AppxFileOFD.Title = "Specify the AppX files to add provisioning for"
         '

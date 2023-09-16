@@ -409,6 +409,12 @@ Public Class AddProvAppxPackage
     End Sub
 
     Private Sub AppxFileOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles AppxFileOFD.FileOk
+        If Path.GetExtension(AppxFileOFD.FileName).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
+            AppInstallerDownloader.AppInstallerFile = AppxFileOFD.FileName
+            If Not File.Exists(AppxFileOFD.FileName.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
+            If File.Exists(AppxFileOFD.FileName.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, AppxFileOFD.FileName.Replace(".appinstaller", ".appxbundle").Trim())
+            Exit Sub
+        End If
         ScanAppxPackage(False, AppxFileOFD.FileName)
     End Sub
 
@@ -1227,6 +1233,10 @@ Public Class AddProvAppxPackage
                 Path.GetExtension(PackageFile).Equals(".eappx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".emsix", StringComparison.OrdinalIgnoreCase) Or _
                 Path.GetExtension(PackageFile).Equals(".eappxbundle", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".emsixbundle", StringComparison.OrdinalIgnoreCase) Then
                 ScanAppxPackage(False, PackageFile)
+            ElseIf Path.GetExtension(PackageFile).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
+                AppInstallerDownloader.AppInstallerFile = PackageFile
+                If Not File.Exists(PackageFile.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
+                If File.Exists(PackageFile.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, PackageFile.Replace(".appinstaller", ".appxbundle").Trim())
             ElseIf File.GetAttributes(PackageFile) = FileAttributes.Directory Then
                 ' Temporary support for directories
                 If File.Exists(PackageFile & "\AppxSignature.p7x") And File.Exists(PackageFile & "\AppxMetadata\AppxBundleManifest.xml") Or File.Exists(PackageFile & "\AppxManifest.xml") Then
@@ -1242,6 +1252,10 @@ Public Class AddProvAppxPackage
                                             If Path.GetExtension(AppPkg).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or _
                                                 Path.GetExtension(AppPkg).Equals(".msix", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".msixbundle", StringComparison.OrdinalIgnoreCase) Then
                                                 ScanAppxPackage(False, AppPkg)
+                                            ElseIf Path.GetExtension(AppPkg).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
+                                                AppInstallerDownloader.AppInstallerFile = AppPkg
+                                                If Not File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
+                                                If File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, AppPkg.Replace(".appinstaller", ".appxbundle").Trim())
                                             Else
                                                 Continue For
                                             End If
@@ -1255,6 +1269,10 @@ Public Class AddProvAppxPackage
                                             If Path.GetExtension(AppPkg).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or _
                                                 Path.GetExtension(AppPkg).Equals(".msix", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".msixbundle", StringComparison.OrdinalIgnoreCase) Then
                                                 ScanAppxPackage(False, AppPkg)
+                                            ElseIf Path.GetExtension(AppPkg).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
+                                                AppInstallerDownloader.AppInstallerFile = AppPkg
+                                                If Not File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
+                                                If File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, AppPkg.Replace(".appinstaller", ".appxbundle").Trim())
                                             Else
                                                 Continue For
                                             End If
@@ -1269,6 +1287,10 @@ Public Class AddProvAppxPackage
                                     If Path.GetExtension(AppPkg).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or _
                                         Path.GetExtension(AppPkg).Equals(".msix", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".msixbundle", StringComparison.OrdinalIgnoreCase) Then
                                         ScanAppxPackage(False, AppPkg)
+                                    ElseIf Path.GetExtension(AppPkg).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
+                                        AppInstallerDownloader.AppInstallerFile = AppPkg
+                                        If Not File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
+                                        If File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, AppPkg.Replace(".appinstaller", ".appxbundle").Trim())
                                     Else
                                         Continue For
                                     End If
@@ -1282,6 +1304,10 @@ Public Class AddProvAppxPackage
                                     If Path.GetExtension(AppPkg).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or _
                                         Path.GetExtension(AppPkg).Equals(".msix", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".msixbundle", StringComparison.OrdinalIgnoreCase) Then
                                         ScanAppxPackage(False, AppPkg)
+                                    ElseIf Path.GetExtension(AppPkg).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
+                                        AppInstallerDownloader.AppInstallerFile = AppPkg
+                                        If Not File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
+                                        If File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, AppPkg.Replace(".appinstaller", ".appxbundle").Trim())
                                     Else
                                         Continue For
                                     End If

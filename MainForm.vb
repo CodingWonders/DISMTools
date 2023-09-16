@@ -220,6 +220,8 @@ Public Class MainForm
     Dim CapabilityInfoList As DismCapabilityCollection
     Dim DriverInfoList As DismDriverPackageCollection
 
+    Public imgVersionInfo As Version = Nothing
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -1696,6 +1698,7 @@ Public Class MainForm
         If Streamlined Then
             If OnlineMode Then
                 Label17.Text = Environment.OSVersion.Version.Major & "." & Environment.OSVersion.Version.Minor & "." & Environment.OSVersion.Version.Build & "." & FileVersionInfo.GetVersionInfo(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe").ProductPrivatePart
+                imgVersionInfo = Environment.OSVersion.Version
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1945,6 +1948,8 @@ Public Class MainForm
 
                 ' Set installation type variable according to the InstallationType registry value
                 imgInstType = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion").GetValue("InstallationType")
+
+                DetectVersions(FileVersionInfo.GetVersionInfo(DismExe), imgVersionInfo)
                 Exit Sub
             Else
                 If IsImageMounted Then
@@ -1954,6 +1959,7 @@ Public Class MainForm
                                 Dim ImageInfoCollection As DismImageInfoCollection = DismApi.GetImageInfo(MountedImageImgFiles(x))
                                 For Each imageInfo As DismImageInfo In ImageInfoCollection
                                     If imageInfo.ImageIndex = MountedImageImgIndexes(x) Then
+                                        imgVersionInfo = imageInfo.ProductVersion
                                         imgMountedName = imageInfo.ImageName
                                         imgMountedDesc = imageInfo.ImageDescription
                                         imgHal = If(Not imageInfo.Hal = "", imageInfo.Hal, "Undefined by the image")
@@ -2064,6 +2070,7 @@ Public Class MainForm
                     MountImageToolStripMenuItem.Enabled = True
                     UnmountImageToolStripMenuItem.Enabled = False
                 End If
+                DetectVersions(FileVersionInfo.GetVersionInfo(DismExe), imgVersionInfo)
                 Exit Sub
             End If
         End If
@@ -2289,8 +2296,7 @@ Public Class MainForm
         End If
     End Sub
 
-    Sub DetectVersions(DismVer As Version, NTVer As Version)
-        ' This procedure is not called yet
+    Sub DetectVersions(DismVer As FileVersionInfo, NTVer As Version)
         ' Restore enabled properties of each menu item
         For Each Item As ToolStripDropDownItem In CommandsToolStripMenuItem.DropDownItems
             Item.Enabled = True
@@ -2302,18 +2308,162 @@ Public Class MainForm
                 Continue For
             End Try
         Next
-        ' Next, detect the DISM version, so that we can determine which things are applicable
-        Select Case DismVer.Major
-            Case 6
-                Select Case DismVer.Minor
-                    Case 1
 
-                    Case Is >= 2
+        ' Detect if an image has been mounted, and act accordingly
+        If IsImageMounted Then
+            ' Now, detect the Windows version
+            Select Case NTVer.Major
+                Case 6
+                    Select Case NTVer.Minor
+                        Case 1
+                            ' All AppX and capability stuff goes away
+                            AppPackagesToolStripMenuItem.Enabled = False
+                            CapabilitiesToolStripMenuItem.Enabled = False
 
-                End Select
-            Case 10
+                            ' WIMBoot also goes away
+                            GetWIMBootEntry.Enabled = False
+                            UpdateWIMBootEntry.Enabled = False
 
-        End Select
+                            ' Microsoft Edge stuff, you know what I mean...
+                            MicrosoftEdgeToolStripMenuItem.Enabled = False
+
+                            ' Disable other stuff
+                            ExportDriver.Enabled = False
+                            ReservedStorageToolStripMenuItem.Enabled = False
+                            SetSysUILang.Enabled = False
+                            ProvisioningPackagesToolStripMenuItem.Enabled = False
+                            OSUninstallToolStripMenuItem.Enabled = False
+                        Case 2
+                            Select Case NTVer.Build
+                                Case Is >= 8102
+                                    CapabilitiesToolStripMenuItem.Enabled = False
+                                    GetWIMBootEntry.Enabled = False
+                                    UpdateWIMBootEntry.Enabled = False
+                                    MicrosoftEdgeToolStripMenuItem.Enabled = False
+                                    ReservedStorageToolStripMenuItem.Enabled = False
+                                    SetSysUILang.Enabled = False
+                                    ProvisioningPackagesToolStripMenuItem.Enabled = False
+                                    OSUninstallToolStripMenuItem.Enabled = False
+                                Case Else
+                                    AppPackagesToolStripMenuItem.Enabled = False
+                                    CapabilitiesToolStripMenuItem.Enabled = False
+                                    GetWIMBootEntry.Enabled = False
+                                    UpdateWIMBootEntry.Enabled = False
+                                    MicrosoftEdgeToolStripMenuItem.Enabled = False
+                                    ReservedStorageToolStripMenuItem.Enabled = False
+                                    SetSysUILang.Enabled = False
+                                    ProvisioningPackagesToolStripMenuItem.Enabled = False
+                                    OSUninstallToolStripMenuItem.Enabled = False
+                            End Select
+                        Case 3
+                            CapabilitiesToolStripMenuItem.Enabled = False
+                            MicrosoftEdgeToolStripMenuItem.Enabled = False
+                            ReservedStorageToolStripMenuItem.Enabled = False
+                            SetSysUILang.Enabled = False
+                            ProvisioningPackagesToolStripMenuItem.Enabled = False
+                            OSUninstallToolStripMenuItem.Enabled = False
+                    End Select
+                Case 10
+                    Select Case NTVer.Build
+                        Case Is < 21996
+                            ' Microsoft Edge stuff only affects Windows 11
+                            MicrosoftEdgeToolStripMenuItem.Enabled = False
+                    End Select
+            End Select
+
+            ' Disable Windows PE stuff when not working with a Windows PE image
+            WindowsPEServicingToolStripMenuItem.Enabled = imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase)
+            ' Disable AppX and capability stuff when working with a Windows PE image
+            AppPackagesToolStripMenuItem.Enabled = (Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
+            CapabilitiesToolStripMenuItem.Enabled = (Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
+
+            ' Next, detect the DISM version, so that we can determine which things are applicable
+            Select Case DismVer.ProductMajorPart
+                Case 6
+                    Select Case DismVer.ProductMinorPart
+                        Case 1
+                            AppendImage.Enabled = False
+                            ApplyFFU.Enabled = False
+                            ApplyImage.Enabled = False
+                            CaptureCustomImage.Enabled = False
+                            CaptureFFU.Enabled = False
+                            CaptureImage.Enabled = False
+                            CleanupMountpoints.Enabled = False
+                            DeleteImage.Enabled = False
+                            ExportImage.Enabled = False
+                            GetWIMBootEntry.Enabled = False
+                            ListImage.Enabled = False
+                            OptimizeFFU.Enabled = False
+                            OptimizeImage.Enabled = False
+                            SplitFFU.Enabled = False
+                            SplitImage.Enabled = False
+                            UpdateWIMBootEntry.Enabled = False
+                            ApplySiloedPackage.Enabled = False
+                            ProvisioningPackagesToolStripMenuItem.Enabled = False
+                            AddProvisionedAppxPackage.Enabled = False
+                            RemoveProvisionedAppxPackage.Enabled = False
+                            OptimizeProvisionedAppxPackages.Enabled = False
+                            SetProvisionedAppxDataFile.Enabled = False
+                            ExportDefaultAppAssociations.Enabled = False
+                            GetDefaultAppAssociations.Enabled = False
+                            ImportDefaultAppAssociations.Enabled = False
+                            RemoveDefaultAppAssociations.Enabled = False
+                            AddCapability.Enabled = False
+                            ExportSource.Enabled = False
+                            RemoveCapability.Enabled = False
+                            ExportDriver.Enabled = False
+                            GetOSUninstallWindow.Enabled = False
+                            InitiateOSUninstall.Enabled = False
+                            RemoveOSUninstall.Enabled = False
+                            SetOSUninstallWindow.Enabled = False
+                            ReservedStorageToolStripMenuItem.Enabled = False
+                            MicrosoftEdgeToolStripMenuItem.Enabled = False
+                            SetSysUILang.Enabled = False
+                        Case 2
+                            CaptureFFU.Enabled = False
+                            GetWIMBootEntry.Enabled = False
+                            OptimizeFFU.Enabled = False
+                            OptimizeImage.Enabled = False
+                            SplitFFU.Enabled = False
+                            UpdateWIMBootEntry.Enabled = False
+                            ApplySiloedPackage.Enabled = False
+                            ProvisioningPackagesToolStripMenuItem.Enabled = False
+                            OptimizeProvisionedAppxPackages.Enabled = False
+                            AddCapability.Enabled = False
+                            ExportSource.Enabled = False
+                            RemoveCapability.Enabled = False
+                            GetOSUninstallWindow.Enabled = False
+                            InitiateOSUninstall.Enabled = False
+                            RemoveOSUninstall.Enabled = False
+                            SetOSUninstallWindow.Enabled = False
+                            ReservedStorageToolStripMenuItem.Enabled = False
+                            MicrosoftEdgeToolStripMenuItem.Enabled = False
+                            SetSysUILang.Enabled = False
+                        Case 3
+                            CaptureFFU.Enabled = False
+                            OptimizeFFU.Enabled = False
+                            OptimizeImage.Enabled = False
+                            SplitFFU.Enabled = False
+                            ApplySiloedPackage.Enabled = False
+                            ProvisioningPackagesToolStripMenuItem.Enabled = False
+                            OptimizeProvisionedAppxPackages.Enabled = False
+                            AddCapability.Enabled = False
+                            ExportSource.Enabled = False
+                            RemoveCapability.Enabled = False
+                            GetOSUninstallWindow.Enabled = False
+                            InitiateOSUninstall.Enabled = False
+                            RemoveOSUninstall.Enabled = False
+                            SetOSUninstallWindow.Enabled = False
+                            ReservedStorageToolStripMenuItem.Enabled = False
+                            MicrosoftEdgeToolStripMenuItem.Enabled = False
+                            SetSysUILang.Enabled = False
+                    End Select
+                Case 10
+                    ' Everything is enabled
+            End Select
+        Else
+
+        End If
     End Sub
 
     ''' <summary>
@@ -4374,8 +4524,6 @@ Public Class MainForm
                     ApplyUnattend.Text = "Apply unattended answer file..."
                     ' Menu - Commands - Windows PE servicing
                     GetPESettings.Text = "Get settings..."
-                    GetScratchSpace.Text = "Get scratch space..."
-                    GetTargetPath.Text = "Get target path..."
                     SetScratchSpace.Text = "Set scratch space..."
                     SetTargetPath.Text = "Set target path..."
                     ' Menu - Commands - OS uninstall
@@ -4654,8 +4802,6 @@ Public Class MainForm
                     ApplyUnattend.Text = "Aplicar archivo de respuesta desatendida..."
                     ' Menu - Commands - Windows PE servicing
                     GetPESettings.Text = "Obtener configuración..."
-                    GetScratchSpace.Text = "Obtener espacio temporal..."
-                    GetTargetPath.Text = "Obtener ruta de destino..."
                     SetScratchSpace.Text = "Establecer espacio temporal..."
                     SetTargetPath.Text = "Establecer ruta de destino..."
                     ' Menu - Commands - OS uninstall
@@ -4939,8 +5085,6 @@ Public Class MainForm
                 ApplyUnattend.Text = "Apply unattended answer file..."
                 ' Menu - Commands - Windows PE servicing
                 GetPESettings.Text = "Get settings..."
-                GetScratchSpace.Text = "Get scratch space..."
-                GetTargetPath.Text = "Get target path..."
                 SetScratchSpace.Text = "Set scratch space..."
                 SetTargetPath.Text = "Set target path..."
                 ' Menu - Commands - OS uninstall
@@ -5219,8 +5363,6 @@ Public Class MainForm
                 ApplyUnattend.Text = "Aplicar archivo de respuesta desatendida..."
                 ' Menu - Commands - Windows PE servicing
                 GetPESettings.Text = "Obtener configuración..."
-                GetScratchSpace.Text = "Obtener espacio temporal..."
-                GetTargetPath.Text = "Obtener ruta de destino..."
                 SetScratchSpace.Text = "Establecer espacio temporal..."
                 SetTargetPath.Text = "Establecer ruta de destino..."
                 ' Menu - Commands - OS uninstall
@@ -6964,7 +7106,7 @@ Public Class MainForm
                 Case 71
                     MenuDesc.Text = "Enters the product key for the current edition"
                 Case 72
-                    MenuDesc.Text = "Displays information the about driver packages you specify or the installed drivers in the image or in the installation"
+                    MenuDesc.Text = "Displays information about the driver packages you specify or the installed drivers in the image or in the installation"
                 Case 74
                     MenuDesc.Text = "Adds third-party driver packages to the image"
                 Case 75
@@ -7164,7 +7306,7 @@ Public Class MainForm
         ShowChildDescs(True, 1)
     End Sub
 
-    Private Sub HideChildDescsTrigger(sender As Object, e As EventArgs) Handles AppendImage.MouseLeave, ApplyFFU.MouseLeave, ApplyImage.MouseLeave, CaptureCustomImage.MouseLeave, CaptureFFU.MouseLeave, CaptureImage.MouseLeave, CleanupMountpoints.MouseLeave, CommitImage.MouseLeave, DeleteImage.MouseLeave, ExportImage.MouseLeave, GetImageInfo.MouseLeave, GetWIMBootEntry.MouseLeave, ListImage.MouseLeave, MountImage.MouseLeave, OptimizeFFU.MouseLeave, OptimizeImage.MouseLeave, RemountImage.MouseLeave, SplitFFU.MouseLeave, SplitImage.MouseLeave, UnmountImage.MouseLeave, UpdateWIMBootEntry.MouseLeave, ApplySiloedPackage.MouseLeave, GetPackages.MouseLeave, AddPackage.MouseLeave, RemovePackage.MouseLeave, GetFeatures.MouseLeave, EnableFeature.MouseLeave, DisableFeature.MouseLeave, CleanupImage.MouseLeave, AddProvisionedAppxPackage.MouseLeave, GetProvisioningPackageInfo.MouseLeave, ApplyCustomDataImage.MouseLeave, GetProvisionedAppxPackages.MouseLeave, AddProvisionedAppxPackage.MouseLeave, RemoveProvisionedAppxPackage.MouseLeave, OptimizeProvisionedAppxPackages.MouseLeave, SetProvisionedAppxDataFile.MouseLeave, CheckAppPatch.MouseLeave, GetAppPatchInfo.MouseLeave, GetAppPatches.MouseLeave, GetAppInfo.MouseLeave, GetApps.MouseLeave, ExportDefaultAppAssociations.MouseLeave, GetDefaultAppAssociations.MouseLeave, ImportDefaultAppAssociations.MouseLeave, RemoveDefaultAppAssociations.MouseLeave, GetIntl.MouseLeave, SetUILangFallback.MouseLeave, SetSysUILang.MouseLeave, SetSysLocale.MouseLeave, SetUserLocale.MouseLeave, SetInputLocale.MouseLeave, SetAllIntl.MouseLeave, SetTimeZone.MouseLeave, SetSKUIntlDefaults.MouseLeave, SetLayeredDriver.MouseLeave, GenLangINI.MouseLeave, SetSetupUILang.MouseLeave, AddCapability.MouseLeave, ExportSource.MouseLeave, GetCapabilities.MouseLeave, RemoveCapability.MouseLeave, GetCurrentEdition.MouseLeave, GetTargetEditions.MouseLeave, SetEdition.MouseLeave, SetProductKey.MouseLeave, GetDrivers.MouseLeave, AddDriver.MouseLeave, RemoveDriver.MouseLeave, ExportDriver.MouseLeave, ApplyUnattend.MouseLeave, GetPESettings.MouseLeave, GetTargetPath.MouseLeave, GetScratchSpace.MouseLeave, SetScratchSpace.MouseLeave, SetTargetPath.MouseLeave, GetOSUninstallWindow.MouseLeave, InitiateOSUninstall.MouseLeave, RemoveOSUninstall.MouseLeave, SetOSUninstallWindow.MouseLeave, SetReservedStorageState.MouseLeave, GetReservedStorageState.MouseLeave, NewProjectToolStripMenuItem.MouseLeave, OpenExistingProjectToolStripMenuItem.MouseLeave, SaveProjectToolStripMenuItem.MouseLeave, SaveProjectasToolStripMenuItem.MouseLeave, ExitToolStripMenuItem.MouseLeave, ViewProjectFilesInFileExplorerToolStripMenuItem.MouseLeave, UnloadProjectToolStripMenuItem.MouseLeave, SwitchImageIndexesToolStripMenuItem.MouseLeave, ProjectPropertiesToolStripMenuItem.MouseLeave, ImagePropertiesToolStripMenuItem.MouseLeave, ImageManagementToolStripMenuItem.MouseLeave, OSPackagesToolStripMenuItem.MouseLeave, ProvisioningPackagesToolStripMenuItem.MouseLeave, AppPackagesToolStripMenuItem.MouseLeave, AppPatchesToolStripMenuItem.MouseLeave, DefaultAppAssociationsToolStripMenuItem.MouseLeave, LanguagesAndRegionSettingsToolStripMenuItem.MouseLeave, CapabilitiesToolStripMenuItem.MouseLeave, WindowsEditionsToolStripMenuItem.MouseLeave, DriversToolStripMenuItem.MouseLeave, UnattendedAnswerFilesToolStripMenuItem.MouseLeave, WindowsPEServicingToolStripMenuItem.MouseLeave, OSUninstallToolStripMenuItem.MouseLeave, ReservedStorageToolStripMenuItem.MouseLeave, ImageConversionToolStripMenuItem.MouseLeave, WIMESDToolStripMenuItem.MouseLeave, RemountImageWithWritePermissionsToolStripMenuItem.MouseLeave, CommandShellToolStripMenuItem.MouseLeave, OptionsToolStripMenuItem.MouseLeave, HelpTopicsToolStripMenuItem.MouseLeave, GlossaryToolStripMenuItem.MouseLeave, CommandHelpToolStripMenuItem.MouseLeave, AboutDISMToolsToolStripMenuItem.MouseLeave, UnattendedAnswerFileManagerToolStripMenuItem.MouseLeave, AddEdge.MouseLeave, AddEdgeBrowser.MouseLeave, AddEdgeWebView.MouseLeave, ReportManagerToolStripMenuItem.MouseLeave, MergeSWM.MouseLeave, MountedImageManagerTSMI.MouseLeave, ReportFeedbackToolStripMenuItem.MouseLeave, ManageOnlineInstallationToolStripMenuItem.MouseLeave, AddProvisioningPackage.MouseLeave
+    Private Sub HideChildDescsTrigger(sender As Object, e As EventArgs) Handles AppendImage.MouseLeave, ApplyFFU.MouseLeave, ApplyImage.MouseLeave, CaptureCustomImage.MouseLeave, CaptureFFU.MouseLeave, CaptureImage.MouseLeave, CleanupMountpoints.MouseLeave, CommitImage.MouseLeave, DeleteImage.MouseLeave, ExportImage.MouseLeave, GetImageInfo.MouseLeave, GetWIMBootEntry.MouseLeave, ListImage.MouseLeave, MountImage.MouseLeave, OptimizeFFU.MouseLeave, OptimizeImage.MouseLeave, RemountImage.MouseLeave, SplitFFU.MouseLeave, SplitImage.MouseLeave, UnmountImage.MouseLeave, UpdateWIMBootEntry.MouseLeave, ApplySiloedPackage.MouseLeave, GetPackages.MouseLeave, AddPackage.MouseLeave, RemovePackage.MouseLeave, GetFeatures.MouseLeave, EnableFeature.MouseLeave, DisableFeature.MouseLeave, CleanupImage.MouseLeave, AddProvisionedAppxPackage.MouseLeave, GetProvisioningPackageInfo.MouseLeave, ApplyCustomDataImage.MouseLeave, GetProvisionedAppxPackages.MouseLeave, AddProvisionedAppxPackage.MouseLeave, RemoveProvisionedAppxPackage.MouseLeave, OptimizeProvisionedAppxPackages.MouseLeave, SetProvisionedAppxDataFile.MouseLeave, CheckAppPatch.MouseLeave, GetAppPatchInfo.MouseLeave, GetAppPatches.MouseLeave, GetAppInfo.MouseLeave, GetApps.MouseLeave, ExportDefaultAppAssociations.MouseLeave, GetDefaultAppAssociations.MouseLeave, ImportDefaultAppAssociations.MouseLeave, RemoveDefaultAppAssociations.MouseLeave, GetIntl.MouseLeave, SetUILangFallback.MouseLeave, SetSysUILang.MouseLeave, SetSysLocale.MouseLeave, SetUserLocale.MouseLeave, SetInputLocale.MouseLeave, SetAllIntl.MouseLeave, SetTimeZone.MouseLeave, SetSKUIntlDefaults.MouseLeave, SetLayeredDriver.MouseLeave, GenLangINI.MouseLeave, SetSetupUILang.MouseLeave, AddCapability.MouseLeave, ExportSource.MouseLeave, GetCapabilities.MouseLeave, RemoveCapability.MouseLeave, GetCurrentEdition.MouseLeave, GetTargetEditions.MouseLeave, SetEdition.MouseLeave, SetProductKey.MouseLeave, GetDrivers.MouseLeave, AddDriver.MouseLeave, RemoveDriver.MouseLeave, ExportDriver.MouseLeave, ApplyUnattend.MouseLeave, GetPESettings.MouseLeave, SetScratchSpace.MouseLeave, SetTargetPath.MouseLeave, GetOSUninstallWindow.MouseLeave, InitiateOSUninstall.MouseLeave, RemoveOSUninstall.MouseLeave, SetOSUninstallWindow.MouseLeave, SetReservedStorageState.MouseLeave, GetReservedStorageState.MouseLeave, NewProjectToolStripMenuItem.MouseLeave, OpenExistingProjectToolStripMenuItem.MouseLeave, SaveProjectToolStripMenuItem.MouseLeave, SaveProjectasToolStripMenuItem.MouseLeave, ExitToolStripMenuItem.MouseLeave, ViewProjectFilesInFileExplorerToolStripMenuItem.MouseLeave, UnloadProjectToolStripMenuItem.MouseLeave, SwitchImageIndexesToolStripMenuItem.MouseLeave, ProjectPropertiesToolStripMenuItem.MouseLeave, ImagePropertiesToolStripMenuItem.MouseLeave, ImageManagementToolStripMenuItem.MouseLeave, OSPackagesToolStripMenuItem.MouseLeave, ProvisioningPackagesToolStripMenuItem.MouseLeave, AppPackagesToolStripMenuItem.MouseLeave, AppPatchesToolStripMenuItem.MouseLeave, DefaultAppAssociationsToolStripMenuItem.MouseLeave, LanguagesAndRegionSettingsToolStripMenuItem.MouseLeave, CapabilitiesToolStripMenuItem.MouseLeave, WindowsEditionsToolStripMenuItem.MouseLeave, DriversToolStripMenuItem.MouseLeave, UnattendedAnswerFilesToolStripMenuItem.MouseLeave, WindowsPEServicingToolStripMenuItem.MouseLeave, OSUninstallToolStripMenuItem.MouseLeave, ReservedStorageToolStripMenuItem.MouseLeave, ImageConversionToolStripMenuItem.MouseLeave, WIMESDToolStripMenuItem.MouseLeave, RemountImageWithWritePermissionsToolStripMenuItem.MouseLeave, CommandShellToolStripMenuItem.MouseLeave, OptionsToolStripMenuItem.MouseLeave, HelpTopicsToolStripMenuItem.MouseLeave, GlossaryToolStripMenuItem.MouseLeave, CommandHelpToolStripMenuItem.MouseLeave, AboutDISMToolsToolStripMenuItem.MouseLeave, UnattendedAnswerFileManagerToolStripMenuItem.MouseLeave, AddEdge.MouseLeave, AddEdgeBrowser.MouseLeave, AddEdgeWebView.MouseLeave, ReportManagerToolStripMenuItem.MouseLeave, MergeSWM.MouseLeave, MountedImageManagerTSMI.MouseLeave, ReportFeedbackToolStripMenuItem.MouseLeave, ManageOnlineInstallationToolStripMenuItem.MouseLeave, AddProvisioningPackage.MouseLeave
         HideChildDescs()
     End Sub
 
@@ -7462,14 +7604,6 @@ Public Class MainForm
 
     Private Sub GetPESettings_MouseEnter(sender As Object, e As EventArgs) Handles GetPESettings.MouseEnter
         ShowChildDescs(True, 78)
-    End Sub
-
-    Private Sub GetScratchSpace_MouseEnter(sender As Object, e As EventArgs) Handles GetScratchSpace.MouseEnter
-        ShowChildDescs(True, 79)
-    End Sub
-
-    Private Sub GetTargetPath_MouseEnter(sender As Object, e As EventArgs) Handles GetTargetPath.MouseEnter
-        ShowChildDescs(True, 80)
     End Sub
 
     Private Sub SetScratchSpace_MouseEnter(sender As Object, e As EventArgs) Handles SetScratchSpace.MouseEnter
@@ -10445,5 +10579,21 @@ Public Class MainForm
                 Process.Start(AppxResSFD.FileName)
             End If
         End If
+    End Sub
+
+    Private Sub ExportDriver_Click(sender As Object, e As EventArgs) Handles ExportDriver.Click
+        ExportDrivers.ShowDialog()
+    End Sub
+
+    Private Sub GetPESettings_Click(sender As Object, e As EventArgs) Handles GetPESettings.Click
+        GetWinPESettings.ShowDialog()
+    End Sub
+
+    Private Sub SetTargetPath_Click(sender As Object, e As EventArgs) Handles SetTargetPath.Click
+        SetPETargetPath.ShowDialog()
+    End Sub
+
+    Private Sub SetScratchSpace_Click(sender As Object, e As EventArgs) Handles SetScratchSpace.Click
+        SetPEScratchSpace.ShowDialog()
     End Sub
 End Class

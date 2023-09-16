@@ -262,6 +262,12 @@
     <Compile Include="Panels\Get_Ops\Pkgs\GetPkgInfo.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Get_Ops\WinPE\GetWinPESettings.Designer.vb">
+      <DependentUpon>GetWinPESettings.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\WinPE\GetWinPESettings.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\ActiveInstAccessWarn.Designer.vb">
       <DependentUpon>ActiveInstAccessWarn.vb</DependentUpon>
     </Compile>
@@ -278,6 +284,12 @@
       <DependentUpon>AddProvAppxPackage.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\Img_Ops\AppxPkgs\AddProvAppxPackage.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\AppxPkgs\AppInstallerDownloader.Designer.vb">
+      <DependentUpon>AppInstallerDownloader.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\AppxPkgs\AppInstallerDownloader.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Img_Ops\AppxPkgs\RemProvAppxPackage.Designer.vb">
@@ -332,6 +344,12 @@
       <DependentUpon>AddDrivers.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\Img_Ops\Drivers\AddDrivers.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Drivers\ExportDrivers.Designer.vb">
+      <DependentUpon>ExportDrivers.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Drivers\ExportDrivers.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Img_Ops\Drivers\RemDrivers.Designer.vb">
@@ -440,6 +458,18 @@
       <DependentUpon>SingleImageIndexError.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\Img_Ops\Switch\SingleImageIndexError.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\WinPE\SetScratchSpace.Designer.vb">
+      <DependentUpon>SetScratchSpace.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\WinPE\SetScratchSpace.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\WinPE\SetTargetPath.Designer.vb">
+      <DependentUpon>SetTargetPath.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\WinPE\SetTargetPath.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Internal\Feats\FeatErrorText.Designer.vb">
@@ -658,6 +688,9 @@
     <EmbeddedResource Include="Panels\Get_Ops\Pkgs\GetPkgInfo.resx">
       <DependentUpon>GetPkgInfo.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Get_Ops\WinPE\GetWinPESettings.resx">
+      <DependentUpon>GetWinPESettings.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\ActiveInstAccessWarn.resx">
       <DependentUpon>ActiveInstAccessWarn.vb</DependentUpon>
     </EmbeddedResource>
@@ -666,6 +699,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\AppxPkgs\AddProvAppxPackage.resx">
       <DependentUpon>AddProvAppxPackage.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\AppxPkgs\AppInstallerDownloader.resx">
+      <DependentUpon>AppInstallerDownloader.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\AppxPkgs\RemProvAppxPackage.resx">
       <DependentUpon>RemProvAppxPackage.vb</DependentUpon>
@@ -693,6 +729,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Drivers\AddDrivers.resx">
       <DependentUpon>AddDrivers.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Drivers\ExportDrivers.resx">
+      <DependentUpon>ExportDrivers.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Drivers\RemDrivers.resx">
       <DependentUpon>RemDrivers.vb</DependentUpon>
@@ -747,6 +786,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Switch\SingleImageIndexError.resx">
       <DependentUpon>SingleImageIndexError.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\WinPE\SetScratchSpace.resx">
+      <DependentUpon>SetScratchSpace.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\WinPE\SetTargetPath.resx">
+      <DependentUpon>SetTargetPath.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Internal\Feats\FeatErrorText.resx">
       <DependentUpon>FeatErrorText.vb</DependentUpon>
@@ -958,6 +1003,7 @@
     <None Include="Resources\info_from_pkg_file.png" />
     <None Include="Resources\get_appxpkg_info.png" />
     <None Include="Resources\split_img.png" />
+    <None Include="Resources\export_driver.png" />
     <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
     <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
     <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />
