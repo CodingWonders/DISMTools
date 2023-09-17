@@ -7,7 +7,8 @@ Imports DISMTools.Utilities
 
 Public Class GetPkgInfoDlg
 
-    Dim PackageInfoList As New List(Of DismPackageInfoEx)
+    Dim PackageInfoExList As New List(Of DismPackageInfoEx)
+    Dim PackageInfoList As New List(Of DismPackageInfo)
     Public InstalledPkgInfo As DismPackageCollection
 
     Private Sub GetPkgInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -413,7 +414,7 @@ Public Class GetPkgInfoDlg
                         Label53.Text = Casters.CastDismFullyOfflineInstallationType(If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.FullyOffline, PkgInfo.FullyOffline), True)
                         If Environment.OSVersion.Version.Major >= 10 Then Label56.Text = PkgInfoEx.CapabilityId Else Label56.Text = ""
                         Label57.Text = ""
-                        Dim cProps As DismCustomPropertyCollection = PkgInfo.CustomProperties
+                        Dim cProps As DismCustomPropertyCollection = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.CustomProperties, PkgInfo.CustomProperties)
                         If cProps.Count > 0 Then
                             For Each cProp As DismCustomProperty In cProps
                                 Label57.Text &= "- " & If(cProp.Path <> "", cProp.Path & "\", "") & cProp.Name & ": " & cProp.Value & CrLf
@@ -434,7 +435,7 @@ Public Class GetPkgInfoDlg
                             End Select
                         End If
                         Label59.Text = ""
-                        Dim pkgFeats As DismFeatureCollection = PkgInfo.Features
+                        Dim pkgFeats As DismFeatureCollection = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.Features, PkgInfo.Features)
                         If pkgFeats.Count > 0 Then
                             ' Output all features
                             For Each pkgFeat As DismFeature In pkgFeats
@@ -486,6 +487,7 @@ Public Class GetPkgInfoDlg
 
     Sub GetPackageFileInformation()
         PackageInfoList.Clear()
+        PackageInfoExList.Clear()
         Try
             ' Background processes need to have completed before showing information
             If MainForm.ImgBW.IsBusy Then
@@ -562,7 +564,14 @@ Public Class GetPkgInfoDlg
                                     Label5.Text = "Obteniendo información del archivo de paquete " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Esto puede llevar algo de tiempo y el programa podría congelarse temporalmente"
                             End Select
                             Application.DoEvents()
-                            Dim pkgInfo As DismPackageInfoEx = DismApi.GetPackageInfoExByPath(imgSession, pkgFile)
+                            Dim pkgInfoEx As DismPackageInfoEx = Nothing
+                            Dim pkgInfo As DismPackageInfo = Nothing
+                            If Environment.OSVersion.Version.Major >= 10 Then
+                                pkgInfoEx = DismApi.GetPackageInfoExByPath(imgSession, pkgFile)
+                            Else
+                                pkgInfo = DismApi.GetPackageInfoByPath(imgSession, pkgFile)
+                            End If
+                            If pkgInfoEx IsNot Nothing Then PackageInfoExList.Add(pkgInfoEx)
                             If pkgInfo IsNot Nothing Then PackageInfoList.Add(pkgInfo)
                         End If
                     Next
@@ -591,27 +600,27 @@ Public Class GetPkgInfoDlg
     End Sub
 
     Sub DisplayPackageFileInformation(PkgFile As Integer)
-        Label9.Text = PackageInfoList(PkgFile).PackageName
-        Label11.Text = Casters.CastDismApplicabilityStatus(PackageInfoList(PkgFile).Applicable, True)
-        Label17.Text = PackageInfoList(PkgFile).Copyright
-        Label19.Text = PackageInfoList(PkgFile).Company
-        Label62.Text = PackageInfoList(PkgFile).CreationTime
-        Label64.Text = PackageInfoList(PkgFile).Description
-        Label66.Text = PackageInfoList(PkgFile).InstallClient
-        Label68.Text = PackageInfoList(PkgFile).InstallPackageName
-        Label70.Text = PackageInfoList(PkgFile).InstallTime
-        Label72.Text = PackageInfoList(PkgFile).LastUpdateTime
-        Label74.Text = PackageInfoList(PkgFile).DisplayName
-        Label76.Text = PackageInfoList(PkgFile).ProductName
-        Label78.Text = PackageInfoList(PkgFile).ProductVersion.ToString()
-        Label80.Text = Casters.CastDismReleaseType(PackageInfoList(PkgFile).ReleaseType, True)
-        Label82.Text = Casters.CastDismRestartType(PackageInfoList(PkgFile).RestartRequired, True)
-        Label84.Text = PackageInfoList(PkgFile).SupportInformation
-        Label86.Text = Casters.CastDismPackageState(PackageInfoList(PkgFile).PackageState, True)
-        Label88.Text = Casters.CastDismFullyOfflineInstallationType(PackageInfoList(PkgFile).FullyOffline, True)
-        Label90.Text = PackageInfoList(PkgFile).CapabilityId
+        Label9.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).PackageName, PackageInfoList(PkgFile).PackageName)
+        Label11.Text = Casters.CastDismApplicabilityStatus(If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).Applicable, PackageInfoList(PkgFile).Applicable), True)
+        Label17.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).Copyright, PackageInfoList(PkgFile).Copyright)
+        Label19.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).Company, PackageInfoList(PkgFile).Company)
+        Label62.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).CreationTime, PackageInfoList(PkgFile).CreationTime)
+        Label64.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).Description, PackageInfoList(PkgFile).Description)
+        Label66.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).InstallClient, PackageInfoList(PkgFile).InstallClient)
+        Label68.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).InstallPackageName, PackageInfoList(PkgFile).InstallPackageName)
+        Label70.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).InstallTime, PackageInfoList(PkgFile).InstallTime)
+        Label72.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).LastUpdateTime, PackageInfoList(PkgFile).LastUpdateTime)
+        Label74.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).DisplayName, PackageInfoList(PkgFile).DisplayName)
+        Label76.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).ProductName, PackageInfoList(PkgFile).ProductName)
+        Label78.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).ProductVersion.ToString(), PackageInfoList(PkgFile).ProductVersion.ToString())
+        Label80.Text = Casters.CastDismReleaseType(If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).ReleaseType, PackageInfoList(PkgFile).ReleaseType), True)
+        Label82.Text = Casters.CastDismRestartType(If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).RestartRequired, PackageInfoList(PkgFile).RestartRequired), True)
+        Label84.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).SupportInformation, PackageInfoList(PkgFile).SupportInformation)
+        Label86.Text = Casters.CastDismPackageState(If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).PackageState, PackageInfoList(PkgFile).PackageState), True)
+        Label88.Text = Casters.CastDismFullyOfflineInstallationType(If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).FullyOffline, PackageInfoList(PkgFile).FullyOffline), True)
+        If Environment.OSVersion.Version.Major >= 10 Then Label90.Text = PackageInfoExList(PkgFile).CapabilityId Else Label90.Text = ""
         Label92.Text = ""
-        Dim cProps As DismCustomPropertyCollection = PackageInfoList(PkgFile).CustomProperties
+        Dim cProps As DismCustomPropertyCollection = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).CustomProperties, PackageInfoList(PkgFile).CustomProperties)
         If cProps.Count > 0 Then
             For Each cProp As DismCustomProperty In cProps
                 Label92.Text &= "- " & If(cProp.Path <> "", cProp.Path & "\", "") & cProp.Name & ": " & cProp.Value & CrLf
@@ -632,7 +641,7 @@ Public Class GetPkgInfoDlg
             End Select
         End If
         Label94.Text = ""
-        Dim pkgFeats As DismFeatureCollection = PackageInfoList(PkgFile).Features
+        Dim pkgFeats As DismFeatureCollection = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).Features, PackageInfoList(PkgFile).Features)
         If pkgFeats.Count > 0 Then
             ' Output all features
             For Each pkgFeat As DismFeature In pkgFeats
@@ -678,7 +687,7 @@ Public Class GetPkgInfoDlg
                 NoPkgPanel.Visible = False
                 PackageFileInfoPanel.Visible = True
                 Button2.Enabled = True
-                If PackageInfoList.Count > 0 Then DisplayPackageFileInformation(ListBox1.SelectedIndex)
+                If PackageInfoExList.Count > 0 Or PackageInfoList.Count > 0 Then DisplayPackageFileInformation(ListBox1.SelectedIndex)
             Else
                 NoPkgPanel.Visible = True
                 PackageFileInfoPanel.Visible = False
@@ -697,6 +706,7 @@ Public Class GetPkgInfoDlg
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         PackageInfoList.RemoveAt(ListBox1.SelectedIndex)
+        PackageInfoExList.RemoveAt(ListBox1.SelectedIndex)
         ListBox1.Items.Remove(ListBox1.SelectedItem)
         If ListBox1.Items.Count > 1 Then Button2.Enabled = False Else Button2.Enabled = True
         NoPkgPanel.Visible = True
@@ -705,6 +715,7 @@ Public Class GetPkgInfoDlg
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
         PackageInfoList.Clear()
+        PackageInfoExList.Clear()
         ListBox1.Items.Clear()
         Button2.Enabled = False
         Button3.Enabled = False
