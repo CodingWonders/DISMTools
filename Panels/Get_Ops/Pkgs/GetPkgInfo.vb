@@ -384,27 +384,34 @@ Public Class GetPkgInfoDlg
                             Case 2
                                 Label5.Text = "Obteniendo información de " & Quote & ListBox2.SelectedItem & Quote & "..."
                         End Select
-                        ' Use the extended version, as DISM gets extended package information
-                        Dim PkgInfo As DismPackageInfoEx = DismApi.GetPackageInfoExByName(imgSession, ListBox2.SelectedItem)
-                        Label23.Text = PkgInfo.PackageName
-                        Label25.Text = Casters.CastDismApplicabilityStatus(PkgInfo.Applicable, True)
-                        Label35.Text = PkgInfo.Copyright
-                        Label32.Text = PkgInfo.Company
-                        Label40.Text = PkgInfo.CreationTime
-                        Label42.Text = PkgInfo.Description
-                        Label46.Text = PkgInfo.InstallClient
-                        Label34.Text = PkgInfo.InstallPackageName
-                        Label27.Text = PkgInfo.InstallTime
-                        Label29.Text = PkgInfo.LastUpdateTime
-                        Label38.Text = PkgInfo.DisplayName
-                        Label44.Text = PkgInfo.ProductName
-                        Label15.Text = PkgInfo.ProductVersion.ToString()
-                        Label21.Text = Casters.CastDismReleaseType(PkgInfo.ReleaseType, True)
-                        Label13.Text = Casters.CastDismRestartType(PkgInfo.RestartRequired, True)
-                        Label49.Text = PkgInfo.SupportInformation
-                        Label51.Text = Casters.CastDismPackageState(PkgInfo.PackageState)
-                        Label53.Text = Casters.CastDismFullyOfflineInstallationType(PkgInfo.FullyOffline, True)
-                        Label56.Text = PkgInfo.CapabilityId
+                        Dim PkgInfoEx As DismPackageInfoEx = Nothing
+                        Dim PkgInfo As DismPackageInfo = Nothing
+                        ' On Windows 10 and later, use the extended version, as DISM gets extended package information.
+                        ' Windows 8 and earlier cannot use the extended type, as no "Ex" function is declared in their DISM API DLL
+                        If Environment.OSVersion.Version.Major >= 10 Then
+                            PkgInfoEx = DismApi.GetPackageInfoExByName(imgSession, ListBox2.SelectedItem)
+                        Else
+                            PkgInfo = DismApi.GetPackageInfoByName(imgSession, ListBox2.SelectedItem)
+                        End If
+                        Label23.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.PackageName, PkgInfo.PackageName)
+                        Label25.Text = Casters.CastDismApplicabilityStatus(If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.Applicable, PkgInfo.Applicable), True)
+                        Label35.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.Copyright, PkgInfo.Copyright)
+                        Label32.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.Company, PkgInfo.Company)
+                        Label40.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.CreationTime, PkgInfo.CreationTime)
+                        Label42.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.Description, PkgInfo.Description)
+                        Label46.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.InstallClient, PkgInfo.InstallClient)
+                        Label34.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.InstallPackageName, PkgInfo.InstallPackageName)
+                        Label27.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.InstallTime, PkgInfo.InstallTime)
+                        Label29.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.LastUpdateTime, PkgInfo.LastUpdateTime)
+                        Label38.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.DisplayName, PkgInfo.DisplayName)
+                        Label44.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.ProductName, PkgInfo.ProductName)
+                        Label15.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.ProductVersion.ToString(), PkgInfo.ProductVersion.ToString())
+                        Label21.Text = Casters.CastDismReleaseType(If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.ReleaseType, PkgInfo.ReleaseType), True)
+                        Label13.Text = Casters.CastDismRestartType(If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.RestartRequired, PkgInfo.RestartRequired), True)
+                        Label49.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.SupportInformation, PkgInfo.SupportInformation)
+                        Label51.Text = Casters.CastDismPackageState(If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.PackageState, PkgInfo.PackageState), True)
+                        Label53.Text = Casters.CastDismFullyOfflineInstallationType(If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.FullyOffline, PkgInfo.FullyOffline), True)
+                        If Environment.OSVersion.Version.Major >= 10 Then Label56.Text = PkgInfoEx.CapabilityId Else Label56.Text = ""
                         Label57.Text = ""
                         Dim cProps As DismCustomPropertyCollection = PkgInfo.CustomProperties
                         If cProps.Count > 0 Then
