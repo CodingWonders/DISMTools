@@ -200,6 +200,8 @@ Public Class ProgressPanel
 
     Public ActionParameters As New List(Of String)
 
+    Dim ImgVersion As Version
+
     ' Initial settings
     Dim DismExe As String
     Dim AutoLogs As Boolean
@@ -2691,7 +2693,7 @@ Public Class ProgressPanel
                     LogView.AppendText(CrLf & _
                                        "Warning: the custom data file does not exist. Continuing without one...")
                 End If
-                If FileVersionInfo.GetVersionInfo(DismProgram).ProductMajorPart = 10 Then
+                If FileVersionInfo.GetVersionInfo(DismProgram).ProductMajorPart = 10 And ImgVersion.Major = 10 Then
                     If appxAdditionPackageList(x).PackageRegions = "" Then
                         CommandArgs &= " /region:all"
                     Else
@@ -4576,6 +4578,7 @@ Public Class ProgressPanel
         Language = MainForm.Language
         AllDrivers = MainForm.AllDrivers
         BodyPanel.BorderStyle = BorderStyle.None
+        ImgVersion = MainForm.imgVersionInfo
         ' Determine program colors
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BodyPanel.BackColor = Color.FromArgb(37, 37, 38)
