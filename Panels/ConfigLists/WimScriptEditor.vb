@@ -5,7 +5,7 @@ Imports System.Text.Encoding
 
 Public Class WimScriptEditor
 
-    Dim ConfigListFile As String
+    Public ConfigListFile As String
     Dim EditedLVI As String
 
     Private Sub WimScriptEditor_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -118,8 +118,6 @@ Public Class WimScriptEditor
         GroupBox1.ForeColor = ForeColor
         GroupBox2.ForeColor = ForeColor
         GroupBox3.ForeColor = ForeColor
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         ' Fill in font combinations
         FontFamilyTSCB.Items.Clear()
         For Each fntFamily As FontFamily In FontFamily.Families
@@ -1043,6 +1041,13 @@ Public Class WimScriptEditor
             Catch ex As Exception
                 Exit Try
             End Try
+        End If
+    End Sub
+
+    Private Sub WimScriptEditor_VisibleChanged(sender As Object, e As EventArgs) Handles MyBase.VisibleChanged
+        If Visible Then
+            Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+            If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         End If
     End Sub
 End Class

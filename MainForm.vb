@@ -10347,6 +10347,8 @@ Public Class MainForm
     End Sub
 
     Private Sub WimScriptEditorCommand_Click(sender As Object, e As EventArgs) Handles WimScriptEditorCommand.Click
+        WimScriptEditor.MinimizeBox = True
+        WimScriptEditor.MaximizeBox = True
         If WimScriptEditor.Visible Then
             If WimScriptEditor.WindowState = FormWindowState.Minimized Then
                 WimScriptEditor.WindowState = FormWindowState.Normal
