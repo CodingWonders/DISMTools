@@ -220,6 +220,8 @@ Public Class MainForm
     Dim CapabilityInfoList As DismCapabilityCollection
     Dim DriverInfoList As DismDriverPackageCollection
 
+    Public imgVersionInfo As Version = Nothing
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -1696,6 +1698,7 @@ Public Class MainForm
         If Streamlined Then
             If OnlineMode Then
                 Label17.Text = Environment.OSVersion.Version.Major & "." & Environment.OSVersion.Version.Minor & "." & Environment.OSVersion.Version.Build & "." & FileVersionInfo.GetVersionInfo(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe").ProductPrivatePart
+                imgVersionInfo = Environment.OSVersion.Version
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1954,6 +1957,7 @@ Public Class MainForm
                                 Dim ImageInfoCollection As DismImageInfoCollection = DismApi.GetImageInfo(MountedImageImgFiles(x))
                                 For Each imageInfo As DismImageInfo In ImageInfoCollection
                                     If imageInfo.ImageIndex = MountedImageImgIndexes(x) Then
+                                        imgVersionInfo = imageInfo.ProductVersion
                                         imgMountedName = imageInfo.ImageName
                                         imgMountedDesc = imageInfo.ImageDescription
                                         imgHal = If(Not imageInfo.Hal = "", imageInfo.Hal, "Undefined by the image")
