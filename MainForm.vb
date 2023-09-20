@@ -10586,14 +10586,26 @@ Public Class MainForm
     End Sub
 
     Private Sub GetPESettings_Click(sender As Object, e As EventArgs) Handles GetPESettings.Click
+        If ImgBW.IsBusy Then
+            BGProcsBusyDialog.ShowDialog()
+            Exit Sub
+        End If
         GetWinPESettings.ShowDialog()
     End Sub
 
     Private Sub SetTargetPath_Click(sender As Object, e As EventArgs) Handles SetTargetPath.Click
+        If ImgBW.IsBusy Then
+            BGProcsBusyDialog.ShowDialog()
+            Exit Sub
+        End If
         SetPETargetPath.ShowDialog()
     End Sub
 
     Private Sub SetScratchSpace_Click(sender As Object, e As EventArgs) Handles SetScratchSpace.Click
+        If ImgBW.IsBusy Then
+            BGProcsBusyDialog.ShowDialog()
+            Exit Sub
+        End If
         SetPEScratchSpace.ShowDialog()
     End Sub
 End Class
