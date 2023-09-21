@@ -68,6 +68,7 @@ Partial Class PrgAbout
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.PictureBox3 = New System.Windows.Forms.PictureBox()
         Me.UpdCheckBtn = New System.Windows.Forms.Button()
+        Me.PictureBox4 = New System.Windows.Forms.PictureBox()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ModernPanelContainer.SuspendLayout()
@@ -78,6 +79,7 @@ Partial Class PrgAbout
         Me.TableLayoutPanel3.SuspendLayout()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -674,6 +676,17 @@ Partial Class PrgAbout
         Me.UpdCheckBtn.Text = "Check for updates"
         Me.UpdCheckBtn.UseVisualStyleBackColor = True
         '
+        'PictureBox4
+        '
+        Me.PictureBox4.BackColor = System.Drawing.Color.Transparent
+        Me.PictureBox4.Image = Global.DISMTools.My.Resources.Resources.mdl_discussion
+        Me.PictureBox4.Location = New System.Drawing.Point(86, 370)
+        Me.PictureBox4.Name = "PictureBox4"
+        Me.PictureBox4.Size = New System.Drawing.Size(24, 24)
+        Me.PictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox4.TabIndex = 9
+        Me.PictureBox4.TabStop = False
+        '
         'PrgAbout
         '
         Me.AcceptButton = Me.OK_Button
@@ -682,6 +695,7 @@ Partial Class PrgAbout
         Me.BackgroundImage = Global.DISMTools.My.Resources.Resources.aboutscr_bg
         Me.ClientSize = New System.Drawing.Size(844, 441)
         Me.Controls.Add(Me.UpdCheckBtn)
+        Me.Controls.Add(Me.PictureBox4)
         Me.Controls.Add(Me.PictureBox3)
         Me.Controls.Add(Me.PictureBox2)
         Me.Controls.Add(Me.PictureBox1)
@@ -710,6 +724,7 @@ Partial Class PrgAbout
         Me.TableLayoutPanel3.PerformLayout()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -760,5 +775,6 @@ Partial Class PrgAbout
     Friend WithEvents PictureBox2 As System.Windows.Forms.PictureBox
     Friend WithEvents PictureBox3 As System.Windows.Forms.PictureBox
     Friend WithEvents UpdCheckBtn As System.Windows.Forms.Button
+    Friend WithEvents PictureBox4 As System.Windows.Forms.PictureBox
 
 End Class

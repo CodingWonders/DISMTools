@@ -343,11 +343,11 @@ Public Class PrgAbout
     End Sub
 #End Region
 
-    Private Sub Picture_MouseEnter(sender As Object, e As EventArgs) Handles PictureBox3.MouseEnter, PictureBox2.MouseEnter
+    Private Sub Picture_MouseEnter(sender As Object, e As EventArgs) Handles PictureBox3.MouseEnter, PictureBox2.MouseEnter, PictureBox4.MouseEnter
         Cursor = Cursors.Hand
     End Sub
 
-    Private Sub Picture_MouseLeave(sender As Object, e As EventArgs) Handles PictureBox3.MouseLeave, PictureBox2.MouseLeave
+    Private Sub Picture_MouseLeave(sender As Object, e As EventArgs) Handles PictureBox3.MouseLeave, PictureBox2.MouseLeave, PictureBox4.MouseLeave
         Cursor = Cursors.Arrow
     End Sub
 
@@ -359,17 +359,21 @@ Public Class PrgAbout
         Process.Start("https://reddit.com/r/DISMTools")
     End Sub
 
+    Private Sub PictureBox4_Click(sender As Object, e As EventArgs) Handles PictureBox4.Click
+        Process.Start("https://forums.mydigitallife.net/threads/discussion-dismtools.87263/")
+    End Sub
+
     Private Sub PictureBox2_MouseHover(sender As Object, e As EventArgs) Handles PictureBox2.MouseHover
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENG"
-                        PictureToolTip.SetToolTip(sender, "Check the project's repository on GitHub")
+                        PictureToolTip.SetToolTip(sender, "Check out the project's repository on GitHub")
                     Case "ESN"
                         PictureToolTip.SetToolTip(sender, "Consulte el repositorio del proyecto en GitHub")
                 End Select
             Case 1
-                PictureToolTip.SetToolTip(sender, "Check the project's repository on GitHub")
+                PictureToolTip.SetToolTip(sender, "Check out the project's repository on GitHub")
             Case 2
                 PictureToolTip.SetToolTip(sender, "Consulte el repositorio del proyecto en GitHub")
         End Select
@@ -380,14 +384,30 @@ Public Class PrgAbout
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENG"
-                        PictureToolTip.SetToolTip(sender, "Check the project's official subreddit")
+                        PictureToolTip.SetToolTip(sender, "Check out the project's official subreddit")
                     Case "ESN"
                         PictureToolTip.SetToolTip(sender, "Consulte el subreddit oficial del proyecto")
                 End Select
             Case 1
-                PictureToolTip.SetToolTip(sender, "Check the project's official subreddit")
+                PictureToolTip.SetToolTip(sender, "Check out the project's official subreddit")
             Case 2
                 PictureToolTip.SetToolTip(sender, "Consulte el subreddit oficial del proyecto")
+        End Select
+    End Sub
+
+    Private Sub PictureBox4_MouseHover(sender As Object, e As EventArgs) Handles PictureBox4.MouseHover
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENG"
+                        PictureToolTip.SetToolTip(sender, "Check out the project's discussion on the My Digital Life forums")
+                    Case "ESN"
+                        PictureToolTip.SetToolTip(sender, "Consulte la discusión del proyecto en los foros de My Digital Life")
+                End Select
+            Case 1
+                PictureToolTip.SetToolTip(sender, "Check out the project's discussion on the My Digital Life forums")
+            Case 2
+                PictureToolTip.SetToolTip(sender, "Consulte la discusión del proyecto en los foros de My Digital Life")
         End Select
     End Sub
 
