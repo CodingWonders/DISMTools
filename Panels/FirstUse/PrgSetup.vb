@@ -208,11 +208,6 @@ Public Class PrgSetup
         End If
     End Sub
 
-    Private Sub Panel4_Paint(sender As Object, e As PaintEventArgs) Handles Panel4.Paint
-        Dim brush As LinearGradientBrush = New LinearGradientBrush(Panel4.ClientRectangle, TrackBar1.BackColor, Color.Transparent, LinearGradientMode.Horizontal)
-        e.Graphics.FillRectangle(brush, Panel4.ClientRectangle)
-    End Sub
-
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
         ' MainForm.SaveDTSettings()
         Options.ShowDialog(Me)
@@ -225,6 +220,28 @@ Public Class PrgSetup
         GetSystemFonts()
         TextBox2.Text = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\Logs\DISM\DISM.log"
         MainForm.LogFile = TextBox2.Text
+
+        ' Set color modes
+        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
+            BodyPanelContainer.BackColor = Color.FromArgb(48, 48, 48)
+            BodyPanelContainer.ForeColor = Color.White
+        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
+            BodyPanelContainer.BackColor = Color.FromArgb(239, 239, 242)
+            BodyPanelContainer.ForeColor = Color.Black
+        End If
+        ComboBox1.BackColor = BodyPanelContainer.BackColor
+        ComboBox2.BackColor = BodyPanelContainer.BackColor
+        ComboBox3.BackColor = BodyPanelContainer.BackColor
+        ComboBox1.ForeColor = BodyPanelContainer.ForeColor
+        ComboBox2.ForeColor = BodyPanelContainer.ForeColor
+        ComboBox3.ForeColor = BodyPanelContainer.ForeColor
+        NumericUpDown1.BackColor = BodyPanelContainer.BackColor
+        NumericUpDown1.ForeColor = BodyPanelContainer.ForeColor
+        TextBox1.BackColor = BodyPanelContainer.BackColor
+        TextBox1.ForeColor = BodyPanelContainer.ForeColor
+        TextBox2.BackColor = BodyPanelContainer.BackColor
+        TextBox2.ForeColor = BodyPanelContainer.ForeColor
+        TrackBar1.BackColor = BodyPanelContainer.BackColor
     End Sub
 
     Sub GetSystemFonts()

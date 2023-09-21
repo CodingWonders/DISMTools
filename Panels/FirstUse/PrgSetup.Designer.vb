@@ -87,6 +87,8 @@ Partial Class PrgSetup
         Me.Button7 = New System.Windows.Forms.Button()
         Me.Label25 = New System.Windows.Forms.Label()
         Me.Label22 = New System.Windows.Forms.Label()
+        Me.Panel5 = New System.Windows.Forms.Panel()
+        Me.Panel6 = New System.Windows.Forms.Panel()
         Me.wndControlPanel.SuspendLayout()
         CType(Me.minBox, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.closeBox, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -119,7 +121,7 @@ Partial Class PrgSetup
         Me.wndControlPanel.Dock = System.Windows.Forms.DockStyle.Top
         Me.wndControlPanel.Location = New System.Drawing.Point(0, 0)
         Me.wndControlPanel.Name = "wndControlPanel"
-        Me.wndControlPanel.Size = New System.Drawing.Size(960, 48)
+        Me.wndControlPanel.Size = New System.Drawing.Size(1280, 48)
         Me.wndControlPanel.TabIndex = 0
         '
         'Label1
@@ -135,8 +137,9 @@ Partial Class PrgSetup
         '
         'minBox
         '
+        Me.minBox.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.minBox.Image = Global.DISMTools.My.Resources.Resources.minBox
-        Me.minBox.Location = New System.Drawing.Point(869, 0)
+        Me.minBox.Location = New System.Drawing.Point(1189, 0)
         Me.minBox.Name = "minBox"
         Me.minBox.Size = New System.Drawing.Size(46, 32)
         Me.minBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
@@ -145,8 +148,9 @@ Partial Class PrgSetup
         '
         'closeBox
         '
+        Me.closeBox.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.closeBox.Image = Global.DISMTools.My.Resources.Resources.closebox
-        Me.closeBox.Location = New System.Drawing.Point(914, 0)
+        Me.closeBox.Location = New System.Drawing.Point(1234, 0)
         Me.closeBox.Name = "closeBox"
         Me.closeBox.Size = New System.Drawing.Size(46, 32)
         Me.closeBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
@@ -162,9 +166,9 @@ Partial Class PrgSetup
         Me.btnControlPanel.Controls.Add(Me.Next_Button)
         Me.btnControlPanel.Controls.Add(Me.Cancel_Button)
         Me.btnControlPanel.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.btnControlPanel.Location = New System.Drawing.Point(0, 664)
+        Me.btnControlPanel.Location = New System.Drawing.Point(0, 672)
         Me.btnControlPanel.Name = "btnControlPanel"
-        Me.btnControlPanel.Size = New System.Drawing.Size(960, 48)
+        Me.btnControlPanel.Size = New System.Drawing.Size(1280, 48)
         Me.btnControlPanel.TabIndex = 1
         '
         'Label4
@@ -172,7 +176,7 @@ Partial Class PrgSetup
         Me.Label4.AutoSize = True
         Me.Label4.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label4.ForeColor = System.Drawing.Color.White
-        Me.Label4.Location = New System.Drawing.Point(12, 17)
+        Me.Label4.Location = New System.Drawing.Point(204, 17)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(168, 15)
         Me.Label4.TabIndex = 1
@@ -180,9 +184,10 @@ Partial Class PrgSetup
         '
         'Back_Button
         '
+        Me.Back_Button.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Back_Button.Enabled = False
         Me.Back_Button.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Back_Button.Location = New System.Drawing.Point(711, 13)
+        Me.Back_Button.Location = New System.Drawing.Point(838, 13)
         Me.Back_Button.Name = "Back_Button"
         Me.Back_Button.Size = New System.Drawing.Size(75, 23)
         Me.Back_Button.TabIndex = 0
@@ -191,8 +196,9 @@ Partial Class PrgSetup
         '
         'Next_Button
         '
+        Me.Next_Button.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Next_Button.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Next_Button.Location = New System.Drawing.Point(792, 13)
+        Me.Next_Button.Location = New System.Drawing.Point(919, 13)
         Me.Next_Button.Name = "Next_Button"
         Me.Next_Button.Size = New System.Drawing.Size(75, 23)
         Me.Next_Button.TabIndex = 0
@@ -201,8 +207,9 @@ Partial Class PrgSetup
         '
         'Cancel_Button
         '
+        Me.Cancel_Button.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Cancel_Button.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Cancel_Button.Location = New System.Drawing.Point(873, 13)
+        Me.Cancel_Button.Location = New System.Drawing.Point(1000, 13)
         Me.Cancel_Button.Name = "Cancel_Button"
         Me.Cancel_Button.Size = New System.Drawing.Size(75, 23)
         Me.Cancel_Button.TabIndex = 0
@@ -211,16 +218,17 @@ Partial Class PrgSetup
         '
         'BodyPanelContainer
         '
-        Me.BodyPanelContainer.BackColor = System.Drawing.Color.Transparent
+        Me.BodyPanelContainer.BackColor = System.Drawing.Color.FromArgb(CType(CType(239, Byte), Integer), CType(CType(239, Byte), Integer), CType(CType(242, Byte), Integer))
         Me.BodyPanelContainer.Controls.Add(Me.WelcomePanel)
         Me.BodyPanelContainer.Controls.Add(Me.CustomizationPanel)
         Me.BodyPanelContainer.Controls.Add(Me.LogsPanel)
         Me.BodyPanelContainer.Controls.Add(Me.ModulesPanel)
         Me.BodyPanelContainer.Controls.Add(Me.FinishPanel)
         Me.BodyPanelContainer.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.BodyPanelContainer.Location = New System.Drawing.Point(0, 48)
+        Me.BodyPanelContainer.ForeColor = System.Drawing.Color.Black
+        Me.BodyPanelContainer.Location = New System.Drawing.Point(200, 48)
         Me.BodyPanelContainer.Name = "BodyPanelContainer"
-        Me.BodyPanelContainer.Size = New System.Drawing.Size(960, 616)
+        Me.BodyPanelContainer.Size = New System.Drawing.Size(880, 624)
         Me.BodyPanelContainer.TabIndex = 2
         '
         'WelcomePanel
@@ -231,15 +239,17 @@ Partial Class PrgSetup
         Me.WelcomePanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.WelcomePanel.Location = New System.Drawing.Point(0, 0)
         Me.WelcomePanel.Name = "WelcomePanel"
-        Me.WelcomePanel.Size = New System.Drawing.Size(960, 616)
+        Me.WelcomePanel.Size = New System.Drawing.Size(880, 624)
         Me.WelcomePanel.TabIndex = 0
         '
         'PictureBox1
         '
+        Me.PictureBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.PictureBox1.Image = Global.DISMTools.My.Resources.Resources.product_overview
-        Me.PictureBox1.Location = New System.Drawing.Point(45, 152)
+        Me.PictureBox1.Location = New System.Drawing.Point(0, 160)
         Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(870, 441)
+        Me.PictureBox1.Size = New System.Drawing.Size(880, 441)
         Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.PictureBox1.TabIndex = 2
         Me.PictureBox1.TabStop = False
@@ -248,12 +258,12 @@ Partial Class PrgSetup
         '
         Me.Label3.AutoEllipsis = True
         Me.Label3.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(56, 76)
+        Me.Label3.Location = New System.Drawing.Point(30, 76)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(811, 105)
+        Me.Label3.Size = New System.Drawing.Size(837, 105)
         Me.Label3.TabIndex = 1
         Me.Label3.Text = "DISMTools is a free and open-source, project-driven GUI for DISM operations. To b" & _
-    "egin setting things up, click Next"
+    "egin setting things up, click Next."
         '
         'Label2
         '
@@ -273,7 +283,7 @@ Partial Class PrgSetup
         Me.CustomizationPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.CustomizationPanel.Location = New System.Drawing.Point(0, 0)
         Me.CustomizationPanel.Name = "CustomizationPanel"
-        Me.CustomizationPanel.Size = New System.Drawing.Size(960, 616)
+        Me.CustomizationPanel.Size = New System.Drawing.Size(880, 624)
         Me.CustomizationPanel.TabIndex = 1
         Me.CustomizationPanel.Visible = False
         '
@@ -288,7 +298,7 @@ Partial Class PrgSetup
         Me.TableLayoutPanel1.Controls.Add(Me.Label7, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.ComboBox1, 1, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Panel1, 1, 2)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(60, 185)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(31, 185)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 3
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.602151!))
@@ -311,10 +321,10 @@ Partial Class PrgSetup
         '
         'ComboBox2
         '
-        Me.ComboBox2.BackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(49, Byte), Integer))
+        Me.ComboBox2.BackColor = System.Drawing.Color.FromArgb(CType(CType(239, Byte), Integer), CType(CType(239, Byte), Integer), CType(CType(242, Byte), Integer))
         Me.ComboBox2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ComboBox2.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ComboBox2.ForeColor = System.Drawing.Color.White
+        Me.ComboBox2.ForeColor = System.Drawing.SystemColors.ControlText
         Me.ComboBox2.FormattingEnabled = True
         Me.ComboBox2.Items.AddRange(New Object() {"Use system setting", "English", "Spanish"})
         Me.ComboBox2.Location = New System.Drawing.Point(185, 35)
@@ -349,10 +359,10 @@ Partial Class PrgSetup
         '
         'ComboBox1
         '
-        Me.ComboBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(49, Byte), Integer))
+        Me.ComboBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(239, Byte), Integer), CType(CType(239, Byte), Integer), CType(CType(242, Byte), Integer))
         Me.ComboBox1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ComboBox1.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ComboBox1.ForeColor = System.Drawing.Color.White
+        Me.ComboBox1.ForeColor = System.Drawing.SystemColors.ControlText
         Me.ComboBox1.FormattingEnabled = True
         Me.ComboBox1.Items.AddRange(New Object() {"Use system setting", "Light mode", "Dark mode"})
         Me.ComboBox1.Location = New System.Drawing.Point(185, 3)
@@ -382,10 +392,10 @@ Partial Class PrgSetup
         '
         'TextBox1
         '
-        Me.TextBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(49, Byte), Integer))
+        Me.TextBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(239, Byte), Integer), CType(CType(239, Byte), Integer), CType(CType(242, Byte), Integer))
         Me.TextBox1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBox1.Font = New System.Drawing.Font("Courier New", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox1.ForeColor = System.Drawing.Color.White
+        Me.TextBox1.ForeColor = System.Drawing.SystemColors.ControlText
         Me.TextBox1.Location = New System.Drawing.Point(0, 0)
         Me.TextBox1.Multiline = True
         Me.TextBox1.Name = "TextBox1"
@@ -418,9 +428,9 @@ Partial Class PrgSetup
         '
         'NumericUpDown1
         '
-        Me.NumericUpDown1.BackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(49, Byte), Integer))
+        Me.NumericUpDown1.BackColor = System.Drawing.Color.FromArgb(CType(CType(239, Byte), Integer), CType(CType(239, Byte), Integer), CType(CType(242, Byte), Integer))
         Me.NumericUpDown1.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.NumericUpDown1.ForeColor = System.Drawing.Color.White
+        Me.NumericUpDown1.ForeColor = System.Drawing.SystemColors.ControlText
         Me.NumericUpDown1.Location = New System.Drawing.Point(499, 3)
         Me.NumericUpDown1.Maximum = New Decimal(New Integer() {96, 0, 0, 0})
         Me.NumericUpDown1.Minimum = New Decimal(New Integer() {8, 0, 0, 0})
@@ -431,9 +441,9 @@ Partial Class PrgSetup
         '
         'ComboBox3
         '
-        Me.ComboBox3.BackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(49, Byte), Integer))
+        Me.ComboBox3.BackColor = System.Drawing.Color.FromArgb(CType(CType(239, Byte), Integer), CType(CType(239, Byte), Integer), CType(CType(242, Byte), Integer))
         Me.ComboBox3.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ComboBox3.ForeColor = System.Drawing.Color.White
+        Me.ComboBox3.ForeColor = System.Drawing.SystemColors.ControlText
         Me.ComboBox3.FormattingEnabled = True
         Me.ComboBox3.Location = New System.Drawing.Point(0, 3)
         Me.ComboBox3.Name = "ComboBox3"
@@ -445,9 +455,9 @@ Partial Class PrgSetup
         '
         Me.Label5.AutoEllipsis = True
         Me.Label5.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(56, 76)
+        Me.Label5.Location = New System.Drawing.Point(30, 76)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(798, 68)
+        Me.Label5.Size = New System.Drawing.Size(824, 68)
         Me.Label5.TabIndex = 1
         Me.Label5.Text = "Make it yours. Customize this program to your liking and click Next. These settin" & _
     "gs can be configured later in the ""Personalization"" section in Tools > Options"
@@ -475,7 +485,7 @@ Partial Class PrgSetup
         Me.LogsPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LogsPanel.Location = New System.Drawing.Point(0, 0)
         Me.LogsPanel.Name = "LogsPanel"
-        Me.LogsPanel.Size = New System.Drawing.Size(960, 616)
+        Me.LogsPanel.Size = New System.Drawing.Size(880, 624)
         Me.LogsPanel.TabIndex = 2
         Me.LogsPanel.Visible = False
         '
@@ -484,7 +494,7 @@ Partial Class PrgSetup
         Me.Panel4.Controls.Add(Me.Label16)
         Me.Panel4.Controls.Add(Me.TrackBar1)
         Me.Panel4.Controls.Add(Me.Label11)
-        Me.Panel4.Location = New System.Drawing.Point(56, 285)
+        Me.Panel4.Location = New System.Drawing.Point(35, 285)
         Me.Panel4.Name = "Panel4"
         Me.Panel4.Size = New System.Drawing.Size(811, 104)
         Me.Panel4.TabIndex = 6
@@ -501,7 +511,7 @@ Partial Class PrgSetup
         '
         'TrackBar1
         '
-        Me.TrackBar1.BackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(49, Byte), Integer))
+        Me.TrackBar1.BackColor = System.Drawing.Color.FromArgb(CType(CType(239, Byte), Integer), CType(CType(239, Byte), Integer), CType(CType(242, Byte), Integer))
         Me.TrackBar1.LargeChange = 1
         Me.TrackBar1.Location = New System.Drawing.Point(0, 0)
         Me.TrackBar1.Maximum = 3
@@ -528,9 +538,9 @@ Partial Class PrgSetup
         Me.Button2.Enabled = False
         Me.Button2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(49, Byte), Integer))
         Me.Button2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(98, Byte), Integer))
-        Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button2.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button2.Location = New System.Drawing.Point(572, 237)
+        Me.Button2.Location = New System.Drawing.Point(551, 237)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(295, 27)
         Me.Button2.TabIndex = 4
@@ -542,9 +552,9 @@ Partial Class PrgSetup
         Me.Button1.Enabled = False
         Me.Button1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(49, Byte), Integer))
         Me.Button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(98, Byte), Integer))
-        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button1.Location = New System.Drawing.Point(792, 204)
+        Me.Button1.Location = New System.Drawing.Point(771, 204)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 27)
         Me.Button1.TabIndex = 4
@@ -553,13 +563,13 @@ Partial Class PrgSetup
         '
         'TextBox2
         '
-        Me.TextBox2.BackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(49, Byte), Integer))
+        Me.TextBox2.BackColor = System.Drawing.Color.FromArgb(CType(CType(239, Byte), Integer), CType(CType(239, Byte), Integer), CType(CType(242, Byte), Integer))
         Me.TextBox2.Enabled = False
         Me.TextBox2.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox2.ForeColor = System.Drawing.Color.White
-        Me.TextBox2.Location = New System.Drawing.Point(77, 204)
+        Me.TextBox2.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.TextBox2.Location = New System.Drawing.Point(49, 204)
         Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(709, 27)
+        Me.TextBox2.Size = New System.Drawing.Size(716, 27)
         Me.TextBox2.TabIndex = 3
         Me.TextBox2.Text = "C:\Windows\Logs\DISM\DISM.log"
         '
@@ -569,7 +579,7 @@ Partial Class PrgSetup
         Me.CheckBox1.Checked = True
         Me.CheckBox1.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBox1.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CheckBox1.Location = New System.Drawing.Point(56, 149)
+        Me.CheckBox1.Location = New System.Drawing.Point(30, 149)
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(398, 24)
         Me.CheckBox1.TabIndex = 2
@@ -582,7 +592,7 @@ Partial Class PrgSetup
         Me.Label10.AutoSize = True
         Me.Label10.Enabled = False
         Me.Label10.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label10.Location = New System.Drawing.Point(73, 181)
+        Me.Label10.Location = New System.Drawing.Point(45, 181)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(100, 20)
         Me.Label10.TabIndex = 1
@@ -592,9 +602,9 @@ Partial Class PrgSetup
         '
         Me.Label13.AutoEllipsis = True
         Me.Label13.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label13.Location = New System.Drawing.Point(56, 76)
+        Me.Label13.Location = New System.Drawing.Point(30, 76)
         Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(798, 68)
+        Me.Label13.Size = New System.Drawing.Size(824, 68)
         Me.Label13.TabIndex = 1
         Me.Label13.Text = resources.GetString("Label13.Text")
         '
@@ -617,7 +627,7 @@ Partial Class PrgSetup
         Me.ModulesPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ModulesPanel.Location = New System.Drawing.Point(0, 0)
         Me.ModulesPanel.Name = "ModulesPanel"
-        Me.ModulesPanel.Size = New System.Drawing.Size(960, 616)
+        Me.ModulesPanel.Size = New System.Drawing.Size(880, 624)
         Me.ModulesPanel.TabIndex = 3
         Me.ModulesPanel.Visible = False
         '
@@ -668,7 +678,7 @@ Partial Class PrgSetup
         Me.Button3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Button3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(49, Byte), Integer))
         Me.Button3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(98, Byte), Integer))
-        Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button3.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Button3.Location = New System.Drawing.Point(688, 3)
         Me.Button3.Name = "Button3"
@@ -682,7 +692,7 @@ Partial Class PrgSetup
         Me.Button4.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Button4.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(49, Byte), Integer))
         Me.Button4.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(98, Byte), Integer))
-        Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button4.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Button4.Location = New System.Drawing.Point(688, 35)
         Me.Button4.Name = "Button4"
@@ -735,7 +745,7 @@ Partial Class PrgSetup
         Me.FinishPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.FinishPanel.Location = New System.Drawing.Point(0, 0)
         Me.FinishPanel.Name = "FinishPanel"
-        Me.FinishPanel.Size = New System.Drawing.Size(960, 616)
+        Me.FinishPanel.Size = New System.Drawing.Size(880, 624)
         Me.FinishPanel.TabIndex = 4
         Me.FinishPanel.Visible = False
         '
@@ -743,9 +753,9 @@ Partial Class PrgSetup
         '
         Me.Button5.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(49, Byte), Integer))
         Me.Button5.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(98, Byte), Integer))
-        Me.Button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.Button5.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button5.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button5.Location = New System.Drawing.Point(345, 393)
+        Me.Button5.Location = New System.Drawing.Point(305, 393)
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(270, 36)
         Me.Button5.TabIndex = 2
@@ -756,9 +766,9 @@ Partial Class PrgSetup
         '
         Me.Label20.AutoEllipsis = True
         Me.Label20.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label20.Location = New System.Drawing.Point(56, 297)
+        Me.Label20.Location = New System.Drawing.Point(30, 297)
         Me.Label20.Name = "Label20"
-        Me.Label20.Size = New System.Drawing.Size(798, 24)
+        Me.Label20.Size = New System.Drawing.Size(824, 24)
         Me.Label20.TabIndex = 1
         Me.Label20.Text = "Is there anything else you would like to configure?"
         '
@@ -766,9 +776,9 @@ Partial Class PrgSetup
         '
         Me.Label21.AutoEllipsis = True
         Me.Label21.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label21.Location = New System.Drawing.Point(56, 325)
+        Me.Label21.Location = New System.Drawing.Point(30, 325)
         Me.Label21.Name = "Label21"
-        Me.Label21.Size = New System.Drawing.Size(798, 55)
+        Me.Label21.Size = New System.Drawing.Size(824, 55)
         Me.Label21.TabIndex = 1
         Me.Label21.Text = "The settings available to you are more than what you've just configured. If you w" & _
     "ish to change more of these, click the button below. We'll also make those setti" & _
@@ -778,9 +788,9 @@ Partial Class PrgSetup
         '
         Me.Label23.AutoEllipsis = True
         Me.Label23.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label23.Location = New System.Drawing.Point(56, 76)
+        Me.Label23.Location = New System.Drawing.Point(30, 76)
         Me.Label23.Name = "Label23"
-        Me.Label23.Size = New System.Drawing.Size(798, 68)
+        Me.Label23.Size = New System.Drawing.Size(824, 68)
         Me.Label23.TabIndex = 1
         Me.Label23.Text = "You have finished setting up the basics to use DISMTools the way you wanted. Clic" & _
     "k ""Finish"", and we'll make your settings persistent."
@@ -804,12 +814,12 @@ Partial Class PrgSetup
         Me.TableLayoutPanel3.Controls.Add(Me.Label27, 0, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.Button6, 1, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.Button7, 1, 1)
-        Me.TableLayoutPanel3.Location = New System.Drawing.Point(56, 178)
+        Me.TableLayoutPanel3.Location = New System.Drawing.Point(30, 178)
         Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
         Me.TableLayoutPanel3.RowCount = 2
         Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel3.Size = New System.Drawing.Size(798, 65)
+        Me.TableLayoutPanel3.Size = New System.Drawing.Size(824, 65)
         Me.TableLayoutPanel3.TabIndex = 3
         '
         'Label26
@@ -819,7 +829,7 @@ Partial Class PrgSetup
         Me.Label26.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label26.Location = New System.Drawing.Point(3, 32)
         Me.Label26.Name = "Label26"
-        Me.Label26.Size = New System.Drawing.Size(663, 33)
+        Me.Label26.Size = New System.Drawing.Size(685, 33)
         Me.Label26.TabIndex = 4
         Me.Label26.Text = "Check for updates, since a new version contains important bugfixes and cool featu" & _
     "res"
@@ -832,7 +842,7 @@ Partial Class PrgSetup
         Me.Label27.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label27.Location = New System.Drawing.Point(3, 0)
         Me.Label27.Name = "Label27"
-        Me.Label27.Size = New System.Drawing.Size(663, 32)
+        Me.Label27.Size = New System.Drawing.Size(685, 32)
         Me.Label27.TabIndex = 2
         Me.Label27.Text = "Get started with DISMTools and image servicing, so you can get around quicker"
         Me.Label27.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -842,11 +852,11 @@ Partial Class PrgSetup
         Me.Button6.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Button6.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(49, Byte), Integer))
         Me.Button6.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(98, Byte), Integer))
-        Me.Button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.Button6.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button6.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button6.Location = New System.Drawing.Point(672, 3)
+        Me.Button6.Location = New System.Drawing.Point(694, 3)
         Me.Button6.Name = "Button6"
-        Me.Button6.Size = New System.Drawing.Size(123, 26)
+        Me.Button6.Size = New System.Drawing.Size(127, 26)
         Me.Button6.TabIndex = 3
         Me.Button6.Text = "Get started"
         Me.Button6.UseVisualStyleBackColor = True
@@ -856,11 +866,11 @@ Partial Class PrgSetup
         Me.Button7.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Button7.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(49, Byte), Integer))
         Me.Button7.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(98, Byte), Integer))
-        Me.Button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.Button7.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button7.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button7.Location = New System.Drawing.Point(672, 35)
+        Me.Button7.Location = New System.Drawing.Point(694, 35)
         Me.Button7.Name = "Button7"
-        Me.Button7.Size = New System.Drawing.Size(123, 27)
+        Me.Button7.Size = New System.Drawing.Size(127, 27)
         Me.Button7.TabIndex = 3
         Me.Button7.Text = "Check for updates"
         Me.Button7.UseVisualStyleBackColor = True
@@ -869,9 +879,9 @@ Partial Class PrgSetup
         '
         Me.Label25.AutoEllipsis = True
         Me.Label25.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label25.Location = New System.Drawing.Point(56, 150)
+        Me.Label25.Location = New System.Drawing.Point(30, 150)
         Me.Label25.Name = "Label25"
-        Me.Label25.Size = New System.Drawing.Size(798, 24)
+        Me.Label25.Size = New System.Drawing.Size(824, 24)
         Me.Label25.TabIndex = 1
         Me.Label25.Text = "Now that you've set things up, we recommend you do the following things:"
         '
@@ -879,11 +889,29 @@ Partial Class PrgSetup
         '
         Me.Label22.AutoEllipsis = True
         Me.Label22.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label22.Location = New System.Drawing.Point(56, 262)
+        Me.Label22.Location = New System.Drawing.Point(30, 262)
         Me.Label22.Name = "Label22"
-        Me.Label22.Size = New System.Drawing.Size(798, 55)
+        Me.Label22.Size = New System.Drawing.Size(824, 55)
         Me.Label22.TabIndex = 1
         Me.Label22.Text = "You can perform these steps at any time."
+        '
+        'Panel5
+        '
+        Me.Panel5.BackColor = System.Drawing.Color.Transparent
+        Me.Panel5.Dock = System.Windows.Forms.DockStyle.Left
+        Me.Panel5.Location = New System.Drawing.Point(0, 48)
+        Me.Panel5.Name = "Panel5"
+        Me.Panel5.Size = New System.Drawing.Size(200, 624)
+        Me.Panel5.TabIndex = 3
+        '
+        'Panel6
+        '
+        Me.Panel6.BackColor = System.Drawing.Color.Transparent
+        Me.Panel6.Dock = System.Windows.Forms.DockStyle.Right
+        Me.Panel6.Location = New System.Drawing.Point(1080, 48)
+        Me.Panel6.Name = "Panel6"
+        Me.Panel6.Size = New System.Drawing.Size(200, 624)
+        Me.Panel6.TabIndex = 4
         '
         'PrgSetup
         '
@@ -891,8 +919,10 @@ Partial Class PrgSetup
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackgroundImage = Global.DISMTools.My.Resources.Resources.dt_bgbranding
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.ClientSize = New System.Drawing.Size(960, 712)
+        Me.ClientSize = New System.Drawing.Size(1280, 720)
         Me.Controls.Add(Me.BodyPanelContainer)
+        Me.Controls.Add(Me.Panel6)
+        Me.Controls.Add(Me.Panel5)
         Me.Controls.Add(Me.btnControlPanel)
         Me.Controls.Add(Me.wndControlPanel)
         Me.DoubleBuffered = True
@@ -999,4 +1029,6 @@ Partial Class PrgSetup
     Friend WithEvents NumericUpDown1 As System.Windows.Forms.NumericUpDown
     Friend WithEvents TrackBar1 As System.Windows.Forms.TrackBar
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
+    Friend WithEvents Panel5 As System.Windows.Forms.Panel
+    Friend WithEvents Panel6 As System.Windows.Forms.Panel
 End Class
