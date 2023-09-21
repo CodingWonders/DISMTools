@@ -4328,6 +4328,7 @@ Public Class ProgressPanel
                     Process.Start("\Windows\explorer.exe", Path.GetDirectoryName(imgDestFile))
                 End If
             ElseIf OperationNum = 996 Then
+                MainForm.DetectMountedImages(False)
                 MainForm.ImgIndex = SwitchTargetIndex
                 MainForm.imgMountedName = SwitchTargetIndexName
                 MainForm.SaveDTProj()
