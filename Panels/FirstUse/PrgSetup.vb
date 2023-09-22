@@ -256,6 +256,7 @@ Public Class PrgSetup
 
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
         ' MainForm.SaveDTSettings()
+        Options.PrefReset.Enabled = False
         Options.ShowDialog(Me)
     End Sub
 

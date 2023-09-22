@@ -95,6 +95,7 @@ Public Class MountedImgMgr
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
         Options.TabControl1.SelectedIndex = 8
+        Options.PrefReset.Enabled = True
         If MainForm.WindowState = FormWindowState.Minimized Then MainForm.WindowState = FormWindowState.Normal
         Options.ShowDialog(MainForm)
     End Sub

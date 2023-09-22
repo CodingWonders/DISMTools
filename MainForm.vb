@@ -4402,7 +4402,7 @@ Public Class MainForm
     Sub ChangeLangs(LangCode As Integer)
         Select Case LangCode
             Case 0
-                If My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "ENG" Then
+                If My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "ENG" Or My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "ENU" Then
                     ' Top-level menu items
                     FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&File".ToUpper(), "&File")
                     ProjectToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Project".ToUpper(), "&Project")
@@ -8019,6 +8019,7 @@ Public Class MainForm
     End Sub
 
     Private Sub OptionsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OptionsToolStripMenuItem.Click
+        Options.PrefReset.Enabled = True
         Options.ShowDialog()
     End Sub
 
