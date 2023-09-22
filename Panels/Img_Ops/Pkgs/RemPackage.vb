@@ -19,7 +19,7 @@ Public Class RemPackage
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 MessageBox.Show(MainForm, "Please select packages to remove, and try again.", "No packages selected", MessageBoxButtons.OK, MessageBoxIcon.Error)
                             Case "ESN"
                                 MessageBox.Show(MainForm, "Seleccione paquetes a eliminar, e inténtelo de nuevo.", "No se han seleccionado paquetes", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -56,7 +56,7 @@ Public Class RemPackage
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 MessageBox.Show(MainForm, "Please select packages to remove, and try again.", "No packages selected", MessageBoxButtons.OK, MessageBoxIcon.Error)
                             Case "ESN"
                                 MessageBox.Show(MainForm, "Seleccione paquetes a eliminar, e inténtelo de nuevo.", "No se han seleccionado paquetes", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -102,7 +102,7 @@ Public Class RemPackage
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Remove packages"
                         Label1.Text = Text
                         Label3.Text = "Package source:"
@@ -227,7 +227,7 @@ Public Class RemPackage
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MsgBox("We couldn't scan the package source for CAB files. Please try again.", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "DISMTools")
                         Case "ESN"
                             MsgBox("No pudimos escanear el origen de paquetes por archivos CAB. Inténtelo de nuevo.", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "DISMTools")
