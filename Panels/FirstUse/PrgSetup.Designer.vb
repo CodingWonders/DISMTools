@@ -39,6 +39,7 @@ Partial Class PrgSetup
         Me.Label2 = New System.Windows.Forms.Label()
         Me.CustomizationPanel = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Label28 = New System.Windows.Forms.Label()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.ComboBox2 = New System.Windows.Forms.ComboBox()
         Me.Label8 = New System.Windows.Forms.Label()
@@ -51,18 +52,23 @@ Partial Class PrgSetup
         Me.Toggle1 = New System.Windows.Forms.CheckBox()
         Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
         Me.ComboBox3 = New System.Windows.Forms.ComboBox()
+        Me.Panel7 = New System.Windows.Forms.Panel()
+        Me.SecProgressStylePreview = New System.Windows.Forms.PictureBox()
+        Me.RadioButton2 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton1 = New System.Windows.Forms.RadioButton()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.LogsPanel = New System.Windows.Forms.Panel()
+        Me.Panel8 = New System.Windows.Forms.Panel()
+        Me.Button2 = New System.Windows.Forms.Button()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.TextBox2 = New System.Windows.Forms.TextBox()
+        Me.Label10 = New System.Windows.Forms.Label()
         Me.Panel4 = New System.Windows.Forms.Panel()
         Me.Label16 = New System.Windows.Forms.Label()
         Me.TrackBar1 = New System.Windows.Forms.TrackBar()
         Me.Label11 = New System.Windows.Forms.Label()
-        Me.Button2 = New System.Windows.Forms.Button()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
-        Me.Label10 = New System.Windows.Forms.Label()
         Me.Label13 = New System.Windows.Forms.Label()
         Me.Label14 = New System.Windows.Forms.Label()
         Me.ModulesPanel = New System.Windows.Forms.Panel()
@@ -89,12 +95,6 @@ Partial Class PrgSetup
         Me.Label22 = New System.Windows.Forms.Label()
         Me.Panel5 = New System.Windows.Forms.Panel()
         Me.Panel6 = New System.Windows.Forms.Panel()
-        Me.Panel7 = New System.Windows.Forms.Panel()
-        Me.RadioButton1 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton2 = New System.Windows.Forms.RadioButton()
-        Me.SecProgressStylePreview = New System.Windows.Forms.PictureBox()
-        Me.Label28 = New System.Windows.Forms.Label()
-        Me.Panel8 = New System.Windows.Forms.Panel()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.wndControlPanel.SuspendLayout()
         CType(Me.minBox, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -109,16 +109,16 @@ Partial Class PrgSetup
         Me.Panel3.SuspendLayout()
         Me.Panel2.SuspendLayout()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel7.SuspendLayout()
+        CType(Me.SecProgressStylePreview, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.LogsPanel.SuspendLayout()
+        Me.Panel8.SuspendLayout()
         Me.Panel4.SuspendLayout()
         CType(Me.TrackBar1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ModulesPanel.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
         Me.FinishPanel.SuspendLayout()
         Me.TableLayoutPanel3.SuspendLayout()
-        Me.Panel7.SuspendLayout()
-        CType(Me.SecProgressStylePreview, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.Panel8.SuspendLayout()
         Me.SuspendLayout()
         '
         'wndControlPanel
@@ -321,6 +321,18 @@ Partial Class PrgSetup
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(818, 372)
         Me.TableLayoutPanel1.TabIndex = 2
         '
+        'Label28
+        '
+        Me.Label28.AutoEllipsis = True
+        Me.Label28.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label28.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label28.Location = New System.Drawing.Point(3, 299)
+        Me.Label28.Name = "Label28"
+        Me.Label28.Size = New System.Drawing.Size(176, 73)
+        Me.Label28.TabIndex = 8
+        Me.Label28.Text = "Secondary progress panel style:"
+        Me.Label28.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
         'Label9
         '
         Me.Label9.AutoEllipsis = True
@@ -465,6 +477,51 @@ Partial Class PrgSetup
         Me.ComboBox3.TabIndex = 5
         Me.ComboBox3.Text = "Courier New"
         '
+        'Panel7
+        '
+        Me.Panel7.Controls.Add(Me.SecProgressStylePreview)
+        Me.Panel7.Controls.Add(Me.RadioButton2)
+        Me.Panel7.Controls.Add(Me.RadioButton1)
+        Me.Panel7.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel7.Location = New System.Drawing.Point(185, 302)
+        Me.Panel7.Name = "Panel7"
+        Me.Panel7.Size = New System.Drawing.Size(630, 67)
+        Me.Panel7.TabIndex = 7
+        '
+        'SecProgressStylePreview
+        '
+        Me.SecProgressStylePreview.Image = Global.DISMTools.My.Resources.Resources.secprogress_modern
+        Me.SecProgressStylePreview.Location = New System.Drawing.Point(267, 3)
+        Me.SecProgressStylePreview.Name = "SecProgressStylePreview"
+        Me.SecProgressStylePreview.Size = New System.Drawing.Size(360, 60)
+        Me.SecProgressStylePreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.SecProgressStylePreview.TabIndex = 1
+        Me.SecProgressStylePreview.TabStop = False
+        '
+        'RadioButton2
+        '
+        Me.RadioButton2.AutoSize = True
+        Me.RadioButton2.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.RadioButton2.Location = New System.Drawing.Point(13, 36)
+        Me.RadioButton2.Name = "RadioButton2"
+        Me.RadioButton2.Size = New System.Drawing.Size(71, 24)
+        Me.RadioButton2.TabIndex = 0
+        Me.RadioButton2.Text = "Classic"
+        Me.RadioButton2.UseVisualStyleBackColor = True
+        '
+        'RadioButton1
+        '
+        Me.RadioButton1.AutoSize = True
+        Me.RadioButton1.Checked = True
+        Me.RadioButton1.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.RadioButton1.Location = New System.Drawing.Point(13, 6)
+        Me.RadioButton1.Name = "RadioButton1"
+        Me.RadioButton1.Size = New System.Drawing.Size(79, 24)
+        Me.RadioButton1.TabIndex = 0
+        Me.RadioButton1.TabStop = True
+        Me.RadioButton1.Text = "Modern"
+        Me.RadioButton1.UseVisualStyleBackColor = True
+        '
         'Label5
         '
         Me.Label5.AutoEllipsis = True
@@ -499,6 +556,66 @@ Partial Class PrgSetup
         Me.LogsPanel.Size = New System.Drawing.Size(880, 624)
         Me.LogsPanel.TabIndex = 2
         Me.LogsPanel.Visible = False
+        '
+        'Panel8
+        '
+        Me.Panel8.Controls.Add(Me.Button2)
+        Me.Panel8.Controls.Add(Me.Button1)
+        Me.Panel8.Controls.Add(Me.TextBox2)
+        Me.Panel8.Controls.Add(Me.Label10)
+        Me.Panel8.Enabled = False
+        Me.Panel8.Location = New System.Drawing.Point(42, 181)
+        Me.Panel8.Name = "Panel8"
+        Me.Panel8.Size = New System.Drawing.Size(808, 87)
+        Me.Panel8.TabIndex = 7
+        '
+        'Button2
+        '
+        Me.Button2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(49, Byte), Integer))
+        Me.Button2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(98, Byte), Integer))
+        Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button2.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button2.Location = New System.Drawing.Point(509, 56)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(295, 27)
+        Me.Button2.TabIndex = 4
+        Me.Button2.Text = "Use default log file"
+        Me.Button2.UseVisualStyleBackColor = True
+        '
+        'Button1
+        '
+        Me.Button1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(49, Byte), Integer))
+        Me.Button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(98, Byte), Integer))
+        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button1.Location = New System.Drawing.Point(729, 23)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(75, 27)
+        Me.Button1.TabIndex = 4
+        Me.Button1.Text = "Browse..."
+        Me.Button1.UseVisualStyleBackColor = True
+        '
+        'TextBox2
+        '
+        Me.TextBox2.BackColor = System.Drawing.Color.FromArgb(CType(CType(239, Byte), Integer), CType(CType(239, Byte), Integer), CType(CType(242, Byte), Integer))
+        Me.TextBox2.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TextBox2.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.TextBox2.Location = New System.Drawing.Point(7, 23)
+        Me.TextBox2.Name = "TextBox2"
+        Me.TextBox2.Size = New System.Drawing.Size(716, 27)
+        Me.TextBox2.TabIndex = 3
+        Me.TextBox2.Text = "C:\Windows\Logs\DISM\DISM.log"
+        '
+        'Label10
+        '
+        Me.Label10.AutoEllipsis = True
+        Me.Label10.AutoSize = True
+        Me.Label10.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label10.Location = New System.Drawing.Point(3, 0)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(62, 20)
+        Me.Label10.TabIndex = 1
+        Me.Label10.Text = "Log file:"
         '
         'Panel4
         '
@@ -544,43 +661,6 @@ Partial Class PrgSetup
         Me.Label11.TabIndex = 1
         Me.Label11.Text = "Errors, warnings and information messages (Log level 3)"
         '
-        'Button2
-        '
-        Me.Button2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(49, Byte), Integer))
-        Me.Button2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(98, Byte), Integer))
-        Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button2.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button2.Location = New System.Drawing.Point(509, 56)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(295, 27)
-        Me.Button2.TabIndex = 4
-        Me.Button2.Text = "Use default log file"
-        Me.Button2.UseVisualStyleBackColor = True
-        '
-        'Button1
-        '
-        Me.Button1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(49, Byte), Integer))
-        Me.Button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(98, Byte), Integer))
-        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button1.Location = New System.Drawing.Point(729, 23)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 27)
-        Me.Button1.TabIndex = 4
-        Me.Button1.Text = "Browse..."
-        Me.Button1.UseVisualStyleBackColor = True
-        '
-        'TextBox2
-        '
-        Me.TextBox2.BackColor = System.Drawing.Color.FromArgb(CType(CType(239, Byte), Integer), CType(CType(239, Byte), Integer), CType(CType(242, Byte), Integer))
-        Me.TextBox2.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox2.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.TextBox2.Location = New System.Drawing.Point(7, 23)
-        Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(716, 27)
-        Me.TextBox2.TabIndex = 3
-        Me.TextBox2.Text = "C:\Windows\Logs\DISM\DISM.log"
-        '
         'CheckBox1
         '
         Me.CheckBox1.AutoSize = True
@@ -593,17 +673,6 @@ Partial Class PrgSetup
         Me.CheckBox1.TabIndex = 2
         Me.CheckBox1.Text = "Automatically create logs in the program's log directory"
         Me.CheckBox1.UseVisualStyleBackColor = True
-        '
-        'Label10
-        '
-        Me.Label10.AutoEllipsis = True
-        Me.Label10.AutoSize = True
-        Me.Label10.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label10.Location = New System.Drawing.Point(3, 0)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(62, 20)
-        Me.Label10.TabIndex = 1
-        Me.Label10.Text = "Log file:"
         '
         'Label13
         '
@@ -920,75 +989,6 @@ Partial Class PrgSetup
         Me.Panel6.Size = New System.Drawing.Size(200, 624)
         Me.Panel6.TabIndex = 4
         '
-        'Panel7
-        '
-        Me.Panel7.Controls.Add(Me.SecProgressStylePreview)
-        Me.Panel7.Controls.Add(Me.RadioButton2)
-        Me.Panel7.Controls.Add(Me.RadioButton1)
-        Me.Panel7.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel7.Location = New System.Drawing.Point(185, 302)
-        Me.Panel7.Name = "Panel7"
-        Me.Panel7.Size = New System.Drawing.Size(630, 67)
-        Me.Panel7.TabIndex = 7
-        '
-        'RadioButton1
-        '
-        Me.RadioButton1.AutoSize = True
-        Me.RadioButton1.Checked = True
-        Me.RadioButton1.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RadioButton1.Location = New System.Drawing.Point(13, 6)
-        Me.RadioButton1.Name = "RadioButton1"
-        Me.RadioButton1.Size = New System.Drawing.Size(79, 24)
-        Me.RadioButton1.TabIndex = 0
-        Me.RadioButton1.TabStop = True
-        Me.RadioButton1.Text = "Modern"
-        Me.RadioButton1.UseVisualStyleBackColor = True
-        '
-        'RadioButton2
-        '
-        Me.RadioButton2.AutoSize = True
-        Me.RadioButton2.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RadioButton2.Location = New System.Drawing.Point(13, 36)
-        Me.RadioButton2.Name = "RadioButton2"
-        Me.RadioButton2.Size = New System.Drawing.Size(71, 24)
-        Me.RadioButton2.TabIndex = 0
-        Me.RadioButton2.Text = "Classic"
-        Me.RadioButton2.UseVisualStyleBackColor = True
-        '
-        'SecProgressStylePreview
-        '
-        Me.SecProgressStylePreview.Image = Global.DISMTools.My.Resources.Resources.secprogress_modern
-        Me.SecProgressStylePreview.Location = New System.Drawing.Point(267, 3)
-        Me.SecProgressStylePreview.Name = "SecProgressStylePreview"
-        Me.SecProgressStylePreview.Size = New System.Drawing.Size(360, 60)
-        Me.SecProgressStylePreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.SecProgressStylePreview.TabIndex = 1
-        Me.SecProgressStylePreview.TabStop = False
-        '
-        'Label28
-        '
-        Me.Label28.AutoEllipsis = True
-        Me.Label28.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label28.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label28.Location = New System.Drawing.Point(3, 299)
-        Me.Label28.Name = "Label28"
-        Me.Label28.Size = New System.Drawing.Size(176, 73)
-        Me.Label28.TabIndex = 8
-        Me.Label28.Text = "Secondary progress panel style:"
-        Me.Label28.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'Panel8
-        '
-        Me.Panel8.Controls.Add(Me.Button2)
-        Me.Panel8.Controls.Add(Me.Button1)
-        Me.Panel8.Controls.Add(Me.TextBox2)
-        Me.Panel8.Controls.Add(Me.Label10)
-        Me.Panel8.Enabled = False
-        Me.Panel8.Location = New System.Drawing.Point(42, 181)
-        Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(808, 87)
-        Me.Panel8.TabIndex = 7
-        '
         'SaveFileDialog1
         '
         Me.SaveFileDialog1.Filter = "All files|*.*"
@@ -1033,8 +1033,13 @@ Partial Class PrgSetup
         Me.Panel3.PerformLayout()
         Me.Panel2.ResumeLayout(False)
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel7.ResumeLayout(False)
+        Me.Panel7.PerformLayout()
+        CType(Me.SecProgressStylePreview, System.ComponentModel.ISupportInitialize).EndInit()
         Me.LogsPanel.ResumeLayout(False)
         Me.LogsPanel.PerformLayout()
+        Me.Panel8.ResumeLayout(False)
+        Me.Panel8.PerformLayout()
         Me.Panel4.ResumeLayout(False)
         Me.Panel4.PerformLayout()
         CType(Me.TrackBar1, System.ComponentModel.ISupportInitialize).EndInit()
@@ -1044,11 +1049,6 @@ Partial Class PrgSetup
         Me.FinishPanel.ResumeLayout(False)
         Me.FinishPanel.PerformLayout()
         Me.TableLayoutPanel3.ResumeLayout(False)
-        Me.Panel7.ResumeLayout(False)
-        Me.Panel7.PerformLayout()
-        CType(Me.SecProgressStylePreview, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.Panel8.ResumeLayout(False)
-        Me.Panel8.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub

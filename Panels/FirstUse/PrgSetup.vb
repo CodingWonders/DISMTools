@@ -396,7 +396,23 @@ Public Class PrgSetup
         ' Since we default to the system deciding the aforementioned settings, choose the first items
         ComboBox1.SelectedIndex = 0
         ComboBox2.SelectedIndex = 0
+
+        If Not Environment.OSVersion.Version.Major >= 10 Or Not (DetectFont("Segoe UI Variable Display Semib") Or DetectFont("Segoe UI Variable Semib")) Then
+            Label2.Font = New Font("Segoe UI", Label2.Font.Size, FontStyle.Regular)
+            Label6.Font = New Font("Segoe UI", Label6.Font.Size, FontStyle.Regular)
+            Label14.Font = New Font("Segoe UI", Label14.Font.Size, FontStyle.Regular)
+            Label24.Font = New Font("Segoe UI", Label24.Font.Size, FontStyle.Regular)
+        End If
     End Sub
+
+    Function DetectFont(FontName As String) As Boolean
+        For Each fntFamily As FontFamily In FontFamily.Families
+            If fntFamily.Name = FontName Then
+                Return True
+            End If
+        Next
+        Return False
+    End Function
 
     Sub GetSystemFonts()
         ComboBox3.Items.Clear()

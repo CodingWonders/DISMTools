@@ -867,6 +867,7 @@ Public Class Options
             Panel2.Enabled = True
             Panel3.Visible = False
         End If
+        PrefReset.Enabled = Not PrgSetup.Visible
     End Sub
 
     Sub GetSystemFonts()
