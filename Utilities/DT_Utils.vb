@@ -22,7 +22,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Unknown"
                                     Case "ESN"
                                         Return "Desconocida"
@@ -58,7 +58,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Unknown"
                                     Case "ESN"
                                         Return "Desconocido"
@@ -76,7 +76,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Unsigned. Please check the validity and expiration date of the signing certificate"
                                     Case "ESN"
                                         Return "No firmado. Compruebe la validez y la fecha de expiración del certificado del controlador"
@@ -94,7 +94,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Signed"
                                     Case "ESN"
                                         Return "Firmado"
@@ -118,7 +118,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Not present"
                                     Case "ESN"
                                         Return "No presente"
@@ -136,7 +136,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Uninstall Pending"
                                     Case "ESN"
                                         Return "Desinstalación pendiente"
@@ -154,7 +154,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Uninstalled"
                                     Case "ESN"
                                         Return "Desinstalado"
@@ -172,7 +172,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Removed"
                                     Case "ESN"
                                         Return "Eliminado"
@@ -190,7 +190,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Installed"
                                     Case "ESN"
                                         Return "Instalado"
@@ -208,7 +208,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Install Pending"
                                     Case "ESN"
                                         Return "Instalación pendiente"
@@ -226,7 +226,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Superseded"
                                     Case "ESN"
                                         Return "Sustituido"
@@ -244,7 +244,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Partially Installed"
                                     Case "ESN"
                                         Return "Instalado parcialmente"
@@ -268,7 +268,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Not present"
                                     Case "ESN"
                                         Return "No presente"
@@ -286,7 +286,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Disable Pending"
                                     Case "ESN"
                                         Return "Deshabilitación pendiente"
@@ -304,7 +304,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Disabled"
                                     Case "ESN"
                                         Return "Deshabilitado"
@@ -322,7 +322,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Removed"
                                     Case "ESN"
                                         Return "Eliminado"
@@ -340,7 +340,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Enabled"
                                     Case "ESN"
                                         Return "Habilitado"
@@ -358,7 +358,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Enable Pending"
                                     Case "ESN"
                                         Return "Habilitación pendiente"
@@ -376,7 +376,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Superseded"
                                     Case "ESN"
                                         Return "Sustituido"
@@ -394,7 +394,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Partially Installed"
                                     Case "ESN"
                                         Return "Instalado parcialmente"
@@ -418,7 +418,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "A restart is not required"
                                     Case "ESN"
                                         Return "No se requiere un reinicio"
@@ -436,7 +436,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "A restart may be required"
                                     Case "ESN"
                                         Return "Puede requerirse un reinicio"
@@ -454,7 +454,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "A restart is required"
                                     Case "ESN"
                                         Return "Se requiere un reinicio"
@@ -478,7 +478,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Yes"
                                     Case "ESN"
                                         Return "Sí"
@@ -496,7 +496,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "No"
                                     Case "ESN"
                                         Return "No"
@@ -520,7 +520,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Critical update"
                                     Case "ESN"
                                         Return "Actualización crítica"
@@ -538,7 +538,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Driver"
                                     Case "ESN"
                                         Return "Controlador"
@@ -556,7 +556,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Feature Pack"
                                     Case "ESN"
                                         Return "Paquete de características"
@@ -574,7 +574,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Foundation package"
                                     Case "ESN"
                                         Return "Paquete de fundación"
@@ -592,7 +592,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Hotfix"
                                     Case "ESN"
                                         Return "Corrección de fallos"
@@ -610,7 +610,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Language pack"
                                     Case "ESN"
                                         Return "Paquete de idiomas"
@@ -628,7 +628,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Local pack"
                                     Case "ESN"
                                         Return "Paquete local"
@@ -646,7 +646,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "On Demand pack"
                                     Case "ESN"
                                         Return "Paquete de funcionalidad"
@@ -664,7 +664,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Other"
                                     Case "ESN"
                                         Return "Otros"
@@ -682,7 +682,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Product"
                                     Case "ESN"
                                         Return "Producto"
@@ -700,7 +700,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Security update"
                                     Case "ESN"
                                         Return "Actualización de seguridad"
@@ -718,7 +718,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Service Pack"
                                     Case "ESN"
                                         Return "Service Pack"
@@ -736,7 +736,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Software update"
                                     Case "ESN"
                                         Return "Actualización de software"
@@ -754,7 +754,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Update"
                                     Case "ESN"
                                         Return "Actualización"
@@ -772,7 +772,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "Update rollup"
                                     Case "ESN"
                                         Return "Actualización acumulativa"
@@ -796,7 +796,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "A boot up to the target image is required to fully install this package"
                                     Case "ESN"
                                         Return "Se requiere un arranque a la imagen de destino para instalar este paquete por completo"
@@ -814,7 +814,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "A boot up to the target image may be required to fully install this package"
                                     Case "ESN"
                                         Return "Se podría requerir un arranque a la imagen de destino para instalar este paquete por completo"
@@ -832,7 +832,7 @@ Namespace Utilities
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Return "A boot up to the target image is not required to fully install this package"
                                     Case "ESN"
                                         Return "No se requiere un arranque a la imagen de destino para instalar este paquete por completo"
