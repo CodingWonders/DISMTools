@@ -15,7 +15,7 @@ Public Class ApplicationDriveSpecifier
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MsgBox("The specified Drive ID does not exist. Please specify an existing Drive ID and try again. You can also refresh the list if you've just plugged or unplugged external drives", MsgBoxStyle.Critical, "Destination drive")
                         Case "ESN"
                             MsgBox("El ID del disco especificado no existe. Especifique un ID de disco existente e inténtelo de nuevo. También puede actualizar la lista si acaba de conectar o desconectar discos externos", MsgBoxStyle.Critical, "Disco de destino")
@@ -37,7 +37,7 @@ Public Class ApplicationDriveSpecifier
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Specify target disk..."
                         Label2.Text = "Destination disk ID (\\.\PHYSICALDRIVE(n)):"
                         Button2.Text = "Refresh"

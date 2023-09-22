@@ -13,7 +13,7 @@ Public Class ImgSplit
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 MsgBox("Please specify a name and path for the target SWM file and try again. Also, make sure that the target path exists.", vbOKOnly + vbCritical, Label1.Text)
                             Case "ESN"
                                 MsgBox("Especifique un nombre y un directorio para el archivo SWM de destino e inténtelo de nuevo. Asegúrese también de que el directorio de destino exista.", vbOKOnly + vbCritical, Label1.Text)
@@ -30,7 +30,7 @@ Public Class ImgSplit
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MsgBox("Please specify a source WIM file and try again. Also, make sure that it exists.", vbOKOnly + vbCritical, Label1.Text)
                         Case "ESN"
                             MsgBox("Especifique un archivo WIM de origen e inténtelo de nuevo. Asegúrese también de que el archivo exista.", vbOKOnly + vbCritical, Label1.Text)
@@ -58,7 +58,7 @@ Public Class ImgSplit
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Split images"
                         Label1.Text = Text
                         Label2.Text = "Source image to split:"

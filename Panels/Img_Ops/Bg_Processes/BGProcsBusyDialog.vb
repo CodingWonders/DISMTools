@@ -12,7 +12,7 @@ Public Class BGProcsBusyDialog
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Label1.Text = "We're still gathering image information"
                         Label2.Text = "Once we finish this process, you can begin performing image tasks. This usually takes a couple of minutes, but this can depend on the image and the speed of your computer." & CrLf & CrLf & _
                             "You can check the status of this background process at any time by clicking the icon on the bottom left."

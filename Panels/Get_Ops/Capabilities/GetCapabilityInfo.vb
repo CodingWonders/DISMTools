@@ -24,7 +24,7 @@ Public Class GetCapabilityInfoDlg
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Get capability information"
                         Label1.Text = Text
                         Label2.Text = "Ready"
@@ -106,7 +106,7 @@ Public Class GetCapabilityInfoDlg
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     msg = "Background processes need to have completed before showing feature information. We'll wait until they have completed"
                                 Case "ESN"
                                     msg = "Los procesos en segundo plano deben haber completado antes de obtener información de la característica. Esperaremos hasta que hayan completado"
@@ -120,7 +120,7 @@ Public Class GetCapabilityInfoDlg
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     Label2.Text = "Waiting for background processes to finish..."
                                 Case "ESN"
                                     Label2.Text = "Esperando a que terminen los procesos en segundo plano..."
@@ -145,7 +145,7 @@ Public Class GetCapabilityInfoDlg
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 Label2.Text = "Preparing to get capability information..."
                             Case "ESN"
                                 Label2.Text = "Preparándonos para obtener información de la funcionalidad..."
@@ -162,7 +162,7 @@ Public Class GetCapabilityInfoDlg
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Label2.Text = "Getting information from " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
                                     Case "ESN"
                                         Label2.Text = "Obteniendo información de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
@@ -182,7 +182,7 @@ Public Class GetCapabilityInfoDlg
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Label42.Text = "Download size: " & capInfo.DownloadSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")" & CrLf & _
                                             "Install size: " & capInfo.InstallSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")"
                                     Case "ESN"
@@ -205,7 +205,7 @@ Public Class GetCapabilityInfoDlg
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     msg = "Could not get capability information. Reason: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                                 Case "ESN"
                                     msg = "No pudimos obtener información de la funcionalidad. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
@@ -222,7 +222,7 @@ Public Class GetCapabilityInfoDlg
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 Label2.Text = "Ready"
                             Case "ESN"
                                 Label2.Text = "Listo"

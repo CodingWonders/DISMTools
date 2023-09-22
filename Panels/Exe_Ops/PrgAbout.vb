@@ -16,7 +16,7 @@ Public Class PrgAbout
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "About this program"
                         Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
                         Label2.Text = "DISMTools lets you deploy, manage, and service Windows images with ease, thanks to a GUI"
@@ -367,7 +367,7 @@ Public Class PrgAbout
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         PictureToolTip.SetToolTip(sender, "Check out the project's repository on GitHub")
                     Case "ESN"
                         PictureToolTip.SetToolTip(sender, "Consulte el repositorio del proyecto en GitHub")
@@ -383,7 +383,7 @@ Public Class PrgAbout
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         PictureToolTip.SetToolTip(sender, "Check out the project's official subreddit")
                     Case "ESN"
                         PictureToolTip.SetToolTip(sender, "Consulte el subreddit oficial del proyecto")
@@ -399,7 +399,7 @@ Public Class PrgAbout
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         PictureToolTip.SetToolTip(sender, "Check out the project's discussion on the My Digital Life forums")
                     Case "ESN"
                         PictureToolTip.SetToolTip(sender, "Consulte la discusión del proyecto en los foros de My Digital Life")
@@ -422,7 +422,7 @@ Public Class PrgAbout
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MsgBox("We couldn't download the update checker. Reason:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
                         Case "ESN"
                             MsgBox("No pudimos descargar el comprobador de actualizaciones. Razón:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)

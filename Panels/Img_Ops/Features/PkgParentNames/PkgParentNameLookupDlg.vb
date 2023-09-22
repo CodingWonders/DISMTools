@@ -13,7 +13,7 @@ Public Class PkgParentNameLookupDlg
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MsgBox("Please specify a package name, and try again.", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Installed package names")
                         Case "ESN"
                             MsgBox("Especifique un nombre de paquete, e inténtelo de nuevo.", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Nombres de paquetes instalados")
@@ -28,7 +28,7 @@ Public Class PkgParentNameLookupDlg
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MsgBox("The specified package name does not seem to be in the image. Please specify an available entry, and try again", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Installed package names")
                         Case "ESN"
                             MsgBox("El paquete especificado no parece estar en la imagen. Especifique una entrada disponible, e inténtelo de nuevo", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Nombres de paquetes instalados")
@@ -59,7 +59,7 @@ Public Class PkgParentNameLookupDlg
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Installed package names"
                         Label1.Text = "Names of installed packages in the mounted image:"
                         Label2.Text = "Name of parent package:"

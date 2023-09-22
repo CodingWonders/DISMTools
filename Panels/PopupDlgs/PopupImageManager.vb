@@ -7,7 +7,7 @@ Public Class PopupImageManager
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Pick image"
                         Button1.Text = "OK"
                         Button2.Text = "Cancel"
@@ -73,7 +73,7 @@ Public Class PopupImageManager
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MsgBox("Please select a image and try again.", vbOKOnly + vbInformation, Text)
                         Case "ESN"
                             MsgBox("Seleccione una imagen e inténtelo de nuevo.", vbOKOnly + vbInformation, Text)

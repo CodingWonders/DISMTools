@@ -33,7 +33,7 @@ Public Class AddListEntryDlg
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Label1.Text = "Entry:"
                         Button1.Text = "Browse..."
                         OK_Button.Text = "OK"

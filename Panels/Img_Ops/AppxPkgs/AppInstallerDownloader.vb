@@ -24,7 +24,7 @@ Public Class AppInstallerDownloader
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Downloading application package..."
                         Label1.Text = "Please wait while DISMTools downloads the application package to add it to this image. This can take some time, depending on your network connection speed."
                         Label2.Text = "Please wait..."
@@ -114,7 +114,7 @@ Public Class AppInstallerDownloader
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         progress = "Downloading main application package... (" & BytesToReadableSize(e.BytesReceived) & " of " & BytesToReadableSize(e.TotalBytesToReceive) & ")"
                     Case "ESN"
                         progress = "Descargando paquete de aplicación principal... (" & BytesToReadableSize(e.BytesReceived) & " de " & BytesToReadableSize(e.TotalBytesToReceive) & ")"

@@ -18,7 +18,7 @@ Public Class SingleImageIndexError
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Label1.Text = "This image seems to have only one index"
                         Label2.Text = "You cannot switch to other indexes. If you want to save the image changes, you can do so using a new, separate index."
                         LinkLabel1.Text = "To know more about the indexes of an image, or some of its specific properties, go to " & Quote & "Commands > Image management > Get image information" & Quote & ", or click here"

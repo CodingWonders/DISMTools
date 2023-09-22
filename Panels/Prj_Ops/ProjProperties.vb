@@ -47,7 +47,7 @@ Public Class ProjProperties
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     Select Case MainForm.MountedImageImgStatuses(x)
                                         Case 0
                                             imgMountedStatus.Text = "OK"
@@ -138,7 +138,7 @@ Public Class ProjProperties
                             Select Case MainForm.Language
                                 Case 0
                                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENG"
+                                        Case "ENU", "ENG"
                                             imgHal.Text = If(Not info.Hal = "", info.Hal, "Undefined by the image")
                                         Case "ESN"
                                             imgHal.Text = If(Not info.Hal = "", info.Hal, "No definida por la imagen")
@@ -161,7 +161,7 @@ Public Class ProjProperties
                                     Select Case MainForm.Language
                                         Case 0
                                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                                Case "ENG"
+                                                Case "ENU", "ENG"
                                                     imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (default)", "") & ", "
                                                 Case "ESN"
                                                     imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (predeterminado)", "") & ", "
@@ -175,7 +175,7 @@ Public Class ProjProperties
                                     Select Case MainForm.Language
                                         Case 0
                                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                                Case "ENG"
+                                                Case "ENU", "ENG"
                                                     imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (default)", "") & ", ")
                                                 Case "ESN"
                                                     imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (predeterminado)", "") & ", ")
@@ -191,7 +191,7 @@ Public Class ProjProperties
                                 Select Case MainForm.Language
                                     Case 0
                                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                            Case "ENG"
+                                            Case "ENU", "ENG"
                                                 LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(info.DefaultLanguage.Name = language.Name, ", default", "") & ")")
                                             Case "ESN"
                                                 LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(info.DefaultLanguage.Name = language.Name, ", predeterminado", "") & ")")
@@ -208,7 +208,7 @@ Public Class ProjProperties
                             Select Case MainForm.Language
                                 Case 0
                                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENG"
+                                        Case "ENU", "ENG"
                                             imgFormat.Text = Path.GetExtension(MainForm.MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper() & " file"
                                         Case "ESN"
                                             imgFormat.Text = "Archivo " & Path.GetExtension(MainForm.MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper()
@@ -221,7 +221,7 @@ Public Class ProjProperties
                             Select Case MainForm.Language
                                 Case 0
                                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENG"
+                                        Case "ENU", "ENG"
                                             imgRW.Text = If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No")
                                         Case "ESN"
                                             imgRW.Text = If(MainForm.MountedImageMountedReWr(x) = 0, "Sí", "No")
@@ -302,7 +302,7 @@ Public Class ProjProperties
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Label2.Text = "View project properties, such as name or location"
                         Label3.Text = "View mounted image properties, such as name, description, or index"
                         Label4.Text = "Getting project and image information. Please wait..."
@@ -467,7 +467,7 @@ Public Class ProjProperties
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Label1.Text = TabControl1.SelectedTab.Text & " properties"
                     Case "ESN"
                         Label1.Text = "Propiedades de " & TabControl1.SelectedTab.Text.ToLower()
@@ -544,7 +544,7 @@ Public Class ProjProperties
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             Label19.Text = "Yes"
                         Case "ESN"
                             Label19.Text = "Sí"
@@ -638,7 +638,7 @@ Public Class ProjProperties
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             imgMountDir.Text = "Not available"
                             imgIndex.Text = "Not available"
                             imgName.Text = "Not available"
@@ -745,7 +745,7 @@ Public Class ProjProperties
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Label1.Text = TabControl1.SelectedTab.Text & " properties"
                     Case "ESN"
                         Label1.Text = "Propiedades de " & TabControl1.SelectedTab.Text.ToLower()
@@ -869,7 +869,7 @@ Public Class ProjProperties
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         imgVersion.Text &= CrLf & "(feature update: " & FeatUpd & ")"
                     Case "ESN"
                         imgVersion.Text &= CrLf & "(act. de características: " & FeatUpd & ")"
@@ -889,7 +889,7 @@ Public Class ProjProperties
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         HalHelper.SetToolTip(sender, "Hardware Abstraction Layer")
                     Case "ESN"
                         HalHelper.SetToolTip(sender, "Capa de abstracción de hardware")

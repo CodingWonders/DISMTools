@@ -7,7 +7,7 @@ Public Class MountedImgMgr
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Mounted image manager"
                         Label1.Text = "Here is an overview of the images that have been mounted on this system. You can look up information about them, and perform some basic tasks. To fully perform image actions with this program though, you need to load the mount directory into a project:"
                         ListView1.Columns(0).Text = "Image file"
@@ -110,7 +110,7 @@ Public Class MountedImgMgr
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Button2.Text = "Reload servicing"
                                     Case "ESN"
                                         Button2.Text = "Recargar servicio"
@@ -124,7 +124,7 @@ Public Class MountedImgMgr
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Button2.Text = "Repair component store"
                                     Case "ESN"
                                         Button2.Text = "Reparar almacén de componentes"
@@ -259,7 +259,7 @@ Public Class MountedImgMgr
                             Select Case MainForm.Language
                                 Case 0
                                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENG"
+                                        Case "ENU", "ENG"
                                             ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No"), MainForm.MountedImageImgVersions(x)}))
                                             PopupImageManager.ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No"), MainForm.MountedImageImgVersions(x)}))
                                         Case "ESN"
@@ -279,7 +279,7 @@ Public Class MountedImgMgr
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No"), MainForm.MountedImageImgVersions(x)}))
                                 If Not ignoreRepeats Then PopupImageManager.ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No"), MainForm.MountedImageImgVersions(x)}))
                             Case "ESN"

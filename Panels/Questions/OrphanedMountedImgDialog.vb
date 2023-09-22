@@ -17,7 +17,7 @@ Public Class OrphanedMountedImgDialog
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Label1.Text = "This image needs a servicing session reload"
                         Label2.Text = "The project that has been loaded contains an orphaned image (an image which needs to be remounted)" & CrLf & "The image will be remounted when you click " & Quote & "OK" & Quote & ". This should not affect your modifications to the image, and should also not take a long time." & CrLf & CrLf & "NOTE: if you click " & Quote & "Cancel" & Quote & ", the project will be unloaded"
                         OK_Button.Text = "OK"

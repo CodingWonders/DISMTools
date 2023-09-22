@@ -482,7 +482,7 @@ Public Class ProgressPanel
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             LogButton.Text = "Hide log"
                         Case "ESN"
                             LogButton.Text = "Ocultar registro"
@@ -497,7 +497,7 @@ Public Class ProgressPanel
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             LogButton.Text = "Show log"
                         Case "ESN"
                             LogButton.Text = "Mostrar registro"
@@ -607,7 +607,7 @@ Public Class ProgressPanel
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         taskCountLbl.Text = "Tasks: 1/" & taskCount
                     Case "ESN"
                         taskCountLbl.Text = "Tareas: 1/" & taskCount
@@ -657,7 +657,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskList.Count
                         Case "ESN"
                             taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskList.Count
@@ -684,7 +684,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             allTasks.Text = "Creating project: " & Quote & projName & Quote
                             currentTask.Text = "Creating DISMTools project structure..."
                         Case "ESN"
@@ -801,7 +801,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             allTasks.Text = "Applying image..."
                             currentTask.Text = "Applying specified image to the specified destination..."
                         Case "ESN"
@@ -896,7 +896,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             currentTask.Text = "Gathering error level..."
                         Case "ESN"
                             currentTask.Text = "Recopilando nivel de error..."
@@ -917,7 +917,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             allTasks.Text = "Capturing image..."
                             currentTask.Text = "Capturing specified directory into a new image..."
                         Case "ESN"
@@ -1018,7 +1018,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             currentTask.Text = "Gathering error level..."
                         Case "ESN"
                             currentTask.Text = "Recopilando nivel de error..."
@@ -1039,7 +1039,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             allTasks.Text = "Committing image..."
                             currentTask.Text = "Saving changes to the image..."
                         Case "ESN"
@@ -1075,7 +1075,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             currentTask.Text = "Gathering error level..."
                         Case "ESN"
                             currentTask.Text = "Recopilando nivel de error..."
@@ -1100,7 +1100,7 @@ Public Class ProgressPanel
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
                             Case "ESN"
                                 taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
@@ -1114,7 +1114,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             allTasks.Text = "Deleting images..."
                             currentTask.Text = "Preparing to remove volume images..."
                         Case "ESN"
@@ -1146,7 +1146,7 @@ Public Class ProgressPanel
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 currentTask.Text = "Removing volume image " & Quote & imgIndexDeletionNames(x) & Quote & "..."
                             Case "ESN"
                                 currentTask.Text = "Eliminando imagen de volumen " & Quote & imgIndexDeletionNames(x) & Quote & "..."
@@ -1216,7 +1216,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             allTasks.Text = "Mounting image..."
                             currentTask.Text = "Mounting specified image..."
                         Case "ESN"
@@ -1270,7 +1270,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             currentTask.Text = "Gathering error level..."
                         Case "ESN"
                             currentTask.Text = "Recopilando nivel de error..."
@@ -1291,7 +1291,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             allTasks.Text = "Remounting image..."
                             currentTask.Text = "Reloading servicing session for mounted image..."
                         Case "ESN"
@@ -1321,7 +1321,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             currentTask.Text = "Gathering error level..."
                         Case "ESN"
                             currentTask.Text = "Recopilando nivel de error..."
@@ -1345,7 +1345,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             allTasks.Text = "Splitting image..."
                             currentTask.Text = "Splitting WIM file..."
                         Case "ESN"
@@ -1397,7 +1397,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             allTasks.Text = "Unmounting image..."
                             currentTask.Text = "Unmounting image file..."
                         Case "ESN"
@@ -1469,7 +1469,7 @@ Public Class ProgressPanel
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 currentTask.Text = "Gathering error level..."
                             Case "ESN"
                                 currentTask.Text = "Recopilando nivel de error..."
@@ -1540,7 +1540,7 @@ Public Class ProgressPanel
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 currentTask.Text = "Gathering error level..."
                             Case "ESN"
                                 currentTask.Text = "Recopilando nivel de error..."
@@ -1564,7 +1564,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             allTasks.Text = "Adding packages..."
                             currentTask.Text = "Preparing to add packages..."
                         Case "ESN"
@@ -1632,7 +1632,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             currentTask.Text = "Adding " & pkgCount & " packages..."
                         Case "ESN"
                             currentTask.Text = "Añadiendo " & pkgCount & " paquetes..."
@@ -1660,7 +1660,7 @@ Public Class ProgressPanel
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 currentTask.Text = "Gathering error level..."
                             Case "ESN"
                                 currentTask.Text = "Recopilando nivel de error..."
@@ -1681,7 +1681,7 @@ Public Class ProgressPanel
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     currentTask.Text = "Adding package " & (x + 1) & " of " & pkgCount & "..."
                                 Case "ESN"
                                     currentTask.Text = "Añadiendo paquete " & (x + 1) & " de " & pkgCount & "..."
@@ -1781,7 +1781,7 @@ Public Class ProgressPanel
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
                             Case "ESN"
                                 taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
@@ -1806,7 +1806,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             allTasks.Text = "Removing packages..."
                             currentTask.Text = "Preparing to remove packages..."
                         Case "ESN"
@@ -1829,7 +1829,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             currentTask.Text = "Removing packages..."
                         Case "ESN"
                             currentTask.Text = "Eliminando paquetes..."
@@ -1847,7 +1847,7 @@ Public Class ProgressPanel
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     currentTask.Text = "Removing package " & (x + 1) & " of " & pkgRemovalCount & "..."
                                 Case "ESN"
                                     currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & pkgRemovalCount & "..."
@@ -1942,7 +1942,7 @@ Public Class ProgressPanel
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     currentTask.Text = "Removing package " & (x + 1) & " of " & pkgRemovalCount & "..."
                                 Case "ESN"
                                     currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & pkgRemovalCount & "..."
@@ -2047,7 +2047,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             allTasks.Text = "Enabling features..."
                             currentTask.Text = "Preparing to enable features..."
                         Case "ESN"
@@ -2108,7 +2108,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             currentTask.Text = "Enabling features..."
                         Case "ESN"
                             currentTask.Text = "Habilitando características..."
@@ -2125,7 +2125,7 @@ Public Class ProgressPanel
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 currentTask.Text = "Enabling feature " & (x + 1) & " of " & featEnablementCount & "..."
                             Case "ESN"
                                 currentTask.Text = "Habilitando característica " & (x + 1) & " de " & featEnablementCount & "..."
@@ -2209,7 +2209,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             allTasks.Text = "Disabling features..."
                             currentTask.Text = "Preparing to disable features..."
                         Case "ESN"
@@ -2248,7 +2248,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             currentTask.Text = "Disabling features..."
                         Case "ESN"
                             currentTask.Text = "Deshabilitando características..."
@@ -2265,7 +2265,7 @@ Public Class ProgressPanel
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 currentTask.Text = "Disabling feature " & (x + 1) & " of " & featDisablementCount & "..."
                             Case "ESN"
                                 currentTask.Text = "Deshabilitando característica " & (x + 1) & " de " & featDisablementCount & "..."
@@ -2342,7 +2342,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             allTasks.Text = "Cleaning up the image..."
                         Case "ESN"
                             allTasks.Text = "Limpiando la imagen..."
@@ -2360,7 +2360,7 @@ Public Class ProgressPanel
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     currentTask.Text = "Reverting pending servicing actions..."
                                 Case "ESN"
                                     currentTask.Text = "Revirtiendo acciones de servicio pendientes..."
@@ -2377,7 +2377,7 @@ Public Class ProgressPanel
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     currentTask.Text = "Cleaning up Service Pack backup files..."
                                 Case "ESN"
                                     currentTask.Text = "Limpiando archivos de copia de seguridad del Service Pack..."
@@ -2396,7 +2396,7 @@ Public Class ProgressPanel
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     currentTask.Text = "Cleaning up the component store..."
                                 Case "ESN"
                                     currentTask.Text = "Limpiando el almacén de componentes..."
@@ -2416,7 +2416,7 @@ Public Class ProgressPanel
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     currentTask.Text = "Analyzing the component store..."
                                 Case "ESN"
                                     currentTask.Text = "Analizando el almacén de componentes..."
@@ -2433,7 +2433,7 @@ Public Class ProgressPanel
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     currentTask.Text = "Checking the component store health..."
                                 Case "ESN"
                                     currentTask.Text = "Comprobando la salud del almacén de componentes..."
@@ -2450,7 +2450,7 @@ Public Class ProgressPanel
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     currentTask.Text = "Scanning the component store..."
                                 Case "ESN"
                                     currentTask.Text = "Escaneando el almacén de componentes..."
@@ -2468,7 +2468,7 @@ Public Class ProgressPanel
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     currentTask.Text = "Repairing the component store..."
                                 Case "ESN"
                                     currentTask.Text = "Reparando el almacén de componentes..."
@@ -2491,7 +2491,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             currentTask.Text = "Gathering error level..."
                         Case "ESN"
                             currentTask.Text = "Recopilando nivel de error..."
@@ -2512,7 +2512,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             allTasks.Text = "Adding provisioning package..."
                             currentTask.Text = "Adding provisioning package to the image..."
                         Case "ESN"
@@ -2553,7 +2553,7 @@ Public Class ProgressPanel
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
                             Case "ESN"
                                 taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
@@ -2572,7 +2572,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             allTasks.Text = "Adding AppX packages..."
                             currentTask.Text = "Preparing to add provisioned AppX packages..."
                         Case "ESN"
@@ -2620,7 +2620,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             currentTask.Text = "Adding AppX packages..."
                         Case "ESN"
                             currentTask.Text = "Añadiendo paquetes AppX..."
@@ -2637,7 +2637,7 @@ Public Class ProgressPanel
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 currentTask.Text = "Adding package " & (x + 1) & " of " & appxAdditionCount & "..."
                             Case "ESN"
                                 currentTask.Text = "Añadiendo paquete " & (x + 1) & " de " & appxAdditionCount & "..."
@@ -2745,7 +2745,7 @@ Public Class ProgressPanel
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
                             Case "ESN"
                                 taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
@@ -2768,7 +2768,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             allTasks.Text = "Removing AppX packages..."
                             currentTask.Text = "Preparing to remove provisioned AppX packages..."
                         Case "ESN"
@@ -2789,7 +2789,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             currentTask.Text = "Removing AppX packages..."
                         Case "ESN"
                             currentTask.Text = "Eliminando paquetes AppX..."
@@ -2806,7 +2806,7 @@ Public Class ProgressPanel
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 currentTask.Text = "Removing package " & (x + 1) & " of " & appxRemovalCount & "..."
                             Case "ESN"
                                 currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & appxRemovalCount & "..."
@@ -2894,7 +2894,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             allTasks.Text = "Adding capabilities..."
                             currentTask.Text = "Preparing to add capabilities..."
                         Case "ESN"
@@ -2921,7 +2921,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             currentTask.Text = "Adding capabilities..."
                         Case "ESN"
                             currentTask.Text = "Añadiendo funcionalidades..."
@@ -2940,7 +2940,7 @@ Public Class ProgressPanel
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 currentTask.Text = "Adding capability " & (x + 1) & " of " & capAdditionCount & "..."
                             Case "ESN"
                                 currentTask.Text = "Añadiendo funcionalidad " & (x + 1) & " de " & capAdditionCount & "..."
@@ -3014,7 +3014,7 @@ Public Class ProgressPanel
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
                             Case "ESN"
                                 taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
@@ -3035,7 +3035,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             allTasks.Text = "Removing capabilities..."
                             currentTask.Text = "Preparing to remove capabilities..."
                         Case "ESN"
@@ -3053,7 +3053,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             currentTask.Text = "Removing capabilities..."
                         Case "ESN"
                             currentTask.Text = "Eliminando funcionalidades..."
@@ -3072,7 +3072,7 @@ Public Class ProgressPanel
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 currentTask.Text = "Removing capability " & (x + 1) & " of " & capRemovalCount & "..."
                             Case "ESN"
                                 currentTask.Text = "Eliminando funcionalidad " & (x + 1) & " de " & capRemovalCount & "..."
@@ -3142,7 +3142,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             allTasks.Text = "Adding drivers..."
                             currentTask.Text = "Preparing to add drivers..."
                         Case "ESN"
@@ -3167,7 +3167,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             currentTask.Text = "Adding drivers..."
                         Case "ESN"
                             currentTask.Text = "Añadiendo controladores..."
@@ -3186,7 +3186,7 @@ Public Class ProgressPanel
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 currentTask.Text = "Adding driver " & (x + 1) & " of " & drvAdditionCount & "..."
                             Case "ESN"
                                 currentTask.Text = "Añadiendo controlador " & (x + 1) & " de " & drvAdditionCount & "..."
@@ -3282,7 +3282,7 @@ Public Class ProgressPanel
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
                             Case "ESN"
                                 taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
@@ -3303,7 +3303,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             allTasks.Text = "Removing drivers..."
                             currentTask.Text = "Preparing to remove drivers..."
                         Case "ESN"
@@ -3331,7 +3331,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             currentTask.Text = "Removing drivers..."
                         Case "ESN"
                             currentTask.Text = "Eliminando controladores..."
@@ -3350,7 +3350,7 @@ Public Class ProgressPanel
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 currentTask.Text = "Removing driver " & (x + 1) & " of " & drvRemovalCount & "..."
                             Case "ESN"
                                 currentTask.Text = "Eliminando controlador " & (x + 1) & " de " & drvRemovalCount & "..."
@@ -3439,7 +3439,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             allTasks.Text = "Exporting drivers..."
                             currentTask.Text = "Exporting third-party drivers to the specified folder..."
                         Case "ESN"
@@ -3487,7 +3487,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             allTasks.Text = "Setting the scratch space..."
                             currentTask.Text = "Setting the Windows PE scratch space..."
                         Case "ESN"
@@ -3524,7 +3524,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             allTasks.Text = "Setting the target path..."
                             currentTask.Text = "Setting the Windows PE target path..."
                         Case "ESN"
@@ -3580,7 +3580,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             allTasks.Text = "Converting image..."
                             currentTask.Text = "Converting specified image..."
                         Case "ESN"
@@ -3631,7 +3631,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             currentTask.Text = "Gathering error level..."
                         Case "ESN"
                             currentTask.Text = "Recopilando nivel de error..."
@@ -3652,7 +3652,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             allTasks.Text = "Merging SWM files..."
                             currentTask.Text = "Merging SWM files into a WIM file..."
                         Case "ESN"
@@ -3692,7 +3692,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             currentTask.Text = "Gathering error level..."
                         Case "ESN"
                             currentTask.Text = "Recopilando nivel de error..."
@@ -3713,7 +3713,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             allTasks.Text = "Switching image indexes..."
                             currentTask.Text = "Unmounting source index..."
                         Case "ESN"
@@ -3762,7 +3762,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             currentTask.Text = "Gathering error level..."
                         Case "ESN"
                             currentTask.Text = "Recopilando nivel de error..."
@@ -3784,7 +3784,7 @@ Public Class ProgressPanel
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 currentTask.Text = "Unmounting source index..."
                             Case "ESN"
                                 currentTask.Text = "Desmontando índice de origen..."
@@ -3811,7 +3811,7 @@ Public Class ProgressPanel
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 currentTask.Text = "Gathering error level..."
                             Case "ESN"
                                 currentTask.Text = "Recopilando nivel de error..."
@@ -3837,7 +3837,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
                             currentTask.Text = "Mounting target index..."
                         Case "ESN"
@@ -3872,7 +3872,7 @@ Public Class ProgressPanel
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             currentTask.Text = "Gathering error level..."
                         Case "ESN"
                             currentTask.Text = "Recopilando nivel de error..."
@@ -4378,7 +4378,7 @@ Public Class ProgressPanel
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MainForm.MenuDesc.Text = "Ready"
                         Case "ESN"
                             MainForm.MenuDesc.Text = "Listo"
@@ -4399,7 +4399,7 @@ Public Class ProgressPanel
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             Label1.Text = "Could not perform image operations"
                             Label2.Text = "An error has occurred, which stopped the image operations. Please read the log below for more information."
                         Case "ESN"
@@ -4421,7 +4421,7 @@ Public Class ProgressPanel
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             Cancel_Button.Text = "OK"
                         Case "ESN"
                             Cancel_Button.Text = "Aceptar"
@@ -4497,7 +4497,7 @@ Public Class ProgressPanel
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MainForm.MenuDesc.Text = "Ready"
                         Case "ESN"
                             MainForm.MenuDesc.Text = "Listo"
@@ -4530,7 +4530,7 @@ Public Class ProgressPanel
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Progress"
                         Label1.Text = "Image operations in progress..."
                         Label2.Text = "Please wait while the following tasks are done. This may take some time."
@@ -4643,7 +4643,7 @@ Public Class ProgressPanel
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         MainForm.MenuDesc.Text = "Performing image operations. Please wait..."
                     Case "ESN"
                         MainForm.MenuDesc.Text = "Realizando operaciones con la imagen. Espere..."
@@ -4681,7 +4681,7 @@ Public Class ProgressPanel
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             taskCountLbl.Text = "Tasks: 1/" & TaskList.Count
                         Case "ESN"
                             taskCountLbl.Text = "Tareas: 1/" & TaskList.Count
@@ -4700,7 +4700,7 @@ Public Class ProgressPanel
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 taskCountLbl.Text = "Tasks: 1/" & TaskList.Count
                             Case "ESN"
                                 taskCountLbl.Text = "Tareas: 1/" & TaskList.Count

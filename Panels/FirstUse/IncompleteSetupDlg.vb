@@ -15,7 +15,7 @@ Public Class IncompleteSetupDlg
 
     Private Sub IncompleteSetupDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-            Case "ENG"
+            Case "ENU", "ENG"
                 Label1.Text = "Setup is not complete yet, and your custom settings will not be saved. Proceeding will make the program use default settings." & CrLf & CrLf & "Do you want to proceed?"
                 OK_Button.Text = "Yes"
                 Cancel_Button.Text = "No"

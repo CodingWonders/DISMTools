@@ -20,7 +20,7 @@ Public Class ImgIndexDelete
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MsgBox("Please select volume images to remove from this image, and try again.", vbOKOnly + vbCritical, "Remove a volume image")
                         Case "ESN"
                             MsgBox("Seleccione imágenes de volumen para eliminar de esta imagen, e inténtelo de nuevo.", vbOKOnly + vbCritical, "Eliminar una imagen de volumen")
@@ -39,7 +39,7 @@ Public Class ImgIndexDelete
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             If MsgBox("The program has detected that this image is mounted. In order to remove volume images from a file, it needs to be unmounted. You can remount it later, if you want." & vbCrLf & vbCrLf & "Do note that this will unmount the image without saving changes. Make sure all your changes have been saved before proceeding." & vbCrLf & vbCrLf & "Do you want to unmount this image?", vbYesNo + vbExclamation, "Remove a volume image") = MsgBoxResult.Yes Then
                                 Try
                                     For x = 0 To Array.LastIndexOf(MainForm.MountedImageImgFiles, MainForm.MountedImageImgFiles.Last)
@@ -148,7 +148,7 @@ Public Class ImgIndexDelete
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Remove a volume image"
                         Label1.Text = Text
                         Label2.Text = "Source image:"
@@ -272,7 +272,7 @@ Public Class ImgIndexDelete
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MsgBox("This image only contains 1 index. You can't remove volume images from this file", vbOKOnly + vbExclamation, "Remove a volume image")
                         Case "ESN"
                             MsgBox("Esta imagen solo contiene 1 índice. No puede eliminar imágenes de volumen de este archivo", vbOKOnly + vbExclamation, "Eliminar una imagen de volumen")

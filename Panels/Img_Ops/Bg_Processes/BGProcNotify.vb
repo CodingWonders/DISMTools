@@ -9,7 +9,7 @@ Public Class BGProcNotify
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Label1.Text = "This project has been loaded successfully"
                         Label2.Text = "The program is now gathering image information in the background. This may take some time."
                     Case "ESN"

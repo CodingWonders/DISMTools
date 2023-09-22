@@ -18,7 +18,7 @@ Public Class GetImgInfoDlg
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Get image information"
                         Label1.Text = Text
                         Label2.Text = "Image file to get information from:"
@@ -205,7 +205,7 @@ Public Class GetImgInfoDlg
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             msg = "Could not gather information of this image file. Reason:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                         Case "ESN"
                             msg = "No pudimos obtener información de este archivo de imagen. Razón:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
@@ -231,7 +231,7 @@ Public Class GetImgInfoDlg
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Label46.Text = If(Not ImageInfoList(Index).Hal = "", ImageInfoList(Index).Hal, "Undefined by the image")
                     Case "ESN"
                         Label46.Text = If(Not ImageInfoList(Index).Hal = "", ImageInfoList(Index).Hal, "No definida por la imagen")
@@ -253,7 +253,7 @@ Public Class GetImgInfoDlg
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(ImageInfoList(Index).DefaultLanguage.Name = language.Name, ", default", "") & ")")
                         Case "ESN"
                             LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(ImageInfoList(Index).DefaultLanguage.Name = language.Name, ", predeterminado", "") & ")")
@@ -267,7 +267,7 @@ Public Class GetImgInfoDlg
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " files in " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directories"
                         Label10.Text = "Date created: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
                             "Date modified: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
@@ -394,7 +394,7 @@ Public Class GetImgInfoDlg
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Label23.Text &= " (feature update: " & FeatUpd & ")"
                     Case "ESN"
                         Label23.Text &= " (actualización de características: " & FeatUpd & ")"

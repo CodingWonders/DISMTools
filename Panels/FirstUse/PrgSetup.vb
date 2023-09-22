@@ -32,7 +32,7 @@ Public Class PrgSetup
     Private Sub minBox_MouseHover(sender As Object, e As EventArgs) Handles minBox.MouseHover
         Dim msg As String = ""
         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-            Case "ENG"
+            Case "ENU", "ENG"
                 msg = "Minimize"
             Case "ESN"
                 msg = "Minimizar"
@@ -63,7 +63,7 @@ Public Class PrgSetup
     Private Sub closeBox_MouseHover(sender As Object, e As EventArgs) Handles closeBox.MouseHover
         Dim msg As String = ""
         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-            Case "ENG"
+            Case "ENU", "ENG"
                 msg = "Close"
             Case "ESN"
                 msg = "Cerrar"
@@ -138,7 +138,7 @@ Public Class PrgSetup
                 If Not CheckBox1.Checked And Not Directory.Exists(Path.GetDirectoryName(TextBox2.Text)) Then
                     Dim msg As String = ""
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             msg = "The folder the log file will be stored on doesn't exist. Make sure it exists and try again."
                         Case "ESN"
                             msg = "La carpeta donde se almacenará el archivo de registro no existe. Asegúrese de que exista e inténtelo de nuevo."
@@ -163,7 +163,7 @@ Public Class PrgSetup
         End Select
         If pageInt = 4 Then
             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                Case "ENG"
+                Case "ENU", "ENG"
                     Next_Button.Text = "Finish"
                 Case "ESN"
                     Next_Button.Text = "Finalizar"
@@ -172,7 +172,7 @@ Public Class PrgSetup
             closeBox.Enabled = False
         Else
             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                Case "ENG"
+                Case "ENU", "ENG"
                     Next_Button.Text = "Next"
                 Case "ESN"
                     Next_Button.Text = "Siguiente"
@@ -230,7 +230,7 @@ Public Class PrgSetup
         End Select
         If pageInt = 4 Then
             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                Case "ENG"
+                Case "ENU", "ENG"
                     Next_Button.Text = "Finish"
                 Case "ESN"
                     Next_Button.Text = "Finalizar"
@@ -239,7 +239,7 @@ Public Class PrgSetup
             closeBox.Enabled = False
         Else
             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                Case "ENG"
+                Case "ENU", "ENG"
                     Next_Button.Text = "Next"
                 Case "ESN"
                     Next_Button.Text = "Siguiente"
@@ -296,7 +296,7 @@ Public Class PrgSetup
 
         ' Set translations (follow system language)
         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-            Case "ENG"
+            Case "ENU", "ENG"
                 Text = "Set up DISMTools"
                 Label1.Text = Text
                 Label2.Text = "Welcome to DISMTools"
@@ -453,7 +453,7 @@ Public Class PrgSetup
 
     Private Sub TrackBar1_Scroll(sender As Object, e As EventArgs) Handles TrackBar1.Scroll
         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-            Case "ENG"
+            Case "ENU", "ENG"
                 Select Case TrackBar1.Value
                     Case 0
                         Label11.Text = "Errors (Log level 1)"
@@ -527,7 +527,7 @@ Public Class PrgSetup
             End Using
         Catch ex As WebException
             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                Case "ENG"
+                Case "ENU", "ENG"
                     MsgBox("We couldn't download the update checker. Reason:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Check for updates")
                 Case "ESN"
                     MsgBox("No pudimos descargar el comprobador de actualizaciones. Razón:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Comprobar actualizaciones")

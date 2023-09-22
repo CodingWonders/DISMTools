@@ -28,7 +28,7 @@ Public Class GetPkgInfoDlg
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Get package information"
                         Label1.Text = Text
                         Label2.Text = "What do you want to get information about?"
@@ -319,7 +319,7 @@ Public Class GetPkgInfoDlg
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     msg = "Background processes need to have completed before showing package information. We'll wait until they have completed"
                                 Case "ESN"
                                     msg = "Los procesos en segundo plano deben haber completado antes de obtener información del paquete. Esperaremos hasta que hayan completado"
@@ -333,7 +333,7 @@ Public Class GetPkgInfoDlg
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     Label5.Text = "Waiting for background processes to finish..."
                                 Case "ESN"
                                     Label5.Text = "Esperando a que terminen los procesos en segundo plano..."
@@ -358,7 +358,7 @@ Public Class GetPkgInfoDlg
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 Label5.Text = "Preparing to get package information..."
                             Case "ESN"
                                 Label5.Text = "Preparándonos para obtener información del paquete..."
@@ -375,7 +375,7 @@ Public Class GetPkgInfoDlg
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Label5.Text = "Getting information from " & Quote & ListBox2.SelectedItem & Quote & "..."
                                     Case "ESN"
                                         Label5.Text = "Obteniendo información de " & Quote & ListBox2.SelectedItem & Quote & "..."
@@ -423,7 +423,7 @@ Public Class GetPkgInfoDlg
                             Select Case MainForm.Language
                                 Case 0
                                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENG"
+                                        Case "ENU", "ENG"
                                             Label57.Text = "None"
                                         Case "ESN"
                                             Label57.Text = "Ninguna"
@@ -445,7 +445,7 @@ Public Class GetPkgInfoDlg
                             Select Case MainForm.Language
                                 Case 0
                                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENG"
+                                        Case "ENU", "ENG"
                                             Label59.Text = "None"
                                         Case "ESN"
                                             Label59.Text = "Ninguna"
@@ -462,7 +462,7 @@ Public Class GetPkgInfoDlg
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     Label5.Text = "Ready"
                                 Case "ESN"
                                     Label5.Text = "Listo"
@@ -495,7 +495,7 @@ Public Class GetPkgInfoDlg
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 msg = "Background processes need to have completed before showing package information. We'll wait until they have completed"
                             Case "ESN"
                                 msg = "Los procesos en segundo plano deben haber completado antes de obtener información del paquete. Esperaremos hasta que hayan completado"
@@ -509,7 +509,7 @@ Public Class GetPkgInfoDlg
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 Label5.Text = "Waiting for background processes to finish..."
                             Case "ESN"
                                 Label5.Text = "Esperando a que terminen los procesos en segundo plano..."
@@ -534,7 +534,7 @@ Public Class GetPkgInfoDlg
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             Label5.Text = "Preparing package information processes..."
                         Case "ESN"
                             Label5.Text = "Preparando procesos de información de paquetes..."
@@ -553,7 +553,7 @@ Public Class GetPkgInfoDlg
                             Select Case MainForm.Language
                                 Case 0
                                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENG"
+                                        Case "ENU", "ENG"
                                             Label5.Text = "Getting information from package file " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "This may take some time and the program may temporarily freeze"
                                         Case "ESN"
                                             Label5.Text = "Obteniendo información del archivo de paquete " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Esto puede llevar algo de tiempo y el programa podría congelarse temporalmente"
@@ -587,7 +587,7 @@ Public Class GetPkgInfoDlg
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Label5.Text = "Ready"
                     Case "ESN"
                         Label5.Text = "Listo"
@@ -629,7 +629,7 @@ Public Class GetPkgInfoDlg
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             Label92.Text = "None"
                         Case "ESN"
                             Label92.Text = "Ninguna"
@@ -651,7 +651,7 @@ Public Class GetPkgInfoDlg
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             Label94.Text = "None"
                         Case "ESN"
                             Label94.Text = "Ninguna"

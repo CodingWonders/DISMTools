@@ -40,7 +40,7 @@ Public Class AddPackageDlg
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 MessageBox.Show(MainForm, "Please select packages to add, and try again. You can also continue with letting DISM scan applicable packages", "No packages selected", MessageBoxButtons.OK, MessageBoxIcon.Error)
                             Case "ESN"
                                 MessageBox.Show(MainForm, "Seleccione paquetes a añadir, e inténtelo de nuevo. También puede continuar dejando que DISM escanee paquetes aplicables", "No hay paquetes seleccionados", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -102,7 +102,7 @@ Public Class AddPackageDlg
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Label4.Text = "Scanning directory for packages. Please wait..."
                     Case "ESN"
                         Label4.Text = "Escaneando directorio por paquetes. Espere..."
@@ -155,7 +155,7 @@ Public Class AddPackageDlg
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             Label4.Text = "This folder does not contain any packages. Please use a different source and try again"
                         Case "ESN"
                             Label4.Text = "Esta carpeta no contiene ningún paquete. Utilice un origen diferente e inténtelo de nuevo"
@@ -170,7 +170,7 @@ Public Class AddPackageDlg
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             Label4.Text = "This folder contains " & CheckedListBox1.Items.Count & " package" & If(CheckedListBox1.Items.Count = 1, ".", "s.")
                         Case "ESN"
                             Label4.Text = "Esta carpeta contiene " & CheckedListBox1.Items.Count & " paquete" & If(CheckedListBox1.Items.Count = 1, ".", "s.")
@@ -187,7 +187,7 @@ Public Class AddPackageDlg
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Add packages"
                         Label1.Text = Text
                         Label2.Text = "Package source:"
@@ -289,7 +289,7 @@ Public Class AddPackageDlg
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             Label4.Text = "Please specify a directory where CAB or MSU files are located."
                         Case "ESN"
                             Label4.Text = "Especifique el directorio donde se encuentran archivos CAB o MSU."

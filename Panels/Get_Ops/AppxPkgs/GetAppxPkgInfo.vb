@@ -13,7 +13,7 @@ Public Class GetAppxPkgInfoDlg
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Get AppX package information"
                         Label1.Text = Text
                         Label36.Text = "AppX package information"
@@ -144,7 +144,7 @@ Public Class GetAppxPkgInfoDlg
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     Label42.Text = "No"
                                 Case "ESN"
                                     Label42.Text = "No"
@@ -158,7 +158,7 @@ Public Class GetAppxPkgInfoDlg
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     Label42.Text = "Yes"
                                 Case "ESN"
                                     Label42.Text = "Sí"
@@ -173,7 +173,7 @@ Public Class GetAppxPkgInfoDlg
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 Label42.Text = "No"
                             Case "ESN"
                                 Label42.Text = "No"

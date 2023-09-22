@@ -17,7 +17,7 @@ Public Class GetWinPESettings
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 Label5.Text = "Could not get value"
                             Case "ESN"
                                 Label5.Text = "No se pudo obtener el valor"
@@ -36,7 +36,7 @@ Public Class GetWinPESettings
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 Label6.Text = "Could not get value"
                             Case "ESN"
                                 Label6.Text = "No se pudo obtener el valor"
@@ -53,7 +53,7 @@ Public Class GetWinPESettings
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 msg = "Could not get value"
                             Case "ESN"
                                 msg = "No se pudo obtener el valor"
@@ -92,7 +92,7 @@ Public Class GetWinPESettings
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Get Windows PE settings"
                         Label1.Text = Text
                         Label2.Text = "These are the Windows PE settings for this image:"
