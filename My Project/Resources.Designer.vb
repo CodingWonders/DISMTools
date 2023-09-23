@@ -1808,14 +1808,15 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''- Fixed a translation issue in the driver information menu entry
+        '''- Fixed an issue where the program would not get package information on Windows 8 hosts
+        '''- Fixed an issue where AppX package addition would fail on Windows 8 images
+        '''- Fixed an issue where the program would not get basic image information automatically when switching indexes
+        '''- Fixed an issue where the program would not be translated properly on systems in English (US)
+        '''- The Windows PE setting dialogs are now shown only when background processes have finished
         '''
         '''New features
         '''
-        '''- The AppX package addition dialog now supports adding App Installer packages (&quot;.appinstaller&quot; files)
-        '''- Menu items are now enabled and disabled according to the versions of the Windows image you&apos;re servicing and the specified DISM executable
-        '''- You can now export the third-party drivers of a Windows image or active installation
-        '''- You can now configure the target path and the scratch space of Windows PE images.
+        '''- The friendly d [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
