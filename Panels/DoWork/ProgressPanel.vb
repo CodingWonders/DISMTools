@@ -2675,9 +2675,14 @@ Public Class ProgressPanel
                     End If
                     CommandArgs &= " /skiplicense"
                 End If
+                ' Inform user that a package will be installed with dependencies
+                If appxAdditionPackageList(x).PackageSpecifiedDependencies.Count > 0 Then
+                    LogView.AppendText("- The following dependency packages will be installed alongside this application:" & CrLf)
+                End If
                 ' Add dependencies
                 For Each Dependency As AppxDependency In appxAdditionPackageList(x).PackageSpecifiedDependencies
                     If File.Exists(Dependency.DependencyFile) Then
+                        LogView.AppendText("    - Dependency: " & Quote & Path.GetFileName(Dependency.DependencyFile) & Quote & CrLf)
                         CommandArgs &= " /dependencypackagepath=" & Quote & Dependency.DependencyFile & Quote
                     Else
                         LogView.AppendText(CrLf & _
