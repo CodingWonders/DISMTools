@@ -50,7 +50,7 @@ Public Class SetPEScratchSpace
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Set Windows PE scratch space"
                         Label1.Text = Text
                         Label2.Text = "The scratch space is the amount of writable space available on the Windows PE system volume when its contents are copied to memory. Please specify a scratch space amount and click OK."

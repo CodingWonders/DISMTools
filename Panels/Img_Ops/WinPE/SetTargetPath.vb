@@ -39,7 +39,7 @@ Public Class SetPETargetPath
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             msg = "The target path must be at least 3 characters and no longer than 32 characters"
                         Case "ESN"
                             msg = "La ruta de destino debe tener al menos 3 caracteres y no más de 32"
@@ -56,7 +56,7 @@ Public Class SetPETargetPath
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             msg = "The target path must start with any letter other than A or B"
                         Case "ESN"
                             msg = "La ruta de destino debe empezar con cualquier letra que no sea A o B"
@@ -73,7 +73,7 @@ Public Class SetPETargetPath
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             msg = "A drive letter must be followed by :"
                         Case "ESN"
                             msg = "Una letra de disco debe estar seguida por :"
@@ -90,7 +90,7 @@ Public Class SetPETargetPath
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             msg = "The target path must be absolute, and must not contain relative elements"
                         Case "ESN"
                             msg = "La ruta de destino debe ser absoluta, y no debe contener elementos relativos"
@@ -107,7 +107,7 @@ Public Class SetPETargetPath
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             msg = "The target path must not contain spaces or quotation marks"
                         Case "ESN"
                             msg = "La ruta de destino no debe contener espacios o comillas"
@@ -137,7 +137,7 @@ Public Class SetPETargetPath
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Set Windows PE target path"
                         Label1.Text = Text
                         Label2.Text = "The target path is a directory where the Windows PE files will be copied to in order to boot to the environment. Please specify a target path and click OK."

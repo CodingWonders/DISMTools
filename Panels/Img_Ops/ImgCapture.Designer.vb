@@ -38,6 +38,7 @@ Partial Class ImgCapture
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
+        Me.Button5 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.TextBox5 = New System.Windows.Forms.TextBox()
         Me.Label6 = New System.Windows.Forms.Label()
@@ -207,6 +208,7 @@ Partial Class ImgCapture
         '
         Me.GroupBox2.Controls.Add(Me.Label8)
         Me.GroupBox2.Controls.Add(Me.ComboBox1)
+        Me.GroupBox2.Controls.Add(Me.Button5)
         Me.GroupBox2.Controls.Add(Me.Button3)
         Me.GroupBox2.Controls.Add(Me.TextBox5)
         Me.GroupBox2.Controls.Add(Me.Label6)
@@ -248,11 +250,22 @@ Partial Class ImgCapture
         Me.ComboBox1.TabIndex = 12
         Me.ComboBox1.Text = "fast"
         '
+        'Button5
+        '
+        Me.Button5.Enabled = False
+        Me.Button5.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button5.Location = New System.Drawing.Point(676, 98)
+        Me.Button5.Name = "Button5"
+        Me.Button5.Size = New System.Drawing.Size(75, 23)
+        Me.Button5.TabIndex = 10
+        Me.Button5.Text = "Create..."
+        Me.Button5.UseVisualStyleBackColor = True
+        '
         'Button3
         '
         Me.Button3.Enabled = False
         Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button3.Location = New System.Drawing.Point(676, 98)
+        Me.Button3.Location = New System.Drawing.Point(595, 98)
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(75, 23)
         Me.Button3.TabIndex = 10
@@ -264,7 +277,7 @@ Partial Class ImgCapture
         Me.TextBox5.Enabled = False
         Me.TextBox5.Location = New System.Drawing.Point(170, 99)
         Me.TextBox5.Name = "TextBox5"
-        Me.TextBox5.Size = New System.Drawing.Size(500, 21)
+        Me.TextBox5.Size = New System.Drawing.Size(419, 21)
         Me.TextBox5.TabIndex = 9
         '
         'Label6
@@ -499,5 +512,6 @@ Partial Class ImgCapture
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
     Friend WithEvents Button4 As System.Windows.Forms.Button
     Friend WithEvents Label11 As System.Windows.Forms.Label
+    Friend WithEvents Button5 As System.Windows.Forms.Button
 
 End Class

@@ -7,7 +7,8 @@ Imports DISMTools.Utilities
 
 Public Class GetPkgInfoDlg
 
-    Dim PackageInfoList As New List(Of DismPackageInfoEx)
+    Dim PackageInfoExList As New List(Of DismPackageInfoEx)
+    Dim PackageInfoList As New List(Of DismPackageInfo)
     Public InstalledPkgInfo As DismPackageCollection
 
     Private Sub GetPkgInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -27,7 +28,7 @@ Public Class GetPkgInfoDlg
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Get package information"
                         Label1.Text = Text
                         Label2.Text = "What do you want to get information about?"
@@ -318,7 +319,7 @@ Public Class GetPkgInfoDlg
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     msg = "Background processes need to have completed before showing package information. We'll wait until they have completed"
                                 Case "ESN"
                                     msg = "Los procesos en segundo plano deben haber completado antes de obtener información del paquete. Esperaremos hasta que hayan completado"
@@ -332,7 +333,7 @@ Public Class GetPkgInfoDlg
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     Label5.Text = "Waiting for background processes to finish..."
                                 Case "ESN"
                                     Label5.Text = "Esperando a que terminen los procesos en segundo plano..."
@@ -357,7 +358,7 @@ Public Class GetPkgInfoDlg
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 Label5.Text = "Preparing to get package information..."
                             Case "ESN"
                                 Label5.Text = "Preparándonos para obtener información del paquete..."
@@ -374,7 +375,7 @@ Public Class GetPkgInfoDlg
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Label5.Text = "Getting information from " & Quote & ListBox2.SelectedItem & Quote & "..."
                                     Case "ESN"
                                         Label5.Text = "Obteniendo información de " & Quote & ListBox2.SelectedItem & Quote & "..."
@@ -384,29 +385,36 @@ Public Class GetPkgInfoDlg
                             Case 2
                                 Label5.Text = "Obteniendo información de " & Quote & ListBox2.SelectedItem & Quote & "..."
                         End Select
-                        ' Use the extended version, as DISM gets extended package information
-                        Dim PkgInfo As DismPackageInfoEx = DismApi.GetPackageInfoExByName(imgSession, ListBox2.SelectedItem)
-                        Label23.Text = PkgInfo.PackageName
-                        Label25.Text = Casters.CastDismApplicabilityStatus(PkgInfo.Applicable, True)
-                        Label35.Text = PkgInfo.Copyright
-                        Label32.Text = PkgInfo.Company
-                        Label40.Text = PkgInfo.CreationTime
-                        Label42.Text = PkgInfo.Description
-                        Label46.Text = PkgInfo.InstallClient
-                        Label34.Text = PkgInfo.InstallPackageName
-                        Label27.Text = PkgInfo.InstallTime
-                        Label29.Text = PkgInfo.LastUpdateTime
-                        Label38.Text = PkgInfo.DisplayName
-                        Label44.Text = PkgInfo.ProductName
-                        Label15.Text = PkgInfo.ProductVersion.ToString()
-                        Label21.Text = Casters.CastDismReleaseType(PkgInfo.ReleaseType, True)
-                        Label13.Text = Casters.CastDismRestartType(PkgInfo.RestartRequired, True)
-                        Label49.Text = PkgInfo.SupportInformation
-                        Label51.Text = Casters.CastDismPackageState(PkgInfo.PackageState)
-                        Label53.Text = Casters.CastDismFullyOfflineInstallationType(PkgInfo.FullyOffline, True)
-                        Label56.Text = PkgInfo.CapabilityId
+                        Dim PkgInfoEx As DismPackageInfoEx = Nothing
+                        Dim PkgInfo As DismPackageInfo = Nothing
+                        ' On Windows 10 and later, use the extended version, as DISM gets extended package information.
+                        ' Windows 8 and earlier cannot use the extended type, as no "Ex" function is declared in their DISM API DLL
+                        If Environment.OSVersion.Version.Major >= 10 Then
+                            PkgInfoEx = DismApi.GetPackageInfoExByName(imgSession, ListBox2.SelectedItem)
+                        Else
+                            PkgInfo = DismApi.GetPackageInfoByName(imgSession, ListBox2.SelectedItem)
+                        End If
+                        Label23.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.PackageName, PkgInfo.PackageName)
+                        Label25.Text = Casters.CastDismApplicabilityStatus(If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.Applicable, PkgInfo.Applicable), True)
+                        Label35.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.Copyright, PkgInfo.Copyright)
+                        Label32.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.Company, PkgInfo.Company)
+                        Label40.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.CreationTime, PkgInfo.CreationTime)
+                        Label42.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.Description, PkgInfo.Description)
+                        Label46.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.InstallClient, PkgInfo.InstallClient)
+                        Label34.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.InstallPackageName, PkgInfo.InstallPackageName)
+                        Label27.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.InstallTime, PkgInfo.InstallTime)
+                        Label29.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.LastUpdateTime, PkgInfo.LastUpdateTime)
+                        Label38.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.DisplayName, PkgInfo.DisplayName)
+                        Label44.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.ProductName, PkgInfo.ProductName)
+                        Label15.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.ProductVersion.ToString(), PkgInfo.ProductVersion.ToString())
+                        Label21.Text = Casters.CastDismReleaseType(If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.ReleaseType, PkgInfo.ReleaseType), True)
+                        Label13.Text = Casters.CastDismRestartType(If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.RestartRequired, PkgInfo.RestartRequired), True)
+                        Label49.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.SupportInformation, PkgInfo.SupportInformation)
+                        Label51.Text = Casters.CastDismPackageState(If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.PackageState, PkgInfo.PackageState), True)
+                        Label53.Text = Casters.CastDismFullyOfflineInstallationType(If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.FullyOffline, PkgInfo.FullyOffline), True)
+                        If Environment.OSVersion.Version.Major >= 10 Then Label56.Text = PkgInfoEx.CapabilityId Else Label56.Text = ""
                         Label57.Text = ""
-                        Dim cProps As DismCustomPropertyCollection = PkgInfo.CustomProperties
+                        Dim cProps As DismCustomPropertyCollection = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.CustomProperties, PkgInfo.CustomProperties)
                         If cProps.Count > 0 Then
                             For Each cProp As DismCustomProperty In cProps
                                 Label57.Text &= "- " & If(cProp.Path <> "", cProp.Path & "\", "") & cProp.Name & ": " & cProp.Value & CrLf
@@ -415,7 +423,7 @@ Public Class GetPkgInfoDlg
                             Select Case MainForm.Language
                                 Case 0
                                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENG"
+                                        Case "ENU", "ENG"
                                             Label57.Text = "None"
                                         Case "ESN"
                                             Label57.Text = "Ninguna"
@@ -427,7 +435,7 @@ Public Class GetPkgInfoDlg
                             End Select
                         End If
                         Label59.Text = ""
-                        Dim pkgFeats As DismFeatureCollection = PkgInfo.Features
+                        Dim pkgFeats As DismFeatureCollection = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.Features, PkgInfo.Features)
                         If pkgFeats.Count > 0 Then
                             ' Output all features
                             For Each pkgFeat As DismFeature In pkgFeats
@@ -437,7 +445,7 @@ Public Class GetPkgInfoDlg
                             Select Case MainForm.Language
                                 Case 0
                                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENG"
+                                        Case "ENU", "ENG"
                                             Label59.Text = "None"
                                         Case "ESN"
                                             Label59.Text = "Ninguna"
@@ -454,7 +462,7 @@ Public Class GetPkgInfoDlg
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     Label5.Text = "Ready"
                                 Case "ESN"
                                     Label5.Text = "Listo"
@@ -479,6 +487,7 @@ Public Class GetPkgInfoDlg
 
     Sub GetPackageFileInformation()
         PackageInfoList.Clear()
+        PackageInfoExList.Clear()
         Try
             ' Background processes need to have completed before showing information
             If MainForm.ImgBW.IsBusy Then
@@ -486,7 +495,7 @@ Public Class GetPkgInfoDlg
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 msg = "Background processes need to have completed before showing package information. We'll wait until they have completed"
                             Case "ESN"
                                 msg = "Los procesos en segundo plano deben haber completado antes de obtener información del paquete. Esperaremos hasta que hayan completado"
@@ -500,7 +509,7 @@ Public Class GetPkgInfoDlg
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 Label5.Text = "Waiting for background processes to finish..."
                             Case "ESN"
                                 Label5.Text = "Esperando a que terminen los procesos en segundo plano..."
@@ -525,7 +534,7 @@ Public Class GetPkgInfoDlg
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             Label5.Text = "Preparing package information processes..."
                         Case "ESN"
                             Label5.Text = "Preparando procesos de información de paquetes..."
@@ -544,7 +553,7 @@ Public Class GetPkgInfoDlg
                             Select Case MainForm.Language
                                 Case 0
                                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENG"
+                                        Case "ENU", "ENG"
                                             Label5.Text = "Getting information from package file " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "This may take some time and the program may temporarily freeze"
                                         Case "ESN"
                                             Label5.Text = "Obteniendo información del archivo de paquete " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Esto puede llevar algo de tiempo y el programa podría congelarse temporalmente"
@@ -555,7 +564,14 @@ Public Class GetPkgInfoDlg
                                     Label5.Text = "Obteniendo información del archivo de paquete " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Esto puede llevar algo de tiempo y el programa podría congelarse temporalmente"
                             End Select
                             Application.DoEvents()
-                            Dim pkgInfo As DismPackageInfoEx = DismApi.GetPackageInfoExByPath(imgSession, pkgFile)
+                            Dim pkgInfoEx As DismPackageInfoEx = Nothing
+                            Dim pkgInfo As DismPackageInfo = Nothing
+                            If Environment.OSVersion.Version.Major >= 10 Then
+                                pkgInfoEx = DismApi.GetPackageInfoExByPath(imgSession, pkgFile)
+                            Else
+                                pkgInfo = DismApi.GetPackageInfoByPath(imgSession, pkgFile)
+                            End If
+                            If pkgInfoEx IsNot Nothing Then PackageInfoExList.Add(pkgInfoEx)
                             If pkgInfo IsNot Nothing Then PackageInfoList.Add(pkgInfo)
                         End If
                     Next
@@ -571,7 +587,7 @@ Public Class GetPkgInfoDlg
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Label5.Text = "Ready"
                     Case "ESN"
                         Label5.Text = "Listo"
@@ -584,27 +600,27 @@ Public Class GetPkgInfoDlg
     End Sub
 
     Sub DisplayPackageFileInformation(PkgFile As Integer)
-        Label9.Text = PackageInfoList(PkgFile).PackageName
-        Label11.Text = Casters.CastDismApplicabilityStatus(PackageInfoList(PkgFile).Applicable, True)
-        Label17.Text = PackageInfoList(PkgFile).Copyright
-        Label19.Text = PackageInfoList(PkgFile).Company
-        Label62.Text = PackageInfoList(PkgFile).CreationTime
-        Label64.Text = PackageInfoList(PkgFile).Description
-        Label66.Text = PackageInfoList(PkgFile).InstallClient
-        Label68.Text = PackageInfoList(PkgFile).InstallPackageName
-        Label70.Text = PackageInfoList(PkgFile).InstallTime
-        Label72.Text = PackageInfoList(PkgFile).LastUpdateTime
-        Label74.Text = PackageInfoList(PkgFile).DisplayName
-        Label76.Text = PackageInfoList(PkgFile).ProductName
-        Label78.Text = PackageInfoList(PkgFile).ProductVersion.ToString()
-        Label80.Text = Casters.CastDismReleaseType(PackageInfoList(PkgFile).ReleaseType, True)
-        Label82.Text = Casters.CastDismRestartType(PackageInfoList(PkgFile).RestartRequired, True)
-        Label84.Text = PackageInfoList(PkgFile).SupportInformation
-        Label86.Text = Casters.CastDismPackageState(PackageInfoList(PkgFile).PackageState, True)
-        Label88.Text = Casters.CastDismFullyOfflineInstallationType(PackageInfoList(PkgFile).FullyOffline, True)
-        Label90.Text = PackageInfoList(PkgFile).CapabilityId
+        Label9.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).PackageName, PackageInfoList(PkgFile).PackageName)
+        Label11.Text = Casters.CastDismApplicabilityStatus(If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).Applicable, PackageInfoList(PkgFile).Applicable), True)
+        Label17.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).Copyright, PackageInfoList(PkgFile).Copyright)
+        Label19.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).Company, PackageInfoList(PkgFile).Company)
+        Label62.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).CreationTime, PackageInfoList(PkgFile).CreationTime)
+        Label64.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).Description, PackageInfoList(PkgFile).Description)
+        Label66.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).InstallClient, PackageInfoList(PkgFile).InstallClient)
+        Label68.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).InstallPackageName, PackageInfoList(PkgFile).InstallPackageName)
+        Label70.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).InstallTime, PackageInfoList(PkgFile).InstallTime)
+        Label72.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).LastUpdateTime, PackageInfoList(PkgFile).LastUpdateTime)
+        Label74.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).DisplayName, PackageInfoList(PkgFile).DisplayName)
+        Label76.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).ProductName, PackageInfoList(PkgFile).ProductName)
+        Label78.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).ProductVersion.ToString(), PackageInfoList(PkgFile).ProductVersion.ToString())
+        Label80.Text = Casters.CastDismReleaseType(If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).ReleaseType, PackageInfoList(PkgFile).ReleaseType), True)
+        Label82.Text = Casters.CastDismRestartType(If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).RestartRequired, PackageInfoList(PkgFile).RestartRequired), True)
+        Label84.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).SupportInformation, PackageInfoList(PkgFile).SupportInformation)
+        Label86.Text = Casters.CastDismPackageState(If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).PackageState, PackageInfoList(PkgFile).PackageState), True)
+        Label88.Text = Casters.CastDismFullyOfflineInstallationType(If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).FullyOffline, PackageInfoList(PkgFile).FullyOffline), True)
+        If Environment.OSVersion.Version.Major >= 10 Then Label90.Text = PackageInfoExList(PkgFile).CapabilityId Else Label90.Text = ""
         Label92.Text = ""
-        Dim cProps As DismCustomPropertyCollection = PackageInfoList(PkgFile).CustomProperties
+        Dim cProps As DismCustomPropertyCollection = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).CustomProperties, PackageInfoList(PkgFile).CustomProperties)
         If cProps.Count > 0 Then
             For Each cProp As DismCustomProperty In cProps
                 Label92.Text &= "- " & If(cProp.Path <> "", cProp.Path & "\", "") & cProp.Name & ": " & cProp.Value & CrLf
@@ -613,7 +629,7 @@ Public Class GetPkgInfoDlg
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             Label92.Text = "None"
                         Case "ESN"
                             Label92.Text = "Ninguna"
@@ -625,7 +641,7 @@ Public Class GetPkgInfoDlg
             End Select
         End If
         Label94.Text = ""
-        Dim pkgFeats As DismFeatureCollection = PackageInfoList(PkgFile).Features
+        Dim pkgFeats As DismFeatureCollection = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).Features, PackageInfoList(PkgFile).Features)
         If pkgFeats.Count > 0 Then
             ' Output all features
             For Each pkgFeat As DismFeature In pkgFeats
@@ -635,7 +651,7 @@ Public Class GetPkgInfoDlg
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             Label94.Text = "None"
                         Case "ESN"
                             Label94.Text = "Ninguna"
@@ -671,7 +687,7 @@ Public Class GetPkgInfoDlg
                 NoPkgPanel.Visible = False
                 PackageFileInfoPanel.Visible = True
                 Button2.Enabled = True
-                If PackageInfoList.Count > 0 Then DisplayPackageFileInformation(ListBox1.SelectedIndex)
+                If PackageInfoExList.Count > 0 Or PackageInfoList.Count > 0 Then DisplayPackageFileInformation(ListBox1.SelectedIndex)
             Else
                 NoPkgPanel.Visible = True
                 PackageFileInfoPanel.Visible = False
@@ -690,6 +706,7 @@ Public Class GetPkgInfoDlg
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         PackageInfoList.RemoveAt(ListBox1.SelectedIndex)
+        PackageInfoExList.RemoveAt(ListBox1.SelectedIndex)
         ListBox1.Items.Remove(ListBox1.SelectedItem)
         If ListBox1.Items.Count > 1 Then Button2.Enabled = False Else Button2.Enabled = True
         NoPkgPanel.Visible = True
@@ -698,6 +715,7 @@ Public Class GetPkgInfoDlg
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
         PackageInfoList.Clear()
+        PackageInfoExList.Clear()
         ListBox1.Items.Clear()
         Button2.Enabled = False
         Button3.Enabled = False

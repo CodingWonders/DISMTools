@@ -51,7 +51,7 @@ Public Class AddDrivers
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MsgBox("There are no selected driver packages to install. Please specify the driver packages you'd like to install and try again.", vbOKOnly + vbCritical, Label1.Text)
                         Case "ESN"
                             MsgBox("No hay paquetes de controladores seleccionados para instalar. Especifique los paquetes de controladores que le gustaría instalar e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
@@ -85,7 +85,7 @@ Public Class AddDrivers
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         ListView1.Items.Add(New ListViewItem(New String() {OpenFileDialog1.FileName, "File"}))
                     Case "ESN"
                         ListView1.Items.Add(New ListViewItem(New String() {OpenFileDialog1.FileName, "Archivo"}))
@@ -104,7 +104,7 @@ Public Class AddDrivers
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 ListView1.Items.Add(New ListViewItem(New String() {FolderBrowserDialog1.SelectedPath, "Folder"}))
                             Case "ESN"
                                 ListView1.Items.Add(New ListViewItem(New String() {FolderBrowserDialog1.SelectedPath, "Carpeta"}))
@@ -119,7 +119,7 @@ Public Class AddDrivers
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 MsgBox("There are no driver packages in the specified folder", vbOKOnly + vbCritical, Label1.Text)
                             Case "ESN"
                                 MsgBox("No hay paquetes de controladores en la carpeta espcificada", vbOKOnly + vbCritical, Label1.Text)
@@ -164,7 +164,7 @@ Public Class AddDrivers
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Add drivers"
                         Label1.Text = Text
                         Label2.Text = "Please specify the drivers to add by using the buttons below or by dropping them to the list below:"
@@ -296,7 +296,7 @@ Public Class AddDrivers
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             ListView1.Items.Add(New ListViewItem(New String() {PkgFile, If(File.GetAttributes(PkgFile) = FileAttributes.Directory, "Folder", "File")}))
                         Case "ESN"
                             ListView1.Items.Add(New ListViewItem(New String() {PkgFile, If(File.GetAttributes(PkgFile) = FileAttributes.Directory, "Carpeta", "Archivo")}))

@@ -21,7 +21,7 @@ Public Class SaveProjectQuestionDialog
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Label1.Text = "Do you want to save the changes of this project?"
                         Label2.Text = "If you shut down or restart your system without unmounting the images, you will need to reload the servicing session."
                         CheckBox1.Text = "Save changes and unmount image"

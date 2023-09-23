@@ -142,10 +142,12 @@ Public Class ImgCapture
             Label6.Enabled = True
             TextBox5.Enabled = True
             Button3.Enabled = True
+            Button5.Enabled = True
         Else
             Label6.Enabled = False
             TextBox5.Enabled = False
             Button3.Enabled = False
+            Button5.Enabled = False
         End If
         GatherValidFields()
     End Sub
@@ -198,5 +200,17 @@ Public Class ImgCapture
 
     Private Sub TextBox3_TextChanged(sender As Object, e As EventArgs) Handles TextBox3.TextChanged
         GatherValidFields()
+    End Sub
+
+    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+        Visible = False
+        ' Make it so that it can only close
+        WimScriptEditor.MinimizeBox = False
+        WimScriptEditor.MaximizeBox = False
+        WimScriptEditor.ShowDialog(MainForm)
+        If File.Exists(WimScriptEditor.ConfigListFile) Then
+            TextBox5.Text = WimScriptEditor.ConfigListFile
+        End If
+        Visible = True
     End Sub
 End Class

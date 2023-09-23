@@ -11,7 +11,7 @@ Public Class ExportDrivers
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             msg = "Please specify a target to export the drivers to and make sure that the specified target exists."
                         Case "ESN"
                             msg = "Especifique un destino al que exportar los controladores y asegúrese de que el destino especificado existe."
@@ -40,7 +40,7 @@ Public Class ExportDrivers
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Export drivers"
                         Label1.Text = Text
                         Label2.Text = "Export target:"

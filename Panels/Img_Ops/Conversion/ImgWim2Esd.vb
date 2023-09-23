@@ -44,7 +44,7 @@ Public Class ImgWim2Esd
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Convert image"
                         Label1.Text = Text
                         Label2.Text = "Source image file:"

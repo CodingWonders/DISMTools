@@ -267,7 +267,7 @@ Public Class MainForm
                         Select Case Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         MsgBox("An invalid project has been specified", vbOKOnly + vbCritical, Text)
                                     Case "ESN"
                                         MsgBox("Se ha especificado un proyecto no válido", vbOKOnly + vbCritical, Text)
@@ -464,7 +464,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         UpdateLink.Text = "Checking for updates..."
                     Case "ESN"
                         UpdateLink.Text = "Comprobando actualizaciones..."
@@ -505,7 +505,7 @@ Public Class MainForm
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     UpdateLink.Text = "A new version is available for download and installation. Click here to learn more"
                                     UpdateLink.LinkArea = New LinkArea(58, 24)
                                 Case "ESN"
@@ -543,7 +543,7 @@ Public Class MainForm
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             Label5.Text = "Yes"
                         Case "ESN"
                             Label5.Text = "Sí"
@@ -1287,7 +1287,7 @@ Public Class MainForm
                             Select Case Language
                                 Case 0
                                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENG"
+                                        Case "ENU", "ENG"
                                             progressLabel = "Creating session for this image..."
                                         Case "ESN"
                                             progressLabel = "Creando sesión para esta imagen..."
@@ -1333,7 +1333,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         progressLabel = "Running processes"
                     Case "ESN"
                         progressLabel = "Ejecutando procesos"
@@ -1348,7 +1348,7 @@ Public Class MainForm
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             progressLabel = "Getting basic image information..."
                         Case "ESN"
                             progressLabel = "Obteniendo información básica de la imagen..."
@@ -1375,7 +1375,7 @@ Public Class MainForm
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 progressLabel = "Getting advanced image information..."
                             Case "ESN"
                                 progressLabel = "Obteniendo información avanzada de la imagen..."
@@ -1446,7 +1446,7 @@ Public Class MainForm
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 progressLabel = "Getting image packages..."
                             Case "ESN"
                                 progressLabel = "Obteniendo paquetes de la imagen..."
@@ -1465,7 +1465,7 @@ Public Class MainForm
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 progressLabel = "Getting image features..."
                             Case "ESN"
                                 progressLabel = "Obteniendo características de la imagen..."
@@ -1489,7 +1489,7 @@ Public Class MainForm
                         Select Case Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
                                     Case "ESN"
                                         progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
@@ -1518,7 +1518,7 @@ Public Class MainForm
                         Select Case Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         progressLabel = "Getting image Features on Demand (capabilities)..."
                                     Case "ESN"
                                         progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
@@ -1543,7 +1543,7 @@ Public Class MainForm
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 progressLabel = "Getting image drivers..."
                             Case "ESN"
                                 progressLabel = "Obteniendo controladores de la imagen..."
@@ -1563,7 +1563,7 @@ Public Class MainForm
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 progressLabel = "Getting image packages..."
                             Case "ESN"
                                 progressLabel = "Obteniendo paquetes de la imagen..."
@@ -1579,7 +1579,7 @@ Public Class MainForm
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 progressLabel = "Getting image features..."
                             Case "ESN"
                                 progressLabel = "Obteniendo características de la imagen..."
@@ -1598,7 +1598,7 @@ Public Class MainForm
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
                                 Case "ESN"
                                     progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
@@ -1621,7 +1621,7 @@ Public Class MainForm
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     progressLabel = "Getting image Features on Demand (capabilities)..."
                                 Case "ESN"
                                     progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
@@ -1641,7 +1641,7 @@ Public Class MainForm
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 progressLabel = "Getting image drivers..."
                             Case "ESN"
                                 progressLabel = "Obteniendo controladores de la imagen..."
@@ -1658,7 +1658,7 @@ Public Class MainForm
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             progressLabel = "Running pending tasks. This may take some time..."
                         Case "ESN"
                             progressLabel = "Ejecutando tareas pendientes. Esto puede llevar algo de tiempo..."
@@ -1702,7 +1702,7 @@ Public Class MainForm
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 Label14.Text = "(Online installation)"
                                 Label20.Text = "(Online installation)"
                                 projName.Text = "(Online installation)"
@@ -4402,7 +4402,7 @@ Public Class MainForm
     Sub ChangeLangs(LangCode As Integer)
         Select Case LangCode
             Case 0
-                If My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "ENG" Then
+                If My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "ENG" Or My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "ENU" Then
                     ' Top-level menu items
                     FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&File".ToUpper(), "&File")
                     ProjectToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Project".ToUpper(), "&Project")
@@ -5524,7 +5524,7 @@ Public Class MainForm
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             Label5.Text = "Yes"
                             Text = "Online installation - DISMTools"
                             Label14.Text = "(Online installation)"
@@ -5619,7 +5619,7 @@ Public Class MainForm
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 PleaseWaitDialog.Label2.Text = "Loading project: " & Quote & prjName & Quote
                             Case "ESN"
                                 PleaseWaitDialog.Label2.Text = "Cargando proyecto: " & Quote & prjName & Quote
@@ -5671,7 +5671,7 @@ Public Class MainForm
                         Select Case Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         PleaseWaitDialog.Label2.Text = "Loading project: " & Quote & prjName & Quote
                                     Case "ESN"
                                         PleaseWaitDialog.Label2.Text = "Cargando proyecto: " & Quote & prjName & Quote
@@ -5810,7 +5810,7 @@ Public Class MainForm
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     PleaseWaitDialog.Label2.Text = "Loading project: " & Quote & prjName & Quote
                                 Case "ESN"
                                     PleaseWaitDialog.Label2.Text = "Cargando proyecto: " & Quote & prjName & Quote
@@ -6089,7 +6089,7 @@ Public Class MainForm
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             If MsgBox("Background processes are still gathering information about this image. Do you want to cancel them?", vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
                                 ImgBW.CancelAsync()
                             Else
@@ -6118,7 +6118,7 @@ Public Class MainForm
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MenuDesc.Text = "Cancelling background processes. Please wait..."
                         Case "ESN"
                             MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
@@ -6139,7 +6139,7 @@ Public Class MainForm
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MenuDesc.Text = "Ready"
                         Case "ESN"
                             MenuDesc.Text = "Listo"
@@ -6216,7 +6216,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Online installation - DISMTools"
                     Case "ESN"
                         Text = "Instalación activa - DISMTools"
@@ -6235,7 +6235,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Label5.Text = "Yes"
                     Case "ESN"
                         Label5.Text = "Sí"
@@ -6263,7 +6263,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Label14.Text = "(Online installation)"
                         Label12.Text = "(Online installation)"
                     Case "ESN"
@@ -6294,7 +6294,7 @@ Public Class MainForm
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             If MsgBox("Background processes are still gathering information about this image. Do you want to cancel them?", vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
                                 ImgBW.CancelAsync()
                             Else
@@ -6323,7 +6323,7 @@ Public Class MainForm
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MenuDesc.Text = "Cancelling background processes. Please wait..."
                         Case "ESN"
                             MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
@@ -6344,7 +6344,7 @@ Public Class MainForm
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MenuDesc.Text = "Ready"
                         Case "ESN"
                             MenuDesc.Text = "Listo"
@@ -6365,7 +6365,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Label5.Text = "Yes"
                     Case "ESN"
                         Label5.Text = "Sí"
@@ -6404,7 +6404,7 @@ Public Class MainForm
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             Label5.Text = "Yes"
                         Case "ESN"
                             Label5.Text = "Sí"
@@ -6869,7 +6869,7 @@ Public Class MainForm
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             prjTreeView.Nodes.Add("parent", "Project: " & Quote & MainProjNameNode & Quote)
                             prjTreeView.Nodes("parent").Nodes.Add("dandi", "ADK Deployment Tools")
                             prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_x86", "Deployment Tools (x86)")
@@ -7204,7 +7204,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         MenuDesc.Text = "Ready"
                     Case "ESN"
                         MenuDesc.Text = "Listo"
@@ -7218,7 +7218,7 @@ Public Class MainForm
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MenuDesc.Text = "Cancelling background processes. Please wait..."
                         Case "ESN"
                             MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
@@ -7235,7 +7235,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         MenuDesc.Text = "Ready"
                     Case "ESN"
                         MenuDesc.Text = "Listo"
@@ -7249,7 +7249,7 @@ Public Class MainForm
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MenuDesc.Text = "Cancelling background processes. Please wait..."
                         Case "ESN"
                             MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
@@ -7775,7 +7775,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         PleaseWaitDialog.Label2.Text = "Getting package names..."
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
@@ -7805,7 +7805,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
@@ -7838,7 +7838,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
                     Case "ESN"
                         ProjProperties.Label1.Text = "Propiedades de " & ProjProperties.TabControl1.SelectedTab.Text.ToLower()
@@ -7866,7 +7866,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
                     Case "ESN"
                         ProjProperties.Label1.Text = "Propiedades de " & ProjProperties.TabControl1.SelectedTab.Text.ToLower()
@@ -8019,6 +8019,7 @@ Public Class MainForm
     End Sub
 
     Private Sub OptionsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OptionsToolStripMenuItem.Click
+        Options.PrefReset.Enabled = True
         Options.ShowDialog()
     End Sub
 
@@ -8057,7 +8058,7 @@ Public Class MainForm
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 ExpandCollapseTSB.Text = "Collapse"
                                 ExpandToolStripMenuItem.Text = "Collapse item"
                             Case "ESN"
@@ -8080,7 +8081,7 @@ Public Class MainForm
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 ExpandCollapseTSB.Text = "Expand"
                                 ExpandToolStripMenuItem.Text = "Expand item"
                             Case "ESN"
@@ -8113,7 +8114,7 @@ Public Class MainForm
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 ExpandCollapseTSB.Text = "Collapse"
                                 ExpandToolStripMenuItem.Text = "Collapse item"
                             Case "ESN"
@@ -8136,7 +8137,7 @@ Public Class MainForm
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 ExpandCollapseTSB.Text = "Expand"
                                 ExpandToolStripMenuItem.Text = "Expand item"
                             Case "ESN"
@@ -8160,7 +8161,7 @@ Public Class MainForm
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             ExpandCollapseTSB.Text = "Expand"
                             ExpandToolStripMenuItem.Text = "Expand item"
                         Case "ESN"
@@ -8187,7 +8188,7 @@ Public Class MainForm
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             ExpandCollapseTSB.Text = "Collapse"
                             ExpandToolStripMenuItem.Text = "Collapse item"
                         Case "ESN"
@@ -8210,7 +8211,7 @@ Public Class MainForm
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             ExpandCollapseTSB.Text = "Expand"
                             ExpandToolStripMenuItem.Text = "Expand item"
                         Case "ESN"
@@ -8306,7 +8307,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         PleaseWaitDialog.Label2.Text = "Getting package names..."
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
@@ -8345,7 +8346,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         RemPackage.Label2.Text = "This image contains " & ElementCount & " packages"
                     Case "ESN"
                         RemPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes"
@@ -8389,7 +8390,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
@@ -8430,7 +8431,7 @@ Public Class MainForm
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
                             Case "ESN"
                                 EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
@@ -8467,7 +8468,7 @@ Public Class MainForm
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
                             Case "ESN"
                                 DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
@@ -8491,7 +8492,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
@@ -8558,7 +8559,7 @@ Public Class MainForm
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
                             Case "ESN"
                                 DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
@@ -8633,7 +8634,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         PleaseWaitDialog.Label2.Text = "Getting image indexes..."
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
@@ -8710,7 +8711,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         progressLabel = "Image processes have completed"
                     Case "ESN"
                         progressLabel = "Los procesos de la imagen han completado"
@@ -8818,7 +8819,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         PleaseWaitDialog.Label2.Text = "Getting package names..."
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
@@ -8857,7 +8858,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         RemPackage.Label2.Text = "This image contains " & ElementCount & " packages"
                     Case "ESN"
                         RemPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes"
@@ -8880,7 +8881,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
@@ -8921,7 +8922,7 @@ Public Class MainForm
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
                             Case "ESN"
                                 EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
@@ -8958,7 +8959,7 @@ Public Class MainForm
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
                             Case "ESN"
                                 DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
@@ -8982,7 +8983,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
@@ -9024,7 +9025,7 @@ Public Class MainForm
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
                             Case "ESN"
                                 EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
@@ -9061,7 +9062,7 @@ Public Class MainForm
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
                             Case "ESN"
                                 DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
@@ -9082,7 +9083,7 @@ Public Class MainForm
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
                         Case "ESN"
                             MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
@@ -9100,7 +9101,7 @@ Public Class MainForm
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
                         Case "ESN"
                             MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
@@ -9117,7 +9118,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         PleaseWaitDialog.Label2.Text = "Getting provisioned AppX packages..."
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo paquetes aprovisionados AppX..."
@@ -9169,7 +9170,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         RemProvAppxPackage.Label2.Text = "This image contains " & ElementCount & " AppX packages."
                     Case "ESN"
                         RemProvAppxPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes AppX."
@@ -9225,7 +9226,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "running", "stopped")
                         Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Stop", "Start")
                     Case "ESN"
@@ -9322,7 +9323,7 @@ Public Class MainForm
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
                         Case "ESN"
                             MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
@@ -9340,7 +9341,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
@@ -9377,7 +9378,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         AddCapabilities.Label4.Text = "This image contains " & ElementCount & " capabilities."
                     Case "ESN"
                         AddCapabilities.Label4.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
@@ -9395,7 +9396,7 @@ Public Class MainForm
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
                         Case "ESN"
                             MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
@@ -9413,7 +9414,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
@@ -9450,7 +9451,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         RemCapabilities.Label2.Text = "This image contains " & ElementCount & " capabilities."
                     Case "ESN"
                         RemCapabilities.Label2.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
@@ -9470,7 +9471,7 @@ Public Class MainForm
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
                         Case "ESN"
                             MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
@@ -9488,7 +9489,7 @@ Public Class MainForm
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
                         Case "ESN"
                             MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
@@ -9505,7 +9506,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
@@ -9530,7 +9531,7 @@ Public Class MainForm
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Yes", "No"), If(imgDrvBootCriticalStatus(x), "Yes", "No"), imgDrvVersions(x), imgDrvDates(x)}))
                             Case "ESN"
                                 RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sí", "No"), imgDrvVersions(x), imgDrvDates(x)}))
@@ -9566,7 +9567,7 @@ Public Class MainForm
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MsgBox("Could not gather source from group policy. Reason:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detect from group policy")
                         Case "ESN"
                             MsgBox("No se pudo recopilar el origen de las políticas de grupo. Razón:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detectar políticas de grupo")
@@ -9805,7 +9806,7 @@ Public Class MainForm
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MsgBox("We couldn't download the update checker. Reason:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Check for updates")
                         Case "ESN"
                             MsgBox("No pudimos descargar el comprobador de actualizaciones. Razón:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Comprobar actualizaciones")
@@ -9886,7 +9887,7 @@ Public Class MainForm
                                     Select Case Language
                                         Case 0
                                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                                Case "ENG"
+                                                Case "ENU", "ENG"
                                                     MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
                                                 Case "ESN"
                                                     MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
@@ -9914,7 +9915,7 @@ Public Class MainForm
                             Select Case Language
                                 Case 0
                                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENG"
+                                        Case "ENU", "ENG"
                                             MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
                                         Case "ESN"
                                             MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
@@ -9940,7 +9941,7 @@ Public Class MainForm
                             Select Case Language
                                 Case 0
                                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENG"
+                                        Case "ENU", "ENG"
                                             MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
                                         Case "ESN"
                                             MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
@@ -9966,7 +9967,7 @@ Public Class MainForm
                             Select Case Language
                                 Case 0
                                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENG"
+                                        Case "ENU", "ENG"
                                             MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
                                         Case "ESN"
                                             MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
@@ -9992,7 +9993,7 @@ Public Class MainForm
                             Select Case Language
                                 Case 0
                                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENG"
+                                        Case "ENU", "ENG"
                                             MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
                                         Case "ESN"
                                             MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
@@ -10061,7 +10062,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         MenuDesc.Text = "Deployment tools were copied to the project successfully"
                     Case "ESN"
                         MenuDesc.Text = "Las herramientas de implementación fueron copiadas al proyecto satisfactoriamente"
@@ -10079,7 +10080,7 @@ Public Class MainForm
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 MenuDesc.Text = "Copying deployment tools for architecture (" & currentArch & ", " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
                             Case "ESN"
                                 MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (" & currentArch & ", " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
@@ -10093,7 +10094,7 @@ Public Class MainForm
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 MenuDesc.Text = "Copying deployment tools for architecture (x86, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
                             Case "ESN"
                                 MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (x86, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
@@ -10107,7 +10108,7 @@ Public Class MainForm
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 MenuDesc.Text = "Copying deployment tools for architecture (amd64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
                             Case "ESN"
                                 MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (amd64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
@@ -10121,7 +10122,7 @@ Public Class MainForm
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 MenuDesc.Text = "Copying deployment tools for architecture (arm, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
                             Case "ESN"
                                 MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (arm, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
@@ -10135,7 +10136,7 @@ Public Class MainForm
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 MenuDesc.Text = "Copying deployment tools for architecture (arm64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
                             Case "ESN"
                                 MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (arm64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
@@ -10230,7 +10231,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         PleaseWaitDialog.Label2.Text = "Getting image indexes..."
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
@@ -10319,7 +10320,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
@@ -10347,6 +10348,8 @@ Public Class MainForm
     End Sub
 
     Private Sub WimScriptEditorCommand_Click(sender As Object, e As EventArgs) Handles WimScriptEditorCommand.Click
+        WimScriptEditor.MinimizeBox = True
+        WimScriptEditor.MaximizeBox = True
         If WimScriptEditor.Visible Then
             If WimScriptEditor.WindowState = FormWindowState.Minimized Then
                 WimScriptEditor.WindowState = FormWindowState.Normal
@@ -10365,7 +10368,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
@@ -10393,7 +10396,7 @@ Public Class MainForm
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
                         Case "ESN"
                             MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
@@ -10409,7 +10412,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
@@ -10437,7 +10440,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         PleaseWaitDialog.Label2.Text = "Getting package names..."
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
@@ -10467,7 +10470,7 @@ Public Class MainForm
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
                         Case "ESN"
                             MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
@@ -10483,7 +10486,7 @@ Public Class MainForm
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         PleaseWaitDialog.Label2.Text = "Getting package names..."
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
@@ -10515,7 +10518,7 @@ Public Class MainForm
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             Notifications.BalloonTipText = "The asset has been saved to the location you specified"
                             Notifications.BalloonTipTitle = "Save successful"
                         Case "ESN"
@@ -10545,7 +10548,7 @@ Public Class MainForm
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             Notifications.BalloonTipText = "The asset has been copied to the clipboard"
                             Notifications.BalloonTipTitle = "Copy successful"
                         Case "ESN"
@@ -10586,14 +10589,26 @@ Public Class MainForm
     End Sub
 
     Private Sub GetPESettings_Click(sender As Object, e As EventArgs) Handles GetPESettings.Click
+        If ImgBW.IsBusy Then
+            BGProcsBusyDialog.ShowDialog()
+            Exit Sub
+        End If
         GetWinPESettings.ShowDialog()
     End Sub
 
     Private Sub SetTargetPath_Click(sender As Object, e As EventArgs) Handles SetTargetPath.Click
+        If ImgBW.IsBusy Then
+            BGProcsBusyDialog.ShowDialog()
+            Exit Sub
+        End If
         SetPETargetPath.ShowDialog()
     End Sub
 
     Private Sub SetScratchSpace_Click(sender As Object, e As EventArgs) Handles SetScratchSpace.Click
+        If ImgBW.IsBusy Then
+            BGProcsBusyDialog.ShowDialog()
+            Exit Sub
+        End If
         SetPEScratchSpace.ShowDialog()
     End Sub
 End Class

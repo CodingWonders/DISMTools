@@ -13,7 +13,7 @@ Public Class GetAppxPkgInfoDlg
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Get AppX package information"
                         Label1.Text = Text
                         Label36.Text = "AppX package information"
@@ -135,13 +135,16 @@ Public Class GetAppxPkgInfoDlg
                 Label40.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).Version.ToString()
             End If
 
+            Dim appDisplayName As String = If(Not MainForm.GetPackageDisplayName(Label23.Text, Label25.Text).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), MainForm.GetPackageDisplayName(Label23.Text, Label25.Text), "")
+            If appDisplayName <> "" Then Label25.Text &= " (" & appDisplayName & ")"
+
             ' Get exclusive things that can't be obtained with the DISM API
             If Directory.Exists(MainForm.MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & Label23.Text) Then
                 If My.Computer.FileSystem.GetFiles(MainForm.MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & Label23.Text, FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     Label42.Text = "No"
                                 Case "ESN"
                                     Label42.Text = "No"
@@ -155,7 +158,7 @@ Public Class GetAppxPkgInfoDlg
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     Label42.Text = "Yes"
                                 Case "ESN"
                                     Label42.Text = "Sí"
@@ -170,7 +173,7 @@ Public Class GetAppxPkgInfoDlg
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 Label42.Text = "No"
                             Case "ESN"
                                 Label42.Text = "No"

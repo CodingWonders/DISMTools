@@ -6,7 +6,7 @@ Public Class MigrationForm
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
         Threading.Thread.Sleep(2000)
         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-            Case "ENG"
+            Case "ENU", "ENG"
                 msg = "Loading old settings file..."
             Case "ESN"
                 msg = "Cargando archivo antiguo de configuración..."
@@ -15,7 +15,7 @@ Public Class MigrationForm
         MainForm.LoadDTSettings(1)
         Threading.Thread.Sleep(250)
         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-            Case "ENG"
+            Case "ENU", "ENG"
                 msg = "Saving new settings file..."
             Case "ESN"
                 msg = "Guardando archivo nuevo de configuración..."
@@ -24,7 +24,7 @@ Public Class MigrationForm
         MainForm.SaveDTSettings()
         Threading.Thread.Sleep(250)
         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-            Case "ENG"
+            Case "ENU", "ENG"
                 msg = "Done"
             Case "ESN"
                 msg = "Terminado"
@@ -55,7 +55,7 @@ Public Class MigrationForm
             ' Continue
         End Try
         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-            Case "ENG"
+            Case "ENU", "ENG"
                 Label1.Text = "Please wait while DISMTools migrates your old settings file to work on this version. This may take some time."
                 Label2.Text = "Please wait..."
             Case "ESN"
