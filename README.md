@@ -30,6 +30,7 @@ The following actions are supported by DISMTools:
   - WIM -> ESD and viceversa conversion
   - SWM file merger
   - Component cleanup
+  - Image splitting
 - OS packages and features
   - Package addition and removal
   - Feature enablement and disablement
@@ -44,11 +45,12 @@ The following actions are supported by DISMTools:
 - Other
   - Get complete information of an image
   - Using the project's or program's scratch directory
+  - Get information of packages, features, AppX packages, capabilities, and drivers
+  - Configure Windows PE settings
   - Basic automation
   
 ## Unsupported actions
 
-- Getting any information from packages or features (on demand)
 - Regional settings
 - Applying unattended answer files
 - and more, it's in beta stages
@@ -59,9 +61,12 @@ These actions will be supported in future releases. They aren't implemented yet 
 
 If you want to grab a copy straight from the source code, follow these instructions:
 
-- **Requirements**: 7-Zip, .NET Framework 4.8 Developer Pack
+- **Requirements**:
+  - [7-Zip](https://7-zip.org)
+  - [.NET Framework 4.8 Developer Pack](https://dotnet.microsoft.com/en-us/download/dotnet-framework/thank-you/net48-offline-installer)
+  - PowerShell 5 (part of [Windows Management Framework 5](https://www.microsoft.com/en-us/download/confirmation.aspx?id=54616)), or [newer](https://github.com/powershell/powershell), for script debugging
 
-1. You begin by either cloning the project or downloading a ZIP of the source code. Go to "Code", and select an option from there
+1. Begin by either cloning the project or downloading a ZIP of the source code. Go to "Code", and select an option from there
 2. Prepare the NuGet packages by running `nugetpkgprep.bat` in the location you cloned the repository to
 3. Open the solution in Visual Studio 2012 or later    
 4. Finally, go to "Build > Build solution", or press CTRL-Shift-B
