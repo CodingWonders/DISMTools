@@ -1806,17 +1806,20 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Bugfixes
+        '''  Busca una cadena traducida similar a Changes made since last preview
         '''
-        '''- Fixed an issue where the program would not get package information on Windows 8 hosts
-        '''- Fixed an issue where AppX package addition would fail on Windows 8 images
-        '''- Fixed an issue where the program would not get basic image information automatically when switching indexes
-        '''- Fixed an issue where the program would not be translated properly on systems in English (US)
-        '''- The Windows PE setting dialogs are now shown only when background processes have finished
+        '''Bugfixes
         '''
-        '''New features
+        '''- The build time shown in the About screen should no longer be skewed in time zones other than GMT+1 or GMT+2 (Summer Time)
+        '''- Fixed an improper progress panel disposal issue
         '''
-        '''- The friendly d [resto de la cadena truncado]&quot;;.
+        '''Overall changes
+        '''
+        '''Bugfixes
+        '''
+        '''- Fixed an issue that caused the AppX package addition dialog to show up on projects with Windows 7 images loaded
+        '''- Fixed a translation issue in the Configuration List Editor
+        '''- Fixed an issue where the AppX package information dialog would not show the p [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

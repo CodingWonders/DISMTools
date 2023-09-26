@@ -252,7 +252,8 @@ Public Class PrgAbout
         Dim SecondsSince1970 As Integer = BitConverter.ToInt32(b, i + LinkerTimestampOffset)
         Dim dt As New DateTime(1970, 1, 1, 0, 0, 0)
         dt = dt.AddSeconds(SecondsSince1970)
-        dt = dt.AddHours(TimeZone.CurrentTimeZone.GetUtcOffset(dt).Hours)
+        Dim tz As TimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time")
+        dt = TimeZoneInfo.ConvertTimeFromUtc(dt, tz)
         Return dt
     End Function
 

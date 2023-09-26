@@ -4,6 +4,7 @@ Imports System.IO
 Public Class ImgSplit
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         If TextBox1.Text <> "" And File.Exists(TextBox1.Text) Then
             ProgressPanel.SWMSplitSourceFile = TextBox1.Text
             ProgressPanel.SWMSplitFileSize = NumericUpDown1.Value
