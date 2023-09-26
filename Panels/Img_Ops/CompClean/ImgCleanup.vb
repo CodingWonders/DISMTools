@@ -24,7 +24,7 @@ Public Class ImgCleanup
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     MsgBox("No valid source has been provided for component store repair." & CrLf & CrLf & If(RichTextBox1.Text = "", "Please provide a source and try again.", "Please make sure the specified source exists in the file system and try again."), vbOKOnly + vbCritical, "Image cleanup")
                                 Case "ESN"
                                     MsgBox("No se ha proporcionado un origen válido para la reparación del almacén de componentes." & CrLf & CrLf & If(RichTextBox1.Text = "", "Proporcione un origen e inténtelo de nuevo", "Asegúrese de que el origen especificado exista en el sistema de archivos e inténtelo de nuevo."), vbOKOnly + vbCritical, "Limpieza de imagen")
@@ -56,7 +56,7 @@ Public Class ImgCleanup
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Image cleanup"
                         Label1.Text = Text
                         Label2.Text = "Choose a task:"
@@ -214,7 +214,7 @@ Public Class ImgCleanup
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "Could not get last base reset date. It is possible that no base resets were made").ToString()
                         Case "ESN"
                             LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "No se pudo obtener la fecha de restablecimiento de base. Es posible que no se haya hecho ningún restablecimiento").ToString()
@@ -243,7 +243,7 @@ Public Class ImgCleanup
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "Could not get last base reset date. It is possible that no base resets were made").ToString()
                                 Case "ESN"
                                     LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "No se pudo obtener la fecha de restablecimiento de base. Es posible que no se haya hecho ningún restablecimiento").ToString()
@@ -265,7 +265,7 @@ Public Class ImgCleanup
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     Label6.Text = "Could not get last base reset date"
                                 Case "ESN"
                                     Label6.Text = "No se pudo obtener la fecha del último restablecimiento de base"
@@ -289,7 +289,7 @@ Public Class ImgCleanup
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             Label3.Text = "Choose a task to see its description"
                         Case "ESN"
                             Label3.Text = "Elija una tarea para ver su descripción"
@@ -312,7 +312,7 @@ Public Class ImgCleanup
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     Label3.Text = "If you experience a boot failure, this option can try to recover the system by reverting all pending actions from previous servicing operations"
                                 Case "ESN"
                                     Label3.Text = "Si experimenta un error en el arranque, esta opción puede intentar recuperar el sistema revirtiendo todas las acciones pendientes de operaciones de servicio previas"
@@ -333,7 +333,7 @@ Public Class ImgCleanup
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     Label3.Text = "Removes backup files created during the installation of a service pack"
                                 Case "ESN"
                                     Label3.Text = "Elimina archivos de copia de seguridad creados durante la instalación de un Service Pack"
@@ -354,7 +354,7 @@ Public Class ImgCleanup
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     Label3.Text = "Cleans up the superseded components and reduces the size of the component store"
                                 Case "ESN"
                                     Label3.Text = "Limpia los componentes sustituidos y reduce el tamaño del almacén de componentes"
@@ -375,7 +375,7 @@ Public Class ImgCleanup
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     Label3.Text = "Creates a report of the component store, including its size"
                                 Case "ESN"
                                     Label3.Text = "Crea un informe del almacén de componentes, incluyendo su tamaño"
@@ -396,7 +396,7 @@ Public Class ImgCleanup
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     Label3.Text = "Checks whether the image has been flagged as corrupted by a failed process and whether the corruption can be repaired"
                                 Case "ESN"
                                     Label3.Text = "Comprueba si la imagen ha sido reportada como corrupta por un proceso fallido y si la corrupción puede ser reparada"
@@ -417,7 +417,7 @@ Public Class ImgCleanup
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     Label3.Text = "Scans the image for component store corruption, but does not perform repair options automatically"
                                 Case "ESN"
                                     Label3.Text = "Escanea la imagen para comprobar corrupción en el almacén de componentes, pero no realiza operaciones de reparación automáticamente"
@@ -438,7 +438,7 @@ Public Class ImgCleanup
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     Label3.Text = "Scans the image for component store corruption and performs repair operations automatically"
                                 Case "ESN"
                                     Label3.Text = "Escanea la imagen para comprobar corrupción en el almacén de componentes y realiza operaciones de reparación automáticamente"

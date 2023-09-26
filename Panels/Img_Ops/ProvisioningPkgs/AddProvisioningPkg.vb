@@ -13,7 +13,7 @@ Public Class AddProvisioningPkg
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 MsgBox("The specified provisioning package does not exist. Make sure it exists in the file system and try again.", vbOKOnly + vbCritical, Label1.Text)
                             Case "ESN"
                                 MsgBox("El paquete de aprovisionamiento especificado no existe. Asegúrese de que exista en el sistema de archivos e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
@@ -32,7 +32,7 @@ Public Class AddProvisioningPkg
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 msg = "The catalog file specified doesn't exist. We won't use this file if you proceed." & CrLf & CrLf & "Do you want to continue?"
                             Case "ESN"
                                 msg = "El archivo de catálogo especificado no existe. No usaremos este archivo si continúa." & CrLf & CrLf & "¿Desea continuar?"
@@ -52,7 +52,7 @@ Public Class AddProvisioningPkg
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MsgBox("No provisioning package has been specified. Please specify a provisioning package to add and try again.", vbOKOnly + vbCritical, Label1.Text)
                         Case "ESN"
                             MsgBox("No se ha especificado un paquete de aprovisionamiento. Especifique un paquete de aprovisionamiento a añadir e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)

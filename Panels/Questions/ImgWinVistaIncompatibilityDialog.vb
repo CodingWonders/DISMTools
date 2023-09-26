@@ -17,7 +17,7 @@ Public Class ImgWinVistaIncompatibilityDialog
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Label1.Text = "The program can't service Windows Vista images"
                         Label2.Text = "Neither this program nor DISM support servicing Windows Vista images. DISM is meant to service Windows 7 or newer images. You can still mount Windows Vista images, but all options will be disabled." & CrLf & CrLf & "If you still want to service a Windows Vista image, refer to the " & Quote & "Compatibility with older Windows versions" & Quote & " topic in the Help documentation." & CrLf & CrLf & "Do you want to continue?"
                         OK_Button.Text = "Yes"

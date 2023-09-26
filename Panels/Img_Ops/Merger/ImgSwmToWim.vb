@@ -42,7 +42,7 @@ Public Class ImgSwmToWim
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Merge SWM files"
                         Label1.Text = Text
                         Label2.Text = "Source SWM file:"

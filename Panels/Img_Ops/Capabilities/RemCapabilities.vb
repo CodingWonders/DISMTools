@@ -23,7 +23,7 @@ Public Class RemCapabilities
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MsgBox("There aren't any selected capabilities to remove. Please select some capabilities and try again.", vbOKOnly + vbCritical, Label1.Text)
                         Case "ESN"
                             MsgBox("No hay funcionalidades seleccionadas para eliminar. Seleccione algunas de ellas e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
@@ -52,7 +52,7 @@ Public Class RemCapabilities
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Remove capabilities"
                         Label1.Text = Text
                         OK_Button.Text = "OK"
@@ -101,7 +101,7 @@ Public Class RemCapabilities
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Label2.Text &= " Only installed capabilities (" & ListView1.Items.Count & ") are shown"
                     Case "ESN"
                         Label2.Text &= " Solo las funcionalidades instaladas (" & ListView1.Items.Count & ") son mostradas"

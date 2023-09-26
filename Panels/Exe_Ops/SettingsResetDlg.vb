@@ -24,7 +24,7 @@ Public Class SettingsResetDlg
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Reset preferences"
                         Label1.Text = "If you proceed, the settings will be reset to their default values. Once this process is complete, you'll return to the main program window." & CrLf & CrLf & "Do you want to proceed?"
                         OK_Button.Text = "Yes"

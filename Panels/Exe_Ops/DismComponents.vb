@@ -14,7 +14,7 @@ Public Class DismComponents
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "DISM Components"
                         ListView1.Columns(0).Text = "Component"
                         ListView1.Columns(1).Text = "Version"

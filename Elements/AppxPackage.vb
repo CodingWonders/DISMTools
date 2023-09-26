@@ -82,5 +82,12 @@ Namespace Elements
         ''' <remarks></remarks>
         Public Property DependencyVersion As String
     End Class
+
+    <Serializable(), XmlRoot("MainBundle")>
+    Public Class AppInstallers
+
+        <XmlAttribute("Uri")>
+        Public Property MainBundleUri As String
+    End Class
 End Namespace
 

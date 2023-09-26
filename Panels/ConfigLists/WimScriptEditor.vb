@@ -5,14 +5,14 @@ Imports System.Text.Encoding
 
 Public Class WimScriptEditor
 
-    Dim ConfigListFile As String
+    Public ConfigListFile As String
     Dim EditedLVI As String
 
     Private Sub WimScriptEditor_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "DISM Configuration List Editor"
                         Label1.Text = "The Configuration List Editor allows you to exclude files and/or folders during actions that let you specify these files, like capturing an image. You can either specify the settings from the graphical interface, or you can create the configuration file manually. When you've finished, click the Save icon."
                         GroupBox1.Text = "Exclusion list"
@@ -118,8 +118,6 @@ Public Class WimScriptEditor
         GroupBox1.ForeColor = ForeColor
         GroupBox2.ForeColor = ForeColor
         GroupBox3.ForeColor = ForeColor
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         ' Fill in font combinations
         FontFamilyTSCB.Items.Clear()
         For Each fntFamily As FontFamily In FontFamily.Families
@@ -308,7 +306,7 @@ Public Class WimScriptEditor
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
                             Case "ESN"
                                 titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
@@ -322,7 +320,7 @@ Public Class WimScriptEditor
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 titleMsg = Path.GetFileName(ConfigListFile) & " (modified) - DISM Configuration List Editor"
                             Case "ESN"
                                 titleMsg = Path.GetFileName(ConfigListFile) & " (modificado) - Editor de lista de configuraciones de DISM"
@@ -343,7 +341,7 @@ Public Class WimScriptEditor
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         msg = "Do you want to save this configuration list file?"
                         titleMsg = If((ConfigListFile IsNot Nothing And File.Exists(ConfigListFile)), Path.GetFileName(ConfigListFile), "") & " - DISM Configuration List Editor"
                     Case "ESN"
@@ -366,7 +364,7 @@ Public Class WimScriptEditor
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
                                     Case "ESN"
                                         titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
@@ -384,7 +382,7 @@ Public Class WimScriptEditor
                             Select Case MainForm.Language
                                 Case 0
                                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENG"
+                                        Case "ENU", "ENG"
                                             titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
                                         Case "ESN"
                                             titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
@@ -415,7 +413,7 @@ Public Class WimScriptEditor
                                 Select Case MainForm.Language
                                     Case 0
                                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                            Case "ENG"
+                                            Case "ENU", "ENG"
                                                 titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
                                             Case "ESN"
                                                 titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
@@ -433,7 +431,7 @@ Public Class WimScriptEditor
                                     Select Case MainForm.Language
                                         Case 0
                                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                                Case "ENG"
+                                                Case "ENU", "ENG"
                                                     titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
                                                 Case "ESN"
                                                     titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
@@ -462,7 +460,7 @@ Public Class WimScriptEditor
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "New configuration list - DISM Configuration List Editor"
                     Case "ESN"
                         Text = "Nueva lista de configuraciones - Editor de lista de configuración de DISM"
@@ -505,7 +503,7 @@ Public Class WimScriptEditor
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         msg = "Do you want to save this configuration list file?"
                         titleMsg = If((ConfigListFile IsNot Nothing And File.Exists(ConfigListFile)), Path.GetFileName(ConfigListFile), "") & " - DISM Configuration List Editor"
                     Case "ESN"
@@ -529,7 +527,7 @@ Public Class WimScriptEditor
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
                                     Case "ESN"
                                         titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
@@ -547,7 +545,7 @@ Public Class WimScriptEditor
                             Select Case MainForm.Language
                                 Case 0
                                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENG"
+                                        Case "ENU", "ENG"
                                             titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
                                         Case "ESN"
                                             titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
@@ -578,7 +576,7 @@ Public Class WimScriptEditor
                                 Select Case MainForm.Language
                                     Case 0
                                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                            Case "ENG"
+                                            Case "ENU", "ENG"
                                                 titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
                                             Case "ESN"
                                                 titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
@@ -596,7 +594,7 @@ Public Class WimScriptEditor
                                     Select Case MainForm.Language
                                         Case 0
                                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                                Case "ENG"
+                                                Case "ENU", "ENG"
                                                     titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
                                                 Case "ESN"
                                                     titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
@@ -636,7 +634,7 @@ Public Class WimScriptEditor
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
                     Case "ESN"
                         Text = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
@@ -654,7 +652,7 @@ Public Class WimScriptEditor
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
                     Case "ESN"
                         Text = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
@@ -703,11 +701,11 @@ Public Class WimScriptEditor
 
     Private Sub ListView3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView3.SelectedIndexChanged
         If ListView3.SelectedItems.Count = 1 Then
-            Button10.Enabled = True
             Button11.Enabled = True
+            Button9.Enabled = True
         Else
-            Button10.Enabled = False
             Button11.Enabled = False
+            Button9.Enabled = False
         End If
     End Sub
 
@@ -751,7 +749,7 @@ Public Class WimScriptEditor
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
                             Case "ESN"
                                 Text = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
@@ -765,7 +763,7 @@ Public Class WimScriptEditor
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 Text = Path.GetFileName(ConfigListFile) & " (modified) - DISM Configuration List Editor"
                             Case "ESN"
                                 Text = Path.GetFileName(ConfigListFile) & " (modificado) - Editor de lista de configuraciones de DISM"
@@ -787,7 +785,7 @@ Public Class WimScriptEditor
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         AddListEntryDlg.Text = "Add " & GroupBox1.Text.ToLower() & " entry"
                     Case "ESN"
                         AddListEntryDlg.Text = "Añadir entrada de " & GroupBox1.Text.ToLower()
@@ -811,7 +809,7 @@ Public Class WimScriptEditor
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         AddListEntryDlg.Text = "Add " & GroupBox2.Text.ToLower() & " entry"
                     Case "ESN"
                         AddListEntryDlg.Text = "Añadir entrada de " & GroupBox2.Text.ToLower()
@@ -830,12 +828,12 @@ Public Class WimScriptEditor
         End If
     End Sub
 
-    Private Sub Button11_Click(sender As Object, e As EventArgs) Handles Button11.Click
+    Private Sub Button11_Click(sender As Object, e As EventArgs) Handles Button9.Click
         AddListEntryDlg.IsForExclusionList = False
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         AddListEntryDlg.Text = "Add " & GroupBox3.Text.ToLower() & " entry"
                     Case "ESN"
                         AddListEntryDlg.Text = "Añadir entrada de " & GroupBox3.Text.ToLower()
@@ -868,7 +866,7 @@ Public Class WimScriptEditor
         End If
     End Sub
 
-    Private Sub Button10_Click(sender As Object, e As EventArgs) Handles Button10.Click
+    Private Sub Button10_Click(sender As Object, e As EventArgs) Handles Button11.Click
         If ListView3.SelectedItems.Count = 1 Then
             ListView3.Items.Remove(ListView3.FocusedItem)
             UpdateConfigListContents()
@@ -899,7 +897,7 @@ Public Class WimScriptEditor
         Scintilla1.Text = Scintilla1.Text.Replace(EditedLVI, e.Label & CrLf).Trim()
     End Sub
 
-    Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
+    Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button10.Click
         If ListView3.SelectedItems.Count = 1 Then
             Dim LVI As ListViewItem = ListView3.FocusedItem
             LVI.BeginEdit()
@@ -928,7 +926,7 @@ Public Class WimScriptEditor
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         msg = "Do you want to save this configuration list file?"
                         titleMsg = If((ConfigListFile IsNot Nothing And File.Exists(ConfigListFile)), Path.GetFileName(ConfigListFile), "") & " - DISM Configuration List Editor"
                     Case "ESN"
@@ -952,7 +950,7 @@ Public Class WimScriptEditor
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
                                     Case "ESN"
                                         titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
@@ -970,7 +968,7 @@ Public Class WimScriptEditor
                             Select Case MainForm.Language
                                 Case 0
                                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENG"
+                                        Case "ENU", "ENG"
                                             titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
                                         Case "ESN"
                                             titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
@@ -1001,7 +999,7 @@ Public Class WimScriptEditor
                                 Select Case MainForm.Language
                                     Case 0
                                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                            Case "ENG"
+                                            Case "ENU", "ENG"
                                                 titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
                                             Case "ESN"
                                                 titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
@@ -1019,7 +1017,7 @@ Public Class WimScriptEditor
                                     Select Case MainForm.Language
                                         Case 0
                                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                                Case "ENG"
+                                                Case "ENU", "ENG"
                                                     titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
                                                 Case "ESN"
                                                     titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
@@ -1043,6 +1041,13 @@ Public Class WimScriptEditor
             Catch ex As Exception
                 Exit Try
             End Try
+        End If
+    End Sub
+
+    Private Sub WimScriptEditor_VisibleChanged(sender As Object, e As EventArgs) Handles MyBase.VisibleChanged
+        If Visible Then
+            Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+            If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         End If
     End Sub
 End Class

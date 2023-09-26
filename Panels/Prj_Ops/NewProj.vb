@@ -13,7 +13,7 @@ Public Class NewProj
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             If MsgBox("The directory: " & CrLf & Quote & TextBox2.Text & Quote & CrLf & "does not exist. Do you want to create it?", vbYesNo + vbQuestion, "Create a new project") = MsgBoxResult.Yes Then
                                 Try
                                     Directory.CreateDirectory(TextBox2.Text)
@@ -82,7 +82,7 @@ Public Class NewProj
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Create a new project"
                         Label1.Text = Text
                         Label2.Text = "Please specify the options to create a new project:"

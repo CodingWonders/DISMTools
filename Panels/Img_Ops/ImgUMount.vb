@@ -23,7 +23,7 @@ Public Class ImgUMount
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     MsgBox("The specified directory isn't a valid mount directory.", vbOKOnly + vbCritical, Label1.Text)
                                 Case "ESN"
                                     MsgBox("El directorio especificado no es un directorio de montaje válido.", vbOKOnly + vbCritical, Label1.Text)
@@ -39,7 +39,7 @@ Public Class ImgUMount
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 MsgBox("The mount directory doesn't exist.", vbOKOnly + vbCritical, Label1.Text)
                             Case "ESN"
                                 MsgBox("El directorio de montaje no existe.", vbOKOnly + vbCritical, Label1.Text)
@@ -88,7 +88,7 @@ Public Class ImgUMount
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Unmount an image"
                         Label1.Text = Text
                         Label2.Text = "Please specify the options to unmount this image:"

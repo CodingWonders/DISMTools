@@ -17,7 +17,7 @@ Public Class ImgConversionSuccessDialog
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Label1.Text = "The image has been successfully converted"
                         Label2.Text = "The specified image has been successfully converted to the target format. For convenience, the File Explorer can be opened for you to see where the target image is located." & CrLf & CrLf & "Do you want to open the directory where the target image is stored?"
                         OK_Button.Text = "Yes"

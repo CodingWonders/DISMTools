@@ -663,6 +663,16 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property export_driver() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("export_driver", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property express_mode() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("express_mode", resourceCulture)
@@ -1011,6 +1021,16 @@ Namespace My.Resources
         Friend ReadOnly Property logo_preview() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("logo_preview", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property mdl_discussion() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("mdl_discussion", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -1578,6 +1598,16 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property split_img() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("split_img", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property sqlserver_32px() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("sqlserver_32px", resourceCulture)
@@ -1776,16 +1806,20 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Changes from last preview
+        '''  Busca una cadena traducida similar a Changes made since last preview
         '''
         '''Bugfixes
         '''
-        '''- Fixed an issue that caused the automatic program updater to not hide if it couldn&apos;t check for updates
-        '''- Fixed an issue where the driver information dialog didn&apos;t wait for the background processes to finish
-        '''- Fixed a couple of bugs in the DISM Configuration List Editor
-        '''- The splitter distance in the split panels of the project window has been increased
-        '''- The program no longer allows you to mount an already mounted image
-        '''- The CLI version of the mounted image ma [resto de la cadena truncado]&quot;;.
+        '''- The build time shown in the About screen should no longer be skewed in time zones other than GMT+1 or GMT+2 (Summer Time)
+        '''- Fixed an improper progress panel disposal issue
+        '''
+        '''Overall changes
+        '''
+        '''Bugfixes
+        '''
+        '''- Fixed an issue that caused the AppX package addition dialog to show up on projects with Windows 7 images loaded
+        '''- Fixed a translation issue in the Configuration List Editor
+        '''- Fixed an issue where the AppX package information dialog would not show the p [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

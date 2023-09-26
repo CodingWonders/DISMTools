@@ -4,6 +4,7 @@ Imports Microsoft.Dism
 Imports System.Threading
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.Text.Encoding
+Imports DISMTools.Utilities
 
 Public Class GetImgInfoDlg
 
@@ -17,7 +18,7 @@ Public Class GetImgInfoDlg
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Get image information"
                         Label1.Text = Text
                         Label2.Text = "Image file to get information from:"
@@ -204,7 +205,7 @@ Public Class GetImgInfoDlg
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             msg = "Could not gather information of this image file. Reason:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                         Case "ESN"
                             msg = "No pudimos obtener información de este archivo de imagen. Razón:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
@@ -221,36 +222,16 @@ Public Class GetImgInfoDlg
     End Sub
 
     Sub DisplayImageInfo(Index As Integer)
-        'Label23.Text = ImageInfoList(Index).ProductVersion.ToString()
-        'Label25.Text = ImageInfoList(Index).ImageName
-        'Label35.Text = ImageInfoList(Index).ImageDescription
-
         Label23.Text = ImageInfoList(Index).ProductVersion.ToString()
         DetectFeatureUpdate(ImageInfoList(Index).ProductVersion)
         Label25.Text = ImageInfoList(Index).ImageName
         Label35.Text = ImageInfoList(Index).ImageDescription
-        Label32.Text = ImageInfoList(Index).ImageSize.ToString("N0") & " bytes (~" & Math.Round(ImageInfoList(Index).ImageSize / (1024 ^ 3), 2) & " GB)"
-        If ImageInfoList(Index).Architecture = DismProcessorArchitecture.None Then
-            Label42.Text = "Unknown"
-        ElseIf ImageInfoList(Index).Architecture = DismProcessorArchitecture.Neutral Then
-            Label42.Text = "Neutral"
-        ElseIf ImageInfoList(Index).Architecture = DismProcessorArchitecture.Intel Then
-            Label42.Text = "x86"
-        ElseIf ImageInfoList(Index).Architecture = DismProcessorArchitecture.IA64 Then
-            ' I'm not sure what systems run Itanium versions of Windows, but still
-            Label42.Text = "Itanium (64-bit)"
-        ElseIf ImageInfoList(Index).Architecture = DismProcessorArchitecture.ARM64 Then
-            Label42.Text = "ARM64"
-        ElseIf ImageInfoList(Index).Architecture = DismProcessorArchitecture.ARM Then
-            ' This must be the case on Windows RT images
-            Label42.Text = "ARM"
-        ElseIf ImageInfoList(Index).Architecture = DismProcessorArchitecture.AMD64 Then
-            Label42.Text = "x64"
-        End If
+        Label32.Text = ImageInfoList(Index).ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(ImageInfoList(Index).ImageSize) & ")"
+        Label42.Text = Casters.CastDismArchitecture(ImageInfoList(Index).Architecture, True)
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Label46.Text = If(Not ImageInfoList(Index).Hal = "", ImageInfoList(Index).Hal, "Undefined by the image")
                     Case "ESN"
                         Label46.Text = If(Not ImageInfoList(Index).Hal = "", ImageInfoList(Index).Hal, "No definida por la imagen")
@@ -272,7 +253,7 @@ Public Class GetImgInfoDlg
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(ImageInfoList(Index).DefaultLanguage.Name = language.Name, ", default", "") & ")")
                         Case "ESN"
                             LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(ImageInfoList(Index).DefaultLanguage.Name = language.Name, ", predeterminado", "") & ")")
@@ -286,7 +267,7 @@ Public Class GetImgInfoDlg
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " files in " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directories"
                         Label10.Text = "Date created: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
                             "Date modified: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
@@ -413,15 +394,15 @@ Public Class GetImgInfoDlg
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
-                        Label23.Text &= CrLf & "(feature update: " & FeatUpd & ")"
+                    Case "ENU", "ENG"
+                        Label23.Text &= " (feature update: " & FeatUpd & ")"
                     Case "ESN"
-                        Label23.Text &= CrLf & "(actualización de características: " & FeatUpd & ")"
+                        Label23.Text &= " (actualización de características: " & FeatUpd & ")"
                 End Select
             Case 1
-                Label23.Text &= CrLf & "(feature update: " & FeatUpd & ")"
+                Label23.Text &= " (feature update: " & FeatUpd & ")"
             Case 2
-                Label23.Text &= CrLf & "(actualización de características: " & FeatUpd & ")"
+                Label23.Text &= " (actualización de características: " & FeatUpd & ")"
         End Select
     End Sub
 
@@ -447,6 +428,11 @@ Public Class GetImgInfoDlg
         Else
             TextBox1.Enabled = True
             Button1.Enabled = True
+
+            ' If the user had specified an image file, get information of it immediately
+            If TextBox1.Text <> "" And File.Exists(TextBox1.Text) Then
+                GetImageInfo(TextBox1.Text)
+            End If
         End If
     End Sub
 
@@ -471,6 +457,6 @@ Public Class GetImgInfoDlg
     End Sub
 
     Private Sub GetImgInfoDlg_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+        If Not MainForm.MountedImageDetectorBW.IsBusy And Not PleaseWaitDialog.Visible Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
     End Sub
 End Class

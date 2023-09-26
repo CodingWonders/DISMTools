@@ -1,5 +1,6 @@
 ﻿Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.ControlChars
+Imports System.Threading
 
 Public Class SingleImageIndexError
 
@@ -17,7 +18,7 @@ Public Class SingleImageIndexError
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Label1.Text = "This image seems to have only one index"
                         Label2.Text = "You cannot switch to other indexes. If you want to save the image changes, you can do so using a new, separate index."
                         LinkLabel1.Text = "To know more about the indexes of an image, or some of its specific properties, go to " & Quote & "Commands > Image management > Get image information" & Quote & ", or click here"
@@ -59,5 +60,12 @@ Public Class SingleImageIndexError
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         Beep()
+    End Sub
+
+    Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
+        Visible = False
+        GetImgInfoDlg.RadioButton1.Checked = True
+        GetImgInfoDlg.RadioButton2.Checked = False
+        GetImgInfoDlg.ShowDialog(MainForm)
     End Sub
 End Class

@@ -21,7 +21,7 @@ Public Class BGProcsAdvSettings
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             msg = "The program will now detect the drivers of the image according to the options you've specified. This may take some time."
                         Case "ESN"
                             msg = "El programa va a detectar los controladores de la imagen atendiendo a las opciones que ha especificado. Esto puede llevar un tiempo."
@@ -50,7 +50,7 @@ Public Class BGProcsAdvSettings
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Advanced background process settings"
                         Label1.Text = "Configure additional settings for background processes:"
                         CheckBox1.Text = "Enhance detection of all installed AppX packages of an active installation with PowerShell helpers"

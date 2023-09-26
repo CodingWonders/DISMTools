@@ -175,6 +175,7 @@ Public Class Options
         If MainForm.VolatileMode Then
             MainForm.SaveDTSettings()
         End If
+        If MainForm.IsImageMounted Then MainForm.DetectVersions(FileVersionInfo.GetVersionInfo(MainForm.DismExe), MainForm.imgVersionInfo)
     End Sub
 
     Sub GiveErrorExplanation(ErrorCode As Integer)
@@ -242,7 +243,7 @@ Public Class Options
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Label42.Text = If(DetectFileAssociations(), "associations set", "associations not set")
                         Button9.Text = If(DetectFileAssociations(), "Remove file associations", "Set file associations")
                     Case "ESN"
@@ -286,7 +287,7 @@ Public Class Options
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Options"
                         Label1.Text = Text
                         TabPage1.Text = "Program"
@@ -671,7 +672,7 @@ Public Class Options
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         SaveLocations(0) = "Settings file"
                         SaveLocations(1) = "Registry"
                         ColorModes(0) = "Use system setting"
@@ -842,7 +843,7 @@ Public Class Options
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "running", "stopped")
                         Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Stop", "Start")
                     Case "ESN"
@@ -1056,7 +1057,7 @@ Public Class Options
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Select Case TrackBar1.Value
                             Case 0
                                 Label15.Text = "Errors (Log level 1)"
@@ -1157,7 +1158,7 @@ Public Class Options
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         If SourceDir = "" Then
                             Label23.Text = "Please specify a scratch directory."
                             Label24.Visible = False
@@ -1333,7 +1334,7 @@ Public Class Options
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         If Button8.Text = "Stop" Then
                             MainForm.MountedImageDetectorBW.CancelAsync()
                         ElseIf Button8.Text = "Start" Then

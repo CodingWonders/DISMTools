@@ -2,176 +2,11 @@
 Imports System.Threading
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Dism
+Imports DISMTools.Utilities
 
 Public Class GetFeatureInfoDlg
 
     Public InstalledFeatureInfo As DismFeatureCollection
-
-    Function CastDismFeatureState(state As DismPackageFeatureState) As String
-        Select Case state
-            Case DismPackageFeatureState.NotPresent
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Not present"
-                            Case "ESN"
-                                Return "No presente"
-                        End Select
-                    Case 1
-                        Return "Not present"
-                    Case 2
-                        Return "No presente"
-                End Select
-            Case DismPackageFeatureState.UninstallPending
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Disable Pending"
-                            Case "ESN"
-                                Return "Deshabilitación pendiente"
-                        End Select
-                    Case 1
-                        Return "Disable Pending"
-                    Case 2
-                        Return "Deshabilitación pendiente"
-                End Select
-            Case DismPackageFeatureState.Staged
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Disabled"
-                            Case "ESN"
-                                Return "Deshabilitado"
-                        End Select
-                    Case 1
-                        Return "Disabled"
-                    Case 2
-                        Return "Deshabilitado"
-                End Select
-            Case DismPackageFeatureState.Removed Or DismPackageFeatureState.Resolved
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Removed"
-                            Case "ESN"
-                                Return "Eliminado"
-                        End Select
-                    Case 1
-                        Return "Removed"
-                    Case 2
-                        Return "Eliminado"
-                End Select
-            Case DismPackageFeatureState.Installed
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Enabled"
-                            Case "ESN"
-                                Return "Habilitado"
-                        End Select
-                    Case 1
-                        Return "Enabled"
-                    Case 2
-                        Return "Habilitado"
-                End Select
-            Case DismPackageFeatureState.InstallPending
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Enable Pending"
-                            Case "ESN"
-                                Return "Habilitación pendiente"
-                        End Select
-                    Case 1
-                        Return "Enable Pending"
-                    Case 2
-                        Return "Habilitación pendiente"
-                End Select
-            Case DismPackageFeatureState.Superseded
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Superseded"
-                            Case "ESN"
-                                Return "Sustituido"
-                        End Select
-                    Case 1
-                        Return "Superseded"
-                    Case 2
-                        Return "Sustituido"
-                End Select
-            Case DismPackageFeatureState.PartiallyInstalled
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Partially Installed"
-                            Case "ESN"
-                                Return "Instalado parcialmente"
-                        End Select
-                    Case 1
-                        Return "Partially Installed"
-                    Case 2
-                        Return "Instalado parcialmente"
-                End Select
-        End Select
-        Return Nothing
-    End Function
-
-    Function CastDismRestartType(rType As DismRestartType) As String
-        Select Case rType
-            Case DismRestartType.No
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "A restart is not required"
-                            Case "ESN"
-                                Return "No se requiere un reinicio"
-                        End Select
-                    Case 1
-                        Return "A restart is not required"
-                    Case 2
-                        Return "No se requiere un reinicio"
-                End Select
-            Case DismRestartType.Possible
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "A restart may be required"
-                            Case "ESN"
-                                Return "Puede requerirse un reinicio"
-                        End Select
-                    Case 1
-                        Return "A restart may be required"
-                    Case 2
-                        Return "Puede requerirse un reinicio"
-                End Select
-            Case DismRestartType.Required
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "A restart is required"
-                            Case "ESN"
-                                Return "Se requiere un reinicio"
-                        End Select
-                    Case 1
-                        Return "A restart is required"
-                    Case 2
-                        Return "Se requiere un reinicio"
-                End Select
-        End Select
-        Return Nothing
-    End Function
 
     Private Sub GetFeatureInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
@@ -189,7 +24,7 @@ Public Class GetFeatureInfoDlg
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Get feature information"
                         Label1.Text = Text
                         Label2.Text = "Ready"
@@ -258,7 +93,7 @@ Public Class GetFeatureInfoDlg
         Panel7.Visible = True
         ListView1.Items.Clear()
         For Each InstalledFeature As DismFeature In InstalledFeatureInfo
-            ListView1.Items.Add(New ListViewItem(New String() {InstalledFeature.FeatureName, CastDismFeatureState(InstalledFeature.State)}))
+            ListView1.Items.Add(New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.State, True)}))
         Next
     End Sub
 
@@ -271,7 +106,7 @@ Public Class GetFeatureInfoDlg
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     msg = "Background processes need to have completed before showing feature information. We'll wait until they have completed"
                                 Case "ESN"
                                     msg = "Los procesos en segundo plano deben haber completado antes de obtener información de la característica. Esperaremos hasta que hayan completado"
@@ -285,7 +120,7 @@ Public Class GetFeatureInfoDlg
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     Label2.Text = "Waiting for background processes to finish..."
                                 Case "ESN"
                                     Label2.Text = "Esperando a que terminen los procesos en segundo plano..."
@@ -310,7 +145,7 @@ Public Class GetFeatureInfoDlg
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 Label2.Text = "Preparing to get feature information..."
                             Case "ESN"
                                 Label2.Text = "Preparándonos para obtener información de la característica..."
@@ -327,7 +162,7 @@ Public Class GetFeatureInfoDlg
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Label2.Text = "Getting information from " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
                                     Case "ESN"
                                         Label2.Text = "Obteniendo información de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
@@ -342,8 +177,8 @@ Public Class GetFeatureInfoDlg
                         Label23.Text = featInfo.FeatureName
                         Label25.Text = featInfo.DisplayName
                         Label35.Text = featInfo.Description
-                        Label32.Text = CastDismRestartType(featInfo.RestartRequired)
-                        Label40.Text = CastDismFeatureState(featInfo.FeatureState)
+                        Label32.Text = Casters.CastDismRestartType(featInfo.RestartRequired, True)
+                        Label40.Text = Casters.CastDismFeatureState(featInfo.FeatureState, True)
                         Label42.Text = ""
                         Dim cProps As DismCustomPropertyCollection = featInfo.CustomProperties
                         If cProps.Count > 0 Then
@@ -354,7 +189,7 @@ Public Class GetFeatureInfoDlg
                             Select Case MainForm.Language
                                 Case 0
                                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENG"
+                                        Case "ENU", "ENG"
                                             Label42.Text = "None"
                                         Case "ESN"
                                             Label42.Text = "Ninguna"
@@ -374,7 +209,7 @@ Public Class GetFeatureInfoDlg
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     msg = "Could not get feature information. Reason: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                                 Case "ESN"
                                     msg = "No pudimos obtener información de la característica. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
@@ -391,7 +226,7 @@ Public Class GetFeatureInfoDlg
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 Label2.Text = "Ready"
                             Case "ESN"
                                 Label2.Text = "Listo"

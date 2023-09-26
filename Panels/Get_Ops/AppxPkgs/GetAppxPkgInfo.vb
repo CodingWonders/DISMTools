@@ -1,48 +1,19 @@
 ﻿Imports System.Windows.Forms
 Imports System.IO
 Imports Microsoft.Dism
+Imports DISMTools.Utilities
 
 Public Class GetAppxPkgInfoDlg
 
     Public InstalledAppxPkgInfo As DismAppxPackageCollection
-
-    Function CastDismArchitecture(arch As DismProcessorArchitecture) As String
-        Select Case arch
-            Case DismProcessorArchitecture.None
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Unknown"
-                            Case "ESN"
-                                Return "Desconocido"
-                        End Select
-                    Case 1
-                        Return "Unknown"
-                    Case 2
-                        Return "Desconocido"
-                End Select
-            Case DismProcessorArchitecture.Neutral
-                Return "Neutral"
-            Case DismProcessorArchitecture.Intel
-                Return "x86"
-            Case DismProcessorArchitecture.IA64
-                Return "Itanium"
-            Case DismProcessorArchitecture.ARM64
-                Return "ARM64"
-            Case DismProcessorArchitecture.ARM
-                Return "ARM"
-            Case DismProcessorArchitecture.AMD64
-                Return "AMD64"
-        End Select
-        Return Nothing
-    End Function
+    Dim mainAsset As String = ""
+    Dim assetDir As String = ""
 
     Private Sub GetAppxPkgInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Get AppX package information"
                         Label1.Text = Text
                         Label36.Text = "AppX package information"
@@ -146,8 +117,9 @@ Public Class GetAppxPkgInfoDlg
     End Sub
 
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged
-        Dim mainAsset As String = ""
-        Dim assetDir As String = ""
+        Label10.Visible = True
+        mainAsset = ""
+        assetDir = ""
         If ListBox1.SelectedItems.Count = 1 Then
             If MainForm.imgAppxPackageNames.Count > InstalledAppxPkgInfo.Count Then
                 Label23.Text = MainForm.imgAppxPackageNames(ListBox1.SelectedIndex)
@@ -158,10 +130,13 @@ Public Class GetAppxPkgInfoDlg
             Else
                 Label23.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).PackageName
                 Label25.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).DisplayName
-                Label35.Text = CastDismArchitecture(InstalledAppxPkgInfo(ListBox1.SelectedIndex).Architecture)
+                Label35.Text = Casters.CastDismArchitecture(InstalledAppxPkgInfo(ListBox1.SelectedIndex).Architecture, True)
                 Label32.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).ResourceId
                 Label40.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).Version.ToString()
             End If
+
+            Dim appDisplayName As String = If(Not MainForm.GetPackageDisplayName(Label23.Text, Label25.Text).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), MainForm.GetPackageDisplayName(Label23.Text, Label25.Text), "")
+            If appDisplayName <> "" Then Label25.Text &= " (" & appDisplayName & ")"
 
             ' Get exclusive things that can't be obtained with the DISM API
             If Directory.Exists(MainForm.MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & Label23.Text) Then
@@ -169,7 +144,7 @@ Public Class GetAppxPkgInfoDlg
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     Label42.Text = "No"
                                 Case "ESN"
                                     Label42.Text = "No"
@@ -183,7 +158,7 @@ Public Class GetAppxPkgInfoDlg
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     Label42.Text = "Yes"
                                 Case "ESN"
                                     Label42.Text = "Sí"
@@ -198,7 +173,7 @@ Public Class GetAppxPkgInfoDlg
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 Label42.Text = "No"
                             Case "ESN"
                                 Label42.Text = "No"
@@ -218,6 +193,7 @@ Public Class GetAppxPkgInfoDlg
                     PictureBox2.SizeMode = PictureBoxSizeMode.CenterImage
                 End If
             Else
+                Label10.Visible = False
                 PictureBox2.SizeMode = PictureBoxSizeMode.CenterImage
             End If
             If mainAsset <> "" And File.Exists(mainAsset) Then PictureBox2.Image = Image.FromFile(mainAsset) Else PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.preview_unavail_dark, My.Resources.preview_unavail_light)
@@ -237,19 +213,44 @@ Public Class GetAppxPkgInfoDlg
                             SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
                             SplitPaths.RemoveAt(SplitPaths.Count - 1)
                             Dim newPath As String = String.Join("\", SplitPaths)
-                            Label7.Text = assetDir & "\" & newPath
+                            Label7.Text = (assetDir & "\" & newPath).Replace("\\", "\").Trim()
+                            Exit For
+                        End If
+                    Next
+                End If
+            Else
+                If File.Exists(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & Label23.Text & "\AppxManifest.xml") Then
+                    Dim ManFile As New RichTextBox() With {
+                        .Text = File.ReadAllText(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & Label23.Text & "\AppxManifest.xml")
+                    }
+                    For Each line In ManFile.Lines
+                        If line.Contains("<Logo>") Then
+                            Dim SplitPaths As New List(Of String)
+                            SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
+                            SplitPaths.RemoveAt(SplitPaths.Count - 1)
+                            Dim newPath As String = String.Join("\", SplitPaths)
+                            Label7.Text = (If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & Label23.Text & "\" & newPath).Replace("\\", "\").Trim()
                             Exit For
                         End If
                     Next
                 End If
             End If
-            Label3.Text = If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & Label23.Text
+            Label3.Text = (If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & Label23.Text).Replace("\\", "\").Trim()
             Dim pkgDirs() As String = Directory.GetDirectories(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps", Label23.Text & "*", SearchOption.TopDirectoryOnly)
             For Each folder In pkgDirs
                 If Not folder.Contains("neutral") Then
-                    Label5.Text = folder & "\AppxManifest.xml"
+                    Label5.Text = (folder & "\AppxManifest.xml").Replace("\\", "\").Trim()
                 End If
             Next
+            If pkgDirs.Count <= 1 And Not Label5.Text.Contains(Label23.Text) Then
+                If File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml") Then
+                    Label5.Text = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml"
+                ElseIf File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml") Then
+                    Label5.Text = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml"
+                Else
+                    Label5.Text = ""
+                End If
+            End If
             Panel4.Visible = True
             Panel7.Visible = False
         Else
@@ -259,8 +260,10 @@ Public Class GetAppxPkgInfoDlg
     End Sub
 
     Private Sub PictureBox2_MouseClick(sender As Object, e As MouseEventArgs) Handles PictureBox2.MouseClick
-        If e.Button = Windows.Forms.MouseButtons.Right Then
-            MainForm.AppxResCMS.Show(sender, e.Location)
+        If mainAsset <> "" And File.Exists(mainAsset) Then
+            If e.Button = Windows.Forms.MouseButtons.Right Then
+                MainForm.AppxResCMS.Show(sender, e.Location)
+            End If
         End If
     End Sub
 End Class

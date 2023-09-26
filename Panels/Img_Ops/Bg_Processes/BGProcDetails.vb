@@ -117,7 +117,7 @@
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             Label1.Text = "Gathering image information..."
                             Label3.Text = "These processes may take some time to complete"
                         Case "ESN"

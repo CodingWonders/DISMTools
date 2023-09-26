@@ -16,7 +16,7 @@ Public Class PrgAbout
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "About this program"
                         Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
                         Label2.Text = "DISMTools lets you deploy, manage, and service Windows images with ease, thanks to a GUI"
@@ -252,7 +252,8 @@ Public Class PrgAbout
         Dim SecondsSince1970 As Integer = BitConverter.ToInt32(b, i + LinkerTimestampOffset)
         Dim dt As New DateTime(1970, 1, 1, 0, 0, 0)
         dt = dt.AddSeconds(SecondsSince1970)
-        dt = dt.AddHours(TimeZone.CurrentTimeZone.GetUtcOffset(dt).Hours)
+        Dim tz As TimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time")
+        dt = TimeZoneInfo.ConvertTimeFromUtc(dt, tz)
         Return dt
     End Function
 
@@ -343,11 +344,11 @@ Public Class PrgAbout
     End Sub
 #End Region
 
-    Private Sub Picture_MouseEnter(sender As Object, e As EventArgs) Handles PictureBox3.MouseEnter, PictureBox2.MouseEnter
+    Private Sub Picture_MouseEnter(sender As Object, e As EventArgs) Handles PictureBox3.MouseEnter, PictureBox2.MouseEnter, PictureBox4.MouseEnter
         Cursor = Cursors.Hand
     End Sub
 
-    Private Sub Picture_MouseLeave(sender As Object, e As EventArgs) Handles PictureBox3.MouseLeave, PictureBox2.MouseLeave
+    Private Sub Picture_MouseLeave(sender As Object, e As EventArgs) Handles PictureBox3.MouseLeave, PictureBox2.MouseLeave, PictureBox4.MouseLeave
         Cursor = Cursors.Arrow
     End Sub
 
@@ -359,17 +360,21 @@ Public Class PrgAbout
         Process.Start("https://reddit.com/r/DISMTools")
     End Sub
 
+    Private Sub PictureBox4_Click(sender As Object, e As EventArgs) Handles PictureBox4.Click
+        Process.Start("https://forums.mydigitallife.net/threads/discussion-dismtools.87263/")
+    End Sub
+
     Private Sub PictureBox2_MouseHover(sender As Object, e As EventArgs) Handles PictureBox2.MouseHover
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
-                        PictureToolTip.SetToolTip(sender, "Check the project's repository on GitHub")
+                    Case "ENU", "ENG"
+                        PictureToolTip.SetToolTip(sender, "Check out the project's repository on GitHub")
                     Case "ESN"
                         PictureToolTip.SetToolTip(sender, "Consulte el repositorio del proyecto en GitHub")
                 End Select
             Case 1
-                PictureToolTip.SetToolTip(sender, "Check the project's repository on GitHub")
+                PictureToolTip.SetToolTip(sender, "Check out the project's repository on GitHub")
             Case 2
                 PictureToolTip.SetToolTip(sender, "Consulte el repositorio del proyecto en GitHub")
         End Select
@@ -379,15 +384,31 @@ Public Class PrgAbout
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
-                        PictureToolTip.SetToolTip(sender, "Check the project's official subreddit")
+                    Case "ENU", "ENG"
+                        PictureToolTip.SetToolTip(sender, "Check out the project's official subreddit")
                     Case "ESN"
                         PictureToolTip.SetToolTip(sender, "Consulte el subreddit oficial del proyecto")
                 End Select
             Case 1
-                PictureToolTip.SetToolTip(sender, "Check the project's official subreddit")
+                PictureToolTip.SetToolTip(sender, "Check out the project's official subreddit")
             Case 2
                 PictureToolTip.SetToolTip(sender, "Consulte el subreddit oficial del proyecto")
+        End Select
+    End Sub
+
+    Private Sub PictureBox4_MouseHover(sender As Object, e As EventArgs) Handles PictureBox4.MouseHover
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PictureToolTip.SetToolTip(sender, "Check out the project's discussion on the My Digital Life forums")
+                    Case "ESN"
+                        PictureToolTip.SetToolTip(sender, "Consulte la discusión del proyecto en los foros de My Digital Life")
+                End Select
+            Case 1
+                PictureToolTip.SetToolTip(sender, "Check out the project's discussion on the My Digital Life forums")
+            Case 2
+                PictureToolTip.SetToolTip(sender, "Consulte la discusión del proyecto en los foros de My Digital Life")
         End Select
     End Sub
 
@@ -402,7 +423,7 @@ Public Class PrgAbout
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MsgBox("We couldn't download the update checker. Reason:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
                         Case "ESN"
                             MsgBox("No pudimos descargar el comprobador de actualizaciones. Razón:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)

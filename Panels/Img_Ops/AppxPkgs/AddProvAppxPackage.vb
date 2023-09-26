@@ -38,7 +38,7 @@ Public Class AddProvAppxPackage
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             MsgBox("Please specify packed or unpacked AppX packages and try again.", vbOKOnly + vbCritical, "Add provisioned AppX packages")
                         Case "ESN"
                             MsgBox("Especifique archivos AppX empaquetados o desempaquetados e inténtelo de nuevo.", vbOKOnly + vbCritical, "Añadir paquetes aprovisionados AppX")
@@ -78,7 +78,7 @@ Public Class AddProvAppxPackage
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         MsgBox("Please specify a license file and try again. You can also continue without one, but this may compromise the image.", vbOKOnly + vbCritical, "Add provisioned AppX packages")
                                     Case "ESN"
                                         MsgBox("Especifique un archivo de licencia e inténtelo de nuevo. También puede continuar sin uno, pero esta acción podría comprometer la imagen.", vbOKOnly + vbCritical, "Añadir paquetes aprovisionados AppX")
@@ -93,7 +93,7 @@ Public Class AddProvAppxPackage
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         MsgBox("The license file specified was not found. Make sure it exists on the specified location and try again.", vbOKOnly + vbCritical, "Add provisioned AppX packages")
                                     Case "ESN"
                                         MsgBox("El archivo de licencia especificado no se ha encontrado. Asegúrese de que exista en la ubicación especificada e inténtelo de nuevo.", vbOKOnly + vbCritical, "Añadir paquetes aprovisionados AppX")
@@ -117,7 +117,7 @@ Public Class AddProvAppxPackage
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         MsgBox("Please specify a custom data file and try again. You can also continue without one.", vbOKOnly + vbCritical, "Add provisioned AppX packages")
                                     Case "ESN"
                                         MsgBox("Especifique un archivo de datos personalizados e inténtelo de nuevo. También puede continuar sin uno", vbOKOnly + vbCritical, "Añadir paquetes aprovisionados AppX")
@@ -132,7 +132,7 @@ Public Class AddProvAppxPackage
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         MsgBox("The custom data file specified was not found. Make sure it exists on the specified location and try again.", vbOKOnly + vbCritical, "Add provisioned AppX packages")
                                     Case "ESN"
                                         MsgBox("El archivo de datos personalizados especificado no se ha encontrado. Asegúrese de que exista en la ubicación especificada e inténtelo de nuevo.", vbOKOnly + vbCritical, "Añadir paquetes aprovisionados AppX")
@@ -182,7 +182,7 @@ Public Class AddProvAppxPackage
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Add provisioned AppX packages"
                         Label1.Text = Text
                         Label2.Text = "Please add packed or unpacked AppX packages by using the buttons below, or by dropping them to the list view below:"
@@ -356,7 +356,7 @@ Public Class AddProvAppxPackage
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
-        GroupBox3.Enabled = If(FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart < 10, False, True)
+        GroupBox3.Enabled = If(FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart < 10 Or Not MainForm.imgVersionInfo.Major >= 10, False, True)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -376,6 +376,8 @@ Public Class AddProvAppxPackage
         Button9.Enabled = False
         NoAppxFilePanel.Visible = True
         AppxFilePanel.Visible = False
+        AppxDetailsPanel.Height = 520
+        FlowLayoutPanel1.Visible = False
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
@@ -407,6 +409,12 @@ Public Class AddProvAppxPackage
     End Sub
 
     Private Sub AppxFileOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles AppxFileOFD.FileOk
+        If Path.GetExtension(AppxFileOFD.FileName).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
+            AppInstallerDownloader.AppInstallerFile = AppxFileOFD.FileName
+            If Not File.Exists(AppxFileOFD.FileName.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
+            If File.Exists(AppxFileOFD.FileName.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, AppxFileOFD.FileName.Replace(".appinstaller", ".appxbundle").Trim())
+            Exit Sub
+        End If
         ScanAppxPackage(False, AppxFileOFD.FileName)
     End Sub
 
@@ -457,7 +465,7 @@ Public Class AddProvAppxPackage
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             msg = "The package:" & CrLf & CrLf & Package & CrLf & CrLf & "is an encrypted application package. Neither DISMTools nor DISM support adding these application types. If you'd like to add it, you can do so, after the image is applied and booted to."
                         Case "ESN"
                             msg = "El paquete:" & CrLf & CrLf & Package & CrLf & CrLf & "es un paquete de aplicación encriptado. Ni DISMTools ni DISM soportan añadir estos tipos de aplicaciones. Si le gustaría añadirlo, puede hacerlo, después de que la imagen se haya aplicado e iniciado."
@@ -575,7 +583,7 @@ Public Class AddProvAppxPackage
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 MsgBox("This folder doesn't seem to contain an AppX package structure. It will not be added to the list", vbOKOnly + vbExclamation, "Add provisioned AppX packages")
                             Case "ESN"
                                 MsgBox("Esta carpeta no parece contener una estructura de un paquete AppX. No será añadida a la lista", vbOKOnly + vbExclamation, "Añadir paquetes aprovisionados AppX")
@@ -701,7 +709,7 @@ Public Class AddProvAppxPackage
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     MsgBox("The package you want to add is already added to the list, and all its properties match with the properties of the package specified. We won't add the specified package", vbOKOnly + vbCritical, Label1.Text)
                                 Case "ESN"
                                     MsgBox("El paquete que desea añadir ya está añadido a la lista, y todas sus propiedades coinciden con las propiedades del paquete especificado. No añadiremos el paquete especificado", vbOKOnly + vbCritical, Label1.Text)
@@ -720,7 +728,7 @@ Public Class AddProvAppxPackage
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     msg = "The package you want to add is already added to the list, but it comes from a different developer or publisher." & CrLf & CrLf & "Do note that applications redistributed by third-party publishers or developers can cause damage to the Windows image." & CrLf & CrLf & "Do you want to replace the entry in the list with the package specified?"
                                 Case "ESN"
                                     msg = "El paquete que desea añadir ya está añadido a la lista, pero proviene de un desarrollador o publicador distinto." & CrLf & CrLf & "Dese cuenta de que las aplicaciones redistribuidas por publicadores o desarrolladores de terceros pueden dañar la imagen de Windows." & CrLf & CrLf & "¿Desea reemplazar la entrada en la lista por el paquete especificado?"
@@ -736,7 +744,7 @@ Public Class AddProvAppxPackage
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Item.SubItems(1).Text = If(IsFolder, "Unpacked", "Packed")
                                     Case "ESN"
                                         Item.SubItems(1).Text = If(IsFolder, "Desempaquetado", "Empaquetado")
@@ -769,7 +777,7 @@ Public Class AddProvAppxPackage
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     msg = "The package you want to add is already added to the list, but it contains a newer version." & CrLf & CrLf & "Do you want to replace the entry in the list with the updated package specified?"
                                 Case "ESN"
                                     msg = "El paquete que desea añadir ya está añadido a la lista, pero contiene una nueva versión." & CrLf & CrLf & "¿Desea reemplazar la entrada en la lista por el paquete actualizado especificado?"
@@ -785,7 +793,7 @@ Public Class AddProvAppxPackage
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Item.SubItems(1).Text = If(IsFolder, "Unpacked", "Packed")
                                     Case "ESN"
                                         Item.SubItems(1).Text = If(IsFolder, "Desempaquetado", "Empaquetado")
@@ -816,7 +824,7 @@ Public Class AddProvAppxPackage
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         If IsFolder Then
                             ListView1.Items.Add(New ListViewItem(New String() {Package, "Unpacked", currentAppxName, currentAppxPublisher, currentAppxVersion}))
                         Else
@@ -908,7 +916,7 @@ Public Class AddProvAppxPackage
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     MsgBox("Could not get application store logo assets from this package - cannot read from manifest", vbOKOnly + vbCritical, "Add provisioned AppX packages")
                                 Case "ESN"
                                     MsgBox("No se pudo obtener recursos de logotipos de este paquete - no se puede leer el manifiesto", vbOKOnly + vbCritical, "Añadir paquetes aprovisionados AppX")
@@ -966,6 +974,10 @@ Public Class AddProvAppxPackage
         If ListView1.FocusedItem.Text <> "" Then
             Packages.RemoveAt(ListView1.FocusedItem.Index)
             ListView1.Items.Remove(ListView1.FocusedItem)
+            NoAppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, True, False)
+            AppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, False, True)
+            AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
+            FlowLayoutPanel1.Visible = If(ListView1.SelectedItems.Count <= 0, False, True)
         End If
     End Sub
 
@@ -1025,7 +1037,7 @@ Public Class AddProvAppxPackage
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 Label8.Text = "Publisher: " & ListView1.FocusedItem.SubItems(3).Text
                                 Label9.Text = "Version: " & ListView1.FocusedItem.SubItems(4).Text
                             Case "ESN"
@@ -1127,7 +1139,7 @@ Public Class AddProvAppxPackage
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             .Text = "Preview"
                         Case "ESN"
                             .Text = "Vista previa"
@@ -1179,7 +1191,7 @@ Public Class AddProvAppxPackage
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "The logo assets for this file could not be detected", "Click here to enlarge the view"))
                         Case "ESN"
                             previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Los recursos de este archivo no pudieron ser detectados", "Haga clic para agrandar la vista"))
@@ -1193,7 +1205,7 @@ Public Class AddProvAppxPackage
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             previewer.SetToolTip(sender, "The logo assets for this file could not be detected")
                         Case "ESN"
                             previewer.SetToolTip(sender, "Los recursos de este archivo no pudieron ser detectados")
@@ -1221,6 +1233,10 @@ Public Class AddProvAppxPackage
                 Path.GetExtension(PackageFile).Equals(".eappx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".emsix", StringComparison.OrdinalIgnoreCase) Or _
                 Path.GetExtension(PackageFile).Equals(".eappxbundle", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".emsixbundle", StringComparison.OrdinalIgnoreCase) Then
                 ScanAppxPackage(False, PackageFile)
+            ElseIf Path.GetExtension(PackageFile).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
+                AppInstallerDownloader.AppInstallerFile = PackageFile
+                If Not File.Exists(PackageFile.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
+                If File.Exists(PackageFile.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, PackageFile.Replace(".appinstaller", ".appxbundle").Trim())
             ElseIf File.GetAttributes(PackageFile) = FileAttributes.Directory Then
                 ' Temporary support for directories
                 If File.Exists(PackageFile & "\AppxSignature.p7x") And File.Exists(PackageFile & "\AppxMetadata\AppxBundleManifest.xml") Or File.Exists(PackageFile & "\AppxManifest.xml") Then
@@ -1230,12 +1246,16 @@ Public Class AddProvAppxPackage
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     If MsgBox("The following directory:" & CrLf & Quote & PackageFile & Quote & CrLf & "contains application packages. Do you want to process them as well?" & CrLf & CrLf & "NOTE: this will scan this directory recursively, so it may take longer for this operation to complete", vbYesNo + vbQuestion, "Add provisioned AppX packages") = MsgBoxResult.Yes Then
                                         For Each AppPkg In My.Computer.FileSystem.GetFiles(PackageFile, FileIO.SearchOption.SearchAllSubDirectories)
                                             If Path.GetExtension(AppPkg).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or _
                                                 Path.GetExtension(AppPkg).Equals(".msix", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".msixbundle", StringComparison.OrdinalIgnoreCase) Then
                                                 ScanAppxPackage(False, AppPkg)
+                                            ElseIf Path.GetExtension(AppPkg).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
+                                                AppInstallerDownloader.AppInstallerFile = AppPkg
+                                                If Not File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
+                                                If File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, AppPkg.Replace(".appinstaller", ".appxbundle").Trim())
                                             Else
                                                 Continue For
                                             End If
@@ -1249,6 +1269,10 @@ Public Class AddProvAppxPackage
                                             If Path.GetExtension(AppPkg).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or _
                                                 Path.GetExtension(AppPkg).Equals(".msix", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".msixbundle", StringComparison.OrdinalIgnoreCase) Then
                                                 ScanAppxPackage(False, AppPkg)
+                                            ElseIf Path.GetExtension(AppPkg).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
+                                                AppInstallerDownloader.AppInstallerFile = AppPkg
+                                                If Not File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
+                                                If File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, AppPkg.Replace(".appinstaller", ".appxbundle").Trim())
                                             Else
                                                 Continue For
                                             End If
@@ -1263,6 +1287,10 @@ Public Class AddProvAppxPackage
                                     If Path.GetExtension(AppPkg).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or _
                                         Path.GetExtension(AppPkg).Equals(".msix", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".msixbundle", StringComparison.OrdinalIgnoreCase) Then
                                         ScanAppxPackage(False, AppPkg)
+                                    ElseIf Path.GetExtension(AppPkg).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
+                                        AppInstallerDownloader.AppInstallerFile = AppPkg
+                                        If Not File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
+                                        If File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, AppPkg.Replace(".appinstaller", ".appxbundle").Trim())
                                     Else
                                         Continue For
                                     End If
@@ -1276,6 +1304,10 @@ Public Class AddProvAppxPackage
                                     If Path.GetExtension(AppPkg).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or _
                                         Path.GetExtension(AppPkg).Equals(".msix", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".msixbundle", StringComparison.OrdinalIgnoreCase) Then
                                         ScanAppxPackage(False, AppPkg)
+                                    ElseIf Path.GetExtension(AppPkg).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
+                                        AppInstallerDownloader.AppInstallerFile = AppPkg
+                                        If Not File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
+                                        If File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, AppPkg.Replace(".appinstaller", ".appxbundle").Trim())
                                     Else
                                         Continue For
                                     End If
@@ -1289,7 +1321,7 @@ Public Class AddProvAppxPackage
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 MsgBox("The file that has been dropped here isn't an application package.", vbOKOnly + vbCritical, "Add provisioned AppX packages")
                             Case "ESN"
                                 MsgBox("El archivo que se ha soltado aquí no es un paquete de aplicación.", vbOKOnly + vbCritical, "Añadir paquetes aprovisionados AppX")

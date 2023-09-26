@@ -2,128 +2,11 @@
 Imports System.Threading
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Dism
+Imports DISMTools.Utilities
 
 Public Class GetCapabilityInfoDlg
 
     Public InstalledCapabilityInfo As DismCapabilityCollection
-
-    Function CastDismCapabilityState(state As DismPackageFeatureState) As String
-        Select Case state
-            Case DismPackageFeatureState.NotPresent
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Not present"
-                            Case "ESN"
-                                Return "No presente"
-                        End Select
-                    Case 1
-                        Return "Not present"
-                    Case 2
-                        Return "No presente"
-                End Select
-            Case DismPackageFeatureState.UninstallPending
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Uninstall Pending"
-                            Case "ESN"
-                                Return "Desinstalación pendiente"
-                        End Select
-                    Case 1
-                        Return "Uninstall Pending"
-                    Case 2
-                        Return "Desinstalación pendiente"
-                End Select
-            Case DismPackageFeatureState.Staged
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Uninstalled"
-                            Case "ESN"
-                                Return "Desinstalado"
-                        End Select
-                    Case 1
-                        Return "Uninstalled"
-                    Case 2
-                        Return "Desinstalado"
-                End Select
-            Case DismPackageFeatureState.Removed Or DismPackageFeatureState.Resolved
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Removed"
-                            Case "ESN"
-                                Return "Eliminado"
-                        End Select
-                    Case 1
-                        Return "Removed"
-                    Case 2
-                        Return "Eliminado"
-                End Select
-            Case DismPackageFeatureState.Installed
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Installed"
-                            Case "ESN"
-                                Return "Instalado"
-                        End Select
-                    Case 1
-                        Return "Installed"
-                    Case 2
-                        Return "Instalado"
-                End Select
-            Case DismPackageFeatureState.InstallPending
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Install Pending"
-                            Case "ESN"
-                                Return "Instalación pendiente"
-                        End Select
-                    Case 1
-                        Return "Install Pending"
-                    Case 2
-                        Return "Instalación pendiente"
-                End Select
-            Case DismPackageFeatureState.Superseded
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Superseded"
-                            Case "ESN"
-                                Return "Sustituido"
-                        End Select
-                    Case 1
-                        Return "Superseded"
-                    Case 2
-                        Return "Sustituido"
-                End Select
-            Case DismPackageFeatureState.PartiallyInstalled
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
-                                Return "Partially Installed"
-                            Case "ESN"
-                                Return "Instalado parcialmente"
-                        End Select
-                    Case 1
-                        Return "Partially Installed"
-                    Case 2
-                        Return "Instalado parcialmente"
-                End Select
-        End Select
-        Return Nothing
-    End Function
 
     Private Sub GetCapabilityInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
@@ -141,7 +24,7 @@ Public Class GetCapabilityInfoDlg
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Get capability information"
                         Label1.Text = Text
                         Label2.Text = "Ready"
@@ -210,7 +93,7 @@ Public Class GetCapabilityInfoDlg
         Panel7.Visible = True
         ListView1.Items.Clear()
         For Each InstalledCapability As DismCapability In InstalledCapabilityInfo
-            ListView1.Items.Add(New ListViewItem(New String() {InstalledCapability.Name, CastDismCapabilityState(InstalledCapability.State)}))
+            ListView1.Items.Add(New ListViewItem(New String() {InstalledCapability.Name, Casters.CastDismPackageState(InstalledCapability.State, True)}))
         Next
     End Sub
 
@@ -223,7 +106,7 @@ Public Class GetCapabilityInfoDlg
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     msg = "Background processes need to have completed before showing feature information. We'll wait until they have completed"
                                 Case "ESN"
                                     msg = "Los procesos en segundo plano deben haber completado antes de obtener información de la característica. Esperaremos hasta que hayan completado"
@@ -237,7 +120,7 @@ Public Class GetCapabilityInfoDlg
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     Label2.Text = "Waiting for background processes to finish..."
                                 Case "ESN"
                                     Label2.Text = "Esperando a que terminen los procesos en segundo plano..."
@@ -262,7 +145,7 @@ Public Class GetCapabilityInfoDlg
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 Label2.Text = "Preparing to get capability information..."
                             Case "ESN"
                                 Label2.Text = "Preparándonos para obtener información de la funcionalidad..."
@@ -279,7 +162,7 @@ Public Class GetCapabilityInfoDlg
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Label2.Text = "Getting information from " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
                                     Case "ESN"
                                         Label2.Text = "Obteniendo información de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
@@ -293,25 +176,25 @@ Public Class GetCapabilityInfoDlg
                         Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, ListView1.FocusedItem.SubItems(0).Text)
                         Label23.Text = capInfo.Name
                         Label25.Text = capInfo.Name.Remove(InStr(capInfo.Name, "~") - 1)
-                        Label35.Text = CastDismCapabilityState(capInfo.State)
+                        Label35.Text = Casters.CastDismPackageState(capInfo.State, True)
                         Label32.Text = capInfo.DisplayName
                         Label40.Text = capInfo.Description
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
-                                        Label42.Text = "Download size: " & capInfo.DownloadSize & " bytes (~" & Math.Round((capInfo.DownloadSize / 1024 ^ 2), 2) & " MB)" & CrLf & _
-                                            "Install size: " & capInfo.InstallSize & " bytes (~" & Math.Round((capInfo.InstallSize / 1024 ^ 2), 2) & " MB)"
+                                    Case "ENU", "ENG"
+                                        Label42.Text = "Download size: " & capInfo.DownloadSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")" & CrLf & _
+                                            "Install size: " & capInfo.InstallSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")"
                                     Case "ESN"
-                                        Label42.Text = "Tamaño de descarga: " & capInfo.DownloadSize & " bytes (~" & Math.Round((capInfo.DownloadSize / 1024 ^ 2), 2) & " MB)" & CrLf & _
-                                            "Tamaño de instalación: " & capInfo.InstallSize & " bytes (~" & Math.Round((capInfo.InstallSize / 1024 ^ 2), 2) & " MB)"
+                                        Label42.Text = "Tamaño de descarga: " & capInfo.DownloadSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")" & CrLf & _
+                                            "Tamaño de instalación: " & capInfo.InstallSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")"
                                 End Select
                             Case 1
-                                Label42.Text = "Download size: " & capInfo.DownloadSize & " bytes (~" & Math.Round((capInfo.DownloadSize / 1024 ^ 2), 2) & " MB)" & CrLf & _
-                                    "Install size: " & capInfo.InstallSize & " bytes (~" & Math.Round((capInfo.InstallSize / 1024 ^ 2), 2) & " MB)"
+                                Label42.Text = "Download size: " & capInfo.DownloadSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")" & CrLf & _
+                                    "Install size: " & capInfo.InstallSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")"
                             Case 2
-                                Label42.Text = "Tamaño de descarga: " & capInfo.DownloadSize & " bytes (~" & Math.Round((capInfo.DownloadSize / 1024 ^ 2), 2) & " MB)" & CrLf & _
-                                    "Tamaño de instalación: " & capInfo.InstallSize & " bytes (~" & Math.Round((capInfo.InstallSize / 1024 ^ 2), 2) & " MB)"
+                                Label42.Text = "Tamaño de descarga: " & capInfo.DownloadSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")" & CrLf & _
+                                    "Tamaño de instalación: " & capInfo.InstallSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")"
                         End Select
                     End Using
                 Catch NRE As NullReferenceException
@@ -322,7 +205,7 @@ Public Class GetCapabilityInfoDlg
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     msg = "Could not get capability information. Reason: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                                 Case "ESN"
                                     msg = "No pudimos obtener información de la funcionalidad. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
@@ -339,7 +222,7 @@ Public Class GetCapabilityInfoDlg
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 Label2.Text = "Ready"
                             Case "ESN"
                                 Label2.Text = "Listo"

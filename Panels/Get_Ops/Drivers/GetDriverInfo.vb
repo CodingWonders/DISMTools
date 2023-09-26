@@ -3,6 +3,7 @@ Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Dism
 Imports System.Threading
+Imports DISMTools.Utilities
 
 Public Class GetDriverInfo
 
@@ -20,7 +21,7 @@ Public Class GetDriverInfo
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "Get driver information"
                         Label1.Text = Text
                         Label2.Text = "What do you want to get information about?"
@@ -216,7 +217,7 @@ Public Class GetDriverInfo
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         InstalledDriverList.Clear()
         ListView1.Items.Clear()
-        If InstalledDriverList.Count >= 0 Then
+        If InstalledDriverInfo.Count > 0 Then
             For Each DriverPackage As DismDriverPackage In InstalledDriverInfo
                 InstalledDriverList.Add(DriverPackage)
                 ListView1.Items.Add(New ListViewItem(New String() {DriverPackage.PublishedName, Path.GetFileName(DriverPackage.OriginalFileName)}))
@@ -278,7 +279,7 @@ Public Class GetDriverInfo
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 msg = "Background processes need to have completed before showing package information. We'll wait until they have completed"
                             Case "ESN"
                                 msg = "Los procesos en segundo plano deben haber completado antes de obtener información del paquete. Esperaremos hasta que hayan completado"
@@ -292,7 +293,7 @@ Public Class GetDriverInfo
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 Label5.Text = "Waiting for background processes to finish..."
                             Case "ESN"
                                 Label5.Text = "Esperando a que terminen los procesos en segundo plano..."
@@ -317,7 +318,7 @@ Public Class GetDriverInfo
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             Label5.Text = "Preparing driver information processes..."
                         Case "ESN"
                             Label5.Text = "Preparando procesos de información de controladores..."
@@ -335,7 +336,7 @@ Public Class GetDriverInfo
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
+                                    Case "ENU", "ENG"
                                         Label5.Text = "Getting information from driver file " & Quote & Path.GetFileName(drvFile) & Quote & "..." & CrLf & "This may take some time and the program may temporarily freeze"
                                     Case "ESN"
                                         Label5.Text = "Obteniendo información del archivo de controlador " & Quote & Path.GetFileName(drvFile) & Quote & "..." & CrLf & "Esto puede llevar algo de tiempo y el programa podría congelarse temporalmente"
@@ -359,7 +360,7 @@ Public Class GetDriverInfo
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Label5.Text = "Ready"
                     Case "ESN"
                         Label5.Text = "Listo"
@@ -380,39 +381,12 @@ Public Class GetDriverInfo
                 Label14.Text = DriverPackageInfo.CompatibleIds
                 Label15.Text = DriverPackageInfo.ExcludeIds
                 Label18.Text = DriverPackageInfo.ManufacturerName
-                Select Case DriverPackageInfo.Architecture
-                    Case DismProcessorArchitecture.None
-                        Select Case MainForm.Language
-                            Case 0
-                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
-                                        Label19.Text = "Unknown"
-                                    Case "ESN"
-                                        Label19.Text = "Desconocido"
-                                End Select
-                            Case 1
-                                Label19.Text = "Unknown"
-                            Case 2
-                                Label19.Text = "Desconocido"
-                        End Select
-                    Case DismProcessorArchitecture.Neutral
-                        Label19.Text = "Neutral"
-                    Case DismProcessorArchitecture.Intel
-                        Label19.Text = "x86"
-                    Case DismProcessorArchitecture.IA64
-                        Label19.Text = "Itanium"
-                    Case DismProcessorArchitecture.ARM64
-                        Label19.Text = "ARM64"
-                    Case DismProcessorArchitecture.ARM
-                        Label19.Text = "ARM"
-                    Case DismProcessorArchitecture.AMD64
-                        Label19.Text = "AMD64"
-                End Select
+                Label19.Text = Casters.CastDismArchitecture(DriverPackageInfo.Architecture, True)
                 If Label14.Text = "" Then
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     Label14.Text = "None declared by the hardware manufacturer"
                                 Case "ESN"
                                     Label14.Text = "Ninguno declarado por el fabricante del hardware"
@@ -427,7 +401,7 @@ Public Class GetDriverInfo
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     Label15.Text = "None declared by the hardware manufacturer"
                                 Case "ESN"
                                     Label15.Text = "Ninguno declarado por el fabricante del hardware"
@@ -490,7 +464,7 @@ Public Class GetDriverInfo
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENG"
+                                Case "ENU", "ENG"
                                     Label7.Text = "Hardware target 1 of " & DriverInfoList(ListBox1.SelectedIndex).Count
                                 Case "ESN"
                                     Label7.Text = "Hardware de destino 1 de " & DriverInfoList(ListBox1.SelectedIndex).Count
@@ -542,7 +516,7 @@ Public Class GetDriverInfo
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             Label7.Text = "Hardware target " & CurrentHWTarget & " of " & DriverInfoList(ListBox1.SelectedIndex).Count
                         Case "ESN"
                             Label7.Text = "Hardware de destino " & CurrentHWTarget & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
@@ -564,7 +538,7 @@ Public Class GetDriverInfo
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENG"
+                        Case "ENU", "ENG"
                             Label7.Text = "Hardware target " & CurrentHWTarget & " of " & DriverInfoList(ListBox1.SelectedIndex).Count
                         Case "ESN"
                             Label7.Text = "Hardware de destino " & CurrentHWTarget & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
@@ -584,7 +558,7 @@ Public Class GetDriverInfo
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         msg = "Previous hardware target"
                     Case "ESN"
                         msg = "Anterior hardware de destino"
@@ -602,7 +576,7 @@ Public Class GetDriverInfo
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         msg = "Next hardware target"
                     Case "ESN"
                         msg = "Siguiente hardware de destino"
@@ -620,7 +594,7 @@ Public Class GetDriverInfo
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         msg = "Jump to specific hardware target"
                     Case "ESN"
                         msg = "Saltar a hardware de destino específico"
@@ -639,7 +613,7 @@ Public Class GetDriverInfo
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Label7.Text = "Hardware target " & JumpTo & " of " & DriverInfoList(ListBox1.SelectedIndex).Count
                     Case "ESN"
                         Label7.Text = "Hardware de destino " & JumpTo & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
@@ -674,7 +648,7 @@ Public Class GetDriverInfo
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENG"
+                            Case "ENU", "ENG"
                                 Label27.Text = If(InstalledDriverList(ListView1.FocusedItem.Index).BootCritical, "Yes", "No")
                                 Label34.Text = If(InstalledDriverList(ListView1.FocusedItem.Index).InBox, "Yes", "No")
                             Case "ESN"
@@ -694,50 +668,7 @@ Public Class GetDriverInfo
                 Label38.Text = InstalledDriverList(ListView1.FocusedItem.Index).Date
                 Label40.Text = InstalledDriverList(ListView1.FocusedItem.Index).ClassDescription
                 Label42.Text = InstalledDriverList(ListView1.FocusedItem.Index).ClassGuid
-                Select Case InstalledDriverList(ListView1.FocusedItem.Index).DriverSignature
-                    Case DismDriverSignature.Unknown
-                        Select Case MainForm.Language
-                            Case 0
-                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
-                                        Label44.Text = "Unknown"
-                                    Case "ESN"
-                                        Label44.Text = "Desconocido"
-                                End Select
-                            Case 1
-                                Label44.Text = "Unknown"
-                            Case 2
-                                Label44.Text = "Desconocido"
-                        End Select
-                    Case DismDriverSignature.Unsigned
-                        Select Case MainForm.Language
-                            Case 0
-                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
-                                        Label44.Text = "Unsigned. Please check the validity and expiration date of the signing certificate"
-                                    Case "ESN"
-                                        Label44.Text = "No firmado. Compruebe la validez y la fecha de expiración del certificado del controlador"
-                                End Select
-                            Case 1
-                                Label44.Text = "Unsigned. Please check the validity and expiration date of the signing certificate"
-                            Case 2
-                                Label44.Text = "No firmado. Compruebe la validez y la fecha de expiración del certificado del controlador"
-                        End Select
-                    Case DismDriverSignature.Signed
-                        Select Case MainForm.Language
-                            Case 0
-                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENG"
-                                        Label44.Text = "Signed"
-                                    Case "ESN"
-                                        Label44.Text = "Firmado"
-                                End Select
-                            Case 1
-                                Label44.Text = "Signed"
-                            Case 2
-                                Label44.Text = "Firmado"
-                        End Select
-                End Select
+                Label44.Text = Casters.CastDismSignatureStatus(InstalledDriverList(ListView1.FocusedItem.Index).DriverSignature, True)
                 Label46.Text = InstalledDriverList(ListView1.FocusedItem.Index).CatalogFile
             Else
                 Panel4.Visible = False

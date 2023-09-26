@@ -17,7 +17,7 @@ Public Class ActiveInstAccessWarn
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Text = "About active installation management"
                         Label1.Text = "You are about to enter the online installation management mode, which lets you perform changes to your active Windows installation." & CrLf & CrLf & _
                             "Given that this mode lets you modify your installation, you should be extremely careful when performing tasks with this program." & CrLf & CrLf & _

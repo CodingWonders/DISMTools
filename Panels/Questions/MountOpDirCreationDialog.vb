@@ -17,7 +17,7 @@ Public Class MountOpDirCreationDialog
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENG"
+                    Case "ENU", "ENG"
                         Label1.Text = "Do you want to create the mount directory?"
                         OK_Button.Text = "Yes"
                         Cancel_Button.Text = "No"
