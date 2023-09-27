@@ -4555,7 +4555,7 @@ Public Class MainForm
                     CommandHelpToolStripMenuItem.Text = "Command help..."
                     AboutDISMToolsToolStripMenuItem.Text = "About DISMTools"
                     ' Menu - Invalid settings
-                    ISFix.Text = "Fix..."
+                    ISFix.Text = "More information"
                     ISHelp.Text = "What's this?"
                     ' Menu - DevState
                     ReportFeedbackToolStripMenuItem.Text = "Report feedback (opens in web browser)"
@@ -4833,7 +4833,7 @@ Public Class MainForm
                     CommandHelpToolStripMenuItem.Text = "Ayuda de comandos..."
                     AboutDISMToolsToolStripMenuItem.Text = "Acerca de DISMTools"
                     ' Menu - Invalid settings
-                    ISFix.Text = "Corregir..."
+                    ISFix.Text = "Más información"
                     ISHelp.Text = "¿Qué es esto?"
                     ' Menu - DevState
                     ReportFeedbackToolStripMenuItem.Text = "Enviar comentarios (se abre en navegador web)"
@@ -5116,7 +5116,7 @@ Public Class MainForm
                 CommandHelpToolStripMenuItem.Text = "Command help..."
                 AboutDISMToolsToolStripMenuItem.Text = "About DISMTools"
                 ' Menu - Invalid settings
-                ISFix.Text = "Fix..."
+                ISFix.Text = "More information"
                 ISHelp.Text = "What's this?"
                 ' Menu - DevState
                 ReportFeedbackToolStripMenuItem.Text = "Report feedback (opens in web browser)"
@@ -5394,7 +5394,7 @@ Public Class MainForm
                 CommandHelpToolStripMenuItem.Text = "Ayuda de comandos..."
                 AboutDISMToolsToolStripMenuItem.Text = "Acerca de DISMTools"
                 ' Menu - Invalid settings
-                ISFix.Text = "Corregir..."
+                ISFix.Text = "Más información"
                 ISHelp.Text = "¿Qué es esto?"
                 ' Menu - DevState
                 ReportFeedbackToolStripMenuItem.Text = "Enviar comentarios (se abre en navegador web)"
@@ -10610,5 +10610,9 @@ Public Class MainForm
             Exit Sub
         End If
         SetPEScratchSpace.ShowDialog()
+    End Sub
+
+    Private Sub ISFix_Click(sender As Object, e As EventArgs) Handles ISFix.Click
+        InvalidSettingsDialog.ShowDialog()
     End Sub
 End Class
