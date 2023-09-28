@@ -75,6 +75,7 @@ Partial Class AddProvAppxPackage
         Me.FlowLayoutPanel1 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
+        Me.Button10 = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -656,6 +657,17 @@ Partial Class AddProvAppxPackage
         Me.CheckBox3.Text = "License file:"
         Me.CheckBox3.UseVisualStyleBackColor = True
         '
+        'Button10
+        '
+        Me.Button10.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button10.Location = New System.Drawing.Point(871, 583)
+        Me.Button10.Name = "Button10"
+        Me.Button10.Size = New System.Drawing.Size(32, 23)
+        Me.Button10.TabIndex = 12
+        Me.Button10.Text = "..."
+        Me.Button10.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.Button10.UseVisualStyleBackColor = True
+        '
         'AddProvAppxPackage
         '
         Me.AcceptButton = Me.OK_Button
@@ -663,6 +675,7 @@ Partial Class AddProvAppxPackage
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(1064, 621)
+        Me.Controls.Add(Me.Button10)
         Me.Controls.Add(Me.AppxDetailsPanel)
         Me.Controls.Add(Me.CheckBox2)
         Me.Controls.Add(Me.TableLayoutPanel2)
@@ -752,5 +765,6 @@ Partial Class AddProvAppxPackage
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents CheckBox3 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox4 As System.Windows.Forms.CheckBox
+    Friend WithEvents Button10 As System.Windows.Forms.Button
 
 End Class

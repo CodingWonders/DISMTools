@@ -4034,11 +4034,13 @@ Public Class MainForm
                         PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                        AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         PkgInfoCMS.ForeColor = Color.White
                         ImgUMountPopupCMS.ForeColor = Color.White
                         AppxPackagePopupCMS.ForeColor = Color.White
+                        AppxRelatedLinksCMS.ForeColor = Color.White
                         TreeViewCMS.ForeColor = Color.White
                         AppxResCMS.ForeColor = Color.White
                         Dim items = TreeViewCMS.Items
@@ -4145,11 +4147,13 @@ Public Class MainForm
                         PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                        AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         PkgInfoCMS.ForeColor = Color.Black
                         ImgUMountPopupCMS.ForeColor = Color.Black
                         AppxPackagePopupCMS.ForeColor = Color.Black
+                        AppxRelatedLinksCMS.ForeColor = Color.Black
                         TreeViewCMS.ForeColor = Color.Black
                         AppxResCMS.ForeColor = Color.Black
                         Dim items = TreeViewCMS.Items
@@ -4260,11 +4264,13 @@ Public Class MainForm
                 PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 PkgInfoCMS.ForeColor = Color.Black
                 ImgUMountPopupCMS.ForeColor = Color.Black
                 AppxPackagePopupCMS.ForeColor = Color.Black
+                AppxRelatedLinksCMS.ForeColor = Color.Black
                 TreeViewCMS.ForeColor = Color.Black
                 AppxResCMS.ForeColor = Color.Black
                 Dim items = TreeViewCMS.Items
@@ -4371,11 +4377,13 @@ Public Class MainForm
                 PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 PkgInfoCMS.ForeColor = Color.White
                 ImgUMountPopupCMS.ForeColor = Color.White
                 AppxPackagePopupCMS.ForeColor = Color.White
+                AppxRelatedLinksCMS.ForeColor = Color.White
                 TreeViewCMS.ForeColor = Color.White
                 AppxResCMS.ForeColor = Color.White
                 Dim items = TreeViewCMS.Items
@@ -10614,5 +10622,13 @@ Public Class MainForm
 
     Private Sub ISFix_Click(sender As Object, e As EventArgs) Handles ISFix.Click
         InvalidSettingsDialog.ShowDialog()
+    End Sub
+
+    Private Sub MicrosoftAppsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MicrosoftAppsToolStripMenuItem.Click
+        Process.Start("https://apps.microsoft.com")
+    End Sub
+
+    Private Sub MicrosoftStoreGenerationProjectToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MicrosoftStoreGenerationProjectToolStripMenuItem.Click
+        Process.Start("https://store.rg-adguard.net")
     End Sub
 End Class
