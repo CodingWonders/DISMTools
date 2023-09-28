@@ -26,10 +26,10 @@ Partial Class InvalidSettingsDialog
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.Label5 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -85,35 +85,25 @@ Partial Class InvalidSettingsDialog
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(596, 155)
         Me.TableLayoutPanel1.TabIndex = 12
         '
-        'Label3
+        'Label6
         '
-        Me.Label3.AutoEllipsis = True
-        Me.TableLayoutPanel1.SetColumnSpan(Me.Label3, 2)
-        Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label3.Location = New System.Drawing.Point(3, 0)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(590, 38)
-        Me.Label3.TabIndex = 0
-        Me.Label3.Text = "Label3"
-        Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'Label4
-        '
-        Me.Label4.AutoEllipsis = True
-        Me.TableLayoutPanel1.SetColumnSpan(Me.Label4, 2)
-        Me.Label4.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label4.Location = New System.Drawing.Point(3, 38)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(590, 38)
-        Me.Label4.TabIndex = 2
-        Me.Label4.Text = "Label4"
-        Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.Label6.AutoEllipsis = True
+        Me.TableLayoutPanel1.SetColumnSpan(Me.Label6, 2)
+        Me.Label6.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label6.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label6.Location = New System.Drawing.Point(3, 114)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(590, 41)
+        Me.Label6.TabIndex = 6
+        Me.Label6.Text = "Label6"
+        Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label5
         '
         Me.Label5.AutoEllipsis = True
         Me.TableLayoutPanel1.SetColumnSpan(Me.Label5, 2)
         Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label5.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label5.Location = New System.Drawing.Point(3, 76)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(590, 38)
@@ -121,17 +111,31 @@ Partial Class InvalidSettingsDialog
         Me.Label5.Text = "Label5"
         Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'Label6
+        'Label4
         '
-        Me.Label6.AutoEllipsis = True
-        Me.TableLayoutPanel1.SetColumnSpan(Me.Label6, 2)
-        Me.Label6.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label6.Location = New System.Drawing.Point(3, 114)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(590, 41)
-        Me.Label6.TabIndex = 6
-        Me.Label6.Text = "Label6"
-        Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.Label4.AutoEllipsis = True
+        Me.TableLayoutPanel1.SetColumnSpan(Me.Label4, 2)
+        Me.Label4.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label4.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.Location = New System.Drawing.Point(3, 38)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(590, 38)
+        Me.Label4.TabIndex = 2
+        Me.Label4.Text = "Label4"
+        Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Label3
+        '
+        Me.Label3.AutoEllipsis = True
+        Me.TableLayoutPanel1.SetColumnSpan(Me.Label3, 2)
+        Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label3.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.Location = New System.Drawing.Point(3, 0)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(590, 38)
+        Me.Label3.TabIndex = 0
+        Me.Label3.Text = "Label3"
+        Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'InvalidSettingsDialog
         '
