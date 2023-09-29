@@ -222,6 +222,8 @@ Public Class MainForm
 
     Public imgVersionInfo As Version = Nothing
 
+    Dim NoMigration As Boolean                                           ' Set this variable to true ONLY if the IDE started the program
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -287,6 +289,8 @@ Public Class MainForm
                 ElseIf arg.StartsWith("/migrate", StringComparison.OrdinalIgnoreCase) Then
                     MigrationForm.ShowDialog()
                     Thread.Sleep(1500)
+                ElseIf arg.StartsWith("/nomig", StringComparison.OrdinalIgnoreCase) Then
+                    NoMigration = True
                 End If
             Next
         End If
@@ -3923,6 +3927,7 @@ Public Class MainForm
     ''' <remarks>If the file does not exist, the initial setup wizard launches</remarks>
     Sub PerformSettingFileValidation()
         If File.Exists(Application.StartupPath & "\settings.ini") Then
+            If NoMigration Then Exit Sub
             Dim bldDate As Date = PrgAbout.RetrieveLinkerTimestamp(Application.StartupPath & "\DISMTools.exe")
             If File.GetLastWriteTime(Application.StartupPath & "\settings.ini") < bldDate Then
                 ' Perform setting file migration
