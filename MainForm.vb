@@ -4688,6 +4688,9 @@ Public Class MainForm
                     ' Context menu of AppX information dialog
                     SaveResourceToolStripMenuItem.Text = "Save resource..."
                     CopyToolStripMenuItem.Text = "Copy resource"
+                    ' Context menu of AppX addition dialog
+                    MicrosoftAppsToolStripMenuItem.Text = "Visit the Microsoft Apps website"
+                    MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visit the Microsoft Store Generation Project website"
                 ElseIf My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "ESN" Then
                     ' Top-level menu items
                     FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -4966,6 +4969,9 @@ Public Class MainForm
                     ' Context menu of AppX information dialog
                     SaveResourceToolStripMenuItem.Text = "Guardar recurso..."
                     CopyToolStripMenuItem.Text = "Copiar recurso"
+                    ' Context menu of AppX addition dialog
+                    MicrosoftAppsToolStripMenuItem.Text = "Visitar el sitio web de Aplicaciones de Microsoft"
+                    MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visitar el sitio web del proyecto de generación de Microsoft Store"
                 Else
                     Language = 1
                     ChangeLangs(Language)
@@ -5249,6 +5255,9 @@ Public Class MainForm
                 ' Context menu of AppX information dialog
                 SaveResourceToolStripMenuItem.Text = "Save resource..."
                 CopyToolStripMenuItem.Text = "Copy resource"
+                ' Context menu of AppX addition dialog
+                MicrosoftAppsToolStripMenuItem.Text = "Visit the Microsoft Apps website"
+                MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visit the Microsoft Store Generation Project website"
             Case 2
                 ' Top-level menu items
                 FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -5526,6 +5535,9 @@ Public Class MainForm
                 ExistingFileToolStripMenuItem.Text = "Archivo existente..."
                 SaveResourceToolStripMenuItem.Text = "Guardar recurso..."
                 CopyToolStripMenuItem.Text = "Copiar recurso"
+                ' Context menu of AppX addition dialog
+                MicrosoftAppsToolStripMenuItem.Text = "Visitar el sitio web de Aplicaciones de Microsoft"
+                MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visitar el sitio web del proyecto de generación de Microsoft Store"
         End Select
 
         If OnlineManagement Then
