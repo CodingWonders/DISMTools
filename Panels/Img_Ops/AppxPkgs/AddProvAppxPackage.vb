@@ -1384,4 +1384,8 @@ Public Class AddProvAppxPackage
     Private Sub TextBox2_TextChanged(sender As Object, e As EventArgs) Handles TextBox2.TextChanged
         If ListView1.SelectedItems.Count = 1 Then Packages(ListView1.FocusedItem.Index).PackageCustomDataFile = TextBox2.Text
     End Sub
+
+    Private Sub Button10_Click(sender As Object, e As EventArgs) Handles Button10.Click
+        MainForm.AppxRelatedLinksCMS.Show(sender, New Point(8, 8))
+    End Sub
 End Class

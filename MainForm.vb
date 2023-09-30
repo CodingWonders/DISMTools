@@ -222,6 +222,8 @@ Public Class MainForm
 
     Public imgVersionInfo As Version = Nothing
 
+    Dim NoMigration As Boolean                                           ' Set this variable to true ONLY if the IDE started the program
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -287,6 +289,8 @@ Public Class MainForm
                 ElseIf arg.StartsWith("/migrate", StringComparison.OrdinalIgnoreCase) Then
                     MigrationForm.ShowDialog()
                     Thread.Sleep(1500)
+                ElseIf arg.StartsWith("/nomig", StringComparison.OrdinalIgnoreCase) Then
+                    NoMigration = True
                 End If
             Next
         End If
@@ -3923,6 +3927,7 @@ Public Class MainForm
     ''' <remarks>If the file does not exist, the initial setup wizard launches</remarks>
     Sub PerformSettingFileValidation()
         If File.Exists(Application.StartupPath & "\settings.ini") Then
+            If NoMigration Then Exit Sub
             Dim bldDate As Date = PrgAbout.RetrieveLinkerTimestamp(Application.StartupPath & "\DISMTools.exe")
             If File.GetLastWriteTime(Application.StartupPath & "\settings.ini") < bldDate Then
                 ' Perform setting file migration
@@ -4034,11 +4039,13 @@ Public Class MainForm
                         PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                        AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         PkgInfoCMS.ForeColor = Color.White
                         ImgUMountPopupCMS.ForeColor = Color.White
                         AppxPackagePopupCMS.ForeColor = Color.White
+                        AppxRelatedLinksCMS.ForeColor = Color.White
                         TreeViewCMS.ForeColor = Color.White
                         AppxResCMS.ForeColor = Color.White
                         Dim items = TreeViewCMS.Items
@@ -4145,11 +4152,13 @@ Public Class MainForm
                         PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                        AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         PkgInfoCMS.ForeColor = Color.Black
                         ImgUMountPopupCMS.ForeColor = Color.Black
                         AppxPackagePopupCMS.ForeColor = Color.Black
+                        AppxRelatedLinksCMS.ForeColor = Color.Black
                         TreeViewCMS.ForeColor = Color.Black
                         AppxResCMS.ForeColor = Color.Black
                         Dim items = TreeViewCMS.Items
@@ -4260,11 +4269,13 @@ Public Class MainForm
                 PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 PkgInfoCMS.ForeColor = Color.Black
                 ImgUMountPopupCMS.ForeColor = Color.Black
                 AppxPackagePopupCMS.ForeColor = Color.Black
+                AppxRelatedLinksCMS.ForeColor = Color.Black
                 TreeViewCMS.ForeColor = Color.Black
                 AppxResCMS.ForeColor = Color.Black
                 Dim items = TreeViewCMS.Items
@@ -4371,11 +4382,13 @@ Public Class MainForm
                 PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 PkgInfoCMS.ForeColor = Color.White
                 ImgUMountPopupCMS.ForeColor = Color.White
                 AppxPackagePopupCMS.ForeColor = Color.White
+                AppxRelatedLinksCMS.ForeColor = Color.White
                 TreeViewCMS.ForeColor = Color.White
                 AppxResCMS.ForeColor = Color.White
                 Dim items = TreeViewCMS.Items
@@ -4555,7 +4568,7 @@ Public Class MainForm
                     CommandHelpToolStripMenuItem.Text = "Command help..."
                     AboutDISMToolsToolStripMenuItem.Text = "About DISMTools"
                     ' Menu - Invalid settings
-                    ISFix.Text = "Fix..."
+                    ISFix.Text = "More information"
                     ISHelp.Text = "What's this?"
                     ' Menu - DevState
                     ReportFeedbackToolStripMenuItem.Text = "Report feedback (opens in web browser)"
@@ -4680,6 +4693,9 @@ Public Class MainForm
                     ' Context menu of AppX information dialog
                     SaveResourceToolStripMenuItem.Text = "Save resource..."
                     CopyToolStripMenuItem.Text = "Copy resource"
+                    ' Context menu of AppX addition dialog
+                    MicrosoftAppsToolStripMenuItem.Text = "Visit the Microsoft Apps website"
+                    MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visit the Microsoft Store Generation Project website"
                 ElseIf My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName = "ESN" Then
                     ' Top-level menu items
                     FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -4833,7 +4849,7 @@ Public Class MainForm
                     CommandHelpToolStripMenuItem.Text = "Ayuda de comandos..."
                     AboutDISMToolsToolStripMenuItem.Text = "Acerca de DISMTools"
                     ' Menu - Invalid settings
-                    ISFix.Text = "Corregir..."
+                    ISFix.Text = "Más información"
                     ISHelp.Text = "¿Qué es esto?"
                     ' Menu - DevState
                     ReportFeedbackToolStripMenuItem.Text = "Enviar comentarios (se abre en navegador web)"
@@ -4958,6 +4974,9 @@ Public Class MainForm
                     ' Context menu of AppX information dialog
                     SaveResourceToolStripMenuItem.Text = "Guardar recurso..."
                     CopyToolStripMenuItem.Text = "Copiar recurso"
+                    ' Context menu of AppX addition dialog
+                    MicrosoftAppsToolStripMenuItem.Text = "Visitar el sitio web de Aplicaciones de Microsoft"
+                    MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visitar el sitio web del proyecto de generación de Microsoft Store"
                 Else
                     Language = 1
                     ChangeLangs(Language)
@@ -5116,7 +5135,7 @@ Public Class MainForm
                 CommandHelpToolStripMenuItem.Text = "Command help..."
                 AboutDISMToolsToolStripMenuItem.Text = "About DISMTools"
                 ' Menu - Invalid settings
-                ISFix.Text = "Fix..."
+                ISFix.Text = "More information"
                 ISHelp.Text = "What's this?"
                 ' Menu - DevState
                 ReportFeedbackToolStripMenuItem.Text = "Report feedback (opens in web browser)"
@@ -5241,6 +5260,9 @@ Public Class MainForm
                 ' Context menu of AppX information dialog
                 SaveResourceToolStripMenuItem.Text = "Save resource..."
                 CopyToolStripMenuItem.Text = "Copy resource"
+                ' Context menu of AppX addition dialog
+                MicrosoftAppsToolStripMenuItem.Text = "Visit the Microsoft Apps website"
+                MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visit the Microsoft Store Generation Project website"
             Case 2
                 ' Top-level menu items
                 FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -5394,7 +5416,7 @@ Public Class MainForm
                 CommandHelpToolStripMenuItem.Text = "Ayuda de comandos..."
                 AboutDISMToolsToolStripMenuItem.Text = "Acerca de DISMTools"
                 ' Menu - Invalid settings
-                ISFix.Text = "Corregir..."
+                ISFix.Text = "Más información"
                 ISHelp.Text = "¿Qué es esto?"
                 ' Menu - DevState
                 ReportFeedbackToolStripMenuItem.Text = "Enviar comentarios (se abre en navegador web)"
@@ -5518,6 +5540,9 @@ Public Class MainForm
                 ExistingFileToolStripMenuItem.Text = "Archivo existente..."
                 SaveResourceToolStripMenuItem.Text = "Guardar recurso..."
                 CopyToolStripMenuItem.Text = "Copiar recurso"
+                ' Context menu of AppX addition dialog
+                MicrosoftAppsToolStripMenuItem.Text = "Visitar el sitio web de Aplicaciones de Microsoft"
+                MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visitar el sitio web del proyecto de generación de Microsoft Store"
         End Select
 
         If OnlineManagement Then
@@ -10610,5 +10635,17 @@ Public Class MainForm
             Exit Sub
         End If
         SetPEScratchSpace.ShowDialog()
+    End Sub
+
+    Private Sub ISFix_Click(sender As Object, e As EventArgs) Handles ISFix.Click
+        InvalidSettingsDialog.ShowDialog()
+    End Sub
+
+    Private Sub MicrosoftAppsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MicrosoftAppsToolStripMenuItem.Click
+        Process.Start("https://apps.microsoft.com")
+    End Sub
+
+    Private Sub MicrosoftStoreGenerationProjectToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MicrosoftStoreGenerationProjectToolStripMenuItem.Click
+        Process.Start("https://store.rg-adguard.net")
     End Sub
 End Class
