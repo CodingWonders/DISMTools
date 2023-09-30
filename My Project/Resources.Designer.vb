@@ -1806,20 +1806,14 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Changes made since last preview
+        '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''Bugfixes
+        '''- Fixed a release status consistency issue
         '''
-        '''- The build time shown in the About screen should no longer be skewed in time zones other than GMT+1 or GMT+2 (Summer Time)
-        '''- Fixed an improper progress panel disposal issue
+        '''New features
         '''
-        '''Overall changes
-        '''
-        '''Bugfixes
-        '''
-        '''- Fixed an issue that caused the AppX package addition dialog to show up on projects with Windows 7 images loaded
-        '''- Fixed a translation issue in the Configuration List Editor
-        '''- Fixed an issue where the AppX package information dialog would not show the p [resto de la cadena truncado]&quot;;.
+        '''- You can now view which settings are invalid
+        '''- You can now go to the Microsoft Apps and Microsoft Store Generation Project websites from the AppX package addition dialog.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
