@@ -10,7 +10,7 @@ Public Class Options
     Dim CanExit As Boolean
     Dim SaveLocations() As String = New String(1) {"Settings file", "Registry"}
     Dim ColorModes() As String = New String(2) {"Use system setting", "Light mode", "Dark mode"}
-    Dim Languages() As String = New String(2) {"Use system language", "English", "Spanish"}
+    Dim Languages() As String = New String(3) {"Use system language", "English", "Spanish", "French"}
     Dim LogViews() As String = New String(1) {"list", "table"}
     Dim NotFreqs() As String = New String(1) {"Every time a project has been loaded successfully", "Once"}
 
@@ -681,6 +681,7 @@ Public Class Options
                         Languages(0) = "Use system language"
                         Languages(1) = "English"
                         Languages(2) = "Spanish"
+                        Languages(3) = "French"
                         LogViews(0) = "list"
                         LogViews(1) = "table"
                         NotFreqs(0) = "Every time a project has been loaded successfully"
@@ -694,6 +695,7 @@ Public Class Options
                         Languages(0) = "Usar idioma del sistema"
                         Languages(1) = "Inglés"
                         Languages(2) = "Español"
+                        Languages(3) = "Francés"
                         LogViews(0) = "lista"
                         LogViews(1) = "tabla"
                         NotFreqs(0) = "Cada vez que un proyecto ha sido cargado satisfactoriamente"
@@ -708,6 +710,7 @@ Public Class Options
                 Languages(0) = "Use system language"
                 Languages(1) = "English"
                 Languages(2) = "Spanish"
+                Languages(3) = "French"
                 LogViews(0) = "list"
                 LogViews(1) = "table"
                 NotFreqs(0) = "Every time a project has been loaded successfully"
@@ -721,6 +724,7 @@ Public Class Options
                 Languages(0) = "Usar idioma del sistema"
                 Languages(1) = "Inglés"
                 Languages(2) = "Español"
+                Languages(3) = "Francés"
                 LogViews(0) = "lista"
                 LogViews(1) = "tabla"
                 NotFreqs(0) = "Cada vez que un proyecto ha sido cargado satisfactoriamente"
