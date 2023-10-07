@@ -573,7 +573,7 @@ Partial Class Options
         '
         'Label10
         '
-        Me.Label10.AutoSize = True
+        Me.Label10.AutoEllipsis = True
         Me.Label10.Location = New System.Drawing.Point(46, 59)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(90, 13)
@@ -1426,10 +1426,10 @@ Partial Class Options
         '
         'Label35
         '
-        Me.Label35.AutoSize = True
+        Me.Label35.AutoEllipsis = True
         Me.Label35.Location = New System.Drawing.Point(22, 22)
         Me.Label35.Name = "Label35"
-        Me.Label35.Size = New System.Drawing.Size(524, 13)
+        Me.Label35.Size = New System.Drawing.Size(703, 13)
         Me.Label35.TabIndex = 0
         Me.Label35.Text = "Modify these settings only if you experience constant program or system slowdowns" & _
     " due to high CPU usage"
@@ -1536,10 +1536,10 @@ Partial Class Options
         '
         'Label40
         '
-        Me.Label40.AutoSize = True
+        Me.Label40.AutoEllipsis = True
         Me.Label40.Location = New System.Drawing.Point(22, 22)
         Me.Label40.Name = "Label40"
-        Me.Label40.Size = New System.Drawing.Size(450, 13)
+        Me.Label40.Size = New System.Drawing.Size(705, 13)
         Me.Label40.TabIndex = 0
         Me.Label40.Text = "File associations let you access project files directly, without having to load t" & _
     "he program first"
@@ -1669,7 +1669,6 @@ Partial Class Options
         Me.Panel3.PerformLayout()
         CType(Me.PictureBox8, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel2.ResumeLayout(False)
-        Me.Panel2.PerformLayout()
         Me.GroupBox5.ResumeLayout(False)
         Me.GroupBox5.PerformLayout()
         Me.TabPage11.ResumeLayout(False)

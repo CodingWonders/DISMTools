@@ -1332,14 +1332,14 @@ Public Class MainForm
                                         Case "ESN"
                                             progressLabel = "Creando sesión para esta imagen..."
                                         Case "FRA"
-                                            progressLabel = "Création d'une session pour cette image en cours ..."
+                                            progressLabel = "Création d'une session pour cette image en cours..."
                                     End Select
                                 Case 1
                                     progressLabel = "Creating session for this image..."
                                 Case 2
                                     progressLabel = "Creando sesión para esta imagen..."
                                 Case 3
-                                    progressLabel = "Création d'une session pour cette image en cours ..."
+                                    progressLabel = "Création d'une session pour cette image en cours..."
                             End Select
                             ImgBW.ReportProgress(0)
                             sessionMntDir = MountedImageMountDirs(x)
@@ -1401,14 +1401,14 @@ Public Class MainForm
                         Case "ESN"
                             progressLabel = "Obteniendo información básica de la imagen..."
                         Case "FRA"
-                            progressLabel = "Obtention des informations basiques sur l'image en cours ..."
+                            progressLabel = "Obtention des informations basiques sur l'image en cours..."
                     End Select
                 Case 1
                     progressLabel = "Getting basic image information..."
                 Case 2
                     progressLabel = "Obteniendo información básica de la imagen..."
                 Case 3
-                    progressLabel = "Obtention des informations basiques sur l'image en cours ..."
+                    progressLabel = "Obtention des informations basiques sur l'image en cours..."
             End Select
             ImgBW.ReportProgress(progressMin + progressDivs)
             GetBasicImageInfo(True, OnlineMode)
@@ -1432,14 +1432,14 @@ Public Class MainForm
                             Case "ESN"
                                 progressLabel = "Obteniendo información avanzada de la imagen..."
                             Case "FRA"
-                                progressLabel = "Obtention des informations avancées sur l'image en cours ..."
+                                progressLabel = "Obtention des informations avancées sur l'image en cours..."
                         End Select
                     Case 1
                         progressLabel = "Getting advanced image information..."
                     Case 2
                         progressLabel = "Obteniendo información avanzada de la imagen..."
                     Case 3
-                        progressLabel = "Obtention des informations avancées sur l'image en cours ..."
+                        progressLabel = "Obtention des informations avancées sur l'image en cours..."
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetAdvancedImageInfo(True, OnlineMode)
@@ -1507,14 +1507,14 @@ Public Class MainForm
                             Case "ESN"
                                 progressLabel = "Obteniendo paquetes de la imagen..."
                             Case "FRA"
-                                progressLabel = "Obtention des paquets de l'image en cours ..."
+                                progressLabel = "Obtention des paquets de l'image en cours..."
                         End Select
                     Case 1
                         progressLabel = "Getting image packages..."
                     Case 2
                         progressLabel = "Obteniendo paquetes de la imagen..."
                     Case 3
-                        progressLabel = "Obtention des paquets de l'image en cours ..."
+                        progressLabel = "Obtention des paquets de l'image en cours..."
                 End Select
                 ImgBW.ReportProgress(20)
                 GetImagePackages(True, OnlineMode)
@@ -1530,14 +1530,14 @@ Public Class MainForm
                             Case "ESN"
                                 progressLabel = "Obteniendo características de la imagen..."
                             Case "FRA"
-                                progressLabel = "Obtention des caractéristiques de l'image en cours ..."
+                                progressLabel = "Obtention des caractéristiques de l'image en cours..."
                         End Select
                     Case 1
                         progressLabel = "Getting image features..."
                     Case 2
                         progressLabel = "Obteniendo características de la imagen..."
                     Case 3
-                        progressLabel = "Obtention des caractéristiques de l'image en cours ..."
+                        progressLabel = "Obtention des caractéristiques de l'image en cours..."
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetImageFeatures(True, OnlineMode)
@@ -1558,14 +1558,14 @@ Public Class MainForm
                                     Case "ESN"
                                         progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
                                     Case "FRA"
-                                        progressLabel = "Obtention des paquets AppX (applications de style Metro) provisionnés de l'image en cours ..."
+                                        progressLabel = "Obtention des paquets AppX (applications de style Metro) provisionnés de l'image en cours..."
                                 End Select
                             Case 1
                                 progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
                             Case 2
                                 progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
                             Case 3
-                                progressLabel = "Obtention des paquets AppX (applications de style Metro) provisionnés de l'image en cours ..."
+                                progressLabel = "Obtention des paquets AppX (applications de style Metro) provisionnés de l'image en cours..."
                         End Select
                         ImgBW.ReportProgress(progressMin + progressDivs)
                         GetImageAppxPackages(True, OnlineMode)
@@ -1591,14 +1591,14 @@ Public Class MainForm
                                     Case "ESN"
                                         progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
                                     Case "FRA"
-                                        progressLabel = "Obtention de caractéristiques de l'image à la demande (capacités) en cours ..."
+                                        progressLabel = "Obtention de caractéristiques de l'image à la demande (capacités) en cours..."
                                 End Select
                             Case 1
                                 progressLabel = "Getting image Features on Demand (capabilities)..."
                             Case 2
                                 progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
                             Case 3
-                                progressLabel = "Obtention de caractéristiques de l'image à la demande (capacités) en cours ..."
+                                progressLabel = "Obtention de caractéristiques de l'image à la demande (capacités) en cours..."
                         End Select
                         ImgBW.ReportProgress(progressMin + progressDivs)
                         GetImageCapabilities(True, OnlineMode)
@@ -1620,14 +1620,14 @@ Public Class MainForm
                             Case "ESN"
                                 progressLabel = "Obteniendo controladores de la imagen..."
                             Case "FRA"
-                                progressLabel = "Obtention des pilotes de l'image en cours ..."
+                                progressLabel = "Obtention des pilotes de l'image en cours..."
                         End Select
                     Case 1
                         progressLabel = "Getting image drivers..."
                     Case 2
                         progressLabel = "Obteniendo controladores de la imagen..."
                     Case 3
-                        progressLabel = "Obtention des pilotes de l'image en cours ..."
+                        progressLabel = "Obtention des pilotes de l'image en cours..."
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetImageDrivers(True, OnlineMode)
@@ -1644,14 +1644,14 @@ Public Class MainForm
                             Case "ESN"
                                 progressLabel = "Obteniendo paquetes de la imagen..."
                             Case "FRA"
-                                progressLabel = "Obtention des paquets de l'image en cours ..."
+                                progressLabel = "Obtention des paquets de l'image en cours..."
                         End Select
                     Case 1
                         progressLabel = "Getting image packages..."
                     Case 2
                         progressLabel = "Obteniendo paquetes de la imagen..."
                     Case 3
-                        progressLabel = "Obtention des paquets de l'image en cours ..."
+                        progressLabel = "Obtention des paquets de l'image en cours..."
                 End Select
                 ImgBW.ReportProgress(20)
                 GetImagePackages(True, OnlineMode)
@@ -1664,14 +1664,14 @@ Public Class MainForm
                             Case "ESN"
                                 progressLabel = "Obteniendo características de la imagen..."
                             Case "FRA"
-                                progressLabel = "Obtention des caractéristiques de l'image en cours ..."
+                                progressLabel = "Obtention des caractéristiques de l'image en cours..."
                         End Select
                     Case 1
                         progressLabel = "Getting image features..."
                     Case 2
                         progressLabel = "Obteniendo características de la imagen..."
                     Case 3
-                        progressLabel = "Obtention des caractéristiques de l'image en cours ..."
+                        progressLabel = "Obtention des caractéristiques de l'image en cours..."
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetImageFeatures(True, OnlineMode)
@@ -1687,14 +1687,14 @@ Public Class MainForm
                                 Case "ESN"
                                     progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
                                 Case "FRA"
-                                    progressLabel = "Obtention des paquets AppX (applications de style Metro) provisionnés de l'image en cours ..."
+                                    progressLabel = "Obtention des paquets AppX (applications de style Metro) provisionnés de l'image en cours..."
                             End Select
                         Case 1
                             progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
                         Case 2
                             progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
                         Case 3
-                            progressLabel = "Obtention des paquets AppX (applications de style Metro) provisionnés de l'image en cours ..."
+                            progressLabel = "Obtention des paquets AppX (applications de style Metro) provisionnés de l'image en cours..."
                     End Select
                     ImgBW.ReportProgress(progressMin + progressDivs)
                     GetImageAppxPackages(True, OnlineMode)
@@ -1714,14 +1714,14 @@ Public Class MainForm
                                 Case "ESN"
                                     progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
                                 Case "FRA"
-                                    progressLabel = "Obtention de caractéristiques de l'image à la demande (capacités) en cours ..."
+                                    progressLabel = "Obtention de caractéristiques de l'image à la demande (capacités) en cours..."
                             End Select
                         Case 1
                             progressLabel = "Getting image Features on Demand (capabilities)..."
                         Case 2
                             progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
                         Case 3
-                            progressLabel = "Obtention de caractéristiques de l'image à la demande (capacités) en cours ..."
+                            progressLabel = "Obtention de caractéristiques de l'image à la demande (capacités) en cours..."
                     End Select
                     ImgBW.ReportProgress(progressMin + progressDivs)
                     GetImageCapabilities(True, OnlineMode)
@@ -1738,14 +1738,14 @@ Public Class MainForm
                             Case "ESN"
                                 progressLabel = "Obteniendo controladores de la imagen..."
                             Case "FRA"
-                                progressLabel = "Obtention des pilotes de l'image en cours ..."
+                                progressLabel = "Obtention des pilotes de l'image en cours..."
                         End Select
                     Case 1
                         progressLabel = "Getting image drivers..."
                     Case 2
                         progressLabel = "Obteniendo controladores de la imagen..."
                     Case 3
-                        progressLabel = "Obtention des pilotes de l'image en cours ..."
+                        progressLabel = "Obtention des pilotes de l'image en cours..."
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetImageDrivers(True, OnlineMode)
@@ -8596,14 +8596,14 @@ Public Class MainForm
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
                     Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours ..."
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting package names..."
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
             Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours ..."
+                PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
         End Select
         If Not CompletedTasks(0) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -8630,14 +8630,14 @@ Public Class MainForm
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
                     Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours ..."
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
             Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours ..."
+                PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
         End Select
         If Not CompletedTasks(1) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -9185,14 +9185,14 @@ Public Class MainForm
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
                     Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours ..."
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting package names..."
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
             Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours ..."
+                PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
         End Select
         If Not CompletedTasks(0) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -9276,14 +9276,14 @@ Public Class MainForm
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
                     Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours ..."
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
             Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours ..."
+                PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
         End Select
         If Not CompletedTasks(1) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -9390,14 +9390,14 @@ Public Class MainForm
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
                     Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours ..."
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
             Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours ..."
+                PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
         End Select
         If Not CompletedTasks(1) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -9540,14 +9540,14 @@ Public Class MainForm
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
                     Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours ..."
+                        PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting image indexes..."
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
             Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours ..."
+                PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours..."
         End Select
         PleaseWaitDialog.ShowDialog(Me)
         If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
@@ -9733,14 +9733,14 @@ Public Class MainForm
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
                     Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours ..."
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting package names..."
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
             Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours ..."
+                PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
         End Select
         If Not CompletedTasks(0) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -9803,14 +9803,14 @@ Public Class MainForm
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
                     Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours ..."
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
             Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours ..."
+                PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
         End Select
         If Not CompletedTasks(1) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -9917,14 +9917,14 @@ Public Class MainForm
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
                     Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours ..."
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
             Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours ..."
+                PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
         End Select
         If Not CompletedTasks(1) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -10072,14 +10072,14 @@ Public Class MainForm
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo paquetes aprovisionados AppX..."
                     Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des paquets AppX provisionnés en cours ..."
+                        PleaseWaitDialog.Label2.Text = "Obtention des paquets AppX provisionnés en cours..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting provisioned AppX packages..."
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo paquetes aprovisionados AppX..."
             Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des paquets AppX provisionnés en cours ..."
+                PleaseWaitDialog.Label2.Text = "Obtention des paquets AppX provisionnés en cours..."
         End Select
         ProgressPanel.OperationNum = 994
         If Not CompletedTasks(2) Then
@@ -10313,14 +10313,14 @@ Public Class MainForm
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
                     Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours ..."
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
             Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours ..."
+                PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
         End Select
         If Not CompletedTasks(3) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -10398,14 +10398,14 @@ Public Class MainForm
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
                     Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours ..."
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
             Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours ..."
+                PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
         End Select
         If Not CompletedTasks(3) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -10506,14 +10506,14 @@ Public Class MainForm
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
                     Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours ..."
+                        PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
             Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours ..."
+                PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
         End Select
         If Not CompletedTasks(4) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -10903,14 +10903,14 @@ Public Class MainForm
                                                 Case "ESN"
                                                     MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
                                                 Case "FRA"
-                                                    MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours ..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
+                                                    MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
                                             End Select
                                         Case 1
                                             MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
                                         Case 2
                                             MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
                                         Case 3
-                                            MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours ..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
+                                            MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
                                     End Select
                                     CurrentFileInt = 0
                                     For Each folder In My.Computer.FileSystem.GetDirectories(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\" & arches(x), FileIO.SearchOption.SearchAllSubDirectories)
@@ -10935,14 +10935,14 @@ Public Class MainForm
                                         Case "ESN"
                                             MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
                                         Case "FRA"
-                                            MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours ..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
+                                            MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
                                     End Select
                                 Case 1
                                     MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
                                 Case 2
                                     MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
                                 Case 3
-                                    MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours ..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
+                                    MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
                             End Select
                             Dim CurrentFileInt As Integer = 0
                             For Each folder In My.Computer.FileSystem.GetDirectories(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\x86", FileIO.SearchOption.SearchAllSubDirectories)
@@ -10965,14 +10965,14 @@ Public Class MainForm
                                         Case "ESN"
                                             MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
                                         Case "FRA"
-                                            MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours ..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
+                                            MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
                                     End Select
                                 Case 1
                                     MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
                                 Case 2
                                     MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
                                 Case 3
-                                    MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours ..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
+                                    MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
                             End Select
                             Dim CurrentFileInt As Integer = 0
                             For Each folder In My.Computer.FileSystem.GetDirectories(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64", FileIO.SearchOption.SearchAllSubDirectories)
@@ -10995,14 +10995,14 @@ Public Class MainForm
                                         Case "ESN"
                                             MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
                                         Case "FRA"
-                                            MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours ..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
+                                            MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
                                     End Select
                                 Case 1
                                     MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
                                 Case 2
                                     MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
                                 Case 3
-                                    MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours ..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
+                                    MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
                             End Select
                             Dim CurrentFileInt As Integer = 0
                             For Each folder In My.Computer.FileSystem.GetDirectories(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm", FileIO.SearchOption.SearchAllSubDirectories)
@@ -11025,14 +11025,14 @@ Public Class MainForm
                                         Case "ESN"
                                             MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
                                         Case "FRA"
-                                            MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours ..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
+                                            MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
                                     End Select
                                 Case 1
                                     MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
                                 Case 2
                                     MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
                                 Case 3
-                                    MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours ..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
+                                    MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
                             End Select
                             Dim CurrentFileInt As Integer = 0
                             For Each folder In My.Computer.FileSystem.GetDirectories(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm64", FileIO.SearchOption.SearchAllSubDirectories)
@@ -11291,14 +11291,14 @@ Public Class MainForm
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
                     Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours ..."
+                        PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting image indexes..."
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
             Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours ..."
+                PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours..."
         End Select
         PleaseWaitDialog.ShowDialog(Me)
         If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
@@ -11384,14 +11384,14 @@ Public Class MainForm
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
                     Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours ..."
+                        PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
             Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours ..."
+                PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
         End Select
         If Not CompletedTasks(4) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -11436,14 +11436,14 @@ Public Class MainForm
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
                     Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours ..."
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
             Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours ..."
+                PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
         End Select
         If Not CompletedTasks(1) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -11488,14 +11488,14 @@ Public Class MainForm
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
                     Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours ..."
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
             Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours ..."
+                PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
         End Select
         If Not CompletedTasks(3) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -11520,14 +11520,14 @@ Public Class MainForm
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
                     Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours ..."
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting package names..."
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
             Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours ..."
+                PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
         End Select
         If Not CompletedTasks(0) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -11574,14 +11574,14 @@ Public Class MainForm
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
                     Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours ..."
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting package names..."
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
             Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours ..."
+                PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
         End Select
         If Not CompletedTasks(2) Then
             PleaseWaitDialog.ShowDialog(Me)
