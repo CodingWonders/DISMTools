@@ -25,11 +25,15 @@ Public Class BGProcsAdvSettings
                             msg = "The program will now detect the drivers of the image according to the options you've specified. This may take some time."
                         Case "ESN"
                             msg = "El programa va a detectar los controladores de la imagen atendiendo a las opciones que ha especificado. Esto puede llevar un tiempo."
+                        Case "FRA"
+                            msg = "Le programme va maintenant détecter les pilotes de l'image en fonction des options que vous avez spécifiées. Cela peut prendre un certain temps."
                     End Select
                 Case 1
                     msg = "The program will now detect the drivers of the image according to the options you've specified. This may take some time."
                 Case 2
                     msg = "El programa va a detectar los controladores de la imagen atendiendo a las opciones que ha especificado. Esto puede llevar un tiempo."
+                Case 3
+                    msg = "Le programme va maintenant détecter les pilotes de l'image en fonction des options que vous avez spécifiées. Cela peut prendre un certain temps."
             End Select
             MsgBox(msg, vbOKOnly + vbInformation, Text)
             MainForm.bwGetImageInfo = False
@@ -70,6 +74,16 @@ Public Class BGProcsAdvSettings
                         CheckBox5.Text = "Ejecutar todos los procesos en segundo plano tras realizar una operación"
                         OK_Button.Text = "Aceptar"
                         Cancel_Button.Text = "Cancelar"
+                    Case "FRA"
+                        Text = "Paramètres avancés des processus en arrière plan"
+                        Label1.Text = "Configurer des paramètres supplémentaires pour les processus en arrière plan :"
+                        CheckBox1.Text = "Améliorer la détection de tous les paquets AppX installés dans une installation active grâce aux aides PowerShell"
+                        CheckBox2.Text = "Sauter les paquets dont les politiques ne sont pas supprimées"
+                        CheckBox3.Text = "Détecter tous les pilotes de l'image"
+                        CheckBox4.Text = "Ignorer les paquets cadres et les supprimer de la liste s'ils ont été détectés."
+                        CheckBox5.Text = "Exécuter tous les processus en arrière plan après l'exécution d'une tâche"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annuler"
                 End Select
             Case 1
                 Text = "Advanced background process settings"
@@ -91,6 +105,16 @@ Public Class BGProcsAdvSettings
                 CheckBox5.Text = "Ejecutar todos los procesos en segundo plano tras realizar una operación"
                 OK_Button.Text = "Aceptar"
                 Cancel_Button.Text = "Cancelar"
+            Case 3
+                Text = "Paramètres avancés des processus en arrière plan"
+                Label1.Text = "Configurer des paramètres supplémentaires pour les processus en arrière plan :"
+                CheckBox1.Text = "Améliorer la détection de tous les paquets AppX installés dans une installation active grâce aux aides PowerShell"
+                CheckBox2.Text = "Sauter les paquets dont les politiques ne sont pas supprimées"
+                CheckBox3.Text = "Détecter tous les pilotes de l'image"
+                CheckBox4.Text = "Ignorer les paquets cadres et les supprimer de la liste s'ils ont été détectés."
+                CheckBox5.Text = "Exécuter tous les processus en arrière plan après l'exécution d'une tâche"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annuler"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)

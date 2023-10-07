@@ -6,7 +6,7 @@ Imports System.Net
 Public Class PrgSetup
 
     Dim ColorModes() As String = New String(2) {"Use system setting", "Light mode", "Dark mode"}
-    Dim Languages() As String = New String(2) {"Use system language", "English", "Spanish"}
+    Dim Languages() As String = New String(3) {"Use system language", "English", "Spanish", "French"}
 
     Dim btnToolTip As New ToolTip()
     Private isMouseDown As Boolean = False
@@ -36,6 +36,8 @@ Public Class PrgSetup
                 msg = "Minimize"
             Case "ESN"
                 msg = "Minimizar"
+            Case "FRA"
+                msg = "Minimiser"
         End Select
         btnToolTip.SetToolTip(sender, msg)
     End Sub
@@ -67,6 +69,8 @@ Public Class PrgSetup
                 msg = "Close"
             Case "ESN"
                 msg = "Cerrar"
+            Case "FRA"
+                msg = "Fermer"
         End Select
         btnToolTip.SetToolTip(sender, msg)
     End Sub
@@ -142,6 +146,8 @@ Public Class PrgSetup
                             msg = "The folder the log file will be stored on doesn't exist. Make sure it exists and try again."
                         Case "ESN"
                             msg = "La carpeta donde se almacenará el archivo de registro no existe. Asegúrese de que exista e inténtelo de nuevo."
+                        Case "FRA"
+                            msg = "Le dossier dans lequel le fichier journal sera stocké n'existe pas. Assurez-vous qu'il existe et réessayez."
                     End Select
                     MsgBox(msg, vbOKOnly + vbCritical, Text)
                     Exit Sub
@@ -167,6 +173,8 @@ Public Class PrgSetup
                     Next_Button.Text = "Finish"
                 Case "ESN"
                     Next_Button.Text = "Finalizar"
+                Case "FRA"
+                    Next_Button.Text = "Finir"
             End Select
             Cancel_Button.Enabled = False
             closeBox.Enabled = False
@@ -176,6 +184,8 @@ Public Class PrgSetup
                     Next_Button.Text = "Next"
                 Case "ESN"
                     Next_Button.Text = "Siguiente"
+                Case "FRA"
+                    Next_Button.Text = "Suivant"
             End Select
             Cancel_Button.Enabled = True
             closeBox.Enabled = True
@@ -234,6 +244,8 @@ Public Class PrgSetup
                     Next_Button.Text = "Finish"
                 Case "ESN"
                     Next_Button.Text = "Finalizar"
+                Case "FRA"
+                    Next_Button.Text = "Finir"
             End Select
             Cancel_Button.Enabled = False
             closeBox.Enabled = False
@@ -243,6 +255,8 @@ Public Class PrgSetup
                     Next_Button.Text = "Next"
                 Case "ESN"
                     Next_Button.Text = "Siguiente"
+                Case "FRA"
+                    Next_Button.Text = "Suivant"
             End Select
             Cancel_Button.Enabled = True
             closeBox.Enabled = True
@@ -343,6 +357,7 @@ Public Class PrgSetup
                 Languages(0) = "Use system language"
                 Languages(1) = "English"
                 Languages(2) = "Spanish"
+                Languages(3) = "French"
             Case "ESN"
                 Text = "Configurar DISMTools"
                 Label1.Text = Text
@@ -389,6 +404,54 @@ Public Class PrgSetup
                 Languages(0) = "Usar idioma del sistema"
                 Languages(1) = "Inglés"
                 Languages(2) = "Español"
+                Languages(3) = "Francés"
+            Case "FRA"
+                Text = "Configurer DISMTools"
+                Label1.Text = Text
+                Label2.Text = "Bienvenue à DISMTools"
+                Label3.Text = "DISMTools est une interface graphique libre et gratuite pour les opérations DISM. Pour commencer à configurer les choses, cliquez sur Suivant."
+                Label5.Text = "Faites-le vôtre. Personnalisez ce programme à votre guise et cliquez sur Suivant. Ces paramètres peuvent être configurés à tout moment dans la section " & Quote & "Personnalisation" & Quote & " de la fenêtre des paramètres."
+                Label6.Text = "Personnaliser ce programme"
+                Label7.Text = "Mode couleur :"
+                Label8.Text = "Langue :"
+                Label9.Text = "Fonte de la fenêtre du journal :"
+                Label10.Text = "Fichier journal :"
+                ' Since we start with log level 3, manually show that option
+                Label11.Text = "Erreurs, avertissements et messages d'information (niveau du journal 3)"
+                Label13.Text = "Spécifiez les paramètres du journal et cliquez sur Suivant. En fonction du niveau de contenu spécifié, nous enregistrerons plus ou moins d'informations. Ce paramètre peut être configuré à tout moment dans la section " & Quote & "Journaux" & Quote & " de la fenêtre des paramètres."
+                Label14.Text = "Que devons-nous enregistrer lorsque vous effectuez une opération ?"
+                ' Same here
+                Label16.Text = "Le fichier journal doit afficher les erreurs, les avertissements et les messages d'information après l'exécution d'une opération d'image."
+                Label20.Text = "Souhaitez-vous configurer autre chose ?"
+                Label21.Text = "Les paramètres disponibles sont plus nombreux que ceux que vous venez de configurer. Si vous souhaitez en modifier d'autres, cliquez sur le bouton ci-dessous. Nous rendrons également ces paramètres persistants."
+                Label22.Text = "Vous pouvez effectuer ces démarches à tout moment."
+                Label23.Text = "Vous avez fini de configurer les bases pour utiliser DISMTools comme vous le souhaitiez. Cliquez sur " & Quote & "Finir" & Quote & ", et nous rendrons vos paramètres persistants."
+                Label24.Text = "La configuration est terminée"
+                Label25.Text = "Maintenant que vous avez tout configuré, nous vous recommandons de procéder aux opérations suivantes :"
+                Label26.Text = "Restez à jour pour recevoir de nouvelles caractéristiques et une expérience améliorée."
+                Label27.Text = "Commencez à utiliser DISMTools et le service d'images, afin de vous déplacer plus rapidement."
+                Label28.Text = "Style du panneau de progression secondaire :"
+                Back_Button.Text = "Retour"
+                Next_Button.Text = "Suivant"
+                Cancel_Button.Text = "Annuler"
+                Button1.Text = "Parcourir..."
+                Button2.Text = "Utiliser le fichier journal par défaut"
+                Button5.Text = "Configurer d'autres paramètres"
+                Button6.Text = "Commencer"
+                Button7.Text = "Mettre à jour les données"
+                CheckBox1.Text = "Créer automatiquement des journaux dans le répertoire des journaux du programme"
+                RadioButton1.Text = "Moderne"
+                RadioButton2.Text = "Classique"
+                SaveFileDialog1.Title = "Spécifier le fichier journal"
+
+                ' Configure string arrays to put them in the comboboxes
+                ColorModes(0) = "Utiliser les paramètres du système"
+                ColorModes(1) = "Mode lumineux"
+                ColorModes(2) = "Mode sombre"
+                Languages(0) = "Utiliser la langue du système"
+                Languages(1) = "Anglais"
+                Languages(2) = "Espagnol"
+                Languages(3) = "Français"
         End Select
         ' Add new items to the comboboxes
         ComboBox1.Items.AddRange(ColorModes)
@@ -484,6 +547,21 @@ Public Class PrgSetup
                         Label11.Text = "Errores, advertencias, mensajes de información y de depuración (Nivel 4)"
                         Label16.Text = "El archivo de registro debe mostrar errores, advertencias, mensajes de información y de depuración tras realizar una operación."
                 End Select
+            Case "FRA"
+                Select Case TrackBar1.Value
+                    Case 0
+                        Label11.Text = "Erreurs (niveau du journal 1)"
+                        Label16.Text = "Le fichier journal ne doit afficher les erreurs qu'après l'exécution d'une opération d'image."
+                    Case 1
+                        Label11.Text = "Erreurs et avertissements (niveau de journal 2)"
+                        Label16.Text = "Le fichier journal doit afficher les erreurs et les avertissements après l'exécution d'une opération d'image."
+                    Case 2
+                        Label11.Text = "Erreurs, avertissements et messages d'information (niveau du journal 3)"
+                        Label16.Text = "Le fichier journal doit afficher les erreurs, les avertissements et les messages d'information après l'exécution d'une opération d'image."
+                    Case 3
+                        Label11.Text = "Erreurs, avertissements, informations et messages de débogage (niveau du journal 4)"
+                        Label16.Text = "Le fichier journal doit afficher les erreurs, les avertissements, les informations et les messages de débogage après l'exécution d'une opération d'image."
+                End Select
         End Select
         MainForm.LogLevel = TrackBar1.Value + 1
     End Sub
@@ -532,6 +610,8 @@ Public Class PrgSetup
                     MsgBox("We couldn't download the update checker. Reason:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Check for updates")
                 Case "ESN"
                     MsgBox("No pudimos descargar el comprobador de actualizaciones. Razón:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Comprobar actualizaciones")
+                Case "FRA"
+                    MsgBox("Nous n'avons pas pu télécharger le vérificateur de mise à jour. Raison :" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Mettre à jour les données")
             End Select
             Exit Sub
         End Try

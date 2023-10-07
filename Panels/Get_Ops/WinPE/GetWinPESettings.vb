@@ -21,11 +21,15 @@ Public Class GetWinPESettings
                                 Label5.Text = "Could not get value"
                             Case "ESN"
                                 Label5.Text = "No se pudo obtener el valor"
+                            Case "FRA"
+                                Label5.Text = "Impossible d'obtenir la valeur"
                         End Select
                     Case 1
                         Label5.Text = "Could not get value"
                     Case 2
                         Label5.Text = "No se pudo obtener el valor"
+                    Case 3
+                        Label5.Text = "Impossible d'obtenir la valeur"
                 End Select
                 Button1.Visible = False
             End If
@@ -40,11 +44,15 @@ Public Class GetWinPESettings
                                 Label6.Text = "Could not get value"
                             Case "ESN"
                                 Label6.Text = "No se pudo obtener el valor"
+                            Case "FRA"
+                                Label6.Text = "Impossible d'obtenir la valeur"
                         End Select
                     Case 1
                         Label6.Text = "Could not get value"
                     Case 2
                         Label6.Text = "No se pudo obtener el valor"
+                    Case 3
+                        Label6.Text = "Impossible d'obtenir la valeur"
                 End Select
                 Button2.Visible = False
             End If
@@ -57,11 +65,15 @@ Public Class GetWinPESettings
                                 msg = "Could not get value"
                             Case "ESN"
                                 msg = "No se pudo obtener el valor"
+                            Case "FRA"
+                                msg = "Impossible d'obtenir la valeur"
                         End Select
                     Case 1
                         msg = "Could not get value"
                     Case 2
                         msg = "No se pudo obtener el valor"
+                    Case 3
+                        msg = "Impossible d'obtenir la valeur"
                 End Select
                 ' Get target path first
                 Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("PE_SOFT\Microsoft\Windows NT\CurrentVersion\WinPE", False)
@@ -110,6 +122,15 @@ Public Class GetWinPESettings
                         Button1.Text = "Cambiar..."
                         Button2.Text = "Cambiar..."
                         OK_Button.Text = "Aceptar"
+                    Case "FRA"
+                        Text = "Obtenir les paramètres de Windows PE"
+                        Label1.Text = Text
+                        Label2.Text = "Il s'agit des paramètres Windows PE pour cette image :"
+                        Label3.Text = "Chemin cible :"
+                        Label4.Text = "Espace temporaire :"
+                        Button1.Text = "Changer..."
+                        Button2.Text = "Changer..."
+                        OK_Button.Text = "OK"
                 End Select
             Case 1
                 Text = "Get Windows PE settings"
@@ -129,6 +150,15 @@ Public Class GetWinPESettings
                 Button1.Text = "Cambiar..."
                 Button2.Text = "Cambiar..."
                 OK_Button.Text = "Aceptar"
+            Case 3
+                Text = "Obtenir les paramètres de Windows PE"
+                Label1.Text = Text
+                Label2.Text = "Il s'agit des paramètres Windows PE pour cette image :"
+                Label3.Text = "Chemin cible :"
+                Label4.Text = "Espace temporaire :"
+                Button1.Text = "Changer..."
+                Button2.Text = "Changer..."
+                OK_Button.Text = "OK"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""

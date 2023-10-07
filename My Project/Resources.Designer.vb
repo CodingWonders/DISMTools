@@ -1808,12 +1808,12 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''- Fixed a release status consistency issue
+        '''- The program should no longer output the &quot;- Check image integrity?&quot; and &quot;- Append image?&quot; options when unmounting an image while discarding changes
         '''
         '''New features
         '''
-        '''- You can now view which settings are invalid
-        '''- You can now go to the Microsoft Apps and Microsoft Store Generation Project websites from the AppX package addition dialog.
+        '''- An initial implementation of French translations has been added
+        '''- The image application dialog now shows index information in a combo box, as opposed to a numeric list.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

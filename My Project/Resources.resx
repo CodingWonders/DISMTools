@@ -1099,12 +1099,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes
 
-- Fixed a release status consistency issue
+- The program should no longer output the "- Check image integrity?" and "- Append image?" options when unmounting an image while discarding changes
 
 New features
 
-- You can now view which settings are invalid
-- You can now go to the Microsoft Apps and Microsoft Store Generation Project websites from the AppX package addition dialog</value>
+- An initial implementation of French translations has been added
+- The image application dialog now shows index information in a combo box, as opposed to a numeric list</value>
   </data>
   <data name="split_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\split_img.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

@@ -27,6 +27,11 @@ Public Class ImgConversionSuccessDialog
                         Label2.Text = "La imagen especificada ha sido convertida satisfactoriamente al formato de destino. Por si lo desea, el Explorador de archivos puede ser abierto para ver dónde está ubicada la imagen." & CrLf & CrLf & "¿Desea abrir el directorio donde la imagen de destino está almacenada?"
                         OK_Button.Text = "Sí"
                         Cancel_Button.Text = "No"
+                    Case "FRA"
+                        Label1.Text = "L'image a été convertie avec succès"
+                        Label2.Text = "L'image spécifiée a été convertie avec succès au format cible. Pour plus de commodité, l'explorateur de fichiers peut être ouvert pour vous permettre de voir où se trouve l'image cible." & CrLf & CrLf & "Voulez-vous ouvrir le répertoire dans lequel l'image cible est stockée ?"
+                        OK_Button.Text = "Oui"
+                        Cancel_Button.Text = "Non"
                 End Select
             Case 1
                 Label1.Text = "The image has been successfully converted"
@@ -38,6 +43,11 @@ Public Class ImgConversionSuccessDialog
                 Label2.Text = "La imagen especificada ha sido convertida satisfactoriamente al formato de destino. Por si lo desea, el Explorador de archivos puede ser abierto para ver dónde está ubicada la imagen." & CrLf & CrLf & "¿Desea abrir el directorio donde la imagen de destino está almacenada?"
                 OK_Button.Text = "Sí"
                 Cancel_Button.Text = "No"
+            Case 3
+                Label1.Text = "L'image a été convertie avec succès"
+                Label2.Text = "L'image spécifiée a été convertie avec succès au format cible. Pour plus de commodité, l'explorateur de fichiers peut être ouvert pour vous permettre de voir où se trouve l'image cible." & CrLf & CrLf & "Voulez-vous ouvrir le répertoire dans lequel l'image cible est stockée ?"
+                OK_Button.Text = "Oui"
+                Cancel_Button.Text = "Non"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)

@@ -48,20 +48,20 @@ Partial Class ProgressPanel
         '
         'Label1
         '
-        Me.Label1.AutoSize = True
+        Me.Label1.AutoEllipsis = True
         Me.Label1.Font = New System.Drawing.Font("Segoe UI", 15.75!)
         Me.Label1.Location = New System.Drawing.Point(51, 12)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(298, 30)
+        Me.Label1.Size = New System.Drawing.Size(703, 30)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Image operations in progress..."
         '
         'Label2
         '
-        Me.Label2.AutoSize = True
+        Me.Label2.AutoEllipsis = True
         Me.Label2.Location = New System.Drawing.Point(55, 53)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(354, 13)
+        Me.Label2.Size = New System.Drawing.Size(699, 13)
         Me.Label2.TabIndex = 2
         Me.Label2.Text = "Please wait while the following tasks are done. This may take some time."
         '
@@ -92,6 +92,7 @@ Partial Class ProgressPanel
         '
         'currentTask
         '
+        Me.currentTask.AutoEllipsis = True
         Me.currentTask.Location = New System.Drawing.Point(55, 84)
         Me.currentTask.Name = "currentTask"
         Me.currentTask.Size = New System.Drawing.Size(699, 13)

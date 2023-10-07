@@ -45,6 +45,22 @@ Public Class GetAppxPkgInfoDlg
                         Label8.Text = "Directorio de recursos de logotipos de Tienda:"
                         Label9.Text = "Recurso de logotipos de Tienda principal:"
                         Label10.Text = "Este recurso ha sido averiguado por DISMTools por su tamaño, lo que puede llevar a un resultado incorrecto. Si eso ocurre, informe de un problema en el repositorio de GitHub"
+                    Case "FRA"
+                        Text = "Obtenir des informations sur les paquets AppX"
+                        Label1.Text = Text
+                        Label36.Text = "Informations sur le paquet AppX"
+                        Label37.Text = "Sélectionnez un paquet AppX installé sur la gauche pour afficher son information ici."
+                        Label22.Text = "Nom du paquet :"
+                        Label24.Text = "Nom d'affichage de l'application :"
+                        Label26.Text = "Architecture :"
+                        Label31.Text = "ID de la ressource :"
+                        Label41.Text = "Version :"
+                        Label43.Text = "Est-il enregistré au nom d'un utilisateur ?"
+                        Label4.Text = "Répertoire d'installation :"
+                        Label6.Text = "Emplacement du manifeste du paquet :"
+                        Label8.Text = "Répertoire du logo du magasin :"
+                        Label9.Text = "Logo du magasin principal :"
+                        Label10.Text = "Ce bien a été deviné par DISMTools sur la base de sa taille, ce qui peut conduire à un résultat incorrect. Si cela se produit, veuillez signaler un problème sur le dépôt GitHub."
                 End Select
             Case 1
                 Text = "Get AppX package information"
@@ -78,6 +94,22 @@ Public Class GetAppxPkgInfoDlg
                 Label8.Text = "Directorio de recursos de logotipos de Tienda:"
                 Label9.Text = "Recurso de logotipos de Tienda principal:"
                 Label10.Text = "Este recurso ha sido averiguado por DISMTools por su tamaño, lo que puede llevar a un resultado incorrecto. Si eso ocurre, informe de un problema en el repositorio de GitHub"
+            Case 3
+                Text = "Obtenir des informations sur les paquets AppX"
+                Label1.Text = Text
+                Label36.Text = "Informations sur le paquet AppX"
+                Label37.Text = "Sélectionnez un paquet AppX installé sur la gauche pour afficher son information ici."
+                Label22.Text = "Nom du paquet :"
+                Label24.Text = "Nom d'affichage de l'application :"
+                Label26.Text = "Architecture :"
+                Label31.Text = "ID de la ressource :"
+                Label41.Text = "Version :"
+                Label43.Text = "Est-il enregistré au nom d'un utilisateur ?"
+                Label4.Text = "Répertoire d'installation :"
+                Label6.Text = "Emplacement du manifeste du paquet :"
+                Label8.Text = "Répertoire du logo du magasin :"
+                Label9.Text = "Logo du magasin principal :"
+                Label10.Text = "Ce bien a été deviné par DISMTools sur la base de sa taille, ce qui peut conduire à un résultat incorrect. Si cela se produit, veuillez signaler un problème sur le dépôt GitHub."
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
@@ -148,11 +180,15 @@ Public Class GetAppxPkgInfoDlg
                                     Label42.Text = "No"
                                 Case "ESN"
                                     Label42.Text = "No"
+                                Case "FRA"
+                                    Label42.Text = "Non"
                             End Select
                         Case 1
                             Label42.Text = "No"
                         Case 2
                             Label42.Text = "No"
+                        Case 3
+                            Label42.Text = "Non"
                     End Select
                 Else
                     Select Case MainForm.Language
@@ -162,11 +198,15 @@ Public Class GetAppxPkgInfoDlg
                                     Label42.Text = "Yes"
                                 Case "ESN"
                                     Label42.Text = "Sí"
+                                Case "FRA"
+                                    Label42.Text = "Oui"
                             End Select
                         Case 1
                             Label42.Text = "Yes"
                         Case 2
                             Label42.Text = "Sí"
+                        Case 3
+                            Label42.Text = "Oui"
                     End Select
                 End If
             Else
@@ -177,11 +217,15 @@ Public Class GetAppxPkgInfoDlg
                                 Label42.Text = "No"
                             Case "ESN"
                                 Label42.Text = "No"
+                            Case "FRA"
+                                Label42.Text = "Non"
                         End Select
                     Case 1
                         Label42.Text = "No"
                     Case 2
                         Label42.Text = "No"
+                    Case 3
+                        Label42.Text = "Non"
                 End Select
             End If
             mainAsset = MainForm.GetStoreAppMainLogo(Label23.Text)

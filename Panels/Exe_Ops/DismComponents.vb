@@ -24,6 +24,11 @@ Public Class DismComponents
                         ListView1.Columns(0).Text = "Componente"
                         ListView1.Columns(1).Text = "Versión"
                         OK_Button.Text = "Aceptar"
+                    Case "FRA"
+                        Text = "Composants du DISM"
+                        ListView1.Columns(0).Text = "Composant"
+                        ListView1.Columns(1).Text = "Version"
+                        OK_Button.Text = "OK"
                 End Select
             Case 1
                 Text = "DISM Components"
@@ -35,6 +40,11 @@ Public Class DismComponents
                 ListView1.Columns(0).Text = "Componente"
                 ListView1.Columns(1).Text = "Versión"
                 OK_Button.Text = "Aceptar"
+            Case 3
+                Text = "Composants du DISM"
+                ListView1.Columns(0).Text = "Composant"
+                ListView1.Columns(1).Text = "Version"
+                OK_Button.Text = "OK"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)

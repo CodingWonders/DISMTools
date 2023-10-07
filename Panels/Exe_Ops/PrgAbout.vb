@@ -91,6 +91,43 @@ Public Class PrgAbout
                         LinkLabel13.Text = "Visitar sitio"
                         OK_Button.Text = "Aceptar"
                         UpdCheckBtn.Text = "Comprobar actualizaciones"
+                    Case "FRA"
+                        Text = "À propos de ce programme"
+                        Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
+                        Label2.Text = "DISMTools vous permet de déployer, de gérer et d'entretenir des images Windows en toute simplicité, grâce à une interface graphique."
+                        Label3.Text = "Ces ressources et éléments ont été utilisés pour la création de ce programme :"
+                        Label4.Text = "Ressources"
+                        Label5.Text = "Fluency"
+                        Label6.Text = "Icône SQL Server (Color)"
+                        Label7.Text = "Outils"
+                        Label8.Text = "7-Zip"
+                        Label9.Text = "wimlib-imagex (utilisé à l'avenir)"
+                        Label10.Text = "Documentation d'aide"
+                        Label11.Text = "Source d'aide à la commande"
+                        Label12.Text = "Création de fichiers de réponse sans surveillance"
+                        Label13.Text = "Scintilla.NET (paquet NuGet)"
+                        If Not MainForm.dtBranch.Contains("preview") Then
+                            Label15.Text = "Construit le " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " par msbuild"
+                            Label15.Visible = True
+                        End If
+                        Label16.Text = "ManagedDism (paquet NuGet)"
+                        Label17.Text = "Les atouts de la marque"
+                        Label18.Text = "Fond d'écran Windows Home Server"
+                        LinkLabel1.Text = "CRÉDITS"
+                        LinkLabel2.Text = "LICENCES"
+                        LinkLabel3.Text = "QUOI DE NEUF"
+                        LinkLabel4.Text = "Icons8"
+                        LinkLabel5.Text = "Site web"
+                        LinkLabel6.Text = "Site web"
+                        LinkLabel7.Text = "Microsoft"
+                        LinkLabel8.Text = "L'assistant de création de fichiers de réponses sans surveillance est basé sur le site web Windows Answer File Generator"
+                        LinkLabel8.LinkArea = New LinkArea(79, 41)
+                        LinkLabel9.Text = "Site web"
+                        LinkLabel10.Text = "Site web"
+                        LinkLabel11.Text = "Microsoft, Kýnan Antos"
+                        LinkLabel12.Text = "Site web"
+                        LinkLabel13.Text = "Site web"
+                        OK_Button.Text = "OK"
                 End Select
             Case 1
                 Text = "About this program"
@@ -168,6 +205,43 @@ Public Class PrgAbout
                 LinkLabel13.Text = "Visitar sitio"
                 OK_Button.Text = "Aceptar"
                 UpdCheckBtn.Text = "Comprobar actualizaciones"
+            Case 3
+                Text = "À propos de ce programme"
+                Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
+                Label2.Text = "DISMTools vous permet de déployer, de gérer et d'entretenir des images Windows en toute simplicité, grâce à une interface graphique."
+                Label3.Text = "Ces ressources et éléments ont été utilisés pour la création de ce programme :"
+                Label4.Text = "Ressources"
+                Label5.Text = "Fluency"
+                Label6.Text = "Icône SQL Server (Color)"
+                Label7.Text = "Outils"
+                Label8.Text = "7-Zip"
+                Label9.Text = "wimlib-imagex (utilisé à l'avenir)"
+                Label10.Text = "Documentation d'aide"
+                Label11.Text = "Source d'aide à la commande"
+                Label12.Text = "Création de fichiers de réponse sans surveillance"
+                Label13.Text = "Scintilla.NET (paquet NuGet)"
+                If Not MainForm.dtBranch.Contains("preview") Then
+                    Label15.Text = "Construit le " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " par msbuild"
+                    Label15.Visible = True
+                End If
+                Label16.Text = "ManagedDism (paquet NuGet)"
+                Label17.Text = "Les atouts de la marque"
+                Label18.Text = "Fond d'écran Windows Home Server"
+                LinkLabel1.Text = "CRÉDITS"
+                LinkLabel2.Text = "LICENCES"
+                LinkLabel3.Text = "QUOI DE NEUF"
+                LinkLabel4.Text = "Icons8"
+                LinkLabel5.Text = "Site web"
+                LinkLabel6.Text = "Site web"
+                LinkLabel7.Text = "Microsoft"
+                LinkLabel8.Text = "L'assistant de création de fichiers de réponses sans surveillance est basé sur le site web Windows Answer File Generator"
+                LinkLabel8.LinkArea = New LinkArea(79, 41)
+                LinkLabel9.Text = "Site web"
+                LinkLabel10.Text = "Site web"
+                LinkLabel11.Text = "Microsoft, Kýnan Antos"
+                LinkLabel12.Text = "Site web"
+                LinkLabel13.Text = "Site web"
+                OK_Button.Text = "OK"
         End Select
         RichTextBox1.Text = My.Resources.LicenseOverview
         RichTextBox2.Text = My.Resources.WhatsNew

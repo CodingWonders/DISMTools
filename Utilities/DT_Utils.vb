@@ -26,17 +26,37 @@ Namespace Utilities
                                         Return "Unknown"
                                     Case "ESN"
                                         Return "Desconocida"
+                                    Case "FRA"
+                                        Return "Inconnu"
                                 End Select
                             Case 1
                                 Return "Unknown"
                             Case 2
                                 Return "Desconocida"
+                            Case 3
+                                Return "Inconnu"
                         End Select
                     Else
                         Return "Unknown"
                     End If
                 Case DismProcessorArchitecture.Neutral
-                    Return "Neutral"
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENU", "ENG"
+                                    Return "Neutral"
+                                Case "ESN"
+                                    Return "Neutral"
+                                Case "FRA"
+                                    Return "Neutre"
+                            End Select
+                        Case 1
+                            Return "Neutral"
+                        Case 2
+                            Return "Neutral"
+                        Case 3
+                            Return "Neutre"
+                    End Select
                 Case DismProcessorArchitecture.Intel
                     Return "x86"
                 Case DismProcessorArchitecture.IA64
@@ -62,11 +82,15 @@ Namespace Utilities
                                         Return "Unknown"
                                     Case "ESN"
                                         Return "Desconocido"
+                                    Case "FRA"
+                                        Return "Inconnu"
                                 End Select
                             Case 1
                                 Return "Unknown"
                             Case 2
                                 Return "Desconocido"
+                            Case 3
+                                Return "Inconnu"
                         End Select
                     Else
                         Return "Unknown"
@@ -80,11 +104,15 @@ Namespace Utilities
                                         Return "Unsigned. Please check the validity and expiration date of the signing certificate"
                                     Case "ESN"
                                         Return "No firmado. Compruebe la validez y la fecha de expiración del certificado del controlador"
+                                    Case "FRA"
+                                        Return "Non signé. Veuillez vérifier la validité et la date d'expiration du certificat de signature."
                                 End Select
                             Case 1
                                 Return "Unsigned. Please check the validity and expiration date of the signing certificate"
                             Case 2
                                 Return "No firmado. Compruebe la validez y la fecha de expiración del certificado del controlador"
+                            Case 3
+                                Return "Non signé. Veuillez vérifier la validité et la date d'expiration du certificat de signature."
                         End Select
                     Else
                         Return "Unsigned. Please check the validity and expiration date of the signing certificate"
@@ -98,11 +126,15 @@ Namespace Utilities
                                         Return "Signed"
                                     Case "ESN"
                                         Return "Firmado"
+                                    Case "FRA"
+                                        Return "Signé"
                                 End Select
                             Case 1
                                 Return "Signed"
                             Case 2
                                 Return "Firmado"
+                            Case 3
+                                Return "Signé"
                         End Select
                     Else
                         Return "Signed"
@@ -122,11 +154,15 @@ Namespace Utilities
                                         Return "Not present"
                                     Case "ESN"
                                         Return "No presente"
+                                    Case "FRA"
+                                        Return "Absent"
                                 End Select
                             Case 1
                                 Return "Not present"
                             Case 2
                                 Return "No presente"
+                            Case 3
+                                Return "Absent"
                         End Select
                     Else
                         Return "Not present"
@@ -140,11 +176,15 @@ Namespace Utilities
                                         Return "Uninstall Pending"
                                     Case "ESN"
                                         Return "Desinstalación pendiente"
+                                    Case "FRA"
+                                        Return "Désinstallation en cours"
                                 End Select
                             Case 1
                                 Return "Uninstall Pending"
                             Case 2
                                 Return "Desinstalación pendiente"
+                            Case 3
+                                Return "Désinstallation en cours"
                         End Select
                     Else
                         Return "Uninstall Pending"
@@ -158,11 +198,15 @@ Namespace Utilities
                                         Return "Uninstalled"
                                     Case "ESN"
                                         Return "Desinstalado"
+                                    Case "FRA"
+                                        Return "Désinstallé"
                                 End Select
                             Case 1
                                 Return "Uninstalled"
                             Case 2
                                 Return "Desinstalado"
+                            Case 3
+                                Return "Désinstallé"
                         End Select
                     Else
                         Return "Uninstalled"
@@ -176,11 +220,15 @@ Namespace Utilities
                                         Return "Removed"
                                     Case "ESN"
                                         Return "Eliminado"
+                                    Case "FRA"
+                                        Return "Supprimé"
                                 End Select
                             Case 1
                                 Return "Removed"
                             Case 2
                                 Return "Eliminado"
+                            Case 3
+                                Return "Supprimé"
                         End Select
                     Else
                         Return "Removed"
@@ -194,11 +242,15 @@ Namespace Utilities
                                         Return "Installed"
                                     Case "ESN"
                                         Return "Instalado"
+                                    Case "FRA"
+                                        Return "Installé"
                                 End Select
                             Case 1
                                 Return "Installed"
                             Case 2
                                 Return "Instalado"
+                            Case 3
+                                Return "Installé"
                         End Select
                     Else
                         Return "Installed"
@@ -212,11 +264,15 @@ Namespace Utilities
                                         Return "Install Pending"
                                     Case "ESN"
                                         Return "Instalación pendiente"
+                                    Case "FRA"
+                                        Return "Installation en cours"
                                 End Select
                             Case 1
                                 Return "Install Pending"
                             Case 2
                                 Return "Instalación pendiente"
+                            Case 3
+                                Return "Installation en cours"
                         End Select
                     Else
                         Return "Install Pending"
@@ -230,11 +286,15 @@ Namespace Utilities
                                         Return "Superseded"
                                     Case "ESN"
                                         Return "Sustituido"
+                                    Case "FRA"
+                                        Return "Remplacé"
                                 End Select
                             Case 1
                                 Return "Superseded"
                             Case 2
                                 Return "Sustituido"
+                            Case 3
+                                Return "Remplacé"
                         End Select
                     Else
                         Return "Superseded"
@@ -248,11 +308,15 @@ Namespace Utilities
                                         Return "Partially Installed"
                                     Case "ESN"
                                         Return "Instalado parcialmente"
+                                    Case "FRA"
+                                        Return "Partiellement installé"
                                 End Select
                             Case 1
                                 Return "Partially Installed"
                             Case 2
                                 Return "Instalado parcialmente"
+                            Case 3
+                                Return "Partiellement installé"
                         End Select
                     Else
                         Return "Partially Installed"
@@ -272,11 +336,15 @@ Namespace Utilities
                                         Return "Not present"
                                     Case "ESN"
                                         Return "No presente"
+                                    Case "FRA"
+                                        Return "Absente"
                                 End Select
                             Case 1
                                 Return "Not present"
                             Case 2
                                 Return "No presente"
+                            Case 3
+                                Return "Absente"
                         End Select
                     Else
                         Return "Not present"
@@ -290,11 +358,15 @@ Namespace Utilities
                                         Return "Disable Pending"
                                     Case "ESN"
                                         Return "Deshabilitación pendiente"
+                                    Case "FRA"
+                                        Return "Invalidité en cours"
                                 End Select
                             Case 1
                                 Return "Disable Pending"
                             Case 2
                                 Return "Deshabilitación pendiente"
+                            Case 3
+                                Return "Invalidité en cours"
                         End Select
                     Else
                         Return "Disable Pending"
@@ -308,11 +380,15 @@ Namespace Utilities
                                         Return "Disabled"
                                     Case "ESN"
                                         Return "Deshabilitado"
+                                    Case "FRA"
+                                        Return "Désactivée"
                                 End Select
                             Case 1
                                 Return "Disabled"
                             Case 2
                                 Return "Deshabilitado"
+                            Case 3
+                                Return "Désactivée"
                         End Select
                     Else
                         Return "Disabled"
@@ -326,11 +402,15 @@ Namespace Utilities
                                         Return "Removed"
                                     Case "ESN"
                                         Return "Eliminado"
+                                    Case "FRA"
+                                        Return "Supprimée"
                                 End Select
                             Case 1
                                 Return "Removed"
                             Case 2
                                 Return "Eliminado"
+                            Case 3
+                                Return "Supprimée"
                         End Select
                     Else
                         Return "Removed"
@@ -344,11 +424,15 @@ Namespace Utilities
                                         Return "Enabled"
                                     Case "ESN"
                                         Return "Habilitado"
+                                    Case "FRA"
+                                        Return "Activée"
                                 End Select
                             Case 1
                                 Return "Enabled"
                             Case 2
                                 Return "Habilitado"
+                            Case 3
+                                Return "Activée"
                         End Select
                     Else
                         Return "Enabled"
@@ -362,11 +446,15 @@ Namespace Utilities
                                         Return "Enable Pending"
                                     Case "ESN"
                                         Return "Habilitación pendiente"
+                                    Case "FRA"
+                                        Return "Activation en cours"
                                 End Select
                             Case 1
                                 Return "Enable Pending"
                             Case 2
                                 Return "Habilitación pendiente"
+                            Case 3
+                                Return "Activation en cours"
                         End Select
                     Else
                         Return "Enable Pending"
@@ -380,11 +468,15 @@ Namespace Utilities
                                         Return "Superseded"
                                     Case "ESN"
                                         Return "Sustituido"
+                                    Case "FRA"
+                                        Return "Remplacée"
                                 End Select
                             Case 1
                                 Return "Superseded"
                             Case 2
                                 Return "Sustituido"
+                            Case 3
+                                Return "Remplacée"
                         End Select
                     Else
                         Return "Superseded"
@@ -398,11 +490,15 @@ Namespace Utilities
                                         Return "Partially Installed"
                                     Case "ESN"
                                         Return "Instalado parcialmente"
+                                    Case "FRA"
+                                        Return "Partiellement installée"
                                 End Select
                             Case 1
                                 Return "Partially Installed"
                             Case 2
                                 Return "Instalado parcialmente"
+                            Case 3
+                                Return "Partiellement installée"
                         End Select
                     Else
                         Return "Partially Installed"
@@ -422,11 +518,15 @@ Namespace Utilities
                                         Return "A restart is not required"
                                     Case "ESN"
                                         Return "No se requiere un reinicio"
+                                    Case "FRA"
+                                        Return "Un redémarrage n'est pas nécessaire"
                                 End Select
                             Case 1
                                 Return "A restart is not required"
                             Case 2
                                 Return "No se requiere un reinicio"
+                            Case 3
+                                Return "Un redémarrage n'est pas nécessaire"
                         End Select
                     Else
                         Return "A restart is not required"
@@ -440,11 +540,15 @@ Namespace Utilities
                                         Return "A restart may be required"
                                     Case "ESN"
                                         Return "Puede requerirse un reinicio"
+                                    Case "FRA"
+                                        Return "Un redémarrage peut être nécessaire"
                                 End Select
                             Case 1
                                 Return "A restart may be required"
                             Case 2
                                 Return "Puede requerirse un reinicio"
+                            Case 3
+                                Return "Un redémarrage peut être nécessaire"
                         End Select
                     Else
                         Return "A restart may be required"
@@ -458,11 +562,15 @@ Namespace Utilities
                                         Return "A restart is required"
                                     Case "ESN"
                                         Return "Se requiere un reinicio"
+                                    Case "FRA"
+                                        Return "Un redémarrage est nécessaire"
                                 End Select
                             Case 1
                                 Return "A restart is required"
                             Case 2
                                 Return "Se requiere un reinicio"
+                            Case 3
+                                Return "Un redémarrage est nécessaire"
                         End Select
                     Else
                         Return "A restart is required"
@@ -482,11 +590,15 @@ Namespace Utilities
                                         Return "Yes"
                                     Case "ESN"
                                         Return "Sí"
+                                    Case "FRA"
+                                        Return "Oui"
                                 End Select
                             Case 1
                                 Return "Yes"
                             Case 2
                                 Return "Sí"
+                            Case 3
+                                Return "Oui"
                         End Select
                     Else
                         Return "Yes"
@@ -500,11 +612,15 @@ Namespace Utilities
                                         Return "No"
                                     Case "ESN"
                                         Return "No"
+                                    Case "FRA"
+                                        Return "Non"
                                 End Select
                             Case 1
                                 Return "No"
                             Case 2
                                 Return "No"
+                            Case 3
+                                Return "Non"
                         End Select
                     Else
                         Return "No"
@@ -524,11 +640,15 @@ Namespace Utilities
                                         Return "Critical update"
                                     Case "ESN"
                                         Return "Actualización crítica"
+                                    Case "FRA"
+                                        Return "Mise à jour critique"
                                 End Select
                             Case 1
                                 Return "Critical update"
                             Case 2
                                 Return "Actualización crítica"
+                            Case 3
+                                Return "Mise à jour critique"
                         End Select
                     Else
                         Return "Critical update"
@@ -542,11 +662,15 @@ Namespace Utilities
                                         Return "Driver"
                                     Case "ESN"
                                         Return "Controlador"
+                                    Case "FRA"
+                                        Return "Pilote"
                                 End Select
                             Case 1
                                 Return "Driver"
                             Case 2
                                 Return "Controlador"
+                            Case 3
+                                Return "Pilote"
                         End Select
                     Else
                         Return "Driver"
@@ -560,11 +684,15 @@ Namespace Utilities
                                         Return "Feature Pack"
                                     Case "ESN"
                                         Return "Paquete de características"
+                                    Case "FRA"
+                                        Return "Pack de caractéristiques"
                                 End Select
                             Case 1
                                 Return "Feature Pack"
                             Case 2
                                 Return "Paquete de características"
+                            Case 3
+                                Return "Pack de caractéristiques"
                         End Select
                     Else
                         Return "Feature Pack"
@@ -578,11 +706,15 @@ Namespace Utilities
                                         Return "Foundation package"
                                     Case "ESN"
                                         Return "Paquete de fundación"
+                                    Case "FRA"
+                                        Return "Paquet de base"
                                 End Select
                             Case 1
                                 Return "Foundation package"
                             Case 2
                                 Return "Paquete de fundación"
+                            Case 3
+                                Return "Paquet de base"
                         End Select
                     Else
                         Return "Foundation package"
@@ -596,11 +728,15 @@ Namespace Utilities
                                         Return "Hotfix"
                                     Case "ESN"
                                         Return "Corrección de fallos"
+                                    Case "FRA"
+                                        Return "Correctif"
                                 End Select
                             Case 1
                                 Return "Hotfix"
                             Case 2
                                 Return "Corrección de fallos"
+                            Case 3
+                                Return "Correctif"
                         End Select
                     Else
                         Return "Hotfix"
@@ -614,11 +750,15 @@ Namespace Utilities
                                         Return "Language pack"
                                     Case "ESN"
                                         Return "Paquete de idiomas"
+                                    Case "FRA"
+                                        Return "Pack linguistique"
                                 End Select
                             Case 1
                                 Return "Language pack"
                             Case 2
                                 Return "Paquete de idiomas"
+                            Case 3
+                                Return "Pack linguistique"
                         End Select
                     Else
                         Return "Language pack"
@@ -632,11 +772,15 @@ Namespace Utilities
                                         Return "Local pack"
                                     Case "ESN"
                                         Return "Paquete local"
+                                    Case "FRA"
+                                        Return "Paquet local"
                                 End Select
                             Case 1
                                 Return "Local pack"
                             Case 2
                                 Return "Paquete local"
+                            Case 3
+                                Return "Paquet local"
                         End Select
                     Else
                         Return "Local pack"
@@ -650,11 +794,15 @@ Namespace Utilities
                                         Return "On Demand pack"
                                     Case "ESN"
                                         Return "Paquete de funcionalidad"
+                                    Case "FRA"
+                                        Return "Paquet de capacités"
                                 End Select
                             Case 1
                                 Return "On Demand pack"
                             Case 2
                                 Return "Paquete de funcionalidad"
+                            Case 3
+                                Return "Paquet de capacités"
                         End Select
                     Else
                         Return "On Demand pack"
@@ -668,11 +816,15 @@ Namespace Utilities
                                         Return "Other"
                                     Case "ESN"
                                         Return "Otros"
+                                    Case "FRA"
+                                        Return "Autres"
                                 End Select
                             Case 1
                                 Return "Other"
                             Case 2
                                 Return "Otros"
+                            Case 3
+                                Return "Autres"
                         End Select
                     Else
                         Return "Other"
@@ -686,11 +838,15 @@ Namespace Utilities
                                         Return "Product"
                                     Case "ESN"
                                         Return "Producto"
+                                    Case "FRA"
+                                        Return "Produit"
                                 End Select
                             Case 1
                                 Return "Product"
                             Case 2
                                 Return "Producto"
+                            Case 3
+                                Return "Produit"
                         End Select
                     Else
                         Return "Product"
@@ -704,11 +860,15 @@ Namespace Utilities
                                         Return "Security update"
                                     Case "ESN"
                                         Return "Actualización de seguridad"
+                                    Case "FRA"
+                                        Return "Mise à jour de la sécurité"
                                 End Select
                             Case 1
                                 Return "Security update"
                             Case 2
                                 Return "Actualización de seguridad"
+                            Case 3
+                                Return "Mise à jour de la sécurité"
                         End Select
                     Else
                         Return "Security update"
@@ -722,10 +882,14 @@ Namespace Utilities
                                         Return "Service Pack"
                                     Case "ESN"
                                         Return "Service Pack"
+                                    Case "FRA"
+                                        Return "Service Pack"
                                 End Select
                             Case 1
                                 Return "Service Pack"
                             Case 2
+                                Return "Service Pack"
+                            Case 3
                                 Return "Service Pack"
                         End Select
                     Else
@@ -740,11 +904,15 @@ Namespace Utilities
                                         Return "Software update"
                                     Case "ESN"
                                         Return "Actualización de software"
+                                    Case "FRA"
+                                        Return "Mise à jour du logiciel"
                                 End Select
                             Case 1
                                 Return "Software update"
                             Case 2
                                 Return "Actualización de software"
+                            Case 3
+                                Return "Mise à jour du logiciel"
                         End Select
                     Else
                         Return "Software update"
@@ -758,11 +926,15 @@ Namespace Utilities
                                         Return "Update"
                                     Case "ESN"
                                         Return "Actualización"
+                                    Case "FRA"
+                                        Return "Mise à jour"
                                 End Select
                             Case 1
                                 Return "Update"
                             Case 2
                                 Return "Actualización"
+                            Case 3
+                                Return "Mise à jour"
                         End Select
                     Else
                         Return "Update"
@@ -776,11 +948,15 @@ Namespace Utilities
                                         Return "Update rollup"
                                     Case "ESN"
                                         Return "Actualización acumulativa"
+                                    Case "FRA"
+                                        Return "Mise à jour cumulative"
                                 End Select
                             Case 1
                                 Return "Update rollup"
                             Case 2
                                 Return "Actualización acumulativa"
+                            Case 3
+                                Return "Mise à jour cumulative"
                         End Select
                     Else
                         Return "Update rollup"
@@ -800,11 +976,15 @@ Namespace Utilities
                                         Return "A boot up to the target image is required to fully install this package"
                                     Case "ESN"
                                         Return "Se requiere un arranque a la imagen de destino para instalar este paquete por completo"
+                                    Case "FRA"
+                                        Return "Un démarrage sur l'image cible est nécessaire pour installer complètement ce paquet."
                                 End Select
                             Case 1
                                 Return "A boot up to the target image is required to fully install this package"
                             Case 2
                                 Return "Se requiere un arranque a la imagen de destino para instalar este paquete por completo"
+                            Case 3
+                                Return "Un démarrage sur l'image cible est nécessaire pour installer complètement ce paquet."
                         End Select
                     Else
                         Return "A boot up to the target image is required to fully install this package"
@@ -818,11 +998,15 @@ Namespace Utilities
                                         Return "A boot up to the target image may be required to fully install this package"
                                     Case "ESN"
                                         Return "Se podría requerir un arranque a la imagen de destino para instalar este paquete por completo"
+                                    Case "FRA"
+                                        Return "Un démarrage sur l'image cible peut être nécessaire pour installer complètement ce paquet."
                                 End Select
                             Case 1
                                 Return "A boot up to the target image may be required to fully install this package"
                             Case 2
                                 Return "Se podría requerir un arranque a la imagen de destino para instalar este paquete por completo"
+                            Case 3
+                                Return "Un démarrage sur l'image cible peut être nécessaire pour installer complètement ce paquet."
                         End Select
                     Else
                         Return "A boot up to the target image may be required to fully install this package"
@@ -836,11 +1020,15 @@ Namespace Utilities
                                         Return "A boot up to the target image is not required to fully install this package"
                                     Case "ESN"
                                         Return "No se requiere un arranque a la imagen de destino para instalar este paquete por completo"
+                                    Case "FRA"
+                                        Return "Il n'est pas nécessaire de démarrer sur l'image cible pour installer complètement ce paquet."
                                 End Select
                             Case 1
                                 Return "A boot up to the target image is not required to fully install this package"
                             Case 2
                                 Return "No se requiere un arranque a la imagen de destino para instalar este paquete por completo"
+                            Case 3
+                                Return "Il n'est pas nécessaire de démarrer sur l'image cible pour installer complètement ce paquet."
                         End Select
                     Else
                         Return "A boot up to the target image is not required to fully install this package"

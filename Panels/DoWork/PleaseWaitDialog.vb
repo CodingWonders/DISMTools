@@ -46,11 +46,15 @@ Public Class PleaseWaitDialog
                         Label1.Text = "Please wait..."
                     Case "ESN"
                         Label1.Text = "Espere..."
+                    Case "FRA"
+                        Label1.Text = "Veuillez patienter..."
                 End Select
             Case 1
                 Label1.Text = "Please wait..."
             Case 2
                 Label1.Text = "Espere..."
+            Case 3
+                Label1.Text = "Veuillez patienter..."
         End Select
         Visible = True
         Panel1.BorderStyle = BorderStyle.None
