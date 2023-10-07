@@ -43,11 +43,15 @@ Public Class SetPETargetPath
                             msg = "The target path must be at least 3 characters and no longer than 32 characters"
                         Case "ESN"
                             msg = "La ruta de destino debe tener al menos 3 caracteres y no más de 32"
+                        Case "FRA"
+                            msg = "Le chemin cible doit être composé d'au moins 3 caractères et d'au plus 32 caractères."
                     End Select
                 Case 1
                     msg = "The target path must be at least 3 characters and no longer than 32 characters"
                 Case 2
                     msg = "La ruta de destino debe tener al menos 3 caracteres y no más de 32"
+                Case 3
+                    msg = "Le chemin cible doit être composé d'au moins 3 caractères et d'au plus 32 caractères."
             End Select
             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
             Exit Sub
@@ -60,11 +64,15 @@ Public Class SetPETargetPath
                             msg = "The target path must start with any letter other than A or B"
                         Case "ESN"
                             msg = "La ruta de destino debe empezar con cualquier letra que no sea A o B"
+                        Case "FRA"
+                            msg = "Le chemin cible doit commencer par une lettre autre que A ou B."
                     End Select
                 Case 1
                     msg = "The target path must start with any letter other than A or B"
                 Case 2
                     msg = "La ruta de destino debe empezar con cualquier letra que no sea A o B"
+                Case 3
+                    msg = "Le chemin cible doit commencer par une lettre autre que A ou B."
             End Select
             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
             Exit Sub
@@ -77,11 +85,15 @@ Public Class SetPETargetPath
                             msg = "A drive letter must be followed by :"
                         Case "ESN"
                             msg = "Una letra de disco debe estar seguida por :"
+                        Case "FRA"
+                            msg = "Une lettre de disque doit être suivie de :"
                     End Select
                 Case 1
                     msg = "A drive letter must be followed by :"
                 Case 2
                     msg = "Una letra de disco debe estar seguida por :"
+                Case 3
+                    msg = "Une lettre de disque doit être suivie de :"
             End Select
             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
             Exit Sub
@@ -94,11 +106,15 @@ Public Class SetPETargetPath
                             msg = "The target path must be absolute, and must not contain relative elements"
                         Case "ESN"
                             msg = "La ruta de destino debe ser absoluta, y no debe contener elementos relativos"
+                        Case "FRA"
+                            msg = "Le chemin cible doit être absolu et ne doit pas contenir d'éléments relatifs."
                     End Select
                 Case 1
                     msg = "The target path must be absolute, and must not contain relative elements"
                 Case 2
                     msg = "La ruta de destino debe ser absoluta, y no debe contener elementos relativos"
+                Case 3
+                    msg = "Le chemin cible doit être absolu et ne doit pas contenir d'éléments relatifs."
             End Select
             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
             Exit Sub
@@ -111,11 +127,15 @@ Public Class SetPETargetPath
                             msg = "The target path must not contain spaces or quotation marks"
                         Case "ESN"
                             msg = "La ruta de destino no debe contener espacios o comillas"
+                        Case "FRA"
+                            msg = "Le chemin cible ne doit pas contenir d'espaces ou de guillemets."
                     End Select
                 Case 1
                     msg = "The target path must not contain spaces or quotation marks"
                 Case 2
                     msg = "La ruta de destino no debe contener espacios o comillas"
+                Case 3
+                    msg = "Le chemin cible ne doit pas contenir d'espaces ou de guillemets."
             End Select
             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
             Exit Sub
@@ -151,6 +171,13 @@ Public Class SetPETargetPath
                         Label3.Text = "Ruta de destino:"
                         OK_Button.Text = "Aceptar"
                         Cancel_Button.Text = "Cancelar"
+                    Case "FRA"
+                        Text = "Configurer le chemin cible de Windows PE"
+                        Label1.Text = Text
+                        Label2.Text = "Le chemin cible est un répertoire dans lequel les fichiers Windows PE seront copiés afin de démarrer dans l'environnement. Veuillez indiquer un chemin cible et cliquer sur OK."
+                        Label3.Text = "Chemin cible :"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annuler"
                 End Select
             Case 1
                 Text = "Set Windows PE target path"
@@ -166,6 +193,13 @@ Public Class SetPETargetPath
                 Label3.Text = "Ruta de destino:"
                 OK_Button.Text = "Aceptar"
                 Cancel_Button.Text = "Cancelar"
+            Case 3
+                Text = "Configurer le chemin cible de Windows PE"
+                Label1.Text = Text
+                Label2.Text = "Le chemin cible est un répertoire dans lequel les fichiers Windows PE seront copiés afin de démarrer dans l'environnement. Veuillez indiquer un chemin cible et cliquer sur OK."
+                Label3.Text = "Chemin cible :"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annuler"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""

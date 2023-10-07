@@ -17,11 +17,15 @@ Public Class AddProvisioningPkg
                                 MsgBox("The specified provisioning package does not exist. Make sure it exists in the file system and try again.", vbOKOnly + vbCritical, Label1.Text)
                             Case "ESN"
                                 MsgBox("El paquete de aprovisionamiento especificado no existe. Asegúrese de que exista en el sistema de archivos e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
+                            Case "FRA"
+                                MsgBox("Le paquet de provisionnement spécifié n'existe pas. Assurez-vous qu'il existe dans le système de fichiers et réessayez.", vbOKOnly + vbCritical, Label1.Text)
                         End Select
                     Case 1
                         MsgBox("The specified provisioning package does not exist. Make sure it exists in the file system and try again.", vbOKOnly + vbCritical, Label1.Text)
                     Case 2
                         MsgBox("El paquete de aprovisionamiento especificado no existe. Asegúrese de que exista en el sistema de archivos e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
+                    Case 3
+                        MsgBox("Le paquet de provisionnement spécifié n'existe pas. Assurez-vous qu'il existe dans le système de fichiers et réessayez.", vbOKOnly + vbCritical, Label1.Text)
                 End Select
                 Exit Sub
             End If
@@ -36,11 +40,15 @@ Public Class AddProvisioningPkg
                                 msg = "The catalog file specified doesn't exist. We won't use this file if you proceed." & CrLf & CrLf & "Do you want to continue?"
                             Case "ESN"
                                 msg = "El archivo de catálogo especificado no existe. No usaremos este archivo si continúa." & CrLf & CrLf & "¿Desea continuar?"
+                            Case "FRA"
+                                msg = "Le fichier de catalogue spécifié n'existe pas. Nous n'utiliserons pas ce fichier si vous continuez." & CrLf & CrLf & "Voulez-vous continuer ?"
                         End Select
                     Case 1
                         msg = "The catalog file specified doesn't exist. We won't use this file if you proceed." & CrLf & CrLf & "Do you want to continue?"
                     Case 2
                         msg = "El archivo de catálogo especificado no existe. No usaremos este archivo si continúa." & CrLf & CrLf & "¿Desea continuar?"
+                    Case 3
+                        msg = "Le fichier de catalogue spécifié n'existe pas. Nous n'utiliserons pas ce fichier si vous continuez." & CrLf & CrLf & "Voulez-vous continuer ?"
                 End Select
                 If MsgBox(msg, vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
                     Exit Sub
@@ -56,11 +64,15 @@ Public Class AddProvisioningPkg
                             MsgBox("No provisioning package has been specified. Please specify a provisioning package to add and try again.", vbOKOnly + vbCritical, Label1.Text)
                         Case "ESN"
                             MsgBox("No se ha especificado un paquete de aprovisionamiento. Especifique un paquete de aprovisionamiento a añadir e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
+                        Case "FRA"
+                            MsgBox("Aucun paquet de provisionnement n'a été spécifié. Veuillez spécifier un paquet de provisionnement à ajouter et réessayer.", vbOKOnly + vbCritical, Label1.Text)
                     End Select
                 Case 1
                     MsgBox("No provisioning package has been specified. Please specify a provisioning package to add and try again.", vbOKOnly + vbCritical, Label1.Text)
                 Case 2
                     MsgBox("No se ha especificado un paquete de aprovisionamiento. Especifique un paquete de aprovisionamiento a añadir e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
+                Case 3
+                    MsgBox("Aucun paquet de provisionnement n'a été spécifié. Veuillez spécifier un paquet de provisionnement à ajouter et réessayer.", vbOKOnly + vbCritical, Label1.Text)
             End Select
             Exit Sub
         End If

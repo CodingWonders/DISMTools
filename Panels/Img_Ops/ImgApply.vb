@@ -16,16 +16,20 @@ Public Class ImgApply
                             MsgBox("The specified image file is not valid. Please specify a valid image and try again.", vbOKOnly + vbCritical, Label1.Text)
                         Case "ESN"
                             MsgBox("El archivo de imagen especificado no es válido. Especifique una imagen válida e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
+                        Case "FRA"
+                            MsgBox("Le fichier image spécifié n'est pas valide. Veuillez spécifier une image valide et réessayer.", vbOKOnly + vbCritical, Label1.Text)
                     End Select
                 Case 1
                     MsgBox("The specified image file is not valid. Please specify a valid image and try again.", vbOKOnly + vbCritical, Label1.Text)
                 Case 2
                     MsgBox("El archivo de imagen especificado no es válido. Especifique una imagen válida e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
+                Case 3
+                    MsgBox("Le fichier image spécifié n'est pas valide. Veuillez spécifier une image valide et réessayer.", vbOKOnly + vbCritical, Label1.Text)
             End Select
             Exit Sub
         End If
         ProgressPanel.ApplicationSourceImg = TextBox1.Text
-        ProgressPanel.ApplicationIndex = NumericUpDown1.Value
+        ProgressPanel.ApplicationIndex = ComboBox1.SelectedIndex + 1
         If RadioButton1.Checked Then
             ProgressPanel.ApplicationDestDir = TextBox2.Text
             ProgressPanel.ApplicationDestDrive = ""
@@ -161,6 +165,34 @@ Public Class ImgApply
                         GroupBox2.Text = "Opciones"
                         GroupBox3.Text = "Destino"
                         GroupBox4.Text = "Patrón de archivos SWM"
+                    Case "FRA"
+                        Text = "Appliquer une image"
+                        Label1.Text = Text
+                        Label2.Text = "Fichier de l'image originale :"
+                        Label3.Text = "Index de l'image:"
+                        Label4.Text = "Modèle de dénomination :"
+                        CheckBox1.Text = "Vérifier l'intégrité de l'image"
+                        CheckBox2.Text = "Verifier"
+                        CheckBox3.Text = "Utiliser la correction de la balise reparse"
+                        CheckBox4.Text = "Référence aux fichiers SWM"
+                        CheckBox5.Text = "Valider l'image pour Trusted Desktop"
+                        CheckBox6.Text = "Ajouter une image avec la configuration WIMBoot"
+                        CheckBox7.Text = "Appliquer l'image en mode compact"
+                        CheckBox8.Text = "Appliquer des attributs étendus"
+                        Button1.Text = "Parcourir..."
+                        Button2.Text = "Parcourir..."
+                        Button3.Text = "Spécifier..."
+                        Button4.Text = "Utiliser le nom de l'image"
+                        Button5.Text = "Scanner le modèle"
+                        UseMountedImgBtn.Text = "Utiliser une image montée"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annuler"
+                        RadioButton1.Text = "Répertoire de destination :"
+                        RadioButton2.Text = "Disque de destination :"
+                        GroupBox1.Text = "Source"
+                        GroupBox2.Text = "Paramètres"
+                        GroupBox3.Text = "Destination"
+                        GroupBox4.Text = "Modèle de fichier SWM"
                 End Select
             Case 1
                 Text = "Apply an image"
@@ -218,6 +250,34 @@ Public Class ImgApply
                 GroupBox2.Text = "Opciones"
                 GroupBox3.Text = "Destino"
                 GroupBox4.Text = "Patrón de archivos SWM"
+            Case 3
+                Text = "Appliquer une image"
+                Label1.Text = Text
+                Label2.Text = "Fichier de l'image originale :"
+                Label3.Text = "Index de l'image:"
+                Label4.Text = "Modèle de dénomination :"
+                CheckBox1.Text = "Vérifier l'intégrité de l'image"
+                CheckBox2.Text = "Verifier"
+                CheckBox3.Text = "Utiliser la correction de la balise reparse"
+                CheckBox4.Text = "Référence aux fichiers SWM"
+                CheckBox5.Text = "Valider l'image pour Trusted Desktop"
+                CheckBox6.Text = "Ajouter une image avec la configuration WIMBoot"
+                CheckBox7.Text = "Appliquer l'image en mode compact"
+                CheckBox8.Text = "Appliquer des attributs étendus"
+                Button1.Text = "Parcourir..."
+                Button2.Text = "Parcourir..."
+                Button3.Text = "Spécifier..."
+                Button4.Text = "Utiliser le nom de l'image"
+                Button5.Text = "Scanner le modèle"
+                UseMountedImgBtn.Text = "Utiliser une image montée"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annuler"
+                RadioButton1.Text = "Répertoire de destination :"
+                RadioButton2.Text = "Disque de destination :"
+                GroupBox1.Text = "Source"
+                GroupBox2.Text = "Paramètres"
+                GroupBox3.Text = "Destination"
+                GroupBox4.Text = "Modèle de fichier SWM"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
@@ -233,7 +293,7 @@ Public Class ImgApply
             GroupBox4.ForeColor = Color.White
             ListBox1.BackColor = Color.FromArgb(31, 31, 31)
             StatusStrip1.BackColor = Color.FromArgb(31, 31, 31)
-            NumericUpDown1.BackColor = Color.FromArgb(31, 31, 31)
+            ComboBox1.BackColor = Color.FromArgb(31, 31, 31)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Win10Title.BackColor = Color.White
             BackColor = Color.FromArgb(238, 238, 242)
@@ -246,9 +306,9 @@ Public Class ImgApply
             GroupBox2.ForeColor = Color.Black
             GroupBox3.ForeColor = Color.Black
             GroupBox4.ForeColor = Color.Black
-            NumericUpDown1.BackColor = Color.FromArgb(238, 238, 242)
+            ComboBox1.BackColor = Color.FromArgb(238, 238, 242)
         End If
-        NumericUpDown1.ForeColor = ForeColor
+        ComboBox1.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
         TextBox2.ForeColor = ForeColor
         TextBox3.ForeColor = ForeColor
@@ -265,11 +325,15 @@ Public Class ImgApply
                         ToolStripStatusLabel1.Text = "Please specify the naming pattern of the SWM files"
                     Case "ESN"
                         ToolStripStatusLabel1.Text = "Especifique la nomenclatura del patrón de los archivos SWM"
+                    Case "FRA"
+                        ToolStripStatusLabel1.Text = "Veuillez spécifier le modèle de dénomination des fichiers SWM"
                 End Select
             Case 1
                 ToolStripStatusLabel1.Text = "Please specify the naming pattern of the SWM files"
             Case 2
                 ToolStripStatusLabel1.Text = "Especifique la nomenclatura del patrón de los archivos SWM"
+            Case 3
+                ToolStripStatusLabel1.Text = "Veuillez spécifier le modèle de dénomination des fichiers SWM"
         End Select
         If MainForm.SourceImg = "N/A" Then
             UseMountedImgBtn.Enabled = False
@@ -289,28 +353,50 @@ Public Class ImgApply
     End Sub
 
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
-        If TextBox1.Text <> "" And File.Exists(TextBox1.Text) Then GetMaxIndexCount(TextBox1.Text) Else Exit Sub
+        If TextBox1.Text <> "" And File.Exists(TextBox1.Text) Then GetIndexes(TextBox1.Text) Else Exit Sub
         If TextBox1.Text.EndsWith(".swm") Then
             CheckBox4.Checked = True
             Button4.PerformClick()
         End If
     End Sub
 
-    Sub GetMaxIndexCount(ImgFile As String)
+    Sub GetIndexes(ImgFile As String)
         If MainForm.MountedImageDetectorBW.IsBusy Then MainForm.MountedImageDetectorBW.CancelAsync()
         While MainForm.MountedImageDetectorBW.IsBusy
             Application.DoEvents()
             Threading.Thread.Sleep(100)
         End While
         Dim imgInfo As DismImageInfoCollection = Nothing
+        ComboBox1.Items.Clear()
         Try
-            imgInfo = DismApi.GetImageInfo(TextBox1.Text)
-        Catch ex As DismNotInitializedException
             DismApi.Initialize(DismLogLevel.LogErrors)
             imgInfo = DismApi.GetImageInfo(TextBox1.Text)
+            For Each imageInfo In imgInfo
+                ComboBox1.Items.Add(imageInfo.ImageIndex & " (" & imageInfo.ImageName & ")")
+            Next
+        Catch ex As Exception
+            Dim msg As String = ""
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            msg = "Could not gather information of this image file. Reason:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                        Case "ESN"
+                            msg = "No pudimos obtener información de este archivo de imagen. Razón:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                        Case "FRA"
+                            msg = "Impossible de recueillir des informations sur ce fichier de l'image. Raison :" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                    End Select
+                Case 1
+                    msg = "Could not gather information of this image file. Reason:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                Case 2
+                    msg = "No pudimos obtener información de este archivo de imagen. Razón:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                Case 3
+                    msg = "Impossible de recueillir des informations sur ce fichier de l'image. Raison :" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+            End Select
+            MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+        Finally
+            DismApi.Shutdown()
         End Try
-        NumericUpDown1.Maximum = imgInfo.Count
-        DismApi.Shutdown()
         If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
     End Sub
 
@@ -348,6 +434,9 @@ Public Class ImgApply
                         Case "ESN"
                             MsgBox("Especifique el arhivo WIM de origen. Esto le permitirá usar los archivos SWM para la aplicación posterior de la imagen", vbOKOnly + vbCritical, "Aplicar una imagen")
                             ToolStripStatusLabel1.Text = "Esta nomenclatura de patrón devuelve " & ListBox1.Items.Count & " archivos SWM"
+                        Case "FRA"
+                            MsgBox("Veuillez indiquer un fichier WIM original. Cela vous permettra d'utiliser les fichiers SWM pour une application d'image ultérieure.", vbOKOnly + vbCritical, "Appliquer une image")
+                            ToolStripStatusLabel1.Text = "Ce modèle de dénomination renvoie " & ListBox1.Items.Count & " fichiers SWM"
                     End Select
                 Case 1
                     MsgBox("Please specify a source WIM file. This will let you use the SWM files for later image application", vbOKOnly + vbCritical, "Apply an image")
@@ -355,6 +444,9 @@ Public Class ImgApply
                 Case 2
                     MsgBox("Especifique el arhivo WIM de origen. Esto le permitirá usar los archivos SWM para la aplicación posterior de la imagen", vbOKOnly + vbCritical, "Aplicar una imagen")
                     ToolStripStatusLabel1.Text = "Esta nomenclatura de patrón devuelve " & ListBox1.Items.Count & " archivos SWM"
+                Case 3
+                    MsgBox("Veuillez indiquer un fichier WIM original. Cela vous permettra d'utiliser les fichiers SWM pour une application d'image ultérieure.", vbOKOnly + vbCritical, "Appliquer une image")
+                    ToolStripStatusLabel1.Text = "Ce modèle de dénomination renvoie " & ListBox1.Items.Count & " fichiers SWM"
             End Select
             Beep()
             Exit Sub
@@ -371,11 +463,15 @@ Public Class ImgApply
                         ToolStripStatusLabel1.Text = "This naming pattern returns " & ListBox1.Items.Count & " SWM files"
                     Case "ESN"
                         ToolStripStatusLabel1.Text = "Esta nomenclatura de patrón devuelve " & ListBox1.Items.Count & " archivos SWM"
+                    Case "FRA"
+                        ToolStripStatusLabel1.Text = "Ce modèle de dénomination renvoie " & ListBox1.Items.Count & " fichiers SWM"
                 End Select
             Case 1
                 ToolStripStatusLabel1.Text = "This naming pattern returns " & ListBox1.Items.Count & " SWM files"
             Case 2
                 ToolStripStatusLabel1.Text = "Esta nomenclatura de patrón devuelve " & ListBox1.Items.Count & " archivos SWM"
+            Case 3
+                ToolStripStatusLabel1.Text = "Ce modèle de dénomination renvoie " & ListBox1.Items.Count & " fichiers SWM"
         End Select
         If ListBox1.Items.Count <= 0 Then Beep()
     End Sub

@@ -22,6 +22,11 @@ Public Class InvalidSettingsDialog
                         Label1.Text = "El programa ha detectado configuraciones inválidas"
                         Label2.Text = "Las configuraciones inválidas han sido restablecidas a sus valores predeterminados. Compruebe los campos de abajo para más información:"
                         Button1.Text = "Aceptar"
+                    Case "FRA"
+                        Text = "Des paramètres non valides ont été détectés"
+                        Label1.Text = "Le programme a détecté des paramètres non valides"
+                        Label2.Text = "Les paramètres non valides ont été réinitialisés aux valeurs par défaut. Vérifiez les champs ci-dessous pour plus d'informations :"
+                        Button1.Text = "OK"
                 End Select
             Case 1
                 Text = "Invalid settings have been detected"
@@ -33,6 +38,11 @@ Public Class InvalidSettingsDialog
                 Label1.Text = "El programa ha detectado configuraciones inválidas"
                 Label2.Text = "Las configuraciones inválidas han sido restablecidas a sus valores predeterminados. Compruebe los campos de abajo para más información:"
                 Button1.Text = "Aceptar"
+            Case 3
+                Text = "Des paramètres non valides ont été détectés"
+                Label1.Text = "Le programme a détecté des paramètres non valides"
+                Label2.Text = "Les paramètres non valides ont été réinitialisés aux valeurs par défaut. Vérifiez les champs ci-dessous pour plus d'informations :"
+                Button1.Text = "OK"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)
@@ -51,11 +61,15 @@ Public Class InvalidSettingsDialog
                             Label3.Text = "The specified DISM executable does not exist:" & CrLf & Quote & MainForm.ProblematicStrings(0) & Quote
                         Case "ESN"
                             Label3.Text = "El ejecutable de DISM especificado no existe:" & CrLf & Quote & MainForm.ProblematicStrings(0) & Quote
+                        Case "FRA"
+                            Label3.Text = "L'exécutable DISM spécifié n'existe pas :" & CrLf & Quote & MainForm.ProblematicStrings(0) & Quote
                     End Select
                 Case 1
                     Label3.Text = "The specified DISM executable does not exist:" & CrLf & Quote & MainForm.ProblematicStrings(0) & Quote
                 Case 2
                     Label3.Text = "El ejecutable de DISM especificado no existe:" & CrLf & Quote & MainForm.ProblematicStrings(0) & Quote
+                Case 3
+                    Label3.Text = "L'exécutable DISM spécifié n'existe pas :" & CrLf & Quote & MainForm.ProblematicStrings(0) & Quote
             End Select
         Else
             Select Case MainForm.Language
@@ -65,11 +79,15 @@ Public Class InvalidSettingsDialog
                             Label3.Text = "The DISM executable setting seems to be in order"
                         Case "ESN"
                             Label3.Text = "La configuración del ejecutable de DISM parece estar bien"
+                        Case "FRA"
+                            Label3.Text = "Le paramétrage de l'exécutable DISM semble être en ordre"
                     End Select
                 Case 1
                     Label3.Text = "The DISM executable setting seems to be in order"
                 Case 2
                     Label3.Text = "La configuración del ejecutable de DISM parece estar bien"
+                Case 3
+                    Label3.Text = "Le paramétrage de l'exécutable DISM semble être en ordre"
             End Select
         End If
         If MainForm.isLogFontProblematic Then
@@ -80,11 +98,15 @@ Public Class InvalidSettingsDialog
                             Label4.Text = "The specified log font does not exist in this system:" & CrLf & Quote & MainForm.ProblematicStrings(1) & Quote
                         Case "ESN"
                             Label4.Text = "La fuente del registro especificada no existe en este sistema:" & CrLf & Quote & MainForm.ProblematicStrings(1) & Quote
+                        Case "FRA"
+                            Label4.Text = "La fonte spécifiée n'existe pas dans ce système :" & CrLf & Quote & MainForm.ProblematicStrings(1) & Quote
                     End Select
                 Case 1
                     Label4.Text = "The specified log font does not exist in this system:" & CrLf & Quote & MainForm.ProblematicStrings(1) & Quote
                 Case 2
                     Label4.Text = "La fuente del registro especificada no existe en este sistema:" & CrLf & Quote & MainForm.ProblematicStrings(1) & Quote
+                Case 3
+                    Label4.Text = "La fonte spécifiée n'existe pas dans ce système :" & CrLf & Quote & MainForm.ProblematicStrings(1) & Quote
             End Select
         Else
             Select Case MainForm.Language
@@ -94,11 +116,15 @@ Public Class InvalidSettingsDialog
                             Label4.Text = "The log font setting seems to be in order"
                         Case "ESN"
                             Label4.Text = "La configuración de la fuente de registro parece estar bien"
+                        Case "FRA"
+                            Label4.Text = "Le paramètre de la fonte du journal semble être dans l'ordre"
                     End Select
                 Case 1
                     Label4.Text = "The log font setting seems to be in order"
                 Case 2
                     Label4.Text = "La configuración de la fuente de registro parece estar bien"
+                Case 3
+                    Label4.Text = "Le paramètre de la fonte du journal semble être dans l'ordre"
             End Select
         End If
         If MainForm.isLogFileProblematic Then
@@ -109,11 +135,15 @@ Public Class InvalidSettingsDialog
                             Label5.Text = "The specified log file does not exist:" & CrLf & Quote & MainForm.ProblematicStrings(2) & Quote
                         Case "ESN"
                             Label5.Text = "El archivo de registro especificado no existe:" & CrLf & Quote & MainForm.ProblematicStrings(2) & Quote
+                        Case "FRA"
+                            Label5.Text = "Le fichier journal spécifié n'existe pas :" & CrLf & Quote & MainForm.ProblematicStrings(2) & Quote
                     End Select
                 Case 1
                     Label5.Text = "The specified log file does not exist:" & CrLf & Quote & MainForm.ProblematicStrings(2) & Quote
                 Case 2
                     Label5.Text = "El archivo de registro especificado no existe:" & CrLf & Quote & MainForm.ProblematicStrings(2) & Quote
+                Case 3
+                    Label5.Text = "Le fichier journal spécifié n'existe pas :" & CrLf & Quote & MainForm.ProblematicStrings(2) & Quote
             End Select
         Else
             Select Case MainForm.Language
@@ -123,11 +153,15 @@ Public Class InvalidSettingsDialog
                             Label5.Text = "The log file setting seems to be in order"
                         Case "ESN"
                             Label5.Text = "La configuración del archivo de registro parece estar bien"
+                        Case "FRA"
+                            Label5.Text = "Le paramètre du fichier journal semble être dans l'ordre"
                     End Select
                 Case 1
                     Label5.Text = "The log file setting seems to be in order"
                 Case 2
                     Label5.Text = "La configuración del archivo de registro parece estar bien"
+                Case 3
+                    Label5.Text = "Le paramètre du fichier journal semble être dans l'ordre"
             End Select
         End If
         If MainForm.isScratchDirProblematic Then
@@ -138,11 +172,15 @@ Public Class InvalidSettingsDialog
                             Label6.Text = "The specified scratch directory does not exist:" & CrLf & Quote & MainForm.ProblematicStrings(3) & Quote
                         Case "ESN"
                             Label6.Text = "El directorio temporal especificado no existe:" & CrLf & Quote & MainForm.ProblematicStrings(3) & Quote
+                        Case "FRA"
+                            Label6.Text = "Le répertoire temporaire spécifié n'existe pas :" & CrLf & Quote & MainForm.ProblematicStrings(3) & Quote
                     End Select
                 Case 1
                     Label6.Text = "The specified scratch directory does not exist:" & CrLf & Quote & MainForm.ProblematicStrings(3) & Quote
                 Case 2
                     Label6.Text = "El directorio temporal especificado no existe:" & CrLf & Quote & MainForm.ProblematicStrings(3) & Quote
+                Case 3
+
             End Select
         Else
             Select Case MainForm.Language
@@ -152,11 +190,15 @@ Public Class InvalidSettingsDialog
                             Label6.Text = "The scratch directory setting seems to be in order"
                         Case "ESN"
                             Label6.Text = "La configuración del directorio temporal parece estar bien"
+                        Case "FRA"
+                            Label6.Text = "Le paramètre du répertoire temporaire semble être dans l'ordre"
                     End Select
                 Case 1
                     Label6.Text = "The scratch directory setting seems to be in order"
                 Case 2
                     Label6.Text = "La configuración del directorio temporal parece estar bien"
+                Case 3
+                    Label6.Text = "Le paramètre du répertoire temporaire semble être dans l'ordre"
             End Select
         End If
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
