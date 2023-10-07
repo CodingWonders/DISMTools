@@ -486,11 +486,15 @@ Public Class ProgressPanel
                             LogButton.Text = "Hide log"
                         Case "ESN"
                             LogButton.Text = "Ocultar registro"
+                        Case "FRA"
+                            LogButton.Text = "Cacher le journal"
                     End Select
                 Case 1
                     LogButton.Text = "Hide log"
                 Case 2
                     LogButton.Text = "Ocultar registro"
+                Case 3
+                    LogButton.Text = "Cacher le journal"
             End Select
             Height = 420
         ElseIf Height = 420 Then
@@ -501,11 +505,15 @@ Public Class ProgressPanel
                             LogButton.Text = "Show log"
                         Case "ESN"
                             LogButton.Text = "Mostrar registro"
+                        Case "FRA"
+                            LogButton.Text = "Afficher le journal"
                     End Select
                 Case 1
                     LogButton.Text = "Show log"
                 Case 2
                     LogButton.Text = "Mostrar registro"
+                Case 3
+                    LogButton.Text = "Afficher le journal"
             End Select
             Height = 240
         End If
@@ -611,11 +619,15 @@ Public Class ProgressPanel
                         taskCountLbl.Text = "Tasks: 1/" & taskCount
                     Case "ESN"
                         taskCountLbl.Text = "Tareas: 1/" & taskCount
+                    Case "FRA"
+                        taskCountLbl.Text = "Tâches : 1/" & taskCount
                 End Select
             Case 1
                 taskCountLbl.Text = "Tasks: 1/" & taskCount
             Case 2
                 taskCountLbl.Text = "Tareas: 1/" & taskCount
+            Case 3
+                taskCountLbl.Text = "Tâches : 1/" & taskCount
         End Select
         CenterToParent()
     End Sub
@@ -661,11 +673,15 @@ Public Class ProgressPanel
                             taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskList.Count
                         Case "ESN"
                             taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskList.Count
+                        Case "FRA"
+                            taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskList.Count
                     End Select
                 Case 1
                     taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskList.Count
                 Case 2
                     taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskList.Count
+                Case 3
+                    taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskList.Count
             End Select
             If IsSuccessful Then successfulTasks += 1 Else failedTasks += 1
         Next
@@ -690,6 +706,9 @@ Public Class ProgressPanel
                         Case "ESN"
                             allTasks.Text = "Creando proyecto: " & Quote & projName & Quote
                             currentTask.Text = "Creando estructura del proyecto de DISMTools..."
+                        Case "FRA"
+                            allTasks.Text = "Création d'un projet en cours : " & Quote & projName & Quote
+                            currentTask.Text = "Création de la structure du projet DISMTools en cours..."
                     End Select
                 Case 1
                     allTasks.Text = "Creating project: " & Quote & projName & Quote
@@ -697,6 +716,9 @@ Public Class ProgressPanel
                 Case 2
                     allTasks.Text = "Creando proyecto: " & Quote & projName & Quote
                     currentTask.Text = "Creando estructura del proyecto de DISMTools..."
+                Case 3
+                    allTasks.Text = "Création d'un projet en cours : " & Quote & projName & Quote
+                    currentTask.Text = "Création de la structure du projet DISMTools en cours..."
             End Select
             LogView.AppendText(CrLf & "Creating project structure...")
             Try
@@ -807,6 +829,9 @@ Public Class ProgressPanel
                         Case "ESN"
                             allTasks.Text = "Aplicando imagen..."
                             currentTask.Text = "Aplicando imagen especificada al destino especificado..."
+                        Case "FRA"
+                            allTasks.Text = "Application de l'image en cours..."
+                            currentTask.Text = "Application de l'image spécifiée à la destination spécifiée en cours..."
                     End Select
                 Case 1
                     allTasks.Text = "Applying image..."
@@ -814,6 +839,9 @@ Public Class ProgressPanel
                 Case 2
                     allTasks.Text = "Aplicando imagen..."
                     currentTask.Text = "Aplicando imagen especificada al destino especificado..."
+                Case 3
+                    allTasks.Text = "Application de l'image en cours..."
+                    currentTask.Text = "Application de l'image spécifiée à la destination spécifiée en cours..."
             End Select
             LogView.AppendText(CrLf & "Applying image..." & CrLf & "Options:" & CrLf & _
                                "- Source image file: " & ApplicationSourceImg & CrLf & _
@@ -900,11 +928,15 @@ Public Class ProgressPanel
                             currentTask.Text = "Gathering error level..."
                         Case "ESN"
                             currentTask.Text = "Recopilando nivel de error..."
+                        Case "FRA"
+                            currentTask.Text = "Recueil du niveau d'erreur en cours..."
                     End Select
                 Case 1
                     currentTask.Text = "Gathering error level..."
                 Case 2
                     currentTask.Text = "Recopilando nivel de error..."
+                Case 3
+                    currentTask.Text = "Recueil du niveau d'erreur en cours..."
             End Select
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
@@ -923,6 +955,9 @@ Public Class ProgressPanel
                         Case "ESN"
                             allTasks.Text = "Capturando imagen..."
                             currentTask.Text = "Capturando directorio especificado en una nueva imagen..."
+                        Case "FRA"
+                            allTasks.Text = "Capture de l'image en cours..."
+                            currentTask.Text = "Capture du répertoire spécifié dans une nouvelle image en cours..."
                     End Select
                 Case 1
                     allTasks.Text = "Capturing image..."
@@ -930,6 +965,9 @@ Public Class ProgressPanel
                 Case 2
                     allTasks.Text = "Capturando imagen..."
                     currentTask.Text = "Capturando directorio especificado en una nueva imagen..."
+                Case 3
+                    allTasks.Text = "Capture de l'image en cours..."
+                    currentTask.Text = "Capture du répertoire spécifié dans une nouvelle image en cours..."
             End Select
             LogView.AppendText(CrLf & "Capturing directory..." & CrLf & "Options:" & CrLf &
                                "- Source directory: " & CaptureSourceDir & CrLf &
@@ -1022,11 +1060,15 @@ Public Class ProgressPanel
                             currentTask.Text = "Gathering error level..."
                         Case "ESN"
                             currentTask.Text = "Recopilando nivel de error..."
+                        Case "FRA"
+                            currentTask.Text = "Recueil du niveau d'erreur en cours..."
                     End Select
                 Case 1
                     currentTask.Text = "Gathering error level..."
                 Case 2
                     currentTask.Text = "Recopilando nivel de error..."
+                Case 3
+                    currentTask.Text = "Recueil du niveau d'erreur en cours..."
             End Select
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
@@ -1045,6 +1087,9 @@ Public Class ProgressPanel
                         Case "ESN"
                             allTasks.Text = "Guardando imagen..."
                             currentTask.Text = "Guardando cambios en la imagen..."
+                        Case "FRA"
+                            allTasks.Text = "Sauvegarde de l'image en cours..."
+                            currentTask.Text = "Sauvegarde des modifications apportées à l'image en cours..."
                     End Select
                 Case 1
                     allTasks.Text = "Committing image..."
@@ -1052,6 +1097,9 @@ Public Class ProgressPanel
                 Case 2
                     allTasks.Text = "Guardando imagen..."
                     currentTask.Text = "Guardando cambios en la imagen..."
+                Case 3
+                    allTasks.Text = "Sauvegarde de l'image en cours..."
+                    currentTask.Text = "Sauvegarde des modifications apportées à l'image en cours..."
             End Select
             LogView.AppendText(CrLf & "Saving changes..." & CrLf & "Options:" & CrLf &
                                "- Mount directory: " & MountDir)
@@ -1079,11 +1127,15 @@ Public Class ProgressPanel
                             currentTask.Text = "Gathering error level..."
                         Case "ESN"
                             currentTask.Text = "Recopilando nivel de error..."
+                        Case "FRA"
+                            currentTask.Text = "Recueil du niveau d'erreur en cours..."
                     End Select
                 Case 1
                     currentTask.Text = "Gathering error level..."
                 Case 2
                     currentTask.Text = "Recopilando nivel de error..."
+                Case 3
+                    currentTask.Text = "Recueil du niveau d'erreur en cours..."
             End Select
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
@@ -1104,11 +1156,15 @@ Public Class ProgressPanel
                                 taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
                             Case "ESN"
                                 taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                            Case "FRA"
+                                taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskCount
                         End Select
                     Case 1
                         taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
                     Case 2
                         taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                    Case 3
+                        taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskCount
                 End Select
             End If
             Select Case Language
@@ -1120,6 +1176,9 @@ Public Class ProgressPanel
                         Case "ESN"
                             allTasks.Text = "Eliminando imágenes..."
                             currentTask.Text = "Preparando para eliminar imágenes de volumen..."
+                        Case "FRA"
+                            allTasks.Text = "Suppression des images en cours..."
+                            currentTask.Text = "Préparation de la suppression des images de volume en cours..."
                     End Select
                 Case 1
                     allTasks.Text = "Deleting images..."
@@ -1127,6 +1186,9 @@ Public Class ProgressPanel
                 Case 2
                     allTasks.Text = "Eliminando imágenes..."
                     currentTask.Text = "Preparando para eliminar imágenes de volumen..."
+                Case 3
+                    allTasks.Text = "Suppression des images en cours..."
+                    currentTask.Text = "Préparation de la suppression des images de volume en cours..."
             End Select
             LogView.AppendText(CrLf & "Removing volume images from file..." & CrLf & _
                                "Options:" & CrLf & _
@@ -1150,11 +1212,15 @@ Public Class ProgressPanel
                                 currentTask.Text = "Removing volume image " & Quote & imgIndexDeletionNames(x) & Quote & "..."
                             Case "ESN"
                                 currentTask.Text = "Eliminando imagen de volumen " & Quote & imgIndexDeletionNames(x) & Quote & "..."
+                            Case "FRA"
+                                currentTask.Text = "Suppression de l'image de volume " & Quote & imgIndexDeletionNames(x) & Quote & " en cours..."
                         End Select
                     Case 1
                         currentTask.Text = "Removing volume image " & Quote & imgIndexDeletionNames(x) & Quote & "..."
                     Case 2
                         currentTask.Text = "Eliminando imagen de volumen " & Quote & imgIndexDeletionNames(x) & Quote & "..."
+                    Case 3
+                        currentTask.Text = "Suppression de l'image de volume " & Quote & imgIndexDeletionNames(x) & Quote & " en cours..."
                 End Select
                 LogView.AppendText(CrLf & _
                                    "- " & imgIndexDeletionNames(x) & "...")
@@ -1222,6 +1288,9 @@ Public Class ProgressPanel
                         Case "ESN"
                             allTasks.Text = "Montando imagen..."
                             currentTask.Text = "Montando imagen especificada..."
+                        Case "FRA"
+                            allTasks.Text = "Montage de l'image en cours..."
+                            currentTask.Text = "Montage de l'image spécifiée en cours..."
                     End Select
                 Case 1
                     allTasks.Text = "Mounting image..."
@@ -1229,6 +1298,9 @@ Public Class ProgressPanel
                 Case 2
                     allTasks.Text = "Montando imagen..."
                     currentTask.Text = "Montando imagen especificada..."
+                Case 3
+                    allTasks.Text = "Montage de l'image en cours..."
+                    currentTask.Text = "Montage de l'image spécifiée en cours..."
             End Select
             LogView.AppendText(CrLf & "Mounting image..." & CrLf & "Options:" & CrLf &
                                "- Image file: " & SourceImg & CrLf &
@@ -1274,11 +1346,15 @@ Public Class ProgressPanel
                             currentTask.Text = "Gathering error level..."
                         Case "ESN"
                             currentTask.Text = "Recopilando nivel de error..."
+                        Case "FRA"
+                            currentTask.Text = "Recueil du niveau d'erreur en cours..."
                     End Select
                 Case 1
                     currentTask.Text = "Gathering error level..."
                 Case 2
                     currentTask.Text = "Recopilando nivel de error..."
+                Case 3
+                    currentTask.Text = "Recueil du niveau d'erreur en cours..."
             End Select
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
@@ -1297,6 +1373,9 @@ Public Class ProgressPanel
                         Case "ESN"
                             allTasks.Text = "Remontando imagen..."
                             currentTask.Text = "Recargando sesión de servicio para la imagen montada..."
+                        Case "FRA"
+                            allTasks.Text = "Remontage de l'image en cours..."
+                            currentTask.Text = "Rechargement de la session de maintenance pour l'image montée en cours..."
                     End Select
                 Case 1
                     allTasks.Text = "Remounting image..."
@@ -1304,6 +1383,9 @@ Public Class ProgressPanel
                 Case 2
                     allTasks.Text = "Remontando imagen..."
                     currentTask.Text = "Recargando sesión de servicio para la imagen montada..."
+                Case 3
+                    allTasks.Text = "Remontage de l'image en cours..."
+                    currentTask.Text = "Rechargement de la session de maintenance pour l'image montée en cours..."
             End Select
             LogView.AppendText(CrLf & "Reloading servicing session..." & CrLf &
                                "- Mount directory: " & MountDir)
@@ -1325,11 +1407,15 @@ Public Class ProgressPanel
                             currentTask.Text = "Gathering error level..."
                         Case "ESN"
                             currentTask.Text = "Recopilando nivel de error..."
+                        Case "FRA"
+                            currentTask.Text = "Recueil du niveau d'erreur en cours..."
                     End Select
                 Case 1
                     currentTask.Text = "Gathering error level..."
                 Case 2
                     currentTask.Text = "Recopilando nivel de error..."
+                Case 3
+                    currentTask.Text = "Recueil du niveau d'erreur en cours..."
             End Select
             LogView.AppendText(CrLf & "Gathering error level...")
             If errCode Is Nothing Then
@@ -1351,6 +1437,9 @@ Public Class ProgressPanel
                         Case "ESN"
                             allTasks.Text = "Dividiendo imagen..."
                             currentTask.Text = "Dividiendo archivo WIM..."
+                        Case "FRA"
+                            allTasks.Text = "Division de l'image en cours..."
+                            currentTask.Text = "Division du fichier WIM en cours..."
                     End Select
                 Case 1
                     allTasks.Text = "Splitting image..."
@@ -1358,6 +1447,9 @@ Public Class ProgressPanel
                 Case 2
                     allTasks.Text = "Dividiendo imagen..."
                     currentTask.Text = "Dividiendo archivo WIM..."
+                Case 3
+                    allTasks.Text = "Division de l'image en cours..."
+                    currentTask.Text = "Division du fichier WIM en cours..."
             End Select
             LogView.AppendText(CrLf & "Splitting WIM file into SWM files..." & CrLf & _
                                "- Source image file to split: " & Quote & SWMSplitSourceFile & Quote & CrLf & _
@@ -1403,6 +1495,9 @@ Public Class ProgressPanel
                         Case "ESN"
                             allTasks.Text = "Desmontando imagen..."
                             currentTask.Text = "Desmontando archivo de imagen..."
+                        Case "FRA"
+                            allTasks.Text = "Démontage de l'image en cours..."
+                            currentTask.Text = "Démontage du fichier d'image en cours..."
                     End Select
                 Case 1
                     allTasks.Text = "Unmounting image..."
@@ -1410,6 +1505,9 @@ Public Class ProgressPanel
                 Case 2
                     allTasks.Text = "Desmontando imagen..."
                     currentTask.Text = "Desmontando archivo de imagen..."
+                Case 3
+                    allTasks.Text = "Démontage de l'image en cours..."
+                    currentTask.Text = "Démontage du fichier d'image en cours..."
             End Select
             If UMountLocalDir Then
                 LogView.AppendText(CrLf & "Unmounting image file from mount point..." & CrLf &
@@ -1473,11 +1571,15 @@ Public Class ProgressPanel
                                 currentTask.Text = "Gathering error level..."
                             Case "ESN"
                                 currentTask.Text = "Recopilando nivel de error..."
+                            Case "FRA"
+                                currentTask.Text = "Recueil du niveau d'erreur en cours..."
                         End Select
                     Case 1
                         currentTask.Text = "Gathering error level..."
                     Case 2
                         currentTask.Text = "Recopilando nivel de error..."
+                    Case 3
+                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
                 End Select
                 LogView.AppendText(CrLf & "Gathering error level...")
                 GetErrorCode(False)
@@ -1519,17 +1621,19 @@ Public Class ProgressPanel
                         LogView.AppendText(CrLf & "- Unmount operation: Discard")
                         CommandArgs &= " /discard"
                     End If
-                    If CheckImgIntegrity Then
-                        LogView.AppendText(CrLf & "- Check image integrity? Yes")
-                        CommandArgs &= " /checkintegrity"
-                    Else
-                        LogView.AppendText(CrLf & "- Check image integrity? No")
-                    End If
-                    If SaveToNewIndex Then
-                        LogView.AppendText(CrLf & "- Append changes to new index? Yes")
-                        CommandArgs &= " /append"
-                    Else
-                        LogView.AppendText(CrLf & "- Append changes to new index? No")
+                    If UMountOp = 0 Then
+                        If CheckImgIntegrity Then
+                            LogView.AppendText(CrLf & "- Check image integrity? Yes")
+                            CommandArgs &= " /checkintegrity"
+                        Else
+                            LogView.AppendText(CrLf & "- Check image integrity? No")
+                        End If
+                        If SaveToNewIndex Then
+                            LogView.AppendText(CrLf & "- Append changes to new index? Yes")
+                            CommandArgs &= " /append"
+                        Else
+                            LogView.AppendText(CrLf & "- Append changes to new index? No")
+                        End If
                     End If
                     DISMProc.StartInfo.Arguments = CommandArgs
                     DISMProc.Start()
@@ -1544,11 +1648,15 @@ Public Class ProgressPanel
                                 currentTask.Text = "Gathering error level..."
                             Case "ESN"
                                 currentTask.Text = "Recopilando nivel de error..."
+                            Case "FRA"
+                                currentTask.Text = "Recueil du niveau d'erreur en cours..."
                         End Select
                     Case 1
                         currentTask.Text = "Gathering error level..."
                     Case 2
                         currentTask.Text = "Recopilando nivel de error..."
+                    Case 3
+                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
                 End Select
                 LogView.AppendText(CrLf & "Gathering error level...")
                 GetErrorCode(False)
@@ -1570,6 +1678,9 @@ Public Class ProgressPanel
                         Case "ESN"
                             allTasks.Text = "Añadiendo paquetes..."
                             currentTask.Text = "Preparándonos para añadir paquetes..."
+                        Case "FRA"
+                            allTasks.Text = "Ajout des paquets en cours..."
+                            currentTask.Text = "Préparation de l'ajout des paquets en cours..."
                     End Select
                 Case 1
                     allTasks.Text = "Adding packages..."
@@ -1577,6 +1688,9 @@ Public Class ProgressPanel
                 Case 2
                     allTasks.Text = "Añadiendo paquetes..."
                     currentTask.Text = "Preparándonos para añadir paquetes..."
+                Case 3
+                    allTasks.Text = "Ajout des paquets en cours..."
+                    currentTask.Text = "Préparation de l'ajout des paquets en cours..."
             End Select
             LogView.AppendText(CrLf & "Adding packages to mounted image..." & CrLf &
                                "- Package source: " & pkgSource & CrLf)
@@ -1636,11 +1750,15 @@ Public Class ProgressPanel
                             currentTask.Text = "Adding " & pkgCount & " packages..."
                         Case "ESN"
                             currentTask.Text = "Añadiendo " & pkgCount & " paquetes..."
+                        Case "FRA"
+                            currentTask.Text = "Ajout de " & pkgCount & " paquets en cours..."
                     End Select
                 Case 1
                     currentTask.Text = "Adding " & pkgCount & " packages..."
                 Case 2
                     currentTask.Text = "Añadiendo " & pkgCount & " paquetes..."
+                Case 3
+                    currentTask.Text = "Ajout de " & pkgCount & " paquets en cours..."
             End Select
             CurrentPB.Style = ProgressBarStyle.Blocks
             LogView.AppendText(CrLf & CrLf &
@@ -1664,11 +1782,15 @@ Public Class ProgressPanel
                                 currentTask.Text = "Gathering error level..."
                             Case "ESN"
                                 currentTask.Text = "Recopilando nivel de error..."
+                            Case "FRA"
+                                currentTask.Text = "Recueil du niveau d'erreur en cours..."
                         End Select
                     Case 1
                         currentTask.Text = "Gathering error level..."
                     Case 2
                         currentTask.Text = "Recopilando nivel de error..."
+                    Case 3
+                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
                 End Select
                 LogView.AppendText(CrLf & "Gathering error level...")
                 GetErrorCode(False)
@@ -1685,11 +1807,15 @@ Public Class ProgressPanel
                                     currentTask.Text = "Adding package " & (x + 1) & " of " & pkgCount & "..."
                                 Case "ESN"
                                     currentTask.Text = "Añadiendo paquete " & (x + 1) & " de " & pkgCount & "..."
+                                Case "FRA"
+                                    currentTask.Text = "Ajout du paquet " & (x + 1) & " de " & pkgCount & " en cours..."
                             End Select
                         Case 1
                             currentTask.Text = "Adding package " & (x + 1) & " of " & pkgCount & "..."
                         Case 2
                             currentTask.Text = "Añadiendo paquete " & (x + 1) & " de " & pkgCount & "..."
+                        Case 3
+                            currentTask.Text = "Ajout du paquet " & (x + 1) & " de " & pkgCount & " en cours..."
                     End Select
                     CurrentPB.Value = x + 1
                     LogView.AppendText(CrLf &
@@ -1785,11 +1911,15 @@ Public Class ProgressPanel
                                 taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
                             Case "ESN"
                                 taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                            Case "FRA"
+                                taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskCount
                         End Select
                     Case 1
                         taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
                     Case 2
                         taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                    Case 3
+                        taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskCount
                 End Select
                 RunOps(8)
             Else
@@ -1812,6 +1942,9 @@ Public Class ProgressPanel
                         Case "ESN"
                             allTasks.Text = "Eliminando paquetes..."
                             currentTask.Text = "Preparándonos para eliminar paquetes..."
+                        Case "FRA"
+                            allTasks.Text = "Suppression des paquets en cours..."
+                            currentTask.Text = "Préparation de la suppression des paquets en cours..."
                     End Select
                 Case 1
                     allTasks.Text = "Removing packages..."
@@ -1819,6 +1952,9 @@ Public Class ProgressPanel
                 Case 2
                     allTasks.Text = "Eliminando paquetes..."
                     currentTask.Text = "Preparándonos para eliminar paquetes..."
+                Case 3
+                    allTasks.Text = "Suppression des paquets en cours..."
+                    currentTask.Text = "Préparation de la suppression des paquets en cours..."
             End Select
             LogView.AppendText(CrLf & "Removing packages from mounted image..." & CrLf &
                                "Enumerating packages to remove. Please wait...")
@@ -1833,11 +1969,15 @@ Public Class ProgressPanel
                             currentTask.Text = "Removing packages..."
                         Case "ESN"
                             currentTask.Text = "Eliminando paquetes..."
+                        Case "FRA"
+                            currentTask.Text = "Suppression des paquets en cours..."
                     End Select
                 Case 1
                     currentTask.Text = "Removing packages..."
                 Case 2
                     currentTask.Text = "Eliminando paquetes..."
+                Case 3
+                    currentTask.Text = "Suppression des paquets en cours..."
             End Select
             CurrentPB.Maximum = pkgRemovalCount
             If pkgRemovalOp = 0 Then
@@ -1851,11 +1991,15 @@ Public Class ProgressPanel
                                     currentTask.Text = "Removing package " & (x + 1) & " of " & pkgRemovalCount & "..."
                                 Case "ESN"
                                     currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & pkgRemovalCount & "..."
+                                Case "FRA"
+                                    currentTask.Text = "Suppression du paquet " & (x + 1) & " de " & pkgRemovalCount & " en cours..."
                             End Select
                         Case 1
                             currentTask.Text = "Removing package " & (x + 1) & " of " & pkgRemovalCount & "..."
                         Case 2
                             currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & pkgRemovalCount & "..."
+                        Case 3
+                            currentTask.Text = "Suppression du paquet " & (x + 1) & " de " & pkgRemovalCount & " en cours..."
                     End Select
                     LogView.AppendText(CrLf &
                                        "Package " & (x + 1) & " of " & pkgRemovalCount)
@@ -1946,11 +2090,15 @@ Public Class ProgressPanel
                                     currentTask.Text = "Removing package " & (x + 1) & " of " & pkgRemovalCount & "..."
                                 Case "ESN"
                                     currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & pkgRemovalCount & "..."
+                                Case "FRA"
+                                    currentTask.Text = "Suppression du paquet " & (x + 1) & " de " & pkgRemovalCount & " en cours..."
                             End Select
                         Case 1
                             currentTask.Text = "Removing package " & (x + 1) & " of " & pkgRemovalCount & "..."
                         Case 2
                             currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & pkgRemovalCount & "..."
+                        Case 3
+                            currentTask.Text = "Suppression du paquet " & (x + 1) & " de " & pkgRemovalCount & " en cours..."
                     End Select
                     LogView.AppendText(CrLf &
                                        "Package " & (x + 1) & " of " & pkgRemovalCount)
@@ -2053,6 +2201,9 @@ Public Class ProgressPanel
                         Case "ESN"
                             allTasks.Text = "Habilitando características..."
                             currentTask.Text = "Preparándonos para habilitar características..."
+                        Case "FRA"
+                            allTasks.Text = "Activation des caractéristiques en cours..."
+                            currentTask.Text = "Préparation de l'activation des caractéristiques en cours..."
                     End Select
                 Case 1
                     allTasks.Text = "Enabling features..."
@@ -2060,6 +2211,9 @@ Public Class ProgressPanel
                 Case 2
                     allTasks.Text = "Habilitando características..."
                     currentTask.Text = "Preparándonos para habilitar características..."
+                Case 3
+                    allTasks.Text = "Activation des caractéristiques en cours..."
+                    currentTask.Text = "Préparation de l'activation des caractéristiques en cours..."
             End Select
             LogView.AppendText(CrLf & "Enabling features..." & CrLf &
                                "Options:" & CrLf)
@@ -2112,11 +2266,15 @@ Public Class ProgressPanel
                             currentTask.Text = "Enabling features..."
                         Case "ESN"
                             currentTask.Text = "Habilitando características..."
+                        Case "FRA"
+                            currentTask.Text = "Activation des caractéristiques en cours..."
                     End Select
                 Case 1
                     currentTask.Text = "Enabling features..."
                 Case 2
                     currentTask.Text = "Habilitando características..."
+                Case 3
+                    currentTask.Text = "Activation des caractéristiques en cours..."
             End Select
             CurrentPB.Maximum = featEnablementCount
             For x = 0 To Array.LastIndexOf(featEnablementNames, featEnablementLastName)
@@ -2129,11 +2287,15 @@ Public Class ProgressPanel
                                 currentTask.Text = "Enabling feature " & (x + 1) & " of " & featEnablementCount & "..."
                             Case "ESN"
                                 currentTask.Text = "Habilitando característica " & (x + 1) & " de " & featEnablementCount & "..."
+                            Case "FRA"
+                                currentTask.Text = "Activation de la caractéristique " & (x + 1) & " de " & featEnablementCount & " en cours..."
                         End Select
                     Case 1
                         currentTask.Text = "Enabling feature " & (x + 1) & " of " & featEnablementCount & "..."
                     Case 2
                         currentTask.Text = "Habilitando característica " & (x + 1) & " de " & featEnablementCount & "..."
+                    Case 3
+                        currentTask.Text = "Activation de la caractéristique " & (x + 1) & " de " & featEnablementCount & " en cours..."
                 End Select
                 LogView.AppendText(CrLf &
                                    "Feature " & (x + 1) & " of " & featEnablementCount)
@@ -2215,6 +2377,9 @@ Public Class ProgressPanel
                         Case "ESN"
                             allTasks.Text = "Deshabilitando características..."
                             currentTask.Text = "Preparándonos para deshabilitar características..."
+                        Case "FRA"
+                            allTasks.Text = "Désactivation des caractéristiques en cours..."
+                            currentTask.Text = "Préparation de la désactivation des caractéristiques en cours..."
                     End Select
                 Case 1
                     allTasks.Text = "Disabling features..."
@@ -2222,6 +2387,9 @@ Public Class ProgressPanel
                 Case 2
                     allTasks.Text = "Deshabilitando características..."
                     currentTask.Text = "Preparándonos para deshabilitar características..."
+                Case 3
+                    allTasks.Text = "Désactivation des caractéristiques en cours..."
+                    currentTask.Text = "Préparation de la désactivation des caractéristiques en cours..."
             End Select
             LogView.AppendText(CrLf & "Disabling features..." & CrLf &
                                "Options:" & CrLf)
@@ -2252,11 +2420,15 @@ Public Class ProgressPanel
                             currentTask.Text = "Disabling features..."
                         Case "ESN"
                             currentTask.Text = "Deshabilitando características..."
+                        Case "FRA"
+                            currentTask.Text = "Désactivation des caractéristiques en cours..."
                     End Select
                 Case 1
                     currentTask.Text = "Disabling features..."
                 Case 2
                     currentTask.Text = "Deshabilitando características..."
+                Case 3
+                    currentTask.Text = "Désactivation des caractéristiques en cours..."
             End Select
             CurrentPB.Maximum = featDisablementCount
             For x = 0 To Array.LastIndexOf(featDisablementNames, featDisablementLastName)
@@ -2269,11 +2441,15 @@ Public Class ProgressPanel
                                 currentTask.Text = "Disabling feature " & (x + 1) & " of " & featDisablementCount & "..."
                             Case "ESN"
                                 currentTask.Text = "Deshabilitando característica " & (x + 1) & " de " & featDisablementCount & "..."
+                            Case "FRA"
+                                currentTask.Text = "Désactivation de la caractéristique " & (x + 1) & " de " & featDisablementCount & " en cours..."
                         End Select
                     Case 1
                         currentTask.Text = "Disabling feature " & (x + 1) & " of " & featDisablementCount & "..."
                     Case 2
                         currentTask.Text = "Deshabilitando característica " & (x + 1) & " de " & featDisablementCount & "..."
+                    Case 3
+                        currentTask.Text = "Désactivation de la caractéristique " & (x + 1) & " de " & featDisablementCount & " en cours..."
                 End Select
                 LogView.AppendText(CrLf &
                                    "Feature " & (x + 1) & " of " & featDisablementCount)
@@ -2346,11 +2522,15 @@ Public Class ProgressPanel
                             allTasks.Text = "Cleaning up the image..."
                         Case "ESN"
                             allTasks.Text = "Limpiando la imagen..."
+                        Case "FRA"
+                            allTasks.Text = "Nettoyage de l'image en cours..."
                     End Select
                 Case 1
                     allTasks.Text = "Cleaning up the image..."
                 Case 2
                     allTasks.Text = "Limpiando la imagen..."
+                Case 3
+                    allTasks.Text = "Nettoyage de l'image en cours..."
             End Select
             ' Initialize command
             DISMProc.StartInfo.FileName = DismProgram
@@ -2364,11 +2544,15 @@ Public Class ProgressPanel
                                     currentTask.Text = "Reverting pending servicing actions..."
                                 Case "ESN"
                                     currentTask.Text = "Revirtiendo acciones de servicio pendientes..."
+                                Case "FRA"
+                                    currentTask.Text = "Annulation des actions de maintenance en cours..."
                             End Select
                         Case 1
                             currentTask.Text = "Reverting pending servicing actions..."
                         Case 2
                             currentTask.Text = "Revirtiendo acciones de servicio pendientes..."
+                        Case 3
+                            currentTask.Text = "Annulation des actions de maintenance en cours..."
                     End Select
                     LogView.AppendText(CrLf & _
                                        "Reverting pending servicing actions...")
@@ -2381,11 +2565,15 @@ Public Class ProgressPanel
                                     currentTask.Text = "Cleaning up Service Pack backup files..."
                                 Case "ESN"
                                     currentTask.Text = "Limpiando archivos de copia de seguridad del Service Pack..."
+                                Case "FRA"
+                                    currentTask.Text = "Nettoyage des fichiers de sauvegarde du Service Pack en cours..."
                             End Select
                         Case 1
                             currentTask.Text = "Cleaning up Service Pack backup files..."
                         Case 2
                             currentTask.Text = "Limpiando archivos de copia de seguridad del Service Pack..."
+                        Case 3
+                            currentTask.Text = "Nettoyage des fichiers de sauvegarde du Service Pack en cours..."
                     End Select
                     LogView.AppendText(CrLf & _
                                        "Cleaning up Service Pack backup files..." & CrLf & _
@@ -2400,11 +2588,15 @@ Public Class ProgressPanel
                                     currentTask.Text = "Cleaning up the component store..."
                                 Case "ESN"
                                     currentTask.Text = "Limpiando el almacén de componentes..."
+                                Case "FRA"
+                                    currentTask.Text = "Nettoyage du stock de composants en cours..."
                             End Select
                         Case 1
                             currentTask.Text = "Cleaning up the component store..."
                         Case 2
                             currentTask.Text = "Limpiando el almacén de componentes..."
+                        Case 3
+                            currentTask.Text = "Nettoyage du stock de composants en cours..."
                     End Select
                     LogView.AppendText(CrLf & _
                                        "Cleaning up the component store..." & CrLf & _
@@ -2420,11 +2612,15 @@ Public Class ProgressPanel
                                     currentTask.Text = "Analyzing the component store..."
                                 Case "ESN"
                                     currentTask.Text = "Analizando el almacén de componentes..."
+                                Case "FRA"
+                                    currentTask.Text = "Analyse du stock de composants en cours..."
                             End Select
                         Case 1
                             currentTask.Text = "Analyzing the component store..."
                         Case 2
                             currentTask.Text = "Analizando el almacén de componentes..."
+                        Case 3
+                            currentTask.Text = "Analyse du stock de composants en cours..."
                     End Select
                     LogView.AppendText(CrLf & _
                                        "Analyzing the component store...")
@@ -2437,11 +2633,15 @@ Public Class ProgressPanel
                                     currentTask.Text = "Checking the component store health..."
                                 Case "ESN"
                                     currentTask.Text = "Comprobando la salud del almacén de componentes..."
+                                Case "FRA"
+                                    currentTask.Text = "Vérification de l'état de santé du stock de composants en cours..."
                             End Select
                         Case 1
                             currentTask.Text = "Checking the component store health..."
                         Case 2
                             currentTask.Text = "Comprobando la salud del almacén de componentes..."
+                        Case 3
+                            currentTask.Text = "Vérification de l'état de santé du stock de composants en cours..."
                     End Select
                     LogView.AppendText(CrLf & _
                                        "Checking the component store health...")
@@ -2454,11 +2654,15 @@ Public Class ProgressPanel
                                     currentTask.Text = "Scanning the component store..."
                                 Case "ESN"
                                     currentTask.Text = "Escaneando el almacén de componentes..."
+                                Case "FRA"
+                                    currentTask.Text = "Analyse du stock de composants en cours..."
                             End Select
                         Case 1
                             currentTask.Text = "Scanning the component store..."
                         Case 2
                             currentTask.Text = "Escaneando el almacén de componentes..."
+                        Case 3
+                            currentTask.Text = "Analyse du stock de composants en cours..."
                     End Select
                     LogView.AppendText(CrLf & _
                                        "Scanning the component store...")
@@ -2472,11 +2676,15 @@ Public Class ProgressPanel
                                     currentTask.Text = "Repairing the component store..."
                                 Case "ESN"
                                     currentTask.Text = "Reparando el almacén de componentes..."
+                                Case "FRA"
+                                    currentTask.Text = "Réparation du stock de composants en cours..."
                             End Select
                         Case 1
                             currentTask.Text = "Repairing the component store..."
                         Case 2
                             currentTask.Text = "Reparando el almacén de componentes..."
+                        Case 3
+                            currentTask.Text = "Réparation du stock de composants en cours..."
                     End Select
                     LogView.AppendText(CrLf & _
                                        "Repairing the component store..." & CrLf & _
@@ -2495,11 +2703,15 @@ Public Class ProgressPanel
                             currentTask.Text = "Gathering error level..."
                         Case "ESN"
                             currentTask.Text = "Recopilando nivel de error..."
+                        Case "FRA"
+                            currentTask.Text = "Recueil du niveau d'erreur en cours..."
                     End Select
                 Case 1
                     currentTask.Text = "Gathering error level..."
                 Case 2
                     currentTask.Text = "Recopilando nivel de error..."
+                Case 3
+                    currentTask.Text = "Recueil du niveau d'erreur en cours..."
             End Select
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
@@ -2518,6 +2730,9 @@ Public Class ProgressPanel
                         Case "ESN"
                             allTasks.Text = "Añadiendo paquete de aprovisionamiento..."
                             currentTask.Text = "Añadiendo paquete de aprovisionamiento a la imagen..."
+                        Case "FRA"
+                            allTasks.Text = "Ajout d'un paquet de provisionnement en cours..."
+                            currentTask.Text = "Ajout d'un paquet de provisionnement à l'image en cours..."
                     End Select
                 Case 1
                     allTasks.Text = "Adding provisioning package..."
@@ -2525,6 +2740,9 @@ Public Class ProgressPanel
                 Case 2
                     allTasks.Text = "Añadiendo paquete de aprovisionamiento..."
                     currentTask.Text = "Añadiendo paquete de aprovisionamiento a la imagen..."
+                Case 3
+                    allTasks.Text = "Ajout d'un paquet de provisionnement en cours..."
+                    currentTask.Text = "Ajout d'un paquet de provisionnement à l'image en cours..."
             End Select
             LogView.AppendText("Adding provisioning package to the image..." & CrLf & _
                                "Options:" & CrLf & CrLf & _
@@ -2557,11 +2775,15 @@ Public Class ProgressPanel
                                 taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
                             Case "ESN"
                                 taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                            Case "FRA"
+                                taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskCount
                         End Select
                     Case 1
                         taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
                     Case 2
                         taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                    Case 3
+                        taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskCount
                 End Select
                 RunOps(8)
             Else
@@ -2578,6 +2800,9 @@ Public Class ProgressPanel
                         Case "ESN"
                             allTasks.Text = "Añadiendo paquetes aprovisionados AppX..."
                             currentTask.Text = "Preparándonos para añadir paquetes aprovisionados AppX..."
+                        Case "FRA"
+                            allTasks.Text = "Ajout de paquets AppX en cours..."
+                            currentTask.Text = "Préparation de l'ajout de paquets AppX provisionnés en cours..."
                     End Select
                 Case 1
                     allTasks.Text = "Adding AppX packages..."
@@ -2585,6 +2810,9 @@ Public Class ProgressPanel
                 Case 2
                     allTasks.Text = "Añadiendo paquetes aprovisionados AppX..."
                     currentTask.Text = "Preparándonos para añadir paquetes aprovisionados AppX..."
+                Case 3
+                    allTasks.Text = "Ajout de paquets AppX en cours..."
+                    currentTask.Text = "Préparation de l'ajout de paquets AppX provisionnés en cours..."
             End Select
             LogView.AppendText(CrLf & "Adding provisioned AppX packages..." & CrLf & _
                                "Options:" & CrLf)
@@ -2624,11 +2852,15 @@ Public Class ProgressPanel
                             currentTask.Text = "Adding AppX packages..."
                         Case "ESN"
                             currentTask.Text = "Añadiendo paquetes AppX..."
+                        Case "FRA"
+                            currentTask.Text = "Ajout de paquets AppX en cours..."
                     End Select
                 Case 1
                     currentTask.Text = "Adding AppX packages..."
                 Case 2
                     currentTask.Text = "Añadiendo paquetes AppX..."
+                Case 3
+                    currentTask.Text = "Ajout de paquets AppX en cours..."
             End Select
             CurrentPB.Maximum = appxAdditionCount
             For x = 0 To Array.LastIndexOf(appxAdditionPackages, appxAdditionLastPackage)
@@ -2641,11 +2873,15 @@ Public Class ProgressPanel
                                 currentTask.Text = "Adding package " & (x + 1) & " of " & appxAdditionCount & "..."
                             Case "ESN"
                                 currentTask.Text = "Añadiendo paquete " & (x + 1) & " de " & appxAdditionCount & "..."
+                            Case "FRA"
+                                currentTask.Text = "Ajout du paquet " & (x + 1) & " de " & appxAdditionCount & " en cours..."
                         End Select
                     Case 1
                         currentTask.Text = "Adding package " & (x + 1) & " of " & appxAdditionCount & "..."
                     Case 2
                         currentTask.Text = "Añadiendo paquete " & (x + 1) & " de " & appxAdditionCount & "..."
+                    Case 3
+                        currentTask.Text = "Ajout du paquet " & (x + 1) & " de " & appxAdditionCount & " en cours..."
                 End Select
                 LogView.AppendText(CrLf & _
                                    "Package " & (x + 1) & " of " & appxAdditionCount)
@@ -2754,11 +2990,15 @@ Public Class ProgressPanel
                                 taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
                             Case "ESN"
                                 taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                            Case "FRA"
+                                taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskCount
                         End Select
                     Case 1
                         taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
                     Case 2
                         taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                    Case 3
+                        taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskCount
                 End Select
                 RunOps(8)
             Else
@@ -2779,6 +3019,9 @@ Public Class ProgressPanel
                         Case "ESN"
                             allTasks.Text = "Eliminando paquetes AppX..."
                             currentTask.Text = "Preparándonos para eliminar paquetes aprovisionados AppX..."
+                        Case "FRA"
+                            allTasks.Text = "Suppression des paquets AppX en cours..."
+                            currentTask.Text = "Préparation de la suppression des paquets AppX en cours..."
                     End Select
                 Case 1
                     allTasks.Text = "Removing AppX packages..."
@@ -2786,6 +3029,9 @@ Public Class ProgressPanel
                 Case 2
                     allTasks.Text = "Eliminando paquetes AppX..."
                     currentTask.Text = "Preparándonos para eliminar paquetes aprovisionados AppX..."
+                Case 3
+                    allTasks.Text = "Suppression des paquets AppX en cours..."
+                    currentTask.Text = "Préparation de la suppression des paquets AppX en cours..."
             End Select
             LogView.AppendText(CrLf & "Removing provisioned AppX packages..." & CrLf & CrLf & _
                                "Enumerating AppX packages to remove...")
@@ -2798,11 +3044,15 @@ Public Class ProgressPanel
                             currentTask.Text = "Removing AppX packages..."
                         Case "ESN"
                             currentTask.Text = "Eliminando paquetes AppX..."
+                        Case "FRA"
+                            currentTask.Text = "Suppression des paquets AppX en cours..."
                     End Select
                 Case 1
                     currentTask.Text = "Removing AppX packages..."
                 Case 2
                     currentTask.Text = "Eliminando paquetes AppX..."
+                Case 3
+                    currentTask.Text = "Suppression des paquets AppX en cours..."
             End Select
             CurrentPB.Maximum = appxRemovalCount
             For x = 0 To Array.LastIndexOf(appxRemovalPackages, appxRemovalLastPackage)
@@ -2815,11 +3065,15 @@ Public Class ProgressPanel
                                 currentTask.Text = "Removing package " & (x + 1) & " of " & appxRemovalCount & "..."
                             Case "ESN"
                                 currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & appxRemovalCount & "..."
+                            Case "FRA"
+                                currentTask.Text = "Suppression du paquet " & (x + 1) & " de " & appxRemovalCount & " en cours..."
                         End Select
                     Case 1
                         currentTask.Text = "Removing package " & (x + 1) & " of " & appxRemovalCount & "..."
                     Case 2
                         currentTask.Text = "Eliminando paquete " & (x + 1) & " de " & appxRemovalCount & "..."
+                    Case 3
+                        currentTask.Text = "Suppression du paquet " & (x + 1) & " de " & appxRemovalCount & " en cours..."
                 End Select
                 LogView.AppendText(CrLf & _
                                    "Package " & (x + 1) & " of " & appxRemovalCount)
@@ -2905,6 +3159,9 @@ Public Class ProgressPanel
                         Case "ESN"
                             allTasks.Text = "Añadiendo funcionalidades..."
                             currentTask.Text = "Preparándonos para añadir funcionalidades..."
+                        Case "FRA"
+                            allTasks.Text = "Ajout des capacités en cours..."
+                            currentTask.Text = "Préparation de l'ajout des capacités en cours..."
                     End Select
                 Case 1
                     allTasks.Text = "Adding capabilities..."
@@ -2912,6 +3169,9 @@ Public Class ProgressPanel
                 Case 2
                     allTasks.Text = "Añadiendo funcionalidades..."
                     currentTask.Text = "Preparándonos para añadir funcionalidades..."
+                Case 3
+                    allTasks.Text = "Ajout des capacités en cours..."
+                    currentTask.Text = "Préparation de l'ajout des capacités en cours..."
             End Select
             LogView.AppendText(CrLf & "Adding capabilities to mounted image..." & CrLf & _
                                "Options:" & CrLf & _
@@ -2930,11 +3190,15 @@ Public Class ProgressPanel
                             currentTask.Text = "Adding capabilities..."
                         Case "ESN"
                             currentTask.Text = "Añadiendo funcionalidades..."
+                        Case "FRA"
+                            currentTask.Text = "Ajout des capacités en cours..."
                     End Select
                 Case 1
                     currentTask.Text = "Adding capabilities..."
                 Case 2
                     currentTask.Text = "Añadiendo funcionalidades..."
+                Case 3
+                    currentTask.Text = "Ajout des capacités en cours..."
             End Select
             LogView.AppendText(CrLf & "Enumerating capabilities to add. Please wait..." & CrLf & _
                                "Total number of capabilities: " & capAdditionCount)
@@ -2949,11 +3213,15 @@ Public Class ProgressPanel
                                 currentTask.Text = "Adding capability " & (x + 1) & " of " & capAdditionCount & "..."
                             Case "ESN"
                                 currentTask.Text = "Añadiendo funcionalidad " & (x + 1) & " de " & capAdditionCount & "..."
+                            Case "FRA"
+                                currentTask.Text = "Ajout de la capacité " & (x + 1) & " de " & capAdditionCount & " en cours..."
                         End Select
                     Case 1
                         currentTask.Text = "Adding capability " & (x + 1) & " of " & capAdditionCount & "..."
                     Case 2
                         currentTask.Text = "Añadiendo funcionalidad " & (x + 1) & " de " & capAdditionCount & "..."
+                    Case 3
+                        currentTask.Text = "Ajout de la capacité " & (x + 1) & " de " & capAdditionCount & " en cours..."
                 End Select
                 CurrentPB.Value = x + 1
                 LogView.AppendText(CrLf & _
@@ -3023,11 +3291,15 @@ Public Class ProgressPanel
                                 taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
                             Case "ESN"
                                 taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                            Case "FRA"
+                                taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskCount
                         End Select
                     Case 1
                         taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
                     Case 2
                         taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                    Case 3
+                        taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskCount
                 End Select
                 RunOps(8)
             End If
@@ -3046,6 +3318,9 @@ Public Class ProgressPanel
                         Case "ESN"
                             allTasks.Text = "Eliminando funcionalidades..."
                             currentTask.Text = "Preparándonos para eliminar funcionalidades..."
+                        Case "FRA"
+                            allTasks.Text = "Suppression des capacités en cours..."
+                            currentTask.Text = "Préparation de la suppression des capacités en cours..."
                     End Select
                 Case 1
                     allTasks.Text = "Removing capabilities..."
@@ -3053,6 +3328,9 @@ Public Class ProgressPanel
                 Case 2
                     allTasks.Text = "Eliminando funcionalidades..."
                     currentTask.Text = "Preparándonos para eliminar funcionalidades..."
+                Case 3
+                    allTasks.Text = "Suppression des capacités en cours..."
+                    currentTask.Text = "Préparation de la suppression des capacités en cours..."
             End Select
             LogView.AppendText(CrLf & "Removing capabilities from mounted image..." & CrLf)
             Select Case Language
@@ -3062,11 +3340,15 @@ Public Class ProgressPanel
                             currentTask.Text = "Removing capabilities..."
                         Case "ESN"
                             currentTask.Text = "Eliminando funcionalidades..."
+                        Case "FRA"
+                            currentTask.Text = "Suppression des capacités en cours..."
                     End Select
                 Case 1
                     currentTask.Text = "Removing capabilities..."
                 Case 2
                     currentTask.Text = "Eliminando funcionalidades..."
+                Case 3
+                    currentTask.Text = "Suppression des capacités en cours..."
             End Select
             LogView.AppendText(CrLf & "Enumerating capabilities to remove. Please wait..." & CrLf & _
                                "Total number of capabilities: " & capRemovalCount)
@@ -3081,11 +3363,15 @@ Public Class ProgressPanel
                                 currentTask.Text = "Removing capability " & (x + 1) & " of " & capRemovalCount & "..."
                             Case "ESN"
                                 currentTask.Text = "Eliminando funcionalidad " & (x + 1) & " de " & capRemovalCount & "..."
+                            Case "FRA"
+                                currentTask.Text = "Suppression de la capacité " & (x + 1) & " de " & capRemovalCount & " en cours..."
                         End Select
                     Case 1
                         currentTask.Text = "Removing capability " & (x + 1) & " of " & capRemovalCount & "..."
                     Case 2
                         currentTask.Text = "Eliminando funcionalidad " & (x + 1) & " de " & capRemovalCount & "..."
+                    Case 3
+                        currentTask.Text = "Suppression de la capacité " & (x + 1) & " de " & capRemovalCount & " en cours..."
                 End Select
                 CurrentPB.Value = x + 1
                 LogView.AppendText(CrLf & _
@@ -3153,6 +3439,9 @@ Public Class ProgressPanel
                         Case "ESN"
                             allTasks.Text = "Añadiendo controladores..."
                             currentTask.Text = "Preparándonos para añadir controladores..."
+                        Case "FRA"
+                            allTasks.Text = "Ajout des pilotes en cours..."
+                            currentTask.Text = "Préparation de l'ajout des pilotes en cours..."
                     End Select
                 Case 1
                     allTasks.Text = "Adding drivers..."
@@ -3160,6 +3449,9 @@ Public Class ProgressPanel
                 Case 2
                     allTasks.Text = "Añadiendo controladores..."
                     currentTask.Text = "Preparándonos para añadir controladores..."
+                Case 3
+                    allTasks.Text = "Ajout des pilotes en cours..."
+                    currentTask.Text = "Préparation de l'ajout des pilotes en cours..."
             End Select
             LogView.AppendText(CrLf & "Adding driver packages to mounted image..." & CrLf & _
                                "Options:" & CrLf & _
@@ -3176,11 +3468,15 @@ Public Class ProgressPanel
                             currentTask.Text = "Adding drivers..."
                         Case "ESN"
                             currentTask.Text = "Añadiendo controladores..."
+                        Case "FRA"
+                            currentTask.Text = "Ajout des pilotes en cours..."
                     End Select
                 Case 1
                     currentTask.Text = "Adding drivers..."
                 Case 2
                     currentTask.Text = "Añadiendo controladores..."
+                Case 3
+                    currentTask.Text = "Ajout des pilotes en cours..."
             End Select
             LogView.AppendText(CrLf & "Enumerating drivers to add. Please wait..." & CrLf & _
                                "Total number of drivers: " & drvAdditionCount)
@@ -3195,11 +3491,15 @@ Public Class ProgressPanel
                                 currentTask.Text = "Adding driver " & (x + 1) & " of " & drvAdditionCount & "..."
                             Case "ESN"
                                 currentTask.Text = "Añadiendo controlador " & (x + 1) & " de " & drvAdditionCount & "..."
+                            Case "FRA"
+                                currentTask.Text = "Ajout du pilote " & (x + 1) & " de " & drvAdditionCount & " en cours..."
                         End Select
                     Case 1
                         currentTask.Text = "Adding driver " & (x + 1) & " of " & drvAdditionCount & "..."
                     Case 2
                         currentTask.Text = "Añadiendo controlador " & (x + 1) & " de " & drvAdditionCount & "..."
+                    Case 3
+                        currentTask.Text = "Ajout du pilote " & (x + 1) & " de " & drvAdditionCount & " en cours..."
                 End Select
                 CurrentPB.Value = x + 1
                 LogView.AppendText(CrLf & _
@@ -3291,11 +3591,15 @@ Public Class ProgressPanel
                                 taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
                             Case "ESN"
                                 taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                            Case "FRA"
+                                taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskCount
                         End Select
                     Case 1
                         taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
                     Case 2
                         taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
+                    Case 3
+                        taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskCount
                 End Select
                 RunOps(8)
             End If
@@ -3314,6 +3618,9 @@ Public Class ProgressPanel
                         Case "ESN"
                             allTasks.Text = "Eliminando controladores..."
                             currentTask.Text = "Preparándonos para eliminar controladores..."
+                        Case "FRA"
+                            allTasks.Text = "Suppression des pilotes en cours..."
+                            currentTask.Text = "Préparation de la suppression des pilotes en cours..."
                     End Select
                 Case 1
                     allTasks.Text = "Removing drivers..."
@@ -3321,6 +3628,9 @@ Public Class ProgressPanel
                 Case 2
                     allTasks.Text = "Eliminando controladores..."
                     currentTask.Text = "Preparándonos para eliminar controladores..."
+                Case 3
+                    allTasks.Text = "Suppression des pilotes en cours..."
+                    currentTask.Text = "Préparation de la suppression des pilotes en cours..."
             End Select
             LogView.AppendText(CrLf & "Removing driver packages from mounted image..." & CrLf)
             ' Get all driver packages
@@ -3340,11 +3650,15 @@ Public Class ProgressPanel
                             currentTask.Text = "Removing drivers..."
                         Case "ESN"
                             currentTask.Text = "Eliminando controladores..."
+                        Case "FRA"
+                            currentTask.Text = "Suppression des pilotes en cours..."
                     End Select
                 Case 1
                     currentTask.Text = "Removing drivers..."
                 Case 2
                     currentTask.Text = "Eliminando controladores..."
+                Case 3
+                    currentTask.Text = "Suppression des pilotes en cours..."
             End Select
             LogView.AppendText(CrLf & "Enumerating drivers to remove. Please wait..." & CrLf & _
                                "Total number of drivers: " & drvRemovalCount)
@@ -3359,11 +3673,15 @@ Public Class ProgressPanel
                                 currentTask.Text = "Removing driver " & (x + 1) & " of " & drvRemovalCount & "..."
                             Case "ESN"
                                 currentTask.Text = "Eliminando controlador " & (x + 1) & " de " & drvRemovalCount & "..."
+                            Case "FRA"
+                                currentTask.Text = "Suppression du pilote " & (x + 1) & " de " & drvRemovalCount & " en cours..."
                         End Select
                     Case 1
                         currentTask.Text = "Removing driver " & (x + 1) & " of " & drvRemovalCount & "..."
                     Case 2
                         currentTask.Text = "Eliminando controlador " & (x + 1) & " de " & drvRemovalCount & "..."
+                    Case 3
+                        currentTask.Text = "Suppression du pilote " & (x + 1) & " de " & drvRemovalCount & " en cours..."
                 End Select
                 CurrentPB.Value = x + 1
                 LogView.AppendText(CrLf & _
@@ -3450,6 +3768,9 @@ Public Class ProgressPanel
                         Case "ESN"
                             allTasks.Text = "Exportando controladores..."
                             currentTask.Text = "Exportando controladores de terceros a la carpeta especificada..."
+                        Case "FRA"
+                            allTasks.Text = "Exportation des pilotes en cours..."
+                            currentTask.Text = "Exportation de pilotes tiers dans le dossier spécifié en cours..."
                     End Select
                 Case 1
                     allTasks.Text = "Exporting drivers..."
@@ -3457,6 +3778,9 @@ Public Class ProgressPanel
                 Case 2
                     allTasks.Text = "Exportando controladores..."
                     currentTask.Text = "Exportando controladores de terceros a la carpeta especificada..."
+                Case 3
+                    allTasks.Text = "Exportation des pilotes en cours..."
+                    currentTask.Text = "Exportation de pilotes tiers dans le dossier spécifié en cours..."
             End Select
             LogView.AppendText(CrLf & "Exporting drivers to specified folder..." & CrLf & _
                                "- Export target: " & Quote & drvExportTarget & Quote)
@@ -3498,6 +3822,9 @@ Public Class ProgressPanel
                         Case "ESN"
                             allTasks.Text = "Estableciendo el espacio temporal..."
                             currentTask.Text = "Estableciendo el espacio temporal de Windows PE..."
+                        Case "FRA"
+                            allTasks.Text = "Configuration de l'espace temporaire en cours..."
+                            currentTask.Text = "Configuration de l'espace temporaire de Windows PE en cours..."
                     End Select
                 Case 1
                     allTasks.Text = "Setting the scratch space..."
@@ -3505,6 +3832,9 @@ Public Class ProgressPanel
                 Case 2
                     allTasks.Text = "Estableciendo el espacio temporal..."
                     currentTask.Text = "Estableciendo el espacio temporal de Windows PE..."
+                Case 3
+                    allTasks.Text = "Configuration de l'espace temporaire en cours..."
+                    currentTask.Text = "Configuration de l'espace temporaire de Windows PE en cours..."
             End Select
             LogView.AppendText(CrLf & "Setting the Windows PE scratch space..." & CrLf & _
                                "- New scratch space amount: " & peNewScratchSpace & " MB")
@@ -3535,6 +3865,9 @@ Public Class ProgressPanel
                         Case "ESN"
                             allTasks.Text = "Estableciendo la ruta de destino..."
                             currentTask.Text = "Estableciendo la ruta de destino de Windows PE..."
+                        Case "FRA"
+                            allTasks.Text = "Configuration du chemin cible en cours..."
+                            currentTask.Text = "Configuration du chemin cible de Windows PE en cours..."
                     End Select
                 Case 1
                     allTasks.Text = "Setting the target path..."
@@ -3542,6 +3875,9 @@ Public Class ProgressPanel
                 Case 2
                     allTasks.Text = "Estableciendo la ruta de destino..."
                     currentTask.Text = "Estableciendo la ruta de destino de Windows PE..."
+                Case 3
+                    allTasks.Text = "Configuration du chemin cible en cours..."
+                    currentTask.Text = "Configuration du chemin cible de Windows PE en cours..."
             End Select
             LogView.AppendText(CrLf & "Setting the Windows PE target path..." & CrLf & _
                                "- New target path: " & Quote & peNewTargetPath & Quote)
@@ -3581,7 +3917,6 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 991 Then
-            ' Convert image formats. Right now, only index 1 will be converted (exported) to a WIM/ESD file
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3591,6 +3926,9 @@ Public Class ProgressPanel
                         Case "ESN"
                             allTasks.Text = "Convirtiendo imagen..."
                             currentTask.Text = "Convirtiendo imagen especificada"
+                        Case "FRA"
+                            allTasks.Text = "Conversion de l'image en cours..."
+                            currentTask.Text = "Conversion de l'image spécifiée en cours..."
                     End Select
                 Case 1
                     allTasks.Text = "Converting image..."
@@ -3598,6 +3936,9 @@ Public Class ProgressPanel
                 Case 2
                     allTasks.Text = "Convirtiendo imagen..."
                     currentTask.Text = "Convirtiendo imagen especificada"
+                Case 3
+                    allTasks.Text = "Conversion de l'image en cours..."
+                    currentTask.Text = "Conversion de l'image spécifiée en cours..."
             End Select
             LogView.AppendText(CrLf & "Converting image..." & CrLf &
                                "Options:" & CrLf)
@@ -3640,11 +3981,15 @@ Public Class ProgressPanel
                             currentTask.Text = "Gathering error level..."
                         Case "ESN"
                             currentTask.Text = "Recopilando nivel de error..."
+                        Case "FRA"
+                            currentTask.Text = "Recueil du niveau d'erreur en cours..."
                     End Select
                 Case 1
                     currentTask.Text = "Gathering error level..."
                 Case 2
                     currentTask.Text = "Recopilando nivel de error..."
+                Case 3
+                    currentTask.Text = "Recueil du niveau d'erreur en cours..."
             End Select
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
@@ -3663,6 +4008,9 @@ Public Class ProgressPanel
                         Case "ESN"
                             allTasks.Text = "Combinando archivos SWM..."
                             currentTask.Text = "Combinando archivos SWM en un archivo WIM..."
+                        Case "FRA"
+                            allTasks.Text = "Fusion des fichiers SWM en cours..."
+                            currentTask.Text = "Fusion des fichiers SWM dans un fichier WIM en cours..."
                     End Select
                 Case 1
                     allTasks.Text = "Merging SWM files..."
@@ -3670,6 +4018,9 @@ Public Class ProgressPanel
                 Case 2
                     allTasks.Text = "Combinando archivos SWM..."
                     currentTask.Text = "Combinando archivos SWM en un archivo WIM..."
+                Case 3
+                    allTasks.Text = "Fusion des fichiers SWM en cours..."
+                    currentTask.Text = "Fusion des fichiers SWM dans un fichier WIM en cours..."
             End Select
             LogView.AppendText(CrLf & "Merging SWM files into a WIM file..." & CrLf & _
                                "Options:" & CrLf)
@@ -3701,11 +4052,15 @@ Public Class ProgressPanel
                             currentTask.Text = "Gathering error level..."
                         Case "ESN"
                             currentTask.Text = "Recopilando nivel de error..."
+                        Case "FRA"
+                            currentTask.Text = "Recueil du niveau d'erreur en cours..."
                     End Select
                 Case 1
                     currentTask.Text = "Gathering error level..."
                 Case 2
                     currentTask.Text = "Recopilando nivel de error..."
+                Case 3
+                    currentTask.Text = "Recueil du niveau d'erreur en cours..."
             End Select
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
@@ -3724,6 +4079,9 @@ Public Class ProgressPanel
                         Case "ESN"
                             allTasks.Text = "Cambiando índices de imagen..."
                             currentTask.Text = "Desmontando índice de origen..."
+                        Case "FRA"
+                            allTasks.Text = "Changement d'index de l'image en cours..."
+                            currentTask.Text = "Démontage de l'index original en cours..."
                     End Select
                 Case 1
                     allTasks.Text = "Switching image indexes..."
@@ -3731,6 +4089,9 @@ Public Class ProgressPanel
                 Case 2
                     allTasks.Text = "Cambiando índices de imagen..."
                     currentTask.Text = "Desmontando índice de origen..."
+                Case 3
+                    allTasks.Text = "Changement d'index de l'image en cours..."
+                    currentTask.Text = "Démontage de l'index original en cours..."
             End Select
             LogView.AppendText(CrLf & "Switching image indexes..." & CrLf & _
                                "Options:" & CrLf)
@@ -3771,11 +4132,15 @@ Public Class ProgressPanel
                             currentTask.Text = "Gathering error level..."
                         Case "ESN"
                             currentTask.Text = "Recopilando nivel de error..."
+                        Case "FRA"
+                            currentTask.Text = "Recueil du niveau d'erreur en cours..."
                     End Select
                 Case 1
                     currentTask.Text = "Gathering error level..."
                 Case 2
                     currentTask.Text = "Recopilando nivel de error..."
+                Case 3
+                    currentTask.Text = "Recueil du niveau d'erreur en cours..."
             End Select
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
@@ -3793,11 +4158,15 @@ Public Class ProgressPanel
                                 currentTask.Text = "Unmounting source index..."
                             Case "ESN"
                                 currentTask.Text = "Desmontando índice de origen..."
+                            Case "FRA"
+                                currentTask.Text = "Démontage de l'index original en cours..."
                         End Select
                     Case 1
                         currentTask.Text = "Unmounting source index..."
                     Case 2
                         currentTask.Text = "Desmontando índice de origen..."
+                    Case 3
+                        currentTask.Text = "Démontage de l'index original en cours..."
                 End Select
                 Select Case DismVersionChecker.ProductMajorPart
                     Case 6
@@ -3820,11 +4189,15 @@ Public Class ProgressPanel
                                 currentTask.Text = "Gathering error level..."
                             Case "ESN"
                                 currentTask.Text = "Recopilando nivel de error..."
+                            Case "FRA"
+                                currentTask.Text = "Recueil du niveau d'erreur en cours..."
                         End Select
                     Case 1
                         currentTask.Text = "Gathering error level..."
                     Case 2
                         currentTask.Text = "Recopilando nivel de error..."
+                    Case 3
+                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
                 End Select
                 LogView.AppendText(CrLf & "Gathering error level...")
                 GetErrorCode(False)
@@ -3848,6 +4221,9 @@ Public Class ProgressPanel
                         Case "ESN"
                             taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
                             currentTask.Text = "Montando índice de destino..."
+                        Case "FRA"
+                            taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskCount
+                            currentTask.Text = "Montage de l'index de ciblage en cours..."
                     End Select
                 Case 1
                     taskCountLbl.Text = "Tasks: " & currentTCont & "/" & taskCount
@@ -3855,6 +4231,9 @@ Public Class ProgressPanel
                 Case 2
                     taskCountLbl.Text = "Tareas: " & currentTCont & "/" & taskCount
                     currentTask.Text = "Montando índice de destino..."
+                Case 3
+                    taskCountLbl.Text = "Tâches : " & currentTCont & "/" & taskCount
+                    currentTask.Text = "Montage de l'index de ciblage en cours..."
             End Select
             LogView.AppendText(CrLf & "Mounting image (index: " & SwitchTargetIndex & ")...")
             Select Case DismVersionChecker.ProductMajorPart
@@ -3881,11 +4260,15 @@ Public Class ProgressPanel
                             currentTask.Text = "Gathering error level..."
                         Case "ESN"
                             currentTask.Text = "Recopilando nivel de error..."
+                        Case "FRA"
+                            currentTask.Text = "Recueil du niveau d'erreur en cours..."
                     End Select
                 Case 1
                     currentTask.Text = "Gathering error level..."
                 Case 2
                     currentTask.Text = "Recopilando nivel de error..."
+                Case 3
+                    currentTask.Text = "Recueil du niveau d'erreur en cours..."
             End Select
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
@@ -4387,11 +4770,15 @@ Public Class ProgressPanel
                             MainForm.MenuDesc.Text = "Ready"
                         Case "ESN"
                             MainForm.MenuDesc.Text = "Listo"
+                        Case "FRA"
+                            MainForm.MenuDesc.Text = "Prêt"
                     End Select
                 Case 1
                     MainForm.MenuDesc.Text = "Ready"
                 Case 2
                     MainForm.MenuDesc.Text = "Listo"
+                Case 3
+                    MainForm.MenuDesc.Text = "Prêt"
             End Select
             ActionRunning = False
             TaskList.Clear()
@@ -4410,6 +4797,9 @@ Public Class ProgressPanel
                         Case "ESN"
                             Label1.Text = "No se pudieron realizar las operaciones"
                             Label2.Text = "Ha ocurrido un error, el cual detuvo las operaciones. Lea el registro debajo para más información."
+                        Case "FRA"
+                            Label1.Text = "Impossible d'effectuer des opérations de l'image"
+                            Label2.Text = "Une erreur s'est produite, qui a interrompu les opérations sur l'image. Veuillez lire le journal ci-dessous pour plus d'informations."
                     End Select
                 Case 1
                     Label1.Text = "Could not perform image operations"
@@ -4417,6 +4807,9 @@ Public Class ProgressPanel
                 Case 2
                     Label1.Text = "No se pudieron realizar las operaciones"
                     Label2.Text = "Ha ocurrido un error, el cual detuvo las operaciones. Lea el registro debajo para más información."
+                Case 3
+                    Label1.Text = "Impossible d'effectuer des opérations de l'image"
+                    Label2.Text = "Une erreur s'est produite, qui a interrompu les opérations sur l'image. Veuillez lire le journal ci-dessous pour plus d'informations."
             End Select
             CurrentPB.Value = CurrentPB.Maximum
             AllPB.Value = AllPB.Maximum
@@ -4430,11 +4823,15 @@ Public Class ProgressPanel
                             Cancel_Button.Text = "OK"
                         Case "ESN"
                             Cancel_Button.Text = "Aceptar"
+                        Case "FRA"
+                            Cancel_Button.Text = "OK"
                     End Select
                 Case 1
                     Cancel_Button.Text = "OK"
                 Case 2
                     Cancel_Button.Text = "Aceptar"
+                Case 3
+                    Cancel_Button.Text = "OK"
             End Select
             LinkLabel1.Visible = True
             ' Add details for error codes
@@ -4506,11 +4903,15 @@ Public Class ProgressPanel
                             MainForm.MenuDesc.Text = "Ready"
                         Case "ESN"
                             MainForm.MenuDesc.Text = "Listo"
+                        Case "FRA"
+                            MainForm.MenuDesc.Text = "Prêt"
                     End Select
                 Case 1
                     MainForm.MenuDesc.Text = "Ready"
                 Case 2
                     MainForm.MenuDesc.Text = "Listo"
+                Case 3
+                    MainForm.MenuDesc.Text = "Prêt"
             End Select
             MainForm.StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
             SaveLog(Application.StartupPath & "\logs\DISMTools.log")
@@ -4555,6 +4956,16 @@ Public Class ProgressPanel
                         GroupBox1.Text = "Registro"
                         allTasks.Text = "Por favor, espere..."
                         currentTask.Text = "Por favor, espere..."
+                    Case "FRA"
+                        Text = "Avancement"
+                        Label1.Text = "Opérations de l'image en cours..."
+                        Label2.Text = "Veuillez patienter pendant que les tâches suivantes sont effectuées. Cela peut prendre un certain temps."
+                        Cancel_Button.Text = "Annuler"
+                        LogButton.Text = If(Height = 240, "Afficher le journal", "Cacher le journal")
+                        LinkLabel1.Text = "Afficher le fichier journal DISM (avancé)"
+                        GroupBox1.Text = "Journal"
+                        allTasks.Text = "Veuillez patienter..."
+                        currentTask.Text = "Veuillez patienter..."
                 End Select
             Case 1
                 Text = "Progress"
@@ -4576,6 +4987,16 @@ Public Class ProgressPanel
                 GroupBox1.Text = "Registro"
                 allTasks.Text = "Por favor, espere..."
                 currentTask.Text = "Por favor, espere..."
+            Case 3
+                Text = "Avancement"
+                Label1.Text = "Opérations de l'image en cours..."
+                Label2.Text = "Veuillez patienter pendant que les tâches suivantes sont effectuées. Cela peut prendre un certain temps."
+                Cancel_Button.Text = "Annuler"
+                LogButton.Text = If(Height = 240, "Afficher le journal", "Cacher le journal")
+                LinkLabel1.Text = "Afficher le fichier journal DISM (avancé)"
+                GroupBox1.Text = "Journal"
+                allTasks.Text = "Veuillez patienter..."
+                currentTask.Text = "Veuillez patienter..."
         End Select
         taskCountLbl.Visible = False
         MainForm.bwBackgroundProcessAction = 0
@@ -4652,11 +5073,15 @@ Public Class ProgressPanel
                         MainForm.MenuDesc.Text = "Performing image operations. Please wait..."
                     Case "ESN"
                         MainForm.MenuDesc.Text = "Realizando operaciones con la imagen. Espere..."
+                    Case "FRA"
+                        MainForm.MenuDesc.Text = "Exécution d'opérations sur les images en cours. Veuillez patienter..."
                 End Select
             Case 1
                 MainForm.MenuDesc.Text = "Performing image operations. Please wait..."
             Case 2
                 MainForm.MenuDesc.Text = "Realizando operaciones con la imagen. Espere..."
+            Case 3
+                MainForm.MenuDesc.Text = "Exécution d'opérations sur les images en cours. Veuillez patienter..."
         End Select
         MainForm.StatusStrip.BackColor = Color.FromArgb(14, 99, 156)
         If Debugger.IsAttached Then
@@ -4690,15 +5115,18 @@ Public Class ProgressPanel
                             taskCountLbl.Text = "Tasks: 1/" & TaskList.Count
                         Case "ESN"
                             taskCountLbl.Text = "Tareas: 1/" & TaskList.Count
+                        Case "FRA"
+                            taskCountLbl.Text = "Tâches : 1/" & TaskList.Count
                     End Select
                 Case 1
                     taskCountLbl.Text = "Tasks: 1/" & TaskList.Count
                 Case 2
                     taskCountLbl.Text = "Tareas: 1/" & TaskList.Count
+                Case 3
+                    taskCountLbl.Text = "Tâches : 1/" & TaskList.Count
             End Select
             InitializeActionRuntime(IsInValidationMode)
             ReadActionFile(ActionFile)
-            'Exit Sub
         Else
             If TaskList.Count >= 2 Then
                 AllPB.Maximum = TaskList.Count * 100
@@ -4709,11 +5137,15 @@ Public Class ProgressPanel
                                 taskCountLbl.Text = "Tasks: 1/" & TaskList.Count
                             Case "ESN"
                                 taskCountLbl.Text = "Tareas: 1/" & TaskList.Count
+                            Case "FRA"
+                                taskCountLbl.Text = "Tâches : 1/" & TaskList.Count
                         End Select
                     Case 1
                         taskCountLbl.Text = "Tasks: 1/" & TaskList.Count
                     Case 2
                         taskCountLbl.Text = "Tareas: 1/" & TaskList.Count
+                    Case 3
+                        taskCountLbl.Text = "Tâches : 1/" & TaskList.Count
                 End Select
                 OperationNum = 1000
             Else
