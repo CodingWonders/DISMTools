@@ -1081,8 +1081,12 @@ Public Class ProjProperties
                         FeatUpd = "21H2 (Cobalt)"
                     Case 22350 To 22630     ' This goes until Windows 11 build 22631 (2022 Update Moment 4)
                         FeatUpd = "22H2 (Nickel)"
-                    Case 22631 To 25000     ' 25000 is a relative number. This is because of the structural changes in Windows Insider channels, where 23xxx builds are the new Dev builds, and the Zinc development builds since 25314 are the new Canary builds
+                    Case 22631 To 22634
                         FeatUpd = "23H2 (Nickel)"
+                    Case 22635 To 23400
+                        FeatUpd = "23H2 (Nickel Moment 5)"
+                    Case 23401 To 25000
+                        FeatUpd = "Dev (Nickel)"
                     Case 25057 To 25238
                         FeatUpd = "23H1 (Copper)"
                     Case 25240 To 25400     ' 25400 is a relative number. 25398 is the final build of Zinc
