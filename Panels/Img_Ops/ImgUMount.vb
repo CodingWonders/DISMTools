@@ -27,11 +27,15 @@ Public Class ImgUMount
                                     MsgBox("The specified directory isn't a valid mount directory.", vbOKOnly + vbCritical, Label1.Text)
                                 Case "ESN"
                                     MsgBox("El directorio especificado no es un directorio de montaje válido.", vbOKOnly + vbCritical, Label1.Text)
+                                Case "FRA"
+                                    MsgBox("Le répertoire spécifié n'est pas un répertoire de montage valide.", vbOKOnly + vbCritical, Label1.Text)
                             End Select
                         Case 1
                             MsgBox("The specified directory isn't a valid mount directory.", vbOKOnly + vbCritical, Label1.Text)
                         Case 2
                             MsgBox("El directorio especificado no es un directorio de montaje válido.", vbOKOnly + vbCritical, Label1.Text)
+                        Case 3
+                            MsgBox("Le répertoire spécifié n'est pas un répertoire de montage valide.", vbOKOnly + vbCritical, Label1.Text)
                     End Select
                     Exit Sub
                 End If
@@ -43,11 +47,15 @@ Public Class ImgUMount
                                 MsgBox("The mount directory doesn't exist.", vbOKOnly + vbCritical, Label1.Text)
                             Case "ESN"
                                 MsgBox("El directorio de montaje no existe.", vbOKOnly + vbCritical, Label1.Text)
+                            Case "FRA"
+                                MsgBox("Le répertoire de montage n'existe pas.", vbOKOnly + vbCritical, Label1.Text)
                         End Select
                     Case 1
                         MsgBox("The mount directory doesn't exist.", vbOKOnly + vbCritical, Label1.Text)
                     Case 2
                         MsgBox("El directorio de montaje no existe.", vbOKOnly + vbCritical, Label1.Text)
+                    Case 3
+                        MsgBox("Le répertoire de montage n'existe pas.", vbOKOnly + vbCritical, Label1.Text)
                 End Select
                 Exit Sub
             End If
@@ -128,6 +136,26 @@ Public Class ImgUMount
                         ComboBox1.Items.AddRange(UMountOperations)
                         GroupBox1.Text = "Directorio de montaje"
                         GroupBox2.Text = "Opciones adicionales"
+                    Case "FRA"
+                        Text = "Démonter une image"
+                        Label1.Text = Text
+                        Label2.Text = "Veuillez spécifier les options pour démonter cette image :"
+                        Label3.Text = "Le répertoire de montage :"
+                        Label4.Text = "Répertoire de montage ::"
+                        Label7.Text = "Opération de démontage :"
+                        CheckBox1.Text = "Vérifier l'intégrité de l'image"
+                        CheckBox2.Text = "Ajouter des modifications à un autre index"
+                        Button1.Text = "Choisir..."
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annuler"
+                        FolderBrowserDialog1.Description = "Veuillez indiquer un répertoire de montage :"
+                        RadioButton1.Text = "est chargé dans le projet"
+                        RadioButton2.Text = "est situé ailleurs"
+                        UMountOperations(0) = "Sauvegarder les modifications et démonter"
+                        UMountOperations(1) = "Annuler les modifications et démonter"
+                        ComboBox1.Items.AddRange(UMountOperations)
+                        GroupBox1.Text = "Répertoire de montage"
+                        GroupBox2.Text = "Paramètres supplémentaires"
                 End Select
             Case 1
                 Text = "Unmount an image"
@@ -169,6 +197,26 @@ Public Class ImgUMount
                 ComboBox1.Items.AddRange(UMountOperations)
                 GroupBox1.Text = "Directorio de montaje"
                 GroupBox2.Text = "Opciones adicionales"
+            Case 3
+                Text = "Démonter une image"
+                Label1.Text = Text
+                Label2.Text = "Veuillez spécifier les options pour démonter cette image :"
+                Label3.Text = "Le répertoire de montage :"
+                Label4.Text = "Répertoire de montage ::"
+                Label7.Text = "Opération de démontage :"
+                CheckBox1.Text = "Vérifier l'intégrité de l'image"
+                CheckBox2.Text = "Ajouter des modifications à un autre index"
+                Button1.Text = "Choisir..."
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annuler"
+                FolderBrowserDialog1.Description = "Veuillez indiquer un répertoire de montage :"
+                RadioButton1.Text = "est chargé dans le projet"
+                RadioButton2.Text = "est situé ailleurs"
+                UMountOperations(0) = "Sauvegarder les modifications et démonter"
+                UMountOperations(1) = "Annuler les modifications et démonter"
+                ComboBox1.Items.AddRange(UMountOperations)
+                GroupBox1.Text = "Répertoire de montage"
+                GroupBox2.Text = "Paramètres supplémentaires"
         End Select
         ComboBox1.SelectedIndex = 0
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then

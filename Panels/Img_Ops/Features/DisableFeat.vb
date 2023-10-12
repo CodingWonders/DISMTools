@@ -18,11 +18,15 @@ Public Class DisableFeat
                             MessageBox.Show(MainForm, "Please select features to disable, and try again.", "No features selected", MessageBoxButtons.OK, MessageBoxIcon.Error)
                         Case "ESN"
                             MessageBox.Show(MainForm, "Seleccione las características a deshabilitar, e inténtelo de nuevo", "No hay características seleccionadas", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        Case "FRA"
+                            MessageBox.Show(MainForm, "Veuillez sélectionner les caractéristiques à désactiver et réessayer.", "Aucune caractéristique sélectionée", MessageBoxButtons.OK, MessageBoxIcon.Error)
                     End Select
                 Case 1
                     MessageBox.Show(MainForm, "Please select features to disable, and try again.", "No features selected", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Case 2
                     MessageBox.Show(MainForm, "Seleccione las características a deshabilitar, e inténtelo de nuevo", "No hay características seleccionadas", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Case 3
+                    MessageBox.Show(MainForm, "Veuillez sélectionner les caractéristiques à désactiver et réessayer.", "Aucune caractéristique sélectionée", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Select
             Exit Sub
         Else
@@ -92,6 +96,19 @@ Public Class DisableFeat
                         ListView1.Columns(1).Text = "Estado"
                         CheckBox1.Text = "Especificar nombre de paquete principal para las características"
                         CheckBox2.Text = "Eliminar característica sin eliminar manifiesto"
+                    Case 3
+                        Text = "Désactiver des caractéristiques"
+                        Label1.Text = Text
+                        Label3.Text = "Nom du paquet :"
+                        GroupBox1.Text = "Caractéristiques"
+                        GroupBox2.Text = "Paramètres"
+                        Button1.Text = "Rechercher..."
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annuler"
+                        ListView1.Columns(0).Text = "Nom de la caractéristique"
+                        ListView1.Columns(1).Text = "État"
+                        CheckBox1.Text = "Spécifier le nom du paquet parent pour les caractéristiques"
+                        CheckBox2.Text = "Supprimer une caractéristique sans supprimer le manifeste"
                 End Select
             Case 1
                 Text = "Disable features"
@@ -119,6 +136,19 @@ Public Class DisableFeat
                 ListView1.Columns(1).Text = "Estado"
                 CheckBox1.Text = "Especificar nombre de paquete principal para las características"
                 CheckBox2.Text = "Eliminar característica sin eliminar manifiesto"
+            Case 3
+                Text = "Désactiver des caractéristiques"
+                Label1.Text = Text
+                Label3.Text = "Nom du paquet :"
+                GroupBox1.Text = "Caractéristiques"
+                GroupBox2.Text = "Paramètres"
+                Button1.Text = "Rechercher..."
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annuler"
+                ListView1.Columns(0).Text = "Nom de la caractéristique"
+                ListView1.Columns(1).Text = "État"
+                CheckBox1.Text = "Spécifier le nom du paquet parent pour les caractéristiques"
+                CheckBox2.Text = "Supprimer une caractéristique sans supprimer le manifeste"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
@@ -150,11 +180,15 @@ Public Class DisableFeat
                         Label2.Text &= " Only enabled features (" & ListView1.Items.Count & ") are shown"
                     Case "ESN"
                         Label2.Text &= " Solo las características habilitadas (" & ListView1.Items.Count & ") son mostradas"
+                    Case "FRA"
+                        Label2.Text &= " Seules les caractéristiques activées (" & ListView1.Items.Count & ") sont présentées."
                 End Select
             Case 1
                 Label2.Text &= " Only enabled features (" & ListView1.Items.Count & ") are shown"
             Case 2
                 Label2.Text &= " Solo las características habilitadas (" & ListView1.Items.Count & ") son mostradas"
+            Case 3
+                Label2.Text &= " Seules les caractéristiques activées (" & ListView1.Items.Count & ") sont présentées."
         End Select
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
