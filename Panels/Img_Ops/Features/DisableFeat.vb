@@ -96,7 +96,7 @@ Public Class DisableFeat
                         ListView1.Columns(1).Text = "Estado"
                         CheckBox1.Text = "Especificar nombre de paquete principal para las características"
                         CheckBox2.Text = "Eliminar característica sin eliminar manifiesto"
-                    Case 3
+                    Case "FRA"
                         Text = "Désactiver des caractéristiques"
                         Label1.Text = Text
                         Label3.Text = "Nom du paquet :"

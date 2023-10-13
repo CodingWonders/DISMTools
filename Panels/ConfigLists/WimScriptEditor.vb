@@ -861,11 +861,15 @@ Public Class WimScriptEditor
                                 Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
                             Case "ESN"
                                 Text = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                            Case "FRA"
+                                Text = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                         End Select
                     Case 1
                         Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
                     Case 2
                         Text = Path.GetFileName(ConfigListFile) & " - Editor de lista de configuraciones de DISM"
+                    Case 3
+                        Text = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                 End Select
             Else
                 Select Case MainForm.Language
@@ -875,11 +879,15 @@ Public Class WimScriptEditor
                                 Text = Path.GetFileName(ConfigListFile) & " (modified) - DISM Configuration List Editor"
                             Case "ESN"
                                 Text = Path.GetFileName(ConfigListFile) & " (modificado) - Editor de lista de configuraciones de DISM"
+                            Case "FRA"
+                                Text = Path.GetFileName(ConfigListFile) & " (modifié) - Éditeur de liste de configuration DISM"
                         End Select
                     Case 1
                         Text = Path.GetFileName(ConfigListFile) & " (modified) - DISM Configuration List Editor"
                     Case 2
                         Text = Path.GetFileName(ConfigListFile) & " (modificado) - Editor de lista de configuraciones de DISM"
+                    Case 3
+                        Text = Path.GetFileName(ConfigListFile) & " (modifié) - Éditeur de liste de configuration DISM"
                 End Select
             End If
         End If
