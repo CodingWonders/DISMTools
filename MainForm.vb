@@ -10883,6 +10883,7 @@ Public Class MainForm
             Try
                 Dim adkInst As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\WIMMount")
                 Dim adk As String = adkInst.GetValue("AdkInstallation").ToString()
+                adkInst.Close()
                 If adk = "1" Then
                     ' Copy deployment tools. This will default to "Program Files\Windows Kits\10"
                     Select Case adkCopyArg
@@ -11090,23 +11091,67 @@ Public Class MainForm
     End Sub
 
     Private Sub ADKCopierBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ADKCopierBW.RunWorkerCompleted
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
+        Try
+            ' Detect if ADKs are present
+            Dim adkInst As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\WIMMount")
+            Dim adk As String = adkInst.GetValue("AdkInstallation").ToString()
+            adkInst.Close()
+            If adk = "1" Then
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                MenuDesc.Text = "Deployment tools were copied to the project successfully"
+                            Case "ESN"
+                                MenuDesc.Text = "Las herramientas de implementación fueron copiadas al proyecto satisfactoriamente"
+                            Case "FRA"
+                                MenuDesc.Text = "Les outils de déploiement ont été copiés dans le projet avec succès."
+                        End Select
+                    Case 1
                         MenuDesc.Text = "Deployment tools were copied to the project successfully"
-                    Case "ESN"
+                    Case 2
                         MenuDesc.Text = "Las herramientas de implementación fueron copiadas al proyecto satisfactoriamente"
-                    Case "FRA"
+                    Case 3
                         MenuDesc.Text = "Les outils de déploiement ont été copiés dans le projet avec succès."
                 End Select
-            Case 1
-                MenuDesc.Text = "Deployment tools were copied to the project successfully"
-            Case 2
-                MenuDesc.Text = "Las herramientas de implementación fueron copiadas al proyecto satisfactoriamente"
-            Case 3
-                MenuDesc.Text = "Les outils de déploiement ont été copiés dans le projet avec succès."
-        End Select
+            ElseIf adk <> "1" Then
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                MenuDesc.Text = "Deployment tools aren't present on this system"
+                            Case "ESN"
+                                MenuDesc.Text = "Las herramientas de implementación no están presentes en este sistema"
+                            Case "FRA"
+                                MenuDesc.Text = "Les outils de déploiement ne sont pas présents sur ce système."
+                        End Select
+                    Case 1
+                        MenuDesc.Text = "Deployment tools aren't present on this system"
+                    Case 2
+                        MenuDesc.Text = "Las herramientas de implementación no están presentes en este sistema"
+                    Case 3
+                        MenuDesc.Text = "Les outils de déploiement ne sont pas présents sur ce système."
+                End Select
+            End If
+        Catch ex As Exception
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            MenuDesc.Text = "Deployment tools could not be copied"
+                        Case "ESN"
+                            MenuDesc.Text = "Las herramientas de implementación no pudieron ser copiadas"
+                        Case "FRA"
+                            MenuDesc.Text = "Les outils de déploiement n'ont pas pu être copiés."
+                    End Select
+                Case 1
+                    MenuDesc.Text = "Deployment tools could not be copied"
+                Case 2
+                    MenuDesc.Text = "Las herramientas de implementación no pudieron ser copiadas"
+                Case 3
+                    MenuDesc.Text = "Les outils de déploiement n'ont pas pu être copiés."
+            End Select
+        End Try
     End Sub
 
     Private Sub ADKCopierBW_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles ADKCopierBW.ProgressChanged
