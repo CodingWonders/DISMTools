@@ -55,11 +55,15 @@ Public Class AddDrivers
                             MsgBox("There are no selected driver packages to install. Please specify the driver packages you'd like to install and try again.", vbOKOnly + vbCritical, Label1.Text)
                         Case "ESN"
                             MsgBox("No hay paquetes de controladores seleccionados para instalar. Especifique los paquetes de controladores que le gustaría instalar e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
+                        Case "FRA"
+                            MsgBox("Il n'y a pas de pilotes sélectionnés à installer. Veuillez spécifier les paquets de pilotes que vous souhaitez installer et réessayez.", vbOKOnly + vbCritical, Label1.Text)
                     End Select
                 Case 1
                     MsgBox("There are no selected driver packages to install. Please specify the driver packages you'd like to install and try again.", vbOKOnly + vbCritical, Label1.Text)
                 Case 2
                     MsgBox("No hay paquetes de controladores seleccionados para instalar. Especifique los paquetes de controladores que le gustaría instalar e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
+                Case 3
+                    MsgBox("Il n'y a pas de pilotes sélectionnés à installer. Veuillez spécifier les paquets de pilotes que vous souhaitez installer et réessayez.", vbOKOnly + vbCritical, Label1.Text)
             End Select
             Exit Sub
         End If
@@ -89,11 +93,15 @@ Public Class AddDrivers
                         ListView1.Items.Add(New ListViewItem(New String() {OpenFileDialog1.FileName, "File"}))
                     Case "ESN"
                         ListView1.Items.Add(New ListViewItem(New String() {OpenFileDialog1.FileName, "Archivo"}))
+                    Case "FRA"
+                        ListView1.Items.Add(New ListViewItem(New String() {OpenFileDialog1.FileName, "Fichier"}))
                 End Select
             Case 1
                 ListView1.Items.Add(New ListViewItem(New String() {OpenFileDialog1.FileName, "File"}))
             Case 2
                 ListView1.Items.Add(New ListViewItem(New String() {OpenFileDialog1.FileName, "Archivo"}))
+            Case 3
+                ListView1.Items.Add(New ListViewItem(New String() {OpenFileDialog1.FileName, "Fichier"}))
         End Select
     End Sub
 
@@ -108,11 +116,15 @@ Public Class AddDrivers
                                 ListView1.Items.Add(New ListViewItem(New String() {FolderBrowserDialog1.SelectedPath, "Folder"}))
                             Case "ESN"
                                 ListView1.Items.Add(New ListViewItem(New String() {FolderBrowserDialog1.SelectedPath, "Carpeta"}))
+                            Case "FRA"
+                                ListView1.Items.Add(New ListViewItem(New String() {FolderBrowserDialog1.SelectedPath, "Répertoire"}))
                         End Select
                     Case 1
                         ListView1.Items.Add(New ListViewItem(New String() {FolderBrowserDialog1.SelectedPath, "Folder"}))
                     Case 2
                         ListView1.Items.Add(New ListViewItem(New String() {FolderBrowserDialog1.SelectedPath, "Carpeta"}))
+                    Case 3
+                        ListView1.Items.Add(New ListViewItem(New String() {FolderBrowserDialog1.SelectedPath, "Répertoire"}))
                 End Select
                 CheckedListBox1.Items.Add(FolderBrowserDialog1.SelectedPath)
             Else
@@ -123,11 +135,15 @@ Public Class AddDrivers
                                 MsgBox("There are no driver packages in the specified folder", vbOKOnly + vbCritical, Label1.Text)
                             Case "ESN"
                                 MsgBox("No hay paquetes de controladores en la carpeta espcificada", vbOKOnly + vbCritical, Label1.Text)
+                            Case "FRA"
+                                MsgBox("Il n'y a pas de pilotes dans le répertoire spécifié.", vbOKOnly + vbCritical, Label1.Text)
                         End Select
                     Case 1
                         MsgBox("There are no driver packages in the specified folder", vbOKOnly + vbCritical, Label1.Text)
                     Case 2
                         MsgBox("No hay paquetes de controladores en la carpeta espcificada", vbOKOnly + vbCritical, Label1.Text)
+                    Case 3
+                        MsgBox("Il n'y a pas de pilotes dans le répertoire spécifié.", vbOKOnly + vbCritical, Label1.Text)
                 End Select
             End If
             Cursor = Cursors.Arrow
@@ -204,6 +220,26 @@ Public Class AddDrivers
                         ListView1.Columns(1).Text = "Tipo"
                         OpenFileDialog1.Title = "Especifique el paquete de controlador a añadir"
                         FolderBrowserDialog1.Description = "Especifique la carpeta que contiene paquetes de controladores. Luego podrá especificar si necesita ser escaneada de forma recursiva:"
+                    Case "FRA"
+                        Text = "Ajouter des pilotes"
+                        Label1.Text = Text
+                        Label2.Text = "Veuillez spécifier les pilotes à ajouter en utilisant les boutons ci-dessous ou en les déposant dans la liste ci-dessous :"
+                        Label3.Text = "Vous pouvez laisser le programme analyser les répertoires de pilotes présents dans la liste ci-dessous de manière récursive et les ajouter également. Pour ce faire, cochez les entrées que vous souhaitez voir analysées :"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annuler"
+                        Button1.Text = "Ajouter un fichier..."
+                        Button2.Text = "Ajouter un répertoire..."
+                        Button3.Text = "Supprimer toutes les entrées"
+                        Button4.Text = "Supprimer l'entrée sélectionnée"
+                        CheckBox1.Text = "Forcer l'installation des pilotes non signés"
+                        CheckBox2.Text = "Sauvegarder l'image après l'ajout des pilotes"
+                        GroupBox1.Text = "Fichiers des pilotes"
+                        GroupBox2.Text = "Répertoires des pilotes"
+                        GroupBox3.Text = "Paramètres"
+                        ListView1.Columns(0).Text = "Fichier/Répertoire"
+                        ListView1.Columns(1).Text = "Type"
+                        OpenFileDialog1.Title = "Spécifier le paquet de pilotes à ajouter"
+                        FolderBrowserDialog1.Description = "Indiquez le répertoire contenant les pilotes. Vous pourrez ensuite préciser s'il doit être analysé de manière récursive :"
                 End Select
             Case 1
                 Text = "Add drivers"
@@ -245,6 +281,26 @@ Public Class AddDrivers
                 ListView1.Columns(1).Text = "Tipo"
                 OpenFileDialog1.Title = "Especifique el paquete de controlador a añadir"
                 FolderBrowserDialog1.Description = "Especifique la carpeta que contiene paquetes de controladores. Luego podrá especificar si necesita ser escaneada de forma recursiva:"
+            Case 3
+                Text = "Ajouter des pilotes"
+                Label1.Text = Text
+                Label2.Text = "Veuillez spécifier les pilotes à ajouter en utilisant les boutons ci-dessous ou en les déposant dans la liste ci-dessous :"
+                Label3.Text = "Vous pouvez laisser le programme analyser les répertoires de pilotes présents dans la liste ci-dessous de manière récursive et les ajouter également. Pour ce faire, cochez les entrées que vous souhaitez voir analysées :"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annuler"
+                Button1.Text = "Ajouter un fichier..."
+                Button2.Text = "Ajouter un répertoire..."
+                Button3.Text = "Supprimer toutes les entrées"
+                Button4.Text = "Supprimer l'entrée sélectionnée"
+                CheckBox1.Text = "Forcer l'installation des pilotes non signés"
+                CheckBox2.Text = "Sauvegarder l'image après l'ajout des pilotes"
+                GroupBox1.Text = "Fichiers des pilotes"
+                GroupBox2.Text = "Répertoires des pilotes"
+                GroupBox3.Text = "Paramètres"
+                ListView1.Columns(0).Text = "Fichier/Répertoire"
+                ListView1.Columns(1).Text = "Type"
+                OpenFileDialog1.Title = "Spécifier le paquet de pilotes à ajouter"
+                FolderBrowserDialog1.Description = "Indiquez le répertoire contenant les pilotes. Vous pourrez ensuite préciser s'il doit être analysé de manière récursive :"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
@@ -300,11 +356,15 @@ Public Class AddDrivers
                             ListView1.Items.Add(New ListViewItem(New String() {PkgFile, If(File.GetAttributes(PkgFile) = FileAttributes.Directory, "Folder", "File")}))
                         Case "ESN"
                             ListView1.Items.Add(New ListViewItem(New String() {PkgFile, If(File.GetAttributes(PkgFile) = FileAttributes.Directory, "Carpeta", "Archivo")}))
+                        Case "FRA"
+                            ListView1.Items.Add(New ListViewItem(New String() {PkgFile, If(File.GetAttributes(PkgFile) = FileAttributes.Directory, "Répertoire", "Fichier")}))
                     End Select
                 Case 1
                     ListView1.Items.Add(New ListViewItem(New String() {PkgFile, If(File.GetAttributes(PkgFile) = FileAttributes.Directory, "Folder", "File")}))
                 Case 2
                     ListView1.Items.Add(New ListViewItem(New String() {PkgFile, If(File.GetAttributes(PkgFile) = FileAttributes.Directory, "Carpeta", "Archivo")}))
+                Case 3
+                    ListView1.Items.Add(New ListViewItem(New String() {PkgFile, If(File.GetAttributes(PkgFile) = FileAttributes.Directory, "Répertoire", "Fichier")}))
             End Select
             If File.GetAttributes(PkgFile) = FileAttributes.Directory Then CheckedListBox1.Items.Add(PkgFile)
         Next
