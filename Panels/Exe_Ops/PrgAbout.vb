@@ -446,11 +446,15 @@ Public Class PrgAbout
                         PictureToolTip.SetToolTip(sender, "Check out the project's repository on GitHub")
                     Case "ESN"
                         PictureToolTip.SetToolTip(sender, "Consulte el repositorio del proyecto en GitHub")
+                    Case "FRA"
+                        PictureToolTip.SetToolTip(sender, "Consultez le dépôt du projet sur GitHub")
                 End Select
             Case 1
                 PictureToolTip.SetToolTip(sender, "Check out the project's repository on GitHub")
             Case 2
                 PictureToolTip.SetToolTip(sender, "Consulte el repositorio del proyecto en GitHub")
+            Case 3
+                PictureToolTip.SetToolTip(sender, "Consultez le dépôt du projet sur GitHub")
         End Select
     End Sub
 
@@ -462,11 +466,15 @@ Public Class PrgAbout
                         PictureToolTip.SetToolTip(sender, "Check out the project's official subreddit")
                     Case "ESN"
                         PictureToolTip.SetToolTip(sender, "Consulte el subreddit oficial del proyecto")
+                    Case "FRA"
+                        PictureToolTip.SetToolTip(sender, "Consultez le subreddit officiel du projet")
                 End Select
             Case 1
                 PictureToolTip.SetToolTip(sender, "Check out the project's official subreddit")
             Case 2
                 PictureToolTip.SetToolTip(sender, "Consulte el subreddit oficial del proyecto")
+            Case 3
+                PictureToolTip.SetToolTip(sender, "Consultez le subreddit officiel du projet")
         End Select
     End Sub
 
@@ -478,11 +486,15 @@ Public Class PrgAbout
                         PictureToolTip.SetToolTip(sender, "Check out the project's discussion on the My Digital Life forums")
                     Case "ESN"
                         PictureToolTip.SetToolTip(sender, "Consulte la discusión del proyecto en los foros de My Digital Life")
+                    Case "FRA"
+                        PictureToolTip.SetToolTip(sender, "Consultez les discussions sur le projet sur les forums de My Digital Life")
                 End Select
             Case 1
                 PictureToolTip.SetToolTip(sender, "Check out the project's discussion on the My Digital Life forums")
             Case 2
                 PictureToolTip.SetToolTip(sender, "Consulte la discusión del proyecto en los foros de My Digital Life")
+            Case 3
+                PictureToolTip.SetToolTip(sender, "Consultez les discussions sur le projet sur les forums de My Digital Life")
         End Select
     End Sub
 
@@ -501,11 +513,15 @@ Public Class PrgAbout
                             MsgBox("We couldn't download the update checker. Reason:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
                         Case "ESN"
                             MsgBox("No pudimos descargar el comprobador de actualizaciones. Razón:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
+                        Case "FRA"
+                            MsgBox("Nous n'avons pas pu télécharger le vérificateur de mise à jour. Raison :" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
                     End Select
                 Case 1
                     MsgBox("We couldn't download the update checker. Reason:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
                 Case 2
                     MsgBox("No pudimos descargar el comprobador de actualizaciones. Razón:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
+                Case 3
+                    MsgBox("Nous n'avons pas pu télécharger le vérificateur de mise à jour. Raison :" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
             End Select
             Exit Sub
         End Try
