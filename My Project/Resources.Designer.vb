@@ -1808,12 +1808,13 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''- The program should no longer output the &quot;- Check image integrity?&quot; and &quot;- Append image?&quot; options when unmounting an image while discarding changes
+        '''- The program no longer outputs a success message if the Windows ADK isn&apos;t installed or if an error occurred while copying the ADK files
+        '''- Enhanced the reliability of the App Installer downloader
         '''
         '''New features
         '''
-        '''- An initial implementation of French translations has been added
-        '''- The image application dialog now shows index information in a combo box, as opposed to a numeric list.
+        '''- The program now gets feature update information for Windows 11 2023 Update Moment 5 (build 22635)
+        '''- French translations are complete.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

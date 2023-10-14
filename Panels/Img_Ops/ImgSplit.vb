@@ -18,11 +18,15 @@ Public Class ImgSplit
                                 MsgBox("Please specify a name and path for the target SWM file and try again. Also, make sure that the target path exists.", vbOKOnly + vbCritical, Label1.Text)
                             Case "ESN"
                                 MsgBox("Especifique un nombre y un directorio para el archivo SWM de destino e inténtelo de nuevo. Asegúrese también de que el directorio de destino exista.", vbOKOnly + vbCritical, Label1.Text)
+                            Case "FRA"
+                                MsgBox("Veuillez indiquer un nom et un chemin pour le fichier SWM cible et réessayez. Assurez-vous également que le chemin d'accès à la cible existe.", vbOKOnly + vbCritical, Label1.Text)
                         End Select
                     Case 1
                         MsgBox("Please specify a name and path for the target SWM file and try again. Also, make sure that the target path exists.", vbOKOnly + vbCritical, Label1.Text)
                     Case 2
                         MsgBox("Especifique un nombre y un directorio para el archivo SWM de destino e inténtelo de nuevo. Asegúrese también de que el directorio de destino exista.", vbOKOnly + vbCritical, Label1.Text)
+                    Case 3
+                        MsgBox("Veuillez indiquer un nom et un chemin pour le fichier SWM cible et réessayez. Assurez-vous également que le chemin d'accès à la cible existe.", vbOKOnly + vbCritical, Label1.Text)
                 End Select
                 Exit Sub
             End If
@@ -35,11 +39,15 @@ Public Class ImgSplit
                             MsgBox("Please specify a source WIM file and try again. Also, make sure that it exists.", vbOKOnly + vbCritical, Label1.Text)
                         Case "ESN"
                             MsgBox("Especifique un archivo WIM de origen e inténtelo de nuevo. Asegúrese también de que el archivo exista.", vbOKOnly + vbCritical, Label1.Text)
+                        Case "FRA"
+                            MsgBox("Veuillez indiquer un fichier WIM source et réessayer. Assurez-vous également qu'il existe.", vbOKOnly + vbCritical, Label1.Text)
                     End Select
                 Case 1
                     MsgBox("Please specify a source WIM file and try again. Also, make sure that it exists.", vbOKOnly + vbCritical, Label1.Text)
                 Case 2
                     MsgBox("Especifique un archivo WIM de origen e inténtelo de nuevo. Asegúrese también de que el archivo exista.", vbOKOnly + vbCritical, Label1.Text)
+                Case 3
+                    MsgBox("Veuillez indiquer un fichier WIM source et réessayer. Assurez-vous également qu'il existe.", vbOKOnly + vbCritical, Label1.Text)
             End Select
             Exit Sub
         End If
@@ -87,6 +95,20 @@ Public Class ImgSplit
                         CheckBox1.Text = "Comprobar integridad de la imagen"
                         OpenFileDialog1.Title = "Especifique el archivo WIM de origen a dividir:"
                         SaveFileDialog1.Title = "Especifique la ubicación de destino de las imágenes divididas:"
+                    Case "FRA"
+                        Text = "Diviser les images"
+                        Label1.Text = Text
+                        Label2.Text = "Image source à diviser :"
+                        Label3.Text = "Nom et chemin de l'image divisée de destination :"
+                        Label4.Text = "Taille maximale des images fractionnées (en Mo) :"
+                        Label5.Text = "Notez que, pour tenir compte d'un fichier volumineux dans l'image, un fichier d'image divisé peut être plus grand que la valeur spécifiée."
+                        Button1.Text = "Parcourir..."
+                        Button2.Text = "Parcourir..."
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annuler"
+                        CheckBox1.Text = "Vérifier l'intégrité de l'image"
+                        OpenFileDialog1.Title = "Spécifiez le fichier WIM source à diviser :"
+                        SaveFileDialog1.Title = "Spécifiez l'emplacement cible des images divisées :"
                 End Select
             Case 1
                 Text = "Split images"
@@ -116,6 +138,20 @@ Public Class ImgSplit
                 CheckBox1.Text = "Comprobar integridad de la imagen"
                 OpenFileDialog1.Title = "Especifique el archivo WIM de origen a dividir:"
                 SaveFileDialog1.Title = "Especifique la ubicación de destino de las imágenes divididas:"
+            Case 3
+                Text = "Diviser les images"
+                Label1.Text = Text
+                Label2.Text = "Image source à diviser :"
+                Label3.Text = "Nom et chemin de l'image divisée de destination :"
+                Label4.Text = "Taille maximale des images fractionnées (en Mo) :"
+                Label5.Text = "Notez que, pour tenir compte d'un fichier volumineux dans l'image, un fichier d'image divisé peut être plus grand que la valeur spécifiée."
+                Button1.Text = "Parcourir..."
+                Button2.Text = "Parcourir..."
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annuler"
+                CheckBox1.Text = "Vérifier l'intégrité de l'image"
+                OpenFileDialog1.Title = "Spécifiez le fichier WIM source à diviser :"
+                SaveFileDialog1.Title = "Spécifiez l'emplacement cible des images divisées :"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)

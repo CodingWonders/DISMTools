@@ -32,6 +32,10 @@ Public Class AppInstallerDownloader
                         Text = "Descargando paquete de aplicación..."
                         Label1.Text = "Espere mientras DISMTools descarga el paquete de aplicación para añadirlo a esta imagen. Esto puede llevar algo de tiempo, dependiendo de la velocidad de su conexión de red."
                         Label2.Text = "Espere..."
+                    Case "FRA"
+                        Text = "Téléchargement du paquet de l'application en cours..."
+                        Label1.Text = "Veuillez patienter pendant que DISMTools télécharge le paquet d'application pour l'ajouter à cette image. Cela peut prendre un certain temps, en fonction de la vitesse de votre connexion réseau."
+                        Label2.Text = "Veuillez patienter..."
                 End Select
             Case 1
                 Text = "Downloading application package..."
@@ -41,6 +45,10 @@ Public Class AppInstallerDownloader
                 Text = "Descargando paquete de aplicación..."
                 Label1.Text = "Espere mientras DISMTools descarga el paquete de aplicación para añadirlo a esta imagen. Esto puede llevar algo de tiempo, dependiendo de la velocidad de su conexión de red."
                 Label2.Text = "Espere..."
+            Case 3
+                Text = "Téléchargement du paquet de l'application en cours..."
+                Label1.Text = "Veuillez patienter pendant que DISMTools télécharge le paquet d'application pour l'ajouter à cette image. Cela peut prendre un certain temps, en fonction de la vitesse de votre connexion réseau."
+                Label2.Text = "Veuillez patienter..."
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)
@@ -115,14 +123,18 @@ Public Class AppInstallerDownloader
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        progress = "Downloading main application package... (" & BytesToReadableSize(e.BytesReceived) & " of " & BytesToReadableSize(e.TotalBytesToReceive) & ")"
+                        progress = "Downloading main application package... (" & BytesToReadableSize(e.BytesReceived) & " of " & BytesToReadableSize(e.TotalBytesToReceive) & " downloaded)"
                     Case "ESN"
-                        progress = "Descargando paquete de aplicación principal... (" & BytesToReadableSize(e.BytesReceived) & " de " & BytesToReadableSize(e.TotalBytesToReceive) & ")"
+                        progress = "Descargando paquete de aplicación principal... (" & BytesToReadableSize(e.BytesReceived) & " de " & BytesToReadableSize(e.TotalBytesToReceive) & " descargados)"
+                    Case "FRA"
+                        progress = "Téléchargement de l'application principale en cours... (" & BytesToReadableSize(e.BytesReceived, True) & " of " & BytesToReadableSize(e.TotalBytesToReceive, True) & " téléchargés)"
                 End Select
             Case 1
-                progress = "Downloading main application package... (" & BytesToReadableSize(e.BytesReceived) & " of " & BytesToReadableSize(e.TotalBytesToReceive) & ")"
+                progress = "Downloading main application package... (" & BytesToReadableSize(e.BytesReceived) & " of " & BytesToReadableSize(e.TotalBytesToReceive) & " downloaded)"
             Case 2
-                progress = "Descargando paquete de aplicación principal... (" & BytesToReadableSize(e.BytesReceived) & " de " & BytesToReadableSize(e.TotalBytesToReceive) & ")"
+                progress = "Descargando paquete de aplicación principal... (" & BytesToReadableSize(e.BytesReceived) & " de " & BytesToReadableSize(e.TotalBytesToReceive) & " descargados)"
+            Case 3
+                progress = "Téléchargement de l'application principale en cours... (" & BytesToReadableSize(e.BytesReceived, True) & " of " & BytesToReadableSize(e.TotalBytesToReceive, True) & " téléchargés)"
         End Select
     End Sub
 

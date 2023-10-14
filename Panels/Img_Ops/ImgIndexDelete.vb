@@ -24,11 +24,15 @@ Public Class ImgIndexDelete
                             MsgBox("Please select volume images to remove from this image, and try again.", vbOKOnly + vbCritical, "Remove a volume image")
                         Case "ESN"
                             MsgBox("Seleccione imágenes de volumen para eliminar de esta imagen, e inténtelo de nuevo.", vbOKOnly + vbCritical, "Eliminar una imagen de volumen")
+                        Case "FRA"
+                            MsgBox("Veuillez sélectionner les images de volume à supprimer de cette image et réessayer.", vbOKOnly + vbCritical, "Supprimer une image de volume")
                     End Select
                 Case 1
                     MsgBox("Please select volume images to remove from this image, and try again.", vbOKOnly + vbCritical, "Remove a volume image")
                 Case 2
                     MsgBox("Seleccione imágenes de volumen para eliminar de esta imagen, e inténtelo de nuevo.", vbOKOnly + vbCritical, "Eliminar una imagen de volumen")
+                Case 3
+                    MsgBox("Veuillez sélectionner les images de volume à supprimer de cette image et réessayer.", vbOKOnly + vbCritical, "Supprimer une image de volume")
             End Select
             Exit Sub
         End If
@@ -77,6 +81,25 @@ Public Class ImgIndexDelete
                             Else
                                 Exit Sub
                             End If
+                        Case "FRA"
+                            If MsgBox("Le programme a détecté que cette image est montée. Pour supprimer les images de volume d'un fichier, celui-ci doit être démonté. Vous pourrez la remonter plus tard, si vous le souhaitez." & vbCrLf & vbCrLf & "Notez que cette opération démontera l'image sans enregistrer les modifications. Assurez-vous que toutes vos modifications ont été enregistrées avant de continuer." & vbCrLf & vbCrLf & "Voulez-vous démonter cette image ?", vbYesNo + vbExclamation, "Supprimer une image de volume") = MsgBoxResult.Yes Then
+                                Try
+                                    For x = 0 To Array.LastIndexOf(MainForm.MountedImageImgFiles, MainForm.MountedImageImgFiles.Last)
+                                        If MainForm.MountedImageImgFiles(x) = TextBox1.Text Then
+                                            ProgressPanel.imgIndexDeletionUnmount = True
+                                            ProgressPanel.UMountImgIndex = MainForm.MountedImageImgIndexes(x)
+                                            If MainForm.MountedImageMountDirs(x) = MainForm.MountDir Then ProgressPanel.UMountLocalDir = True Else ProgressPanel.UMountLocalDir = False
+                                            ProgressPanel.MountDir = MainForm.MountedImageMountDirs(x)
+                                            ProgressPanel.UMountOp = 1
+                                            Exit For
+                                        End If
+                                    Next
+                                Catch ex As Exception
+                                    Exit Try
+                                End Try
+                            Else
+                                Exit Sub
+                            End If
                     End Select
                 Case 1
                     If MsgBox("The program has detected that this image is mounted. In order to remove volume images from a file, it needs to be unmounted. You can remount it later, if you want." & vbCrLf & vbCrLf & "Do note that this will unmount the image without saving changes. Make sure all your changes have been saved before proceeding." & vbCrLf & vbCrLf & "Do you want to unmount this image?", vbYesNo + vbExclamation, "Remove a volume image") = MsgBoxResult.Yes Then
@@ -99,6 +122,25 @@ Public Class ImgIndexDelete
                     End If
                 Case 2
                     If MsgBox("El programa ha detectado que esta imagen está montada. Para eliminar imágenes de volumen de este archivo, debe ser desmontado. Puede remontarlo más tarde, si lo desea." & vbCrLf & vbCrLf & "Dese cuenta de que esto desmontará la imagen descartando los cambios. Asegúrese de que todos sus cambios hayan sido guardados antes de proceder." & vbCrLf & vbCrLf & "¿Desea desmontar esta imagen?", vbYesNo + vbExclamation, "Eliminar una imagen de volumen") = MsgBoxResult.Yes Then
+                        Try
+                            For x = 0 To Array.LastIndexOf(MainForm.MountedImageImgFiles, MainForm.MountedImageImgFiles.Last)
+                                If MainForm.MountedImageImgFiles(x) = TextBox1.Text Then
+                                    ProgressPanel.imgIndexDeletionUnmount = True
+                                    ProgressPanel.UMountImgIndex = MainForm.MountedImageImgIndexes(x)
+                                    If MainForm.MountedImageMountDirs(x) = MainForm.MountDir Then ProgressPanel.UMountLocalDir = True Else ProgressPanel.UMountLocalDir = False
+                                    ProgressPanel.MountDir = MainForm.MountedImageMountDirs(x)
+                                    ProgressPanel.UMountOp = 1
+                                    Exit For
+                                End If
+                            Next
+                        Catch ex As Exception
+                            Exit Try
+                        End Try
+                    Else
+                        Exit Sub
+                    End If
+                Case 3
+                    If MsgBox("Le programme a détecté que cette image est montée. Pour supprimer les images de volume d'un fichier, celui-ci doit être démonté. Vous pourrez la remonter plus tard, si vous le souhaitez." & vbCrLf & vbCrLf & "Notez que cette opération démontera l'image sans enregistrer les modifications. Assurez-vous que toutes vos modifications ont été enregistrées avant de continuer." & vbCrLf & vbCrLf & "Voulez-vous démonter cette image ?", vbYesNo + vbExclamation, "Supprimer une image de volume") = MsgBoxResult.Yes Then
                         Try
                             For x = 0 To Array.LastIndexOf(MainForm.MountedImageImgFiles, MainForm.MountedImageImgFiles.Last)
                                 If MainForm.MountedImageImgFiles(x) = TextBox1.Text Then
@@ -180,6 +222,22 @@ Public Class ImgIndexDelete
                         ListView2.Columns(0).Text = "Índice"
                         ListView2.Columns(1).Text = "Nombre de imagen"
                         GroupBox1.Text = "Imágenes de volumen"
+                    Case "FRA"
+                        Text = "Supprimer une image de volume"
+                        Label1.Text = Text
+                        Label2.Text = "Image source :"
+                        Label3.Text = "Veuillez marquer les images de volume à supprimer sur la gauche. L'image aura alors les index affichés à droite."
+                        Label4.Text = "Obtention des index de l'image en cours. Veuillez patienter..."
+                        Button1.Text = "Parcourir..."
+                        Button2.Text = "Utiliser l'image montée"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annuler"
+                        CheckBox1.Text = "Vérifier l'intégrité de l'image"
+                        ListView1.Columns(0).Text = "Index"
+                        ListView1.Columns(1).Text = "Nom de l'image"
+                        ListView2.Columns(0).Text = "Index de l'image"
+                        ListView2.Columns(1).Text = "Nom de l'image"
+                        GroupBox1.Text = "Images de volume"
                 End Select
             Case 1
                 Text = "Remove a volume image"
@@ -213,6 +271,22 @@ Public Class ImgIndexDelete
                 ListView2.Columns(0).Text = "Índice"
                 ListView2.Columns(1).Text = "Nombre de imagen"
                 GroupBox1.Text = "Imágenes de volumen"
+            Case 3
+                Text = "Supprimer une image de volume"
+                Label1.Text = Text
+                Label2.Text = "Image source :"
+                Label3.Text = "Veuillez marquer les images de volume à supprimer sur la gauche. L'image aura alors les index affichés à droite."
+                Label4.Text = "Obtention des index de l'image en cours. Veuillez patienter..."
+                Button1.Text = "Parcourir..."
+                Button2.Text = "Utiliser l'image montée"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annuler"
+                CheckBox1.Text = "Vérifier l'intégrité de l'image"
+                ListView1.Columns(0).Text = "Index"
+                ListView1.Columns(1).Text = "Nom de l'image"
+                ListView2.Columns(0).Text = "Index de l'image"
+                ListView2.Columns(1).Text = "Nom de l'image"
+                GroupBox1.Text = "Images de volume"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
@@ -276,11 +350,15 @@ Public Class ImgIndexDelete
                             MsgBox("This image only contains 1 index. You can't remove volume images from this file", vbOKOnly + vbExclamation, "Remove a volume image")
                         Case "ESN"
                             MsgBox("Esta imagen solo contiene 1 índice. No puede eliminar imágenes de volumen de este archivo", vbOKOnly + vbExclamation, "Eliminar una imagen de volumen")
+                        Case "FRA"
+                            MsgBox("Cette image ne contient qu'un seul index. Vous ne pouvez pas supprimer les images de volume de ce fichier.", vbOKOnly + vbExclamation, "Supprimer une image de volume")
                     End Select
                 Case 1
                     MsgBox("This image only contains 1 index. You can't remove volume images from this file", vbOKOnly + vbExclamation, "Remove a volume image")
                 Case 2
                     MsgBox("Esta imagen solo contiene 1 índice. No puede eliminar imágenes de volumen de este archivo", vbOKOnly + vbExclamation, "Eliminar una imagen de volumen")
+                Case 3
+                    MsgBox("Cette image ne contient qu'un seul index. Vous ne pouvez pas supprimer les images de volume de ce fichier.", vbOKOnly + vbExclamation, "Supprimer une image de volume")
             End Select
             Label4.Visible = False
             OK_Button.Enabled = False
