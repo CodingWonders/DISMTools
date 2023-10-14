@@ -9,6 +9,8 @@ Public Class GetAppxPkgInfoDlg
     Dim mainAsset As String = ""
     Dim assetDir As String = ""
 
+    Public displayName As String = ""
+
     Private Sub GetAppxPkgInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language
             Case 0
@@ -166,6 +168,8 @@ Public Class GetAppxPkgInfoDlg
                 Label32.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).ResourceId
                 Label40.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).Version.ToString()
             End If
+
+            displayName = Label25.Text
 
             Dim appDisplayName As String = If(Not MainForm.GetPackageDisplayName(Label23.Text, Label25.Text).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), MainForm.GetPackageDisplayName(Label23.Text, Label25.Text), "")
             If appDisplayName <> "" Then Label25.Text &= " (" & appDisplayName & ")"
