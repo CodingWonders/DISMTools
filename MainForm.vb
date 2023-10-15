@@ -11777,6 +11777,7 @@ Public Class MainForm
                     Exit For
                 End If
             Next
+            ImgInfoSaveDlg.ImgMountDir = MountDir
             ImgInfoSaveDlg.SaveTask = 0
             ImgInfoSaveDlg.ShowDialog()
         End If
