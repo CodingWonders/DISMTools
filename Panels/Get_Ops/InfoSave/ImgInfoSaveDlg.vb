@@ -47,7 +47,10 @@ Public Class ImgInfoSaveDlg
         If ImageInfoList.Count <> 0 Then ImageInfoList.Clear()
         Contents &= "----> Image information" & CrLf & CrLf
         If OnlineMode Then
-            Contents &= "    An active installation has been detected. Information can't be obtained from such images. Skipping this task..." & CrLf & CrLf
+            Contents &= "  Active installation information:" & CrLf & _
+                        "    - Name: " & My.Computer.Info.OSFullName & CrLf & _
+                        "    - Boot point (mount point): " & Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & CrLf & _
+                        "    - Version: " & Environment.OSVersion.Version.Major & "." & Environment.OSVersion.Version.Minor & "." & Environment.OSVersion.Version.Build & "." & FileVersionInfo.GetVersionInfo(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe").ProductPrivatePart & CrLf & CrLf
             Exit Sub
         End If
         Contents &= " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "")
