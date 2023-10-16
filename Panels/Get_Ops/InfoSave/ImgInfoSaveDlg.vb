@@ -65,7 +65,7 @@ Public Class ImgInfoSaveDlg
                         "  Getting information of " & ImageInfoCollection.Count & " images..." & CrLf & CrLf
             Debug.WriteLine("[GetImageInformation] Exporting information to contents...")
             For Each ImageInfo As DismImageInfo In ImageInfoCollection
-                ReportChanges("Getting image information... (image " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & " of " & ImageInfoCollection.Count & ")", (ImageInfoCollection.IndexOf(ImageInfo) / ImageInfoCollection.Count))
+                ReportChanges("Getting image information... (image " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & " of " & ImageInfoCollection.Count & ")", (ImageInfoCollection.IndexOf(ImageInfo) / ImageInfoCollection.Count) * 100)
                 Contents &= "  Image " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & ":" & CrLf & _
                             "    - Version: " & ImageInfo.ProductVersion.ToString() & CrLf & _
                             "    - Image name: " & Quote & ImageInfo.ImageName & Quote & CrLf & _
@@ -123,7 +123,7 @@ Public Class ImgInfoSaveDlg
                               "Do you want to get this information and save it in the report?", vbYesNo + vbQuestion, "Package information") = MsgBoxResult.Yes Then
                         Debug.WriteLine("[GetPackageInformation] Getting complete package information...")
                         For Each installedPackage As DismPackage In InstalledPkgInfo
-                            ReportChanges("Getting information of package... (package " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " of " & InstalledPkgInfo.Count & ")", InstalledPkgInfo.IndexOf(installedPackage) / InstalledPkgInfo.Count)
+                            ReportChanges("Getting information of package... (package " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " of " & InstalledPkgInfo.Count & ")", (InstalledPkgInfo.IndexOf(installedPackage) / InstalledPkgInfo.Count) * 100)
                             Dim pkgInfoEx As DismPackageInfoEx = Nothing
                             Dim pkgInfo As DismPackageInfo = Nothing
                             Dim cProps As DismCustomPropertyCollection = Nothing
@@ -258,7 +258,7 @@ Public Class ImgInfoSaveDlg
                               "Do you want to get this information and save it in the report?", vbYesNo + vbQuestion, "Feature information") = MsgBoxResult.Yes Then
                         Debug.WriteLine("[GetFeatureInformation] Getting complete feature information...")
                         For Each feature As DismFeature In InstalledFeatInfo
-                            ReportChanges("Getting information of feature... (feature " & InstalledFeatInfo.IndexOf(feature) + 1 & " of " & InstalledFeatInfo.Count & ")", InstalledFeatInfo.IndexOf(feature) / InstalledFeatInfo.Count)
+                            ReportChanges("Getting information of feature... (feature " & InstalledFeatInfo.IndexOf(feature) + 1 & " of " & InstalledFeatInfo.Count & ")", (InstalledFeatInfo.IndexOf(feature) / InstalledFeatInfo.Count) * 100)
                             Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, feature.FeatureName)
                             Contents &= "  Feature " & InstalledFeatInfo.IndexOf(feature) + 1 & " of " & InstalledFeatInfo.Count & ":" & CrLf
                             Dim cProps As DismCustomPropertyCollection = featInfo.CustomProperties
@@ -299,6 +299,15 @@ Public Class ImgInfoSaveDlg
     End Sub
 
     Private Sub ImgInfoSaveDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
+            BackColor = Color.FromArgb(31, 31, 31)
+            ForeColor = Color.White
+        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
+            BackColor = Color.FromArgb(238, 238, 242)
+            ForeColor = Color.Black
+        End If
+        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         Visible = True
         Select Case MainForm.Language
             Case 0
