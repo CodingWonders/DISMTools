@@ -153,13 +153,13 @@ Public Class ImgInfoSaveDlg
                                             "    - Package state: " & Casters.CastDismPackageState(pkgInfoEx.PackageState) & CrLf & _
                                             "    - Is a boot up required for full installation? " & Casters.CastDismFullyOfflineInstallationType(pkgInfoEx.FullyOffline) & CrLf & _
                                             "    - Capability identity: " & pkgInfoEx.CapabilityId & CrLf & _
-                                            "    - Custom properties: " & If(cProps.Count < 0, "none", "") & CrLf
+                                            "    - Custom properties: " & If(cProps.Count <= 0, "none", "") & CrLf
                                 If cProps.Count > 0 Then
                                     For Each cProp As DismCustomProperty In cProps
                                         Contents &= "      - " & If(cProp.Path <> "", cProp.Path & "\", "") & cProp.Name & ": " & cProp.Value & CrLf
                                     Next
                                 End If
-                                Contents &= "    - Features: " & If(pkgInfoEx.Features.Count < 0, "none", "") & CrLf
+                                Contents &= "    - Features: " & If(pkgInfoEx.Features.Count <= 0, "none", "") & CrLf
                                 If pkgInfoEx.Features.Count > 0 Then
                                     Dim pkgFeats As DismFeatureCollection = pkgInfoEx.Features
                                     For Each pkgFeat As DismFeature In pkgFeats
@@ -188,13 +188,13 @@ Public Class ImgInfoSaveDlg
                                             "    - Package state: " & Casters.CastDismPackageState(pkgInfo.PackageState) & CrLf & _
                                             "    - Is a boot up required for full installation? " & Casters.CastDismFullyOfflineInstallationType(pkgInfo.FullyOffline) & CrLf & _
                                             "    - Capability identity: not applicable (the installation this information was obtained with can't get capability information)" & CrLf & _
-                                            "    - Custom properties: " & If(cProps.Count < 0, "none", "") & CrLf
+                                            "    - Custom properties: " & If(cProps.Count <= 0, "none", "") & CrLf
                                 If cProps.Count > 0 Then
                                     For Each cProp As DismCustomProperty In cProps
                                         Contents &= "      - " & If(cProp.Path <> "", cProp.Path & "\", "") & cProp.Name & ": " & cProp.Value & CrLf
                                     Next
                                 End If
-                                Contents &= "    - Features: " & If(pkgInfo.Features.Count < 0, "none", "") & CrLf
+                                Contents &= "    - Features: " & If(pkgInfo.Features.Count <= 0, "none", "") & CrLf
                                 If pkgInfo.Features.Count > 0 Then
                                     Dim pkgFeats As DismFeatureCollection = pkgInfo.Features
                                     For Each pkgFeat As DismFeature In pkgFeats
