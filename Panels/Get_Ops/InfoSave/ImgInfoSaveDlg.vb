@@ -276,15 +276,17 @@ Public Class ImgInfoSaveDlg
                             Contents &= CrLf & CrLf
                         Next
                         Contents &= "  - Complete feature information has been gathered" & CrLf & CrLf
+                    Else
+                        ReportChanges("Saving installed features...", 50)
+                        Contents &= "  - Complete feature information has not been gathered" & CrLf & CrLf & _
+                                    "  Installed features in this image:" & CrLf
+                        For Each installedFeature As DismFeature In InstalledFeatInfo
+                            Contents &= "  - Feature name: " & installedFeature.FeatureName & CrLf & _
+                                        "  - Feature state: " & Casters.CastDismPackageState(installedFeature.State) & CrLf & CrLf
+                        Next
                     End If
                 Else
-                    ReportChanges("Saving installed features...", 50)
-                    Contents &= "  - Complete feature information has not been gathered" & CrLf & CrLf & _
-                                "  Installed features in this image:" & CrLf
-                    For Each installedFeature As DismFeature In InstalledFeatInfo
-                        Contents &= "  - Feature name: " & installedFeature.FeatureName & CrLf & _
-                                    "  - Feature state: " & Casters.CastDismPackageState(installedFeature.State) & CrLf & CrLf
-                    Next
+
                 End If
             End Using
         Catch ex As Exception
@@ -296,6 +298,55 @@ Public Class ImgInfoSaveDlg
         Finally
             DismApi.Shutdown()
         End Try
+    End Sub
+
+    Sub GetAppxInformation()
+        ' This is a work in progress. Do not call this procedure until this message has been removed
+        Dim InstalledAppxPackageInfo As DismAppxPackageCollection = Nothing
+        Contents &= "----> AppX package information" & CrLf & CrLf & _
+                    " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
+        ' Detect if the image is Windows 8 or later. If not, skip this task
+        If (Not OnlineMode And (Not MainForm.IsWindows8OrHigher(ImgMountDir & "\Windows\system32\ntoskrnl.exe") Or MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase))) Or (OnlineMode And Not MainForm.IsWindows8OrHigher(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe")) Then
+            Contents &= "    This task is not supported on the specified Windows image. Check that it contains Windows 8 or a later Windows version, and that it isn't a Windows PE image. Skipping task..." & CrLf & CrLf
+            Exit Sub
+        Else
+            Debug.WriteLine("[GetAppxInformation] Starting task...")
+            Try
+                ' Windows 8 can't get this information with the API. Use the MainForm arrays
+                If Environment.OSVersion.Version.Major < 10 Then
+
+                Else
+                    Debug.WriteLine("[GetAppxInformation] Starting API...")
+                    DismApi.Initialize(DismLogLevel.LogErrors)
+                    Debug.WriteLine("[GetAppxInformation] Creating image session...")
+                    ReportChanges("Preparing AppX package information processes...", 0)
+                    Using imgSession As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(ImgMountDir))
+                        Debug.WriteLine("[GetAppxInformation] Getting basic AppX package information...")
+                        ReportChanges("Getting installed AppX packages...", 5)
+                        InstalledAppxPackageInfo = DismApi.GetProvisionedAppxPackages(imgSession)
+                        Contents &= "  Installed AppX packages in this image: " & InstalledAppxPackageInfo.Count & CrLf & CrLf
+                        ReportChanges("AppX packages have been obtained", 10)
+                        If SaveTask = 0 Then
+                            If MsgBox("The program has obtained basic information of the installed packages of this image. You can also get complete information of such packages and save it in the report." & CrLf & CrLf & _
+                              "Do note that this will take longer depending on the number of installed packages." & CrLf & CrLf & _
+                              "Do you want to get this information and save it in the report?", vbYesNo + vbQuestion, "Package information") = MsgBoxResult.Yes Then
+
+                            Else
+
+                            End If
+                        End If
+                    End Using
+                End If
+            Catch ex As Exception
+                Debug.WriteLine("[GetAppxInformation] An error occurred while getting AppX package information: " & ex.ToString() & " - " & ex.Message)
+                Contents &= "  The program could not get information about this task. See below for reasons why:" & CrLf & CrLf & _
+                            "  - Exception: " & ex.ToString() & CrLf & _
+                            "  - Exception message: " & ex.Message & CrLf & _
+                            "  - Error code: " & Hex(ex.HResult) & CrLf & CrLf
+            Finally
+                DismApi.Shutdown()
+            End Try
+        End If
     End Sub
 
     Private Sub ImgInfoSaveDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -380,6 +431,7 @@ Public Class ImgInfoSaveDlg
                 GetImageInformation()
                 GetPackageInformation()
                 GetFeatureInformation()
+                'GetAppxInformation()
         End Select
 
         ' Save the file
