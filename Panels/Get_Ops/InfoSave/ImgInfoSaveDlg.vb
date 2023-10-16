@@ -223,7 +223,73 @@ Public Class ImgInfoSaveDlg
                 End If
             End Using
         Catch ex As Exception
+            Debug.WriteLine("[GetPackageInformation] An error occurred while getting package information: " & ex.ToString() & " - " & ex.Message)
+            Contents &= "  The program could not get information about this task. See below for reasons why:" & CrLf & CrLf & _
+                        "  - Exception: " & ex.ToString() & CrLf & _
+                        "  - Exception message: " & ex.Message & CrLf & _
+                        "  - Error code: " & Hex(ex.HResult) & CrLf & CrLf
+        Finally
+            DismApi.Shutdown()
+        End Try
+    End Sub
 
+    Sub GetFeatureInformation()
+        Dim InstalledFeatInfo As DismFeatureCollection = Nothing
+        Contents &= "----> Feature information" & CrLf & CrLf & _
+                    " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
+        Debug.WriteLine("[GetFeatureInformation] Starting task...")
+        Try
+            Debug.WriteLine("[GetFeatureInformation] Starting API...")
+            DismApi.Initialize(DismLogLevel.LogErrors)
+            Debug.WriteLine("[GetFeatureInformation] Creating image session...")
+            ReportChanges("Preparing feature information processes...", 0)
+            Using imgSession As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(ImgMountDir))
+                Debug.WriteLine("[GetFeatureInformation] Getting basic feature information...")
+                ReportChanges("Getting installed features...", 5)
+                InstalledFeatInfo = DismApi.GetFeatures(imgSession)
+                Contents &= "  Installed features in this image: " & InstalledFeatInfo.Count & CrLf & CrLf
+                ReportChanges("Features have been obtained", 10)
+                If SaveTask = 0 Then
+                    If MsgBox("The program has obtained basic information of the installed features of this image. You can also get complete information of such features and save it in the report." & CrLf & CrLf & _
+                              "Do note that this will take longer depending on the number of installed features." & CrLf & CrLf & _
+                              "Do you want to get this information and save it in the report?", vbYesNo + vbQuestion, "Feature information") = MsgBoxResult.Yes Then
+                        Debug.WriteLine("[GetFeatureInformation] Getting complete feature information...")
+                        For Each feature As DismFeature In InstalledFeatInfo
+                            ReportChanges("Getting information of feature... (feature " & InstalledFeatInfo.IndexOf(feature) + 1 & " of " & InstalledFeatInfo.Count & ")", InstalledFeatInfo.IndexOf(feature) / InstalledFeatInfo.Count)
+                            Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, feature.FeatureName)
+                            Contents &= "  Feature " & InstalledFeatInfo.IndexOf(feature) + 1 & " of " & InstalledFeatInfo.Count & ":" & CrLf
+                            Dim cProps As DismCustomPropertyCollection = featInfo.CustomProperties
+                            Contents &= "    - Feature name: " & featInfo.FeatureName & CrLf & _
+                                        "    - Display name: " & featInfo.DisplayName & CrLf & _
+                                        "    - Description: " & featInfo.Description & CrLf & _
+                                        "    - Is a restart required? " & Casters.CastDismRestartType(featInfo.RestartRequired) & CrLf & _
+                                        "    - State: " & Casters.CastDismFeatureState(featInfo.FeatureState) & CrLf & _
+                                            "    - Custom properties: " & If(cProps.Count <= 0, "none", "") & CrLf
+                            If cProps.Count > 0 Then
+                                For Each cProp As DismCustomProperty In cProps
+                                    Contents &= "      - " & If(cProp.Path <> "", cProp.Path & "\", "") & cProp.Name & ": " & cProp.Value & CrLf
+                                Next
+                            End If
+                            Contents &= CrLf & CrLf
+                        Next
+                        Contents &= "  - Complete feature information has been gathered" & CrLf & CrLf
+                    End If
+                Else
+                    ReportChanges("Saving installed features...", 50)
+                    Contents &= "  - Complete feature information has not been gathered" & CrLf & CrLf & _
+                                "  Installed features in this image:" & CrLf
+                    For Each installedFeature As DismFeature In InstalledFeatInfo
+                        Contents &= "  - Feature name: " & installedFeature.FeatureName & CrLf & _
+                                    "  - Feature state: " & Casters.CastDismPackageState(installedFeature.State) & CrLf & CrLf
+                    Next
+                End If
+            End Using
+        Catch ex As Exception
+            Debug.WriteLine("[GetFeatureInformation] An error occurred while getting feature information: " & ex.ToString() & " - " & ex.Message)
+            Contents &= "  The program could not get information about this task. See below for reasons why:" & CrLf & CrLf & _
+                        "  - Exception: " & ex.ToString() & CrLf & _
+                        "  - Exception message: " & ex.Message & CrLf & _
+                        "  - Error code: " & Hex(ex.HResult) & CrLf & CrLf
         Finally
             DismApi.Shutdown()
         End Try
@@ -301,6 +367,7 @@ Public Class ImgInfoSaveDlg
                 Contents &= " - Information tasks: get complete image information" & CrLf & CrLf
                 GetImageInformation()
                 GetPackageInformation()
+                GetFeatureInformation()
         End Select
 
         ' Save the file

@@ -11777,7 +11777,8 @@ Public Class MainForm
                     Exit For
                 End If
             Next
-            ImgInfoSaveDlg.ImgMountDir = MountDir
+            ImgInfoSaveDlg.ImgMountDir = If(Not OnlineManagement, MountDir, "")
+            ImgInfoSaveDlg.OnlineMode = OnlineManagement
             ImgInfoSaveDlg.SaveTask = 0
             ImgInfoSaveDlg.ShowDialog()
         End If
