@@ -178,7 +178,12 @@ Public Class GetAppxPkgInfoDlg
 
             Dim packageDispName As String = MainForm.GetPackageDisplayName(Label23.Text, Label25.Text)
 
-            Dim appDisplayName As String = If(packageDispName IsNot Nothing, packageDispName, "")
+            Dim appDisplayName As String = ""
+
+            If packageDispName IsNot Nothing Then
+                appDisplayName = If(Not packageDispName.StartsWith("ms-resource:"), packageDispName, "")
+            End If
+
             If appDisplayName <> "" Then Label25.Text &= " (" & appDisplayName & ")"
 
             ' Get exclusive things that can't be obtained with the DISM API
