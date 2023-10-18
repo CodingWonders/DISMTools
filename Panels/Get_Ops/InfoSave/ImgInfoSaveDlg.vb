@@ -123,7 +123,7 @@ Public Class ImgInfoSaveDlg
                               "Do you want to get this information and save it in the report?", vbYesNo + vbQuestion, "Package information") = MsgBoxResult.Yes Then
                         Debug.WriteLine("[GetPackageInformation] Getting complete package information...")
                         For Each installedPackage As DismPackage In InstalledPkgInfo
-                            ReportChanges("Getting information of package... (package " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " of " & InstalledPkgInfo.Count & ")", (InstalledPkgInfo.IndexOf(installedPackage) / InstalledPkgInfo.Count) * 100)
+                            ReportChanges("Getting information of packages... (package " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " of " & InstalledPkgInfo.Count & ")", (InstalledPkgInfo.IndexOf(installedPackage) / InstalledPkgInfo.Count) * 100)
                             Dim pkgInfoEx As DismPackageInfoEx = Nothing
                             Dim pkgInfo As DismPackageInfo = Nothing
                             Dim cProps As DismCustomPropertyCollection = Nothing
@@ -258,7 +258,7 @@ Public Class ImgInfoSaveDlg
                               "Do you want to get this information and save it in the report?", vbYesNo + vbQuestion, "Feature information") = MsgBoxResult.Yes Then
                         Debug.WriteLine("[GetFeatureInformation] Getting complete feature information...")
                         For Each feature As DismFeature In InstalledFeatInfo
-                            ReportChanges("Getting information of feature... (feature " & InstalledFeatInfo.IndexOf(feature) + 1 & " of " & InstalledFeatInfo.Count & ")", (InstalledFeatInfo.IndexOf(feature) / InstalledFeatInfo.Count) * 100)
+                            ReportChanges("Getting information of features... (feature " & InstalledFeatInfo.IndexOf(feature) + 1 & " of " & InstalledFeatInfo.Count & ")", (InstalledFeatInfo.IndexOf(feature) / InstalledFeatInfo.Count) * 100)
                             Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, feature.FeatureName)
                             Contents &= "  Feature " & InstalledFeatInfo.IndexOf(feature) + 1 & " of " & InstalledFeatInfo.Count & ":" & CrLf
                             Dim cProps As DismCustomPropertyCollection = featInfo.CustomProperties
@@ -301,7 +301,6 @@ Public Class ImgInfoSaveDlg
     End Sub
 
     Sub GetAppxInformation()
-        ' This is a work in progress. Do not call this procedure until this message has been removed
         Dim InstalledAppxPackageInfo As DismAppxPackageCollection = Nothing
         Contents &= "----> AppX package information" & CrLf & CrLf & _
                     " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
@@ -314,7 +313,95 @@ Public Class ImgInfoSaveDlg
             Try
                 ' Windows 8 can't get this information with the API. Use the MainForm arrays
                 If Environment.OSVersion.Version.Major < 10 Then
-
+                    For x = 0 To Array.LastIndexOf(MainForm.imgAppxPackageNames, MainForm.imgAppxPackageNames.Last)
+                        ReportChanges("Getting information of AppX packages... (AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count & ")", ((x + 1) / MainForm.imgAppxPackageNames.Count) * 100)
+                        Contents &= "  AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count & ":" & CrLf & _
+                                    "    - Package name: " & MainForm.imgAppxPackageNames(x) & CrLf & _
+                                    "    - Application display name: " & MainForm.imgAppxDisplayNames(x) & CrLf & _
+                                    "    - Architecture: " & MainForm.imgAppxArchitectures(x) & CrLf & _
+                                    "    - Resource ID: " & MainForm.imgAppxResourceIds(x) & CrLf & _
+                                    "    - Version: " & MainForm.imgAppxVersions(x) & CrLf
+                        ' Detect if *.pckgdep files are present in the AppRepository folder, as that's how this program gets the registration status of an AppX package
+                        If Directory.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & MainForm.imgAppxPackageNames(x), _
+                                               ImgMountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & MainForm.imgAppxPackageNames(x))) Then
+                            ' Get the number of pckgdep files
+                            If My.Computer.FileSystem.GetFiles(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & MainForm.imgAppxPackageNames(x), _
+                                                                  ImgMountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & MainForm.imgAppxPackageNames(x)), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count > 0 Then
+                                Contents &= "    - Is registered to any user? Yes" & CrLf
+                            Else
+                                Contents &= "    - Is registered to any user? No" & CrLf
+                            End If
+                        Else
+                            Contents &= "    - Is registered to any user? No" & CrLf
+                        End If
+                        Contents &= "    - Installation location: " & Quote & (If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & MainForm.imgAppxPackageNames(x)).Replace("\\", "\").Trim() & Quote & CrLf
+                        Dim pkgDirs() As String = Directory.GetDirectories(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps", MainForm.imgAppxPackageNames(x) & "*", SearchOption.TopDirectoryOnly)
+                        Dim instDir As String = ""
+                        For Each folder In pkgDirs
+                            If Not folder.Contains("neutral") Then
+                                instDir = (folder & "\AppxManifest.xml").Replace("\\", "\").Trim()
+                            End If
+                        Next
+                        If pkgDirs.Count <= 1 And Not instDir.Contains(MainForm.imgAppxPackageNames(x)) Then
+                            If File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml") Then
+                                instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml"
+                            ElseIf File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml") Then
+                                instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml"
+                            Else
+                                instDir = ""
+                            End If
+                        End If
+                        Contents &= "    - Package manifest location: " & Quote & instDir & Quote & CrLf
+                        ' Get store logo asset directory
+                        Dim assetDir As String = ""
+                        Try
+                            assetDir = MainForm.GetSuitablePackageFolder(MainForm.imgAppxDisplayNames(x))
+                        Catch ex As Exception
+                            ' Continue
+                        End Try
+                        If assetDir <> "" Then
+                            If File.Exists(assetDir & "\AppxManifest.xml") Then
+                                Dim ManFile As New RichTextBox() With {
+                                    .Text = File.ReadAllText(assetDir & "\AppxManifest.xml")
+                                }
+                                For Each line In ManFile.Lines
+                                    If line.Contains("<Logo>") Then
+                                        Dim SplitPaths As New List(Of String)
+                                        SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
+                                        SplitPaths.RemoveAt(SplitPaths.Count - 1)
+                                        Dim newPath As String = String.Join("\", SplitPaths)
+                                        Contents &= "    - Store logo asset directory: " & Quote & (assetDir & "\" & newPath).Replace("\\", "\").Trim() & Quote & CrLf
+                                        Exit For
+                                    End If
+                                Next
+                            End If
+                        Else
+                            If File.Exists(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & MainForm.imgAppxPackageNames(x) & "\AppxManifest.xml") Then
+                                Dim ManFile As New RichTextBox() With {
+                                    .Text = File.ReadAllText(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & MainForm.imgAppxPackageNames(x) & "\AppxManifest.xml")
+                                }
+                                For Each line In ManFile.Lines
+                                    If line.Contains("<Logo>") Then
+                                        Dim SplitPaths As New List(Of String)
+                                        SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
+                                        SplitPaths.RemoveAt(SplitPaths.Count - 1)
+                                        Dim newPath As String = String.Join("\", SplitPaths)
+                                        Contents &= "    - Store logo asset directory: " & Quote & (If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & MainForm.imgAppxPackageNames(x) & "\" & newPath).Replace("\\", "\").Trim() & Quote & CrLf
+                                        Exit For
+                                    End If
+                                Next
+                            End If
+                        End If
+                        ' Since store logo assets can't be saved on plain text files, output their locations
+                        Dim mainAsset As String = MainForm.GetStoreAppMainLogo(MainForm.imgAppxPackageNames(x))
+                        If mainAsset <> "" And File.Exists(mainAsset) Then
+                            Contents &= "    - Main store logo asset: " & Quote & mainAsset.Replace("\\", "\").Trim() & Quote & CrLf & _
+                                        "                             Do note that this is a guess, and may not be the asset you're looking for. If that happens, report an issue on the GitHub repo" & _
+                                        " using the " & Quote & "Store logo asset preview issue" & Quote & " template. Then, provide the package name, the expected asset and the obtained asset." & CrLf & CrLf
+                        Else
+                            Contents &= "    - Main store logo asset: unknown" & CrLf & CrLf
+                        End If
+                    Next
                 Else
                     Debug.WriteLine("[GetAppxInformation] Starting API...")
                     DismApi.Initialize(DismLogLevel.LogErrors)
@@ -327,12 +414,205 @@ Public Class ImgInfoSaveDlg
                         Contents &= "  Installed AppX packages in this image: " & InstalledAppxPackageInfo.Count & CrLf & CrLf
                         ReportChanges("AppX packages have been obtained", 10)
                         If SaveTask = 0 Then
-                            If MsgBox("The program has obtained basic information of the installed packages of this image. You can also get complete information of such packages and save it in the report." & CrLf & CrLf & _
-                              "Do note that this will take longer depending on the number of installed packages." & CrLf & CrLf & _
-                              "Do you want to get this information and save it in the report?", vbYesNo + vbQuestion, "Package information") = MsgBoxResult.Yes Then
+                            If MsgBox("The program has obtained basic information of the installed AppX packages of this image. You can also get complete information of such AppX packages and save it in the report." & CrLf & CrLf & _
+                              "Do note that this will take longer depending on the number of installed AppX packages." & CrLf & CrLf & _
+                              "Do you want to get this information and save it in the report?", vbYesNo + vbQuestion, "AppX package information") = MsgBoxResult.Yes Then
+                                Debug.WriteLine("[GetAppxInformation] Getting complete AppX package information...")
+                                ' Determine if MainForm arrays contain more stuff
+                                Dim pkgNames As New List(Of String)
+                                For Each pkg As DismAppxPackage In InstalledAppxPackageInfo
+                                    pkgNames.Add(pkg.PackageName)
+                                Next
+                                If MainForm.imgAppxPackageNames.Count > pkgNames.Count Then
+                                    For x = 0 To Array.LastIndexOf(MainForm.imgAppxPackageNames, MainForm.imgAppxPackageNames.Last)
+                                        ReportChanges("Getting information of AppX packages... (AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count & ")", ((x + 1) / MainForm.imgAppxPackageNames.Count) * 100)
+                                        Contents &= "  AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count & ":" & CrLf & _
+                                                    "    - Package name: " & MainForm.imgAppxPackageNames(x) & CrLf & _
+                                                    "    - Application display name: " & MainForm.imgAppxDisplayNames(x) & CrLf & _
+                                                    "    - Architecture: " & MainForm.imgAppxArchitectures(x) & CrLf & _
+                                                    "    - Resource ID: " & MainForm.imgAppxResourceIds(x) & CrLf & _
+                                                    "    - Version: " & MainForm.imgAppxVersions(x) & CrLf
+                                        ' Detect if *.pckgdep files are present in the AppRepository folder, as that's how this program gets the registration status of an AppX package
+                                        If Directory.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & MainForm.imgAppxPackageNames(x), _
+                                                               ImgMountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & MainForm.imgAppxPackageNames(x))) Then
+                                            ' Get the number of pckgdep files
+                                            If My.Computer.FileSystem.GetFiles(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & MainForm.imgAppxPackageNames(x), _
+                                                                                  ImgMountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & MainForm.imgAppxPackageNames(x)), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count > 0 Then
+                                                Contents &= "    - Is registered to any user? Yes" & CrLf
+                                            Else
+                                                Contents &= "    - Is registered to any user? No" & CrLf
+                                            End If
+                                        Else
+                                            Contents &= "    - Is registered to any user? No" & CrLf
+                                        End If
+                                        Contents &= "    - Installation location: " & Quote & (If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & MainForm.imgAppxPackageNames(x)).Replace("\\", "\").Trim() & Quote & CrLf
+                                        Dim pkgDirs() As String = Directory.GetDirectories(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps", MainForm.imgAppxPackageNames(x) & "*", SearchOption.TopDirectoryOnly)
+                                        Dim instDir As String = ""
+                                        For Each folder In pkgDirs
+                                            If Not folder.Contains("neutral") Then
+                                                instDir = (folder & "\AppxManifest.xml").Replace("\\", "\").Trim()
+                                            End If
+                                        Next
+                                        If pkgDirs.Count <= 1 And Not instDir.Contains(MainForm.imgAppxPackageNames(x)) Then
+                                            If File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml") Then
+                                                instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml"
+                                            ElseIf File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml") Then
+                                                instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml"
+                                            Else
+                                                instDir = ""
+                                            End If
+                                        End If
+                                        Contents &= "    - Package manifest location: " & Quote & instDir & Quote & CrLf
+                                        ' Get store logo asset directory
+                                        Dim assetDir As String = ""
+                                        Try
+                                            assetDir = MainForm.GetSuitablePackageFolder(MainForm.imgAppxDisplayNames(x))
+                                        Catch ex As Exception
+                                            ' Continue
+                                        End Try
+                                        If assetDir <> "" Then
+                                            If File.Exists(assetDir & "\AppxManifest.xml") Then
+                                                Dim ManFile As New RichTextBox() With {
+                                                    .Text = File.ReadAllText(assetDir & "\AppxManifest.xml")
+                                                }
+                                                For Each line In ManFile.Lines
+                                                    If line.Contains("<Logo>") Then
+                                                        Dim SplitPaths As New List(Of String)
+                                                        SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
+                                                        SplitPaths.RemoveAt(SplitPaths.Count - 1)
+                                                        Dim newPath As String = String.Join("\", SplitPaths)
+                                                        Contents &= "    - Store logo asset directory: " & Quote & (assetDir & "\" & newPath).Replace("\\", "\").Trim() & Quote & CrLf
+                                                        Exit For
+                                                    End If
+                                                Next
+                                            End If
+                                        Else
+                                            If File.Exists(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & MainForm.imgAppxPackageNames(x) & "\AppxManifest.xml") Then
+                                                Dim ManFile As New RichTextBox() With {
+                                                    .Text = File.ReadAllText(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & MainForm.imgAppxPackageNames(x) & "\AppxManifest.xml")
+                                                }
+                                                For Each line In ManFile.Lines
+                                                    If line.Contains("<Logo>") Then
+                                                        Dim SplitPaths As New List(Of String)
+                                                        SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
+                                                        SplitPaths.RemoveAt(SplitPaths.Count - 1)
+                                                        Dim newPath As String = String.Join("\", SplitPaths)
+                                                        Contents &= "    - Store logo asset directory: " & Quote & (If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & MainForm.imgAppxPackageNames(x) & "\" & newPath).Replace("\\", "\").Trim() & Quote & CrLf
+                                                        Exit For
+                                                    End If
+                                                Next
+                                            End If
+                                        End If
+                                        ' Since store logo assets can't be saved on plain text files, output their locations
+                                        Dim mainAsset As String = MainForm.GetStoreAppMainLogo(MainForm.imgAppxPackageNames(x))
+                                        If mainAsset <> "" And File.Exists(mainAsset) Then
+                                            Contents &= "    - Main store logo asset: " & Quote & mainAsset.Replace("\\", "\").Trim() & Quote & CrLf & _
+                                                        "                             Do note that this is a guess, and may not be the asset you're looking for. If that happens, report an issue on the GitHub repo" & _
+                                                        " using the " & Quote & "Store logo asset preview issue" & Quote & " template. Then, provide the package name, the expected asset and the obtained asset." & CrLf & CrLf
+                                        Else
+                                            Contents &= "    - Main store logo asset: unknown" & CrLf & CrLf
+                                        End If
+                                    Next
+                                Else
+                                    For Each appxPkg As DismAppxPackage In InstalledAppxPackageInfo
+                                        ReportChanges("Getting information of AppX packages... (AppX package " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " of " & InstalledAppxPackageInfo.Count & ")", (InstalledAppxPackageInfo.IndexOf(appxPkg) / InstalledAppxPackageInfo.Count) * 100)
+                                        Contents &= "  AppX package " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " of " & InstalledAppxPackageInfo.Count & ":" & CrLf & _
+                                                    "    - Package name: " & appxPkg.PackageName & CrLf & _
+                                                    "    - Application display name: " & appxPkg.DisplayName & CrLf & _
+                                                    "    - Architecture: " & Casters.CastDismArchitecture(appxPkg.Architecture) & CrLf & _
+                                                    "    - Resource ID: " & appxPkg.ResourceId & CrLf & _
+                                                    "    - Version: " & appxPkg.Version.ToString() & CrLf
+                                        ' Detect if *.pckgdep files are present in the AppRepository folder, as that's how this program gets the registration status of an AppX package
+                                        If Directory.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxPkg.PackageName, _
+                                                               ImgMountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxPkg.PackageName)) Then
+                                            ' Get the number of pckgdep files
+                                            If My.Computer.FileSystem.GetFiles(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxPkg.PackageName, _
+                                                                                  ImgMountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxPkg.PackageName), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count > 0 Then
+                                                Contents &= "    - Is registered to any user? Yes" & CrLf
+                                            Else
+                                                Contents &= "    - Is registered to any user? No" & CrLf
+                                            End If
+                                        Else
+                                            Contents &= "    - Is registered to any user? No" & CrLf
+                                        End If
+                                        ' Use the InstallLocation property of the AppxPackage class.
+                                        ' TODO: if this works, implement InstallLocation on all other cases
+                                        Contents &= "    - Installation location: " & Quote & appxPkg.InstallLocation.Replace("%SYSTEMDRIVE%", Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Replace("\", "").Trim()).Trim() & Quote & CrLf
+                                        ' Detect if the source is an appx or appxbundle package by the manifest file
+                                        If File.Exists(appxPkg.InstallLocation & "\AppxManifest.xml") Then
+                                            ' APPX/MSIX file
+                                            Contents &= "    - Package manifest location: " & Quote & appxPkg.InstallLocation & "\AppxManifest.xml" & Quote & CrLf
+                                        ElseIf File.Exists(appxPkg.InstallLocation & "\AppxMetadata\AppxBundleManifest.xml") Then
+                                            ' APPXBUNDLE/MSIXBUNDLE file
+                                            Contents &= "    - Package manifest location: " & Quote & appxPkg.InstallLocation & "\AppxMetadata\AppxBundleManifest.xml" & Quote & CrLf
+                                        Else
+                                            ' Unrecognized type of file
+                                            Contents &= "    - Package manifest location: unknown" & CrLf
+                                        End If
+                                        ' Get store logo asset directory
+                                        Dim assetDir As String = ""
+                                        Try
+                                            assetDir = MainForm.GetSuitablePackageFolder(appxPkg.DisplayName)
+                                        Catch ex As Exception
+                                            ' Continue
+                                        End Try
+                                        If assetDir <> "" Then
+                                            If File.Exists(assetDir & "\AppxManifest.xml") Then
+                                                Dim ManFile As New RichTextBox() With {
+                                                    .Text = File.ReadAllText(assetDir & "\AppxManifest.xml")
+                                                }
+                                                For Each line In ManFile.Lines
+                                                    If line.Contains("<Logo>") Then
+                                                        Dim SplitPaths As New List(Of String)
+                                                        SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
+                                                        SplitPaths.RemoveAt(SplitPaths.Count - 1)
+                                                        Dim newPath As String = String.Join("\", SplitPaths)
+                                                        Contents &= "    - Store logo asset directory: " & Quote & (assetDir & "\" & newPath).Replace("\\", "\").Trim() & Quote & CrLf
+                                                        Exit For
+                                                    End If
+                                                Next
+                                            End If
+                                        Else
+                                            If File.Exists(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & appxPkg.PackageName & "\AppxManifest.xml") Then
+                                                Dim ManFile As New RichTextBox() With {
+                                                    .Text = File.ReadAllText(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & appxPkg.PackageName & "\AppxManifest.xml")
+                                                }
+                                                For Each line In ManFile.Lines
+                                                    If line.Contains("<Logo>") Then
+                                                        Dim SplitPaths As New List(Of String)
+                                                        SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
+                                                        SplitPaths.RemoveAt(SplitPaths.Count - 1)
+                                                        Dim newPath As String = String.Join("\", SplitPaths)
+                                                        Contents &= "    - Store logo asset directory: " & Quote & (If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & appxPkg.PackageName & "\" & newPath).Replace("\\", "\").Trim() & Quote & CrLf
+                                                        Exit For
+                                                    End If
+                                                Next
+                                            End If
+                                        End If
+                                        ' Since store logo assets can't be saved on plain text files, output their locations
+                                        Dim mainAsset As String = MainForm.GetStoreAppMainLogo(appxPkg.PackageName)
+                                        If mainAsset <> "" And File.Exists(mainAsset) Then
+                                            Contents &= "    - Main store logo asset: " & Quote & mainAsset.Replace("\\", "\").Trim() & Quote & CrLf & _
+                                                        "                             Do note that this is a guess, and may not be the asset you're looking for. If that happens, report an issue on the GitHub repo" & _
+                                                        " using the " & Quote & "Store logo asset preview issue" & Quote & " template. Then, provide the package name, the expected asset and the obtained asset." & CrLf & CrLf
+                                        Else
+                                            Contents &= "    - Main store logo asset: unknown" & CrLf & CrLf
+                                        End If
+                                    Next
+                                End If
 
+                                Contents &= "  - Complete AppX package information has been gathered" & CrLf & CrLf
                             Else
-
+                                ReportChanges("Saving installed AppX packages...", 50)
+                                Contents &= "  - Complete AppX package information has not been gathered" & CrLf & CrLf & _
+                                            "  Installed AppX packages in this image:" & CrLf
+                                For Each installedAppxPkg As DismAppxPackage In InstalledAppxPackageInfo
+                                    Contents &= "  - Package name: " & installedAppxPkg.PackageName & CrLf & _
+                                                "  - Application display name: " & installedAppxPkg.DisplayName & CrLf & _
+                                                "  - Architecture: " & Casters.CastDismArchitecture(installedAppxPkg.Architecture) & CrLf & _
+                                                "  - Resource ID: " & installedAppxPkg.ResourceId & CrLf & _
+                                                "  - Version: " & installedAppxPkg.Version.ToString() & CrLf & CrLf
+                                Next
                             End If
                         End If
                     End Using
@@ -431,7 +711,7 @@ Public Class ImgInfoSaveDlg
                 GetImageInformation()
                 GetPackageInformation()
                 GetFeatureInformation()
-                'GetAppxInformation()
+                GetAppxInformation()
         End Select
 
         ' Save the file
