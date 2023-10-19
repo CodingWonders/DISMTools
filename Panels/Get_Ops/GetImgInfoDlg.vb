@@ -486,8 +486,10 @@ Public Class GetImgInfoDlg
                         FeatUpd = "23H1 (Copper)"
                     Case 25240 To 25400     ' 25400 is a relative number. 25398 is the final build of Zinc
                         FeatUpd = "23H2 (Zinc)"
-                    Case 25801 To 27000     ' 27000 is a relative number
+                    Case 25801 To 25941
                         FeatUpd = "24H1 (Gallium)"
+                    Case 25942 To 27000     ' 27000 is a relative number
+                        FeatUpd = "24H2 (Germanium)"
                 End Select
             Case Else
                 Exit Sub
