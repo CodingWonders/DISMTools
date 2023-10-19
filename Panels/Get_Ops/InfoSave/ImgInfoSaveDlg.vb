@@ -313,6 +313,7 @@ Public Class ImgInfoSaveDlg
             Try
                 ' Windows 8 can't get this information with the API. Use the MainForm arrays
                 If Environment.OSVersion.Version.Major < 10 Then
+                    Contents &= "  Installed AppX packages in this image: " & MainForm.imgAppxPackageNames.Count & CrLf & CrLf
                     For x = 0 To Array.LastIndexOf(MainForm.imgAppxPackageNames, MainForm.imgAppxPackageNames.Last)
                         ReportChanges("Getting information of AppX packages... (AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count & ")", ((x + 1) / MainForm.imgAppxPackageNames.Count) * 100)
                         Contents &= "  AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count & ":" & CrLf & _
@@ -411,18 +412,18 @@ Public Class ImgInfoSaveDlg
                         Debug.WriteLine("[GetAppxInformation] Getting basic AppX package information...")
                         ReportChanges("Getting installed AppX packages...", 5)
                         InstalledAppxPackageInfo = DismApi.GetProvisionedAppxPackages(imgSession)
-                        Contents &= "  Installed AppX packages in this image: " & InstalledAppxPackageInfo.Count & CrLf & CrLf
+                        ' Determine if MainForm arrays contain more stuff
+                        Dim pkgNames As New List(Of String)
+                        For Each pkg As DismAppxPackage In InstalledAppxPackageInfo
+                            pkgNames.Add(pkg.PackageName)
+                        Next
+                        Contents &= "  Installed AppX packages in this image: " & If(MainForm.imgAppxPackageNames.Count > pkgNames.Count, MainForm.imgAppxPackageNames.Count, pkgNames.Count) & CrLf & CrLf
                         ReportChanges("AppX packages have been obtained", 10)
                         If SaveTask = 0 Then
                             If MsgBox("The program has obtained basic information of the installed AppX packages of this image. You can also get complete information of such AppX packages and save it in the report." & CrLf & CrLf & _
                               "Do note that this will take longer depending on the number of installed AppX packages." & CrLf & CrLf & _
                               "Do you want to get this information and save it in the report?", vbYesNo + vbQuestion, "AppX package information") = MsgBoxResult.Yes Then
                                 Debug.WriteLine("[GetAppxInformation] Getting complete AppX package information...")
-                                ' Determine if MainForm arrays contain more stuff
-                                Dim pkgNames As New List(Of String)
-                                For Each pkg As DismAppxPackage In InstalledAppxPackageInfo
-                                    pkgNames.Add(pkg.PackageName)
-                                Next
                                 If MainForm.imgAppxPackageNames.Count > pkgNames.Count Then
                                     For x = 0 To Array.LastIndexOf(MainForm.imgAppxPackageNames, MainForm.imgAppxPackageNames.Last)
                                         ReportChanges("Getting information of AppX packages... (AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count & ")", ((x + 1) / MainForm.imgAppxPackageNames.Count) * 100)
@@ -640,6 +641,48 @@ Public Class ImgInfoSaveDlg
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         Visible = True
+        If MainForm.ImgBW.IsBusy Then
+            Dim msg As String = ""
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            msg = "Background processes need to have completed before showing information. We'll wait until they have completed"
+                        Case "ESN"
+                            msg = "Los procesos en segundo plano deben haber completado antes de obtener información. Esperaremos hasta que hayan completado"
+                        Case "FRA"
+                            msg = "Les processus en plan doivent être terminés avant d'afficher l'information. Nous attendrons qu'ils soient terminés"
+                    End Select
+                Case 1
+                    msg = "Background processes need to have completed before showing information. We'll wait until they have completed"
+                Case 2
+                    msg = "Los procesos en segundo plano deben haber completado antes de obtener información. Esperaremos hasta que hayan completado"
+                Case 3
+                    msg = "Les processus en plan doivent être terminés avant d'afficher l'information. Nous attendrons qu'ils soient terminés"
+            End Select
+            MsgBox(msg, vbOKOnly + vbInformation, Label1.Text)
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            Label2.Text = "Waiting for background processes to finish..."
+                        Case "ESN"
+                            Label2.Text = "Esperando a que terminen los procesos en segundo plano..."
+                        Case "FRA"
+                            Label2.Text = "Attente de la fin des processus en arrière plan..."
+                    End Select
+                Case 1
+                    Label2.Text = "Waiting for background processes to finish..."
+                Case 2
+                    Label2.Text = "Esperando a que terminen los procesos en segundo plano..."
+                Case 3
+                    Label2.Text = "Attente de la fin des processus en arrière plan..."
+            End Select
+            While MainForm.ImgBW.IsBusy
+                Application.DoEvents()
+                Thread.Sleep(500)
+            End While
+        End If
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
