@@ -310,13 +310,15 @@ Public Class ImgInfoSaveDlg
             Exit Sub
         Else
             Debug.WriteLine("[GetAppxInformation] Starting task...")
+            ' Do note that, when using the MainForm arrays, an empty entry appears at the end, so don't take it into account
             Try
                 ' Windows 8 can't get this information with the API. Use the MainForm arrays
                 If Environment.OSVersion.Version.Major < 10 Then
-                    Contents &= "  Installed AppX packages in this image: " & MainForm.imgAppxPackageNames.Count & CrLf & CrLf
+                    Contents &= "  Installed AppX packages in this image: " & MainForm.imgAppxPackageNames.Count - 1 & CrLf & CrLf
                     For x = 0 To Array.LastIndexOf(MainForm.imgAppxPackageNames, MainForm.imgAppxPackageNames.Last)
-                        ReportChanges("Getting information of AppX packages... (AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count & ")", ((x + 1) / MainForm.imgAppxPackageNames.Count) * 100)
-                        Contents &= "  AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count & ":" & CrLf & _
+                        If x = MainForm.imgAppxPackageNames.Count - 1 Then Continue For
+                        ReportChanges("Getting information of AppX packages... (AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ")", ((x + 1) / MainForm.imgAppxPackageNames.Count) * 100)
+                        Contents &= "  AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ":" & CrLf & _
                                     "    - Package name: " & MainForm.imgAppxPackageNames(x) & CrLf & _
                                     "    - Application display name: " & MainForm.imgAppxDisplayNames(x) & CrLf & _
                                     "    - Architecture: " & MainForm.imgAppxArchitectures(x) & CrLf & _
@@ -417,17 +419,18 @@ Public Class ImgInfoSaveDlg
                         For Each pkg As DismAppxPackage In InstalledAppxPackageInfo
                             pkgNames.Add(pkg.PackageName)
                         Next
-                        Contents &= "  Installed AppX packages in this image: " & If(MainForm.imgAppxPackageNames.Count > pkgNames.Count, MainForm.imgAppxPackageNames.Count, pkgNames.Count) & CrLf & CrLf
+                        Contents &= "  Installed AppX packages in this image: " & If(MainForm.imgAppxPackageNames.Count - 1 > pkgNames.Count, MainForm.imgAppxPackageNames.Count - 1, pkgNames.Count) & CrLf & CrLf
                         ReportChanges("AppX packages have been obtained", 10)
                         If SaveTask = 0 Then
                             If MsgBox("The program has obtained basic information of the installed AppX packages of this image. You can also get complete information of such AppX packages and save it in the report." & CrLf & CrLf & _
                               "Do note that this will take longer depending on the number of installed AppX packages." & CrLf & CrLf & _
                               "Do you want to get this information and save it in the report?", vbYesNo + vbQuestion, "AppX package information") = MsgBoxResult.Yes Then
                                 Debug.WriteLine("[GetAppxInformation] Getting complete AppX package information...")
-                                If MainForm.imgAppxPackageNames.Count > pkgNames.Count Then
+                                If MainForm.imgAppxPackageNames.Count - 1 > pkgNames.Count Then
                                     For x = 0 To Array.LastIndexOf(MainForm.imgAppxPackageNames, MainForm.imgAppxPackageNames.Last)
-                                        ReportChanges("Getting information of AppX packages... (AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count & ")", ((x + 1) / MainForm.imgAppxPackageNames.Count) * 100)
-                                        Contents &= "  AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count & ":" & CrLf & _
+                                        If x = MainForm.imgAppxPackageNames.Count - 1 Then Continue For
+                                        ReportChanges("Getting information of AppX packages... (AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ")", ((x + 1) / MainForm.imgAppxPackageNames.Count) * 100)
+                                        Contents &= "  AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ":" & CrLf & _
                                                     "    - Package name: " & MainForm.imgAppxPackageNames(x) & CrLf & _
                                                     "    - Application display name: " & MainForm.imgAppxDisplayNames(x) & CrLf & _
                                                     "    - Architecture: " & MainForm.imgAppxArchitectures(x) & CrLf & _
@@ -660,7 +663,7 @@ Public Class ImgInfoSaveDlg
                 Case 3
                     msg = "Les processus en plan doivent être terminés avant d'afficher l'information. Nous attendrons qu'ils soient terminés"
             End Select
-            MsgBox(msg, vbOKOnly + vbInformation, Label1.Text)
+            MsgBox(msg, vbOKOnly + vbInformation, Text)
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
