@@ -633,6 +633,69 @@ Public Class ImgInfoSaveDlg
         End If
     End Sub
 
+    Sub GetCapabilityInformation()
+        Dim InstalledCapInfo As DismCapabilityCollection = Nothing
+        Contents &= "----> Capability information" & CrLf & CrLf & _
+                    " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
+        If (Not OnlineMode And (Not MainForm.IsWindows10OrHigher(ImgMountDir & "\Windows\system32\ntoskrnl.exe") Or MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase))) Or (OnlineMode And Not MainForm.IsWindows10OrHigher(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe")) Then
+            Contents &= "    This task is not supported on the specified Windows image. Check that it contains Windows 10 or a later Windows version, and that it isn't a Windows PE image. Skipping task..." & CrLf & CrLf
+            Exit Sub
+        Else
+            Debug.WriteLine("[GetCapabilityInformation] Starting task...")
+            Try
+                Debug.WriteLine("[GetCapabilityInformation] Starting API...")
+                DismApi.Initialize(DismLogLevel.LogErrors)
+                Debug.WriteLine("[GetCapabilityInformation] Creating image session...")
+                ReportChanges("Preparing capability information processes...", 0)
+                Using imgSession As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(ImgMountDir))
+                    Debug.WriteLine("[GetCapabilityInformation] Getting basic capability information...")
+                    ReportChanges("Getting installed capabilities...", 5)
+                    InstalledCapInfo = DismApi.GetCapabilities(imgSession)
+                    Contents &= "  Installed capabilities in this image: " & InstalledCapInfo.Count & CrLf & CrLf
+                    ReportChanges("Capabilities have been obtained", 10)
+                    If SaveTask = 0 Then
+                        If MsgBox("The program has obtained basic information of the installed capabilities of this image. You can also get complete information of such capabilities and save it in the report." & CrLf & CrLf & _
+                              "Do note that this will take longer depending on the number of installed capabilities." & CrLf & CrLf & _
+                              "Do you want to get this information and save it in the report?", vbYesNo + vbQuestion, "Capability information") = MsgBoxResult.Yes Then
+                            Debug.WriteLine("[GetCapabilityInformation] Getting complete capability information...")
+                            For Each capability As DismCapability In InstalledCapInfo
+                                ReportChanges("Getting information of capabilities... (capability " & InstalledCapInfo.IndexOf(capability) + 1 & " of " & InstalledCapInfo.Count & ")", (InstalledCapInfo.IndexOf(capability) / InstalledCapInfo.Count) * 100)
+                                Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, capability.Name)
+                                Contents &= "  Capability " & InstalledCapInfo.IndexOf(capability) + 1 & " of " & InstalledCapInfo.Count & ":" & CrLf & _
+                                            "    - Capability identity: " & capInfo.Name & CrLf & _
+                                            "    - Capability name: " & capInfo.Name.Remove(InStr(capInfo.Name, "~") - 1) & CrLf & _
+                                            "    - Capability state: " & Casters.CastDismPackageState(capInfo.State) & CrLf & _
+                                            "    - Display name: " & capInfo.DisplayName & CrLf & _
+                                            "    - Capability description: " & capInfo.Description & CrLf & _
+                                            "    - Sizes:" & CrLf & _
+                                            "      - Download size: " & capInfo.DownloadSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")" & CrLf & _
+                                            "      - Install size: " & capInfo.InstallSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")" & CrLf & CrLf
+                            Next
+                            Contents &= "  - Complete capability information has been gathered" & CrLf & CrLf
+                        Else
+                            ReportChanges("Saving installed capabilities...", 50)
+                            Contents &= "  - Complete capability information has not been gathered" & CrLf & CrLf
+                            For Each installedCapability As DismCapability In InstalledCapInfo
+                                Contents &= "  - Capability name: " & installedCapability.Name & CrLf & _
+                                            "  - Capability state: " & Casters.CastDismPackageState(installedCapability.State) & CrLf & CrLf
+                            Next
+                        End If
+                    Else
+
+                    End If
+                End Using
+            Catch ex As Exception
+                Debug.WriteLine("[GetCapabilityInformation] An error occurred while getting capability information: " & ex.ToString() & " - " & ex.Message)
+                Contents &= "  The program could not get information about this task. See below for reasons why:" & CrLf & CrLf & _
+                            "  - Exception: " & ex.ToString() & CrLf & _
+                            "  - Exception message: " & ex.Message & CrLf & _
+                            "  - Error code: " & Hex(ex.HResult) & CrLf & CrLf
+            Finally
+                DismApi.Shutdown()
+            End Try
+        End If
+    End Sub
+
     Private Sub ImgInfoSaveDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)
@@ -758,11 +821,13 @@ Public Class ImgInfoSaveDlg
                 GetPackageInformation()
                 GetFeatureInformation()
                 GetAppxInformation()
+                GetCapabilityInformation()
         End Select
 
         ' Save the file
         If Contents <> "" And File.Exists(SaveTarget) Then File.WriteAllText(SaveTarget, Contents, UTF8)
         If Debugger.IsAttached Then Process.Start(SaveTarget)
+        If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
         Close()
     End Sub
 End Class

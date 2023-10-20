@@ -11770,6 +11770,7 @@ Public Class MainForm
 
     Private Sub SaveImageInformationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaveImageInformationToolStripMenuItem.Click
         If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
             For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
                 If MountedImageMountDirs(x) = MountDir Then
