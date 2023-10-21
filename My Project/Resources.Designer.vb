@@ -1808,13 +1808,14 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''- The program no longer outputs a success message if the Windows ADK isn&apos;t installed or if an error occurred while copying the ADK files
-        '''- Enhanced the reliability of the App Installer downloader
+        '''- Fixed a couple of issues of the AppX package information dialog:
+        '''  - Fixed an issue where, if the install location, package manifest location, or store logo asset location couldn&apos;t be detected; they would not be updated and would show incorrect results
+        '''  - Fixed an issue where the program threw an exception if the package display name returned nothing
+        '''- The AppX resource save dialog no longer appends the friendly display name to the target file name
         '''
         '''New features
         '''
-        '''- The program now gets feature update information for Windows 11 2023 Update Moment 5 (build 22635)
-        '''- French translations are complete.
+        '''- Feature update detec [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

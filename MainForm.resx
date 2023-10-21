@@ -938,4 +938,7 @@ These options, and the program information, can be found by opening the Help men
   <metadata name="AppxRelatedLinksCMS.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>1205, 17</value>
   </metadata>
+  <metadata name="ImgInfoSFD.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 41</value>
+  </metadata>
 </root>

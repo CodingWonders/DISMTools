@@ -11638,7 +11638,7 @@ Public Class MainForm
 
     Private Sub SaveResourceToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaveResourceToolStripMenuItem.Click
         If OnlineManagement Then AppxResSFD.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures) Else AppxResSFD.InitialDirectory = projPath
-        AppxResSFD.FileName = GetAppxPkgInfoDlg.Label25.Text
+        AppxResSFD.FileName = If(GetAppxPkgInfoDlg.displayName <> "", GetAppxPkgInfoDlg.displayName, GetAppxPkgInfoDlg.Label25.Text)
         AppxResSFD.ShowDialog()
     End Sub
 
@@ -11766,5 +11766,22 @@ Public Class MainForm
 
     Private Sub MicrosoftStoreGenerationProjectToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MicrosoftStoreGenerationProjectToolStripMenuItem.Click
         Process.Start("https://store.rg-adguard.net")
+    End Sub
+
+    Private Sub SaveImageInformationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaveImageInformationToolStripMenuItem.Click
+        If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
+            ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
+            For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
+                If MountedImageMountDirs(x) = MountDir Then
+                    ImgInfoSaveDlg.SourceImage = MountedImageImgFiles(x)
+                    Exit For
+                End If
+            Next
+            ImgInfoSaveDlg.ImgMountDir = If(Not OnlineManagement, MountDir, "")
+            ImgInfoSaveDlg.OnlineMode = OnlineManagement
+            ImgInfoSaveDlg.SaveTask = 0
+            ImgInfoSaveDlg.ShowDialog()
+        End If
     End Sub
 End Class

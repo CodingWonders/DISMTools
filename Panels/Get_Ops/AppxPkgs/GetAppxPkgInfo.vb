@@ -9,6 +9,8 @@ Public Class GetAppxPkgInfoDlg
     Dim mainAsset As String = ""
     Dim assetDir As String = ""
 
+    Public displayName As String = ""
+
     Private Sub GetAppxPkgInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language
             Case 0
@@ -152,6 +154,11 @@ Public Class GetAppxPkgInfoDlg
         Label10.Visible = True
         mainAsset = ""
         assetDir = ""
+        ' Clear the values of Label7, Label5, and Label3; as the program can't update their text properties on some packages
+        Label7.Text = ""
+        Label5.Text = ""
+        Label3.Text = ""
+
         If ListBox1.SelectedItems.Count = 1 Then
             If MainForm.imgAppxPackageNames.Count > InstalledAppxPkgInfo.Count Then
                 Label23.Text = MainForm.imgAppxPackageNames(ListBox1.SelectedIndex)
@@ -167,7 +174,16 @@ Public Class GetAppxPkgInfoDlg
                 Label40.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).Version.ToString()
             End If
 
-            Dim appDisplayName As String = If(Not MainForm.GetPackageDisplayName(Label23.Text, Label25.Text).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), MainForm.GetPackageDisplayName(Label23.Text, Label25.Text), "")
+            displayName = Label25.Text
+
+            Dim packageDispName As String = MainForm.GetPackageDisplayName(Label23.Text, Label25.Text)
+
+            Dim appDisplayName As String = ""
+
+            If packageDispName IsNot Nothing Then
+                appDisplayName = If(Not packageDispName.StartsWith("ms-resource:"), packageDispName, "")
+            End If
+
             If appDisplayName <> "" Then Label25.Text &= " (" & appDisplayName & ")"
 
             ' Get exclusive things that can't be obtained with the DISM API
