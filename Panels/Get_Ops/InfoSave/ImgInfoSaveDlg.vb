@@ -29,6 +29,8 @@ Public Class ImgInfoSaveDlg
 
     Public OnlineMode As Boolean
 
+    Public AllDrivers As Boolean
+
     ' The file to save the information to
     Public SaveTarget As String
 
@@ -696,6 +698,73 @@ Public Class ImgInfoSaveDlg
         End If
     End Sub
 
+    Sub GetDriverInformation()
+        Dim InstalledDrvInfo As DismDriverPackageCollection = Nothing
+        Contents &= "----> Driver information" & CrLf & CrLf & _
+                    " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & _
+                    " - In-box driver information " & If(AllDrivers, "was saved", "was not saved") & CrLf
+        Debug.WriteLine("[GetDriverInformation] Starting task...")
+        Try
+            Debug.WriteLine("[GetDriverInformation] Starting API...")
+            DismApi.Initialize(DismLogLevel.LogErrors)
+            Debug.WriteLine("[GetDriverInformation] Creating image session...")
+            ReportChanges("Preparing driver information processes...", 0)
+            Using imgSession As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(ImgMountDir))
+                Debug.WriteLine("[GetDriverInformation] Getting basic driver information...")
+                ReportChanges("Getting installed drivers...", 5)
+                InstalledDrvInfo = DismApi.GetDrivers(imgSession, AllDrivers)
+                Contents &= "  Installed drivers in this image: " & InstalledDrvInfo.Count & CrLf & CrLf
+                ReportChanges("Drivers have been obtained", 10)
+                If SaveTask = 0 Then
+                    If MsgBox("The program has obtained basic information of the installed drivers of this image. You can also get complete information of such drivers and save it in the report." & CrLf & CrLf & _
+                          "Do note that this will take longer depending on the number of installed drivers." & CrLf & CrLf & _
+                          "Do you want to get this information and save it in the report?", vbYesNo + vbQuestion, "Driver information") = MsgBoxResult.Yes Then
+                        Debug.WriteLine("[GetCapabilityInformation] Getting complete capability information...")
+                        For Each driver As DismDriverPackage In InstalledDrvInfo
+                            ReportChanges("Getting information of drivers... (driver " & InstalledDrvInfo.IndexOf(driver) + 1 & " of " & InstalledDrvInfo.Count & ")", (InstalledDrvInfo.IndexOf(driver) / InstalledDrvInfo.Count) * 100)
+                            Contents &= "  Driver " & InstalledDrvInfo.IndexOf(driver) + 1 & " of " & InstalledDrvInfo.Count & ":" & CrLf & _
+                                        "    - Published name: " & driver.PublishedName & CrLf & _
+                                        "    - Original file name: " & Path.GetFileName(driver.OriginalFileName) & " (" & Path.GetDirectoryName(driver.OriginalFileName) & ")" & CrLf & _
+                                        "    - Provider name: " & driver.ProviderName & CrLf & _
+                                        "    - Class name: " & driver.ClassName & CrLf & _
+                                        "    - Class description: " & driver.ClassDescription & CrLf & _
+                                        "    - Class GUID: " & CrLf & _
+                                        "    - Catalog file path: " & driver.CatalogFile & CrLf & _
+                                        "    - Is part of the Windows distribution? " & If(driver.InBox, "Yes", "No") & CrLf & _
+                                        "    - Is critical to the boot process? " & If(driver.BootCritical, "Yes", "No") & CrLf & _
+                                        "    - Version: " & driver.Version.ToString() & CrLf & _
+                                        "    - Date: " & driver.Date & CrLf & _
+                                        "    - Driver signature status: " & Casters.CastDismSignatureStatus(driver.DriverSignature) & CrLf & CrLf
+                        Next
+                        Contents &= "  - Complete driver information has been gathered" & CrLf & CrLf
+                    Else
+                        ReportChanges("Saving installed drivers...", 50)
+                        Contents &= "  - Complete driver information has not been gathered" & CrLf & CrLf
+                        For Each installedDriver As DismDriverPackage In InstalledDrvInfo
+                            Contents &= "  - Published name: " & installedDriver.PublishedName & CrLf & _
+                                        "  - Original file name: " & Path.GetFileName(installedDriver.OriginalFileName) & " (" & Path.GetDirectoryName(installedDriver.OriginalFileName) & ")" & CrLf & _
+                                        "  - Is part of the Windows distribution? " & If(installedDriver.InBox, "Yes", "No") & CrLf & _
+                                        "  - Class name: " & installedDriver.ClassName & CrLf & _
+                                        "  - Provider name: " & installedDriver.ProviderName & CrLf & _
+                                        "  - Date: " & installedDriver.Date & CrLf & _
+                                        "  - Version: " & installedDriver.Version.ToString() & CrLf & CrLf
+                        Next
+                    End If
+                Else
+
+                End If
+            End Using
+        Catch ex As Exception
+            Debug.WriteLine("[GetDriverInformation] An error occurred while getting driver information: " & ex.ToString() & " - " & ex.Message)
+            Contents &= "  The program could not get information about this task. See below for reasons why:" & CrLf & CrLf & _
+                        "  - Exception: " & ex.ToString() & CrLf & _
+                        "  - Exception message: " & ex.Message & CrLf & _
+                        "  - Error code: " & Hex(ex.HResult) & CrLf & CrLf
+        Finally
+            DismApi.Shutdown()
+        End Try
+    End Sub
+
     Private Sub ImgInfoSaveDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)
@@ -822,6 +891,7 @@ Public Class ImgInfoSaveDlg
                 GetFeatureInformation()
                 GetAppxInformation()
                 GetCapabilityInformation()
+                GetDriverInformation()
         End Select
 
         ' Save the file
