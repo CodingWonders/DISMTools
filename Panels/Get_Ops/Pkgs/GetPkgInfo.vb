@@ -85,6 +85,7 @@ Public Class GetPkgInfoDlg
                         Button1.Text = "Add package..."
                         Button2.Text = "Remove selected"
                         Button3.Text = "Remove all"
+                        Button4.Text = "Save..."
                         InstalledPackageLink.Text = "I want to get information about installed packages in the image"
                         PackageFileLink.Text = "I want to get information about package files"
                         OpenFileDialog1.Title = "Locate package files"
@@ -145,6 +146,7 @@ Public Class GetPkgInfoDlg
                         Button1.Text = "Añadir paquete..."
                         Button2.Text = "Eliminar selección"
                         Button3.Text = "Eliminar todo"
+                        Button4.Text = "Guardar..."
                         InstalledPackageLink.Text = "Deseo obtener información acerca de paquetes instalados en la imagen"
                         PackageFileLink.Text = "Deseo obtener información acerca de archivos de paquetes"
                         OpenFileDialog1.Title = "Ubique los archivos de paquetes"
@@ -205,6 +207,7 @@ Public Class GetPkgInfoDlg
                         Button1.Text = "Ajouter un paquet..."
                         Button2.Text = "Supprimer la sélection"
                         Button3.Text = "Supprimer tout"
+                        Button4.Text = "Sauvegarder..."
                         InstalledPackageLink.Text = "Je souhaite obtenir des informations sur les paquets installés dans l'image."
                         PackageFileLink.Text = "Je souhaite obtenir des informations sur les fichiers de paquets"
                         OpenFileDialog1.Title = "Localiser les fichiers des paquets"
@@ -266,6 +269,7 @@ Public Class GetPkgInfoDlg
                 Button1.Text = "Add package..."
                 Button2.Text = "Remove selected"
                 Button3.Text = "Remove all"
+                Button4.Text = "Save..."
                 InstalledPackageLink.Text = "I want to get information about installed packages in the image"
                 PackageFileLink.Text = "I want to get information about package files"
                 OpenFileDialog1.Title = "Locate package files"
@@ -326,6 +330,7 @@ Public Class GetPkgInfoDlg
                 Button1.Text = "Añadir paquete..."
                 Button2.Text = "Eliminar selección"
                 Button3.Text = "Eliminar todo"
+                Button4.Text = "Guardar..."
                 InstalledPackageLink.Text = "Deseo obtener información acerca de paquetes instalados en la imagen"
                 PackageFileLink.Text = "Deseo obtener información acerca de archivos de paquetes"
                 OpenFileDialog1.Title = "Ubique los archivos de paquetes"
@@ -386,6 +391,7 @@ Public Class GetPkgInfoDlg
                 Button1.Text = "Ajouter un paquet..."
                 Button2.Text = "Supprimer la sélection"
                 Button3.Text = "Supprimer tout"
+                Button4.Text = "Sauvegarder..."
                 InstalledPackageLink.Text = "Je souhaite obtenir des informations sur les paquets installés dans l'image."
                 PackageFileLink.Text = "Je souhaite obtenir des informations sur les fichiers de paquets"
                 OpenFileDialog1.Title = "Localiser les fichiers des paquets"
@@ -421,6 +427,7 @@ Public Class GetPkgInfoDlg
         PackageInfoPanel.Visible = True
         InfoFromInstalledPkgsPanel.Visible = True
         InfoFromPackageFilesPanel.Visible = False
+        Button4.Visible = True
     End Sub
 
     Private Sub PackageFileLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles PackageFileLink.LinkClicked
@@ -428,6 +435,7 @@ Public Class GetPkgInfoDlg
         PackageInfoPanel.Visible = True
         InfoFromInstalledPkgsPanel.Visible = False
         InfoFromPackageFilesPanel.Visible = True
+        Button4.Visible = False
     End Sub
 
     Private Sub ListBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox2.SelectedIndexChanged
@@ -907,5 +915,16 @@ Public Class GetPkgInfoDlg
 
     Private Sub GetPkgInfoDlg_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+    End Sub
+
+    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+        If MainForm.ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
+            ImgInfoSaveDlg.SaveTarget = MainForm.ImgInfoSFD.FileName
+            ImgInfoSaveDlg.ImgMountDir = If(Not MainForm.OnlineManagement, MainForm.MountDir, "")
+            ImgInfoSaveDlg.OnlineMode = MainForm.OnlineManagement
+            ImgInfoSaveDlg.SaveTask = 2
+            ImgInfoSaveDlg.ShowDialog()
+        End If
     End Sub
 End Class

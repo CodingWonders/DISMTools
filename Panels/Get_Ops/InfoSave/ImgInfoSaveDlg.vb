@@ -882,6 +882,9 @@ Public Class ImgInfoSaveDlg
             Case 1
                 Contents &= " - Information tasks: get image file information" & CrLf & CrLf
                 GetImageInformation()
+            Case 2
+                Contents &= " - Information tasks: get installed package information" & CrLf & CrLf
+                GetPackageInformation()
             Case 4
                 Contents &= " - Information tasks: get feature information" & CrLf & CrLf
                 GetFeatureInformation()
