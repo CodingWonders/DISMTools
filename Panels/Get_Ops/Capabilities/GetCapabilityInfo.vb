@@ -38,6 +38,7 @@ Public Class GetCapabilityInfoDlg
                         Label43.Text = "Sizes:"
                         ListView1.Columns(0).Text = "Capability identity"
                         ListView1.Columns(1).Text = "State"
+                        Button2.Text = "Save..."
                     Case "ESN"
                         Text = "Obtener información de funcionalidades"
                         Label1.Text = Text
@@ -52,6 +53,7 @@ Public Class GetCapabilityInfoDlg
                         Label43.Text = "Tamaños:"
                         ListView1.Columns(0).Text = "Identidad de funcionalidad"
                         ListView1.Columns(1).Text = "Estado"
+                        Button2.Text = "Guardar..."
                     Case "FRA"
                         Text = "Obtenir des informations sur les capacités"
                         Label1.Text = Text
@@ -66,6 +68,7 @@ Public Class GetCapabilityInfoDlg
                         Label43.Text = "Tailles :"
                         ListView1.Columns(0).Text = "Identité de la capacité"
                         ListView1.Columns(1).Text = "État"
+                        Button2.Text = "Sauvegarder..."
                 End Select
             Case 1
                 Text = "Get capability information"
@@ -81,6 +84,7 @@ Public Class GetCapabilityInfoDlg
                 Label43.Text = "Sizes:"
                 ListView1.Columns(0).Text = "Capability identity"
                 ListView1.Columns(1).Text = "State"
+                Button2.Text = "Save..."
             Case 2
                 Text = "Obtener información de funcionalidades"
                 Label1.Text = Text
@@ -95,6 +99,7 @@ Public Class GetCapabilityInfoDlg
                 Label43.Text = "Tamaños:"
                 ListView1.Columns(0).Text = "Identidad de funcionalidad"
                 ListView1.Columns(1).Text = "Estado"
+                Button2.Text = "Guardar..."
             Case 3
                 Text = "Obtenir des informations sur les capacités"
                 Label1.Text = Text
@@ -109,6 +114,7 @@ Public Class GetCapabilityInfoDlg
                 Label43.Text = "Tailles :"
                 ListView1.Columns(0).Text = "Identité de la capacité"
                 ListView1.Columns(1).Text = "État"
+                Button2.Text = "Sauvegarder..."
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
@@ -304,5 +310,16 @@ Public Class GetCapabilityInfoDlg
 
     Private Sub GetCapabilityInfoDlg_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        If MainForm.ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
+            ImgInfoSaveDlg.ImgMountDir = If(Not MainForm.OnlineManagement, MainForm.MountDir, "")
+            ImgInfoSaveDlg.SaveTarget = MainForm.ImgInfoSFD.FileName
+            ImgInfoSaveDlg.OnlineMode = MainForm.OnlineManagement
+            ImgInfoSaveDlg.SaveTask = 6
+            ImgInfoSaveDlg.ShowDialog()
+        End If
     End Sub
 End Class
