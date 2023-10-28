@@ -702,7 +702,7 @@ Public Class ImgInfoSaveDlg
         Dim InstalledDrvInfo As DismDriverPackageCollection = Nothing
         Contents &= "----> Driver information" & CrLf & CrLf & _
                     " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & _
-                    " - In-box driver information " & If(AllDrivers, "was saved", "was not saved") & CrLf
+                    " - In-box driver information " & If(AllDrivers, "was saved", "was not saved") & CrLf & CrLf
         Debug.WriteLine("[GetDriverInformation] Starting task...")
         Try
             Debug.WriteLine("[GetDriverInformation] Starting API...")

@@ -11780,6 +11780,7 @@ Public Class MainForm
             Next
             ImgInfoSaveDlg.ImgMountDir = If(Not OnlineManagement, MountDir, "")
             ImgInfoSaveDlg.OnlineMode = OnlineManagement
+            ImgInfoSaveDlg.AllDrivers = AllDrivers
             ImgInfoSaveDlg.SaveTask = 0
             ImgInfoSaveDlg.ShowDialog()
         End If
