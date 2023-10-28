@@ -38,6 +38,7 @@ Public Class GetFeatureInfoDlg
                         Label43.Text = "Custom properties:"
                         ListView1.Columns(0).Text = "Feature name"
                         ListView1.Columns(1).Text = "Feature state"
+                        Button2.Text = "Save..."
                     Case "ESN"
                         Text = "Obtener información de características"
                         Label1.Text = Text
@@ -52,6 +53,7 @@ Public Class GetFeatureInfoDlg
                         Label43.Text = "Propiedades personalizadas:"
                         ListView1.Columns(0).Text = "Nombre de característica"
                         ListView1.Columns(1).Text = "Estado"
+                        Button2.Text = "Guardar..."
                     Case "FRA"
                         Text = "Obtenir des informations sur les caractéristiques"
                         Label1.Text = Text
@@ -66,6 +68,7 @@ Public Class GetFeatureInfoDlg
                         Label43.Text = "Propriétés personnalisées :"
                         ListView1.Columns(0).Text = "Nom de la caractéristique"
                         ListView1.Columns(1).Text = "État de la caractéristique"
+                        Button2.Text = "Sauvegarder..."
                 End Select
             Case 1
                 Text = "Get feature information"
@@ -81,6 +84,7 @@ Public Class GetFeatureInfoDlg
                 Label43.Text = "Custom properties:"
                 ListView1.Columns(0).Text = "Feature name"
                 ListView1.Columns(1).Text = "Feature state"
+                Button2.Text = "Save..."
             Case 2
                 Text = "Obtener información de características"
                 Label1.Text = Text
@@ -95,6 +99,7 @@ Public Class GetFeatureInfoDlg
                 Label43.Text = "Propiedades personalizadas:"
                 ListView1.Columns(0).Text = "Nombre de característica"
                 ListView1.Columns(1).Text = "Estado"
+                Button2.Text = "Guardar..."
             Case 3
                 Text = "Obtenir des informations sur les caractéristiques"
                 Label1.Text = Text
@@ -109,6 +114,7 @@ Public Class GetFeatureInfoDlg
                 Label43.Text = "Propriétés personnalisées :"
                 ListView1.Columns(0).Text = "Nom de la caractéristique"
                 ListView1.Columns(1).Text = "État de la caractéristique"
+                Button2.Text = "Sauvegarder..."
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
@@ -306,5 +312,16 @@ Public Class GetFeatureInfoDlg
 
     Private Sub GetFeatureInfoDlg_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        If MainForm.ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
+            ImgInfoSaveDlg.ImgMountDir = If(Not MainForm.OnlineManagement, MainForm.MountDir, "")
+            ImgInfoSaveDlg.SaveTarget = MainForm.ImgInfoSFD.FileName
+            ImgInfoSaveDlg.OnlineMode = MainForm.OnlineManagement
+            ImgInfoSaveDlg.SaveTask = 4
+            ImgInfoSaveDlg.ShowDialog()
+        End If
     End Sub
 End Class
