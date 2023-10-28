@@ -67,6 +67,8 @@ Partial Class MainForm
         Me.UnmountImage = New System.Windows.Forms.ToolStripMenuItem()
         Me.UpdateWIMBootEntry = New System.Windows.Forms.ToolStripMenuItem()
         Me.ApplySiloedPackage = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator34 = New System.Windows.Forms.ToolStripSeparator()
+        Me.SaveImageInformationToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OSPackagesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GetPackages = New System.Windows.Forms.ToolStripMenuItem()
         Me.AddPackage = New System.Windows.Forms.ToolStripMenuItem()
@@ -392,8 +394,6 @@ Partial Class MainForm
         Me.AppxRelatedLinksCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.MicrosoftAppsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MicrosoftStoreGenerationProjectToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator34 = New System.Windows.Forms.ToolStripSeparator()
-        Me.SaveImageInformationToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ImgInfoSFD = New System.Windows.Forms.SaveFileDialog()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
@@ -722,6 +722,17 @@ Partial Class MainForm
         Me.ApplySiloedPackage.Name = "ApplySiloedPackage"
         Me.ApplySiloedPackage.Size = New System.Drawing.Size(289, 22)
         Me.ApplySiloedPackage.Text = "Apply siloed provisioning package..."
+        '
+        'ToolStripSeparator34
+        '
+        Me.ToolStripSeparator34.Name = "ToolStripSeparator34"
+        Me.ToolStripSeparator34.Size = New System.Drawing.Size(286, 6)
+        '
+        'SaveImageInformationToolStripMenuItem
+        '
+        Me.SaveImageInformationToolStripMenuItem.Name = "SaveImageInformationToolStripMenuItem"
+        Me.SaveImageInformationToolStripMenuItem.Size = New System.Drawing.Size(289, 22)
+        Me.SaveImageInformationToolStripMenuItem.Text = "Save image information..."
         '
         'OSPackagesToolStripMenuItem
         '
@@ -2302,7 +2313,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.44444!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.55556!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 153.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 154.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -2351,7 +2362,7 @@ Partial Class MainForm
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel8.Location = New System.Drawing.Point(64, 3)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(71, 23)
+        Me.Panel8.Size = New System.Drawing.Size(70, 23)
         Me.Panel8.TabIndex = 8
         '
         'projName
@@ -2360,7 +2371,7 @@ Partial Class MainForm
         Me.projName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projName.Location = New System.Drawing.Point(0, 0)
         Me.projName.Name = "projName"
-        Me.projName.Size = New System.Drawing.Size(71, 23)
+        Me.projName.Size = New System.Drawing.Size(70, 23)
         Me.projName.TabIndex = 2
         Me.projName.Text = "projName"
         Me.projName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -2370,7 +2381,7 @@ Partial Class MainForm
         Me.projNameText.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projNameText.Location = New System.Drawing.Point(0, 0)
         Me.projNameText.Name = "projNameText"
-        Me.projNameText.Size = New System.Drawing.Size(71, 21)
+        Me.projNameText.Size = New System.Drawing.Size(70, 21)
         Me.projNameText.TabIndex = 4
         Me.projNameText.Text = "projName"
         Me.projNameText.Visible = False
@@ -3491,16 +3502,9 @@ Partial Class MainForm
         Me.MicrosoftStoreGenerationProjectToolStripMenuItem.Size = New System.Drawing.Size(319, 22)
         Me.MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visit the Microsoft Store Generation Project website"
         '
-        'ToolStripSeparator34
+        'ImgInfoSFD
         '
-        Me.ToolStripSeparator34.Name = "ToolStripSeparator34"
-        Me.ToolStripSeparator34.Size = New System.Drawing.Size(286, 6)
-        '
-        'SaveImageInformationToolStripMenuItem
-        '
-        Me.SaveImageInformationToolStripMenuItem.Name = "SaveImageInformationToolStripMenuItem"
-        Me.SaveImageInformationToolStripMenuItem.Size = New System.Drawing.Size(289, 22)
-        Me.SaveImageInformationToolStripMenuItem.Text = "Save image information..."
+        Me.ImgInfoSFD.Filter = "Text files|*.txt"
         '
         'MainForm
         '

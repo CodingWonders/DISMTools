@@ -892,6 +892,9 @@ Public Class ImgInfoSaveDlg
                 GetAppxInformation()
                 GetCapabilityInformation()
                 GetDriverInformation()
+            Case 1
+                Contents &= " - Information tasks: get image file information" & CrLf & CrLf
+                GetImageInformation()
         End Select
 
         ' Save the file
