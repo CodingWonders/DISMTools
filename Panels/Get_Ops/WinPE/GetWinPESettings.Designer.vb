@@ -34,6 +34,7 @@ Partial Class GetWinPESettings
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
+        Me.Button4 = New System.Windows.Forms.Button()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -176,12 +177,23 @@ Partial Class GetWinPESettings
         Me.Label4.Text = "Scratch space:"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
+        'Button4
+        '
+        Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button4.Location = New System.Drawing.Point(435, 182)
+        Me.Button4.Name = "Button4"
+        Me.Button4.Size = New System.Drawing.Size(96, 23)
+        Me.Button4.TabIndex = 12
+        Me.Button4.Text = "Save..."
+        Me.Button4.UseVisualStyleBackColor = True
+        '
         'GetWinPESettings
         '
         Me.AcceptButton = Me.OK_Button
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(624, 217)
+        Me.Controls.Add(Me.Button4)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Win10Title)
@@ -214,5 +226,6 @@ Partial Class GetWinPESettings
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents Label4 As System.Windows.Forms.Label
+    Friend WithEvents Button4 As System.Windows.Forms.Button
 
 End Class

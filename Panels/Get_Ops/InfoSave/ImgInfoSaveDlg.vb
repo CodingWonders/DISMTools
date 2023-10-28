@@ -5,6 +5,7 @@ Imports System.Text.Encoding
 Imports Microsoft.Dism
 Imports System.Threading
 Imports DISMTools.Utilities
+Imports Microsoft.Win32
 
 Public Class ImgInfoSaveDlg
 
@@ -752,6 +753,57 @@ Public Class ImgInfoSaveDlg
         End Try
     End Sub
 
+    Sub GetWinPEConfiguration()
+        Contents &= "----> Windows PE configuration" & CrLf & CrLf
+        If Not MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+            Contents &= "    This task is not supported on the specified Windows image. Check that it is a Windows PE image. Skipping task..." & CrLf & CrLf
+            Exit Sub
+        Else
+            Contents &= " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
+            Debug.WriteLine("[GetWinPEConfiguration] Starting task...")
+            Using reg As New Process
+                Debug.WriteLine("[GetWinPEConfiguration] Detecting target path...")
+                ReportChanges("Preparing to get Windows PE configuration...", 0)
+                reg.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe"
+                reg.StartInfo.Arguments = "load HKLM\PE_SOFT " & Quote & MainForm.MountDir & "\Windows\system32\config\SOFTWARE" & Quote
+                reg.StartInfo.CreateNoWindow = True
+                reg.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+                reg.Start()
+                reg.WaitForExit()
+                If reg.ExitCode <> 0 Then
+                    Contents &= "  - Target path: could not get value" & CrLf
+                End If
+                reg.StartInfo.Arguments = "load HKLM\PE_SYS " & Quote & MainForm.MountDir & "\Windows\system32\config\SYSTEM" & Quote
+                reg.Start()
+                reg.WaitForExit()
+                If reg.ExitCode <> 0 Then
+                    Contents &= "  - Scratch space: could not get value" & CrLf & CrLf
+                    Exit Sub
+                End If
+                Try
+                    ReportChanges("Getting Windows PE target path...", 50)
+                    ' Get target path first
+                    Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("PE_SOFT\Microsoft\Windows NT\CurrentVersion\WinPE", False)
+                    Contents &= "  - Target path: " & regKey.GetValue("InstRoot", "could not get value").ToString() & CrLf
+                    regKey.Close()
+                    ReportChanges("Getting Windows PE scratch space...", 75)
+                    regKey = Registry.LocalMachine.OpenSubKey("PE_SYS\ControlSet001\Services\FBWF", False)
+                    Contents &= "  - Scratch space: " & regKey.GetValue("WinPECacheThreshold", "could not get value").ToString() & " MB" & CrLf & CrLf
+                    regKey.Close()
+                Catch ex As Exception
+
+                End Try
+                ' Unload registry hives
+                reg.StartInfo.Arguments = "unload HKLM\PE_SOFT"
+                reg.Start()
+                reg.WaitForExit()
+                reg.StartInfo.Arguments = "unload HKLM\PE_SYS"
+                reg.Start()
+                reg.WaitForExit()
+            End Using
+        End If
+    End Sub
+
     Private Sub ImgInfoSaveDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)
@@ -879,6 +931,7 @@ Public Class ImgInfoSaveDlg
                 GetAppxInformation()
                 GetCapabilityInformation()
                 GetDriverInformation()
+                GetWinPEConfiguration()
             Case 1
                 Contents &= " - Information tasks: get image file information" & CrLf & CrLf
                 GetImageInformation()
@@ -897,7 +950,14 @@ Public Class ImgInfoSaveDlg
             Case 7
                 Contents &= " - Information tasks: get installed driver information" & CrLf & CrLf
                 GetDriverInformation()
+            Case 9
+                Contents &= " - Information tasks: get Windows PE configuration" & CrLf & CrLf
+                GetWinPEConfiguration()
         End Select
+
+        ' Put an ending to the contents
+        Contents &= " - Processes ended at: " & Date.Now & CrLf & CrLf & _
+                    "                  We have ended. Have a nice day!"
 
         ' Save the file
         If Contents <> "" And File.Exists(SaveTarget) Then File.WriteAllText(SaveTarget, Contents, UTF8)
