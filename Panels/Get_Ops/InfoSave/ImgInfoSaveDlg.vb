@@ -373,7 +373,7 @@ Public Class ImgInfoSaveDlg
                 msg(2) = "Feature information"
             Case 2
                 msg(0) = "Preparando procesos de información de características..."
-                msg(1) = "El programa ha obtenido información básica de los características instalados en esta imagen. También puede obtener información completa de dichos características y guardarla en el informe." & CrLf & CrLf & _
+                msg(1) = "El programa ha obtenido información básica de las características instaladas en esta imagen. También puede obtener información completa de dichos características y guardarla en el informe." & CrLf & CrLf & _
                   "Dese cuenta de que esto tardará más, dependiendo del número de características instalados." & CrLf & CrLf & _
                   "¿Desea obtener esta información y guardarla en el informe?"
                 msg(2) = "Información de características"
@@ -1111,7 +1111,7 @@ Public Class ImgInfoSaveDlg
                       "This setting is also applied to this task, but you can get the information of all drivers now. Do note that this can take a long time, depending on the amount of first-party drivers." & CrLf & CrLf & _
                       "Do you want to get the information of all drivers, including drivers part of the Windows distribution?"
                     Case "ESN"
-                        msg(0) = "Preparando procesos de información de características..."
+                        msg(0) = "Preparando procesos de información de controladores..."
                         msg(1) = "El programa ha obtenido información básica de los controladores instalados en esta imagen. También puede obtener información completa de dichos controladores y guardarla en el informe." & CrLf & CrLf & _
                           "Dese cuenta de que esto tardará más, dependiendo del número de controladores instalados." & CrLf & CrLf & _
                           "¿Desea obtener esta información y guardarla en el informe?"
@@ -1139,7 +1139,7 @@ Public Class ImgInfoSaveDlg
               "This setting is also applied to this task, but you can get the information of all drivers now. Do note that this can take a long time, depending on the amount of first-party drivers." & CrLf & CrLf & _
               "Do you want to get the information of all drivers, including drivers part of the Windows distribution?"
             Case 2
-                msg(0) = "Preparando procesos de información de características..."
+                msg(0) = "Preparando procesos de información de controladores..."
                 msg(1) = "El programa ha obtenido información básica de los controladores instalados en esta imagen. También puede obtener información completa de dichos controladores y guardarla en el informe." & CrLf & CrLf & _
                   "Dese cuenta de que esto tardará más, dependiendo del número de controladores instalados." & CrLf & CrLf & _
                   "¿Desea obtener esta información y guardarla en el informe?"
