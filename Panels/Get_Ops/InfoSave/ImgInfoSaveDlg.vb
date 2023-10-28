@@ -684,6 +684,13 @@ Public Class ImgInfoSaveDlg
 
     Sub GetDriverInformation()
         Dim InstalledDrvInfo As DismDriverPackageCollection = Nothing
+        If SaveTask = 7 And Not AllDrivers Then
+            If MsgBox("You have configured background processes to not detect all drivers, which includes drivers part of the Windows distribution, so you may not see the driver you're interested in." & CrLf & CrLf & _
+                      "This setting is also applied to this task, but you can get the information of all drivers now. Do note that this can take a long time, depending on the amount of first-party drivers." & CrLf & CrLf & _
+                      "Do you want to get the information of all drivers, including drivers part of the Windows distribution?", vbYesNo + vbQuestion, "Driver information") = MsgBoxResult.Yes Then
+                AllDrivers = True
+            End If
+        End If
         Contents &= "----> Driver information" & CrLf & CrLf & _
                     " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & _
                     " - In-box driver information " & If(AllDrivers, "was saved", "was not saved") & CrLf & CrLf
@@ -884,6 +891,9 @@ Public Class ImgInfoSaveDlg
             Case 6
                 Contents &= " - Information tasks: get capability information" & CrLf & CrLf
                 GetCapabilityInformation()
+            Case 7
+                Contents &= " - Information tasks: get installed driver information" & CrLf & CrLf
+                GetDriverInformation()
         End Select
 
         ' Save the file

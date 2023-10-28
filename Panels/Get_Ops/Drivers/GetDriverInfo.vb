@@ -344,6 +344,7 @@ Public Class GetDriverInfo
 
         Label5.Visible = False
         IsInDrvPkgs = False
+        Button8.Visible = True
     End Sub
 
     Private Sub DriverFileLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles DriverFileLink.LinkClicked
@@ -354,6 +355,7 @@ Public Class GetDriverInfo
         Panel6.Visible = False
         Label5.Visible = True
         IsInDrvPkgs = True
+        Button8.Visible = False
     End Sub
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
@@ -841,5 +843,17 @@ Public Class GetDriverInfo
         Visible = False
         BGProcsAdvSettings.ShowDialog(MainForm)
         If BGProcsAdvSettings.DialogResult = Windows.Forms.DialogResult.OK And BGProcsAdvSettings.NeedsDriverChecks Then Close() Else Visible = True
+    End Sub
+
+    Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
+        If MainForm.ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
+            ImgInfoSaveDlg.SaveTarget = MainForm.ImgInfoSFD.FileName
+            ImgInfoSaveDlg.ImgMountDir = If(Not MainForm.OnlineManagement, MainForm.MountDir, "")
+            ImgInfoSaveDlg.OnlineMode = MainForm.OnlineManagement
+            ImgInfoSaveDlg.AllDrivers = MainForm.AllDrivers
+            ImgInfoSaveDlg.SaveTask = 7
+            ImgInfoSaveDlg.ShowDialog()
+        End If
     End Sub
 End Class
