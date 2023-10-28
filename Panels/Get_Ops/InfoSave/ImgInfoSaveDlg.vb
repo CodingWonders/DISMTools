@@ -68,7 +68,25 @@ Public Class ImgInfoSaveDlg
                         "  Getting information of " & ImageInfoCollection.Count & " images..." & CrLf & CrLf
             Debug.WriteLine("[GetImageInformation] Exporting information to contents...")
             For Each ImageInfo As DismImageInfo In ImageInfoCollection
-                ReportChanges("Getting image information... (image " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & " of " & ImageInfoCollection.Count & ")", (ImageInfoCollection.IndexOf(ImageInfo) / ImageInfoCollection.Count) * 100)
+                Dim msg As String = ""
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                msg = "Getting image information... (image " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & " of " & ImageInfoCollection.Count & ")"
+                            Case "ESN"
+                                msg = "Obteniendo información de la imagen... (imagen " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & " de " & ImageInfoCollection.Count & ")"
+                            Case "FRA"
+                                msg = "Obtention des informations sur l'image en cours... (image " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & " de " & ImageInfoCollection.Count & ")"
+                        End Select
+                    Case 1
+                        msg = "Getting image information... (image " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & " of " & ImageInfoCollection.Count & ")"
+                    Case 2
+                        msg = "Obteniendo información de la imagen... (imagen " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & " de " & ImageInfoCollection.Count & ")"
+                    Case 3
+                        msg = "Obtention des informations sur l'image en cours... (image " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & " de " & ImageInfoCollection.Count & ")"
+                End Select
+                ReportChanges(msg, (ImageInfoCollection.IndexOf(ImageInfo) / ImageInfoCollection.Count) * 100)
                 Contents &= "  Image " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & ":" & CrLf & _
                             "    - Version: " & ImageInfo.ProductVersion.ToString() & CrLf & _
                             "    - Image name: " & Quote & ImageInfo.ImageName & Quote & CrLf & _
@@ -103,9 +121,49 @@ Public Class ImgInfoSaveDlg
     End Sub
 
     Sub GetPackageInformation()
-        'Dim PackageInfoExList As New List(Of DismPackageInfoEx)
-        'Dim PackageInfoList As New List(Of DismPackageInfo)
         Dim InstalledPkgInfo As DismPackageCollection = Nothing
+        Dim msg As String() = New String(2) {"", "", ""}
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        msg(0) = "Preparing package information processes..."
+                        msg(1) = "The program has obtained basic information of the installed packages of this image. You can also get complete information of such packages and save it in the report." & CrLf & CrLf & _
+                          "Do note that this will take longer depending on the number of installed packages." & CrLf & CrLf & _
+                          "Do you want to get this information and save it in the report?"
+                        msg(2) = "Package information"
+                    Case "ESN"
+                        msg(0) = "Preparando procesos de información de paquetes..."
+                        msg(1) = "El programa ha obtenido información básica de los paquetes instalados en esta imagen. También puede obtener información completa de dichos paquetes y guardarla en el informe." & CrLf & CrLf & _
+                          "Dese cuenta de que esto tardará más, dependiendo del número de paquetes instalados." & CrLf & CrLf & _
+                          "¿Desea obtener esta información y guardarla en el informe?"
+                        msg(2) = "Información de paquetes"
+                    Case "FRA"
+                        msg(0) = "Préparation des processus d'information sur les paquets en cours..."
+                        msg(1) = "Le programme a obtenu des informations basiques sur les paquets installés sur cette image. Vous pouvez également obtenir des informations complètes sur ces paquets et les enregistrer dans le rapport." & CrLf & CrLf & _
+                          "Notez que cette opération peut prendre plus de temps en fonction du nombre de paquets installés." & CrLf & CrLf & _
+                          "Souhaitez-vous obtenir ces informations et les enregistrer dans le rapport ?"
+                        msg(2) = "Informations sur les paquets"
+                End Select
+            Case 1
+                msg(0) = "Preparing package information processes..."
+                msg(1) = "The program has obtained basic information of the installed packages of this image. You can also get complete information of such packages and save it in the report." & CrLf & CrLf & _
+                  "Do note that this will take longer depending on the number of installed packages." & CrLf & CrLf & _
+                  "Do you want to get this information and save it in the report?"
+                msg(2) = "Package information"
+            Case 2
+                msg(0) = "Preparando procesos de información de paquetes..."
+                msg(1) = "El programa ha obtenido información básica de los paquetes instalados en esta imagen. También puede obtener información completa de dichos paquetes y guardarla en el informe." & CrLf & CrLf & _
+                  "Dese cuenta de que esto tardará más, dependiendo del número de paquetes instalados." & CrLf & CrLf & _
+                  "¿Desea obtener esta información y guardarla en el informe?"
+                msg(2) = "Información de paquetes"
+            Case 3
+                msg(0) = "Préparation des processus d'information sur les paquets en cours..."
+                msg(1) = "Le programme a obtenu des informations basiques sur les paquets installés sur cette image. Vous pouvez également obtenir des informations complètes sur ces paquets et les enregistrer dans le rapport." & CrLf & CrLf & _
+                  "Notez que cette opération peut prendre plus de temps en fonction du nombre de paquets installés." & CrLf & CrLf & _
+                  "Souhaitez-vous obtenir ces informations et les enregistrer dans le rapport ?"
+                msg(2) = "Informations sur les paquets"
+        End Select
         Contents &= "----> Package information" & CrLf & CrLf & _
                     " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
         Debug.WriteLine("[GetPackageInformation] Starting task...")
@@ -113,19 +171,51 @@ Public Class ImgInfoSaveDlg
             Debug.WriteLine("[GetPackageInformation] Starting API...")
             DismApi.Initialize(DismLogLevel.LogErrors)
             Debug.WriteLine("[GetPackageInformation] Creating image session...")
-            ReportChanges("Preparing package information processes...", 0)
+            ReportChanges(msg(0), 0)
             Using imgSession As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(ImgMountDir))
                 Debug.WriteLine("[GetPackageInformation] Getting basic package information...")
-                ReportChanges("Getting installed packages...", 5)
+                ReportChanges(msg(0), 5)
                 InstalledPkgInfo = DismApi.GetPackages(imgSession)
                 Contents &= "  Installed packages in this image: " & InstalledPkgInfo.Count & CrLf & CrLf
-                ReportChanges("Packages have been obtained", 10)
-                If MsgBox("The program has obtained basic information of the installed packages of this image. You can also get complete information of such packages and save it in the report." & CrLf & CrLf & _
-                          "Do note that this will take longer depending on the number of installed packages." & CrLf & CrLf & _
-                          "Do you want to get this information and save it in the report?", vbYesNo + vbQuestion, "Package information") = MsgBoxResult.Yes Then
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                msg(0) = "Packages have been obtained"
+                            Case "ESN"
+                                msg(0) = "Los paquetes han sido obtenidos"
+                            Case "FRA"
+                                msg(0) = "Des paquets ont été obtenus"
+                        End Select
+                    Case 1
+                        msg(0) = "Packages have been obtained"
+                    Case 2
+                        msg(0) = "Los paquetes han sido obtenidos"
+                    Case 3
+                        msg(0) = "Des paquets ont été obtenus"
+                End Select
+                ReportChanges(msg(0), 10)
+                If MsgBox(msg(1), vbYesNo + vbQuestion, msg(2)) = MsgBoxResult.Yes Then
                     Debug.WriteLine("[GetPackageInformation] Getting complete package information...")
                     For Each installedPackage As DismPackage In InstalledPkgInfo
-                        ReportChanges("Getting information of packages... (package " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " of " & InstalledPkgInfo.Count & ")", (InstalledPkgInfo.IndexOf(installedPackage) / InstalledPkgInfo.Count) * 100)
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENU", "ENG"
+                                        msg(0) = "Getting information of packages... (package " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " of " & InstalledPkgInfo.Count & ")"
+                                    Case "ESN"
+                                        msg(0) = "Obteniendo información de paquetes... (paquete " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " de " & InstalledPkgInfo.Count & ")"
+                                    Case "FRA"
+                                        msg(0) = "Obtention des informations sur les paquets en cours... (paquet " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " de " & InstalledPkgInfo.Count & ")"
+                                End Select
+                            Case 1
+                                msg(0) = "Getting information of packages... (package " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " of " & InstalledPkgInfo.Count & ")"
+                            Case 2
+                                msg(0) = "Obteniendo información de paquetes... (paquete " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " de " & InstalledPkgInfo.Count & ")"
+                            Case 3
+                                msg(0) = "Obtention des informations sur les paquets en cours... (paquet " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " de " & InstalledPkgInfo.Count & ")"
+                        End Select
+                        ReportChanges(msg(0), (InstalledPkgInfo.IndexOf(installedPackage) / InstalledPkgInfo.Count) * 100)
                         Dim pkgInfoEx As DismPackageInfoEx = Nothing
                         Dim pkgInfo As DismPackageInfo = Nothing
                         Dim cProps As DismCustomPropertyCollection = Nothing
@@ -211,7 +301,24 @@ Public Class ImgInfoSaveDlg
                     Next
                     Contents &= "  - Complete package information has been gathered" & CrLf & CrLf
                 Else
-                    ReportChanges("Saving installed packages...", 50)
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENU", "ENG"
+                                    msg(0) = "Saving installed packages..."
+                                Case "ESN"
+                                    msg(0) = "Guardando paquetes instalados..."
+                                Case "FRA"
+                                    msg(0) = "Sauvegarde des paquets installés en cours..."
+                            End Select
+                        Case 1
+                            msg(0) = "Saving installed packages..."
+                        Case 2
+                            msg(0) = "Guardando paquetes instalados..."
+                        Case 3
+                            msg(0) = "Sauvegarde des paquets installés en cours..."
+                    End Select
+                    ReportChanges(msg(0), 50)
                     Contents &= "  - Complete package information has not been gathered" & CrLf & CrLf & _
                                 "  Installed packages in this image:" & CrLf
                     For Each installedPackage As DismPackage In InstalledPkgInfo
@@ -235,6 +342,48 @@ Public Class ImgInfoSaveDlg
 
     Sub GetFeatureInformation()
         Dim InstalledFeatInfo As DismFeatureCollection = Nothing
+        Dim msg As String() = New String(2) {"", "", ""}
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        msg(0) = "Preparing feature information processes..."
+                        msg(1) = "The program has obtained basic information of the installed features of this image. You can also get complete information of such features and save it in the report." & CrLf & CrLf & _
+                          "Do note that this will take longer depending on the number of installed features." & CrLf & CrLf & _
+                          "Do you want to get this information and save it in the report?"
+                        msg(2) = "Feature information"
+                    Case "ESN"
+                        msg(0) = "Preparando procesos de información de características..."
+                        msg(1) = "El programa ha obtenido información básica de las características instaladas en esta imagen. También puede obtener información completa de dichas características y guardarla en el informe." & CrLf & CrLf & _
+                          "Dese cuenta de que esto tardará más, dependiendo del número de características instaladas." & CrLf & CrLf & _
+                          "¿Desea obtener esta información y guardarla en el informe?"
+                        msg(2) = "Información de características"
+                    Case "FRA"
+                        msg(0) = "Préparation des processus d'information sur les caractéristiques en cours..."
+                        msg(1) = "Le programme a obtenu des informations basiques sur les caractéristiques installées sur cette image. Vous pouvez également obtenir des informations complètes sur ces caractéristiques et les enregistrer dans le rapport." & CrLf & CrLf & _
+                          "Notez que cette opération peut prendre plus de temps en fonction du nombre de caractéristiques installées." & CrLf & CrLf & _
+                          "Souhaitez-vous obtenir ces informations et les enregistrer dans le rapport ?"
+                        msg(2) = "Informations sur les caractéristiques"
+                End Select
+            Case 1
+                msg(0) = "Preparing feature information processes..."
+                msg(1) = "The program has obtained basic information of the installed features of this image. You can also get complete information of such features and save it in the report." & CrLf & CrLf & _
+                  "Do note that this will take longer depending on the number of installed features." & CrLf & CrLf & _
+                  "Do you want to get this information and save it in the report?"
+                msg(2) = "Feature information"
+            Case 2
+                msg(0) = "Preparando procesos de información de características..."
+                msg(1) = "El programa ha obtenido información básica de los características instalados en esta imagen. También puede obtener información completa de dichos características y guardarla en el informe." & CrLf & CrLf & _
+                  "Dese cuenta de que esto tardará más, dependiendo del número de características instalados." & CrLf & CrLf & _
+                  "¿Desea obtener esta información y guardarla en el informe?"
+                msg(2) = "Información de características"
+            Case 3
+                msg(0) = "Préparation des processus d'information sur les caractéristiques en cours..."
+                msg(1) = "Le programme a obtenu des informations basiques sur les caractéristiques installées sur cette image. Vous pouvez également obtenir des informations complètes sur ces caractéristiques et les enregistrer dans le rapport." & CrLf & CrLf & _
+                  "Notez que cette opération peut prendre plus de temps en fonction du nombre de caractéristiques installées." & CrLf & CrLf & _
+                  "Souhaitez-vous obtenir ces informations et les enregistrer dans le rapport ?"
+                msg(2) = "Informations sur les caractéristiques"
+        End Select
         Contents &= "----> Feature information" & CrLf & CrLf & _
                     " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
         Debug.WriteLine("[GetFeatureInformation] Starting task...")
@@ -242,19 +391,51 @@ Public Class ImgInfoSaveDlg
             Debug.WriteLine("[GetFeatureInformation] Starting API...")
             DismApi.Initialize(DismLogLevel.LogErrors)
             Debug.WriteLine("[GetFeatureInformation] Creating image session...")
-            ReportChanges("Preparing feature information processes...", 0)
+            ReportChanges(msg(0), 0)
             Using imgSession As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(ImgMountDir))
                 Debug.WriteLine("[GetFeatureInformation] Getting basic feature information...")
-                ReportChanges("Getting installed features...", 5)
+                ReportChanges(msg(0), 5)
                 InstalledFeatInfo = DismApi.GetFeatures(imgSession)
                 Contents &= "  Installed features in this image: " & InstalledFeatInfo.Count & CrLf & CrLf
-                ReportChanges("Features have been obtained", 10)
-                If MsgBox("The program has obtained basic information of the installed features of this image. You can also get complete information of such features and save it in the report." & CrLf & CrLf & _
-                          "Do note that this will take longer depending on the number of installed features." & CrLf & CrLf & _
-                          "Do you want to get this information and save it in the report?", vbYesNo + vbQuestion, "Feature information") = MsgBoxResult.Yes Then
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                msg(0) = "Features have been obtained"
+                            Case "ESN"
+                                msg(0) = "Las características han sido obtenidas"
+                            Case "FRA"
+                                msg(0) = "Des caractéristiques ont été obtenues"
+                        End Select
+                    Case 1
+                        msg(0) = "Features have been obtained"
+                    Case 2
+                        msg(0) = "Las características han sido obtenidas"
+                    Case 3
+                        msg(0) = "Des caractéristiques ont été obtenues"
+                End Select
+                ReportChanges(msg(0), 10)
+                If MsgBox(msg(1), vbYesNo + vbQuestion, msg(2)) = MsgBoxResult.Yes Then
                     Debug.WriteLine("[GetFeatureInformation] Getting complete feature information...")
                     For Each feature As DismFeature In InstalledFeatInfo
-                        ReportChanges("Getting information of features... (feature " & InstalledFeatInfo.IndexOf(feature) + 1 & " of " & InstalledFeatInfo.Count & ")", (InstalledFeatInfo.IndexOf(feature) / InstalledFeatInfo.Count) * 100)
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENU", "ENG"
+                                        msg(0) = "Getting information of features... (feature " & InstalledFeatInfo.IndexOf(feature) + 1 & " of " & InstalledFeatInfo.Count & ")"
+                                    Case "ESN"
+                                        msg(0) = "Obteniendo información de características... (característica " & InstalledFeatInfo.IndexOf(feature) + 1 & " de " & InstalledFeatInfo.Count & ")"
+                                    Case "FRA"
+                                        msg(0) = "Obtention des informations sur les caractéristiques en cours... (caractéristique " & InstalledFeatInfo.IndexOf(feature) + 1 & " de " & InstalledFeatInfo.Count & ")"
+                                End Select
+                            Case 1
+                                msg(0) = "Getting information of features... (feature " & InstalledFeatInfo.IndexOf(feature) + 1 & " of " & InstalledFeatInfo.Count & ")"
+                            Case 2
+                                msg(0) = "Obteniendo información de características... (característica " & InstalledFeatInfo.IndexOf(feature) + 1 & " de " & InstalledFeatInfo.Count & ")"
+                            Case 3
+                                msg(0) = "Obtention des informations sur les caractéristiques en cours... (caractéristique " & InstalledFeatInfo.IndexOf(feature) + 1 & " de " & InstalledFeatInfo.Count & ")"
+                        End Select
+                        ReportChanges(msg(0), (InstalledFeatInfo.IndexOf(feature) / InstalledFeatInfo.Count) * 100)
                         Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, feature.FeatureName)
                         Contents &= "  Feature " & InstalledFeatInfo.IndexOf(feature) + 1 & " of " & InstalledFeatInfo.Count & ":" & CrLf
                         Dim cProps As DismCustomPropertyCollection = featInfo.CustomProperties
@@ -273,12 +454,29 @@ Public Class ImgInfoSaveDlg
                     Next
                     Contents &= "  - Complete feature information has been gathered" & CrLf & CrLf
                 Else
-                    ReportChanges("Saving installed features...", 50)
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENU", "ENG"
+                                    msg(0) = "Saving installed features..."
+                                Case "ESN"
+                                    msg(0) = "Guardando características instaladas..."
+                                Case "FRA"
+                                    msg(0) = "Sauvegarde des caractéristiques installés en cours..."
+                            End Select
+                        Case 1
+                            msg(0) = "Saving installed features..."
+                        Case 2
+                            msg(0) = "Guardando características instaladas..."
+                        Case 3
+                            msg(0) = "Sauvegarde des caractéristiques installés en cours..."
+                    End Select
+                    ReportChanges(msg(0), 50)
                     Contents &= "  - Complete feature information has not been gathered" & CrLf & CrLf & _
                                 "  Installed features in this image:" & CrLf
                     For Each installedFeature As DismFeature In InstalledFeatInfo
                         Contents &= "  - Feature name: " & installedFeature.FeatureName & CrLf & _
-                                    "  - Feature state: " & Casters.CastDismPackageState(installedFeature.State) & CrLf & CrLf
+                                    "  - Feature state: " & Casters.CastDismFeatureState(installedFeature.State) & CrLf & CrLf
                     Next
                 End If
             End Using
@@ -295,6 +493,48 @@ Public Class ImgInfoSaveDlg
 
     Sub GetAppxInformation()
         Dim InstalledAppxPackageInfo As DismAppxPackageCollection = Nothing
+        Dim msg As String() = New String(2) {"", "", ""}
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        msg(0) = "Preparing AppX package information processes..."
+                        msg(1) = "The program has obtained basic information of the installed AppX packages of this image. You can also get complete information of such AppX packages and save it in the report." & CrLf & CrLf & _
+                          "Do note that this will take longer depending on the number of installed AppX packages." & CrLf & CrLf & _
+                          "Do you want to get this information and save it in the report?"
+                        msg(2) = "AppX package information"
+                    Case "ESN"
+                        msg(0) = "Preparando procesos de información de paquetes AppX..."
+                        msg(1) = "El programa ha obtenido información básica de los paquetes AppX instalados en esta imagen. También puede obtener información completa de dichos paquetes AppX y guardarla en el informe." & CrLf & CrLf & _
+                          "Dese cuenta de que esto tardará más, dependiendo del número de paquetes AppX instalados." & CrLf & CrLf & _
+                          "¿Desea obtener esta información y guardarla en el informe?"
+                        msg(2) = "Información de paquetes AppX"
+                    Case "FRA"
+                        msg(0) = "Préparation des processus d'information sur les paquets AppX en cours..."
+                        msg(1) = "Le programme a obtenu des informations basiques sur les paquets AppX installés sur cette image. Vous pouvez également obtenir des informations complètes sur ces paquets AppX et les enregistrer dans le rapport." & CrLf & CrLf & _
+                          "Notez que cette opération peut prendre plus de temps en fonction du nombre de paquets AppX installés." & CrLf & CrLf & _
+                          "Souhaitez-vous obtenir ces informations et les enregistrer dans le rapport ?"
+                        msg(2) = "Informations sur les paquets AppX"
+                End Select
+            Case 1
+                msg(0) = "Preparing AppX package information processes..."
+                msg(1) = "The program has obtained basic information of the installed AppX packages of this image. You can also get complete information of such AppX packages and save it in the report." & CrLf & CrLf & _
+                  "Do note that this will take longer depending on the number of installed AppX packages." & CrLf & CrLf & _
+                  "Do you want to get this information and save it in the report?"
+                msg(2) = "AppX package information"
+            Case 2
+                msg(0) = "Preparando procesos de información de paquetes AppX..."
+                msg(1) = "El programa ha obtenido información básica de los paquetes AppX instalados en esta imagen. También puede obtener información completa de dichos paquetes AppX y guardarla en el informe." & CrLf & CrLf & _
+                  "Dese cuenta de que esto tardará más, dependiendo del número de paquetes AppX instalados." & CrLf & CrLf & _
+                  "¿Desea obtener esta información y guardarla en el informe?"
+                msg(2) = "Información de paquetes AppX"
+            Case 3
+                msg(0) = "Préparation des processus d'information sur les paquets AppX en cours..."
+                msg(1) = "Le programme a obtenu des informations basiques sur les paquets AppX installés sur cette image. Vous pouvez également obtenir des informations complètes sur ces paquets AppX et les enregistrer dans le rapport." & CrLf & CrLf & _
+                  "Notez que cette opération peut prendre plus de temps en fonction du nombre de paquets AppX installés." & CrLf & CrLf & _
+                  "Souhaitez-vous obtenir ces informations et les enregistrer dans le rapport ?"
+                msg(2) = "Informations sur les paquets AppX"
+        End Select
         Contents &= "----> AppX package information" & CrLf & CrLf & _
                     " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
         ' Detect if the image is Windows 8 or later. If not, skip this task
@@ -310,7 +550,24 @@ Public Class ImgInfoSaveDlg
                     Contents &= "  Installed AppX packages in this image: " & MainForm.imgAppxPackageNames.Count - 1 & CrLf & CrLf
                     For x = 0 To Array.LastIndexOf(MainForm.imgAppxPackageNames, MainForm.imgAppxPackageNames.Last)
                         If x = MainForm.imgAppxPackageNames.Count - 1 Then Continue For
-                        ReportChanges("Getting information of AppX packages... (AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ")", ((x + 1) / MainForm.imgAppxPackageNames.Count) * 100)
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENU", "ENG"
+                                        msg(0) = "Getting information of AppX packages... (AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                    Case "ESN"
+                                        msg(0) = "Obteniendo información de paquetes AppX... (paquete AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                    Case "FRA"
+                                        msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                End Select
+                            Case 1
+                                msg(0) = "Getting information of AppX packages... (AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                            Case 2
+                                msg(0) = "Obteniendo información de paquetes AppX... (paquete AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                            Case 3
+                                msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                        End Select
+                        ReportChanges(msg(0), ((x + 1) / MainForm.imgAppxPackageNames.Count) * 100)
                         Contents &= "  AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ":" & CrLf & _
                                     "    - Package name: " & MainForm.imgAppxPackageNames(x) & CrLf & _
                                     "    - Application display name: " & MainForm.imgAppxDisplayNames(x) & CrLf & _
@@ -402,10 +659,9 @@ Public Class ImgInfoSaveDlg
                     Debug.WriteLine("[GetAppxInformation] Starting API...")
                     DismApi.Initialize(DismLogLevel.LogErrors)
                     Debug.WriteLine("[GetAppxInformation] Creating image session...")
-                    ReportChanges("Preparing AppX package information processes...", 0)
                     Using imgSession As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(ImgMountDir))
                         Debug.WriteLine("[GetAppxInformation] Getting basic AppX package information...")
-                        ReportChanges("Getting installed AppX packages...", 5)
+                        ReportChanges(msg(0), 5)
                         InstalledAppxPackageInfo = DismApi.GetProvisionedAppxPackages(imgSession)
                         ' Determine if MainForm arrays contain more stuff
                         Dim pkgNames As New List(Of String)
@@ -413,15 +669,47 @@ Public Class ImgInfoSaveDlg
                             pkgNames.Add(pkg.PackageName)
                         Next
                         Contents &= "  Installed AppX packages in this image: " & If(MainForm.imgAppxPackageNames.Count - 1 > pkgNames.Count, MainForm.imgAppxPackageNames.Count - 1, pkgNames.Count) & CrLf & CrLf
-                        ReportChanges("AppX packages have been obtained", 10)
-                        If MsgBox("The program has obtained basic information of the installed AppX packages of this image. You can also get complete information of such AppX packages and save it in the report." & CrLf & CrLf & _
-                          "Do note that this will take longer depending on the number of installed AppX packages." & CrLf & CrLf & _
-                          "Do you want to get this information and save it in the report?", vbYesNo + vbQuestion, "AppX package information") = MsgBoxResult.Yes Then
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENU", "ENG"
+                                        msg(0) = "AppX packages have been obtained"
+                                    Case "ESN"
+                                        msg(0) = "Los paquetes AppX han sido obtenidos"
+                                    Case "FRA"
+                                        msg(0) = "Des paquets AppX ont été obtenus"
+                                End Select
+                            Case 1
+                                msg(0) = "AppX packages have been obtained"
+                            Case 2
+                                msg(0) = "Los paquetes AppX han sido obtenidos"
+                            Case 3
+                                msg(0) = "Des paquets AppX ont été obtenus"
+                        End Select
+                        ReportChanges(msg(0), 10)
+                        If MsgBox(msg(1), vbYesNo + vbQuestion, msg(2)) = MsgBoxResult.Yes Then
                             Debug.WriteLine("[GetAppxInformation] Getting complete AppX package information...")
                             If MainForm.imgAppxPackageNames.Count - 1 > pkgNames.Count Then
                                 For x = 0 To Array.LastIndexOf(MainForm.imgAppxPackageNames, MainForm.imgAppxPackageNames.Last)
                                     If x = MainForm.imgAppxPackageNames.Count - 1 Then Continue For
-                                    ReportChanges("Getting information of AppX packages... (AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ")", ((x + 1) / MainForm.imgAppxPackageNames.Count) * 100)
+                                    Select Case MainForm.Language
+                                        Case 0
+                                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                                Case "ENU", "ENG"
+                                                    msg(0) = "Getting information of AppX packages... (AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                                Case "ESN"
+                                                    msg(0) = "Obteniendo información de paquetes AppX... (paquete AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                                Case "FRA"
+                                                    msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                            End Select
+                                        Case 1
+                                            msg(0) = "Getting information of AppX packages... (AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                        Case 2
+                                            msg(0) = "Obteniendo información de paquetes AppX... (paquete AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                        Case 3
+                                            msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                    End Select
+                                    ReportChanges(msg(0), ((x + 1) / MainForm.imgAppxPackageNames.Count) * 100)
                                     Contents &= "  AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ":" & CrLf & _
                                                 "    - Package name: " & MainForm.imgAppxPackageNames(x) & CrLf & _
                                                 "    - Application display name: " & MainForm.imgAppxDisplayNames(x) & CrLf & _
@@ -511,7 +799,24 @@ Public Class ImgInfoSaveDlg
                                 Next
                             Else
                                 For Each appxPkg As DismAppxPackage In InstalledAppxPackageInfo
-                                    ReportChanges("Getting information of AppX packages... (AppX package " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " of " & InstalledAppxPackageInfo.Count & ")", (InstalledAppxPackageInfo.IndexOf(appxPkg) / InstalledAppxPackageInfo.Count) * 100)
+                                    Select Case MainForm.Language
+                                        Case 0
+                                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                                Case "ENU", "ENG"
+                                                    msg(0) = "Getting information of AppX packages... (AppX package " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " of " & InstalledAppxPackageInfo.Count & ")"
+                                                Case "ESN"
+                                                    msg(0) = "Obteniendo información de paquetes AppX ... (paquete AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " de " & InstalledAppxPackageInfo.Count & ")"
+                                                Case "FRA"
+                                                    msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " de " & InstalledAppxPackageInfo.Count & ")"
+                                            End Select
+                                        Case 1
+                                            msg(0) = "Getting information of AppX packages... (AppX package " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " of " & InstalledAppxPackageInfo.Count & ")"
+                                        Case 2
+                                            msg(0) = "Obteniendo información de paquetes AppX ... (paquete AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " de " & InstalledAppxPackageInfo.Count & ")"
+                                        Case 3
+                                            msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " de " & InstalledAppxPackageInfo.Count & ")"
+                                    End Select
+                                    ReportChanges(msg(0), (InstalledAppxPackageInfo.IndexOf(appxPkg) / InstalledAppxPackageInfo.Count) * 100)
                                     Contents &= "  AppX package " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " of " & InstalledAppxPackageInfo.Count & ":" & CrLf & _
                                                 "    - Package name: " & appxPkg.PackageName & CrLf & _
                                                 "    - Application display name: " & appxPkg.DisplayName & CrLf & _
@@ -599,7 +904,24 @@ Public Class ImgInfoSaveDlg
 
                             Contents &= "  - Complete AppX package information has been gathered" & CrLf & CrLf
                         Else
-                            ReportChanges("Saving installed AppX packages...", 50)
+                            Select Case MainForm.Language
+                                Case 0
+                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                        Case "ENU", "ENG"
+                                            msg(0) = "Saving installed AppX packages..."
+                                        Case "ESN"
+                                            msg(0) = "Guardando paquetes AppX instalados..."
+                                        Case "FRA"
+                                            msg(0) = "Sauvegarde des paquets AppX installés en cours..."
+                                    End Select
+                                Case 1
+                                    msg(0) = "Saving installed AppX packages..."
+                                Case 2
+                                    msg(0) = "Guardando paquetes AppX instalados..."
+                                Case 3
+                                    msg(0) = "Sauvegarde des paquets AppX installés en cours..."
+                            End Select
+                            ReportChanges(msg(0), 50)
                             Contents &= "  - Complete AppX package information has not been gathered" & CrLf & CrLf & _
                                         "  Installed AppX packages in this image:" & CrLf
                             For Each installedAppxPkg As DismAppxPackage In InstalledAppxPackageInfo
@@ -626,6 +948,48 @@ Public Class ImgInfoSaveDlg
 
     Sub GetCapabilityInformation()
         Dim InstalledCapInfo As DismCapabilityCollection = Nothing
+        Dim msg As String() = New String(2) {"", "", ""}
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        msg(0) = "Preparing capability information processes..."
+                        msg(1) = "The program has obtained basic information of the installed capabilities of this image. You can also get complete information of such capabilities and save it in the report." & CrLf & CrLf & _
+                          "Do note that this will take longer depending on the number of installed capabilities." & CrLf & CrLf & _
+                          "Do you want to get this information and save it in the report?"
+                        msg(2) = "Capability information"
+                    Case "ESN"
+                        msg(0) = "Preparando procesos de información de funcionalidades..."
+                        msg(1) = "El programa ha obtenido información básica de las funcionalidades instaladas en esta imagen. También puede obtener información completa de dichas funcionalidades y guardarla en el informe." & CrLf & CrLf & _
+                          "Dese cuenta de que esto tardará más, dependiendo del número de funcionalidades instaladas." & CrLf & CrLf & _
+                          "¿Desea obtener esta información y guardarla en el informe?"
+                        msg(2) = "Información de funcionalidades"
+                    Case "FRA"
+                        msg(0) = "Préparation des processus d'information sur les capacités en cours..."
+                        msg(1) = "Le programme a obtenu des informations basiques sur les capacités installés sur cette image. Vous pouvez également obtenir des informations complètes sur ces capacités et les enregistrer dans le rapport." & CrLf & CrLf & _
+                          "Notez que cette opération peut prendre plus de temps en fonction du nombre de capacités installées." & CrLf & CrLf & _
+                          "Souhaitez-vous obtenir ces informations et les enregistrer dans le rapport ?"
+                        msg(2) = "Informations sur les capacités"
+                End Select
+            Case 1
+                msg(0) = "Preparing capability information processes..."
+                msg(1) = "The program has obtained basic information of the installed capabilities of this image. You can also get complete information of such capabilities and save it in the report." & CrLf & CrLf & _
+                  "Do note that this will take longer depending on the number of installed capabilities." & CrLf & CrLf & _
+                  "Do you want to get this information and save it in the report?"
+                msg(2) = "Capability information"
+            Case 2
+                msg(0) = "Preparando procesos de información de funcionalidades..."
+                msg(1) = "El programa ha obtenido información básica de las funcionalidades instaladas en esta imagen. También puede obtener información completa de dichas funcionalidades y guardarla en el informe." & CrLf & CrLf & _
+                  "Dese cuenta de que esto tardará más, dependiendo del número de funcionalidades instaladas." & CrLf & CrLf & _
+                  "¿Desea obtener esta información y guardarla en el informe?"
+                msg(2) = "Información de funcionalidades"
+            Case 3
+                msg(0) = "Préparation des processus d'information sur les capacités en cours..."
+                msg(1) = "Le programme a obtenu des informations basiques sur les capacités installés sur cette image. Vous pouvez également obtenir des informations complètes sur ces capacités et les enregistrer dans le rapport." & CrLf & CrLf & _
+                  "Notez que cette opération peut prendre plus de temps en fonction du nombre de capacités installées." & CrLf & CrLf & _
+                  "Souhaitez-vous obtenir ces informations et les enregistrer dans le rapport ?"
+                msg(2) = "Informations sur les capacités"
+        End Select
         Contents &= "----> Capability information" & CrLf & CrLf & _
                     " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
         If (Not OnlineMode And (Not MainForm.IsWindows10OrHigher(ImgMountDir & "\Windows\system32\ntoskrnl.exe") Or MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase))) Or (OnlineMode And Not MainForm.IsWindows10OrHigher(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe")) Then
@@ -637,19 +1001,50 @@ Public Class ImgInfoSaveDlg
                 Debug.WriteLine("[GetCapabilityInformation] Starting API...")
                 DismApi.Initialize(DismLogLevel.LogErrors)
                 Debug.WriteLine("[GetCapabilityInformation] Creating image session...")
-                ReportChanges("Preparing capability information processes...", 0)
                 Using imgSession As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(ImgMountDir))
                     Debug.WriteLine("[GetCapabilityInformation] Getting basic capability information...")
-                    ReportChanges("Getting installed capabilities...", 5)
+                    ReportChanges(msg(0), 5)
                     InstalledCapInfo = DismApi.GetCapabilities(imgSession)
                     Contents &= "  Installed capabilities in this image: " & InstalledCapInfo.Count & CrLf & CrLf
-                    ReportChanges("Capabilities have been obtained", 10)
-                    If MsgBox("The program has obtained basic information of the installed capabilities of this image. You can also get complete information of such capabilities and save it in the report." & CrLf & CrLf & _
-                          "Do note that this will take longer depending on the number of installed capabilities." & CrLf & CrLf & _
-                          "Do you want to get this information and save it in the report?", vbYesNo + vbQuestion, "Capability information") = MsgBoxResult.Yes Then
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENU", "ENG"
+                                    msg(0) = "Capabilities have been obtained"
+                                Case "ESN"
+                                    msg(0) = "Las funcionalidades han sido obtenidas"
+                                Case "FRA"
+                                    msg(0) = "Des capacités ont été obtenues"
+                            End Select
+                        Case 1
+                            msg(0) = "Capabilities have been obtained"
+                        Case 2
+                            msg(0) = "Las funcionalidades han sido obtenidas"
+                        Case 3
+                            msg(0) = "Des capacités ont été obtenues"
+                    End Select
+                    ReportChanges(msg(0), 10)
+                    If MsgBox(msg(1), vbYesNo + vbQuestion, msg(2)) = MsgBoxResult.Yes Then
                         Debug.WriteLine("[GetCapabilityInformation] Getting complete capability information...")
                         For Each capability As DismCapability In InstalledCapInfo
-                            ReportChanges("Getting information of capabilities... (capability " & InstalledCapInfo.IndexOf(capability) + 1 & " of " & InstalledCapInfo.Count & ")", (InstalledCapInfo.IndexOf(capability) / InstalledCapInfo.Count) * 100)
+                            Select Case MainForm.Language
+                                Case 0
+                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                        Case "ENU", "ENG"
+                                            msg(0) = "Getting information of capabilities... (capability " & InstalledCapInfo.IndexOf(capability) + 1 & " of " & InstalledCapInfo.Count & ")"
+                                        Case "ESN"
+                                            msg(0) = "Obteniendo información de funcionalidades... (funcionalidad " & InstalledCapInfo.IndexOf(capability) + 1 & " de " & InstalledCapInfo.Count & ")"
+                                        Case "FRA"
+                                            msg(0) = "Obtention des informations sur les capacités en cours... (capacité " & InstalledCapInfo.IndexOf(capability) + 1 & " de " & InstalledCapInfo.Count & ")"
+                                    End Select
+                                Case 1
+                                    msg(0) = "Getting information of capabilities... (capability " & InstalledCapInfo.IndexOf(capability) + 1 & " of " & InstalledCapInfo.Count & ")"
+                                Case 2
+                                    msg(0) = "Obteniendo información de funcionalidades... (funcionalidad " & InstalledCapInfo.IndexOf(capability) + 1 & " de " & InstalledCapInfo.Count & ")"
+                                Case 3
+                                    msg(0) = "Obtention des informations sur les capacités en cours... (capacité " & InstalledCapInfo.IndexOf(capability) + 1 & " de " & InstalledCapInfo.Count & ")"
+                            End Select
+                            ReportChanges(msg(0), (InstalledCapInfo.IndexOf(capability) / InstalledCapInfo.Count) * 100)
                             Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, capability.Name)
                             Contents &= "  Capability " & InstalledCapInfo.IndexOf(capability) + 1 & " of " & InstalledCapInfo.Count & ":" & CrLf & _
                                         "    - Capability identity: " & capInfo.Name & CrLf & _
@@ -663,7 +1058,24 @@ Public Class ImgInfoSaveDlg
                         Next
                         Contents &= "  - Complete capability information has been gathered" & CrLf & CrLf
                     Else
-                        ReportChanges("Saving installed capabilities...", 50)
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENU", "ENG"
+                                        msg(0) = "Saving installed capabilities..."
+                                    Case "ESN"
+                                        msg(0) = "Guardando funcionalidades instaladas..."
+                                    Case "FRA"
+                                        msg(0) = "Sauvegarde des caractéristiques installées en cours..."
+                                End Select
+                            Case 1
+                                msg(0) = "Saving installed capabilities..."
+                            Case 2
+                                msg(0) = "Guardando funcionalidades instaladas..."
+                            Case 3
+                                msg(0) = "Sauvegarde des caractéristiques installées en cours..."
+                        End Select
+                        ReportChanges(msg(0), 50)
                         Contents &= "  - Complete capability information has not been gathered" & CrLf & CrLf
                         For Each installedCapability As DismCapability In InstalledCapInfo
                             Contents &= "  - Capability name: " & installedCapability.Name & CrLf & _
@@ -685,10 +1097,68 @@ Public Class ImgInfoSaveDlg
 
     Sub GetDriverInformation()
         Dim InstalledDrvInfo As DismDriverPackageCollection = Nothing
-        If SaveTask = 7 And Not AllDrivers Then
-            If MsgBox("You have configured background processes to not detect all drivers, which includes drivers part of the Windows distribution, so you may not see the driver you're interested in." & CrLf & CrLf & _
+        Dim msg As String() = New String(3) {"", "", "", ""}
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        msg(0) = "Preparing driver information processes..."
+                        msg(1) = "The program has obtained basic information of the installed drivers of this image. You can also get complete information of such drivers and save it in the report." & CrLf & CrLf & _
+                          "Do note that this will take longer depending on the number of installed drivers." & CrLf & CrLf & _
+                          "Do you want to get this information and save it in the report?"
+                        msg(2) = "Driver information"
+                        msg(3) = "You have configured background processes to not detect all drivers, which includes drivers part of the Windows distribution, so you may not see the driver you're interested in." & CrLf & CrLf & _
                       "This setting is also applied to this task, but you can get the information of all drivers now. Do note that this can take a long time, depending on the amount of first-party drivers." & CrLf & CrLf & _
-                      "Do you want to get the information of all drivers, including drivers part of the Windows distribution?", vbYesNo + vbQuestion, "Driver information") = MsgBoxResult.Yes Then
+                      "Do you want to get the information of all drivers, including drivers part of the Windows distribution?"
+                    Case "ESN"
+                        msg(0) = "Preparando procesos de información de características..."
+                        msg(1) = "El programa ha obtenido información básica de los controladores instalados en esta imagen. También puede obtener información completa de dichos controladores y guardarla en el informe." & CrLf & CrLf & _
+                          "Dese cuenta de que esto tardará más, dependiendo del número de controladores instalados." & CrLf & CrLf & _
+                          "¿Desea obtener esta información y guardarla en el informe?"
+                        msg(2) = "Información de controladores"
+                        msg(3) = "Ha configurado los procesos en segundo plano para no detectar todos los controladores, lo que incluye controladores parte de la distribución de Windows, por lo que podría no ver el controlador que le interesa." & CrLf & CrLf & _
+                      "Esta configuración también se aplica a esta tarea, pero puede obtener la información de todos los controladores ahora. Dese cuenta de que esto puede llevar mucho tiempo, dependiendo del número de controladores de serie." & CrLf & CrLf & _
+                      "¿Desea obtener la información de todos los controladores, incluyendo los controladores que son parte de la distribución de Windows?"
+                    Case "FRA"
+                        msg(0) = "Préparation des processus d'information sur les pilotes en cours..."
+                        msg(1) = "Le programme a obtenu des informations basiques sur les pilotes installés sur cette image. Vous pouvez également obtenir des informations complètes sur ces pilotes et les enregistrer dans le rapport." & CrLf & CrLf & _
+                          "Notez que cette opération peut prendre plus de temps en fonction du nombre de pilotes installés." & CrLf & CrLf & _
+                          "Souhaitez-vous obtenir ces informations et les enregistrer dans le rapport ?"
+                        msg(2) = "Informations sur les pilotes"
+                        msg(3) = "Vous avez configuré les processus d'arrière-plan pour qu'ils ne détectent pas tous les pilotes, ce qui inclut les pilotes faisant partie de la distribution Windows, il se peut donc que vous ne voyiez pas le pilote qui vous intéresse." & CrLf & CrLf & _
+                      "Ce paramètre est également appliqué à cette tâche, mais vous pouvez obtenir les informations de tous les pilotes maintenant. Notez que cela peut prendre beaucoup de temps, en fonction du nombre de pilotes de première partie." & CrLf & CrLf & _
+                      "Voulez-vous obtenir les informations de tous les pilotes, y compris les pilotes faisant partie de la distribution Windows ?"
+                End Select
+            Case 1
+                msg(0) = "Preparing driver information processes..."
+                msg(1) = "The program has obtained basic information of the installed drivers of this image. You can also get complete information of such drivers and save it in the report." & CrLf & CrLf & _
+                  "Do note that this will take longer depending on the number of installed drivers." & CrLf & CrLf & _
+                  "Do you want to get this information and save it in the report?"
+                msg(2) = "Driver information"
+                msg(3) = "You have configured background processes to not detect all drivers, which includes drivers part of the Windows distribution, so you may not see the driver you're interested in." & CrLf & CrLf & _
+              "This setting is also applied to this task, but you can get the information of all drivers now. Do note that this can take a long time, depending on the amount of first-party drivers." & CrLf & CrLf & _
+              "Do you want to get the information of all drivers, including drivers part of the Windows distribution?"
+            Case 2
+                msg(0) = "Preparando procesos de información de características..."
+                msg(1) = "El programa ha obtenido información básica de los controladores instalados en esta imagen. También puede obtener información completa de dichos controladores y guardarla en el informe." & CrLf & CrLf & _
+                  "Dese cuenta de que esto tardará más, dependiendo del número de controladores instalados." & CrLf & CrLf & _
+                  "¿Desea obtener esta información y guardarla en el informe?"
+                msg(2) = "Información de controladores"
+                msg(3) = "Ha configurado los procesos en segundo plano para no detectar todos los controladores, lo que incluye controladores parte de la distribución de Windows, por lo que podría no ver el controlador que le interesa." & CrLf & CrLf & _
+              "Esta configuración también se aplica a esta tarea, pero puede obtener la información de todos los controladores ahora. Dese cuenta de que esto puede llevar mucho tiempo, dependiendo del número de controladores de serie." & CrLf & CrLf & _
+              "¿Desea obtener la información de todos los controladores, incluyendo los controladores que son parte de la distribución de Windows?"
+            Case 3
+                msg(0) = "Préparation des processus d'information sur les pilotes en cours..."
+                msg(1) = "Le programme a obtenu des informations basiques sur les pilotes installés sur cette image. Vous pouvez également obtenir des informations complètes sur ces pilotes et les enregistrer dans le rapport." & CrLf & CrLf & _
+                  "Notez que cette opération peut prendre plus de temps en fonction du nombre de pilotes installés." & CrLf & CrLf & _
+                  "Souhaitez-vous obtenir ces informations et les enregistrer dans le rapport ?"
+                msg(2) = "Informations sur les pilotes"
+                msg(3) = "Vous avez configuré les processus d'arrière-plan pour qu'ils ne détectent pas tous les pilotes, ce qui inclut les pilotes faisant partie de la distribution Windows, il se peut donc que vous ne voyiez pas le pilote qui vous intéresse." & CrLf & CrLf & _
+              "Ce paramètre est également appliqué à cette tâche, mais vous pouvez obtenir les informations de tous les pilotes maintenant. Notez que cela peut prendre beaucoup de temps, en fonction du nombre de pilotes de première partie." & CrLf & CrLf & _
+              "Voulez-vous obtenir les informations de tous les pilotes, y compris les pilotes faisant partie de la distribution Windows ?"
+        End Select
+        If SaveTask = 7 And Not AllDrivers Then
+            If MsgBox(msg(3), vbYesNo + vbQuestion, msg(2)) = MsgBoxResult.Yes Then
                 AllDrivers = True
             End If
         End If
@@ -700,19 +1170,50 @@ Public Class ImgInfoSaveDlg
             Debug.WriteLine("[GetDriverInformation] Starting API...")
             DismApi.Initialize(DismLogLevel.LogErrors)
             Debug.WriteLine("[GetDriverInformation] Creating image session...")
-            ReportChanges("Preparing driver information processes...", 0)
             Using imgSession As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(ImgMountDir))
                 Debug.WriteLine("[GetDriverInformation] Getting basic driver information...")
-                ReportChanges("Getting installed drivers...", 5)
+                ReportChanges(msg(0), 5)
                 InstalledDrvInfo = DismApi.GetDrivers(imgSession, AllDrivers)
                 Contents &= "  Installed drivers in this image: " & InstalledDrvInfo.Count & CrLf & CrLf
-                ReportChanges("Drivers have been obtained", 10)
-                If MsgBox("The program has obtained basic information of the installed drivers of this image. You can also get complete information of such drivers and save it in the report." & CrLf & CrLf & _
-                      "Do note that this will take longer depending on the number of installed drivers." & CrLf & CrLf & _
-                      "Do you want to get this information and save it in the report?", vbYesNo + vbQuestion, "Driver information") = MsgBoxResult.Yes Then
-                    Debug.WriteLine("[GetCapabilityInformation] Getting complete capability information...")
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                msg(0) = "Drivers have been obtained"
+                            Case "ESN"
+                                msg(0) = "Los controladores han sido obtenidos"
+                            Case "FRA"
+                                msg(0) = "Des pilotes ont été obtenus"
+                        End Select
+                    Case 1
+                        msg(0) = "Drivers have been obtained"
+                    Case 2
+                        msg(0) = "Los controladores han sido obtenidos"
+                    Case 3
+                        msg(0) = "Des pilotes ont été obtenus"
+                End Select
+                ReportChanges(msg(0), 10)
+                If MsgBox(msg(1), vbYesNo + vbQuestion, msg(2)) = MsgBoxResult.Yes Then
+                    Debug.WriteLine("[GetDriverInformation] Getting complete driver information...")
                     For Each driver As DismDriverPackage In InstalledDrvInfo
-                        ReportChanges("Getting information of drivers... (driver " & InstalledDrvInfo.IndexOf(driver) + 1 & " of " & InstalledDrvInfo.Count & ")", (InstalledDrvInfo.IndexOf(driver) / InstalledDrvInfo.Count) * 100)
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENU", "ENG"
+                                        msg(0) = "Getting information of drivers... (driver " & InstalledDrvInfo.IndexOf(driver) + 1 & " of " & InstalledDrvInfo.Count & ")"
+                                    Case "ESN"
+                                        msg(0) = "Obteniendo información de controladores... (controlador " & InstalledDrvInfo.IndexOf(driver) + 1 & " de " & InstalledDrvInfo.Count & ")"
+                                    Case "FRA"
+                                        msg(0) = "Obtention des informations sur les pilotes en cours... (pilote " & InstalledDrvInfo.IndexOf(driver) + 1 & " de " & InstalledDrvInfo.Count & ")"
+                                End Select
+                            Case 1
+                                msg(0) = "Getting information of drivers... (driver " & InstalledDrvInfo.IndexOf(driver) + 1 & " of " & InstalledDrvInfo.Count & ")"
+                            Case 2
+                                msg(0) = "Obteniendo información de controladores... (controlador " & InstalledDrvInfo.IndexOf(driver) + 1 & " de " & InstalledDrvInfo.Count & ")"
+                            Case 3
+                                msg(0) = "Obtention des informations sur les pilotes en cours... (pilote " & InstalledDrvInfo.IndexOf(driver) + 1 & " de " & InstalledDrvInfo.Count & ")"
+                        End Select
+                        ReportChanges(msg(0), (InstalledDrvInfo.IndexOf(driver) / InstalledDrvInfo.Count) * 100)
                         Contents &= "  Driver " & InstalledDrvInfo.IndexOf(driver) + 1 & " of " & InstalledDrvInfo.Count & ":" & CrLf & _
                                     "    - Published name: " & driver.PublishedName & CrLf & _
                                     "    - Original file name: " & Path.GetFileName(driver.OriginalFileName) & " (" & Path.GetDirectoryName(driver.OriginalFileName) & ")" & CrLf & _
@@ -729,7 +1230,24 @@ Public Class ImgInfoSaveDlg
                     Next
                     Contents &= "  - Complete driver information has been gathered" & CrLf & CrLf
                 Else
-                    ReportChanges("Saving installed drivers...", 50)
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENU", "ENG"
+                                    msg(0) = "Saving installed drivers..."
+                                Case "ESN"
+                                    msg(0) = "Guardando controladores instalados..."
+                                Case "FRA"
+                                    msg(0) = "Sauvegarde des pilotes installés en cours..."
+                            End Select
+                        Case 1
+                            msg(0) = "Saving installed drivers..."
+                        Case 2
+                            msg(0) = "Guardando controladores instalados..."
+                        Case 3
+                            msg(0) = "Sauvegarde des pilotes installés en cours..."
+                    End Select
+                    ReportChanges(msg(0), 50)
                     Contents &= "  - Complete driver information has not been gathered" & CrLf & CrLf
                     For Each installedDriver As DismDriverPackage In InstalledDrvInfo
                         Contents &= "  - Published name: " & installedDriver.PublishedName & CrLf & _
@@ -754,6 +1272,24 @@ Public Class ImgInfoSaveDlg
     End Sub
 
     Sub GetWinPEConfiguration()
+        Dim msg As String = ""
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        msg = "Preparing to get Windows PE configuration..."
+                    Case "ESN"
+                        msg = "Preparándonos para obtener la configuración de Windows PE..."
+                    Case "FRA"
+                        msg = "Préparation de l'obtention de la configuration de Windows PE en cours..."
+                End Select
+            Case 1
+                msg = "Preparing to get Windows PE configuration..."
+            Case 2
+                msg = "Preparándonos para obtener la configuración de Windows PE..."
+            Case 3
+                msg = "Préparation de l'obtention de la configuration de Windows PE en cours..."
+        End Select
         Contents &= "----> Windows PE configuration" & CrLf & CrLf
         If Not MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
             Contents &= "    This task is not supported on the specified Windows image. Check that it is a Windows PE image. Skipping task..." & CrLf & CrLf
@@ -763,7 +1299,7 @@ Public Class ImgInfoSaveDlg
             Debug.WriteLine("[GetWinPEConfiguration] Starting task...")
             Using reg As New Process
                 Debug.WriteLine("[GetWinPEConfiguration] Detecting target path...")
-                ReportChanges("Preparing to get Windows PE configuration...", 0)
+                ReportChanges(msg, 0)
                 reg.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe"
                 reg.StartInfo.Arguments = "load HKLM\PE_SOFT " & Quote & MainForm.MountDir & "\Windows\system32\config\SOFTWARE" & Quote
                 reg.StartInfo.CreateNoWindow = True
@@ -781,12 +1317,46 @@ Public Class ImgInfoSaveDlg
                     Exit Sub
                 End If
                 Try
-                    ReportChanges("Getting Windows PE target path...", 50)
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENU", "ENG"
+                                    msg = "Getting Windows PE target path..."
+                                Case "ESN"
+                                    msg = "Obteniendo la ruta de destino de Windows PE..."
+                                Case "FRA"
+                                    msg = "Obtention du chemin d'accès cible de Windows PE en cours..."
+                            End Select
+                        Case 1
+                            msg = "Getting Windows PE target path..."
+                        Case 2
+                            msg = "Obteniendo la ruta de destino de Windows PE..."
+                        Case 3
+                            msg = "Obtention du chemin d'accès cible de Windows PE en cours..."
+                    End Select
+                    ReportChanges(msg, 50)
                     ' Get target path first
                     Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("PE_SOFT\Microsoft\Windows NT\CurrentVersion\WinPE", False)
                     Contents &= "  - Target path: " & regKey.GetValue("InstRoot", "could not get value").ToString() & CrLf
                     regKey.Close()
-                    ReportChanges("Getting Windows PE scratch space...", 75)
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENU", "ENG"
+                                    msg = "Getting Windows PE scratch space..."
+                                Case "ESN"
+                                    msg = "Obteniendo espacio temporal de Windows PE..."
+                                Case "FRA"
+                                    msg = "Obtention de l'espace temporaire de Windows PE en cours..."
+                            End Select
+                        Case 1
+                            msg = "Getting Windows PE scratch space..."
+                        Case 2
+                            msg = "Obteniendo espacio temporal de Windows PE..."
+                        Case 3
+                            msg = "Obtention de l'espace temporaire de Windows PE en cours..."
+                    End Select
+                    ReportChanges(msg, 75)
                     regKey = Registry.LocalMachine.OpenSubKey("PE_SYS\ControlSet001\Services\FBWF", False)
                     Contents &= "  - Scratch space: " & regKey.GetValue("WinPECacheThreshold", "could not get value").ToString() & " MB" & CrLf & CrLf
                     regKey.Close()
@@ -815,6 +1385,35 @@ Public Class ImgInfoSaveDlg
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         Visible = True
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        Text = "Saving image information..."
+                        Label1.Text = "Please wait while DISMTools saves the image information to a file. This can take some time, depending on the tasks that are run."
+                        Label2.Text = "Please wait..."
+                    Case "ESN"
+                        Text = "Guardando información de la imagen..."
+                        Label1.Text = "Espere mientras DISMTools guarda la información de la imagen en un archivo. Esto puede llevar algo de tiempo, dependiendo de las tareas que son ejecutadas."
+                        Label2.Text = "Espere..."
+                    Case "FRA"
+                        Text = "Sauvegarde des informations sur l'image en cours..."
+                        Label1.Text = "Veuillez patienter pendant que DISMTools enregistre l'information sur l'image dans un fichier. Cette opération peut prendre un certain temps, en fonction des tâches exécutées."
+                        Label2.Text = "Veuillez patienter..."
+                End Select
+            Case 1
+                Text = "Saving image information..."
+                Label1.Text = "Please wait while DISMTools saves the image information to a file. This can take some time, depending on the tasks that are run."
+                Label2.Text = "Please wait..."
+            Case 2
+                Text = "Guardando información de la imagen..."
+                Label1.Text = "Espere mientras DISMTools guarda la información de la imagen en un archivo. Esto puede llevar algo de tiempo, dependiendo de las tareas que son ejecutadas."
+                Label2.Text = "Espere..."
+            Case 3
+                Text = "Sauvegarde des informations sur l'image en cours..."
+                Label1.Text = "Veuillez patienter pendant que DISMTools enregistre l'information sur l'image dans un fichier. Cette opération peut prendre un certain temps, en fonction des tâches exécutées."
+                Label2.Text = "Veuillez patienter..."
+        End Select
         If MainForm.ImgBW.IsBusy Then
             Dim msg As String = ""
             Select Case MainForm.Language
@@ -857,35 +1456,6 @@ Public Class ImgInfoSaveDlg
                 Thread.Sleep(500)
             End While
         End If
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        'Text = "Downloading application package..."
-                        'Label1.Text = "Please wait while DISMTools downloads the application package to add it to this image. This can take some time, depending on your network connection speed."
-                        Label2.Text = "Please wait..."
-                    Case "ESN"
-                        'Text = "Descargando paquete de aplicación..."
-                        'Label1.Text = "Espere mientras DISMTools descarga el paquete de aplicación para añadirlo a esta imagen. Esto puede llevar algo de tiempo, dependiendo de la velocidad de su conexión de red."
-                        Label2.Text = "Espere..."
-                    Case "FRA"
-                        'Text = "Téléchargement du paquet de l'application en cours..."
-                        'Label1.Text = "Veuillez patienter pendant que DISMTools télécharge le paquet d'application pour l'ajouter à cette image. Cela peut prendre un certain temps, en fonction de la vitesse de votre connexion réseau."
-                        Label2.Text = "Veuillez patienter..."
-                End Select
-            Case 1
-                'Text = "Downloading application package..."
-                'Label1.Text = "Please wait while DISMTools downloads the application package to add it to this image. This can take some time, depending on your network connection speed."
-                Label2.Text = "Please wait..."
-            Case 2
-                'Text = "Descargando paquete de aplicación..."
-                'Label1.Text = "Espere mientras DISMTools descarga el paquete de aplicación para añadirlo a esta imagen. Esto puede llevar algo de tiempo, dependiendo de la velocidad de su conexión de red."
-                Label2.Text = "Espere..."
-            Case 3
-                'Text = "Téléchargement du paquet de l'application en cours..."
-                'Label1.Text = "Veuillez patienter pendant que DISMTools télécharge le paquet d'application pour l'ajouter à cette image. Cela peut prendre un certain temps, en fonction de la vitesse de votre connexion réseau."
-                Label2.Text = "Veuillez patienter..."
-        End Select
 
         ' Stop the mounted image detector, as it makes the program crash when performing DISM API operations
         If MainForm.MountedImageDetectorBW.IsBusy Then
@@ -901,7 +1471,31 @@ Public Class ImgInfoSaveDlg
             Try
                 File.WriteAllText(SaveTarget, String.Empty)
             Catch ex As Exception
-                MsgBox("Could not create the save target. Reason: " & ex.ToString() & ": " & ex.Message, vbOKOnly + vbCritical, "The operation has failed")
+                Dim msg As String() = New String(1) {"", ""}
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                msg(0) = "Could not create the save target. Reason: "
+                                msg(1) = "The operation has failed"
+                            Case "ESN"
+                                msg(0) = "No se pudo crear el informe de destino. Razón: "
+                                msg(1) = "La operación ha fallado"
+                            Case "FRA"
+                                msg(0) = "Impossible de créer le fichier cible. Raison : "
+                                msg(1) = "L'opération a échoué"
+                        End Select
+                    Case 1
+                        msg(0) = "Could not create the save target. Reason: "
+                        msg(1) = "The operation has failed"
+                    Case 2
+                        msg(0) = "No se pudo crear el informe de destino. Razón: "
+                        msg(1) = "La operación ha fallado"
+                    Case 3
+                        msg(0) = "Impossible de créer le fichier cible. Raison : "
+                        msg(1) = "L'opération a échoué"
+                End Select
+                MsgBox(msg(0) & ex.ToString() & ": " & ex.Message, vbOKOnly + vbCritical, msg(1))
                 Exit Sub
             End Try
         End If
