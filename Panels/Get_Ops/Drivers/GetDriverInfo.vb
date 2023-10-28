@@ -17,6 +17,8 @@ Public Class GetDriverInfo
 
     Dim ButtonTT As New ToolTip()
 
+    Dim IsInDrvPkgs As Boolean
+
     Private Sub GetDriverInfo_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language
             Case 0
@@ -311,6 +313,9 @@ Public Class GetDriverInfo
         ' Detect if the "Detect all drivers" option is checked and act accordingly
         Panel6.Visible = MainForm.AllDrivers = False
 
+        ' Forcefully hide that panel if the driver packages panel is visible
+        If IsInDrvPkgs Then Panel6.Visible = False
+
         ' Switch to the selection panels
         Panel4.Visible = False
         Panel7.Visible = True
@@ -338,6 +343,7 @@ Public Class GetDriverInfo
         Panel6.Visible = MainForm.AllDrivers = False
 
         Label5.Visible = False
+        IsInDrvPkgs = False
     End Sub
 
     Private Sub DriverFileLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles DriverFileLink.LinkClicked
@@ -347,6 +353,7 @@ Public Class GetDriverInfo
         InfoFromDrvPackagesPanel.Visible = True
         Panel6.Visible = False
         Label5.Visible = True
+        IsInDrvPkgs = True
     End Sub
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
