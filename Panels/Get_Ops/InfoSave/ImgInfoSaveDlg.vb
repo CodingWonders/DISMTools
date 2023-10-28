@@ -878,6 +878,9 @@ Public Class ImgInfoSaveDlg
             Case 4
                 Contents &= " - Information tasks: get feature information" & CrLf & CrLf
                 GetFeatureInformation()
+            Case 5
+                Contents &= " - Information tasks: get installed AppX package information" & CrLf & CrLf
+                GetAppxInformation()
         End Select
 
         ' Save the file
