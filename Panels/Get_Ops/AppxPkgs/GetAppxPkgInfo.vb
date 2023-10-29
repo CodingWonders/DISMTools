@@ -31,6 +31,7 @@ Public Class GetAppxPkgInfoDlg
                         Label8.Text = "Store logo asset directory:"
                         Label9.Text = "Main store logo asset:"
                         Label10.Text = "This asset has been guessed by DISMTools based on its size, which can lead to an incorrect result. If that happens, please report an issue on the GitHub repository"
+                        Button2.Text = "Save..."
                     Case "ESN"
                         Text = "Obtener información de paquetes AppX"
                         Label1.Text = Text
@@ -47,6 +48,7 @@ Public Class GetAppxPkgInfoDlg
                         Label8.Text = "Directorio de recursos de logotipos de Tienda:"
                         Label9.Text = "Recurso de logotipos de Tienda principal:"
                         Label10.Text = "Este recurso ha sido averiguado por DISMTools por su tamaño, lo que puede llevar a un resultado incorrecto. Si eso ocurre, informe de un problema en el repositorio de GitHub"
+                        Button2.Text = "Guardar..."
                     Case "FRA"
                         Text = "Obtenir des informations sur les paquets AppX"
                         Label1.Text = Text
@@ -63,6 +65,7 @@ Public Class GetAppxPkgInfoDlg
                         Label8.Text = "Répertoire du logo du magasin :"
                         Label9.Text = "Logo du magasin principal :"
                         Label10.Text = "Ce bien a été deviné par DISMTools sur la base de sa taille, ce qui peut conduire à un résultat incorrect. Si cela se produit, veuillez signaler un problème sur le dépôt GitHub."
+                        Button2.Text = "Sauvegarder..."
                 End Select
             Case 1
                 Text = "Get AppX package information"
@@ -80,6 +83,7 @@ Public Class GetAppxPkgInfoDlg
                 Label8.Text = "Store logo asset directory:"
                 Label9.Text = "Main store logo asset:"
                 Label10.Text = "This asset has been guessed by DISMTools based on its size, which can lead to an incorrect result. If that happens, please report an issue on the GitHub repository"
+                Button2.Text = "Save..."
             Case 2
                 Text = "Obtener información de paquetes AppX"
                 Label1.Text = Text
@@ -96,6 +100,7 @@ Public Class GetAppxPkgInfoDlg
                 Label8.Text = "Directorio de recursos de logotipos de Tienda:"
                 Label9.Text = "Recurso de logotipos de Tienda principal:"
                 Label10.Text = "Este recurso ha sido averiguado por DISMTools por su tamaño, lo que puede llevar a un resultado incorrecto. Si eso ocurre, informe de un problema en el repositorio de GitHub"
+                Button2.Text = "Guardar..."
             Case 3
                 Text = "Obtenir des informations sur les paquets AppX"
                 Label1.Text = Text
@@ -112,6 +117,7 @@ Public Class GetAppxPkgInfoDlg
                 Label8.Text = "Répertoire du logo du magasin :"
                 Label9.Text = "Logo du magasin principal :"
                 Label10.Text = "Ce bien a été deviné par DISMTools sur la base de sa taille, ce qui peut conduire à un résultat incorrect. Si cela se produit, veuillez signaler un problème sur le dépôt GitHub."
+                Button2.Text = "Sauvegarder..."
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
@@ -324,6 +330,18 @@ Public Class GetAppxPkgInfoDlg
             If e.Button = Windows.Forms.MouseButtons.Right Then
                 MainForm.AppxResCMS.Show(sender, e.Location)
             End If
+        End If
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        If MainForm.ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
+            ImgInfoSaveDlg.SourceImage = MainForm.SourceImg
+            ImgInfoSaveDlg.ImgMountDir = If(Not MainForm.OnlineManagement, MainForm.MountDir, "")
+            ImgInfoSaveDlg.SaveTarget = MainForm.ImgInfoSFD.FileName
+            ImgInfoSaveDlg.OnlineMode = MainForm.OnlineManagement
+            ImgInfoSaveDlg.SaveTask = 5
+            ImgInfoSaveDlg.ShowDialog()
         End If
     End Sub
 End Class

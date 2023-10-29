@@ -76,12 +76,13 @@ Partial Class GetImgInfoDlg
         Me.Label10 = New System.Windows.Forms.Label()
         Me.Label13 = New System.Windows.Forms.Label()
         Me.LanguageList = New System.Windows.Forms.ListBox()
+        Me.Label55 = New System.Windows.Forms.Label()
         Me.Panel5 = New System.Windows.Forms.Panel()
         Me.Label36 = New System.Windows.Forms.Label()
         Me.Panel7 = New System.Windows.Forms.Panel()
         Me.Label37 = New System.Windows.Forms.Label()
         Me.FlowLayoutPanel4 = New System.Windows.Forms.FlowLayoutPanel()
-        Me.Label55 = New System.Windows.Forms.Label()
+        Me.Button2 = New System.Windows.Forms.Button()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ImageInfoPanel.SuspendLayout()
@@ -706,6 +707,16 @@ Partial Class GetImgInfoDlg
         Me.LanguageList.Size = New System.Drawing.Size(410, 95)
         Me.LanguageList.TabIndex = 21
         '
+        'Label55
+        '
+        Me.Label55.AutoEllipsis = True
+        Me.Label55.Location = New System.Drawing.Point(7, 632)
+        Me.Label55.Name = "Label55"
+        Me.Label55.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label55.Size = New System.Drawing.Size(405, 16)
+        Me.Label55.TabIndex = 22
+        Me.Label55.UseMnemonic = False
+        '
         'Panel5
         '
         Me.Panel5.Controls.Add(Me.Label36)
@@ -754,21 +765,22 @@ Partial Class GetImgInfoDlg
         Me.FlowLayoutPanel4.Size = New System.Drawing.Size(200, 100)
         Me.FlowLayoutPanel4.TabIndex = 0
         '
-        'Label55
+        'Button2
         '
-        Me.Label55.AutoEllipsis = True
-        Me.Label55.Location = New System.Drawing.Point(7, 632)
-        Me.Label55.Name = "Label55"
-        Me.Label55.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label55.Size = New System.Drawing.Size(405, 16)
-        Me.Label55.TabIndex = 22
-        Me.Label55.UseMnemonic = False
+        Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button2.Location = New System.Drawing.Point(829, 499)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(96, 23)
+        Me.Button2.TabIndex = 5
+        Me.Button2.Text = "Save..."
+        Me.Button2.UseVisualStyleBackColor = True
         '
         'GetImgInfoDlg
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1008, 561)
+        Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.ImageInfoPanel)
         Me.Controls.Add(Me.Win10Title)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -859,5 +871,6 @@ Partial Class GetImgInfoDlg
     Friend WithEvents FlowLayoutPanel4 As System.Windows.Forms.FlowLayoutPanel
     Friend WithEvents LanguageList As System.Windows.Forms.ListBox
     Friend WithEvents Label55 As System.Windows.Forms.Label
+    Friend WithEvents Button2 As System.Windows.Forms.Button
 
 End Class

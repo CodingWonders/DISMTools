@@ -909,36 +909,36 @@ These options, and the program information, can be found by opening the Help men
     <value>1051, 17</value>
   </metadata>
   <metadata name="MountedImageDetectorBW.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 56</value>
+    <value>132, 56</value>
   </metadata>
   <metadata name="ImgUMountPopupCMS.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>219, 56</value>
+    <value>334, 56</value>
   </metadata>
   <metadata name="AppxPackagePopupCMS.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>398, 56</value>
+    <value>513, 56</value>
   </metadata>
   <metadata name="TreeViewCMS.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>584, 56</value>
+    <value>699, 56</value>
   </metadata>
   <metadata name="ADKCopierBW.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>711, 56</value>
+    <value>826, 56</value>
   </metadata>
   <metadata name="UpdCheckerBW.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>841, 56</value>
+    <value>956, 56</value>
   </metadata>
   <metadata name="AppxResCMS.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>978, 56</value>
+    <value>1093, 56</value>
   </metadata>
   <metadata name="AppxResSFD.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1102, 56</value>
+    <value>1217, 56</value>
   </metadata>
   <metadata name="Notifications.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1222, 56</value>
+    <value>17, 95</value>
   </metadata>
   <metadata name="AppxRelatedLinksCMS.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>1205, 17</value>
   </metadata>
   <metadata name="ImgInfoSFD.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 41</value>
+    <value>17, 56</value>
   </metadata>
 </root>

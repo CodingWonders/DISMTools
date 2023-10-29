@@ -48,6 +48,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.Label8 = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.Label9 = New System.Windows.Forms.Label()
+        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.Label55 = New System.Windows.Forms.Label()
         Me.Panel5 = New System.Windows.Forms.Panel()
@@ -58,7 +59,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.Win10Title = New System.Windows.Forms.Panel()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
+        Me.Button2 = New System.Windows.Forms.Button()
         Me.FeatureInfoPanel.SuspendLayout()
         CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer2.Panel1.SuspendLayout()
@@ -68,11 +69,11 @@ Partial Class GetAppxPkgInfoDlg
         Me.Panel3.SuspendLayout()
         Me.Panel4.SuspendLayout()
         Me.FlowLayoutPanel3.SuspendLayout()
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel5.SuspendLayout()
         Me.Panel7.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'FeatureInfoPanel
@@ -384,6 +385,15 @@ Partial Class GetAppxPkgInfoDlg
         Me.Label9.TabIndex = 0
         Me.Label9.Text = "Main store logo asset:"
         '
+        'PictureBox2
+        '
+        Me.PictureBox2.Location = New System.Drawing.Point(7, 310)
+        Me.PictureBox2.Name = "PictureBox2"
+        Me.PictureBox2.Size = New System.Drawing.Size(405, 150)
+        Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
+        Me.PictureBox2.TabIndex = 2
+        Me.PictureBox2.TabStop = False
+        '
         'Label10
         '
         Me.Label10.AutoSize = True
@@ -487,20 +497,22 @@ Partial Class GetAppxPkgInfoDlg
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Get AppX package information"
         '
-        'PictureBox2
+        'Button2
         '
-        Me.PictureBox2.Location = New System.Drawing.Point(7, 310)
-        Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(405, 150)
-        Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
-        Me.PictureBox2.TabIndex = 2
-        Me.PictureBox2.TabStop = False
+        Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button2.Location = New System.Drawing.Point(848, 499)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(96, 23)
+        Me.Button2.TabIndex = 12
+        Me.Button2.Text = "Save..."
+        Me.Button2.UseVisualStyleBackColor = True
         '
         'GetAppxPkgInfoDlg
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1008, 561)
+        Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.FeatureInfoPanel)
         Me.Controls.Add(Me.Win10Title)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -521,12 +533,12 @@ Partial Class GetAppxPkgInfoDlg
         Me.Panel4.ResumeLayout(False)
         Me.FlowLayoutPanel3.ResumeLayout(False)
         Me.FlowLayoutPanel3.PerformLayout()
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel5.ResumeLayout(False)
         Me.Panel7.ResumeLayout(False)
         Me.Win10Title.ResumeLayout(False)
         Me.Win10Title.PerformLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -567,5 +579,6 @@ Partial Class GetAppxPkgInfoDlg
     Friend WithEvents Label9 As System.Windows.Forms.Label
     Friend WithEvents Label10 As System.Windows.Forms.Label
     Friend WithEvents PictureBox2 As System.Windows.Forms.PictureBox
+    Friend WithEvents Button2 As System.Windows.Forms.Button
 
 End Class

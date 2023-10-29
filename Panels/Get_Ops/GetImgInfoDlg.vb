@@ -45,6 +45,7 @@ Public Class GetImgInfoDlg
                         RadioButton1.Text = "Currently mounted image"
                         RadioButton2.Text = "Another image"
                         Button1.Text = "Browse..."
+                        Button2.Text = "Save..."
                         ListView1.Columns(0).Text = "Index"
                         ListView1.Columns(1).Text = "Image name"
                         OpenFileDialog1.Title = "Specify the image to get the information from"
@@ -75,6 +76,7 @@ Public Class GetImgInfoDlg
                         RadioButton1.Text = "Imagen montada actualmente"
                         RadioButton2.Text = "Otra imagen"
                         Button1.Text = "Examinar..."
+                        Button2.Text = "Guardar..."
                         ListView1.Columns(0).Text = "Índice"
                         ListView1.Columns(1).Text = "Nombre de imagen"
                         OpenFileDialog1.Title = "Especifique la imagen de la que obtener información"
@@ -105,6 +107,7 @@ Public Class GetImgInfoDlg
                         RadioButton1.Text = "Image actuellement montée"
                         RadioButton2.Text = "Autre image"
                         Button1.Text = "Parcourir..."
+                        Button2.Text = "Sauvegarder..."
                         ListView1.Columns(0).Text = "Index"
                         ListView1.Columns(1).Text = "Nom de l'image"
                         OpenFileDialog1.Title = "Spécifier l'image à partir de laquelle l'information doit être obtenue"
@@ -136,6 +139,7 @@ Public Class GetImgInfoDlg
                 RadioButton1.Text = "Currently mounted image"
                 RadioButton2.Text = "Another image"
                 Button1.Text = "Browse..."
+                Button2.Text = "Save..."
                 ListView1.Columns(0).Text = "Index"
                 ListView1.Columns(1).Text = "Image name"
                 OpenFileDialog1.Title = "Specify the image to get the information from"
@@ -166,6 +170,7 @@ Public Class GetImgInfoDlg
                 RadioButton1.Text = "Imagen montada actualmente"
                 RadioButton2.Text = "Otra imagen"
                 Button1.Text = "Examinar..."
+                Button2.Text = "Guardar..."
                 ListView1.Columns(0).Text = "Índice"
                 ListView1.Columns(1).Text = "Nombre de imagen"
                 OpenFileDialog1.Title = "Especifique la imagen de la que obtener información"
@@ -196,6 +201,7 @@ Public Class GetImgInfoDlg
                 RadioButton1.Text = "Image actuellement montée"
                 RadioButton2.Text = "Autre image"
                 Button1.Text = "Parcourir..."
+                Button2.Text = "Sauvegarder..."
                 ListView1.Columns(0).Text = "Index"
                 ListView1.Columns(1).Text = "Nom de l'image"
                 OpenFileDialog1.Title = "Spécifier l'image à partir de laquelle l'information doit être obtenue"
@@ -229,6 +235,7 @@ Public Class GetImgInfoDlg
             RadioButton1.Enabled = False
             RadioButton1.Checked = False
             RadioButton2.Checked = True
+            If TextBox1.Text <> "" And File.Exists(TextBox1.Text) Then Button2.Enabled = True Else Button2.Enabled = False
         Else
             RadioButton1.Enabled = True
         End If
@@ -516,10 +523,12 @@ Public Class GetImgInfoDlg
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
         If TextBox1.Text <> "" And File.Exists(TextBox1.Text) Then
             GetImageInfo(TextBox1.Text)
+            Button2.Enabled = True
         End If
     End Sub
 
     Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
+        Button2.Enabled = False
         If RadioButton1.Checked Then
             ' Go through the mounted image listings to find the appropriate image
             If MainForm.MountedImageImgFiles.Count > 0 Then
@@ -528,6 +537,7 @@ Public Class GetImgInfoDlg
                 For x = 0 To Array.LastIndexOf(MainForm.MountedImageImgFiles, MainForm.MountedImageImgFiles.Last)
                     If MainForm.MountedImageMountDirs(x) = MainForm.MountDir Then
                         GetImageInfo(MainForm.MountedImageImgFiles(x))
+                        Button2.Enabled = True
                         Exit For
                     End If
                 Next
@@ -539,6 +549,7 @@ Public Class GetImgInfoDlg
             ' If the user had specified an image file, get information of it immediately
             If TextBox1.Text <> "" And File.Exists(TextBox1.Text) Then
                 GetImageInfo(TextBox1.Text)
+                Button2.Enabled = True
             End If
         End If
     End Sub
@@ -565,5 +576,16 @@ Public Class GetImgInfoDlg
 
     Private Sub GetImgInfoDlg_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         If Not MainForm.MountedImageDetectorBW.IsBusy And Not PleaseWaitDialog.Visible Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        If MainForm.ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
+            ImgInfoSaveDlg.SourceImage = SelectedImageFile
+            ImgInfoSaveDlg.SaveTarget = MainForm.ImgInfoSFD.FileName
+            ImgInfoSaveDlg.OnlineMode = False
+            ImgInfoSaveDlg.SaveTask = 1
+            ImgInfoSaveDlg.ShowDialog()
+        End If
     End Sub
 End Class

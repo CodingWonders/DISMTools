@@ -44,6 +44,7 @@ Partial Class GetCapabilityInfoDlg
         Me.Label40 = New System.Windows.Forms.Label()
         Me.Label43 = New System.Windows.Forms.Label()
         Me.Label42 = New System.Windows.Forms.Label()
+        Me.Label55 = New System.Windows.Forms.Label()
         Me.Panel5 = New System.Windows.Forms.Panel()
         Me.Label36 = New System.Windows.Forms.Label()
         Me.Panel7 = New System.Windows.Forms.Panel()
@@ -52,7 +53,7 @@ Partial Class GetCapabilityInfoDlg
         Me.Win10Title = New System.Windows.Forms.Panel()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label55 = New System.Windows.Forms.Label()
+        Me.Button2 = New System.Windows.Forms.Button()
         Me.FeatureInfoPanel.SuspendLayout()
         CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer2.Panel1.SuspendLayout()
@@ -315,6 +316,16 @@ Partial Class GetCapabilityInfoDlg
         Me.Label42.Text = "Label8"
         Me.Label42.UseMnemonic = False
         '
+        'Label55
+        '
+        Me.Label55.AutoEllipsis = True
+        Me.Label55.Location = New System.Drawing.Point(7, 194)
+        Me.Label55.Name = "Label55"
+        Me.Label55.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label55.Size = New System.Drawing.Size(405, 16)
+        Me.Label55.TabIndex = 1
+        Me.Label55.UseMnemonic = False
+        '
         'Panel5
         '
         Me.Panel5.Controls.Add(Me.Label36)
@@ -396,21 +407,22 @@ Partial Class GetCapabilityInfoDlg
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Get capability information"
         '
-        'Label55
+        'Button2
         '
-        Me.Label55.AutoEllipsis = True
-        Me.Label55.Location = New System.Drawing.Point(7, 194)
-        Me.Label55.Name = "Label55"
-        Me.Label55.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label55.Size = New System.Drawing.Size(405, 16)
-        Me.Label55.TabIndex = 1
-        Me.Label55.UseMnemonic = False
+        Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button2.Location = New System.Drawing.Point(848, 499)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(96, 23)
+        Me.Button2.TabIndex = 10
+        Me.Button2.Text = "Save..."
+        Me.Button2.UseVisualStyleBackColor = True
         '
         'GetCapabilityInfoDlg
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1008, 561)
+        Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.FeatureInfoPanel)
         Me.Controls.Add(Me.Win10Title)
@@ -472,5 +484,6 @@ Partial Class GetCapabilityInfoDlg
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label55 As System.Windows.Forms.Label
+    Friend WithEvents Button2 As System.Windows.Forms.Button
 
 End Class
