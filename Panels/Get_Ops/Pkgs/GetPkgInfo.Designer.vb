@@ -324,10 +324,10 @@ Partial Class GetPkgInfoDlg
         'Label5
         '
         Me.Label5.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Label5.AutoSize = True
+        Me.Label5.AutoEllipsis = True
         Me.Label5.Location = New System.Drawing.Point(20, 460)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(38, 13)
+        Me.Label5.Size = New System.Drawing.Size(822, 44)
         Me.Label5.TabIndex = 4
         Me.Label5.Text = "Status"
         '

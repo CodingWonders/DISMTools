@@ -427,7 +427,7 @@ Public Class GetPkgInfoDlg
         PackageInfoPanel.Visible = True
         InfoFromInstalledPkgsPanel.Visible = True
         InfoFromPackageFilesPanel.Visible = False
-        Button4.Visible = True
+        Button4.Enabled = True
     End Sub
 
     Private Sub PackageFileLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles PackageFileLink.LinkClicked
@@ -435,7 +435,7 @@ Public Class GetPkgInfoDlg
         PackageInfoPanel.Visible = True
         InfoFromInstalledPkgsPanel.Visible = False
         InfoFromPackageFilesPanel.Visible = True
-        Button4.Visible = False
+        Button4.Enabled = ListBox1.Items.Count > 0
     End Sub
 
     Private Sub ListBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox2.SelectedIndexChanged
@@ -862,6 +862,7 @@ Public Class GetPkgInfoDlg
             End If
         Next
         Button3.Enabled = True
+        Button4.Enabled = True
         GetPackageFileInformation()
     End Sub
 
@@ -881,6 +882,11 @@ Public Class GetPkgInfoDlg
             ListBox1.Items.Remove(ListBox1.SelectedItem)
             NoPkgPanel.Visible = True
             PackageFileInfoPanel.Visible = False
+            If ListBox1.Items.Count < 1 Then
+                Button2.Enabled = False
+                Button3.Enabled = False
+                Button4.Enabled = False
+            End If
         End Try
     End Sub
 
@@ -889,12 +895,29 @@ Public Class GetPkgInfoDlg
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        PackageInfoList.RemoveAt(ListBox1.SelectedIndex)
-        PackageInfoExList.RemoveAt(ListBox1.SelectedIndex)
+        Try
+            PackageInfoList.RemoveAt(ListBox1.SelectedIndex)
+        Catch ex As Exception
+            ' Not in there
+        End Try
+        Try
+            PackageInfoExList.RemoveAt(ListBox1.SelectedIndex)
+        Catch ex As Exception
+            ' Not in there
+        End Try
         ListBox1.Items.Remove(ListBox1.SelectedItem)
-        If ListBox1.Items.Count > 1 Then Button2.Enabled = False Else Button2.Enabled = True
+        If ListBox1.Items.Count >= 1 Then
+            Button2.Enabled = True
+            Button3.Enabled = True
+            Button4.Enabled = True
+        Else
+            Button2.Enabled = False
+            Button3.Enabled = False
+            Button4.Enabled = False
+        End If
         NoPkgPanel.Visible = True
         PackageFileInfoPanel.Visible = False
+        Button2.Enabled = False
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
@@ -903,6 +926,7 @@ Public Class GetPkgInfoDlg
         ListBox1.Items.Clear()
         Button2.Enabled = False
         Button3.Enabled = False
+        Button4.Enabled = False
         NoPkgPanel.Visible = True
         PackageFileInfoPanel.Visible = False
     End Sub
@@ -910,6 +934,7 @@ Public Class GetPkgInfoDlg
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
         ListBox1.Items.Add(OpenFileDialog1.FileName)
         Button3.Enabled = True
+        Button4.Enabled = True
         GetPackageFileInformation()
     End Sub
 
@@ -920,11 +945,17 @@ Public Class GetPkgInfoDlg
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
         If MainForm.ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
+            If ImgInfoSaveDlg.PackageFiles.Count > 0 Then ImgInfoSaveDlg.PackageFiles.Clear()
             ImgInfoSaveDlg.SourceImage = MainForm.SourceImg
             ImgInfoSaveDlg.SaveTarget = MainForm.ImgInfoSFD.FileName
             ImgInfoSaveDlg.ImgMountDir = If(Not MainForm.OnlineManagement, MainForm.MountDir, "")
             ImgInfoSaveDlg.OnlineMode = MainForm.OnlineManagement
-            ImgInfoSaveDlg.SaveTask = 2
+            ImgInfoSaveDlg.SaveTask = If(InfoFromPackageFilesPanel.Visible, 3, 2)
+            If InfoFromPackageFilesPanel.Visible Then
+                For Each pkgFile In ListBox1.Items
+                    If File.Exists(pkgFile) Then ImgInfoSaveDlg.PackageFiles.Add(pkgFile)
+                Next
+            End If
             ImgInfoSaveDlg.ShowDialog()
         End If
     End Sub

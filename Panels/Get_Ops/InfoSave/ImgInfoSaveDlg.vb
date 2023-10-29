@@ -38,6 +38,9 @@ Public Class ImgInfoSaveDlg
     ' The contents the target file will have
     Public Contents As String
 
+    ' List of package files
+    Public PackageFiles As New List(Of String)
+
     Sub ReportChanges(Message As String, ProgressPercentage As Double)
         Label2.Text = Message
         ProgressBar1.Value = ProgressPercentage
@@ -338,6 +341,154 @@ Public Class ImgInfoSaveDlg
         Finally
             DismApi.Shutdown()
         End Try
+    End Sub
+
+    Sub GetPackageFileInformation()
+        'Dim PackageInfoList As New List(Of DismPackageInfo)
+        'Dim PackageInfoExList As New List(Of DismPackageInfoEx)
+        Dim msg As String = ""
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        msg = "Preparing package information processes..."
+                    Case "ESN"
+                        msg = "Preparando procesos de información de paquetes..."
+                    Case "FRA"
+                        msg = "Préparation des processus d'information des paquets en cours..."
+                End Select
+            Case 1
+                msg = "Preparing package information processes..."
+            Case 2
+                msg = "Preparando procesos de información de paquetes..."
+            Case 3
+                msg = "Préparation des processus d'information des paquets en cours..."
+        End Select
+        Contents &= "----> Package file information" & CrLf & CrLf & _
+                    " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
+        Debug.WriteLine("[GetPackageFileInformation] Starting task...")
+        Try
+            Debug.WriteLine("[GetPackageFileInformation] Starting API...")
+            DismApi.Initialize(DismLogLevel.LogErrors)
+            Debug.WriteLine("[GetPackageFileInformation] Creating image session...")
+            ReportChanges(msg, 0)
+            Using imgSession As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(ImgMountDir))
+                Contents &= "  Amount of package files to get information about: " & PackageFiles.Count & CrLf & CrLf
+                For Each pkgFile In PackageFiles
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENU", "ENG"
+                                    msg = "Getting information from package files... (package file " & PackageFiles.IndexOf(pkgFile) + 1 & " of " & PackageFiles.Count & ")"
+                                Case "ESN"
+                                    msg = "Obteniendo información de archivos de paquetes... (archivo de paquete " & PackageFiles.IndexOf(pkgFile) + 1 & " de " & PackageFiles.Count & ")"
+                                Case "FRA"
+                                    msg = "Obtention des informations des fichiers paquets en cours... (fichier paquet " & PackageFiles.IndexOf(pkgFile) + 1 & " de " & PackageFiles.Count & ")"
+                            End Select
+                        Case 1
+                            msg = "Getting information from package files... (package file " & PackageFiles.IndexOf(pkgFile) + 1 & " of " & PackageFiles.Count & ")"
+                        Case 2
+                            msg = "Obteniendo información de archivos de paquetes... (archivo de paquete " & PackageFiles.IndexOf(pkgFile) + 1 & " de " & PackageFiles.Count & ")"
+                        Case 3
+                            msg = "Obtention des informations des fichiers paquets en cours... (fichier paquet " & PackageFiles.IndexOf(pkgFile) + 1 & " de " & PackageFiles.Count & ")"
+                    End Select
+                    ReportChanges(msg, (PackageFiles.IndexOf(pkgFile) / PackageFiles.Count) * 100)
+                    If File.Exists(pkgFile) Then
+                        Dim pkgInfoEx As DismPackageInfoEx = Nothing
+                        Dim pkgInfo As DismPackageInfo = Nothing
+                        Dim cProps As DismCustomPropertyCollection = Nothing
+
+                        ' Determine Windows version
+                        If Environment.OSVersion.Version.Major >= 10 Then
+                            pkgInfoEx = DismApi.GetPackageInfoExByPath(imgSession, pkgFile)
+                        Else
+                            pkgInfo = DismApi.GetPackageInfoByPath(imgSession, pkgFile)
+                        End If
+                        Contents &= "  Package " & PackageFiles.IndexOf(pkgFile) + 1 & " of " & PackageFiles.Count & ":" & CrLf & CrLf
+                        If pkgInfoEx IsNot Nothing Then
+                            cProps = pkgInfoEx.CustomProperties
+                            Contents &= "    - Package name: " & pkgInfoEx.PackageName & CrLf & _
+                                        "    - Is applicable? " & Casters.CastDismApplicabilityStatus(pkgInfoEx.Applicable) & CrLf & _
+                                        "    - Copyright: " & pkgInfoEx.Copyright & CrLf & _
+                                        "    - Company: " & pkgInfoEx.Company & CrLf & _
+                                        "    - Creation time: " & pkgInfoEx.CreationTime & CrLf & _
+                                        "    - Description: " & pkgInfoEx.Description & CrLf & _
+                                        "    - Install client: " & pkgInfoEx.InstallClient & CrLf & _
+                                        "    - Install package name: " & pkgInfoEx.InstallPackageName & CrLf & _
+                                        "    - Install time: " & pkgInfoEx.InstallTime & CrLf & _
+                                        "    - Last update time: " & pkgInfoEx.LastUpdateTime & CrLf & _
+                                        "    - Display name: " & pkgInfoEx.DisplayName & CrLf & _
+                                        "    - Product name: " & pkgInfoEx.ProductName & CrLf & _
+                                        "    - Product version: " & pkgInfoEx.ProductVersion.ToString() & CrLf & _
+                                        "    - Release type: " & Casters.CastDismReleaseType(pkgInfoEx.ReleaseType) & CrLf & _
+                                        "    - Is a restart required? " & Casters.CastDismRestartType(pkgInfoEx.RestartRequired) & CrLf & _
+                                        "    - Support information: " & pkgInfoEx.SupportInformation & CrLf & _
+                                        "    - Package state: " & Casters.CastDismPackageState(pkgInfoEx.PackageState) & CrLf & _
+                                        "    - Is a boot up required for full installation? " & Casters.CastDismFullyOfflineInstallationType(pkgInfoEx.FullyOffline) & CrLf & _
+                                        "    - Capability identity: " & pkgInfoEx.CapabilityId & CrLf & _
+                                        "    - Custom properties: " & If(cProps.Count <= 0, "none", "") & CrLf
+                            If cProps.Count > 0 Then
+                                For Each cProp As DismCustomProperty In cProps
+                                    Contents &= "      - " & If(cProp.Path <> "", cProp.Path & "\", "") & cProp.Name & ": " & cProp.Value & CrLf
+                                Next
+                            End If
+                            Contents &= "    - Features: " & If(pkgInfoEx.Features.Count <= 0, "none", "") & CrLf
+                            If pkgInfoEx.Features.Count > 0 Then
+                                Dim pkgFeats As DismFeatureCollection = pkgInfoEx.Features
+                                For Each pkgFeat As DismFeature In pkgFeats
+                                    Contents &= "      - " & pkgFeat.FeatureName & " (" & Casters.CastDismFeatureState(pkgFeat.State) & ")" & CrLf
+                                Next
+                            End If
+                            Contents &= CrLf & CrLf
+                        ElseIf pkgInfo IsNot Nothing Then
+                            cProps = pkgInfo.CustomProperties
+                            Contents &= "    - Package name: " & pkgInfo.PackageName & CrLf & _
+                                        "    - Is applicable? " & Casters.CastDismApplicabilityStatus(pkgInfo.Applicable) & CrLf & _
+                                        "    - Copyright: " & pkgInfo.Copyright & CrLf & _
+                                        "    - Company: " & pkgInfo.Company & CrLf & _
+                                        "    - Creation time: " & pkgInfo.CreationTime & CrLf & _
+                                        "    - Description: " & pkgInfo.Description & CrLf & _
+                                        "    - Install client: " & pkgInfo.InstallClient & CrLf & _
+                                        "    - Install package name: " & pkgInfo.InstallPackageName & CrLf & _
+                                        "    - Install time: " & pkgInfo.InstallTime & CrLf & _
+                                        "    - Last update time: " & pkgInfo.LastUpdateTime & CrLf & _
+                                        "    - Display name: " & pkgInfo.DisplayName & CrLf & _
+                                        "    - Product name: " & pkgInfo.ProductName & CrLf & _
+                                        "    - Product version: " & pkgInfo.ProductVersion.ToString() & CrLf & _
+                                        "    - Release type: " & Casters.CastDismReleaseType(pkgInfo.ReleaseType) & CrLf & _
+                                        "    - Is a restart required? " & Casters.CastDismRestartType(pkgInfo.RestartRequired) & CrLf & _
+                                        "    - Support information: " & pkgInfo.SupportInformation & CrLf & _
+                                        "    - Package state: " & Casters.CastDismPackageState(pkgInfo.PackageState) & CrLf & _
+                                        "    - Is a boot up required for full installation? " & Casters.CastDismFullyOfflineInstallationType(pkgInfo.FullyOffline) & CrLf & _
+                                        "    - Capability identity: not applicable (the installation this information was obtained with can't get capability information)" & CrLf & _
+                                        "    - Custom properties: " & If(cProps.Count <= 0, "none", "") & CrLf
+                            If cProps.Count > 0 Then
+                                For Each cProp As DismCustomProperty In cProps
+                                    Contents &= "      - " & If(cProp.Path <> "", cProp.Path & "\", "") & cProp.Name & ": " & cProp.Value & CrLf
+                                Next
+                            End If
+                            Contents &= "    - Features: " & If(pkgInfo.Features.Count <= 0, "none", "") & CrLf
+                            If pkgInfo.Features.Count > 0 Then
+                                Dim pkgFeats As DismFeatureCollection = pkgInfo.Features
+                                For Each pkgFeat As DismFeature In pkgFeats
+                                    Contents &= "      - " & pkgFeat.FeatureName & " (" & Casters.CastDismFeatureState(pkgFeat.State) & ")" & CrLf
+                                Next
+                            End If
+                            Contents &= CrLf & CrLf
+                        End If
+                    End If
+                Next
+            End Using
+        Catch ex As Exception
+            Debug.WriteLine("[GetPackageFileInformation] An error occurred while getting package information: " & ex.ToString() & " - " & ex.Message)
+            Contents &= "  The program could not get information about this task. See below for reasons why:" & CrLf & CrLf & _
+                        "  - Exception: " & ex.ToString() & CrLf & _
+                        "  - Exception message: " & ex.Message & CrLf & _
+                        "  - Error code: " & Hex(ex.HResult) & CrLf & CrLf
+        Finally
+            DismApi.Shutdown()
+        End Try
+
     End Sub
 
     Sub GetFeatureInformation()
@@ -1532,6 +1683,9 @@ Public Class ImgInfoSaveDlg
             Case 2
                 Contents &= " - Information tasks: get installed package information" & CrLf & CrLf
                 GetPackageInformation()
+            Case 3
+                Contents &= " - Information tasks: get package file information" & CrLf & CrLf
+                GetPackageFileInformation()
             Case 4
                 Contents &= " - Information tasks: get feature information" & CrLf & CrLf
                 GetFeatureInformation()
