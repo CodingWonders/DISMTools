@@ -41,6 +41,9 @@ Public Class ImgInfoSaveDlg
     ' List of package files
     Public PackageFiles As New List(Of String)
 
+    ' List of driver packages
+    Public DriverPkgs As New List(Of String)
+
     Sub ReportChanges(Message As String, ProgressPercentage As Double)
         Label2.Text = Message
         ProgressBar1.Value = ProgressPercentage
@@ -344,8 +347,6 @@ Public Class ImgInfoSaveDlg
     End Sub
 
     Sub GetPackageFileInformation()
-        'Dim PackageInfoList As New List(Of DismPackageInfo)
-        'Dim PackageInfoExList As New List(Of DismPackageInfoEx)
         Dim msg As String = ""
         Select Case MainForm.Language
             Case 0
@@ -1422,6 +1423,104 @@ Public Class ImgInfoSaveDlg
         End Try
     End Sub
 
+    Sub GetDriverFileInformation()
+        Dim msg As String = ""
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        msg = "Preparing driver information processes..."
+                    Case "ESN"
+                        msg = "Preparando procesos de información de controladores..."
+                    Case "FRA"
+                        msg = "Préparation des processus d'information des pilotes en cours..."
+                End Select
+            Case 1
+                msg = "Preparing driver information processes..."
+            Case 2
+                msg = "Preparando procesos de información de controladores..."
+            Case 3
+                msg = "Préparation des processus d'information des pilotes en cours..."
+        End Select
+        Contents &= "----> Driver package information" & CrLf & CrLf & _
+                    " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
+        Debug.WriteLine("[GetDriverFileInformation] Starting task...")
+        Try
+            Debug.WriteLine("[GetDriverFileInformation] Starting API...")
+            DismApi.Initialize(DismLogLevel.LogErrors)
+            Debug.WriteLine("[GetDriverFileInformation] Creating image session...")
+            ReportChanges(msg, 0)
+            Using imgSession As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(ImgMountDir))
+                Contents &= "  Amount of driver files to get information about: " & DriverPkgs.Count & CrLf & CrLf
+                For Each drvPkg In DriverPkgs
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENU", "ENG"
+                                    msg = "Getting information from driver files... (driver file " & DriverPkgs.IndexOf(drvPkg) + 1 & " of " & DriverPkgs.Count & ")"
+                                Case "ESN"
+                                    msg = "Obteniendo información de archivos de controladores... (archivo de controlador " & DriverPkgs.IndexOf(drvPkg) + 1 & " de " & DriverPkgs.Count & ")"
+                                Case "FRA"
+                                    msg = "Obtention des informations des fichiers pilotes en cours... (fichier pilote " & DriverPkgs.IndexOf(drvPkg) + 1 & " de " & DriverPkgs.Count & ")"
+                            End Select
+                        Case 1
+                            msg = "Getting information from driver files... (driver file " & DriverPkgs.IndexOf(drvPkg) + 1 & " of " & DriverPkgs.Count & ")"
+                        Case 2
+                            msg = "Obteniendo información de archivos de controladores... (archivo de controlador " & DriverPkgs.IndexOf(drvPkg) + 1 & " de " & DriverPkgs.Count & ")"
+                        Case 3
+                            msg = "Obtention des informations des fichiers pilotes en cours... (fichier pilote " & DriverPkgs.IndexOf(drvPkg) + 1 & " de " & DriverPkgs.Count & ")"
+                    End Select
+                    ReportChanges(msg, (DriverPkgs.IndexOf(drvPkg) / DriverPkgs.Count) * 100)
+                    If File.Exists(drvPkg) Then
+                        Contents &= "  Driver package " & DriverPkgs.IndexOf(drvPkg) + 1 & " of " & DriverPkgs.Count & ":" & CrLf & CrLf
+                        Dim drvInfoCollection As DismDriverCollection = DismApi.GetDriverInfo(imgSession, drvPkg)
+                        If drvInfoCollection.Count > 0 Then
+                            Contents &= "    Available hardware targets: " & drvInfoCollection.Count & CrLf & CrLf
+                            For Each hwTarget As DismDriver In drvInfoCollection
+                                Contents &= "    Hardware target " & drvInfoCollection.IndexOf(hwTarget) + 1 & " of " & drvInfoCollection.Count & ":" & CrLf & CrLf
+                                Select Case MainForm.Language
+                                    Case 0
+                                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                            Case "ENU", "ENG"
+                                                msg = "Getting information from hardware targets... (target " & drvInfoCollection.IndexOf(hwTarget) + 1 & " of " & drvInfoCollection.Count & ")"
+                                            Case "ESN"
+                                                msg = "Obteniendo información de destinos de hardware... (destino " & drvInfoCollection.IndexOf(hwTarget) + 1 & " de " & drvInfoCollection.Count & ")"
+                                            Case "FRA"
+                                                msg = "Obtention des informations des matériels cibles en cours... (cible " & drvInfoCollection.IndexOf(hwTarget) + 1 & " de " & drvInfoCollection.Count & ")"
+                                        End Select
+                                    Case 1
+                                        msg = "Getting information from hardware targets... (target " & drvInfoCollection.IndexOf(hwTarget) + 1 & " of " & drvInfoCollection.Count & ")"
+                                    Case 2
+                                        msg = "Obteniendo información de destinos de hardware... (destino " & drvInfoCollection.IndexOf(hwTarget) + 1 & " de " & drvInfoCollection.Count & ")"
+                                    Case 3
+                                        msg = "Obtention des informations des matériels cibles en cours... (cible " & drvInfoCollection.IndexOf(hwTarget) + 1 & " de " & drvInfoCollection.Count & ")"
+                                End Select
+                                ReportChanges(msg, (DriverPkgs.IndexOf(drvPkg) / DriverPkgs.Count) * 100)
+                                Contents &= "      - Hardware description: " & hwTarget.HardwareDescription & CrLf & _
+                                            "      - Hardware ID: " & hwTarget.HardwareId & CrLf & _
+                                            "      - Additional IDs:" & CrLf & _
+                                            "        - Compatible IDs: " & If(hwTarget.CompatibleIds = "", "none declared by the manufacturer", hwTarget.CompatibleIds) & CrLf & _
+                                            "        - Exclude IDs: " & If(hwTarget.ExcludeIds = "", "none declared by the manufacturer", hwTarget.ExcludeIds) & CrLf & _
+                                            "      - Hardware manufacturer: " & hwTarget.ManufacturerName & CrLf & _
+                                            "      - Architecture: " & Casters.CastDismArchitecture(hwTarget.Architecture) & CrLf & CrLf
+                            Next
+                        Else
+                            Contents &= "    Available hardware targets: none. An invalid driver may have been added to the driver information list" & CrLf & CrLf
+                        End If
+                    End If
+                Next
+            End Using
+        Catch ex As Exception
+            Debug.WriteLine("[GetDriverFileInformation] An error occurred while getting driver information: " & ex.ToString() & " - " & ex.Message)
+            Contents &= "  The program could not get information about this task. See below for reasons why:" & CrLf & CrLf & _
+                        "  - Exception: " & ex.ToString() & CrLf & _
+                        "  - Exception message: " & ex.Message & CrLf & _
+                        "  - Error code: " & Hex(ex.HResult) & CrLf & CrLf
+        Finally
+            DismApi.Shutdown()
+        End Try
+    End Sub
+
     Sub GetWinPEConfiguration()
         Dim msg As String = ""
         Select Case MainForm.Language
@@ -1698,6 +1797,9 @@ Public Class ImgInfoSaveDlg
             Case 7
                 Contents &= " - Information tasks: get installed driver information" & CrLf & CrLf
                 GetDriverInformation()
+            Case 8
+                Contents &= " - Information tasks: get driver package information" & CrLf & CrLf
+                GetDriverFileInformation()
             Case 9
                 Contents &= " - Information tasks: get Windows PE configuration" & CrLf & CrLf
                 GetWinPEConfiguration()

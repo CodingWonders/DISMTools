@@ -336,6 +336,7 @@ Public Class GetDriverInfo
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
         ListBox1.Items.Add(OpenFileDialog1.FileName)
         Button3.Enabled = True
+        Button8.Enabled = True
         GetDriverInformation()
     End Sub
 
@@ -350,7 +351,7 @@ Public Class GetDriverInfo
 
         Label5.Visible = False
         IsInDrvPkgs = False
-        Button8.Visible = True
+        Button8.Enabled = True
     End Sub
 
     Private Sub DriverFileLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles DriverFileLink.LinkClicked
@@ -361,7 +362,7 @@ Public Class GetDriverInfo
         Panel6.Visible = False
         Label5.Visible = True
         IsInDrvPkgs = True
-        Button8.Visible = False
+        Button8.Enabled = ListBox1.Items.Count > 0
     End Sub
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
@@ -573,6 +574,7 @@ Public Class GetDriverInfo
             End If
         Next
         Button3.Enabled = True
+        Button8.Enabled = True
         GetDriverInformation()
     End Sub
 
@@ -620,13 +622,26 @@ Public Class GetDriverInfo
             ListBox1.Items.Remove(ListBox1.SelectedItem)
             NoDrvPanel.Visible = True
             DrvPackageInfoPanel.Visible = False
+            If ListBox1.Items.Count < 1 Then
+                Button2.Enabled = False
+                Button3.Enabled = False
+                Button8.Enabled = False
+            End If
         End Try
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         DriverInfoList.RemoveAt(ListBox1.SelectedIndex)
         ListBox1.Items.Remove(ListBox1.SelectedItem)
-        If ListBox1.Items.Count > 1 Then Button2.Enabled = False Else Button2.Enabled = True
+        If ListBox1.Items.Count >= 1 Then
+            Button2.Enabled = True
+            Button3.Enabled = True
+            Button8.Enabled = True
+        Else
+            Button2.Enabled = False
+            Button3.Enabled = False
+            Button8.Enabled = False
+        End If
         NoDrvPanel.Visible = True
         DrvPackageInfoPanel.Visible = False
     End Sub
@@ -636,6 +651,7 @@ Public Class GetDriverInfo
         ListBox1.Items.Clear()
         Button2.Enabled = False
         Button3.Enabled = False
+        Button8.Enabled = False
         NoDrvPanel.Visible = True
         DrvPackageInfoPanel.Visible = False
     End Sub
@@ -854,12 +870,18 @@ Public Class GetDriverInfo
     Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
         If MainForm.ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
+            If ImgInfoSaveDlg.DriverPkgs.Count > 0 Then ImgInfoSaveDlg.DriverPkgs.Clear()
             ImgInfoSaveDlg.SourceImage = MainForm.SourceImg
             ImgInfoSaveDlg.SaveTarget = MainForm.ImgInfoSFD.FileName
             ImgInfoSaveDlg.ImgMountDir = If(Not MainForm.OnlineManagement, MainForm.MountDir, "")
             ImgInfoSaveDlg.OnlineMode = MainForm.OnlineManagement
             ImgInfoSaveDlg.AllDrivers = MainForm.AllDrivers
-            ImgInfoSaveDlg.SaveTask = 7
+            ImgInfoSaveDlg.SaveTask = If(InfoFromDrvPackagesPanel.Visible, 8, 7)
+            If InfoFromDrvPackagesPanel.Visible Then
+                For Each drvFile In ListBox1.Items
+                    If File.Exists(drvFile) Then ImgInfoSaveDlg.DriverPkgs.Add(drvFile)
+                Next
+            End If
             ImgInfoSaveDlg.ShowDialog()
         End If
     End Sub
