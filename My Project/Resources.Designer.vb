@@ -1810,16 +1810,20 @@ Namespace My.Resources
         '''
         '''Bugfixes
         '''
-        '''- The build time shown in the About screen should no longer be skewed in time zones other than GMT+1 or GMT+2 (Summer Time)
-        '''- Fixed an improper progress panel disposal issue
+        '''- Fixed an issue where the installed driver detection notification panel would be shown when the user is getting information from driver files
+        '''- Fixed a couple of issues in the package information dialog
+        '''
+        '''New features
+        '''
+        '''- The CLI version of the mounted image manager now lets you switch indexes of mounted images
+        '''- Added more functionality to the information saver
         '''
         '''Overall changes
         '''
         '''Bugfixes
         '''
-        '''- Fixed an issue that caused the AppX package addition dialog to show up on projects with Windows 7 images loaded
-        '''- Fixed a translation issue in the Configuration List Editor
-        '''- Fixed an issue where the AppX package information dialog would not show the p [resto de la cadena truncado]&quot;;.
+        '''- Fixed a release status consistency issue
+        '''- The program sho [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

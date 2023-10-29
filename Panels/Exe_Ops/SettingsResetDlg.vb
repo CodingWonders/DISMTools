@@ -34,6 +34,11 @@ Public Class SettingsResetDlg
                         Label1.Text = "Si continúa, las configuraciones serán restablecidas a sus valores predeterminados. Cuando este proceso haya completado, regresará a la ventana principal." & CrLf & CrLf & "¿Desea continuar?"
                         OK_Button.Text = "Sí"
                         Cancel_Button.Text = "No"
+                    Case "FRA"
+                        Text = "Réinitialiser les préférences"
+                        Label1.Text = "Si vous continuez, les paramètres seront réinitialisés à leurs valeurs par défaut. Une fois ce processus terminé, vous reviendrez à la fenêtre principale du programme." & CrLf & CrLf & "Voulez-vous continuer ?"
+                        OK_Button.Text = "Oui"
+                        Cancel_Button.Text = "Non"
                 End Select
             Case 1
                 Text = "Reset preferences"
@@ -45,6 +50,11 @@ Public Class SettingsResetDlg
                 Label1.Text = "Si continúa, las configuraciones serán restablecidas a sus valores predeterminados. Cuando este proceso haya completado, regresará a la ventana principal." & CrLf & CrLf & "¿Desea continuar?"
                 OK_Button.Text = "Sí"
                 Cancel_Button.Text = "No"
+            Case 3
+                Text = "Réinitialiser les préférences"
+                Label1.Text = "Si vous continuez, les paramètres seront réinitialisés à leurs valeurs par défaut. Une fois ce processus terminé, vous reviendrez à la fenêtre principale du programme." & CrLf & CrLf & "Voulez-vous continuer ?"
+                OK_Button.Text = "Oui"
+                Cancel_Button.Text = "Non"
         End Select
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(Handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))

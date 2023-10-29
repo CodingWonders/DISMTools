@@ -64,6 +64,13 @@ Public Class SetPEScratchSpace
                         Label3.Text = "Espacio temporal:"
                         OK_Button.Text = "Aceptar"
                         Cancel_Button.Text = "Cancelar"
+                    Case "FRA"
+                        Text = "Configurer l'espace temporaire de Windows PE"
+                        Label1.Text = Text
+                        Label2.Text = "L'espace temporaire est la quantité d'espace accessible en écriture disponible sur le volume du système Windows PE lorsque son contenu est copié dans la mémoire. Veuillez spécifier une quantité d'espace temporaire et cliquez sur OK."
+                        Label3.Text = "Espace temporaire :"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annuler"
                 End Select
             Case 1
                 Text = "Set Windows PE scratch space"
@@ -79,6 +86,13 @@ Public Class SetPEScratchSpace
                 Label3.Text = "Espacio temporal:"
                 OK_Button.Text = "Aceptar"
                 Cancel_Button.Text = "Cancelar"
+            Case 3
+                Text = "Configurer l'espace temporaire de Windows PE"
+                Label1.Text = Text
+                Label2.Text = "L'espace temporaire est la quantité d'espace accessible en écriture disponible sur le volume du système Windows PE lorsque son contenu est copié dans la mémoire. Veuillez spécifier une quantité d'espace temporaire et cliquez sur OK."
+                Label3.Text = "Espace temporaire :"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annuler"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""

@@ -23,6 +23,10 @@ Public Class IncompleteSetupDlg
                 Label1.Text = "No ha terminado de configurar el programa, y sus preferencias no serán guardadas. Si continúa, el programa utilizará configuraciones predeterminadas." & CrLf & CrLf & "¿Desea continuar?"
                 OK_Button.Text = "Sí"
                 Cancel_Button.Text = "No"
+            Case "FRA"
+                Label1.Text = "L'installation n'est pas encore terminée et vos paramètres personnalisés ne seront pas sauvegardés. Si vous continuez, le programme utilisera les paramètres par défaut." & CrLf & CrLf & "Voulez-vous continuer ?"
+                OK_Button.Text = "Oui"
+                Cancel_Button.Text = "Non"
         End Select
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(Handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then

@@ -9,6 +9,8 @@ Public Class GetAppxPkgInfoDlg
     Dim mainAsset As String = ""
     Dim assetDir As String = ""
 
+    Public displayName As String = ""
+
     Private Sub GetAppxPkgInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language
             Case 0
@@ -29,6 +31,7 @@ Public Class GetAppxPkgInfoDlg
                         Label8.Text = "Store logo asset directory:"
                         Label9.Text = "Main store logo asset:"
                         Label10.Text = "This asset has been guessed by DISMTools based on its size, which can lead to an incorrect result. If that happens, please report an issue on the GitHub repository"
+                        Button2.Text = "Save..."
                     Case "ESN"
                         Text = "Obtener información de paquetes AppX"
                         Label1.Text = Text
@@ -45,6 +48,24 @@ Public Class GetAppxPkgInfoDlg
                         Label8.Text = "Directorio de recursos de logotipos de Tienda:"
                         Label9.Text = "Recurso de logotipos de Tienda principal:"
                         Label10.Text = "Este recurso ha sido averiguado por DISMTools por su tamaño, lo que puede llevar a un resultado incorrecto. Si eso ocurre, informe de un problema en el repositorio de GitHub"
+                        Button2.Text = "Guardar..."
+                    Case "FRA"
+                        Text = "Obtenir des informations sur les paquets AppX"
+                        Label1.Text = Text
+                        Label36.Text = "Informations sur le paquet AppX"
+                        Label37.Text = "Sélectionnez un paquet AppX installé sur la gauche pour afficher son information ici."
+                        Label22.Text = "Nom du paquet :"
+                        Label24.Text = "Nom d'affichage de l'application :"
+                        Label26.Text = "Architecture :"
+                        Label31.Text = "ID de la ressource :"
+                        Label41.Text = "Version :"
+                        Label43.Text = "Est-il enregistré au nom d'un utilisateur ?"
+                        Label4.Text = "Répertoire d'installation :"
+                        Label6.Text = "Emplacement du manifeste du paquet :"
+                        Label8.Text = "Répertoire du logo du magasin :"
+                        Label9.Text = "Logo du magasin principal :"
+                        Label10.Text = "Ce bien a été deviné par DISMTools sur la base de sa taille, ce qui peut conduire à un résultat incorrect. Si cela se produit, veuillez signaler un problème sur le dépôt GitHub."
+                        Button2.Text = "Sauvegarder..."
                 End Select
             Case 1
                 Text = "Get AppX package information"
@@ -62,6 +83,7 @@ Public Class GetAppxPkgInfoDlg
                 Label8.Text = "Store logo asset directory:"
                 Label9.Text = "Main store logo asset:"
                 Label10.Text = "This asset has been guessed by DISMTools based on its size, which can lead to an incorrect result. If that happens, please report an issue on the GitHub repository"
+                Button2.Text = "Save..."
             Case 2
                 Text = "Obtener información de paquetes AppX"
                 Label1.Text = Text
@@ -78,6 +100,24 @@ Public Class GetAppxPkgInfoDlg
                 Label8.Text = "Directorio de recursos de logotipos de Tienda:"
                 Label9.Text = "Recurso de logotipos de Tienda principal:"
                 Label10.Text = "Este recurso ha sido averiguado por DISMTools por su tamaño, lo que puede llevar a un resultado incorrecto. Si eso ocurre, informe de un problema en el repositorio de GitHub"
+                Button2.Text = "Guardar..."
+            Case 3
+                Text = "Obtenir des informations sur les paquets AppX"
+                Label1.Text = Text
+                Label36.Text = "Informations sur le paquet AppX"
+                Label37.Text = "Sélectionnez un paquet AppX installé sur la gauche pour afficher son information ici."
+                Label22.Text = "Nom du paquet :"
+                Label24.Text = "Nom d'affichage de l'application :"
+                Label26.Text = "Architecture :"
+                Label31.Text = "ID de la ressource :"
+                Label41.Text = "Version :"
+                Label43.Text = "Est-il enregistré au nom d'un utilisateur ?"
+                Label4.Text = "Répertoire d'installation :"
+                Label6.Text = "Emplacement du manifeste du paquet :"
+                Label8.Text = "Répertoire du logo du magasin :"
+                Label9.Text = "Logo du magasin principal :"
+                Label10.Text = "Ce bien a été deviné par DISMTools sur la base de sa taille, ce qui peut conduire à un résultat incorrect. Si cela se produit, veuillez signaler un problème sur le dépôt GitHub."
+                Button2.Text = "Sauvegarder..."
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
@@ -120,6 +160,11 @@ Public Class GetAppxPkgInfoDlg
         Label10.Visible = True
         mainAsset = ""
         assetDir = ""
+        ' Clear the values of Label7, Label5, and Label3; as the program can't update their text properties on some packages
+        Label7.Text = ""
+        Label5.Text = ""
+        Label3.Text = ""
+
         If ListBox1.SelectedItems.Count = 1 Then
             If MainForm.imgAppxPackageNames.Count > InstalledAppxPkgInfo.Count Then
                 Label23.Text = MainForm.imgAppxPackageNames(ListBox1.SelectedIndex)
@@ -135,7 +180,16 @@ Public Class GetAppxPkgInfoDlg
                 Label40.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).Version.ToString()
             End If
 
-            Dim appDisplayName As String = If(Not MainForm.GetPackageDisplayName(Label23.Text, Label25.Text).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), MainForm.GetPackageDisplayName(Label23.Text, Label25.Text), "")
+            displayName = Label25.Text
+
+            Dim packageDispName As String = MainForm.GetPackageDisplayName(Label23.Text, Label25.Text)
+
+            Dim appDisplayName As String = ""
+
+            If packageDispName IsNot Nothing Then
+                appDisplayName = If(Not packageDispName.StartsWith("ms-resource:"), packageDispName, "")
+            End If
+
             If appDisplayName <> "" Then Label25.Text &= " (" & appDisplayName & ")"
 
             ' Get exclusive things that can't be obtained with the DISM API
@@ -148,11 +202,15 @@ Public Class GetAppxPkgInfoDlg
                                     Label42.Text = "No"
                                 Case "ESN"
                                     Label42.Text = "No"
+                                Case "FRA"
+                                    Label42.Text = "Non"
                             End Select
                         Case 1
                             Label42.Text = "No"
                         Case 2
                             Label42.Text = "No"
+                        Case 3
+                            Label42.Text = "Non"
                     End Select
                 Else
                     Select Case MainForm.Language
@@ -162,11 +220,15 @@ Public Class GetAppxPkgInfoDlg
                                     Label42.Text = "Yes"
                                 Case "ESN"
                                     Label42.Text = "Sí"
+                                Case "FRA"
+                                    Label42.Text = "Oui"
                             End Select
                         Case 1
                             Label42.Text = "Yes"
                         Case 2
                             Label42.Text = "Sí"
+                        Case 3
+                            Label42.Text = "Oui"
                     End Select
                 End If
             Else
@@ -177,11 +239,15 @@ Public Class GetAppxPkgInfoDlg
                                 Label42.Text = "No"
                             Case "ESN"
                                 Label42.Text = "No"
+                            Case "FRA"
+                                Label42.Text = "Non"
                         End Select
                     Case 1
                         Label42.Text = "No"
                     Case 2
                         Label42.Text = "No"
+                    Case 3
+                        Label42.Text = "Non"
                 End Select
             End If
             mainAsset = MainForm.GetStoreAppMainLogo(Label23.Text)
@@ -264,6 +330,18 @@ Public Class GetAppxPkgInfoDlg
             If e.Button = Windows.Forms.MouseButtons.Right Then
                 MainForm.AppxResCMS.Show(sender, e.Location)
             End If
+        End If
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        If MainForm.ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
+            ImgInfoSaveDlg.SourceImage = MainForm.SourceImg
+            ImgInfoSaveDlg.ImgMountDir = If(Not MainForm.OnlineManagement, MainForm.MountDir, "")
+            ImgInfoSaveDlg.SaveTarget = MainForm.ImgInfoSFD.FileName
+            ImgInfoSaveDlg.OnlineMode = MainForm.OnlineManagement
+            ImgInfoSaveDlg.SaveTask = 5
+            ImgInfoSaveDlg.ShowDialog()
         End If
     End Sub
 End Class

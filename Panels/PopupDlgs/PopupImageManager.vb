@@ -29,6 +29,17 @@ Public Class PopupImageManager
                         ListView1.Columns(3).Text = "Estado"
                         ListView1.Columns(4).Text = "¿Permisos de lectura y escritura?"
                         ListView1.Columns(5).Text = "Versión"
+                    Case "FRA"
+                        Text = "Choisir l'image"
+                        Button1.Text = "OK"
+                        Button2.Text = "Annuler"
+                        Label1.Text = "Choisissez une image dans la liste ci-dessous :"
+                        ListView1.Columns(0).Text = "Fichier de l'image"
+                        ListView1.Columns(1).Text = "Index"
+                        ListView1.Columns(2).Text = "Répertoire de montage"
+                        ListView1.Columns(3).Text = "État"
+                        ListView1.Columns(4).Text = "Droits de lecture/écriture ?"
+                        ListView1.Columns(5).Text = "Version"
                 End Select
             Case 1
                 Text = "Pick image"
@@ -52,6 +63,17 @@ Public Class PopupImageManager
                 ListView1.Columns(3).Text = "Estado"
                 ListView1.Columns(4).Text = "¿Permisos de lectura y escritura?"
                 ListView1.Columns(5).Text = "Versión"
+            Case 3
+                Text = "Choisir l'image"
+                Button1.Text = "OK"
+                Button2.Text = "Annuler"
+                Label1.Text = "Choisissez une image dans la liste ci-dessous :"
+                ListView1.Columns(0).Text = "Fichier de l'image"
+                ListView1.Columns(1).Text = "Index"
+                ListView1.Columns(2).Text = "Répertoire de montage"
+                ListView1.Columns(3).Text = "État"
+                ListView1.Columns(4).Text = "Droits de lecture/écriture ?"
+                ListView1.Columns(5).Text = "Version"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)
@@ -74,14 +96,18 @@ Public Class PopupImageManager
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENU", "ENG"
-                            MsgBox("Please select a image and try again.", vbOKOnly + vbInformation, Text)
+                            MsgBox("Please select an image and try again.", vbOKOnly + vbInformation, Text)
                         Case "ESN"
                             MsgBox("Seleccione una imagen e inténtelo de nuevo.", vbOKOnly + vbInformation, Text)
+                        Case "FRA"
+                            MsgBox("Veuillez sélectionner une image et réessayer.", vbOKOnly + vbInformation, Text)
                     End Select
                 Case 1
-                    MsgBox("Please select a image and try again.", vbOKOnly + vbInformation, Text)
+                    MsgBox("Please select an image and try again.", vbOKOnly + vbInformation, Text)
                 Case 2
                     MsgBox("Seleccione una imagen e inténtelo de nuevo.", vbOKOnly + vbInformation, Text)
+                Case 3
+                    MsgBox("Veuillez sélectionner une image et réessayer.", vbOKOnly + vbInformation, Text)
             End Select
             Exit Sub
         End If

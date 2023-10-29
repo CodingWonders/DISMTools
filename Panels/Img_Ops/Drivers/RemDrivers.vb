@@ -19,7 +19,7 @@ Public Class RemDrivers
             drvPkgs = drvPkgList.ToArray()
             ' Detect if there are boot-critical drivers checked
             For x = 0 To ListView1.CheckedItems.Count - 1
-                If ListView1.CheckedItems(x).SubItems(5).Text = "Yes" Or ListView1.CheckedItems(x).SubItems(5).Text = "Sí" Then
+                If ListView1.CheckedItems(x).SubItems(5).Text = "Yes" Or ListView1.CheckedItems(x).SubItems(5).Text = "Sí" Or ListView1.CheckedItems(x).SubItems(5).Text = "Oui" Then
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -31,6 +31,10 @@ Public Class RemDrivers
                                     If MsgBox("Ha seleccionado paquetes de controladores que son críticos para el arranque. Continuar con la eliminación de dichos paquetes podría dejar la imagen de destino sin poder arrancar." & CrLf & CrLf & "¿Desea continuar?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
                                         Exit Sub
                                     End If
+                                Case "FRA"
+                                    If MsgBox("Vous avez sélectionné des paquets de pilotes critiques pour le démarrage. En procédant à la suppression de ces paquets, vous risquez de rendre l'image cible non amorçable." & CrLf & CrLf & "Voulez-vous continuer ?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                                        Exit Sub
+                                    End If
                             End Select
                         Case 1
                             If MsgBox("You have selected driver packages that are boot-critical. Proceeding with the removal of such packages may leave the target image unbootable." & CrLf & CrLf & "Do you want to continue?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
@@ -40,10 +44,14 @@ Public Class RemDrivers
                             If MsgBox("Ha seleccionado paquetes de controladores que son críticos para el arranque. Continuar con la eliminación de dichos paquetes podría dejar la imagen de destino sin poder arrancar." & CrLf & CrLf & "¿Desea continuar?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
                                 Exit Sub
                             End If
+                        Case 3
+                            If MsgBox("Vous avez sélectionné des paquets de pilotes critiques pour le démarrage. En procédant à la suppression de ces paquets, vous risquez de rendre l'image cible non amorçable." & CrLf & CrLf & "Voulez-vous continuer ?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                                Exit Sub
+                            End If
                     End Select
                     Exit For
                 End If
-                If ListView1.CheckedItems(x).SubItems(4).Text = "Yes" Or ListView1.CheckedItems(x).SubItems(4).Text = "Sí" Then
+                If ListView1.CheckedItems(x).SubItems(4).Text = "Yes" Or ListView1.CheckedItems(x).SubItems(4).Text = "Sí" Or ListView1.CheckedItems(x).SubItems(4).Text = "Oui" Then
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -55,6 +63,10 @@ Public Class RemDrivers
                                     If MsgBox("Ha seleccionado paquetes de controladores que son parte de la distribución de Windows. Continuar podría dejar algunas partes de Windows que dependan de estos contoladores inaccesibles." & CrLf & CrLf & "¿Desea continuar?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
                                         Exit Sub
                                     End If
+                                Case "FRA"
+                                    If MsgBox("Vous avez sélectionné des paquets de pilotes qui font partie de la distribution de Windows. La poursuite de l'opération peut rendre inaccessibles certaines parties de Windows qui dépendent de ces pilotes." & CrLf & CrLf & "Voulez-vous continuer ?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                                        Exit Sub
+                                    End If
                             End Select
                         Case 1
                             If MsgBox("You have selected driver packages that are part of the Windows distribution. Proceeding may leave certain parts of Windows that depend on these drivers inaccessible." & CrLf & CrLf & "Do you want to continue?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
@@ -62,6 +74,10 @@ Public Class RemDrivers
                             End If
                         Case 2
                             If MsgBox("Ha seleccionado paquetes de controladores que son parte de la distribución de Windows. Continuar podría dejar algunas partes de Windows que dependan de estos contoladores inaccesibles." & CrLf & CrLf & "¿Desea continuar?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
+                                Exit Sub
+                            End If
+                        Case 3
+                            If MsgBox("Vous avez sélectionné des paquets de pilotes qui font partie de la distribution de Windows. La poursuite de l'opération peut rendre inaccessibles certaines parties de Windows qui dépendent de ces pilotes." & CrLf & CrLf & "Voulez-vous continuer ?", vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.No Then
                                 Exit Sub
                             End If
                     End Select
@@ -80,11 +96,15 @@ Public Class RemDrivers
                             MsgBox("Please specify the driver packages you wish to remove and try again", vbOKOnly + vbCritical, Label1.Text)
                         Case "ESN"
                             MsgBox("Especifique los paquetes de controladores que desea eliminar e inténtelo de nuevo", vbOKOnly + vbCritical, Label1.Text)
+                        Case "FRA"
+                            MsgBox("Veuillez spécifier les paquets de pilotes que vous souhaitez supprimer et réessayez.", vbOKOnly + vbCritical, Label1.Text)
                     End Select
                 Case 1
                     MsgBox("Please specify the driver packages you wish to remove and try again", vbOKOnly + vbCritical, Label1.Text)
                 Case 2
                     MsgBox("Especifique los paquetes de controladores que desea eliminar e inténtelo de nuevo", vbOKOnly + vbCritical, Label1.Text)
+                Case 3
+                    MsgBox("Veuillez spécifier les paquets de pilotes que vous souhaitez supprimer et réessayez.", vbOKOnly + vbCritical, Label1.Text)
             End Select
             Exit Sub
         End If
@@ -137,6 +157,22 @@ Public Class RemDrivers
                         ListView1.Columns(5).Text = "¿Es crítico para el arranque?"
                         ListView1.Columns(6).Text = "Versión"
                         ListView1.Columns(7).Text = "Fecha"
+                    Case "FRA"
+                        Text = "Supprimer les pilotes"
+                        Label1.Text = Text
+                        Label2.Text = "Indiquez les paquets de pilotes que vous souhaitez supprimer et cliquez sur OK :"
+                        CheckBox1.Text = "Cacher les pilotes critiques pour le démarrage"
+                        CheckBox2.Text = "Cacher les pilotes qui font partie de la distribution de Windows"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annuler"
+                        ListView1.Columns(0).Text = "Nom publié"
+                        ListView1.Columns(1).Text = "Nom du fichier original"
+                        ListView1.Columns(2).Text = "Nom du prestataire"
+                        ListView1.Columns(3).Text = "Nom de la classe"
+                        ListView1.Columns(4).Text = "Fait-il partie de la distribution Windows ?"
+                        ListView1.Columns(5).Text = "Est-il critique pour le démarrage ?"
+                        ListView1.Columns(6).Text = "Version"
+                        ListView1.Columns(7).Text = "Date"
                 End Select
             Case 1
                 Text = "Remove drivers"
@@ -170,6 +206,22 @@ Public Class RemDrivers
                 ListView1.Columns(5).Text = "¿Es crítico para el arranque?"
                 ListView1.Columns(6).Text = "Versión"
                 ListView1.Columns(7).Text = "Fecha"
+            Case 3
+                Text = "Supprimer les pilotes"
+                Label1.Text = Text
+                Label2.Text = "Indiquez les paquets de pilotes que vous souhaitez supprimer et cliquez sur OK :"
+                CheckBox1.Text = "Cacher les pilotes critiques pour le démarrage"
+                CheckBox2.Text = "Cacher les pilotes qui font partie de la distribution de Windows"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annuler"
+                ListView1.Columns(0).Text = "Nom publié"
+                ListView1.Columns(1).Text = "Nom du fichier original"
+                ListView1.Columns(2).Text = "Nom du prestataire"
+                ListView1.Columns(3).Text = "Nom de la classe"
+                ListView1.Columns(4).Text = "Fait-il partie de la distribution Windows ?"
+                ListView1.Columns(5).Text = "Est-il critique pour le démarrage ?"
+                ListView1.Columns(6).Text = "Version"
+                ListView1.Columns(7).Text = "Date"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
@@ -201,11 +253,15 @@ Public Class RemDrivers
                         PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
                     Case "ESN"
                         PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
+                    Case "FRA"
+                        PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
             Case 2
                 PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
+            Case 3
+                PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
         End Select
         If Not MainForm.areBackgroundProcessesDone Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -226,11 +282,15 @@ Public Class RemDrivers
                                 ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgDrvPublishedNames(x), Path.GetFileName(MainForm.imgDrvOGFileNames(x)), MainForm.imgDrvProviderNames(x), MainForm.imgDrvClassNames(x), If(CBool(MainForm.imgDrvInbox(x)), "Yes", "No"), If(MainForm.imgDrvBootCriticalStatus(x), "Yes", "No"), MainForm.imgDrvVersions(x), MainForm.imgDrvDates(x)}))
                             Case "ESN"
                                 ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgDrvPublishedNames(x), Path.GetFileName(MainForm.imgDrvOGFileNames(x)), MainForm.imgDrvProviderNames(x), MainForm.imgDrvClassNames(x), If(CBool(MainForm.imgDrvInbox(x)), "Sí", "No"), If(MainForm.imgDrvBootCriticalStatus(x), "Sí", "No"), MainForm.imgDrvVersions(x), MainForm.imgDrvDates(x)}))
+                            Case "FRA"
+                                ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgDrvPublishedNames(x), Path.GetFileName(MainForm.imgDrvOGFileNames(x)), MainForm.imgDrvProviderNames(x), MainForm.imgDrvClassNames(x), If(CBool(MainForm.imgDrvInbox(x)), "Oui", "Non"), If(MainForm.imgDrvBootCriticalStatus(x), "Oui", "Non"), MainForm.imgDrvVersions(x), MainForm.imgDrvDates(x)}))
                         End Select
                     Case 1
                         ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgDrvPublishedNames(x), Path.GetFileName(MainForm.imgDrvOGFileNames(x)), MainForm.imgDrvProviderNames(x), MainForm.imgDrvClassNames(x), If(CBool(MainForm.imgDrvInbox(x)), "Yes", "No"), If(MainForm.imgDrvBootCriticalStatus(x), "Yes", "No"), MainForm.imgDrvVersions(x), MainForm.imgDrvDates(x)}))
                     Case 2
                         ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgDrvPublishedNames(x), Path.GetFileName(MainForm.imgDrvOGFileNames(x)), MainForm.imgDrvProviderNames(x), MainForm.imgDrvClassNames(x), If(CBool(MainForm.imgDrvInbox(x)), "Sí", "No"), If(MainForm.imgDrvBootCriticalStatus(x), "Sí", "No"), MainForm.imgDrvVersions(x), MainForm.imgDrvDates(x)}))
+                    Case 3
+                        ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgDrvPublishedNames(x), Path.GetFileName(MainForm.imgDrvOGFileNames(x)), MainForm.imgDrvProviderNames(x), MainForm.imgDrvClassNames(x), If(CBool(MainForm.imgDrvInbox(x)), "Oui", "Non"), If(MainForm.imgDrvBootCriticalStatus(x), "Oui", "Non"), MainForm.imgDrvVersions(x), MainForm.imgDrvDates(x)}))
                 End Select
             Next
         Catch ex As Exception

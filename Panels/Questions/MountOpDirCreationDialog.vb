@@ -25,6 +25,10 @@ Public Class MountOpDirCreationDialog
                         Label1.Text = "¿Desea crear el directorio de montaje?"
                         OK_Button.Text = "Sí"
                         Cancel_Button.Text = "No"
+                    Case "FRA"
+                        Label1.Text = "Voulez-vous créer le répertoire de montage ?"
+                        OK_Button.Text = "Oui"
+                        Cancel_Button.Text = "Non"
                 End Select
             Case 1
                 Label1.Text = "Do you want to create the mount directory?"
@@ -34,6 +38,10 @@ Public Class MountOpDirCreationDialog
                 Label1.Text = "¿Desea crear el directorio de montaje?"
                 OK_Button.Text = "Sí"
                 Cancel_Button.Text = "No"
+            Case 3
+                Label1.Text = "Voulez-vous créer le répertoire de montage ?"
+                OK_Button.Text = "Oui"
+                Cancel_Button.Text = "Non"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)

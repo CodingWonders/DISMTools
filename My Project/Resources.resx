@@ -1101,50 +1101,34 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 Bugfixes
 
-- The build time shown in the About screen should no longer be skewed in time zones other than GMT+1 or GMT+2 (Summer Time)
-- Fixed an improper progress panel disposal issue
+- Fixed an issue where the installed driver detection notification panel would be shown when the user is getting information from driver files
+- Fixed a couple of issues in the package information dialog
+
+New features
+
+- The CLI version of the mounted image manager now lets you switch indexes of mounted images
+- Added more functionality to the information saver
 
 Overall changes
 
 Bugfixes
 
-- Fixed an issue that caused the AppX package addition dialog to show up on projects with Windows 7 images loaded
-- Fixed a translation issue in the Configuration List Editor
-- Fixed an issue where the AppX package information dialog would not show the path of the store logo assets and the path to the package manifest for some applications
-- Fixed an issue where the path roots of the AppX package information dialog contained double backslashes ("\\")
-- Fixed an issue where the driver information dialog threw an exception when loading in some cases
-- Fixed an issue where the project tree view would not be cleared when entering the online installation management mode
-- Fixed an issue where the "no selected items" panel of the AppX package addition dialog would not be resized when removing an entry or clearing all entries
-- The AppX package information dialog no longer allows you to copy the "Asset Unavailable" resource
-- The AppX package removal dialog no longer appends " (Cortana)" to the entry: "Microsoft.549981C3F5F10"
-- Fixed a translation issue in the driver information menu entry
-- Fixed an issue where the program would not get package information on Windows 8 hosts
-- Fixed an issue where AppX package addition would fail on Windows 8 images (backported to version 0.3.1)
-- Fixed an issue where the program would not get basic image information automatically when switching indexes
-- Fixed an issue where the program would not be translated properly on systems in English (US)
-- The Windows PE setting dialogs are now shown only when background processes have finished
+- Fixed a release status consistency issue
+- The program should no longer output the "- Check image integrity?" and "- Append image?" options when unmounting an image while discarding changes
+- The program no longer outputs a success message if the Windows ADK isn't installed or if an error occurred while copying the ADK files
+- Enhanced the reliability of the App Installer downloader
+- Fixed a couple of issues of the AppX package information dialog:
+  - Fixed an issue where, if the install location, package manifest location, or store logo asset location couldn't be detected; they would not be updated and would show incorrect results
+  - Fixed an issue where the program threw an exception if the package display name returned nothing
+- The AppX resource save dialog no longer appends the friendly display name to the target file name
 
 New features
 
-- CODE: introduced the "Utilities" namespace, which removes duplicate functions and puts the original ones in a centralized location
-- The package addition operation now shows a correct representation of the release type
-- The capability information dialog now represents download and install sizes correctly, in case a capability's sizes need to be shown in kilobytes
-- Introduced the image split dialog
-- The image information dialog can now be opened from the single image index error dialog
-- In the online installation management mode, the AppX resource save dialog now defaults to the user's Pictures library and will default to the project directory otherwise
-- The existing mount directory link now opens the mounted image picker instead of the folder browser
-- The program immediately gets information about an image file now when selecting "Another image" in the image information dialog, if it had been specified
-- You can now click the AppX resource save notification to view the resource
-- The program directly unmounts read-only mounted images discarding changes when clicking the "Unmount image" button
-- The AppX package addition dialog now supports adding App Installer packages (".appinstaller" files)
-- Menu items are now enabled and disabled according to the versions of the Windows image you're servicing and the specified DISM executable
-- You can now export the third-party drivers of a Windows image or active installation
-- You can now configure the target path and the scratch space of Windows PE images
-- The friendly display name (the name that shows in the Applications list) is now shown next to the application display name in the AppX package information dialog (when possible)
-- You can now access the Configuration List Editor from the image capture dialog
-- The design of the initial setup screen has been updated to reduce control flicker and to add more functionality
-- Added links to the My Digital Life discussion in the About screen, represented with a lightbulb
-- The program will now show the dependency packages to be installed alongside an AppX package</value>
+- You can now view which settings are invalid
+- You can now go to the Microsoft Apps and Microsoft Store Generation Project websites from the AppX package addition dialog
+- French translations are now included
+- Feature update detection now identifies Windows build 22635 as Windows 11 2023 Update Moment 5 and builds greater than 25941 as Germanium
+- The program can now create image information reports</value>
   </data>
   <data name="split_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\split_img.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

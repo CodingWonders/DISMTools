@@ -15,11 +15,15 @@ Public Class ExportDrivers
                             msg = "Please specify a target to export the drivers to and make sure that the specified target exists."
                         Case "ESN"
                             msg = "Especifique un destino al que exportar los controladores y asegúrese de que el destino especificado existe."
+                        Case "FRA"
+                            msg = "Veuillez spécifier une cible vers laquelle exporter les pilotes et assurez-vous que la cible spécifiée existe."
                     End Select
                 Case 1
                     msg = "Please specify a target to export the drivers to and make sure that the specified target exists."
                 Case 2
                     msg = "Especifique un destino al que exportar los controladores y asegúrese de que el destino especificado existe."
+                Case 3
+                    msg = "Veuillez spécifier une cible vers laquelle exporter les pilotes et assurez-vous que la cible spécifiée existe."
             End Select
             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
             Exit Sub
@@ -56,6 +60,14 @@ Public Class ExportDrivers
                         OK_Button.Text = "Aceptar"
                         Cancel_Button.Text = "Cancelar"
                         FolderBrowserDialog1.Description = "Especifique la ruta a la que los controladores serán exportados:"
+                    Case "FRA"
+                        Text = "Exporter les pilotes"
+                        Label1.Text = Text
+                        Label2.Text = "Cible d'exportation :"
+                        Button1.Text = "Parcourir..."
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annuler"
+                        FolderBrowserDialog1.Description = "Veuillez indiquer le chemin vers lequel les pilotes seront exportés :"
                 End Select
             Case 1
                 Text = "Export drivers"
@@ -73,6 +85,14 @@ Public Class ExportDrivers
                 OK_Button.Text = "Aceptar"
                 Cancel_Button.Text = "Cancelar"
                 FolderBrowserDialog1.Description = "Especifique la ruta a la que los controladores serán exportados:"
+            Case 3
+                Text = "Exporter les pilotes"
+                Label1.Text = Text
+                Label2.Text = "Cible d'exportation :"
+                Button1.Text = "Parcourir..."
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annuler"
+                FolderBrowserDialog1.Description = "Veuillez indiquer le chemin vers lequel les pilotes seront exportés :"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)

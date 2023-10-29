@@ -19,11 +19,15 @@ Public Class ApplicationDriveSpecifier
                             MsgBox("The specified Drive ID does not exist. Please specify an existing Drive ID and try again. You can also refresh the list if you've just plugged or unplugged external drives", MsgBoxStyle.Critical, "Destination drive")
                         Case "ESN"
                             MsgBox("El ID del disco especificado no existe. Especifique un ID de disco existente e inténtelo de nuevo. También puede actualizar la lista si acaba de conectar o desconectar discos externos", MsgBoxStyle.Critical, "Disco de destino")
+                        Case "FRA"
+                            MsgBox("L'ID de disque spécifié n'existe pas. Veuillez spécifier un ID de disque existant et réessayer. Vous pouvez également actualiser la liste si vous venez de brancher ou de débrancher des disques externes.", MsgBoxStyle.Critical, "Disque de destination")
                     End Select
                 Case 1
                     MsgBox("The specified Drive ID does not exist. Please specify an existing Drive ID and try again. You can also refresh the list if you've just plugged or unplugged external drives", MsgBoxStyle.Critical, "Destination drive")
                 Case 2
                     MsgBox("El ID del disco especificado no existe. Especifique un ID de disco existente e inténtelo de nuevo. También puede actualizar la lista si acaba de conectar o desconectar discos externos", MsgBoxStyle.Critical, "Disco de destino")
+                Case 3
+                    MsgBox("L'ID de disque spécifié n'existe pas. Veuillez spécifier un ID de disque existant et réessayer. Vous pouvez également actualiser la liste si vous venez de brancher ou de débrancher des disques externes.", MsgBoxStyle.Critical, "Disque de destination")
             End Select
         End If
     End Sub
@@ -49,6 +53,12 @@ Public Class ApplicationDriveSpecifier
                         Button2.Text = "Actualizar"
                         OK_Button.Text = "Aceptar"
                         Cancel_Button.Text = "Cancelar"
+                    Case "FRA"
+                        Text = "Spécifier le disque cible..."
+                        Label2.Text = "ID de disque de destination (\\.\PHYSICALDRIVE(n)):"
+                        Button2.Text = "Rafraîchir"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annuler"
                 End Select
             Case 1
                 Text = "Specify target disk..."
@@ -62,6 +72,12 @@ Public Class ApplicationDriveSpecifier
                 Button2.Text = "Actualizar"
                 OK_Button.Text = "Aceptar"
                 Cancel_Button.Text = "Cancelar"
+            Case 3
+                Text = "Spécifier le disque cible..."
+                Label2.Text = "ID de disque de destination (\\.\PHYSICALDRIVE(n)):"
+                Button2.Text = "Rafraîchir"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annuler"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)

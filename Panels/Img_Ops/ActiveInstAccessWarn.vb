@@ -35,6 +35,15 @@ Public Class ActiveInstAccessWarn
                             "Si entiende este aviso, y le gustaría seguir, haga clic en Aceptar. De lo contrario, haga clic en Aceptar, y luego en " & Quote & "Descargar proyecto" & Quote & ". Esto terminará la administración de instalaciones en línea."
                         Label2.Text = "El proyecto actual será descargado."
                         OK_Button.Text = "Aceptar"
+                    Case "FRA"
+                        Text = "À propos de la gestion active des installations"
+                        Label1.Text = "Vous êtes sur le point d'entrer dans le mode de gestion de l'installation en ligne, qui vous permet d'apporter des modifications à votre installation Windows active." & CrLf & CrLf & _
+                            "Étant donné que ce mode vous permet de modifier votre installation, vous devez être extrêmement prudent lorsque vous effectuez des tâches avec ce programme." & CrLf & CrLf & _
+                            "Si vous effectuez sans précaution une opération sur une image en ligne, vous risquez de la casser, au point de rendre l'installation non amorçable." & CrLf & CrLf & _
+                            "Nous NE SOMMES PAS RESPONSABLES des dommages causés à votre installation active. Si vous vous retrouvez avec un système non amorçable, vous devez réinstaller Windows (en sauvegardant d'abord vos fichiers, si possible)." & CrLf & CrLf & _
+                            "Si vous comprenez cet avertissement et que vous souhaitez continuer, cliquez sur OK. Sinon, cliquez sur OK, puis sur " & Quote & "Décharger projet" & Quote & ". Cela mettra fin à la gestion de l'installation en ligne."
+                        Label2.Text = "Le projet actuel sera déchargé."
+                        OK_Button.Text = "OK"
                 End Select
             Case 1
                 Text = "About active installation management"
@@ -54,6 +63,15 @@ Public Class ActiveInstAccessWarn
                     "Si entiende este aviso, y le gustaría seguir, haga clic en Aceptar. De lo contrario, haga clic en Aceptar, y luego en " & Quote & "Descargar proyecto" & Quote & ". Esto terminará la administración de instalaciones en línea."
                 Label2.Text = "El proyecto actual será descargado."
                 OK_Button.Text = "Aceptar"
+            Case 3
+                Text = "À propos de la gestion active des installations"
+                Label1.Text = "Vous êtes sur le point d'entrer dans le mode de gestion de l'installation en ligne, qui vous permet d'apporter des modifications à votre installation Windows active." & CrLf & CrLf & _
+                    "Étant donné que ce mode vous permet de modifier votre installation, vous devez être extrêmement prudent lorsque vous effectuez des tâches avec ce programme." & CrLf & CrLf & _
+                    "Si vous effectuez sans précaution une opération sur une image en ligne, vous risquez de la casser, au point de rendre l'installation non amorçable." & CrLf & CrLf & _
+                    "Nous NE SOMMES PAS RESPONSABLES des dommages causés à votre installation active. Si vous vous retrouvez avec un système non amorçable, vous devez réinstaller Windows (en sauvegardant d'abord vos fichiers, si possible)." & CrLf & CrLf & _
+                    "Si vous comprenez cet avertissement et que vous souhaitez continuer, cliquez sur OK. Sinon, cliquez sur OK, puis sur " & Quote & "Décharger projet" & Quote & ". Cela mettra fin à la gestion de l'installation en ligne."
+                Label2.Text = "Le projet actuel sera déchargé."
+                OK_Button.Text = "OK"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)

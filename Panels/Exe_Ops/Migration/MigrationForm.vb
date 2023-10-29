@@ -10,6 +10,8 @@ Public Class MigrationForm
                 msg = "Loading old settings file..."
             Case "ESN"
                 msg = "Cargando archivo antiguo de configuración..."
+            Case "FRA"
+                msg = "Chargement d'un ancien fichier de paramètres en cours..."
         End Select
         BackgroundWorker1.ReportProgress(33.3)
         MainForm.LoadDTSettings(1)
@@ -19,6 +21,8 @@ Public Class MigrationForm
                 msg = "Saving new settings file..."
             Case "ESN"
                 msg = "Guardando archivo nuevo de configuración..."
+            Case "FRA"
+                msg = "Sauvegarder le fichier des nouveaux paramètres en cours..."
         End Select
         BackgroundWorker1.ReportProgress(66.6)
         MainForm.SaveDTSettings()
@@ -28,6 +32,8 @@ Public Class MigrationForm
                 msg = "Done"
             Case "ESN"
                 msg = "Terminado"
+            Case "FRA"
+                msg = "Terminé"
         End Select
         BackgroundWorker1.ReportProgress(100)
         Threading.Thread.Sleep(1000)
@@ -61,6 +67,9 @@ Public Class MigrationForm
             Case "ESN"
                 Label1.Text = "Espere mientras DISMTools migra su archivo antiguo de configuración para que sea compatible con esta versión. Esto puede llevar un tiempo."
                 Label2.Text = "Espere..."
+            Case "FRA"
+                Label1.Text = "Veuillez patienter pendant que DISMTools migre votre ancien fichier de paramètres pour qu'il fonctionne avec cette version. Cela peut prendre un certain temps."
+                Label2.Text = "Veuillez patienter..."
         End Select
         Refresh()
         BackgroundWorker1.RunWorkerAsync()

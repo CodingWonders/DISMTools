@@ -36,63 +36,6 @@ Partial Class GetPkgInfoDlg
         Me.PackageInfoPanel = New System.Windows.Forms.Panel()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.PackageContainerPanel = New System.Windows.Forms.Panel()
-        Me.InfoFromPackageFilesPanel = New System.Windows.Forms.Panel()
-        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
-        Me.PkgFilesPanel = New System.Windows.Forms.Panel()
-        Me.ListBox1 = New System.Windows.Forms.ListBox()
-        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
-        Me.Button3 = New System.Windows.Forms.Button()
-        Me.Button2 = New System.Windows.Forms.Button()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.PackageFileContainerPanel = New System.Windows.Forms.Panel()
-        Me.PackageFileInfoPanel = New System.Windows.Forms.Panel()
-        Me.FlowLayoutPanel2 = New System.Windows.Forms.FlowLayoutPanel()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.Label10 = New System.Windows.Forms.Label()
-        Me.Label11 = New System.Windows.Forms.Label()
-        Me.Label12 = New System.Windows.Forms.Label()
-        Me.Label17 = New System.Windows.Forms.Label()
-        Me.Label18 = New System.Windows.Forms.Label()
-        Me.Label19 = New System.Windows.Forms.Label()
-        Me.Label20 = New System.Windows.Forms.Label()
-        Me.Label62 = New System.Windows.Forms.Label()
-        Me.Label63 = New System.Windows.Forms.Label()
-        Me.Label64 = New System.Windows.Forms.Label()
-        Me.Label65 = New System.Windows.Forms.Label()
-        Me.Label66 = New System.Windows.Forms.Label()
-        Me.Label67 = New System.Windows.Forms.Label()
-        Me.Label68 = New System.Windows.Forms.Label()
-        Me.Label69 = New System.Windows.Forms.Label()
-        Me.Label70 = New System.Windows.Forms.Label()
-        Me.Label71 = New System.Windows.Forms.Label()
-        Me.Label72 = New System.Windows.Forms.Label()
-        Me.Label73 = New System.Windows.Forms.Label()
-        Me.Label74 = New System.Windows.Forms.Label()
-        Me.Label75 = New System.Windows.Forms.Label()
-        Me.Label76 = New System.Windows.Forms.Label()
-        Me.Label77 = New System.Windows.Forms.Label()
-        Me.Label78 = New System.Windows.Forms.Label()
-        Me.Label79 = New System.Windows.Forms.Label()
-        Me.Label80 = New System.Windows.Forms.Label()
-        Me.Label81 = New System.Windows.Forms.Label()
-        Me.Label82 = New System.Windows.Forms.Label()
-        Me.Label83 = New System.Windows.Forms.Label()
-        Me.Label84 = New System.Windows.Forms.Label()
-        Me.Label85 = New System.Windows.Forms.Label()
-        Me.Label86 = New System.Windows.Forms.Label()
-        Me.Label87 = New System.Windows.Forms.Label()
-        Me.Label88 = New System.Windows.Forms.Label()
-        Me.Label91 = New System.Windows.Forms.Label()
-        Me.Label92 = New System.Windows.Forms.Label()
-        Me.Label93 = New System.Windows.Forms.Label()
-        Me.Label94 = New System.Windows.Forms.Label()
-        Me.Label95 = New System.Windows.Forms.Label()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.NoPkgPanel = New System.Windows.Forms.Panel()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.FlowLayoutPanel1 = New System.Windows.Forms.FlowLayoutPanel()
         Me.InfoFromInstalledPkgsPanel = New System.Windows.Forms.Panel()
         Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
         Me.Panel2 = New System.Windows.Forms.Panel()
@@ -148,10 +91,68 @@ Partial Class GetPkgInfoDlg
         Me.Panel7 = New System.Windows.Forms.Panel()
         Me.Label37 = New System.Windows.Forms.Label()
         Me.FlowLayoutPanel4 = New System.Windows.Forms.FlowLayoutPanel()
-        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
-        Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
+        Me.InfoFromPackageFilesPanel = New System.Windows.Forms.Panel()
+        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.PkgFilesPanel = New System.Windows.Forms.Panel()
+        Me.ListBox1 = New System.Windows.Forms.ListBox()
+        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Button3 = New System.Windows.Forms.Button()
+        Me.Button2 = New System.Windows.Forms.Button()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.PackageFileContainerPanel = New System.Windows.Forms.Panel()
+        Me.PackageFileInfoPanel = New System.Windows.Forms.Panel()
+        Me.FlowLayoutPanel2 = New System.Windows.Forms.FlowLayoutPanel()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.Label17 = New System.Windows.Forms.Label()
+        Me.Label18 = New System.Windows.Forms.Label()
+        Me.Label19 = New System.Windows.Forms.Label()
+        Me.Label20 = New System.Windows.Forms.Label()
+        Me.Label62 = New System.Windows.Forms.Label()
+        Me.Label63 = New System.Windows.Forms.Label()
+        Me.Label64 = New System.Windows.Forms.Label()
+        Me.Label65 = New System.Windows.Forms.Label()
+        Me.Label66 = New System.Windows.Forms.Label()
+        Me.Label67 = New System.Windows.Forms.Label()
+        Me.Label68 = New System.Windows.Forms.Label()
+        Me.Label69 = New System.Windows.Forms.Label()
+        Me.Label70 = New System.Windows.Forms.Label()
+        Me.Label71 = New System.Windows.Forms.Label()
+        Me.Label72 = New System.Windows.Forms.Label()
+        Me.Label73 = New System.Windows.Forms.Label()
+        Me.Label74 = New System.Windows.Forms.Label()
+        Me.Label75 = New System.Windows.Forms.Label()
+        Me.Label76 = New System.Windows.Forms.Label()
+        Me.Label77 = New System.Windows.Forms.Label()
+        Me.Label78 = New System.Windows.Forms.Label()
+        Me.Label79 = New System.Windows.Forms.Label()
+        Me.Label80 = New System.Windows.Forms.Label()
+        Me.Label81 = New System.Windows.Forms.Label()
+        Me.Label82 = New System.Windows.Forms.Label()
+        Me.Label83 = New System.Windows.Forms.Label()
+        Me.Label84 = New System.Windows.Forms.Label()
+        Me.Label85 = New System.Windows.Forms.Label()
+        Me.Label86 = New System.Windows.Forms.Label()
+        Me.Label87 = New System.Windows.Forms.Label()
+        Me.Label88 = New System.Windows.Forms.Label()
         Me.Label89 = New System.Windows.Forms.Label()
         Me.Label90 = New System.Windows.Forms.Label()
+        Me.Label91 = New System.Windows.Forms.Label()
+        Me.Label92 = New System.Windows.Forms.Label()
+        Me.Label93 = New System.Windows.Forms.Label()
+        Me.Label94 = New System.Windows.Forms.Label()
+        Me.Label95 = New System.Windows.Forms.Label()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.NoPkgPanel = New System.Windows.Forms.Panel()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.FlowLayoutPanel1 = New System.Windows.Forms.FlowLayoutPanel()
+        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
+        Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
+        Me.Button4 = New System.Windows.Forms.Button()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.MenuPanel.SuspendLayout()
@@ -159,6 +160,17 @@ Partial Class GetPkgInfoDlg
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PackageInfoPanel.SuspendLayout()
         Me.PackageContainerPanel.SuspendLayout()
+        Me.InfoFromInstalledPkgsPanel.SuspendLayout()
+        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer2.Panel1.SuspendLayout()
+        Me.SplitContainer2.Panel2.SuspendLayout()
+        Me.SplitContainer2.SuspendLayout()
+        Me.Panel2.SuspendLayout()
+        Me.Panel3.SuspendLayout()
+        Me.Panel4.SuspendLayout()
+        Me.FlowLayoutPanel3.SuspendLayout()
+        Me.Panel5.SuspendLayout()
+        Me.Panel7.SuspendLayout()
         Me.InfoFromPackageFilesPanel.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
@@ -171,17 +183,6 @@ Partial Class GetPkgInfoDlg
         Me.FlowLayoutPanel2.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.NoPkgPanel.SuspendLayout()
-        Me.InfoFromInstalledPkgsPanel.SuspendLayout()
-        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.SplitContainer2.Panel1.SuspendLayout()
-        Me.SplitContainer2.Panel2.SuspendLayout()
-        Me.SplitContainer2.SuspendLayout()
-        Me.Panel2.SuspendLayout()
-        Me.Panel3.SuspendLayout()
-        Me.Panel4.SuspendLayout()
-        Me.FlowLayoutPanel3.SuspendLayout()
-        Me.Panel5.SuspendLayout()
-        Me.Panel7.SuspendLayout()
         Me.SuspendLayout()
         '
         'Win10Title
@@ -309,6 +310,7 @@ Partial Class GetPkgInfoDlg
         '
         'PackageInfoPanel
         '
+        Me.PackageInfoPanel.Controls.Add(Me.Button4)
         Me.PackageInfoPanel.Controls.Add(Me.Label5)
         Me.PackageInfoPanel.Controls.Add(Me.PackageContainerPanel)
         Me.PackageInfoPanel.Controls.Add(Me.LinkLabel1)
@@ -322,10 +324,10 @@ Partial Class GetPkgInfoDlg
         'Label5
         '
         Me.Label5.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Label5.AutoSize = True
+        Me.Label5.AutoEllipsis = True
         Me.Label5.Location = New System.Drawing.Point(20, 460)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(38, 13)
+        Me.Label5.Size = New System.Drawing.Size(822, 44)
         Me.Label5.TabIndex = 4
         Me.Label5.Text = "Status"
         '
@@ -340,679 +342,6 @@ Partial Class GetPkgInfoDlg
         Me.PackageContainerPanel.Name = "PackageContainerPanel"
         Me.PackageContainerPanel.Size = New System.Drawing.Size(880, 376)
         Me.PackageContainerPanel.TabIndex = 3
-        '
-        'InfoFromPackageFilesPanel
-        '
-        Me.InfoFromPackageFilesPanel.Controls.Add(Me.SplitContainer1)
-        Me.InfoFromPackageFilesPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.InfoFromPackageFilesPanel.Location = New System.Drawing.Point(0, 0)
-        Me.InfoFromPackageFilesPanel.Name = "InfoFromPackageFilesPanel"
-        Me.InfoFromPackageFilesPanel.Size = New System.Drawing.Size(880, 376)
-        Me.InfoFromPackageFilesPanel.TabIndex = 1
-        '
-        'SplitContainer1
-        '
-        Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SplitContainer1.IsSplitterFixed = True
-        Me.SplitContainer1.Location = New System.Drawing.Point(0, 0)
-        Me.SplitContainer1.Name = "SplitContainer1"
-        '
-        'SplitContainer1.Panel1
-        '
-        Me.SplitContainer1.Panel1.Controls.Add(Me.PkgFilesPanel)
-        '
-        'SplitContainer1.Panel2
-        '
-        Me.SplitContainer1.Panel2.Controls.Add(Me.PackageFileContainerPanel)
-        Me.SplitContainer1.Panel2.Controls.Add(Me.FlowLayoutPanel1)
-        Me.SplitContainer1.Size = New System.Drawing.Size(880, 376)
-        Me.SplitContainer1.SplitterDistance = 440
-        Me.SplitContainer1.TabIndex = 0
-        '
-        'PkgFilesPanel
-        '
-        Me.PkgFilesPanel.Controls.Add(Me.ListBox1)
-        Me.PkgFilesPanel.Controls.Add(Me.TableLayoutPanel2)
-        Me.PkgFilesPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PkgFilesPanel.Location = New System.Drawing.Point(0, 0)
-        Me.PkgFilesPanel.Name = "PkgFilesPanel"
-        Me.PkgFilesPanel.Size = New System.Drawing.Size(440, 376)
-        Me.PkgFilesPanel.TabIndex = 1
-        '
-        'ListBox1
-        '
-        Me.ListBox1.AllowDrop = True
-        Me.ListBox1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ListBox1.FormattingEnabled = True
-        Me.ListBox1.Location = New System.Drawing.Point(0, 0)
-        Me.ListBox1.Name = "ListBox1"
-        Me.ListBox1.Size = New System.Drawing.Size(440, 348)
-        Me.ListBox1.TabIndex = 0
-        '
-        'TableLayoutPanel2
-        '
-        Me.TableLayoutPanel2.ColumnCount = 3
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel2.Controls.Add(Me.Button3, 2, 0)
-        Me.TableLayoutPanel2.Controls.Add(Me.Button2, 1, 0)
-        Me.TableLayoutPanel2.Controls.Add(Me.Button1, 0, 0)
-        Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(0, 348)
-        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
-        Me.TableLayoutPanel2.RowCount = 1
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(440, 28)
-        Me.TableLayoutPanel2.TabIndex = 1
-        '
-        'Button3
-        '
-        Me.Button3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Button3.Enabled = False
-        Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button3.Location = New System.Drawing.Point(295, 3)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(142, 22)
-        Me.Button3.TabIndex = 2
-        Me.Button3.Text = "Remove all"
-        Me.Button3.UseVisualStyleBackColor = True
-        '
-        'Button2
-        '
-        Me.Button2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Button2.Enabled = False
-        Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button2.Location = New System.Drawing.Point(149, 3)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(140, 22)
-        Me.Button2.TabIndex = 1
-        Me.Button2.Text = "Remove selected"
-        Me.Button2.UseVisualStyleBackColor = True
-        '
-        'Button1
-        '
-        Me.Button1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button1.Location = New System.Drawing.Point(3, 3)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(140, 22)
-        Me.Button1.TabIndex = 0
-        Me.Button1.Text = "Add package..."
-        Me.Button1.UseVisualStyleBackColor = True
-        '
-        'PackageFileContainerPanel
-        '
-        Me.PackageFileContainerPanel.Controls.Add(Me.PackageFileInfoPanel)
-        Me.PackageFileContainerPanel.Controls.Add(Me.NoPkgPanel)
-        Me.PackageFileContainerPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PackageFileContainerPanel.Location = New System.Drawing.Point(0, 0)
-        Me.PackageFileContainerPanel.Name = "PackageFileContainerPanel"
-        Me.PackageFileContainerPanel.Size = New System.Drawing.Size(436, 376)
-        Me.PackageFileContainerPanel.TabIndex = 1
-        '
-        'PackageFileInfoPanel
-        '
-        Me.PackageFileInfoPanel.Controls.Add(Me.FlowLayoutPanel2)
-        Me.PackageFileInfoPanel.Controls.Add(Me.Panel1)
-        Me.PackageFileInfoPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PackageFileInfoPanel.Location = New System.Drawing.Point(0, 0)
-        Me.PackageFileInfoPanel.Name = "PackageFileInfoPanel"
-        Me.PackageFileInfoPanel.Size = New System.Drawing.Size(436, 376)
-        Me.PackageFileInfoPanel.TabIndex = 2
-        Me.PackageFileInfoPanel.Visible = False
-        '
-        'FlowLayoutPanel2
-        '
-        Me.FlowLayoutPanel2.AutoScroll = True
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label8)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label9)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label10)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label11)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label12)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label17)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label18)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label19)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label20)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label62)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label63)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label64)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label65)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label66)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label67)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label68)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label69)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label70)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label71)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label72)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label73)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label74)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label75)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label76)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label77)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label78)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label79)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label80)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label81)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label82)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label83)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label84)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label85)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label86)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label87)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label88)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label89)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label90)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label91)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label92)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label93)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label94)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Label95)
-        Me.FlowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.FlowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
-        Me.FlowLayoutPanel2.Location = New System.Drawing.Point(0, 36)
-        Me.FlowLayoutPanel2.Name = "FlowLayoutPanel2"
-        Me.FlowLayoutPanel2.Padding = New System.Windows.Forms.Padding(4, 6, 0, 0)
-        Me.FlowLayoutPanel2.Size = New System.Drawing.Size(436, 340)
-        Me.FlowLayoutPanel2.TabIndex = 1
-        Me.FlowLayoutPanel2.WrapContents = False
-        '
-        'Label8
-        '
-        Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(7, 6)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(80, 13)
-        Me.Label8.TabIndex = 1
-        Me.Label8.Text = "Package name:"
-        '
-        'Label9
-        '
-        Me.Label9.AutoEllipsis = True
-        Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(7, 19)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label9.Size = New System.Drawing.Size(38, 15)
-        Me.Label9.TabIndex = 24
-        Me.Label9.Text = "Label8"
-        Me.Label9.UseMnemonic = False
-        '
-        'Label10
-        '
-        Me.Label10.AutoSize = True
-        Me.Label10.Location = New System.Drawing.Point(7, 34)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label10.Size = New System.Drawing.Size(114, 17)
-        Me.Label10.TabIndex = 25
-        Me.Label10.Text = "Is package applicable?"
-        '
-        'Label11
-        '
-        Me.Label11.AutoEllipsis = True
-        Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(7, 51)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label11.Size = New System.Drawing.Size(38, 15)
-        Me.Label11.TabIndex = 26
-        Me.Label11.Text = "Label8"
-        Me.Label11.UseMnemonic = False
-        '
-        'Label12
-        '
-        Me.Label12.AutoSize = True
-        Me.Label12.Location = New System.Drawing.Point(7, 66)
-        Me.Label12.Name = "Label12"
-        Me.Label12.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label12.Size = New System.Drawing.Size(58, 17)
-        Me.Label12.TabIndex = 27
-        Me.Label12.Text = "Copyright:"
-        '
-        'Label17
-        '
-        Me.Label17.AutoEllipsis = True
-        Me.Label17.AutoSize = True
-        Me.Label17.Location = New System.Drawing.Point(7, 83)
-        Me.Label17.Name = "Label17"
-        Me.Label17.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label17.Size = New System.Drawing.Size(38, 15)
-        Me.Label17.TabIndex = 28
-        Me.Label17.Text = "Label8"
-        Me.Label17.UseMnemonic = False
-        '
-        'Label18
-        '
-        Me.Label18.AutoSize = True
-        Me.Label18.Location = New System.Drawing.Point(7, 98)
-        Me.Label18.Name = "Label18"
-        Me.Label18.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label18.Size = New System.Drawing.Size(56, 17)
-        Me.Label18.TabIndex = 29
-        Me.Label18.Text = "Company:"
-        '
-        'Label19
-        '
-        Me.Label19.AutoEllipsis = True
-        Me.Label19.AutoSize = True
-        Me.Label19.Location = New System.Drawing.Point(7, 115)
-        Me.Label19.Name = "Label19"
-        Me.Label19.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label19.Size = New System.Drawing.Size(38, 15)
-        Me.Label19.TabIndex = 30
-        Me.Label19.Text = "Label8"
-        Me.Label19.UseMnemonic = False
-        '
-        'Label20
-        '
-        Me.Label20.AutoSize = True
-        Me.Label20.Location = New System.Drawing.Point(7, 130)
-        Me.Label20.Name = "Label20"
-        Me.Label20.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label20.Size = New System.Drawing.Size(75, 17)
-        Me.Label20.TabIndex = 31
-        Me.Label20.Text = "Creation time:"
-        '
-        'Label62
-        '
-        Me.Label62.AutoEllipsis = True
-        Me.Label62.AutoSize = True
-        Me.Label62.Location = New System.Drawing.Point(7, 147)
-        Me.Label62.Name = "Label62"
-        Me.Label62.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label62.Size = New System.Drawing.Size(38, 15)
-        Me.Label62.TabIndex = 33
-        Me.Label62.Text = "Label8"
-        Me.Label62.UseMnemonic = False
-        '
-        'Label63
-        '
-        Me.Label63.AutoSize = True
-        Me.Label63.Location = New System.Drawing.Point(7, 162)
-        Me.Label63.Name = "Label63"
-        Me.Label63.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label63.Size = New System.Drawing.Size(64, 17)
-        Me.Label63.TabIndex = 42
-        Me.Label63.Text = "Description:"
-        '
-        'Label64
-        '
-        Me.Label64.AutoEllipsis = True
-        Me.Label64.AutoSize = True
-        Me.Label64.Location = New System.Drawing.Point(7, 179)
-        Me.Label64.Name = "Label64"
-        Me.Label64.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label64.Size = New System.Drawing.Size(38, 15)
-        Me.Label64.TabIndex = 34
-        Me.Label64.Text = "Label8"
-        Me.Label64.UseMnemonic = False
-        '
-        'Label65
-        '
-        Me.Label65.AutoSize = True
-        Me.Label65.Location = New System.Drawing.Point(7, 194)
-        Me.Label65.Name = "Label65"
-        Me.Label65.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label65.Size = New System.Drawing.Size(68, 17)
-        Me.Label65.TabIndex = 35
-        Me.Label65.Text = "Install client:"
-        '
-        'Label66
-        '
-        Me.Label66.AutoEllipsis = True
-        Me.Label66.AutoSize = True
-        Me.Label66.Location = New System.Drawing.Point(7, 211)
-        Me.Label66.Name = "Label66"
-        Me.Label66.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label66.Size = New System.Drawing.Size(38, 15)
-        Me.Label66.TabIndex = 36
-        Me.Label66.Text = "Label8"
-        Me.Label66.UseMnemonic = False
-        '
-        'Label67
-        '
-        Me.Label67.AutoSize = True
-        Me.Label67.Location = New System.Drawing.Point(7, 226)
-        Me.Label67.Name = "Label67"
-        Me.Label67.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label67.Size = New System.Drawing.Size(112, 17)
-        Me.Label67.TabIndex = 37
-        Me.Label67.Text = "Install package name:"
-        '
-        'Label68
-        '
-        Me.Label68.AutoEllipsis = True
-        Me.Label68.AutoSize = True
-        Me.Label68.Location = New System.Drawing.Point(7, 243)
-        Me.Label68.Name = "Label68"
-        Me.Label68.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label68.Size = New System.Drawing.Size(38, 15)
-        Me.Label68.TabIndex = 38
-        Me.Label68.Text = "Label8"
-        Me.Label68.UseMnemonic = False
-        '
-        'Label69
-        '
-        Me.Label69.AutoSize = True
-        Me.Label69.Location = New System.Drawing.Point(7, 258)
-        Me.Label69.Name = "Label69"
-        Me.Label69.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label69.Size = New System.Drawing.Size(63, 17)
-        Me.Label69.TabIndex = 39
-        Me.Label69.Text = "Install time:"
-        '
-        'Label70
-        '
-        Me.Label70.AutoEllipsis = True
-        Me.Label70.AutoSize = True
-        Me.Label70.Location = New System.Drawing.Point(7, 275)
-        Me.Label70.Name = "Label70"
-        Me.Label70.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label70.Size = New System.Drawing.Size(38, 15)
-        Me.Label70.TabIndex = 40
-        Me.Label70.Text = "Label8"
-        Me.Label70.UseMnemonic = False
-        '
-        'Label71
-        '
-        Me.Label71.AutoSize = True
-        Me.Label71.Location = New System.Drawing.Point(7, 290)
-        Me.Label71.Name = "Label71"
-        Me.Label71.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label71.Size = New System.Drawing.Size(91, 17)
-        Me.Label71.TabIndex = 41
-        Me.Label71.Text = "Last update time:"
-        '
-        'Label72
-        '
-        Me.Label72.AutoEllipsis = True
-        Me.Label72.AutoSize = True
-        Me.Label72.Location = New System.Drawing.Point(7, 307)
-        Me.Label72.Name = "Label72"
-        Me.Label72.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label72.Size = New System.Drawing.Size(38, 15)
-        Me.Label72.TabIndex = 23
-        Me.Label72.Text = "Label8"
-        Me.Label72.UseMnemonic = False
-        '
-        'Label73
-        '
-        Me.Label73.AutoSize = True
-        Me.Label73.Location = New System.Drawing.Point(7, 322)
-        Me.Label73.Name = "Label73"
-        Me.Label73.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label73.Size = New System.Drawing.Size(74, 17)
-        Me.Label73.TabIndex = 32
-        Me.Label73.Text = "Display name:"
-        '
-        'Label74
-        '
-        Me.Label74.AutoEllipsis = True
-        Me.Label74.AutoSize = True
-        Me.Label74.Location = New System.Drawing.Point(7, 339)
-        Me.Label74.Name = "Label74"
-        Me.Label74.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label74.Size = New System.Drawing.Size(38, 15)
-        Me.Label74.TabIndex = 22
-        Me.Label74.Text = "Label8"
-        Me.Label74.UseMnemonic = False
-        '
-        'Label75
-        '
-        Me.Label75.AutoSize = True
-        Me.Label75.Location = New System.Drawing.Point(7, 354)
-        Me.Label75.Name = "Label75"
-        Me.Label75.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label75.Size = New System.Drawing.Size(77, 17)
-        Me.Label75.TabIndex = 10
-        Me.Label75.Text = "Product name:"
-        '
-        'Label76
-        '
-        Me.Label76.AutoEllipsis = True
-        Me.Label76.AutoSize = True
-        Me.Label76.Location = New System.Drawing.Point(7, 371)
-        Me.Label76.Name = "Label76"
-        Me.Label76.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label76.Size = New System.Drawing.Size(38, 15)
-        Me.Label76.TabIndex = 2
-        Me.Label76.Text = "Label8"
-        Me.Label76.UseMnemonic = False
-        '
-        'Label77
-        '
-        Me.Label77.AutoSize = True
-        Me.Label77.Location = New System.Drawing.Point(7, 386)
-        Me.Label77.Name = "Label77"
-        Me.Label77.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label77.Size = New System.Drawing.Size(86, 17)
-        Me.Label77.TabIndex = 3
-        Me.Label77.Text = "Product version:"
-        '
-        'Label78
-        '
-        Me.Label78.AutoEllipsis = True
-        Me.Label78.AutoSize = True
-        Me.Label78.Location = New System.Drawing.Point(7, 403)
-        Me.Label78.Name = "Label78"
-        Me.Label78.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label78.Size = New System.Drawing.Size(38, 15)
-        Me.Label78.TabIndex = 4
-        Me.Label78.Text = "Label8"
-        Me.Label78.UseMnemonic = False
-        '
-        'Label79
-        '
-        Me.Label79.AutoSize = True
-        Me.Label79.Location = New System.Drawing.Point(7, 418)
-        Me.Label79.Name = "Label79"
-        Me.Label79.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label79.Size = New System.Drawing.Size(74, 17)
-        Me.Label79.TabIndex = 5
-        Me.Label79.Text = "Release type:"
-        '
-        'Label80
-        '
-        Me.Label80.AutoEllipsis = True
-        Me.Label80.AutoSize = True
-        Me.Label80.Location = New System.Drawing.Point(7, 435)
-        Me.Label80.Name = "Label80"
-        Me.Label80.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label80.Size = New System.Drawing.Size(38, 15)
-        Me.Label80.TabIndex = 6
-        Me.Label80.Text = "Label8"
-        Me.Label80.UseMnemonic = False
-        '
-        'Label81
-        '
-        Me.Label81.AutoSize = True
-        Me.Label81.Location = New System.Drawing.Point(7, 450)
-        Me.Label81.Name = "Label81"
-        Me.Label81.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label81.Size = New System.Drawing.Size(109, 17)
-        Me.Label81.TabIndex = 7
-        Me.Label81.Text = "Is a restart required?"
-        '
-        'Label82
-        '
-        Me.Label82.AutoEllipsis = True
-        Me.Label82.AutoSize = True
-        Me.Label82.Location = New System.Drawing.Point(7, 467)
-        Me.Label82.Name = "Label82"
-        Me.Label82.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label82.Size = New System.Drawing.Size(38, 15)
-        Me.Label82.TabIndex = 8
-        Me.Label82.Text = "Label8"
-        Me.Label82.UseMnemonic = False
-        '
-        'Label83
-        '
-        Me.Label83.AutoSize = True
-        Me.Label83.Location = New System.Drawing.Point(7, 482)
-        Me.Label83.Name = "Label83"
-        Me.Label83.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label83.Size = New System.Drawing.Size(106, 17)
-        Me.Label83.TabIndex = 9
-        Me.Label83.Text = "Support information:"
-        '
-        'Label84
-        '
-        Me.Label84.AutoEllipsis = True
-        Me.Label84.AutoSize = True
-        Me.Label84.Location = New System.Drawing.Point(7, 499)
-        Me.Label84.Name = "Label84"
-        Me.Label84.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label84.Size = New System.Drawing.Size(38, 15)
-        Me.Label84.TabIndex = 11
-        Me.Label84.Text = "Label8"
-        Me.Label84.UseMnemonic = False
-        '
-        'Label85
-        '
-        Me.Label85.AutoSize = True
-        Me.Label85.Location = New System.Drawing.Point(7, 514)
-        Me.Label85.Name = "Label85"
-        Me.Label85.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label85.Size = New System.Drawing.Size(37, 17)
-        Me.Label85.TabIndex = 20
-        Me.Label85.Text = "State:"
-        '
-        'Label86
-        '
-        Me.Label86.AutoEllipsis = True
-        Me.Label86.AutoSize = True
-        Me.Label86.Location = New System.Drawing.Point(7, 531)
-        Me.Label86.Name = "Label86"
-        Me.Label86.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label86.Size = New System.Drawing.Size(38, 15)
-        Me.Label86.TabIndex = 12
-        Me.Label86.Text = "Label8"
-        Me.Label86.UseMnemonic = False
-        '
-        'Label87
-        '
-        Me.Label87.AutoSize = True
-        Me.Label87.Location = New System.Drawing.Point(7, 546)
-        Me.Label87.Name = "Label87"
-        Me.Label87.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label87.Size = New System.Drawing.Size(201, 17)
-        Me.Label87.TabIndex = 13
-        Me.Label87.Text = "Is a boot up required for full installation?"
-        '
-        'Label88
-        '
-        Me.Label88.AutoEllipsis = True
-        Me.Label88.AutoSize = True
-        Me.Label88.Location = New System.Drawing.Point(7, 563)
-        Me.Label88.Name = "Label88"
-        Me.Label88.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label88.Size = New System.Drawing.Size(38, 15)
-        Me.Label88.TabIndex = 14
-        Me.Label88.Text = "Label8"
-        Me.Label88.UseMnemonic = False
-        '
-        'Label91
-        '
-        Me.Label91.AutoSize = True
-        Me.Label91.Location = New System.Drawing.Point(7, 610)
-        Me.Label91.Name = "Label91"
-        Me.Label91.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label91.Size = New System.Drawing.Size(99, 17)
-        Me.Label91.TabIndex = 17
-        Me.Label91.Text = "Custom properties:"
-        '
-        'Label92
-        '
-        Me.Label92.AutoEllipsis = True
-        Me.Label92.AutoSize = True
-        Me.Label92.Location = New System.Drawing.Point(7, 627)
-        Me.Label92.Name = "Label92"
-        Me.Label92.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label92.Size = New System.Drawing.Size(38, 15)
-        Me.Label92.TabIndex = 18
-        Me.Label92.Text = "Label8"
-        Me.Label92.UseMnemonic = False
-        '
-        'Label93
-        '
-        Me.Label93.AutoSize = True
-        Me.Label93.Location = New System.Drawing.Point(7, 642)
-        Me.Label93.Name = "Label93"
-        Me.Label93.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
-        Me.Label93.Size = New System.Drawing.Size(54, 17)
-        Me.Label93.TabIndex = 19
-        Me.Label93.Text = "Features:"
-        '
-        'Label94
-        '
-        Me.Label94.AutoEllipsis = True
-        Me.Label94.AutoSize = True
-        Me.Label94.Location = New System.Drawing.Point(7, 659)
-        Me.Label94.Name = "Label94"
-        Me.Label94.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label94.Size = New System.Drawing.Size(38, 15)
-        Me.Label94.TabIndex = 21
-        Me.Label94.Text = "Label8"
-        Me.Label94.UseMnemonic = False
-        '
-        'Label95
-        '
-        Me.Label95.AutoEllipsis = True
-        Me.Label95.Location = New System.Drawing.Point(7, 674)
-        Me.Label95.Name = "Label95"
-        Me.Label95.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label95.Size = New System.Drawing.Size(405, 16)
-        Me.Label95.TabIndex = 43
-        Me.Label95.UseMnemonic = False
-        '
-        'Panel1
-        '
-        Me.Panel1.Controls.Add(Me.Label7)
-        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel1.Location = New System.Drawing.Point(0, 0)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(436, 36)
-        Me.Panel1.TabIndex = 0
-        '
-        'Label7
-        '
-        Me.Label7.AutoEllipsis = True
-        Me.Label7.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label7.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label7.Location = New System.Drawing.Point(0, 0)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(436, 36)
-        Me.Label7.TabIndex = 0
-        Me.Label7.Text = "Package information"
-        Me.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'NoPkgPanel
-        '
-        Me.NoPkgPanel.Controls.Add(Me.Label6)
-        Me.NoPkgPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.NoPkgPanel.Location = New System.Drawing.Point(0, 0)
-        Me.NoPkgPanel.Name = "NoPkgPanel"
-        Me.NoPkgPanel.Size = New System.Drawing.Size(436, 376)
-        Me.NoPkgPanel.TabIndex = 1
-        '
-        'Label6
-        '
-        Me.Label6.AutoEllipsis = True
-        Me.Label6.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label6.Location = New System.Drawing.Point(0, 0)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(436, 376)
-        Me.Label6.TabIndex = 0
-        Me.Label6.Text = "Add or select a package file to view its information here"
-        Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'FlowLayoutPanel1
-        '
-        Me.FlowLayoutPanel1.Location = New System.Drawing.Point(106, 163)
-        Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
-        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(200, 100)
-        Me.FlowLayoutPanel1.TabIndex = 0
         '
         'InfoFromInstalledPkgsPanel
         '
@@ -1657,23 +986,576 @@ Partial Class GetPkgInfoDlg
         Me.FlowLayoutPanel4.Size = New System.Drawing.Size(200, 100)
         Me.FlowLayoutPanel4.TabIndex = 0
         '
-        'LinkLabel1
+        'InfoFromPackageFilesPanel
         '
-        Me.LinkLabel1.AutoSize = True
-        Me.LinkLabel1.Font = New System.Drawing.Font("Tahoma", 8.25!)
-        Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel1.Location = New System.Drawing.Point(17, 12)
-        Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(60, 13)
-        Me.LinkLabel1.TabIndex = 2
-        Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "<- Go back"
+        Me.InfoFromPackageFilesPanel.Controls.Add(Me.SplitContainer1)
+        Me.InfoFromPackageFilesPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.InfoFromPackageFilesPanel.Location = New System.Drawing.Point(0, 0)
+        Me.InfoFromPackageFilesPanel.Name = "InfoFromPackageFilesPanel"
+        Me.InfoFromPackageFilesPanel.Size = New System.Drawing.Size(880, 376)
+        Me.InfoFromPackageFilesPanel.TabIndex = 1
         '
-        'OpenFileDialog1
+        'SplitContainer1
         '
-        Me.OpenFileDialog1.Filter = "CAB files|*.cab"
-        Me.OpenFileDialog1.Title = "Locate package files"
+        Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer1.IsSplitterFixed = True
+        Me.SplitContainer1.Location = New System.Drawing.Point(0, 0)
+        Me.SplitContainer1.Name = "SplitContainer1"
+        '
+        'SplitContainer1.Panel1
+        '
+        Me.SplitContainer1.Panel1.Controls.Add(Me.PkgFilesPanel)
+        '
+        'SplitContainer1.Panel2
+        '
+        Me.SplitContainer1.Panel2.Controls.Add(Me.PackageFileContainerPanel)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.FlowLayoutPanel1)
+        Me.SplitContainer1.Size = New System.Drawing.Size(880, 376)
+        Me.SplitContainer1.SplitterDistance = 440
+        Me.SplitContainer1.TabIndex = 0
+        '
+        'PkgFilesPanel
+        '
+        Me.PkgFilesPanel.Controls.Add(Me.ListBox1)
+        Me.PkgFilesPanel.Controls.Add(Me.TableLayoutPanel2)
+        Me.PkgFilesPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PkgFilesPanel.Location = New System.Drawing.Point(0, 0)
+        Me.PkgFilesPanel.Name = "PkgFilesPanel"
+        Me.PkgFilesPanel.Size = New System.Drawing.Size(440, 376)
+        Me.PkgFilesPanel.TabIndex = 1
+        '
+        'ListBox1
+        '
+        Me.ListBox1.AllowDrop = True
+        Me.ListBox1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ListBox1.FormattingEnabled = True
+        Me.ListBox1.Location = New System.Drawing.Point(0, 0)
+        Me.ListBox1.Name = "ListBox1"
+        Me.ListBox1.Size = New System.Drawing.Size(440, 348)
+        Me.ListBox1.TabIndex = 0
+        '
+        'TableLayoutPanel2
+        '
+        Me.TableLayoutPanel2.ColumnCount = 3
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TableLayoutPanel2.Controls.Add(Me.Button3, 2, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.Button2, 1, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.Button1, 0, 0)
+        Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(0, 348)
+        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
+        Me.TableLayoutPanel2.RowCount = 1
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(440, 28)
+        Me.TableLayoutPanel2.TabIndex = 1
+        '
+        'Button3
+        '
+        Me.Button3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Button3.Enabled = False
+        Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button3.Location = New System.Drawing.Point(295, 3)
+        Me.Button3.Name = "Button3"
+        Me.Button3.Size = New System.Drawing.Size(142, 22)
+        Me.Button3.TabIndex = 2
+        Me.Button3.Text = "Remove all"
+        Me.Button3.UseVisualStyleBackColor = True
+        '
+        'Button2
+        '
+        Me.Button2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Button2.Enabled = False
+        Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button2.Location = New System.Drawing.Point(149, 3)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(140, 22)
+        Me.Button2.TabIndex = 1
+        Me.Button2.Text = "Remove selected"
+        Me.Button2.UseVisualStyleBackColor = True
+        '
+        'Button1
+        '
+        Me.Button1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button1.Location = New System.Drawing.Point(3, 3)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(140, 22)
+        Me.Button1.TabIndex = 0
+        Me.Button1.Text = "Add package..."
+        Me.Button1.UseVisualStyleBackColor = True
+        '
+        'PackageFileContainerPanel
+        '
+        Me.PackageFileContainerPanel.Controls.Add(Me.PackageFileInfoPanel)
+        Me.PackageFileContainerPanel.Controls.Add(Me.NoPkgPanel)
+        Me.PackageFileContainerPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PackageFileContainerPanel.Location = New System.Drawing.Point(0, 0)
+        Me.PackageFileContainerPanel.Name = "PackageFileContainerPanel"
+        Me.PackageFileContainerPanel.Size = New System.Drawing.Size(436, 376)
+        Me.PackageFileContainerPanel.TabIndex = 1
+        '
+        'PackageFileInfoPanel
+        '
+        Me.PackageFileInfoPanel.Controls.Add(Me.FlowLayoutPanel2)
+        Me.PackageFileInfoPanel.Controls.Add(Me.Panel1)
+        Me.PackageFileInfoPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PackageFileInfoPanel.Location = New System.Drawing.Point(0, 0)
+        Me.PackageFileInfoPanel.Name = "PackageFileInfoPanel"
+        Me.PackageFileInfoPanel.Size = New System.Drawing.Size(436, 376)
+        Me.PackageFileInfoPanel.TabIndex = 2
+        Me.PackageFileInfoPanel.Visible = False
+        '
+        'FlowLayoutPanel2
+        '
+        Me.FlowLayoutPanel2.AutoScroll = True
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label8)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label9)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label10)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label11)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label12)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label17)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label18)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label19)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label20)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label62)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label63)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label64)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label65)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label66)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label67)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label68)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label69)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label70)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label71)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label72)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label73)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label74)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label75)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label76)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label77)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label78)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label79)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label80)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label81)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label82)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label83)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label84)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label85)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label86)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label87)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label88)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label89)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label90)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label91)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label92)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label93)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label94)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Label95)
+        Me.FlowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FlowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
+        Me.FlowLayoutPanel2.Location = New System.Drawing.Point(0, 36)
+        Me.FlowLayoutPanel2.Name = "FlowLayoutPanel2"
+        Me.FlowLayoutPanel2.Padding = New System.Windows.Forms.Padding(4, 6, 0, 0)
+        Me.FlowLayoutPanel2.Size = New System.Drawing.Size(436, 340)
+        Me.FlowLayoutPanel2.TabIndex = 1
+        Me.FlowLayoutPanel2.WrapContents = False
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Location = New System.Drawing.Point(7, 6)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(80, 13)
+        Me.Label8.TabIndex = 1
+        Me.Label8.Text = "Package name:"
+        '
+        'Label9
+        '
+        Me.Label9.AutoEllipsis = True
+        Me.Label9.AutoSize = True
+        Me.Label9.Location = New System.Drawing.Point(7, 19)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label9.Size = New System.Drawing.Size(38, 15)
+        Me.Label9.TabIndex = 24
+        Me.Label9.Text = "Label8"
+        Me.Label9.UseMnemonic = False
+        '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Location = New System.Drawing.Point(7, 34)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label10.Size = New System.Drawing.Size(114, 17)
+        Me.Label10.TabIndex = 25
+        Me.Label10.Text = "Is package applicable?"
+        '
+        'Label11
+        '
+        Me.Label11.AutoEllipsis = True
+        Me.Label11.AutoSize = True
+        Me.Label11.Location = New System.Drawing.Point(7, 51)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label11.Size = New System.Drawing.Size(38, 15)
+        Me.Label11.TabIndex = 26
+        Me.Label11.Text = "Label8"
+        Me.Label11.UseMnemonic = False
+        '
+        'Label12
+        '
+        Me.Label12.AutoSize = True
+        Me.Label12.Location = New System.Drawing.Point(7, 66)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label12.Size = New System.Drawing.Size(58, 17)
+        Me.Label12.TabIndex = 27
+        Me.Label12.Text = "Copyright:"
+        '
+        'Label17
+        '
+        Me.Label17.AutoEllipsis = True
+        Me.Label17.AutoSize = True
+        Me.Label17.Location = New System.Drawing.Point(7, 83)
+        Me.Label17.Name = "Label17"
+        Me.Label17.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label17.Size = New System.Drawing.Size(38, 15)
+        Me.Label17.TabIndex = 28
+        Me.Label17.Text = "Label8"
+        Me.Label17.UseMnemonic = False
+        '
+        'Label18
+        '
+        Me.Label18.AutoSize = True
+        Me.Label18.Location = New System.Drawing.Point(7, 98)
+        Me.Label18.Name = "Label18"
+        Me.Label18.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label18.Size = New System.Drawing.Size(56, 17)
+        Me.Label18.TabIndex = 29
+        Me.Label18.Text = "Company:"
+        '
+        'Label19
+        '
+        Me.Label19.AutoEllipsis = True
+        Me.Label19.AutoSize = True
+        Me.Label19.Location = New System.Drawing.Point(7, 115)
+        Me.Label19.Name = "Label19"
+        Me.Label19.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label19.Size = New System.Drawing.Size(38, 15)
+        Me.Label19.TabIndex = 30
+        Me.Label19.Text = "Label8"
+        Me.Label19.UseMnemonic = False
+        '
+        'Label20
+        '
+        Me.Label20.AutoSize = True
+        Me.Label20.Location = New System.Drawing.Point(7, 130)
+        Me.Label20.Name = "Label20"
+        Me.Label20.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label20.Size = New System.Drawing.Size(75, 17)
+        Me.Label20.TabIndex = 31
+        Me.Label20.Text = "Creation time:"
+        '
+        'Label62
+        '
+        Me.Label62.AutoEllipsis = True
+        Me.Label62.AutoSize = True
+        Me.Label62.Location = New System.Drawing.Point(7, 147)
+        Me.Label62.Name = "Label62"
+        Me.Label62.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label62.Size = New System.Drawing.Size(38, 15)
+        Me.Label62.TabIndex = 33
+        Me.Label62.Text = "Label8"
+        Me.Label62.UseMnemonic = False
+        '
+        'Label63
+        '
+        Me.Label63.AutoSize = True
+        Me.Label63.Location = New System.Drawing.Point(7, 162)
+        Me.Label63.Name = "Label63"
+        Me.Label63.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label63.Size = New System.Drawing.Size(64, 17)
+        Me.Label63.TabIndex = 42
+        Me.Label63.Text = "Description:"
+        '
+        'Label64
+        '
+        Me.Label64.AutoEllipsis = True
+        Me.Label64.AutoSize = True
+        Me.Label64.Location = New System.Drawing.Point(7, 179)
+        Me.Label64.Name = "Label64"
+        Me.Label64.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label64.Size = New System.Drawing.Size(38, 15)
+        Me.Label64.TabIndex = 34
+        Me.Label64.Text = "Label8"
+        Me.Label64.UseMnemonic = False
+        '
+        'Label65
+        '
+        Me.Label65.AutoSize = True
+        Me.Label65.Location = New System.Drawing.Point(7, 194)
+        Me.Label65.Name = "Label65"
+        Me.Label65.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label65.Size = New System.Drawing.Size(68, 17)
+        Me.Label65.TabIndex = 35
+        Me.Label65.Text = "Install client:"
+        '
+        'Label66
+        '
+        Me.Label66.AutoEllipsis = True
+        Me.Label66.AutoSize = True
+        Me.Label66.Location = New System.Drawing.Point(7, 211)
+        Me.Label66.Name = "Label66"
+        Me.Label66.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label66.Size = New System.Drawing.Size(38, 15)
+        Me.Label66.TabIndex = 36
+        Me.Label66.Text = "Label8"
+        Me.Label66.UseMnemonic = False
+        '
+        'Label67
+        '
+        Me.Label67.AutoSize = True
+        Me.Label67.Location = New System.Drawing.Point(7, 226)
+        Me.Label67.Name = "Label67"
+        Me.Label67.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label67.Size = New System.Drawing.Size(112, 17)
+        Me.Label67.TabIndex = 37
+        Me.Label67.Text = "Install package name:"
+        '
+        'Label68
+        '
+        Me.Label68.AutoEllipsis = True
+        Me.Label68.AutoSize = True
+        Me.Label68.Location = New System.Drawing.Point(7, 243)
+        Me.Label68.Name = "Label68"
+        Me.Label68.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label68.Size = New System.Drawing.Size(38, 15)
+        Me.Label68.TabIndex = 38
+        Me.Label68.Text = "Label8"
+        Me.Label68.UseMnemonic = False
+        '
+        'Label69
+        '
+        Me.Label69.AutoSize = True
+        Me.Label69.Location = New System.Drawing.Point(7, 258)
+        Me.Label69.Name = "Label69"
+        Me.Label69.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label69.Size = New System.Drawing.Size(63, 17)
+        Me.Label69.TabIndex = 39
+        Me.Label69.Text = "Install time:"
+        '
+        'Label70
+        '
+        Me.Label70.AutoEllipsis = True
+        Me.Label70.AutoSize = True
+        Me.Label70.Location = New System.Drawing.Point(7, 275)
+        Me.Label70.Name = "Label70"
+        Me.Label70.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label70.Size = New System.Drawing.Size(38, 15)
+        Me.Label70.TabIndex = 40
+        Me.Label70.Text = "Label8"
+        Me.Label70.UseMnemonic = False
+        '
+        'Label71
+        '
+        Me.Label71.AutoSize = True
+        Me.Label71.Location = New System.Drawing.Point(7, 290)
+        Me.Label71.Name = "Label71"
+        Me.Label71.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label71.Size = New System.Drawing.Size(91, 17)
+        Me.Label71.TabIndex = 41
+        Me.Label71.Text = "Last update time:"
+        '
+        'Label72
+        '
+        Me.Label72.AutoEllipsis = True
+        Me.Label72.AutoSize = True
+        Me.Label72.Location = New System.Drawing.Point(7, 307)
+        Me.Label72.Name = "Label72"
+        Me.Label72.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label72.Size = New System.Drawing.Size(38, 15)
+        Me.Label72.TabIndex = 23
+        Me.Label72.Text = "Label8"
+        Me.Label72.UseMnemonic = False
+        '
+        'Label73
+        '
+        Me.Label73.AutoSize = True
+        Me.Label73.Location = New System.Drawing.Point(7, 322)
+        Me.Label73.Name = "Label73"
+        Me.Label73.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label73.Size = New System.Drawing.Size(74, 17)
+        Me.Label73.TabIndex = 32
+        Me.Label73.Text = "Display name:"
+        '
+        'Label74
+        '
+        Me.Label74.AutoEllipsis = True
+        Me.Label74.AutoSize = True
+        Me.Label74.Location = New System.Drawing.Point(7, 339)
+        Me.Label74.Name = "Label74"
+        Me.Label74.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label74.Size = New System.Drawing.Size(38, 15)
+        Me.Label74.TabIndex = 22
+        Me.Label74.Text = "Label8"
+        Me.Label74.UseMnemonic = False
+        '
+        'Label75
+        '
+        Me.Label75.AutoSize = True
+        Me.Label75.Location = New System.Drawing.Point(7, 354)
+        Me.Label75.Name = "Label75"
+        Me.Label75.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label75.Size = New System.Drawing.Size(77, 17)
+        Me.Label75.TabIndex = 10
+        Me.Label75.Text = "Product name:"
+        '
+        'Label76
+        '
+        Me.Label76.AutoEllipsis = True
+        Me.Label76.AutoSize = True
+        Me.Label76.Location = New System.Drawing.Point(7, 371)
+        Me.Label76.Name = "Label76"
+        Me.Label76.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label76.Size = New System.Drawing.Size(38, 15)
+        Me.Label76.TabIndex = 2
+        Me.Label76.Text = "Label8"
+        Me.Label76.UseMnemonic = False
+        '
+        'Label77
+        '
+        Me.Label77.AutoSize = True
+        Me.Label77.Location = New System.Drawing.Point(7, 386)
+        Me.Label77.Name = "Label77"
+        Me.Label77.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label77.Size = New System.Drawing.Size(86, 17)
+        Me.Label77.TabIndex = 3
+        Me.Label77.Text = "Product version:"
+        '
+        'Label78
+        '
+        Me.Label78.AutoEllipsis = True
+        Me.Label78.AutoSize = True
+        Me.Label78.Location = New System.Drawing.Point(7, 403)
+        Me.Label78.Name = "Label78"
+        Me.Label78.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label78.Size = New System.Drawing.Size(38, 15)
+        Me.Label78.TabIndex = 4
+        Me.Label78.Text = "Label8"
+        Me.Label78.UseMnemonic = False
+        '
+        'Label79
+        '
+        Me.Label79.AutoSize = True
+        Me.Label79.Location = New System.Drawing.Point(7, 418)
+        Me.Label79.Name = "Label79"
+        Me.Label79.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label79.Size = New System.Drawing.Size(74, 17)
+        Me.Label79.TabIndex = 5
+        Me.Label79.Text = "Release type:"
+        '
+        'Label80
+        '
+        Me.Label80.AutoEllipsis = True
+        Me.Label80.AutoSize = True
+        Me.Label80.Location = New System.Drawing.Point(7, 435)
+        Me.Label80.Name = "Label80"
+        Me.Label80.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label80.Size = New System.Drawing.Size(38, 15)
+        Me.Label80.TabIndex = 6
+        Me.Label80.Text = "Label8"
+        Me.Label80.UseMnemonic = False
+        '
+        'Label81
+        '
+        Me.Label81.AutoSize = True
+        Me.Label81.Location = New System.Drawing.Point(7, 450)
+        Me.Label81.Name = "Label81"
+        Me.Label81.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label81.Size = New System.Drawing.Size(109, 17)
+        Me.Label81.TabIndex = 7
+        Me.Label81.Text = "Is a restart required?"
+        '
+        'Label82
+        '
+        Me.Label82.AutoEllipsis = True
+        Me.Label82.AutoSize = True
+        Me.Label82.Location = New System.Drawing.Point(7, 467)
+        Me.Label82.Name = "Label82"
+        Me.Label82.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label82.Size = New System.Drawing.Size(38, 15)
+        Me.Label82.TabIndex = 8
+        Me.Label82.Text = "Label8"
+        Me.Label82.UseMnemonic = False
+        '
+        'Label83
+        '
+        Me.Label83.AutoSize = True
+        Me.Label83.Location = New System.Drawing.Point(7, 482)
+        Me.Label83.Name = "Label83"
+        Me.Label83.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label83.Size = New System.Drawing.Size(106, 17)
+        Me.Label83.TabIndex = 9
+        Me.Label83.Text = "Support information:"
+        '
+        'Label84
+        '
+        Me.Label84.AutoEllipsis = True
+        Me.Label84.AutoSize = True
+        Me.Label84.Location = New System.Drawing.Point(7, 499)
+        Me.Label84.Name = "Label84"
+        Me.Label84.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label84.Size = New System.Drawing.Size(38, 15)
+        Me.Label84.TabIndex = 11
+        Me.Label84.Text = "Label8"
+        Me.Label84.UseMnemonic = False
+        '
+        'Label85
+        '
+        Me.Label85.AutoSize = True
+        Me.Label85.Location = New System.Drawing.Point(7, 514)
+        Me.Label85.Name = "Label85"
+        Me.Label85.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label85.Size = New System.Drawing.Size(37, 17)
+        Me.Label85.TabIndex = 20
+        Me.Label85.Text = "State:"
+        '
+        'Label86
+        '
+        Me.Label86.AutoEllipsis = True
+        Me.Label86.AutoSize = True
+        Me.Label86.Location = New System.Drawing.Point(7, 531)
+        Me.Label86.Name = "Label86"
+        Me.Label86.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label86.Size = New System.Drawing.Size(38, 15)
+        Me.Label86.TabIndex = 12
+        Me.Label86.Text = "Label8"
+        Me.Label86.UseMnemonic = False
+        '
+        'Label87
+        '
+        Me.Label87.AutoSize = True
+        Me.Label87.Location = New System.Drawing.Point(7, 546)
+        Me.Label87.Name = "Label87"
+        Me.Label87.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label87.Size = New System.Drawing.Size(201, 17)
+        Me.Label87.TabIndex = 13
+        Me.Label87.Text = "Is a boot up required for full installation?"
+        '
+        'Label88
+        '
+        Me.Label88.AutoEllipsis = True
+        Me.Label88.AutoSize = True
+        Me.Label88.Location = New System.Drawing.Point(7, 563)
+        Me.Label88.Name = "Label88"
+        Me.Label88.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label88.Size = New System.Drawing.Size(38, 15)
+        Me.Label88.TabIndex = 14
+        Me.Label88.Text = "Label8"
+        Me.Label88.UseMnemonic = False
         '
         'Label89
         '
@@ -1696,6 +1578,136 @@ Partial Class GetPkgInfoDlg
         Me.Label90.TabIndex = 45
         Me.Label90.Text = "Label8"
         Me.Label90.UseMnemonic = False
+        '
+        'Label91
+        '
+        Me.Label91.AutoSize = True
+        Me.Label91.Location = New System.Drawing.Point(7, 610)
+        Me.Label91.Name = "Label91"
+        Me.Label91.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label91.Size = New System.Drawing.Size(99, 17)
+        Me.Label91.TabIndex = 17
+        Me.Label91.Text = "Custom properties:"
+        '
+        'Label92
+        '
+        Me.Label92.AutoEllipsis = True
+        Me.Label92.AutoSize = True
+        Me.Label92.Location = New System.Drawing.Point(7, 627)
+        Me.Label92.Name = "Label92"
+        Me.Label92.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label92.Size = New System.Drawing.Size(38, 15)
+        Me.Label92.TabIndex = 18
+        Me.Label92.Text = "Label8"
+        Me.Label92.UseMnemonic = False
+        '
+        'Label93
+        '
+        Me.Label93.AutoSize = True
+        Me.Label93.Location = New System.Drawing.Point(7, 642)
+        Me.Label93.Name = "Label93"
+        Me.Label93.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+        Me.Label93.Size = New System.Drawing.Size(54, 17)
+        Me.Label93.TabIndex = 19
+        Me.Label93.Text = "Features:"
+        '
+        'Label94
+        '
+        Me.Label94.AutoEllipsis = True
+        Me.Label94.AutoSize = True
+        Me.Label94.Location = New System.Drawing.Point(7, 659)
+        Me.Label94.Name = "Label94"
+        Me.Label94.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label94.Size = New System.Drawing.Size(38, 15)
+        Me.Label94.TabIndex = 21
+        Me.Label94.Text = "Label8"
+        Me.Label94.UseMnemonic = False
+        '
+        'Label95
+        '
+        Me.Label95.AutoEllipsis = True
+        Me.Label95.Location = New System.Drawing.Point(7, 674)
+        Me.Label95.Name = "Label95"
+        Me.Label95.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label95.Size = New System.Drawing.Size(405, 16)
+        Me.Label95.TabIndex = 43
+        Me.Label95.UseMnemonic = False
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.Label7)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel1.Location = New System.Drawing.Point(0, 0)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(436, 36)
+        Me.Panel1.TabIndex = 0
+        '
+        'Label7
+        '
+        Me.Label7.AutoEllipsis = True
+        Me.Label7.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label7.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label7.Location = New System.Drawing.Point(0, 0)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(436, 36)
+        Me.Label7.TabIndex = 0
+        Me.Label7.Text = "Package information"
+        Me.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'NoPkgPanel
+        '
+        Me.NoPkgPanel.Controls.Add(Me.Label6)
+        Me.NoPkgPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.NoPkgPanel.Location = New System.Drawing.Point(0, 0)
+        Me.NoPkgPanel.Name = "NoPkgPanel"
+        Me.NoPkgPanel.Size = New System.Drawing.Size(436, 376)
+        Me.NoPkgPanel.TabIndex = 1
+        '
+        'Label6
+        '
+        Me.Label6.AutoEllipsis = True
+        Me.Label6.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label6.Location = New System.Drawing.Point(0, 0)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(436, 376)
+        Me.Label6.TabIndex = 0
+        Me.Label6.Text = "Add or select a package file to view its information here"
+        Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'FlowLayoutPanel1
+        '
+        Me.FlowLayoutPanel1.Location = New System.Drawing.Point(106, 163)
+        Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
+        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(200, 100)
+        Me.FlowLayoutPanel1.TabIndex = 0
+        '
+        'LinkLabel1
+        '
+        Me.LinkLabel1.AutoSize = True
+        Me.LinkLabel1.Font = New System.Drawing.Font("Tahoma", 8.25!)
+        Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel1.Location = New System.Drawing.Point(17, 12)
+        Me.LinkLabel1.Name = "LinkLabel1"
+        Me.LinkLabel1.Size = New System.Drawing.Size(60, 13)
+        Me.LinkLabel1.TabIndex = 2
+        Me.LinkLabel1.TabStop = True
+        Me.LinkLabel1.Text = "<- Go back"
+        '
+        'OpenFileDialog1
+        '
+        Me.OpenFileDialog1.Filter = "CAB files|*.cab"
+        Me.OpenFileDialog1.Title = "Locate package files"
+        '
+        'Button4
+        '
+        Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button4.Location = New System.Drawing.Point(848, 450)
+        Me.Button4.Name = "Button4"
+        Me.Button4.Size = New System.Drawing.Size(96, 23)
+        Me.Button4.TabIndex = 11
+        Me.Button4.Text = "Save..."
+        Me.Button4.UseVisualStyleBackColor = True
         '
         'GetPkgInfoDlg
         '
@@ -1723,6 +1735,18 @@ Partial Class GetPkgInfoDlg
         Me.PackageInfoPanel.ResumeLayout(False)
         Me.PackageInfoPanel.PerformLayout()
         Me.PackageContainerPanel.ResumeLayout(False)
+        Me.InfoFromInstalledPkgsPanel.ResumeLayout(False)
+        Me.SplitContainer2.Panel1.ResumeLayout(False)
+        Me.SplitContainer2.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer2.ResumeLayout(False)
+        Me.Panel2.ResumeLayout(False)
+        Me.Panel3.ResumeLayout(False)
+        Me.Panel4.ResumeLayout(False)
+        Me.FlowLayoutPanel3.ResumeLayout(False)
+        Me.FlowLayoutPanel3.PerformLayout()
+        Me.Panel5.ResumeLayout(False)
+        Me.Panel7.ResumeLayout(False)
         Me.InfoFromPackageFilesPanel.ResumeLayout(False)
         Me.SplitContainer1.Panel1.ResumeLayout(False)
         Me.SplitContainer1.Panel2.ResumeLayout(False)
@@ -1736,18 +1760,6 @@ Partial Class GetPkgInfoDlg
         Me.FlowLayoutPanel2.PerformLayout()
         Me.Panel1.ResumeLayout(False)
         Me.NoPkgPanel.ResumeLayout(False)
-        Me.InfoFromInstalledPkgsPanel.ResumeLayout(False)
-        Me.SplitContainer2.Panel1.ResumeLayout(False)
-        Me.SplitContainer2.Panel2.ResumeLayout(False)
-        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.SplitContainer2.ResumeLayout(False)
-        Me.Panel2.ResumeLayout(False)
-        Me.Panel3.ResumeLayout(False)
-        Me.Panel4.ResumeLayout(False)
-        Me.FlowLayoutPanel3.ResumeLayout(False)
-        Me.FlowLayoutPanel3.PerformLayout()
-        Me.Panel5.ResumeLayout(False)
-        Me.Panel7.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -1881,5 +1893,6 @@ Partial Class GetPkgInfoDlg
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
     Friend WithEvents Label89 As System.Windows.Forms.Label
     Friend WithEvents Label90 As System.Windows.Forms.Label
+    Friend WithEvents Button4 As System.Windows.Forms.Button
 
 End Class

@@ -27,6 +27,11 @@ Public Class OrphanedMountedImgDialog
                         Label2.Text = "El proyecto que ha sido cargado contiene una imagen huérfana (una imagen que debe ser remontada)" & CrLf & "La imagen será remontada al hacer clic en " & Quote & "Aceptar" & Quote & ". Esto no debería afectar las modificaciones a la imagen, y no debería tardar mucho tiempo." & CrLf & CrLf & "NOTA: si hace clic en " & Quote & "Cancelar" & Quote & ", el proyecto será descargado"
                         OK_Button.Text = "Aceptar"
                         Cancel_Button.Text = "Cancelar"
+                    Case "FRA"
+                        Label1.Text = "Cette image nécessite un rechargement de la session de maintenance"
+                        Label2.Text = "Le projet qui a été chargé contient une image orpheline (une image qui doit être remontée)" & CrLf & "L'image sera remontée lorsque vous cliquerez sur " & Quote & "OK" & Quote & ". Cela ne devrait pas affecter vos modifications de l'image et ne devrait pas prendre beaucoup de temps." & CrLf & CrLf & "NOTE: si vous cliquez sur " & Quote & "Annuler" & Quote & ", le projet sera déchargé."
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annuler"
                 End Select
             Case 1
                 Label1.Text = "This image needs a servicing session reload"
@@ -38,6 +43,11 @@ Public Class OrphanedMountedImgDialog
                 Label2.Text = "El proyecto que ha sido cargado contiene una imagen huérfana (una imagen que debe ser remontada)" & CrLf & "La imagen será remontada al hacer clic en " & Quote & "Aceptar" & Quote & ". Esto no debería afectar las modificaciones a la imagen, y no debería tardar mucho tiempo." & CrLf & CrLf & "NOTA: si hace clic en " & Quote & "Cancelar" & Quote & ", el proyecto será descargado"
                 OK_Button.Text = "Aceptar"
                 Cancel_Button.Text = "Cancelar"
+            Case 3
+                Label1.Text = "Cette image nécessite un rechargement de la session de maintenance"
+                Label2.Text = "Le projet qui a été chargé contient une image orpheline (une image qui doit être remontée)" & CrLf & "L'image sera remontée lorsque vous cliquerez sur " & Quote & "OK" & Quote & ". Cela ne devrait pas affecter vos modifications de l'image et ne devrait pas prendre beaucoup de temps." & CrLf & CrLf & "NOTE: si vous cliquez sur " & Quote & "Annuler" & Quote & ", le projet sera déchargé."
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annuler"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)

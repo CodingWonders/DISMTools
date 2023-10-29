@@ -2,7 +2,7 @@
 #                                         .'^""""""^.            
 #      '^`'.                            '^"""""""^.              
 #     .^"""""`'                       .^"""""""^.                ------------------------------------------------------
-#      .^""""""`                      ^"""""""`                  | DISMTools 0.3.2                                    |
+#      .^""""""`                      ^"""""""`                  | DISMTools 0.3.3                                    |
 #       ."""""""^.                   `""""""""'           `,`    | Open-source Windows image management, evolved      |
 #         '`""""""`.                 """""""""^         `,,,"    ------------------------------------------------------
 #            '^"""""`.               ^""""""""""'.   .`,,,,,^    | Mounted image manager (CLI version)                |
@@ -55,13 +55,17 @@ $global:selImage = 0
 $global:imgInfo = ''
 $newImg = 0
 $selImgPath = ''
-$ver = '0.3.2'
+$ver = '0.3.3'
 $global:img_removalIndexes = New-Object System.Collections.ArrayList
 $global:img_remIndexesBck = New-Object System.Collections.ArrayList
 
 # Unmount setting variables
 $global:checkIntegrity = $false
 $global:appendIndex = $false
+
+# Image index switch parameters
+$destIndex = 0
+$suMountOp = 0
 
 # Set window title
 $host.UI.RawUI.WindowTitle = "Mounted image manager"
@@ -471,10 +475,170 @@ function Remove-VolumeImages {
     }
 }
 
+function Switch-Indexes {
+    Clear-Host
+    Write-Host "Getting image indexes. This may take some time..."`n
+    if ((Get-WindowsImage -ImagePath $global:mImage[$global:selImage - 1].ImagePath).Count -le 1)
+    {
+        Write-Host "This image only contains 1 index, so you can't switch to other indexes."`n"Press ENTER to go back to the main menu..."
+        Read-Host | Out-Null
+        MainMenu
+    }
+    # Since we have done the necessary prep work, clear the screen
+    Clear-Host
+
+    # Output essential information
+    $global:imgInfo = Get-WindowsImage -ImagePath $global:mImage[$global:selImage - 1].ImagePath
+    Write-Host "- Image: $($global:mImage[$global:selImage - 1].ImagePath)"`n"- Currently mounted index: index $($global:mImage[$global:selImage - 1].ImageIndex) ($($global:imgInfo[($global:mImage[$global:selImage - 1].ImageIndex) - 1].ImageName))"`n
+    if (($destIndex -le 0) -or ($destIndex -gt $global:imgInfo.Count))
+    {
+        Write-Host "- Destination index to mount: not specified. Press S to specify..."
+    }
+    else
+    {
+        Write-Host "- Destination index to mount: $($destIndex) ($($global:imgInfo[$destIndex - 1].ImageName))"
+    }
+    switch ($suMountOp)
+    {
+        0 {
+            Write-Host "- Unmount operation when switching indexes: not specified. Press C to change this setting..."
+        }
+        1 {
+            Write-Host "- Unmount operation when switching indexes: commit"
+        }
+        2 {
+            Write-Host "- Unmount operation when switching indexes: discard"
+        }
+    }
+
+    # Display menu items
+    Write-Host `n
+    Write-Host "[S]: Specify target index"`n -NoNewline
+    if (($suMountOp -le 0) -or ($suMountOp -gt 2))
+    {
+        Write-Host "[C]: Specify unmount operation"
+    }
+    else
+    {
+        Write-Host "[C]: Change unmount operation"
+    }
+    Write-Host "[P]: Proceed"`n`n"[B]: Go back"`n
+    $option = Read-Host -Prompt "Select an option and press ENTER"
+    switch ($option)
+    {
+        "S" {
+            $global:imgInfo | Format-Table ImageIndex, ImageName
+            Write-Host `n`n
+            $option = Read-Host -Prompt "Choose an index from the list above and press ENTER, or press [B] to go back"
+            switch ($option)
+            {
+                "B" {
+                    Switch-Indexes
+                }
+                default {
+                    try
+                    {
+                        $destIndex = [int]$option
+                        # The user could have picked a non-existent image. Detect that
+                        if (($destIndex -le 0) -or ($destIndex -gt $global:imgInfo.Count))
+                        {
+                            $destIndex = 0
+                            Write-Host "The index selected does not exist in the image file. Press ENTER to go back, and try again."
+                            Read-Host | Out-Null
+                        }
+                        Switch-Indexes
+                    }
+                    catch
+                    {
+                        Write-Host "The index selected does not exist in the image file. Press ENTER to go back, and try again."
+                        Read-Host | Out-Null
+                        Switch-Indexes
+                    }
+                }
+            }
+        }
+        "C" {
+            $option = Read-Host -Prompt "Press [C] to unmount the source index whilst saving changes, [U] to discard the changes and unmount, or [B] to go back"
+            switch ($option)
+            {
+                "C" {
+                    $suMountOp = 1
+                }
+                "U" {
+                    $suMountOp = 2
+                }
+                "B" {
+                    # Go back
+                }
+                default {
+                    Write-Host "An invalid option has been specified. Press ENTER to go back, and try again"
+                    Read-Host | Out-Null
+                }
+            }
+            Switch-Indexes
+        }
+        "P" {
+            # Detect if necessary parameters weren't set up, and stop if that's the case
+            if (($destIndex -le 0) -or ($destIndex -gt $global:imgInfo.Count))
+            {
+                Write-Host "The destination index hasn't been specified. Please specify one, and try again." -ForegroundColor Black -BackgroundColor DarkYellow
+                Read-Host | Out-Null
+                Switch-Indexes
+            }            
+            if (($suMountOp -le 0) -or ($suMountOp -gt 2))
+            {
+                Write-Host "The unmount operation hasn't been specified. Please specify one, and try again." -ForegroundColor Black -BackgroundColor DarkYellow
+                Read-Host | Out-Null
+                Switch-Indexes
+            }
+            # Stop this process if the user chose to switch to the same index
+            if ($destIndex -eq $global:mImage[$global:selImage - 1].ImageIndex)
+            {
+                Write-Host "The destination index you have specified is the same as the source index. Make sure you have selected the destination index you wanted, and try again." -ForegroundColor Black -BackgroundColor DarkYellow
+                Read-Host | Out-Null
+                Switch-Indexes
+            }
+            Write-Host "Beginning switch operation..."
+            Write-Host "0  % - Unmounting source index... (step 1 of 2)"
+            switch ($suMountOp)
+            {
+                1 {
+                    Dismount-WindowsImage -Path $global:mImage[$global:selImage - 1].MountPath -Save
+                }
+                2 {
+                    Dismount-WindowsImage -Path $global:mImage[$global:selImage - 1].MountPath -Discard
+                }
+            }
+            if ($? -eq $false)
+            {
+                Write-Host "The unmount operation has failed. Read the log file for more information."`n`n"Press ENTER to continue..."
+                Read-Host | Out-Null
+                MainMenu
+            }
+            Write-Host "50 % - Mounting destination index... (step 2 of 2)"
+            Mount-WindowsImage -ImagePath $global:mImage[$global:selImage - 1].ImagePath -Index $destIndex -Path $global:mImage[$global:selImage - 1].MountPath
+            if ($? -eq $false)
+            {
+                Write-Host "The mount operation has failed. Read the log file for more information."`n`n"Press ENTER to continue..."
+                Read-Host | Out-Null
+                MainMenu
+            }
+            Write-Host "100% - This operation has completed and the destination image should have been mounted."`n`n"Press ENTER to continue..."
+            Read-Host | Out-Null
+            MainMenu
+        }
+        "B" {
+            MainMenu
+        }
+        default {
+            Switch-Indexes
+        }
+    }
+}
+
 function Update-Listing {
     $global:mImage = Get-WindowsImage -Mounted
     $global:mImages = Get-WindowsImage -Mounted
-    # MainMenu
 }
 
 function Get-MenuItems {
@@ -502,6 +666,7 @@ function Get-MenuItems {
         if ((Get-WindowsImage -ImagePath $global:mImage[$global:selImage - 1].ImagePath | Select-Object -ExpandProperty ImageIndex).Count -gt 1)
         {
             Write-Host "[V]: Remove volume images..."
+            Write-Host "[S]: Switch image indexes..."
         }
     }
     Write-Host "[L]: Update mounted image listing"
@@ -647,6 +812,9 @@ function MainMenu {
         }
         "V" {
             Remove-VolumeImages
+        }
+        "S" {
+            Switch-Indexes
         }
         "L" {
             Write-Host `n"Updating mounted image listing..." 
