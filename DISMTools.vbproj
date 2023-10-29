@@ -1314,7 +1314,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
     <PostBuildEvent>SET DELETELOGDIR="Yes"
-SET ISPREVIEW="Yes"
+SET ISPREVIEW="No"
 SET GEN_INSTALLER="Yes"
 ECHO Generating program structure...
 IF EXIST "$(SolutionDir)portable" (
