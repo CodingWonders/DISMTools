@@ -1806,16 +1806,24 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Bugfixes
+        '''  Busca una cadena traducida similar a Changes made since last preview
         '''
-        '''- Fixed a couple of issues of the AppX package information dialog:
-        '''  - Fixed an issue where, if the install location, package manifest location, or store logo asset location couldn&apos;t be detected; they would not be updated and would show incorrect results
-        '''  - Fixed an issue where the program threw an exception if the package display name returned nothing
-        '''- The AppX resource save dialog no longer appends the friendly display name to the target file name
+        '''Bugfixes
+        '''
+        '''- Fixed an issue where the installed driver detection notification panel would be shown when the user is getting information from driver files
+        '''- Fixed a couple of issues in the package information dialog
         '''
         '''New features
         '''
-        '''- Feature update detec [resto de la cadena truncado]&quot;;.
+        '''- The CLI version of the mounted image manager now lets you switch indexes of mounted images
+        '''- Added more functionality to the information saver
+        '''
+        '''Overall changes
+        '''
+        '''Bugfixes
+        '''
+        '''- Fixed a release status consistency issue
+        '''- The program sho [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
