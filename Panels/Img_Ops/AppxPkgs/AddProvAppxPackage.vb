@@ -497,14 +497,18 @@ Public Class AddProvAppxPackage
     End Sub
 
     Private Sub AppxFileOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles AppxFileOFD.FileOk
-        If Path.GetExtension(AppxFileOFD.FileName).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
-            If Not AppInstallerDownloader.IsDisposed Then AppInstallerDownloader.Dispose()
-            AppInstallerDownloader.AppInstallerFile = AppxFileOFD.FileName
-            If Not File.Exists(AppxFileOFD.FileName.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
-            If File.Exists(AppxFileOFD.FileName.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, AppxFileOFD.FileName.Replace(".appinstaller", ".appxbundle").Trim())
-            Exit Sub
+        If AppxFileOFD.FileNames.Count > 0 Then
+            For Each AppxFile In AppxFileOFD.FileNames
+                If Path.GetExtension(AppxFile).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
+                    If Not AppInstallerDownloader.IsDisposed Then AppInstallerDownloader.Dispose()
+                    AppInstallerDownloader.AppInstallerFile = AppxFile
+                    If Not File.Exists(AppxFile.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
+                    If File.Exists(AppxFile.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, AppxFile.Replace(".appinstaller", ".appxbundle").Trim())
+                    Continue For
+                End If
+                ScanAppxPackage(False, AppxFile)
+            Next
         End If
-        ScanAppxPackage(False, AppxFileOFD.FileName)
     End Sub
 
     Private Sub AppxDependencyOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles AppxDependencyOFD.FileOk
