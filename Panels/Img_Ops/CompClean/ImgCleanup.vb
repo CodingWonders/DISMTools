@@ -327,7 +327,12 @@ Public Class ImgCleanup
             End Using
         End If
 
-        CheckBox5.Enabled = MainForm.OnlineManagement = True
+        If MainForm.OnlineManagement And (SystemInformation.BootMode = BootMode.Normal Or SystemInformation.BootMode = BootMode.FailSafeWithNetwork) Then
+            CheckBox5.Enabled = True
+        Else
+            CheckBox5.Checked = False
+            CheckBox5.Enabled = False
+        End If
 
         If SelTask >= 0 And SelTask < ComboBox1.Items.Count Then ComboBox1.SelectedIndex = SelTask
     End Sub

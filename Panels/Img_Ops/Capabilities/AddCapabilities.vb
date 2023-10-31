@@ -306,7 +306,12 @@ Public Class AddCapabilities
         CheckBox3.ForeColor = ForeColor
         ListView1.ForeColor = ForeColor
         RichTextBox1.ForeColor = ForeColor
-        CheckBox2.Enabled = MainForm.OnlineManagement = True
+        If MainForm.OnlineManagement And (SystemInformation.BootMode = BootMode.Normal Or SystemInformation.BootMode = BootMode.FailSafeWithNetwork) Then
+            CheckBox2.Enabled = True
+        Else
+            CheckBox2.Checked = False
+            CheckBox2.Enabled = False
+        End If
         CheckBox3.Enabled = MainForm.OnlineManagement = False
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
