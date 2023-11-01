@@ -109,6 +109,8 @@ Public Class MainForm
 
     ' Variable used for online installation management
     Public OnlineManagement As Boolean
+    ' Variable used for offline installation management
+    Public OfflineManagement As Boolean
 
     ' These are the variables that need to change when testing setting validity
     Public isExeProblematic As Boolean
@@ -1290,7 +1292,7 @@ Public Class MainForm
     ''' <param name="UseApi">(Optional) Uses the DISM API to get image information and to reduce the time these processes take</param>
     ''' <param name="OnlineMode">(Optional) Detects properties of an active Windows installation if this value is True. Otherwise, if it is False or is not set, it won't pass this option</param>
     ''' <remarks>Depending on the parameter of bgProcOptn, and on the power of the system, the background processes may take a longer time to finish</remarks>
-    Sub RunBackgroundProcesses(bgProcOptn As Integer, GatherBasicInfo As Boolean, GatherAdvancedInfo As Boolean, Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
+    Sub RunBackgroundProcesses(bgProcOptn As Integer, GatherBasicInfo As Boolean, GatherAdvancedInfo As Boolean, Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False, Optional OfflineMode As Boolean = False)
         IsCompatible = True
         If Not IsImageMounted Then
             Button1.Enabled = True
@@ -1320,7 +1322,7 @@ Public Class MainForm
         pbOpNums = 0
         Dim session As DismSession = Nothing
         If UseApi Then
-            If Not OnlineMode Then
+            If Not OnlineMode And Not OfflineMode Then
                 Try
                     For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
                         If MountedImageMountDirs(x) = MountDir Then
@@ -1351,6 +1353,7 @@ Public Class MainForm
                 End Try
             End If
         End If
+        If OfflineMode Then sessionMntDir = MountDir
         ' Determine which actions are being done
         If GatherBasicInfo Then
             If GatherAdvancedInfo Then
@@ -1411,7 +1414,7 @@ Public Class MainForm
                     progressLabel = "Obtention des informations basiques sur l'image en cours..."
             End Select
             ImgBW.ReportProgress(progressMin + progressDivs)
-            GetBasicImageInfo(True, OnlineMode)
+            GetBasicImageInfo(True, OnlineMode, OfflineMode)
             If isOrphaned Then
                 'If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                 Exit Sub
@@ -1442,7 +1445,7 @@ Public Class MainForm
                         progressLabel = "Obtention des informations avancées sur l'image en cours..."
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
-                GetAdvancedImageInfo(True, OnlineMode)
+                GetAdvancedImageInfo(True, OnlineMode, OfflineMode)
             End If
         End If
         Directory.CreateDirectory(Application.StartupPath & "\tempinfo")
@@ -1785,7 +1788,7 @@ Public Class MainForm
     ''' Gets basic image information, such as its index, its file path, or its mount dir
     ''' </summary>
     ''' <remarks>Depending on the GatherBasicInfo flag in RunBackgroundProcesses, this function will run or not</remarks>
-    Sub GetBasicImageInfo(Optional Streamlined As Boolean = False, Optional OnlineMode As Boolean = False)
+    Sub GetBasicImageInfo(Optional Streamlined As Boolean = False, Optional OnlineMode As Boolean = False, Optional OfflineMode As Boolean = False)
         ' Set image properties
         Label14.Text = ProgressPanel.ImgIndex
         Label12.Text = ProgressPanel.MountDir
@@ -1831,6 +1834,47 @@ Public Class MainForm
                 Label18.Text = My.Computer.Info.OSFullName
                 Label12.Text = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows))
                 Label3.Text = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows))
+            ElseIf OfflineMode Then
+                Label17.Text = FileVersionInfo.GetVersionInfo(MountDir & "\Windows\system32\ntoskrnl.exe").ProductVersion
+                imgVersionInfo = New Version(FileVersionInfo.GetVersionInfo(MountDir & "\Windows\system32\ntoskrnl.exe").ProductVersion)
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                Label14.Text = "(Offline installation)"
+                                Label18.Text = "(Offline installation)"
+                                Label20.Text = "(Offline installation)"
+                                projName.Text = "(Offline installation)"
+                            Case "ESN"
+                                Label14.Text = "(Instalación fuera de línea)"
+                                Label18.Text = "(Instalación fuera de línea)"
+                                Label20.Text = "(Instalación fuera de línea)"
+                                projName.Text = "(Instalación fuera de línea)"
+                            Case "FRA"
+                                Label14.Text = "(Installation hors ligne)"
+                                Label18.Text = "(Installation hors ligne)"
+                                Label20.Text = "(Installation hors ligne)"
+                                projName.Text = "(Installation hors ligne)"
+                        End Select
+                    Case 1
+                        Label14.Text = "(Offline installation)"
+                        Label18.Text = "(Offline installation)"
+                        Label20.Text = "(Offline installation)"
+                        projName.Text = "(Offline installation)"
+                    Case 2
+                        Label14.Text = "(Instalación fuera de línea)"
+                        Label18.Text = "(Instalación fuera de línea)"
+                        Label20.Text = "(Instalación fuera de línea)"
+                        projName.Text = "(Instalación fuera de línea)"
+                    Case 3
+                        Label14.Text = "(Installation hors ligne)"
+                        Label18.Text = "(Installation hors ligne)"
+                        Label20.Text = "(Installation hors ligne)"
+                        projName.Text = "(Installation hors ligne)"
+                End Select
+                Label12.Text = MountDir
+                Label3.Text = MountDir
+                GetOfflineEditionAndInstIdFromRegistry()
             Else
                 Try
                     For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
@@ -2034,11 +2078,35 @@ Public Class MainForm
         'ImgBW.ReportProgress(irregVal)
     End Sub
 
+    Sub GetOfflineEditionAndInstIdFromRegistry()
+        Using reg As New Process
+            reg.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe"
+            reg.StartInfo.Arguments = "load HKLM\IMG_SOFT " & Quote & MountDir & "\Windows\system32\config\SOFTWARE" & Quote
+            reg.StartInfo.CreateNoWindow = True
+            reg.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+            reg.Start()
+            reg.WaitForExit()
+            If reg.ExitCode <> 0 Then
+                imgEdition = ""
+            Else
+                Dim edReg As RegistryKey = Registry.LocalMachine.OpenSubKey("IMG_SOFT\Microsoft\Windows NT\CurrentVersion", False)
+                imgEdition = edReg.GetValue("EditionID", "").ToString()
+                imgInstType = edReg.GetValue("InstallationType", "").ToString()
+                edReg.Close()
+            End If
+            reg.StartInfo.Arguments = "unload HKLM\IMG_SOFT"
+            reg.StartInfo.CreateNoWindow = True
+            reg.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+            reg.Start()
+            reg.WaitForExit()
+        End Using
+    End Sub
+
     ''' <summary>
     ''' Gets advanced image information, such as number of files and directories, image name, and more
     ''' </summary>
     ''' <remarks>This is called when bgGetAdvImgInfo is True</remarks>
-    Sub GetAdvancedImageInfo(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
+    Sub GetAdvancedImageInfo(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False, Optional OfflineMode As Boolean = False)
         Button14.Enabled = True
         Button15.Enabled = True
         Button16.Enabled = True
@@ -2057,6 +2125,14 @@ Public Class MainForm
                 ' Set installation type variable according to the InstallationType registry value
                 imgInstType = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion").GetValue("InstallationType")
 
+                DetectVersions(FileVersionInfo.GetVersionInfo(DismExe), imgVersionInfo)
+                Exit Sub
+            ElseIf OfflineMode Then
+                Button14.Enabled = False
+                Button15.Enabled = False
+                Button16.Enabled = False
+                ExplorerView.Enabled = False
+                ProjNameEditBtn.Visible = False
                 DetectVersions(FileVersionInfo.GetVersionInfo(DismExe), imgVersionInfo)
                 Exit Sub
             Else
@@ -4685,6 +4761,7 @@ Public Class MainForm
                         NewProjLink.Text = "New project..."
                         ExistingProjLink.Text = "Open existing project..."
                         OnlineInstMgmt.Text = "Manage online installation"
+                        OfflineInstMgmt.Text = "Manage offline installation..."
                         ' Start Panel tabs
                         WelcomeTab.Text = "Welcome"
                         NewsFeedTab.Text = "Latest news"
@@ -4967,6 +5044,7 @@ Public Class MainForm
                         NewProjLink.Text = "Nuevo proyecto..."
                         ExistingProjLink.Text = "Abrir proyecto existente..."
                         OnlineInstMgmt.Text = "Administrar instalación activa"
+                        OfflineInstMgmt.Text = "Administrar instalación fuera de línea..."
                         ' Start Panel tabs
                         WelcomeTab.Text = "Bienvenido"
                         NewsFeedTab.Text = "Últimas noticias"
@@ -5249,6 +5327,7 @@ Public Class MainForm
                         NewProjLink.Text = "Nouveau projet..."
                         ExistingProjLink.Text = "Ouvrir un projet existant..."
                         OnlineInstMgmt.Text = "Gérer l'installation en ligne"
+                        OfflineInstMgmt.Text = "Gérer l'installation hors ligne..."
                         ' Start Panel tabs
                         WelcomeTab.Text = "Bienvenue"
                         NewsFeedTab.Text = "Dernières nouvelles"
@@ -5536,6 +5615,7 @@ Public Class MainForm
                 NewProjLink.Text = "New project..."
                 ExistingProjLink.Text = "Open existing project..."
                 OnlineInstMgmt.Text = "Manage online installation"
+                OfflineInstMgmt.Text = "Manage offline installation..."
                 ' Start Panel tabs
                 WelcomeTab.Text = "Welcome"
                 NewsFeedTab.Text = "Latest news"
@@ -5818,6 +5898,7 @@ Public Class MainForm
                 NewProjLink.Text = "Nuevo proyecto..."
                 ExistingProjLink.Text = "Abrir proyecto existente..."
                 OnlineInstMgmt.Text = "Administrar instalación activa"
+                OfflineInstMgmt.Text = "Administrar instalación fuera de línea..."
                 ' Start Panel tabs
                 WelcomeTab.Text = "Bienvenido"
                 NewsFeedTab.Text = "Últimas noticias"
@@ -6099,6 +6180,7 @@ Public Class MainForm
                 NewProjLink.Text = "Nouveau projet..."
                 ExistingProjLink.Text = "Ouvrir un projet existant..."
                 OnlineInstMgmt.Text = "Gérer l'installation en ligne"
+                OfflineInstMgmt.Text = "Gérer l'installation hors ligne..."
                 ' Start Panel tabs
                 WelcomeTab.Text = "Bienvenue"
                 NewsFeedTab.Text = "Dernières nouvelles"
@@ -6949,6 +7031,7 @@ Public Class MainForm
         Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
         PendingTasks = Enumerable.Repeat(True, PendingTasks.Length).ToArray()
         If OnlineManagement Then EndOnlineManagement()
+        If OfflineManagement Then EndOfflineManagement()
     End Sub
 
     Sub BeginOnlineManagement(ShowDialog As Boolean)
@@ -7043,6 +7126,233 @@ Public Class MainForm
         MountDir = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows))
         ImgBW.RunWorkerAsync()
         Exit Sub
+    End Sub
+
+    Sub BeginOfflineManagement(ImageDrive As String)
+        IsImageMounted = True
+        isProjectLoaded = True
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        Text = "Offline installation - DISMTools"
+                    Case "ESN"
+                        Text = "Instalación fuera de línea - DISMTools"
+                    Case "FRA"
+                        Text = "Installation hors ligne - DISMTools"
+                End Select
+            Case 1
+                Text = "Offline installation - DISMTools"
+            Case 2
+                Text = "Instalación fuera de línea - DISMTools"
+            Case 3
+                Text = "Installation hors ligne - DISMTools"
+        End Select
+        OfflineManagement = True
+        ' Initialize background processes
+        bwAllBackgroundProcesses = True
+        bwGetImageInfo = True
+        bwGetAdvImgInfo = True
+        bwBackgroundProcessAction = 0
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        Label5.Text = "Yes"
+                    Case "ESN"
+                        Label5.Text = "Sí"
+                    Case "FRA"
+                        Label5.Text = "Oui"
+                End Select
+            Case 1
+                Label5.Text = "Yes"
+            Case 2
+                Label5.Text = "Sí"
+            Case 3
+                Label5.Text = "Oui"
+        End Select
+        UnpopulateProjectTree()
+        HomePanel.Visible = False
+        PrjPanel.Visible = True
+        SplitPanels.Visible = True
+        RemountImageWithWritePermissionsToolStripMenuItem.Enabled = False
+        SaveProjectToolStripMenuItem.Enabled = False
+        SaveProjectasToolStripMenuItem.Enabled = False
+        LinkLabel1.Visible = False
+        ImageNotMountedPanel.Visible = False
+        ImagePanel.Visible = True
+        CommandsToolStripMenuItem.Visible = True
+        Thread.Sleep(250)
+        Refresh()
+        ' Saving a project is not possible in offline mode either
+        ToolStripButton2.Enabled = False
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        Label14.Text = "(Offline installation)"
+                        Label12.Text = "(Offline installation)"
+                    Case "ESN"
+                        Label14.Text = "(Instalación fuera de línea)"
+                        Label12.Text = "(Instalación fuera de línea)"
+                    Case "FRA"
+                        Label14.Text = "(Installation hors ligne)"
+                        Label12.Text = "(Installation hors ligne)"
+                End Select
+            Case 1
+                Label14.Text = "(Offline installation)"
+                Label12.Text = "(Offline installation)"
+            Case 2
+                Label14.Text = "(Instalación fuera de línea)"
+                Label12.Text = "(Instalación fuera de línea)"
+            Case 3
+                Label14.Text = "(Installation hors ligne)"
+                Label12.Text = "(Installation hors ligne)"
+        End Select
+        GroupBox1.Enabled = False
+        Panel2.Visible = False
+        ProjNameEditBtn.Visible = False
+        TableLayoutPanel2.ColumnCount = 2
+        TableLayoutPanel2.SetColumnSpan(Label5, 1)
+        TableLayoutPanel2.SetColumnSpan(Label3, 1)
+        ManageOnlineInstallationToolStripMenuItem.Enabled = False
+        MountDir = ImageDrive
+        ImgBW.RunWorkerAsync()
+        Exit Sub
+    End Sub
+
+    Sub EndOfflineManagement()
+        If ImgBW.IsBusy Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            If MsgBox("Background processes are still gathering information about this image. Do you want to cancel them?", vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
+                                ImgBW.CancelAsync()
+                            Else
+                                Exit Sub
+                            End If
+                        Case "ESN"
+                            If MsgBox("Procesos en segundo plano todavía están recopilando información de esta imagen. ¿Desea cancelarlos?", vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
+                                ImgBW.CancelAsync()
+                            Else
+                                Exit Sub
+                            End If
+                        Case "FRA"
+                            If MsgBox("Les processus en arrière-plan sont encore en train de recueillir des informations sur cette image. Voulez-vous les annuler ?", vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
+                                ImgBW.CancelAsync()
+                            Else
+                                Exit Sub
+                            End If
+                    End Select
+                Case 1
+                    If MsgBox("Background processes are still gathering information about this image. Do you want to cancel them?", vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
+                        ImgBW.CancelAsync()
+                    Else
+                        Exit Sub
+                    End If
+                Case 2
+                    If MsgBox("Procesos en segundo plano todavía están recopilando información de esta imagen. ¿Desea cancelarlos?", vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
+                        ImgBW.CancelAsync()
+                    Else
+                        Exit Sub
+                    End If
+                Case 3
+                    If MsgBox("Les processus en arrière-plan sont encore en train de recueillir des informations sur cette image. Voulez-vous les annuler ?", vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
+                        ImgBW.CancelAsync()
+                    Else
+                        Exit Sub
+                    End If
+            End Select
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            MenuDesc.Text = "Cancelling background processes. Please wait..."
+                        Case "ESN"
+                            MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
+                        Case "FRA"
+                            MenuDesc.Text = "Annulation des processus en arrière plan en cours. Veuillez patienter ..."
+                    End Select
+                Case 1
+                    MenuDesc.Text = "Cancelling background processes. Please wait..."
+                Case 2
+                    MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
+                Case 3
+                    MenuDesc.Text = "Annulation des processus en arrière plan en cours. Veuillez patienter ..."
+            End Select
+            While ImgBW.IsBusy()
+                ToolStripButton3.Enabled = False
+                UnloadBtn.Enabled = False
+                Application.DoEvents()
+                Thread.Sleep(100)
+            End While
+            ToolStripButton3.Enabled = True
+            UnloadBtn.Enabled = True
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            MenuDesc.Text = "Ready"
+                        Case "ESN"
+                            MenuDesc.Text = "Listo"
+                        Case "FRA"
+                            MenuDesc.Text = "Prêt"
+                    End Select
+                Case 1
+                    MenuDesc.Text = "Ready"
+                Case 2
+                    MenuDesc.Text = "Listo"
+                Case 3
+                    MenuDesc.Text = "Prêt"
+            End Select
+        End If
+        bwBackgroundProcessAction = 0
+        bwGetImageInfo = True
+        bwGetAdvImgInfo = True
+        IsImageMounted = False
+        isProjectLoaded = False
+        Text = "DISMTools"
+        OfflineManagement = False
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        Label5.Text = "Yes"
+                    Case "ESN"
+                        Label5.Text = "Sí"
+                    Case "FRA"
+                        Label5.Text = "Oui"
+                End Select
+            Case 1
+                Label5.Text = "Yes"
+            Case 2
+                Label5.Text = "Sí"
+            Case 3
+                Label5.Text = "Oui"
+        End Select
+        HomePanel.Visible = True
+        PrjPanel.Visible = False
+        SplitPanels.Visible = False
+        RemountImageWithWritePermissionsToolStripMenuItem.Enabled = False
+        LinkLabel1.Visible = False
+        ImageNotMountedPanel.Visible = False
+        ImagePanel.Visible = True
+        CommandsToolStripMenuItem.Visible = False
+        ProjectToolStripMenuItem.Visible = False
+        Thread.Sleep(250)
+        Refresh()
+        ToolStripButton2.Enabled = True
+        GroupBox1.Enabled = True
+        Panel2.Visible = True
+        ProjNameEditBtn.Visible = True
+        TableLayoutPanel2.ColumnCount = 3
+        TableLayoutPanel2.SetColumnSpan(Label5, 2)
+        TableLayoutPanel2.SetColumnSpan(Label3, 2)
+        ManageOnlineInstallationToolStripMenuItem.Enabled = True
+        Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
+        PendingTasks = Enumerable.Repeat(True, PendingTasks.Count).ToArray()
+        MountDir = ""
     End Sub
 
     Sub EndOnlineManagement()
@@ -8761,7 +9071,20 @@ Public Class MainForm
                 Thread.Sleep(100)
             End While
         End If
-        If isProjectLoaded And Not OnlineManagement Then
+        If OfflineManagement Then
+            EndOfflineManagement()
+            MountedImageDetectorBW.CancelAsync()
+            While MountedImageDetectorBW.IsBusy
+                Application.DoEvents()
+                Thread.Sleep(100)
+            End While
+            If MountedImgMgr.DetectorBW.IsBusy Then MountedImgMgr.DetectorBW.CancelAsync()
+            While MountedImgMgr.DetectorBW.IsBusy
+                Application.DoEvents()
+                Thread.Sleep(100)
+            End While
+        End If
+        If isProjectLoaded And (Not OnlineManagement Or Not OfflineManagement) Then
             If isModified Then
                 SaveProjectQuestionDialog.ShowDialog()
                 If SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Yes Then
@@ -8817,6 +9140,10 @@ Public Class MainForm
     Private Sub ToolStripButton3_Click(sender As Object, e As EventArgs) Handles ToolStripButton3.Click
         If OnlineManagement Then
             EndOnlineManagement()
+            Exit Sub
+        End If
+        If OfflineManagement Then
+            EndOfflineManagement()
             Exit Sub
         End If
         If isModified Then
@@ -9261,12 +9588,12 @@ Public Class MainForm
         If bwAllBackgroundProcesses Then
             If bwGetImageInfo Then
                 If bwGetAdvImgInfo Then
-                    RunBackgroundProcesses(bwBackgroundProcessAction, True, True, True, OnlineManagement)
+                    RunBackgroundProcesses(bwBackgroundProcessAction, True, True, True, OnlineManagement, OfflineManagement)
                 Else
-                    RunBackgroundProcesses(bwBackgroundProcessAction, True, False, True, OnlineManagement)
+                    RunBackgroundProcesses(bwBackgroundProcessAction, True, False, True, OnlineManagement, OfflineManagement)
                 End If
             Else
-                RunBackgroundProcesses(bwBackgroundProcessAction, False, False, True, OnlineManagement)
+                RunBackgroundProcesses(bwBackgroundProcessAction, False, False, True, OnlineManagement, OfflineManagement)
             End If
         Else
 
@@ -10285,7 +10612,7 @@ Public Class MainForm
     Private Sub OpenExistingProjectToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OpenExistingProjectToolStripMenuItem.Click
         If OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
             If File.Exists(OpenFileDialog1.FileName) Then
-                If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement, False, True), False)
+                If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement Or OfflineManagement, False, True), False)
                 If ImgBW.IsBusy Then Exit Sub
                 ProgressPanel.OperationNum = 990
                 LoadDTProj(OpenFileDialog1.FileName, Path.GetFileNameWithoutExtension(OpenFileDialog1.FileName), False, False)
@@ -11795,6 +12122,12 @@ Public Class MainForm
             ImgInfoSaveDlg.AllDrivers = AllDrivers
             ImgInfoSaveDlg.SaveTask = 0
             ImgInfoSaveDlg.ShowDialog()
+        End If
+    End Sub
+
+    Private Sub OfflineInstMgmt_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles OfflineInstMgmt.LinkClicked
+        If OfflineInstDriveLister.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            BeginOfflineManagement(MountDir)
         End If
     End Sub
 End Class

@@ -5054,6 +5054,7 @@ Public Class ProgressPanel
                 Next
             End If
         End If
+        If MainForm.OfflineManagement Then mntString = MainForm.MountDir
         DismProgram = MainForm.DismExe
         If MountDir = "" Then MountDir = MainForm.MountDir
         DISMProc.StartInfo.CreateNoWindow = False
