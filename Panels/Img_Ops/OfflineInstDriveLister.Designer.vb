@@ -58,6 +58,7 @@ Partial Class OfflineInstDriveLister
         'OK_Button
         '
         Me.OK_Button.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.OK_Button.Enabled = False
         Me.OK_Button.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.OK_Button.Location = New System.Drawing.Point(3, 3)
         Me.OK_Button.Name = "OK_Button"
@@ -170,7 +171,7 @@ Partial Class OfflineInstDriveLister
         Me.Name = "OfflineInstDriveLister"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Offline installation management mode - Choose a disk"
+        Me.Text = "Choose a disk"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 

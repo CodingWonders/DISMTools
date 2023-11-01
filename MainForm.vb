@@ -12127,6 +12127,11 @@ Public Class MainForm
 
     Private Sub OfflineInstMgmt_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles OfflineInstMgmt.LinkClicked
         If OfflineInstDriveLister.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If MountDir = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) Then
+                ActiveInstAccessWarn.Label2.Visible = False
+                BeginOnlineManagement(True)
+                Exit Sub
+            End If
             BeginOfflineManagement(MountDir)
         End If
     End Sub
