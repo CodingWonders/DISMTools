@@ -324,7 +324,7 @@ Public Class EnableFeat
             Case 3
                 Label2.Text &= " Seules les caractéristiques désactivées (" & ListView1.Items.Count & ") sont représentées"
         End Select
-        CheckBox5.Enabled = MainForm.OnlineManagement = False
+        CheckBox5.Enabled = If(MainForm.OnlineManagement Or MainForm.OfflineManagement, False, True)
         If MainForm.OnlineManagement And (SystemInformation.BootMode = BootMode.Normal Or SystemInformation.BootMode = BootMode.FailSafeWithNetwork) Then
             CheckBox4.Enabled = True
         Else

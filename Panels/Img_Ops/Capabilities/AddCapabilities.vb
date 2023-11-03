@@ -312,7 +312,7 @@ Public Class AddCapabilities
             CheckBox2.Checked = False
             CheckBox2.Enabled = False
         End If
-        CheckBox3.Enabled = MainForm.OnlineManagement = False
+        CheckBox3.Enabled = If(MainForm.OnlineManagement Or MainForm.OfflineManagement, False, True)
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
     End Sub

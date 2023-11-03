@@ -440,7 +440,7 @@ Public Class AddProvAppxPackage
             Text = ""
             Win10Title.Visible = True
         End If
-        CheckBox2.Enabled = MainForm.OnlineManagement = False
+        CheckBox2.Enabled = If(MainForm.OnlineManagement Or MainForm.OfflineManagement, False, True)
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
