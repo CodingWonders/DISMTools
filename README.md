@@ -1,6 +1,16 @@
 <p align="center">
-  <img src="https://github.com/CodingWonders/DISMTools/assets/101426328/4c753c9a-1440-44cb-a742-04e71d077dff">
-  <h3 align="center">A free and open-source GUI for DISM operations</h3>
+	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/4c753c9a-1440-44cb-a742-04e71d077dff">
+	<h3 align="center">A free and open-source GUI for DISM operations</h3>
+</p>
+<hr>
+
+<!-- Tags (powered by Shields.io) -->
+
+<p align="center">
+	<img src="https://img.shields.io/github/downloads/CodingWonders/DISMTools/total" />
+	<a href="https://github.com/CodingWonders/DISMTools/releases/latest"><img src="https://img.shields.io/github/v/release/CodingWonders/DISMTools" /></a>
+	<a href="https://forums.mydigitallife.net/threads/dismtools.87263"><img src="https://img.shields.io/badge/MDL_Forums-blue" /></a>
+	<a href="https://reddit.com/r/DISMTools"><img src="https://img.shields.io/badge/Subreddit-orange?logo=reddit&logoColor=white" /></a>
 </p>
 <hr>
 
