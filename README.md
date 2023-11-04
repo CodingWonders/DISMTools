@@ -71,7 +71,7 @@ If you want to grab a copy straight from the source code, follow these instructi
 3. Open the solution in Visual Studio 2012 or later    
 4. Finally, go to "Build > Build solution", or press CTRL-Shift-B
 
-**NOTE:** in the event that the program detects an update and lets you download an older version, we suggest that you should disregard its advice (it's not like it will affect the binary being compiled, as it will be recompiled when you build the project, but it will make you waste time)
+**NOTE:** in the event that the program detects an update and lets you download an older version, we suggest that you disregard its advice (it's not like it will affect the binary being compiled, as it will be recompiled when you build the project, but it will make you waste time)
 
 ## Contributions
 
@@ -90,7 +90,7 @@ If you want to contribute to this project, you can do so in many ways:
 
 We continue the development of the next version in the Preview branch. To go to it, select "dt_preview" from the branch list. Commits are done every day, and new builds are released every Sunday.
 
-However, if you want to download the latest release AS SOON AS the project is built with new changes, you can download the [nightly installer](https://github.com/CodingWonders/DISMTools/raw/dt_pre_23111/Installer/Output/dt_setup.exe).
+However, if you want to download the latest release AS SOON AS the project is built with new changes, you can download the [nightly installer](https://github.com/CodingWonders/DISMTools/raw/dt_pre_23112/Installer/Output/dt_setup.exe).
 
 ## Stay in touch
 
