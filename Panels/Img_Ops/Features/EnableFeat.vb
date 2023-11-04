@@ -324,8 +324,13 @@ Public Class EnableFeat
             Case 3
                 Label2.Text &= " Seules les caractéristiques désactivées (" & ListView1.Items.Count & ") sont représentées"
         End Select
-        CheckBox4.Enabled = MainForm.OnlineManagement = True
-        CheckBox5.Enabled = MainForm.OnlineManagement = False
+        CheckBox5.Enabled = If(MainForm.OnlineManagement Or MainForm.OfflineManagement, False, True)
+        If MainForm.OnlineManagement And (SystemInformation.BootMode = BootMode.Normal Or SystemInformation.BootMode = BootMode.FailSafeWithNetwork) Then
+            CheckBox4.Enabled = True
+        Else
+            CheckBox4.Checked = False
+            CheckBox4.Enabled = False
+        End If
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
     End Sub

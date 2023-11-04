@@ -76,7 +76,7 @@
       <HintPath>packages\DarkUI.2.0.2\lib\DarkUI.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Dism, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5bba90053b345501, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Dism.2.5.2\lib\net40\Microsoft.Dism.dll</HintPath>
+      <HintPath>packages\Microsoft.Dism.3.0.0\lib\net40\Microsoft.Dism.dll</HintPath>
     </Reference>
     <Reference Include="ScintillaNET, Version=3.6.3.0, Culture=neutral, PublicKeyToken=d42c48f11a620156, processorArchitecture=MSIL">
       <HintPath>packages\jacobslusser.ScintillaNET.Signed.3.6.3\lib\net40\ScintillaNET.dll</HintPath>
@@ -442,6 +442,12 @@
     <Compile Include="Panels\Img_Ops\MountedImgMgr.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Img_Ops\OfflineInstDriveLister.Designer.vb">
+      <DependentUpon>OfflineInstDriveLister.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\OfflineInstDriveLister.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\Pkgs\AddPackage.Designer.vb">
       <DependentUpon>AddPackage.vb</DependentUpon>
     </Compile>
@@ -790,6 +796,9 @@
     <EmbeddedResource Include="Panels\Img_Ops\MountedImgMgr.resx">
       <DependentUpon>MountedImgMgr.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\OfflineInstDriveLister.resx">
+      <DependentUpon>OfflineInstDriveLister.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Pkgs\AddPackage.resx">
       <DependentUpon>AddPackage.vb</DependentUpon>
     </EmbeddedResource>
@@ -926,7 +935,9 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="settings.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -1314,7 +1325,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
     <PostBuildEvent>SET DELETELOGDIR="Yes"
-SET ISPREVIEW="No"
+SET ISPREVIEW="Yes"
 SET GEN_INSTALLER="Yes"
 ECHO Generating program structure...
 IF EXIST "$(SolutionDir)portable" (

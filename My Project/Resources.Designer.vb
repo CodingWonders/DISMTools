@@ -1806,24 +1806,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Changes made since last preview
+        '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''Bugfixes
-        '''
-        '''- Fixed an issue where the installed driver detection notification panel would be shown when the user is getting information from driver files
-        '''- Fixed a couple of issues in the package information dialog
+        '''- Updated the managed DISM API package to version 3.0 to fix an issue where the sizes of capabilities could overflow and return negative values
         '''
         '''New features
         '''
-        '''- The CLI version of the mounted image manager now lets you switch indexes of mounted images
-        '''- Added more functionality to the information saver
-        '''
-        '''Overall changes
-        '''
-        '''Bugfixes
-        '''
-        '''- Fixed a release status consistency issue
-        '''- The program sho [resto de la cadena truncado]&quot;;.
+        '''- Introduced offline installation management capabilities
+        '''- You can now specify multiple files in the file picker of the AppX package addition dialog, and can now perform multiple selections
+        '''- All Windows Update-related settings are now disabled when managing an active installation in Safe Mode (without networking support).
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
