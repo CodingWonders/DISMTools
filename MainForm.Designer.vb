@@ -396,6 +396,7 @@ Partial Class MainForm
         Me.MicrosoftAppsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MicrosoftStoreGenerationProjectToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ImgInfoSFD = New System.Windows.Forms.SaveFileDialog()
+        Me.ManageOfflineInstallationToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -471,7 +472,7 @@ Partial Class MainForm
         '
         'FileToolStripMenuItem
         '
-        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewProjectToolStripMenuItem, Me.OpenExistingProjectToolStripMenuItem, Me.ToolStripSeparator26, Me.ManageOnlineInstallationToolStripMenuItem, Me.ToolStripSeparator1, Me.SaveProjectToolStripMenuItem, Me.SaveProjectasToolStripMenuItem, Me.ToolStripSeparator2, Me.ExitToolStripMenuItem})
+        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewProjectToolStripMenuItem, Me.OpenExistingProjectToolStripMenuItem, Me.ToolStripSeparator26, Me.ManageOnlineInstallationToolStripMenuItem, Me.ManageOfflineInstallationToolStripMenuItem, Me.ToolStripSeparator1, Me.SaveProjectToolStripMenuItem, Me.SaveProjectasToolStripMenuItem, Me.ToolStripSeparator2, Me.ExitToolStripMenuItem})
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
         Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
         Me.FileToolStripMenuItem.Text = "&File"
@@ -3520,6 +3521,12 @@ Partial Class MainForm
         '
         Me.ImgInfoSFD.Filter = "Text files|*.txt"
         '
+        'ManageOfflineInstallationToolStripMenuItem
+        '
+        Me.ManageOfflineInstallationToolStripMenuItem.Name = "ManageOfflineInstallationToolStripMenuItem"
+        Me.ManageOfflineInstallationToolStripMenuItem.Size = New System.Drawing.Size(224, 22)
+        Me.ManageOfflineInstallationToolStripMenuItem.Text = "Manage o&ffline installation..."
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -3991,4 +3998,5 @@ Partial Class MainForm
     Friend WithEvents SaveImageInformationToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ImgInfoSFD As System.Windows.Forms.SaveFileDialog
     Friend WithEvents OfflineInstMgmt As System.Windows.Forms.LinkLabel
+    Friend WithEvents ManageOfflineInstallationToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class

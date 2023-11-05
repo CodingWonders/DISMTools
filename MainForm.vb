@@ -4609,6 +4609,7 @@ Public Class MainForm
                         NewProjectToolStripMenuItem.Text = "&New project..."
                         OpenExistingProjectToolStripMenuItem.Text = "&Open existing project"
                         ManageOnlineInstallationToolStripMenuItem.Text = "&Manage online installation"
+                        ManageOfflineInstallationToolStripMenuItem.Text = "Manage o&ffline installation..."
                         SaveProjectToolStripMenuItem.Text = "&Save project..."
                         SaveProjectasToolStripMenuItem.Text = "Save project &as..."
                         ExitToolStripMenuItem.Text = "E&xit"
@@ -4892,6 +4893,7 @@ Public Class MainForm
                         NewProjectToolStripMenuItem.Text = "&Nuevo proyecto..."
                         OpenExistingProjectToolStripMenuItem.Text = "&Abrir proyecto existente"
                         ManageOnlineInstallationToolStripMenuItem.Text = "Administrar &instalación activa"
+                        ManageOfflineInstallationToolStripMenuItem.Text = "Administrar instalación &fuera de línea..."
                         SaveProjectToolStripMenuItem.Text = "&Guardar proyecto..."
                         SaveProjectasToolStripMenuItem.Text = "Guardar proyecto &como..."
                         ExitToolStripMenuItem.Text = "Sa&lir"
@@ -5175,6 +5177,7 @@ Public Class MainForm
                         NewProjectToolStripMenuItem.Text = "&Nouveau projet..."
                         OpenExistingProjectToolStripMenuItem.Text = "&Ouvrir un projet existant"
                         ManageOnlineInstallationToolStripMenuItem.Text = "&Gérer l'installation en ligne"
+                        ManageOfflineInstallationToolStripMenuItem.Text = "Gérer l'installation &hors ligne..."
                         SaveProjectToolStripMenuItem.Text = "&Sauvegarder le projet..."
                         SaveProjectasToolStripMenuItem.Text = "Sauvegarder le projet so&us..."
                         ExitToolStripMenuItem.Text = "Sor&tir"
@@ -5463,6 +5466,7 @@ Public Class MainForm
                 NewProjectToolStripMenuItem.Text = "&New project..."
                 OpenExistingProjectToolStripMenuItem.Text = "&Open existing project"
                 ManageOnlineInstallationToolStripMenuItem.Text = "&Manage online installation"
+                ManageOfflineInstallationToolStripMenuItem.Text = "Manage o&ffline installation..."
                 SaveProjectToolStripMenuItem.Text = "&Save project..."
                 SaveProjectasToolStripMenuItem.Text = "Save project &as..."
                 ExitToolStripMenuItem.Text = "E&xit"
@@ -5746,6 +5750,7 @@ Public Class MainForm
                 NewProjectToolStripMenuItem.Text = "&Nuevo proyecto..."
                 OpenExistingProjectToolStripMenuItem.Text = "&Abrir proyecto existente"
                 ManageOnlineInstallationToolStripMenuItem.Text = "Administrar &instalación activa"
+                ManageOfflineInstallationToolStripMenuItem.Text = "Administrar instalación &fuera de línea..."
                 SaveProjectToolStripMenuItem.Text = "&Guardar proyecto..."
                 SaveProjectasToolStripMenuItem.Text = "Guardar proyecto &como..."
                 ExitToolStripMenuItem.Text = "Sa&lir"
@@ -6028,6 +6033,7 @@ Public Class MainForm
                 NewProjectToolStripMenuItem.Text = "&Nouveau projet..."
                 OpenExistingProjectToolStripMenuItem.Text = "&Ouvrir un projet existant"
                 ManageOnlineInstallationToolStripMenuItem.Text = "&Gérer l'installation en ligne"
+                ManageOfflineInstallationToolStripMenuItem.Text = "Gérer l'installation &hors ligne..."
                 SaveProjectToolStripMenuItem.Text = "&Sauvegarder le projet..."
                 SaveProjectasToolStripMenuItem.Text = "Sauvegarder le projet so&us..."
                 ExitToolStripMenuItem.Text = "Sor&tir"
@@ -6996,7 +7002,7 @@ Public Class MainForm
             ProgressPanel.ShowDialog(Me)
             Exit Sub
         End If
-        If SaveProject Then
+        If SaveProject And Not (OnlineManagement Or OfflineManagement) Then
             SaveDTProj()
         End If
         If UnmountImg Then
@@ -7215,7 +7221,7 @@ Public Class MainForm
         TableLayoutPanel2.ColumnCount = 2
         TableLayoutPanel2.SetColumnSpan(Label5, 1)
         TableLayoutPanel2.SetColumnSpan(Label3, 1)
-        ManageOnlineInstallationToolStripMenuItem.Enabled = False
+        ManageOfflineInstallationToolStripMenuItem.Enabled = False
         MountDir = ImageDrive
         ImgBW.RunWorkerAsync()
         Exit Sub
@@ -7350,7 +7356,7 @@ Public Class MainForm
         TableLayoutPanel2.SetColumnSpan(Label5, 2)
         TableLayoutPanel2.SetColumnSpan(Label3, 2)
         BGProcDetails.Hide()
-        ManageOnlineInstallationToolStripMenuItem.Enabled = True
+        ManageOfflineInstallationToolStripMenuItem.Enabled = True
         Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
         PendingTasks = Enumerable.Repeat(True, PendingTasks.Count).ToArray()
         MountDir = ""
@@ -11703,6 +11709,21 @@ Public Class MainForm
         End If
         ActiveInstAccessWarn.Label2.Visible = False
         BeginOnlineManagement(Not showMessage)
+    End Sub
+
+    Private Sub ManageOfflineInstallationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageOfflineInstallationToolStripMenuItem.Click
+        If OfflineInstDriveLister.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If MountDir = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) Then
+                Exit Sub
+            End If
+            Dim drivePath As String = MountDir
+            If isProjectLoaded Then
+                UnloadDTProj(False, True, False)
+                If ImgBW.IsBusy Then Exit Sub
+            End If
+            If MountDir = "" Then MountDir = drivePath
+            BeginOfflineManagement(MountDir)
+        End If
     End Sub
 
     Private Sub UpdCheckupPanel_Paint(sender As Object, e As PaintEventArgs)
