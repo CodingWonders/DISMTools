@@ -7349,6 +7349,7 @@ Public Class MainForm
         TableLayoutPanel2.ColumnCount = 3
         TableLayoutPanel2.SetColumnSpan(Label5, 2)
         TableLayoutPanel2.SetColumnSpan(Label3, 2)
+        BGProcDetails.Hide()
         ManageOnlineInstallationToolStripMenuItem.Enabled = True
         Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
         PendingTasks = Enumerable.Repeat(True, PendingTasks.Count).ToArray()
@@ -7484,6 +7485,7 @@ Public Class MainForm
         TableLayoutPanel2.SetColumnSpan(Label5, 2)
         TableLayoutPanel2.SetColumnSpan(Label3, 2)
         ManageOnlineInstallationToolStripMenuItem.Enabled = True
+        BGProcDetails.Hide()
         Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
         PendingTasks = Enumerable.Repeat(True, PendingTasks.Count).ToArray()
         MountDir = ""
