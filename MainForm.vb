@@ -226,6 +226,8 @@ Public Class MainForm
 
     Dim NoMigration As Boolean                                           ' Set this variable to true ONLY if the IDE started the program
 
+    Public drivePath As String = ""
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -11713,16 +11715,14 @@ Public Class MainForm
 
     Private Sub ManageOfflineInstallationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageOfflineInstallationToolStripMenuItem.Click
         If OfflineInstDriveLister.ShowDialog() = Windows.Forms.DialogResult.OK Then
-            If MountDir = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) Then
+            If drivePath = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) Then
                 Exit Sub
             End If
-            Dim drivePath As String = MountDir
             If isProjectLoaded Then
                 UnloadDTProj(False, True, False)
                 If ImgBW.IsBusy Then Exit Sub
             End If
-            If MountDir = "" Then MountDir = drivePath
-            BeginOfflineManagement(MountDir)
+            BeginOfflineManagement(drivePath)
         End If
     End Sub
 
@@ -12150,12 +12150,12 @@ Public Class MainForm
 
     Private Sub OfflineInstMgmt_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles OfflineInstMgmt.LinkClicked
         If OfflineInstDriveLister.ShowDialog() = Windows.Forms.DialogResult.OK Then
-            If MountDir = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) Then
+            If drivePath = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) Then
                 ActiveInstAccessWarn.Label2.Visible = False
                 BeginOnlineManagement(True)
                 Exit Sub
             End If
-            BeginOfflineManagement(MountDir)
+            BeginOfflineManagement(drivePath)
         End If
     End Sub
 End Class
