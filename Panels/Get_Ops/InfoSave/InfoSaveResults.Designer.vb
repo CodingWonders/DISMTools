@@ -56,7 +56,6 @@ Partial Class InfoSaveResults
         'Button2
         '
         Me.Button2.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button2.Enabled = False
         Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button2.Location = New System.Drawing.Point(13, 526)
         Me.Button2.Name = "Button2"
