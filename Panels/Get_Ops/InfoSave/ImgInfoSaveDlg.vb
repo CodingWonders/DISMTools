@@ -1625,6 +1625,10 @@ Public Class ImgInfoSaveDlg
     End Sub
 
     Private Sub ImgInfoSaveDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If Not InfoSaveResults.IsDisposed Then
+            InfoSaveResults.Close()
+            InfoSaveResults.Dispose()
+        End If
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)
             ForeColor = Color.White
