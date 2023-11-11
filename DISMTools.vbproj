@@ -268,6 +268,12 @@
     <Compile Include="Panels\Get_Ops\InfoSave\ImgInfoSaveDlg.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Get_Ops\InfoSave\InfoSaveResults.Designer.vb">
+      <DependentUpon>InfoSaveResults.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\InfoSave\InfoSaveResults.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Get_Ops\Pkgs\GetPkgInfo.Designer.vb">
       <DependentUpon>GetPkgInfo.vb</DependentUpon>
     </Compile>
@@ -708,6 +714,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Get_Ops\InfoSave\ImgInfoSaveDlg.resx">
       <DependentUpon>ImgInfoSaveDlg.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Get_Ops\InfoSave\InfoSaveResults.resx">
+      <DependentUpon>InfoSaveResults.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Get_Ops\Pkgs\GetPkgInfo.resx">
       <DependentUpon>GetPkgInfo.vb</DependentUpon>

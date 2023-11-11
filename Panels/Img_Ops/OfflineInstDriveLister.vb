@@ -7,7 +7,7 @@ Public Class OfflineInstDriveLister
     Dim DIList As New List(Of DriveInfo)
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
-        MainForm.MountDir = ListView1.FocusedItem.SubItems(0).Text
+        MainForm.drivePath = ListView1.FocusedItem.SubItems(0).Text
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
     End Sub

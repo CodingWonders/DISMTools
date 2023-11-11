@@ -1,6 +1,16 @@
 <p align="center">
-  <img src="https://github.com/CodingWonders/DISMTools/assets/101426328/4c753c9a-1440-44cb-a742-04e71d077dff">
-  <h3 align="center">A free and open-source GUI for DISM operations</h3>
+	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/4c753c9a-1440-44cb-a742-04e71d077dff">
+	<h3 align="center">A free and open-source GUI for DISM operations</h3>
+</p>
+<hr>
+
+<!-- Tags (powered by Shields.io) -->
+
+<p align="center">
+	<img src="https://img.shields.io/github/downloads/CodingWonders/DISMTools/total" />
+	<a href="https://github.com/CodingWonders/DISMTools/releases/latest"><img src="https://img.shields.io/github/v/release/CodingWonders/DISMTools" /></a>
+	<a href="https://forums.mydigitallife.net/threads/dismtools.87263"><img src="https://img.shields.io/badge/MDL_Forums-blue" /></a>
+	<a href="https://reddit.com/r/DISMTools"><img src="https://img.shields.io/badge/Subreddit-orange?logo=reddit&logoColor=white" /></a>
 </p>
 <hr>
 
@@ -95,3 +105,7 @@ However, if you want to download the latest release AS SOON AS the project is bu
 ## Stay in touch
 
 Be sure to [follow our official subreddit](https://reddit.com/r/DISMTools) for release announcements and other cool stuff. Also, check out the [My Digital Life discussion](https://forums.mydigitallife.net/threads/discussion-dismtools.87263/) to know about features being worked on.
+
+## Contribute to the help system
+
+We want your help to build a great help system for DISMTools. If you want to contribute to it, you can read more [here](https://github.com/CodingWonders/dt_help).

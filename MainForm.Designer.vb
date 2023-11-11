@@ -30,6 +30,7 @@ Partial Class MainForm
         Me.OpenExistingProjectToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator26 = New System.Windows.Forms.ToolStripSeparator()
         Me.ManageOnlineInstallationToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ManageOfflineInstallationToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.SaveProjectToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SaveProjectasToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -177,6 +178,8 @@ Partial Class MainForm
         Me.AboutDISMToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator21 = New System.Windows.Forms.ToolStripSeparator()
         Me.ReportFeedbackToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator35 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ContributeToTheHelpSystemToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BranchTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.VersionTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.InvalidSettingsTSMI = New System.Windows.Forms.ToolStripMenuItem()
@@ -471,7 +474,7 @@ Partial Class MainForm
         '
         'FileToolStripMenuItem
         '
-        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewProjectToolStripMenuItem, Me.OpenExistingProjectToolStripMenuItem, Me.ToolStripSeparator26, Me.ManageOnlineInstallationToolStripMenuItem, Me.ToolStripSeparator1, Me.SaveProjectToolStripMenuItem, Me.SaveProjectasToolStripMenuItem, Me.ToolStripSeparator2, Me.ExitToolStripMenuItem})
+        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewProjectToolStripMenuItem, Me.OpenExistingProjectToolStripMenuItem, Me.ToolStripSeparator26, Me.ManageOnlineInstallationToolStripMenuItem, Me.ManageOfflineInstallationToolStripMenuItem, Me.ToolStripSeparator1, Me.SaveProjectToolStripMenuItem, Me.SaveProjectasToolStripMenuItem, Me.ToolStripSeparator2, Me.ExitToolStripMenuItem})
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
         Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
         Me.FileToolStripMenuItem.Text = "&File"
@@ -479,54 +482,60 @@ Partial Class MainForm
         'NewProjectToolStripMenuItem
         '
         Me.NewProjectToolStripMenuItem.Name = "NewProjectToolStripMenuItem"
-        Me.NewProjectToolStripMenuItem.Size = New System.Drawing.Size(214, 22)
+        Me.NewProjectToolStripMenuItem.Size = New System.Drawing.Size(224, 22)
         Me.NewProjectToolStripMenuItem.Text = "&New project..."
         '
         'OpenExistingProjectToolStripMenuItem
         '
         Me.OpenExistingProjectToolStripMenuItem.Name = "OpenExistingProjectToolStripMenuItem"
-        Me.OpenExistingProjectToolStripMenuItem.Size = New System.Drawing.Size(214, 22)
+        Me.OpenExistingProjectToolStripMenuItem.Size = New System.Drawing.Size(224, 22)
         Me.OpenExistingProjectToolStripMenuItem.Text = "&Open existing project"
         '
         'ToolStripSeparator26
         '
         Me.ToolStripSeparator26.Name = "ToolStripSeparator26"
-        Me.ToolStripSeparator26.Size = New System.Drawing.Size(211, 6)
+        Me.ToolStripSeparator26.Size = New System.Drawing.Size(221, 6)
         '
         'ManageOnlineInstallationToolStripMenuItem
         '
         Me.ManageOnlineInstallationToolStripMenuItem.Name = "ManageOnlineInstallationToolStripMenuItem"
-        Me.ManageOnlineInstallationToolStripMenuItem.Size = New System.Drawing.Size(214, 22)
+        Me.ManageOnlineInstallationToolStripMenuItem.Size = New System.Drawing.Size(224, 22)
         Me.ManageOnlineInstallationToolStripMenuItem.Text = "&Manage online installation"
+        '
+        'ManageOfflineInstallationToolStripMenuItem
+        '
+        Me.ManageOfflineInstallationToolStripMenuItem.Name = "ManageOfflineInstallationToolStripMenuItem"
+        Me.ManageOfflineInstallationToolStripMenuItem.Size = New System.Drawing.Size(224, 22)
+        Me.ManageOfflineInstallationToolStripMenuItem.Text = "Manage o&ffline installation..."
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(211, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(221, 6)
         '
         'SaveProjectToolStripMenuItem
         '
         Me.SaveProjectToolStripMenuItem.Enabled = False
         Me.SaveProjectToolStripMenuItem.Name = "SaveProjectToolStripMenuItem"
-        Me.SaveProjectToolStripMenuItem.Size = New System.Drawing.Size(214, 22)
+        Me.SaveProjectToolStripMenuItem.Size = New System.Drawing.Size(224, 22)
         Me.SaveProjectToolStripMenuItem.Text = "&Save project..."
         '
         'SaveProjectasToolStripMenuItem
         '
         Me.SaveProjectasToolStripMenuItem.Enabled = False
         Me.SaveProjectasToolStripMenuItem.Name = "SaveProjectasToolStripMenuItem"
-        Me.SaveProjectasToolStripMenuItem.Size = New System.Drawing.Size(214, 22)
+        Me.SaveProjectasToolStripMenuItem.Size = New System.Drawing.Size(224, 22)
         Me.SaveProjectasToolStripMenuItem.Text = "Save project &as..."
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(211, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(221, 6)
         '
         'ExitToolStripMenuItem
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(214, 22)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(224, 22)
         Me.ExitToolStripMenuItem.Text = "E&xit"
         '
         'ProjectToolStripMenuItem
@@ -1342,7 +1351,7 @@ Partial Class MainForm
         '
         'HelpToolStripMenuItem
         '
-        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HelpTopicsToolStripMenuItem, Me.GlossaryToolStripMenuItem, Me.CommandHelpToolStripMenuItem, Me.ToolStripSeparator10, Me.AboutDISMToolsToolStripMenuItem, Me.ToolStripSeparator21, Me.ReportFeedbackToolStripMenuItem})
+        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HelpTopicsToolStripMenuItem, Me.GlossaryToolStripMenuItem, Me.CommandHelpToolStripMenuItem, Me.ToolStripSeparator10, Me.AboutDISMToolsToolStripMenuItem, Me.ToolStripSeparator21, Me.ReportFeedbackToolStripMenuItem, Me.ToolStripSeparator35, Me.ContributeToTheHelpSystemToolStripMenuItem})
         Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
         Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
         Me.HelpToolStripMenuItem.Text = "&Help"
@@ -1389,6 +1398,17 @@ Partial Class MainForm
         Me.ReportFeedbackToolStripMenuItem.Name = "ReportFeedbackToolStripMenuItem"
         Me.ReportFeedbackToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
         Me.ReportFeedbackToolStripMenuItem.Text = "Report feedback (opens in web browser)"
+        '
+        'ToolStripSeparator35
+        '
+        Me.ToolStripSeparator35.Name = "ToolStripSeparator35"
+        Me.ToolStripSeparator35.Size = New System.Drawing.Size(283, 6)
+        '
+        'ContributeToTheHelpSystemToolStripMenuItem
+        '
+        Me.ContributeToTheHelpSystemToolStripMenuItem.Name = "ContributeToTheHelpSystemToolStripMenuItem"
+        Me.ContributeToTheHelpSystemToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
+        Me.ContributeToTheHelpSystemToolStripMenuItem.Text = "Contribute to the help system"
         '
         'BranchTSMI
         '
@@ -2327,7 +2347,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.44444!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.55556!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 158.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 161.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -2362,9 +2382,9 @@ Partial Class MainForm
         Me.LinkLabel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel1.Location = New System.Drawing.Point(62, 146)
+        Me.LinkLabel1.Location = New System.Drawing.Point(61, 146)
         Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(227, 254)
+        Me.LinkLabel1.Size = New System.Drawing.Size(228, 254)
         Me.LinkLabel1.TabIndex = 5
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "Click here to mount an image"
@@ -2374,9 +2394,9 @@ Partial Class MainForm
         Me.Panel8.Controls.Add(Me.projName)
         Me.Panel8.Controls.Add(Me.projNameText)
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel8.Location = New System.Drawing.Point(62, 3)
+        Me.Panel8.Location = New System.Drawing.Point(61, 3)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(68, 23)
+        Me.Panel8.Size = New System.Drawing.Size(66, 23)
         Me.Panel8.TabIndex = 8
         '
         'projName
@@ -2385,7 +2405,7 @@ Partial Class MainForm
         Me.projName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projName.Location = New System.Drawing.Point(0, 0)
         Me.projName.Name = "projName"
-        Me.projName.Size = New System.Drawing.Size(68, 23)
+        Me.projName.Size = New System.Drawing.Size(66, 23)
         Me.projName.TabIndex = 2
         Me.projName.Text = "projName"
         Me.projName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -2395,7 +2415,7 @@ Partial Class MainForm
         Me.projNameText.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projNameText.Location = New System.Drawing.Point(0, 0)
         Me.projNameText.Name = "projNameText"
-        Me.projNameText.Size = New System.Drawing.Size(68, 21)
+        Me.projNameText.Size = New System.Drawing.Size(66, 21)
         Me.projNameText.TabIndex = 4
         Me.projNameText.Text = "projName"
         Me.projNameText.Visible = False
@@ -2406,9 +2426,9 @@ Partial Class MainForm
         Me.Label5.AutoSize = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label5, 2)
         Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label5.Location = New System.Drawing.Point(62, 131)
+        Me.Label5.Location = New System.Drawing.Point(61, 131)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(227, 15)
+        Me.Label5.Size = New System.Drawing.Size(228, 15)
         Me.Label5.TabIndex = 2
         Me.Label5.Text = "imgStatus"
         '
@@ -2418,7 +2438,7 @@ Partial Class MainForm
         Me.Label2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label2.Location = New System.Drawing.Point(3, 29)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(53, 102)
+        Me.Label2.Size = New System.Drawing.Size(52, 102)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "Location:"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2428,9 +2448,9 @@ Partial Class MainForm
         Me.Label3.AutoEllipsis = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label3, 2)
         Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label3.Location = New System.Drawing.Point(62, 29)
+        Me.Label3.Location = New System.Drawing.Point(61, 29)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(227, 102)
+        Me.Label3.Size = New System.Drawing.Size(228, 102)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "projPath"
         '
@@ -2441,7 +2461,7 @@ Partial Class MainForm
         Me.Label4.Location = New System.Drawing.Point(3, 131)
         Me.Label4.Name = "Label4"
         Me.TableLayoutPanel2.SetRowSpan(Me.Label4, 2)
-        Me.Label4.Size = New System.Drawing.Size(53, 269)
+        Me.Label4.Size = New System.Drawing.Size(52, 269)
         Me.Label4.TabIndex = 1
         Me.Label4.Text = "Images mounted?"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2452,7 +2472,7 @@ Partial Class MainForm
         Me.Panel9.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel9.Location = New System.Drawing.Point(3, 3)
         Me.Panel9.Name = "Panel9"
-        Me.Panel9.Size = New System.Drawing.Size(53, 23)
+        Me.Panel9.Size = New System.Drawing.Size(52, 23)
         Me.Panel9.TabIndex = 9
         '
         'Label1
@@ -2460,7 +2480,7 @@ Partial Class MainForm
         Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label1.Location = New System.Drawing.Point(0, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(53, 23)
+        Me.Label1.Size = New System.Drawing.Size(52, 23)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Name:"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -3991,4 +4011,7 @@ Partial Class MainForm
     Friend WithEvents SaveImageInformationToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ImgInfoSFD As System.Windows.Forms.SaveFileDialog
     Friend WithEvents OfflineInstMgmt As System.Windows.Forms.LinkLabel
+    Friend WithEvents ManageOfflineInstallationToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator35 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents ContributeToTheHelpSystemToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class

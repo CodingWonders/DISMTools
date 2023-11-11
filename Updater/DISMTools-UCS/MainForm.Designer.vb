@@ -211,9 +211,9 @@ Partial Class MainForm
         Me.Label5.AutoSize = True
         Me.Label5.Location = New System.Drawing.Point(16, 16)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(328, 15)
+        Me.Label5.Size = New System.Drawing.Size(301, 15)
         Me.Label5.TabIndex = 0
-        Me.Label5.Text = "There is a new version available to download and installation:"
+        Me.Label5.Text = "There is a new version available to download and install:"
         '
         'Label4
         '
