@@ -1808,13 +1808,13 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''- Updated the managed DISM API package to version 3.0 to fix an issue where the sizes of capabilities could overflow and return negative values
+        '''- The background process details panel is now hidden when leaving the offline or online installation management modes
         '''
         '''New features
         '''
-        '''- Introduced offline installation management capabilities
-        '''- You can now specify multiple files in the file picker of the AppX package addition dialog, and can now perform multiple selections
-        '''- All Windows Update-related settings are now disabled when managing an active installation in Safe Mode (without networking support).
+        '''- You can now access the offline installation management mode from the File menu
+        '''- You will now see an image information report preview right after the generation process has been completed
+        '''- When performing feature enablement, component store repair, and capability addition operations to an active installation in Safe Mode, the progress panel will inform you [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
