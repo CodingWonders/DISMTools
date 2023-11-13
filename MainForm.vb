@@ -11784,12 +11784,14 @@ Public Class MainForm
         If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
-            For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
-                If MountedImageMountDirs(x) = MountDir Then
-                    ImgInfoSaveDlg.SourceImage = MountedImageImgFiles(x)
-                    Exit For
-                End If
-            Next
+            If MountedImageMountDirs.Count > 0 Then
+                For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
+                    If MountedImageMountDirs(x) = MountDir Then
+                        ImgInfoSaveDlg.SourceImage = MountedImageImgFiles(x)
+                        Exit For
+                    End If
+                Next
+            End If
             ImgInfoSaveDlg.ImgMountDir = If(Not OnlineManagement, MountDir, "")
             ImgInfoSaveDlg.OnlineMode = OnlineManagement
             ImgInfoSaveDlg.AllDrivers = AllDrivers
