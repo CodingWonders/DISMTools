@@ -1608,7 +1608,8 @@ Public Class ImgInfoSaveDlg
                     End Select
                     ReportChanges(msg, 75)
                     regKey = Registry.LocalMachine.OpenSubKey("PE_SYS\ControlSet001\Services\FBWF", False)
-                    Contents &= "  - Scratch space: " & regKey.GetValue("WinPECacheThreshold", "could not get value").ToString() & " MB" & CrLf & CrLf
+                    Dim scSize As String = regKey.GetValue("WinPECacheThreshold", "").ToString()
+                    Contents &= "  - Scratch space: " & If(Not scSize = "", scSize & " MB", "could not get value") & CrLf & CrLf
                     regKey.Close()
                 Catch ex As Exception
 

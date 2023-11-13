@@ -80,7 +80,8 @@ Public Class GetWinPESettings
                 Label5.Text = regKey.GetValue("InstRoot", msg).ToString()
                 regKey.Close()
                 regKey = Registry.LocalMachine.OpenSubKey("PE_SYS\ControlSet001\Services\FBWF", False)
-                Label6.Text = regKey.GetValue("WinPECacheThreshold", msg).ToString() & " MB"
+                Dim scSize As String = regKey.GetValue("WinPECacheThreshold","").ToString()
+                Label6.Text = If(Not scSize = "", scSize & " MB", msg)
                 regKey.Close()
             Catch ex As Exception
 
