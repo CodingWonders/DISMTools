@@ -29,6 +29,7 @@ Public Class ImgInfoSaveDlg
     Public ImgMountDir As String
 
     Public OnlineMode As Boolean
+    Public OfflineMode As Boolean
 
     Public AllDrivers As Boolean
 
@@ -60,6 +61,11 @@ Public Class ImgInfoSaveDlg
                         "    - Name: " & My.Computer.Info.OSFullName & CrLf & _
                         "    - Boot point (mount point): " & Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & CrLf & _
                         "    - Version: " & Environment.OSVersion.Version.Major & "." & Environment.OSVersion.Version.Minor & "." & Environment.OSVersion.Version.Build & "." & FileVersionInfo.GetVersionInfo(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe").ProductPrivatePart & CrLf & CrLf
+            Exit Sub
+        ElseIf OfflineMode Then
+            Contents &= "  Offline installation information:" & CrLf & _
+                        "    - Boot point (mount point): " & ImgMountDir & CrLf & _
+                        "    - Version: " & FileVersionInfo.GetVersionInfo(ImgMountDir & "\Windows\system32\ntoskrnl.exe").ProductVersion.ToString() & CrLf & CrLf
             Exit Sub
         End If
         Contents &= " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "")
@@ -1769,6 +1775,8 @@ Public Class ImgInfoSaveDlg
                    "====================================================================" & CrLf & CrLf & _
                    " - Processes started at: " & Date.Now & CrLf & _
                    " - Report file target: " & Quote & SaveTarget & Quote & CrLf
+
+        If OfflineMode Then SourceImage = ImgMountDir
 
         ' Begin performing operations
         Select Case SaveTask
