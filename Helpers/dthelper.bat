@@ -33,6 +33,11 @@ if "%1%"=="/sh" (
 
 :dt_wmic
 cls
+
+:: Show deprecation notice
+echo This function is deprecated and has been replaced by native WMI commands.
+echo You can still access this function, but it will be removed in the future.
+
 echo Getting drive information. Please wait...
 if exist .\wmic (
 	del .\wmic

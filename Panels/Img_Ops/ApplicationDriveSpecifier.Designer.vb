@@ -29,6 +29,11 @@ Partial Class ApplicationDriveSpecifier
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Button2 = New System.Windows.Forms.Button()
+        Me.ListView1 = New System.Windows.Forms.ListView()
+        Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader4 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.TableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -89,6 +94,7 @@ Partial Class ApplicationDriveSpecifier
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBox1.Location = New System.Drawing.Point(235, 369)
         Me.TextBox1.Name = "TextBox1"
+        Me.TextBox1.ReadOnly = True
         Me.TextBox1.Size = New System.Drawing.Size(616, 21)
         Me.TextBox1.TabIndex = 3
         Me.TextBox1.Text = "\\.\"
@@ -112,6 +118,40 @@ Partial Class ApplicationDriveSpecifier
         Me.Button2.Text = "Refresh"
         Me.Button2.UseVisualStyleBackColor = True
         '
+        'ListView1
+        '
+        Me.ListView1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3, Me.ColumnHeader4})
+        Me.ListView1.FullRowSelect = True
+        Me.ListView1.Location = New System.Drawing.Point(13, 13)
+        Me.ListView1.Name = "ListView1"
+        Me.ListView1.Size = New System.Drawing.Size(919, 349)
+        Me.ListView1.TabIndex = 5
+        Me.ListView1.UseCompatibleStateImageBehavior = False
+        Me.ListView1.View = System.Windows.Forms.View.Details
+        '
+        'ColumnHeader1
+        '
+        Me.ColumnHeader1.Text = "Device ID"
+        Me.ColumnHeader1.Width = 246
+        '
+        'ColumnHeader2
+        '
+        Me.ColumnHeader2.Text = "Model"
+        Me.ColumnHeader2.Width = 347
+        '
+        'ColumnHeader3
+        '
+        Me.ColumnHeader3.Text = "Partitions"
+        Me.ColumnHeader3.Width = 127
+        '
+        'ColumnHeader4
+        '
+        Me.ColumnHeader4.Text = "Size"
+        Me.ColumnHeader4.Width = 179
+        '
         'ApplicationDriveSpecifier
         '
         Me.AcceptButton = Me.OK_Button
@@ -119,6 +159,7 @@ Partial Class ApplicationDriveSpecifier
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(944, 441)
+        Me.Controls.Add(Me.ListView1)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.TextBox1)
         Me.Controls.Add(Me.Label2)
@@ -144,5 +185,10 @@ Partial Class ApplicationDriveSpecifier
     Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents ListView1 As System.Windows.Forms.ListView
+    Friend WithEvents ColumnHeader1 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader2 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader3 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader4 As System.Windows.Forms.ColumnHeader
 
 End Class
