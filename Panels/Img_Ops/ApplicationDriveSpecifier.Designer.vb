@@ -86,6 +86,7 @@ Partial Class ApplicationDriveSpecifier
         Me.RichTextBox1.Size = New System.Drawing.Size(919, 350)
         Me.RichTextBox1.TabIndex = 1
         Me.RichTextBox1.Text = ""
+        Me.RichTextBox1.Visible = False
         Me.RichTextBox1.WordWrap = False
         '
         'TextBox1
