@@ -1822,6 +1822,27 @@ Public Class ImgInfoSaveDlg
         Contents &= " - Processes ended at: " & Date.Now & CrLf & CrLf & _
                     "                  We have ended. Have a nice day!"
 
+        ' Inform user that we are saving the file
+        Dim saveMsg As String = ""
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        saveMsg = "Saving contents..."
+                    Case "ESN"
+                        saveMsg = "Guardando contenidos..."
+                    Case "FRA"
+                        saveMsg = "Sauvegarde des contenus en cours..."
+                End Select
+            Case 1
+                saveMsg = "Saving contents..."
+            Case 2
+                saveMsg = "Guardando contenidos..."
+            Case 3
+                saveMsg = "Sauvegarde des contenus en cours..."
+        End Select
+        ReportChanges(saveMsg, ProgressBar1.Maximum)
+
         ' Save the file
         If Contents <> "" And File.Exists(SaveTarget) Then File.WriteAllText(SaveTarget, Contents, UTF8)
         If Debugger.IsAttached Then Process.Start(SaveTarget) Else InfoSaveResults.Show()
