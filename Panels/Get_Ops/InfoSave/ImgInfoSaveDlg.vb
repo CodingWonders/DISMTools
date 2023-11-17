@@ -1501,7 +1501,7 @@ Public Class ImgInfoSaveDlg
                                     Case 3
                                         msg = "Obtention des informations des matériels cibles en cours... (cible " & drvInfoCollection.IndexOf(hwTarget) + 1 & " de " & drvInfoCollection.Count & ")"
                                 End Select
-                                ReportChanges(msg, (DriverPkgs.IndexOf(drvPkg) / DriverPkgs.Count) * 100)
+                                ReportChanges(msg, (DriverPkgs.IndexOf(drvPkg) / DriverPkgs.Count) * 100 + (drvInfoCollection.IndexOf(hwTarget) + 1) / drvInfoCollection.Count * 100 / DriverPkgs.Count)
                                 Contents &= "      - Hardware description: " & hwTarget.HardwareDescription & CrLf & _
                                             "      - Hardware ID: " & hwTarget.HardwareId & CrLf & _
                                             "      - Additional IDs:" & CrLf & _
