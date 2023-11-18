@@ -4282,6 +4282,7 @@ Public Class MainForm
                         Next
                         InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph_dark)
                         BranchTSMI.Image = New Bitmap(My.Resources.branch_dark)
+                        FlowLayoutPanel1.BackColor = Color.FromArgb(48, 48, 48)
                     ElseIf ColorMode = "1" Then
                         If IsWindowsVersionOrGreater(10, 0, 18362) Then EnableDarkTitleBar(Handle, False)
                         BackColor = Color.FromArgb(239, 239, 242)
@@ -4395,6 +4396,7 @@ Public Class MainForm
                         Next
                         InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph)
                         BranchTSMI.Image = New Bitmap(My.Resources.branch)
+                        FlowLayoutPanel1.BackColor = Color.FromArgb(239, 239, 242)
                     End If
                 Catch ex As Exception
                     ChangePrgColors(1)
@@ -4512,6 +4514,7 @@ Public Class MainForm
                 Next
                 InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph)
                 BranchTSMI.Image = New Bitmap(My.Resources.branch)
+                FlowLayoutPanel1.BackColor = Color.FromArgb(239, 239, 242)
             Case 2
                 If IsWindowsVersionOrGreater(10, 0, 18362) Then EnableDarkTitleBar(Handle, True)
                 BackColor = Color.FromArgb(48, 48, 48)
@@ -4625,6 +4628,7 @@ Public Class MainForm
                 Next
                 InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph_dark)
                 BranchTSMI.Image = New Bitmap(My.Resources.branch_dark)
+                FlowLayoutPanel1.BackColor = Color.FromArgb(48, 48, 48)
         End Select
     End Sub
 

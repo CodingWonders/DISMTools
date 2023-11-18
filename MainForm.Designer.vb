@@ -255,6 +255,27 @@ Partial Class MainForm
         Me.PrjPanel = New System.Windows.Forms.Panel()
         Me.ProjectView = New System.Windows.Forms.Panel()
         Me.Panel11 = New System.Windows.Forms.Panel()
+        Me.FlowLayoutPanel1 = New System.Windows.Forms.FlowLayoutPanel()
+        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
+        Me.Button24 = New System.Windows.Forms.Button()
+        Me.Button31 = New System.Windows.Forms.Button()
+        Me.Button30 = New System.Windows.Forms.Button()
+        Me.Button33 = New System.Windows.Forms.Button()
+        Me.Button32 = New System.Windows.Forms.Button()
+        Me.Button26 = New System.Windows.Forms.Button()
+        Me.Button25 = New System.Windows.Forms.Button()
+        Me.Button29 = New System.Windows.Forms.Button()
+        Me.Button28 = New System.Windows.Forms.Button()
+        Me.Button27 = New System.Windows.Forms.Button()
+        Me.GroupBox5 = New System.Windows.Forms.GroupBox()
+        Me.Button35 = New System.Windows.Forms.Button()
+        Me.Button34 = New System.Windows.Forms.Button()
+        Me.Button36 = New System.Windows.Forms.Button()
+        Me.GroupBox6 = New System.Windows.Forms.GroupBox()
+        Me.GroupBox7 = New System.Windows.Forms.GroupBox()
+        Me.GroupBox8 = New System.Windows.Forms.GroupBox()
+        Me.GroupBox9 = New System.Windows.Forms.GroupBox()
+        Me.GroupBox10 = New System.Windows.Forms.GroupBox()
         Me.Button20 = New System.Windows.Forms.Button()
         Me.ProjectSidePanel = New System.Windows.Forms.Panel()
         Me.ProjectSidePanelContainer = New System.Windows.Forms.Panel()
@@ -440,6 +461,29 @@ Partial Class MainForm
         Me.MicrosoftStoreGenerationProjectToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ImgInfoSFD = New System.Windows.Forms.SaveFileDialog()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
+        Me.Button37 = New System.Windows.Forms.Button()
+        Me.Button38 = New System.Windows.Forms.Button()
+        Me.Button39 = New System.Windows.Forms.Button()
+        Me.Button40 = New System.Windows.Forms.Button()
+        Me.Button41 = New System.Windows.Forms.Button()
+        Me.Button42 = New System.Windows.Forms.Button()
+        Me.Button43 = New System.Windows.Forms.Button()
+        Me.Button44 = New System.Windows.Forms.Button()
+        Me.Button45 = New System.Windows.Forms.Button()
+        Me.Button46 = New System.Windows.Forms.Button()
+        Me.SpaceLabel = New System.Windows.Forms.Label()
+        Me.Button47 = New System.Windows.Forms.Button()
+        Me.Button48 = New System.Windows.Forms.Button()
+        Me.Button49 = New System.Windows.Forms.Button()
+        Me.Button50 = New System.Windows.Forms.Button()
+        Me.Button51 = New System.Windows.Forms.Button()
+        Me.Button52 = New System.Windows.Forms.Button()
+        Me.Button53 = New System.Windows.Forms.Button()
+        Me.Button54 = New System.Windows.Forms.Button()
+        Me.Button55 = New System.Windows.Forms.Button()
+        Me.Button56 = New System.Windows.Forms.Button()
+        Me.Button57 = New System.Windows.Forms.Button()
+        Me.Button58 = New System.Windows.Forms.Button()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -467,6 +511,14 @@ Partial Class MainForm
         Me.PrjPanel.SuspendLayout()
         Me.ProjectView.SuspendLayout()
         Me.Panel11.SuspendLayout()
+        Me.FlowLayoutPanel1.SuspendLayout()
+        Me.GroupBox4.SuspendLayout()
+        Me.GroupBox5.SuspendLayout()
+        Me.GroupBox6.SuspendLayout()
+        Me.GroupBox7.SuspendLayout()
+        Me.GroupBox8.SuspendLayout()
+        Me.GroupBox9.SuspendLayout()
+        Me.GroupBox10.SuspendLayout()
         Me.ProjectSidePanel.SuspendLayout()
         Me.ProjectSidePanelContainer.SuspendLayout()
         Me.SidePanel_ProjectView.SuspendLayout()
@@ -2282,18 +2334,279 @@ Partial Class MainForm
         '
         'Panel11
         '
-        Me.Panel11.Controls.Add(Me.Button20)
+        Me.Panel11.Controls.Add(Me.FlowLayoutPanel1)
         Me.Panel11.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel11.Location = New System.Drawing.Point(300, 48)
         Me.Panel11.Name = "Panel11"
         Me.Panel11.Size = New System.Drawing.Size(708, 558)
         Me.Panel11.TabIndex = 2
         '
+        'FlowLayoutPanel1
+        '
+        Me.FlowLayoutPanel1.AutoScroll = True
+        Me.FlowLayoutPanel1.BackColor = System.Drawing.SystemColors.Control
+        Me.FlowLayoutPanel1.Controls.Add(Me.GroupBox4)
+        Me.FlowLayoutPanel1.Controls.Add(Me.GroupBox5)
+        Me.FlowLayoutPanel1.Controls.Add(Me.GroupBox6)
+        Me.FlowLayoutPanel1.Controls.Add(Me.GroupBox7)
+        Me.FlowLayoutPanel1.Controls.Add(Me.GroupBox8)
+        Me.FlowLayoutPanel1.Controls.Add(Me.GroupBox9)
+        Me.FlowLayoutPanel1.Controls.Add(Me.GroupBox10)
+        Me.FlowLayoutPanel1.Controls.Add(Me.Button20)
+        Me.FlowLayoutPanel1.Controls.Add(Me.SpaceLabel)
+        Me.FlowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FlowLayoutPanel1.ForeColor = System.Drawing.Color.Black
+        Me.FlowLayoutPanel1.Location = New System.Drawing.Point(0, 0)
+        Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
+        Me.FlowLayoutPanel1.Padding = New System.Windows.Forms.Padding(8)
+        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(708, 558)
+        Me.FlowLayoutPanel1.TabIndex = 1
+        '
+        'GroupBox4
+        '
+        Me.GroupBox4.Controls.Add(Me.Button24)
+        Me.GroupBox4.Controls.Add(Me.Button31)
+        Me.GroupBox4.Controls.Add(Me.Button30)
+        Me.GroupBox4.Controls.Add(Me.Button33)
+        Me.GroupBox4.Controls.Add(Me.Button32)
+        Me.GroupBox4.Controls.Add(Me.Button26)
+        Me.GroupBox4.Controls.Add(Me.Button25)
+        Me.GroupBox4.Controls.Add(Me.Button29)
+        Me.GroupBox4.Controls.Add(Me.Button28)
+        Me.GroupBox4.Controls.Add(Me.Button27)
+        Me.GroupBox4.Location = New System.Drawing.Point(11, 11)
+        Me.GroupBox4.Name = "GroupBox4"
+        Me.GroupBox4.Size = New System.Drawing.Size(666, 230)
+        Me.GroupBox4.TabIndex = 0
+        Me.GroupBox4.TabStop = False
+        Me.GroupBox4.Text = "Image operations"
+        '
+        'Button24
+        '
+        Me.Button24.Image = CType(resources.GetObject("Button24.Image"), System.Drawing.Image)
+        Me.Button24.Location = New System.Drawing.Point(336, 89)
+        Me.Button24.Name = "Button24"
+        Me.Button24.Size = New System.Drawing.Size(324, 63)
+        Me.Button24.TabIndex = 1
+        Me.Button24.Text = "Switch image indexes..."
+        Me.Button24.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button24.UseVisualStyleBackColor = True
+        '
+        'Button31
+        '
+        Me.Button31.Image = Global.DISMTools.My.Resources.Resources.capture_img
+        Me.Button31.Location = New System.Drawing.Point(171, 158)
+        Me.Button31.Name = "Button31"
+        Me.Button31.Size = New System.Drawing.Size(159, 63)
+        Me.Button31.TabIndex = 1
+        Me.Button31.Text = "Capture image..."
+        Me.Button31.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button31.UseVisualStyleBackColor = True
+        '
+        'Button30
+        '
+        Me.Button30.Image = Global.DISMTools.My.Resources.Resources.apply_img
+        Me.Button30.Location = New System.Drawing.Point(6, 158)
+        Me.Button30.Name = "Button30"
+        Me.Button30.Size = New System.Drawing.Size(159, 63)
+        Me.Button30.TabIndex = 1
+        Me.Button30.Text = "Apply image..."
+        Me.Button30.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button30.UseVisualStyleBackColor = True
+        '
+        'Button33
+        '
+        Me.Button33.Location = New System.Drawing.Point(501, 158)
+        Me.Button33.Name = "Button33"
+        Me.Button33.Size = New System.Drawing.Size(159, 63)
+        Me.Button33.TabIndex = 1
+        Me.Button33.Text = "Save complete image information..."
+        Me.Button33.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button33.UseVisualStyleBackColor = True
+        '
+        'Button32
+        '
+        Me.Button32.Image = Global.DISMTools.My.Resources.Resources.delete_imgindex
+        Me.Button32.Location = New System.Drawing.Point(336, 158)
+        Me.Button32.Name = "Button32"
+        Me.Button32.Size = New System.Drawing.Size(159, 63)
+        Me.Button32.TabIndex = 1
+        Me.Button32.Text = "Remove volume images..."
+        Me.Button32.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button32.UseVisualStyleBackColor = True
+        '
+        'Button26
+        '
+        Me.Button26.Image = CType(resources.GetObject("Button26.Image"), System.Drawing.Image)
+        Me.Button26.Location = New System.Drawing.Point(6, 20)
+        Me.Button26.Name = "Button26"
+        Me.Button26.Size = New System.Drawing.Size(159, 63)
+        Me.Button26.TabIndex = 1
+        Me.Button26.Text = "Mount image..."
+        Me.Button26.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button26.UseVisualStyleBackColor = True
+        '
+        'Button25
+        '
+        Me.Button25.Image = CType(resources.GetObject("Button25.Image"), System.Drawing.Image)
+        Me.Button25.Location = New System.Drawing.Point(6, 89)
+        Me.Button25.Name = "Button25"
+        Me.Button25.Size = New System.Drawing.Size(324, 63)
+        Me.Button25.TabIndex = 1
+        Me.Button25.Text = "Reload servicing session..."
+        Me.Button25.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button25.UseVisualStyleBackColor = True
+        '
+        'Button29
+        '
+        Me.Button29.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button29.Location = New System.Drawing.Point(336, 54)
+        Me.Button29.Name = "Button29"
+        Me.Button29.Size = New System.Drawing.Size(324, 28)
+        Me.Button29.TabIndex = 1
+        Me.Button29.Text = "Unmount image discarding changes"
+        Me.Button29.UseVisualStyleBackColor = True
+        '
+        'Button28
+        '
+        Me.Button28.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button28.Location = New System.Drawing.Point(336, 20)
+        Me.Button28.Name = "Button28"
+        Me.Button28.Size = New System.Drawing.Size(324, 28)
+        Me.Button28.TabIndex = 1
+        Me.Button28.Text = "Commit and unmount image"
+        Me.Button28.UseVisualStyleBackColor = True
+        '
+        'Button27
+        '
+        Me.Button27.Image = CType(resources.GetObject("Button27.Image"), System.Drawing.Image)
+        Me.Button27.Location = New System.Drawing.Point(171, 20)
+        Me.Button27.Name = "Button27"
+        Me.Button27.Size = New System.Drawing.Size(159, 63)
+        Me.Button27.TabIndex = 1
+        Me.Button27.Text = "Commit current changes"
+        Me.Button27.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button27.UseVisualStyleBackColor = True
+        '
+        'GroupBox5
+        '
+        Me.GroupBox5.Controls.Add(Me.Button38)
+        Me.GroupBox5.Controls.Add(Me.Button35)
+        Me.GroupBox5.Controls.Add(Me.Button37)
+        Me.GroupBox5.Controls.Add(Me.Button34)
+        Me.GroupBox5.Controls.Add(Me.Button36)
+        Me.GroupBox5.Location = New System.Drawing.Point(11, 247)
+        Me.GroupBox5.Name = "GroupBox5"
+        Me.GroupBox5.Size = New System.Drawing.Size(666, 164)
+        Me.GroupBox5.TabIndex = 0
+        Me.GroupBox5.TabStop = False
+        Me.GroupBox5.Text = "Package operations"
+        '
+        'Button35
+        '
+        Me.Button35.Image = CType(resources.GetObject("Button35.Image"), System.Drawing.Image)
+        Me.Button35.Location = New System.Drawing.Point(6, 91)
+        Me.Button35.Name = "Button35"
+        Me.Button35.Size = New System.Drawing.Size(324, 63)
+        Me.Button35.TabIndex = 1
+        Me.Button35.Text = "Remove package..."
+        Me.Button35.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button35.UseVisualStyleBackColor = True
+        '
+        'Button34
+        '
+        Me.Button34.Image = CType(resources.GetObject("Button34.Image"), System.Drawing.Image)
+        Me.Button34.Location = New System.Drawing.Point(226, 20)
+        Me.Button34.Name = "Button34"
+        Me.Button34.Size = New System.Drawing.Size(214, 63)
+        Me.Button34.TabIndex = 1
+        Me.Button34.Text = "Get package information..."
+        Me.Button34.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button34.UseVisualStyleBackColor = True
+        '
+        'Button36
+        '
+        Me.Button36.Image = CType(resources.GetObject("Button36.Image"), System.Drawing.Image)
+        Me.Button36.Location = New System.Drawing.Point(6, 20)
+        Me.Button36.Name = "Button36"
+        Me.Button36.Size = New System.Drawing.Size(214, 63)
+        Me.Button36.TabIndex = 1
+        Me.Button36.Text = "Add package..."
+        Me.Button36.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button36.UseVisualStyleBackColor = True
+        '
+        'GroupBox6
+        '
+        Me.GroupBox6.Controls.Add(Me.Button42)
+        Me.GroupBox6.Controls.Add(Me.Button39)
+        Me.GroupBox6.Controls.Add(Me.Button41)
+        Me.GroupBox6.Controls.Add(Me.Button40)
+        Me.GroupBox6.Location = New System.Drawing.Point(11, 417)
+        Me.GroupBox6.Name = "GroupBox6"
+        Me.GroupBox6.Size = New System.Drawing.Size(666, 93)
+        Me.GroupBox6.TabIndex = 0
+        Me.GroupBox6.TabStop = False
+        Me.GroupBox6.Text = "Feature operations"
+        '
+        'GroupBox7
+        '
+        Me.GroupBox7.Controls.Add(Me.Button46)
+        Me.GroupBox7.Controls.Add(Me.Button44)
+        Me.GroupBox7.Controls.Add(Me.Button45)
+        Me.GroupBox7.Controls.Add(Me.Button43)
+        Me.GroupBox7.Location = New System.Drawing.Point(11, 516)
+        Me.GroupBox7.Name = "GroupBox7"
+        Me.GroupBox7.Size = New System.Drawing.Size(666, 93)
+        Me.GroupBox7.TabIndex = 0
+        Me.GroupBox7.TabStop = False
+        Me.GroupBox7.Text = "AppX package operations"
+        '
+        'GroupBox8
+        '
+        Me.GroupBox8.Controls.Add(Me.Button50)
+        Me.GroupBox8.Controls.Add(Me.Button48)
+        Me.GroupBox8.Controls.Add(Me.Button49)
+        Me.GroupBox8.Controls.Add(Me.Button47)
+        Me.GroupBox8.Location = New System.Drawing.Point(11, 615)
+        Me.GroupBox8.Name = "GroupBox8"
+        Me.GroupBox8.Size = New System.Drawing.Size(666, 93)
+        Me.GroupBox8.TabIndex = 0
+        Me.GroupBox8.TabStop = False
+        Me.GroupBox8.Text = "Capability operations"
+        '
+        'GroupBox9
+        '
+        Me.GroupBox9.Controls.Add(Me.Button54)
+        Me.GroupBox9.Controls.Add(Me.Button53)
+        Me.GroupBox9.Controls.Add(Me.Button51)
+        Me.GroupBox9.Controls.Add(Me.Button52)
+        Me.GroupBox9.Location = New System.Drawing.Point(11, 714)
+        Me.GroupBox9.Name = "GroupBox9"
+        Me.GroupBox9.Size = New System.Drawing.Size(666, 93)
+        Me.GroupBox9.TabIndex = 0
+        Me.GroupBox9.TabStop = False
+        Me.GroupBox9.Text = "Driver operations"
+        '
+        'GroupBox10
+        '
+        Me.GroupBox10.Controls.Add(Me.Button58)
+        Me.GroupBox10.Controls.Add(Me.Button57)
+        Me.GroupBox10.Controls.Add(Me.Button56)
+        Me.GroupBox10.Controls.Add(Me.Button55)
+        Me.GroupBox10.Location = New System.Drawing.Point(11, 813)
+        Me.GroupBox10.Name = "GroupBox10"
+        Me.GroupBox10.Size = New System.Drawing.Size(666, 53)
+        Me.GroupBox10.TabIndex = 0
+        Me.GroupBox10.TabStop = False
+        Me.GroupBox10.Text = "Windows PE operations"
+        '
         'Button20
         '
         Me.Button20.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Button20.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button20.Location = New System.Drawing.Point(214, 268)
+        Me.Button20.Location = New System.Drawing.Point(11, 872)
         Me.Button20.Name = "Button20"
         Me.Button20.Size = New System.Drawing.Size(281, 23)
         Me.Button20.TabIndex = 0
@@ -2864,7 +3177,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.44444!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.55556!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 164.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 166.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -2899,9 +3212,9 @@ Partial Class MainForm
         Me.LinkLabel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel1.Location = New System.Drawing.Point(59, 146)
+        Me.LinkLabel1.Location = New System.Drawing.Point(58, 146)
         Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(230, 254)
+        Me.LinkLabel1.Size = New System.Drawing.Size(231, 254)
         Me.LinkLabel1.TabIndex = 5
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "Click here to mount an image"
@@ -2911,9 +3224,9 @@ Partial Class MainForm
         Me.Panel8.Controls.Add(Me.projName)
         Me.Panel8.Controls.Add(Me.projNameText)
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel8.Location = New System.Drawing.Point(59, 3)
+        Me.Panel8.Location = New System.Drawing.Point(58, 3)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(65, 23)
+        Me.Panel8.Size = New System.Drawing.Size(64, 23)
         Me.Panel8.TabIndex = 8
         '
         'projName
@@ -2922,7 +3235,7 @@ Partial Class MainForm
         Me.projName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projName.Location = New System.Drawing.Point(0, 0)
         Me.projName.Name = "projName"
-        Me.projName.Size = New System.Drawing.Size(65, 23)
+        Me.projName.Size = New System.Drawing.Size(64, 23)
         Me.projName.TabIndex = 2
         Me.projName.Text = "projName"
         Me.projName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -2932,7 +3245,7 @@ Partial Class MainForm
         Me.projNameText.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projNameText.Location = New System.Drawing.Point(0, 0)
         Me.projNameText.Name = "projNameText"
-        Me.projNameText.Size = New System.Drawing.Size(65, 21)
+        Me.projNameText.Size = New System.Drawing.Size(64, 21)
         Me.projNameText.TabIndex = 4
         Me.projNameText.Text = "projName"
         Me.projNameText.Visible = False
@@ -2943,9 +3256,9 @@ Partial Class MainForm
         Me.Label5.AutoSize = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label5, 2)
         Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label5.Location = New System.Drawing.Point(59, 131)
+        Me.Label5.Location = New System.Drawing.Point(58, 131)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(230, 15)
+        Me.Label5.Size = New System.Drawing.Size(231, 15)
         Me.Label5.TabIndex = 2
         Me.Label5.Text = "imgStatus"
         '
@@ -2955,7 +3268,7 @@ Partial Class MainForm
         Me.Label2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label2.Location = New System.Drawing.Point(3, 29)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(50, 102)
+        Me.Label2.Size = New System.Drawing.Size(49, 102)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "Location:"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2965,9 +3278,9 @@ Partial Class MainForm
         Me.Label3.AutoEllipsis = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label3, 2)
         Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label3.Location = New System.Drawing.Point(59, 29)
+        Me.Label3.Location = New System.Drawing.Point(58, 29)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(230, 102)
+        Me.Label3.Size = New System.Drawing.Size(231, 102)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "projPath"
         '
@@ -2978,7 +3291,7 @@ Partial Class MainForm
         Me.Label4.Location = New System.Drawing.Point(3, 131)
         Me.Label4.Name = "Label4"
         Me.TableLayoutPanel2.SetRowSpan(Me.Label4, 2)
-        Me.Label4.Size = New System.Drawing.Size(50, 269)
+        Me.Label4.Size = New System.Drawing.Size(49, 269)
         Me.Label4.TabIndex = 1
         Me.Label4.Text = "Images mounted?"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -2989,7 +3302,7 @@ Partial Class MainForm
         Me.Panel9.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel9.Location = New System.Drawing.Point(3, 3)
         Me.Panel9.Name = "Panel9"
-        Me.Panel9.Size = New System.Drawing.Size(50, 23)
+        Me.Panel9.Size = New System.Drawing.Size(49, 23)
         Me.Panel9.TabIndex = 9
         '
         'Label1
@@ -2997,7 +3310,7 @@ Partial Class MainForm
         Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label1.Location = New System.Drawing.Point(0, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(50, 23)
+        Me.Label1.Size = New System.Drawing.Size(49, 23)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Name:"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -4073,6 +4386,257 @@ Partial Class MainForm
         '
         Me.Timer1.Interval = 1
         '
+        'Button37
+        '
+        Me.Button37.Image = Global.DISMTools.My.Resources.Resources.cleanup_img
+        Me.Button37.Location = New System.Drawing.Point(336, 91)
+        Me.Button37.Name = "Button37"
+        Me.Button37.Size = New System.Drawing.Size(324, 63)
+        Me.Button37.TabIndex = 1
+        Me.Button37.Text = "Perform image cleanup and/or repair operations..."
+        Me.Button37.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button37.UseVisualStyleBackColor = True
+        '
+        'Button38
+        '
+        Me.Button38.Location = New System.Drawing.Point(446, 20)
+        Me.Button38.Name = "Button38"
+        Me.Button38.Size = New System.Drawing.Size(214, 63)
+        Me.Button38.TabIndex = 1
+        Me.Button38.Text = "Save installed package information..."
+        Me.Button38.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button38.UseVisualStyleBackColor = True
+        '
+        'Button39
+        '
+        Me.Button39.Image = CType(resources.GetObject("Button39.Image"), System.Drawing.Image)
+        Me.Button39.Location = New System.Drawing.Point(171, 20)
+        Me.Button39.Name = "Button39"
+        Me.Button39.Size = New System.Drawing.Size(159, 63)
+        Me.Button39.TabIndex = 1
+        Me.Button39.Text = "Get feature information..."
+        Me.Button39.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button39.UseVisualStyleBackColor = True
+        '
+        'Button40
+        '
+        Me.Button40.Image = CType(resources.GetObject("Button40.Image"), System.Drawing.Image)
+        Me.Button40.Location = New System.Drawing.Point(501, 20)
+        Me.Button40.Name = "Button40"
+        Me.Button40.Size = New System.Drawing.Size(159, 63)
+        Me.Button40.TabIndex = 1
+        Me.Button40.Text = "Disable feature..."
+        Me.Button40.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button40.UseVisualStyleBackColor = True
+        '
+        'Button41
+        '
+        Me.Button41.Image = CType(resources.GetObject("Button41.Image"), System.Drawing.Image)
+        Me.Button41.Location = New System.Drawing.Point(6, 20)
+        Me.Button41.Name = "Button41"
+        Me.Button41.Size = New System.Drawing.Size(159, 63)
+        Me.Button41.TabIndex = 1
+        Me.Button41.Text = "Enable feature..."
+        Me.Button41.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button41.UseVisualStyleBackColor = True
+        '
+        'Button42
+        '
+        Me.Button42.Location = New System.Drawing.Point(336, 20)
+        Me.Button42.Name = "Button42"
+        Me.Button42.Size = New System.Drawing.Size(159, 63)
+        Me.Button42.TabIndex = 1
+        Me.Button42.Text = "Save feature information..."
+        Me.Button42.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button42.UseVisualStyleBackColor = True
+        '
+        'Button43
+        '
+        Me.Button43.Image = Global.DISMTools.My.Resources.Resources.rem_appxpkg
+        Me.Button43.Location = New System.Drawing.Point(501, 20)
+        Me.Button43.Name = "Button43"
+        Me.Button43.Size = New System.Drawing.Size(159, 63)
+        Me.Button43.TabIndex = 1
+        Me.Button43.Text = "Remove AppX package..."
+        Me.Button43.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button43.UseVisualStyleBackColor = True
+        '
+        'Button44
+        '
+        Me.Button44.Image = Global.DISMTools.My.Resources.Resources.add_appxpkg
+        Me.Button44.Location = New System.Drawing.Point(6, 20)
+        Me.Button44.Name = "Button44"
+        Me.Button44.Size = New System.Drawing.Size(159, 63)
+        Me.Button44.TabIndex = 1
+        Me.Button44.Text = "Add AppX package..."
+        Me.Button44.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button44.UseVisualStyleBackColor = True
+        '
+        'Button45
+        '
+        Me.Button45.Image = Global.DISMTools.My.Resources.Resources.get_appxpkg_info
+        Me.Button45.Location = New System.Drawing.Point(171, 20)
+        Me.Button45.Name = "Button45"
+        Me.Button45.Size = New System.Drawing.Size(159, 63)
+        Me.Button45.TabIndex = 1
+        Me.Button45.Text = "Get app information..."
+        Me.Button45.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button45.UseVisualStyleBackColor = True
+        '
+        'Button46
+        '
+        Me.Button46.Location = New System.Drawing.Point(336, 20)
+        Me.Button46.Name = "Button46"
+        Me.Button46.Size = New System.Drawing.Size(159, 63)
+        Me.Button46.TabIndex = 1
+        Me.Button46.Text = "Save installed AppX package information..."
+        Me.Button46.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button46.UseVisualStyleBackColor = True
+        '
+        'SpaceLabel
+        '
+        Me.SpaceLabel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.SpaceLabel.AutoEllipsis = True
+        Me.SpaceLabel.Location = New System.Drawing.Point(11, 898)
+        Me.SpaceLabel.Name = "SpaceLabel"
+        Me.SpaceLabel.Size = New System.Drawing.Size(675, 17)
+        Me.SpaceLabel.TabIndex = 1
+        '
+        'Button47
+        '
+        Me.Button47.Image = CType(resources.GetObject("Button47.Image"), System.Drawing.Image)
+        Me.Button47.Location = New System.Drawing.Point(501, 20)
+        Me.Button47.Name = "Button47"
+        Me.Button47.Size = New System.Drawing.Size(159, 63)
+        Me.Button47.TabIndex = 1
+        Me.Button47.Text = "Remove capability..."
+        Me.Button47.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button47.UseVisualStyleBackColor = True
+        '
+        'Button48
+        '
+        Me.Button48.Image = CType(resources.GetObject("Button48.Image"), System.Drawing.Image)
+        Me.Button48.Location = New System.Drawing.Point(6, 20)
+        Me.Button48.Name = "Button48"
+        Me.Button48.Size = New System.Drawing.Size(159, 63)
+        Me.Button48.TabIndex = 1
+        Me.Button48.Text = "Add capability..."
+        Me.Button48.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button48.UseVisualStyleBackColor = True
+        '
+        'Button49
+        '
+        Me.Button49.Image = CType(resources.GetObject("Button49.Image"), System.Drawing.Image)
+        Me.Button49.Location = New System.Drawing.Point(171, 20)
+        Me.Button49.Name = "Button49"
+        Me.Button49.Size = New System.Drawing.Size(159, 63)
+        Me.Button49.TabIndex = 1
+        Me.Button49.Text = "Get capability information..."
+        Me.Button49.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button49.UseVisualStyleBackColor = True
+        '
+        'Button50
+        '
+        Me.Button50.Location = New System.Drawing.Point(336, 20)
+        Me.Button50.Name = "Button50"
+        Me.Button50.Size = New System.Drawing.Size(159, 63)
+        Me.Button50.TabIndex = 1
+        Me.Button50.Text = "Save capability information..."
+        Me.Button50.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button50.UseVisualStyleBackColor = True
+        '
+        'Button51
+        '
+        Me.Button51.Image = Global.DISMTools.My.Resources.Resources.rem_drv
+        Me.Button51.Location = New System.Drawing.Point(501, 20)
+        Me.Button51.Name = "Button51"
+        Me.Button51.Size = New System.Drawing.Size(159, 63)
+        Me.Button51.TabIndex = 1
+        Me.Button51.Text = "Remove driver..."
+        Me.Button51.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button51.UseVisualStyleBackColor = True
+        '
+        'Button52
+        '
+        Me.Button52.Image = Global.DISMTools.My.Resources.Resources.get_drv_info
+        Me.Button52.Location = New System.Drawing.Point(171, 20)
+        Me.Button52.Name = "Button52"
+        Me.Button52.Size = New System.Drawing.Size(159, 63)
+        Me.Button52.TabIndex = 1
+        Me.Button52.Text = "Get driver information..."
+        Me.Button52.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button52.UseVisualStyleBackColor = True
+        '
+        'Button53
+        '
+        Me.Button53.Image = Global.DISMTools.My.Resources.Resources.add_drv
+        Me.Button53.Location = New System.Drawing.Point(6, 20)
+        Me.Button53.Name = "Button53"
+        Me.Button53.Size = New System.Drawing.Size(159, 63)
+        Me.Button53.TabIndex = 1
+        Me.Button53.Text = "Add driver package..."
+        Me.Button53.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button53.UseVisualStyleBackColor = True
+        '
+        'Button54
+        '
+        Me.Button54.Location = New System.Drawing.Point(336, 20)
+        Me.Button54.Name = "Button54"
+        Me.Button54.Size = New System.Drawing.Size(159, 63)
+        Me.Button54.TabIndex = 1
+        Me.Button54.Text = "Save installed driver information..."
+        Me.Button54.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button54.UseVisualStyleBackColor = True
+        '
+        'Button55
+        '
+        Me.Button55.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Button55.Location = New System.Drawing.Point(7, 20)
+        Me.Button55.Name = "Button55"
+        Me.Button55.Size = New System.Drawing.Size(159, 23)
+        Me.Button55.TabIndex = 1
+        Me.Button55.Text = "Get configuration..."
+        Me.Button55.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button55.UseVisualStyleBackColor = True
+        '
+        'Button56
+        '
+        Me.Button56.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Button56.Location = New System.Drawing.Point(171, 20)
+        Me.Button56.Name = "Button56"
+        Me.Button56.Size = New System.Drawing.Size(159, 23)
+        Me.Button56.TabIndex = 1
+        Me.Button56.Text = "Save configuration..."
+        Me.Button56.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button56.UseVisualStyleBackColor = True
+        '
+        'Button57
+        '
+        Me.Button57.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Button57.Location = New System.Drawing.Point(336, 20)
+        Me.Button57.Name = "Button57"
+        Me.Button57.Size = New System.Drawing.Size(159, 23)
+        Me.Button57.TabIndex = 1
+        Me.Button57.Text = "Set target path..."
+        Me.Button57.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button57.UseVisualStyleBackColor = True
+        '
+        'Button58
+        '
+        Me.Button58.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Button58.Location = New System.Drawing.Point(501, 20)
+        Me.Button58.Name = "Button58"
+        Me.Button58.Size = New System.Drawing.Size(159, 23)
+        Me.Button58.TabIndex = 1
+        Me.Button58.Text = "Set scratch space..."
+        Me.Button58.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.Button58.UseVisualStyleBackColor = True
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -4124,6 +4688,14 @@ Partial Class MainForm
         Me.PrjPanel.PerformLayout()
         Me.ProjectView.ResumeLayout(False)
         Me.Panel11.ResumeLayout(False)
+        Me.FlowLayoutPanel1.ResumeLayout(False)
+        Me.GroupBox4.ResumeLayout(False)
+        Me.GroupBox5.ResumeLayout(False)
+        Me.GroupBox6.ResumeLayout(False)
+        Me.GroupBox7.ResumeLayout(False)
+        Me.GroupBox8.ResumeLayout(False)
+        Me.GroupBox9.ResumeLayout(False)
+        Me.GroupBox10.ResumeLayout(False)
         Me.ProjectSidePanel.ResumeLayout(False)
         Me.ProjectSidePanelContainer.ResumeLayout(False)
         Me.SidePanel_ProjectView.ResumeLayout(False)
@@ -4604,4 +5176,48 @@ Partial Class MainForm
     Friend WithEvents Button21 As System.Windows.Forms.Button
     Friend WithEvents Button22 As System.Windows.Forms.Button
     Friend WithEvents Button23 As System.Windows.Forms.Button
+    Friend WithEvents FlowLayoutPanel1 As System.Windows.Forms.FlowLayoutPanel
+    Friend WithEvents GroupBox4 As System.Windows.Forms.GroupBox
+    Friend WithEvents Button24 As System.Windows.Forms.Button
+    Friend WithEvents Button31 As System.Windows.Forms.Button
+    Friend WithEvents Button30 As System.Windows.Forms.Button
+    Friend WithEvents Button33 As System.Windows.Forms.Button
+    Friend WithEvents Button32 As System.Windows.Forms.Button
+    Friend WithEvents Button26 As System.Windows.Forms.Button
+    Friend WithEvents Button25 As System.Windows.Forms.Button
+    Friend WithEvents Button29 As System.Windows.Forms.Button
+    Friend WithEvents Button28 As System.Windows.Forms.Button
+    Friend WithEvents Button27 As System.Windows.Forms.Button
+    Friend WithEvents GroupBox5 As System.Windows.Forms.GroupBox
+    Friend WithEvents Button35 As System.Windows.Forms.Button
+    Friend WithEvents Button34 As System.Windows.Forms.Button
+    Friend WithEvents Button36 As System.Windows.Forms.Button
+    Friend WithEvents GroupBox6 As System.Windows.Forms.GroupBox
+    Friend WithEvents GroupBox7 As System.Windows.Forms.GroupBox
+    Friend WithEvents GroupBox8 As System.Windows.Forms.GroupBox
+    Friend WithEvents GroupBox9 As System.Windows.Forms.GroupBox
+    Friend WithEvents GroupBox10 As System.Windows.Forms.GroupBox
+    Friend WithEvents Button38 As System.Windows.Forms.Button
+    Friend WithEvents Button37 As System.Windows.Forms.Button
+    Friend WithEvents Button42 As System.Windows.Forms.Button
+    Friend WithEvents Button39 As System.Windows.Forms.Button
+    Friend WithEvents Button41 As System.Windows.Forms.Button
+    Friend WithEvents Button40 As System.Windows.Forms.Button
+    Friend WithEvents Button46 As System.Windows.Forms.Button
+    Friend WithEvents Button44 As System.Windows.Forms.Button
+    Friend WithEvents Button45 As System.Windows.Forms.Button
+    Friend WithEvents Button43 As System.Windows.Forms.Button
+    Friend WithEvents Button50 As System.Windows.Forms.Button
+    Friend WithEvents Button48 As System.Windows.Forms.Button
+    Friend WithEvents Button49 As System.Windows.Forms.Button
+    Friend WithEvents Button47 As System.Windows.Forms.Button
+    Friend WithEvents Button54 As System.Windows.Forms.Button
+    Friend WithEvents Button53 As System.Windows.Forms.Button
+    Friend WithEvents Button51 As System.Windows.Forms.Button
+    Friend WithEvents Button52 As System.Windows.Forms.Button
+    Friend WithEvents Button58 As System.Windows.Forms.Button
+    Friend WithEvents Button57 As System.Windows.Forms.Button
+    Friend WithEvents Button56 As System.Windows.Forms.Button
+    Friend WithEvents Button55 As System.Windows.Forms.Button
+    Friend WithEvents SpaceLabel As System.Windows.Forms.Label
 End Class
