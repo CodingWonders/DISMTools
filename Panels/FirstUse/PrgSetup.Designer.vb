@@ -25,6 +25,7 @@ Partial Class PrgSetup
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(PrgSetup))
         Me.wndControlPanel = New System.Windows.Forms.Panel()
         Me.Label1 = New System.Windows.Forms.Label()
+        Me.backBox = New System.Windows.Forms.PictureBox()
         Me.minBox = New System.Windows.Forms.PictureBox()
         Me.closeBox = New System.Windows.Forms.PictureBox()
         Me.btnControlPanel = New System.Windows.Forms.Panel()
@@ -97,6 +98,7 @@ Partial Class PrgSetup
         Me.Panel6 = New System.Windows.Forms.Panel()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.wndControlPanel.SuspendLayout()
+        CType(Me.backBox, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.minBox, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.closeBox, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.btnControlPanel.SuspendLayout()
@@ -126,6 +128,7 @@ Partial Class PrgSetup
         Me.wndControlPanel.BackColor = System.Drawing.Color.Transparent
         Me.wndControlPanel.BackgroundImage = Global.DISMTools.My.Resources.Resources.wndPanel_Backdrop
         Me.wndControlPanel.Controls.Add(Me.Label1)
+        Me.wndControlPanel.Controls.Add(Me.backBox)
         Me.wndControlPanel.Controls.Add(Me.minBox)
         Me.wndControlPanel.Controls.Add(Me.closeBox)
         Me.wndControlPanel.Dock = System.Windows.Forms.DockStyle.Top
@@ -144,6 +147,18 @@ Partial Class PrgSetup
         Me.Label1.Size = New System.Drawing.Size(98, 15)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Set up DISMTools"
+        '
+        'backBox
+        '
+        Me.backBox.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.backBox.Image = Global.DISMTools.My.Resources.Resources.backbox
+        Me.backBox.Location = New System.Drawing.Point(0, 0)
+        Me.backBox.Name = "backBox"
+        Me.backBox.Size = New System.Drawing.Size(46, 32)
+        Me.backBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.backBox.TabIndex = 0
+        Me.backBox.TabStop = False
+        Me.backBox.Visible = False
         '
         'minBox
         '
@@ -204,6 +219,7 @@ Partial Class PrgSetup
         Me.Back_Button.TabIndex = 0
         Me.Back_Button.Text = "Back"
         Me.Back_Button.UseVisualStyleBackColor = True
+        Me.Back_Button.Visible = False
         '
         'Next_Button
         '
@@ -226,6 +242,7 @@ Partial Class PrgSetup
         Me.Cancel_Button.TabIndex = 0
         Me.Cancel_Button.Text = "Cancel"
         Me.Cancel_Button.UseVisualStyleBackColor = True
+        Me.Cancel_Button.Visible = False
         '
         'BodyPanelContainer
         '
@@ -1017,6 +1034,7 @@ Partial Class PrgSetup
         Me.Text = "Set up DISMTools"
         Me.wndControlPanel.ResumeLayout(False)
         Me.wndControlPanel.PerformLayout()
+        CType(Me.backBox, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.minBox, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.closeBox, System.ComponentModel.ISupportInitialize).EndInit()
         Me.btnControlPanel.ResumeLayout(False)
@@ -1125,4 +1143,5 @@ Partial Class PrgSetup
     Friend WithEvents RadioButton1 As System.Windows.Forms.RadioButton
     Friend WithEvents Panel8 As System.Windows.Forms.Panel
     Friend WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
+    Friend WithEvents backBox As System.Windows.Forms.PictureBox
 End Class

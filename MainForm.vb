@@ -228,6 +228,8 @@ Public Class MainForm
 
     Public drivePath As String = ""
 
+    Public EnableExperiments As Boolean
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -299,6 +301,8 @@ Public Class MainForm
                     Thread.Sleep(1500)
                 ElseIf arg.StartsWith("/nomig", StringComparison.OrdinalIgnoreCase) Then
                     NoMigration = True
+                ElseIf arg.StartsWith("/exp", StringComparison.OrdinalIgnoreCase) Then
+                    EnableExperiments = True
                 End If
             Next
         End If
@@ -388,6 +392,8 @@ Public Class MainForm
         If argOnline Then
             BeginOnlineManagement(True)
         End If
+        Timer1.Enabled = True
+        Button19.Visible = EnableExperiments
     End Sub
 
     ''' <summary>
@@ -577,6 +583,7 @@ Public Class MainForm
                     Label5.Text = "Non"
             End Select
             LinkLabel1.Visible = True
+            LinkLabel14.Visible = True
         Else
             Select Case Language
                 Case 0
@@ -596,7 +603,9 @@ Public Class MainForm
                     Label5.Text = "Oui"
             End Select
             LinkLabel1.Visible = False
+            LinkLabel14.Visible = False
         End If
+        Label50.Text = Label5.Text
     End Sub
 
     ''' <summary>
@@ -1794,11 +1803,15 @@ Public Class MainForm
         ' Set image properties
         Label14.Text = ProgressPanel.ImgIndex
         Label12.Text = ProgressPanel.MountDir
+        Label41.Text = Label14.Text
+        Label44.Text = Label12.Text
         ' Loading the project directly with an image already mounted makes the two labels above be wrong.
         ' Check them and use local vars
         If Label14.Text = "0" Or Label12.Text = "" Then     ' Label14 (index preview label) returns 0 and Label12 (mount dir preview) returns blank
             Label14.Text = ImgIndex
             Label12.Text = MountDir
+            Label41.Text = Label14.Text
+            Label44.Text = Label12.Text
         End If
         If Streamlined Then
             If OnlineMode Then
@@ -1836,6 +1849,13 @@ Public Class MainForm
                 Label18.Text = My.Computer.Info.OSFullName
                 Label12.Text = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows))
                 Label3.Text = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows))
+                Label49.Text = projName.Text
+                Label52.Text = Label3.Text
+                Label44.Text = Label12.Text
+                Label46.Text = Label18.Text
+                Label41.Text = Label14.Text
+                Label48.Text = Label17.Text
+                Label47.Text = Label20.Text
             ElseIf OfflineMode Then
                 Label17.Text = FileVersionInfo.GetVersionInfo(MountDir & "\Windows\system32\ntoskrnl.exe").ProductVersion
                 imgVersionInfo = New Version(FileVersionInfo.GetVersionInfo(MountDir & "\Windows\system32\ntoskrnl.exe").ProductVersion)
@@ -1875,7 +1895,14 @@ Public Class MainForm
                         projName.Text = "(Installation hors ligne)"
                 End Select
                 Label12.Text = MountDir
+                Label44.Text = MountDir
+                Label41.Text = Label14.Text
+                Label46.Text = Label18.Text
+                Label47.Text = Label20.Text
+                Label48.Text = Label17.Text
+                Label49.Text = projName.Text
                 Label3.Text = MountDir
+                Label52.Text = Label3.Text
                 GetOfflineEditionAndInstIdFromRegistry()
             Else
                 Try
@@ -1883,6 +1910,9 @@ Public Class MainForm
                         If MountedImageImgFiles(x) = SourceImg Then
                             Label14.Text = MountedImageImgIndexes(x)
                             Label12.Text = MountedImageMountDirs(x)
+
+                            Label44.Text = Label12.Text
+                            Label41.Text = Label14.Text
                             If MountedImageImgStatuses(x) = 0 Then
                                 isOrphaned = False
                             ElseIf MountedImageImgStatuses(x) = 1 Then
@@ -1895,6 +1925,10 @@ Public Class MainForm
                                     Label17.Text = imageInfo.ProductVersion.ToString()
                                     Label18.Text = imageInfo.ImageName
                                     Label20.Text = imageInfo.ImageDescription
+
+                                    Label48.Text = imageInfo.ProductVersion.ToString()
+                                    Label46.Text = imageInfo.ImageName
+                                    Label47.Text = imageInfo.ImageDescription
                                 End If
                             Next
                             RemountImageWithWritePermissionsToolStripMenuItem.Enabled = If(MountedImageMountedReWr(x) = 0, False, True)
@@ -6362,6 +6396,7 @@ Public Class MainForm
                     Label20.Text = "(Installation en ligne)"
                     projName.Text = "(Installation en ligne)"
             End Select
+            Label49.Text = projName.Text
         End If
     End Sub
 
@@ -6447,7 +6482,9 @@ Public Class MainForm
                 End Select
                 PleaseWaitDialog.ShowDialog(Me)
                 projName.Text = prjName
+                Label49.Text = projName.Text
                 Label3.Text = DTProjPath
+                Label52.Text = Label3.Text
                 projPath = DTProjPath
                 projPath = projPath.Replace("\" & DTProjFileName & ".dtproj", "").Trim()
                 If IsImageMounted Then
@@ -6482,6 +6519,7 @@ Public Class MainForm
                             Text &= " (debug mode)"
                         End If
                         Label3.Text = DTProjPath
+                        Label52.Text = Label3.Text
                         projPath = DTProjPath
                         projPath = projPath.Replace("\" & DTProjFileName & ".dtproj", "").Trim()
                         Select Case Language
@@ -6504,6 +6542,7 @@ Public Class MainForm
                         'PleaseWaitDialog.Label2.Text = "Loading project: " & Quote & prjName & Quote
                         PleaseWaitDialog.ShowDialog(Me)
                         projName.Text = prjName
+                        Label49.Text = projName.Text
                         If IsImageMounted Then
                             ImageNotMountedPanel.Visible = False
                             ImagePanel.Visible = True
@@ -6625,6 +6664,7 @@ Public Class MainForm
                         Text &= " (debug mode)"
                     End If
                     Label3.Text = DTProjPath
+                    Label52.Text = Label3.Text
                     projPath = DTProjPath
                     projPath = projPath.Replace("\" & DTProjFileName & ".dtproj", "").Trim()
                     Select Case Language
@@ -6647,6 +6687,7 @@ Public Class MainForm
                     'PleaseWaitDialog.Label2.Text = "Loading project: " & Quote & prjName & Quote
                     PleaseWaitDialog.ShowDialog(Me)
                     projName.Text = prjName
+                    Label49.Text = projName.Text
                     If IsImageMounted Then
                         ImageNotMountedPanel.Visible = False
                         ImagePanel.Visible = True
@@ -7098,6 +7139,7 @@ Public Class MainForm
             Case 3
                 Label5.Text = "Oui"
         End Select
+        Label50.Text = Label5.Text
         UnpopulateProjectTree()
         HomePanel.Visible = False
         PrjPanel.Visible = True
@@ -7106,6 +7148,7 @@ Public Class MainForm
         SaveProjectToolStripMenuItem.Enabled = False
         SaveProjectasToolStripMenuItem.Enabled = False
         LinkLabel1.Visible = False
+        LinkLabel14.Visible = False
         ImageNotMountedPanel.Visible = False
         ImagePanel.Visible = True
         CommandsToolStripMenuItem.Visible = True
@@ -7136,6 +7179,8 @@ Public Class MainForm
                 Label14.Text = "(Installation en ligne)"
                 Label12.Text = "(Installation en ligne)"
         End Select
+        Label41.Text = Label14.Text
+        Label44.Text = Label12.Text
         GroupBox1.Enabled = False
         Panel2.Visible = False
         ProjNameEditBtn.Visible = False
@@ -7191,6 +7236,7 @@ Public Class MainForm
             Case 3
                 Label5.Text = "Oui"
         End Select
+        Label50.Text = Label5.Text
         UnpopulateProjectTree()
         HomePanel.Visible = False
         PrjPanel.Visible = True
@@ -7199,6 +7245,7 @@ Public Class MainForm
         SaveProjectToolStripMenuItem.Enabled = False
         SaveProjectasToolStripMenuItem.Enabled = False
         LinkLabel1.Visible = False
+        LinkLabel14.Visible = False
         ImageNotMountedPanel.Visible = False
         ImagePanel.Visible = True
         CommandsToolStripMenuItem.Visible = True
@@ -7229,6 +7276,8 @@ Public Class MainForm
                 Label14.Text = "(Installation hors ligne)"
                 Label12.Text = "(Installation hors ligne)"
         End Select
+        Label41.Text = Label14.Text
+        Label44.Text = Label12.Text
         GroupBox1.Enabled = False
         Panel2.Visible = False
         ProjNameEditBtn.Visible = False
@@ -7351,11 +7400,13 @@ Public Class MainForm
             Case 3
                 Label5.Text = "Oui"
         End Select
+        Label50.Text = Label5.Text
         HomePanel.Visible = True
         PrjPanel.Visible = False
         SplitPanels.Visible = False
         RemountImageWithWritePermissionsToolStripMenuItem.Enabled = False
         LinkLabel1.Visible = False
+        LinkLabel14.Visible = False
         ImageNotMountedPanel.Visible = False
         ImagePanel.Visible = True
         CommandsToolStripMenuItem.Visible = False
@@ -7486,11 +7537,13 @@ Public Class MainForm
             Case 3
                 Label5.Text = "Oui"
         End Select
+        Label50.Text = Label5.Text
         HomePanel.Visible = True
         PrjPanel.Visible = False
         SplitPanels.Visible = False
         RemountImageWithWritePermissionsToolStripMenuItem.Enabled = False
         LinkLabel1.Visible = False
+        LinkLabel14.Visible = False
         ImageNotMountedPanel.Visible = False
         ImagePanel.Visible = True
         CommandsToolStripMenuItem.Visible = False
@@ -7530,13 +7583,17 @@ Public Class MainForm
                 Case 3
                     Label5.Text = "Oui"
             End Select
+            Label50.Text = Label5.Text
             LinkLabel1.Visible = False
+            LinkLabel14.Visible = False
             ImageNotMountedPanel.Visible = False
             ImagePanel.Visible = True
             IsImageMounted = True
         Else
             Label5.Text = "No"
+            Label50.Text = Label5.Text
             LinkLabel1.Visible = True
+            LinkLabel14.Visible = True
             ImageNotMountedPanel.Visible = True
             ImagePanel.Visible = False
             IsImageMounted = False
@@ -9002,7 +9059,7 @@ Public Class MainForm
         GetFeatureInfoDlg.ShowDialog(Me)
     End Sub
 
-    Private Sub Button14_Click(sender As Object, e As EventArgs) Handles Button14.Click, ProjectPropertiesToolStripMenuItem.Click
+    Private Sub Button14_Click(sender As Object, e As EventArgs) Handles Button14.Click, ProjectPropertiesToolStripMenuItem.Click, Button23.Click
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -9239,7 +9296,7 @@ Public Class MainForm
         ProgressPanel.ShowDialog(Me)
     End Sub
 
-    Private Sub ExplorerView_Click(sender As Object, e As EventArgs) Handles ExplorerView.Click
+    Private Sub ExplorerView_Click(sender As Object, e As EventArgs) Handles ExplorerView.Click, Button22.Click
         Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", projPath)
     End Sub
 
@@ -9923,7 +9980,7 @@ Public Class MainForm
         End If
     End Sub
 
-    Private Sub UnloadBtn_Click(sender As Object, e As EventArgs) Handles UnloadBtn.Click
+    Private Sub UnloadBtn_Click(sender As Object, e As EventArgs) Handles UnloadBtn.Click, Button21.Click
         ToolStripButton3.PerformClick()
     End Sub
 
@@ -12152,14 +12209,17 @@ Public Class MainForm
         If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
-            For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
-                If MountedImageMountDirs(x) = MountDir Then
-                    ImgInfoSaveDlg.SourceImage = MountedImageImgFiles(x)
-                    Exit For
-                End If
-            Next
+            If MountedImageMountDirs.Count > 0 Then
+                For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
+                    If MountedImageMountDirs(x) = MountDir Then
+                        ImgInfoSaveDlg.SourceImage = MountedImageImgFiles(x)
+                        Exit For
+                    End If
+                Next
+            End If
             ImgInfoSaveDlg.ImgMountDir = If(Not OnlineManagement, MountDir, "")
             ImgInfoSaveDlg.OnlineMode = OnlineManagement
+            ImgInfoSaveDlg.OfflineMode = OfflineManagement
             ImgInfoSaveDlg.AllDrivers = AllDrivers
             ImgInfoSaveDlg.SaveTask = 0
             ImgInfoSaveDlg.ShowDialog()
@@ -12179,5 +12239,33 @@ Public Class MainForm
 
     Private Sub ContributeToTheHelpSystemToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ContributeToTheHelpSystemToolStripMenuItem.Click
         Process.Start("https://github.com/CodingWonders/dt_help")
+    End Sub
+
+    Private Sub Button19_Click(sender As Object, e As EventArgs) Handles Button19.Click
+        ProjectView.Visible = True
+        SplitPanels.Visible = False
+    End Sub
+
+    Private Sub Button20_Click(sender As Object, e As EventArgs) Handles Button20.Click
+        ProjectView.Visible = False
+        SplitPanels.Visible = True
+    End Sub
+
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        TimeLabel.Text = DateTime.Now.ToString("D") & " - " & DateTime.Now.ToString("HH:mm")
+    End Sub
+
+    Private Sub LinkLabel12_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel12.LinkClicked
+        LinkLabel12.LinkColor = Color.FromArgb(241, 241, 241)
+        LinkLabel13.LinkColor = Color.FromArgb(153, 153, 153)
+        SidePanel_ProjectView.Visible = True
+        SidePanel_ImageView.Visible = False
+    End Sub
+
+    Private Sub LinkLabel13_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel13.LinkClicked
+        LinkLabel12.LinkColor = Color.FromArgb(153, 153, 153)
+        LinkLabel13.LinkColor = Color.FromArgb(241, 241, 241)
+        SidePanel_ProjectView.Visible = False
+        SidePanel_ImageView.Visible = True
     End Sub
 End Class

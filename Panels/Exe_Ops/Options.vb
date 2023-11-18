@@ -345,6 +345,7 @@ Public Class Options
                         Label44.Text = "The program will use the scratch directory provided by the project if one is loaded. If you are in online installation management mode, the program will use its scratch directory"
                         Label45.Text = "Secondary progress panel style:"
                         Label46.Text = "These settings aren't applicable to non-portable installations"
+                        Label47.Text = "This font may not be readable on log windows. While you can still use it, we recommend monospaced fonts for increased readability."
                         Button1.Text = "Browse..."
                         Button2.Text = "View DISM component versions"
                         Button3.Text = "Browse..."
@@ -440,6 +441,7 @@ Public Class Options
                         Label44.Text = "El programa usará el directorio temporal proporcionado por el proyecto si se cargó alguno. Si está en modo de administración de instalaciones en línea, el programa utilizará su directorio temporal"
                         Label45.Text = "Estilo del panel de progreso secundario:"
                         Label46.Text = "Estas configuraciones no son aplicables a instalaciones no portátiles"
+                        Label47.Text = "Esta fuente podría no ser legible en ventanas de registro. Aunque todavía pueda utilizarla, le recomendamos fuentes monoespaciadas para una legibilidad aumentada."
                         Button1.Text = "Examinar..."
                         Button2.Text = "Ver versiones de componentes"
                         Button3.Text = "Examinar..."
@@ -535,6 +537,7 @@ Public Class Options
                         Label44.Text = "Le programme utilisera le répertoire temporaire fourni par le projet s'il en existe un. Si vous êtes en mode de gestion de l'installation en ligne, le programme utilisera son répertoire temporaire."
                         Label45.Text = "Style du panneau de progression secondaire :"
                         Label46.Text = "Ces paramètres ne s'appliquent pas aux installations non portables."
+                        Label47.Text = "Cette police peut ne pas être lisible sur les fenêtres logiques. Bien que vous puissiez encore l'utiliser, nous recommandons les polices monospaces pour une meilleure lisibilité."
                         Button1.Text = "Parcourir..."
                         Button2.Text = "Voir les versions des composants DISM"
                         Button3.Text = "Parcourir..."
@@ -631,6 +634,7 @@ Public Class Options
                 Label44.Text = "The program will use the scratch directory provided by the project if one is loaded. If you are in online installation management mode, the program will use its scratch directory"
                 Label45.Text = "Secondary progress panel style:"
                 Label46.Text = "These settings aren't applicable to non-portable installations"
+                Label47.Text = "This font may not be readable on log windows. While you can still use it, we recommend monospaced fonts for increased readability."
                 Button1.Text = "Browse..."
                 Button2.Text = "View DISM component versions"
                 Button3.Text = "Browse..."
@@ -726,6 +730,7 @@ Public Class Options
                 Label44.Text = "El programa usará el directorio temporal proporcionado por el proyecto si se cargó alguno. Si está en modo de administración de instalaciones en línea, el programa utilizará su directorio temporal"
                 Label45.Text = "Estilo del panel de progreso secundario:"
                 Label46.Text = "Estas configuraciones no son aplicables a instalaciones no portátiles"
+                Label47.Text = "Esta fuente podría no ser legible en ventanas de registro. Aunque todavía pueda utilizarla, le recomendamos fuentes monoespaciadas para una legibilidad aumentada."
                 Button1.Text = "Examinar..."
                 Button2.Text = "Ver versiones de componentes"
                 Button3.Text = "Examinar..."
@@ -821,6 +826,7 @@ Public Class Options
                 Label44.Text = "Le programme utilisera le répertoire temporaire fourni par le projet s'il en existe un. Si vous êtes en mode de gestion de l'installation en ligne, le programme utilisera son répertoire temporaire."
                 Label45.Text = "Style du panneau de progression secondaire :"
                 Label46.Text = "Ces paramètres ne s'appliquent pas aux installations non portables."
+                Label47.Text = "Cette police peut ne pas être lisible sur les fenêtres logiques. Bien que vous puissiez encore l'utiliser, nous recommandons les polices monospaces pour une meilleure lisibilité."
                 Button1.Text = "Parcourir..."
                 Button2.Text = "Voir les versions des composants DISM"
                 Button3.Text = "Parcourir..."
@@ -1250,7 +1256,27 @@ Public Class Options
         Else
             LogPreview.Font = New Font(ComboBox4.Text, NumericUpDown1.Value, FontStyle.Regular)
         End If
+        Panel4.Visible = Not IsMonospacedFont(ComboBox4.Text)
     End Sub
+
+    Function IsMonospacedFont(ftName As String) As Boolean
+        Using testFont As Font = New Font(ftName, 10)
+            Dim widthI As Decimal = MeasureCharacterWidth(testFont, "i")
+            Dim widthW As Decimal = MeasureCharacterWidth(testFont, "w")
+            Return widthI = widthW
+        End Using
+        Return False
+    End Function
+
+    Function MeasureCharacterWidth(ft As Font, character As Char) As Decimal
+        Using bmp As Bitmap = New Bitmap(1, 1)
+            Using g As Graphics = Graphics.FromImage(bmp)
+                Dim size As SizeF = g.MeasureString(character.ToString(), ft)
+                Return size.Width
+            End Using
+        End Using
+        Return 0
+    End Function
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         DismComponents.ShowDialog()

@@ -321,6 +321,7 @@ Public Class GetFeatureInfoDlg
             ImgInfoSaveDlg.ImgMountDir = If(Not MainForm.OnlineManagement, MainForm.MountDir, "")
             ImgInfoSaveDlg.SaveTarget = MainForm.ImgInfoSFD.FileName
             ImgInfoSaveDlg.OnlineMode = MainForm.OnlineManagement
+            ImgInfoSaveDlg.OfflineMode = MainForm.OfflineManagement
             ImgInfoSaveDlg.SaveTask = 4
             ImgInfoSaveDlg.ShowDialog()
         End If

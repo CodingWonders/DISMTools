@@ -154,6 +154,9 @@ Partial Class Options
         Me.Label43 = New System.Windows.Forms.Label()
         Me.PrefReset = New System.Windows.Forms.Button()
         Me.LogSFD = New System.Windows.Forms.SaveFileDialog()
+        Me.Panel4 = New System.Windows.Forms.Panel()
+        Me.Label47 = New System.Windows.Forms.Label()
+        Me.PictureBox9 = New System.Windows.Forms.PictureBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -189,6 +192,8 @@ Partial Class Options
         Me.Panel2.SuspendLayout()
         Me.GroupBox5.SuspendLayout()
         Me.TabPage11.SuspendLayout()
+        Me.Panel4.SuspendLayout()
+        CType(Me.PictureBox9, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -503,6 +508,7 @@ Partial Class Options
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.Panel4)
         Me.GroupBox1.Controls.Add(Me.Toggle1)
         Me.GroupBox1.Controls.Add(Me.NumericUpDown1)
         Me.GroupBox1.Controls.Add(Me.LogPreview)
@@ -549,7 +555,7 @@ Partial Class Options
         Me.LogPreview.Name = "LogPreview"
         Me.LogPreview.ReadOnly = True
         Me.LogPreview.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.LogPreview.Size = New System.Drawing.Size(607, 134)
+        Me.LogPreview.Size = New System.Drawing.Size(607, 117)
         Me.LogPreview.TabIndex = 4
         Me.LogPreview.Text = resources.GetString("LogPreview.Text")
         '
@@ -1601,6 +1607,36 @@ Partial Class Options
         Me.LogSFD.Filter = "All files|*.*"
         Me.LogSFD.Title = "Specify the location of the log file"
         '
+        'Panel4
+        '
+        Me.Panel4.Controls.Add(Me.Label47)
+        Me.Panel4.Controls.Add(Me.PictureBox9)
+        Me.Panel4.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Panel4.Location = New System.Drawing.Point(3, 239)
+        Me.Panel4.Name = "Panel4"
+        Me.Panel4.Size = New System.Drawing.Size(697, 34)
+        Me.Panel4.TabIndex = 7
+        Me.Panel4.Visible = False
+        '
+        'Label47
+        '
+        Me.Label47.Location = New System.Drawing.Point(33, 3)
+        Me.Label47.Name = "Label47"
+        Me.Label47.Size = New System.Drawing.Size(652, 33)
+        Me.Label47.TabIndex = 9
+        Me.Label47.Text = "This font may not be readable on log windows. While you can still use it, we reco" & _
+    "mmend monospaced fonts for increased readability."
+        '
+        'PictureBox9
+        '
+        Me.PictureBox9.Image = Global.DISMTools.My.Resources.Resources.info_16px
+        Me.PictureBox9.Location = New System.Drawing.Point(11, 3)
+        Me.PictureBox9.Name = "PictureBox9"
+        Me.PictureBox9.Size = New System.Drawing.Size(16, 16)
+        Me.PictureBox9.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox9.TabIndex = 8
+        Me.PictureBox9.TabStop = False
+        '
         'Options
         '
         Me.AcceptButton = Me.OK_Button
@@ -1673,6 +1709,9 @@ Partial Class Options
         Me.GroupBox5.PerformLayout()
         Me.TabPage11.ResumeLayout(False)
         Me.TabPage11.PerformLayout()
+        Me.Panel4.ResumeLayout(False)
+        Me.Panel4.PerformLayout()
+        CType(Me.PictureBox9, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1807,5 +1846,8 @@ Partial Class Options
     Friend WithEvents PictureBox8 As System.Windows.Forms.PictureBox
     Friend WithEvents Panel2 As System.Windows.Forms.Panel
     Friend WithEvents Panel3 As System.Windows.Forms.Panel
+    Friend WithEvents Panel4 As System.Windows.Forms.Panel
+    Friend WithEvents Label47 As System.Windows.Forms.Label
+    Friend WithEvents PictureBox9 As System.Windows.Forms.PictureBox
 
 End Class

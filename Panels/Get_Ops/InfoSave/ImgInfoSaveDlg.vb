@@ -29,6 +29,7 @@ Public Class ImgInfoSaveDlg
     Public ImgMountDir As String
 
     Public OnlineMode As Boolean
+    Public OfflineMode As Boolean
 
     Public AllDrivers As Boolean
 
@@ -60,6 +61,11 @@ Public Class ImgInfoSaveDlg
                         "    - Name: " & My.Computer.Info.OSFullName & CrLf & _
                         "    - Boot point (mount point): " & Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & CrLf & _
                         "    - Version: " & Environment.OSVersion.Version.Major & "." & Environment.OSVersion.Version.Minor & "." & Environment.OSVersion.Version.Build & "." & FileVersionInfo.GetVersionInfo(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe").ProductPrivatePart & CrLf & CrLf
+            Exit Sub
+        ElseIf OfflineMode Then
+            Contents &= "  Offline installation information:" & CrLf & _
+                        "    - Boot point (mount point): " & ImgMountDir & CrLf & _
+                        "    - Version: " & FileVersionInfo.GetVersionInfo(ImgMountDir & "\Windows\system32\ntoskrnl.exe").ProductVersion.ToString() & CrLf & CrLf
             Exit Sub
         End If
         Contents &= " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "")
@@ -1495,7 +1501,7 @@ Public Class ImgInfoSaveDlg
                                     Case 3
                                         msg = "Obtention des informations des matériels cibles en cours... (cible " & drvInfoCollection.IndexOf(hwTarget) + 1 & " de " & drvInfoCollection.Count & ")"
                                 End Select
-                                ReportChanges(msg, (DriverPkgs.IndexOf(drvPkg) / DriverPkgs.Count) * 100)
+                                ReportChanges(msg, (DriverPkgs.IndexOf(drvPkg) / DriverPkgs.Count) * 100 + (drvInfoCollection.IndexOf(hwTarget) + 1) / drvInfoCollection.Count * 100 / DriverPkgs.Count)
                                 Contents &= "      - Hardware description: " & hwTarget.HardwareDescription & CrLf & _
                                             "      - Hardware ID: " & hwTarget.HardwareId & CrLf & _
                                             "      - Additional IDs:" & CrLf & _
@@ -1608,7 +1614,8 @@ Public Class ImgInfoSaveDlg
                     End Select
                     ReportChanges(msg, 75)
                     regKey = Registry.LocalMachine.OpenSubKey("PE_SYS\ControlSet001\Services\FBWF", False)
-                    Contents &= "  - Scratch space: " & regKey.GetValue("WinPECacheThreshold", "could not get value").ToString() & " MB" & CrLf & CrLf
+                    Dim scSize As String = regKey.GetValue("WinPECacheThreshold", "").ToString()
+                    Contents &= "  - Scratch space: " & If(Not scSize = "", scSize & " MB", "could not get value") & CrLf & CrLf
                     regKey.Close()
                 Catch ex As Exception
 
@@ -1769,6 +1776,8 @@ Public Class ImgInfoSaveDlg
                    " - Processes started at: " & Date.Now & CrLf & _
                    " - Report file target: " & Quote & SaveTarget & Quote & CrLf
 
+        If OfflineMode Then SourceImage = ImgMountDir
+
         ' Begin performing operations
         Select Case SaveTask
             Case 0
@@ -1812,6 +1821,27 @@ Public Class ImgInfoSaveDlg
         ' Put an ending to the contents
         Contents &= " - Processes ended at: " & Date.Now & CrLf & CrLf & _
                     "                  We have ended. Have a nice day!"
+
+        ' Inform user that we are saving the file
+        Dim saveMsg As String = ""
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        saveMsg = "Saving contents..."
+                    Case "ESN"
+                        saveMsg = "Guardando contenidos..."
+                    Case "FRA"
+                        saveMsg = "Sauvegarde des contenus en cours..."
+                End Select
+            Case 1
+                saveMsg = "Saving contents..."
+            Case 2
+                saveMsg = "Guardando contenidos..."
+            Case 3
+                saveMsg = "Sauvegarde des contenus en cours..."
+        End Select
+        ReportChanges(saveMsg, ProgressBar1.Maximum)
 
         ' Save the file
         If Contents <> "" And File.Exists(SaveTarget) Then File.WriteAllText(SaveTarget, Contents, UTF8)

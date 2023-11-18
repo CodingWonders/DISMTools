@@ -875,6 +875,7 @@ Public Class GetDriverInfo
             ImgInfoSaveDlg.SaveTarget = MainForm.ImgInfoSFD.FileName
             ImgInfoSaveDlg.ImgMountDir = If(Not MainForm.OnlineManagement, MainForm.MountDir, "")
             ImgInfoSaveDlg.OnlineMode = MainForm.OnlineManagement
+            ImgInfoSaveDlg.OfflineMode = MainForm.OfflineManagement
             ImgInfoSaveDlg.AllDrivers = MainForm.AllDrivers
             ImgInfoSaveDlg.SaveTask = If(InfoFromDrvPackagesPanel.Visible, 8, 7)
             If InfoFromDrvPackagesPanel.Visible Then

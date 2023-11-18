@@ -173,6 +173,36 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property backbox() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("backbox", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property backbox_down() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("backbox_down", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property backbox_focus() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("backbox_focus", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property bg_ops() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("bg_ops", resourceCulture)
@@ -1808,13 +1838,14 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''- The background process details panel is now hidden when leaving the offline or online installation management modes
+        '''- Fixed an issue where the program threw an exception when attempting to save complete image information if no images were mounted
+        '''- When getting Windows PE configuration, the program no longer returns &quot;Could not get value MB&quot; if it fails to get the scratch space configuration
+        '''- Image information reports correctly detect the offline installation management mode now
+        '''- The image information saver now informs you when the target report file is being saved
         '''
         '''New features
         '''
-        '''- You can now access the offline installation management mode from the File menu
-        '''- You will now see an image information report preview right after the generation process has been completed
-        '''- When performing feature enablement, component store repair, and capability addition operations to an active installation in Safe Mode, the progress panel will inform you [resto de la cadena truncado]&quot;;.
+        '''- The program now rec [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
