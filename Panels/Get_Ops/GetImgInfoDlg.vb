@@ -584,6 +584,7 @@ Public Class GetImgInfoDlg
             ImgInfoSaveDlg.SourceImage = SelectedImageFile
             ImgInfoSaveDlg.SaveTarget = MainForm.ImgInfoSFD.FileName
             ImgInfoSaveDlg.OnlineMode = False
+            ImgInfoSaveDlg.OfflineMode = False
             ImgInfoSaveDlg.SaveTask = 1
             ImgInfoSaveDlg.ShowDialog()
         End If

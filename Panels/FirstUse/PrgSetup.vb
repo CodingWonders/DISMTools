@@ -82,6 +82,39 @@ Public Class PrgSetup
         End If
     End Sub
 
+    Private Sub backBox_MouseEnter(sender As Object, e As EventArgs) Handles backBox.MouseEnter
+        backBox.Image = My.Resources.backbox_focus
+    End Sub
+
+    Private Sub backBox_MouseLeave(sender As Object, e As EventArgs) Handles backBox.MouseLeave
+        backBox.Image = My.Resources.backbox
+    End Sub
+
+    Private Sub backBox_MouseDown(sender As Object, e As MouseEventArgs) Handles backBox.MouseDown
+        backBox.Image = My.Resources.backbox_down
+    End Sub
+
+    Private Sub backBox_MouseUp(sender As Object, e As MouseEventArgs) Handles backBox.MouseUp
+        backBox.Image = My.Resources.backbox_focus
+    End Sub
+
+    Private Sub backBox_MouseHover(sender As Object, e As EventArgs) Handles backBox.MouseHover
+        Dim msg As String = ""
+        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+            Case "ENU", "ENG"
+                msg = "Go back"
+            Case "ESN"
+                msg = "Atrás"
+            Case "FRA"
+                msg = "Retourner"
+        End Select
+        btnToolTip.SetToolTip(sender, msg)
+    End Sub
+
+    'Private Sub backBox_Click(sender As Object, e As EventArgs) Handles backBox.Click
+    '    Back_Button.PerformClick()
+    'End Sub
+
     Private Sub wndControlPanel_MouseDown(sender As Object, e As MouseEventArgs) Handles wndControlPanel.MouseDown
         If e.Button = Windows.Forms.MouseButtons.Left Then
             ' Get the new position
@@ -192,12 +225,16 @@ Public Class PrgSetup
         End If
         If pageInt = 0 Then
             Back_Button.Enabled = False
+            backBox.Visible = False
+            Label1.Left = 8
         Else
             Back_Button.Enabled = True
+            backBox.Visible = True
+            Label1.Left = 54
         End If
     End Sub
 
-    Private Sub Back_Button_Click(sender As Object, e As EventArgs) Handles Back_Button.Click
+    Private Sub Back_Button_Click(sender As Object, e As EventArgs) Handles Back_Button.Click, backBox.Click
         pageInt -= 1
         Select Case pageInt
             Case 0
@@ -263,8 +300,12 @@ Public Class PrgSetup
         End If
         If pageInt = 0 Then
             Back_Button.Enabled = False
+            backBox.Visible = False
+            Label1.Left = 8
         Else
             Back_Button.Enabled = True
+            backBox.Visible = True
+            Label1.Left = 54
         End If
     End Sub
 
@@ -281,6 +322,8 @@ Public Class PrgSetup
         GetSystemFonts()
         TextBox2.Text = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\Logs\DISM\DISM.log"
         MainForm.LogFile = TextBox2.Text
+
+        Next_Button.Left = 998
 
         ' Set color modes
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then

@@ -1099,14 +1099,18 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes
 
-- The background process details panel is now hidden when leaving the offline or online installation management modes
+- Fixed an issue where the program threw an exception when attempting to save complete image information if no images were mounted
+- When getting Windows PE configuration, the program no longer returns "Could not get value MB" if it fails to get the scratch space configuration
+- Image information reports correctly detect the offline installation management mode now
+- The image information saver now informs you when the target report file is being saved
 
 New features
 
-- You can now access the offline installation management mode from the File menu
-- You will now see an image information report preview right after the generation process has been completed
-- When performing feature enablement, component store repair, and capability addition operations to an active installation in Safe Mode, the progress panel will inform you about it
-- Added a menu entry to contribute to the help system</value>
+- The program now recommends monospaced fonts for log windows
+- The initial setup wizard has had a minor redesign:
+  - The Back and Cancel buttons are now hidden, in favor of the window controls
+- The image application drive specifier now uses native WMI queries instead of the helper command
+- When getting information of driver packages, the progress bar will smoothly increase in value now</value>
   </data>
   <data name="split_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\split_img.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -1116,5 +1120,14 @@ New features
   </data>
   <data name="mdl_discussion" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\about\mdl_discussion.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="backbox" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FirstUse\backbox.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="backbox_down" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FirstUse\backbox_down.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="backbox_focus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FirstUse\backbox_focus.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

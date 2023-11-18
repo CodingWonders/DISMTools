@@ -91,6 +91,9 @@
     <Reference Include="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Management">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
@@ -1043,6 +1046,9 @@
     <None Include="Resources\split_img.png" />
     <None Include="Resources\export_driver.png" />
     <None Include="Resources\about\mdl_discussion.png" />
+    <None Include="Resources\FirstUse\backbox.png" />
+    <None Include="Resources\FirstUse\backbox_down.png" />
+    <None Include="Resources\FirstUse\backbox_focus.png" />
     <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
     <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
     <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />
