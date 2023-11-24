@@ -2145,16 +2145,24 @@ Public Class MainForm
     Sub GetAdvancedImageInfo(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False, Optional OfflineMode As Boolean = False)
         Button14.Enabled = True
         Button15.Enabled = True
+        LinkLabel20.Enabled = True
         Button16.Enabled = True
+        LinkLabel19.Enabled = True
         ExplorerView.Enabled = True
+        LinkLabel15.Enabled = True
+        LinkLabel16.Enabled = True
         ProjNameEditBtn.Visible = True
         If UseApi Then
             If OnlineMode Then
                 Button14.Enabled = False
                 Button15.Enabled = False
+                LinkLabel20.Enabled = False
                 Button16.Enabled = False
+                LinkLabel19.Enabled = False
                 ExplorerView.Enabled = False
                 ProjNameEditBtn.Visible = False
+                LinkLabel15.Enabled = False
+                LinkLabel16.Enabled = False
                 ' Set edition variable according to the EditionID registry value
                 imgEdition = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion").GetValue("EditionID")
 
@@ -2166,9 +2174,13 @@ Public Class MainForm
             ElseIf OfflineMode Then
                 Button14.Enabled = False
                 Button15.Enabled = False
+                LinkLabel20.Enabled = False
                 Button16.Enabled = False
+                LinkLabel19.Enabled = False
                 ExplorerView.Enabled = False
                 ProjNameEditBtn.Visible = False
+                LinkLabel15.Enabled = False
+                LinkLabel16.Enabled = False
                 DetectVersions(FileVersionInfo.GetVersionInfo(DismExe), imgVersionInfo)
                 Exit Sub
             Else
@@ -4282,7 +4294,15 @@ Public Class MainForm
                         Next
                         InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph_dark)
                         BranchTSMI.Image = New Bitmap(My.Resources.branch_dark)
+                        ' New design stuff
                         FlowLayoutPanel1.BackColor = Color.FromArgb(48, 48, 48)
+                        GroupBox4.ForeColor = Color.White
+                        GroupBox5.ForeColor = Color.White
+                        GroupBox6.ForeColor = Color.White
+                        GroupBox7.ForeColor = Color.White
+                        GroupBox8.ForeColor = Color.White
+                        GroupBox9.ForeColor = Color.White
+                        GroupBox10.ForeColor = Color.White
                     ElseIf ColorMode = "1" Then
                         If IsWindowsVersionOrGreater(10, 0, 18362) Then EnableDarkTitleBar(Handle, False)
                         BackColor = Color.FromArgb(239, 239, 242)
@@ -4396,7 +4416,15 @@ Public Class MainForm
                         Next
                         InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph)
                         BranchTSMI.Image = New Bitmap(My.Resources.branch)
+                        ' New design stuff
                         FlowLayoutPanel1.BackColor = Color.FromArgb(239, 239, 242)
+                        GroupBox4.ForeColor = Color.Black
+                        GroupBox5.ForeColor = Color.Black
+                        GroupBox6.ForeColor = Color.Black
+                        GroupBox7.ForeColor = Color.Black
+                        GroupBox8.ForeColor = Color.Black
+                        GroupBox9.ForeColor = Color.Black
+                        GroupBox10.ForeColor = Color.Black
                     End If
                 Catch ex As Exception
                     ChangePrgColors(1)
@@ -4514,7 +4542,15 @@ Public Class MainForm
                 Next
                 InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph)
                 BranchTSMI.Image = New Bitmap(My.Resources.branch)
+                ' New design stuff
                 FlowLayoutPanel1.BackColor = Color.FromArgb(239, 239, 242)
+                GroupBox4.ForeColor = Color.Black
+                GroupBox5.ForeColor = Color.Black
+                GroupBox6.ForeColor = Color.Black
+                GroupBox7.ForeColor = Color.Black
+                GroupBox8.ForeColor = Color.Black
+                GroupBox9.ForeColor = Color.Black
+                GroupBox10.ForeColor = Color.Black
             Case 2
                 If IsWindowsVersionOrGreater(10, 0, 18362) Then EnableDarkTitleBar(Handle, True)
                 BackColor = Color.FromArgb(48, 48, 48)
@@ -4628,7 +4664,15 @@ Public Class MainForm
                 Next
                 InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph_dark)
                 BranchTSMI.Image = New Bitmap(My.Resources.branch_dark)
+                ' New design stuff
                 FlowLayoutPanel1.BackColor = Color.FromArgb(48, 48, 48)
+                GroupBox4.ForeColor = Color.White
+                GroupBox5.ForeColor = Color.White
+                GroupBox6.ForeColor = Color.White
+                GroupBox7.ForeColor = Color.White
+                GroupBox8.ForeColor = Color.White
+                GroupBox9.ForeColor = Color.White
+                GroupBox10.ForeColor = Color.White
         End Select
     End Sub
 
@@ -6494,6 +6538,8 @@ Public Class MainForm
                 If IsImageMounted Then
                     ImageNotMountedPanel.Visible = False
                     ImagePanel.Visible = True
+                    ImageView_NoImage.Visible = False
+                    ImageView_BasicInfo.Visible = True
                 End If
                 PopulateProjectTree(prjName)
                 isProjectLoaded = True
@@ -6550,9 +6596,13 @@ Public Class MainForm
                         If IsImageMounted Then
                             ImageNotMountedPanel.Visible = False
                             ImagePanel.Visible = True
+                            ImageView_NoImage.Visible = False
+                            ImageView_BasicInfo.Visible = True
                         Else
                             ImageNotMountedPanel.Visible = True
                             ImagePanel.Visible = False
+                            ImageView_NoImage.Visible = True
+                            ImageView_BasicInfo.Visible = False
                         End If
                         PopulateProjectTree(prjName)
                         isProjectLoaded = True
@@ -6695,9 +6745,13 @@ Public Class MainForm
                     If IsImageMounted Then
                         ImageNotMountedPanel.Visible = False
                         ImagePanel.Visible = True
+                        ImageView_NoImage.Visible = False
+                        ImageView_BasicInfo.Visible = True
                     Else
                         ImageNotMountedPanel.Visible = True
                         ImagePanel.Visible = False
+                        ImageView_NoImage.Visible = True
+                        ImageView_BasicInfo.Visible = False
                     End If
                     PopulateProjectTree(prjName)
                     isProjectLoaded = True
@@ -7155,6 +7209,8 @@ Public Class MainForm
         LinkLabel14.Visible = False
         ImageNotMountedPanel.Visible = False
         ImagePanel.Visible = True
+        ImageView_NoImage.Visible = False
+        ImageView_BasicInfo.Visible = True
         CommandsToolStripMenuItem.Visible = True
         Thread.Sleep(250)
         Refresh()
@@ -7252,6 +7308,8 @@ Public Class MainForm
         LinkLabel14.Visible = False
         ImageNotMountedPanel.Visible = False
         ImagePanel.Visible = True
+        ImageView_NoImage.Visible = False
+        ImageView_BasicInfo.Visible = True
         CommandsToolStripMenuItem.Visible = True
         Thread.Sleep(250)
         Refresh()
@@ -7413,6 +7471,8 @@ Public Class MainForm
         LinkLabel14.Visible = False
         ImageNotMountedPanel.Visible = False
         ImagePanel.Visible = True
+        ImageView_NoImage.Visible = False
+        ImageView_BasicInfo.Visible = True
         CommandsToolStripMenuItem.Visible = False
         ProjectToolStripMenuItem.Visible = False
         Thread.Sleep(250)
@@ -7550,6 +7610,8 @@ Public Class MainForm
         LinkLabel14.Visible = False
         ImageNotMountedPanel.Visible = False
         ImagePanel.Visible = True
+        ImageView_NoImage.Visible = False
+        ImageView_BasicInfo.Visible = True
         CommandsToolStripMenuItem.Visible = False
         ProjectToolStripMenuItem.Visible = False
         Thread.Sleep(250)
@@ -7592,6 +7654,8 @@ Public Class MainForm
             LinkLabel14.Visible = False
             ImageNotMountedPanel.Visible = False
             ImagePanel.Visible = True
+            ImageView_NoImage.Visible = False
+            ImageView_BasicInfo.Visible = True
             IsImageMounted = True
         Else
             Label5.Text = "No"
@@ -7600,6 +7664,8 @@ Public Class MainForm
             LinkLabel14.Visible = True
             ImageNotMountedPanel.Visible = True
             ImagePanel.Visible = False
+            ImageView_NoImage.Visible = True
+            ImageView_BasicInfo.Visible = False
             IsImageMounted = False
             SourceImg = "N/A"
             ImgIndex = 0
@@ -12272,4 +12338,128 @@ Public Class MainForm
         SidePanel_ProjectView.Visible = False
         SidePanel_ImageView.Visible = True
     End Sub
+
+#Region "Task Links"
+
+    Private Sub LinkLabel15_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel15.LinkClicked
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        ProjProperties.TabControl1.SelectedIndex = 0
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
+                    Case "ESN"
+                        ProjProperties.Label1.Text = "Propiedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del proyecto", "de la imagen")
+                    Case "FRA"
+                        ProjProperties.Label1.Text = "Propriétés " & If(ProjProperties.TabControl1.SelectedIndex = 0, "du projet", "de l'image")
+                End Select
+            Case 1
+                ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
+            Case 2
+                ProjProperties.Label1.Text = "Propiedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del proyecto", "de la imagen")
+            Case 3
+                ProjProperties.Label1.Text = "Propriétés " & If(ProjProperties.TabControl1.SelectedIndex = 0, "du projet", "de l'image")
+        End Select
+        If Environment.OSVersion.Version.Major = 10 Then
+            ProjProperties.Text = ""
+        Else
+            ProjProperties.Text = ProjProperties.Label1.Text
+        End If
+        ProjProperties.ShowDialog()
+    End Sub
+
+    Private Sub LinkLabel16_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel16.LinkClicked
+        Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", projPath)
+    End Sub
+
+    Private Sub LinkLabel17_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel17.LinkClicked
+        ToolStripButton3.PerformClick()
+    End Sub
+
+    Private Sub LinkLabel18_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel18.LinkClicked
+        PopupImageManager.Location = LinkLabel18.PointToScreen(Point.Empty)
+        PopupImageManager.Top -= PopupImageManager.Height
+        If PopupImageManager.ShowDialog() = DialogResult.OK Then
+            If MountedImageMountDirs.Count > 0 Then
+                MountDir = PopupImageManager.selectedMntDir
+                If MountedImageMountDirs.Count > 0 Then
+                    Try
+                        For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
+                            If MountedImageMountDirs(x) = MountDir Then
+                                ImgIndex = MountedImageImgIndexes(x)
+                                SourceImg = MountedImageImgFiles(x)
+                                IIf(MountedImageMountedReWr(x) = 1, isReadOnly = False, isReadOnly = True)
+                            End If
+                        Next
+                    Catch ex As Exception
+                        Exit Try
+                    End Try
+                    UpdateProjProperties(True, If(isReadOnly, True, False))
+                    SaveDTProj()
+                End If
+            Else
+                Exit Sub
+            End If
+        End If
+    End Sub
+
+    Private Sub LinkLabel19_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel19.LinkClicked
+        ' If it's a read only image, directly unmount it discarding changes
+        If MountedImageImgFiles.Count > 0 Then
+            For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
+                If MountedImageMountDirs(x) = MountDir Then
+                    If MountedImageMountedReWr(x) = 1 Then
+                        Button4.PerformClick()
+                        Exit Sub
+                    End If
+                End If
+            Next
+        End If
+        ImgUMount.RadioButton1.Checked = True
+        ImgUMount.RadioButton2.Checked = False
+        ImgUMount.ShowDialog()
+    End Sub
+
+    Private Sub LinkLabel20_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel20.LinkClicked
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        ProjProperties.TabControl1.SelectedIndex = 1
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
+                    Case "ESN"
+                        ProjProperties.Label1.Text = "Propiedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del proyecto", "de la imagen")
+                    Case "FRA"
+                        ProjProperties.Label1.Text = "Propriétés " & If(ProjProperties.TabControl1.SelectedIndex = 0, "du projet", "de l'image")
+                End Select
+            Case 1
+                ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
+            Case 2
+                ProjProperties.Label1.Text = "Propiedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del proyecto", "de la imagen")
+            Case 3
+                ProjProperties.Label1.Text = "Propriétés " & If(ProjProperties.TabControl1.SelectedIndex = 0, "du projet", "de l'image")
+        End Select
+        If Environment.OSVersion.Version.Major = 10 Then
+            ProjProperties.Text = ""
+        Else
+            ProjProperties.Text = ProjProperties.Label1.Text
+        End If
+        ProjProperties.ShowDialog()
+    End Sub
+
+    Private Sub LinkLabel21_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel21.LinkClicked
+        ImgMount.ShowDialog()
+    End Sub
+
+#End Region
 End Class
