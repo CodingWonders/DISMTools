@@ -393,7 +393,6 @@ Public Class MainForm
             BeginOnlineManagement(True)
         End If
         Timer1.Enabled = True
-        Button19.Visible = EnableExperiments
     End Sub
 
     ''' <summary>
@@ -11978,7 +11977,7 @@ Public Class MainForm
     End Sub
 
     Private Sub GetFeatures_Click(sender As Object, e As EventArgs) Handles GetFeatures.Click
-        If Not IsImageMounted Or Not OnlineManagement Then Exit Sub
+        If Not IsImageMounted Then Exit Sub
         ProgressPanel.OperationNum = 994
         Select Case Language
             Case 0
