@@ -1049,6 +1049,10 @@
     <None Include="Resources\FirstUse\backbox.png" />
     <None Include="Resources\FirstUse\backbox_down.png" />
     <None Include="Resources\FirstUse\backbox_focus.png" />
+    <None Include="Resources\menus\explorer_view_glyph.png" />
+    <None Include="Resources\menus\explorer_view_glyph_dark.png" />
+    <None Include="Resources\menus\info_glyph.png" />
+    <None Include="Resources\menus\info_glyph_dark.png" />
     <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
     <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
     <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />

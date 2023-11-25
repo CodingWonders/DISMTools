@@ -393,7 +393,6 @@ Public Class MainForm
             BeginOnlineManagement(True)
         End If
         Timer1.Enabled = True
-        Button19.Visible = EnableExperiments
     End Sub
 
     ''' <summary>
@@ -1319,6 +1318,42 @@ Public Class MainForm
             Button11.Enabled = False
             Button12.Enabled = False
             Button13.Enabled = False
+            ' Update the buttons in the new design accordingly
+            Button26.Enabled = True
+            Button27.Enabled = False
+            Button28.Enabled = False
+            Button29.Enabled = False
+            Button24.Enabled = False
+            Button25.Enabled = False
+            Button30.Enabled = False
+            Button31.Enabled = False
+            Button32.Enabled = False
+            Button33.Enabled = False
+            Button34.Enabled = False
+            Button35.Enabled = False
+            Button36.Enabled = False
+            Button37.Enabled = False
+            Button38.Enabled = False
+            Button39.Enabled = False
+            Button40.Enabled = False
+            Button41.Enabled = False
+            Button42.Enabled = False
+            Button43.Enabled = False
+            Button44.Enabled = False
+            Button45.Enabled = False
+            Button46.Enabled = False
+            Button47.Enabled = False
+            Button48.Enabled = False
+            Button49.Enabled = False
+            Button50.Enabled = False
+            Button51.Enabled = False
+            Button52.Enabled = False
+            Button53.Enabled = False
+            Button54.Enabled = False
+            Button55.Enabled = False
+            Button56.Enabled = False
+            Button57.Enabled = False
+            Button58.Enabled = False
             Exit Sub
         End If
         Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
@@ -1856,6 +1891,13 @@ Public Class MainForm
                 Label41.Text = Label14.Text
                 Label48.Text = Label17.Text
                 Label47.Text = Label20.Text
+                ' Disable tasks in the new design accordingly
+                Button24.Enabled = False
+                Button25.Enabled = False
+                Button26.Enabled = False
+                Button27.Enabled = False
+                Button28.Enabled = False
+                Button29.Enabled = False
             ElseIf OfflineMode Then
                 Label17.Text = FileVersionInfo.GetVersionInfo(MountDir & "\Windows\system32\ntoskrnl.exe").ProductVersion
                 imgVersionInfo = New Version(FileVersionInfo.GetVersionInfo(MountDir & "\Windows\system32\ntoskrnl.exe").ProductVersion)
@@ -1903,6 +1945,13 @@ Public Class MainForm
                 Label49.Text = projName.Text
                 Label3.Text = MountDir
                 Label52.Text = Label3.Text
+                ' Disable tasks in the new design accordingly
+                Button24.Enabled = False
+                Button25.Enabled = False
+                Button26.Enabled = False
+                Button27.Enabled = False
+                Button28.Enabled = False
+                Button29.Enabled = False
                 GetOfflineEditionAndInstIdFromRegistry()
             Else
                 Try
@@ -2145,30 +2194,55 @@ Public Class MainForm
     Sub GetAdvancedImageInfo(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False, Optional OfflineMode As Boolean = False)
         Button14.Enabled = True
         Button15.Enabled = True
+        LinkLabel20.Enabled = True
         Button16.Enabled = True
+        LinkLabel19.Enabled = True
         ExplorerView.Enabled = True
+        LinkLabel15.Enabled = True
+        LinkLabel16.Enabled = True
         ProjNameEditBtn.Visible = True
         If UseApi Then
             If OnlineMode Then
                 Button14.Enabled = False
                 Button15.Enabled = False
+                LinkLabel20.Enabled = False
                 Button16.Enabled = False
+                LinkLabel19.Enabled = False
                 ExplorerView.Enabled = False
                 ProjNameEditBtn.Visible = False
+                LinkLabel15.Enabled = False
+                LinkLabel16.Enabled = False
                 ' Set edition variable according to the EditionID registry value
                 imgEdition = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion").GetValue("EditionID")
 
                 ' Set installation type variable according to the InstallationType registry value
                 imgInstType = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion").GetValue("InstallationType")
 
+                Button24.Enabled = False
+                Button25.Enabled = False
+                Button26.Enabled = False
+                Button27.Enabled = False
+                Button28.Enabled = False
+                Button29.Enabled = False
+
                 DetectVersions(FileVersionInfo.GetVersionInfo(DismExe), imgVersionInfo)
                 Exit Sub
             ElseIf OfflineMode Then
                 Button14.Enabled = False
                 Button15.Enabled = False
+                LinkLabel20.Enabled = False
                 Button16.Enabled = False
+                LinkLabel19.Enabled = False
                 ExplorerView.Enabled = False
                 ProjNameEditBtn.Visible = False
+                LinkLabel15.Enabled = False
+                LinkLabel16.Enabled = False
+                Button24.Enabled = False
+                Button25.Enabled = False
+                Button26.Enabled = False
+                Button27.Enabled = False
+                Button28.Enabled = False
+                Button29.Enabled = False
                 DetectVersions(FileVersionInfo.GetVersionInfo(DismExe), imgVersionInfo)
                 Exit Sub
             Else
@@ -2271,6 +2345,42 @@ Public Class MainForm
                     Button11.Enabled = True
                     Button12.Enabled = True
                     Button13.Enabled = True
+                    ' Update the buttons in the new design accordingly
+                    Button26.Enabled = False
+                    'Button27.Enabled = True
+                    'Button28.Enabled = True
+                    'Button29.Enabled = True
+                    Button24.Enabled = True
+                    Button25.Enabled = True
+                    Button30.Enabled = True
+                    Button31.Enabled = True
+                    Button32.Enabled = True
+                    Button33.Enabled = True
+                    Button34.Enabled = True
+                    Button35.Enabled = True
+                    Button36.Enabled = True
+                    Button37.Enabled = True
+                    Button38.Enabled = True
+                    Button39.Enabled = True
+                    Button40.Enabled = True
+                    Button41.Enabled = True
+                    Button42.Enabled = True
+                    Button43.Enabled = True
+                    Button44.Enabled = True
+                    Button45.Enabled = True
+                    Button46.Enabled = True
+                    Button47.Enabled = True
+                    Button48.Enabled = True
+                    Button49.Enabled = True
+                    Button50.Enabled = True
+                    Button51.Enabled = True
+                    Button52.Enabled = True
+                    Button53.Enabled = True
+                    Button54.Enabled = True
+                    Button55.Enabled = True
+                    Button56.Enabled = True
+                    Button57.Enabled = True
+                    Button58.Enabled = True
                     MountImageToolStripMenuItem.Enabled = False
                     UnmountImageToolStripMenuItem.Enabled = True
                 Else
@@ -2287,6 +2397,42 @@ Public Class MainForm
                     Button11.Enabled = False
                     Button12.Enabled = False
                     Button13.Enabled = False
+                    ' Update the buttons in the new design accordingly
+                    Button26.Enabled = True
+                    Button27.Enabled = False
+                    Button28.Enabled = False
+                    Button29.Enabled = False
+                    Button24.Enabled = False
+                    Button25.Enabled = False
+                    Button30.Enabled = False
+                    Button31.Enabled = False
+                    Button32.Enabled = False
+                    Button33.Enabled = False
+                    Button34.Enabled = False
+                    Button35.Enabled = False
+                    Button36.Enabled = False
+                    Button37.Enabled = False
+                    Button38.Enabled = False
+                    Button39.Enabled = False
+                    Button40.Enabled = False
+                    Button41.Enabled = False
+                    Button42.Enabled = False
+                    Button43.Enabled = False
+                    Button44.Enabled = False
+                    Button45.Enabled = False
+                    Button46.Enabled = False
+                    Button47.Enabled = False
+                    Button48.Enabled = False
+                    Button49.Enabled = False
+                    Button50.Enabled = False
+                    Button51.Enabled = False
+                    Button52.Enabled = False
+                    Button53.Enabled = False
+                    Button54.Enabled = False
+                    Button55.Enabled = False
+                    Button56.Enabled = False
+                    Button57.Enabled = False
+                    Button58.Enabled = False
                     MountImageToolStripMenuItem.Enabled = True
                     UnmountImageToolStripMenuItem.Enabled = False
                 End If
@@ -2465,6 +2611,42 @@ Public Class MainForm
                 Button11.Enabled = True
                 Button12.Enabled = True
                 Button13.Enabled = True
+                ' Update the buttons in the new design accordingly
+                Button26.Enabled = False
+                Button27.Enabled = True
+                Button28.Enabled = True
+                Button29.Enabled = True
+                Button24.Enabled = True
+                Button25.Enabled = True
+                Button30.Enabled = True
+                Button31.Enabled = True
+                Button32.Enabled = True
+                Button33.Enabled = True
+                Button34.Enabled = True
+                Button35.Enabled = True
+                Button36.Enabled = True
+                Button37.Enabled = True
+                Button38.Enabled = True
+                Button39.Enabled = True
+                Button40.Enabled = True
+                Button41.Enabled = True
+                Button42.Enabled = True
+                Button43.Enabled = True
+                Button44.Enabled = True
+                Button45.Enabled = True
+                Button46.Enabled = True
+                Button47.Enabled = True
+                Button48.Enabled = True
+                Button49.Enabled = True
+                Button50.Enabled = True
+                Button51.Enabled = True
+                Button52.Enabled = True
+                Button53.Enabled = True
+                Button54.Enabled = True
+                Button55.Enabled = True
+                Button56.Enabled = True
+                Button57.Enabled = True
+                Button58.Enabled = True
                 DetectNTVersion(MountDir & "\Windows\system32\ntoskrnl.exe")
             Catch ex As Exception
 
@@ -2513,11 +2695,47 @@ Public Class MainForm
             Button11.Enabled = False
             Button12.Enabled = False
             Button13.Enabled = False
+            ' Update the buttons in the new design accordingly
+            Button26.Enabled = True
+            Button27.Enabled = False
+            Button28.Enabled = False
+            Button29.Enabled = False
+            Button24.Enabled = False
+            Button25.Enabled = False
+            Button30.Enabled = False
+            Button31.Enabled = False
+            Button32.Enabled = False
+            Button33.Enabled = False
+            Button34.Enabled = False
+            Button35.Enabled = False
+            Button36.Enabled = False
+            Button37.Enabled = False
+            Button38.Enabled = False
+            Button39.Enabled = False
+            Button40.Enabled = False
+            Button41.Enabled = False
+            Button42.Enabled = False
+            Button43.Enabled = False
+            Button44.Enabled = False
+            Button45.Enabled = False
+            Button46.Enabled = False
+            Button47.Enabled = False
+            Button48.Enabled = False
+            Button49.Enabled = False
+            Button50.Enabled = False
+            Button51.Enabled = False
+            Button52.Enabled = False
+            Button53.Enabled = False
+            Button54.Enabled = False
+            Button55.Enabled = False
+            Button56.Enabled = False
+            Button57.Enabled = False
+            Button58.Enabled = False
         End If
     End Sub
 
     Sub DetectVersions(DismVer As FileVersionInfo, NTVer As Version)
-        ' Restore enabled properties of each menu item
+        ' Restore enabled properties of each menu item and group in the new design
         For Each Item As ToolStripDropDownItem In CommandsToolStripMenuItem.DropDownItems
             Item.Enabled = True
             Try
@@ -2528,6 +2746,9 @@ Public Class MainForm
                 Continue For
             End Try
         Next
+        GroupBox7.Enabled = True    ' AppX package group
+        GroupBox8.Enabled = True    ' Capability group
+        GroupBox10.Enabled = True   ' Windows PE settings group
 
         ' Detect if an image has been mounted, and act accordingly
         If IsImageMounted Then
@@ -2539,6 +2760,8 @@ Public Class MainForm
                             ' All AppX and capability stuff goes away
                             AppPackagesToolStripMenuItem.Enabled = False
                             CapabilitiesToolStripMenuItem.Enabled = False
+                            GroupBox7.Enabled = False
+                            GroupBox8.Enabled = False
 
                             ' WIMBoot also goes away
                             GetWIMBootEntry.Enabled = False
@@ -2557,6 +2780,7 @@ Public Class MainForm
                             Select Case NTVer.Build
                                 Case Is >= 8102
                                     CapabilitiesToolStripMenuItem.Enabled = False
+                                    GroupBox8.Enabled = False
                                     GetWIMBootEntry.Enabled = False
                                     UpdateWIMBootEntry.Enabled = False
                                     MicrosoftEdgeToolStripMenuItem.Enabled = False
@@ -2567,6 +2791,8 @@ Public Class MainForm
                                 Case Else
                                     AppPackagesToolStripMenuItem.Enabled = False
                                     CapabilitiesToolStripMenuItem.Enabled = False
+                                    GroupBox7.Enabled = False
+                                    GroupBox8.Enabled = False
                                     GetWIMBootEntry.Enabled = False
                                     UpdateWIMBootEntry.Enabled = False
                                     MicrosoftEdgeToolStripMenuItem.Enabled = False
@@ -2577,6 +2803,7 @@ Public Class MainForm
                             End Select
                         Case 3
                             CapabilitiesToolStripMenuItem.Enabled = False
+                            GroupBox8.Enabled = False
                             MicrosoftEdgeToolStripMenuItem.Enabled = False
                             ReservedStorageToolStripMenuItem.Enabled = False
                             SetSysUILang.Enabled = False
@@ -2593,9 +2820,12 @@ Public Class MainForm
 
             ' Disable Windows PE stuff when not working with a Windows PE image
             WindowsPEServicingToolStripMenuItem.Enabled = imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase)
+            GroupBox10.Enabled = imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase)
             ' Disable AppX and capability stuff when working with a Windows PE image
             AppPackagesToolStripMenuItem.Enabled = (Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
             CapabilitiesToolStripMenuItem.Enabled = (Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
+            GroupBox7.Enabled = (Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
+            GroupBox8.Enabled = (Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
 
             ' Next, detect the DISM version, so that we can determine which things are applicable
             Select Case DismVer.ProductMajorPart
@@ -2639,6 +2869,8 @@ Public Class MainForm
                             ReservedStorageToolStripMenuItem.Enabled = False
                             MicrosoftEdgeToolStripMenuItem.Enabled = False
                             SetSysUILang.Enabled = False
+                            GroupBox7.Enabled = False
+                            GroupBox8.Enabled = False
                         Case 2
                             CaptureFFU.Enabled = False
                             GetWIMBootEntry.Enabled = False
@@ -2659,6 +2891,7 @@ Public Class MainForm
                             ReservedStorageToolStripMenuItem.Enabled = False
                             MicrosoftEdgeToolStripMenuItem.Enabled = False
                             SetSysUILang.Enabled = False
+                            GroupBox8.Enabled = False
                         Case 3
                             CaptureFFU.Enabled = False
                             OptimizeFFU.Enabled = False
@@ -2677,6 +2910,7 @@ Public Class MainForm
                             ReservedStorageToolStripMenuItem.Enabled = False
                             MicrosoftEdgeToolStripMenuItem.Enabled = False
                             SetSysUILang.Enabled = False
+                            GroupBox8.Enabled = False
                     End Select
                 Case 10
                     ' Everything is enabled
@@ -2720,6 +2954,42 @@ Public Class MainForm
         Button11.Enabled = True
         Button12.Enabled = True
         Button13.Enabled = True
+        ' Update the buttons in the new design accordingly
+        Button26.Enabled = False
+        'Button27.Enabled = True
+        'Button28.Enabled = True
+        'Button29.Enabled = True
+        Button24.Enabled = True
+        Button25.Enabled = True
+        Button30.Enabled = True
+        Button31.Enabled = True
+        Button32.Enabled = True
+        Button33.Enabled = True
+        Button34.Enabled = True
+        Button35.Enabled = True
+        Button36.Enabled = True
+        Button37.Enabled = True
+        Button38.Enabled = True
+        Button39.Enabled = True
+        Button40.Enabled = True
+        Button41.Enabled = True
+        Button42.Enabled = True
+        Button43.Enabled = True
+        Button44.Enabled = True
+        Button45.Enabled = True
+        Button46.Enabled = True
+        Button47.Enabled = True
+        Button48.Enabled = True
+        Button49.Enabled = True
+        Button50.Enabled = True
+        Button51.Enabled = True
+        Button52.Enabled = True
+        Button53.Enabled = True
+        Button54.Enabled = True
+        Button55.Enabled = True
+        Button56.Enabled = True
+        Button57.Enabled = True
+        Button58.Enabled = True
     End Sub
 
     ''' <summary>
@@ -4282,6 +4552,15 @@ Public Class MainForm
                         Next
                         InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph_dark)
                         BranchTSMI.Image = New Bitmap(My.Resources.branch_dark)
+                        ' New design stuff
+                        FlowLayoutPanel1.BackColor = Color.FromArgb(48, 48, 48)
+                        GroupBox4.ForeColor = Color.White
+                        GroupBox5.ForeColor = Color.White
+                        GroupBox6.ForeColor = Color.White
+                        GroupBox7.ForeColor = Color.White
+                        GroupBox8.ForeColor = Color.White
+                        GroupBox9.ForeColor = Color.White
+                        GroupBox10.ForeColor = Color.White
                     ElseIf ColorMode = "1" Then
                         If IsWindowsVersionOrGreater(10, 0, 18362) Then EnableDarkTitleBar(Handle, False)
                         BackColor = Color.FromArgb(239, 239, 242)
@@ -4395,6 +4674,15 @@ Public Class MainForm
                         Next
                         InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph)
                         BranchTSMI.Image = New Bitmap(My.Resources.branch)
+                        ' New design stuff
+                        FlowLayoutPanel1.BackColor = Color.FromArgb(239, 239, 242)
+                        GroupBox4.ForeColor = Color.Black
+                        GroupBox5.ForeColor = Color.Black
+                        GroupBox6.ForeColor = Color.Black
+                        GroupBox7.ForeColor = Color.Black
+                        GroupBox8.ForeColor = Color.Black
+                        GroupBox9.ForeColor = Color.Black
+                        GroupBox10.ForeColor = Color.Black
                     End If
                 Catch ex As Exception
                     ChangePrgColors(1)
@@ -4512,6 +4800,15 @@ Public Class MainForm
                 Next
                 InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph)
                 BranchTSMI.Image = New Bitmap(My.Resources.branch)
+                ' New design stuff
+                FlowLayoutPanel1.BackColor = Color.FromArgb(239, 239, 242)
+                GroupBox4.ForeColor = Color.Black
+                GroupBox5.ForeColor = Color.Black
+                GroupBox6.ForeColor = Color.Black
+                GroupBox7.ForeColor = Color.Black
+                GroupBox8.ForeColor = Color.Black
+                GroupBox9.ForeColor = Color.Black
+                GroupBox10.ForeColor = Color.Black
             Case 2
                 If IsWindowsVersionOrGreater(10, 0, 18362) Then EnableDarkTitleBar(Handle, True)
                 BackColor = Color.FromArgb(48, 48, 48)
@@ -4625,6 +4922,15 @@ Public Class MainForm
                 Next
                 InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph_dark)
                 BranchTSMI.Image = New Bitmap(My.Resources.branch_dark)
+                ' New design stuff
+                FlowLayoutPanel1.BackColor = Color.FromArgb(48, 48, 48)
+                GroupBox4.ForeColor = Color.White
+                GroupBox5.ForeColor = Color.White
+                GroupBox6.ForeColor = Color.White
+                GroupBox7.ForeColor = Color.White
+                GroupBox8.ForeColor = Color.White
+                GroupBox9.ForeColor = Color.White
+                GroupBox10.ForeColor = Color.White
         End Select
     End Sub
 
@@ -4875,6 +5181,8 @@ Public Class MainForm
                         Button11.Text = "Reload servicing session..."
                         Button12.Text = "Perform component cleanup and/or repair..."
                         Button13.Text = "Switch indexes..."
+                        Button19.Text = "Preview the new design"
+                        Button20.Text = "Go back to the old design"
                         ' Pop-up context menus
                         PkgBasicInfo.Text = "Get basic information (all packages)"
                         PkgDetailedInfo.Text = "Get detailed information (specific package)"
@@ -5161,6 +5469,8 @@ Public Class MainForm
                         Button11.Text = "Recargar sesión de servicio..."
                         Button12.Text = "Realizar limpieza y/o reparación de componentes..."
                         Button13.Text = "Cambiar índices..."
+                        Button19.Text = "Ver el nuevo diseño"
+                        Button20.Text = "Regresar al diseño antiguo"
                         ' Pop-up context menus
                         PkgBasicInfo.Text = "Obtener información básica (todos los paquetes)"
                         PkgDetailedInfo.Text = "Obtener información detallada (paquete específico)"
@@ -5447,6 +5757,8 @@ Public Class MainForm
                         Button11.Text = "Recharger la session de maintenance..."
                         Button12.Text = "Effectuer le nettoyage et/ou la réparation des composants..."
                         Button13.Text = "Changer d'index de l'image..."
+                        Button19.Text = "Prévisualiser le nouveau design"
+                        Button20.Text = "Revenir à l'ancien design"
                         ' Pop-up context menus
                         PkgBasicInfo.Text = "Obtenir des informations basiques (tous les paquets)"
                         PkgDetailedInfo.Text = "Obtenir des informations détaillées (paquet spécifique)"
@@ -5738,6 +6050,8 @@ Public Class MainForm
                 Button11.Text = "Reload servicing session..."
                 Button12.Text = "Perform component cleanup and/or repair..."
                 Button13.Text = "Switch indexes..."
+                Button19.Text = "Preview the new design"
+                Button20.Text = "Go back to the old design"
                 ' Pop-up context menus
                 PkgBasicInfo.Text = "Get basic information (all packages)"
                 PkgDetailedInfo.Text = "Get detailed information (specific package)"
@@ -6024,6 +6338,8 @@ Public Class MainForm
                 Button11.Text = "Recargar sesión de servicio..."
                 Button12.Text = "Realizar limpieza y/o reparación de componentes..."
                 Button13.Text = "Cambiar índices..."
+                Button19.Text = "Ver el nuevo diseño"
+                Button20.Text = "Regresar al diseño antiguo"
                 ' Pop-up context menus
                 PkgBasicInfo.Text = "Obtener información básica (todos los paquetes)"
                 PkgDetailedInfo.Text = "Obtener información detallada (paquete específico)"
@@ -6309,6 +6625,8 @@ Public Class MainForm
                 Button11.Text = "Recharger la session de maintenance..."
                 Button12.Text = "Effectuer le nettoyage et/ou la réparation des composants..."
                 Button13.Text = "Changer d'index de l'image..."
+                Button19.Text = "Prévisualiser le nouveau design"
+                Button20.Text = "Revenir à l'ancien design"
                 ' Pop-up context menus
                 PkgBasicInfo.Text = "Obtenir des informations basiques (tous les paquets)"
                 PkgDetailedInfo.Text = "Obtenir des informations détaillées (paquet spécifique)"
@@ -6490,6 +6808,8 @@ Public Class MainForm
                 If IsImageMounted Then
                     ImageNotMountedPanel.Visible = False
                     ImagePanel.Visible = True
+                    ImageView_NoImage.Visible = False
+                    ImageView_BasicInfo.Visible = True
                 End If
                 PopulateProjectTree(prjName)
                 isProjectLoaded = True
@@ -6508,6 +6828,42 @@ Public Class MainForm
                 Button11.Enabled = False
                 Button12.Enabled = False
                 Button13.Enabled = False
+                ' Update the buttons in the new design accordingly
+                Button26.Enabled = True
+                Button27.Enabled = False
+                Button28.Enabled = False
+                Button29.Enabled = False
+                Button24.Enabled = False
+                Button25.Enabled = False
+                Button30.Enabled = False
+                Button31.Enabled = False
+                Button32.Enabled = False
+                Button33.Enabled = False
+                Button34.Enabled = False
+                Button35.Enabled = False
+                Button36.Enabled = False
+                Button37.Enabled = False
+                Button38.Enabled = False
+                Button39.Enabled = False
+                Button40.Enabled = False
+                Button41.Enabled = False
+                Button42.Enabled = False
+                Button43.Enabled = False
+                Button44.Enabled = False
+                Button45.Enabled = False
+                Button46.Enabled = False
+                Button47.Enabled = False
+                Button48.Enabled = False
+                Button49.Enabled = False
+                Button50.Enabled = False
+                Button51.Enabled = False
+                Button52.Enabled = False
+                Button53.Enabled = False
+                Button54.Enabled = False
+                Button55.Enabled = False
+                Button56.Enabled = False
+                Button57.Enabled = False
+                Button58.Enabled = False
             Else
                 If OpenFileDialog1.FileName = "" Then
                     If BypassFileDialog = False Then
@@ -6546,9 +6902,13 @@ Public Class MainForm
                         If IsImageMounted Then
                             ImageNotMountedPanel.Visible = False
                             ImagePanel.Visible = True
+                            ImageView_NoImage.Visible = False
+                            ImageView_BasicInfo.Visible = True
                         Else
                             ImageNotMountedPanel.Visible = True
                             ImagePanel.Visible = False
+                            ImageView_NoImage.Visible = True
+                            ImageView_BasicInfo.Visible = False
                         End If
                         PopulateProjectTree(prjName)
                         isProjectLoaded = True
@@ -6641,6 +7001,42 @@ Public Class MainForm
                             Button11.Enabled = True
                             Button12.Enabled = True
                             Button13.Enabled = True
+                            ' Update the buttons in the new design accordingly
+                            Button26.Enabled = False
+                            Button27.Enabled = True
+                            Button28.Enabled = True
+                            Button29.Enabled = True
+                            Button24.Enabled = True
+                            Button25.Enabled = True
+                            Button30.Enabled = True
+                            Button31.Enabled = True
+                            Button32.Enabled = True
+                            Button33.Enabled = True
+                            Button34.Enabled = True
+                            Button35.Enabled = True
+                            Button36.Enabled = True
+                            Button37.Enabled = True
+                            Button38.Enabled = True
+                            Button39.Enabled = True
+                            Button40.Enabled = True
+                            Button41.Enabled = True
+                            Button42.Enabled = True
+                            Button43.Enabled = True
+                            Button44.Enabled = True
+                            Button45.Enabled = True
+                            Button46.Enabled = True
+                            Button47.Enabled = True
+                            Button48.Enabled = True
+                            Button49.Enabled = True
+                            Button50.Enabled = True
+                            Button51.Enabled = True
+                            Button52.Enabled = True
+                            Button53.Enabled = True
+                            Button54.Enabled = True
+                            Button55.Enabled = True
+                            Button56.Enabled = True
+                            Button57.Enabled = True
+                            Button58.Enabled = True
                         Else
                             Button1.Enabled = True
                             Button2.Enabled = False
@@ -6655,6 +7051,42 @@ Public Class MainForm
                             Button11.Enabled = False
                             Button12.Enabled = False
                             Button13.Enabled = False
+                            ' Update the buttons in the new design accordingly
+                            Button26.Enabled = True
+                            Button27.Enabled = False
+                            Button28.Enabled = False
+                            Button29.Enabled = False
+                            Button24.Enabled = False
+                            Button25.Enabled = False
+                            Button30.Enabled = False
+                            Button31.Enabled = False
+                            Button32.Enabled = False
+                            Button33.Enabled = False
+                            Button34.Enabled = False
+                            Button35.Enabled = False
+                            Button36.Enabled = False
+                            Button37.Enabled = False
+                            Button38.Enabled = False
+                            Button39.Enabled = False
+                            Button40.Enabled = False
+                            Button41.Enabled = False
+                            Button42.Enabled = False
+                            Button43.Enabled = False
+                            Button44.Enabled = False
+                            Button45.Enabled = False
+                            Button46.Enabled = False
+                            Button47.Enabled = False
+                            Button48.Enabled = False
+                            Button49.Enabled = False
+                            Button50.Enabled = False
+                            Button51.Enabled = False
+                            Button52.Enabled = False
+                            Button53.Enabled = False
+                            Button54.Enabled = False
+                            Button55.Enabled = False
+                            Button56.Enabled = False
+                            Button57.Enabled = False
+                            Button58.Enabled = False
                         End If
                     End If
                 Else
@@ -6691,9 +7123,13 @@ Public Class MainForm
                     If IsImageMounted Then
                         ImageNotMountedPanel.Visible = False
                         ImagePanel.Visible = True
+                        ImageView_NoImage.Visible = False
+                        ImageView_BasicInfo.Visible = True
                     Else
                         ImageNotMountedPanel.Visible = True
                         ImagePanel.Visible = False
+                        ImageView_NoImage.Visible = True
+                        ImageView_BasicInfo.Visible = False
                     End If
                     PopulateProjectTree(prjName)
                     isProjectLoaded = True
@@ -6786,6 +7222,42 @@ Public Class MainForm
                         Button11.Enabled = True
                         Button12.Enabled = True
                         Button13.Enabled = True
+                        ' Update the buttons in the new design accordingly
+                        Button26.Enabled = False
+                        Button27.Enabled = True
+                        Button28.Enabled = True
+                        Button29.Enabled = True
+                        Button24.Enabled = True
+                        Button25.Enabled = True
+                        Button30.Enabled = True
+                        Button31.Enabled = True
+                        Button32.Enabled = True
+                        Button33.Enabled = True
+                        Button34.Enabled = True
+                        Button35.Enabled = True
+                        Button36.Enabled = True
+                        Button37.Enabled = True
+                        Button38.Enabled = True
+                        Button39.Enabled = True
+                        Button40.Enabled = True
+                        Button41.Enabled = True
+                        Button42.Enabled = True
+                        Button43.Enabled = True
+                        Button44.Enabled = True
+                        Button45.Enabled = True
+                        Button46.Enabled = True
+                        Button47.Enabled = True
+                        Button48.Enabled = True
+                        Button49.Enabled = True
+                        Button50.Enabled = True
+                        Button51.Enabled = True
+                        Button52.Enabled = True
+                        Button53.Enabled = True
+                        Button54.Enabled = True
+                        Button55.Enabled = True
+                        Button56.Enabled = True
+                        Button57.Enabled = True
+                        Button58.Enabled = True
                     Else
                         Button1.Enabled = True
                         Button2.Enabled = False
@@ -6800,6 +7272,42 @@ Public Class MainForm
                         Button11.Enabled = False
                         Button12.Enabled = False
                         Button13.Enabled = False
+                        ' Update the buttons in the new design accordingly
+                        Button26.Enabled = True
+                        Button27.Enabled = False
+                        Button28.Enabled = False
+                        Button29.Enabled = False
+                        Button24.Enabled = False
+                        Button25.Enabled = False
+                        Button30.Enabled = False
+                        Button31.Enabled = False
+                        Button32.Enabled = False
+                        Button33.Enabled = False
+                        Button34.Enabled = False
+                        Button35.Enabled = False
+                        Button36.Enabled = False
+                        Button37.Enabled = False
+                        Button38.Enabled = False
+                        Button39.Enabled = False
+                        Button40.Enabled = False
+                        Button41.Enabled = False
+                        Button42.Enabled = False
+                        Button43.Enabled = False
+                        Button44.Enabled = False
+                        Button45.Enabled = False
+                        Button46.Enabled = False
+                        Button47.Enabled = False
+                        Button48.Enabled = False
+                        Button49.Enabled = False
+                        Button50.Enabled = False
+                        Button51.Enabled = False
+                        Button52.Enabled = False
+                        Button53.Enabled = False
+                        Button54.Enabled = False
+                        Button55.Enabled = False
+                        Button56.Enabled = False
+                        Button57.Enabled = False
+                        Button58.Enabled = False
                     End If
                 End If
             End If
@@ -7151,6 +7659,8 @@ Public Class MainForm
         LinkLabel14.Visible = False
         ImageNotMountedPanel.Visible = False
         ImagePanel.Visible = True
+        ImageView_NoImage.Visible = False
+        ImageView_BasicInfo.Visible = True
         CommandsToolStripMenuItem.Visible = True
         Thread.Sleep(250)
         Refresh()
@@ -7248,6 +7758,8 @@ Public Class MainForm
         LinkLabel14.Visible = False
         ImageNotMountedPanel.Visible = False
         ImagePanel.Visible = True
+        ImageView_NoImage.Visible = False
+        ImageView_BasicInfo.Visible = True
         CommandsToolStripMenuItem.Visible = True
         Thread.Sleep(250)
         Refresh()
@@ -7409,12 +7921,21 @@ Public Class MainForm
         LinkLabel14.Visible = False
         ImageNotMountedPanel.Visible = False
         ImagePanel.Visible = True
+        ImageView_NoImage.Visible = False
+        ImageView_BasicInfo.Visible = True
         CommandsToolStripMenuItem.Visible = False
         ProjectToolStripMenuItem.Visible = False
         Thread.Sleep(250)
         Refresh()
         ToolStripButton2.Enabled = True
         GroupBox1.Enabled = True
+        ' Enable tasks in the new design accordingly
+        Button24.Enabled = True
+        Button25.Enabled = True
+        Button26.Enabled = True
+        Button27.Enabled = True
+        Button28.Enabled = True
+        Button29.Enabled = True
         Panel2.Visible = True
         ProjNameEditBtn.Visible = True
         TableLayoutPanel2.ColumnCount = 3
@@ -7546,12 +8067,21 @@ Public Class MainForm
         LinkLabel14.Visible = False
         ImageNotMountedPanel.Visible = False
         ImagePanel.Visible = True
+        ImageView_NoImage.Visible = False
+        ImageView_BasicInfo.Visible = True
         CommandsToolStripMenuItem.Visible = False
         ProjectToolStripMenuItem.Visible = False
         Thread.Sleep(250)
         Refresh()
         ToolStripButton2.Enabled = True
         GroupBox1.Enabled = True
+        ' Enable tasks in the new design accordingly
+        Button24.Enabled = True
+        Button25.Enabled = True
+        Button26.Enabled = True
+        Button27.Enabled = True
+        Button28.Enabled = True
+        Button29.Enabled = True
         Panel2.Visible = True
         ProjNameEditBtn.Visible = True
         TableLayoutPanel2.ColumnCount = 3
@@ -7588,6 +8118,8 @@ Public Class MainForm
             LinkLabel14.Visible = False
             ImageNotMountedPanel.Visible = False
             ImagePanel.Visible = True
+            ImageView_NoImage.Visible = False
+            ImageView_BasicInfo.Visible = True
             IsImageMounted = True
         Else
             Label5.Text = "No"
@@ -7596,6 +8128,8 @@ Public Class MainForm
             LinkLabel14.Visible = True
             ImageNotMountedPanel.Visible = True
             ImagePanel.Visible = False
+            ImageView_NoImage.Visible = True
+            ImageView_BasicInfo.Visible = False
             IsImageMounted = False
             SourceImg = "N/A"
             ImgIndex = 0
@@ -7987,6 +8521,42 @@ Public Class MainForm
                 Button11.Enabled = True
                 Button12.Enabled = True
                 Button13.Enabled = True
+                ' Update the buttons in the new design accordingly
+                Button26.Enabled = False
+                Button27.Enabled = True
+                Button28.Enabled = True
+                Button29.Enabled = True
+                Button24.Enabled = True
+                Button25.Enabled = True
+                Button30.Enabled = True
+                Button31.Enabled = True
+                Button32.Enabled = True
+                Button33.Enabled = True
+                Button34.Enabled = True
+                Button35.Enabled = True
+                Button36.Enabled = True
+                Button37.Enabled = True
+                Button38.Enabled = True
+                Button39.Enabled = True
+                Button40.Enabled = True
+                Button41.Enabled = True
+                Button42.Enabled = True
+                Button43.Enabled = True
+                Button44.Enabled = True
+                Button45.Enabled = True
+                Button46.Enabled = True
+                Button47.Enabled = True
+                Button48.Enabled = True
+                Button49.Enabled = True
+                Button50.Enabled = True
+                Button51.Enabled = True
+                Button52.Enabled = True
+                Button53.Enabled = True
+                Button54.Enabled = True
+                Button55.Enabled = True
+                Button56.Enabled = True
+                Button57.Enabled = True
+                Button58.Enabled = True
                 DetectNTVersion(MountDir & "\Windows\system32\ntoskrnl.exe")
             Catch ex As Exception
 
@@ -8033,6 +8603,42 @@ Public Class MainForm
             Button11.Enabled = False
             Button12.Enabled = False
             Button13.Enabled = False
+            ' Update the buttons in the new design accordingly
+            Button26.Enabled = True
+            Button27.Enabled = False
+            Button28.Enabled = False
+            Button29.Enabled = False
+            Button24.Enabled = False
+            Button25.Enabled = False
+            Button30.Enabled = False
+            Button31.Enabled = False
+            Button32.Enabled = False
+            Button33.Enabled = False
+            Button34.Enabled = False
+            Button35.Enabled = False
+            Button36.Enabled = False
+            Button37.Enabled = False
+            Button38.Enabled = False
+            Button39.Enabled = False
+            Button40.Enabled = False
+            Button41.Enabled = False
+            Button42.Enabled = False
+            Button43.Enabled = False
+            Button44.Enabled = False
+            Button45.Enabled = False
+            Button46.Enabled = False
+            Button47.Enabled = False
+            Button48.Enabled = False
+            Button49.Enabled = False
+            Button50.Enabled = False
+            Button51.Enabled = False
+            Button52.Enabled = False
+            Button53.Enabled = False
+            Button54.Enabled = False
+            Button55.Enabled = False
+            Button56.Enabled = False
+            Button57.Enabled = False
+            Button58.Enabled = False
         End If
     End Sub
 
@@ -10097,6 +10703,42 @@ Public Class MainForm
                         Button11.Enabled = False
                         Button12.Enabled = False
                         Button13.Enabled = False
+                        ' Update the buttons in the new design accordingly
+                        Button26.Enabled = False
+                        Button27.Enabled = False
+                        Button28.Enabled = False
+                        Button29.Enabled = True
+                        Button24.Enabled = False
+                        Button25.Enabled = False
+                        Button30.Enabled = False
+                        Button31.Enabled = False
+                        Button32.Enabled = False
+                        Button33.Enabled = False
+                        Button34.Enabled = False
+                        Button35.Enabled = False
+                        Button36.Enabled = False
+                        Button37.Enabled = False
+                        Button38.Enabled = False
+                        Button39.Enabled = False
+                        Button40.Enabled = False
+                        Button41.Enabled = False
+                        Button42.Enabled = False
+                        Button43.Enabled = False
+                        Button44.Enabled = False
+                        Button45.Enabled = False
+                        Button46.Enabled = False
+                        Button47.Enabled = False
+                        Button48.Enabled = False
+                        Button49.Enabled = False
+                        Button50.Enabled = False
+                        Button51.Enabled = False
+                        Button52.Enabled = False
+                        Button53.Enabled = False
+                        Button54.Enabled = False
+                        Button55.Enabled = False
+                        Button56.Enabled = False
+                        Button57.Enabled = False
+                        Button58.Enabled = False
                         Exit Sub
                     ElseIf ImgWinVistaIncompatibilityDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
                         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
@@ -11908,7 +12550,7 @@ Public Class MainForm
     End Sub
 
     Private Sub GetFeatures_Click(sender As Object, e As EventArgs) Handles GetFeatures.Click
-        If Not IsImageMounted Or Not OnlineManagement Then Exit Sub
+        If Not IsImageMounted Then Exit Sub
         ProgressPanel.OperationNum = 994
         Select Case Language
             Case 0
@@ -12268,4 +12910,1228 @@ Public Class MainForm
         SidePanel_ProjectView.Visible = False
         SidePanel_ImageView.Visible = True
     End Sub
+
+#Region "Task Links"
+
+    Private Sub LinkLabel15_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel15.LinkClicked
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        ProjProperties.TabControl1.SelectedIndex = 0
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
+                    Case "ESN"
+                        ProjProperties.Label1.Text = "Propiedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del proyecto", "de la imagen")
+                    Case "FRA"
+                        ProjProperties.Label1.Text = "Propriétés " & If(ProjProperties.TabControl1.SelectedIndex = 0, "du projet", "de l'image")
+                End Select
+            Case 1
+                ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
+            Case 2
+                ProjProperties.Label1.Text = "Propiedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del proyecto", "de la imagen")
+            Case 3
+                ProjProperties.Label1.Text = "Propriétés " & If(ProjProperties.TabControl1.SelectedIndex = 0, "du projet", "de l'image")
+        End Select
+        If Environment.OSVersion.Version.Major = 10 Then
+            ProjProperties.Text = ""
+        Else
+            ProjProperties.Text = ProjProperties.Label1.Text
+        End If
+        ProjProperties.ShowDialog()
+    End Sub
+
+    Private Sub LinkLabel16_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel16.LinkClicked
+        Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", projPath)
+    End Sub
+
+    Private Sub LinkLabel17_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel17.LinkClicked
+        ToolStripButton3.PerformClick()
+    End Sub
+
+    Private Sub LinkLabel18_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel18.LinkClicked
+        PopupImageManager.Location = LinkLabel18.PointToScreen(Point.Empty)
+        PopupImageManager.Top -= PopupImageManager.Height
+        If PopupImageManager.ShowDialog() = DialogResult.OK Then
+            If MountedImageMountDirs.Count > 0 Then
+                MountDir = PopupImageManager.selectedMntDir
+                If MountedImageMountDirs.Count > 0 Then
+                    Try
+                        For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
+                            If MountedImageMountDirs(x) = MountDir Then
+                                ImgIndex = MountedImageImgIndexes(x)
+                                SourceImg = MountedImageImgFiles(x)
+                                IIf(MountedImageMountedReWr(x) = 1, isReadOnly = False, isReadOnly = True)
+                            End If
+                        Next
+                    Catch ex As Exception
+                        Exit Try
+                    End Try
+                    UpdateProjProperties(True, If(isReadOnly, True, False))
+                    SaveDTProj()
+                End If
+            Else
+                Exit Sub
+            End If
+        End If
+    End Sub
+
+    Private Sub LinkLabel19_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel19.LinkClicked
+        ' If it's a read only image, directly unmount it discarding changes
+        If MountedImageImgFiles.Count > 0 Then
+            For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
+                If MountedImageMountDirs(x) = MountDir Then
+                    If MountedImageMountedReWr(x) = 1 Then
+                        Button4.PerformClick()
+                        Exit Sub
+                    End If
+                End If
+            Next
+        End If
+        ImgUMount.RadioButton1.Checked = True
+        ImgUMount.RadioButton2.Checked = False
+        ImgUMount.ShowDialog()
+    End Sub
+
+    Private Sub LinkLabel20_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel20.LinkClicked
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        ProjProperties.TabControl1.SelectedIndex = 1
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
+                    Case "ESN"
+                        ProjProperties.Label1.Text = "Propiedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del proyecto", "de la imagen")
+                    Case "FRA"
+                        ProjProperties.Label1.Text = "Propriétés " & If(ProjProperties.TabControl1.SelectedIndex = 0, "du projet", "de l'image")
+                End Select
+            Case 1
+                ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
+            Case 2
+                ProjProperties.Label1.Text = "Propiedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del proyecto", "de la imagen")
+            Case 3
+                ProjProperties.Label1.Text = "Propriétés " & If(ProjProperties.TabControl1.SelectedIndex = 0, "du projet", "de l'image")
+        End Select
+        If Environment.OSVersion.Version.Major = 10 Then
+            ProjProperties.Text = ""
+        Else
+            ProjProperties.Text = ProjProperties.Label1.Text
+        End If
+        ProjProperties.ShowDialog()
+    End Sub
+
+    Private Sub LinkLabel21_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel21.LinkClicked
+        ImgMount.ShowDialog()
+    End Sub
+
+#End Region
+
+#Region "Common Task button functionality in new design"
+
+    Private Sub Button24_Click(sender As Object, e As EventArgs) Handles Button24.Click
+        MountedImageDetectorBW.CancelAsync()
+        ProgressPanel.OperationNum = 995
+        PleaseWaitDialog.indexesSourceImg = SourceImg
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting image indexes..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
+                    Case "FRA"
+                        PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting image indexes..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
+            Case 3
+                PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours..."
+        End Select
+        PleaseWaitDialog.ShowDialog(Me)
+        If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
+        If PleaseWaitDialog.imgIndexes > 1 Then
+            ImgIndexSwitch.ShowDialog()
+        End If
+    End Sub
+
+    Private Sub Button25_Click(sender As Object, e As EventArgs) Handles Button25.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+        ProgressPanel.MountDir = MountDir
+        ProgressPanel.OperationNum = 18
+        ProgressPanel.ShowDialog(Me)
+    End Sub
+
+    Private Sub Button26_Click(sender As Object, e As EventArgs) Handles Button26.Click
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        ImgMount.ShowDialog()
+    End Sub
+
+    Private Sub Button27_Click(sender As Object, e As EventArgs) Handles Button27.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+        ProgressPanel.MountDir = MountDir
+        ' TODO: Add additional options later
+        ProgressPanel.OperationNum = 8
+        ProgressPanel.ShowDialog(Me)
+    End Sub
+
+    Private Sub Button28_Click(sender As Object, e As EventArgs) Handles Button28.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+        imgCommitOperation = 0
+        UnloadDTProj(False, True, True)
+    End Sub
+
+    Private Sub Button29_Click(sender As Object, e As EventArgs) Handles Button29.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+        imgCommitOperation = 1
+        UnloadDTProj(False, True, True)
+    End Sub
+
+    Private Sub Button30_Click(sender As Object, e As EventArgs) Handles Button30.Click
+        ImgApply.ShowDialog()
+    End Sub
+
+    Private Sub Button31_Click(sender As Object, e As EventArgs) Handles Button31.Click
+        ImgCapture.ShowDialog()
+    End Sub
+
+    Private Sub Button32_Click(sender As Object, e As EventArgs) Handles Button32.Click
+        ImgIndexDelete.ShowDialog()
+    End Sub
+
+    Private Sub Button33_Click(sender As Object, e As EventArgs) Handles Button33.Click
+        If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
+            ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
+            If MountedImageMountDirs.Count > 0 Then
+                For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
+                    If MountedImageMountDirs(x) = MountDir Then
+                        ImgInfoSaveDlg.SourceImage = MountedImageImgFiles(x)
+                        Exit For
+                    End If
+                Next
+            End If
+            ImgInfoSaveDlg.ImgMountDir = If(Not OnlineManagement, MountDir, "")
+            ImgInfoSaveDlg.OnlineMode = OnlineManagement
+            ImgInfoSaveDlg.OfflineMode = OfflineManagement
+            ImgInfoSaveDlg.AllDrivers = AllDrivers
+            ImgInfoSaveDlg.SaveTask = 0
+            ImgInfoSaveDlg.ShowDialog()
+        End If
+    End Sub
+
+    Private Sub Button34_Click(sender As Object, e As EventArgs) Handles Button34.Click
+        ProgressPanel.OperationNum = 993
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting package names..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
+                    Case "FRA"
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting package names..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
+            Case 3
+                PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
+        End Select
+        If Not CompletedTasks(0) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        If MountedImageDetectorBW.IsBusy Then
+            MountedImageDetectorBW.CancelAsync()
+            While MountedImageDetectorBW.IsBusy
+                Application.DoEvents()
+                Thread.Sleep(500)
+            End While
+        End If
+        If PackageInfoList IsNot Nothing Then GetPkgInfoDlg.InstalledPkgInfo = PackageInfoList
+        GetPkgInfoDlg.ShowDialog(Me)
+    End Sub
+
+    Private Sub Button35_Click(sender As Object, e As EventArgs) Handles Button35.Click
+        ElementCount = 0
+        RemPackage.CheckedListBox1.Items.Clear()
+        ProgressPanel.OperationNum = 993
+        PleaseWaitDialog.pkgSourceImgStr = MountDir
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting package names..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
+                    Case "FRA"
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting package names..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
+            Case 3
+                PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
+        End Select
+        If Not CompletedTasks(0) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        Try
+            For x = 0 To Array.LastIndexOf(imgPackageNames, imgPackageNames.Last)
+                If imgPackageNames(x) = "" Then
+                    Continue For
+                End If
+                RemPackage.CheckedListBox1.Items.Add(imgPackageNames(x))
+            Next
+        Catch ex As Exception
+            ' We should have enough with the entries already added.
+            Exit Try
+        End Try
+        Try
+            For x = 0 To Array.LastIndexOf(imgPackageNames, imgPackageNames.Last)
+                If imgPackageNames(x) = "" Then
+                    Exit For
+                End If
+                ElementCount += 1
+            Next
+        Catch ex As Exception
+            ' We should have enough with the entries already added.
+            Exit Try
+        End Try
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        RemPackage.Label2.Text = "This image contains " & ElementCount & " packages"
+                    Case "ESN"
+                        RemPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes"
+                    Case "FRA"
+                        RemPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets"
+                End Select
+            Case 1
+                RemPackage.Label2.Text = "This image contains " & ElementCount & " packages"
+            Case 2
+                RemPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes"
+            Case 3
+                RemPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets"
+        End Select
+        RemPackage.ShowDialog()
+    End Sub
+
+    Private Sub Button36_Click(sender As Object, e As EventArgs) Handles Button36.Click
+        AddPackageDlg.ShowDialog()
+    End Sub
+
+    Private Sub Button37_Click(sender As Object, e As EventArgs) Handles Button37.Click
+        ImgCleanup.ShowDialog()
+    End Sub
+
+    Private Sub Button38_Click(sender As Object, e As EventArgs) Handles Button38.Click
+        If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
+            If ImgInfoSaveDlg.PackageFiles.Count > 0 Then ImgInfoSaveDlg.PackageFiles.Clear()
+            ImgInfoSaveDlg.SourceImage = SourceImg
+            ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
+            ImgInfoSaveDlg.ImgMountDir = If(Not OnlineManagement, MountDir, "")
+            ImgInfoSaveDlg.OnlineMode = OnlineManagement
+            ImgInfoSaveDlg.SaveTask = 2
+            ImgInfoSaveDlg.ShowDialog()
+        End If
+    End Sub
+
+    Private Sub Button39_Click(sender As Object, e As EventArgs) Handles Button39.Click
+        If Not IsImageMounted Then Exit Sub
+        ProgressPanel.OperationNum = 994
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
+                    Case "FRA"
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
+            Case 3
+                PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
+        End Select
+        If Not CompletedTasks(1) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(500)
+        End While
+        If FeatureInfoList IsNot Nothing Then GetFeatureInfoDlg.InstalledFeatureInfo = FeatureInfoList
+        GetFeatureInfoDlg.ShowDialog(Me)
+    End Sub
+
+    Private Sub Button40_Click(sender As Object, e As EventArgs) Handles Button40.Click
+        ElementCount = 0
+        EnableFeat.ListView1.Items.Clear()
+        DisableFeat.ListView1.Items.Clear()
+        ProgressPanel.OperationNum = 994
+        PleaseWaitDialog.featOpType = 1
+        PleaseWaitDialog.featSourceImg = MountDir
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
+                    Case "FRA"
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
+            Case 3
+                PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
+        End Select
+        If Not CompletedTasks(1) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        Select Case PleaseWaitDialog.featOpType
+            Case 0
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureState(x).Contains("Enable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
+                            Continue For
+                        End If
+                        EnableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
+                    Next
+                Catch ex As Exception
+                    ' We should have enough with the entries already added.
+                    Exit Try
+                End Try
+                ' Get number of available elements
+                Dim ElementCount As Integer = 0
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureNames(x) = "" Then
+                            Exit For
+                        End If
+                        ElementCount += 1
+                    Next
+                Catch ex As Exception
+                    Exit Try
+                End Try
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                            Case "ESN"
+                                EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
+                            Case "FRA"
+                                EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
+                        End Select
+                    Case 1
+                        EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                    Case 2
+                        EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
+                    Case 3
+                        EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
+                End Select
+            Case 1
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureState(x).Contains("Disable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
+                            Continue For
+                        End If
+                        DisableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
+                    Next
+                Catch ex As Exception
+                    ' We should have enough with the entries already added.
+                    Exit Try
+                End Try
+                ' Get number of available elements
+                Dim ElementCount As Integer
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureNames(x) = "" Then
+                            Exit For
+                        End If
+                        ElementCount += 1
+                    Next
+                Catch ex As Exception
+                    Exit Try
+                End Try
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                            Case "ESN"
+                                DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
+                            Case "FRA"
+                                EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
+                        End Select
+                    Case 1
+                        DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                    Case 2
+                        DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
+                    Case 3
+                        EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
+                End Select
+        End Select
+        DisableFeat.ShowDialog()
+    End Sub
+
+    Private Sub Button41_Click(sender As Object, e As EventArgs) Handles Button41.Click
+        ElementCount = 0
+        EnableFeat.ListView1.Items.Clear()
+        DisableFeat.ListView1.Items.Clear()
+        ProgressPanel.OperationNum = 994
+        PleaseWaitDialog.featOpType = 0
+        PleaseWaitDialog.featSourceImg = MountDir
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
+                    Case "FRA"
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
+            Case 3
+                PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
+        End Select
+        If Not CompletedTasks(1) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        Select Case PleaseWaitDialog.featOpType
+            Case 0
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureState(x).Contains("Enable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
+                            Continue For
+                        End If
+                        EnableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
+                    Next
+                Catch ex As Exception
+                    ' We should have enough with the entries already added.
+                    Exit Try
+                End Try
+                ' Get number of available elements
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureNames(x) = "" Then
+                            Exit For
+                        End If
+                        ElementCount += 1
+                    Next
+                Catch ex As Exception
+                    Exit Try
+                End Try
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                            Case "ESN"
+                                EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
+                            Case "FRA"
+                                EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
+                        End Select
+                    Case 1
+                        EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                    Case 2
+                        EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
+                    Case 3
+                        EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
+                End Select
+            Case 1
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureState(x).Contains("Disable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
+                            Continue For
+                        End If
+                        DisableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
+                    Next
+                Catch ex As Exception
+                    ' We should have enough with the entries already added.
+                    Exit Try
+                End Try
+                ' Get number of available elements
+                Dim ElementCount As Integer
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureNames(x) = "" Then
+                            Exit For
+                        End If
+                        ElementCount += 1
+                    Next
+                Catch ex As Exception
+                    Exit Try
+                End Try
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                            Case "ESN"
+                                DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
+                            Case "FRA"
+                                EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
+                        End Select
+                    Case 1
+                        DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                    Case 2
+                        DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
+                    Case 3
+                        EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
+                End Select
+        End Select
+        EnableFeat.ShowDialog()
+    End Sub
+
+    Private Sub Button42_Click(sender As Object, e As EventArgs) Handles Button42.Click
+        If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
+            ImgInfoSaveDlg.SourceImage = SourceImg
+            ImgInfoSaveDlg.ImgMountDir = If(Not OnlineManagement, MountDir, "")
+            ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
+            ImgInfoSaveDlg.OnlineMode = OnlineManagement
+            ImgInfoSaveDlg.OfflineMode = OfflineManagement
+            ImgInfoSaveDlg.SaveTask = 4
+            ImgInfoSaveDlg.ShowDialog()
+        End If
+    End Sub
+
+    Private Sub Button43_Click(sender As Object, e As EventArgs) Handles Button43.Click
+        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                        Case "FRA"
+                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                Case 3
+                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+            End Select
+            Exit Sub
+        End If
+        ElementCount = 0
+        RemProvAppxPackage.ListView1.Items.Clear()
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting provisioned AppX packages..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo paquetes aprovisionados AppX..."
+                    Case "FRA"
+                        PleaseWaitDialog.Label2.Text = "Obtention des paquets AppX provisionnés en cours..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting provisioned AppX packages..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo paquetes aprovisionados AppX..."
+            Case 3
+                PleaseWaitDialog.Label2.Text = "Obtention des paquets AppX provisionnés en cours..."
+        End Select
+        ProgressPanel.OperationNum = 994
+        If Not CompletedTasks(2) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        Try
+            For x = 0 To Array.LastIndexOf(imgAppxPackageNames, imgAppxPackageNames.Last)
+                If imgAppxPackageNames(x) = "" Or imgAppxPackageNames(x) = "Nothing" Then
+                    Continue For
+                Else
+                    If Directory.Exists(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x)) Then
+                        If My.Computer.FileSystem.GetFiles(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
+                            RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "No"}))
+                        Else
+                            RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "Yes"}))
+                        End If
+                    Else
+                        RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "No"}))
+                    End If
+                End If
+            Next
+        Catch ex As Exception
+            ' We should have enough with the entries already added.
+            Exit Try
+        End Try
+        ' Begin counting
+        Try
+            For x = 0 To Array.LastIndexOf(imgAppxPackageNames, imgAppxPackageNames.Last)
+                If imgAppxPackageNames(x) = "" Then
+                    Exit For
+                End If
+                ElementCount += 1
+            Next
+        Catch ex As Exception
+            Exit Try
+        End Try
+        If ElementCount <= 0 Then
+            ElementCount = RemProvAppxPackage.ListView1.Items.Count
+        End If
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        RemProvAppxPackage.Label2.Text = "This image contains " & ElementCount & " AppX packages."
+                    Case "ESN"
+                        RemProvAppxPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes AppX."
+                    Case "FRA"
+                        RemProvAppxPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets AppX."
+                End Select
+            Case 1
+                RemProvAppxPackage.Label2.Text = "This image contains " & ElementCount & " AppX packages."
+            Case 2
+                RemProvAppxPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes AppX."
+            Case 3
+                RemProvAppxPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets AppX."
+        End Select
+        RemProvAppxPackage.ShowDialog()
+    End Sub
+
+    Private Sub Button44_Click(sender As Object, e As EventArgs) Handles Button44.Click
+        If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+            AddProvAppxPackage.ShowDialog()
+        Else
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                        Case "FRA"
+                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                Case 3
+                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+            End Select
+        End If
+    End Sub
+
+    Private Sub Button45_Click(sender As Object, e As EventArgs) Handles Button45.Click
+        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                        Case "FRA"
+                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                Case 3
+                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+            End Select
+            Exit Sub
+        End If
+        ProgressPanel.OperationNum = 993
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting package names..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
+                    Case "FRA"
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting package names..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
+            Case 3
+                PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
+        End Select
+        If Not CompletedTasks(2) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        If AppxPackageInfoList IsNot Nothing Then GetAppxPkgInfoDlg.InstalledAppxPkgInfo = AppxPackageInfoList
+        GetAppxPkgInfoDlg.ShowDialog(Me)
+    End Sub
+
+    Private Sub Button46_Click(sender As Object, e As EventArgs) Handles Button46.Click
+        If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
+            ImgInfoSaveDlg.SourceImage = SourceImg
+            ImgInfoSaveDlg.ImgMountDir = If(Not OnlineManagement, MountDir, "")
+            ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
+            ImgInfoSaveDlg.OnlineMode = OnlineManagement
+            ImgInfoSaveDlg.OfflineMode = OfflineManagement
+            ImgInfoSaveDlg.SaveTask = 5
+            ImgInfoSaveDlg.ShowDialog()
+        End If
+    End Sub
+
+    Private Sub Button47_Click(sender As Object, e As EventArgs) Handles Button47.Click
+        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                        Case "FRA"
+                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                Case 3
+                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+            End Select
+            Exit Sub
+        End If
+        ElementCount = 0
+        RemCapabilities.ListView1.Items.Clear()
+        ProgressPanel.OperationNum = 994
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
+                    Case "FRA"
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
+            Case 3
+                PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
+        End Select
+        If Not CompletedTasks(3) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        Try
+            For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
+                If imgCapabilityState(x) = "Removed" Or imgCapabilityState(x) = "Not present" Or imgCapabilityState(x) = "Uninstalled" Then
+                    Continue For
+                End If
+                RemCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapabilityIds(x), imgCapabilityState(x)}))
+            Next
+        Catch ex As Exception
+            Exit Try
+        End Try
+        Try
+            For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
+                If imgCapabilityIds(x) = "" Then
+                    Exit For
+                End If
+                ElementCount += 1
+            Next
+        Catch ex As Exception
+            Exit Try
+        End Try
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        RemCapabilities.Label2.Text = "This image contains " & ElementCount & " capabilities."
+                    Case "ESN"
+                        RemCapabilities.Label2.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
+                    Case "FRA"
+                        AddCapabilities.Label4.Text = "Cette image contient " & ElementCount & " capacités."
+                End Select
+            Case 1
+                RemCapabilities.Label2.Text = "This image contains " & ElementCount & " capabilities."
+            Case 2
+                RemCapabilities.Label2.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
+            Case 3
+                AddCapabilities.Label4.Text = "Cette image contient " & ElementCount & " capacités."
+        End Select
+        RemCapabilities.ShowDialog()
+    End Sub
+
+    Private Sub Button48_Click(sender As Object, e As EventArgs) Handles Button48.Click
+        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                        Case "FRA"
+                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                Case 3
+                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+            End Select
+            Exit Sub
+        End If
+        ElementCount = 0
+        AddCapabilities.ListView1.Items.Clear()
+        ProgressPanel.OperationNum = 994
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
+                    Case "FRA"
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
+            Case 3
+                PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
+        End Select
+        If Not CompletedTasks(3) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        Try
+            For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
+                If imgCapabilityState(x) = "Installed" Or imgCapabilityState(x) = "Install Pending" Then
+                    Continue For
+                End If
+                AddCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapabilityIds(x), imgCapabilityState(x)}))
+            Next
+        Catch ex As Exception
+            Exit Try
+        End Try
+        Try
+            For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
+                If imgCapabilityIds(x) = "" Then
+                    Exit For
+                End If
+                ElementCount += 1
+            Next
+        Catch ex As Exception
+            Exit Try
+        End Try
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        AddCapabilities.Label4.Text = "This image contains " & ElementCount & " capabilities."
+                    Case "ESN"
+                        AddCapabilities.Label4.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
+                    Case "FRA"
+                        AddCapabilities.Label4.Text = "Cette image contient " & ElementCount & " capacités."
+                End Select
+            Case 1
+                AddCapabilities.Label4.Text = "This image contains " & ElementCount & " capabilities."
+            Case 2
+                AddCapabilities.Label4.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
+            Case 3
+                AddCapabilities.Label4.Text = "Cette image contient " & ElementCount & " capacités."
+        End Select
+        AddCapabilities.ShowDialog()
+    End Sub
+
+    Private Sub Button49_Click(sender As Object, e As EventArgs) Handles Button49.Click
+        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                        Case "FRA"
+                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                Case 3
+                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+            End Select
+            Exit Sub
+        End If
+        ProgressPanel.OperationNum = 994
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
+                    Case "FRA"
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
+            Case 3
+                PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
+        End Select
+        If Not CompletedTasks(3) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(500)
+        End While
+        If CapabilityInfoList IsNot Nothing Then GetCapabilityInfoDlg.InstalledCapabilityInfo = CapabilityInfoList
+        GetCapabilityInfoDlg.ShowDialog(Me)
+    End Sub
+
+    Private Sub Button50_Click(sender As Object, e As EventArgs) Handles Button50.Click
+        If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
+            ImgInfoSaveDlg.SourceImage = SourceImg
+            ImgInfoSaveDlg.ImgMountDir = If(Not OnlineManagement, MountDir, "")
+            ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
+            ImgInfoSaveDlg.OnlineMode = OnlineManagement
+            ImgInfoSaveDlg.OfflineMode = OfflineManagement
+            ImgInfoSaveDlg.SaveTask = 6
+            ImgInfoSaveDlg.ShowDialog()
+        End If
+    End Sub
+
+    Private Sub Button51_Click(sender As Object, e As EventArgs) Handles Button51.Click
+        If OnlineManagement Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
+                        Case "FRA"
+                            MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
+                Case 3
+                    MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+            End Select
+            Exit Sub
+        End If
+        RemDrivers.ListView1.Items.Clear()
+        ProgressPanel.OperationNum = 994
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
+                    Case "FRA"
+                        PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
+            Case 3
+                PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
+        End Select
+        If Not CompletedTasks(4) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        Try
+            For x = 0 To Array.LastIndexOf(imgDrvPublishedNames, imgDrvPublishedNames.Last)
+                If RemDrivers.CheckBox1.Checked Then
+                    If imgDrvBootCriticalStatus(x) Then Continue For
+                End If
+                If RemDrivers.CheckBox2.Checked Then
+                    If CBool(imgDrvInbox(x)) Then Continue For
+                End If
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Yes", "No"), If(imgDrvBootCriticalStatus(x), "Yes", "No"), imgDrvVersions(x), imgDrvDates(x)}))
+                            Case "ESN"
+                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sí", "No"), imgDrvVersions(x), imgDrvDates(x)}))
+                            Case "FRA"
+                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Oui", "Non"), If(imgDrvBootCriticalStatus(x), "Oui", "Non"), imgDrvVersions(x), imgDrvDates(x)}))
+                        End Select
+                    Case 1
+                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Yes", "No"), If(imgDrvBootCriticalStatus(x), "Yes", "No"), imgDrvVersions(x), imgDrvDates(x)}))
+                    Case 2
+                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sí", "No"), imgDrvVersions(x), imgDrvDates(x)}))
+                    Case 3
+                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Oui", "Non"), If(imgDrvBootCriticalStatus(x), "Oui", "Non"), imgDrvVersions(x), imgDrvDates(x)}))
+                End Select
+            Next
+        Catch ex As Exception
+            Exit Try
+        End Try
+        RemDrivers.ShowDialog()
+    End Sub
+
+    Private Sub Button52_Click(sender As Object, e As EventArgs) Handles Button52.Click
+        ProgressPanel.OperationNum = 994
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
+                    Case "FRA"
+                        PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
+            Case 3
+                PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
+        End Select
+        If Not CompletedTasks(4) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(500)
+        End While
+        If DriverInfoList IsNot Nothing Then GetDriverInfo.InstalledDriverInfo = DriverInfoList
+        GetDriverInfo.ShowDialog()
+    End Sub
+
+    Private Sub Button53_Click(sender As Object, e As EventArgs) Handles Button53.Click
+        If Not OnlineManagement Then
+            AddDrivers.ShowDialog()
+        Else
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
+                        Case "FRA"
+                            MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
+                Case 3
+                    MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+            End Select
+        End If
+    End Sub
+
+    Private Sub Button54_Click(sender As Object, e As EventArgs) Handles Button54.Click
+        If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
+            If ImgInfoSaveDlg.DriverPkgs.Count > 0 Then ImgInfoSaveDlg.DriverPkgs.Clear()
+            ImgInfoSaveDlg.SourceImage = SourceImg
+            ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
+            ImgInfoSaveDlg.ImgMountDir = If(Not OnlineManagement, MountDir, "")
+            ImgInfoSaveDlg.OnlineMode = OnlineManagement
+            ImgInfoSaveDlg.OfflineMode = OfflineManagement
+            ImgInfoSaveDlg.AllDrivers = AllDrivers
+            ImgInfoSaveDlg.SaveTask = 7
+            ImgInfoSaveDlg.ShowDialog()
+        End If
+    End Sub
+
+    Private Sub Button55_Click(sender As Object, e As EventArgs) Handles Button55.Click
+        If ImgBW.IsBusy Then
+            BGProcsBusyDialog.ShowDialog()
+            Exit Sub
+        End If
+        GetWinPESettings.ShowDialog()
+    End Sub
+
+    Private Sub Button56_Click(sender As Object, e As EventArgs) Handles Button56.Click
+        If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
+            ImgInfoSaveDlg.SourceImage = SourceImg
+            ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
+            ImgInfoSaveDlg.ImgMountDir = If(Not OnlineManagement, MountDir, "")
+            ImgInfoSaveDlg.OnlineMode = OnlineManagement
+            ImgInfoSaveDlg.SaveTask = 9
+            ImgInfoSaveDlg.ShowDialog()
+        End If
+    End Sub
+
+    Private Sub Button57_Click(sender As Object, e As EventArgs) Handles Button57.Click
+        If ImgBW.IsBusy Then
+            BGProcsBusyDialog.ShowDialog()
+            Exit Sub
+        End If
+        SetPETargetPath.ShowDialog()
+    End Sub
+
+    Private Sub Button58_Click(sender As Object, e As EventArgs) Handles Button58.Click
+        If ImgBW.IsBusy Then
+            BGProcsBusyDialog.ShowDialog()
+            Exit Sub
+        End If
+        SetPEScratchSpace.ShowDialog()
+    End Sub
+
+#End Region
 End Class
