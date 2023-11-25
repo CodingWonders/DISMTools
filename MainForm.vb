@@ -5181,6 +5181,8 @@ Public Class MainForm
                         Button11.Text = "Reload servicing session..."
                         Button12.Text = "Perform component cleanup and/or repair..."
                         Button13.Text = "Switch indexes..."
+                        Button19.Text = "Preview the new design"
+                        Button20.Text = "Go back to the old design"
                         ' Pop-up context menus
                         PkgBasicInfo.Text = "Get basic information (all packages)"
                         PkgDetailedInfo.Text = "Get detailed information (specific package)"
@@ -5467,6 +5469,8 @@ Public Class MainForm
                         Button11.Text = "Recargar sesión de servicio..."
                         Button12.Text = "Realizar limpieza y/o reparación de componentes..."
                         Button13.Text = "Cambiar índices..."
+                        Button19.Text = "Ver el nuevo diseño"
+                        Button20.Text = "Regresar al diseño antiguo"
                         ' Pop-up context menus
                         PkgBasicInfo.Text = "Obtener información básica (todos los paquetes)"
                         PkgDetailedInfo.Text = "Obtener información detallada (paquete específico)"
@@ -5753,6 +5757,8 @@ Public Class MainForm
                         Button11.Text = "Recharger la session de maintenance..."
                         Button12.Text = "Effectuer le nettoyage et/ou la réparation des composants..."
                         Button13.Text = "Changer d'index de l'image..."
+                        Button19.Text = "Prévisualiser le nouveau design"
+                        Button20.Text = "Revenir à l'ancien design"
                         ' Pop-up context menus
                         PkgBasicInfo.Text = "Obtenir des informations basiques (tous les paquets)"
                         PkgDetailedInfo.Text = "Obtenir des informations détaillées (paquet spécifique)"
@@ -6044,6 +6050,8 @@ Public Class MainForm
                 Button11.Text = "Reload servicing session..."
                 Button12.Text = "Perform component cleanup and/or repair..."
                 Button13.Text = "Switch indexes..."
+                Button19.Text = "Preview the new design"
+                Button20.Text = "Go back to the old design"
                 ' Pop-up context menus
                 PkgBasicInfo.Text = "Get basic information (all packages)"
                 PkgDetailedInfo.Text = "Get detailed information (specific package)"
@@ -6330,6 +6338,8 @@ Public Class MainForm
                 Button11.Text = "Recargar sesión de servicio..."
                 Button12.Text = "Realizar limpieza y/o reparación de componentes..."
                 Button13.Text = "Cambiar índices..."
+                Button19.Text = "Ver el nuevo diseño"
+                Button20.Text = "Regresar al diseño antiguo"
                 ' Pop-up context menus
                 PkgBasicInfo.Text = "Obtener información básica (todos los paquetes)"
                 PkgDetailedInfo.Text = "Obtener información detallada (paquete específico)"
@@ -6615,6 +6625,8 @@ Public Class MainForm
                 Button11.Text = "Recharger la session de maintenance..."
                 Button12.Text = "Effectuer le nettoyage et/ou la réparation des composants..."
                 Button13.Text = "Changer d'index de l'image..."
+                Button19.Text = "Prévisualiser le nouveau design"
+                Button20.Text = "Revenir à l'ancien design"
                 ' Pop-up context menus
                 PkgBasicInfo.Text = "Obtenir des informations basiques (tous les paquets)"
                 PkgDetailedInfo.Text = "Obtenir des informations détaillées (paquet spécifique)"

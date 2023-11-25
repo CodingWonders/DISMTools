@@ -302,6 +302,27 @@ Partial Class MainForm
         Me.SpaceLabel = New System.Windows.Forms.Label()
         Me.ProjectSidePanel = New System.Windows.Forms.Panel()
         Me.ProjectSidePanelContainer = New System.Windows.Forms.Panel()
+        Me.SidePanel_ProjectView = New System.Windows.Forms.Panel()
+        Me.Label55 = New System.Windows.Forms.Label()
+        Me.PrjTasks = New System.Windows.Forms.TableLayoutPanel()
+        Me.LinkLabel17 = New System.Windows.Forms.LinkLabel()
+        Me.PictureBox11 = New System.Windows.Forms.PictureBox()
+        Me.LinkLabel16 = New System.Windows.Forms.LinkLabel()
+        Me.PictureBox10 = New System.Windows.Forms.PictureBox()
+        Me.LinkLabel15 = New System.Windows.Forms.LinkLabel()
+        Me.PictureBox9 = New System.Windows.Forms.PictureBox()
+        Me.Button21 = New System.Windows.Forms.Button()
+        Me.Button22 = New System.Windows.Forms.Button()
+        Me.Button23 = New System.Windows.Forms.Button()
+        Me.TableLayoutPanel6 = New System.Windows.Forms.TableLayoutPanel()
+        Me.LinkLabel14 = New System.Windows.Forms.LinkLabel()
+        Me.Label50 = New System.Windows.Forms.Label()
+        Me.Label51 = New System.Windows.Forms.Label()
+        Me.Label52 = New System.Windows.Forms.Label()
+        Me.Label53 = New System.Windows.Forms.Label()
+        Me.Panel13 = New System.Windows.Forms.Panel()
+        Me.Label54 = New System.Windows.Forms.Label()
+        Me.Label49 = New System.Windows.Forms.Label()
         Me.SidePanel_ImageView = New System.Windows.Forms.Panel()
         Me.ImageView_NoImage = New System.Windows.Forms.Panel()
         Me.Label59 = New System.Windows.Forms.Label()
@@ -330,27 +351,6 @@ Partial Class MainForm
         Me.Label46 = New System.Windows.Forms.Label()
         Me.Label47 = New System.Windows.Forms.Label()
         Me.Label48 = New System.Windows.Forms.Label()
-        Me.SidePanel_ProjectView = New System.Windows.Forms.Panel()
-        Me.Label55 = New System.Windows.Forms.Label()
-        Me.PrjTasks = New System.Windows.Forms.TableLayoutPanel()
-        Me.LinkLabel17 = New System.Windows.Forms.LinkLabel()
-        Me.PictureBox11 = New System.Windows.Forms.PictureBox()
-        Me.LinkLabel16 = New System.Windows.Forms.LinkLabel()
-        Me.PictureBox10 = New System.Windows.Forms.PictureBox()
-        Me.LinkLabel15 = New System.Windows.Forms.LinkLabel()
-        Me.PictureBox9 = New System.Windows.Forms.PictureBox()
-        Me.Button21 = New System.Windows.Forms.Button()
-        Me.Button22 = New System.Windows.Forms.Button()
-        Me.Button23 = New System.Windows.Forms.Button()
-        Me.TableLayoutPanel6 = New System.Windows.Forms.TableLayoutPanel()
-        Me.LinkLabel14 = New System.Windows.Forms.LinkLabel()
-        Me.Label50 = New System.Windows.Forms.Label()
-        Me.Label51 = New System.Windows.Forms.Label()
-        Me.Label52 = New System.Windows.Forms.Label()
-        Me.Label53 = New System.Windows.Forms.Label()
-        Me.Panel13 = New System.Windows.Forms.Panel()
-        Me.Label54 = New System.Windows.Forms.Label()
-        Me.Label49 = New System.Windows.Forms.Label()
         Me.Panel10 = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel4 = New System.Windows.Forms.TableLayoutPanel()
         Me.LinkLabel12 = New System.Windows.Forms.LinkLabel()
@@ -543,6 +543,13 @@ Partial Class MainForm
         Me.GroupBox10.SuspendLayout()
         Me.ProjectSidePanel.SuspendLayout()
         Me.ProjectSidePanelContainer.SuspendLayout()
+        Me.SidePanel_ProjectView.SuspendLayout()
+        Me.PrjTasks.SuspendLayout()
+        CType(Me.PictureBox11, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox10, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox9, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.TableLayoutPanel6.SuspendLayout()
+        Me.Panel13.SuspendLayout()
         Me.SidePanel_ImageView.SuspendLayout()
         Me.ImageView_NoImage.SuspendLayout()
         Me.TableLayoutPanel7.SuspendLayout()
@@ -553,13 +560,6 @@ Partial Class MainForm
         CType(Me.PictureBox13, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox14, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel5.SuspendLayout()
-        Me.SidePanel_ProjectView.SuspendLayout()
-        Me.PrjTasks.SuspendLayout()
-        CType(Me.PictureBox11, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.PictureBox10, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.PictureBox9, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.TableLayoutPanel6.SuspendLayout()
-        Me.Panel13.SuspendLayout()
         Me.Panel10.SuspendLayout()
         Me.TableLayoutPanel4.SuspendLayout()
         Me.ProjectViewHeader.SuspendLayout()
@@ -2954,6 +2954,285 @@ Partial Class MainForm
         Me.ProjectSidePanelContainer.Size = New System.Drawing.Size(300, 522)
         Me.ProjectSidePanelContainer.TabIndex = 1
         '
+        'SidePanel_ProjectView
+        '
+        Me.SidePanel_ProjectView.Controls.Add(Me.Label55)
+        Me.SidePanel_ProjectView.Controls.Add(Me.PrjTasks)
+        Me.SidePanel_ProjectView.Controls.Add(Me.Button21)
+        Me.SidePanel_ProjectView.Controls.Add(Me.Button22)
+        Me.SidePanel_ProjectView.Controls.Add(Me.Button23)
+        Me.SidePanel_ProjectView.Controls.Add(Me.TableLayoutPanel6)
+        Me.SidePanel_ProjectView.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SidePanel_ProjectView.Location = New System.Drawing.Point(0, 0)
+        Me.SidePanel_ProjectView.Name = "SidePanel_ProjectView"
+        Me.SidePanel_ProjectView.Size = New System.Drawing.Size(300, 522)
+        Me.SidePanel_ProjectView.TabIndex = 0
+        '
+        'Label55
+        '
+        Me.Label55.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Label55.AutoSize = True
+        Me.Label55.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label55.Location = New System.Drawing.Point(11, 386)
+        Me.Label55.Name = "Label55"
+        Me.Label55.Size = New System.Drawing.Size(79, 15)
+        Me.Label55.TabIndex = 14
+        Me.Label55.Text = "Project Tasks"
+        '
+        'PrjTasks
+        '
+        Me.PrjTasks.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.PrjTasks.ColumnCount = 2
+        Me.PrjTasks.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 32.0!))
+        Me.PrjTasks.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.PrjTasks.Controls.Add(Me.LinkLabel17, 1, 2)
+        Me.PrjTasks.Controls.Add(Me.PictureBox11, 0, 2)
+        Me.PrjTasks.Controls.Add(Me.LinkLabel16, 1, 1)
+        Me.PrjTasks.Controls.Add(Me.PictureBox10, 0, 1)
+        Me.PrjTasks.Controls.Add(Me.LinkLabel15, 1, 0)
+        Me.PrjTasks.Controls.Add(Me.PictureBox9, 0, 0)
+        Me.PrjTasks.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.PrjTasks.Location = New System.Drawing.Point(10, 410)
+        Me.PrjTasks.Name = "PrjTasks"
+        Me.PrjTasks.RowCount = 3
+        Me.PrjTasks.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.PrjTasks.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.PrjTasks.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.PrjTasks.Size = New System.Drawing.Size(283, 94)
+        Me.PrjTasks.TabIndex = 13
+        '
+        'LinkLabel17
+        '
+        Me.LinkLabel17.ActiveLinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(151, Byte), Integer), CType(CType(251, Byte), Integer))
+        Me.LinkLabel17.AutoEllipsis = True
+        Me.LinkLabel17.Cursor = System.Windows.Forms.Cursors.Arrow
+        Me.LinkLabel17.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.LinkLabel17.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel17.LinkColor = System.Drawing.Color.White
+        Me.LinkLabel17.Location = New System.Drawing.Point(35, 62)
+        Me.LinkLabel17.Name = "LinkLabel17"
+        Me.LinkLabel17.Size = New System.Drawing.Size(245, 32)
+        Me.LinkLabel17.TabIndex = 5
+        Me.LinkLabel17.TabStop = True
+        Me.LinkLabel17.Text = "Unload project"
+        Me.LinkLabel17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'PictureBox11
+        '
+        Me.PictureBox11.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PictureBox11.Image = Global.DISMTools.My.Resources.Resources.prj_unload_glyph_dark
+        Me.PictureBox11.Location = New System.Drawing.Point(3, 65)
+        Me.PictureBox11.Name = "PictureBox11"
+        Me.PictureBox11.Size = New System.Drawing.Size(26, 26)
+        Me.PictureBox11.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
+        Me.PictureBox11.TabIndex = 4
+        Me.PictureBox11.TabStop = False
+        '
+        'LinkLabel16
+        '
+        Me.LinkLabel16.ActiveLinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(151, Byte), Integer), CType(CType(251, Byte), Integer))
+        Me.LinkLabel16.AutoEllipsis = True
+        Me.LinkLabel16.Cursor = System.Windows.Forms.Cursors.Arrow
+        Me.LinkLabel16.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.LinkLabel16.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel16.LinkColor = System.Drawing.Color.White
+        Me.LinkLabel16.Location = New System.Drawing.Point(35, 31)
+        Me.LinkLabel16.Name = "LinkLabel16"
+        Me.LinkLabel16.Size = New System.Drawing.Size(245, 31)
+        Me.LinkLabel16.TabIndex = 3
+        Me.LinkLabel16.TabStop = True
+        Me.LinkLabel16.Text = "Open in File Explorer"
+        Me.LinkLabel16.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'PictureBox10
+        '
+        Me.PictureBox10.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PictureBox10.Image = Global.DISMTools.My.Resources.Resources.explorer_view_glyph_dark
+        Me.PictureBox10.Location = New System.Drawing.Point(3, 34)
+        Me.PictureBox10.Name = "PictureBox10"
+        Me.PictureBox10.Size = New System.Drawing.Size(26, 25)
+        Me.PictureBox10.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
+        Me.PictureBox10.TabIndex = 2
+        Me.PictureBox10.TabStop = False
+        '
+        'LinkLabel15
+        '
+        Me.LinkLabel15.ActiveLinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(151, Byte), Integer), CType(CType(251, Byte), Integer))
+        Me.LinkLabel15.AutoEllipsis = True
+        Me.LinkLabel15.Cursor = System.Windows.Forms.Cursors.Arrow
+        Me.LinkLabel15.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.LinkLabel15.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel15.LinkColor = System.Drawing.Color.White
+        Me.LinkLabel15.Location = New System.Drawing.Point(35, 0)
+        Me.LinkLabel15.Name = "LinkLabel15"
+        Me.LinkLabel15.Size = New System.Drawing.Size(245, 31)
+        Me.LinkLabel15.TabIndex = 0
+        Me.LinkLabel15.TabStop = True
+        Me.LinkLabel15.Text = "View project properties"
+        Me.LinkLabel15.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'PictureBox9
+        '
+        Me.PictureBox9.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PictureBox9.Image = Global.DISMTools.My.Resources.Resources.info_glyph_dark
+        Me.PictureBox9.Location = New System.Drawing.Point(3, 3)
+        Me.PictureBox9.Name = "PictureBox9"
+        Me.PictureBox9.Size = New System.Drawing.Size(26, 25)
+        Me.PictureBox9.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
+        Me.PictureBox9.TabIndex = 1
+        Me.PictureBox9.TabStop = False
+        '
+        'Button21
+        '
+        Me.Button21.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button21.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button21.Location = New System.Drawing.Point(40, 481)
+        Me.Button21.Name = "Button21"
+        Me.Button21.Size = New System.Drawing.Size(221, 28)
+        Me.Button21.TabIndex = 10
+        Me.Button21.Text = "Unload project"
+        Me.Button21.UseVisualStyleBackColor = True
+        Me.Button21.Visible = False
+        '
+        'Button22
+        '
+        Me.Button22.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button22.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button22.Location = New System.Drawing.Point(40, 447)
+        Me.Button22.Name = "Button22"
+        Me.Button22.Size = New System.Drawing.Size(221, 28)
+        Me.Button22.TabIndex = 11
+        Me.Button22.Text = "View in File Explorer"
+        Me.Button22.UseVisualStyleBackColor = True
+        Me.Button22.Visible = False
+        '
+        'Button23
+        '
+        Me.Button23.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button23.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button23.Location = New System.Drawing.Point(40, 413)
+        Me.Button23.Name = "Button23"
+        Me.Button23.Size = New System.Drawing.Size(221, 28)
+        Me.Button23.TabIndex = 12
+        Me.Button23.Text = "View project properties"
+        Me.Button23.UseVisualStyleBackColor = True
+        Me.Button23.Visible = False
+        '
+        'TableLayoutPanel6
+        '
+        Me.TableLayoutPanel6.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TableLayoutPanel6.ColumnCount = 2
+        Me.TableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.44444!))
+        Me.TableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.55556!))
+        Me.TableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 163.0!))
+        Me.TableLayoutPanel6.Controls.Add(Me.LinkLabel14, 1, 3)
+        Me.TableLayoutPanel6.Controls.Add(Me.Label50, 1, 2)
+        Me.TableLayoutPanel6.Controls.Add(Me.Label51, 0, 1)
+        Me.TableLayoutPanel6.Controls.Add(Me.Label52, 1, 1)
+        Me.TableLayoutPanel6.Controls.Add(Me.Label53, 0, 2)
+        Me.TableLayoutPanel6.Controls.Add(Me.Panel13, 0, 0)
+        Me.TableLayoutPanel6.Controls.Add(Me.Label49, 1, 0)
+        Me.TableLayoutPanel6.Location = New System.Drawing.Point(4, 4)
+        Me.TableLayoutPanel6.Name = "TableLayoutPanel6"
+        Me.TableLayoutPanel6.RowCount = 4
+        Me.TableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29.0!))
+        Me.TableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 102.0!))
+        Me.TableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15.0!))
+        Me.TableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8.0!))
+        Me.TableLayoutPanel6.Size = New System.Drawing.Size(292, 369)
+        Me.TableLayoutPanel6.TabIndex = 9
+        '
+        'LinkLabel14
+        '
+        Me.LinkLabel14.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.LinkLabel14.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel14.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel14.Location = New System.Drawing.Point(132, 146)
+        Me.LinkLabel14.Name = "LinkLabel14"
+        Me.LinkLabel14.Size = New System.Drawing.Size(157, 223)
+        Me.LinkLabel14.TabIndex = 5
+        Me.LinkLabel14.TabStop = True
+        Me.LinkLabel14.Text = "Click here to mount an image"
+        '
+        'Label50
+        '
+        Me.Label50.AutoEllipsis = True
+        Me.Label50.AutoSize = True
+        Me.Label50.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label50.Location = New System.Drawing.Point(132, 131)
+        Me.Label50.Name = "Label50"
+        Me.Label50.Size = New System.Drawing.Size(157, 15)
+        Me.Label50.TabIndex = 2
+        Me.Label50.Text = "imgStatus"
+        '
+        'Label51
+        '
+        Me.Label51.AutoSize = True
+        Me.Label51.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label51.Location = New System.Drawing.Point(3, 29)
+        Me.Label51.Name = "Label51"
+        Me.Label51.Size = New System.Drawing.Size(123, 102)
+        Me.Label51.TabIndex = 1
+        Me.Label51.Text = "Location:"
+        Me.Label51.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'Label52
+        '
+        Me.Label52.AutoEllipsis = True
+        Me.Label52.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label52.Location = New System.Drawing.Point(132, 29)
+        Me.Label52.Name = "Label52"
+        Me.Label52.Size = New System.Drawing.Size(157, 102)
+        Me.Label52.TabIndex = 2
+        Me.Label52.Text = "projPath"
+        '
+        'Label53
+        '
+        Me.Label53.AutoSize = True
+        Me.Label53.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label53.Location = New System.Drawing.Point(3, 131)
+        Me.Label53.Name = "Label53"
+        Me.TableLayoutPanel6.SetRowSpan(Me.Label53, 2)
+        Me.Label53.Size = New System.Drawing.Size(123, 238)
+        Me.Label53.TabIndex = 1
+        Me.Label53.Text = "Images mounted?"
+        Me.Label53.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'Panel13
+        '
+        Me.Panel13.Controls.Add(Me.Label54)
+        Me.Panel13.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel13.Location = New System.Drawing.Point(3, 3)
+        Me.Panel13.Name = "Panel13"
+        Me.Panel13.Size = New System.Drawing.Size(123, 23)
+        Me.Panel13.TabIndex = 9
+        '
+        'Label54
+        '
+        Me.Label54.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label54.Location = New System.Drawing.Point(0, 0)
+        Me.Label54.Name = "Label54"
+        Me.Label54.Size = New System.Drawing.Size(123, 23)
+        Me.Label54.TabIndex = 1
+        Me.Label54.Text = "Name:"
+        Me.Label54.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'Label49
+        '
+        Me.Label49.AutoEllipsis = True
+        Me.Label49.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label49.Location = New System.Drawing.Point(132, 0)
+        Me.Label49.Name = "Label49"
+        Me.Label49.Size = New System.Drawing.Size(157, 29)
+        Me.Label49.TabIndex = 2
+        Me.Label49.Text = "Label49"
+        Me.Label49.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
         'SidePanel_ImageView
         '
         Me.SidePanel_ImageView.Controls.Add(Me.ImageView_NoImage)
@@ -3310,285 +3589,6 @@ Partial Class MainForm
         Me.Label48.Text = "imgVersion"
         Me.Label48.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'SidePanel_ProjectView
-        '
-        Me.SidePanel_ProjectView.Controls.Add(Me.Label55)
-        Me.SidePanel_ProjectView.Controls.Add(Me.PrjTasks)
-        Me.SidePanel_ProjectView.Controls.Add(Me.Button21)
-        Me.SidePanel_ProjectView.Controls.Add(Me.Button22)
-        Me.SidePanel_ProjectView.Controls.Add(Me.Button23)
-        Me.SidePanel_ProjectView.Controls.Add(Me.TableLayoutPanel6)
-        Me.SidePanel_ProjectView.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SidePanel_ProjectView.Location = New System.Drawing.Point(0, 0)
-        Me.SidePanel_ProjectView.Name = "SidePanel_ProjectView"
-        Me.SidePanel_ProjectView.Size = New System.Drawing.Size(300, 522)
-        Me.SidePanel_ProjectView.TabIndex = 0
-        '
-        'Label55
-        '
-        Me.Label55.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Label55.AutoSize = True
-        Me.Label55.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label55.Location = New System.Drawing.Point(11, 386)
-        Me.Label55.Name = "Label55"
-        Me.Label55.Size = New System.Drawing.Size(79, 15)
-        Me.Label55.TabIndex = 14
-        Me.Label55.Text = "Project Tasks"
-        '
-        'PrjTasks
-        '
-        Me.PrjTasks.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.PrjTasks.ColumnCount = 2
-        Me.PrjTasks.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 32.0!))
-        Me.PrjTasks.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.PrjTasks.Controls.Add(Me.LinkLabel17, 1, 2)
-        Me.PrjTasks.Controls.Add(Me.PictureBox11, 0, 2)
-        Me.PrjTasks.Controls.Add(Me.LinkLabel16, 1, 1)
-        Me.PrjTasks.Controls.Add(Me.PictureBox10, 0, 1)
-        Me.PrjTasks.Controls.Add(Me.LinkLabel15, 1, 0)
-        Me.PrjTasks.Controls.Add(Me.PictureBox9, 0, 0)
-        Me.PrjTasks.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.PrjTasks.Location = New System.Drawing.Point(10, 410)
-        Me.PrjTasks.Name = "PrjTasks"
-        Me.PrjTasks.RowCount = 3
-        Me.PrjTasks.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.PrjTasks.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.PrjTasks.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.PrjTasks.Size = New System.Drawing.Size(283, 94)
-        Me.PrjTasks.TabIndex = 13
-        '
-        'LinkLabel17
-        '
-        Me.LinkLabel17.ActiveLinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(151, Byte), Integer), CType(CType(251, Byte), Integer))
-        Me.LinkLabel17.AutoEllipsis = True
-        Me.LinkLabel17.Cursor = System.Windows.Forms.Cursors.Arrow
-        Me.LinkLabel17.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.LinkLabel17.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel17.LinkColor = System.Drawing.Color.White
-        Me.LinkLabel17.Location = New System.Drawing.Point(35, 62)
-        Me.LinkLabel17.Name = "LinkLabel17"
-        Me.LinkLabel17.Size = New System.Drawing.Size(245, 32)
-        Me.LinkLabel17.TabIndex = 5
-        Me.LinkLabel17.TabStop = True
-        Me.LinkLabel17.Text = "Unload project"
-        Me.LinkLabel17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'PictureBox11
-        '
-        Me.PictureBox11.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PictureBox11.Image = Global.DISMTools.My.Resources.Resources.prj_unload_glyph_dark
-        Me.PictureBox11.Location = New System.Drawing.Point(3, 65)
-        Me.PictureBox11.Name = "PictureBox11"
-        Me.PictureBox11.Size = New System.Drawing.Size(26, 26)
-        Me.PictureBox11.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
-        Me.PictureBox11.TabIndex = 4
-        Me.PictureBox11.TabStop = False
-        '
-        'LinkLabel16
-        '
-        Me.LinkLabel16.ActiveLinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(151, Byte), Integer), CType(CType(251, Byte), Integer))
-        Me.LinkLabel16.AutoEllipsis = True
-        Me.LinkLabel16.Cursor = System.Windows.Forms.Cursors.Arrow
-        Me.LinkLabel16.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.LinkLabel16.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel16.LinkColor = System.Drawing.Color.White
-        Me.LinkLabel16.Location = New System.Drawing.Point(35, 31)
-        Me.LinkLabel16.Name = "LinkLabel16"
-        Me.LinkLabel16.Size = New System.Drawing.Size(245, 31)
-        Me.LinkLabel16.TabIndex = 3
-        Me.LinkLabel16.TabStop = True
-        Me.LinkLabel16.Text = "Open in File Explorer"
-        Me.LinkLabel16.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'PictureBox10
-        '
-        Me.PictureBox10.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PictureBox10.Image = Global.DISMTools.My.Resources.Resources.explorer_view_glyph_dark
-        Me.PictureBox10.Location = New System.Drawing.Point(3, 34)
-        Me.PictureBox10.Name = "PictureBox10"
-        Me.PictureBox10.Size = New System.Drawing.Size(26, 25)
-        Me.PictureBox10.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
-        Me.PictureBox10.TabIndex = 2
-        Me.PictureBox10.TabStop = False
-        '
-        'LinkLabel15
-        '
-        Me.LinkLabel15.ActiveLinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(151, Byte), Integer), CType(CType(251, Byte), Integer))
-        Me.LinkLabel15.AutoEllipsis = True
-        Me.LinkLabel15.Cursor = System.Windows.Forms.Cursors.Arrow
-        Me.LinkLabel15.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.LinkLabel15.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel15.LinkColor = System.Drawing.Color.White
-        Me.LinkLabel15.Location = New System.Drawing.Point(35, 0)
-        Me.LinkLabel15.Name = "LinkLabel15"
-        Me.LinkLabel15.Size = New System.Drawing.Size(245, 31)
-        Me.LinkLabel15.TabIndex = 0
-        Me.LinkLabel15.TabStop = True
-        Me.LinkLabel15.Text = "View project properties"
-        Me.LinkLabel15.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'PictureBox9
-        '
-        Me.PictureBox9.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PictureBox9.Image = Global.DISMTools.My.Resources.Resources.info_glyph_dark
-        Me.PictureBox9.Location = New System.Drawing.Point(3, 3)
-        Me.PictureBox9.Name = "PictureBox9"
-        Me.PictureBox9.Size = New System.Drawing.Size(26, 25)
-        Me.PictureBox9.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
-        Me.PictureBox9.TabIndex = 1
-        Me.PictureBox9.TabStop = False
-        '
-        'Button21
-        '
-        Me.Button21.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button21.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button21.Location = New System.Drawing.Point(40, 481)
-        Me.Button21.Name = "Button21"
-        Me.Button21.Size = New System.Drawing.Size(221, 28)
-        Me.Button21.TabIndex = 10
-        Me.Button21.Text = "Unload project"
-        Me.Button21.UseVisualStyleBackColor = True
-        Me.Button21.Visible = False
-        '
-        'Button22
-        '
-        Me.Button22.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button22.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button22.Location = New System.Drawing.Point(40, 447)
-        Me.Button22.Name = "Button22"
-        Me.Button22.Size = New System.Drawing.Size(221, 28)
-        Me.Button22.TabIndex = 11
-        Me.Button22.Text = "View in File Explorer"
-        Me.Button22.UseVisualStyleBackColor = True
-        Me.Button22.Visible = False
-        '
-        'Button23
-        '
-        Me.Button23.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button23.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button23.Location = New System.Drawing.Point(40, 413)
-        Me.Button23.Name = "Button23"
-        Me.Button23.Size = New System.Drawing.Size(221, 28)
-        Me.Button23.TabIndex = 12
-        Me.Button23.Text = "View project properties"
-        Me.Button23.UseVisualStyleBackColor = True
-        Me.Button23.Visible = False
-        '
-        'TableLayoutPanel6
-        '
-        Me.TableLayoutPanel6.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TableLayoutPanel6.ColumnCount = 2
-        Me.TableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.44444!))
-        Me.TableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.55556!))
-        Me.TableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 163.0!))
-        Me.TableLayoutPanel6.Controls.Add(Me.LinkLabel14, 1, 3)
-        Me.TableLayoutPanel6.Controls.Add(Me.Label50, 1, 2)
-        Me.TableLayoutPanel6.Controls.Add(Me.Label51, 0, 1)
-        Me.TableLayoutPanel6.Controls.Add(Me.Label52, 1, 1)
-        Me.TableLayoutPanel6.Controls.Add(Me.Label53, 0, 2)
-        Me.TableLayoutPanel6.Controls.Add(Me.Panel13, 0, 0)
-        Me.TableLayoutPanel6.Controls.Add(Me.Label49, 1, 0)
-        Me.TableLayoutPanel6.Location = New System.Drawing.Point(4, 4)
-        Me.TableLayoutPanel6.Name = "TableLayoutPanel6"
-        Me.TableLayoutPanel6.RowCount = 4
-        Me.TableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29.0!))
-        Me.TableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 102.0!))
-        Me.TableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15.0!))
-        Me.TableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8.0!))
-        Me.TableLayoutPanel6.Size = New System.Drawing.Size(292, 369)
-        Me.TableLayoutPanel6.TabIndex = 9
-        '
-        'LinkLabel14
-        '
-        Me.LinkLabel14.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.LinkLabel14.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel14.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel14.Location = New System.Drawing.Point(132, 146)
-        Me.LinkLabel14.Name = "LinkLabel14"
-        Me.LinkLabel14.Size = New System.Drawing.Size(157, 223)
-        Me.LinkLabel14.TabIndex = 5
-        Me.LinkLabel14.TabStop = True
-        Me.LinkLabel14.Text = "Click here to mount an image"
-        '
-        'Label50
-        '
-        Me.Label50.AutoEllipsis = True
-        Me.Label50.AutoSize = True
-        Me.Label50.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label50.Location = New System.Drawing.Point(132, 131)
-        Me.Label50.Name = "Label50"
-        Me.Label50.Size = New System.Drawing.Size(157, 15)
-        Me.Label50.TabIndex = 2
-        Me.Label50.Text = "imgStatus"
-        '
-        'Label51
-        '
-        Me.Label51.AutoSize = True
-        Me.Label51.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label51.Location = New System.Drawing.Point(3, 29)
-        Me.Label51.Name = "Label51"
-        Me.Label51.Size = New System.Drawing.Size(123, 102)
-        Me.Label51.TabIndex = 1
-        Me.Label51.Text = "Location:"
-        Me.Label51.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
-        'Label52
-        '
-        Me.Label52.AutoEllipsis = True
-        Me.Label52.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label52.Location = New System.Drawing.Point(132, 29)
-        Me.Label52.Name = "Label52"
-        Me.Label52.Size = New System.Drawing.Size(157, 102)
-        Me.Label52.TabIndex = 2
-        Me.Label52.Text = "projPath"
-        '
-        'Label53
-        '
-        Me.Label53.AutoSize = True
-        Me.Label53.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label53.Location = New System.Drawing.Point(3, 131)
-        Me.Label53.Name = "Label53"
-        Me.TableLayoutPanel6.SetRowSpan(Me.Label53, 2)
-        Me.Label53.Size = New System.Drawing.Size(123, 238)
-        Me.Label53.TabIndex = 1
-        Me.Label53.Text = "Images mounted?"
-        Me.Label53.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
-        'Panel13
-        '
-        Me.Panel13.Controls.Add(Me.Label54)
-        Me.Panel13.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel13.Location = New System.Drawing.Point(3, 3)
-        Me.Panel13.Name = "Panel13"
-        Me.Panel13.Size = New System.Drawing.Size(123, 23)
-        Me.Panel13.TabIndex = 9
-        '
-        'Label54
-        '
-        Me.Label54.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label54.Location = New System.Drawing.Point(0, 0)
-        Me.Label54.Name = "Label54"
-        Me.Label54.Size = New System.Drawing.Size(123, 23)
-        Me.Label54.TabIndex = 1
-        Me.Label54.Text = "Name:"
-        Me.Label54.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'Label49
-        '
-        Me.Label49.AutoEllipsis = True
-        Me.Label49.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label49.Location = New System.Drawing.Point(132, 0)
-        Me.Label49.Name = "Label49"
-        Me.Label49.Size = New System.Drawing.Size(157, 29)
-        Me.Label49.TabIndex = 2
-        Me.Label49.Text = "Label49"
-        Me.Label49.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
         'Panel10
         '
         Me.Panel10.Controls.Add(Me.TableLayoutPanel4)
@@ -3813,7 +3813,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.44444!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.55556!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 176.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 178.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -3848,9 +3848,9 @@ Partial Class MainForm
         Me.LinkLabel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel1.Location = New System.Drawing.Point(54, 146)
+        Me.LinkLabel1.Location = New System.Drawing.Point(53, 146)
         Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(235, 254)
+        Me.LinkLabel1.Size = New System.Drawing.Size(236, 254)
         Me.LinkLabel1.TabIndex = 5
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "Click here to mount an image"
@@ -3860,9 +3860,9 @@ Partial Class MainForm
         Me.Panel8.Controls.Add(Me.projName)
         Me.Panel8.Controls.Add(Me.projNameText)
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel8.Location = New System.Drawing.Point(54, 3)
+        Me.Panel8.Location = New System.Drawing.Point(53, 3)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(58, 23)
+        Me.Panel8.Size = New System.Drawing.Size(57, 23)
         Me.Panel8.TabIndex = 8
         '
         'projName
@@ -3871,7 +3871,7 @@ Partial Class MainForm
         Me.projName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projName.Location = New System.Drawing.Point(0, 0)
         Me.projName.Name = "projName"
-        Me.projName.Size = New System.Drawing.Size(58, 23)
+        Me.projName.Size = New System.Drawing.Size(57, 23)
         Me.projName.TabIndex = 2
         Me.projName.Text = "projName"
         Me.projName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -3881,7 +3881,7 @@ Partial Class MainForm
         Me.projNameText.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projNameText.Location = New System.Drawing.Point(0, 0)
         Me.projNameText.Name = "projNameText"
-        Me.projNameText.Size = New System.Drawing.Size(58, 21)
+        Me.projNameText.Size = New System.Drawing.Size(57, 21)
         Me.projNameText.TabIndex = 4
         Me.projNameText.Text = "projName"
         Me.projNameText.Visible = False
@@ -3892,9 +3892,9 @@ Partial Class MainForm
         Me.Label5.AutoSize = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label5, 2)
         Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label5.Location = New System.Drawing.Point(54, 131)
+        Me.Label5.Location = New System.Drawing.Point(53, 131)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(235, 15)
+        Me.Label5.Size = New System.Drawing.Size(236, 15)
         Me.Label5.TabIndex = 2
         Me.Label5.Text = "imgStatus"
         '
@@ -3904,7 +3904,7 @@ Partial Class MainForm
         Me.Label2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label2.Location = New System.Drawing.Point(3, 29)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(45, 102)
+        Me.Label2.Size = New System.Drawing.Size(44, 102)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "Location:"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -3914,9 +3914,9 @@ Partial Class MainForm
         Me.Label3.AutoEllipsis = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label3, 2)
         Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label3.Location = New System.Drawing.Point(54, 29)
+        Me.Label3.Location = New System.Drawing.Point(53, 29)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(235, 102)
+        Me.Label3.Size = New System.Drawing.Size(236, 102)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "projPath"
         '
@@ -3927,7 +3927,7 @@ Partial Class MainForm
         Me.Label4.Location = New System.Drawing.Point(3, 131)
         Me.Label4.Name = "Label4"
         Me.TableLayoutPanel2.SetRowSpan(Me.Label4, 2)
-        Me.Label4.Size = New System.Drawing.Size(45, 269)
+        Me.Label4.Size = New System.Drawing.Size(44, 269)
         Me.Label4.TabIndex = 1
         Me.Label4.Text = "Images mounted?"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -3938,7 +3938,7 @@ Partial Class MainForm
         Me.Panel9.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel9.Location = New System.Drawing.Point(3, 3)
         Me.Panel9.Name = "Panel9"
-        Me.Panel9.Size = New System.Drawing.Size(45, 23)
+        Me.Panel9.Size = New System.Drawing.Size(44, 23)
         Me.Panel9.TabIndex = 9
         '
         'Label1
@@ -3946,7 +3946,7 @@ Partial Class MainForm
         Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label1.Location = New System.Drawing.Point(0, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(45, 23)
+        Me.Label1.Size = New System.Drawing.Size(44, 23)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Name:"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -4269,7 +4269,7 @@ Partial Class MainForm
         Me.Button19.Name = "Button19"
         Me.Button19.Size = New System.Drawing.Size(188, 23)
         Me.Button19.TabIndex = 3
-        Me.Button19.Text = "Preview the new project panel"
+        Me.Button19.Text = "Preview the new design"
         Me.Button19.UseVisualStyleBackColor = True
         '
         'GroupBox3
@@ -5083,6 +5083,15 @@ Partial Class MainForm
         Me.GroupBox10.ResumeLayout(False)
         Me.ProjectSidePanel.ResumeLayout(False)
         Me.ProjectSidePanelContainer.ResumeLayout(False)
+        Me.SidePanel_ProjectView.ResumeLayout(False)
+        Me.SidePanel_ProjectView.PerformLayout()
+        Me.PrjTasks.ResumeLayout(False)
+        CType(Me.PictureBox11, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox10, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox9, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.TableLayoutPanel6.ResumeLayout(False)
+        Me.TableLayoutPanel6.PerformLayout()
+        Me.Panel13.ResumeLayout(False)
         Me.SidePanel_ImageView.ResumeLayout(False)
         Me.ImageView_NoImage.ResumeLayout(False)
         Me.ImageView_NoImage.PerformLayout()
@@ -5095,15 +5104,6 @@ Partial Class MainForm
         CType(Me.PictureBox13, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox14, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TableLayoutPanel5.ResumeLayout(False)
-        Me.SidePanel_ProjectView.ResumeLayout(False)
-        Me.SidePanel_ProjectView.PerformLayout()
-        Me.PrjTasks.ResumeLayout(False)
-        CType(Me.PictureBox11, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.PictureBox10, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.PictureBox9, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.TableLayoutPanel6.ResumeLayout(False)
-        Me.TableLayoutPanel6.PerformLayout()
-        Me.Panel13.ResumeLayout(False)
         Me.Panel10.ResumeLayout(False)
         Me.TableLayoutPanel4.ResumeLayout(False)
         Me.TableLayoutPanel4.PerformLayout()

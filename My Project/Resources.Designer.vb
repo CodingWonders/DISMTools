@@ -1878,14 +1878,11 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''- Fixed an issue where the program threw an exception when attempting to save complete image information if no images were mounted
-        '''- When getting Windows PE configuration, the program no longer returns &quot;Could not get value MB&quot; if it fails to get the scratch space configuration
-        '''- Image information reports correctly detect the offline installation management mode now
-        '''- The image information saver now informs you when the target report file is being saved
+        '''- Fixed an issue where the feature information dialog would not load when its entry in the Commands menu was clicked
         '''
         '''New features
         '''
-        '''- The program now rec [resto de la cadena truncado]&quot;;.
+        '''- A new design of the project view is now available.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
