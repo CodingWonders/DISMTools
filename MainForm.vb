@@ -230,6 +230,9 @@ Public Class MainForm
 
     Public EnableExperiments As Boolean
 
+    Public SkipQuestions As Boolean             ' Skips questions in the info saver
+    Public AutoCompleteInfo(4) As Boolean       ' Skips questions for specific info categories
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -1004,6 +1007,14 @@ Public Class MainForm
                 End If
                 WindowState = If(CInt(WndKey.GetValue("WndMaximized")) = 1, FormWindowState.Maximized, FormWindowState.Normal)
                 WndKey.Close()
+                Dim InfoSaverKey As RegistryKey = Key.OpenSubKey("InfoSaver")
+                SkipQuestions = (CInt(InfoSaverKey.GetValue("SkipQuestions")) = 1)
+                AutoCompleteInfo(0) = (CInt(InfoSaverKey.GetValue("Pkg_CompleteInfo")) = 1)
+                AutoCompleteInfo(1) = (CInt(InfoSaverKey.GetValue("Feat_CompleteInfo")) = 1)
+                AutoCompleteInfo(2) = (CInt(InfoSaverKey.GetValue("AppX_CompleteInfo")) = 1)
+                AutoCompleteInfo(3) = (CInt(InfoSaverKey.GetValue("Cap_CompleteInfo")) = 1)
+                AutoCompleteInfo(4) = (CInt(InfoSaverKey.GetValue("Drv_CompleteInfo")) = 1)
+                InfoSaverKey.Close()
                 Key.Close()
                 ' Apply program colors immediately
                 ChangePrgColors(ColorMode)
@@ -1219,6 +1230,36 @@ Public Class MainForm
                     WindowState = FormWindowState.Maximized
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("WndMaximized=0") Then
                     WindowState = FormWindowState.Normal
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("SkipQuestions=1") Then
+                    SkipQuestions = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("SkipQuestions=0") Then
+                    SkipQuestions = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("Pkg_CompleteInfo=1") Then
+                    AutoCompleteInfo(0) = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Pkg_CompleteInfo=0") Then
+                    AutoCompleteInfo(0) = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("Feat_CompleteInfo=1") Then
+                    AutoCompleteInfo(1) = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Feat_CompleteInfo=0") Then
+                    AutoCompleteInfo(1) = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("AppX_CompleteInfo=1") Then
+                    AutoCompleteInfo(2) = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("AppX_CompleteInfo=0") Then
+                    AutoCompleteInfo(2) = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("Cap_CompleteInfo=1") Then
+                    AutoCompleteInfo(3) = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Cap_CompleteInfo=0") Then
+                    AutoCompleteInfo(3) = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("Drv_CompleteInfo=1") Then
+                    AutoCompleteInfo(4) = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Drv_CompleteInfo=0") Then
+                    AutoCompleteInfo(4) = False
                 End If
             Else
                 GenerateDTSettings()
@@ -4082,8 +4123,13 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "WndLeft=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "WndTop=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "WndMaximized=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ImgDetection]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("CPUMode=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[InfoSaver]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("SkipQuestions=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "Pkg_CompleteInfo=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "Feat_CompleteInfo=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "AppX_CompleteInfo=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "Cap_CompleteInfo=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "Drv_CompleteInfo=1")
         File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
         If File.Exists(Application.StartupPath & "\portable") Then Exit Sub
         Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("preview"), "Preview", "Stable")
@@ -4151,9 +4197,14 @@ Public Class MainForm
         WndKey.SetValue("WndTop", 0, RegistryValueKind.DWord)
         WndKey.SetValue("WndMaximized", 0, RegistryValueKind.DWord)
         WndKey.Close()
-        Dim ImgDetectionKey As RegistryKey = Key.CreateSubKey("ImgDetection")
-        ImgDetectionKey.SetValue("CPUMode", 0, RegistryValueKind.DWord)
-        ImgDetectionKey.Close()
+        Dim InfoSaverKey As RegistryKey = Key.CreateSubKey("InfoSaver")
+        InfoSaverKey.SetValue("SkipQuestions", 1, RegistryValueKind.DWord)
+        InfoSaverKey.SetValue("Pkg_CompleteInfo", 1, RegistryValueKind.DWord)
+        InfoSaverKey.SetValue("Feat_CompleteInfo", 1, RegistryValueKind.DWord)
+        InfoSaverKey.SetValue("AppX_CompleteInfo", 1, RegistryValueKind.DWord)
+        InfoSaverKey.SetValue("Cap_CompleteInfo", 1, RegistryValueKind.DWord)
+        InfoSaverKey.SetValue("Drv_CompleteInfo", 1, RegistryValueKind.DWord)
+        InfoSaverKey.Close()
         Key.Close()
     End Sub
 
@@ -4324,7 +4375,13 @@ Public Class MainForm
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "WndLeft=" & WndLeft)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "WndTop=" & WndTop)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "WndMaximized=" & If(WindowState = FormWindowState.Maximized, "1", "0"))
-                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ImgDetection]" & CrLf)
+                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[InfoSaver]" & CrLf)
+                DTSettingForm.RichTextBox2.AppendText("SkipQuestions=" & If(SkipQuestions, "1", "0"))
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "Pkg_CompleteInfo=" & If(AutoCompleteInfo(0), "1", "0"))
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "Feat_CompleteInfo=" & If(AutoCompleteInfo(1), "1", "0"))
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "AppX_CompleteInfo=" & If(AutoCompleteInfo(2), "1", "0"))
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "Cap_CompleteInfo=" & If(AutoCompleteInfo(3), "1", "0"))
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "Drv_CompleteInfo=" & If(AutoCompleteInfo(4), "1", "0"))
                 File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
             Else
                 ' Tell settings file to use this method
@@ -4394,8 +4451,14 @@ Public Class MainForm
                 WndKey.SetValue("WndTop", WndTop, RegistryValueKind.DWord)
                 WndKey.SetValue("WndMaximized", If(WindowState = FormWindowState.Maximized, 1, 0), RegistryValueKind.DWord)
                 WndKey.Close()
-                Dim ImgDetectionKey As RegistryKey = Key.CreateSubKey("ImgDetection")
-                ImgDetectionKey.Close()
+                Dim InfoSaverKey As RegistryKey = Key.CreateSubKey("InfoSaver")
+                InfoSaverKey.SetValue("SkipQuestions", If(SkipQuestions, 1, 0), RegistryValueKind.DWord)
+                InfoSaverKey.SetValue("Pkg_CompleteInfo", If(AutoCompleteInfo(0), 1, 0), RegistryValueKind.DWord)
+                InfoSaverKey.SetValue("Feat_CompleteInfo", If(AutoCompleteInfo(1), 1, 0), RegistryValueKind.DWord)
+                InfoSaverKey.SetValue("AppX_CompleteInfo", If(AutoCompleteInfo(2), 1, 0), RegistryValueKind.DWord)
+                InfoSaverKey.SetValue("Cap_CompleteInfo", If(AutoCompleteInfo(3), 1, 0), RegistryValueKind.DWord)
+                InfoSaverKey.SetValue("Drv_CompleteInfo", If(AutoCompleteInfo(4), 1, 0), RegistryValueKind.DWord)
+                InfoSaverKey.Close()
                 Key.Close()
             End If
         End If
@@ -8945,7 +9008,7 @@ Public Class MainForm
                 Case 91
                     MenuDesc.Text = "Adds the Microsoft Edge WebView2 component to the image"
                 Case 92
-                    MenuDesc.Text = "Saves complete image information to the file you want. You will be asked some questions during this process, so don't leave your computer"
+                    MenuDesc.Text = "Saves complete image information to the file you want. Depending on the settings you had specified, you may be asked some questions during the process"
                 Case Else
                     ' Do not show anything
             End Select
@@ -12863,6 +12926,8 @@ Public Class MainForm
             ImgInfoSaveDlg.OnlineMode = OnlineManagement
             ImgInfoSaveDlg.OfflineMode = OfflineManagement
             ImgInfoSaveDlg.AllDrivers = AllDrivers
+            ImgInfoSaveDlg.SkipQuestions = SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 0
             ImgInfoSaveDlg.ShowDialog()
         End If
@@ -13129,6 +13194,8 @@ Public Class MainForm
             ImgInfoSaveDlg.OnlineMode = OnlineManagement
             ImgInfoSaveDlg.OfflineMode = OfflineManagement
             ImgInfoSaveDlg.AllDrivers = AllDrivers
+            ImgInfoSaveDlg.SkipQuestions = SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 0
             ImgInfoSaveDlg.ShowDialog()
         End If
@@ -13252,6 +13319,8 @@ Public Class MainForm
             ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
             ImgInfoSaveDlg.ImgMountDir = If(Not OnlineManagement, MountDir, "")
             ImgInfoSaveDlg.OnlineMode = OnlineManagement
+            ImgInfoSaveDlg.SkipQuestions = SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 2
             ImgInfoSaveDlg.ShowDialog()
         End If
@@ -13527,6 +13596,8 @@ Public Class MainForm
             ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
             ImgInfoSaveDlg.OnlineMode = OnlineManagement
             ImgInfoSaveDlg.OfflineMode = OfflineManagement
+            ImgInfoSaveDlg.SkipQuestions = SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 4
             ImgInfoSaveDlg.ShowDialog()
         End If
@@ -13710,6 +13781,8 @@ Public Class MainForm
             ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
             ImgInfoSaveDlg.OnlineMode = OnlineManagement
             ImgInfoSaveDlg.OfflineMode = OfflineManagement
+            ImgInfoSaveDlg.SkipQuestions = SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 5
             ImgInfoSaveDlg.ShowDialog()
         End If
@@ -13945,6 +14018,8 @@ Public Class MainForm
             ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
             ImgInfoSaveDlg.OnlineMode = OnlineManagement
             ImgInfoSaveDlg.OfflineMode = OfflineManagement
+            ImgInfoSaveDlg.SkipQuestions = SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 6
             ImgInfoSaveDlg.ShowDialog()
         End If
@@ -14092,6 +14167,8 @@ Public Class MainForm
             ImgInfoSaveDlg.OnlineMode = OnlineManagement
             ImgInfoSaveDlg.OfflineMode = OfflineManagement
             ImgInfoSaveDlg.AllDrivers = AllDrivers
+            ImgInfoSaveDlg.SkipQuestions = SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 7
             ImgInfoSaveDlg.ShowDialog()
         End If
@@ -14112,6 +14189,8 @@ Public Class MainForm
             ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
             ImgInfoSaveDlg.ImgMountDir = If(Not OnlineManagement, MountDir, "")
             ImgInfoSaveDlg.OnlineMode = OnlineManagement
+            ImgInfoSaveDlg.SkipQuestions = SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 9
             ImgInfoSaveDlg.ShowDialog()
         End If
