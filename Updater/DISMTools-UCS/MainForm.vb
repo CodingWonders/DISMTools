@@ -292,10 +292,11 @@ Public Class MainForm
     Sub DownloadRelease(ReleaseTag As String)
         ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
         If Not Directory.Exists(Application.StartupPath & "\new") Then Directory.CreateDirectory(Application.StartupPath & "\new")
-        ReleaseDownloader.DownloadFile("https://github.com/CodingWonders/DISMTools/releases/download/" & ReleaseTag & "/DISMTools.zip", Application.StartupPath & "\new\DISMTools.zip")
+        ReleaseDownloader.DownloadFile("https://github.com/CodingWonders/DISMTools/releases/download/" & ReleaseTag & "/" & If(IsPortable, "DISMTools.zip", "dt_setup.exe"), Application.StartupPath & "\new\" & If(IsPortable, "DISMTools.zip", "dt_setup.exe"))
     End Sub
 
     Sub ExpandContents()
+        If Not IsPortable Then Exit Sub
         Dim Expander As New Process()
         Expander.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
         Expander.StartInfo.Arguments = "-command Expand-Archive -Path '" & Application.StartupPath & "\new\DISMTools.zip' -DestinationPath '" & Application.StartupPath & "\new'"
@@ -351,6 +352,10 @@ Public Class MainForm
     End Sub
 
     Sub InstallNewVersion()
+        If Not IsPortable And File.Exists(Application.StartupPath & "\dt_setup.exe") Then
+            Process.Start(Application.StartupPath & "\dt_setup.exe", "/VERYSILENT /SUPPRESSMSGBOXES").WaitForExit()
+            Exit Sub
+        End If
         Dim Updater As New Process()
         Updater.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
         Updater.StartInfo.WorkingDirectory = Application.StartupPath
@@ -372,7 +377,7 @@ Public Class MainForm
     Sub CleanBackupFiles()
         Directory.Delete(Application.StartupPath & "\new", True)
         Directory.Delete(Application.StartupPath & "\old", True)
-        If Not IsPortable Then
+        If Not IsPortable And File.Exists(Application.StartupPath & "\portable") Then
             File.SetAttributes(Application.StartupPath & "\portable", FileAttributes.Normal)
             File.Delete(Application.StartupPath & "\portable")
         Else
