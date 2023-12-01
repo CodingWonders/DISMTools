@@ -586,6 +586,8 @@ Public Class ProgressPanel
             Else
                 taskCount = 1
             End If
+        ElseIf opNum = 68 Then
+            taskCount = 1
         ElseIf opNum = 75 Then
             If drvAdditionCommit Then
                 taskCount = 2
