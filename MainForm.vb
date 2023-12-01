@@ -7142,42 +7142,145 @@ Public Class MainForm
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENU", "ENG"
-                            Label5.Text = "Yes"
+                            Label5.Text = If(IsImageMounted, "Yes", "No")
                             Text = "Online installation - DISMTools"
                             Label14.Text = "(Online installation)"
                             Label20.Text = "(Online installation)"
                             projName.Text = "(Online installation)"
+                            Label50.Text = If(IsImageMounted, "Yes", "No")
+                            Label41.Text = "(Online installation)"
+                            Label47.Text = "(Online installation)"
+                            Label49.Text = "(Online installation)"
                         Case "ESN"
-                            Label5.Text = "Sí"
+                            Label5.Text = If(IsImageMounted, "Sí", "No")
                             Text = "Instalación activa - DISMTools"
                             Label14.Text = "(Instalación activa)"
                             Label20.Text = "(Instalación activa)"
                             projName.Text = "(Instalación activa)"
+                            Label50.Text = If(IsImageMounted, "Sí", "No")
+                            Label41.Text = "(Instalación activa)"
+                            Label47.Text = "(Instalación activa)"
+                            Label49.Text = "(Instalación activa)"
                         Case "FRA"
-                            Label5.Text = "Oui"
+                            Label5.Text = If(IsImageMounted, "Oui", "Non")
                             Text = "Installation en ligne - DISMTools"
                             Label14.Text = "(Installation en ligne)"
                             Label20.Text = "(Installation en ligne)"
                             projName.Text = "(Installation en ligne)"
+                            Label50.Text = If(IsImageMounted, "Oui", "Non")
+                            Label41.Text = "(Installation en ligne)"
+                            Label47.Text = "(Installation en ligne)"
+                            Label49.Text = "(Installation en ligne)"
                     End Select
                 Case 1
-                    Label5.Text = "Yes"
+                    Label5.Text = If(IsImageMounted, "Yes", "No")
                     Text = "Online installation - DISMTools"
                     Label14.Text = "(Online installation)"
                     Label20.Text = "(Online installation)"
                     projName.Text = "(Online installation)"
+                    Label50.Text = If(IsImageMounted, "Yes", "No")
+                    Label41.Text = "(Online installation)"
+                    Label47.Text = "(Online installation)"
+                    Label49.Text = "(Online installation)"
                 Case 2
-                    Label5.Text = "Sí"
+                    Label5.Text = If(IsImageMounted, "Sí", "No")
                     Text = "Instalación activa - DISMTools"
                     Label14.Text = "(Instalación activa)"
                     Label20.Text = "(Instalación activa)"
                     projName.Text = "(Instalación activa)"
+                    Label50.Text = If(IsImageMounted, "Sí", "No")
+                    Label41.Text = "(Instalación activa)"
+                    Label47.Text = "(Instalación activa)"
+                    Label49.Text = "(Instalación activa)"
                 Case 3
-                    Label5.Text = "Oui"
+                    Label5.Text = If(IsImageMounted, "Oui", "Non")
                     Text = "Installation en ligne - DISMTools"
                     Label14.Text = "(Installation en ligne)"
                     Label20.Text = "(Installation en ligne)"
                     projName.Text = "(Installation en ligne)"
+                    Label50.Text = If(IsImageMounted, "Oui", "Non")
+                    Label41.Text = "(Installation en ligne)"
+                    Label47.Text = "(Installation en ligne)"
+                    Label49.Text = "(Installation en ligne)"
+            End Select
+            Label49.Text = projName.Text
+        ElseIf OfflineManagement Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            Label5.Text = If(IsImageMounted, "Yes", "No")
+                            Text = "Offline installation - DISMTools"
+                            Label14.Text = "(Offline installation)"
+                            Label18.Text = "(Offline installation)"
+                            Label20.Text = "(Offline installation)"
+                            projName.Text = "(Offline installation)"
+                            Label50.Text = If(IsImageMounted, "Yes", "No")
+                            Label41.Text = "(Offline installation)"
+                            Label46.Text = "(Offline installation)"
+                            Label47.Text = "(Offline installation)"
+                            Label49.Text = "(Offline installation)"
+                        Case "ESN"
+                            Label5.Text = If(IsImageMounted, "Sí", "No")
+                            Text = "Instalación fuera de línea - DISMTools"
+                            Label14.Text = "(Instalación fuera de línea)"
+                            Label18.Text = "(Instalación fuera de línea)"
+                            Label20.Text = "(Instalación fuera de línea)"
+                            projName.Text = "(Instalación fuera de línea)"
+                            Label50.Text = If(IsImageMounted, "Sí", "No")
+                            Label41.Text = "(Instalación fuera de línea)"
+                            Label46.Text = "(Instalación fuera de línea)"
+                            Label47.Text = "(Instalación fuera de línea)"
+                            Label49.Text = "(Instalación fuera de línea)"
+                        Case "FRA"
+                            Label5.Text = If(IsImageMounted, "Oui", "Non")
+                            Text = "Installation hors ligne - DISMTools"
+                            Label14.Text = "(Installation hors ligne)"
+                            Label18.Text = "(Installation hors ligne)"
+                            Label20.Text = "(Installation hors ligne)"
+                            projName.Text = "(Installation hors ligne)"
+                            Label50.Text = If(IsImageMounted, "Oui", "Non")
+                            Label41.Text = "(Installation hors ligne)"
+                            Label46.Text = "(Installation hors ligne)"
+                            Label47.Text = "(Installation hors ligne)"
+                            Label49.Text = "(Installation hors ligne)"
+                    End Select
+                Case 1
+                    Label5.Text = If(IsImageMounted, "Yes", "No")
+                    Text = "Online installation - DISMTools"
+                    Label14.Text = "(Offline installation)"
+                    Label18.Text = "(Offline installation)"
+                    Label20.Text = "(Offline installation)"
+                    projName.Text = "(Offline installation)"
+                    Label50.Text = If(IsImageMounted, "Yes", "No")
+                    Label41.Text = "(Offline installation)"
+                    Label46.Text = "(Offline installation)"
+                    Label47.Text = "(Offline installation)"
+                    Label49.Text = "(Offline installation)"
+                Case 2
+                    Label5.Text = If(IsImageMounted, "Sí", "No")
+                    Text = "Instalación fuera de línea - DISMTools"
+                    Label14.Text = "(Instalación fuera de línea)"
+                    Label18.Text = "(Instalación fuera de línea)"
+                    Label20.Text = "(Instalación fuera de línea)"
+                    projName.Text = "(Instalación fuera de línea)"
+                    Label50.Text = If(IsImageMounted, "Sí", "No")
+                    Label41.Text = "(Instalación fuera de línea)"
+                    Label46.Text = "(Instalación fuera de línea)"
+                    Label47.Text = "(Instalación fuera de línea)"
+                    Label49.Text = "(Instalación fuera de línea)"
+                Case 3
+                    Label5.Text = If(IsImageMounted, "Oui", "Non")
+                    Text = "Installation hors ligne - DISMTools"
+                    Label14.Text = "(Installation hors ligne)"
+                    Label18.Text = "(Installation hors ligne)"
+                    Label20.Text = "(Installation hors ligne)"
+                    projName.Text = "(Installation hors ligne)"
+                    Label50.Text = If(IsImageMounted, "Oui", "Non")
+                    Label41.Text = "(Installation hors ligne)"
+                    Label46.Text = "(Installation hors ligne)"
+                    Label47.Text = "(Installation hors ligne)"
+                    Label49.Text = "(Installation hors ligne)"
             End Select
             Label49.Text = projName.Text
         End If
