@@ -233,6 +233,8 @@ Public Class MainForm
     Public SkipQuestions As Boolean             ' Skips questions in the info saver
     Public AutoCompleteInfo(4) As Boolean       ' Skips questions for specific info categories
 
+    Public GoToNewView As Boolean
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -1345,6 +1347,13 @@ Public Class MainForm
     ''' <remarks>Depending on the parameter of bgProcOptn, and on the power of the system, the background processes may take a longer time to finish</remarks>
     Sub RunBackgroundProcesses(bgProcOptn As Integer, GatherBasicInfo As Boolean, GatherAdvancedInfo As Boolean, Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False, Optional OfflineMode As Boolean = False)
         IsCompatible = True
+        If isProjectLoaded And GoToNewView Then
+            ProjectView.Visible = True
+            SplitPanels.Visible = False
+        ElseIf isProjectLoaded And Not GoToNewView Then
+            ProjectView.Visible = False
+            SplitPanels.Visible = True
+        End If
         If Not IsImageMounted Then
             Button1.Enabled = True
             Button2.Enabled = False
@@ -13456,11 +13465,13 @@ Public Class MainForm
     Private Sub Button19_Click(sender As Object, e As EventArgs) Handles Button19.Click
         ProjectView.Visible = True
         SplitPanels.Visible = False
+        GoToNewView = True
     End Sub
 
     Private Sub Button20_Click(sender As Object, e As EventArgs) Handles Button20.Click
         ProjectView.Visible = False
         SplitPanels.Visible = True
+        GoToNewView = False
     End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
