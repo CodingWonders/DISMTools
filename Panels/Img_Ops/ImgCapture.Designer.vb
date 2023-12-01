@@ -58,8 +58,6 @@ Partial Class ImgCapture
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
-        Me.Button4 = New System.Windows.Forms.Button()
-        Me.Label11 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -75,7 +73,7 @@ Partial Class ImgCapture
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.OK_Button, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Cancel_Button, 1, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(626, 480)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(850, 520)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
@@ -112,7 +110,7 @@ Partial Class ImgCapture
         Me.Win10Title.Dock = System.Windows.Forms.DockStyle.Top
         Me.Win10Title.Location = New System.Drawing.Point(0, 0)
         Me.Win10Title.Name = "Win10Title"
-        Me.Win10Title.Size = New System.Drawing.Size(784, 48)
+        Me.Win10Title.Size = New System.Drawing.Size(1008, 48)
         Me.Win10Title.TabIndex = 6
         Me.Win10Title.Visible = False
         '
@@ -120,7 +118,7 @@ Partial Class ImgCapture
         '
         Me.PictureBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.PictureBox1.Image = Global.DISMTools.My.Resources.Resources.capture_img
-        Me.PictureBox1.Location = New System.Drawing.Point(740, 8)
+        Me.PictureBox1.Location = New System.Drawing.Point(964, 8)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(32, 32)
         Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
@@ -147,15 +145,16 @@ Partial Class ImgCapture
         Me.GroupBox1.Controls.Add(Me.Label3)
         Me.GroupBox1.Location = New System.Drawing.Point(12, 54)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(760, 91)
+        Me.GroupBox1.Size = New System.Drawing.Size(984, 91)
         Me.GroupBox1.TabIndex = 7
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Sources and destinations"
         '
         'Button2
         '
+        Me.Button2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button2.Location = New System.Drawing.Point(676, 51)
+        Me.Button2.Location = New System.Drawing.Point(900, 51)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 10
@@ -164,24 +163,27 @@ Partial Class ImgCapture
         '
         'TextBox2
         '
-        Me.TextBox2.Location = New System.Drawing.Point(135, 52)
+        Me.TextBox2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBox2.Location = New System.Drawing.Point(129, 52)
         Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(535, 21)
+        Me.TextBox2.Size = New System.Drawing.Size(765, 21)
         Me.TextBox2.TabIndex = 9
         '
         'Label2
         '
-        Me.Label2.AutoSize = True
+        Me.Label2.AutoEllipsis = True
         Me.Label2.Location = New System.Drawing.Point(10, 55)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(119, 13)
         Me.Label2.TabIndex = 8
-        Me.Label2.Text = "Destination image file*:"
+        Me.Label2.Text = "Destination image file:"
         '
         'Button1
         '
+        Me.Button1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button1.Location = New System.Drawing.Point(676, 24)
+        Me.Button1.Location = New System.Drawing.Point(900, 24)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 7
@@ -190,19 +192,21 @@ Partial Class ImgCapture
         '
         'TextBox1
         '
-        Me.TextBox1.Location = New System.Drawing.Point(143, 25)
+        Me.TextBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBox1.Location = New System.Drawing.Point(137, 25)
         Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(527, 21)
+        Me.TextBox1.Size = New System.Drawing.Size(757, 21)
         Me.TextBox1.TabIndex = 6
         '
         'Label3
         '
-        Me.Label3.AutoSize = True
+        Me.Label3.AutoEllipsis = True
         Me.Label3.Location = New System.Drawing.Point(10, 28)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(127, 13)
         Me.Label3.TabIndex = 5
-        Me.Label3.Text = "Source image directory*:"
+        Me.Label3.Text = "Source image directory:"
         '
         'GroupBox2
         '
@@ -227,34 +231,40 @@ Partial Class ImgCapture
         Me.GroupBox2.Controls.Add(Me.Label5)
         Me.GroupBox2.Location = New System.Drawing.Point(12, 151)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(760, 323)
+        Me.GroupBox2.Size = New System.Drawing.Size(984, 363)
         Me.GroupBox2.TabIndex = 7
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Options"
         '
         'Label8
         '
+        Me.Label8.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label8.AutoEllipsis = True
         Me.Label8.Location = New System.Drawing.Point(199, 154)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(552, 13)
+        Me.Label8.Size = New System.Drawing.Size(776, 13)
         Me.Label8.TabIndex = 13
         Me.Label8.Text = "(Description goes here)"
         '
         'ComboBox1
         '
+        Me.ComboBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ComboBox1.FormattingEnabled = True
         Me.ComboBox1.Items.AddRange(New Object() {"none", "fast", "maximum"})
         Me.ComboBox1.Location = New System.Drawing.Point(199, 126)
         Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(552, 21)
+        Me.ComboBox1.Size = New System.Drawing.Size(776, 21)
         Me.ComboBox1.TabIndex = 12
         Me.ComboBox1.Text = "fast"
         '
         'Button5
         '
+        Me.Button5.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button5.Enabled = False
         Me.Button5.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button5.Location = New System.Drawing.Point(676, 98)
+        Me.Button5.Location = New System.Drawing.Point(900, 98)
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(75, 23)
         Me.Button5.TabIndex = 10
@@ -263,9 +273,10 @@ Partial Class ImgCapture
         '
         'Button3
         '
+        Me.Button3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button3.Enabled = False
         Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button3.Location = New System.Drawing.Point(595, 98)
+        Me.Button3.Location = New System.Drawing.Point(819, 98)
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(75, 23)
         Me.Button3.TabIndex = 10
@@ -274,21 +285,23 @@ Partial Class ImgCapture
         '
         'TextBox5
         '
+        Me.TextBox5.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBox5.Enabled = False
-        Me.TextBox5.Location = New System.Drawing.Point(170, 99)
+        Me.TextBox5.Location = New System.Drawing.Point(164, 99)
         Me.TextBox5.Name = "TextBox5"
-        Me.TextBox5.Size = New System.Drawing.Size(419, 21)
+        Me.TextBox5.Size = New System.Drawing.Size(649, 21)
         Me.TextBox5.TabIndex = 9
         '
         'Label6
         '
-        Me.Label6.AutoSize = True
+        Me.Label6.AutoEllipsis = True
         Me.Label6.Enabled = False
         Me.Label6.Location = New System.Drawing.Point(29, 103)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(135, 13)
         Me.Label6.TabIndex = 11
-        Me.Label6.Text = "Path of configuration file*:"
+        Me.Label6.Text = "Path of configuration file:"
         '
         'CheckBox5
         '
@@ -305,7 +318,7 @@ Partial Class ImgCapture
         'CheckBox8
         '
         Me.CheckBox8.AutoSize = True
-        Me.CheckBox8.Location = New System.Drawing.Point(322, 173)
+        Me.CheckBox8.Location = New System.Drawing.Point(13, 311)
         Me.CheckBox8.Name = "CheckBox8"
         Me.CheckBox8.Size = New System.Drawing.Size(205, 17)
         Me.CheckBox8.TabIndex = 10
@@ -374,14 +387,16 @@ Partial Class ImgCapture
         '
         'TextBox4
         '
+        Me.TextBox4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBox4.Location = New System.Drawing.Point(167, 52)
         Me.TextBox4.Name = "TextBox4"
-        Me.TextBox4.Size = New System.Drawing.Size(584, 21)
+        Me.TextBox4.Size = New System.Drawing.Size(808, 21)
         Me.TextBox4.TabIndex = 9
         '
         'Label7
         '
-        Me.Label7.AutoSize = True
+        Me.Label7.AutoEllipsis = True
         Me.Label7.Location = New System.Drawing.Point(10, 129)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(183, 13)
@@ -390,7 +405,7 @@ Partial Class ImgCapture
         '
         'Label4
         '
-        Me.Label4.AutoSize = True
+        Me.Label4.AutoEllipsis = True
         Me.Label4.Location = New System.Drawing.Point(10, 55)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(151, 13)
@@ -399,19 +414,21 @@ Partial Class ImgCapture
         '
         'TextBox3
         '
-        Me.TextBox3.Location = New System.Drawing.Point(147, 25)
+        Me.TextBox3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBox3.Location = New System.Drawing.Point(141, 25)
         Me.TextBox3.Name = "TextBox3"
-        Me.TextBox3.Size = New System.Drawing.Size(604, 21)
+        Me.TextBox3.Size = New System.Drawing.Size(834, 21)
         Me.TextBox3.TabIndex = 6
         '
         'Label5
         '
-        Me.Label5.AutoSize = True
+        Me.Label5.AutoEllipsis = True
         Me.Label5.Location = New System.Drawing.Point(10, 28)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(131, 13)
         Me.Label5.TabIndex = 5
-        Me.Label5.Text = "Destination image name*:"
+        Me.Label5.Text = "Destination image name:"
         '
         'SaveFileDialog1
         '
@@ -422,35 +439,13 @@ Partial Class ImgCapture
         Me.OpenFileDialog1.Filter = "WimScript.ini|WimScript.ini"
         Me.OpenFileDialog1.Title = "Specify a WimScript.ini configuration file"
         '
-        'Button4
-        '
-        Me.Button4.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button4.Location = New System.Drawing.Point(12, 483)
-        Me.Button4.Name = "Button4"
-        Me.Button4.Size = New System.Drawing.Size(100, 23)
-        Me.Button4.TabIndex = 9
-        Me.Button4.Text = "Command help"
-        Me.Button4.UseVisualStyleBackColor = True
-        '
-        'Label11
-        '
-        Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(118, 488)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(179, 13)
-        Me.Label11.TabIndex = 8
-        Me.Label11.Text = "The fields that end in * are required"
-        '
         'ImgCapture
         '
         Me.AcceptButton = Me.OK_Button
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Cancel_Button
-        Me.ClientSize = New System.Drawing.Size(784, 521)
-        Me.Controls.Add(Me.Button4)
-        Me.Controls.Add(Me.Label11)
+        Me.ClientSize = New System.Drawing.Size(1008, 561)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.Win10Title)
@@ -472,7 +467,6 @@ Partial Class ImgCapture
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
@@ -510,8 +504,6 @@ Partial Class ImgCapture
     Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
     Friend WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
-    Friend WithEvents Button4 As System.Windows.Forms.Button
-    Friend WithEvents Label11 As System.Windows.Forms.Label
     Friend WithEvents Button5 As System.Windows.Forms.Button
 
 End Class

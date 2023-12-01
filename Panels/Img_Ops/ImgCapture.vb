@@ -3,6 +3,8 @@ Imports System.IO
 
 Public Class ImgCapture
 
+    Dim CompressionTypeStrings() As String = New String(2) {"No compression will be applied to the destination image.", "Fast compression will be applied. This is the default option.", "Maximum compression will be applied. This will take the most time, but will result in a smaller image."}
+
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.CaptureSourceDir = TextBox1.Text
@@ -81,6 +83,179 @@ Public Class ImgCapture
     End Sub
 
     Private Sub ImgCapture_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        Text = "Capture an image"
+                        Label1.Text = Text
+                        Label2.Text = "Destination image file:"
+                        Label3.Text = "Source image directory:"
+                        Label4.Text = "Destination image description:"
+                        Label5.Text = "Destination image name:"
+                        Label6.Text = "Path of configuration file:"
+                        Label7.Text = "Destination image compression type:"
+                        GroupBox1.Text = "Sources and destinations"
+                        GroupBox2.Text = "Options"
+                        Button1.Text = "Browse..."
+                        Button2.Text = "Browse..."
+                        Button3.Text = "Browse..."
+                        Button5.Text = "Create..."
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Cancel"
+                        CheckBox1.Text = "Exclude certain files and directories for destination image"
+                        CheckBox2.Text = "Make image bootable (Windows PE only)"
+                        CheckBox3.Text = "Verify image integrity"
+                        CheckBox4.Text = "Check for file errors"
+                        CheckBox5.Text = "Use the reparse point tag fix"
+                        CheckBox6.Text = "Append with WIMBoot configuration"
+                        CheckBox7.Text = "Capture extended attributes"
+                        CheckBox8.Text = "Mount destination image for later use"
+                        CompressionTypeStrings(0) = "No compression will be applied to the destination image."
+                        CompressionTypeStrings(1) = "Fast compression will be applied. This is the default option."
+                        CompressionTypeStrings(2) = "Maximum compression will be applied. This will take the most time, but will result in a smaller image."
+                    Case "ESN"
+                        Text = "Capturar una imagen"
+                        Label1.Text = Text
+                        Label2.Text = "Archivo de imagen de destino:"
+                        Label3.Text = "Directorio de imagen de origen:"
+                        Label4.Text = "Descripción de la imagen de destino:"
+                        Label5.Text = "Nombre de la imagen de destino:"
+                        Label6.Text = "Ubicación de archivo de configuración:"
+                        Label7.Text = "Tipo de compresión de imagen de destino:"
+                        GroupBox1.Text = "Orígenes y destinos"
+                        GroupBox2.Text = "Opciones"
+                        Button1.Text = "Examinar..."
+                        Button2.Text = "Examinar..."
+                        Button3.Text = "Examinar..."
+                        Button5.Text = "Crear..."
+                        OK_Button.Text = "Aceptar"
+                        Cancel_Button.Text = "Cancelar"
+                        CheckBox1.Text = "Excluir algunos archivos y directorios para la imagen de destino"
+                        CheckBox2.Text = "Hacer imagen arrancable (solo Windows PE)"
+                        CheckBox3.Text = "Verificar integridad de imagen"
+                        CheckBox4.Text = "Comprobar errores de archivos"
+                        CheckBox5.Text = "Utilizar corrección de etiquetas de puntos de repetición de análisis"
+                        CheckBox6.Text = "Anexar con configuración WIMBoot"
+                        CheckBox7.Text = "Capturar atributos extendidos"
+                        CheckBox8.Text = "Montar imagen de destino para posterior uso"
+                        CompressionTypeStrings(0) = "No se aplicará compresión a la imagen de destino."
+                        CompressionTypeStrings(1) = "Se aplicará compresión rápida. Esta es la opción predeterminada."
+                        CompressionTypeStrings(2) = "Se aplicará compresión máxima. Esto tardará más tiempo, pero resultará en una imagen más pequeña."
+                    Case "FRA"
+                        Text = "Capturer une image"
+                        Label1.Text = Text
+                        Label2.Text = "Fichier de l'image de destination :"
+                        Label3.Text = "Répertoire de l'image source :"
+                        Label4.Text = "Description de l'image de destination :"
+                        Label5.Text = "Nom de l'image de destination :"
+                        Label6.Text = "Emplacement du fichier de configuration :"
+                        Label7.Text = "Type de compression de l'image de destination :"
+                        GroupBox1.Text = "Sources et destinations"
+                        GroupBox2.Text = "Paramètres"
+                        Button1.Text = "Parcourir..."
+                        Button2.Text = "Parcourir..."
+                        Button3.Text = "Parcourir..."
+                        Button5.Text = "Créer..."
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annuler"
+                        CheckBox1.Text = "Exclure certains fichiers et répertoires pour l'image de destination"
+                        CheckBox2.Text = "Rendre l'image amorçable (Windows PE uniquement)"
+                        CheckBox3.Text = "Vérifier l'intégrité de l'image"
+                        CheckBox4.Text = "Vérifier les erreurs de fichiers"
+                        CheckBox5.Text = "Utiliser la correction de la balise reparse"
+                        CheckBox6.Text = "Ajouter la configuration WIMBoot"
+                        CheckBox7.Text = "Capturer les attributs étendus"
+                        CheckBox8.Text = "Monter l'image de destination pour une utilisation ultérieure"
+                        CompressionTypeStrings(0) = "Aucune compression ne sera appliquée à l'image de destination."
+                        CompressionTypeStrings(1) = "Une compression rapide sera appliquée. Il s'agit du paramètre par défaut."
+                        CompressionTypeStrings(2) = "La compression maximale sera appliquée. C'est ce qui prendra le plus de temps, mais l'image sera plus petite."
+                End Select
+            Case 1
+                Text = "Capture an image"
+                Label1.Text = Text
+                Label2.Text = "Destination image file:"
+                Label3.Text = "Source image directory:"
+                Label4.Text = "Destination image description:"
+                Label5.Text = "Destination image name:"
+                Label6.Text = "Path of configuration file:"
+                Label7.Text = "Destination image compression type:"
+                GroupBox1.Text = "Sources and destinations"
+                GroupBox2.Text = "Options"
+                Button1.Text = "Browse..."
+                Button2.Text = "Browse..."
+                Button3.Text = "Browse..."
+                Button5.Text = "Create..."
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Cancel"
+                CheckBox1.Text = "Exclude certain files and directories for destination image"
+                CheckBox2.Text = "Make image bootable (Windows PE only)"
+                CheckBox3.Text = "Verify image integrity"
+                CheckBox4.Text = "Check for file errors"
+                CheckBox5.Text = "Use the reparse point tag fix"
+                CheckBox6.Text = "Append with WIMBoot configuration"
+                CheckBox7.Text = "Capture extended attributes"
+                CheckBox8.Text = "Mount destination image for later use"
+                CompressionTypeStrings(0) = "No compression will be applied to the destination image."
+                CompressionTypeStrings(1) = "Fast compression will be applied. This is the default option."
+                CompressionTypeStrings(2) = "Maximum compression will be applied. This will take the most time, but will result in a smaller image."
+            Case 2
+                Text = "Capturar una imagen"
+                Label1.Text = Text
+                Label2.Text = "Archivo de imagen de destino:"
+                Label3.Text = "Directorio de imagen de origen:"
+                Label4.Text = "Descripción de la imagen de destino:"
+                Label5.Text = "Nombre de la imagen de destino:"
+                Label6.Text = "Ubicación de archivo de configuración:"
+                Label7.Text = "Tipo de compresión de imagen de destino:"
+                GroupBox1.Text = "Orígenes y destinos"
+                GroupBox2.Text = "Opciones"
+                Button1.Text = "Examinar..."
+                Button2.Text = "Examinar..."
+                Button3.Text = "Examinar..."
+                Button5.Text = "Crear..."
+                OK_Button.Text = "Aceptar"
+                Cancel_Button.Text = "Cancelar"
+                CheckBox1.Text = "Excluir algunos archivos y directorios para la imagen de destino"
+                CheckBox2.Text = "Hacer imagen arrancable (solo Windows PE)"
+                CheckBox3.Text = "Verificar integridad de imagen"
+                CheckBox4.Text = "Comprobar errores de archivos"
+                CheckBox5.Text = "Utilizar corrección de etiquetas de puntos de repetición de análisis"
+                CheckBox6.Text = "Anexar con configuración WIMBoot"
+                CheckBox7.Text = "Capturar atributos extendidos"
+                CheckBox8.Text = "Montar imagen de destino para posterior uso"
+                CompressionTypeStrings(0) = "No se aplicará compresión a la imagen de destino."
+                CompressionTypeStrings(1) = "Se aplicará compresión rápida. Esta es la opción predeterminada."
+                CompressionTypeStrings(2) = "Se aplicará compresión máxima. Esto tardará más tiempo, pero resultará en una imagen más pequeña."
+            Case 3
+                Text = "Capturer une image"
+                Label1.Text = Text
+                Label2.Text = "Fichier de l'image de destination :"
+                Label3.Text = "Répertoire de l'image source :"
+                Label4.Text = "Description de l'image de destination :"
+                Label5.Text = "Nom de l'image de destination :"
+                Label6.Text = "Emplacement du fichier de configuration :"
+                Label7.Text = "Type de compression de l'image de destination :"
+                GroupBox1.Text = "Sources et destinations"
+                GroupBox2.Text = "Paramètres"
+                Button1.Text = "Parcourir..."
+                Button2.Text = "Parcourir..."
+                Button3.Text = "Parcourir..."
+                Button5.Text = "Créer..."
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annuler"
+                CheckBox1.Text = "Exclure certains fichiers et répertoires pour l'image de destination"
+                CheckBox2.Text = "Rendre l'image amorçable (Windows PE uniquement)"
+                CheckBox3.Text = "Vérifier l'intégrité de l'image"
+                CheckBox4.Text = "Vérifier les erreurs de fichiers"
+                CheckBox5.Text = "Utiliser la correction de la balise reparse"
+                CheckBox6.Text = "Ajouter la configuration WIMBoot"
+                CheckBox7.Text = "Capturer les attributs étendus"
+                CheckBox8.Text = "Monter l'image de destination pour une utilisation ultérieure"
+                CompressionTypeStrings(0) = "Aucune compression ne sera appliquée à l'image de destination."
+                CompressionTypeStrings(1) = "Une compression rapide sera appliquée. Il s'agit du paramètre par défaut."
+                CompressionTypeStrings(2) = "La compression maximale sera appliquée. C'est ce qui prendra le plus de temps, mais l'image sera plus petite."
+        End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
             BackColor = Color.FromArgb(31, 31, 31)
@@ -190,11 +365,11 @@ Public Class ImgCapture
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
         If ComboBox1.SelectedItem = "none" Then
-            Label8.Text = "No compression will be applied to the destination image."
+            Label8.Text = CompressionTypeStrings(0)
         ElseIf ComboBox1.SelectedItem = "fast" Then
-            Label8.Text = "Fast compression will be applied. This is the default option."
+            Label8.Text = CompressionTypeStrings(1)
         ElseIf ComboBox1.SelectedItem = "maximum" Then
-            Label8.Text = "Maximum compression will be applied. This will take the most time, but will result in a smaller image."
+            Label8.Text = CompressionTypeStrings(2)
         End If
     End Sub
 
