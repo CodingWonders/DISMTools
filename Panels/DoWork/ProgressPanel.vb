@@ -586,6 +586,8 @@ Public Class ProgressPanel
             Else
                 taskCount = 1
             End If
+        ElseIf opNum = 68 Then
+            taskCount = 1
         ElseIf opNum = 75 Then
             If drvAdditionCommit Then
                 taskCount = 2
@@ -5265,11 +5267,19 @@ Public Class ProgressPanel
 #End Region
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
-        If File.Exists(Application.StartupPath & "\logs\" & dateStr) Then
-            Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\notepad.exe", Application.StartupPath & "\logs\" & dateStr)
-        ElseIf File.Exists(LogPath) Then
-            Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\notepad.exe", LogPath)
-        End If
+        Try
+            If File.Exists(Application.StartupPath & "\logs\" & dateStr) Then
+                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\notepad.exe", Application.StartupPath & "\logs\" & dateStr)
+            ElseIf File.Exists(LogPath) Then
+                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\notepad.exe", LogPath)
+            End If
+        Catch ex As Exception
+            If Not File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\notepad.exe") Then
+                LogView.AppendText(CrLf & "Notepad was not found")
+            ElseIf Not File.Exists(Application.StartupPath & "\logs\" & dateStr) Or Not File.Exists(LogPath) Then
+                LogView.AppendText(CrLf & "The log file was not found")
+            End If
+        End Try
     End Sub
 
     Private Sub BodyPanel_Paint(sender As Object, e As PaintEventArgs) Handles BodyPanel.Paint

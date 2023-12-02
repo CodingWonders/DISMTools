@@ -341,6 +341,8 @@ Public Class GetAppxPkgInfoDlg
             ImgInfoSaveDlg.SaveTarget = MainForm.ImgInfoSFD.FileName
             ImgInfoSaveDlg.OnlineMode = MainForm.OnlineManagement
             ImgInfoSaveDlg.OfflineMode = MainForm.OfflineManagement
+            ImgInfoSaveDlg.SkipQuestions = MainForm.SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = MainForm.AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 5
             ImgInfoSaveDlg.ShowDialog()
         End If

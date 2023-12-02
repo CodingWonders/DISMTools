@@ -230,6 +230,11 @@ Public Class MainForm
 
     Public EnableExperiments As Boolean
 
+    Public SkipQuestions As Boolean             ' Skips questions in the info saver
+    Public AutoCompleteInfo(4) As Boolean       ' Skips questions for specific info categories
+
+    Public GoToNewView As Boolean
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -1004,6 +1009,14 @@ Public Class MainForm
                 End If
                 WindowState = If(CInt(WndKey.GetValue("WndMaximized")) = 1, FormWindowState.Maximized, FormWindowState.Normal)
                 WndKey.Close()
+                Dim InfoSaverKey As RegistryKey = Key.OpenSubKey("InfoSaver")
+                SkipQuestions = (CInt(InfoSaverKey.GetValue("SkipQuestions")) = 1)
+                AutoCompleteInfo(0) = (CInt(InfoSaverKey.GetValue("Pkg_CompleteInfo")) = 1)
+                AutoCompleteInfo(1) = (CInt(InfoSaverKey.GetValue("Feat_CompleteInfo")) = 1)
+                AutoCompleteInfo(2) = (CInt(InfoSaverKey.GetValue("AppX_CompleteInfo")) = 1)
+                AutoCompleteInfo(3) = (CInt(InfoSaverKey.GetValue("Cap_CompleteInfo")) = 1)
+                AutoCompleteInfo(4) = (CInt(InfoSaverKey.GetValue("Drv_CompleteInfo")) = 1)
+                InfoSaverKey.Close()
                 Key.Close()
                 ' Apply program colors immediately
                 ChangePrgColors(ColorMode)
@@ -1220,6 +1233,36 @@ Public Class MainForm
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("WndMaximized=0") Then
                     WindowState = FormWindowState.Normal
                 End If
+                If DTSettingForm.RichTextBox1.Text.Contains("SkipQuestions=1") Then
+                    SkipQuestions = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("SkipQuestions=0") Then
+                    SkipQuestions = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("Pkg_CompleteInfo=1") Then
+                    AutoCompleteInfo(0) = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Pkg_CompleteInfo=0") Then
+                    AutoCompleteInfo(0) = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("Feat_CompleteInfo=1") Then
+                    AutoCompleteInfo(1) = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Feat_CompleteInfo=0") Then
+                    AutoCompleteInfo(1) = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("AppX_CompleteInfo=1") Then
+                    AutoCompleteInfo(2) = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("AppX_CompleteInfo=0") Then
+                    AutoCompleteInfo(2) = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("Cap_CompleteInfo=1") Then
+                    AutoCompleteInfo(3) = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Cap_CompleteInfo=0") Then
+                    AutoCompleteInfo(3) = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("Drv_CompleteInfo=1") Then
+                    AutoCompleteInfo(4) = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Drv_CompleteInfo=0") Then
+                    AutoCompleteInfo(4) = False
+                End If
             Else
                 GenerateDTSettings()
                 LoadDTSettings(1)
@@ -1304,6 +1347,13 @@ Public Class MainForm
     ''' <remarks>Depending on the parameter of bgProcOptn, and on the power of the system, the background processes may take a longer time to finish</remarks>
     Sub RunBackgroundProcesses(bgProcOptn As Integer, GatherBasicInfo As Boolean, GatherAdvancedInfo As Boolean, Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False, Optional OfflineMode As Boolean = False)
         IsCompatible = True
+        If isProjectLoaded And GoToNewView Then
+            ProjectView.Visible = True
+            SplitPanels.Visible = False
+        ElseIf isProjectLoaded And Not GoToNewView Then
+            ProjectView.Visible = False
+            SplitPanels.Visible = True
+        End If
         If Not IsImageMounted Then
             Button1.Enabled = True
             Button2.Enabled = False
@@ -4082,8 +4132,13 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "WndLeft=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "WndTop=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "WndMaximized=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ImgDetection]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("CPUMode=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[InfoSaver]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("SkipQuestions=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "Pkg_CompleteInfo=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "Feat_CompleteInfo=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "AppX_CompleteInfo=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "Cap_CompleteInfo=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "Drv_CompleteInfo=1")
         File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
         If File.Exists(Application.StartupPath & "\portable") Then Exit Sub
         Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("preview"), "Preview", "Stable")
@@ -4151,9 +4206,14 @@ Public Class MainForm
         WndKey.SetValue("WndTop", 0, RegistryValueKind.DWord)
         WndKey.SetValue("WndMaximized", 0, RegistryValueKind.DWord)
         WndKey.Close()
-        Dim ImgDetectionKey As RegistryKey = Key.CreateSubKey("ImgDetection")
-        ImgDetectionKey.SetValue("CPUMode", 0, RegistryValueKind.DWord)
-        ImgDetectionKey.Close()
+        Dim InfoSaverKey As RegistryKey = Key.CreateSubKey("InfoSaver")
+        InfoSaverKey.SetValue("SkipQuestions", 1, RegistryValueKind.DWord)
+        InfoSaverKey.SetValue("Pkg_CompleteInfo", 1, RegistryValueKind.DWord)
+        InfoSaverKey.SetValue("Feat_CompleteInfo", 1, RegistryValueKind.DWord)
+        InfoSaverKey.SetValue("AppX_CompleteInfo", 1, RegistryValueKind.DWord)
+        InfoSaverKey.SetValue("Cap_CompleteInfo", 1, RegistryValueKind.DWord)
+        InfoSaverKey.SetValue("Drv_CompleteInfo", 1, RegistryValueKind.DWord)
+        InfoSaverKey.Close()
         Key.Close()
     End Sub
 
@@ -4324,7 +4384,13 @@ Public Class MainForm
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "WndLeft=" & WndLeft)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "WndTop=" & WndTop)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "WndMaximized=" & If(WindowState = FormWindowState.Maximized, "1", "0"))
-                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ImgDetection]" & CrLf)
+                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[InfoSaver]" & CrLf)
+                DTSettingForm.RichTextBox2.AppendText("SkipQuestions=" & If(SkipQuestions, "1", "0"))
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "Pkg_CompleteInfo=" & If(AutoCompleteInfo(0), "1", "0"))
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "Feat_CompleteInfo=" & If(AutoCompleteInfo(1), "1", "0"))
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "AppX_CompleteInfo=" & If(AutoCompleteInfo(2), "1", "0"))
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "Cap_CompleteInfo=" & If(AutoCompleteInfo(3), "1", "0"))
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "Drv_CompleteInfo=" & If(AutoCompleteInfo(4), "1", "0"))
                 File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
             Else
                 ' Tell settings file to use this method
@@ -4394,8 +4460,14 @@ Public Class MainForm
                 WndKey.SetValue("WndTop", WndTop, RegistryValueKind.DWord)
                 WndKey.SetValue("WndMaximized", If(WindowState = FormWindowState.Maximized, 1, 0), RegistryValueKind.DWord)
                 WndKey.Close()
-                Dim ImgDetectionKey As RegistryKey = Key.CreateSubKey("ImgDetection")
-                ImgDetectionKey.Close()
+                Dim InfoSaverKey As RegistryKey = Key.CreateSubKey("InfoSaver")
+                InfoSaverKey.SetValue("SkipQuestions", If(SkipQuestions, 1, 0), RegistryValueKind.DWord)
+                InfoSaverKey.SetValue("Pkg_CompleteInfo", If(AutoCompleteInfo(0), 1, 0), RegistryValueKind.DWord)
+                InfoSaverKey.SetValue("Feat_CompleteInfo", If(AutoCompleteInfo(1), 1, 0), RegistryValueKind.DWord)
+                InfoSaverKey.SetValue("AppX_CompleteInfo", If(AutoCompleteInfo(2), 1, 0), RegistryValueKind.DWord)
+                InfoSaverKey.SetValue("Cap_CompleteInfo", If(AutoCompleteInfo(3), 1, 0), RegistryValueKind.DWord)
+                InfoSaverKey.SetValue("Drv_CompleteInfo", If(AutoCompleteInfo(4), 1, 0), RegistryValueKind.DWord)
+                InfoSaverKey.Close()
                 Key.Close()
             End If
         End If
@@ -5226,6 +5298,73 @@ Public Class MainForm
                         ' Context menu of AppX addition dialog
                         MicrosoftAppsToolStripMenuItem.Text = "Visit the Microsoft Apps website"
                         MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visit the Microsoft Store Generation Project website"
+                        ' New design
+                        GreetingLabel.Text = "Welcome to this servicing session"
+                        LinkLabel12.Text = "PROJECT"
+                        LinkLabel13.Text = "IMAGE"
+                        Label54.Text = "Name:"
+                        Label51.Text = "Location:"
+                        Label53.Text = "Images mounted?"
+                        LinkLabel14.Text = "Click here to mount an image"
+                        Label55.Text = "Project Tasks"
+                        LinkLabel15.Text = "View project properties"
+                        LinkLabel16.Text = "Open in File Explorer"
+                        LinkLabel17.Text = "Unload project"
+                        Label59.Text = "No image has been mounted"
+                        Label58.Text = "You need to mount an image in order to view its information"
+                        Label57.Text = "Choices"
+                        LinkLabel21.Text = "Mount an image..."
+                        LinkLabel18.Text = "Pick a mounted image..."
+                        Label39.Text = "Image index:"
+                        Label43.Text = "Mount point:"
+                        Label45.Text = "Version:"
+                        Label42.Text = "Name:"
+                        Label40.Text = "Description:"
+                        Label56.Text = "Image Tasks"
+                        LinkLabel20.Text = "View image properties"
+                        LinkLabel19.Text = "Unmount image"
+                        GroupBox4.Text = "Image operations"
+                        Button26.Text = "Mount image..."
+                        Button27.Text = "Commit current changes"
+                        Button28.Text = "Commit and unmount image"
+                        Button29.Text = "Unmount image discarding changes"
+                        Button25.Text = "Reload servicing session"
+                        Button24.Text = "Switch image indexes..."
+                        Button30.Text = "Apply image..."
+                        Button31.Text = "Capture image..."
+                        Button32.Text = "Remove volume images..."
+                        Button33.Text = "Save complete image information..."
+                        GroupBox5.Text = "Package operations"
+                        Button36.Text = "Add package..."
+                        Button34.Text = "Get package information..."
+                        Button38.Text = "Save installed package information..."
+                        Button35.Text = "Remove package..."
+                        Button37.Text = "Perform component store maintenance and cleanup..."
+                        GroupBox6.Text = "Feature operations"
+                        Button41.Text = "Enable feature..."
+                        Button39.Text = "Get feature information..."
+                        Button42.Text = "Save feature information..."
+                        Button40.Text = "Disable feature..."
+                        GroupBox7.Text = "AppX package operations"
+                        Button44.Text = "Add AppX package..."
+                        Button45.Text = "Get app information..."
+                        Button46.Text = "Save installed AppX package information..."
+                        Button43.Text = "Remove AppX package..."
+                        GroupBox8.Text = "Capability operations"
+                        Button48.Text = "Add capability..."
+                        Button49.Text = "Get capability information..."
+                        Button50.Text = "Save capability information..."
+                        Button47.Text = "Remove capability..."
+                        GroupBox9.Text = "Driver operations"
+                        Button53.Text = "Add driver package..."
+                        Button52.Text = "Get driver information..."
+                        Button54.Text = "Save installed driver information..."
+                        Button51.Text = "Remove driver..."
+                        GroupBox10.Text = "Windows PE operations"
+                        Button55.Text = "Get configuration"
+                        Button56.Text = "Save configuration..."
+                        Button57.Text = "Set target path..."
+                        Button58.Text = "Set scratch space..."
                     Case "ESN"
                         ' Top-level menu items
                         FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -5514,6 +5653,73 @@ Public Class MainForm
                         ' Context menu of AppX addition dialog
                         MicrosoftAppsToolStripMenuItem.Text = "Visitar el sitio web de Aplicaciones de Microsoft"
                         MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visitar el sitio web del proyecto de generación de Microsoft Store"
+                        ' New design
+                        GreetingLabel.Text = "Le damos la bienvenida a esta sesión de servicio"
+                        LinkLabel12.Text = "PROYECTO"
+                        LinkLabel13.Text = "IMAGEN"
+                        Label54.Text = "Nombre:"
+                        Label51.Text = "Ubicación:"
+                        Label53.Text = "¿Hay imágenes montadas?"
+                        LinkLabel14.Text = "Haga clic aquí para montar una imagen"
+                        Label55.Text = "Tareas del proyecto"
+                        LinkLabel15.Text = "Ver propiedades del proyecto"
+                        LinkLabel16.Text = "Abrir en el Explorador de Archivos"
+                        LinkLabel17.Text = "Descargar proyecto"
+                        Label59.Text = "No se ha montado una imagen"
+                        Label58.Text = "Debe montar una imagen para poder ver su información"
+                        Label57.Text = "Elecciones"
+                        LinkLabel21.Text = "Montar una imagen..."
+                        LinkLabel18.Text = "Escoger una imagen montada..."
+                        Label39.Text = "Índice de la imagen:"
+                        Label43.Text = "Punto de montaje:"
+                        Label45.Text = "Versión:"
+                        Label42.Text = "Nombre:"
+                        Label40.Text = "Descripción:"
+                        Label56.Text = "Tareas de la imagen"
+                        LinkLabel20.Text = "Ver propiedades de la imagen"
+                        LinkLabel19.Text = "Desmontar imagen"
+                        GroupBox4.Text = "Operaciones de la imagen"
+                        Button26.Text = "Montar imagen..."
+                        Button27.Text = "Guardar cambios actuales"
+                        Button28.Text = "Guardar cambios y desmontar imagen"
+                        Button29.Text = "Desmontar imagen descartando cambios"
+                        Button25.Text = "Recargar sesión de servicio"
+                        Button24.Text = "Cambiar índices de la imagen..."
+                        Button30.Text = "Aplicar imagen..."
+                        Button31.Text = "Capturar imagen..."
+                        Button32.Text = "Eliminar imágenes de volumen..."
+                        Button33.Text = "Guardar información completa de la imagen..."
+                        GroupBox5.Text = "Operaciones de paquetes"
+                        Button36.Text = "Añadir paquete..."
+                        Button34.Text = "Obtener información de paquetes..."
+                        Button38.Text = "Guardar información de paquetes instalados..."
+                        Button35.Text = "Eliminar paquete..."
+                        Button37.Text = "Realizar mantenimiento y limpieza del almacén de componentes..."
+                        GroupBox6.Text = "Operaciones de características"
+                        Button41.Text = "Habilitar característica..."
+                        Button39.Text = "Obtener información de características..."
+                        Button42.Text = "Guardar información de características..."
+                        Button40.Text = "Deshabilitar característica..."
+                        GroupBox7.Text = "Operaciones de paquetes AppX"
+                        Button44.Text = "Añadir paquete AppX..."
+                        Button45.Text = "Obtener información de aplicaciones..."
+                        Button46.Text = "Guardar información de paquetes AppX instalados..."
+                        Button43.Text = "Eliminar paquete AppX..."
+                        GroupBox8.Text = "Operaciones de funcionalidades"
+                        Button48.Text = "Añadir funcionalidad..."
+                        Button49.Text = "Obtener información de funcionalidades..."
+                        Button50.Text = "Guardar información de funcionalidades..."
+                        Button47.Text = "Eliminar funcionalidades..."
+                        GroupBox9.Text = "Operaciones de controladores"
+                        Button53.Text = "Añadir controlador..."
+                        Button52.Text = "Obtener información de controladores..."
+                        Button54.Text = "Guardar información de controladores instalados..."
+                        Button51.Text = "Eliminar controlador..."
+                        GroupBox10.Text = "Operaciones de Windows PE"
+                        Button55.Text = "Obtener configuración"
+                        Button56.Text = "Guardar configuración..."
+                        Button57.Text = "Establecer ruta de destino..."
+                        Button58.Text = "Establecer espacio temporal..."
                     Case "FRA"
                         ' Top-level menu items
                         FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Fichier".ToUpper(), "&Fichier")
@@ -5802,6 +6008,73 @@ Public Class MainForm
                         ' Context menu of AppX addition dialog
                         MicrosoftAppsToolStripMenuItem.Text = "Visiter le site web de Microsoft Apps"
                         MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visiter le site web du projet Microsoft Store Generation"
+                        ' New design
+                        GreetingLabel.Text = "Bienvenue à cette session de service"
+                        LinkLabel12.Text = "PROJET"
+                        LinkLabel13.Text = "IMAGE"
+                        Label54.Text = "Nom :"
+                        Label51.Text = "Lieu :"
+                        Label53.Text = "Images montées ?"
+                        LinkLabel14.Text = "Cliquez ici pour monter une image"
+                        Label55.Text = "Tâches du projet"
+                        LinkLabel15.Text = "Voir les propriétés du projet"
+                        LinkLabel16.Text = "Ouvrir dans l'explorateur de fichiers"
+                        LinkLabel17.Text = "Décharger le projet"
+                        Label59.Text = "Aucune image n'a été montée"
+                        Label58.Text = "Vous devez monter une image pour pouvoir consulter ses informations."
+                        Label57.Text = "Choix"
+                        LinkLabel21.Text = "Monter une image..."
+                        LinkLabel18.Text = "Choisir une image montée..."
+                        Label39.Text = "Index de l'image :"
+                        Label43.Text = "Répertoire de montage :"
+                        Label45.Text = "Version :"
+                        Label42.Text = "Nom :"
+                        Label40.Text = "Description :"
+                        Label56.Text = "Tâches de l'image"
+                        LinkLabel20.Text = "Voir les propriétés de l'image"
+                        LinkLabel19.Text = "Démonter l'image"
+                        GroupBox4.Text = "Opérations sur les images"
+                        Button26.Text = "Monter une image..."
+                        Button27.Text = "Sauvegarder les modifications pendants"
+                        Button28.Text = "Sauvegarder modifications et démonter l'image"
+                        Button29.Text = "Démonter l'image en supprimant les modifications"
+                        Button25.Text = "Recharger la session de service"
+                        Button24.Text = "Changer d'index de l'image..."
+                        Button30.Text = "Appliquer l'image..."
+                        Button31.Text = "Capturer image..."
+                        Button32.Text = "Supprimer les images de volume..."
+                        Button33.Text = "Sauvegarder les informations complètes de l'image..."
+                        GroupBox5.Text = "Opérations sur les paquets"
+                        Button36.Text = "Ajouter des paquets..."
+                        Button34.Text = "Obtenir des informations sur le paquet..."
+                        Button38.Text = "Sauvegarder les informations sur les paquets installés..."
+                        Button35.Text = "Supprimer des paquets..."
+                        Button37.Text = "Effectuer la maintenance et le nettoyage du stock de composants..."
+                        GroupBox6.Text = "Opérations sur les caractéristiques"
+                        Button41.Text = "Activer des caractéristiques..."
+                        Button39.Text = "Obtenir des informations sur les caractéristiques..."
+                        Button42.Text = "Sauvegarder les caractéristiques..."
+                        Button40.Text = "Désactiver des caractéristiques..."
+                        GroupBox7.Text = "Opérations sur les paquets AppX"
+                        Button44.Text = "Ajouter des paquets AppX..."
+                        Button45.Text = "Obtenir des informations sur les applications..."
+                        Button46.Text = "Sauvegarder les informations sur les paquets AppX installés..."
+                        Button43.Text = "Supprimer des paquets AppX..."
+                        GroupBox8.Text = "Opérations sur les capacités"
+                        Button48.Text = "Ajouter des capacités..."
+                        Button49.Text = "Obtenir des informations sur les capacités..."
+                        Button50.Text = "Sauvegarder les informations sur les capacités..."
+                        Button47.Text = "Supprimer des capacités..."
+                        GroupBox9.Text = "Opérations sur les pilotes"
+                        Button53.Text = "Ajouter des paquets de pilotes..."
+                        Button52.Text = "Obtenir des informations sur les pilotes..."
+                        Button54.Text = "Sauvegarder les informations sur les pilotes installés..."
+                        Button51.Text = "Supprimer des pilotes..."
+                        GroupBox10.Text = "Opérations de Windows PE"
+                        Button55.Text = "Obtenir des paramètres..."
+                        Button56.Text = "Sauvegarder les paramètres..."
+                        Button57.Text = "Configurer le chemin d'accès..."
+                        Button58.Text = "Configurer l'espace temporaire..."
                     Case Else
                         Language = 1
                         ChangeLangs(Language)
@@ -6095,6 +6368,73 @@ Public Class MainForm
                 ' Context menu of AppX addition dialog
                 MicrosoftAppsToolStripMenuItem.Text = "Visit the Microsoft Apps website"
                 MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visit the Microsoft Store Generation Project website"
+                ' New design
+                GreetingLabel.Text = "Welcome to this servicing session"
+                LinkLabel12.Text = "PROJECT"
+                LinkLabel13.Text = "IMAGE"
+                Label54.Text = "Name:"
+                Label51.Text = "Location:"
+                Label53.Text = "Images mounted?"
+                LinkLabel14.Text = "Click here to mount an image"
+                Label55.Text = "Project Tasks"
+                LinkLabel15.Text = "View project properties"
+                LinkLabel16.Text = "Open in File Explorer"
+                LinkLabel17.Text = "Unload project"
+                Label59.Text = "No image has been mounted"
+                Label58.Text = "You need to mount an image in order to view its information"
+                Label57.Text = "Choices"
+                LinkLabel21.Text = "Mount an image..."
+                LinkLabel18.Text = "Pick a mounted image..."
+                Label39.Text = "Image index:"
+                Label43.Text = "Mount point:"
+                Label45.Text = "Version:"
+                Label42.Text = "Name:"
+                Label40.Text = "Description:"
+                Label56.Text = "Image Tasks"
+                LinkLabel20.Text = "View image properties"
+                LinkLabel19.Text = "Unmount image"
+                GroupBox4.Text = "Image operations"
+                Button26.Text = "Mount image..."
+                Button27.Text = "Commit current changes"
+                Button28.Text = "Commit and unmount image"
+                Button29.Text = "Unmount image discarding changes"
+                Button25.Text = "Reload servicing session"
+                Button24.Text = "Switch image indexes..."
+                Button30.Text = "Apply image..."
+                Button31.Text = "Capture image..."
+                Button32.Text = "Remove volume images..."
+                Button33.Text = "Save complete image information..."
+                GroupBox5.Text = "Package operations"
+                Button36.Text = "Add package..."
+                Button34.Text = "Get package information..."
+                Button38.Text = "Save installed package information..."
+                Button35.Text = "Remove package..."
+                Button37.Text = "Perform component store maintenance and cleanup..."
+                GroupBox6.Text = "Feature operations"
+                Button41.Text = "Enable feature..."
+                Button39.Text = "Get feature information..."
+                Button42.Text = "Save feature information..."
+                Button40.Text = "Disable feature..."
+                GroupBox7.Text = "AppX package operations"
+                Button44.Text = "Add AppX package..."
+                Button45.Text = "Get app information..."
+                Button46.Text = "Save installed AppX package information..."
+                Button43.Text = "Remove AppX package..."
+                GroupBox8.Text = "Capability operations"
+                Button48.Text = "Add capability..."
+                Button49.Text = "Get capability information..."
+                Button50.Text = "Save capability information..."
+                Button47.Text = "Remove capability..."
+                GroupBox9.Text = "Driver operations"
+                Button53.Text = "Add driver package..."
+                Button52.Text = "Get driver information..."
+                Button54.Text = "Save installed driver information..."
+                Button51.Text = "Remove driver..."
+                GroupBox10.Text = "Windows PE operations"
+                Button55.Text = "Get configuration"
+                Button56.Text = "Save configuration..."
+                Button57.Text = "Set target path..."
+                Button58.Text = "Set scratch space..."
             Case 2
                 ' Top-level menu items
                 FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -6382,6 +6722,73 @@ Public Class MainForm
                 ' Context menu of AppX addition dialog
                 MicrosoftAppsToolStripMenuItem.Text = "Visitar el sitio web de Aplicaciones de Microsoft"
                 MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visitar el sitio web del proyecto de generación de Microsoft Store"
+                ' New design
+                GreetingLabel.Text = "Le damos la bienvenida a esta sesión de servicio"
+                LinkLabel12.Text = "PROYECTO"
+                LinkLabel13.Text = "IMAGEN"
+                Label54.Text = "Nombre:"
+                Label51.Text = "Ubicación:"
+                Label53.Text = "¿Hay imágenes montadas?"
+                LinkLabel14.Text = "Haga clic aquí para montar una imagen"
+                Label55.Text = "Tareas del proyecto"
+                LinkLabel15.Text = "Ver propiedades del proyecto"
+                LinkLabel16.Text = "Abrir en el Explorador de Archivos"
+                LinkLabel17.Text = "Descargar proyecto"
+                Label59.Text = "No se ha montado una imagen"
+                Label58.Text = "Debe montar una imagen para poder ver su información"
+                Label57.Text = "Elecciones"
+                LinkLabel21.Text = "Montar una imagen..."
+                LinkLabel18.Text = "Escoger una imagen montada..."
+                Label39.Text = "Índice de la imagen:"
+                Label43.Text = "Punto de montaje:"
+                Label45.Text = "Versión:"
+                Label42.Text = "Nombre:"
+                Label40.Text = "Descripción:"
+                Label56.Text = "Tareas de la imagen"
+                LinkLabel20.Text = "Ver propiedades de la imagen"
+                LinkLabel19.Text = "Desmontar imagen"
+                GroupBox4.Text = "Operaciones de la imagen"
+                Button26.Text = "Montar imagen..."
+                Button27.Text = "Guardar cambios actuales"
+                Button28.Text = "Guardar cambios y desmontar imagen"
+                Button29.Text = "Desmontar imagen descartando cambios"
+                Button25.Text = "Recargar sesión de servicio"
+                Button24.Text = "Cambiar índices de la imagen..."
+                Button30.Text = "Aplicar imagen..."
+                Button31.Text = "Capturar imagen..."
+                Button32.Text = "Eliminar imágenes de volumen..."
+                Button33.Text = "Guardar información completa de la imagen..."
+                GroupBox5.Text = "Operaciones de paquetes"
+                Button36.Text = "Añadir paquete..."
+                Button34.Text = "Obtener información de paquetes..."
+                Button38.Text = "Guardar información de paquetes instalados..."
+                Button35.Text = "Eliminar paquete..."
+                Button37.Text = "Realizar mantenimiento y limpieza del almacén de componentes..."
+                GroupBox6.Text = "Operaciones de características"
+                Button41.Text = "Habilitar característica..."
+                Button39.Text = "Obtener información de características..."
+                Button42.Text = "Guardar información de características..."
+                Button40.Text = "Deshabilitar característica..."
+                GroupBox7.Text = "Operaciones de paquetes AppX"
+                Button44.Text = "Añadir paquete AppX..."
+                Button45.Text = "Obtener información de aplicaciones..."
+                Button46.Text = "Guardar información de paquetes AppX instalados..."
+                Button43.Text = "Eliminar paquete AppX..."
+                GroupBox8.Text = "Operaciones de funcionalidades"
+                Button48.Text = "Añadir funcionalidad..."
+                Button49.Text = "Obtener información de funcionalidades..."
+                Button50.Text = "Guardar información de funcionalidades..."
+                Button47.Text = "Eliminar funcionalidades..."
+                GroupBox9.Text = "Operaciones de controladores"
+                Button53.Text = "Añadir controlador..."
+                Button52.Text = "Obtener información de controladores..."
+                Button54.Text = "Guardar información de controladores instalados..."
+                Button51.Text = "Eliminar controlador..."
+                GroupBox10.Text = "Operaciones de Windows PE"
+                Button55.Text = "Obtener configuración"
+                Button56.Text = "Guardar configuración..."
+                Button57.Text = "Establecer ruta de destino..."
+                Button58.Text = "Establecer espacio temporal..."
             Case 3
                 ' Top-level menu items
                 FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Fichier".ToUpper(), "&Fichier")
@@ -6670,6 +7077,73 @@ Public Class MainForm
                 ' Context menu of AppX addition dialog
                 MicrosoftAppsToolStripMenuItem.Text = "Visiter le site web de Microsoft Apps"
                 MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visiter le site web du projet Microsoft Store Generation"
+                ' New design
+                GreetingLabel.Text = "Bienvenue à cette session de service"
+                LinkLabel12.Text = "PROJET"
+                LinkLabel13.Text = "IMAGE"
+                Label54.Text = "Nom :"
+                Label51.Text = "Lieu :"
+                Label53.Text = "Images montées ?"
+                LinkLabel14.Text = "Cliquez ici pour monter une image"
+                Label55.Text = "Tâches du projet"
+                LinkLabel15.Text = "Voir les propriétés du projet"
+                LinkLabel16.Text = "Ouvrir dans l'explorateur de fichiers"
+                LinkLabel17.Text = "Décharger le projet"
+                Label59.Text = "Aucune image n'a été montée"
+                Label58.Text = "Vous devez monter une image pour pouvoir consulter ses informations."
+                Label57.Text = "Choix"
+                LinkLabel21.Text = "Monter une image..."
+                LinkLabel18.Text = "Choisir une image montée..."
+                Label39.Text = "Index de l'image :"
+                Label43.Text = "Répertoire de montage :"
+                Label45.Text = "Version :"
+                Label42.Text = "Nom :"
+                Label40.Text = "Description :"
+                Label56.Text = "Tâches de l'image"
+                LinkLabel20.Text = "Voir les propriétés de l'image"
+                LinkLabel19.Text = "Démonter l'image"
+                GroupBox4.Text = "Opérations sur les images"
+                Button26.Text = "Monter une image..."
+                Button27.Text = "Sauvegarder les modifications pendants"
+                Button28.Text = "Sauvegarder modifications et démonter l'image"
+                Button29.Text = "Démonter l'image en supprimant les modifications"
+                Button25.Text = "Recharger la session de service"
+                Button24.Text = "Changer d'index de l'image..."
+                Button30.Text = "Appliquer l'image..."
+                Button31.Text = "Capturer image..."
+                Button32.Text = "Supprimer les images de volume..."
+                Button33.Text = "Sauvegarder les informations complètes de l'image..."
+                GroupBox5.Text = "Opérations sur les paquets"
+                Button36.Text = "Ajouter des paquets..."
+                Button34.Text = "Obtenir des informations sur le paquet..."
+                Button38.Text = "Sauvegarder les informations sur les paquets installés..."
+                Button35.Text = "Supprimer des paquets..."
+                Button37.Text = "Effectuer la maintenance et le nettoyage du stock de composants..."
+                GroupBox6.Text = "Opérations sur les caractéristiques"
+                Button41.Text = "Activer des caractéristiques..."
+                Button39.Text = "Obtenir des informations sur les caractéristiques..."
+                Button42.Text = "Sauvegarder les caractéristiques..."
+                Button40.Text = "Désactiver des caractéristiques..."
+                GroupBox7.Text = "Opérations sur les paquets AppX"
+                Button44.Text = "Ajouter des paquets AppX..."
+                Button45.Text = "Obtenir des informations sur les applications..."
+                Button46.Text = "Sauvegarder les informations sur les paquets AppX installés..."
+                Button43.Text = "Supprimer des paquets AppX..."
+                GroupBox8.Text = "Opérations sur les capacités"
+                Button48.Text = "Ajouter des capacités..."
+                Button49.Text = "Obtenir des informations sur les capacités..."
+                Button50.Text = "Sauvegarder les informations sur les capacités..."
+                Button47.Text = "Supprimer des capacités..."
+                GroupBox9.Text = "Opérations sur les pilotes"
+                Button53.Text = "Ajouter des paquets de pilotes..."
+                Button52.Text = "Obtenir des informations sur les pilotes..."
+                Button54.Text = "Sauvegarder les informations sur les pilotes installés..."
+                Button51.Text = "Supprimer des pilotes..."
+                GroupBox10.Text = "Opérations de Windows PE"
+                Button55.Text = "Obtenir des paramètres..."
+                Button56.Text = "Sauvegarder les paramètres..."
+                Button57.Text = "Configurer le chemin d'accès..."
+                Button58.Text = "Configurer l'espace temporaire..."
         End Select
 
         If OnlineManagement Then
@@ -6677,42 +7151,145 @@ Public Class MainForm
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENU", "ENG"
-                            Label5.Text = "Yes"
+                            Label5.Text = If(IsImageMounted, "Yes", "No")
                             Text = "Online installation - DISMTools"
                             Label14.Text = "(Online installation)"
                             Label20.Text = "(Online installation)"
                             projName.Text = "(Online installation)"
+                            Label50.Text = If(IsImageMounted, "Yes", "No")
+                            Label41.Text = "(Online installation)"
+                            Label47.Text = "(Online installation)"
+                            Label49.Text = "(Online installation)"
                         Case "ESN"
-                            Label5.Text = "Sí"
+                            Label5.Text = If(IsImageMounted, "Sí", "No")
                             Text = "Instalación activa - DISMTools"
                             Label14.Text = "(Instalación activa)"
                             Label20.Text = "(Instalación activa)"
                             projName.Text = "(Instalación activa)"
+                            Label50.Text = If(IsImageMounted, "Sí", "No")
+                            Label41.Text = "(Instalación activa)"
+                            Label47.Text = "(Instalación activa)"
+                            Label49.Text = "(Instalación activa)"
                         Case "FRA"
-                            Label5.Text = "Oui"
+                            Label5.Text = If(IsImageMounted, "Oui", "Non")
                             Text = "Installation en ligne - DISMTools"
                             Label14.Text = "(Installation en ligne)"
                             Label20.Text = "(Installation en ligne)"
                             projName.Text = "(Installation en ligne)"
+                            Label50.Text = If(IsImageMounted, "Oui", "Non")
+                            Label41.Text = "(Installation en ligne)"
+                            Label47.Text = "(Installation en ligne)"
+                            Label49.Text = "(Installation en ligne)"
                     End Select
                 Case 1
-                    Label5.Text = "Yes"
+                    Label5.Text = If(IsImageMounted, "Yes", "No")
                     Text = "Online installation - DISMTools"
                     Label14.Text = "(Online installation)"
                     Label20.Text = "(Online installation)"
                     projName.Text = "(Online installation)"
+                    Label50.Text = If(IsImageMounted, "Yes", "No")
+                    Label41.Text = "(Online installation)"
+                    Label47.Text = "(Online installation)"
+                    Label49.Text = "(Online installation)"
                 Case 2
-                    Label5.Text = "Sí"
+                    Label5.Text = If(IsImageMounted, "Sí", "No")
                     Text = "Instalación activa - DISMTools"
                     Label14.Text = "(Instalación activa)"
                     Label20.Text = "(Instalación activa)"
                     projName.Text = "(Instalación activa)"
+                    Label50.Text = If(IsImageMounted, "Sí", "No")
+                    Label41.Text = "(Instalación activa)"
+                    Label47.Text = "(Instalación activa)"
+                    Label49.Text = "(Instalación activa)"
                 Case 3
-                    Label5.Text = "Oui"
+                    Label5.Text = If(IsImageMounted, "Oui", "Non")
                     Text = "Installation en ligne - DISMTools"
                     Label14.Text = "(Installation en ligne)"
                     Label20.Text = "(Installation en ligne)"
                     projName.Text = "(Installation en ligne)"
+                    Label50.Text = If(IsImageMounted, "Oui", "Non")
+                    Label41.Text = "(Installation en ligne)"
+                    Label47.Text = "(Installation en ligne)"
+                    Label49.Text = "(Installation en ligne)"
+            End Select
+            Label49.Text = projName.Text
+        ElseIf OfflineManagement Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            Label5.Text = If(IsImageMounted, "Yes", "No")
+                            Text = "Offline installation - DISMTools"
+                            Label14.Text = "(Offline installation)"
+                            Label18.Text = "(Offline installation)"
+                            Label20.Text = "(Offline installation)"
+                            projName.Text = "(Offline installation)"
+                            Label50.Text = If(IsImageMounted, "Yes", "No")
+                            Label41.Text = "(Offline installation)"
+                            Label46.Text = "(Offline installation)"
+                            Label47.Text = "(Offline installation)"
+                            Label49.Text = "(Offline installation)"
+                        Case "ESN"
+                            Label5.Text = If(IsImageMounted, "Sí", "No")
+                            Text = "Instalación fuera de línea - DISMTools"
+                            Label14.Text = "(Instalación fuera de línea)"
+                            Label18.Text = "(Instalación fuera de línea)"
+                            Label20.Text = "(Instalación fuera de línea)"
+                            projName.Text = "(Instalación fuera de línea)"
+                            Label50.Text = If(IsImageMounted, "Sí", "No")
+                            Label41.Text = "(Instalación fuera de línea)"
+                            Label46.Text = "(Instalación fuera de línea)"
+                            Label47.Text = "(Instalación fuera de línea)"
+                            Label49.Text = "(Instalación fuera de línea)"
+                        Case "FRA"
+                            Label5.Text = If(IsImageMounted, "Oui", "Non")
+                            Text = "Installation hors ligne - DISMTools"
+                            Label14.Text = "(Installation hors ligne)"
+                            Label18.Text = "(Installation hors ligne)"
+                            Label20.Text = "(Installation hors ligne)"
+                            projName.Text = "(Installation hors ligne)"
+                            Label50.Text = If(IsImageMounted, "Oui", "Non")
+                            Label41.Text = "(Installation hors ligne)"
+                            Label46.Text = "(Installation hors ligne)"
+                            Label47.Text = "(Installation hors ligne)"
+                            Label49.Text = "(Installation hors ligne)"
+                    End Select
+                Case 1
+                    Label5.Text = If(IsImageMounted, "Yes", "No")
+                    Text = "Online installation - DISMTools"
+                    Label14.Text = "(Offline installation)"
+                    Label18.Text = "(Offline installation)"
+                    Label20.Text = "(Offline installation)"
+                    projName.Text = "(Offline installation)"
+                    Label50.Text = If(IsImageMounted, "Yes", "No")
+                    Label41.Text = "(Offline installation)"
+                    Label46.Text = "(Offline installation)"
+                    Label47.Text = "(Offline installation)"
+                    Label49.Text = "(Offline installation)"
+                Case 2
+                    Label5.Text = If(IsImageMounted, "Sí", "No")
+                    Text = "Instalación fuera de línea - DISMTools"
+                    Label14.Text = "(Instalación fuera de línea)"
+                    Label18.Text = "(Instalación fuera de línea)"
+                    Label20.Text = "(Instalación fuera de línea)"
+                    projName.Text = "(Instalación fuera de línea)"
+                    Label50.Text = If(IsImageMounted, "Sí", "No")
+                    Label41.Text = "(Instalación fuera de línea)"
+                    Label46.Text = "(Instalación fuera de línea)"
+                    Label47.Text = "(Instalación fuera de línea)"
+                    Label49.Text = "(Instalación fuera de línea)"
+                Case 3
+                    Label5.Text = If(IsImageMounted, "Oui", "Non")
+                    Text = "Installation hors ligne - DISMTools"
+                    Label14.Text = "(Installation hors ligne)"
+                    Label18.Text = "(Installation hors ligne)"
+                    Label20.Text = "(Installation hors ligne)"
+                    projName.Text = "(Installation hors ligne)"
+                    Label50.Text = If(IsImageMounted, "Oui", "Non")
+                    Label41.Text = "(Installation hors ligne)"
+                    Label46.Text = "(Installation hors ligne)"
+                    Label47.Text = "(Installation hors ligne)"
+                    Label49.Text = "(Installation hors ligne)"
             End Select
             Label49.Text = projName.Text
         End If
@@ -8945,7 +9522,7 @@ Public Class MainForm
                 Case 91
                     MenuDesc.Text = "Adds the Microsoft Edge WebView2 component to the image"
                 Case 92
-                    MenuDesc.Text = "Saves complete image information to the file you want. You will be asked some questions during this process, so don't leave your computer"
+                    MenuDesc.Text = "Saves complete image information to the file you want. Depending on the settings you had specified, you may be asked some questions during the process"
                 Case Else
                     ' Do not show anything
             End Select
@@ -12863,6 +13440,8 @@ Public Class MainForm
             ImgInfoSaveDlg.OnlineMode = OnlineManagement
             ImgInfoSaveDlg.OfflineMode = OfflineManagement
             ImgInfoSaveDlg.AllDrivers = AllDrivers
+            ImgInfoSaveDlg.SkipQuestions = SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 0
             ImgInfoSaveDlg.ShowDialog()
         End If
@@ -12886,11 +13465,13 @@ Public Class MainForm
     Private Sub Button19_Click(sender As Object, e As EventArgs) Handles Button19.Click
         ProjectView.Visible = True
         SplitPanels.Visible = False
+        GoToNewView = True
     End Sub
 
     Private Sub Button20_Click(sender As Object, e As EventArgs) Handles Button20.Click
         ProjectView.Visible = False
         SplitPanels.Visible = True
+        GoToNewView = False
     End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
@@ -13129,6 +13710,8 @@ Public Class MainForm
             ImgInfoSaveDlg.OnlineMode = OnlineManagement
             ImgInfoSaveDlg.OfflineMode = OfflineManagement
             ImgInfoSaveDlg.AllDrivers = AllDrivers
+            ImgInfoSaveDlg.SkipQuestions = SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 0
             ImgInfoSaveDlg.ShowDialog()
         End If
@@ -13252,6 +13835,8 @@ Public Class MainForm
             ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
             ImgInfoSaveDlg.ImgMountDir = If(Not OnlineManagement, MountDir, "")
             ImgInfoSaveDlg.OnlineMode = OnlineManagement
+            ImgInfoSaveDlg.SkipQuestions = SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 2
             ImgInfoSaveDlg.ShowDialog()
         End If
@@ -13527,6 +14112,8 @@ Public Class MainForm
             ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
             ImgInfoSaveDlg.OnlineMode = OnlineManagement
             ImgInfoSaveDlg.OfflineMode = OfflineManagement
+            ImgInfoSaveDlg.SkipQuestions = SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 4
             ImgInfoSaveDlg.ShowDialog()
         End If
@@ -13710,6 +14297,8 @@ Public Class MainForm
             ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
             ImgInfoSaveDlg.OnlineMode = OnlineManagement
             ImgInfoSaveDlg.OfflineMode = OfflineManagement
+            ImgInfoSaveDlg.SkipQuestions = SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 5
             ImgInfoSaveDlg.ShowDialog()
         End If
@@ -13945,6 +14534,8 @@ Public Class MainForm
             ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
             ImgInfoSaveDlg.OnlineMode = OnlineManagement
             ImgInfoSaveDlg.OfflineMode = OfflineManagement
+            ImgInfoSaveDlg.SkipQuestions = SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 6
             ImgInfoSaveDlg.ShowDialog()
         End If
@@ -14092,6 +14683,8 @@ Public Class MainForm
             ImgInfoSaveDlg.OnlineMode = OnlineManagement
             ImgInfoSaveDlg.OfflineMode = OfflineManagement
             ImgInfoSaveDlg.AllDrivers = AllDrivers
+            ImgInfoSaveDlg.SkipQuestions = SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 7
             ImgInfoSaveDlg.ShowDialog()
         End If
@@ -14112,6 +14705,8 @@ Public Class MainForm
             ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
             ImgInfoSaveDlg.ImgMountDir = If(Not OnlineManagement, MountDir, "")
             ImgInfoSaveDlg.OnlineMode = OnlineManagement
+            ImgInfoSaveDlg.SkipQuestions = SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 9
             ImgInfoSaveDlg.ShowDialog()
         End If

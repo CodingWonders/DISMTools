@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("")> 
 <Assembly: AssemblyProduct("Update Check System for DISMTools")> 
-<Assembly: AssemblyCopyright("© 2023 CodingWonders Software")> 
+<Assembly: AssemblyCopyright("© 2023-2024 CodingWonders Software")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' mediante el asterisco ('*'), como se muestra a continuación:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("1.0.4.0")> 
-<Assembly: AssemblyFileVersion("1.0.4.0")> 
+<Assembly: AssemblyVersion("1.0.4.1")> 
+<Assembly: AssemblyFileVersion("1.0.4.1")> 

@@ -322,6 +322,8 @@ Public Class GetFeatureInfoDlg
             ImgInfoSaveDlg.SaveTarget = MainForm.ImgInfoSFD.FileName
             ImgInfoSaveDlg.OnlineMode = MainForm.OnlineManagement
             ImgInfoSaveDlg.OfflineMode = MainForm.OfflineManagement
+            ImgInfoSaveDlg.SkipQuestions = MainForm.SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = MainForm.AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 4
             ImgInfoSaveDlg.ShowDialog()
         End If

@@ -877,6 +877,8 @@ Public Class GetDriverInfo
             ImgInfoSaveDlg.OnlineMode = MainForm.OnlineManagement
             ImgInfoSaveDlg.OfflineMode = MainForm.OfflineManagement
             ImgInfoSaveDlg.AllDrivers = MainForm.AllDrivers
+            ImgInfoSaveDlg.SkipQuestions = MainForm.SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = MainForm.AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = If(InfoFromDrvPackagesPanel.Visible, 8, 7)
             If InfoFromDrvPackagesPanel.Visible Then
                 For Each drvFile In ListBox1.Items
