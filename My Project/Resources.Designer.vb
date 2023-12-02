@@ -1878,11 +1878,19 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''- Fixed an issue where the feature information dialog would not load when its entry in the Commands menu was clicked
+        '''- Added exception handling to the log file link in the progress panel
         '''
         '''New features
         '''
-        '''- A new design of the project view is now available.
+        '''- The new design is now complete, and the following changes were made:
+        '''  - Translations have been added
+        '''  - The program will no longer switch to the old design automatically
+        '''- You can now configure the image information saver settings
+        '''- The image capture dialog has seen some enhancements to add translations
+        '''
+        '''Update system
+        '''
+        '''- The update system will now run the installer silently when updating non-port [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
