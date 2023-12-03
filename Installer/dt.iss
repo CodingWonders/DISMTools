@@ -70,6 +70,7 @@ Source: ".\files\ScintillaNET.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Drawing.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Management.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
+Source: ".\files\System.ServiceModel.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Windows.Forms.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Xml.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Xml.Linq.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion

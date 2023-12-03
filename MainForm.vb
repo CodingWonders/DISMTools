@@ -6,6 +6,8 @@ Imports System.Text.Encoding
 Imports Microsoft.Win32
 Imports Microsoft.Dism
 Imports System.Runtime.InteropServices
+Imports System.Xml
+Imports System.ServiceModel.Syndication
 
 Public Class MainForm
 
@@ -235,6 +237,8 @@ Public Class MainForm
 
     Public GoToNewView As Boolean
 
+    Dim FeedLinks As New List(Of Uri)
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -398,6 +402,8 @@ Public Class MainForm
             BeginOnlineManagement(True)
         End If
         Timer1.Enabled = True
+        Button17.Visible = EnableExperiments
+        If EnableExperiments Then GetFeedNews()
     End Sub
 
     ''' <summary>
@@ -14729,4 +14735,34 @@ Public Class MainForm
     End Sub
 
 #End Region
+
+    Sub GetFeedNews()
+        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+        Try
+            ' Use CTT news temporarily, since Reddit doesn't work nicely with this method
+            Dim reader As XmlReader = XmlReader.Create("https://christitus.com/categories/windows/index.xml")
+            Dim feed As SyndicationFeed = SyndicationFeed.Load(reader)
+            reader.Close()
+            For Each item As SyndicationItem In feed.Items
+                ListView1.Items.Add(New ListViewItem(New String() {item.Title.Text, item.PublishDate.ToString()}))
+                FeedLinks.Add(item.Links(0).Uri)
+            Next
+        Catch ex As Exception
+            FeedsPanel.Visible = False
+            FeedErrorPanel.Visible = True
+            TextBox1.Text = ex.ToString() & " - " & ex.Message
+        End Try
+    End Sub
+
+    Private Sub Button17_Click(sender As Object, e As EventArgs) Handles Button17.Click
+        WelcomeTabControl.Visible = False
+        StartPanel.Visible = True
+        Button17.Visible = False
+    End Sub
+
+    Private Sub Button18_Click(sender As Object, e As EventArgs) Handles Button18.Click
+        WelcomeTabControl.Visible = True
+        StartPanel.Visible = False
+        Button17.Visible = True
+    End Sub
 End Class
