@@ -14752,14 +14752,21 @@ Public Class MainForm
     Sub GetFeedNews()
         ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
         Try
-            ' Use CTT news temporarily, since Reddit doesn't work nicely with this method
-            Dim reader As XmlReader = XmlReader.Create("https://christitus.com/categories/windows/index.xml")
-            Dim feed As SyndicationFeed = SyndicationFeed.Load(reader)
-            reader.Close()
-            For Each item As SyndicationItem In feed.Items
-                ListView1.Items.Add(New ListViewItem(New String() {item.Title.Text, item.PublishDate.ToString()}))
-                FeedLinks.Add(item.Links(0).Uri)
-            Next
+            Dim rssUrl As String = "https://reddit.com/r/DISMTools.rss"
+            Dim rssContent As String = ""
+            Using client As New WebClient()
+                client.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+                rssContent = client.DownloadString(rssUrl)
+            End Using
+            If Not String.IsNullOrWhiteSpace(rssContent) Then
+                Dim reader As XmlReader = XmlReader.Create(New StringReader(rssContent))
+                Dim feed As SyndicationFeed = SyndicationFeed.Load(reader)
+                reader.Close()
+                For Each item As SyndicationItem In feed.Items.OrderByDescending(Function(x) x.PublishDate)
+                    ListView1.Items.Add(New ListViewItem(New String() {item.Title.Text, item.PublishDate.ToString()}))
+                    FeedLinks.Add(item.Links(0).Uri)
+                Next
+            End If
         Catch ex As Exception
             FeedsPanel.Visible = False
             FeedErrorPanel.Visible = True
