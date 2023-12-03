@@ -5010,6 +5010,19 @@ Public Class MainForm
                 GroupBox9.ForeColor = Color.White
                 GroupBox10.ForeColor = Color.White
         End Select
+        If EnableExperiments Then
+            If GetStartedPanel.Visible Then
+                LinkLabel22.LinkColor = ForeColor
+                LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
+                LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
+            ElseIf LatestNewsPanel.Visible Then
+                LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
+                LinkLabel23.LinkColor = ForeColor
+                LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
+            End If
+            ListView1.BackColor = BackColor
+            ListView1.ForeColor = ForeColor
+        End If
     End Sub
 
     Sub ChangeLangs(LangCode As Integer)
@@ -14739,14 +14752,21 @@ Public Class MainForm
     Sub GetFeedNews()
         ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
         Try
-            ' Use CTT news temporarily, since Reddit doesn't work nicely with this method
-            Dim reader As XmlReader = XmlReader.Create("https://christitus.com/categories/windows/index.xml")
-            Dim feed As SyndicationFeed = SyndicationFeed.Load(reader)
-            reader.Close()
-            For Each item As SyndicationItem In feed.Items
-                ListView1.Items.Add(New ListViewItem(New String() {item.Title.Text, item.PublishDate.ToString()}))
-                FeedLinks.Add(item.Links(0).Uri)
-            Next
+            Dim rssUrl As String = "https://reddit.com/r/DISMTools.rss"
+            Dim rssContent As String = ""
+            Using client As New WebClient()
+                client.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+                rssContent = client.DownloadString(rssUrl)
+            End Using
+            If Not String.IsNullOrWhiteSpace(rssContent) Then
+                Dim reader As XmlReader = XmlReader.Create(New StringReader(rssContent))
+                Dim feed As SyndicationFeed = SyndicationFeed.Load(reader)
+                reader.Close()
+                For Each item As SyndicationItem In feed.Items.OrderByDescending(Function(x) x.PublishDate)
+                    ListView1.Items.Add(New ListViewItem(New String() {item.Title.Text, item.PublishDate.ToString()}))
+                    FeedLinks.Add(item.Links(0).Uri)
+                Next
+            End If
         Catch ex As Exception
             FeedsPanel.Visible = False
             FeedErrorPanel.Visible = True
@@ -14764,5 +14784,37 @@ Public Class MainForm
         WelcomeTabControl.Visible = True
         StartPanel.Visible = False
         Button17.Visible = True
+    End Sub
+
+    Private Sub LinkLabel22_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel22.LinkClicked
+        GetStartedPanel.Visible = True
+        LatestNewsPanel.Visible = False
+        LinkLabel22.LinkColor = ForeColor
+        LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
+        LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
+    End Sub
+
+    Private Sub LinkLabel23_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel23.LinkClicked
+        GetStartedPanel.Visible = False
+        LatestNewsPanel.Visible = True
+        LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
+        LinkLabel23.LinkColor = ForeColor
+        LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
+    End Sub
+
+    Private Sub LinkLabel24_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel24.LinkClicked
+        LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
+        LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
+        LinkLabel24.LinkColor = ForeColor
+    End Sub
+
+    Private Sub ListView1_DoubleClick(sender As Object, e As EventArgs) Handles ListView1.DoubleClick
+        If ListView1.SelectedItems.Count = 1 Then
+            Process.Start(FeedLinks(ListView1.FocusedItem.Index).AbsoluteUri)
+        End If
+    End Sub
+
+    Private Sub HelpTopicsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles HelpTopicsToolStripMenuItem.Click
+        HelpBrowserForm.Show()
     End Sub
 End Class
