@@ -2040,6 +2040,9 @@ Public Class MainForm
                             Button2.Enabled = If(MountedImageMountedReWr(x) = 0, True, False)
                             Button3.Enabled = If(MountedImageMountedReWr(x) = 0, True, False)
                             Button4.Enabled = True
+                            Button27.Enabled = If(MountedImageMountedReWr(x) = 0, True, False)
+                            Button28.Enabled = If(MountedImageMountedReWr(x) = 0, True, False)
+                            Button29.Enabled = True
                             Exit For
                         End If
                     Next
@@ -13586,7 +13589,9 @@ Public Class MainForm
             For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
                 If MountedImageMountDirs(x) = MountDir Then
                     If MountedImageMountedReWr(x) = 1 Then
-                        Button4.PerformClick()
+                        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+                        imgCommitOperation = 1
+                        UnloadDTProj(False, True, True)
                         Exit Sub
                     End If
                 End If
