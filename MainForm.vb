@@ -14813,4 +14813,8 @@ Public Class MainForm
             Process.Start(FeedLinks(ListView1.FocusedItem.Index).AbsoluteUri)
         End If
     End Sub
+
+    Private Sub HelpTopicsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles HelpTopicsToolStripMenuItem.Click
+        HelpBrowserForm.Show()
+    End Sub
 End Class
