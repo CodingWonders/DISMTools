@@ -9,7 +9,7 @@ Public Class HelpBrowserForm
     End Sub
 
     Private Sub WebBrowser1_Navigated(sender As Object, e As WebBrowserNavigatedEventArgs) Handles WebBrowser1.Navigated
-        If File.Exists(e.Url.AbsoluteUri.Replace("file:///", "").Trim().Replace("/", "\").Trim() & "\index.html") Then
+        If File.Exists(e.Url.AbsoluteUri.Replace("file:///", "").Trim().Replace("/", "\").Trim().Replace("%20", " ").Trim() & "\index.html") Then
             WebBrowser1.Navigate(e.Url.AbsoluteUri & "\index.html")
         End If
         Text = WebBrowser1.DocumentTitle & " - DISMTools Help Topics"
