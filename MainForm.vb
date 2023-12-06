@@ -402,6 +402,8 @@ Public Class MainForm
             BeginOnlineManagement(True)
         End If
         Timer1.Enabled = True
+        LinkLabel12.LinkColor = Color.FromArgb(241, 241, 241)
+        LinkLabel13.LinkColor = Color.FromArgb(153, 153, 153)
         Button17.Visible = EnableExperiments
         If EnableExperiments Then GetFeedNews()
     End Sub
@@ -14821,5 +14823,39 @@ Public Class MainForm
 
     Private Sub HelpTopicsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles HelpTopicsToolStripMenuItem.Click
         HelpBrowserForm.Show()
+    End Sub
+
+    Private Sub LinkLabel12_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel12.MouseLeave
+        If SidePanel_ProjectView.Visible Then
+            LinkLabel12.LinkColor = Color.FromArgb(241, 241, 241)
+        Else
+            LinkLabel12.LinkColor = Color.FromArgb(153, 153, 153)
+        End If
+    End Sub
+
+    Private Sub LinkLabel13_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel13.MouseLeave
+        If SidePanel_ImageView.Visible Then
+            LinkLabel13.LinkColor = Color.FromArgb(241, 241, 241)
+        Else
+            LinkLabel13.LinkColor = Color.FromArgb(153, 153, 153)
+        End If
+    End Sub
+
+    Private Sub LinkLabel12_MouseEnter(sender As Object, e As EventArgs) Handles LinkLabel12.MouseEnter
+        If LinkLabel12.LinkColor = Color.FromArgb(241, 241, 241) Then
+            Cursor = Cursors.Arrow
+            Exit Sub
+        Else
+            LinkLabel12.LinkColor = Color.FromArgb(0, 151, 251)
+        End If
+    End Sub
+
+    Private Sub LinkLabel13_MouseEnter(sender As Object, e As EventArgs) Handles LinkLabel13.MouseEnter
+        If LinkLabel13.LinkColor = Color.FromArgb(241, 241, 241) Then
+            Cursor = Cursors.Arrow
+            Exit Sub
+        Else
+            LinkLabel13.LinkColor = Color.FromArgb(0, 151, 251)
+        End If
     End Sub
 End Class
