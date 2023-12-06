@@ -364,7 +364,7 @@ Public Class MainForm
     End Sub
 
     Sub InstallNewVersion()
-        If Not IsPortable And File.Exists(Application.StartupPath & "\dt_setup.exe") Then
+        If Not IsPortable And File.Exists(Application.StartupPath & "\new\dt_setup.exe") Then
             Dim Installer As New Process()
             Installer.StartInfo.FileName = Application.StartupPath & "\new\dt_setup.exe"
             Installer.StartInfo.Arguments = "/VERYSILENT /SUPPRESSMSGBOXES"
