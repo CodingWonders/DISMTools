@@ -25,7 +25,6 @@ Public Class HelpBrowserForm
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         Text = TitleMsg
-        WebBrowser1.Navigate(Application.StartupPath & "\docs\index.html")
     End Sub
 
     Private Sub WebBrowser1_Navigated(sender As Object, e As WebBrowserNavigatedEventArgs) Handles WebBrowser1.Navigated
