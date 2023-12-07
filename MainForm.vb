@@ -237,7 +237,9 @@ Public Class MainForm
 
     Public GoToNewView As Boolean
 
+    Dim FeedContents As New SyndicationFeed()
     Dim FeedLinks As New List(Of Uri)
+    Dim FeedEx As Exception
 
     Friend NotInheritable Class NativeMethods
 
@@ -405,7 +407,9 @@ Public Class MainForm
         LinkLabel12.LinkColor = Color.FromArgb(241, 241, 241)
         LinkLabel13.LinkColor = Color.FromArgb(153, 153, 153)
         Button17.Visible = EnableExperiments
-        If EnableExperiments Then GetFeedNews()
+        If EnableExperiments Then
+            FeedWorker.RunWorkerAsync()
+        End If
     End Sub
 
     ''' <summary>
@@ -10423,6 +10427,11 @@ Public Class MainForm
             Application.DoEvents()
             Thread.Sleep(100)
         End While
+        If FeedWorker.IsBusy Then FeedWorker.CancelAsync()
+        While FeedWorker.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
     End Sub
 
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
@@ -14757,6 +14766,7 @@ Public Class MainForm
 #End Region
 
     Sub GetFeedNews()
+        FeedContents = New SyndicationFeed()
         ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
         Try
             Dim rssUrl As String = "https://reddit.com/r/DISMTools.rss"
@@ -14767,17 +14777,12 @@ Public Class MainForm
             End Using
             If Not String.IsNullOrWhiteSpace(rssContent) Then
                 Dim reader As XmlReader = XmlReader.Create(New StringReader(rssContent))
-                Dim feed As SyndicationFeed = SyndicationFeed.Load(reader)
+                FeedContents = SyndicationFeed.Load(reader)
                 reader.Close()
-                For Each item As SyndicationItem In feed.Items.OrderByDescending(Function(x) x.PublishDate)
-                    ListView1.Items.Add(New ListViewItem(New String() {item.Title.Text, item.PublishDate.ToString()}))
-                    FeedLinks.Add(item.Links(0).Uri)
-                Next
             End If
         Catch ex As Exception
-            FeedsPanel.Visible = False
-            FeedErrorPanel.Visible = True
-            TextBox1.Text = ex.ToString() & " - " & ex.Message
+            Debug.WriteLine("[GetFeedNews] Failed to get feed news")
+            FeedEx = ex
         End Try
     End Sub
 
@@ -14822,6 +14827,7 @@ Public Class MainForm
     End Sub
 
     Private Sub HelpTopicsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles HelpTopicsToolStripMenuItem.Click
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\index.html")
         HelpBrowserForm.Show()
     End Sub
 
@@ -14857,5 +14863,79 @@ Public Class MainForm
         Else
             LinkLabel13.LinkColor = Color.FromArgb(0, 151, 251)
         End If
+    End Sub
+
+    Private Sub Button59_Click(sender As Object, e As EventArgs) Handles Button59.Click
+        ListView1.Items.Clear()
+        FeedLinks.Clear()
+        GetFeedNews()
+        If FeedContents.Items.Count > 0 Then
+            FeedsPanel.Visible = True
+            FeedErrorPanel.Visible = False
+            For Each item As SyndicationItem In FeedContents.Items.OrderByDescending(Function(x) x.PublishDate)
+                ListView1.Items.Add(New ListViewItem(New String() {item.Title.Text, item.PublishDate.ToString()}))
+                FeedLinks.Add(item.Links(0).Uri)
+            Next
+        Else
+            FeedsPanel.Visible = False
+            FeedErrorPanel.Visible = True
+            TextBox1.Text = FeedEx.ToString() & " - " & FeedEx.Message
+        End If
+    End Sub
+
+    Private Sub FeedWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles FeedWorker.DoWork
+        Do
+            If FeedWorker.CancellationPending Then Exit Do
+            GetFeedNews()
+            FeedWorker.ReportProgress(0)
+            If Not FeedWorker.CancellationPending Then Thread.Sleep(2000)
+        Loop
+    End Sub
+
+    Private Sub FeedWorker_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles FeedWorker.ProgressChanged
+        ListView1.Items.Clear()
+        FeedLinks.Clear()
+        If FeedContents.Items.Count > 0 Then
+            FeedsPanel.Visible = True
+            FeedErrorPanel.Visible = False
+            For Each item As SyndicationItem In FeedContents.Items.OrderByDescending(Function(x) x.PublishDate)
+                ListView1.Items.Add(New ListViewItem(New String() {item.Title.Text, item.PublishDate.ToString()}))
+                FeedLinks.Add(item.Links(0).Uri)
+            Next
+        Else
+            FeedsPanel.Visible = False
+            FeedErrorPanel.Visible = True
+            TextBox1.Text = FeedEx.ToString() & " - " & FeedEx.Message
+        End If
+    End Sub
+
+    Private Sub LinkLabel6_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel6.LinkClicked
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\new_to_servicing\index.html")
+        HelpBrowserForm.Show()
+    End Sub
+
+    Private Sub LinkLabel7_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel7.LinkClicked
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\start\index.html#first-steps")
+        HelpBrowserForm.Show()
+    End Sub
+
+    Private Sub LinkLabel8_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel8.LinkClicked
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\start\index.html")
+        HelpBrowserForm.Show()
+    End Sub
+
+    Private Sub LinkLabel9_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel9.LinkClicked
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\start\index.html#best-practices")
+        HelpBrowserForm.Show()
+    End Sub
+
+    Private Sub LinkLabel10_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel10.LinkClicked
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\info\infodlgs\index.html")
+        HelpBrowserForm.Show()
+    End Sub
+
+    Private Sub LinkLabel11_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel11.LinkClicked
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\info\infodlgs\index.html#saving-image-information")
+        HelpBrowserForm.Show()
     End Sub
 End Class
