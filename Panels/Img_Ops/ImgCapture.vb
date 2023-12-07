@@ -293,6 +293,11 @@ Public Class ImgCapture
         End If
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.OnlineManagement Or MainForm.OfflineManagement Then
+            CheckBox8.Enabled = False
+        Else
+            CheckBox8.Enabled = True
+        End If
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
