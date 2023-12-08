@@ -3,6 +3,7 @@
 Public Class HelpBrowserForm
 
     Dim TitleMsg As String = ""
+    Dim CurrentSite As String = ""
 
     Private Sub HelpBrowserForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language
@@ -30,7 +31,11 @@ Public Class HelpBrowserForm
     Private Sub WebBrowser1_Navigated(sender As Object, e As WebBrowserNavigatedEventArgs) Handles WebBrowser1.Navigated
         If File.Exists(e.Url.AbsoluteUri.Replace("file:///", "").Trim().Replace("/", "\").Trim().Replace("%20", " ").Trim() & "\index.html") Then
             WebBrowser1.Navigate(e.Url.AbsoluteUri & "\index.html")
+        ElseIf e.Url.AbsoluteUri.StartsWith("http", StringComparison.OrdinalIgnoreCase) Or e.Url.AbsoluteUri.StartsWith("ftp", StringComparison.OrdinalIgnoreCase) Then
+            Process.Start(e.Url.AbsoluteUri)
+            WebBrowser1.Navigate(CurrentSite)
         End If
         Text = WebBrowser1.DocumentTitle & " - " & TitleMsg
+        CurrentSite = e.Url.AbsoluteUri
     End Sub
 End Class
