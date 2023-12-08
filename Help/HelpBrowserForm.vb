@@ -38,4 +38,11 @@ Public Class HelpBrowserForm
         Text = WebBrowser1.DocumentTitle & " - " & TitleMsg
         CurrentSite = e.Url.AbsoluteUri
     End Sub
+
+    Private Sub HelpBrowserForm_VisibleChanged(sender As Object, e As EventArgs) Handles Me.VisibleChanged
+        If Visible Then
+            Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+            If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        End If
+    End Sub
 End Class
