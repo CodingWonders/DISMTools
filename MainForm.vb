@@ -409,6 +409,7 @@ Public Class MainForm
         Button17.Visible = EnableExperiments
         If EnableExperiments Then
             FeedWorker.RunWorkerAsync()
+            Timer2.Enabled = True
         End If
     End Sub
 
@@ -10432,6 +10433,7 @@ Public Class MainForm
             Application.DoEvents()
             Thread.Sleep(100)
         End While
+        Timer2.Enabled = False
     End Sub
 
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
@@ -14884,12 +14886,10 @@ Public Class MainForm
     End Sub
 
     Private Sub FeedWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles FeedWorker.DoWork
-        Do
-            If FeedWorker.CancellationPending Then Exit Do
-            GetFeedNews()
-            FeedWorker.ReportProgress(0)
-            If Not FeedWorker.CancellationPending Then Thread.Sleep(2000)
-        Loop
+        If FeedWorker.CancellationPending Then Exit Sub
+        GetFeedNews()
+        FeedWorker.ReportProgress(0)
+        If Not FeedWorker.CancellationPending Then Thread.Sleep(2000)
     End Sub
 
     Private Sub FeedWorker_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles FeedWorker.ProgressChanged
@@ -14937,5 +14937,9 @@ Public Class MainForm
     Private Sub LinkLabel11_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel11.LinkClicked
         HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\info\infodlgs\index.html#saving-image-information")
         HelpBrowserForm.Show()
+    End Sub
+
+    Private Sub Timer2_Tick(sender As Object, e As EventArgs) Handles Timer2.Tick
+        FeedWorker.RunWorkerAsync()
     End Sub
 End Class

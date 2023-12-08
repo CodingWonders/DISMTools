@@ -322,6 +322,16 @@ Public Class MainForm
                 Threading.Thread.Sleep(500)
             Loop
             Exit Sub
+        Else
+            Dim Procs() As Process = Process.GetProcessesByName("DISMTools")
+            For Each Proc As Process In Procs
+                Proc.CloseMainWindow()
+                Do Until Proc.HasExited
+                    Application.DoEvents()
+                    Threading.Thread.Sleep(500)
+                Loop
+            Next
+            Exit Sub
         End If
         Dim Closer As New Process()
         Closer.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
