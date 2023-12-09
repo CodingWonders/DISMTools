@@ -403,6 +403,9 @@ Public Class MainForm
         Updater.StartInfo.Arguments = "-command Copy-Item -Path '" & Application.StartupPath & "\new\bin' -Destination '" & Application.StartupPath & "' -Recurse -Force" & If(Debugger.IsAttached, " -Verbose", "")
         Updater.Start()
         Updater.WaitForExit()
+        Updater.StartInfo.Arguments = "-command Copy-Item -Path '" & Application.StartupPath & "\new\docs' -Destination '" & Application.StartupPath & "' -Recurse -Force" & If(Debugger.IsAttached, " -Verbose", "")
+        Updater.Start()
+        Updater.WaitForExit()
     End Sub
 
     Sub CleanBackupFiles()
