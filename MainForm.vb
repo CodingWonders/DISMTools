@@ -977,6 +977,14 @@ Public Class MainForm
                 LogFontIsBold = (CInt(PersKey.GetValue("LogFontBold")) = 1)
                 ProgressPanelStyle = CInt(PersKey.GetValue("SecondaryProgressPanelStyle"))
                 AllCaps = (CInt(PersKey.GetValue("AllCaps")) = 1)
+                GoToNewView = (CInt(PersKey.GetValue("NewDesign")) = 1)
+                If GoToNewView Then
+                    ProjectView.Visible = True
+                    SplitPanels.Visible = False
+                Else
+                    ProjectView.Visible = False
+                    SplitPanels.Visible = True
+                End If
                 PersKey.Close()
                 Dim LogKey As RegistryKey = Key.OpenSubKey("Logs")
                 LogFile = LogKey.GetValue("LogFile").ToString().Replace(Quote, "").Trim()
@@ -1095,7 +1103,7 @@ Public Class MainForm
                     ElseIf line.StartsWith("LogFile=", StringComparison.OrdinalIgnoreCase) Then
                         ' Detect log file path. If file does not exist, create one
                         LogFile = line.Replace("LogFile=", "").Trim().Replace(Quote, "").Trim()
-                        If LogFile.StartsWith("{common:WinDir", StringComparison.OrdinalIgnoreCase) Then LogFile = LogFile.Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
+                        If LogFile.StartsWith("{common:WinDir}", StringComparison.OrdinalIgnoreCase) Then LogFile = LogFile.Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
                     ElseIf line.StartsWith("ScratchDirLocation=", StringComparison.OrdinalIgnoreCase) Then
                         ScratchDir = line.Replace("ScratchDirLocation=", "").Trim().Replace(Quote, "").Trim()
                     ElseIf line.StartsWith("WndWidth=", StringComparison.OrdinalIgnoreCase) Then
@@ -1130,6 +1138,18 @@ Public Class MainForm
                     CommandsToolStripMenuItem.Text = CommandsToolStripMenuItem.Text.ToUpper()
                     ToolsToolStripMenuItem.Text = ToolsToolStripMenuItem.Text.ToUpper()
                     HelpToolStripMenuItem.Text = HelpToolStripMenuItem.Text.ToUpper()
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("NewDesign=1") Then
+                    GoToNewView = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("NewDesign=0") Then
+                    GoToNewView = False
+                End If
+                If GoToNewView Then
+                    ProjectView.Visible = True
+                    SplitPanels.Visible = False
+                Else
+                    ProjectView.Visible = False
+                    SplitPanels.Visible = True
                 End If
                 ' Detect log file level: 1 - Errors only
                 '                        2 - Errors and warnings
@@ -1360,13 +1380,6 @@ Public Class MainForm
     ''' <remarks>Depending on the parameter of bgProcOptn, and on the power of the system, the background processes may take a longer time to finish</remarks>
     Sub RunBackgroundProcesses(bgProcOptn As Integer, GatherBasicInfo As Boolean, GatherAdvancedInfo As Boolean, Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False, Optional OfflineMode As Boolean = False)
         IsCompatible = True
-        If isProjectLoaded And GoToNewView Then
-            ProjectView.Visible = True
-            SplitPanels.Visible = False
-        ElseIf isProjectLoaded And Not GoToNewView Then
-            ProjectView.Visible = False
-            SplitPanels.Visible = True
-        End If
         If Not IsImageMounted Then
             Button1.Enabled = True
             Button2.Enabled = False
@@ -4114,6 +4127,7 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontBold=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SecondaryProgressPanelStyle=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "NewDesign=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & "{common:WinDir}\Logs\DISM\DISM.log" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=3")
@@ -4180,6 +4194,7 @@ Public Class MainForm
         PersKey.SetValue("LogFontBold", 0, RegistryValueKind.DWord)
         PersKey.SetValue("SecondaryProgressPanelStyle", 1, RegistryValueKind.DWord)
         PersKey.SetValue("AllCaps", 0, RegistryValueKind.DWord)
+        PersKey.SetValue("NewDesign", 1, RegistryValueKind.DWord)
         PersKey.Close()
         Dim LogKey As RegistryKey = Key.CreateSubKey("Logs")
         LogKey.SetValue("LogFile", Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\logs\DISM\DISM.log" & Quote, RegistryValueKind.ExpandString)
@@ -4281,6 +4296,11 @@ Public Class MainForm
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=1")
                 Else
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=0")
+                End If
+                If GoToNewView Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "NewDesign=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "NewDesign=0")
                 End If
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
                 DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & LogFile & Quote)
@@ -4430,6 +4450,7 @@ Public Class MainForm
                 PersKey.SetValue("LogFontBold", If(LogFontIsBold, 1, 0), RegistryValueKind.DWord)
                 PersKey.SetValue("SecondaryProgressPanelStyle", ProgressPanelStyle, RegistryValueKind.DWord)
                 PersKey.SetValue("AllCaps", If(AllCaps, 1, 0), RegistryValueKind.DWord)
+                PersKey.SetValue("NewDesign", If(GoToNewView, 1, 0), RegistryValueKind.DWord)
                 PersKey.Close()
                 Dim LogKey As RegistryKey = Key.CreateSubKey("Logs")
                 LogKey.SetValue("LogFile", LogFile, RegistryValueKind.ExpandString)

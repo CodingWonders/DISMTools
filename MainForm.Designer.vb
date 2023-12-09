@@ -3027,6 +3027,7 @@ Partial Class MainForm
         Me.Button20.TabIndex = 0
         Me.Button20.Text = "Go back to the old design"
         Me.Button20.UseVisualStyleBackColor = True
+        Me.Button20.Visible = False
         '
         'SpaceLabel
         '
@@ -4378,6 +4379,7 @@ Partial Class MainForm
         Me.Button19.TabIndex = 3
         Me.Button19.Text = "Preview the new design"
         Me.Button19.UseVisualStyleBackColor = True
+        Me.Button19.Visible = False
         '
         'GroupBox3
         '
