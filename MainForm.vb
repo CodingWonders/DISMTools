@@ -14977,4 +14977,18 @@ Public Class MainForm
     Private Sub Timer2_Tick(sender As Object, e As EventArgs) Handles Timer2.Tick
         FeedWorker.RunWorkerAsync()
     End Sub
+
+    Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel4.LinkClicked
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\online_inst_mgmt\index.html")
+        HelpBrowserForm.MinimizeBox = True
+        HelpBrowserForm.MaximizeBox = True
+        HelpBrowserForm.Show()
+    End Sub
+
+    Private Sub LinkLabel5_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel5.LinkClicked
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\offline_inst_mgmt\index.html")
+        HelpBrowserForm.MinimizeBox = True
+        HelpBrowserForm.MaximizeBox = True
+        HelpBrowserForm.Show()
+    End Sub
 End Class
