@@ -1878,19 +1878,12 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''- Added exception handling to the log file link in the progress panel
-        '''
-        '''New features
-        '''
-        '''- The new design is now complete, and the following changes were made:
-        '''  - Translations have been added
-        '''  - The program will no longer switch to the old design automatically
-        '''- You can now configure the image information saver settings
-        '''- The image capture dialog has seen some enhancements to add translations
-        '''
-        '''Update system
-        '''
-        '''- The update system will now run the installer silently when updating non-port [resto de la cadena truncado]&quot;;.
+        '''- Fixed some issues in the new design:
+        '''  - Fixed an issue where the program would not unmount read-only images when clicking &quot;Unmount image&quot;
+        '''  - Fixed an issue where the program would not disable the commit operation buttons for read-only mounted images
+        '''- The &quot;Use mounted image&quot; buttons are now disabled in online and offline installation management modes
+        '''- The &quot;Mount destination image for later use&quot; check box is now disabled in online and offline installation management modes
+        '''- Fixed an iss [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
