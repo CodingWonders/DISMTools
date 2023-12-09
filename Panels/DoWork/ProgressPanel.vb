@@ -948,6 +948,9 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 6 Then
+            ' This variable tells the program to use quotes when capturing a mount directory in a drive.
+            ' This is false when we want to capture an entire drive.
+            Dim UseQuotes As Boolean = Not Path.GetPathRoot(CaptureSourceDir) = CaptureSourceDir
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -982,10 +985,10 @@ Public Class ProgressPanel
                         Case 1
                             ' Not available
                         Case Is >= 2
-                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /capture-image /imagefile=" & Quote & CaptureDestinationImage & Quote & " /capturedir=" & Quote & CaptureSourceDir & Quote & " /name=" & Quote & CaptureName & Quote
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /capture-image /imagefile=" & Quote & CaptureDestinationImage & Quote & " /capturedir=" & If(UseQuotes, Quote, "") & CaptureSourceDir & If(UseQuotes, Quote, "") & " /name=" & Quote & CaptureName & Quote
                     End Select
                 Case 10
-                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /capture-image /imagefile=" & Quote & CaptureDestinationImage & Quote & " /capturedir=" & Quote & CaptureSourceDir & Quote & " /name=" & Quote & CaptureName & Quote
+                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /capture-image /imagefile=" & Quote & CaptureDestinationImage & Quote & " /capturedir=" & If(UseQuotes, Quote, "") & CaptureSourceDir & If(UseQuotes, Quote, "") & " /name=" & Quote & CaptureName & Quote
             End Select
             ' Get additional options
             If CaptureDescription = "" Then

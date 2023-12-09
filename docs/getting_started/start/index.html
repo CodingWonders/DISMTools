@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Getting started - DISMTools</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Getting started";
+        var mkdocs_page_input_path = "getting_started\\start.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> DISMTools
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Getting started</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#first-steps">First steps</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#creating-your-first-project">Creating your first project</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#loading-a-windows-image">Loading a Windows image</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#mounting-a-windows-image">Mounting a Windows image</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#loading-an-already-existing-mount-directory">Loading an already existing mount directory</a>
+    </li>
+        </ul>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#best-practices">Best practices</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#project-paths">Project paths</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#dism-operations">DISM operations</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#servicing-from-windows-pe">Servicing from Windows PE</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Image tasks</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../img_tasks/img_tasks/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../img_tasks/online_inst_mgmt/">Online installation management mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../img_tasks/offline_inst_mgmt/">Offline installation management mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="#">Image management</a>
+    <ul>
+                <li class="toctree-l2"><a class="" href="../../img_tasks/mgmt.md">Overview</a>
+                </li>
+                <li class="toctree-l2"><a class="" href="../../img_tasks/mgmt/apply_image.md">Applying an image</a>
+                </li>
+                <li class="toctree-l2"><a class="" href="../../img_tasks/mgmt/capture_image.md">Capturing an image</a>
+                </li>
+                <li class="toctree-l2"><a class="" href="../../img_tasks/mgmt/delete_image.md">Removing volume images from an image file</a>
+                </li>
+                <li class="toctree-l2"><a class="" href="../../img_tasks/mgmt/get_imginfo.md">Getting image information</a>
+                </li>
+                <li class="toctree-l2"><a class="" href="../../img_tasks/mgmt/mount_image.md">Mounting an image</a>
+                </li>
+                <li class="toctree-l2"><a class="" href="../../img_tasks/mgmt/remount_image.md">Remounting an image</a>
+                </li>
+                <li class="toctree-l2"><a class="" href="../../img_tasks/mgmt/split_image.md">Splitting an image</a>
+                </li>
+                <li class="toctree-l2"><a class="" href="../../img_tasks/mgmt/unmount_image.md">Unmounting an image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="#">Image information dialogs</a>
+    <ul>
+                <li class="toctree-l3"><a class="reference internal" href="../../img_tasks/info/infodlgs/">Overview</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../img_tasks/info/img_info/">Image file information</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../img_tasks/info/pkg_info/">Package information</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../img_tasks/info/feat_info/">Feature information</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../img_tasks/info/appxpkg_info/">AppX package information</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../img_tasks/info/cap_info/">Capability information</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../img_tasks/info/drv_info/">Driver information</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../img_tasks/info/winpe_info/">Windows PE configuration information</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="#">OS packages</a>
+    <ul>
+                <li class="toctree-l2"><a class="" href="../../img_tasks/packages/pkgs.md">Overview</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../img_tasks/packages/add_package/">Adding packages</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../img_tasks/packages/remove_package/">Removing packages</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="#">Features</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../img_tasks/features/features/">Overview</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../img_tasks/features/enable_feature/">Enabling features</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../img_tasks/features/disable_feature/">Disabling features</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="#">AppX packages</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../img_tasks/appx/appx/">Overview</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../img_tasks/appx/add_provisionedappxpackage/">Adding AppX packages</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../img_tasks/appx/remove_provisionedappxpackage/">Removing AppX packages</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="#">Capabilities</a>
+    <ul>
+                <li class="toctree-l2"><a class="" href="../../img_tasks/capabilities/caps.md">Overview</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../img_tasks/capabilities/add_capability/">Adding capabilities</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../img_tasks/capabilities/remove_capability/">Removing capabilities</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="#">Drivers</a>
+    <ul>
+                <li class="toctree-l2"><a class="" href="../../img_tasks/drivers/drvs.md">Overview</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../img_tasks/drivers/add_driver/">Adding drivers</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../img_tasks/drivers/remove_driver/">Removing drivers</a>
+                </li>
+                <li class="toctree-l2"><a class="" href="../../img_tasks/drivers/export_driver.md">Exporting drivers</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="#">Windows PE servicing</a>
+    <ul>
+                <li class="toctree-l2"><a class="" href="../../img_tasks/winpe/set_targetpath.md">Setting the target path</a>
+                </li>
+                <li class="toctree-l2"><a class="" href="../../img_tasks/winpe/set_scratchspace.md">Setting the scratch space</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="" href="../../img_tasks/cli_tools/cli_help">Command-line help</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="#">Tools</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../img_tasks/tools/mimgmgr/">Mounted image manager</a>
+                </li>
+                <li class="toctree-l2"><a class="" href="../../img_tasks/tools/wim2esd.md">Image conversion</a>
+                </li>
+                <li class="toctree-l2"><a class="" href="../../img_tasks/tools/swm2wim.md">SWM file merger</a>
+                </li>
+                <li class="toctree-l2"><a class="" href="../../img_tasks/tools/wimscript_editor.md">DISM Configuration List Editor</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Command-line tools</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../cli_tools/cli_tools.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="#">Command Console</a>
+    <ul>
+                <li class="toctree-l2"><a class="" href="../../cli_tools/cmd_console.md">Overview</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="#">Tools</a>
+    <ul>
+                <li class="toctree-l3"><a class="" href="../../cli_tools/cmdhelp.md">Command help</a>
+                </li>
+                <li class="toctree-l3"><a class="" href="../../cli_tools/mimgmgr.md">Mounted image manager (CLI version)</a>
+                </li>
+                <li class="toctree-l3"><a class="" href="../../cli_tools/extappx.md">Extended AppX package getter</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">DISMTools</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Getting started</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="getting-started">Getting started</h1>
+<p>If you don't know anything about Windows servicing, or come from other servicing tools, click on a section below to know what's different in this utility:</p>
+<ul>
+<li><a href="../new_to_servicing/">Getting started with Windows servicing</a></li>
+<li>I come from other tools<ul>
+<li><a href="https://example.com">Coming from NTLite</a></li>
+<li><a href="../msmg_migration/">Coming from MSMG Toolkit</a></li>
+</ul>
+</li>
+</ul>
+<p>If you want to know about something else, keep on reading.</p>
+<h2 id="first-steps">First steps</h2>
+<p>After installation has completed, you may run the program. The following steps are recommended to be done in order to get started</p>
+<h3 id="creating-your-first-project">Creating your first project</h3>
+<p>With the program up and running, you'll begin by <strong>creating a project</strong>. Use the first link in the main screen, or go to File -&gt; New project...</p>
+<p>You'll see the following screen, in which you need to provide a name and a location.</p>
+<p align="center">
+    <img src="../../res/getting_started/create_a_project.png"/>
+</p>
+
+<p>After providing data on both fields, click OK. The project will be created and you'll be at the project screen.</p>
+<p align="center">
+    <img src="../../res/getting_started/project_view.png"/>
+</p>
+
+<p>To load this project later, go to "Open an existing project..." and specify the project location.</p>
+<p><strong>NOTE:</strong> in the future, a Recents list will be implemented</p>
+<h3 id="loading-a-windows-image">Loading a Windows image</h3>
+<p>The first thing you need to do after creating a project is to load an image to it. There are 2 ways to do this:</p>
+<h4 id="mounting-a-windows-image">Mounting a Windows image</h4>
+<p>To mount a Windows image, either click the "Mount image..." button, or click the link in the left panel. You'll see this screen:</p>
+<p align="center">
+    <img src="../../res/getting_started/mount_an_image.png" />
+</p>
+
+<p>Specify the source image file you want to mount and the path you want to mount the image to. You can also configure more settings from this dialog, if you wish. Follow the image mount guide for more information.</p>
+<p><strong>INFO:</strong> the easiest way of getting a Windows image is by extracting the <code>sources\install.wim</code> file from Windows installation media. This can be easily done by mounting the ISO in the File Explorer or by using 3rd party tools, like 7-Zip.</p>
+<p>Once you're done, click OK and wait for the image to be mounted. Finally, you have finished!</p>
+<h4 id="loading-an-already-existing-mount-directory">Loading an already existing mount directory</h4>
+<p>Since DISMTools 0.2, the program lets you load a mount directory and use it in your project if you've already mounted a Windows image to it.</p>
+<p>To do this, switch to the "Image" tab on the left and click the link on the bottom. Next, specify the mount directory and click OK. That's it!</p>
+<p align="center">
+    <img src="../../res/getting_started/load_mount_directory.png" />
+</p>
+
+<p>To look for available mounted images, use the <a href="../../img_tasks/tools/mimgmgr/"><strong>mounted image manager</strong></a>.</p>
+<p><strong>NOTE:</strong> since version 0.3.2, the aforementioned link will open a popup mounted image picker, instead of a folder browser, that makes this process easier. Simply select a mounted image from the list and click OK:</p>
+<p align="center">
+    <img src="../../res/getting_started/load_mount_directory_new.png" />
+</p>
+
+<h2 id="best-practices">Best practices</h2>
+<p>When creating a project and/or managing Windows images, consider these best practices:</p>
+<h3 id="project-paths">Project paths</h3>
+<ul>
+<li>
+<p>Store your project on a location whose length is not greater than the <code>MAX_PATH</code> <a href="https://learn.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation">path length limitation</a> (260 characters)</p>
+<ul>
+<li>A great place to store your project on would be at the root of your preferred drive, or in a folder 1 level deep. Such examples would be: <code>D:\</code> or <code>E:\Projects\</code></li>
+<li>You can disable this limitation if you're using Windows 10, version 1607 or later, by following <a href="https://learn.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=registry#enable-long-paths-in-windows-10-version-1607-and-later">these guides</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="dism-operations">DISM operations</h3>
+<ul>
+<li>An antivirus program may prevent you from doing an image task, so it's recommended to set an exclusion to the mount path of the image</li>
+<li>It's not recommended to mount more than 20 images at the same time, as it can cause significant performance degradation</li>
+<li>You must run this program and, at any time, DISM as an administrator, no matter what privileges you may have</li>
+<li>If you have mounted the image with write privileges enabled, it's best to commit your changes often. That way, if the image becomes corrupt, it's easier to recover it</li>
+<li>It's not recommended to store files on network shares, as it can be faster to perform most operations if the files are copied to a local disk</li>
+</ul>
+<h3 id="servicing-from-windows-pe">Servicing from Windows PE</h3>
+<p>If you plan on servicing images from a Windows Preinstallation Environment (WinPE), consider these requirements while planning your strategy:</p>
+<ul>
+<li><strong>Booting Windows PE from a local disk:</strong> you can allocate additional memory to your Windows PE installation when booting it from a local disk, to increase performance; and you can create temporary folders to store large updates</li>
+<li><strong>Booting Windows PE from read-only media:</strong> if you plan on booting the Windows PE installation from optical media, ensure that your computer has enough memory</li>
+<li><strong>Add a page file to your PE installation:</strong> to improve memory management, consider creating a page file. See the <a href="https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/wpeutil-command-line-options?view=windows-11#createpagefile"><code>wpeutil</code> command reference</a> for more information</li>
+<li><strong>Specify a scratch directory:</strong> for some operations, like adding packages, it is best to create and specify a scratch directory to store temporary files on. If not specified, Windows PE creates a scratch directory of the size you specified when <a href="../img_tasks/winpe/set_scratchspace.md">setting the scratch space</a>. However, you may run out of space on your PE environment</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../.." class="btn btn-neutral float-left" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../img_tasks/img_tasks/" class="btn btn-neutral float-right" title="Overview">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../.." style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../../img_tasks/img_tasks/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

@@ -80,6 +80,15 @@ Partial Class Options
         Me.CheckBox10 = New System.Windows.Forms.CheckBox()
         Me.PictureBox4 = New System.Windows.Forms.PictureBox()
         Me.TabPage4 = New System.Windows.Forms.TabPage()
+        Me.GroupBox6 = New System.Windows.Forms.GroupBox()
+        Me.CheckBox14 = New System.Windows.Forms.CheckBox()
+        Me.Label48 = New System.Windows.Forms.Label()
+        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.CheckBox15 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox19 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox18 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox16 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox17 = New System.Windows.Forms.CheckBox()
         Me.Label19 = New System.Windows.Forms.Label()
         Me.Label18 = New System.Windows.Forms.Label()
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
@@ -157,15 +166,7 @@ Partial Class Options
         Me.Label43 = New System.Windows.Forms.Label()
         Me.PrefReset = New System.Windows.Forms.Button()
         Me.LogSFD = New System.Windows.Forms.SaveFileDialog()
-        Me.GroupBox6 = New System.Windows.Forms.GroupBox()
-        Me.Label48 = New System.Windows.Forms.Label()
-        Me.CheckBox14 = New System.Windows.Forms.CheckBox()
-        Me.CheckBox15 = New System.Windows.Forms.CheckBox()
-        Me.CheckBox16 = New System.Windows.Forms.CheckBox()
-        Me.CheckBox17 = New System.Windows.Forms.CheckBox()
-        Me.CheckBox18 = New System.Windows.Forms.CheckBox()
-        Me.CheckBox19 = New System.Windows.Forms.CheckBox()
-        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.CheckBox20 = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -184,6 +185,8 @@ Partial Class Options
         CType(Me.TrackBar1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabPage4.SuspendLayout()
+        Me.GroupBox6.SuspendLayout()
+        Me.TableLayoutPanel2.SuspendLayout()
         Me.TabPage5.SuspendLayout()
         CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabPage6.SuspendLayout()
@@ -203,8 +206,6 @@ Partial Class Options
         Me.Panel2.SuspendLayout()
         Me.GroupBox5.SuspendLayout()
         Me.TabPage11.SuspendLayout()
-        Me.GroupBox6.SuspendLayout()
-        Me.TableLayoutPanel2.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -457,6 +458,7 @@ Partial Class Options
         '
         'TabPage2
         '
+        Me.TabPage2.Controls.Add(Me.CheckBox20)
         Me.TabPage2.Controls.Add(Me.SecProgressStylePreview)
         Me.TabPage2.Controls.Add(Me.RadioButton6)
         Me.TabPage2.Controls.Add(Me.RadioButton5)
@@ -487,21 +489,21 @@ Partial Class Options
         '
         'RadioButton6
         '
-        Me.RadioButton6.AutoSize = True
-        Me.RadioButton6.Location = New System.Drawing.Point(25, 402)
+        Me.RadioButton6.AutoEllipsis = True
+        Me.RadioButton6.Location = New System.Drawing.Point(194, 377)
         Me.RadioButton6.Name = "RadioButton6"
-        Me.RadioButton6.Size = New System.Drawing.Size(57, 17)
+        Me.RadioButton6.Size = New System.Drawing.Size(127, 17)
         Me.RadioButton6.TabIndex = 6
         Me.RadioButton6.Text = "Classic"
         Me.RadioButton6.UseVisualStyleBackColor = True
         '
         'RadioButton5
         '
-        Me.RadioButton5.AutoSize = True
+        Me.RadioButton5.AutoEllipsis = True
         Me.RadioButton5.Checked = True
-        Me.RadioButton5.Location = New System.Drawing.Point(25, 379)
+        Me.RadioButton5.Location = New System.Drawing.Point(52, 377)
         Me.RadioButton5.Name = "RadioButton5"
-        Me.RadioButton5.Size = New System.Drawing.Size(61, 17)
+        Me.RadioButton5.Size = New System.Drawing.Size(131, 17)
         Me.RadioButton5.TabIndex = 6
         Me.RadioButton5.TabStop = True
         Me.RadioButton5.Text = "Modern"
@@ -828,6 +830,117 @@ Partial Class Options
         Me.TabPage4.TabIndex = 3
         Me.TabPage4.Text = "Image operations"
         Me.TabPage4.UseVisualStyleBackColor = True
+        '
+        'GroupBox6
+        '
+        Me.GroupBox6.Controls.Add(Me.CheckBox14)
+        Me.GroupBox6.Controls.Add(Me.Label48)
+        Me.GroupBox6.Controls.Add(Me.TableLayoutPanel2)
+        Me.GroupBox6.Location = New System.Drawing.Point(25, 261)
+        Me.GroupBox6.Name = "GroupBox6"
+        Me.GroupBox6.Size = New System.Drawing.Size(704, 136)
+        Me.GroupBox6.TabIndex = 9
+        Me.GroupBox6.TabStop = False
+        Me.GroupBox6.Text = "Saving information"
+        '
+        'CheckBox14
+        '
+        Me.CheckBox14.AutoSize = True
+        Me.CheckBox14.Location = New System.Drawing.Point(20, 55)
+        Me.CheckBox14.Name = "CheckBox14"
+        Me.CheckBox14.Size = New System.Drawing.Size(320, 17)
+        Me.CheckBox14.TabIndex = 1
+        Me.CheckBox14.Text = "Always save complete information for the following elements:"
+        Me.CheckBox14.UseVisualStyleBackColor = True
+        '
+        'Label48
+        '
+        Me.Label48.AutoEllipsis = True
+        Me.Label48.Location = New System.Drawing.Point(18, 24)
+        Me.Label48.Name = "Label48"
+        Me.Label48.Size = New System.Drawing.Size(680, 26)
+        Me.Label48.TabIndex = 0
+        Me.Label48.Text = "Choose the settings the program should consider when saving image information:"
+        '
+        'TableLayoutPanel2
+        '
+        Me.TableLayoutPanel2.ColumnCount = 3
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
+        Me.TableLayoutPanel2.Controls.Add(Me.CheckBox15, 0, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.CheckBox19, 2, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.CheckBox18, 1, 1)
+        Me.TableLayoutPanel2.Controls.Add(Me.CheckBox16, 0, 1)
+        Me.TableLayoutPanel2.Controls.Add(Me.CheckBox17, 1, 0)
+        Me.TableLayoutPanel2.Enabled = False
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(37, 79)
+        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
+        Me.TableLayoutPanel2.RowCount = 2
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(642, 51)
+        Me.TableLayoutPanel2.TabIndex = 2
+        '
+        'CheckBox15
+        '
+        Me.CheckBox15.AutoSize = True
+        Me.CheckBox15.Checked = True
+        Me.CheckBox15.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox15.Location = New System.Drawing.Point(3, 3)
+        Me.CheckBox15.Name = "CheckBox15"
+        Me.CheckBox15.Size = New System.Drawing.Size(115, 17)
+        Me.CheckBox15.TabIndex = 1
+        Me.CheckBox15.Text = "Installed packages"
+        Me.CheckBox15.UseVisualStyleBackColor = True
+        '
+        'CheckBox19
+        '
+        Me.CheckBox19.AutoSize = True
+        Me.CheckBox19.Checked = True
+        Me.CheckBox19.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox19.Location = New System.Drawing.Point(431, 3)
+        Me.CheckBox19.Name = "CheckBox19"
+        Me.CheckBox19.Size = New System.Drawing.Size(103, 17)
+        Me.CheckBox19.TabIndex = 1
+        Me.CheckBox19.Text = "Installed drivers"
+        Me.CheckBox19.UseVisualStyleBackColor = True
+        '
+        'CheckBox18
+        '
+        Me.CheckBox18.AutoSize = True
+        Me.CheckBox18.Checked = True
+        Me.CheckBox18.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox18.Location = New System.Drawing.Point(217, 28)
+        Me.CheckBox18.Name = "CheckBox18"
+        Me.CheckBox18.Size = New System.Drawing.Size(80, 17)
+        Me.CheckBox18.TabIndex = 1
+        Me.CheckBox18.Text = "Capabilities"
+        Me.CheckBox18.UseVisualStyleBackColor = True
+        '
+        'CheckBox16
+        '
+        Me.CheckBox16.AutoSize = True
+        Me.CheckBox16.Checked = True
+        Me.CheckBox16.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox16.Location = New System.Drawing.Point(3, 28)
+        Me.CheckBox16.Name = "CheckBox16"
+        Me.CheckBox16.Size = New System.Drawing.Size(69, 17)
+        Me.CheckBox16.TabIndex = 1
+        Me.CheckBox16.Text = "Features"
+        Me.CheckBox16.UseVisualStyleBackColor = True
+        '
+        'CheckBox17
+        '
+        Me.CheckBox17.AutoSize = True
+        Me.CheckBox17.Checked = True
+        Me.CheckBox17.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox17.Location = New System.Drawing.Point(217, 3)
+        Me.CheckBox17.Name = "CheckBox17"
+        Me.CheckBox17.Size = New System.Drawing.Size(143, 17)
+        Me.CheckBox17.TabIndex = 1
+        Me.CheckBox17.Text = "Installed AppX packages"
+        Me.CheckBox17.UseVisualStyleBackColor = True
         '
         'Label19
         '
@@ -1649,116 +1762,15 @@ Partial Class Options
         Me.LogSFD.Filter = "All files|*.*"
         Me.LogSFD.Title = "Specify the location of the log file"
         '
-        'GroupBox6
+        'CheckBox20
         '
-        Me.GroupBox6.Controls.Add(Me.CheckBox14)
-        Me.GroupBox6.Controls.Add(Me.Label48)
-        Me.GroupBox6.Controls.Add(Me.TableLayoutPanel2)
-        Me.GroupBox6.Location = New System.Drawing.Point(25, 261)
-        Me.GroupBox6.Name = "GroupBox6"
-        Me.GroupBox6.Size = New System.Drawing.Size(704, 136)
-        Me.GroupBox6.TabIndex = 9
-        Me.GroupBox6.TabStop = False
-        Me.GroupBox6.Text = "Saving information"
-        '
-        'Label48
-        '
-        Me.Label48.AutoEllipsis = True
-        Me.Label48.Location = New System.Drawing.Point(18, 24)
-        Me.Label48.Name = "Label48"
-        Me.Label48.Size = New System.Drawing.Size(680, 26)
-        Me.Label48.TabIndex = 0
-        Me.Label48.Text = "Choose the settings the program should consider when saving image information:"
-        '
-        'CheckBox14
-        '
-        Me.CheckBox14.AutoSize = True
-        Me.CheckBox14.Location = New System.Drawing.Point(20, 55)
-        Me.CheckBox14.Name = "CheckBox14"
-        Me.CheckBox14.Size = New System.Drawing.Size(320, 17)
-        Me.CheckBox14.TabIndex = 1
-        Me.CheckBox14.Text = "Always save complete information for the following elements:"
-        Me.CheckBox14.UseVisualStyleBackColor = True
-        '
-        'CheckBox15
-        '
-        Me.CheckBox15.AutoSize = True
-        Me.CheckBox15.Checked = True
-        Me.CheckBox15.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox15.Location = New System.Drawing.Point(3, 3)
-        Me.CheckBox15.Name = "CheckBox15"
-        Me.CheckBox15.Size = New System.Drawing.Size(115, 17)
-        Me.CheckBox15.TabIndex = 1
-        Me.CheckBox15.Text = "Installed packages"
-        Me.CheckBox15.UseVisualStyleBackColor = True
-        '
-        'CheckBox16
-        '
-        Me.CheckBox16.AutoSize = True
-        Me.CheckBox16.Checked = True
-        Me.CheckBox16.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox16.Location = New System.Drawing.Point(3, 28)
-        Me.CheckBox16.Name = "CheckBox16"
-        Me.CheckBox16.Size = New System.Drawing.Size(69, 17)
-        Me.CheckBox16.TabIndex = 1
-        Me.CheckBox16.Text = "Features"
-        Me.CheckBox16.UseVisualStyleBackColor = True
-        '
-        'CheckBox17
-        '
-        Me.CheckBox17.AutoSize = True
-        Me.CheckBox17.Checked = True
-        Me.CheckBox17.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox17.Location = New System.Drawing.Point(216, 3)
-        Me.CheckBox17.Name = "CheckBox17"
-        Me.CheckBox17.Size = New System.Drawing.Size(143, 17)
-        Me.CheckBox17.TabIndex = 1
-        Me.CheckBox17.Text = "Installed AppX packages"
-        Me.CheckBox17.UseVisualStyleBackColor = True
-        '
-        'CheckBox18
-        '
-        Me.CheckBox18.AutoSize = True
-        Me.CheckBox18.Checked = True
-        Me.CheckBox18.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox18.Location = New System.Drawing.Point(216, 28)
-        Me.CheckBox18.Name = "CheckBox18"
-        Me.CheckBox18.Size = New System.Drawing.Size(80, 17)
-        Me.CheckBox18.TabIndex = 1
-        Me.CheckBox18.Text = "Capabilities"
-        Me.CheckBox18.UseVisualStyleBackColor = True
-        '
-        'CheckBox19
-        '
-        Me.CheckBox19.AutoSize = True
-        Me.CheckBox19.Checked = True
-        Me.CheckBox19.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox19.Location = New System.Drawing.Point(429, 3)
-        Me.CheckBox19.Name = "CheckBox19"
-        Me.CheckBox19.Size = New System.Drawing.Size(103, 17)
-        Me.CheckBox19.TabIndex = 1
-        Me.CheckBox19.Text = "Installed drivers"
-        Me.CheckBox19.UseVisualStyleBackColor = True
-        '
-        'TableLayoutPanel2
-        '
-        Me.TableLayoutPanel2.ColumnCount = 3
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel2.Controls.Add(Me.CheckBox15, 0, 0)
-        Me.TableLayoutPanel2.Controls.Add(Me.CheckBox19, 2, 0)
-        Me.TableLayoutPanel2.Controls.Add(Me.CheckBox18, 1, 1)
-        Me.TableLayoutPanel2.Controls.Add(Me.CheckBox16, 0, 1)
-        Me.TableLayoutPanel2.Controls.Add(Me.CheckBox17, 1, 0)
-        Me.TableLayoutPanel2.Enabled = False
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(37, 79)
-        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
-        Me.TableLayoutPanel2.RowCount = 2
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(642, 51)
-        Me.TableLayoutPanel2.TabIndex = 2
+        Me.CheckBox20.AutoEllipsis = True
+        Me.CheckBox20.Location = New System.Drawing.Point(25, 403)
+        Me.CheckBox20.Name = "CheckBox20"
+        Me.CheckBox20.Size = New System.Drawing.Size(337, 17)
+        Me.CheckBox20.TabIndex = 8
+        Me.CheckBox20.Text = "Use the new project view design"
+        Me.CheckBox20.UseVisualStyleBackColor = True
         '
         'Options
         '
@@ -1805,6 +1817,10 @@ Partial Class Options
         CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TabPage4.ResumeLayout(False)
         Me.TabPage4.PerformLayout()
+        Me.GroupBox6.ResumeLayout(False)
+        Me.GroupBox6.PerformLayout()
+        Me.TableLayoutPanel2.ResumeLayout(False)
+        Me.TableLayoutPanel2.PerformLayout()
         Me.TabPage5.ResumeLayout(False)
         Me.TabPage5.PerformLayout()
         CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).EndInit()
@@ -1835,10 +1851,6 @@ Partial Class Options
         Me.GroupBox5.PerformLayout()
         Me.TabPage11.ResumeLayout(False)
         Me.TabPage11.PerformLayout()
-        Me.GroupBox6.ResumeLayout(False)
-        Me.GroupBox6.PerformLayout()
-        Me.TableLayoutPanel2.ResumeLayout(False)
-        Me.TableLayoutPanel2.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1985,5 +1997,6 @@ Partial Class Options
     Friend WithEvents CheckBox18 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox16 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox17 As System.Windows.Forms.CheckBox
+    Friend WithEvents CheckBox20 As System.Windows.Forms.CheckBox
 
 End Class

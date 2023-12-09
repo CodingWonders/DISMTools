@@ -253,6 +253,9 @@ Public Class RemProvAppxPackage
     End Sub
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
-        Help_RegisteredAppxPkgsDlg.ShowDialog(Me)
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\appx\remove_provisionedappxpackage\index.html#questions")
+        HelpBrowserForm.MinimizeBox = False
+        HelpBrowserForm.MaximizeBox = False
+        HelpBrowserForm.ShowDialog()
     End Sub
 End Class

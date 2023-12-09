@@ -6,6 +6,8 @@ Imports System.Text.Encoding
 Imports Microsoft.Win32
 Imports Microsoft.Dism
 Imports System.Runtime.InteropServices
+Imports System.Xml
+Imports System.ServiceModel.Syndication
 
 Public Class MainForm
 
@@ -235,6 +237,10 @@ Public Class MainForm
 
     Public GoToNewView As Boolean
 
+    Dim FeedContents As New SyndicationFeed()
+    Dim FeedLinks As New List(Of Uri)
+    Dim FeedEx As Exception
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -398,6 +404,13 @@ Public Class MainForm
             BeginOnlineManagement(True)
         End If
         Timer1.Enabled = True
+        LinkLabel12.LinkColor = Color.FromArgb(241, 241, 241)
+        LinkLabel13.LinkColor = Color.FromArgb(153, 153, 153)
+        Button17.Visible = EnableExperiments
+        If EnableExperiments Then
+            FeedWorker.RunWorkerAsync()
+            Timer2.Enabled = True
+        End If
     End Sub
 
     ''' <summary>
@@ -964,6 +977,14 @@ Public Class MainForm
                 LogFontIsBold = (CInt(PersKey.GetValue("LogFontBold")) = 1)
                 ProgressPanelStyle = CInt(PersKey.GetValue("SecondaryProgressPanelStyle"))
                 AllCaps = (CInt(PersKey.GetValue("AllCaps")) = 1)
+                GoToNewView = (CInt(PersKey.GetValue("NewDesign")) = 1)
+                If GoToNewView Then
+                    ProjectView.Visible = True
+                    SplitPanels.Visible = False
+                Else
+                    ProjectView.Visible = False
+                    SplitPanels.Visible = True
+                End If
                 PersKey.Close()
                 Dim LogKey As RegistryKey = Key.OpenSubKey("Logs")
                 LogFile = LogKey.GetValue("LogFile").ToString().Replace(Quote, "").Trim()
@@ -1082,7 +1103,7 @@ Public Class MainForm
                     ElseIf line.StartsWith("LogFile=", StringComparison.OrdinalIgnoreCase) Then
                         ' Detect log file path. If file does not exist, create one
                         LogFile = line.Replace("LogFile=", "").Trim().Replace(Quote, "").Trim()
-                        If LogFile.StartsWith("{common:WinDir", StringComparison.OrdinalIgnoreCase) Then LogFile = LogFile.Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
+                        If LogFile.StartsWith("{common:WinDir}", StringComparison.OrdinalIgnoreCase) Then LogFile = LogFile.Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
                     ElseIf line.StartsWith("ScratchDirLocation=", StringComparison.OrdinalIgnoreCase) Then
                         ScratchDir = line.Replace("ScratchDirLocation=", "").Trim().Replace(Quote, "").Trim()
                     ElseIf line.StartsWith("WndWidth=", StringComparison.OrdinalIgnoreCase) Then
@@ -1117,6 +1138,18 @@ Public Class MainForm
                     CommandsToolStripMenuItem.Text = CommandsToolStripMenuItem.Text.ToUpper()
                     ToolsToolStripMenuItem.Text = ToolsToolStripMenuItem.Text.ToUpper()
                     HelpToolStripMenuItem.Text = HelpToolStripMenuItem.Text.ToUpper()
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("NewDesign=1") Then
+                    GoToNewView = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("NewDesign=0") Then
+                    GoToNewView = False
+                End If
+                If GoToNewView Then
+                    ProjectView.Visible = True
+                    SplitPanels.Visible = False
+                Else
+                    ProjectView.Visible = False
+                    SplitPanels.Visible = True
                 End If
                 ' Detect log file level: 1 - Errors only
                 '                        2 - Errors and warnings
@@ -1347,13 +1380,6 @@ Public Class MainForm
     ''' <remarks>Depending on the parameter of bgProcOptn, and on the power of the system, the background processes may take a longer time to finish</remarks>
     Sub RunBackgroundProcesses(bgProcOptn As Integer, GatherBasicInfo As Boolean, GatherAdvancedInfo As Boolean, Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False, Optional OfflineMode As Boolean = False)
         IsCompatible = True
-        If isProjectLoaded And GoToNewView Then
-            ProjectView.Visible = True
-            SplitPanels.Visible = False
-        ElseIf isProjectLoaded And Not GoToNewView Then
-            ProjectView.Visible = False
-            SplitPanels.Visible = True
-        End If
         If Not IsImageMounted Then
             Button1.Enabled = True
             Button2.Enabled = False
@@ -2034,6 +2060,9 @@ Public Class MainForm
                             Button2.Enabled = If(MountedImageMountedReWr(x) = 0, True, False)
                             Button3.Enabled = If(MountedImageMountedReWr(x) = 0, True, False)
                             Button4.Enabled = True
+                            Button27.Enabled = If(MountedImageMountedReWr(x) = 0, True, False)
+                            Button28.Enabled = If(MountedImageMountedReWr(x) = 0, True, False)
+                            Button29.Enabled = True
                             Exit For
                         End If
                     Next
@@ -4098,6 +4127,7 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontBold=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SecondaryProgressPanelStyle=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "NewDesign=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & "{common:WinDir}\Logs\DISM\DISM.log" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=3")
@@ -4164,6 +4194,7 @@ Public Class MainForm
         PersKey.SetValue("LogFontBold", 0, RegistryValueKind.DWord)
         PersKey.SetValue("SecondaryProgressPanelStyle", 1, RegistryValueKind.DWord)
         PersKey.SetValue("AllCaps", 0, RegistryValueKind.DWord)
+        PersKey.SetValue("NewDesign", 1, RegistryValueKind.DWord)
         PersKey.Close()
         Dim LogKey As RegistryKey = Key.CreateSubKey("Logs")
         LogKey.SetValue("LogFile", Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\logs\DISM\DISM.log" & Quote, RegistryValueKind.ExpandString)
@@ -4265,6 +4296,11 @@ Public Class MainForm
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=1")
                 Else
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=0")
+                End If
+                If GoToNewView Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "NewDesign=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "NewDesign=0")
                 End If
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
                 DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & LogFile & Quote)
@@ -4414,6 +4450,7 @@ Public Class MainForm
                 PersKey.SetValue("LogFontBold", If(LogFontIsBold, 1, 0), RegistryValueKind.DWord)
                 PersKey.SetValue("SecondaryProgressPanelStyle", ProgressPanelStyle, RegistryValueKind.DWord)
                 PersKey.SetValue("AllCaps", If(AllCaps, 1, 0), RegistryValueKind.DWord)
+                PersKey.SetValue("NewDesign", If(GoToNewView, 1, 0), RegistryValueKind.DWord)
                 PersKey.Close()
                 Dim LogKey As RegistryKey = Key.CreateSubKey("Logs")
                 LogKey.SetValue("LogFile", LogFile, RegistryValueKind.ExpandString)
@@ -5004,6 +5041,19 @@ Public Class MainForm
                 GroupBox9.ForeColor = Color.White
                 GroupBox10.ForeColor = Color.White
         End Select
+        If EnableExperiments Then
+            If GetStartedPanel.Visible Then
+                LinkLabel22.LinkColor = ForeColor
+                LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
+                LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
+            ElseIf LatestNewsPanel.Visible Then
+                LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
+                LinkLabel23.LinkColor = ForeColor
+                LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
+            End If
+            ListView1.BackColor = BackColor
+            ListView1.ForeColor = ForeColor
+        End If
     End Sub
 
     Sub ChangeLangs(LangCode As Integer)
@@ -10399,6 +10449,12 @@ Public Class MainForm
             Application.DoEvents()
             Thread.Sleep(100)
         End While
+        If FeedWorker.IsBusy Then FeedWorker.CancelAsync()
+        While FeedWorker.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        Timer2.Enabled = False
     End Sub
 
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
@@ -12472,7 +12528,7 @@ Public Class MainForm
             End Select
             Exit Sub
         End Try
-        If File.Exists(Application.StartupPath & "\update.exe") Then Process.Start(Application.StartupPath & "\update.exe", "/" & dtBranch)
+        If File.Exists(Application.StartupPath & "\update.exe") Then Process.Start(Application.StartupPath & "\update.exe", "/" & dtBranch & " /pid=" & Process.GetCurrentProcess().Id)
     End Sub
 
     Private Sub prjTreeView_NodeMouseClick(sender As Object, e As TreeNodeMouseClickEventArgs) Handles prjTreeView.NodeMouseClick
@@ -13567,7 +13623,9 @@ Public Class MainForm
             For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
                 If MountedImageMountDirs(x) = MountDir Then
                     If MountedImageMountedReWr(x) = 1 Then
-                        Button4.PerformClick()
+                        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+                        imgCommitOperation = 1
+                        UnloadDTProj(False, True, True)
                         Exit Sub
                     End If
                 End If
@@ -14729,4 +14787,208 @@ Public Class MainForm
     End Sub
 
 #End Region
+
+    Sub GetFeedNews()
+        FeedContents = New SyndicationFeed()
+        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+        Try
+            Dim rssUrl As String = "https://reddit.com/r/DISMTools.rss"
+            Dim rssContent As String = ""
+            Using client As New WebClient()
+                client.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+                rssContent = client.DownloadString(rssUrl)
+            End Using
+            If Not String.IsNullOrWhiteSpace(rssContent) Then
+                Dim reader As XmlReader = XmlReader.Create(New StringReader(rssContent))
+                FeedContents = SyndicationFeed.Load(reader)
+                reader.Close()
+            End If
+        Catch ex As Exception
+            Debug.WriteLine("[GetFeedNews] Failed to get feed news")
+            FeedEx = ex
+        End Try
+    End Sub
+
+    Private Sub Button17_Click(sender As Object, e As EventArgs) Handles Button17.Click
+        WelcomeTabControl.Visible = False
+        StartPanel.Visible = True
+        Button17.Visible = False
+    End Sub
+
+    Private Sub Button18_Click(sender As Object, e As EventArgs) Handles Button18.Click
+        WelcomeTabControl.Visible = True
+        StartPanel.Visible = False
+        Button17.Visible = True
+    End Sub
+
+    Private Sub LinkLabel22_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel22.LinkClicked
+        GetStartedPanel.Visible = True
+        LatestNewsPanel.Visible = False
+        LinkLabel22.LinkColor = ForeColor
+        LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
+        LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
+    End Sub
+
+    Private Sub LinkLabel23_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel23.LinkClicked
+        GetStartedPanel.Visible = False
+        LatestNewsPanel.Visible = True
+        LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
+        LinkLabel23.LinkColor = ForeColor
+        LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
+    End Sub
+
+    Private Sub LinkLabel24_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel24.LinkClicked
+        LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
+        LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
+        LinkLabel24.LinkColor = ForeColor
+    End Sub
+
+    Private Sub ListView1_DoubleClick(sender As Object, e As EventArgs) Handles ListView1.DoubleClick
+        If ListView1.SelectedItems.Count = 1 Then
+            Process.Start(FeedLinks(ListView1.FocusedItem.Index).AbsoluteUri)
+        End If
+    End Sub
+
+    Private Sub HelpTopicsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles HelpTopicsToolStripMenuItem.Click
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\index.html")
+        HelpBrowserForm.MinimizeBox = True
+        HelpBrowserForm.MaximizeBox = True
+        HelpBrowserForm.Show()
+    End Sub
+
+    Private Sub LinkLabel12_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel12.MouseLeave
+        If SidePanel_ProjectView.Visible Then
+            LinkLabel12.LinkColor = Color.FromArgb(241, 241, 241)
+        Else
+            LinkLabel12.LinkColor = Color.FromArgb(153, 153, 153)
+        End If
+    End Sub
+
+    Private Sub LinkLabel13_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel13.MouseLeave
+        If SidePanel_ImageView.Visible Then
+            LinkLabel13.LinkColor = Color.FromArgb(241, 241, 241)
+        Else
+            LinkLabel13.LinkColor = Color.FromArgb(153, 153, 153)
+        End If
+    End Sub
+
+    Private Sub LinkLabel12_MouseEnter(sender As Object, e As EventArgs) Handles LinkLabel12.MouseEnter
+        If LinkLabel12.LinkColor = Color.FromArgb(241, 241, 241) Then
+            Cursor = Cursors.Arrow
+            Exit Sub
+        Else
+            LinkLabel12.LinkColor = Color.FromArgb(0, 151, 251)
+        End If
+    End Sub
+
+    Private Sub LinkLabel13_MouseEnter(sender As Object, e As EventArgs) Handles LinkLabel13.MouseEnter
+        If LinkLabel13.LinkColor = Color.FromArgb(241, 241, 241) Then
+            Cursor = Cursors.Arrow
+            Exit Sub
+        Else
+            LinkLabel13.LinkColor = Color.FromArgb(0, 151, 251)
+        End If
+    End Sub
+
+    Private Sub Button59_Click(sender As Object, e As EventArgs) Handles Button59.Click
+        ListView1.Items.Clear()
+        FeedLinks.Clear()
+        GetFeedNews()
+        If FeedContents.Items.Count > 0 Then
+            FeedsPanel.Visible = True
+            FeedErrorPanel.Visible = False
+            For Each item As SyndicationItem In FeedContents.Items.OrderByDescending(Function(x) x.PublishDate)
+                ListView1.Items.Add(New ListViewItem(New String() {item.Title.Text, item.PublishDate.ToString()}))
+                FeedLinks.Add(item.Links(0).Uri)
+            Next
+        Else
+            FeedsPanel.Visible = False
+            FeedErrorPanel.Visible = True
+            TextBox1.Text = FeedEx.ToString() & " - " & FeedEx.Message
+        End If
+    End Sub
+
+    Private Sub FeedWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles FeedWorker.DoWork
+        If FeedWorker.CancellationPending Then Exit Sub
+        GetFeedNews()
+        FeedWorker.ReportProgress(0)
+        If Not FeedWorker.CancellationPending Then Thread.Sleep(2000)
+    End Sub
+
+    Private Sub FeedWorker_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles FeedWorker.ProgressChanged
+        ListView1.Items.Clear()
+        FeedLinks.Clear()
+        If FeedContents.Items.Count > 0 Then
+            FeedsPanel.Visible = True
+            FeedErrorPanel.Visible = False
+            For Each item As SyndicationItem In FeedContents.Items.OrderByDescending(Function(x) x.PublishDate)
+                ListView1.Items.Add(New ListViewItem(New String() {item.Title.Text, item.PublishDate.ToString()}))
+                FeedLinks.Add(item.Links(0).Uri)
+            Next
+        Else
+            FeedsPanel.Visible = False
+            FeedErrorPanel.Visible = True
+            TextBox1.Text = FeedEx.ToString() & " - " & FeedEx.Message
+        End If
+    End Sub
+
+    Private Sub LinkLabel6_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel6.LinkClicked
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\new_to_servicing\index.html")
+        HelpBrowserForm.MinimizeBox = True
+        HelpBrowserForm.MaximizeBox = True
+        HelpBrowserForm.Show()
+    End Sub
+
+    Private Sub LinkLabel7_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel7.LinkClicked
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\start\index.html#first-steps")
+        HelpBrowserForm.MinimizeBox = True
+        HelpBrowserForm.MaximizeBox = True
+        HelpBrowserForm.Show()
+    End Sub
+
+    Private Sub LinkLabel8_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel8.LinkClicked
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\start\index.html")
+        HelpBrowserForm.MinimizeBox = True
+        HelpBrowserForm.MaximizeBox = True
+        HelpBrowserForm.Show()
+    End Sub
+
+    Private Sub LinkLabel9_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel9.LinkClicked
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\start\index.html#best-practices")
+        HelpBrowserForm.MinimizeBox = True
+        HelpBrowserForm.MaximizeBox = True
+        HelpBrowserForm.Show()
+    End Sub
+
+    Private Sub LinkLabel10_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel10.LinkClicked
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\info\infodlgs\index.html")
+        HelpBrowserForm.MinimizeBox = True
+        HelpBrowserForm.MaximizeBox = True
+        HelpBrowserForm.Show()
+    End Sub
+
+    Private Sub LinkLabel11_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel11.LinkClicked
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\info\infodlgs\index.html#saving-image-information")
+        HelpBrowserForm.MinimizeBox = True
+        HelpBrowserForm.MaximizeBox = True
+        HelpBrowserForm.Show()
+    End Sub
+
+    Private Sub Timer2_Tick(sender As Object, e As EventArgs) Handles Timer2.Tick
+        FeedWorker.RunWorkerAsync()
+    End Sub
+
+    Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel4.LinkClicked
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\online_inst_mgmt\index.html")
+        HelpBrowserForm.MinimizeBox = True
+        HelpBrowserForm.MaximizeBox = True
+        HelpBrowserForm.Show()
+    End Sub
+
+    Private Sub LinkLabel5_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel5.LinkClicked
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\offline_inst_mgmt\index.html")
+        HelpBrowserForm.MinimizeBox = True
+        HelpBrowserForm.MaximizeBox = True
+        HelpBrowserForm.Show()
+    End Sub
 End Class

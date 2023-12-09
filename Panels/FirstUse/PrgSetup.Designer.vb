@@ -97,6 +97,9 @@ Partial Class PrgSetup
         Me.Panel5 = New System.Windows.Forms.Panel()
         Me.Panel6 = New System.Windows.Forms.Panel()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
+        Me.Panel9 = New System.Windows.Forms.Panel()
+        Me.Label29 = New System.Windows.Forms.Label()
+        Me.CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.wndControlPanel.SuspendLayout()
         CType(Me.backBox, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.minBox, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -121,6 +124,7 @@ Partial Class PrgSetup
         Me.TableLayoutPanel2.SuspendLayout()
         Me.FinishPanel.SuspendLayout()
         Me.TableLayoutPanel3.SuspendLayout()
+        Me.Panel9.SuspendLayout()
         Me.SuspendLayout()
         '
         'wndControlPanel
@@ -305,6 +309,7 @@ Partial Class PrgSetup
         '
         'CustomizationPanel
         '
+        Me.CustomizationPanel.Controls.Add(Me.CheckBox2)
         Me.CustomizationPanel.Controls.Add(Me.TableLayoutPanel1)
         Me.CustomizationPanel.Controls.Add(Me.Label5)
         Me.CustomizationPanel.Controls.Add(Me.Label6)
@@ -318,8 +323,8 @@ Partial Class PrgSetup
         'TableLayoutPanel1
         '
         Me.TableLayoutPanel1.ColumnCount = 2
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 22.24939!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 77.75061!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 22.2493896!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 77.7506104!))
         Me.TableLayoutPanel1.Controls.Add(Me.Label28, 0, 3)
         Me.TableLayoutPanel1.Controls.Add(Me.Label9, 0, 2)
         Me.TableLayoutPanel1.Controls.Add(Me.ComboBox2, 1, 1)
@@ -331,10 +336,10 @@ Partial Class PrgSetup
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(31, 185)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 4
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 6.966703!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 6.966704!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 67.05452!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 19.01208!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 6.96670294!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 6.96670389!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 67.0545197!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 19.0120792!))
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(818, 372)
         Me.TableLayoutPanel1.TabIndex = 2
         '
@@ -417,6 +422,7 @@ Partial Class PrgSetup
         'Panel1
         '
         Me.Panel1.Controls.Add(Me.Panel3)
+        Me.Panel1.Controls.Add(Me.Panel9)
         Me.Panel1.Controls.Add(Me.Panel2)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(185, 53)
@@ -430,7 +436,7 @@ Partial Class PrgSetup
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel3.Location = New System.Drawing.Point(0, 33)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(630, 210)
+        Me.Panel3.Size = New System.Drawing.Size(630, 177)
         Me.Panel3.TabIndex = 1
         '
         'TextBox1
@@ -443,7 +449,7 @@ Partial Class PrgSetup
         Me.TextBox1.Multiline = True
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TextBox1.Size = New System.Drawing.Size(630, 210)
+        Me.TextBox1.Size = New System.Drawing.Size(630, 177)
         Me.TextBox1.TabIndex = 0
         Me.TextBox1.Text = resources.GetString("TextBox1.Text")
         '
@@ -727,8 +733,8 @@ Partial Class PrgSetup
         'TableLayoutPanel2
         '
         Me.TableLayoutPanel2.ColumnCount = 2
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 83.94608!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.05392!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 83.9460831!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.0539207!))
         Me.TableLayoutPanel2.Controls.Add(Me.Label15, 0, 1)
         Me.TableLayoutPanel2.Controls.Add(Me.Label12, 0, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.Button3, 1, 0)
@@ -901,8 +907,8 @@ Partial Class PrgSetup
         'TableLayoutPanel3
         '
         Me.TableLayoutPanel3.ColumnCount = 2
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 83.94608!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.05392!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 83.9460831!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.0539207!))
         Me.TableLayoutPanel3.Controls.Add(Me.Label26, 0, 1)
         Me.TableLayoutPanel3.Controls.Add(Me.Label27, 0, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.Button6, 1, 0)
@@ -1012,6 +1018,42 @@ Partial Class PrgSetup
         Me.SaveFileDialog1.SupportMultiDottedExtensions = True
         Me.SaveFileDialog1.Title = "Specify the log file"
         '
+        'Panel9
+        '
+        Me.Panel9.Controls.Add(Me.Label29)
+        Me.Panel9.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Panel9.Location = New System.Drawing.Point(0, 210)
+        Me.Panel9.Name = "Panel9"
+        Me.Panel9.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Panel9.Size = New System.Drawing.Size(630, 33)
+        Me.Panel9.TabIndex = 2
+        Me.Panel9.Visible = False
+        '
+        'Label29
+        '
+        Me.Label29.AutoEllipsis = True
+        Me.Label29.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label29.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label29.Location = New System.Drawing.Point(0, 2)
+        Me.Label29.Name = "Label29"
+        Me.Label29.Size = New System.Drawing.Size(630, 31)
+        Me.Label29.TabIndex = 2
+        Me.Label29.Text = "This font may not be readable on log windows. While you can still use it, we reco" & _
+    "mmend monospaced fonts for increased readability."
+        '
+        'CheckBox2
+        '
+        Me.CheckBox2.AutoSize = True
+        Me.CheckBox2.Checked = True
+        Me.CheckBox2.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox2.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CheckBox2.Location = New System.Drawing.Point(31, 564)
+        Me.CheckBox2.Name = "CheckBox2"
+        Me.CheckBox2.Size = New System.Drawing.Size(241, 24)
+        Me.CheckBox2.TabIndex = 3
+        Me.CheckBox2.Text = "Use the new project view design"
+        Me.CheckBox2.UseVisualStyleBackColor = True
+        '
         'PrgSetup
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1067,6 +1109,7 @@ Partial Class PrgSetup
         Me.FinishPanel.ResumeLayout(False)
         Me.FinishPanel.PerformLayout()
         Me.TableLayoutPanel3.ResumeLayout(False)
+        Me.Panel9.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -1144,4 +1187,7 @@ Partial Class PrgSetup
     Friend WithEvents Panel8 As System.Windows.Forms.Panel
     Friend WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
     Friend WithEvents backBox As System.Windows.Forms.PictureBox
+    Friend WithEvents Panel9 As System.Windows.Forms.Panel
+    Friend WithEvents Label29 As System.Windows.Forms.Label
+    Friend WithEvents CheckBox2 As System.Windows.Forms.CheckBox
 End Class

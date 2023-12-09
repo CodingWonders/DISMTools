@@ -70,12 +70,14 @@ Source: ".\files\ScintillaNET.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Drawing.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Management.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
+Source: ".\files\System.ServiceModel.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Windows.Forms.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Xml.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Xml.Linq.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\WeifenLuo.WinFormsUI.Docking.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\WeifenLuo.WinFormsUI.Docking.ThemeVS2012.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\bin\*"; DestDir: "{#pfDir}\bin"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: ".\files\docs\*"; DestDir: "{#pfDir}\docs"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Registry]
@@ -120,6 +122,7 @@ Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dwo
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: string; ValueName: "LogFont"; ValueData: "Courier New"; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "LogFontBold"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "LogFontSi"; ValueData: 10; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "NewDesign"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "SecondaryProgressPanelStyle"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Program"; Flags: uninsdeletekey

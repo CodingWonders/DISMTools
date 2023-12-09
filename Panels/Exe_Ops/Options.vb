@@ -182,6 +182,14 @@ Public Class Options
         MainForm.AutoCompleteInfo(2) = CheckBox17.Checked
         MainForm.AutoCompleteInfo(3) = CheckBox18.Checked
         MainForm.AutoCompleteInfo(4) = CheckBox19.Checked
+        MainForm.GoToNewView = CheckBox20.Checked
+        If MainForm.GoToNewView Then
+            MainForm.ProjectView.Visible = True
+            MainForm.SplitPanels.Visible = False
+        Else
+            MainForm.ProjectView.Visible = False
+            MainForm.SplitPanels.Visible = True
+        End If
     End Sub
 
     Sub GiveErrorExplanation(ErrorCode As Integer)
@@ -385,6 +393,7 @@ Public Class Options
                         CheckBox17.Text = "Installed AppX packages"
                         CheckBox18.Text = "Capabilities"
                         CheckBox19.Text = "Installed drivers"
+                        CheckBox20.Text = "Use the new project view design"
                         DismOFD.Title = "Specify the DISM executable to use"
                         GroupBox1.Text = "Log customization"
                         GroupBox2.Text = "Notification frequency"
@@ -489,6 +498,7 @@ Public Class Options
                         CheckBox17.Text = "Paquetes AppX instalados"
                         CheckBox18.Text = "Funcionalidades"
                         CheckBox19.Text = "Controladores instalados"
+                        CheckBox20.Text = "Utilizar el nuevo diseño de la vista de proyectos"
                         DismOFD.Title = "Especifique el ejecutable de DISM a usar"
                         GroupBox1.Text = "Personalización del registro"
                         GroupBox2.Text = "Frecuencia de notificaciones"
@@ -593,6 +603,7 @@ Public Class Options
                         CheckBox17.Text = "Paquets AppX installés"
                         CheckBox18.Text = "Capacités"
                         CheckBox19.Text = "Pilotes installés"
+                        CheckBox20.Text = "Utiliser le nouveau design de la vue du projet"
                         DismOFD.Title = "Spécifier l'exécutable DISM à utiliser"
                         GroupBox1.Text = "Personnalisation du journal"
                         GroupBox2.Text = "Fréquence des notifications"
@@ -698,6 +709,7 @@ Public Class Options
                 CheckBox17.Text = "Installed AppX packages"
                 CheckBox18.Text = "Capabilities"
                 CheckBox19.Text = "Installed drivers"
+                CheckBox20.Text = "Use the new project view design"
                 DismOFD.Title = "Specify the DISM executable to use"
                 GroupBox1.Text = "Log customization"
                 GroupBox2.Text = "Notification frequency"
@@ -802,6 +814,7 @@ Public Class Options
                 CheckBox17.Text = "Paquetes AppX instalados"
                 CheckBox18.Text = "Funcionalidades"
                 CheckBox19.Text = "Controladores instalados"
+                CheckBox20.Text = "Utilizar el nuevo diseño de la vista de proyectos"
                 DismOFD.Title = "Especifique el ejecutable de DISM a usar"
                 GroupBox1.Text = "Personalización del registro"
                 GroupBox2.Text = "Frecuencia de notificaciones"
@@ -906,6 +919,7 @@ Public Class Options
                 CheckBox17.Text = "Paquets AppX installés"
                 CheckBox18.Text = "Capacités"
                 CheckBox19.Text = "Pilotes installés"
+                CheckBox20.Text = "Utiliser le nouveau design de la vue du projet"
                 DismOFD.Title = "Spécifier l'exécutable DISM à utiliser"
                 GroupBox1.Text = "Personnalisation du journal"
                 GroupBox2.Text = "Fréquence des notifications"
@@ -1278,6 +1292,7 @@ Public Class Options
         CheckBox17.Checked = MainForm.AutoCompleteInfo(2)
         CheckBox18.Checked = MainForm.AutoCompleteInfo(3)
         CheckBox19.Checked = MainForm.AutoCompleteInfo(4)
+        CheckBox20.Checked = MainForm.GoToNewView
     End Sub
 
     Private Sub ComboBox5_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox5.SelectedIndexChanged

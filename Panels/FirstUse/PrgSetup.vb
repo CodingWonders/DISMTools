@@ -165,6 +165,14 @@ Public Class PrgSetup
                 MainForm.LogFontSize = NumericUpDown1.Value
                 MainForm.LogFontIsBold = Toggle1.Checked
                 MainForm.ProgressPanelStyle = If(RadioButton1.Checked, 1, 0)
+                MainForm.GoToNewView = CheckBox2.Checked
+                If MainForm.GoToNewView Then
+                    MainForm.ProjectView.Visible = True
+                    MainForm.SplitPanels.Visible = False
+                Else
+                    MainForm.ProjectView.Visible = False
+                    MainForm.SplitPanels.Visible = True
+                End If
                 WelcomePanel.Visible = False
                 CustomizationPanel.Visible = False
                 LogsPanel.Visible = True
@@ -380,6 +388,7 @@ Public Class PrgSetup
                 Label26.Text = "Stay up to date to receive new features and an improved experience"
                 Label27.Text = "Get started with DISMTools and image servicing, so you can get around quicker"
                 Label28.Text = "Secondary progress panel style:"
+                Label29.Text = "This font may not be readable on log windows. While you can still use it, we recommend monospaced fonts for increased readability."
                 Back_Button.Text = "Back"
                 Next_Button.Text = "Next"
                 Cancel_Button.Text = "Cancel"
@@ -389,6 +398,7 @@ Public Class PrgSetup
                 Button6.Text = "Get started"
                 Button7.Text = "Check for updates"
                 CheckBox1.Text = "Automatically create logs in the program's log directory"
+                CheckBox2.Text = "Use the new project view design"
                 RadioButton1.Text = "Modern"
                 RadioButton2.Text = "Classic"
                 SaveFileDialog1.Title = "Specify the log file"
@@ -427,6 +437,7 @@ Public Class PrgSetup
                 Label26.Text = "Manténgase al día para recibir nuevas características y una experiencia mejorada"
                 Label27.Text = "Aprenda DISMTools y el servicio de imágenes para poder manejarse mejor"
                 Label28.Text = "Estilo del panel de progreso secundario:"
+                Label29.Text = "Esta fuente podría no ser legible en ventanas de registro. Aunque todavía pueda utilizarla, le recomendamos fuentes monoespaciadas para una legibilidad aumentada."
                 Back_Button.Text = "Atrás"
                 Next_Button.Text = "Siguiente"
                 Cancel_Button.Text = "Cancelar"
@@ -436,6 +447,7 @@ Public Class PrgSetup
                 Button6.Text = "Comenzar"
                 Button7.Text = "Comprobar actualizaciones"
                 CheckBox1.Text = "Crear archivos de registro automáticamente en la carpeta de registros del programa"
+                CheckBox2.Text = "Utilizar el nuevo diseño de la vista de proyectos"
                 RadioButton1.Text = "Moderno"
                 RadioButton2.Text = "Clásico"
                 SaveFileDialog1.Title = "Especifique el archivo de registro"
@@ -474,6 +486,7 @@ Public Class PrgSetup
                 Label26.Text = "Restez à jour pour recevoir de nouvelles caractéristiques et une expérience améliorée."
                 Label27.Text = "Commencez à utiliser DISMTools et le service d'images, afin de vous déplacer plus rapidement."
                 Label28.Text = "Style du panneau de progression secondaire :"
+                Label29.Text = "Cette police peut ne pas être lisible sur les fenêtres logiques. Bien que vous puissiez encore l'utiliser, nous recommandons les polices monospaces pour une meilleure lisibilité."
                 Back_Button.Text = "Retour"
                 Next_Button.Text = "Suivant"
                 Cancel_Button.Text = "Annuler"
@@ -483,6 +496,7 @@ Public Class PrgSetup
                 Button6.Text = "Commencer"
                 Button7.Text = "Mettre à jour les données"
                 CheckBox1.Text = "Créer automatiquement des journaux dans le répertoire des journaux du programme"
+                CheckBox2.Text = "Utiliser le nouveau design de la vue du projet"
                 RadioButton1.Text = "Moderne"
                 RadioButton2.Text = "Classique"
                 SaveFileDialog1.Title = "Spécifier le fichier journal"
@@ -534,7 +548,27 @@ Public Class PrgSetup
         MainForm.LogFont = ComboBox3.SelectedItem
         MainForm.LogFontSize = NumericUpDown1.Value
         MainForm.LogFontIsBold = Toggle1.Checked
+        Panel9.Visible = Not IsMonospacedFont(ComboBox3.Text)
     End Sub
+
+    Function IsMonospacedFont(ftName As String) As Boolean
+        Using testFont As Font = New Font(ftName, 10)
+            Dim widthI As Decimal = MeasureCharacterWidth(testFont, "i")
+            Dim widthW As Decimal = MeasureCharacterWidth(testFont, "w")
+            Return widthI = widthW
+        End Using
+        Return False
+    End Function
+
+    Function MeasureCharacterWidth(ft As Font, character As Char) As Decimal
+        Using bmp As Bitmap = New Bitmap(1, 1)
+            Using g As Graphics = Graphics.FromImage(bmp)
+                Dim size As SizeF = g.MeasureString(character.ToString(), ft)
+                Return size.Width
+            End Using
+        End Using
+        Return 0
+    End Function
 
     Private Sub Toggle1_CheckedChanged(sender As Object, e As EventArgs) Handles Toggle1.CheckedChanged
         TextBox1.Font = New Font(ComboBox3.Text, NumericUpDown1.Value, If(Toggle1.Checked, FontStyle.Bold, FontStyle.Regular))

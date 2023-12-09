@@ -12,6 +12,7 @@ Public Class MainForm
 
     ' Argument variables
     Dim branch As String
+    Dim pid As Integer = -1
 
     ' Progress variables
     Dim msg As String
@@ -113,6 +114,7 @@ Public Class MainForm
         Else
             Dim args() As String = Environment.GetCommandLineArgs()
             branch = args(1).Replace("/", "").Trim()
+            If Environment.GetCommandLineArgs.Length = 3 Then pid = args(2).Replace("/pid=", "").Trim()
         End If
     End Sub
 
@@ -311,6 +313,26 @@ Public Class MainForm
     End Sub
 
     Sub CloseMainProcess()
+        ' New method
+        If pid <> -1 Then
+            Dim Procs As Process = Process.GetProcessById(pid)
+            Procs.CloseMainWindow()
+            Do Until Procs.HasExited
+                Application.DoEvents()
+                Threading.Thread.Sleep(500)
+            Loop
+            Exit Sub
+        Else
+            Dim Procs() As Process = Process.GetProcessesByName("DISMTools")
+            For Each Proc As Process In Procs
+                Proc.CloseMainWindow()
+                Do Until Proc.HasExited
+                    Application.DoEvents()
+                    Threading.Thread.Sleep(500)
+                Loop
+            Next
+            Exit Sub
+        End If
         Dim Closer As New Process()
         Closer.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
         Closer.StartInfo.Arguments = "-command Get-Process DISMTools | Foreach-Object { $_.CloseMainWindow() | Out-Null }"
@@ -352,8 +374,17 @@ Public Class MainForm
     End Sub
 
     Sub InstallNewVersion()
-        If Not IsPortable And File.Exists(Application.StartupPath & "\dt_setup.exe") Then
-            Process.Start(Application.StartupPath & "\dt_setup.exe", "/VERYSILENT /SUPPRESSMSGBOXES").WaitForExit()
+        If Not IsPortable And File.Exists(Application.StartupPath & "\new\dt_setup.exe") Then
+            Dim Installer As New Process()
+            Installer.StartInfo.FileName = Application.StartupPath & "\new\dt_setup.exe"
+            Installer.StartInfo.Arguments = "/VERYSILENT /SUPPRESSMSGBOXES"
+            Installer.StartInfo.CreateNoWindow = True
+            Installer.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+            Installer.Start()
+            Installer.WaitForExit()
+            If Installer.ExitCode <> 0 Then
+                Debug.WriteLine("An error occured installing the new version.")
+            End If
             Exit Sub
         End If
         Dim Updater As New Process()
@@ -381,6 +412,7 @@ Public Class MainForm
             File.SetAttributes(Application.StartupPath & "\portable", FileAttributes.Normal)
             File.Delete(Application.StartupPath & "\portable")
         Else
+            If Not File.Exists(Application.StartupPath & "\portable") Then Exit Sub
             If Not File.GetAttributes(Application.StartupPath & "\portable") = FileAttributes.Hidden Then
                 File.SetAttributes(Application.StartupPath & "\portable", FileAttributes.Hidden)
             End If
