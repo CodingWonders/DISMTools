@@ -59,6 +59,8 @@ Partial Class MainForm
         Me.Label15 = New System.Windows.Forms.Label()
         Me.ReleaseFetcherBW = New System.ComponentModel.BackgroundWorker()
         Me.UpdaterBW = New System.ComponentModel.BackgroundWorker()
+        Me.Panel5 = New System.Windows.Forms.Panel()
+        Me.Panel2 = New System.Windows.Forms.Panel()
         Me.btnControlPanel.SuspendLayout()
         Me.wndControlPanel.SuspendLayout()
         CType(Me.minBox, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -90,9 +92,10 @@ Partial Class MainForm
         Me.btnControlPanel.BackgroundImage = Global.DISMTools_UCS.My.Resources.Resources.wndPanel_Backdrop
         Me.btnControlPanel.Controls.Add(Me.Label1)
         Me.btnControlPanel.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.btnControlPanel.Location = New System.Drawing.Point(0, 664)
+        Me.btnControlPanel.ForeColor = System.Drawing.Color.White
+        Me.btnControlPanel.Location = New System.Drawing.Point(0, 672)
         Me.btnControlPanel.Name = "btnControlPanel"
-        Me.btnControlPanel.Size = New System.Drawing.Size(960, 48)
+        Me.btnControlPanel.Size = New System.Drawing.Size(1280, 48)
         Me.btnControlPanel.TabIndex = 3
         '
         'wndControlPanel
@@ -103,9 +106,10 @@ Partial Class MainForm
         Me.wndControlPanel.Controls.Add(Me.minBox)
         Me.wndControlPanel.Controls.Add(Me.closeBox)
         Me.wndControlPanel.Dock = System.Windows.Forms.DockStyle.Top
+        Me.wndControlPanel.ForeColor = System.Drawing.Color.White
         Me.wndControlPanel.Location = New System.Drawing.Point(0, 0)
         Me.wndControlPanel.Name = "wndControlPanel"
-        Me.wndControlPanel.Size = New System.Drawing.Size(960, 48)
+        Me.wndControlPanel.Size = New System.Drawing.Size(1280, 48)
         Me.wndControlPanel.TabIndex = 2
         '
         'Label2
@@ -122,7 +126,7 @@ Partial Class MainForm
         'minBox
         '
         Me.minBox.Image = Global.DISMTools_UCS.My.Resources.Resources.minBox
-        Me.minBox.Location = New System.Drawing.Point(869, 0)
+        Me.minBox.Location = New System.Drawing.Point(1189, 0)
         Me.minBox.Name = "minBox"
         Me.minBox.Size = New System.Drawing.Size(46, 32)
         Me.minBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
@@ -132,7 +136,7 @@ Partial Class MainForm
         'closeBox
         '
         Me.closeBox.Image = Global.DISMTools_UCS.My.Resources.Resources.closebox
-        Me.closeBox.Location = New System.Drawing.Point(914, 0)
+        Me.closeBox.Location = New System.Drawing.Point(1234, 0)
         Me.closeBox.Name = "closeBox"
         Me.closeBox.Size = New System.Drawing.Size(46, 32)
         Me.closeBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
@@ -141,15 +145,16 @@ Partial Class MainForm
         '
         'WelcomePanel
         '
-        Me.WelcomePanel.BackColor = System.Drawing.Color.Transparent
+        Me.WelcomePanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(239, Byte), Integer), CType(CType(239, Byte), Integer), CType(CType(242, Byte), Integer))
         Me.WelcomePanel.Controls.Add(Me.Panel1)
         Me.WelcomePanel.Controls.Add(Me.Label4)
         Me.WelcomePanel.Controls.Add(Me.ProgressBar1)
         Me.WelcomePanel.Controls.Add(Me.Label3)
         Me.WelcomePanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.WelcomePanel.Location = New System.Drawing.Point(0, 48)
+        Me.WelcomePanel.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.WelcomePanel.Location = New System.Drawing.Point(200, 48)
         Me.WelcomePanel.Name = "WelcomePanel"
-        Me.WelcomePanel.Size = New System.Drawing.Size(960, 616)
+        Me.WelcomePanel.Size = New System.Drawing.Size(880, 624)
         Me.WelcomePanel.TabIndex = 4
         '
         'Panel1
@@ -159,16 +164,17 @@ Partial Class MainForm
         Me.Panel1.Controls.Add(Me.Label6)
         Me.Panel1.Controls.Add(Me.Label7)
         Me.Panel1.Controls.Add(Me.Label5)
-        Me.Panel1.Location = New System.Drawing.Point(30, 68)
+        Me.Panel1.Location = New System.Drawing.Point(33, 68)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(900, 475)
+        Me.Panel1.Size = New System.Drawing.Size(814, 475)
         Me.Panel1.TabIndex = 4
         Me.Panel1.Visible = False
         '
         'Button1
         '
+        Me.Button1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button1.Location = New System.Drawing.Point(810, 439)
+        Me.Button1.Location = New System.Drawing.Point(724, 439)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 2
@@ -179,6 +185,7 @@ Partial Class MainForm
         '
         Me.LinkLabel1.AutoSize = True
         Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
         Me.LinkLabel1.Location = New System.Drawing.Point(19, 439)
         Me.LinkLabel1.Name = "LinkLabel1"
         Me.LinkLabel1.Size = New System.Drawing.Size(103, 15)
@@ -188,10 +195,12 @@ Partial Class MainForm
         '
         'Label6
         '
+        Me.Label6.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label6.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label6.Location = New System.Drawing.Point(0, 42)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(900, 42)
+        Me.Label6.Size = New System.Drawing.Size(814, 42)
         Me.Label6.TabIndex = 0
         Me.Label6.Text = "Version information"
         Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -228,7 +237,7 @@ Partial Class MainForm
         '
         Me.ProgressBar1.Location = New System.Drawing.Point(30, 568)
         Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(900, 23)
+        Me.ProgressBar1.Size = New System.Drawing.Size(817, 23)
         Me.ProgressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee
         Me.ProgressBar1.TabIndex = 2
         '
@@ -244,7 +253,7 @@ Partial Class MainForm
         '
         'UpdatePanel
         '
-        Me.UpdatePanel.BackColor = System.Drawing.Color.Transparent
+        Me.UpdatePanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(239, Byte), Integer), CType(CType(239, Byte), Integer), CType(CType(242, Byte), Integer))
         Me.UpdatePanel.Controls.Add(Me.PictureBox1)
         Me.UpdatePanel.Controls.Add(Me.PictureBox2)
         Me.UpdatePanel.Controls.Add(Me.PictureBox3)
@@ -258,9 +267,10 @@ Partial Class MainForm
         Me.UpdatePanel.Controls.Add(Me.Label9)
         Me.UpdatePanel.Controls.Add(Me.Label8)
         Me.UpdatePanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.UpdatePanel.Location = New System.Drawing.Point(0, 48)
+        Me.UpdatePanel.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.UpdatePanel.Location = New System.Drawing.Point(200, 48)
         Me.UpdatePanel.Name = "UpdatePanel"
-        Me.UpdatePanel.Size = New System.Drawing.Size(960, 616)
+        Me.UpdatePanel.Size = New System.Drawing.Size(880, 624)
         Me.UpdatePanel.TabIndex = 4
         Me.UpdatePanel.Visible = False
         '
@@ -386,22 +396,23 @@ Partial Class MainForm
         '
         'FinishPanel
         '
-        Me.FinishPanel.BackColor = System.Drawing.Color.Transparent
+        Me.FinishPanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(239, Byte), Integer), CType(CType(239, Byte), Integer), CType(CType(242, Byte), Integer))
         Me.FinishPanel.Controls.Add(Me.Button2)
         Me.FinishPanel.Controls.Add(Me.Label17)
         Me.FinishPanel.Controls.Add(Me.Label16)
         Me.FinishPanel.Controls.Add(Me.Label15)
         Me.FinishPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.FinishPanel.Location = New System.Drawing.Point(0, 48)
+        Me.FinishPanel.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.FinishPanel.Location = New System.Drawing.Point(200, 48)
         Me.FinishPanel.Name = "FinishPanel"
-        Me.FinishPanel.Size = New System.Drawing.Size(960, 616)
+        Me.FinishPanel.Size = New System.Drawing.Size(880, 624)
         Me.FinishPanel.TabIndex = 4
         Me.FinishPanel.Visible = False
         '
         'Button2
         '
         Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button2.Location = New System.Drawing.Point(840, 507)
+        Me.Button2.Location = New System.Drawing.Point(772, 568)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 5
@@ -447,20 +458,40 @@ Partial Class MainForm
         Me.UpdaterBW.WorkerReportsProgress = True
         Me.UpdaterBW.WorkerSupportsCancellation = True
         '
+        'Panel5
+        '
+        Me.Panel5.BackColor = System.Drawing.Color.Transparent
+        Me.Panel5.Dock = System.Windows.Forms.DockStyle.Left
+        Me.Panel5.Location = New System.Drawing.Point(0, 48)
+        Me.Panel5.Name = "Panel5"
+        Me.Panel5.Size = New System.Drawing.Size(200, 624)
+        Me.Panel5.TabIndex = 5
+        '
+        'Panel2
+        '
+        Me.Panel2.BackColor = System.Drawing.Color.Transparent
+        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Right
+        Me.Panel2.Location = New System.Drawing.Point(1080, 48)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(200, 624)
+        Me.Panel2.TabIndex = 6
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackgroundImage = Global.DISMTools_UCS.My.Resources.Resources.dt_bgbranding
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.ClientSize = New System.Drawing.Size(960, 712)
+        Me.ClientSize = New System.Drawing.Size(1280, 720)
         Me.Controls.Add(Me.WelcomePanel)
         Me.Controls.Add(Me.UpdatePanel)
         Me.Controls.Add(Me.FinishPanel)
+        Me.Controls.Add(Me.Panel5)
+        Me.Controls.Add(Me.Panel2)
         Me.Controls.Add(Me.btnControlPanel)
         Me.Controls.Add(Me.wndControlPanel)
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ForeColor = System.Drawing.Color.White
+        Me.ForeColor = System.Drawing.SystemColors.ControlText
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "MainForm"
@@ -523,5 +554,7 @@ Partial Class MainForm
     Friend WithEvents Label17 As System.Windows.Forms.Label
     Friend WithEvents Label16 As System.Windows.Forms.Label
     Friend WithEvents Label15 As System.Windows.Forms.Label
+    Friend WithEvents Panel5 As System.Windows.Forms.Panel
+    Friend WithEvents Panel2 As System.Windows.Forms.Panel
 
 End Class

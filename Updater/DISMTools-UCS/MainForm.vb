@@ -2,6 +2,7 @@
 Imports System.Net
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.IO.Compression
+Imports Microsoft.Win32
 
 Public Class MainForm
 
@@ -25,6 +26,12 @@ Public Class MainForm
     Dim ReleaseDownloader As New WebClient()
 
     Dim IsPortable As Boolean
+
+    Dim dwArgs As DownloadProgressChangedEventArgs
+
+    Dim FileCount As Integer = 0
+    Dim CopiedFiles As Integer = 0
+    Dim BackupOp As Boolean = True
 
     Private Sub minBox_MouseEnter(sender As Object, e As EventArgs) Handles minBox.MouseEnter
         minBox.Image = My.Resources.minBox_focus
@@ -104,8 +111,65 @@ Public Class MainForm
         Label1.Text = "DISMTools Update Check System - Version " & Application.ProductVersion
         If Directory.Exists(Application.StartupPath & "\new") Then Directory.Delete(Application.StartupPath & "\new", True)
         GetArguments()
+        Try
+            Dim ColorModeRk As RegistryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize")
+            Dim ColorMode As String = ColorModeRk.GetValue("AppsUseLightTheme").ToString()
+            ColorModeRk.Close()
+            If ColorMode = "0" Then
+                ForeColor = Color.White
+                PictureBox1.Image = My.Resources.check_dark
+                PictureBox2.Image = My.Resources.check_dark
+                PictureBox3.Image = My.Resources.check_dark
+                PictureBox4.Image = My.Resources.check_dark
+                WelcomePanel.BackColor = Color.FromArgb(48, 48, 48)
+                UpdatePanel.BackColor = Color.FromArgb(48, 48, 48)
+                FinishPanel.BackColor = Color.FromArgb(48, 48, 48)
+                WelcomePanel.ForeColor = Color.White
+                UpdatePanel.ForeColor = Color.White
+                FinishPanel.ForeColor = Color.White
+            ElseIf ColorMode = "1" Then
+                ForeColor = Color.Black
+                PictureBox1.Image = My.Resources.check
+                PictureBox2.Image = My.Resources.check
+                PictureBox3.Image = My.Resources.check
+                PictureBox4.Image = My.Resources.check
+                WelcomePanel.BackColor = Color.FromArgb(239, 239, 242)
+                UpdatePanel.BackColor = Color.FromArgb(239, 239, 242)
+                FinishPanel.BackColor = Color.FromArgb(239, 239, 242)
+                WelcomePanel.ForeColor = Color.Black
+                UpdatePanel.ForeColor = Color.Black
+                FinishPanel.ForeColor = Color.Black
+            End If
+        Catch ex As Exception
+            ForeColor = Color.Black
+            PictureBox1.Image = My.Resources.check
+            PictureBox2.Image = My.Resources.check
+            PictureBox3.Image = My.Resources.check
+            PictureBox4.Image = My.Resources.check
+            WelcomePanel.BackColor = Color.FromArgb(239, 239, 242)
+            UpdatePanel.BackColor = Color.FromArgb(239, 239, 242)
+            FinishPanel.BackColor = Color.FromArgb(239, 239, 242)
+            WelcomePanel.ForeColor = Color.Black
+            UpdatePanel.ForeColor = Color.Black
+            FinishPanel.ForeColor = Color.Black
+        End Try
+
+        If Not Environment.OSVersion.Version.Major >= 10 Or Not (DetectFont("Segoe UI Variable Display Semib") Or DetectFont("Segoe UI Variable Semib")) Then
+            Label3.Font = New Font("Segoe UI", Label3.Font.Size, FontStyle.Regular)
+            Label8.Font = New Font("Segoe UI", Label8.Font.Size, FontStyle.Regular)
+            Label15.Font = New Font("Segoe UI", Label15.Font.Size, FontStyle.Regular)
+        End If
         ReleaseFetcherBW.RunWorkerAsync()
     End Sub
+
+    Function DetectFont(FontName As String) As Boolean
+        For Each fntFamily As FontFamily In FontFamily.Families
+            If fntFamily.Name = FontName Then
+                Return True
+            End If
+        Next
+        Return False
+    End Function
 
     Sub GetArguments()
         If Environment.GetCommandLineArgs.Length = 1 Then
@@ -114,7 +178,9 @@ Public Class MainForm
         Else
             Dim args() As String = Environment.GetCommandLineArgs()
             branch = args(1).Replace("/", "").Trim()
-            If Environment.GetCommandLineArgs.Length = 3 Then pid = args(2).Replace("/pid=", "").Trim()
+            If Environment.GetCommandLineArgs.Length >= 3 Then
+                If args(2).StartsWith("/pid=", StringComparison.OrdinalIgnoreCase) Then pid = args(2).Replace("/pid=", "").Trim()
+            End If
         End If
     End Sub
 
@@ -208,8 +274,9 @@ Public Class MainForm
         Label12.Font = New Font("Segoe UI", 9, FontStyle.Regular)
         Label13.Font = New Font("Segoe UI", 9, FontStyle.Regular)
         UpdaterBW.ReportProgress(5)
-        DownloadRelease(relTag)
-        msg = "Extracting the release..."
+        DownloadAsync().Wait()
+        Threading.Thread.Sleep(500)
+        Label10.Text = "Downloading the update"
         Label10.ForeColor = Color.Gray
         Label11.ForeColor = ForeColor
         Label12.ForeColor = Color.Gray
@@ -222,11 +289,8 @@ Public Class MainForm
         PictureBox2.Visible = False
         PictureBox3.Visible = False
         PictureBox4.Visible = False
-        UpdaterBW.ReportProgress(25)
-        ExpandContents()
-        msg = "Closing the program..."
-        UpdaterBW.ReportProgress(47.5)
-        CloseMainProcess()
+        PrepareUpdateInstallation()
+        Label11.Text = "Preparing update installation"
         Label10.ForeColor = Color.Gray
         Label11.ForeColor = Color.Gray
         Label12.ForeColor = ForeColor
@@ -239,15 +303,12 @@ Public Class MainForm
         PictureBox2.Visible = True
         PictureBox3.Visible = False
         PictureBox4.Visible = False
-        msg = "Backing up old installation..."
-        UpdaterBW.ReportProgress(50)
-        BackupInstallation()
-        msg = "Deleting files..."
-        UpdaterBW.ReportProgress(62.5)
-        DeleteInstallation()
-        msg = "Copying files..."
-        UpdaterBW.ReportProgress(70)
-        InstallNewVersion()
+        InstallUpdate()
+        Label12.Text = "Installing the update"
+        PictureBox1.Visible = True
+        PictureBox2.Visible = True
+        PictureBox3.Visible = True
+        PictureBox4.Visible = False
         Label10.ForeColor = Color.Gray
         Label11.ForeColor = Color.Gray
         Label12.ForeColor = Color.Gray
@@ -256,10 +317,6 @@ Public Class MainForm
         Label11.Font = New Font("Segoe UI", 9, FontStyle.Regular)
         Label12.Font = New Font("Segoe UI", 9, FontStyle.Regular)
         Label13.Font = New Font("Segoe UI", 9, FontStyle.Bold)
-        PictureBox1.Visible = True
-        PictureBox2.Visible = True
-        PictureBox3.Visible = True
-        PictureBox4.Visible = False
         msg = "Deleting backup files..."
         UpdaterBW.ReportProgress(87.5)
         CleanBackupFiles()
@@ -297,19 +354,84 @@ Public Class MainForm
         ReleaseDownloader.DownloadFile("https://github.com/CodingWonders/DISMTools/releases/download/" & ReleaseTag & "/" & If(IsPortable, "DISMTools.zip", "dt_setup.exe"), Application.StartupPath & "\new\" & If(IsPortable, "DISMTools.zip", "dt_setup.exe"))
     End Sub
 
+    Async Function DownloadReleaseAsync(url As String, path As String, worker As System.ComponentModel.BackgroundWorker) As Task(Of Integer)
+        AddHandler ReleaseDownloader.DownloadProgressChanged, Sub(sender, e)
+                                                                  Label10.Text = "Downloading the update (" & e.ProgressPercentage & "%)"
+                                                                  dwArgs = e
+                                                                  worker.ReportProgress(e.ProgressPercentage)
+                                                              End Sub
+        Dim data As Byte() = Await ReleaseDownloader.DownloadDataTaskAsync(url)
+        File.WriteAllBytes(path, data)
+        Return data.Length
+    End Function
+
+    Async Function DownloadAsync() As Task
+        Dim dwWorker As New System.ComponentModel.BackgroundWorker()
+        dwWorker.WorkerReportsProgress = True
+        AddHandler dwWorker.ProgressChanged, Sub(sender, e)
+                                                 msg = "Downloading updated program files..."
+                                                 UpdaterBW.ReportProgress(0)
+                                             End Sub
+        AddHandler dwWorker.RunWorkerCompleted, Sub(sender, e)
+                                                    If e.Error IsNot Nothing Then
+                                                        ChangeSteps(2, False)
+                                                    Else
+                                                        ChangeSteps(2, True)
+                                                    End If
+                                                End Sub
+        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+        If Not Directory.Exists(Application.StartupPath & "\new") Then Directory.CreateDirectory(Application.StartupPath & "\new")
+        Dim bytes As Integer = Await DownloadReleaseAsync("https://github.com/CodingWonders/DISMTools/releases/download/" & relTag & "/" & If(IsPortable, "DISMTools.zip", "dt_setup.exe"), Application.StartupPath & "\new\" & If(IsPortable, "DISMTools.zip", "dt_setup.exe"), dwWorker)
+    End Function
+
+    Sub PrepareUpdateInstallation()
+        If IsPortable Then
+            msg = "Extracting the release..."
+            UpdaterBW.ReportProgress(25)
+            ExpandContents()
+        End If
+        Label11.Text = "Preparing update installation (80%)"
+        msg = "Waiting for processes to close..."
+        UpdaterBW.ReportProgress(47.5)
+        CloseMainProcess()
+        Threading.Thread.Sleep(500)
+    End Sub
+
+    Sub InstallUpdate()
+        msg = "Backing up old installation..."
+        UpdaterBW.ReportProgress(50)
+        BackupInstallation()
+        msg = "Deleting files..."
+        UpdaterBW.ReportProgress(62.5)
+        DeleteInstallation()
+        Threading.Thread.Sleep(1000)
+        msg = "Copying files..."
+        UpdaterBW.ReportProgress(70)
+        InstallNewVersion()
+        Threading.Thread.Sleep(500)
+    End Sub
+
     Sub ExpandContents()
         If Not IsPortable Then Exit Sub
-        Dim Expander As New Process()
-        Expander.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
-        Expander.StartInfo.Arguments = "-command Expand-Archive -Path '" & Application.StartupPath & "\new\DISMTools.zip' -DestinationPath '" & Application.StartupPath & "\new'"
-        Expander.StartInfo.CreateNoWindow = True
-        Expander.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-        Expander.Start()
-        Expander.WaitForExit()
-        If Expander.ExitCode <> 0 Then
-            ZipFile.ExtractToDirectory(Application.StartupPath & "\new\DISMTools.zip", Application.StartupPath & "\new")
-        End If
-        File.Delete(Application.StartupPath & "\new\DISMTools.zip")
+        Try
+            Using archive As ZipArchive = ZipFile.OpenRead(Application.StartupPath & "\new\DISMTools.zip")
+                Dim TotalEntries As Integer = archive.Entries.Count
+                Dim ExtractedEntries As Integer = 0
+                For Each entry As ZipArchiveEntry In archive.Entries
+                    Dim dest As String = Path.Combine(Application.StartupPath & "\new", entry.FullName.Replace("/", "\").Trim())
+                    Debug.WriteLine(dest)
+                    Directory.CreateDirectory(Path.GetDirectoryName(dest))
+                    If Not entry.FullName.EndsWith("/", StringComparison.OrdinalIgnoreCase) Then
+                        ZipFileExtensions.ExtractToFile(entry, dest)
+                    End If
+                    ExtractedEntries += 1
+                    Dim progress As Double = CDbl(ExtractedEntries / TotalEntries)
+                    Label11.Text = "Preparing update installation (" & Math.Round(80 * progress, 0) & "%)"
+                Next
+            End Using
+        Catch ex As Exception
+
+        End Try
     End Sub
 
     Sub CloseMainProcess()
@@ -321,6 +443,7 @@ Public Class MainForm
                 Application.DoEvents()
                 Threading.Thread.Sleep(500)
             Loop
+            Label11.Text = "Preparing update installation (100%)"
             Exit Sub
         Else
             Dim Procs() As Process = Process.GetProcessesByName("DISMTools")
@@ -331,36 +454,58 @@ Public Class MainForm
                     Threading.Thread.Sleep(500)
                 Loop
             Next
+            Label11.Text = "Preparing update installation (100%)"
             Exit Sub
         End If
-        Dim Closer As New Process()
-        Closer.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
-        Closer.StartInfo.Arguments = "-command Get-Process DISMTools | Foreach-Object { $_.CloseMainWindow() | Out-Null }"
-        Closer.StartInfo.CreateNoWindow = True
-        Closer.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-        Closer.Start()
-        Closer.WaitForExit()
     End Sub
 
     Sub BackupInstallation()
-        Dim Backupper As New Process()
-        Backupper.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
-        Backupper.StartInfo.CreateNoWindow = True
-        Backupper.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+        Label12.Text = "Installing the update (0%)"
+        FileCount = Directory.GetFiles(Application.StartupPath, "*", SearchOption.AllDirectories).Length
+        CopiedFiles = 0
+        FileCount -= (1 + If(Directory.Exists(Application.StartupPath & "\logs"), Directory.GetFiles(Application.StartupPath & "\logs", "*", SearchOption.AllDirectories).Length, 0) + _
+                      If(Directory.Exists(Application.StartupPath & "\new"), Directory.GetFiles(Application.StartupPath & "\new", "*", SearchOption.AllDirectories).Length, 0))
         If Not Directory.Exists(Application.StartupPath & "\old") Then Directory.CreateDirectory(Application.StartupPath & "\old")
         Directory.CreateDirectory(Application.StartupPath & "\old\Resources")
         Directory.CreateDirectory(Application.StartupPath & "\old\bin")
-        Backupper.StartInfo.Arguments = "-command Copy-Item -Path *.dll -Destination '" & Application.StartupPath & "\old'"
-        Backupper.Start()
-        Backupper.WaitForExit()
-        Backupper.StartInfo.Arguments = "-command Copy-Item -Path '" & Application.StartupPath & "\Resources' -Destination '" & Application.StartupPath & "\old\Resources' -Recurse -Force"
-        Backupper.Start()
-        Backupper.WaitForExit()
-        Backupper.StartInfo.Arguments = "-command Copy-Item -Path '" & Application.StartupPath & "\bin' -Destination '" & Application.StartupPath & "\old\bin' -Recurse -Force"
-        Backupper.Start()
-        Backupper.WaitForExit()
+        For Each DLLFile In Directory.GetFiles(Application.StartupPath, "*.dll")
+            File.Copy(DLLFile, Path.Combine(Application.StartupPath, "old", Path.GetFileName(DLLFile)), True)
+            CopiedFiles += 1
+            Label12.Text = "Installing the update (" & Math.Round(30 * (CopiedFiles / FileCount), 0) & "%)"
+        Next
+        DirCopy(Application.StartupPath & "\Resources", Application.StartupPath & "\old\Resources", True, False)
+        DirCopy(Application.StartupPath & "\bin", Application.StartupPath & "\old\bin", True, False)
+        DirCopy(Application.StartupPath & "\docs", Application.StartupPath & "\old\docs", True, False)
         File.Copy(Application.StartupPath & "\LICENSE", Application.StartupPath & "\old\LICENSE")
         File.Copy(Application.StartupPath & "\DISMTools.exe", Application.StartupPath & "\old\DISMTools.exe")
+        CopiedFiles += 2
+        Label12.Text = "Installing the update (" & Math.Round(30 * (CopiedFiles / FileCount), 0) & "%)"
+    End Sub
+
+    Sub DirCopy(sourceDir As String, destDir As String, ovr As Boolean, Backup As Boolean)
+        Try
+            Dim dir As DirectoryInfo = New DirectoryInfo(sourceDir)
+            If Not dir.Exists Then
+                Throw New DirectoryNotFoundException("The directory could not be found")
+            End If
+            Dim files As FileInfo() = dir.GetFiles()
+            If Not Directory.Exists(destDir) Then
+                Directory.CreateDirectory(destDir)
+            End If
+            For Each DirFile As FileInfo In files
+                Dim tempPath As String = Path.Combine(destDir, DirFile.Name)
+                DirFile.CopyTo(tempPath, ovr)
+                CopiedFiles += 1
+                Label12.Text = "Installing the update (" & If(Backup, Math.Round(30 * (CopiedFiles / FileCount), 0), 30 + Math.Round(70 * (CopiedFiles / FileCount), 0)) & "%)"
+            Next
+            Dim dirs As DirectoryInfo() = dir.GetDirectories()
+            For Each subDir As DirectoryInfo In dirs
+                Dim tempPath As String = Path.Combine(destDir, subDir.Name)
+                DirCopy(subDir.FullName, tempPath, ovr, BackupOp)
+            Next
+        Catch ex As Exception
+
+        End Try
     End Sub
 
     Sub DeleteInstallation()
@@ -374,6 +519,7 @@ Public Class MainForm
     End Sub
 
     Sub InstallNewVersion()
+        BackupOp = False
         If Not IsPortable And File.Exists(Application.StartupPath & "\new\dt_setup.exe") Then
             Dim Installer As New Process()
             Installer.StartInfo.FileName = Application.StartupPath & "\new\dt_setup.exe"
@@ -385,27 +531,23 @@ Public Class MainForm
             If Installer.ExitCode <> 0 Then
                 Debug.WriteLine("An error occured installing the new version.")
             End If
+            Label12.Text = "Installing the update (100%)"
             Exit Sub
         End If
-        Dim Updater As New Process()
-        Updater.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
-        Updater.StartInfo.WorkingDirectory = Application.StartupPath
-        If Not Debugger.IsAttached Then
-            Updater.StartInfo.CreateNoWindow = True
-            Updater.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-        End If
-        Updater.StartInfo.Arguments = "-command Copy-Item -Path '" & Application.StartupPath & "\new\*' -Exclude DISMTools.zip" & If(Debugger.IsAttached, " -Verbose", "")
-        Updater.Start()
-        Updater.WaitForExit()
-        Updater.StartInfo.Arguments = "-command Copy-Item -Path '" & Application.StartupPath & "\new\Resources' -Destination '" & Application.StartupPath & "' -Recurse -Force" & If(Debugger.IsAttached, " -Verbose", "")
-        Updater.Start()
-        Updater.WaitForExit()
-        Updater.StartInfo.Arguments = "-command Copy-Item -Path '" & Application.StartupPath & "\new\bin' -Destination '" & Application.StartupPath & "' -Recurse -Force" & If(Debugger.IsAttached, " -Verbose", "")
-        Updater.Start()
-        Updater.WaitForExit()
-        Updater.StartInfo.Arguments = "-command Copy-Item -Path '" & Application.StartupPath & "\new\docs' -Destination '" & Application.StartupPath & "' -Recurse -Force" & If(Debugger.IsAttached, " -Verbose", "")
-        Updater.Start()
-        Updater.WaitForExit()
+        ' Count everything in there except for DISMTools.zip and the portable file
+        FileCount = Directory.GetFiles(Application.StartupPath & "\new", "*", SearchOption.AllDirectories).Length - 2
+        CopiedFiles = 0
+        For Each rootFile In Directory.GetFiles(Application.StartupPath & "\new", "*", SearchOption.TopDirectoryOnly)
+            If Path.GetFileName(rootFile) <> "DISMTools.zip" And Path.GetFileName(rootFile) <> "portable" Then
+                File.Copy(rootFile, Path.Combine(Application.StartupPath, Path.GetFileName(rootFile)), True)
+                CopiedFiles += 1
+                Label12.Text = "Installing the update (" & 30 + Math.Round(70 * (CopiedFiles / FileCount), 0) & "%)"
+            End If
+        Next
+        DirCopy(Application.StartupPath & "\new\Resources", Application.StartupPath & "\Resources", True, False)
+        DirCopy(Application.StartupPath & "\new\bin", Application.StartupPath & "\bin", True, False)
+        DirCopy(Application.StartupPath & "\new\docs", Application.StartupPath & "\docs", True, False)
+        If IsPortable And Not File.Exists(Application.StartupPath & "\portable") Then File.Create(Application.StartupPath & "\portable")
     End Sub
 
     Sub CleanBackupFiles()
@@ -431,6 +573,57 @@ Public Class MainForm
         UpdatePanel.Visible = True
         FinishPanel.Visible = False
         UpdaterBW.RunWorkerAsync()
+    End Sub
+
+    Sub ChangeSteps(Steps As Integer, Success As Boolean)
+        Select Case Steps
+            Case 1
+                PictureBox1.Visible = False
+                PictureBox2.Visible = False
+                PictureBox3.Visible = False
+                PictureBox4.Visible = False
+                Label10.Font = New Font("Segoe UI", 9, FontStyle.Bold)
+                Label11.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label12.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label13.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+            Case 2
+                PictureBox1.Visible = True
+                PictureBox2.Visible = False
+                PictureBox3.Visible = False
+                PictureBox4.Visible = False
+                Label10.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label11.Font = New Font("Segoe UI", 9, FontStyle.Bold)
+                Label12.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label13.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+            Case 3
+                PictureBox1.Visible = True
+                PictureBox2.Visible = True
+                PictureBox3.Visible = False
+                PictureBox4.Visible = False
+                Label10.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label11.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label12.Font = New Font("Segoe UI", 9, FontStyle.Bold)
+                Label13.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+            Case 4
+                PictureBox1.Visible = True
+                PictureBox2.Visible = True
+                PictureBox3.Visible = True
+                PictureBox4.Visible = False
+                Label10.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label11.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label12.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label13.Font = New Font("Segoe UI", 9, FontStyle.Bold)
+            Case 5
+                PictureBox1.Visible = True
+                PictureBox2.Visible = True
+                PictureBox3.Visible = True
+                PictureBox4.Visible = True
+                Label10.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label11.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label12.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label13.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+        End Select
+        Refresh()
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
