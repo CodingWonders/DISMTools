@@ -27,8 +27,6 @@ Public Class MainForm
 
     Dim IsPortable As Boolean
 
-    Dim dwArgs As DownloadProgressChangedEventArgs
-
     Dim FileCount As Integer = 0
     Dim CopiedFiles As Integer = 0
     Dim BackupOp As Boolean = True
@@ -357,7 +355,6 @@ Public Class MainForm
     Async Function DownloadReleaseAsync(url As String, path As String, worker As System.ComponentModel.BackgroundWorker) As Task(Of Integer)
         AddHandler ReleaseDownloader.DownloadProgressChanged, Sub(sender, e)
                                                                   Label10.Text = "Downloading the update (" & e.ProgressPercentage & "%)"
-                                                                  dwArgs = e
                                                                   worker.ReportProgress(e.ProgressPercentage)
                                                               End Sub
         Dim data As Byte() = Await ReleaseDownloader.DownloadDataTaskAsync(url)
