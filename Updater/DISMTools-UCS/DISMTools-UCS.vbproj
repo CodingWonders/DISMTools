@@ -57,6 +57,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem">
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
@@ -165,6 +166,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\pucs_update.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\check_dark.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>

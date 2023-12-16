@@ -1099,25 +1099,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes
 
-- Fixed some issues in the new design:
-  - Fixed an issue where the program would not unmount read-only images when clicking "Unmount image"
-  - Fixed an issue where the program would not disable the commit operation buttons for read-only mounted images
-- The "Use mounted image" buttons are now disabled in online and offline installation management modes
-- The "Mount destination image for later use" check box is now disabled in online and offline installation management modes
-- Fixed an issue where the program could not capture an entire drive to an image file
+- Fixed background process panel positioning issues on Windows 8 hosts
+- Fixed an issue where projects could not be created from the offline installation management mode
 
 New features
 
-- Help documentation contents are now included. This is why the release assets have noticeably increased in size
-- The monospaced font detection procedure of the Options window has been ported to the initial setup wizard
-
 Update system
 
-- The process close functionality has been improved
-
-Removed features
-
-- The temporary help dialog in the AppX package removal dialog has been removed in favor of the help documentation contents</value>
+- The update system has been overhauled</value>
   </data>
   <data name="split_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\split_img.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

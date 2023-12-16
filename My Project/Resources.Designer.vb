@@ -1878,12 +1878,14 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''- Fixed some issues in the new design:
-        '''  - Fixed an issue where the program would not unmount read-only images when clicking &quot;Unmount image&quot;
-        '''  - Fixed an issue where the program would not disable the commit operation buttons for read-only mounted images
-        '''- The &quot;Use mounted image&quot; buttons are now disabled in online and offline installation management modes
-        '''- The &quot;Mount destination image for later use&quot; check box is now disabled in online and offline installation management modes
-        '''- Fixed an iss [resto de la cadena truncado]&quot;;.
+        '''- Fixed background process panel positioning issues on Windows 8 hosts
+        '''- Fixed an issue where projects could not be created from the offline installation management mode
+        '''
+        '''New features
+        '''
+        '''Update system
+        '''
+        '''- The update system has been overhauled.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

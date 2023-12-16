@@ -11163,7 +11163,7 @@ Public Class MainForm
                 If Environment.OSVersion.Version.Minor = 1 Then ' The same also applies to Windows 7
                     BGProcNotify.Location = New Point(Left + 8, Top + StatusStrip.Top - (7 + StatusStrip.Height))
                 Else
-                    BGProcNotify.Location = New Point(Left, Top + StatusStrip.Top - StatusStrip.Height)
+                    BGProcNotify.Location = New Point(Left + 8, Top + StatusStrip.Top - StatusStrip.Height - 7)
                 End If
             End If
         ElseIf BGProcDetails.Visible And pinState = 0 Then
@@ -11173,7 +11173,7 @@ Public Class MainForm
                 If Environment.OSVersion.Version.Minor = 1 Then ' The same also applies to Windows 7
                     BGProcDetails.Location = New Point(Left + 8, Top + StatusStrip.Top - (75 + StatusStrip.Height))
                 Else
-                    BGProcDetails.Location = New Point(Left, Top + StatusStrip.Top - StatusStrip.Height)
+                    BGProcDetails.Location = New Point(Left + 8, Top + StatusStrip.Top - StatusStrip.Height - 75)
                 End If
             End If
         End If
@@ -11235,7 +11235,7 @@ Public Class MainForm
                 If Environment.OSVersion.Version.Minor = 1 Then ' The same also applies to Windows 7
                     BGProcNotify.Location = New Point(Left + 8, Top + StatusStrip.Top - (7 + StatusStrip.Height))
                 Else
-                    BGProcNotify.Location = New Point(Left, Top + StatusStrip.Top - StatusStrip.Height)
+                    BGProcNotify.Location = New Point(Left + 8, Top + StatusStrip.Top - StatusStrip.Height - 7)
                 End If
             End If
         ElseIf BGProcDetails.Visible And pinState = 0 Then
@@ -11245,7 +11245,7 @@ Public Class MainForm
                 If Environment.OSVersion.Version.Minor = 1 Then ' The same also applies to Windows 7
                     BGProcDetails.Location = New Point(Left + 8, Top + StatusStrip.Top - (75 + StatusStrip.Height))
                 Else
-                    BGProcDetails.Location = New Point(Left, Top + StatusStrip.Top - StatusStrip.Height)
+                    BGProcDetails.Location = New Point(Left + 8, Top + StatusStrip.Top - StatusStrip.Height - 75)
                 End If
             End If
         End If
