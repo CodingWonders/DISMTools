@@ -406,10 +406,21 @@ Public Class MainForm
         Timer1.Enabled = True
         LinkLabel12.LinkColor = Color.FromArgb(241, 241, 241)
         LinkLabel13.LinkColor = Color.FromArgb(153, 153, 153)
-        Button17.Visible = EnableExperiments
-        If EnableExperiments Then
-            FeedWorker.RunWorkerAsync()
-            Timer2.Enabled = True
+        FeedWorker.RunWorkerAsync()
+        Timer2.Enabled = True
+        LinkLabel22.LinkColor = ForeColor
+        If GetStartedPanel.Visible Then
+            LinkLabel22.LinkColor = ForeColor
+            LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
+            LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
+        ElseIf LatestNewsPanel.Visible Then
+            LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
+            LinkLabel23.LinkColor = ForeColor
+            LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
+        ElseIf TutorialVideoPanel.Visible Then
+            LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
+            LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
+            LinkLabel24.LinkColor = ForeColor
         End If
     End Sub
 
@@ -5041,19 +5052,17 @@ Public Class MainForm
                 GroupBox9.ForeColor = Color.White
                 GroupBox10.ForeColor = Color.White
         End Select
-        If EnableExperiments Then
-            If GetStartedPanel.Visible Then
-                LinkLabel22.LinkColor = ForeColor
-                LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
-                LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
-            ElseIf LatestNewsPanel.Visible Then
-                LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
-                LinkLabel23.LinkColor = ForeColor
-                LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
-            End If
-            ListView1.BackColor = BackColor
-            ListView1.ForeColor = ForeColor
+        If GetStartedPanel.Visible Then
+            LinkLabel22.LinkColor = ForeColor
+            LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
+            LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
+        ElseIf LatestNewsPanel.Visible Then
+            LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
+            LinkLabel23.LinkColor = ForeColor
+            LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
         End If
+        ListView1.BackColor = BackColor
+        ListView1.ForeColor = ForeColor
     End Sub
 
     Sub ChangeLangs(LangCode As Integer)
@@ -7343,6 +7352,9 @@ Public Class MainForm
             End Select
             Label49.Text = projName.Text
         End If
+        LinkLabel22.Text = WelcomeTab.Text.ToUpper()
+        LinkLabel23.Text = NewsFeedTab.Text.ToUpper()
+        LinkLabel24.Text = VideosTab.Text.ToUpper()
     End Sub
 
     'Sub GenReportTab(ReportType As Integer, TableFormat As Integer)            ' Hold this for a future release
@@ -14990,5 +15002,68 @@ Public Class MainForm
         HelpBrowserForm.MinimizeBox = True
         HelpBrowserForm.MaximizeBox = True
         HelpBrowserForm.Show()
+    End Sub
+
+    Private Sub LinkLabel22_MouseEnter(sender As Object, e As EventArgs) Handles LinkLabel22.MouseEnter
+        If LinkLabel22.LinkColor = Color.FromArgb(241, 241, 241) Then
+            Cursor = Cursors.Arrow
+            Exit Sub
+        Else
+            LinkLabel22.LinkColor = Color.FromArgb(0, 151, 251)
+        End If
+    End Sub
+
+    Private Sub LinkLabel22_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel22.MouseLeave
+        If GetStartedPanel.Visible Then
+            If BackColor = Color.FromArgb(48, 48, 48) Then
+                LinkLabel22.LinkColor = Color.FromArgb(241, 241, 241)
+            ElseIf BackColor = Color.FromArgb(239, 239, 242) Then
+                LinkLabel22.LinkColor = Color.Black
+            End If
+        Else
+            LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
+        End If
+    End Sub
+
+    Private Sub LinkLabel23_MouseEnter(sender As Object, e As EventArgs) Handles LinkLabel23.MouseEnter
+        If LinkLabel23.LinkColor = Color.FromArgb(241, 241, 241) Then
+            Cursor = Cursors.Arrow
+            Exit Sub
+        Else
+            LinkLabel23.LinkColor = Color.FromArgb(0, 151, 251)
+        End If
+    End Sub
+
+    Private Sub LinkLabel23_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel23.MouseLeave
+        If LatestNewsPanel.Visible Then
+            If BackColor = Color.FromArgb(48, 48, 48) Then
+                LinkLabel23.LinkColor = Color.FromArgb(241, 241, 241)
+            ElseIf BackColor = Color.FromArgb(239, 239, 242) Then
+                LinkLabel23.LinkColor = Color.Black
+            End If
+        Else
+            LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
+        End If
+    End Sub
+
+    Private Sub LinkLabel24_MouseEnter(sender As Object, e As EventArgs) Handles LinkLabel24.MouseEnter
+        If LinkLabel24.LinkColor = Color.FromArgb(241, 241, 241) Then
+            Cursor = Cursors.Arrow
+            Exit Sub
+        Else
+            LinkLabel24.LinkColor = Color.FromArgb(0, 151, 251)
+        End If
+    End Sub
+
+    Private Sub LinkLabel24_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel24.MouseLeave
+        If TutorialVideoPanel.Visible Then
+            If BackColor = Color.FromArgb(48, 48, 48) Then
+                LinkLabel24.LinkColor = Color.FromArgb(241, 241, 241)
+            ElseIf BackColor = Color.FromArgb(239, 239, 242) Then
+                LinkLabel24.LinkColor = Color.Black
+            End If
+        Else
+            LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
+        End If
     End Sub
 End Class

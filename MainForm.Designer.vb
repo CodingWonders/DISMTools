@@ -246,8 +246,6 @@ Partial Class MainForm
         Me.LinkLabel22 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel23 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel24 = New System.Windows.Forms.LinkLabel()
-        Me.Panel4 = New System.Windows.Forms.Panel()
-        Me.Label7 = New System.Windows.Forms.Label()
         Me.Button18 = New System.Windows.Forms.Button()
         Me.SidePanel = New System.Windows.Forms.Panel()
         Me.UpdatePanel = New System.Windows.Forms.Panel()
@@ -541,7 +539,6 @@ Partial Class MainForm
         Me.FeedErrorPanel.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.FlowLayoutPanel2.SuspendLayout()
-        Me.Panel4.SuspendLayout()
         Me.SidePanel.SuspendLayout()
         Me.UpdatePanel.SuspendLayout()
         Me.Panel3.SuspendLayout()
@@ -1623,9 +1620,10 @@ Partial Class MainForm
         '
         'WelcomePanel
         '
+        Me.WelcomePanel.Controls.Add(Me.Button18)
         Me.WelcomePanel.Controls.Add(Me.Button17)
-        Me.WelcomePanel.Controls.Add(Me.WelcomeTabControl)
         Me.WelcomePanel.Controls.Add(Me.StartPanel)
+        Me.WelcomePanel.Controls.Add(Me.WelcomeTabControl)
         Me.WelcomePanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.WelcomePanel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.WelcomePanel.Location = New System.Drawing.Point(256, 0)
@@ -1841,14 +1839,12 @@ Partial Class MainForm
         '
         Me.StartPanel.Controls.Add(Me.StartPanelPContainer)
         Me.StartPanel.Controls.Add(Me.Panel1)
-        Me.StartPanel.Controls.Add(Me.Panel4)
         Me.StartPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.StartPanel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.StartPanel.Location = New System.Drawing.Point(0, 0)
         Me.StartPanel.Name = "StartPanel"
         Me.StartPanel.Size = New System.Drawing.Size(1008, 657)
         Me.StartPanel.TabIndex = 2
-        Me.StartPanel.Visible = False
         '
         'StartPanelPContainer
         '
@@ -1856,9 +1852,9 @@ Partial Class MainForm
         Me.StartPanelPContainer.Controls.Add(Me.LatestNewsPanel)
         Me.StartPanelPContainer.Controls.Add(Me.TutorialVideoPanel)
         Me.StartPanelPContainer.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.StartPanelPContainer.Location = New System.Drawing.Point(0, 76)
+        Me.StartPanelPContainer.Location = New System.Drawing.Point(0, 38)
         Me.StartPanelPContainer.Name = "StartPanelPContainer"
-        Me.StartPanelPContainer.Size = New System.Drawing.Size(1008, 581)
+        Me.StartPanelPContainer.Size = New System.Drawing.Size(1008, 619)
         Me.StartPanelPContainer.TabIndex = 5
         '
         'GetStartedPanel
@@ -1867,7 +1863,7 @@ Partial Class MainForm
         Me.GetStartedPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GetStartedPanel.Location = New System.Drawing.Point(0, 0)
         Me.GetStartedPanel.Name = "GetStartedPanel"
-        Me.GetStartedPanel.Size = New System.Drawing.Size(1008, 581)
+        Me.GetStartedPanel.Size = New System.Drawing.Size(1008, 619)
         Me.GetStartedPanel.TabIndex = 0
         '
         'GetStartedContainer
@@ -1876,7 +1872,7 @@ Partial Class MainForm
         Me.GetStartedContainer.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GetStartedContainer.Location = New System.Drawing.Point(0, 0)
         Me.GetStartedContainer.Name = "GetStartedContainer"
-        Me.GetStartedContainer.Size = New System.Drawing.Size(1008, 581)
+        Me.GetStartedContainer.Size = New System.Drawing.Size(1008, 619)
         Me.GetStartedContainer.TabIndex = 6
         '
         'Panel6
@@ -1899,7 +1895,7 @@ Partial Class MainForm
         Me.Panel6.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel6.Location = New System.Drawing.Point(0, 0)
         Me.Panel6.Name = "Panel6"
-        Me.Panel6.Size = New System.Drawing.Size(1008, 581)
+        Me.Panel6.Size = New System.Drawing.Size(1008, 619)
         Me.Panel6.TabIndex = 0
         '
         'Label8
@@ -2077,8 +2073,9 @@ Partial Class MainForm
         Me.LatestNewsPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LatestNewsPanel.Location = New System.Drawing.Point(0, 0)
         Me.LatestNewsPanel.Name = "LatestNewsPanel"
-        Me.LatestNewsPanel.Size = New System.Drawing.Size(1008, 581)
+        Me.LatestNewsPanel.Size = New System.Drawing.Size(1008, 619)
         Me.LatestNewsPanel.TabIndex = 0
+        Me.LatestNewsPanel.Visible = False
         '
         'FeedContainer
         '
@@ -2087,7 +2084,7 @@ Partial Class MainForm
         Me.FeedContainer.Dock = System.Windows.Forms.DockStyle.Fill
         Me.FeedContainer.Location = New System.Drawing.Point(0, 0)
         Me.FeedContainer.Name = "FeedContainer"
-        Me.FeedContainer.Size = New System.Drawing.Size(1008, 546)
+        Me.FeedContainer.Size = New System.Drawing.Size(1008, 584)
         Me.FeedContainer.TabIndex = 1
         '
         'FeedsPanel
@@ -2096,7 +2093,7 @@ Partial Class MainForm
         Me.FeedsPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.FeedsPanel.Location = New System.Drawing.Point(0, 0)
         Me.FeedsPanel.Name = "FeedsPanel"
-        Me.FeedsPanel.Size = New System.Drawing.Size(1008, 546)
+        Me.FeedsPanel.Size = New System.Drawing.Size(1008, 584)
         Me.FeedsPanel.TabIndex = 1
         '
         'ListView1
@@ -2104,10 +2101,11 @@ Partial Class MainForm
         Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
         Me.ListView1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ListView1.FullRowSelect = True
+        Me.ListView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None
         Me.ListView1.Location = New System.Drawing.Point(0, 0)
         Me.ListView1.MultiSelect = False
         Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(1008, 546)
+        Me.ListView1.Size = New System.Drawing.Size(1008, 584)
         Me.ListView1.TabIndex = 0
         Me.ListView1.UseCompatibleStateImageBehavior = False
         Me.ListView1.View = System.Windows.Forms.View.Details
@@ -2132,14 +2130,14 @@ Partial Class MainForm
         Me.FeedErrorPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.FeedErrorPanel.Location = New System.Drawing.Point(0, 0)
         Me.FeedErrorPanel.Name = "FeedErrorPanel"
-        Me.FeedErrorPanel.Size = New System.Drawing.Size(1008, 546)
+        Me.FeedErrorPanel.Size = New System.Drawing.Size(1008, 584)
         Me.FeedErrorPanel.TabIndex = 0
         '
         'Button59
         '
         Me.Button59.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button59.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button59.Location = New System.Drawing.Point(880, 312)
+        Me.Button59.Location = New System.Drawing.Point(880, 350)
         Me.Button59.Name = "Button59"
         Me.Button59.Size = New System.Drawing.Size(114, 23)
         Me.Button59.TabIndex = 2
@@ -2157,7 +2155,7 @@ Partial Class MainForm
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.ReadOnly = True
         Me.TextBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TextBox1.Size = New System.Drawing.Size(972, 227)
+        Me.TextBox1.Size = New System.Drawing.Size(972, 265)
         Me.TextBox1.TabIndex = 1
         '
         'Label35
@@ -2166,7 +2164,7 @@ Partial Class MainForm
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label35.AutoEllipsis = True
         Me.Label35.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.Label35.Location = New System.Drawing.Point(14, 338)
+        Me.Label35.Location = New System.Drawing.Point(14, 376)
         Me.Label35.Name = "Label35"
         Me.Label35.Size = New System.Drawing.Size(978, 49)
         Me.Label35.TabIndex = 0
@@ -2197,7 +2195,7 @@ Partial Class MainForm
         '
         Me.Label9.AutoEllipsis = True
         Me.Label9.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Label9.Location = New System.Drawing.Point(0, 546)
+        Me.Label9.Location = New System.Drawing.Point(0, 584)
         Me.Label9.Name = "Label9"
         Me.Label9.Padding = New System.Windows.Forms.Padding(4, 4, 0, 0)
         Me.Label9.Size = New System.Drawing.Size(1008, 35)
@@ -2210,14 +2208,15 @@ Partial Class MainForm
         Me.TutorialVideoPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TutorialVideoPanel.Location = New System.Drawing.Point(0, 0)
         Me.TutorialVideoPanel.Name = "TutorialVideoPanel"
-        Me.TutorialVideoPanel.Size = New System.Drawing.Size(1008, 581)
+        Me.TutorialVideoPanel.Size = New System.Drawing.Size(1008, 619)
         Me.TutorialVideoPanel.TabIndex = 0
+        Me.TutorialVideoPanel.Visible = False
         '
         'Panel1
         '
         Me.Panel1.Controls.Add(Me.FlowLayoutPanel2)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel1.Location = New System.Drawing.Point(0, 38)
+        Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(1008, 38)
         Me.Panel1.TabIndex = 4
@@ -2277,26 +2276,6 @@ Partial Class MainForm
         Me.LinkLabel24.TabStop = True
         Me.LinkLabel24.Text = "TUTORIAL VIDEOS"
         '
-        'Panel4
-        '
-        Me.Panel4.Controls.Add(Me.Label7)
-        Me.Panel4.Controls.Add(Me.Button18)
-        Me.Panel4.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel4.Location = New System.Drawing.Point(0, 0)
-        Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(1008, 38)
-        Me.Panel4.TabIndex = 2
-        '
-        'Label7
-        '
-        Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(11, 11)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(512, 15)
-        Me.Label7.TabIndex = 2
-        Me.Label7.Text = "You are using a preview design of the Start Panel. You can go back to the old des" & _
-    "ign at any time."
-        '
         'Button18
         '
         Me.Button18.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -2307,6 +2286,7 @@ Partial Class MainForm
         Me.Button18.TabIndex = 1
         Me.Button18.Text = "Go back to previous design"
         Me.Button18.UseVisualStyleBackColor = True
+        Me.Button18.Visible = False
         '
         'SidePanel
         '
@@ -3949,7 +3929,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32.42009!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 67.57991!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 86.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 87.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -3998,7 +3978,7 @@ Partial Class MainForm
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel8.Location = New System.Drawing.Point(69, 3)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(133, 23)
+        Me.Panel8.Size = New System.Drawing.Size(132, 23)
         Me.Panel8.TabIndex = 8
         '
         'projName
@@ -4007,7 +3987,7 @@ Partial Class MainForm
         Me.projName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projName.Location = New System.Drawing.Point(0, 0)
         Me.projName.Name = "projName"
-        Me.projName.Size = New System.Drawing.Size(133, 23)
+        Me.projName.Size = New System.Drawing.Size(132, 23)
         Me.projName.TabIndex = 2
         Me.projName.Text = "projName"
         Me.projName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -4017,7 +3997,7 @@ Partial Class MainForm
         Me.projNameText.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projNameText.Location = New System.Drawing.Point(0, 0)
         Me.projNameText.Name = "projNameText"
-        Me.projNameText.Size = New System.Drawing.Size(133, 21)
+        Me.projNameText.Size = New System.Drawing.Size(132, 21)
         Me.projNameText.TabIndex = 4
         Me.projNameText.Text = "projName"
         Me.projNameText.Visible = False
@@ -5211,8 +5191,6 @@ Partial Class MainForm
         Me.Panel1.ResumeLayout(False)
         Me.FlowLayoutPanel2.ResumeLayout(False)
         Me.FlowLayoutPanel2.PerformLayout()
-        Me.Panel4.ResumeLayout(False)
-        Me.Panel4.PerformLayout()
         Me.SidePanel.ResumeLayout(False)
         Me.SidePanel.PerformLayout()
         Me.UpdatePanel.ResumeLayout(False)
@@ -5583,8 +5561,6 @@ Partial Class MainForm
     Friend WithEvents ToolStripSeparator20 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents UnmountSettingsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents StartPanel As System.Windows.Forms.Panel
-    Friend WithEvents Panel4 As System.Windows.Forms.Panel
-    Friend WithEvents Label7 As System.Windows.Forms.Label
     Friend WithEvents Button18 As System.Windows.Forms.Button
     Friend WithEvents Button17 As System.Windows.Forms.Button
     Friend WithEvents StartPanelPContainer As System.Windows.Forms.Panel
