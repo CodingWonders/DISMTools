@@ -81,15 +81,21 @@ If you want to grab a copy straight from the source code, follow these instructi
 3. Open the solution in Visual Studio 2012 or later
 4. Finally, go to "Build > Build solution", or press CTRL-Shift-B
 
+**NOTE:** in the event that the program detects an update and lets you download an older version, we suggest that you disregard its advice (it's not like it will affect the binary being compiled, as it will be recompiled when you build the project, but it will make you waste time)
+
 ### Skipping setting migration
 
 To speed up testing, you can perform these steps before running the program from within Visual Studio:
 
-1. In the Solution Explorer, click `My Project`
+1. In the Solution Explorer, double-click `My Project`
 2. Go to the Debug tab
 3. Under the Startup options, type the following in the command line arguments text box: `/nomig`
 
-**NOTE:** in the event that the program detects an update and lets you download an older version, we suggest that you disregard its advice (it's not like it will affect the binary being compiled, as it will be recompiled when you build the project, but it will make you waste time)
+You should have this setting configured like this:
+
+<p align="center">
+	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/cf3c8704-4c93-4047-9d42-aae7c8976522" />
+</p>
 
 ## Contributions
 
