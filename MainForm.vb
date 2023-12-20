@@ -4593,12 +4593,6 @@ Public Class MainForm
                         TabPage2.ForeColor = Color.White
                         TabPage3.BackColor = Color.FromArgb(40, 40, 43)
                         TabPage3.ForeColor = Color.White
-                        WelcomeTab.BackColor = Color.FromArgb(40, 40, 43)
-                        WelcomeTab.ForeColor = Color.White
-                        NewsFeedTab.BackColor = Color.FromArgb(40, 40, 43)
-                        NewsFeedTab.ForeColor = Color.White
-                        VideosTab.BackColor = Color.FromArgb(40, 40, 43)
-                        VideosTab.ForeColor = Color.White
                         PictureBox5.Image = New Bitmap(My.Resources.logo_mainscr_dark)
                         ToolStrip1.BackColor = Color.FromArgb(48, 48, 48)
                         ToolStrip1.ForeColor = Color.White
@@ -4715,12 +4709,6 @@ Public Class MainForm
                         TabPage2.ForeColor = Color.Black
                         TabPage3.BackColor = Color.White
                         TabPage3.ForeColor = Color.Black
-                        WelcomeTab.BackColor = Color.White
-                        WelcomeTab.ForeColor = Color.Black
-                        NewsFeedTab.BackColor = Color.White
-                        NewsFeedTab.ForeColor = Color.Black
-                        VideosTab.BackColor = Color.White
-                        VideosTab.ForeColor = Color.Black
                         PictureBox5.Image = New Bitmap(My.Resources.logo_mainscr_light)
                         ToolStrip1.BackColor = Color.FromArgb(239, 239, 242)
                         ToolStrip1.ForeColor = Color.Black
@@ -4841,12 +4829,6 @@ Public Class MainForm
                 TabPage2.ForeColor = Color.Black
                 TabPage3.BackColor = Color.White
                 TabPage3.ForeColor = Color.Black
-                WelcomeTab.BackColor = Color.White
-                WelcomeTab.ForeColor = Color.Black
-                NewsFeedTab.BackColor = Color.White
-                NewsFeedTab.ForeColor = Color.Black
-                VideosTab.BackColor = Color.White
-                VideosTab.ForeColor = Color.Black
                 PictureBox5.Image = New Bitmap(My.Resources.logo_mainscr_light)
                 ToolStrip1.BackColor = Color.FromArgb(239, 239, 242)
                 ToolStrip1.ForeColor = Color.Black
@@ -4963,12 +4945,6 @@ Public Class MainForm
                 TabPage2.ForeColor = Color.White
                 TabPage3.BackColor = Color.FromArgb(40, 40, 43)
                 TabPage3.ForeColor = Color.White
-                WelcomeTab.BackColor = Color.FromArgb(40, 40, 43)
-                WelcomeTab.ForeColor = Color.White
-                NewsFeedTab.BackColor = Color.FromArgb(40, 40, 43)
-                NewsFeedTab.ForeColor = Color.White
-                VideosTab.BackColor = Color.FromArgb(40, 40, 43)
-                VideosTab.ForeColor = Color.White
                 PictureBox5.Image = New Bitmap(My.Resources.logo_mainscr_dark)
                 ToolStrip1.BackColor = Color.FromArgb(48, 48, 48)
                 ToolStrip1.ForeColor = Color.White
@@ -5063,6 +5039,8 @@ Public Class MainForm
         End If
         ListView1.BackColor = BackColor
         ListView1.ForeColor = ForeColor
+        TextBox1.BackColor = BackColor
+        TextBox1.ForeColor = ForeColor
     End Sub
 
     Sub ChangeLangs(LangCode As Integer)
@@ -5238,24 +5216,6 @@ Public Class MainForm
                         ExistingProjLink.Text = "Open existing project..."
                         OnlineInstMgmt.Text = "Manage online installation"
                         OfflineInstMgmt.Text = "Manage offline installation..."
-                        ' Start Panel tabs
-                        WelcomeTab.Text = "Welcome"
-                        NewsFeedTab.Text = "Latest news"
-                        VideosTab.Text = "Tutorial videos"
-                        ' Welcome tab contents
-                        Label24.Text = "Welcome to DISMTools"
-                        Label25.Text = "The graphical front-end to perform DISM operations."
-                        Label26.Text = "This is beta software"
-                        Label27.Text = "Currently, this program is in beta. This means lots of things will not work as expected. There will also be lots of bugs, and, generally, the program is incomplete (as you can see right now)"
-                        Label28.Text = "This program is open-source"
-                        Label29.Text = "This program is open-source, meaning you can take a look at how it works and understand it better."
-                        Label30.Text = "Be sure to know what you are doing"
-                        Label31.Text = "Please be careful over what you do in this program. Although it may look simple and easy to use, it is targeted to system administrators and people in the IT department. If you carelessly perform operations to an image or an active installation, it may not work correctly or may refuse to work."
-                        Label32.Text = "Getting started"
-                        Label33.Text = "- Did you get lost in this program? We recommend checking the help topics to get around" & CrLf & _
-                            "- Don't understand a specific term? We recommend checking the glossary. The terms are alphabetically sorted and provide explanations as detailed as possible" & CrLf & _
-                            "- Want to know how to do it in the command line? We recommmend checking the command help" & CrLf & _
-                            "These options, and the program information, can be found by opening the Help menu."
                         ' ToolStrip buttons
                         ToolStripButton1.Text = "Close tab"
                         ToolStripButton2.Text = "Save project"
@@ -5424,6 +5384,30 @@ Public Class MainForm
                         Button56.Text = "Save configuration..."
                         Button57.Text = "Set target path..."
                         Button58.Text = "Set scratch space..."
+                        ' New home panel design
+                        LinkLabel22.Text = "WELCOME"
+                        LinkLabel23.Text = "LATEST NEWS"
+                        LinkLabel24.Text = "TUTORIAL VIDEOS"
+                        ' - Welcome panel
+                        Label36.Text = "This is beta software"
+                        Label8.Text = "This program is not complete and you may run into issues. If that happens, don't hesitate to send us feedback"
+                        Label37.Text = "Getting started"
+                        LinkLabel6.Text = "Getting started with image servicing"
+                        LinkLabel7.Text = "Getting started with DISMTools"
+                        LinkLabel8.Text = "Coming from other utilities?"
+                        Label38.Text = "Performing operations"
+                        LinkLabel9.Text = "Tips for performing great servicing"
+                        LinkLabel10.Text = "Getting image information"
+                        LinkLabel11.Text = "Saving image information"
+                        LinkLabel4.Text = "Managing your active installation"
+                        LinkLabel5.Text = "Managing installations on any drive"
+                        ' - Latest news panel
+                        Label9.Text = "To get the latest DISMTools development news, check out the discussion on the My Digital Life forums. An account is required to view most content."
+                        LinkLabel25.Text = "Visit"
+                        Label22.Text = "We couldn't get the latest news"
+                        Label34.Text = "Error information:"
+                        Label35.Text = "Try connecting your system to the network. If your system is connected to the network but this error still appears, check whether you can access websites."
+                        Button59.Text = "Try again"
                     Case "ESN"
                         ' Top-level menu items
                         FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -5593,24 +5577,6 @@ Public Class MainForm
                         ExistingProjLink.Text = "Abrir proyecto existente..."
                         OnlineInstMgmt.Text = "Administrar instalación activa"
                         OfflineInstMgmt.Text = "Administrar instalación fuera de línea..."
-                        ' Start Panel tabs
-                        WelcomeTab.Text = "Bienvenido"
-                        NewsFeedTab.Text = "Últimas noticias"
-                        VideosTab.Text = "Tutoriales"
-                        ' Welcome tab contents
-                        Label24.Text = "Bienvenido a DISMTools"
-                        Label25.Text = "La interfaz gráfica para realizar operaciones de DISM."
-                        Label26.Text = "Este es un software en beta"
-                        Label27.Text = "Ahora mismo este programa está en beta. Esto significa que muchas cosas no funcionarán como esperado. También habrán muchos errores y, en general, este programa no está completo (como puede ver ahora mismo)"
-                        Label28.Text = "Este programa es de código abierto"
-                        Label29.Text = "Este programa es de código abierto, lo que le permite observar cómo funciona y entenderlo mejor."
-                        Label30.Text = "Asegúrese de saber lo que hace"
-                        Label31.Text = "Por favor, tenga cuidado con lo que hace en este programa. Aunque parezca simple y fácil de usar, está destinado a administradores del sistema y gente en el departamento de TI. Si realiza operaciones sin cuidado a una imagen o instalación activa, podría no funcionar correctamente o dejar de funcionar."
-                        Label32.Text = "Comencemos"
-                        Label33.Text = "- ¿Está perdido en este programa? Le recomendamos que vea la ayuda para manejarse" & CrLf & _
-                            "- ¿No entiende un término en específico? Le recomendamos comprobar el glosario. Los términos están ordenados alfabéticamente y ofrecen explicaciones lo más detalladas posible" & CrLf & _
-                            "- ¿Desea saber cómo hacerlo en la línea de comandos? Le recomendamos comprobar la ayuda de comandos" & CrLf & _
-                            "Estas opciones, y la información del programa, pueden ser encontradas en el menú Ayuda."
                         ' ToolStrip buttons
                         ToolStripButton1.Text = "Cerrar pestaña"
                         ToolStripButton2.Text = "Guardar proyecto"
@@ -5779,6 +5745,30 @@ Public Class MainForm
                         Button56.Text = "Guardar configuración..."
                         Button57.Text = "Establecer ruta de destino..."
                         Button58.Text = "Establecer espacio temporal..."
+                        ' New home panel design
+                        LinkLabel22.Text = "LE DAMOS LA BIENVENIDA"
+                        LinkLabel23.Text = "ÚLTIMAS NOTICIAS"
+                        LinkLabel24.Text = "VÍDEOS"
+                        ' - Welcome panel
+                        Label36.Text = "Este es un software en beta"
+                        Label8.Text = "Este programa no está completado y podría experimentar fallos. Si esto ocurre, no dude en enviar comentarios"
+                        Label37.Text = "Introducciones"
+                        LinkLabel6.Text = "Introducción al servicio de imágenes"
+                        LinkLabel7.Text = "Introducción a DISMTools"
+                        LinkLabel8.Text = "¿Viniendo de otras herramientas?"
+                        Label38.Text = "Realizando operaciones"
+                        LinkLabel9.Text = "Consejos para realizar una buena tarea de servicio"
+                        LinkLabel10.Text = "Obteniendo información de imagen"
+                        LinkLabel11.Text = "Guardando información de imagen"
+                        LinkLabel4.Text = "Administrando su instalación activa"
+                        LinkLabel5.Text = "Administrando instalaciones en cualquier disco"
+                        ' - Latest news panel
+                        Label9.Text = "Para obtener las últimas noticias de desarrollo de DISMTools, consulte la discusión en los foros de My Digital Life. Se requiere una cuenta para ver la mayoría de contenido."
+                        LinkLabel25.Text = "Visitar"
+                        Label22.Text = "No pudimos obtener las últimas noticias"
+                        Label34.Text = "Información del error:"
+                        Label35.Text = "Pruebe conectar su sistema a la red. Si su sistema está conectado a la red pero sigue apareciendo este error, compruebe si puede acceder a sitios web."
+                        Button59.Text = "Intentar de nuevo"
                     Case "FRA"
                         ' Top-level menu items
                         FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Fichier".ToUpper(), "&Fichier")
@@ -5948,24 +5938,6 @@ Public Class MainForm
                         ExistingProjLink.Text = "Ouvrir un projet existant..."
                         OnlineInstMgmt.Text = "Gérer l'installation en ligne"
                         OfflineInstMgmt.Text = "Gérer l'installation hors ligne..."
-                        ' Start Panel tabs
-                        WelcomeTab.Text = "Bienvenue"
-                        NewsFeedTab.Text = "Dernières nouvelles"
-                        VideosTab.Text = "Vidéos tutorielles"
-                        ' Welcome tab contents
-                        Label24.Text = "Bienvenue à DISMTools"
-                        Label25.Text = "L'interface graphique pour effectuer les opérations DISM."
-                        Label26.Text = "Il s'agit d'une version bêta du logiciel"
-                        Label27.Text = "Ce programme est actuellement en version bêta. Cela signifie que beaucoup de choses ne fonctionneront pas comme prévu. Il y aura également de nombreux bugs et, de manière générale, le programme est incomplet (comme vous pouvez le constater dès à présent)."
-                        Label28.Text = "Ce programme est open-source"
-                        Label29.Text = "Ce programme est open-source, ce qui signifie que vous pouvez jeter un coup d'œil à son fonctionnement et mieux le comprendre."
-                        Label30.Text = "Assurez-vous de savoir ce que vous faites"
-                        Label31.Text = "Faites attention à ce que vous faites dans ce programme. Bien qu'il puisse paraître simple et facile à utiliser, il est destiné aux administrateurs système et aux personnes travaillant dans le département informatique. Si vous effectuez sans précaution des opérations sur une image ou une installation active, il se peut qu'elle ne fonctionne pas correctement ou qu'elle refuse de fonctionner."
-                        Label32.Text = "Pour commencer"
-                        Label33.Text = "- Vous vous êtes perdu dans ce programme ? Nous vous recommandons de consulter les rubriques d'aide pour vous y retrouver" & CrLf & _
-                            "- Vous ne comprenez pas un terme spécifique ? Nous vous recommandons de consulter le glossaire. Les termes sont classés par ordre alphabétique et fournissent des explications aussi détaillées que possible" & CrLf & _
-                            "- Vous voulez savoir comment le faire en ligne de commande ? Nous vous recommandons de consulter la commande help" & CrLf & _
-                            "Ces options, ainsi que les informations sur le programme, peuvent être trouvées en ouvrant le menu Aide."
                         ' ToolStrip buttons
                         ToolStripButton1.Text = "Fermer l'onglet"
                         ToolStripButton2.Text = "Sauvegarder le projet"
@@ -6134,6 +6106,30 @@ Public Class MainForm
                         Button56.Text = "Sauvegarder les paramètres..."
                         Button57.Text = "Configurer le chemin d'accès..."
                         Button58.Text = "Configurer l'espace temporaire..."
+                        ' New home panel design
+                        LinkLabel22.Text = "BIENVENUE"
+                        LinkLabel23.Text = "DERNIÈRES NOUVELLES"
+                        LinkLabel24.Text = "VIDÉOS TUTORIELLES"
+                        ' - Welcome panel
+                        Label36.Text = "Il s'agit d'une version bêta du logiciel"
+                        Label8.Text = "Ce programme n'est pas complet et il se peut que vous rencontriez des problèmes. Si cela se produit, n'hésitez pas à nous faire part de vos commentaires."
+                        Label37.Text = "Pour commencer"
+                        LinkLabel6.Text = "Commencer avec le service des images"
+                        LinkLabel7.Text = "Commencer avec DISMTools"
+                        LinkLabel8.Text = "Venant d'autres utilités ?"
+                        Label38.Text = "Réalisation des opérations"
+                        LinkLabel9.Text = "Conseils pour un bon service"
+                        LinkLabel10.Text = "Obtenir des informations sur l'image"
+                        LinkLabel11.Text = "Sauvegarder les informations sur l'image"
+                        LinkLabel4.Text = "Gérer votre installation active"
+                        LinkLabel5.Text = "Gérer les installations sur n'importe quel lecteur"
+                        ' - Latest news panel
+                        Label9.Text = "Pour obtenir les dernières informations sur le développement de DISMTools, consultez les discussions sur les forums de My Digital Life. Un compte est nécessaire pour accéder à la plupart des contenus."
+                        LinkLabel25.Text = "Visiter"
+                        Label22.Text = "Nous n'avons pas pu obtenir les dernières nouvelles"
+                        Label34.Text = "Information d'erreur :"
+                        Label35.Text = "Essayez de connecter votre système au réseau. Si votre système est connecté au réseau mais que cette erreur persiste, vérifiez si vous pouvez accéder aux sites web."
+                        Button59.Text = "Réessayer"
                     Case Else
                         Language = 1
                         ChangeLangs(Language)
@@ -6308,24 +6304,6 @@ Public Class MainForm
                 ExistingProjLink.Text = "Open existing project..."
                 OnlineInstMgmt.Text = "Manage online installation"
                 OfflineInstMgmt.Text = "Manage offline installation..."
-                ' Start Panel tabs
-                WelcomeTab.Text = "Welcome"
-                NewsFeedTab.Text = "Latest news"
-                VideosTab.Text = "Tutorial videos"
-                ' Welcome tab contents
-                Label24.Text = "Welcome to DISMTools"
-                Label25.Text = "The graphical front-end to perform DISM operations."
-                Label26.Text = "This is beta software"
-                Label27.Text = "Currently, this program is in beta. This means lots of things will not work as expected. There will also be lots of bugs, and, generally, the program is incomplete (as you can see right now)"
-                Label28.Text = "This program is open-source"
-                Label29.Text = "This program is open-source, meaning you can take a look at how it works and understand it better."
-                Label30.Text = "Be sure to know what you are doing"
-                Label31.Text = "Please be careful over what you do in this program. Although it may look simple and easy to use, it is targeted to system administrators and people in the IT department. If you carelessly perform operations to an image or an active installation, it may not work correctly or may refuse to work."
-                Label32.Text = "Getting started"
-                Label33.Text = "- Did you get lost in this program? We recommend checking the help topics to get around" & CrLf & _
-                    "- Don't understand a specific term? We recommend checking the glossary. The terms are alphabetically sorted and provide explanations as detailed as possible" & CrLf & _
-                    "- Want to know how to do it in the command line? We recommmend checking the command help" & CrLf & _
-                    "These options, and the program information, can be found by opening the Help menu."
                 ' ToolStrip buttons
                 ToolStripButton1.Text = "Close tab"
                 ToolStripButton2.Text = "Save project"
@@ -6494,6 +6472,30 @@ Public Class MainForm
                 Button56.Text = "Save configuration..."
                 Button57.Text = "Set target path..."
                 Button58.Text = "Set scratch space..."
+                ' New home panel design
+                LinkLabel22.Text = "WELCOME"
+                LinkLabel23.Text = "LATEST NEWS"
+                LinkLabel24.Text = "TUTORIAL VIDEOS"
+                ' - Welcome panel
+                Label36.Text = "This is beta software"
+                Label8.Text = "This program is not complete and you may run into issues. If that happens, don't hesitate to send us feedback"
+                Label37.Text = "Getting started"
+                LinkLabel6.Text = "Getting started with image servicing"
+                LinkLabel7.Text = "Getting started with DISMTools"
+                LinkLabel8.Text = "Coming from other utilities?"
+                Label38.Text = "Performing operations"
+                LinkLabel9.Text = "Tips for performing great servicing"
+                LinkLabel10.Text = "Getting image information"
+                LinkLabel11.Text = "Saving image information"
+                LinkLabel4.Text = "Managing your active installation"
+                LinkLabel5.Text = "Managing installations on any drive"
+                ' - Latest news panel
+                Label9.Text = "To get the latest DISMTools development news, check out the discussion on the My Digital Life forums. An account is required to view most content."
+                LinkLabel25.Text = "Visit"
+                Label22.Text = "We couldn't get the latest news"
+                Label34.Text = "Error information:"
+                Label35.Text = "Try connecting your system to the network. If your system is connected to the network but this error still appears, check whether you can access websites."
+                Button59.Text = "Try again"
             Case 2
                 ' Top-level menu items
                 FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -6663,24 +6665,6 @@ Public Class MainForm
                 ExistingProjLink.Text = "Abrir proyecto existente..."
                 OnlineInstMgmt.Text = "Administrar instalación activa"
                 OfflineInstMgmt.Text = "Administrar instalación fuera de línea..."
-                ' Start Panel tabs
-                WelcomeTab.Text = "Bienvenido"
-                NewsFeedTab.Text = "Últimas noticias"
-                VideosTab.Text = "Tutoriales"
-                ' Welcome tab contents
-                Label24.Text = "Bienvenido a DISMTools"
-                Label25.Text = "La interfaz gráfica para realizar operaciones de DISM."
-                Label26.Text = "Este es un software en beta"
-                Label27.Text = "Ahora mismo este programa está en beta. Esto significa que muchas cosas no funcionarán como esperado. También habrán muchos errores y, en general, este programa no está completo (como puede ver ahora mismo)"
-                Label28.Text = "Este programa es de código abierto"
-                Label29.Text = "Este programa es de código abierto, lo que le permite observar cómo funciona y entenderlo mejor."
-                Label30.Text = "Asegúrese de saber lo que hace"
-                Label31.Text = "Por favor, tenga cuidado con lo que hace en este programa. Aunque parezca simple y fácil de usar, está destinado a administradores del sistema y gente en el departamento de TI. Si realiza operaciones sin cuidado a una imagen o instalación activa, podría no funcionar correctamente o dejar de funcionar."
-                Label32.Text = "Comencemos"
-                Label33.Text = "- ¿Está perdido en este programa? Le recomendamos que vea la ayuda para manejarse" & CrLf & _
-                    "- ¿No entiende un término en específico? Le recomendamos comprobar el glosario. Los términos están ordenados alfabéticamente y ofrecen explicaciones lo más detalladas posible" & CrLf & _
-                    "- ¿Desea saber cómo hacerlo en la línea de comandos? Le recomendamos comprobar la ayuda de comandos" & CrLf & _
-                    "Estas opciones, y la información del programa, pueden ser encontradas en el menú Ayuda."
                 ' ToolStrip buttons
                 ToolStripButton1.Text = "Cerrar pestaña"
                 ToolStripButton2.Text = "Guardar proyecto"
@@ -6848,6 +6832,30 @@ Public Class MainForm
                 Button56.Text = "Guardar configuración..."
                 Button57.Text = "Establecer ruta de destino..."
                 Button58.Text = "Establecer espacio temporal..."
+                ' New home panel design
+                LinkLabel22.Text = "LE DAMOS LA BIENVENIDA"
+                LinkLabel23.Text = "ÚLTIMAS NOTICIAS"
+                LinkLabel24.Text = "VÍDEOS"
+                ' - Welcome panel
+                Label36.Text = "Este es un software en beta"
+                Label8.Text = "Este programa no está completado y podría experimentar fallos. Si esto ocurre, no dude en enviar comentarios"
+                Label37.Text = "Introducciones"
+                LinkLabel6.Text = "Introducción al servicio de imágenes"
+                LinkLabel7.Text = "Introducción a DISMTools"
+                LinkLabel8.Text = "¿Viniendo de otras herramientas?"
+                Label38.Text = "Realizando operaciones"
+                LinkLabel9.Text = "Consejos para realizar una buena tarea de servicio"
+                LinkLabel10.Text = "Obteniendo información de imagen"
+                LinkLabel11.Text = "Guardando información de imagen"
+                LinkLabel4.Text = "Administrando su instalación activa"
+                LinkLabel5.Text = "Administrando instalaciones en cualquier disco"
+                ' - Latest news panel
+                Label9.Text = "Para obtener las últimas noticias de desarrollo de DISMTools, consulte la discusión en los foros de My Digital Life. Se requiere una cuenta para ver la mayoría de contenido."
+                LinkLabel25.Text = "Visitar"
+                Label22.Text = "No pudimos obtener las últimas noticias"
+                Label34.Text = "Información del error:"
+                Label35.Text = "Pruebe conectar su sistema a la red. Si su sistema está conectado a la red pero sigue apareciendo este error, compruebe si puede acceder a sitios web."
+                Button59.Text = "Intentar de nuevo"
             Case 3
                 ' Top-level menu items
                 FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Fichier".ToUpper(), "&Fichier")
@@ -7017,24 +7025,6 @@ Public Class MainForm
                 ExistingProjLink.Text = "Ouvrir un projet existant..."
                 OnlineInstMgmt.Text = "Gérer l'installation en ligne"
                 OfflineInstMgmt.Text = "Gérer l'installation hors ligne..."
-                ' Start Panel tabs
-                WelcomeTab.Text = "Bienvenue"
-                NewsFeedTab.Text = "Dernières nouvelles"
-                VideosTab.Text = "Vidéos tutorielles"
-                ' Welcome tab contents
-                Label24.Text = "Bienvenue à DISMTools"
-                Label25.Text = "L'interface graphique pour effectuer les opérations DISM."
-                Label26.Text = "Il s'agit d'une version bêta du logiciel"
-                Label27.Text = "Ce programme est actuellement en version bêta. Cela signifie que beaucoup de choses ne fonctionneront pas comme prévu. Il y aura également de nombreux bugs et, de manière générale, le programme est incomplet (comme vous pouvez le constater dès à présent)."
-                Label28.Text = "Ce programme est open-source"
-                Label29.Text = "Ce programme est open-source, ce qui signifie que vous pouvez jeter un coup d'œil à son fonctionnement et mieux le comprendre."
-                Label30.Text = "Assurez-vous de savoir ce que vous faites"
-                Label31.Text = "Faites attention à ce que vous faites dans ce programme. Bien qu'il puisse paraître simple et facile à utiliser, il est destiné aux administrateurs système et aux personnes travaillant dans le département informatique. Si vous effectuez sans précaution des opérations sur une image ou une installation active, il se peut qu'elle ne fonctionne pas correctement ou qu'elle refuse de fonctionner."
-                Label32.Text = "Pour commencer"
-                Label33.Text = "- Vous vous êtes perdu dans ce programme ? Nous vous recommandons de consulter les rubriques d'aide pour vous y retrouver" & CrLf & _
-                    "- Vous ne comprenez pas un terme spécifique ? Nous vous recommandons de consulter le glossaire. Les termes sont classés par ordre alphabétique et fournissent des explications aussi détaillées que possible" & CrLf & _
-                    "- Vous voulez savoir comment le faire en ligne de commande ? Nous vous recommandons de consulter la commande help" & CrLf & _
-                    "Ces options, ainsi que les informations sur le programme, peuvent être trouvées en ouvrant le menu Aide."
                 ' ToolStrip buttons
                 ToolStripButton1.Text = "Fermer l'onglet"
                 ToolStripButton2.Text = "Sauvegarder le projet"
@@ -7203,6 +7193,30 @@ Public Class MainForm
                 Button56.Text = "Sauvegarder les paramètres..."
                 Button57.Text = "Configurer le chemin d'accès..."
                 Button58.Text = "Configurer l'espace temporaire..."
+                ' New home panel design
+                LinkLabel22.Text = "BIENVENUE"
+                LinkLabel23.Text = "DERNIÈRES NOUVELLES"
+                LinkLabel24.Text = "VIDÉOS TUTORIELLES"
+                ' - Welcome panel
+                Label36.Text = "Il s'agit d'une version bêta du logiciel"
+                Label8.Text = "Ce programme n'est pas complet et il se peut que vous rencontriez des problèmes. Si cela se produit, n'hésitez pas à nous faire part de vos commentaires."
+                Label37.Text = "Pour commencer"
+                LinkLabel6.Text = "Commencer avec le service des images"
+                LinkLabel7.Text = "Commencer avec DISMTools"
+                LinkLabel8.Text = "Venant d'autres utilités ?"
+                Label38.Text = "Réalisation des opérations"
+                LinkLabel9.Text = "Conseils pour un bon service"
+                LinkLabel10.Text = "Obtenir des informations sur l'image"
+                LinkLabel11.Text = "Sauvegarder les informations sur l'image"
+                LinkLabel4.Text = "Gérer votre installation active"
+                LinkLabel5.Text = "Gérer les installations sur n'importe quel lecteur"
+                ' - Latest news panel
+                Label9.Text = "Pour obtenir les dernières informations sur le développement de DISMTools, consultez les discussions sur les forums de My Digital Life. Un compte est nécessaire pour accéder à la plupart des contenus."
+                LinkLabel25.Text = "Visiter"
+                Label22.Text = "Nous n'avons pas pu obtenir les dernières nouvelles"
+                Label34.Text = "Information d'erreur :"
+                Label35.Text = "Essayez de connecter votre système au réseau. Si votre système est connecté au réseau mais que cette erreur persiste, vérifiez si vous pouvez accéder aux sites web."
+                Button59.Text = "Réessayer"
         End Select
 
         If OnlineManagement Then
@@ -7352,9 +7366,6 @@ Public Class MainForm
             End Select
             Label49.Text = projName.Text
         End If
-        LinkLabel22.Text = WelcomeTab.Text.ToUpper()
-        LinkLabel23.Text = NewsFeedTab.Text.ToUpper()
-        LinkLabel24.Text = VideosTab.Text.ToUpper()
     End Sub
 
     'Sub GenReportTab(ReportType As Integer, TableFormat As Integer)            ' Hold this for a future release
@@ -14821,18 +14832,6 @@ Public Class MainForm
         End Try
     End Sub
 
-    Private Sub Button17_Click(sender As Object, e As EventArgs) Handles Button17.Click
-        WelcomeTabControl.Visible = False
-        StartPanel.Visible = True
-        Button17.Visible = False
-    End Sub
-
-    Private Sub Button18_Click(sender As Object, e As EventArgs) Handles Button18.Click
-        WelcomeTabControl.Visible = True
-        StartPanel.Visible = False
-        Button17.Visible = True
-    End Sub
-
     Private Sub LinkLabel22_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel22.LinkClicked
         GetStartedPanel.Visible = True
         LatestNewsPanel.Visible = False
@@ -15065,5 +15064,9 @@ Public Class MainForm
         Else
             LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
         End If
+    End Sub
+
+    Private Sub LinkLabel25_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel25.LinkClicked
+        Process.Start("https://forums.mydigitallife.net/threads/discussion-dismtools.87263/")
     End Sub
 End Class
