@@ -697,4 +697,11 @@ Public Class PrgSetup
             Next_Button.PerformClick()
         End If
     End Sub
+
+    Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\start\index.html")
+        HelpBrowserForm.MinimizeBox = True
+        HelpBrowserForm.MaximizeBox = True
+        HelpBrowserForm.Show()
+    End Sub
 End Class
