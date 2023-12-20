@@ -78,8 +78,16 @@ If you want to grab a copy straight from the source code, follow these instructi
 
 1. Begin by either cloning the project or downloading a ZIP of the source code. Go to "Code", and select an option from there
 2. Prepare the NuGet packages by running `nugetpkgprep.bat` in the location you cloned the repository to
-3. Open the solution in Visual Studio 2012 or later    
+3. Open the solution in Visual Studio 2012 or later
 4. Finally, go to "Build > Build solution", or press CTRL-Shift-B
+
+### Skipping setting migration
+
+To speed up testing, you can perform these steps before running the program from within Visual Studio:
+
+1. In the Solution Explorer, click `My Project`
+2. Go to the Debug tab
+3. Under the Startup options, type the following in the command line arguments text box: `/nomig`
 
 **NOTE:** in the event that the program detects an update and lets you download an older version, we suggest that you disregard its advice (it's not like it will affect the binary being compiled, as it will be recompiled when you build the project, but it will make you waste time)
 
@@ -94,7 +102,7 @@ If you want to contribute to this project, you can do so in many ways:
   3. Work on your changes **and test them**. We want to make sure your changes work as expected, and there aren't any [regressions](https://en.wikipedia.org/wiki/Regression_testing) because of them
   4. Commit your changes and create a pull request. If not set automatically, select the **latest** `dt_pre_****` branch to merge the contents to it. We'll review your changes and, if they're ready, we'll merge them.
 
-- Documentation and/or artwork: if you like the visual side of things more, ~~you can contribute to the Wiki. For more information, read [the following issue](https://github.com/CodingWonders/DISMTools/issues/2)~~ A better help system will be introduced
+- Documentation and/or artwork: if you like the visual side of things more, we recommend contributing to the help system! Check out the last section for instructions.
 
 ## Testing the latest
 
