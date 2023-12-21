@@ -14,7 +14,7 @@
 </p>
 <hr>
 
-![Product image](https://user-images.githubusercontent.com/101426328/233696501-a27a1e20-f489-4010-8f3c-f060fb808fd2.png)
+![Product image](https://github.com/CodingWonders/DISMTools/assets/101426328/3831b384-d36b-403b-86a0-70f8f632e871.png)
 
 DISMTools is a front-end for DISM that lets you manage your Windows Imaging (WIM) files and a whole lot more.
 
