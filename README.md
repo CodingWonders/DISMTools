@@ -1,8 +1,10 @@
+<!--
 <p align="center">
 	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/4c753c9a-1440-44cb-a742-04e71d077dff">
-	<h3 align="center">A free and open-source GUI for DISM operations</h3>
 </p>
-<hr>
+-->
+
+![Product image](https://github.com/CodingWonders/DISMTools/assets/101426328/7f55a099-7e51-498e-9a31-c433fab7d8b9)
 
 <!-- Tags (powered by Shields.io) -->
 
@@ -14,14 +16,61 @@
 </p>
 <hr>
 
-![Product image](https://github.com/CodingWonders/DISMTools/assets/101426328/7f55a099-7e51-498e-9a31-c433fab7d8b9)
-
 DISMTools is a front-end for DISM that lets you manage your Windows Imaging (WIM) files and a whole lot more.
 
 ## Key features
 
-- DISMTools is the first project-based GUI. Projects store the mounted image and unattended answer files you want to apply (using the command line at this time), while also providing a scratch directory for temporary operations
-- DISMTools is also smart, checking first if an action can be performed before doing it
+### Working with projects
+
+DISMTools is the first project-based GUI. Projects store the mounted image and unattended answer files you want to apply (using the command line at this time), while also providing a scratch directory for temporary operations.
+
+### Manage your active installation, or installations on any drive
+
+With the **online** and **offline installation management modes**, you can easily manage any installation of a modern Windows version.
+
+### An advanced front-end
+
+DISMTools isn't just a front-end for DISM, but an advanced one. As you perform tasks with your images and installations, you're presented with rich information and functionality. Here are some examples:
+
+- **Rich information during AppX package addition.** When adding an AppX package, you'll see rich information and, in most cases, the main Store logo asset:
+
+<p align="center">
+	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/a45c5b56-e5a6-40c5-a2f3-37677ce80405" />
+</p>
+
+- **Download content from App Installer packages automatically.** Have an App Installer package? No problem. Add it, and DISMTools will download the main package and use it automatically:
+
+<p align="center">
+	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/ad39f3ba-b29d-4874-a219-f2595bf8073a" />
+</p>
+
+- **Automatic detection of sources from Group Policy.** If you want to enable a feature, repair the component store of a Windows image, or add a capability, with a source defined in the Group Policy; you can easily use it:
+
+<p align="center">
+	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/8b2cbb41-dc82-4841-9cda-307a40619d64" />
+</p>
+
+<p align="center">
+	<img src="https://user-images.githubusercontent.com/101426328/230734474-358bbac8-2c2e-4a70-b382-9cc3283c0db8.gif" />
+</p>
+
+- **Easily create configuration lists.** With the *DISM Configuration List Editor* you can quickly create your configuration list to exclude certain items during operations like capturing an image:
+
+<p align="center">
+	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/5b472424-4595-4082-9574-c147babba64b" />
+</p>
+
+- **Quickly manage all your mounted images in one interface.** The mounted image manager lets you perform basic image management tasks with your mounted images:
+
+<p align="center">
+	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/a2e35a8b-7f7e-4b52-9366-c71de33ef9e2" />
+</p>
+
+- **Generate and print image information easily.** With image information reports, you can save the information of one area or all areas of the Windows image you're servicing for future reference:
+
+<p align="center">
+	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/d668f94e-0d39-49bb-b98f-ec045fed725b" />
+</p>
 
 ## Supported actions
 
@@ -66,6 +115,16 @@ The following actions are supported by DISMTools:
 - and more, it's in beta stages
 
 These actions will be supported in future releases. They aren't implemented yet because it takes time to create working implementations that don't conflict with the rest of the program
+
+## System requirements
+
+DISMTools is compatible with the following operating systems:
+
+- **Client:** Windows 8.1 and later (excluding Windows 10 versions 1507 and 1511)
+- **Server:** Windows Server 2012 and later (excluding Server Core variants)
+
+> [!NOTE]
+> DISMTools is not compatible with Windows 7/Server 2008 R2 (versions 0.2.1 onwards), [Wine](https://www.winehq.org/), or [ReactOS](https://github.com/reactos/reactos)
 
 ## Building
 
