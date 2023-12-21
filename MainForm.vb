@@ -12355,6 +12355,7 @@ Public Class MainForm
                 Dim pkgDirs() As String = Directory.GetDirectories(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps", DisplayName & "*", SearchOption.TopDirectoryOnly)
                 For Each folder In pkgDirs
                     If Not folder.Contains("neutral") Then
+                        If Not File.Exists(folder & "\AppxManifest.xml") Then Continue For
                         ' Copy manifest to startup dir
                         File.Copy(folder & "\AppxManifest.xml", Application.StartupPath & "\AppxManifest.xml")
                         Dim XMLReaderRTB As New RichTextBox With {

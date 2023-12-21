@@ -853,7 +853,7 @@ Public Class ImgInfoSaveDlg
                 If Environment.OSVersion.Version.Major < 10 Then
                     Contents &= "  Installed AppX packages in this image: " & MainForm.imgAppxPackageNames.Count - 1 & CrLf & CrLf
                     For x = 0 To Array.LastIndexOf(MainForm.imgAppxPackageNames, MainForm.imgAppxPackageNames.Last)
-                        If x = MainForm.imgAppxPackageNames.Count - 1 Then Continue For
+                        If x = MainForm.imgAppxPackageNames.Count - 1 Or MainForm.imgAppxPackageNames(x) Is Nothing Then Continue For
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName

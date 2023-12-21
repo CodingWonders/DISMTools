@@ -143,16 +143,26 @@ Public Class GetAppxPkgInfoDlg
         ' Populate package listing
         ListBox1.Items.Clear()
         ' The PowerShell helper may have added stuff to the MainForm arrays. Check that
-        If MainForm.imgAppxPackageNames.Count > InstalledAppxPkgInfo.Count Then
+        If InstalledAppxPkgInfo IsNot Nothing Then
+            If MainForm.imgAppxPackageNames.Count > InstalledAppxPkgInfo.Count Then
+                For Each PackageName In MainForm.imgAppxPackageNames
+                    ListBox1.Items.Add(PackageName)
+                Next
+                ' An empty entry will appear, so remove it
+                ListBox1.Items.RemoveAt(ListBox1.Items.Count - 1)
+            Else
+                For Each InstalledAppxPkg As DismAppxPackage In InstalledAppxPkgInfo
+                    ListBox1.Items.Add(InstalledAppxPkg.PackageName)
+                Next
+            End If
+        Else
+            ' This condition is met on Windows 8 hosts, as they can't get AppX package information with the DISM API.
             For Each PackageName In MainForm.imgAppxPackageNames
+                If PackageName Is Nothing Then Continue For
                 ListBox1.Items.Add(PackageName)
             Next
             ' An empty entry will appear, so remove it
             ListBox1.Items.RemoveAt(ListBox1.Items.Count - 1)
-        Else
-            For Each InstalledAppxPkg As DismAppxPackage In InstalledAppxPkgInfo
-                ListBox1.Items.Add(InstalledAppxPkg.PackageName)
-            Next
         End If
     End Sub
 
@@ -166,18 +176,26 @@ Public Class GetAppxPkgInfoDlg
         Label3.Text = ""
 
         If ListBox1.SelectedItems.Count = 1 Then
-            If MainForm.imgAppxPackageNames.Count > InstalledAppxPkgInfo.Count Then
-                Label23.Text = MainForm.imgAppxPackageNames(ListBox1.SelectedIndex)
-                Label25.Text = MainForm.imgAppxDisplayNames(ListBox1.SelectedIndex)
-                Label35.Text = MainForm.imgAppxArchitectures(ListBox1.SelectedIndex)
-                Label32.Text = MainForm.imgAppxResourceIds(ListBox1.SelectedIndex)
-                Label40.Text = MainForm.imgAppxVersions(ListBox1.SelectedIndex)
+            If InstalledAppxPkgInfo IsNot Nothing Then
+                If MainForm.imgAppxPackageNames.Count > InstalledAppxPkgInfo.Count Then
+                    Label23.Text = MainForm.imgAppxPackageNames(ListBox1.SelectedIndex)
+                    Label25.Text = MainForm.imgAppxDisplayNames(ListBox1.SelectedIndex)
+                    Label35.Text = MainForm.imgAppxArchitectures(ListBox1.SelectedIndex)
+                    Label32.Text = MainForm.imgAppxResourceIds(ListBox1.SelectedIndex)
+                    Label40.Text = MainForm.imgAppxVersions(ListBox1.SelectedIndex)
+                Else
+                    Label23.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).PackageName
+                    Label25.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).DisplayName
+                    Label35.Text = Casters.CastDismArchitecture(InstalledAppxPkgInfo(ListBox1.SelectedIndex).Architecture, True)
+                    Label32.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).ResourceId
+                    Label40.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).Version.ToString()
+                End If
             Else
-                Label23.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).PackageName
-                Label25.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).DisplayName
-                Label35.Text = Casters.CastDismArchitecture(InstalledAppxPkgInfo(ListBox1.SelectedIndex).Architecture, True)
-                Label32.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).ResourceId
-                Label40.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).Version.ToString()
+                Label23.Text = MainForm.imgAppxPackageNames(MainForm.imgAppxPackageNames.Count - (ListBox1.Items.Count - ListBox1.SelectedIndex) - 1)
+                Label25.Text = MainForm.imgAppxDisplayNames(MainForm.imgAppxPackageNames.Count - (ListBox1.Items.Count - ListBox1.SelectedIndex) - 1)
+                Label35.Text = MainForm.imgAppxArchitectures(MainForm.imgAppxPackageNames.Count - (ListBox1.Items.Count - ListBox1.SelectedIndex) - 1)
+                Label32.Text = MainForm.imgAppxResourceIds(MainForm.imgAppxPackageNames.Count - (ListBox1.Items.Count - ListBox1.SelectedIndex) - 1)
+                Label40.Text = MainForm.imgAppxVersions(MainForm.imgAppxPackageNames.Count - (ListBox1.Items.Count - ListBox1.SelectedIndex) - 1)
             End If
 
             displayName = Label25.Text

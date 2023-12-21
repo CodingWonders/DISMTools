@@ -220,7 +220,9 @@ Partial Class MainForm
         Me.Label35 = New System.Windows.Forms.Label()
         Me.Label34 = New System.Windows.Forms.Label()
         Me.Label22 = New System.Windows.Forms.Label()
+        Me.Panel4 = New System.Windows.Forms.Panel()
         Me.Label9 = New System.Windows.Forms.Label()
+        Me.LinkLabel25 = New System.Windows.Forms.LinkLabel()
         Me.TutorialVideoPanel = New System.Windows.Forms.Panel()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.FlowLayoutPanel2 = New System.Windows.Forms.FlowLayoutPanel()
@@ -493,8 +495,6 @@ Partial Class MainForm
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.FeedWorker = New System.ComponentModel.BackgroundWorker()
         Me.Timer2 = New System.Windows.Forms.Timer(Me.components)
-        Me.Panel4 = New System.Windows.Forms.Panel()
-        Me.LinkLabel25 = New System.Windows.Forms.LinkLabel()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -510,6 +510,7 @@ Partial Class MainForm
         Me.FeedContainer.SuspendLayout()
         Me.FeedsPanel.SuspendLayout()
         Me.FeedErrorPanel.SuspendLayout()
+        Me.Panel4.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.FlowLayoutPanel2.SuspendLayout()
         Me.SidePanel.SuspendLayout()
@@ -583,7 +584,6 @@ Partial Class MainForm
         Me.TreeViewCMS.SuspendLayout()
         Me.AppxResCMS.SuspendLayout()
         Me.AppxRelatedLinksCMS.SuspendLayout()
-        Me.Panel4.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
@@ -1957,6 +1957,16 @@ Partial Class MainForm
         Me.Label22.TabIndex = 0
         Me.Label22.Text = "We couldn't get the latest news"
         '
+        'Panel4
+        '
+        Me.Panel4.Controls.Add(Me.Label9)
+        Me.Panel4.Controls.Add(Me.LinkLabel25)
+        Me.Panel4.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Panel4.Location = New System.Drawing.Point(0, 571)
+        Me.Panel4.Name = "Panel4"
+        Me.Panel4.Size = New System.Drawing.Size(1008, 48)
+        Me.Panel4.TabIndex = 1
+        '
         'Label9
         '
         Me.Label9.AutoEllipsis = True
@@ -1968,6 +1978,20 @@ Partial Class MainForm
         Me.Label9.TabIndex = 0
         Me.Label9.Text = "To get the latest DISMTools development news, check out the discussion on the My " & _
     "Digital Life forums. An account is required to view most content."
+        '
+        'LinkLabel25
+        '
+        Me.LinkLabel25.AutoEllipsis = True
+        Me.LinkLabel25.Dock = System.Windows.Forms.DockStyle.Right
+        Me.LinkLabel25.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel25.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel25.Location = New System.Drawing.Point(880, 0)
+        Me.LinkLabel25.Name = "LinkLabel25"
+        Me.LinkLabel25.Size = New System.Drawing.Size(128, 48)
+        Me.LinkLabel25.TabIndex = 1
+        Me.LinkLabel25.TabStop = True
+        Me.LinkLabel25.Text = "Visit"
+        Me.LinkLabel25.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'TutorialVideoPanel
         '
@@ -3683,7 +3707,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32.42009!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 67.57991!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 88.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 89.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -3718,9 +3742,9 @@ Partial Class MainForm
         Me.LinkLabel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel1.Location = New System.Drawing.Point(69, 146)
+        Me.LinkLabel1.Location = New System.Drawing.Point(68, 146)
         Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(220, 254)
+        Me.LinkLabel1.Size = New System.Drawing.Size(221, 254)
         Me.LinkLabel1.TabIndex = 5
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "Click here to mount an image"
@@ -3730,7 +3754,7 @@ Partial Class MainForm
         Me.Panel8.Controls.Add(Me.projName)
         Me.Panel8.Controls.Add(Me.projNameText)
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel8.Location = New System.Drawing.Point(69, 3)
+        Me.Panel8.Location = New System.Drawing.Point(68, 3)
         Me.Panel8.Name = "Panel8"
         Me.Panel8.Size = New System.Drawing.Size(131, 23)
         Me.Panel8.TabIndex = 8
@@ -3762,9 +3786,9 @@ Partial Class MainForm
         Me.Label5.AutoSize = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label5, 2)
         Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label5.Location = New System.Drawing.Point(69, 131)
+        Me.Label5.Location = New System.Drawing.Point(68, 131)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(220, 15)
+        Me.Label5.Size = New System.Drawing.Size(221, 15)
         Me.Label5.TabIndex = 2
         Me.Label5.Text = "imgStatus"
         '
@@ -3774,7 +3798,7 @@ Partial Class MainForm
         Me.Label2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label2.Location = New System.Drawing.Point(3, 29)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(60, 102)
+        Me.Label2.Size = New System.Drawing.Size(59, 102)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "Location:"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -3784,9 +3808,9 @@ Partial Class MainForm
         Me.Label3.AutoEllipsis = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label3, 2)
         Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label3.Location = New System.Drawing.Point(69, 29)
+        Me.Label3.Location = New System.Drawing.Point(68, 29)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(220, 102)
+        Me.Label3.Size = New System.Drawing.Size(221, 102)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "projPath"
         '
@@ -3797,7 +3821,7 @@ Partial Class MainForm
         Me.Label4.Location = New System.Drawing.Point(3, 131)
         Me.Label4.Name = "Label4"
         Me.TableLayoutPanel2.SetRowSpan(Me.Label4, 2)
-        Me.Label4.Size = New System.Drawing.Size(60, 269)
+        Me.Label4.Size = New System.Drawing.Size(59, 269)
         Me.Label4.TabIndex = 1
         Me.Label4.Text = "Images mounted?"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -3808,7 +3832,7 @@ Partial Class MainForm
         Me.Panel9.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel9.Location = New System.Drawing.Point(3, 3)
         Me.Panel9.Name = "Panel9"
-        Me.Panel9.Size = New System.Drawing.Size(60, 23)
+        Me.Panel9.Size = New System.Drawing.Size(59, 23)
         Me.Panel9.TabIndex = 9
         '
         'Label1
@@ -3816,7 +3840,7 @@ Partial Class MainForm
         Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label1.Location = New System.Drawing.Point(0, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(60, 23)
+        Me.Label1.Size = New System.Drawing.Size(59, 23)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Name:"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -4873,30 +4897,6 @@ Partial Class MainForm
         '
         Me.Timer2.Interval = 900000
         '
-        'Panel4
-        '
-        Me.Panel4.Controls.Add(Me.Label9)
-        Me.Panel4.Controls.Add(Me.LinkLabel25)
-        Me.Panel4.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel4.Location = New System.Drawing.Point(0, 571)
-        Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(1008, 48)
-        Me.Panel4.TabIndex = 1
-        '
-        'LinkLabel25
-        '
-        Me.LinkLabel25.AutoEllipsis = True
-        Me.LinkLabel25.Dock = System.Windows.Forms.DockStyle.Right
-        Me.LinkLabel25.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel25.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel25.Location = New System.Drawing.Point(880, 0)
-        Me.LinkLabel25.Name = "LinkLabel25"
-        Me.LinkLabel25.Size = New System.Drawing.Size(128, 48)
-        Me.LinkLabel25.TabIndex = 1
-        Me.LinkLabel25.TabStop = True
-        Me.LinkLabel25.Text = "Visit"
-        Me.LinkLabel25.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -4930,6 +4930,7 @@ Partial Class MainForm
         Me.FeedsPanel.ResumeLayout(False)
         Me.FeedErrorPanel.ResumeLayout(False)
         Me.FeedErrorPanel.PerformLayout()
+        Me.Panel4.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
         Me.FlowLayoutPanel2.ResumeLayout(False)
         Me.FlowLayoutPanel2.PerformLayout()
@@ -5022,7 +5023,6 @@ Partial Class MainForm
         Me.TreeViewCMS.ResumeLayout(False)
         Me.AppxResCMS.ResumeLayout(False)
         Me.AppxRelatedLinksCMS.ResumeLayout(False)
-        Me.Panel4.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
