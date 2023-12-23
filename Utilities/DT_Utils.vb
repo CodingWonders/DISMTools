@@ -1,4 +1,5 @@
 ﻿Imports Microsoft.Dism
+Imports System.IO
 
 Namespace Utilities
 
@@ -1037,6 +1038,106 @@ Namespace Utilities
             Return Nothing
         End Function
 
+        Shared Function CastDriveType(DrType As DriveType, Optional Translate As Boolean = False) As String
+            Select Case DrType
+                Case DriveType.CDRom
+                    Return "CD-ROM"
+                Case DriveType.Fixed
+                    If Translate Then
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENU", "ENG"
+                                        Return "Fixed"
+                                    Case "ESN"
+                                        Return "Fijo"
+                                    Case "FRA"
+                                        Return "Fixe"
+                                End Select
+                            Case 1
+                                Return "Fixed"
+                            Case 2
+                                Return "Fijo"
+                            Case 3
+                                Return "Fixe"
+                        End Select
+                    Else
+                        Return "Fixed"
+                    End If
+                Case DriveType.Network
+                    If Translate Then
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENU", "ENG"
+                                        Return "Network"
+                                    Case "ESN"
+                                        Return "Red"
+                                    Case "FRA"
+                                        Return "Réseau"
+                                End Select
+                            Case 1
+                                Return "Network"
+                            Case 2
+                                Return "Red"
+                            Case 3
+                                Return "Réseau"
+                        End Select
+                    Else
+                        Return "Network"
+                    End If
+                Case DriveType.NoRootDirectory
+                    Return "No root directory present"
+                Case DriveType.Ram
+                    Return "RAM"
+                Case DriveType.Removable
+                    If Translate Then
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENU", "ENG"
+                                        Return "Removable"
+                                    Case "ESN"
+                                        Return "Removible"
+                                    Case "FRA"
+                                        Return "Amovible"
+                                End Select
+                            Case 1
+                                Return "Removable"
+                            Case 2
+                                Return "Removible"
+                            Case 3
+                                Return "Amovible"
+                        End Select
+                    Else
+                        Return "Removable"
+                    End If
+                Case DriveType.Unknown
+                    If Translate Then
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENU", "ENG"
+                                        Return "Unknown"
+                                    Case "ESN"
+                                        Return "Desconocido"
+                                    Case "FRA"
+                                        Return "Inconnu"
+                                End Select
+                            Case 1
+                                Return "Unknown"
+                            Case 2
+                                Return "Desconocido"
+                            Case 3
+                                Return "Inconnu"
+                        End Select
+                    Else
+                        Return "Unknown"
+                    End If
+            End Select
+            Return Nothing
+        End Function
+
     End Class
 
     Public Class Converters
@@ -1053,7 +1154,7 @@ Namespace Utilities
                 Case 1024 To 1048575
                     ' Use kilobyte (kB) format
                     If UseCountryRepresentation Then
-                        Return Math.Round(ByteSize / 1024, 2) & " ko"
+                        Return Math.Round(ByteSize / 1024, 2) & " Ko"
                     Else
                         Return Math.Round(ByteSize / 1024, 2) & " kB"
                     End If
@@ -1064,12 +1165,19 @@ Namespace Utilities
                     Else
                         Return Math.Round(ByteSize / 1024 ^ 2, 2) & " MB"
                     End If
-                Case Is >= 1073741824
+                Case 1073741824 To 1099511627775
                     ' Use gigabyte (GB) format
                     If UseCountryRepresentation Then
                         Return Math.Round(ByteSize / 1024 ^ 3, 2) & " Go"
                     Else
                         Return Math.Round(ByteSize / 1024 ^ 3, 2) & " GB"
+                    End If
+                Case Is >= 1099511627776
+                    ' Use terabyte (TB) format
+                    If UseCountryRepresentation Then
+                        Return Math.Round(ByteSize / 1024 ^ 4, 2) & " To"
+                    Else
+                        Return Math.Round(ByteSize / 1024 ^ 4, 2) & " TB"
                     End If
             End Select
             Return Nothing

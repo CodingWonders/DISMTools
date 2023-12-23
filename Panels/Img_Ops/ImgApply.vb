@@ -335,7 +335,7 @@ Public Class ImgApply
             Case 3
                 ToolStripStatusLabel1.Text = "Veuillez spécifier le modèle de dénomination des fichiers SWM"
         End Select
-        If MainForm.SourceImg = "N/A" Then
+        If MainForm.SourceImg = "N/A" Or Not File.Exists(MainForm.SourceImg) Or MainForm.OnlineManagement Or MainForm.OfflineManagement Then
             UseMountedImgBtn.Enabled = False
         Else
             UseMountedImgBtn.Enabled = True

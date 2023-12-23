@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../../img/favicon.ico" />
+    <title>Removing capabilities - DISMTools Help Documentation</title>
+    <link rel="stylesheet" href="../../../css/theme.css" />
+    <link rel="stylesheet" href="../../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Removing capabilities";
+        var mkdocs_page_input_path = "img_tasks\\capabilities\\remove_capability.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../../.." class="icon icon-home"> DISMTools Help Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../getting_started/start/">Getting started</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Image tasks</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../../img_tasks/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../online_inst_mgmt/">Online installation management mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../offline_inst_mgmt/">Offline installation management mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="#">Image management</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../mgmt/apply_image/">Applying an image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../mgmt/capture_image/">Capturing an image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../mgmt/delete_image/">Removing volume images from an image file</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../mgmt/mount_image/">Mounting an image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../mgmt/remount_image/">Remounting an image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../mgmt/split_image/">Splitting an image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../mgmt/unmount_image/">Unmounting an image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="#">Image information dialogs</a>
+    <ul>
+                <li class="toctree-l3"><a class="reference internal" href="../../info/infodlgs/">Overview</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../info/img_info/">Image file information</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../info/pkg_info/">Package information</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../info/feat_info/">Feature information</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../info/appxpkg_info/">AppX package information</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../info/cap_info/">Capability information</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../info/drv_info/">Driver information</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../info/winpe_info/">Windows PE configuration information</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="#">OS packages</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../packages/pkgs/">Overview</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../packages/add_package/">Adding packages</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../packages/remove_package/">Removing packages</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="#">Features</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../features/features/">Overview</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../features/enable_feature/">Enabling features</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../features/disable_feature/">Disabling features</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="#">AppX packages</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../appx/appx/">Overview</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../appx/add_provisionedappxpackage/">Adding AppX packages</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../appx/remove_provisionedappxpackage/">Removing AppX packages</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Capabilities</a>
+    <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="../caps/">Overview</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../add_capability/">Adding capabilities</a>
+                </li>
+                <li class="toctree-l2 current"><a class="reference internal current" href="./">Removing capabilities</a>
+    <ul class="current">
+    <li class="toctree-l3"><a class="reference internal" href="#target-os-support">Target OS support</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#related-topics">Related topics</a>
+    </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="#">Drivers</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../drivers/drvs/">Overview</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../drivers/add_driver/">Adding drivers</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../drivers/export_driver/">Exporting drivers</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../drivers/remove_driver/">Removing drivers</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="#">Windows PE servicing</a>
+    <ul>
+                <li class="toctree-l2"><a class="" href="../../winpe/set_targetpath.md">Setting the target path</a>
+                </li>
+                <li class="toctree-l2"><a class="" href="../../winpe/set_scratchspace.md">Setting the scratch space</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="#">Tools</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../tools/mimgmgr/">Mounted image manager</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../tools/wim2esd/">Image conversion</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../tools/swm2wim/">SWM file merger</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../tools/configlisteditor/">DISM Configuration List Editor</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Command-line tools</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../../cli_tools/cli_tools.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="#">Command Console</a>
+    <ul>
+                <li class="toctree-l2"><a class="" href="../../../cli_tools/cmd_console.md">Overview</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="#">Tools</a>
+    <ul>
+                <li class="toctree-l3"><a class="" href="../../../cli_tools/cmdhelp.md">Command help</a>
+                </li>
+                <li class="toctree-l3"><a class="" href="../../../cli_tools/mimgmgr.md">Mounted image manager (CLI version)</a>
+                </li>
+                <li class="toctree-l3"><a class="" href="../../../cli_tools/extappx.md">Extended AppX package getter</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../..">DISMTools Help Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Image tasks</li>
+          <li class="breadcrumb-item">Capabilities</li>
+      <li class="breadcrumb-item active">Removing capabilities</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="removing-capabilities">Removing capabilities</h1>
+<p align="center">
+    <img src="../../../res/img_tasks/capabilities/remove_capability.png" />
+</p>
+
+<p>With DISMTools you can remove capabilities, or Features on Demand (FoDs), from a Windows image or installation. This action can be accessed by clicking Commands &gt; Capabilities &gt; Remove capability...</p>
+<h2 id="target-os-support">Target OS support</h2>
+<p>This action is supported on the following platforms:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Platform</th>
+<th style="text-align: center;">Supported?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">Windows 7/Server 2008 R2</td>
+<td style="text-align: center;">❌</td>
+</tr>
+<tr>
+<td style="text-align: center;">Windows 8/Server 2012</td>
+<td style="text-align: center;">❌</td>
+</tr>
+<tr>
+<td style="text-align: center;">Windows 8.1/Server 2012 R2</td>
+<td style="text-align: center;">❌</td>
+</tr>
+<tr>
+<td style="text-align: center;">Windows 10/Server 2016/2019/2022</td>
+<td style="text-align: center;">✔</td>
+</tr>
+<tr>
+<td style="text-align: center;">Windows 11/Server vNext</td>
+<td style="text-align: center;">✔</td>
+</tr>
+</tbody>
+</table>
+<p><i>This action is supported on DISMTools 0.3 and newer</i></p>
+<h2 id="usage">Usage</h2>
+<p>You need to specify the capabilities you want to remove from your Windows image or installation.</p>
+<h2 id="related-topics">Related topics</h2>
+<ul>
+<li><a href="https://example.com">Command-line help</a></li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../add_capability/" class="btn btn-neutral float-left" title="Adding capabilities"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../drivers/drvs/" class="btn btn-neutral float-right" title="Overview">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../add_capability/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../../drivers/drvs/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../../..";</script>
+    <script src="../../../js/theme_extra.js"></script>
+    <script src="../../../js/theme.js"></script>
+      <script src="../../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

@@ -586,6 +586,8 @@ Public Class ProgressPanel
             Else
                 taskCount = 1
             End If
+        ElseIf opNum = 68 Then
+            taskCount = 1
         ElseIf opNum = 75 Then
             If drvAdditionCommit Then
                 taskCount = 2
@@ -946,6 +948,9 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 6 Then
+            ' This variable tells the program to use quotes when capturing a mount directory in a drive.
+            ' This is false when we want to capture an entire drive.
+            Dim UseQuotes As Boolean = Not Path.GetPathRoot(CaptureSourceDir) = CaptureSourceDir
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -980,10 +985,10 @@ Public Class ProgressPanel
                         Case 1
                             ' Not available
                         Case Is >= 2
-                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /capture-image /imagefile=" & Quote & CaptureDestinationImage & Quote & " /capturedir=" & Quote & CaptureSourceDir & Quote & " /name=" & Quote & CaptureName & Quote
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /capture-image /imagefile=" & Quote & CaptureDestinationImage & Quote & " /capturedir=" & If(UseQuotes, Quote, "") & CaptureSourceDir & If(UseQuotes, Quote, "") & " /name=" & Quote & CaptureName & Quote
                     End Select
                 Case 10
-                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /capture-image /imagefile=" & Quote & CaptureDestinationImage & Quote & " /capturedir=" & Quote & CaptureSourceDir & Quote & " /name=" & Quote & CaptureName & Quote
+                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /capture-image /imagefile=" & Quote & CaptureDestinationImage & Quote & " /capturedir=" & If(UseQuotes, Quote, "") & CaptureSourceDir & If(UseQuotes, Quote, "") & " /name=" & Quote & CaptureName & Quote
             End Select
             ' Get additional options
             If CaptureDescription = "" Then
@@ -2244,6 +2249,8 @@ Public Class ProgressPanel
             End If
             If featContactWindowsUpdate And OnlineMgmt Then
                 LogView.AppendText(CrLf & "- Contact Windows Update? Yes")
+            ElseIf featContactWindowsUpdate And OnlineMgmt And SystemInformation.BootMode = BootMode.FailSafe Then
+                LogView.AppendText(CrLf & "- Contact Windows Update? No, the system is in Safe Mode")
             ElseIf featContactWindowsUpdate And OnlineMgmt = False Then
                 LogView.AppendText(CrLf & "- Contact Windows Update? No, this is not an online installation")
             Else
@@ -2690,7 +2697,8 @@ Public Class ProgressPanel
                                        "Repairing the component store..." & CrLf & _
                                        "Options:" & CrLf & _
                                        "- Use different source? " & If(UseCompRepairSource, "Yes (" & Quote & ComponentRepairSource & Quote & ")", "No") & CrLf & _
-                                       "- Limit Windows Update access? " & If(LimitWUAccess And OnlineMgmt, "Yes", If(LimitWUAccess And Not OnlineMgmt, "No, this is not an online installation", "No")))
+                                       "- Limit Windows Update access? " & If(LimitWUAccess And OnlineMgmt, "Yes", If(LimitWUAccess And Not OnlineMgmt, "No, this is not an online installation", "No")) & _
+                                       If(Not LimitWUAccess And OnlineMgmt And SystemInformation.BootMode = BootMode.FailSafe, ", the system is in Safe Mode", ""))
                     CommandArgs &= " /restorehealth" & If(UseCompRepairSource And File.Exists(ComponentRepairSource), " /source=" & Quote & ComponentRepairSource & Quote, "") & If(LimitWUAccess And OnlineMgmt, " /limitaccess", "")
             End Select
             DISMProc.StartInfo.Arguments = CommandArgs
@@ -3177,7 +3185,7 @@ Public Class ProgressPanel
                                "Options:" & CrLf & _
                                "- Use a source for capability addition? " & If(capAdditionUseSource, "Yes", "No") & CrLf & _
                                "- Capability source: " & If(capAdditionUseSource, Quote & capAdditionSource & Quote, "No source has been provided") & CrLf & _
-                               "- Limit access to Windows Update? " & If(capAdditionLimitWUAccess And OnlineMgmt, "Yes", If(capAdditionLimitWUAccess And Not OnlineMgmt, "No, this is not an online installation", "No")) & CrLf & _
+                               "- Limit access to Windows Update? " & If(capAdditionLimitWUAccess And OnlineMgmt, "Yes", If(capAdditionLimitWUAccess And Not OnlineMgmt, "No, this is not an online installation", "No")) & If(Not capAdditionLimitWUAccess And OnlineMgmt And SystemInformation.BootMode = BootMode.FailSafe, ", the system is in Safe Mode", "") & CrLf & _
                                "- Commit image after adding capabilities? " & If(capAdditionCommit, "Yes", "No") & CrLf)
             If capAdditionUseSource And Not Directory.Exists(capAdditionSource) Then
                 LogView.AppendText(CrLf & _
@@ -5054,6 +5062,7 @@ Public Class ProgressPanel
                 Next
             End If
         End If
+        If MainForm.OfflineManagement Then mntString = MainForm.MountDir
         DismProgram = MainForm.DismExe
         If MountDir = "" Then MountDir = MainForm.MountDir
         DISMProc.StartInfo.CreateNoWindow = False
@@ -5261,11 +5270,19 @@ Public Class ProgressPanel
 #End Region
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
-        If File.Exists(Application.StartupPath & "\logs\" & dateStr) Then
-            Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\notepad.exe", Application.StartupPath & "\logs\" & dateStr)
-        ElseIf File.Exists(LogPath) Then
-            Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\notepad.exe", LogPath)
-        End If
+        Try
+            If File.Exists(Application.StartupPath & "\logs\" & dateStr) Then
+                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\notepad.exe", Application.StartupPath & "\logs\" & dateStr)
+            ElseIf File.Exists(LogPath) Then
+                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\notepad.exe", LogPath)
+            End If
+        Catch ex As Exception
+            If Not File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\notepad.exe") Then
+                LogView.AppendText(CrLf & "Notepad was not found")
+            ElseIf Not File.Exists(Application.StartupPath & "\logs\" & dateStr) Or Not File.Exists(LogPath) Then
+                LogView.AppendText(CrLf & "The log file was not found")
+            End If
+        End Try
     End Sub
 
     Private Sub BodyPanel_Paint(sender As Object, e As PaintEventArgs) Handles BodyPanel.Paint

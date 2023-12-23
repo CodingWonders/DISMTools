@@ -292,7 +292,7 @@ Public Class ImgIndexDelete
             Text = ""
             Win10Title.Visible = True
         End If
-        If MainForm.SourceImg = "N/A" Then Button2.Enabled = False Else Button2.Enabled = True
+        If MainForm.SourceImg = "N/A" Or Not File.Exists(MainForm.SourceImg) Or MainForm.OnlineManagement Or MainForm.OfflineManagement Then Button2.Enabled = False Else Button2.Enabled = True
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
             BackColor = Color.FromArgb(31, 31, 31)

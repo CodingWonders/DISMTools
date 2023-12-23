@@ -52,6 +52,9 @@ Partial Class Options
         Me.RadioButton5 = New System.Windows.Forms.RadioButton()
         Me.CheckBox9 = New System.Windows.Forms.CheckBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Panel4 = New System.Windows.Forms.Panel()
+        Me.Label47 = New System.Windows.Forms.Label()
+        Me.PictureBox9 = New System.Windows.Forms.PictureBox()
         Me.Toggle1 = New System.Windows.Forms.CheckBox()
         Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
         Me.LogPreview = New System.Windows.Forms.TextBox()
@@ -77,6 +80,15 @@ Partial Class Options
         Me.CheckBox10 = New System.Windows.Forms.CheckBox()
         Me.PictureBox4 = New System.Windows.Forms.PictureBox()
         Me.TabPage4 = New System.Windows.Forms.TabPage()
+        Me.GroupBox6 = New System.Windows.Forms.GroupBox()
+        Me.CheckBox14 = New System.Windows.Forms.CheckBox()
+        Me.Label48 = New System.Windows.Forms.Label()
+        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.CheckBox15 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox19 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox18 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox16 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox17 = New System.Windows.Forms.CheckBox()
         Me.Label19 = New System.Windows.Forms.Label()
         Me.Label18 = New System.Windows.Forms.Label()
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
@@ -154,6 +166,7 @@ Partial Class Options
         Me.Label43 = New System.Windows.Forms.Label()
         Me.PrefReset = New System.Windows.Forms.Button()
         Me.LogSFD = New System.Windows.Forms.SaveFileDialog()
+        Me.CheckBox20 = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -164,12 +177,16 @@ Partial Class Options
         Me.TabPage2.SuspendLayout()
         CType(Me.SecProgressStylePreview, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
+        Me.Panel4.SuspendLayout()
+        CType(Me.PictureBox9, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabPage3.SuspendLayout()
         Me.Panel1.SuspendLayout()
         CType(Me.TrackBar1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabPage4.SuspendLayout()
+        Me.GroupBox6.SuspendLayout()
+        Me.TableLayoutPanel2.SuspendLayout()
         Me.TabPage5.SuspendLayout()
         CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabPage6.SuspendLayout()
@@ -441,6 +458,7 @@ Partial Class Options
         '
         'TabPage2
         '
+        Me.TabPage2.Controls.Add(Me.CheckBox20)
         Me.TabPage2.Controls.Add(Me.SecProgressStylePreview)
         Me.TabPage2.Controls.Add(Me.RadioButton6)
         Me.TabPage2.Controls.Add(Me.RadioButton5)
@@ -471,21 +489,21 @@ Partial Class Options
         '
         'RadioButton6
         '
-        Me.RadioButton6.AutoSize = True
-        Me.RadioButton6.Location = New System.Drawing.Point(25, 402)
+        Me.RadioButton6.AutoEllipsis = True
+        Me.RadioButton6.Location = New System.Drawing.Point(194, 377)
         Me.RadioButton6.Name = "RadioButton6"
-        Me.RadioButton6.Size = New System.Drawing.Size(57, 17)
+        Me.RadioButton6.Size = New System.Drawing.Size(127, 17)
         Me.RadioButton6.TabIndex = 6
         Me.RadioButton6.Text = "Classic"
         Me.RadioButton6.UseVisualStyleBackColor = True
         '
         'RadioButton5
         '
-        Me.RadioButton5.AutoSize = True
+        Me.RadioButton5.AutoEllipsis = True
         Me.RadioButton5.Checked = True
-        Me.RadioButton5.Location = New System.Drawing.Point(25, 379)
+        Me.RadioButton5.Location = New System.Drawing.Point(52, 377)
         Me.RadioButton5.Name = "RadioButton5"
-        Me.RadioButton5.Size = New System.Drawing.Size(61, 17)
+        Me.RadioButton5.Size = New System.Drawing.Size(131, 17)
         Me.RadioButton5.TabIndex = 6
         Me.RadioButton5.TabStop = True
         Me.RadioButton5.Text = "Modern"
@@ -503,6 +521,7 @@ Partial Class Options
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.Panel4)
         Me.GroupBox1.Controls.Add(Me.Toggle1)
         Me.GroupBox1.Controls.Add(Me.NumericUpDown1)
         Me.GroupBox1.Controls.Add(Me.LogPreview)
@@ -516,6 +535,36 @@ Partial Class Options
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Log customization"
+        '
+        'Panel4
+        '
+        Me.Panel4.Controls.Add(Me.Label47)
+        Me.Panel4.Controls.Add(Me.PictureBox9)
+        Me.Panel4.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Panel4.Location = New System.Drawing.Point(3, 239)
+        Me.Panel4.Name = "Panel4"
+        Me.Panel4.Size = New System.Drawing.Size(697, 34)
+        Me.Panel4.TabIndex = 7
+        Me.Panel4.Visible = False
+        '
+        'Label47
+        '
+        Me.Label47.Location = New System.Drawing.Point(33, 3)
+        Me.Label47.Name = "Label47"
+        Me.Label47.Size = New System.Drawing.Size(652, 33)
+        Me.Label47.TabIndex = 9
+        Me.Label47.Text = "This font may not be readable on log windows. While you can still use it, we reco" & _
+    "mmend monospaced fonts for increased readability."
+        '
+        'PictureBox9
+        '
+        Me.PictureBox9.Image = Global.DISMTools.My.Resources.Resources.info_16px
+        Me.PictureBox9.Location = New System.Drawing.Point(11, 3)
+        Me.PictureBox9.Name = "PictureBox9"
+        Me.PictureBox9.Size = New System.Drawing.Size(16, 16)
+        Me.PictureBox9.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox9.TabIndex = 8
+        Me.PictureBox9.TabStop = False
         '
         'Toggle1
         '
@@ -549,7 +598,7 @@ Partial Class Options
         Me.LogPreview.Name = "LogPreview"
         Me.LogPreview.ReadOnly = True
         Me.LogPreview.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.LogPreview.Size = New System.Drawing.Size(607, 134)
+        Me.LogPreview.Size = New System.Drawing.Size(607, 117)
         Me.LogPreview.TabIndex = 4
         Me.LogPreview.Text = resources.GetString("LogPreview.Text")
         '
@@ -767,6 +816,7 @@ Partial Class Options
         '
         'TabPage4
         '
+        Me.TabPage4.Controls.Add(Me.GroupBox6)
         Me.TabPage4.Controls.Add(Me.Label19)
         Me.TabPage4.Controls.Add(Me.Label18)
         Me.TabPage4.Controls.Add(Me.CheckBox3)
@@ -780,6 +830,117 @@ Partial Class Options
         Me.TabPage4.TabIndex = 3
         Me.TabPage4.Text = "Image operations"
         Me.TabPage4.UseVisualStyleBackColor = True
+        '
+        'GroupBox6
+        '
+        Me.GroupBox6.Controls.Add(Me.CheckBox14)
+        Me.GroupBox6.Controls.Add(Me.Label48)
+        Me.GroupBox6.Controls.Add(Me.TableLayoutPanel2)
+        Me.GroupBox6.Location = New System.Drawing.Point(25, 261)
+        Me.GroupBox6.Name = "GroupBox6"
+        Me.GroupBox6.Size = New System.Drawing.Size(704, 136)
+        Me.GroupBox6.TabIndex = 9
+        Me.GroupBox6.TabStop = False
+        Me.GroupBox6.Text = "Saving information"
+        '
+        'CheckBox14
+        '
+        Me.CheckBox14.AutoSize = True
+        Me.CheckBox14.Location = New System.Drawing.Point(20, 55)
+        Me.CheckBox14.Name = "CheckBox14"
+        Me.CheckBox14.Size = New System.Drawing.Size(320, 17)
+        Me.CheckBox14.TabIndex = 1
+        Me.CheckBox14.Text = "Always save complete information for the following elements:"
+        Me.CheckBox14.UseVisualStyleBackColor = True
+        '
+        'Label48
+        '
+        Me.Label48.AutoEllipsis = True
+        Me.Label48.Location = New System.Drawing.Point(18, 24)
+        Me.Label48.Name = "Label48"
+        Me.Label48.Size = New System.Drawing.Size(680, 26)
+        Me.Label48.TabIndex = 0
+        Me.Label48.Text = "Choose the settings the program should consider when saving image information:"
+        '
+        'TableLayoutPanel2
+        '
+        Me.TableLayoutPanel2.ColumnCount = 3
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
+        Me.TableLayoutPanel2.Controls.Add(Me.CheckBox15, 0, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.CheckBox19, 2, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.CheckBox18, 1, 1)
+        Me.TableLayoutPanel2.Controls.Add(Me.CheckBox16, 0, 1)
+        Me.TableLayoutPanel2.Controls.Add(Me.CheckBox17, 1, 0)
+        Me.TableLayoutPanel2.Enabled = False
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(37, 79)
+        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
+        Me.TableLayoutPanel2.RowCount = 2
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(642, 51)
+        Me.TableLayoutPanel2.TabIndex = 2
+        '
+        'CheckBox15
+        '
+        Me.CheckBox15.AutoSize = True
+        Me.CheckBox15.Checked = True
+        Me.CheckBox15.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox15.Location = New System.Drawing.Point(3, 3)
+        Me.CheckBox15.Name = "CheckBox15"
+        Me.CheckBox15.Size = New System.Drawing.Size(115, 17)
+        Me.CheckBox15.TabIndex = 1
+        Me.CheckBox15.Text = "Installed packages"
+        Me.CheckBox15.UseVisualStyleBackColor = True
+        '
+        'CheckBox19
+        '
+        Me.CheckBox19.AutoSize = True
+        Me.CheckBox19.Checked = True
+        Me.CheckBox19.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox19.Location = New System.Drawing.Point(431, 3)
+        Me.CheckBox19.Name = "CheckBox19"
+        Me.CheckBox19.Size = New System.Drawing.Size(103, 17)
+        Me.CheckBox19.TabIndex = 1
+        Me.CheckBox19.Text = "Installed drivers"
+        Me.CheckBox19.UseVisualStyleBackColor = True
+        '
+        'CheckBox18
+        '
+        Me.CheckBox18.AutoSize = True
+        Me.CheckBox18.Checked = True
+        Me.CheckBox18.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox18.Location = New System.Drawing.Point(217, 28)
+        Me.CheckBox18.Name = "CheckBox18"
+        Me.CheckBox18.Size = New System.Drawing.Size(80, 17)
+        Me.CheckBox18.TabIndex = 1
+        Me.CheckBox18.Text = "Capabilities"
+        Me.CheckBox18.UseVisualStyleBackColor = True
+        '
+        'CheckBox16
+        '
+        Me.CheckBox16.AutoSize = True
+        Me.CheckBox16.Checked = True
+        Me.CheckBox16.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox16.Location = New System.Drawing.Point(3, 28)
+        Me.CheckBox16.Name = "CheckBox16"
+        Me.CheckBox16.Size = New System.Drawing.Size(69, 17)
+        Me.CheckBox16.TabIndex = 1
+        Me.CheckBox16.Text = "Features"
+        Me.CheckBox16.UseVisualStyleBackColor = True
+        '
+        'CheckBox17
+        '
+        Me.CheckBox17.AutoSize = True
+        Me.CheckBox17.Checked = True
+        Me.CheckBox17.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox17.Location = New System.Drawing.Point(217, 3)
+        Me.CheckBox17.Name = "CheckBox17"
+        Me.CheckBox17.Size = New System.Drawing.Size(143, 17)
+        Me.CheckBox17.TabIndex = 1
+        Me.CheckBox17.Text = "Installed AppX packages"
+        Me.CheckBox17.UseVisualStyleBackColor = True
         '
         'Label19
         '
@@ -1601,6 +1762,16 @@ Partial Class Options
         Me.LogSFD.Filter = "All files|*.*"
         Me.LogSFD.Title = "Specify the location of the log file"
         '
+        'CheckBox20
+        '
+        Me.CheckBox20.AutoEllipsis = True
+        Me.CheckBox20.Location = New System.Drawing.Point(25, 403)
+        Me.CheckBox20.Name = "CheckBox20"
+        Me.CheckBox20.Size = New System.Drawing.Size(337, 17)
+        Me.CheckBox20.TabIndex = 8
+        Me.CheckBox20.Text = "Use the new project view design"
+        Me.CheckBox20.UseVisualStyleBackColor = True
+        '
         'Options
         '
         Me.AcceptButton = Me.OK_Button
@@ -1634,6 +1805,9 @@ Partial Class Options
         CType(Me.SecProgressStylePreview, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        Me.Panel4.ResumeLayout(False)
+        Me.Panel4.PerformLayout()
+        CType(Me.PictureBox9, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TabPage3.ResumeLayout(False)
         Me.TabPage3.PerformLayout()
@@ -1643,6 +1817,10 @@ Partial Class Options
         CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TabPage4.ResumeLayout(False)
         Me.TabPage4.PerformLayout()
+        Me.GroupBox6.ResumeLayout(False)
+        Me.GroupBox6.PerformLayout()
+        Me.TableLayoutPanel2.ResumeLayout(False)
+        Me.TableLayoutPanel2.PerformLayout()
         Me.TabPage5.ResumeLayout(False)
         Me.TabPage5.PerformLayout()
         CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).EndInit()
@@ -1807,5 +1985,18 @@ Partial Class Options
     Friend WithEvents PictureBox8 As System.Windows.Forms.PictureBox
     Friend WithEvents Panel2 As System.Windows.Forms.Panel
     Friend WithEvents Panel3 As System.Windows.Forms.Panel
+    Friend WithEvents Panel4 As System.Windows.Forms.Panel
+    Friend WithEvents Label47 As System.Windows.Forms.Label
+    Friend WithEvents PictureBox9 As System.Windows.Forms.PictureBox
+    Friend WithEvents GroupBox6 As System.Windows.Forms.GroupBox
+    Friend WithEvents CheckBox14 As System.Windows.Forms.CheckBox
+    Friend WithEvents Label48 As System.Windows.Forms.Label
+    Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents CheckBox15 As System.Windows.Forms.CheckBox
+    Friend WithEvents CheckBox19 As System.Windows.Forms.CheckBox
+    Friend WithEvents CheckBox18 As System.Windows.Forms.CheckBox
+    Friend WithEvents CheckBox16 As System.Windows.Forms.CheckBox
+    Friend WithEvents CheckBox17 As System.Windows.Forms.CheckBox
+    Friend WithEvents CheckBox20 As System.Windows.Forms.CheckBox
 
 End Class

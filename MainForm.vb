@@ -6,6 +6,8 @@ Imports System.Text.Encoding
 Imports Microsoft.Win32
 Imports Microsoft.Dism
 Imports System.Runtime.InteropServices
+Imports System.Xml
+Imports System.ServiceModel.Syndication
 
 Public Class MainForm
 
@@ -109,6 +111,8 @@ Public Class MainForm
 
     ' Variable used for online installation management
     Public OnlineManagement As Boolean
+    ' Variable used for offline installation management
+    Public OfflineManagement As Boolean
 
     ' These are the variables that need to change when testing setting validity
     Public isExeProblematic As Boolean
@@ -121,7 +125,7 @@ Public Class MainForm
     Public isSqlServerDTProj As Boolean
 
     ' Set branch name and codenames
-    Public dtBranch As String = "stable"
+    Public dtBranch As String = "dt_preview"
 
     ' Arrays and other variables used on background processes
     Public imgPackageNames(65535) As String
@@ -224,6 +228,19 @@ Public Class MainForm
 
     Dim NoMigration As Boolean                                           ' Set this variable to true ONLY if the IDE started the program
 
+    Public drivePath As String = ""
+
+    Public EnableExperiments As Boolean
+
+    Public SkipQuestions As Boolean             ' Skips questions in the info saver
+    Public AutoCompleteInfo(4) As Boolean       ' Skips questions for specific info categories
+
+    Public GoToNewView As Boolean
+
+    Dim FeedContents As New SyndicationFeed()
+    Dim FeedLinks As New List(Of Uri)
+    Dim FeedEx As Exception
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -295,6 +312,8 @@ Public Class MainForm
                     Thread.Sleep(1500)
                 ElseIf arg.StartsWith("/nomig", StringComparison.OrdinalIgnoreCase) Then
                     NoMigration = True
+                ElseIf arg.StartsWith("/exp", StringComparison.OrdinalIgnoreCase) Then
+                    EnableExperiments = True
                 End If
             Next
         End If
@@ -383,6 +402,25 @@ Public Class MainForm
         End If
         If argOnline Then
             BeginOnlineManagement(True)
+        End If
+        Timer1.Enabled = True
+        LinkLabel12.LinkColor = Color.FromArgb(241, 241, 241)
+        LinkLabel13.LinkColor = Color.FromArgb(153, 153, 153)
+        FeedWorker.RunWorkerAsync()
+        Timer2.Enabled = True
+        LinkLabel22.LinkColor = ForeColor
+        If GetStartedPanel.Visible Then
+            LinkLabel22.LinkColor = ForeColor
+            LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
+            LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
+        ElseIf LatestNewsPanel.Visible Then
+            LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
+            LinkLabel23.LinkColor = ForeColor
+            LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
+        ElseIf TutorialVideoPanel.Visible Then
+            LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
+            LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
+            LinkLabel24.LinkColor = ForeColor
         End If
     End Sub
 
@@ -573,6 +611,7 @@ Public Class MainForm
                     Label5.Text = "Non"
             End Select
             LinkLabel1.Visible = True
+            LinkLabel14.Visible = True
         Else
             Select Case Language
                 Case 0
@@ -592,7 +631,9 @@ Public Class MainForm
                     Label5.Text = "Oui"
             End Select
             LinkLabel1.Visible = False
+            LinkLabel14.Visible = False
         End If
+        Label50.Text = Label5.Text
     End Sub
 
     ''' <summary>
@@ -947,6 +988,14 @@ Public Class MainForm
                 LogFontIsBold = (CInt(PersKey.GetValue("LogFontBold")) = 1)
                 ProgressPanelStyle = CInt(PersKey.GetValue("SecondaryProgressPanelStyle"))
                 AllCaps = (CInt(PersKey.GetValue("AllCaps")) = 1)
+                GoToNewView = (CInt(PersKey.GetValue("NewDesign")) = 1)
+                If GoToNewView Then
+                    ProjectView.Visible = True
+                    SplitPanels.Visible = False
+                Else
+                    ProjectView.Visible = False
+                    SplitPanels.Visible = True
+                End If
                 PersKey.Close()
                 Dim LogKey As RegistryKey = Key.OpenSubKey("Logs")
                 LogFile = LogKey.GetValue("LogFile").ToString().Replace(Quote, "").Trim()
@@ -992,6 +1041,14 @@ Public Class MainForm
                 End If
                 WindowState = If(CInt(WndKey.GetValue("WndMaximized")) = 1, FormWindowState.Maximized, FormWindowState.Normal)
                 WndKey.Close()
+                Dim InfoSaverKey As RegistryKey = Key.OpenSubKey("InfoSaver")
+                SkipQuestions = (CInt(InfoSaverKey.GetValue("SkipQuestions")) = 1)
+                AutoCompleteInfo(0) = (CInt(InfoSaverKey.GetValue("Pkg_CompleteInfo")) = 1)
+                AutoCompleteInfo(1) = (CInt(InfoSaverKey.GetValue("Feat_CompleteInfo")) = 1)
+                AutoCompleteInfo(2) = (CInt(InfoSaverKey.GetValue("AppX_CompleteInfo")) = 1)
+                AutoCompleteInfo(3) = (CInt(InfoSaverKey.GetValue("Cap_CompleteInfo")) = 1)
+                AutoCompleteInfo(4) = (CInt(InfoSaverKey.GetValue("Drv_CompleteInfo")) = 1)
+                InfoSaverKey.Close()
                 Key.Close()
                 ' Apply program colors immediately
                 ChangePrgColors(ColorMode)
@@ -1057,7 +1114,7 @@ Public Class MainForm
                     ElseIf line.StartsWith("LogFile=", StringComparison.OrdinalIgnoreCase) Then
                         ' Detect log file path. If file does not exist, create one
                         LogFile = line.Replace("LogFile=", "").Trim().Replace(Quote, "").Trim()
-                        If LogFile.StartsWith("{common:WinDir", StringComparison.OrdinalIgnoreCase) Then LogFile = LogFile.Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
+                        If LogFile.StartsWith("{common:WinDir}", StringComparison.OrdinalIgnoreCase) Then LogFile = LogFile.Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
                     ElseIf line.StartsWith("ScratchDirLocation=", StringComparison.OrdinalIgnoreCase) Then
                         ScratchDir = line.Replace("ScratchDirLocation=", "").Trim().Replace(Quote, "").Trim()
                     ElseIf line.StartsWith("WndWidth=", StringComparison.OrdinalIgnoreCase) Then
@@ -1092,6 +1149,18 @@ Public Class MainForm
                     CommandsToolStripMenuItem.Text = CommandsToolStripMenuItem.Text.ToUpper()
                     ToolsToolStripMenuItem.Text = ToolsToolStripMenuItem.Text.ToUpper()
                     HelpToolStripMenuItem.Text = HelpToolStripMenuItem.Text.ToUpper()
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("NewDesign=1") Then
+                    GoToNewView = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("NewDesign=0") Then
+                    GoToNewView = False
+                End If
+                If GoToNewView Then
+                    ProjectView.Visible = True
+                    SplitPanels.Visible = False
+                Else
+                    ProjectView.Visible = False
+                    SplitPanels.Visible = True
                 End If
                 ' Detect log file level: 1 - Errors only
                 '                        2 - Errors and warnings
@@ -1208,6 +1277,36 @@ Public Class MainForm
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("WndMaximized=0") Then
                     WindowState = FormWindowState.Normal
                 End If
+                If DTSettingForm.RichTextBox1.Text.Contains("SkipQuestions=1") Then
+                    SkipQuestions = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("SkipQuestions=0") Then
+                    SkipQuestions = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("Pkg_CompleteInfo=1") Then
+                    AutoCompleteInfo(0) = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Pkg_CompleteInfo=0") Then
+                    AutoCompleteInfo(0) = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("Feat_CompleteInfo=1") Then
+                    AutoCompleteInfo(1) = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Feat_CompleteInfo=0") Then
+                    AutoCompleteInfo(1) = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("AppX_CompleteInfo=1") Then
+                    AutoCompleteInfo(2) = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("AppX_CompleteInfo=0") Then
+                    AutoCompleteInfo(2) = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("Cap_CompleteInfo=1") Then
+                    AutoCompleteInfo(3) = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Cap_CompleteInfo=0") Then
+                    AutoCompleteInfo(3) = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("Drv_CompleteInfo=1") Then
+                    AutoCompleteInfo(4) = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Drv_CompleteInfo=0") Then
+                    AutoCompleteInfo(4) = False
+                End If
             Else
                 GenerateDTSettings()
                 LoadDTSettings(1)
@@ -1290,7 +1389,7 @@ Public Class MainForm
     ''' <param name="UseApi">(Optional) Uses the DISM API to get image information and to reduce the time these processes take</param>
     ''' <param name="OnlineMode">(Optional) Detects properties of an active Windows installation if this value is True. Otherwise, if it is False or is not set, it won't pass this option</param>
     ''' <remarks>Depending on the parameter of bgProcOptn, and on the power of the system, the background processes may take a longer time to finish</remarks>
-    Sub RunBackgroundProcesses(bgProcOptn As Integer, GatherBasicInfo As Boolean, GatherAdvancedInfo As Boolean, Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
+    Sub RunBackgroundProcesses(bgProcOptn As Integer, GatherBasicInfo As Boolean, GatherAdvancedInfo As Boolean, Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False, Optional OfflineMode As Boolean = False)
         IsCompatible = True
         If Not IsImageMounted Then
             Button1.Enabled = True
@@ -1306,6 +1405,42 @@ Public Class MainForm
             Button11.Enabled = False
             Button12.Enabled = False
             Button13.Enabled = False
+            ' Update the buttons in the new design accordingly
+            Button26.Enabled = True
+            Button27.Enabled = False
+            Button28.Enabled = False
+            Button29.Enabled = False
+            Button24.Enabled = False
+            Button25.Enabled = False
+            Button30.Enabled = False
+            Button31.Enabled = False
+            Button32.Enabled = False
+            Button33.Enabled = False
+            Button34.Enabled = False
+            Button35.Enabled = False
+            Button36.Enabled = False
+            Button37.Enabled = False
+            Button38.Enabled = False
+            Button39.Enabled = False
+            Button40.Enabled = False
+            Button41.Enabled = False
+            Button42.Enabled = False
+            Button43.Enabled = False
+            Button44.Enabled = False
+            Button45.Enabled = False
+            Button46.Enabled = False
+            Button47.Enabled = False
+            Button48.Enabled = False
+            Button49.Enabled = False
+            Button50.Enabled = False
+            Button51.Enabled = False
+            Button52.Enabled = False
+            Button53.Enabled = False
+            Button54.Enabled = False
+            Button55.Enabled = False
+            Button56.Enabled = False
+            Button57.Enabled = False
+            Button58.Enabled = False
             Exit Sub
         End If
         Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
@@ -1320,7 +1455,7 @@ Public Class MainForm
         pbOpNums = 0
         Dim session As DismSession = Nothing
         If UseApi Then
-            If Not OnlineMode Then
+            If Not OnlineMode And Not OfflineMode Then
                 Try
                     For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
                         If MountedImageMountDirs(x) = MountDir Then
@@ -1351,6 +1486,7 @@ Public Class MainForm
                 End Try
             End If
         End If
+        If OfflineMode Then sessionMntDir = MountDir
         ' Determine which actions are being done
         If GatherBasicInfo Then
             If GatherAdvancedInfo Then
@@ -1411,7 +1547,7 @@ Public Class MainForm
                     progressLabel = "Obtention des informations basiques sur l'image en cours..."
             End Select
             ImgBW.ReportProgress(progressMin + progressDivs)
-            GetBasicImageInfo(True, OnlineMode)
+            GetBasicImageInfo(True, OnlineMode, OfflineMode)
             If isOrphaned Then
                 'If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
                 Exit Sub
@@ -1442,7 +1578,7 @@ Public Class MainForm
                         progressLabel = "Obtention des informations avancées sur l'image en cours..."
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
-                GetAdvancedImageInfo(True, OnlineMode)
+                GetAdvancedImageInfo(True, OnlineMode, OfflineMode)
             End If
         End If
         Directory.CreateDirectory(Application.StartupPath & "\tempinfo")
@@ -1785,15 +1921,19 @@ Public Class MainForm
     ''' Gets basic image information, such as its index, its file path, or its mount dir
     ''' </summary>
     ''' <remarks>Depending on the GatherBasicInfo flag in RunBackgroundProcesses, this function will run or not</remarks>
-    Sub GetBasicImageInfo(Optional Streamlined As Boolean = False, Optional OnlineMode As Boolean = False)
+    Sub GetBasicImageInfo(Optional Streamlined As Boolean = False, Optional OnlineMode As Boolean = False, Optional OfflineMode As Boolean = False)
         ' Set image properties
         Label14.Text = ProgressPanel.ImgIndex
         Label12.Text = ProgressPanel.MountDir
+        Label41.Text = Label14.Text
+        Label44.Text = Label12.Text
         ' Loading the project directly with an image already mounted makes the two labels above be wrong.
         ' Check them and use local vars
         If Label14.Text = "0" Or Label12.Text = "" Then     ' Label14 (index preview label) returns 0 and Label12 (mount dir preview) returns blank
             Label14.Text = ImgIndex
             Label12.Text = MountDir
+            Label41.Text = Label14.Text
+            Label44.Text = Label12.Text
         End If
         If Streamlined Then
             If OnlineMode Then
@@ -1831,12 +1971,84 @@ Public Class MainForm
                 Label18.Text = My.Computer.Info.OSFullName
                 Label12.Text = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows))
                 Label3.Text = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows))
+                Label49.Text = projName.Text
+                Label52.Text = Label3.Text
+                Label44.Text = Label12.Text
+                Label46.Text = Label18.Text
+                Label41.Text = Label14.Text
+                Label48.Text = Label17.Text
+                Label47.Text = Label20.Text
+                ' Disable tasks in the new design accordingly
+                Button24.Enabled = False
+                Button25.Enabled = False
+                Button26.Enabled = False
+                Button27.Enabled = False
+                Button28.Enabled = False
+                Button29.Enabled = False
+            ElseIf OfflineMode Then
+                Label17.Text = FileVersionInfo.GetVersionInfo(MountDir & "\Windows\system32\ntoskrnl.exe").ProductVersion
+                imgVersionInfo = New Version(FileVersionInfo.GetVersionInfo(MountDir & "\Windows\system32\ntoskrnl.exe").ProductVersion)
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                Label14.Text = "(Offline installation)"
+                                Label18.Text = "(Offline installation)"
+                                Label20.Text = "(Offline installation)"
+                                projName.Text = "(Offline installation)"
+                            Case "ESN"
+                                Label14.Text = "(Instalación fuera de línea)"
+                                Label18.Text = "(Instalación fuera de línea)"
+                                Label20.Text = "(Instalación fuera de línea)"
+                                projName.Text = "(Instalación fuera de línea)"
+                            Case "FRA"
+                                Label14.Text = "(Installation hors ligne)"
+                                Label18.Text = "(Installation hors ligne)"
+                                Label20.Text = "(Installation hors ligne)"
+                                projName.Text = "(Installation hors ligne)"
+                        End Select
+                    Case 1
+                        Label14.Text = "(Offline installation)"
+                        Label18.Text = "(Offline installation)"
+                        Label20.Text = "(Offline installation)"
+                        projName.Text = "(Offline installation)"
+                    Case 2
+                        Label14.Text = "(Instalación fuera de línea)"
+                        Label18.Text = "(Instalación fuera de línea)"
+                        Label20.Text = "(Instalación fuera de línea)"
+                        projName.Text = "(Instalación fuera de línea)"
+                    Case 3
+                        Label14.Text = "(Installation hors ligne)"
+                        Label18.Text = "(Installation hors ligne)"
+                        Label20.Text = "(Installation hors ligne)"
+                        projName.Text = "(Installation hors ligne)"
+                End Select
+                Label12.Text = MountDir
+                Label44.Text = MountDir
+                Label41.Text = Label14.Text
+                Label46.Text = Label18.Text
+                Label47.Text = Label20.Text
+                Label48.Text = Label17.Text
+                Label49.Text = projName.Text
+                Label3.Text = MountDir
+                Label52.Text = Label3.Text
+                ' Disable tasks in the new design accordingly
+                Button24.Enabled = False
+                Button25.Enabled = False
+                Button26.Enabled = False
+                Button27.Enabled = False
+                Button28.Enabled = False
+                Button29.Enabled = False
+                GetOfflineEditionAndInstIdFromRegistry()
             Else
                 Try
                     For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
                         If MountedImageImgFiles(x) = SourceImg Then
                             Label14.Text = MountedImageImgIndexes(x)
                             Label12.Text = MountedImageMountDirs(x)
+
+                            Label44.Text = Label12.Text
+                            Label41.Text = Label14.Text
                             If MountedImageImgStatuses(x) = 0 Then
                                 isOrphaned = False
                             ElseIf MountedImageImgStatuses(x) = 1 Then
@@ -1849,12 +2061,19 @@ Public Class MainForm
                                     Label17.Text = imageInfo.ProductVersion.ToString()
                                     Label18.Text = imageInfo.ImageName
                                     Label20.Text = imageInfo.ImageDescription
+
+                                    Label48.Text = imageInfo.ProductVersion.ToString()
+                                    Label46.Text = imageInfo.ImageName
+                                    Label47.Text = imageInfo.ImageDescription
                                 End If
                             Next
                             RemountImageWithWritePermissionsToolStripMenuItem.Enabled = If(MountedImageMountedReWr(x) = 0, False, True)
                             Button2.Enabled = If(MountedImageMountedReWr(x) = 0, True, False)
                             Button3.Enabled = If(MountedImageMountedReWr(x) = 0, True, False)
                             Button4.Enabled = True
+                            Button27.Enabled = If(MountedImageMountedReWr(x) = 0, True, False)
+                            Button28.Enabled = If(MountedImageMountedReWr(x) = 0, True, False)
+                            Button29.Enabled = True
                             Exit For
                         End If
                     Next
@@ -2034,29 +2253,86 @@ Public Class MainForm
         'ImgBW.ReportProgress(irregVal)
     End Sub
 
+    Sub GetOfflineEditionAndInstIdFromRegistry()
+        Using reg As New Process
+            reg.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe"
+            reg.StartInfo.Arguments = "load HKLM\IMG_SOFT " & Quote & MountDir & "\Windows\system32\config\SOFTWARE" & Quote
+            reg.StartInfo.CreateNoWindow = True
+            reg.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+            reg.Start()
+            reg.WaitForExit()
+            If reg.ExitCode <> 0 Then
+                imgEdition = ""
+            Else
+                Dim edReg As RegistryKey = Registry.LocalMachine.OpenSubKey("IMG_SOFT\Microsoft\Windows NT\CurrentVersion", False)
+                imgEdition = edReg.GetValue("EditionID", "").ToString()
+                imgInstType = edReg.GetValue("InstallationType", "").ToString()
+                edReg.Close()
+            End If
+            reg.StartInfo.Arguments = "unload HKLM\IMG_SOFT"
+            reg.StartInfo.CreateNoWindow = True
+            reg.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+            reg.Start()
+            reg.WaitForExit()
+        End Using
+    End Sub
+
     ''' <summary>
     ''' Gets advanced image information, such as number of files and directories, image name, and more
     ''' </summary>
     ''' <remarks>This is called when bgGetAdvImgInfo is True</remarks>
-    Sub GetAdvancedImageInfo(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
+    Sub GetAdvancedImageInfo(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False, Optional OfflineMode As Boolean = False)
         Button14.Enabled = True
         Button15.Enabled = True
+        LinkLabel20.Enabled = True
         Button16.Enabled = True
+        LinkLabel19.Enabled = True
         ExplorerView.Enabled = True
+        LinkLabel15.Enabled = True
+        LinkLabel16.Enabled = True
         ProjNameEditBtn.Visible = True
         If UseApi Then
             If OnlineMode Then
                 Button14.Enabled = False
                 Button15.Enabled = False
+                LinkLabel20.Enabled = False
                 Button16.Enabled = False
+                LinkLabel19.Enabled = False
                 ExplorerView.Enabled = False
                 ProjNameEditBtn.Visible = False
+                LinkLabel15.Enabled = False
+                LinkLabel16.Enabled = False
                 ' Set edition variable according to the EditionID registry value
                 imgEdition = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion").GetValue("EditionID")
 
                 ' Set installation type variable according to the InstallationType registry value
                 imgInstType = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion").GetValue("InstallationType")
 
+                Button24.Enabled = False
+                Button25.Enabled = False
+                Button26.Enabled = False
+                Button27.Enabled = False
+                Button28.Enabled = False
+                Button29.Enabled = False
+
+                DetectVersions(FileVersionInfo.GetVersionInfo(DismExe), imgVersionInfo)
+                Exit Sub
+            ElseIf OfflineMode Then
+                Button14.Enabled = False
+                Button15.Enabled = False
+                LinkLabel20.Enabled = False
+                Button16.Enabled = False
+                LinkLabel19.Enabled = False
+                ExplorerView.Enabled = False
+                ProjNameEditBtn.Visible = False
+                LinkLabel15.Enabled = False
+                LinkLabel16.Enabled = False
+                Button24.Enabled = False
+                Button25.Enabled = False
+                Button26.Enabled = False
+                Button27.Enabled = False
+                Button28.Enabled = False
+                Button29.Enabled = False
                 DetectVersions(FileVersionInfo.GetVersionInfo(DismExe), imgVersionInfo)
                 Exit Sub
             Else
@@ -2159,6 +2435,42 @@ Public Class MainForm
                     Button11.Enabled = True
                     Button12.Enabled = True
                     Button13.Enabled = True
+                    ' Update the buttons in the new design accordingly
+                    Button26.Enabled = False
+                    'Button27.Enabled = True
+                    'Button28.Enabled = True
+                    'Button29.Enabled = True
+                    Button24.Enabled = True
+                    Button25.Enabled = True
+                    Button30.Enabled = True
+                    Button31.Enabled = True
+                    Button32.Enabled = True
+                    Button33.Enabled = True
+                    Button34.Enabled = True
+                    Button35.Enabled = True
+                    Button36.Enabled = True
+                    Button37.Enabled = True
+                    Button38.Enabled = True
+                    Button39.Enabled = True
+                    Button40.Enabled = True
+                    Button41.Enabled = True
+                    Button42.Enabled = True
+                    Button43.Enabled = True
+                    Button44.Enabled = True
+                    Button45.Enabled = True
+                    Button46.Enabled = True
+                    Button47.Enabled = True
+                    Button48.Enabled = True
+                    Button49.Enabled = True
+                    Button50.Enabled = True
+                    Button51.Enabled = True
+                    Button52.Enabled = True
+                    Button53.Enabled = True
+                    Button54.Enabled = True
+                    Button55.Enabled = True
+                    Button56.Enabled = True
+                    Button57.Enabled = True
+                    Button58.Enabled = True
                     MountImageToolStripMenuItem.Enabled = False
                     UnmountImageToolStripMenuItem.Enabled = True
                 Else
@@ -2175,6 +2487,42 @@ Public Class MainForm
                     Button11.Enabled = False
                     Button12.Enabled = False
                     Button13.Enabled = False
+                    ' Update the buttons in the new design accordingly
+                    Button26.Enabled = True
+                    Button27.Enabled = False
+                    Button28.Enabled = False
+                    Button29.Enabled = False
+                    Button24.Enabled = False
+                    Button25.Enabled = False
+                    Button30.Enabled = False
+                    Button31.Enabled = False
+                    Button32.Enabled = False
+                    Button33.Enabled = False
+                    Button34.Enabled = False
+                    Button35.Enabled = False
+                    Button36.Enabled = False
+                    Button37.Enabled = False
+                    Button38.Enabled = False
+                    Button39.Enabled = False
+                    Button40.Enabled = False
+                    Button41.Enabled = False
+                    Button42.Enabled = False
+                    Button43.Enabled = False
+                    Button44.Enabled = False
+                    Button45.Enabled = False
+                    Button46.Enabled = False
+                    Button47.Enabled = False
+                    Button48.Enabled = False
+                    Button49.Enabled = False
+                    Button50.Enabled = False
+                    Button51.Enabled = False
+                    Button52.Enabled = False
+                    Button53.Enabled = False
+                    Button54.Enabled = False
+                    Button55.Enabled = False
+                    Button56.Enabled = False
+                    Button57.Enabled = False
+                    Button58.Enabled = False
                     MountImageToolStripMenuItem.Enabled = True
                     UnmountImageToolStripMenuItem.Enabled = False
                 End If
@@ -2353,6 +2701,42 @@ Public Class MainForm
                 Button11.Enabled = True
                 Button12.Enabled = True
                 Button13.Enabled = True
+                ' Update the buttons in the new design accordingly
+                Button26.Enabled = False
+                Button27.Enabled = True
+                Button28.Enabled = True
+                Button29.Enabled = True
+                Button24.Enabled = True
+                Button25.Enabled = True
+                Button30.Enabled = True
+                Button31.Enabled = True
+                Button32.Enabled = True
+                Button33.Enabled = True
+                Button34.Enabled = True
+                Button35.Enabled = True
+                Button36.Enabled = True
+                Button37.Enabled = True
+                Button38.Enabled = True
+                Button39.Enabled = True
+                Button40.Enabled = True
+                Button41.Enabled = True
+                Button42.Enabled = True
+                Button43.Enabled = True
+                Button44.Enabled = True
+                Button45.Enabled = True
+                Button46.Enabled = True
+                Button47.Enabled = True
+                Button48.Enabled = True
+                Button49.Enabled = True
+                Button50.Enabled = True
+                Button51.Enabled = True
+                Button52.Enabled = True
+                Button53.Enabled = True
+                Button54.Enabled = True
+                Button55.Enabled = True
+                Button56.Enabled = True
+                Button57.Enabled = True
+                Button58.Enabled = True
                 DetectNTVersion(MountDir & "\Windows\system32\ntoskrnl.exe")
             Catch ex As Exception
 
@@ -2401,11 +2785,47 @@ Public Class MainForm
             Button11.Enabled = False
             Button12.Enabled = False
             Button13.Enabled = False
+            ' Update the buttons in the new design accordingly
+            Button26.Enabled = True
+            Button27.Enabled = False
+            Button28.Enabled = False
+            Button29.Enabled = False
+            Button24.Enabled = False
+            Button25.Enabled = False
+            Button30.Enabled = False
+            Button31.Enabled = False
+            Button32.Enabled = False
+            Button33.Enabled = False
+            Button34.Enabled = False
+            Button35.Enabled = False
+            Button36.Enabled = False
+            Button37.Enabled = False
+            Button38.Enabled = False
+            Button39.Enabled = False
+            Button40.Enabled = False
+            Button41.Enabled = False
+            Button42.Enabled = False
+            Button43.Enabled = False
+            Button44.Enabled = False
+            Button45.Enabled = False
+            Button46.Enabled = False
+            Button47.Enabled = False
+            Button48.Enabled = False
+            Button49.Enabled = False
+            Button50.Enabled = False
+            Button51.Enabled = False
+            Button52.Enabled = False
+            Button53.Enabled = False
+            Button54.Enabled = False
+            Button55.Enabled = False
+            Button56.Enabled = False
+            Button57.Enabled = False
+            Button58.Enabled = False
         End If
     End Sub
 
     Sub DetectVersions(DismVer As FileVersionInfo, NTVer As Version)
-        ' Restore enabled properties of each menu item
+        ' Restore enabled properties of each menu item and group in the new design
         For Each Item As ToolStripDropDownItem In CommandsToolStripMenuItem.DropDownItems
             Item.Enabled = True
             Try
@@ -2416,6 +2836,9 @@ Public Class MainForm
                 Continue For
             End Try
         Next
+        GroupBox7.Enabled = True    ' AppX package group
+        GroupBox8.Enabled = True    ' Capability group
+        GroupBox10.Enabled = True   ' Windows PE settings group
 
         ' Detect if an image has been mounted, and act accordingly
         If IsImageMounted Then
@@ -2427,6 +2850,8 @@ Public Class MainForm
                             ' All AppX and capability stuff goes away
                             AppPackagesToolStripMenuItem.Enabled = False
                             CapabilitiesToolStripMenuItem.Enabled = False
+                            GroupBox7.Enabled = False
+                            GroupBox8.Enabled = False
 
                             ' WIMBoot also goes away
                             GetWIMBootEntry.Enabled = False
@@ -2445,6 +2870,7 @@ Public Class MainForm
                             Select Case NTVer.Build
                                 Case Is >= 8102
                                     CapabilitiesToolStripMenuItem.Enabled = False
+                                    GroupBox8.Enabled = False
                                     GetWIMBootEntry.Enabled = False
                                     UpdateWIMBootEntry.Enabled = False
                                     MicrosoftEdgeToolStripMenuItem.Enabled = False
@@ -2455,6 +2881,8 @@ Public Class MainForm
                                 Case Else
                                     AppPackagesToolStripMenuItem.Enabled = False
                                     CapabilitiesToolStripMenuItem.Enabled = False
+                                    GroupBox7.Enabled = False
+                                    GroupBox8.Enabled = False
                                     GetWIMBootEntry.Enabled = False
                                     UpdateWIMBootEntry.Enabled = False
                                     MicrosoftEdgeToolStripMenuItem.Enabled = False
@@ -2465,6 +2893,7 @@ Public Class MainForm
                             End Select
                         Case 3
                             CapabilitiesToolStripMenuItem.Enabled = False
+                            GroupBox8.Enabled = False
                             MicrosoftEdgeToolStripMenuItem.Enabled = False
                             ReservedStorageToolStripMenuItem.Enabled = False
                             SetSysUILang.Enabled = False
@@ -2481,9 +2910,12 @@ Public Class MainForm
 
             ' Disable Windows PE stuff when not working with a Windows PE image
             WindowsPEServicingToolStripMenuItem.Enabled = imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase)
+            GroupBox10.Enabled = imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase)
             ' Disable AppX and capability stuff when working with a Windows PE image
             AppPackagesToolStripMenuItem.Enabled = (Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
             CapabilitiesToolStripMenuItem.Enabled = (Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
+            GroupBox7.Enabled = (Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
+            GroupBox8.Enabled = (Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
 
             ' Next, detect the DISM version, so that we can determine which things are applicable
             Select Case DismVer.ProductMajorPart
@@ -2527,6 +2959,8 @@ Public Class MainForm
                             ReservedStorageToolStripMenuItem.Enabled = False
                             MicrosoftEdgeToolStripMenuItem.Enabled = False
                             SetSysUILang.Enabled = False
+                            GroupBox7.Enabled = False
+                            GroupBox8.Enabled = False
                         Case 2
                             CaptureFFU.Enabled = False
                             GetWIMBootEntry.Enabled = False
@@ -2547,6 +2981,7 @@ Public Class MainForm
                             ReservedStorageToolStripMenuItem.Enabled = False
                             MicrosoftEdgeToolStripMenuItem.Enabled = False
                             SetSysUILang.Enabled = False
+                            GroupBox8.Enabled = False
                         Case 3
                             CaptureFFU.Enabled = False
                             OptimizeFFU.Enabled = False
@@ -2565,6 +3000,7 @@ Public Class MainForm
                             ReservedStorageToolStripMenuItem.Enabled = False
                             MicrosoftEdgeToolStripMenuItem.Enabled = False
                             SetSysUILang.Enabled = False
+                            GroupBox8.Enabled = False
                     End Select
                 Case 10
                     ' Everything is enabled
@@ -2608,6 +3044,42 @@ Public Class MainForm
         Button11.Enabled = True
         Button12.Enabled = True
         Button13.Enabled = True
+        ' Update the buttons in the new design accordingly
+        Button26.Enabled = False
+        'Button27.Enabled = True
+        'Button28.Enabled = True
+        'Button29.Enabled = True
+        Button24.Enabled = True
+        Button25.Enabled = True
+        Button30.Enabled = True
+        Button31.Enabled = True
+        Button32.Enabled = True
+        Button33.Enabled = True
+        Button34.Enabled = True
+        Button35.Enabled = True
+        Button36.Enabled = True
+        Button37.Enabled = True
+        Button38.Enabled = True
+        Button39.Enabled = True
+        Button40.Enabled = True
+        Button41.Enabled = True
+        Button42.Enabled = True
+        Button43.Enabled = True
+        Button44.Enabled = True
+        Button45.Enabled = True
+        Button46.Enabled = True
+        Button47.Enabled = True
+        Button48.Enabled = True
+        Button49.Enabled = True
+        Button50.Enabled = True
+        Button51.Enabled = True
+        Button52.Enabled = True
+        Button53.Enabled = True
+        Button54.Enabled = True
+        Button55.Enabled = True
+        Button56.Enabled = True
+        Button57.Enabled = True
+        Button58.Enabled = True
     End Sub
 
     ''' <summary>
@@ -3646,7 +4118,7 @@ Public Class MainForm
 #End Region
 
     Sub GenerateDTSettings()
-        DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.3.3) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.4) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & "{common:WinDir}\system32\dism.exe" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "Volatile=0")
@@ -3666,6 +4138,7 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontBold=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SecondaryProgressPanelStyle=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "NewDesign=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & "{common:WinDir}\Logs\DISM\DISM.log" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=3")
@@ -3700,8 +4173,13 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "WndLeft=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "WndTop=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "WndMaximized=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ImgDetection]" & CrLf)
-        DTSettingForm.RichTextBox2.AppendText("CPUMode=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[InfoSaver]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("SkipQuestions=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "Pkg_CompleteInfo=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "Feat_CompleteInfo=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "AppX_CompleteInfo=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "Cap_CompleteInfo=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "Drv_CompleteInfo=1")
         File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
         If File.Exists(Application.StartupPath & "\portable") Then Exit Sub
         Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("preview"), "Preview", "Stable")
@@ -3727,6 +4205,7 @@ Public Class MainForm
         PersKey.SetValue("LogFontBold", 0, RegistryValueKind.DWord)
         PersKey.SetValue("SecondaryProgressPanelStyle", 1, RegistryValueKind.DWord)
         PersKey.SetValue("AllCaps", 0, RegistryValueKind.DWord)
+        PersKey.SetValue("NewDesign", 1, RegistryValueKind.DWord)
         PersKey.Close()
         Dim LogKey As RegistryKey = Key.CreateSubKey("Logs")
         LogKey.SetValue("LogFile", Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\logs\DISM\DISM.log" & Quote, RegistryValueKind.ExpandString)
@@ -3769,9 +4248,14 @@ Public Class MainForm
         WndKey.SetValue("WndTop", 0, RegistryValueKind.DWord)
         WndKey.SetValue("WndMaximized", 0, RegistryValueKind.DWord)
         WndKey.Close()
-        Dim ImgDetectionKey As RegistryKey = Key.CreateSubKey("ImgDetection")
-        ImgDetectionKey.SetValue("CPUMode", 0, RegistryValueKind.DWord)
-        ImgDetectionKey.Close()
+        Dim InfoSaverKey As RegistryKey = Key.CreateSubKey("InfoSaver")
+        InfoSaverKey.SetValue("SkipQuestions", 1, RegistryValueKind.DWord)
+        InfoSaverKey.SetValue("Pkg_CompleteInfo", 1, RegistryValueKind.DWord)
+        InfoSaverKey.SetValue("Feat_CompleteInfo", 1, RegistryValueKind.DWord)
+        InfoSaverKey.SetValue("AppX_CompleteInfo", 1, RegistryValueKind.DWord)
+        InfoSaverKey.SetValue("Cap_CompleteInfo", 1, RegistryValueKind.DWord)
+        InfoSaverKey.SetValue("Drv_CompleteInfo", 1, RegistryValueKind.DWord)
+        InfoSaverKey.Close()
         Key.Close()
     End Sub
 
@@ -3784,7 +4268,7 @@ Public Class MainForm
                     File.Delete(Application.StartupPath & "\settings.ini")
                 End If
                 DTSettingForm.RichTextBox2.Clear()
-                DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.3.3) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
+                DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.4) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
                 DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & DismExe & Quote)
                 If SaveOnSettingsIni Then
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=1")
@@ -3823,6 +4307,11 @@ Public Class MainForm
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=1")
                 Else
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=0")
+                End If
+                If GoToNewView Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "NewDesign=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "NewDesign=0")
                 End If
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
                 DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & LogFile & Quote)
@@ -3942,7 +4431,13 @@ Public Class MainForm
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "WndLeft=" & WndLeft)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "WndTop=" & WndTop)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "WndMaximized=" & If(WindowState = FormWindowState.Maximized, "1", "0"))
-                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ImgDetection]" & CrLf)
+                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[InfoSaver]" & CrLf)
+                DTSettingForm.RichTextBox2.AppendText("SkipQuestions=" & If(SkipQuestions, "1", "0"))
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "Pkg_CompleteInfo=" & If(AutoCompleteInfo(0), "1", "0"))
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "Feat_CompleteInfo=" & If(AutoCompleteInfo(1), "1", "0"))
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "AppX_CompleteInfo=" & If(AutoCompleteInfo(2), "1", "0"))
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "Cap_CompleteInfo=" & If(AutoCompleteInfo(3), "1", "0"))
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "Drv_CompleteInfo=" & If(AutoCompleteInfo(4), "1", "0"))
                 File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
             Else
                 ' Tell settings file to use this method
@@ -3966,6 +4461,7 @@ Public Class MainForm
                 PersKey.SetValue("LogFontBold", If(LogFontIsBold, 1, 0), RegistryValueKind.DWord)
                 PersKey.SetValue("SecondaryProgressPanelStyle", ProgressPanelStyle, RegistryValueKind.DWord)
                 PersKey.SetValue("AllCaps", If(AllCaps, 1, 0), RegistryValueKind.DWord)
+                PersKey.SetValue("NewDesign", If(GoToNewView, 1, 0), RegistryValueKind.DWord)
                 PersKey.Close()
                 Dim LogKey As RegistryKey = Key.CreateSubKey("Logs")
                 LogKey.SetValue("LogFile", LogFile, RegistryValueKind.ExpandString)
@@ -4012,8 +4508,14 @@ Public Class MainForm
                 WndKey.SetValue("WndTop", WndTop, RegistryValueKind.DWord)
                 WndKey.SetValue("WndMaximized", If(WindowState = FormWindowState.Maximized, 1, 0), RegistryValueKind.DWord)
                 WndKey.Close()
-                Dim ImgDetectionKey As RegistryKey = Key.CreateSubKey("ImgDetection")
-                ImgDetectionKey.Close()
+                Dim InfoSaverKey As RegistryKey = Key.CreateSubKey("InfoSaver")
+                InfoSaverKey.SetValue("SkipQuestions", If(SkipQuestions, 1, 0), RegistryValueKind.DWord)
+                InfoSaverKey.SetValue("Pkg_CompleteInfo", If(AutoCompleteInfo(0), 1, 0), RegistryValueKind.DWord)
+                InfoSaverKey.SetValue("Feat_CompleteInfo", If(AutoCompleteInfo(1), 1, 0), RegistryValueKind.DWord)
+                InfoSaverKey.SetValue("AppX_CompleteInfo", If(AutoCompleteInfo(2), 1, 0), RegistryValueKind.DWord)
+                InfoSaverKey.SetValue("Cap_CompleteInfo", If(AutoCompleteInfo(3), 1, 0), RegistryValueKind.DWord)
+                InfoSaverKey.SetValue("Drv_CompleteInfo", If(AutoCompleteInfo(4), 1, 0), RegistryValueKind.DWord)
+                InfoSaverKey.Close()
                 Key.Close()
             End If
         End If
@@ -4091,12 +4593,6 @@ Public Class MainForm
                         TabPage2.ForeColor = Color.White
                         TabPage3.BackColor = Color.FromArgb(40, 40, 43)
                         TabPage3.ForeColor = Color.White
-                        WelcomeTab.BackColor = Color.FromArgb(40, 40, 43)
-                        WelcomeTab.ForeColor = Color.White
-                        NewsFeedTab.BackColor = Color.FromArgb(40, 40, 43)
-                        NewsFeedTab.ForeColor = Color.White
-                        VideosTab.BackColor = Color.FromArgb(40, 40, 43)
-                        VideosTab.ForeColor = Color.White
                         PictureBox5.Image = New Bitmap(My.Resources.logo_mainscr_dark)
                         ToolStrip1.BackColor = Color.FromArgb(48, 48, 48)
                         ToolStrip1.ForeColor = Color.White
@@ -4170,6 +4666,15 @@ Public Class MainForm
                         Next
                         InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph_dark)
                         BranchTSMI.Image = New Bitmap(My.Resources.branch_dark)
+                        ' New design stuff
+                        FlowLayoutPanel1.BackColor = Color.FromArgb(48, 48, 48)
+                        GroupBox4.ForeColor = Color.White
+                        GroupBox5.ForeColor = Color.White
+                        GroupBox6.ForeColor = Color.White
+                        GroupBox7.ForeColor = Color.White
+                        GroupBox8.ForeColor = Color.White
+                        GroupBox9.ForeColor = Color.White
+                        GroupBox10.ForeColor = Color.White
                     ElseIf ColorMode = "1" Then
                         If IsWindowsVersionOrGreater(10, 0, 18362) Then EnableDarkTitleBar(Handle, False)
                         BackColor = Color.FromArgb(239, 239, 242)
@@ -4204,12 +4709,6 @@ Public Class MainForm
                         TabPage2.ForeColor = Color.Black
                         TabPage3.BackColor = Color.White
                         TabPage3.ForeColor = Color.Black
-                        WelcomeTab.BackColor = Color.White
-                        WelcomeTab.ForeColor = Color.Black
-                        NewsFeedTab.BackColor = Color.White
-                        NewsFeedTab.ForeColor = Color.Black
-                        VideosTab.BackColor = Color.White
-                        VideosTab.ForeColor = Color.Black
                         PictureBox5.Image = New Bitmap(My.Resources.logo_mainscr_light)
                         ToolStrip1.BackColor = Color.FromArgb(239, 239, 242)
                         ToolStrip1.ForeColor = Color.Black
@@ -4283,6 +4782,15 @@ Public Class MainForm
                         Next
                         InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph)
                         BranchTSMI.Image = New Bitmap(My.Resources.branch)
+                        ' New design stuff
+                        FlowLayoutPanel1.BackColor = Color.FromArgb(239, 239, 242)
+                        GroupBox4.ForeColor = Color.Black
+                        GroupBox5.ForeColor = Color.Black
+                        GroupBox6.ForeColor = Color.Black
+                        GroupBox7.ForeColor = Color.Black
+                        GroupBox8.ForeColor = Color.Black
+                        GroupBox9.ForeColor = Color.Black
+                        GroupBox10.ForeColor = Color.Black
                     End If
                 Catch ex As Exception
                     ChangePrgColors(1)
@@ -4321,12 +4829,6 @@ Public Class MainForm
                 TabPage2.ForeColor = Color.Black
                 TabPage3.BackColor = Color.White
                 TabPage3.ForeColor = Color.Black
-                WelcomeTab.BackColor = Color.White
-                WelcomeTab.ForeColor = Color.Black
-                NewsFeedTab.BackColor = Color.White
-                NewsFeedTab.ForeColor = Color.Black
-                VideosTab.BackColor = Color.White
-                VideosTab.ForeColor = Color.Black
                 PictureBox5.Image = New Bitmap(My.Resources.logo_mainscr_light)
                 ToolStrip1.BackColor = Color.FromArgb(239, 239, 242)
                 ToolStrip1.ForeColor = Color.Black
@@ -4400,6 +4902,15 @@ Public Class MainForm
                 Next
                 InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph)
                 BranchTSMI.Image = New Bitmap(My.Resources.branch)
+                ' New design stuff
+                FlowLayoutPanel1.BackColor = Color.FromArgb(239, 239, 242)
+                GroupBox4.ForeColor = Color.Black
+                GroupBox5.ForeColor = Color.Black
+                GroupBox6.ForeColor = Color.Black
+                GroupBox7.ForeColor = Color.Black
+                GroupBox8.ForeColor = Color.Black
+                GroupBox9.ForeColor = Color.Black
+                GroupBox10.ForeColor = Color.Black
             Case 2
                 If IsWindowsVersionOrGreater(10, 0, 18362) Then EnableDarkTitleBar(Handle, True)
                 BackColor = Color.FromArgb(48, 48, 48)
@@ -4434,12 +4945,6 @@ Public Class MainForm
                 TabPage2.ForeColor = Color.White
                 TabPage3.BackColor = Color.FromArgb(40, 40, 43)
                 TabPage3.ForeColor = Color.White
-                WelcomeTab.BackColor = Color.FromArgb(40, 40, 43)
-                WelcomeTab.ForeColor = Color.White
-                NewsFeedTab.BackColor = Color.FromArgb(40, 40, 43)
-                NewsFeedTab.ForeColor = Color.White
-                VideosTab.BackColor = Color.FromArgb(40, 40, 43)
-                VideosTab.ForeColor = Color.White
                 PictureBox5.Image = New Bitmap(My.Resources.logo_mainscr_dark)
                 ToolStrip1.BackColor = Color.FromArgb(48, 48, 48)
                 ToolStrip1.ForeColor = Color.White
@@ -4513,7 +5018,29 @@ Public Class MainForm
                 Next
                 InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph_dark)
                 BranchTSMI.Image = New Bitmap(My.Resources.branch_dark)
+                ' New design stuff
+                FlowLayoutPanel1.BackColor = Color.FromArgb(48, 48, 48)
+                GroupBox4.ForeColor = Color.White
+                GroupBox5.ForeColor = Color.White
+                GroupBox6.ForeColor = Color.White
+                GroupBox7.ForeColor = Color.White
+                GroupBox8.ForeColor = Color.White
+                GroupBox9.ForeColor = Color.White
+                GroupBox10.ForeColor = Color.White
         End Select
+        If GetStartedPanel.Visible Then
+            LinkLabel22.LinkColor = ForeColor
+            LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
+            LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
+        ElseIf LatestNewsPanel.Visible Then
+            LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
+            LinkLabel23.LinkColor = ForeColor
+            LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
+        End If
+        ListView1.BackColor = BackColor
+        ListView1.ForeColor = ForeColor
+        TextBox1.BackColor = BackColor
+        TextBox1.ForeColor = ForeColor
     End Sub
 
     Sub ChangeLangs(LangCode As Integer)
@@ -4533,6 +5060,7 @@ Public Class MainForm
                         NewProjectToolStripMenuItem.Text = "&New project..."
                         OpenExistingProjectToolStripMenuItem.Text = "&Open existing project"
                         ManageOnlineInstallationToolStripMenuItem.Text = "&Manage online installation"
+                        ManageOfflineInstallationToolStripMenuItem.Text = "Manage o&ffline installation..."
                         SaveProjectToolStripMenuItem.Text = "&Save project..."
                         SaveProjectasToolStripMenuItem.Text = "Save project &as..."
                         ExitToolStripMenuItem.Text = "E&xit"
@@ -4678,6 +5206,8 @@ Public Class MainForm
                         ISHelp.Text = "What's this?"
                         ' Menu - DevState
                         ReportFeedbackToolStripMenuItem.Text = "Report feedback (opens in web browser)"
+                        ' Menu - Contributions
+                        ContributeToTheHelpSystemToolStripMenuItem.Text = "Contribute to the help system"
                         ' Start Panel
                         LabelHeader1.Text = "Begin"
                         Label10.Text = "Recent projects"
@@ -4685,24 +5215,7 @@ Public Class MainForm
                         NewProjLink.Text = "New project..."
                         ExistingProjLink.Text = "Open existing project..."
                         OnlineInstMgmt.Text = "Manage online installation"
-                        ' Start Panel tabs
-                        WelcomeTab.Text = "Welcome"
-                        NewsFeedTab.Text = "Latest news"
-                        VideosTab.Text = "Tutorial videos"
-                        ' Welcome tab contents
-                        Label24.Text = "Welcome to DISMTools"
-                        Label25.Text = "The graphical front-end to perform DISM operations."
-                        Label26.Text = "This is beta software"
-                        Label27.Text = "Currently, this program is in beta. This means lots of things will not work as expected. There will also be lots of bugs, and, generally, the program is incomplete (as you can see right now)"
-                        Label28.Text = "This program is open-source"
-                        Label29.Text = "This program is open-source, meaning you can take a look at how it works and understand it better."
-                        Label30.Text = "Be sure to know what you are doing"
-                        Label31.Text = "Please be careful over what you do in this program. Although it may look simple and easy to use, it is targeted to system administrators and people in the IT department. If you carelessly perform operations to an image or an active installation, it may not work correctly or may refuse to work."
-                        Label32.Text = "Getting started"
-                        Label33.Text = "- Did you get lost in this program? We recommend checking the help topics to get around" & CrLf & _
-                            "- Don't understand a specific term? We recommend checking the glossary. The terms are alphabetically sorted and provide explanations as detailed as possible" & CrLf & _
-                            "- Want to know how to do it in the command line? We recommmend checking the command help" & CrLf & _
-                            "These options, and the program information, can be found by opening the Help menu."
+                        OfflineInstMgmt.Text = "Manage offline installation..."
                         ' ToolStrip buttons
                         ToolStripButton1.Text = "Close tab"
                         ToolStripButton2.Text = "Save project"
@@ -4759,6 +5272,8 @@ Public Class MainForm
                         Button11.Text = "Reload servicing session..."
                         Button12.Text = "Perform component cleanup and/or repair..."
                         Button13.Text = "Switch indexes..."
+                        Button19.Text = "Preview the new design"
+                        Button20.Text = "Go back to the old design"
                         ' Pop-up context menus
                         PkgBasicInfo.Text = "Get basic information (all packages)"
                         PkgDetailedInfo.Text = "Get detailed information (specific package)"
@@ -4802,6 +5317,97 @@ Public Class MainForm
                         ' Context menu of AppX addition dialog
                         MicrosoftAppsToolStripMenuItem.Text = "Visit the Microsoft Apps website"
                         MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visit the Microsoft Store Generation Project website"
+                        ' New design
+                        GreetingLabel.Text = "Welcome to this servicing session"
+                        LinkLabel12.Text = "PROJECT"
+                        LinkLabel13.Text = "IMAGE"
+                        Label54.Text = "Name:"
+                        Label51.Text = "Location:"
+                        Label53.Text = "Images mounted?"
+                        LinkLabel14.Text = "Click here to mount an image"
+                        Label55.Text = "Project Tasks"
+                        LinkLabel15.Text = "View project properties"
+                        LinkLabel16.Text = "Open in File Explorer"
+                        LinkLabel17.Text = "Unload project"
+                        Label59.Text = "No image has been mounted"
+                        Label58.Text = "You need to mount an image in order to view its information"
+                        Label57.Text = "Choices"
+                        LinkLabel21.Text = "Mount an image..."
+                        LinkLabel18.Text = "Pick a mounted image..."
+                        Label39.Text = "Image index:"
+                        Label43.Text = "Mount point:"
+                        Label45.Text = "Version:"
+                        Label42.Text = "Name:"
+                        Label40.Text = "Description:"
+                        Label56.Text = "Image Tasks"
+                        LinkLabel20.Text = "View image properties"
+                        LinkLabel19.Text = "Unmount image"
+                        GroupBox4.Text = "Image operations"
+                        Button26.Text = "Mount image..."
+                        Button27.Text = "Commit current changes"
+                        Button28.Text = "Commit and unmount image"
+                        Button29.Text = "Unmount image discarding changes"
+                        Button25.Text = "Reload servicing session"
+                        Button24.Text = "Switch image indexes..."
+                        Button30.Text = "Apply image..."
+                        Button31.Text = "Capture image..."
+                        Button32.Text = "Remove volume images..."
+                        Button33.Text = "Save complete image information..."
+                        GroupBox5.Text = "Package operations"
+                        Button36.Text = "Add package..."
+                        Button34.Text = "Get package information..."
+                        Button38.Text = "Save installed package information..."
+                        Button35.Text = "Remove package..."
+                        Button37.Text = "Perform component store maintenance and cleanup..."
+                        GroupBox6.Text = "Feature operations"
+                        Button41.Text = "Enable feature..."
+                        Button39.Text = "Get feature information..."
+                        Button42.Text = "Save feature information..."
+                        Button40.Text = "Disable feature..."
+                        GroupBox7.Text = "AppX package operations"
+                        Button44.Text = "Add AppX package..."
+                        Button45.Text = "Get app information..."
+                        Button46.Text = "Save installed AppX package information..."
+                        Button43.Text = "Remove AppX package..."
+                        GroupBox8.Text = "Capability operations"
+                        Button48.Text = "Add capability..."
+                        Button49.Text = "Get capability information..."
+                        Button50.Text = "Save capability information..."
+                        Button47.Text = "Remove capability..."
+                        GroupBox9.Text = "Driver operations"
+                        Button53.Text = "Add driver package..."
+                        Button52.Text = "Get driver information..."
+                        Button54.Text = "Save installed driver information..."
+                        Button51.Text = "Remove driver..."
+                        GroupBox10.Text = "Windows PE operations"
+                        Button55.Text = "Get configuration"
+                        Button56.Text = "Save configuration..."
+                        Button57.Text = "Set target path..."
+                        Button58.Text = "Set scratch space..."
+                        ' New home panel design
+                        LinkLabel22.Text = "WELCOME"
+                        LinkLabel23.Text = "LATEST NEWS"
+                        LinkLabel24.Text = "TUTORIAL VIDEOS"
+                        ' - Welcome panel
+                        Label36.Text = "This is beta software"
+                        Label8.Text = "This program is not complete and you may run into issues. If that happens, don't hesitate to send us feedback"
+                        Label37.Text = "Getting started"
+                        LinkLabel6.Text = "Getting started with image servicing"
+                        LinkLabel7.Text = "Getting started with DISMTools"
+                        LinkLabel8.Text = "Coming from other utilities?"
+                        Label38.Text = "Performing operations"
+                        LinkLabel9.Text = "Tips for performing great servicing"
+                        LinkLabel10.Text = "Getting image information"
+                        LinkLabel11.Text = "Saving image information"
+                        LinkLabel4.Text = "Managing your active installation"
+                        LinkLabel5.Text = "Managing installations on any drive"
+                        ' - Latest news panel
+                        Label9.Text = "To get the latest DISMTools development news, check out the discussion on the My Digital Life forums. An account is required to view most content."
+                        LinkLabel25.Text = "Visit"
+                        Label22.Text = "We couldn't get the latest news"
+                        Label34.Text = "Error information:"
+                        Label35.Text = "Try connecting your system to the network. If your system is connected to the network but this error still appears, check whether you can access websites."
+                        Button59.Text = "Try again"
                     Case "ESN"
                         ' Top-level menu items
                         FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -4815,6 +5421,7 @@ Public Class MainForm
                         NewProjectToolStripMenuItem.Text = "&Nuevo proyecto..."
                         OpenExistingProjectToolStripMenuItem.Text = "&Abrir proyecto existente"
                         ManageOnlineInstallationToolStripMenuItem.Text = "Administrar &instalación activa"
+                        ManageOfflineInstallationToolStripMenuItem.Text = "Administrar instalación &fuera de línea..."
                         SaveProjectToolStripMenuItem.Text = "&Guardar proyecto..."
                         SaveProjectasToolStripMenuItem.Text = "Guardar proyecto &como..."
                         ExitToolStripMenuItem.Text = "Sa&lir"
@@ -4960,6 +5567,8 @@ Public Class MainForm
                         ISHelp.Text = "¿Qué es esto?"
                         ' Menu - DevState
                         ReportFeedbackToolStripMenuItem.Text = "Enviar comentarios (se abre en navegador web)"
+                        ' Menu - Contributions
+                        ContributeToTheHelpSystemToolStripMenuItem.Text = "Contribuir al sistema de ayuda"
                         ' Start Panel
                         LabelHeader1.Text = "Comenzar"
                         Label10.Text = "Proyectos recientes"
@@ -4967,24 +5576,7 @@ Public Class MainForm
                         NewProjLink.Text = "Nuevo proyecto..."
                         ExistingProjLink.Text = "Abrir proyecto existente..."
                         OnlineInstMgmt.Text = "Administrar instalación activa"
-                        ' Start Panel tabs
-                        WelcomeTab.Text = "Bienvenido"
-                        NewsFeedTab.Text = "Últimas noticias"
-                        VideosTab.Text = "Tutoriales"
-                        ' Welcome tab contents
-                        Label24.Text = "Bienvenido a DISMTools"
-                        Label25.Text = "La interfaz gráfica para realizar operaciones de DISM."
-                        Label26.Text = "Este es un software en beta"
-                        Label27.Text = "Ahora mismo este programa está en beta. Esto significa que muchas cosas no funcionarán como esperado. También habrán muchos errores y, en general, este programa no está completo (como puede ver ahora mismo)"
-                        Label28.Text = "Este programa es de código abierto"
-                        Label29.Text = "Este programa es de código abierto, lo que le permite observar cómo funciona y entenderlo mejor."
-                        Label30.Text = "Asegúrese de saber lo que hace"
-                        Label31.Text = "Por favor, tenga cuidado con lo que hace en este programa. Aunque parezca simple y fácil de usar, está destinado a administradores del sistema y gente en el departamento de TI. Si realiza operaciones sin cuidado a una imagen o instalación activa, podría no funcionar correctamente o dejar de funcionar."
-                        Label32.Text = "Comencemos"
-                        Label33.Text = "- ¿Está perdido en este programa? Le recomendamos que vea la ayuda para manejarse" & CrLf & _
-                            "- ¿No entiende un término en específico? Le recomendamos comprobar el glosario. Los términos están ordenados alfabéticamente y ofrecen explicaciones lo más detalladas posible" & CrLf & _
-                            "- ¿Desea saber cómo hacerlo en la línea de comandos? Le recomendamos comprobar la ayuda de comandos" & CrLf & _
-                            "Estas opciones, y la información del programa, pueden ser encontradas en el menú Ayuda."
+                        OfflineInstMgmt.Text = "Administrar instalación fuera de línea..."
                         ' ToolStrip buttons
                         ToolStripButton1.Text = "Cerrar pestaña"
                         ToolStripButton2.Text = "Guardar proyecto"
@@ -5041,6 +5633,8 @@ Public Class MainForm
                         Button11.Text = "Recargar sesión de servicio..."
                         Button12.Text = "Realizar limpieza y/o reparación de componentes..."
                         Button13.Text = "Cambiar índices..."
+                        Button19.Text = "Ver el nuevo diseño"
+                        Button20.Text = "Regresar al diseño antiguo"
                         ' Pop-up context menus
                         PkgBasicInfo.Text = "Obtener información básica (todos los paquetes)"
                         PkgDetailedInfo.Text = "Obtener información detallada (paquete específico)"
@@ -5084,6 +5678,97 @@ Public Class MainForm
                         ' Context menu of AppX addition dialog
                         MicrosoftAppsToolStripMenuItem.Text = "Visitar el sitio web de Aplicaciones de Microsoft"
                         MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visitar el sitio web del proyecto de generación de Microsoft Store"
+                        ' New design
+                        GreetingLabel.Text = "Le damos la bienvenida a esta sesión de servicio"
+                        LinkLabel12.Text = "PROYECTO"
+                        LinkLabel13.Text = "IMAGEN"
+                        Label54.Text = "Nombre:"
+                        Label51.Text = "Ubicación:"
+                        Label53.Text = "¿Hay imágenes montadas?"
+                        LinkLabel14.Text = "Haga clic aquí para montar una imagen"
+                        Label55.Text = "Tareas del proyecto"
+                        LinkLabel15.Text = "Ver propiedades del proyecto"
+                        LinkLabel16.Text = "Abrir en el Explorador de Archivos"
+                        LinkLabel17.Text = "Descargar proyecto"
+                        Label59.Text = "No se ha montado una imagen"
+                        Label58.Text = "Debe montar una imagen para poder ver su información"
+                        Label57.Text = "Elecciones"
+                        LinkLabel21.Text = "Montar una imagen..."
+                        LinkLabel18.Text = "Escoger una imagen montada..."
+                        Label39.Text = "Índice de la imagen:"
+                        Label43.Text = "Punto de montaje:"
+                        Label45.Text = "Versión:"
+                        Label42.Text = "Nombre:"
+                        Label40.Text = "Descripción:"
+                        Label56.Text = "Tareas de la imagen"
+                        LinkLabel20.Text = "Ver propiedades de la imagen"
+                        LinkLabel19.Text = "Desmontar imagen"
+                        GroupBox4.Text = "Operaciones de la imagen"
+                        Button26.Text = "Montar imagen..."
+                        Button27.Text = "Guardar cambios actuales"
+                        Button28.Text = "Guardar cambios y desmontar imagen"
+                        Button29.Text = "Desmontar imagen descartando cambios"
+                        Button25.Text = "Recargar sesión de servicio"
+                        Button24.Text = "Cambiar índices de la imagen..."
+                        Button30.Text = "Aplicar imagen..."
+                        Button31.Text = "Capturar imagen..."
+                        Button32.Text = "Eliminar imágenes de volumen..."
+                        Button33.Text = "Guardar información completa de la imagen..."
+                        GroupBox5.Text = "Operaciones de paquetes"
+                        Button36.Text = "Añadir paquete..."
+                        Button34.Text = "Obtener información de paquetes..."
+                        Button38.Text = "Guardar información de paquetes instalados..."
+                        Button35.Text = "Eliminar paquete..."
+                        Button37.Text = "Realizar mantenimiento y limpieza del almacén de componentes..."
+                        GroupBox6.Text = "Operaciones de características"
+                        Button41.Text = "Habilitar característica..."
+                        Button39.Text = "Obtener información de características..."
+                        Button42.Text = "Guardar información de características..."
+                        Button40.Text = "Deshabilitar característica..."
+                        GroupBox7.Text = "Operaciones de paquetes AppX"
+                        Button44.Text = "Añadir paquete AppX..."
+                        Button45.Text = "Obtener información de aplicaciones..."
+                        Button46.Text = "Guardar información de paquetes AppX instalados..."
+                        Button43.Text = "Eliminar paquete AppX..."
+                        GroupBox8.Text = "Operaciones de funcionalidades"
+                        Button48.Text = "Añadir funcionalidad..."
+                        Button49.Text = "Obtener información de funcionalidades..."
+                        Button50.Text = "Guardar información de funcionalidades..."
+                        Button47.Text = "Eliminar funcionalidades..."
+                        GroupBox9.Text = "Operaciones de controladores"
+                        Button53.Text = "Añadir controlador..."
+                        Button52.Text = "Obtener información de controladores..."
+                        Button54.Text = "Guardar información de controladores instalados..."
+                        Button51.Text = "Eliminar controlador..."
+                        GroupBox10.Text = "Operaciones de Windows PE"
+                        Button55.Text = "Obtener configuración"
+                        Button56.Text = "Guardar configuración..."
+                        Button57.Text = "Establecer ruta de destino..."
+                        Button58.Text = "Establecer espacio temporal..."
+                        ' New home panel design
+                        LinkLabel22.Text = "LE DAMOS LA BIENVENIDA"
+                        LinkLabel23.Text = "ÚLTIMAS NOTICIAS"
+                        LinkLabel24.Text = "VÍDEOS"
+                        ' - Welcome panel
+                        Label36.Text = "Este es un software en beta"
+                        Label8.Text = "Este programa no está completado y podría experimentar fallos. Si esto ocurre, no dude en enviar comentarios"
+                        Label37.Text = "Introducciones"
+                        LinkLabel6.Text = "Introducción al servicio de imágenes"
+                        LinkLabel7.Text = "Introducción a DISMTools"
+                        LinkLabel8.Text = "¿Viniendo de otras herramientas?"
+                        Label38.Text = "Realizando operaciones"
+                        LinkLabel9.Text = "Consejos para realizar una buena tarea de servicio"
+                        LinkLabel10.Text = "Obteniendo información de imagen"
+                        LinkLabel11.Text = "Guardando información de imagen"
+                        LinkLabel4.Text = "Administrando su instalación activa"
+                        LinkLabel5.Text = "Administrando instalaciones en cualquier disco"
+                        ' - Latest news panel
+                        Label9.Text = "Para obtener las últimas noticias de desarrollo de DISMTools, consulte la discusión en los foros de My Digital Life. Se requiere una cuenta para ver la mayoría de contenido."
+                        LinkLabel25.Text = "Visitar"
+                        Label22.Text = "No pudimos obtener las últimas noticias"
+                        Label34.Text = "Información del error:"
+                        Label35.Text = "Pruebe conectar su sistema a la red. Si su sistema está conectado a la red pero sigue apareciendo este error, compruebe si puede acceder a sitios web."
+                        Button59.Text = "Intentar de nuevo"
                     Case "FRA"
                         ' Top-level menu items
                         FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Fichier".ToUpper(), "&Fichier")
@@ -5097,6 +5782,7 @@ Public Class MainForm
                         NewProjectToolStripMenuItem.Text = "&Nouveau projet..."
                         OpenExistingProjectToolStripMenuItem.Text = "&Ouvrir un projet existant"
                         ManageOnlineInstallationToolStripMenuItem.Text = "&Gérer l'installation en ligne"
+                        ManageOfflineInstallationToolStripMenuItem.Text = "Gérer l'installation &hors ligne..."
                         SaveProjectToolStripMenuItem.Text = "&Sauvegarder le projet..."
                         SaveProjectasToolStripMenuItem.Text = "Sauvegarder le projet so&us..."
                         ExitToolStripMenuItem.Text = "Sor&tir"
@@ -5242,6 +5928,8 @@ Public Class MainForm
                         ISHelp.Text = "Qu'est-ce que c'est ?"
                         ' Menu - DevState
                         ReportFeedbackToolStripMenuItem.Text = "Rapport de rétroaction (s'ouvre dans un navigateur web)"
+                        ' Menu - Contributions
+                        ContributeToTheHelpSystemToolStripMenuItem.Text = "Contribuer au système d'aide"
                         ' Start Panel
                         LabelHeader1.Text = "Commencer"
                         Label10.Text = "Projets récents"
@@ -5249,24 +5937,7 @@ Public Class MainForm
                         NewProjLink.Text = "Nouveau projet..."
                         ExistingProjLink.Text = "Ouvrir un projet existant..."
                         OnlineInstMgmt.Text = "Gérer l'installation en ligne"
-                        ' Start Panel tabs
-                        WelcomeTab.Text = "Bienvenue"
-                        NewsFeedTab.Text = "Dernières nouvelles"
-                        VideosTab.Text = "Vidéos tutorielles"
-                        ' Welcome tab contents
-                        Label24.Text = "Bienvenue à DISMTools"
-                        Label25.Text = "L'interface graphique pour effectuer les opérations DISM."
-                        Label26.Text = "Il s'agit d'une version bêta du logiciel"
-                        Label27.Text = "Ce programme est actuellement en version bêta. Cela signifie que beaucoup de choses ne fonctionneront pas comme prévu. Il y aura également de nombreux bugs et, de manière générale, le programme est incomplet (comme vous pouvez le constater dès à présent)."
-                        Label28.Text = "Ce programme est open-source"
-                        Label29.Text = "Ce programme est open-source, ce qui signifie que vous pouvez jeter un coup d'œil à son fonctionnement et mieux le comprendre."
-                        Label30.Text = "Assurez-vous de savoir ce que vous faites"
-                        Label31.Text = "Faites attention à ce que vous faites dans ce programme. Bien qu'il puisse paraître simple et facile à utiliser, il est destiné aux administrateurs système et aux personnes travaillant dans le département informatique. Si vous effectuez sans précaution des opérations sur une image ou une installation active, il se peut qu'elle ne fonctionne pas correctement ou qu'elle refuse de fonctionner."
-                        Label32.Text = "Pour commencer"
-                        Label33.Text = "- Vous vous êtes perdu dans ce programme ? Nous vous recommandons de consulter les rubriques d'aide pour vous y retrouver" & CrLf & _
-                            "- Vous ne comprenez pas un terme spécifique ? Nous vous recommandons de consulter le glossaire. Les termes sont classés par ordre alphabétique et fournissent des explications aussi détaillées que possible" & CrLf & _
-                            "- Vous voulez savoir comment le faire en ligne de commande ? Nous vous recommandons de consulter la commande help" & CrLf & _
-                            "Ces options, ainsi que les informations sur le programme, peuvent être trouvées en ouvrant le menu Aide."
+                        OfflineInstMgmt.Text = "Gérer l'installation hors ligne..."
                         ' ToolStrip buttons
                         ToolStripButton1.Text = "Fermer l'onglet"
                         ToolStripButton2.Text = "Sauvegarder le projet"
@@ -5323,6 +5994,8 @@ Public Class MainForm
                         Button11.Text = "Recharger la session de maintenance..."
                         Button12.Text = "Effectuer le nettoyage et/ou la réparation des composants..."
                         Button13.Text = "Changer d'index de l'image..."
+                        Button19.Text = "Prévisualiser le nouveau design"
+                        Button20.Text = "Revenir à l'ancien design"
                         ' Pop-up context menus
                         PkgBasicInfo.Text = "Obtenir des informations basiques (tous les paquets)"
                         PkgDetailedInfo.Text = "Obtenir des informations détaillées (paquet spécifique)"
@@ -5366,6 +6039,97 @@ Public Class MainForm
                         ' Context menu of AppX addition dialog
                         MicrosoftAppsToolStripMenuItem.Text = "Visiter le site web de Microsoft Apps"
                         MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visiter le site web du projet Microsoft Store Generation"
+                        ' New design
+                        GreetingLabel.Text = "Bienvenue à cette session de service"
+                        LinkLabel12.Text = "PROJET"
+                        LinkLabel13.Text = "IMAGE"
+                        Label54.Text = "Nom :"
+                        Label51.Text = "Lieu :"
+                        Label53.Text = "Images montées ?"
+                        LinkLabel14.Text = "Cliquez ici pour monter une image"
+                        Label55.Text = "Tâches du projet"
+                        LinkLabel15.Text = "Voir les propriétés du projet"
+                        LinkLabel16.Text = "Ouvrir dans l'explorateur de fichiers"
+                        LinkLabel17.Text = "Décharger le projet"
+                        Label59.Text = "Aucune image n'a été montée"
+                        Label58.Text = "Vous devez monter une image pour pouvoir consulter ses informations."
+                        Label57.Text = "Choix"
+                        LinkLabel21.Text = "Monter une image..."
+                        LinkLabel18.Text = "Choisir une image montée..."
+                        Label39.Text = "Index de l'image :"
+                        Label43.Text = "Répertoire de montage :"
+                        Label45.Text = "Version :"
+                        Label42.Text = "Nom :"
+                        Label40.Text = "Description :"
+                        Label56.Text = "Tâches de l'image"
+                        LinkLabel20.Text = "Voir les propriétés de l'image"
+                        LinkLabel19.Text = "Démonter l'image"
+                        GroupBox4.Text = "Opérations sur les images"
+                        Button26.Text = "Monter une image..."
+                        Button27.Text = "Sauvegarder les modifications pendants"
+                        Button28.Text = "Sauvegarder modifications et démonter l'image"
+                        Button29.Text = "Démonter l'image en supprimant les modifications"
+                        Button25.Text = "Recharger la session de service"
+                        Button24.Text = "Changer d'index de l'image..."
+                        Button30.Text = "Appliquer l'image..."
+                        Button31.Text = "Capturer image..."
+                        Button32.Text = "Supprimer les images de volume..."
+                        Button33.Text = "Sauvegarder les informations complètes de l'image..."
+                        GroupBox5.Text = "Opérations sur les paquets"
+                        Button36.Text = "Ajouter des paquets..."
+                        Button34.Text = "Obtenir des informations sur le paquet..."
+                        Button38.Text = "Sauvegarder les informations sur les paquets installés..."
+                        Button35.Text = "Supprimer des paquets..."
+                        Button37.Text = "Effectuer la maintenance et le nettoyage du stock de composants..."
+                        GroupBox6.Text = "Opérations sur les caractéristiques"
+                        Button41.Text = "Activer des caractéristiques..."
+                        Button39.Text = "Obtenir des informations sur les caractéristiques..."
+                        Button42.Text = "Sauvegarder les caractéristiques..."
+                        Button40.Text = "Désactiver des caractéristiques..."
+                        GroupBox7.Text = "Opérations sur les paquets AppX"
+                        Button44.Text = "Ajouter des paquets AppX..."
+                        Button45.Text = "Obtenir des informations sur les applications..."
+                        Button46.Text = "Sauvegarder les informations sur les paquets AppX installés..."
+                        Button43.Text = "Supprimer des paquets AppX..."
+                        GroupBox8.Text = "Opérations sur les capacités"
+                        Button48.Text = "Ajouter des capacités..."
+                        Button49.Text = "Obtenir des informations sur les capacités..."
+                        Button50.Text = "Sauvegarder les informations sur les capacités..."
+                        Button47.Text = "Supprimer des capacités..."
+                        GroupBox9.Text = "Opérations sur les pilotes"
+                        Button53.Text = "Ajouter des paquets de pilotes..."
+                        Button52.Text = "Obtenir des informations sur les pilotes..."
+                        Button54.Text = "Sauvegarder les informations sur les pilotes installés..."
+                        Button51.Text = "Supprimer des pilotes..."
+                        GroupBox10.Text = "Opérations de Windows PE"
+                        Button55.Text = "Obtenir des paramètres..."
+                        Button56.Text = "Sauvegarder les paramètres..."
+                        Button57.Text = "Configurer le chemin d'accès..."
+                        Button58.Text = "Configurer l'espace temporaire..."
+                        ' New home panel design
+                        LinkLabel22.Text = "BIENVENUE"
+                        LinkLabel23.Text = "DERNIÈRES NOUVELLES"
+                        LinkLabel24.Text = "VIDÉOS TUTORIELLES"
+                        ' - Welcome panel
+                        Label36.Text = "Il s'agit d'une version bêta du logiciel"
+                        Label8.Text = "Ce programme n'est pas complet et il se peut que vous rencontriez des problèmes. Si cela se produit, n'hésitez pas à nous faire part de vos commentaires."
+                        Label37.Text = "Pour commencer"
+                        LinkLabel6.Text = "Commencer avec le service des images"
+                        LinkLabel7.Text = "Commencer avec DISMTools"
+                        LinkLabel8.Text = "Venant d'autres utilités ?"
+                        Label38.Text = "Réalisation des opérations"
+                        LinkLabel9.Text = "Conseils pour un bon service"
+                        LinkLabel10.Text = "Obtenir des informations sur l'image"
+                        LinkLabel11.Text = "Sauvegarder les informations sur l'image"
+                        LinkLabel4.Text = "Gérer votre installation active"
+                        LinkLabel5.Text = "Gérer les installations sur n'importe quel lecteur"
+                        ' - Latest news panel
+                        Label9.Text = "Pour obtenir les dernières informations sur le développement de DISMTools, consultez les discussions sur les forums de My Digital Life. Un compte est nécessaire pour accéder à la plupart des contenus."
+                        LinkLabel25.Text = "Visiter"
+                        Label22.Text = "Nous n'avons pas pu obtenir les dernières nouvelles"
+                        Label34.Text = "Information d'erreur :"
+                        Label35.Text = "Essayez de connecter votre système au réseau. Si votre système est connecté au réseau mais que cette erreur persiste, vérifiez si vous pouvez accéder aux sites web."
+                        Button59.Text = "Réessayer"
                     Case Else
                         Language = 1
                         ChangeLangs(Language)
@@ -5384,6 +6148,7 @@ Public Class MainForm
                 NewProjectToolStripMenuItem.Text = "&New project..."
                 OpenExistingProjectToolStripMenuItem.Text = "&Open existing project"
                 ManageOnlineInstallationToolStripMenuItem.Text = "&Manage online installation"
+                ManageOfflineInstallationToolStripMenuItem.Text = "Manage o&ffline installation..."
                 SaveProjectToolStripMenuItem.Text = "&Save project..."
                 SaveProjectasToolStripMenuItem.Text = "Save project &as..."
                 ExitToolStripMenuItem.Text = "E&xit"
@@ -5529,6 +6294,8 @@ Public Class MainForm
                 ISHelp.Text = "What's this?"
                 ' Menu - DevState
                 ReportFeedbackToolStripMenuItem.Text = "Report feedback (opens in web browser)"
+                ' Menu - Contributions
+                ContributeToTheHelpSystemToolStripMenuItem.Text = "Contribute to the help system"
                 ' Start Panel
                 LabelHeader1.Text = "Begin"
                 Label10.Text = "Recent projects"
@@ -5536,24 +6303,7 @@ Public Class MainForm
                 NewProjLink.Text = "New project..."
                 ExistingProjLink.Text = "Open existing project..."
                 OnlineInstMgmt.Text = "Manage online installation"
-                ' Start Panel tabs
-                WelcomeTab.Text = "Welcome"
-                NewsFeedTab.Text = "Latest news"
-                VideosTab.Text = "Tutorial videos"
-                ' Welcome tab contents
-                Label24.Text = "Welcome to DISMTools"
-                Label25.Text = "The graphical front-end to perform DISM operations."
-                Label26.Text = "This is beta software"
-                Label27.Text = "Currently, this program is in beta. This means lots of things will not work as expected. There will also be lots of bugs, and, generally, the program is incomplete (as you can see right now)"
-                Label28.Text = "This program is open-source"
-                Label29.Text = "This program is open-source, meaning you can take a look at how it works and understand it better."
-                Label30.Text = "Be sure to know what you are doing"
-                Label31.Text = "Please be careful over what you do in this program. Although it may look simple and easy to use, it is targeted to system administrators and people in the IT department. If you carelessly perform operations to an image or an active installation, it may not work correctly or may refuse to work."
-                Label32.Text = "Getting started"
-                Label33.Text = "- Did you get lost in this program? We recommend checking the help topics to get around" & CrLf & _
-                    "- Don't understand a specific term? We recommend checking the glossary. The terms are alphabetically sorted and provide explanations as detailed as possible" & CrLf & _
-                    "- Want to know how to do it in the command line? We recommmend checking the command help" & CrLf & _
-                    "These options, and the program information, can be found by opening the Help menu."
+                OfflineInstMgmt.Text = "Manage offline installation..."
                 ' ToolStrip buttons
                 ToolStripButton1.Text = "Close tab"
                 ToolStripButton2.Text = "Save project"
@@ -5610,6 +6360,8 @@ Public Class MainForm
                 Button11.Text = "Reload servicing session..."
                 Button12.Text = "Perform component cleanup and/or repair..."
                 Button13.Text = "Switch indexes..."
+                Button19.Text = "Preview the new design"
+                Button20.Text = "Go back to the old design"
                 ' Pop-up context menus
                 PkgBasicInfo.Text = "Get basic information (all packages)"
                 PkgDetailedInfo.Text = "Get detailed information (specific package)"
@@ -5653,6 +6405,97 @@ Public Class MainForm
                 ' Context menu of AppX addition dialog
                 MicrosoftAppsToolStripMenuItem.Text = "Visit the Microsoft Apps website"
                 MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visit the Microsoft Store Generation Project website"
+                ' New design
+                GreetingLabel.Text = "Welcome to this servicing session"
+                LinkLabel12.Text = "PROJECT"
+                LinkLabel13.Text = "IMAGE"
+                Label54.Text = "Name:"
+                Label51.Text = "Location:"
+                Label53.Text = "Images mounted?"
+                LinkLabel14.Text = "Click here to mount an image"
+                Label55.Text = "Project Tasks"
+                LinkLabel15.Text = "View project properties"
+                LinkLabel16.Text = "Open in File Explorer"
+                LinkLabel17.Text = "Unload project"
+                Label59.Text = "No image has been mounted"
+                Label58.Text = "You need to mount an image in order to view its information"
+                Label57.Text = "Choices"
+                LinkLabel21.Text = "Mount an image..."
+                LinkLabel18.Text = "Pick a mounted image..."
+                Label39.Text = "Image index:"
+                Label43.Text = "Mount point:"
+                Label45.Text = "Version:"
+                Label42.Text = "Name:"
+                Label40.Text = "Description:"
+                Label56.Text = "Image Tasks"
+                LinkLabel20.Text = "View image properties"
+                LinkLabel19.Text = "Unmount image"
+                GroupBox4.Text = "Image operations"
+                Button26.Text = "Mount image..."
+                Button27.Text = "Commit current changes"
+                Button28.Text = "Commit and unmount image"
+                Button29.Text = "Unmount image discarding changes"
+                Button25.Text = "Reload servicing session"
+                Button24.Text = "Switch image indexes..."
+                Button30.Text = "Apply image..."
+                Button31.Text = "Capture image..."
+                Button32.Text = "Remove volume images..."
+                Button33.Text = "Save complete image information..."
+                GroupBox5.Text = "Package operations"
+                Button36.Text = "Add package..."
+                Button34.Text = "Get package information..."
+                Button38.Text = "Save installed package information..."
+                Button35.Text = "Remove package..."
+                Button37.Text = "Perform component store maintenance and cleanup..."
+                GroupBox6.Text = "Feature operations"
+                Button41.Text = "Enable feature..."
+                Button39.Text = "Get feature information..."
+                Button42.Text = "Save feature information..."
+                Button40.Text = "Disable feature..."
+                GroupBox7.Text = "AppX package operations"
+                Button44.Text = "Add AppX package..."
+                Button45.Text = "Get app information..."
+                Button46.Text = "Save installed AppX package information..."
+                Button43.Text = "Remove AppX package..."
+                GroupBox8.Text = "Capability operations"
+                Button48.Text = "Add capability..."
+                Button49.Text = "Get capability information..."
+                Button50.Text = "Save capability information..."
+                Button47.Text = "Remove capability..."
+                GroupBox9.Text = "Driver operations"
+                Button53.Text = "Add driver package..."
+                Button52.Text = "Get driver information..."
+                Button54.Text = "Save installed driver information..."
+                Button51.Text = "Remove driver..."
+                GroupBox10.Text = "Windows PE operations"
+                Button55.Text = "Get configuration"
+                Button56.Text = "Save configuration..."
+                Button57.Text = "Set target path..."
+                Button58.Text = "Set scratch space..."
+                ' New home panel design
+                LinkLabel22.Text = "WELCOME"
+                LinkLabel23.Text = "LATEST NEWS"
+                LinkLabel24.Text = "TUTORIAL VIDEOS"
+                ' - Welcome panel
+                Label36.Text = "This is beta software"
+                Label8.Text = "This program is not complete and you may run into issues. If that happens, don't hesitate to send us feedback"
+                Label37.Text = "Getting started"
+                LinkLabel6.Text = "Getting started with image servicing"
+                LinkLabel7.Text = "Getting started with DISMTools"
+                LinkLabel8.Text = "Coming from other utilities?"
+                Label38.Text = "Performing operations"
+                LinkLabel9.Text = "Tips for performing great servicing"
+                LinkLabel10.Text = "Getting image information"
+                LinkLabel11.Text = "Saving image information"
+                LinkLabel4.Text = "Managing your active installation"
+                LinkLabel5.Text = "Managing installations on any drive"
+                ' - Latest news panel
+                Label9.Text = "To get the latest DISMTools development news, check out the discussion on the My Digital Life forums. An account is required to view most content."
+                LinkLabel25.Text = "Visit"
+                Label22.Text = "We couldn't get the latest news"
+                Label34.Text = "Error information:"
+                Label35.Text = "Try connecting your system to the network. If your system is connected to the network but this error still appears, check whether you can access websites."
+                Button59.Text = "Try again"
             Case 2
                 ' Top-level menu items
                 FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -5666,6 +6509,7 @@ Public Class MainForm
                 NewProjectToolStripMenuItem.Text = "&Nuevo proyecto..."
                 OpenExistingProjectToolStripMenuItem.Text = "&Abrir proyecto existente"
                 ManageOnlineInstallationToolStripMenuItem.Text = "Administrar &instalación activa"
+                ManageOfflineInstallationToolStripMenuItem.Text = "Administrar instalación &fuera de línea..."
                 SaveProjectToolStripMenuItem.Text = "&Guardar proyecto..."
                 SaveProjectasToolStripMenuItem.Text = "Guardar proyecto &como..."
                 ExitToolStripMenuItem.Text = "Sa&lir"
@@ -5811,6 +6655,8 @@ Public Class MainForm
                 ISHelp.Text = "¿Qué es esto?"
                 ' Menu - DevState
                 ReportFeedbackToolStripMenuItem.Text = "Enviar comentarios (se abre en navegador web)"
+                ' Menu - Contributions
+                ContributeToTheHelpSystemToolStripMenuItem.Text = "Contribuir al sistema de ayuda"
                 ' Start Panel
                 LabelHeader1.Text = "Comenzar"
                 Label10.Text = "Proyectos recientes"
@@ -5818,24 +6664,7 @@ Public Class MainForm
                 NewProjLink.Text = "Nuevo proyecto..."
                 ExistingProjLink.Text = "Abrir proyecto existente..."
                 OnlineInstMgmt.Text = "Administrar instalación activa"
-                ' Start Panel tabs
-                WelcomeTab.Text = "Bienvenido"
-                NewsFeedTab.Text = "Últimas noticias"
-                VideosTab.Text = "Tutoriales"
-                ' Welcome tab contents
-                Label24.Text = "Bienvenido a DISMTools"
-                Label25.Text = "La interfaz gráfica para realizar operaciones de DISM."
-                Label26.Text = "Este es un software en beta"
-                Label27.Text = "Ahora mismo este programa está en beta. Esto significa que muchas cosas no funcionarán como esperado. También habrán muchos errores y, en general, este programa no está completo (como puede ver ahora mismo)"
-                Label28.Text = "Este programa es de código abierto"
-                Label29.Text = "Este programa es de código abierto, lo que le permite observar cómo funciona y entenderlo mejor."
-                Label30.Text = "Asegúrese de saber lo que hace"
-                Label31.Text = "Por favor, tenga cuidado con lo que hace en este programa. Aunque parezca simple y fácil de usar, está destinado a administradores del sistema y gente en el departamento de TI. Si realiza operaciones sin cuidado a una imagen o instalación activa, podría no funcionar correctamente o dejar de funcionar."
-                Label32.Text = "Comencemos"
-                Label33.Text = "- ¿Está perdido en este programa? Le recomendamos que vea la ayuda para manejarse" & CrLf & _
-                    "- ¿No entiende un término en específico? Le recomendamos comprobar el glosario. Los términos están ordenados alfabéticamente y ofrecen explicaciones lo más detalladas posible" & CrLf & _
-                    "- ¿Desea saber cómo hacerlo en la línea de comandos? Le recomendamos comprobar la ayuda de comandos" & CrLf & _
-                    "Estas opciones, y la información del programa, pueden ser encontradas en el menú Ayuda."
+                OfflineInstMgmt.Text = "Administrar instalación fuera de línea..."
                 ' ToolStrip buttons
                 ToolStripButton1.Text = "Cerrar pestaña"
                 ToolStripButton2.Text = "Guardar proyecto"
@@ -5892,6 +6721,8 @@ Public Class MainForm
                 Button11.Text = "Recargar sesión de servicio..."
                 Button12.Text = "Realizar limpieza y/o reparación de componentes..."
                 Button13.Text = "Cambiar índices..."
+                Button19.Text = "Ver el nuevo diseño"
+                Button20.Text = "Regresar al diseño antiguo"
                 ' Pop-up context menus
                 PkgBasicInfo.Text = "Obtener información básica (todos los paquetes)"
                 PkgDetailedInfo.Text = "Obtener información detallada (paquete específico)"
@@ -5934,6 +6765,97 @@ Public Class MainForm
                 ' Context menu of AppX addition dialog
                 MicrosoftAppsToolStripMenuItem.Text = "Visitar el sitio web de Aplicaciones de Microsoft"
                 MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visitar el sitio web del proyecto de generación de Microsoft Store"
+                ' New design
+                GreetingLabel.Text = "Le damos la bienvenida a esta sesión de servicio"
+                LinkLabel12.Text = "PROYECTO"
+                LinkLabel13.Text = "IMAGEN"
+                Label54.Text = "Nombre:"
+                Label51.Text = "Ubicación:"
+                Label53.Text = "¿Hay imágenes montadas?"
+                LinkLabel14.Text = "Haga clic aquí para montar una imagen"
+                Label55.Text = "Tareas del proyecto"
+                LinkLabel15.Text = "Ver propiedades del proyecto"
+                LinkLabel16.Text = "Abrir en el Explorador de Archivos"
+                LinkLabel17.Text = "Descargar proyecto"
+                Label59.Text = "No se ha montado una imagen"
+                Label58.Text = "Debe montar una imagen para poder ver su información"
+                Label57.Text = "Elecciones"
+                LinkLabel21.Text = "Montar una imagen..."
+                LinkLabel18.Text = "Escoger una imagen montada..."
+                Label39.Text = "Índice de la imagen:"
+                Label43.Text = "Punto de montaje:"
+                Label45.Text = "Versión:"
+                Label42.Text = "Nombre:"
+                Label40.Text = "Descripción:"
+                Label56.Text = "Tareas de la imagen"
+                LinkLabel20.Text = "Ver propiedades de la imagen"
+                LinkLabel19.Text = "Desmontar imagen"
+                GroupBox4.Text = "Operaciones de la imagen"
+                Button26.Text = "Montar imagen..."
+                Button27.Text = "Guardar cambios actuales"
+                Button28.Text = "Guardar cambios y desmontar imagen"
+                Button29.Text = "Desmontar imagen descartando cambios"
+                Button25.Text = "Recargar sesión de servicio"
+                Button24.Text = "Cambiar índices de la imagen..."
+                Button30.Text = "Aplicar imagen..."
+                Button31.Text = "Capturar imagen..."
+                Button32.Text = "Eliminar imágenes de volumen..."
+                Button33.Text = "Guardar información completa de la imagen..."
+                GroupBox5.Text = "Operaciones de paquetes"
+                Button36.Text = "Añadir paquete..."
+                Button34.Text = "Obtener información de paquetes..."
+                Button38.Text = "Guardar información de paquetes instalados..."
+                Button35.Text = "Eliminar paquete..."
+                Button37.Text = "Realizar mantenimiento y limpieza del almacén de componentes..."
+                GroupBox6.Text = "Operaciones de características"
+                Button41.Text = "Habilitar característica..."
+                Button39.Text = "Obtener información de características..."
+                Button42.Text = "Guardar información de características..."
+                Button40.Text = "Deshabilitar característica..."
+                GroupBox7.Text = "Operaciones de paquetes AppX"
+                Button44.Text = "Añadir paquete AppX..."
+                Button45.Text = "Obtener información de aplicaciones..."
+                Button46.Text = "Guardar información de paquetes AppX instalados..."
+                Button43.Text = "Eliminar paquete AppX..."
+                GroupBox8.Text = "Operaciones de funcionalidades"
+                Button48.Text = "Añadir funcionalidad..."
+                Button49.Text = "Obtener información de funcionalidades..."
+                Button50.Text = "Guardar información de funcionalidades..."
+                Button47.Text = "Eliminar funcionalidades..."
+                GroupBox9.Text = "Operaciones de controladores"
+                Button53.Text = "Añadir controlador..."
+                Button52.Text = "Obtener información de controladores..."
+                Button54.Text = "Guardar información de controladores instalados..."
+                Button51.Text = "Eliminar controlador..."
+                GroupBox10.Text = "Operaciones de Windows PE"
+                Button55.Text = "Obtener configuración"
+                Button56.Text = "Guardar configuración..."
+                Button57.Text = "Establecer ruta de destino..."
+                Button58.Text = "Establecer espacio temporal..."
+                ' New home panel design
+                LinkLabel22.Text = "LE DAMOS LA BIENVENIDA"
+                LinkLabel23.Text = "ÚLTIMAS NOTICIAS"
+                LinkLabel24.Text = "VÍDEOS"
+                ' - Welcome panel
+                Label36.Text = "Este es un software en beta"
+                Label8.Text = "Este programa no está completado y podría experimentar fallos. Si esto ocurre, no dude en enviar comentarios"
+                Label37.Text = "Introducciones"
+                LinkLabel6.Text = "Introducción al servicio de imágenes"
+                LinkLabel7.Text = "Introducción a DISMTools"
+                LinkLabel8.Text = "¿Viniendo de otras herramientas?"
+                Label38.Text = "Realizando operaciones"
+                LinkLabel9.Text = "Consejos para realizar una buena tarea de servicio"
+                LinkLabel10.Text = "Obteniendo información de imagen"
+                LinkLabel11.Text = "Guardando información de imagen"
+                LinkLabel4.Text = "Administrando su instalación activa"
+                LinkLabel5.Text = "Administrando instalaciones en cualquier disco"
+                ' - Latest news panel
+                Label9.Text = "Para obtener las últimas noticias de desarrollo de DISMTools, consulte la discusión en los foros de My Digital Life. Se requiere una cuenta para ver la mayoría de contenido."
+                LinkLabel25.Text = "Visitar"
+                Label22.Text = "No pudimos obtener las últimas noticias"
+                Label34.Text = "Información del error:"
+                Label35.Text = "Pruebe conectar su sistema a la red. Si su sistema está conectado a la red pero sigue apareciendo este error, compruebe si puede acceder a sitios web."
+                Button59.Text = "Intentar de nuevo"
             Case 3
                 ' Top-level menu items
                 FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Fichier".ToUpper(), "&Fichier")
@@ -5947,6 +6869,7 @@ Public Class MainForm
                 NewProjectToolStripMenuItem.Text = "&Nouveau projet..."
                 OpenExistingProjectToolStripMenuItem.Text = "&Ouvrir un projet existant"
                 ManageOnlineInstallationToolStripMenuItem.Text = "&Gérer l'installation en ligne"
+                ManageOfflineInstallationToolStripMenuItem.Text = "Gérer l'installation &hors ligne..."
                 SaveProjectToolStripMenuItem.Text = "&Sauvegarder le projet..."
                 SaveProjectasToolStripMenuItem.Text = "Sauvegarder le projet so&us..."
                 ExitToolStripMenuItem.Text = "Sor&tir"
@@ -6092,6 +7015,8 @@ Public Class MainForm
                 ISHelp.Text = "Qu'est-ce que c'est ?"
                 ' Menu - DevState
                 ReportFeedbackToolStripMenuItem.Text = "Rapport de rétroaction (s'ouvre dans un navigateur web)"
+                ' Menu - Contributions
+                ContributeToTheHelpSystemToolStripMenuItem.Text = "Contribuer au système d'aide"
                 ' Start Panel
                 LabelHeader1.Text = "Commencer"
                 Label10.Text = "Projets récents"
@@ -6099,24 +7024,7 @@ Public Class MainForm
                 NewProjLink.Text = "Nouveau projet..."
                 ExistingProjLink.Text = "Ouvrir un projet existant..."
                 OnlineInstMgmt.Text = "Gérer l'installation en ligne"
-                ' Start Panel tabs
-                WelcomeTab.Text = "Bienvenue"
-                NewsFeedTab.Text = "Dernières nouvelles"
-                VideosTab.Text = "Vidéos tutorielles"
-                ' Welcome tab contents
-                Label24.Text = "Bienvenue à DISMTools"
-                Label25.Text = "L'interface graphique pour effectuer les opérations DISM."
-                Label26.Text = "Il s'agit d'une version bêta du logiciel"
-                Label27.Text = "Ce programme est actuellement en version bêta. Cela signifie que beaucoup de choses ne fonctionneront pas comme prévu. Il y aura également de nombreux bugs et, de manière générale, le programme est incomplet (comme vous pouvez le constater dès à présent)."
-                Label28.Text = "Ce programme est open-source"
-                Label29.Text = "Ce programme est open-source, ce qui signifie que vous pouvez jeter un coup d'œil à son fonctionnement et mieux le comprendre."
-                Label30.Text = "Assurez-vous de savoir ce que vous faites"
-                Label31.Text = "Faites attention à ce que vous faites dans ce programme. Bien qu'il puisse paraître simple et facile à utiliser, il est destiné aux administrateurs système et aux personnes travaillant dans le département informatique. Si vous effectuez sans précaution des opérations sur une image ou une installation active, il se peut qu'elle ne fonctionne pas correctement ou qu'elle refuse de fonctionner."
-                Label32.Text = "Pour commencer"
-                Label33.Text = "- Vous vous êtes perdu dans ce programme ? Nous vous recommandons de consulter les rubriques d'aide pour vous y retrouver" & CrLf & _
-                    "- Vous ne comprenez pas un terme spécifique ? Nous vous recommandons de consulter le glossaire. Les termes sont classés par ordre alphabétique et fournissent des explications aussi détaillées que possible" & CrLf & _
-                    "- Vous voulez savoir comment le faire en ligne de commande ? Nous vous recommandons de consulter la commande help" & CrLf & _
-                    "Ces options, ainsi que les informations sur le programme, peuvent être trouvées en ouvrant le menu Aide."
+                OfflineInstMgmt.Text = "Gérer l'installation hors ligne..."
                 ' ToolStrip buttons
                 ToolStripButton1.Text = "Fermer l'onglet"
                 ToolStripButton2.Text = "Sauvegarder le projet"
@@ -6173,6 +7081,8 @@ Public Class MainForm
                 Button11.Text = "Recharger la session de maintenance..."
                 Button12.Text = "Effectuer le nettoyage et/ou la réparation des composants..."
                 Button13.Text = "Changer d'index de l'image..."
+                Button19.Text = "Prévisualiser le nouveau design"
+                Button20.Text = "Revenir à l'ancien design"
                 ' Pop-up context menus
                 PkgBasicInfo.Text = "Obtenir des informations basiques (tous les paquets)"
                 PkgDetailedInfo.Text = "Obtenir des informations détaillées (paquet spécifique)"
@@ -6216,6 +7126,97 @@ Public Class MainForm
                 ' Context menu of AppX addition dialog
                 MicrosoftAppsToolStripMenuItem.Text = "Visiter le site web de Microsoft Apps"
                 MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visiter le site web du projet Microsoft Store Generation"
+                ' New design
+                GreetingLabel.Text = "Bienvenue à cette session de service"
+                LinkLabel12.Text = "PROJET"
+                LinkLabel13.Text = "IMAGE"
+                Label54.Text = "Nom :"
+                Label51.Text = "Lieu :"
+                Label53.Text = "Images montées ?"
+                LinkLabel14.Text = "Cliquez ici pour monter une image"
+                Label55.Text = "Tâches du projet"
+                LinkLabel15.Text = "Voir les propriétés du projet"
+                LinkLabel16.Text = "Ouvrir dans l'explorateur de fichiers"
+                LinkLabel17.Text = "Décharger le projet"
+                Label59.Text = "Aucune image n'a été montée"
+                Label58.Text = "Vous devez monter une image pour pouvoir consulter ses informations."
+                Label57.Text = "Choix"
+                LinkLabel21.Text = "Monter une image..."
+                LinkLabel18.Text = "Choisir une image montée..."
+                Label39.Text = "Index de l'image :"
+                Label43.Text = "Répertoire de montage :"
+                Label45.Text = "Version :"
+                Label42.Text = "Nom :"
+                Label40.Text = "Description :"
+                Label56.Text = "Tâches de l'image"
+                LinkLabel20.Text = "Voir les propriétés de l'image"
+                LinkLabel19.Text = "Démonter l'image"
+                GroupBox4.Text = "Opérations sur les images"
+                Button26.Text = "Monter une image..."
+                Button27.Text = "Sauvegarder les modifications pendants"
+                Button28.Text = "Sauvegarder modifications et démonter l'image"
+                Button29.Text = "Démonter l'image en supprimant les modifications"
+                Button25.Text = "Recharger la session de service"
+                Button24.Text = "Changer d'index de l'image..."
+                Button30.Text = "Appliquer l'image..."
+                Button31.Text = "Capturer image..."
+                Button32.Text = "Supprimer les images de volume..."
+                Button33.Text = "Sauvegarder les informations complètes de l'image..."
+                GroupBox5.Text = "Opérations sur les paquets"
+                Button36.Text = "Ajouter des paquets..."
+                Button34.Text = "Obtenir des informations sur le paquet..."
+                Button38.Text = "Sauvegarder les informations sur les paquets installés..."
+                Button35.Text = "Supprimer des paquets..."
+                Button37.Text = "Effectuer la maintenance et le nettoyage du stock de composants..."
+                GroupBox6.Text = "Opérations sur les caractéristiques"
+                Button41.Text = "Activer des caractéristiques..."
+                Button39.Text = "Obtenir des informations sur les caractéristiques..."
+                Button42.Text = "Sauvegarder les caractéristiques..."
+                Button40.Text = "Désactiver des caractéristiques..."
+                GroupBox7.Text = "Opérations sur les paquets AppX"
+                Button44.Text = "Ajouter des paquets AppX..."
+                Button45.Text = "Obtenir des informations sur les applications..."
+                Button46.Text = "Sauvegarder les informations sur les paquets AppX installés..."
+                Button43.Text = "Supprimer des paquets AppX..."
+                GroupBox8.Text = "Opérations sur les capacités"
+                Button48.Text = "Ajouter des capacités..."
+                Button49.Text = "Obtenir des informations sur les capacités..."
+                Button50.Text = "Sauvegarder les informations sur les capacités..."
+                Button47.Text = "Supprimer des capacités..."
+                GroupBox9.Text = "Opérations sur les pilotes"
+                Button53.Text = "Ajouter des paquets de pilotes..."
+                Button52.Text = "Obtenir des informations sur les pilotes..."
+                Button54.Text = "Sauvegarder les informations sur les pilotes installés..."
+                Button51.Text = "Supprimer des pilotes..."
+                GroupBox10.Text = "Opérations de Windows PE"
+                Button55.Text = "Obtenir des paramètres..."
+                Button56.Text = "Sauvegarder les paramètres..."
+                Button57.Text = "Configurer le chemin d'accès..."
+                Button58.Text = "Configurer l'espace temporaire..."
+                ' New home panel design
+                LinkLabel22.Text = "BIENVENUE"
+                LinkLabel23.Text = "DERNIÈRES NOUVELLES"
+                LinkLabel24.Text = "VIDÉOS TUTORIELLES"
+                ' - Welcome panel
+                Label36.Text = "Il s'agit d'une version bêta du logiciel"
+                Label8.Text = "Ce programme n'est pas complet et il se peut que vous rencontriez des problèmes. Si cela se produit, n'hésitez pas à nous faire part de vos commentaires."
+                Label37.Text = "Pour commencer"
+                LinkLabel6.Text = "Commencer avec le service des images"
+                LinkLabel7.Text = "Commencer avec DISMTools"
+                LinkLabel8.Text = "Venant d'autres utilités ?"
+                Label38.Text = "Réalisation des opérations"
+                LinkLabel9.Text = "Conseils pour un bon service"
+                LinkLabel10.Text = "Obtenir des informations sur l'image"
+                LinkLabel11.Text = "Sauvegarder les informations sur l'image"
+                LinkLabel4.Text = "Gérer votre installation active"
+                LinkLabel5.Text = "Gérer les installations sur n'importe quel lecteur"
+                ' - Latest news panel
+                Label9.Text = "Pour obtenir les dernières informations sur le développement de DISMTools, consultez les discussions sur les forums de My Digital Life. Un compte est nécessaire pour accéder à la plupart des contenus."
+                LinkLabel25.Text = "Visiter"
+                Label22.Text = "Nous n'avons pas pu obtenir les dernières nouvelles"
+                Label34.Text = "Information d'erreur :"
+                Label35.Text = "Essayez de connecter votre système au réseau. Si votre système est connecté au réseau mais que cette erreur persiste, vérifiez si vous pouvez accéder aux sites web."
+                Button59.Text = "Réessayer"
         End Select
 
         If OnlineManagement Then
@@ -6223,43 +7224,147 @@ Public Class MainForm
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENU", "ENG"
-                            Label5.Text = "Yes"
+                            Label5.Text = If(IsImageMounted, "Yes", "No")
                             Text = "Online installation - DISMTools"
                             Label14.Text = "(Online installation)"
                             Label20.Text = "(Online installation)"
                             projName.Text = "(Online installation)"
+                            Label50.Text = If(IsImageMounted, "Yes", "No")
+                            Label41.Text = "(Online installation)"
+                            Label47.Text = "(Online installation)"
+                            Label49.Text = "(Online installation)"
                         Case "ESN"
-                            Label5.Text = "Sí"
+                            Label5.Text = If(IsImageMounted, "Sí", "No")
                             Text = "Instalación activa - DISMTools"
                             Label14.Text = "(Instalación activa)"
                             Label20.Text = "(Instalación activa)"
                             projName.Text = "(Instalación activa)"
+                            Label50.Text = If(IsImageMounted, "Sí", "No")
+                            Label41.Text = "(Instalación activa)"
+                            Label47.Text = "(Instalación activa)"
+                            Label49.Text = "(Instalación activa)"
                         Case "FRA"
-                            Label5.Text = "Oui"
+                            Label5.Text = If(IsImageMounted, "Oui", "Non")
                             Text = "Installation en ligne - DISMTools"
                             Label14.Text = "(Installation en ligne)"
                             Label20.Text = "(Installation en ligne)"
                             projName.Text = "(Installation en ligne)"
+                            Label50.Text = If(IsImageMounted, "Oui", "Non")
+                            Label41.Text = "(Installation en ligne)"
+                            Label47.Text = "(Installation en ligne)"
+                            Label49.Text = "(Installation en ligne)"
                     End Select
                 Case 1
-                    Label5.Text = "Yes"
+                    Label5.Text = If(IsImageMounted, "Yes", "No")
                     Text = "Online installation - DISMTools"
                     Label14.Text = "(Online installation)"
                     Label20.Text = "(Online installation)"
                     projName.Text = "(Online installation)"
+                    Label50.Text = If(IsImageMounted, "Yes", "No")
+                    Label41.Text = "(Online installation)"
+                    Label47.Text = "(Online installation)"
+                    Label49.Text = "(Online installation)"
                 Case 2
-                    Label5.Text = "Sí"
+                    Label5.Text = If(IsImageMounted, "Sí", "No")
                     Text = "Instalación activa - DISMTools"
                     Label14.Text = "(Instalación activa)"
                     Label20.Text = "(Instalación activa)"
                     projName.Text = "(Instalación activa)"
+                    Label50.Text = If(IsImageMounted, "Sí", "No")
+                    Label41.Text = "(Instalación activa)"
+                    Label47.Text = "(Instalación activa)"
+                    Label49.Text = "(Instalación activa)"
                 Case 3
-                    Label5.Text = "Oui"
+                    Label5.Text = If(IsImageMounted, "Oui", "Non")
                     Text = "Installation en ligne - DISMTools"
                     Label14.Text = "(Installation en ligne)"
                     Label20.Text = "(Installation en ligne)"
                     projName.Text = "(Installation en ligne)"
+                    Label50.Text = If(IsImageMounted, "Oui", "Non")
+                    Label41.Text = "(Installation en ligne)"
+                    Label47.Text = "(Installation en ligne)"
+                    Label49.Text = "(Installation en ligne)"
             End Select
+            Label49.Text = projName.Text
+        ElseIf OfflineManagement Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            Label5.Text = If(IsImageMounted, "Yes", "No")
+                            Text = "Offline installation - DISMTools"
+                            Label14.Text = "(Offline installation)"
+                            Label18.Text = "(Offline installation)"
+                            Label20.Text = "(Offline installation)"
+                            projName.Text = "(Offline installation)"
+                            Label50.Text = If(IsImageMounted, "Yes", "No")
+                            Label41.Text = "(Offline installation)"
+                            Label46.Text = "(Offline installation)"
+                            Label47.Text = "(Offline installation)"
+                            Label49.Text = "(Offline installation)"
+                        Case "ESN"
+                            Label5.Text = If(IsImageMounted, "Sí", "No")
+                            Text = "Instalación fuera de línea - DISMTools"
+                            Label14.Text = "(Instalación fuera de línea)"
+                            Label18.Text = "(Instalación fuera de línea)"
+                            Label20.Text = "(Instalación fuera de línea)"
+                            projName.Text = "(Instalación fuera de línea)"
+                            Label50.Text = If(IsImageMounted, "Sí", "No")
+                            Label41.Text = "(Instalación fuera de línea)"
+                            Label46.Text = "(Instalación fuera de línea)"
+                            Label47.Text = "(Instalación fuera de línea)"
+                            Label49.Text = "(Instalación fuera de línea)"
+                        Case "FRA"
+                            Label5.Text = If(IsImageMounted, "Oui", "Non")
+                            Text = "Installation hors ligne - DISMTools"
+                            Label14.Text = "(Installation hors ligne)"
+                            Label18.Text = "(Installation hors ligne)"
+                            Label20.Text = "(Installation hors ligne)"
+                            projName.Text = "(Installation hors ligne)"
+                            Label50.Text = If(IsImageMounted, "Oui", "Non")
+                            Label41.Text = "(Installation hors ligne)"
+                            Label46.Text = "(Installation hors ligne)"
+                            Label47.Text = "(Installation hors ligne)"
+                            Label49.Text = "(Installation hors ligne)"
+                    End Select
+                Case 1
+                    Label5.Text = If(IsImageMounted, "Yes", "No")
+                    Text = "Online installation - DISMTools"
+                    Label14.Text = "(Offline installation)"
+                    Label18.Text = "(Offline installation)"
+                    Label20.Text = "(Offline installation)"
+                    projName.Text = "(Offline installation)"
+                    Label50.Text = If(IsImageMounted, "Yes", "No")
+                    Label41.Text = "(Offline installation)"
+                    Label46.Text = "(Offline installation)"
+                    Label47.Text = "(Offline installation)"
+                    Label49.Text = "(Offline installation)"
+                Case 2
+                    Label5.Text = If(IsImageMounted, "Sí", "No")
+                    Text = "Instalación fuera de línea - DISMTools"
+                    Label14.Text = "(Instalación fuera de línea)"
+                    Label18.Text = "(Instalación fuera de línea)"
+                    Label20.Text = "(Instalación fuera de línea)"
+                    projName.Text = "(Instalación fuera de línea)"
+                    Label50.Text = If(IsImageMounted, "Sí", "No")
+                    Label41.Text = "(Instalación fuera de línea)"
+                    Label46.Text = "(Instalación fuera de línea)"
+                    Label47.Text = "(Instalación fuera de línea)"
+                    Label49.Text = "(Instalación fuera de línea)"
+                Case 3
+                    Label5.Text = If(IsImageMounted, "Oui", "Non")
+                    Text = "Installation hors ligne - DISMTools"
+                    Label14.Text = "(Installation hors ligne)"
+                    Label18.Text = "(Installation hors ligne)"
+                    Label20.Text = "(Installation hors ligne)"
+                    projName.Text = "(Installation hors ligne)"
+                    Label50.Text = If(IsImageMounted, "Oui", "Non")
+                    Label41.Text = "(Installation hors ligne)"
+                    Label46.Text = "(Installation hors ligne)"
+                    Label47.Text = "(Installation hors ligne)"
+                    Label49.Text = "(Installation hors ligne)"
+            End Select
+            Label49.Text = projName.Text
         End If
     End Sub
 
@@ -6345,12 +7450,16 @@ Public Class MainForm
                 End Select
                 PleaseWaitDialog.ShowDialog(Me)
                 projName.Text = prjName
+                Label49.Text = projName.Text
                 Label3.Text = DTProjPath
+                Label52.Text = Label3.Text
                 projPath = DTProjPath
                 projPath = projPath.Replace("\" & DTProjFileName & ".dtproj", "").Trim()
                 If IsImageMounted Then
                     ImageNotMountedPanel.Visible = False
                     ImagePanel.Visible = True
+                    ImageView_NoImage.Visible = False
+                    ImageView_BasicInfo.Visible = True
                 End If
                 PopulateProjectTree(prjName)
                 isProjectLoaded = True
@@ -6369,6 +7478,42 @@ Public Class MainForm
                 Button11.Enabled = False
                 Button12.Enabled = False
                 Button13.Enabled = False
+                ' Update the buttons in the new design accordingly
+                Button26.Enabled = True
+                Button27.Enabled = False
+                Button28.Enabled = False
+                Button29.Enabled = False
+                Button24.Enabled = False
+                Button25.Enabled = False
+                Button30.Enabled = False
+                Button31.Enabled = False
+                Button32.Enabled = False
+                Button33.Enabled = False
+                Button34.Enabled = False
+                Button35.Enabled = False
+                Button36.Enabled = False
+                Button37.Enabled = False
+                Button38.Enabled = False
+                Button39.Enabled = False
+                Button40.Enabled = False
+                Button41.Enabled = False
+                Button42.Enabled = False
+                Button43.Enabled = False
+                Button44.Enabled = False
+                Button45.Enabled = False
+                Button46.Enabled = False
+                Button47.Enabled = False
+                Button48.Enabled = False
+                Button49.Enabled = False
+                Button50.Enabled = False
+                Button51.Enabled = False
+                Button52.Enabled = False
+                Button53.Enabled = False
+                Button54.Enabled = False
+                Button55.Enabled = False
+                Button56.Enabled = False
+                Button57.Enabled = False
+                Button58.Enabled = False
             Else
                 If OpenFileDialog1.FileName = "" Then
                     If BypassFileDialog = False Then
@@ -6380,6 +7525,7 @@ Public Class MainForm
                             Text &= " (debug mode)"
                         End If
                         Label3.Text = DTProjPath
+                        Label52.Text = Label3.Text
                         projPath = DTProjPath
                         projPath = projPath.Replace("\" & DTProjFileName & ".dtproj", "").Trim()
                         Select Case Language
@@ -6402,12 +7548,17 @@ Public Class MainForm
                         'PleaseWaitDialog.Label2.Text = "Loading project: " & Quote & prjName & Quote
                         PleaseWaitDialog.ShowDialog(Me)
                         projName.Text = prjName
+                        Label49.Text = projName.Text
                         If IsImageMounted Then
                             ImageNotMountedPanel.Visible = False
                             ImagePanel.Visible = True
+                            ImageView_NoImage.Visible = False
+                            ImageView_BasicInfo.Visible = True
                         Else
                             ImageNotMountedPanel.Visible = True
                             ImagePanel.Visible = False
+                            ImageView_NoImage.Visible = True
+                            ImageView_BasicInfo.Visible = False
                         End If
                         PopulateProjectTree(prjName)
                         isProjectLoaded = True
@@ -6500,6 +7651,42 @@ Public Class MainForm
                             Button11.Enabled = True
                             Button12.Enabled = True
                             Button13.Enabled = True
+                            ' Update the buttons in the new design accordingly
+                            Button26.Enabled = False
+                            Button27.Enabled = True
+                            Button28.Enabled = True
+                            Button29.Enabled = True
+                            Button24.Enabled = True
+                            Button25.Enabled = True
+                            Button30.Enabled = True
+                            Button31.Enabled = True
+                            Button32.Enabled = True
+                            Button33.Enabled = True
+                            Button34.Enabled = True
+                            Button35.Enabled = True
+                            Button36.Enabled = True
+                            Button37.Enabled = True
+                            Button38.Enabled = True
+                            Button39.Enabled = True
+                            Button40.Enabled = True
+                            Button41.Enabled = True
+                            Button42.Enabled = True
+                            Button43.Enabled = True
+                            Button44.Enabled = True
+                            Button45.Enabled = True
+                            Button46.Enabled = True
+                            Button47.Enabled = True
+                            Button48.Enabled = True
+                            Button49.Enabled = True
+                            Button50.Enabled = True
+                            Button51.Enabled = True
+                            Button52.Enabled = True
+                            Button53.Enabled = True
+                            Button54.Enabled = True
+                            Button55.Enabled = True
+                            Button56.Enabled = True
+                            Button57.Enabled = True
+                            Button58.Enabled = True
                         Else
                             Button1.Enabled = True
                             Button2.Enabled = False
@@ -6514,6 +7701,42 @@ Public Class MainForm
                             Button11.Enabled = False
                             Button12.Enabled = False
                             Button13.Enabled = False
+                            ' Update the buttons in the new design accordingly
+                            Button26.Enabled = True
+                            Button27.Enabled = False
+                            Button28.Enabled = False
+                            Button29.Enabled = False
+                            Button24.Enabled = False
+                            Button25.Enabled = False
+                            Button30.Enabled = False
+                            Button31.Enabled = False
+                            Button32.Enabled = False
+                            Button33.Enabled = False
+                            Button34.Enabled = False
+                            Button35.Enabled = False
+                            Button36.Enabled = False
+                            Button37.Enabled = False
+                            Button38.Enabled = False
+                            Button39.Enabled = False
+                            Button40.Enabled = False
+                            Button41.Enabled = False
+                            Button42.Enabled = False
+                            Button43.Enabled = False
+                            Button44.Enabled = False
+                            Button45.Enabled = False
+                            Button46.Enabled = False
+                            Button47.Enabled = False
+                            Button48.Enabled = False
+                            Button49.Enabled = False
+                            Button50.Enabled = False
+                            Button51.Enabled = False
+                            Button52.Enabled = False
+                            Button53.Enabled = False
+                            Button54.Enabled = False
+                            Button55.Enabled = False
+                            Button56.Enabled = False
+                            Button57.Enabled = False
+                            Button58.Enabled = False
                         End If
                     End If
                 Else
@@ -6523,6 +7746,7 @@ Public Class MainForm
                         Text &= " (debug mode)"
                     End If
                     Label3.Text = DTProjPath
+                    Label52.Text = Label3.Text
                     projPath = DTProjPath
                     projPath = projPath.Replace("\" & DTProjFileName & ".dtproj", "").Trim()
                     Select Case Language
@@ -6545,12 +7769,17 @@ Public Class MainForm
                     'PleaseWaitDialog.Label2.Text = "Loading project: " & Quote & prjName & Quote
                     PleaseWaitDialog.ShowDialog(Me)
                     projName.Text = prjName
+                    Label49.Text = projName.Text
                     If IsImageMounted Then
                         ImageNotMountedPanel.Visible = False
                         ImagePanel.Visible = True
+                        ImageView_NoImage.Visible = False
+                        ImageView_BasicInfo.Visible = True
                     Else
                         ImageNotMountedPanel.Visible = True
                         ImagePanel.Visible = False
+                        ImageView_NoImage.Visible = True
+                        ImageView_BasicInfo.Visible = False
                     End If
                     PopulateProjectTree(prjName)
                     isProjectLoaded = True
@@ -6643,6 +7872,42 @@ Public Class MainForm
                         Button11.Enabled = True
                         Button12.Enabled = True
                         Button13.Enabled = True
+                        ' Update the buttons in the new design accordingly
+                        Button26.Enabled = False
+                        Button27.Enabled = True
+                        Button28.Enabled = True
+                        Button29.Enabled = True
+                        Button24.Enabled = True
+                        Button25.Enabled = True
+                        Button30.Enabled = True
+                        Button31.Enabled = True
+                        Button32.Enabled = True
+                        Button33.Enabled = True
+                        Button34.Enabled = True
+                        Button35.Enabled = True
+                        Button36.Enabled = True
+                        Button37.Enabled = True
+                        Button38.Enabled = True
+                        Button39.Enabled = True
+                        Button40.Enabled = True
+                        Button41.Enabled = True
+                        Button42.Enabled = True
+                        Button43.Enabled = True
+                        Button44.Enabled = True
+                        Button45.Enabled = True
+                        Button46.Enabled = True
+                        Button47.Enabled = True
+                        Button48.Enabled = True
+                        Button49.Enabled = True
+                        Button50.Enabled = True
+                        Button51.Enabled = True
+                        Button52.Enabled = True
+                        Button53.Enabled = True
+                        Button54.Enabled = True
+                        Button55.Enabled = True
+                        Button56.Enabled = True
+                        Button57.Enabled = True
+                        Button58.Enabled = True
                     Else
                         Button1.Enabled = True
                         Button2.Enabled = False
@@ -6657,6 +7922,42 @@ Public Class MainForm
                         Button11.Enabled = False
                         Button12.Enabled = False
                         Button13.Enabled = False
+                        ' Update the buttons in the new design accordingly
+                        Button26.Enabled = True
+                        Button27.Enabled = False
+                        Button28.Enabled = False
+                        Button29.Enabled = False
+                        Button24.Enabled = False
+                        Button25.Enabled = False
+                        Button30.Enabled = False
+                        Button31.Enabled = False
+                        Button32.Enabled = False
+                        Button33.Enabled = False
+                        Button34.Enabled = False
+                        Button35.Enabled = False
+                        Button36.Enabled = False
+                        Button37.Enabled = False
+                        Button38.Enabled = False
+                        Button39.Enabled = False
+                        Button40.Enabled = False
+                        Button41.Enabled = False
+                        Button42.Enabled = False
+                        Button43.Enabled = False
+                        Button44.Enabled = False
+                        Button45.Enabled = False
+                        Button46.Enabled = False
+                        Button47.Enabled = False
+                        Button48.Enabled = False
+                        Button49.Enabled = False
+                        Button50.Enabled = False
+                        Button51.Enabled = False
+                        Button52.Enabled = False
+                        Button53.Enabled = False
+                        Button54.Enabled = False
+                        Button55.Enabled = False
+                        Button56.Enabled = False
+                        Button57.Enabled = False
+                        Button58.Enabled = False
                     End If
                 End If
             End If
@@ -6914,7 +8215,7 @@ Public Class MainForm
             ProgressPanel.ShowDialog(Me)
             Exit Sub
         End If
-        If SaveProject Then
+        If SaveProject And Not (OnlineManagement Or OfflineManagement) Then
             SaveDTProj()
         End If
         If UnmountImg Then
@@ -6949,6 +8250,7 @@ Public Class MainForm
         Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
         PendingTasks = Enumerable.Repeat(True, PendingTasks.Length).ToArray()
         If OnlineManagement Then EndOnlineManagement()
+        If OfflineManagement Then EndOfflineManagement()
     End Sub
 
     Sub BeginOnlineManagement(ShowDialog As Boolean)
@@ -6995,6 +8297,7 @@ Public Class MainForm
             Case 3
                 Label5.Text = "Oui"
         End Select
+        Label50.Text = Label5.Text
         UnpopulateProjectTree()
         HomePanel.Visible = False
         PrjPanel.Visible = True
@@ -7003,8 +8306,11 @@ Public Class MainForm
         SaveProjectToolStripMenuItem.Enabled = False
         SaveProjectasToolStripMenuItem.Enabled = False
         LinkLabel1.Visible = False
+        LinkLabel14.Visible = False
         ImageNotMountedPanel.Visible = False
         ImagePanel.Visible = True
+        ImageView_NoImage.Visible = False
+        ImageView_BasicInfo.Visible = True
         CommandsToolStripMenuItem.Visible = True
         Thread.Sleep(250)
         Refresh()
@@ -7033,6 +8339,8 @@ Public Class MainForm
                 Label14.Text = "(Installation en ligne)"
                 Label12.Text = "(Installation en ligne)"
         End Select
+        Label41.Text = Label14.Text
+        Label44.Text = Label12.Text
         GroupBox1.Enabled = False
         Panel2.Visible = False
         ProjNameEditBtn.Visible = False
@@ -7043,6 +8351,251 @@ Public Class MainForm
         MountDir = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows))
         ImgBW.RunWorkerAsync()
         Exit Sub
+    End Sub
+
+    Sub BeginOfflineManagement(ImageDrive As String)
+        IsImageMounted = True
+        isProjectLoaded = True
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        Text = "Offline installation - DISMTools"
+                    Case "ESN"
+                        Text = "Instalación fuera de línea - DISMTools"
+                    Case "FRA"
+                        Text = "Installation hors ligne - DISMTools"
+                End Select
+            Case 1
+                Text = "Offline installation - DISMTools"
+            Case 2
+                Text = "Instalación fuera de línea - DISMTools"
+            Case 3
+                Text = "Installation hors ligne - DISMTools"
+        End Select
+        OfflineManagement = True
+        ' Initialize background processes
+        bwAllBackgroundProcesses = True
+        bwGetImageInfo = True
+        bwGetAdvImgInfo = True
+        bwBackgroundProcessAction = 0
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        Label5.Text = "Yes"
+                    Case "ESN"
+                        Label5.Text = "Sí"
+                    Case "FRA"
+                        Label5.Text = "Oui"
+                End Select
+            Case 1
+                Label5.Text = "Yes"
+            Case 2
+                Label5.Text = "Sí"
+            Case 3
+                Label5.Text = "Oui"
+        End Select
+        Label50.Text = Label5.Text
+        UnpopulateProjectTree()
+        HomePanel.Visible = False
+        PrjPanel.Visible = True
+        SplitPanels.Visible = True
+        RemountImageWithWritePermissionsToolStripMenuItem.Enabled = False
+        SaveProjectToolStripMenuItem.Enabled = False
+        SaveProjectasToolStripMenuItem.Enabled = False
+        LinkLabel1.Visible = False
+        LinkLabel14.Visible = False
+        ImageNotMountedPanel.Visible = False
+        ImagePanel.Visible = True
+        ImageView_NoImage.Visible = False
+        ImageView_BasicInfo.Visible = True
+        CommandsToolStripMenuItem.Visible = True
+        Thread.Sleep(250)
+        Refresh()
+        ' Saving a project is not possible in offline mode either
+        ToolStripButton2.Enabled = False
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        Label14.Text = "(Offline installation)"
+                        Label12.Text = "(Offline installation)"
+                    Case "ESN"
+                        Label14.Text = "(Instalación fuera de línea)"
+                        Label12.Text = "(Instalación fuera de línea)"
+                    Case "FRA"
+                        Label14.Text = "(Installation hors ligne)"
+                        Label12.Text = "(Installation hors ligne)"
+                End Select
+            Case 1
+                Label14.Text = "(Offline installation)"
+                Label12.Text = "(Offline installation)"
+            Case 2
+                Label14.Text = "(Instalación fuera de línea)"
+                Label12.Text = "(Instalación fuera de línea)"
+            Case 3
+                Label14.Text = "(Installation hors ligne)"
+                Label12.Text = "(Installation hors ligne)"
+        End Select
+        Label41.Text = Label14.Text
+        Label44.Text = Label12.Text
+        GroupBox1.Enabled = False
+        Panel2.Visible = False
+        ProjNameEditBtn.Visible = False
+        TableLayoutPanel2.ColumnCount = 2
+        TableLayoutPanel2.SetColumnSpan(Label5, 1)
+        TableLayoutPanel2.SetColumnSpan(Label3, 1)
+        ManageOfflineInstallationToolStripMenuItem.Enabled = False
+        MountDir = ImageDrive
+        ImgBW.RunWorkerAsync()
+        Exit Sub
+    End Sub
+
+    Sub EndOfflineManagement()
+        If ImgBW.IsBusy Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            If MsgBox("Background processes are still gathering information about this image. Do you want to cancel them?", vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
+                                ImgBW.CancelAsync()
+                            Else
+                                Exit Sub
+                            End If
+                        Case "ESN"
+                            If MsgBox("Procesos en segundo plano todavía están recopilando información de esta imagen. ¿Desea cancelarlos?", vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
+                                ImgBW.CancelAsync()
+                            Else
+                                Exit Sub
+                            End If
+                        Case "FRA"
+                            If MsgBox("Les processus en arrière-plan sont encore en train de recueillir des informations sur cette image. Voulez-vous les annuler ?", vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
+                                ImgBW.CancelAsync()
+                            Else
+                                Exit Sub
+                            End If
+                    End Select
+                Case 1
+                    If MsgBox("Background processes are still gathering information about this image. Do you want to cancel them?", vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
+                        ImgBW.CancelAsync()
+                    Else
+                        Exit Sub
+                    End If
+                Case 2
+                    If MsgBox("Procesos en segundo plano todavía están recopilando información de esta imagen. ¿Desea cancelarlos?", vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
+                        ImgBW.CancelAsync()
+                    Else
+                        Exit Sub
+                    End If
+                Case 3
+                    If MsgBox("Les processus en arrière-plan sont encore en train de recueillir des informations sur cette image. Voulez-vous les annuler ?", vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
+                        ImgBW.CancelAsync()
+                    Else
+                        Exit Sub
+                    End If
+            End Select
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            MenuDesc.Text = "Cancelling background processes. Please wait..."
+                        Case "ESN"
+                            MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
+                        Case "FRA"
+                            MenuDesc.Text = "Annulation des processus en arrière plan en cours. Veuillez patienter ..."
+                    End Select
+                Case 1
+                    MenuDesc.Text = "Cancelling background processes. Please wait..."
+                Case 2
+                    MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
+                Case 3
+                    MenuDesc.Text = "Annulation des processus en arrière plan en cours. Veuillez patienter ..."
+            End Select
+            While ImgBW.IsBusy()
+                ToolStripButton3.Enabled = False
+                UnloadBtn.Enabled = False
+                Application.DoEvents()
+                Thread.Sleep(100)
+            End While
+            ToolStripButton3.Enabled = True
+            UnloadBtn.Enabled = True
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            MenuDesc.Text = "Ready"
+                        Case "ESN"
+                            MenuDesc.Text = "Listo"
+                        Case "FRA"
+                            MenuDesc.Text = "Prêt"
+                    End Select
+                Case 1
+                    MenuDesc.Text = "Ready"
+                Case 2
+                    MenuDesc.Text = "Listo"
+                Case 3
+                    MenuDesc.Text = "Prêt"
+            End Select
+        End If
+        bwBackgroundProcessAction = 0
+        bwGetImageInfo = True
+        bwGetAdvImgInfo = True
+        IsImageMounted = False
+        isProjectLoaded = False
+        Text = "DISMTools"
+        OfflineManagement = False
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        Label5.Text = "Yes"
+                    Case "ESN"
+                        Label5.Text = "Sí"
+                    Case "FRA"
+                        Label5.Text = "Oui"
+                End Select
+            Case 1
+                Label5.Text = "Yes"
+            Case 2
+                Label5.Text = "Sí"
+            Case 3
+                Label5.Text = "Oui"
+        End Select
+        Label50.Text = Label5.Text
+        HomePanel.Visible = True
+        PrjPanel.Visible = False
+        SplitPanels.Visible = False
+        RemountImageWithWritePermissionsToolStripMenuItem.Enabled = False
+        LinkLabel1.Visible = False
+        LinkLabel14.Visible = False
+        ImageNotMountedPanel.Visible = False
+        ImagePanel.Visible = True
+        ImageView_NoImage.Visible = False
+        ImageView_BasicInfo.Visible = True
+        CommandsToolStripMenuItem.Visible = False
+        ProjectToolStripMenuItem.Visible = False
+        Thread.Sleep(250)
+        Refresh()
+        ToolStripButton2.Enabled = True
+        GroupBox1.Enabled = True
+        ' Enable tasks in the new design accordingly
+        Button24.Enabled = True
+        Button25.Enabled = True
+        Button26.Enabled = True
+        Button27.Enabled = True
+        Button28.Enabled = True
+        Button29.Enabled = True
+        Panel2.Visible = True
+        ProjNameEditBtn.Visible = True
+        TableLayoutPanel2.ColumnCount = 3
+        TableLayoutPanel2.SetColumnSpan(Label5, 2)
+        TableLayoutPanel2.SetColumnSpan(Label3, 2)
+        BGProcDetails.Hide()
+        ManageOfflineInstallationToolStripMenuItem.Enabled = True
+        Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
+        PendingTasks = Enumerable.Repeat(True, PendingTasks.Count).ToArray()
+        MountDir = ""
     End Sub
 
     Sub EndOnlineManagement()
@@ -7155,25 +8708,37 @@ Public Class MainForm
             Case 3
                 Label5.Text = "Oui"
         End Select
+        Label50.Text = Label5.Text
         HomePanel.Visible = True
         PrjPanel.Visible = False
         SplitPanels.Visible = False
         RemountImageWithWritePermissionsToolStripMenuItem.Enabled = False
         LinkLabel1.Visible = False
+        LinkLabel14.Visible = False
         ImageNotMountedPanel.Visible = False
         ImagePanel.Visible = True
+        ImageView_NoImage.Visible = False
+        ImageView_BasicInfo.Visible = True
         CommandsToolStripMenuItem.Visible = False
         ProjectToolStripMenuItem.Visible = False
         Thread.Sleep(250)
         Refresh()
         ToolStripButton2.Enabled = True
         GroupBox1.Enabled = True
+        ' Enable tasks in the new design accordingly
+        Button24.Enabled = True
+        Button25.Enabled = True
+        Button26.Enabled = True
+        Button27.Enabled = True
+        Button28.Enabled = True
+        Button29.Enabled = True
         Panel2.Visible = True
         ProjNameEditBtn.Visible = True
         TableLayoutPanel2.ColumnCount = 3
         TableLayoutPanel2.SetColumnSpan(Label5, 2)
         TableLayoutPanel2.SetColumnSpan(Label3, 2)
         ManageOnlineInstallationToolStripMenuItem.Enabled = True
+        BGProcDetails.Hide()
         Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
         PendingTasks = Enumerable.Repeat(True, PendingTasks.Count).ToArray()
         MountDir = ""
@@ -7198,15 +8763,23 @@ Public Class MainForm
                 Case 3
                     Label5.Text = "Oui"
             End Select
+            Label50.Text = Label5.Text
             LinkLabel1.Visible = False
+            LinkLabel14.Visible = False
             ImageNotMountedPanel.Visible = False
             ImagePanel.Visible = True
+            ImageView_NoImage.Visible = False
+            ImageView_BasicInfo.Visible = True
             IsImageMounted = True
         Else
             Label5.Text = "No"
+            Label50.Text = Label5.Text
             LinkLabel1.Visible = True
+            LinkLabel14.Visible = True
             ImageNotMountedPanel.Visible = True
             ImagePanel.Visible = False
+            ImageView_NoImage.Visible = True
+            ImageView_BasicInfo.Visible = False
             IsImageMounted = False
             SourceImg = "N/A"
             ImgIndex = 0
@@ -7598,6 +9171,42 @@ Public Class MainForm
                 Button11.Enabled = True
                 Button12.Enabled = True
                 Button13.Enabled = True
+                ' Update the buttons in the new design accordingly
+                Button26.Enabled = False
+                Button27.Enabled = True
+                Button28.Enabled = True
+                Button29.Enabled = True
+                Button24.Enabled = True
+                Button25.Enabled = True
+                Button30.Enabled = True
+                Button31.Enabled = True
+                Button32.Enabled = True
+                Button33.Enabled = True
+                Button34.Enabled = True
+                Button35.Enabled = True
+                Button36.Enabled = True
+                Button37.Enabled = True
+                Button38.Enabled = True
+                Button39.Enabled = True
+                Button40.Enabled = True
+                Button41.Enabled = True
+                Button42.Enabled = True
+                Button43.Enabled = True
+                Button44.Enabled = True
+                Button45.Enabled = True
+                Button46.Enabled = True
+                Button47.Enabled = True
+                Button48.Enabled = True
+                Button49.Enabled = True
+                Button50.Enabled = True
+                Button51.Enabled = True
+                Button52.Enabled = True
+                Button53.Enabled = True
+                Button54.Enabled = True
+                Button55.Enabled = True
+                Button56.Enabled = True
+                Button57.Enabled = True
+                Button58.Enabled = True
                 DetectNTVersion(MountDir & "\Windows\system32\ntoskrnl.exe")
             Catch ex As Exception
 
@@ -7644,6 +9253,42 @@ Public Class MainForm
             Button11.Enabled = False
             Button12.Enabled = False
             Button13.Enabled = False
+            ' Update the buttons in the new design accordingly
+            Button26.Enabled = True
+            Button27.Enabled = False
+            Button28.Enabled = False
+            Button29.Enabled = False
+            Button24.Enabled = False
+            Button25.Enabled = False
+            Button30.Enabled = False
+            Button31.Enabled = False
+            Button32.Enabled = False
+            Button33.Enabled = False
+            Button34.Enabled = False
+            Button35.Enabled = False
+            Button36.Enabled = False
+            Button37.Enabled = False
+            Button38.Enabled = False
+            Button39.Enabled = False
+            Button40.Enabled = False
+            Button41.Enabled = False
+            Button42.Enabled = False
+            Button43.Enabled = False
+            Button44.Enabled = False
+            Button45.Enabled = False
+            Button46.Enabled = False
+            Button47.Enabled = False
+            Button48.Enabled = False
+            Button49.Enabled = False
+            Button50.Enabled = False
+            Button51.Enabled = False
+            Button52.Enabled = False
+            Button53.Enabled = False
+            Button54.Enabled = False
+            Button55.Enabled = False
+            Button56.Enabled = False
+            Button57.Enabled = False
+            Button58.Enabled = False
         End If
     End Sub
 
@@ -7950,7 +9595,7 @@ Public Class MainForm
                 Case 91
                     MenuDesc.Text = "Adds the Microsoft Edge WebView2 component to the image"
                 Case 92
-                    MenuDesc.Text = "Saves complete image information to the file you want. You will be asked some questions during this process, so don't leave your computer"
+                    MenuDesc.Text = "Saves complete image information to the file you want. Depending on the settings you had specified, you may be asked some questions during the process"
                 Case Else
                     ' Do not show anything
             End Select
@@ -8004,6 +9649,8 @@ Public Class MainForm
                     MenuDesc.Text = "Shows program information"
                 Case 24
                     MenuDesc.Text = "Lets you report feedback through a new GitHub issue (a GitHub account is needed)"
+                Case 25
+                    MenuDesc.Text = "Opens the GitHub repository containing the help documentation contents, to which you can contribute (a GitHub account is needed)"
             End Select
         End If
     End Sub
@@ -8130,7 +9777,7 @@ Public Class MainForm
         ShowChildDescs(True, 1)
     End Sub
 
-    Private Sub HideChildDescsTrigger(sender As Object, e As EventArgs) Handles AppendImage.MouseLeave, ApplyFFU.MouseLeave, ApplyImage.MouseLeave, CaptureCustomImage.MouseLeave, CaptureFFU.MouseLeave, CaptureImage.MouseLeave, CleanupMountpoints.MouseLeave, CommitImage.MouseLeave, DeleteImage.MouseLeave, ExportImage.MouseLeave, GetImageInfo.MouseLeave, GetWIMBootEntry.MouseLeave, ListImage.MouseLeave, MountImage.MouseLeave, OptimizeFFU.MouseLeave, OptimizeImage.MouseLeave, RemountImage.MouseLeave, SplitFFU.MouseLeave, SplitImage.MouseLeave, UnmountImage.MouseLeave, UpdateWIMBootEntry.MouseLeave, ApplySiloedPackage.MouseLeave, GetPackages.MouseLeave, AddPackage.MouseLeave, RemovePackage.MouseLeave, GetFeatures.MouseLeave, EnableFeature.MouseLeave, DisableFeature.MouseLeave, CleanupImage.MouseLeave, AddProvisionedAppxPackage.MouseLeave, GetProvisioningPackageInfo.MouseLeave, ApplyCustomDataImage.MouseLeave, GetProvisionedAppxPackages.MouseLeave, AddProvisionedAppxPackage.MouseLeave, RemoveProvisionedAppxPackage.MouseLeave, OptimizeProvisionedAppxPackages.MouseLeave, SetProvisionedAppxDataFile.MouseLeave, CheckAppPatch.MouseLeave, GetAppPatchInfo.MouseLeave, GetAppPatches.MouseLeave, GetAppInfo.MouseLeave, GetApps.MouseLeave, ExportDefaultAppAssociations.MouseLeave, GetDefaultAppAssociations.MouseLeave, ImportDefaultAppAssociations.MouseLeave, RemoveDefaultAppAssociations.MouseLeave, GetIntl.MouseLeave, SetUILangFallback.MouseLeave, SetSysUILang.MouseLeave, SetSysLocale.MouseLeave, SetUserLocale.MouseLeave, SetInputLocale.MouseLeave, SetAllIntl.MouseLeave, SetTimeZone.MouseLeave, SetSKUIntlDefaults.MouseLeave, SetLayeredDriver.MouseLeave, GenLangINI.MouseLeave, SetSetupUILang.MouseLeave, AddCapability.MouseLeave, ExportSource.MouseLeave, GetCapabilities.MouseLeave, RemoveCapability.MouseLeave, GetCurrentEdition.MouseLeave, GetTargetEditions.MouseLeave, SetEdition.MouseLeave, SetProductKey.MouseLeave, GetDrivers.MouseLeave, AddDriver.MouseLeave, RemoveDriver.MouseLeave, ExportDriver.MouseLeave, ApplyUnattend.MouseLeave, GetPESettings.MouseLeave, SetScratchSpace.MouseLeave, SetTargetPath.MouseLeave, GetOSUninstallWindow.MouseLeave, InitiateOSUninstall.MouseLeave, RemoveOSUninstall.MouseLeave, SetOSUninstallWindow.MouseLeave, SetReservedStorageState.MouseLeave, GetReservedStorageState.MouseLeave, NewProjectToolStripMenuItem.MouseLeave, OpenExistingProjectToolStripMenuItem.MouseLeave, SaveProjectToolStripMenuItem.MouseLeave, SaveProjectasToolStripMenuItem.MouseLeave, ExitToolStripMenuItem.MouseLeave, ViewProjectFilesInFileExplorerToolStripMenuItem.MouseLeave, UnloadProjectToolStripMenuItem.MouseLeave, SwitchImageIndexesToolStripMenuItem.MouseLeave, ProjectPropertiesToolStripMenuItem.MouseLeave, ImagePropertiesToolStripMenuItem.MouseLeave, ImageManagementToolStripMenuItem.MouseLeave, OSPackagesToolStripMenuItem.MouseLeave, ProvisioningPackagesToolStripMenuItem.MouseLeave, AppPackagesToolStripMenuItem.MouseLeave, AppPatchesToolStripMenuItem.MouseLeave, DefaultAppAssociationsToolStripMenuItem.MouseLeave, LanguagesAndRegionSettingsToolStripMenuItem.MouseLeave, CapabilitiesToolStripMenuItem.MouseLeave, WindowsEditionsToolStripMenuItem.MouseLeave, DriversToolStripMenuItem.MouseLeave, UnattendedAnswerFilesToolStripMenuItem.MouseLeave, WindowsPEServicingToolStripMenuItem.MouseLeave, OSUninstallToolStripMenuItem.MouseLeave, ReservedStorageToolStripMenuItem.MouseLeave, ImageConversionToolStripMenuItem.MouseLeave, WIMESDToolStripMenuItem.MouseLeave, RemountImageWithWritePermissionsToolStripMenuItem.MouseLeave, CommandShellToolStripMenuItem.MouseLeave, OptionsToolStripMenuItem.MouseLeave, HelpTopicsToolStripMenuItem.MouseLeave, GlossaryToolStripMenuItem.MouseLeave, CommandHelpToolStripMenuItem.MouseLeave, AboutDISMToolsToolStripMenuItem.MouseLeave, UnattendedAnswerFileManagerToolStripMenuItem.MouseLeave, AddEdge.MouseLeave, AddEdgeBrowser.MouseLeave, AddEdgeWebView.MouseLeave, ReportManagerToolStripMenuItem.MouseLeave, MergeSWM.MouseLeave, MountedImageManagerTSMI.MouseLeave, ReportFeedbackToolStripMenuItem.MouseLeave, ManageOnlineInstallationToolStripMenuItem.MouseLeave, AddProvisioningPackage.MouseLeave, SaveImageInformationToolStripMenuItem.MouseLeave
+    Private Sub HideChildDescsTrigger(sender As Object, e As EventArgs) Handles AppendImage.MouseLeave, ApplyFFU.MouseLeave, ApplyImage.MouseLeave, CaptureCustomImage.MouseLeave, CaptureFFU.MouseLeave, CaptureImage.MouseLeave, CleanupMountpoints.MouseLeave, CommitImage.MouseLeave, DeleteImage.MouseLeave, ExportImage.MouseLeave, GetImageInfo.MouseLeave, GetWIMBootEntry.MouseLeave, ListImage.MouseLeave, MountImage.MouseLeave, OptimizeFFU.MouseLeave, OptimizeImage.MouseLeave, RemountImage.MouseLeave, SplitFFU.MouseLeave, SplitImage.MouseLeave, UnmountImage.MouseLeave, UpdateWIMBootEntry.MouseLeave, ApplySiloedPackage.MouseLeave, GetPackages.MouseLeave, AddPackage.MouseLeave, RemovePackage.MouseLeave, GetFeatures.MouseLeave, EnableFeature.MouseLeave, DisableFeature.MouseLeave, CleanupImage.MouseLeave, AddProvisionedAppxPackage.MouseLeave, GetProvisioningPackageInfo.MouseLeave, ApplyCustomDataImage.MouseLeave, GetProvisionedAppxPackages.MouseLeave, AddProvisionedAppxPackage.MouseLeave, RemoveProvisionedAppxPackage.MouseLeave, OptimizeProvisionedAppxPackages.MouseLeave, SetProvisionedAppxDataFile.MouseLeave, CheckAppPatch.MouseLeave, GetAppPatchInfo.MouseLeave, GetAppPatches.MouseLeave, GetAppInfo.MouseLeave, GetApps.MouseLeave, ExportDefaultAppAssociations.MouseLeave, GetDefaultAppAssociations.MouseLeave, ImportDefaultAppAssociations.MouseLeave, RemoveDefaultAppAssociations.MouseLeave, GetIntl.MouseLeave, SetUILangFallback.MouseLeave, SetSysUILang.MouseLeave, SetSysLocale.MouseLeave, SetUserLocale.MouseLeave, SetInputLocale.MouseLeave, SetAllIntl.MouseLeave, SetTimeZone.MouseLeave, SetSKUIntlDefaults.MouseLeave, SetLayeredDriver.MouseLeave, GenLangINI.MouseLeave, SetSetupUILang.MouseLeave, AddCapability.MouseLeave, ExportSource.MouseLeave, GetCapabilities.MouseLeave, RemoveCapability.MouseLeave, GetCurrentEdition.MouseLeave, GetTargetEditions.MouseLeave, SetEdition.MouseLeave, SetProductKey.MouseLeave, GetDrivers.MouseLeave, AddDriver.MouseLeave, RemoveDriver.MouseLeave, ExportDriver.MouseLeave, ApplyUnattend.MouseLeave, GetPESettings.MouseLeave, SetScratchSpace.MouseLeave, SetTargetPath.MouseLeave, GetOSUninstallWindow.MouseLeave, InitiateOSUninstall.MouseLeave, RemoveOSUninstall.MouseLeave, SetOSUninstallWindow.MouseLeave, SetReservedStorageState.MouseLeave, GetReservedStorageState.MouseLeave, NewProjectToolStripMenuItem.MouseLeave, OpenExistingProjectToolStripMenuItem.MouseLeave, SaveProjectToolStripMenuItem.MouseLeave, SaveProjectasToolStripMenuItem.MouseLeave, ExitToolStripMenuItem.MouseLeave, ViewProjectFilesInFileExplorerToolStripMenuItem.MouseLeave, UnloadProjectToolStripMenuItem.MouseLeave, SwitchImageIndexesToolStripMenuItem.MouseLeave, ProjectPropertiesToolStripMenuItem.MouseLeave, ImagePropertiesToolStripMenuItem.MouseLeave, ImageManagementToolStripMenuItem.MouseLeave, OSPackagesToolStripMenuItem.MouseLeave, ProvisioningPackagesToolStripMenuItem.MouseLeave, AppPackagesToolStripMenuItem.MouseLeave, AppPatchesToolStripMenuItem.MouseLeave, DefaultAppAssociationsToolStripMenuItem.MouseLeave, LanguagesAndRegionSettingsToolStripMenuItem.MouseLeave, CapabilitiesToolStripMenuItem.MouseLeave, WindowsEditionsToolStripMenuItem.MouseLeave, DriversToolStripMenuItem.MouseLeave, UnattendedAnswerFilesToolStripMenuItem.MouseLeave, WindowsPEServicingToolStripMenuItem.MouseLeave, OSUninstallToolStripMenuItem.MouseLeave, ReservedStorageToolStripMenuItem.MouseLeave, ImageConversionToolStripMenuItem.MouseLeave, WIMESDToolStripMenuItem.MouseLeave, RemountImageWithWritePermissionsToolStripMenuItem.MouseLeave, CommandShellToolStripMenuItem.MouseLeave, OptionsToolStripMenuItem.MouseLeave, HelpTopicsToolStripMenuItem.MouseLeave, GlossaryToolStripMenuItem.MouseLeave, CommandHelpToolStripMenuItem.MouseLeave, AboutDISMToolsToolStripMenuItem.MouseLeave, UnattendedAnswerFileManagerToolStripMenuItem.MouseLeave, AddEdge.MouseLeave, AddEdgeBrowser.MouseLeave, AddEdgeWebView.MouseLeave, ReportManagerToolStripMenuItem.MouseLeave, MergeSWM.MouseLeave, MountedImageManagerTSMI.MouseLeave, ReportFeedbackToolStripMenuItem.MouseLeave, ManageOnlineInstallationToolStripMenuItem.MouseLeave, AddProvisioningPackage.MouseLeave, SaveImageInformationToolStripMenuItem.MouseLeave, ContributeToTheHelpSystemToolStripMenuItem.MouseLeave
         HideChildDescs()
     End Sub
 
@@ -8573,6 +10220,10 @@ Public Class MainForm
     Private Sub ReportFeedbackToolStripMenuItem_MouseEnter(sender As Object, e As EventArgs) Handles ReportFeedbackToolStripMenuItem.MouseEnter
         ShowChildDescs(False, 24)
     End Sub
+
+    Private Sub ContributeToTheHelpSystemToolStripMenuItem_MouseEnter(sender As Object, e As EventArgs) Handles ContributeToTheHelpSystemToolStripMenuItem.MouseEnter
+        ShowChildDescs(False, 25)
+    End Sub
 #End Region
 
     Private Sub NewProjLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles NewProjLink.LinkClicked
@@ -8664,7 +10315,7 @@ Public Class MainForm
         GetFeatureInfoDlg.ShowDialog(Me)
     End Sub
 
-    Private Sub Button14_Click(sender As Object, e As EventArgs) Handles Button14.Click, ProjectPropertiesToolStripMenuItem.Click
+    Private Sub Button14_Click(sender As Object, e As EventArgs) Handles Button14.Click, ProjectPropertiesToolStripMenuItem.Click, Button23.Click
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -8761,7 +10412,20 @@ Public Class MainForm
                 Thread.Sleep(100)
             End While
         End If
-        If isProjectLoaded And Not OnlineManagement Then
+        If OfflineManagement Then
+            EndOfflineManagement()
+            MountedImageDetectorBW.CancelAsync()
+            While MountedImageDetectorBW.IsBusy
+                Application.DoEvents()
+                Thread.Sleep(100)
+            End While
+            If MountedImgMgr.DetectorBW.IsBusy Then MountedImgMgr.DetectorBW.CancelAsync()
+            While MountedImgMgr.DetectorBW.IsBusy
+                Application.DoEvents()
+                Thread.Sleep(100)
+            End While
+        End If
+        If isProjectLoaded And (Not OnlineManagement Or Not OfflineManagement) Then
             If isModified Then
                 SaveProjectQuestionDialog.ShowDialog()
                 If SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Yes Then
@@ -8808,6 +10472,12 @@ Public Class MainForm
             Application.DoEvents()
             Thread.Sleep(100)
         End While
+        If FeedWorker.IsBusy Then FeedWorker.CancelAsync()
+        While FeedWorker.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        Timer2.Enabled = False
     End Sub
 
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
@@ -8817,6 +10487,10 @@ Public Class MainForm
     Private Sub ToolStripButton3_Click(sender As Object, e As EventArgs) Handles ToolStripButton3.Click
         If OnlineManagement Then
             EndOnlineManagement()
+            Exit Sub
+        End If
+        If OfflineManagement Then
+            EndOfflineManagement()
             Exit Sub
         End If
         If isModified Then
@@ -8884,7 +10558,7 @@ Public Class MainForm
         ProgressPanel.ShowDialog(Me)
     End Sub
 
-    Private Sub ExplorerView_Click(sender As Object, e As EventArgs) Handles ExplorerView.Click
+    Private Sub ExplorerView_Click(sender As Object, e As EventArgs) Handles ExplorerView.Click, Button22.Click
         Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", projPath)
     End Sub
 
@@ -9261,12 +10935,12 @@ Public Class MainForm
         If bwAllBackgroundProcesses Then
             If bwGetImageInfo Then
                 If bwGetAdvImgInfo Then
-                    RunBackgroundProcesses(bwBackgroundProcessAction, True, True, True, OnlineManagement)
+                    RunBackgroundProcesses(bwBackgroundProcessAction, True, True, True, OnlineManagement, OfflineManagement)
                 Else
-                    RunBackgroundProcesses(bwBackgroundProcessAction, True, False, True, OnlineManagement)
+                    RunBackgroundProcesses(bwBackgroundProcessAction, True, False, True, OnlineManagement, OfflineManagement)
                 End If
             Else
-                RunBackgroundProcesses(bwBackgroundProcessAction, False, False, True, OnlineManagement)
+                RunBackgroundProcesses(bwBackgroundProcessAction, False, False, True, OnlineManagement, OfflineManagement)
             End If
         Else
 
@@ -9512,7 +11186,7 @@ Public Class MainForm
                 If Environment.OSVersion.Version.Minor = 1 Then ' The same also applies to Windows 7
                     BGProcNotify.Location = New Point(Left + 8, Top + StatusStrip.Top - (7 + StatusStrip.Height))
                 Else
-                    BGProcNotify.Location = New Point(Left, Top + StatusStrip.Top - StatusStrip.Height)
+                    BGProcNotify.Location = New Point(Left + 8, Top + StatusStrip.Top - StatusStrip.Height - 7)
                 End If
             End If
         ElseIf BGProcDetails.Visible And pinState = 0 Then
@@ -9522,7 +11196,7 @@ Public Class MainForm
                 If Environment.OSVersion.Version.Minor = 1 Then ' The same also applies to Windows 7
                     BGProcDetails.Location = New Point(Left + 8, Top + StatusStrip.Top - (75 + StatusStrip.Height))
                 Else
-                    BGProcDetails.Location = New Point(Left, Top + StatusStrip.Top - StatusStrip.Height)
+                    BGProcDetails.Location = New Point(Left + 8, Top + StatusStrip.Top - StatusStrip.Height - 75)
                 End If
             End If
         End If
@@ -9568,7 +11242,7 @@ Public Class MainForm
         End If
     End Sub
 
-    Private Sub UnloadBtn_Click(sender As Object, e As EventArgs) Handles UnloadBtn.Click
+    Private Sub UnloadBtn_Click(sender As Object, e As EventArgs) Handles UnloadBtn.Click, Button21.Click
         ToolStripButton3.PerformClick()
     End Sub
 
@@ -9584,7 +11258,7 @@ Public Class MainForm
                 If Environment.OSVersion.Version.Minor = 1 Then ' The same also applies to Windows 7
                     BGProcNotify.Location = New Point(Left + 8, Top + StatusStrip.Top - (7 + StatusStrip.Height))
                 Else
-                    BGProcNotify.Location = New Point(Left, Top + StatusStrip.Top - StatusStrip.Height)
+                    BGProcNotify.Location = New Point(Left + 8, Top + StatusStrip.Top - StatusStrip.Height - 7)
                 End If
             End If
         ElseIf BGProcDetails.Visible And pinState = 0 Then
@@ -9594,7 +11268,7 @@ Public Class MainForm
                 If Environment.OSVersion.Version.Minor = 1 Then ' The same also applies to Windows 7
                     BGProcDetails.Location = New Point(Left + 8, Top + StatusStrip.Top - (75 + StatusStrip.Height))
                 Else
-                    BGProcDetails.Location = New Point(Left, Top + StatusStrip.Top - StatusStrip.Height)
+                    BGProcDetails.Location = New Point(Left + 8, Top + StatusStrip.Top - StatusStrip.Height - 75)
                 End If
             End If
         End If
@@ -9685,6 +11359,42 @@ Public Class MainForm
                         Button11.Enabled = False
                         Button12.Enabled = False
                         Button13.Enabled = False
+                        ' Update the buttons in the new design accordingly
+                        Button26.Enabled = False
+                        Button27.Enabled = False
+                        Button28.Enabled = False
+                        Button29.Enabled = True
+                        Button24.Enabled = False
+                        Button25.Enabled = False
+                        Button30.Enabled = False
+                        Button31.Enabled = False
+                        Button32.Enabled = False
+                        Button33.Enabled = False
+                        Button34.Enabled = False
+                        Button35.Enabled = False
+                        Button36.Enabled = False
+                        Button37.Enabled = False
+                        Button38.Enabled = False
+                        Button39.Enabled = False
+                        Button40.Enabled = False
+                        Button41.Enabled = False
+                        Button42.Enabled = False
+                        Button43.Enabled = False
+                        Button44.Enabled = False
+                        Button45.Enabled = False
+                        Button46.Enabled = False
+                        Button47.Enabled = False
+                        Button48.Enabled = False
+                        Button49.Enabled = False
+                        Button50.Enabled = False
+                        Button51.Enabled = False
+                        Button52.Enabled = False
+                        Button53.Enabled = False
+                        Button54.Enabled = False
+                        Button55.Enabled = False
+                        Button56.Enabled = False
+                        Button57.Enabled = False
+                        Button58.Enabled = False
                         Exit Sub
                     ElseIf ImgWinVistaIncompatibilityDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
                         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
@@ -10285,7 +11995,7 @@ Public Class MainForm
     Private Sub OpenExistingProjectToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OpenExistingProjectToolStripMenuItem.Click
         If OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
             If File.Exists(OpenFileDialog1.FileName) Then
-                If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement, False, True), False)
+                If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement Or OfflineManagement, False, True), False)
                 If ImgBW.IsBusy Then Exit Sub
                 ProgressPanel.OperationNum = 990
                 LoadDTProj(OpenFileDialog1.FileName, Path.GetFileNameWithoutExtension(OpenFileDialog1.FileName), False, False)
@@ -10645,6 +12355,7 @@ Public Class MainForm
                 Dim pkgDirs() As String = Directory.GetDirectories(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps", DisplayName & "*", SearchOption.TopDirectoryOnly)
                 For Each folder In pkgDirs
                     If Not folder.Contains("neutral") Then
+                        If Not File.Exists(folder & "\AppxManifest.xml") Then Continue For
                         ' Copy manifest to startup dir
                         File.Copy(folder & "\AppxManifest.xml", Application.StartupPath & "\AppxManifest.xml")
                         Dim XMLReaderRTB As New RichTextBox With {
@@ -10841,7 +12552,7 @@ Public Class MainForm
             End Select
             Exit Sub
         End Try
-        If File.Exists(Application.StartupPath & "\update.exe") Then Process.Start(Application.StartupPath & "\update.exe", "/" & dtBranch)
+        If File.Exists(Application.StartupPath & "\update.exe") Then Process.Start(Application.StartupPath & "\update.exe", "/" & dtBranch & " /pid=" & Process.GetCurrentProcess().Id)
     End Sub
 
     Private Sub prjTreeView_NodeMouseClick(sender As Object, e As TreeNodeMouseClickEventArgs) Handles prjTreeView.NodeMouseClick
@@ -11376,6 +13087,19 @@ Public Class MainForm
         BeginOnlineManagement(Not showMessage)
     End Sub
 
+    Private Sub ManageOfflineInstallationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageOfflineInstallationToolStripMenuItem.Click
+        If OfflineInstDriveLister.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If drivePath = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) Then
+                Exit Sub
+            End If
+            If isProjectLoaded Then
+                UnloadDTProj(False, True, False)
+                If ImgBW.IsBusy Then Exit Sub
+            End If
+            BeginOfflineManagement(drivePath)
+        End If
+    End Sub
+
     Private Sub UpdCheckupPanel_Paint(sender As Object, e As PaintEventArgs)
         ControlPaint.DrawBorder(e.Graphics, Panel1.ClientRectangle, Color.FromArgb(0, 122, 204), ButtonBorderStyle.Solid)
     End Sub
@@ -11483,7 +13207,7 @@ Public Class MainForm
     End Sub
 
     Private Sub GetFeatures_Click(sender As Object, e As EventArgs) Handles GetFeatures.Click
-        If Not IsImageMounted Or Not OnlineManagement Then Exit Sub
+        If Not IsImageMounted Then Exit Sub
         ProgressPanel.OperationNum = 994
         Select Case Language
             Case 0
@@ -11784,17 +13508,1566 @@ Public Class MainForm
         If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
-            For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
-                If MountedImageMountDirs(x) = MountDir Then
-                    ImgInfoSaveDlg.SourceImage = MountedImageImgFiles(x)
-                    Exit For
-                End If
-            Next
+            If MountedImageMountDirs.Count > 0 Then
+                For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
+                    If MountedImageMountDirs(x) = MountDir Then
+                        ImgInfoSaveDlg.SourceImage = MountedImageImgFiles(x)
+                        Exit For
+                    End If
+                Next
+            End If
             ImgInfoSaveDlg.ImgMountDir = If(Not OnlineManagement, MountDir, "")
             ImgInfoSaveDlg.OnlineMode = OnlineManagement
+            ImgInfoSaveDlg.OfflineMode = OfflineManagement
             ImgInfoSaveDlg.AllDrivers = AllDrivers
+            ImgInfoSaveDlg.SkipQuestions = SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 0
             ImgInfoSaveDlg.ShowDialog()
         End If
+    End Sub
+
+    Private Sub OfflineInstMgmt_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles OfflineInstMgmt.LinkClicked
+        If OfflineInstDriveLister.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If drivePath = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) Then
+                ActiveInstAccessWarn.Label2.Visible = False
+                BeginOnlineManagement(True)
+                Exit Sub
+            End If
+            BeginOfflineManagement(drivePath)
+        End If
+    End Sub
+
+    Private Sub ContributeToTheHelpSystemToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ContributeToTheHelpSystemToolStripMenuItem.Click
+        Process.Start("https://github.com/CodingWonders/dt_help")
+    End Sub
+
+    Private Sub Button19_Click(sender As Object, e As EventArgs) Handles Button19.Click
+        ProjectView.Visible = True
+        SplitPanels.Visible = False
+        GoToNewView = True
+    End Sub
+
+    Private Sub Button20_Click(sender As Object, e As EventArgs) Handles Button20.Click
+        ProjectView.Visible = False
+        SplitPanels.Visible = True
+        GoToNewView = False
+    End Sub
+
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        TimeLabel.Text = DateTime.Now.ToString("D") & " - " & DateTime.Now.ToString("HH:mm")
+    End Sub
+
+    Private Sub LinkLabel12_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel12.LinkClicked
+        LinkLabel12.LinkColor = Color.FromArgb(241, 241, 241)
+        LinkLabel13.LinkColor = Color.FromArgb(153, 153, 153)
+        SidePanel_ProjectView.Visible = True
+        SidePanel_ImageView.Visible = False
+    End Sub
+
+    Private Sub LinkLabel13_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel13.LinkClicked
+        LinkLabel12.LinkColor = Color.FromArgb(153, 153, 153)
+        LinkLabel13.LinkColor = Color.FromArgb(241, 241, 241)
+        SidePanel_ProjectView.Visible = False
+        SidePanel_ImageView.Visible = True
+    End Sub
+
+#Region "Task Links"
+
+    Private Sub LinkLabel15_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel15.LinkClicked
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        ProjProperties.TabControl1.SelectedIndex = 0
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
+                    Case "ESN"
+                        ProjProperties.Label1.Text = "Propiedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del proyecto", "de la imagen")
+                    Case "FRA"
+                        ProjProperties.Label1.Text = "Propriétés " & If(ProjProperties.TabControl1.SelectedIndex = 0, "du projet", "de l'image")
+                End Select
+            Case 1
+                ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
+            Case 2
+                ProjProperties.Label1.Text = "Propiedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del proyecto", "de la imagen")
+            Case 3
+                ProjProperties.Label1.Text = "Propriétés " & If(ProjProperties.TabControl1.SelectedIndex = 0, "du projet", "de l'image")
+        End Select
+        If Environment.OSVersion.Version.Major = 10 Then
+            ProjProperties.Text = ""
+        Else
+            ProjProperties.Text = ProjProperties.Label1.Text
+        End If
+        ProjProperties.ShowDialog()
+    End Sub
+
+    Private Sub LinkLabel16_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel16.LinkClicked
+        Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", projPath)
+    End Sub
+
+    Private Sub LinkLabel17_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel17.LinkClicked
+        ToolStripButton3.PerformClick()
+    End Sub
+
+    Private Sub LinkLabel18_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel18.LinkClicked
+        PopupImageManager.Location = LinkLabel18.PointToScreen(Point.Empty)
+        PopupImageManager.Top -= PopupImageManager.Height
+        If PopupImageManager.ShowDialog() = DialogResult.OK Then
+            If MountedImageMountDirs.Count > 0 Then
+                MountDir = PopupImageManager.selectedMntDir
+                If MountedImageMountDirs.Count > 0 Then
+                    Try
+                        For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
+                            If MountedImageMountDirs(x) = MountDir Then
+                                ImgIndex = MountedImageImgIndexes(x)
+                                SourceImg = MountedImageImgFiles(x)
+                                IIf(MountedImageMountedReWr(x) = 1, isReadOnly = False, isReadOnly = True)
+                            End If
+                        Next
+                    Catch ex As Exception
+                        Exit Try
+                    End Try
+                    UpdateProjProperties(True, If(isReadOnly, True, False))
+                    SaveDTProj()
+                End If
+            Else
+                Exit Sub
+            End If
+        End If
+    End Sub
+
+    Private Sub LinkLabel19_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel19.LinkClicked
+        ' If it's a read only image, directly unmount it discarding changes
+        If MountedImageImgFiles.Count > 0 Then
+            For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
+                If MountedImageMountDirs(x) = MountDir Then
+                    If MountedImageMountedReWr(x) = 1 Then
+                        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+                        imgCommitOperation = 1
+                        UnloadDTProj(False, True, True)
+                        Exit Sub
+                    End If
+                End If
+            Next
+        End If
+        ImgUMount.RadioButton1.Checked = True
+        ImgUMount.RadioButton2.Checked = False
+        ImgUMount.ShowDialog()
+    End Sub
+
+    Private Sub LinkLabel20_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel20.LinkClicked
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        ProjProperties.TabControl1.SelectedIndex = 1
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
+                    Case "ESN"
+                        ProjProperties.Label1.Text = "Propiedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del proyecto", "de la imagen")
+                    Case "FRA"
+                        ProjProperties.Label1.Text = "Propriétés " & If(ProjProperties.TabControl1.SelectedIndex = 0, "du projet", "de l'image")
+                End Select
+            Case 1
+                ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
+            Case 2
+                ProjProperties.Label1.Text = "Propiedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del proyecto", "de la imagen")
+            Case 3
+                ProjProperties.Label1.Text = "Propriétés " & If(ProjProperties.TabControl1.SelectedIndex = 0, "du projet", "de l'image")
+        End Select
+        If Environment.OSVersion.Version.Major = 10 Then
+            ProjProperties.Text = ""
+        Else
+            ProjProperties.Text = ProjProperties.Label1.Text
+        End If
+        ProjProperties.ShowDialog()
+    End Sub
+
+    Private Sub LinkLabel21_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel21.LinkClicked
+        ImgMount.ShowDialog()
+    End Sub
+
+#End Region
+
+#Region "Common Task button functionality in new design"
+
+    Private Sub Button24_Click(sender As Object, e As EventArgs) Handles Button24.Click
+        MountedImageDetectorBW.CancelAsync()
+        ProgressPanel.OperationNum = 995
+        PleaseWaitDialog.indexesSourceImg = SourceImg
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting image indexes..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
+                    Case "FRA"
+                        PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting image indexes..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
+            Case 3
+                PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours..."
+        End Select
+        PleaseWaitDialog.ShowDialog(Me)
+        If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
+        If PleaseWaitDialog.imgIndexes > 1 Then
+            ImgIndexSwitch.ShowDialog()
+        End If
+    End Sub
+
+    Private Sub Button25_Click(sender As Object, e As EventArgs) Handles Button25.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+        ProgressPanel.MountDir = MountDir
+        ProgressPanel.OperationNum = 18
+        ProgressPanel.ShowDialog(Me)
+    End Sub
+
+    Private Sub Button26_Click(sender As Object, e As EventArgs) Handles Button26.Click
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        ImgMount.ShowDialog()
+    End Sub
+
+    Private Sub Button27_Click(sender As Object, e As EventArgs) Handles Button27.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+        ProgressPanel.MountDir = MountDir
+        ' TODO: Add additional options later
+        ProgressPanel.OperationNum = 8
+        ProgressPanel.ShowDialog(Me)
+    End Sub
+
+    Private Sub Button28_Click(sender As Object, e As EventArgs) Handles Button28.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+        imgCommitOperation = 0
+        UnloadDTProj(False, True, True)
+    End Sub
+
+    Private Sub Button29_Click(sender As Object, e As EventArgs) Handles Button29.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+        imgCommitOperation = 1
+        UnloadDTProj(False, True, True)
+    End Sub
+
+    Private Sub Button30_Click(sender As Object, e As EventArgs) Handles Button30.Click
+        ImgApply.ShowDialog()
+    End Sub
+
+    Private Sub Button31_Click(sender As Object, e As EventArgs) Handles Button31.Click
+        ImgCapture.ShowDialog()
+    End Sub
+
+    Private Sub Button32_Click(sender As Object, e As EventArgs) Handles Button32.Click
+        ImgIndexDelete.ShowDialog()
+    End Sub
+
+    Private Sub Button33_Click(sender As Object, e As EventArgs) Handles Button33.Click
+        If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
+            ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
+            If MountedImageMountDirs.Count > 0 Then
+                For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
+                    If MountedImageMountDirs(x) = MountDir Then
+                        ImgInfoSaveDlg.SourceImage = MountedImageImgFiles(x)
+                        Exit For
+                    End If
+                Next
+            End If
+            ImgInfoSaveDlg.ImgMountDir = If(Not OnlineManagement, MountDir, "")
+            ImgInfoSaveDlg.OnlineMode = OnlineManagement
+            ImgInfoSaveDlg.OfflineMode = OfflineManagement
+            ImgInfoSaveDlg.AllDrivers = AllDrivers
+            ImgInfoSaveDlg.SkipQuestions = SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.SaveTask = 0
+            ImgInfoSaveDlg.ShowDialog()
+        End If
+    End Sub
+
+    Private Sub Button34_Click(sender As Object, e As EventArgs) Handles Button34.Click
+        ProgressPanel.OperationNum = 993
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting package names..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
+                    Case "FRA"
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting package names..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
+            Case 3
+                PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
+        End Select
+        If Not CompletedTasks(0) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        If MountedImageDetectorBW.IsBusy Then
+            MountedImageDetectorBW.CancelAsync()
+            While MountedImageDetectorBW.IsBusy
+                Application.DoEvents()
+                Thread.Sleep(500)
+            End While
+        End If
+        If PackageInfoList IsNot Nothing Then GetPkgInfoDlg.InstalledPkgInfo = PackageInfoList
+        GetPkgInfoDlg.ShowDialog(Me)
+    End Sub
+
+    Private Sub Button35_Click(sender As Object, e As EventArgs) Handles Button35.Click
+        ElementCount = 0
+        RemPackage.CheckedListBox1.Items.Clear()
+        ProgressPanel.OperationNum = 993
+        PleaseWaitDialog.pkgSourceImgStr = MountDir
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting package names..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
+                    Case "FRA"
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting package names..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
+            Case 3
+                PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
+        End Select
+        If Not CompletedTasks(0) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        Try
+            For x = 0 To Array.LastIndexOf(imgPackageNames, imgPackageNames.Last)
+                If imgPackageNames(x) = "" Then
+                    Continue For
+                End If
+                RemPackage.CheckedListBox1.Items.Add(imgPackageNames(x))
+            Next
+        Catch ex As Exception
+            ' We should have enough with the entries already added.
+            Exit Try
+        End Try
+        Try
+            For x = 0 To Array.LastIndexOf(imgPackageNames, imgPackageNames.Last)
+                If imgPackageNames(x) = "" Then
+                    Exit For
+                End If
+                ElementCount += 1
+            Next
+        Catch ex As Exception
+            ' We should have enough with the entries already added.
+            Exit Try
+        End Try
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        RemPackage.Label2.Text = "This image contains " & ElementCount & " packages"
+                    Case "ESN"
+                        RemPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes"
+                    Case "FRA"
+                        RemPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets"
+                End Select
+            Case 1
+                RemPackage.Label2.Text = "This image contains " & ElementCount & " packages"
+            Case 2
+                RemPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes"
+            Case 3
+                RemPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets"
+        End Select
+        RemPackage.ShowDialog()
+    End Sub
+
+    Private Sub Button36_Click(sender As Object, e As EventArgs) Handles Button36.Click
+        AddPackageDlg.ShowDialog()
+    End Sub
+
+    Private Sub Button37_Click(sender As Object, e As EventArgs) Handles Button37.Click
+        ImgCleanup.ShowDialog()
+    End Sub
+
+    Private Sub Button38_Click(sender As Object, e As EventArgs) Handles Button38.Click
+        If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
+            If ImgInfoSaveDlg.PackageFiles.Count > 0 Then ImgInfoSaveDlg.PackageFiles.Clear()
+            ImgInfoSaveDlg.SourceImage = SourceImg
+            ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
+            ImgInfoSaveDlg.ImgMountDir = If(Not OnlineManagement, MountDir, "")
+            ImgInfoSaveDlg.OnlineMode = OnlineManagement
+            ImgInfoSaveDlg.SkipQuestions = SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.SaveTask = 2
+            ImgInfoSaveDlg.ShowDialog()
+        End If
+    End Sub
+
+    Private Sub Button39_Click(sender As Object, e As EventArgs) Handles Button39.Click
+        If Not IsImageMounted Then Exit Sub
+        ProgressPanel.OperationNum = 994
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
+                    Case "FRA"
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
+            Case 3
+                PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
+        End Select
+        If Not CompletedTasks(1) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(500)
+        End While
+        If FeatureInfoList IsNot Nothing Then GetFeatureInfoDlg.InstalledFeatureInfo = FeatureInfoList
+        GetFeatureInfoDlg.ShowDialog(Me)
+    End Sub
+
+    Private Sub Button40_Click(sender As Object, e As EventArgs) Handles Button40.Click
+        ElementCount = 0
+        EnableFeat.ListView1.Items.Clear()
+        DisableFeat.ListView1.Items.Clear()
+        ProgressPanel.OperationNum = 994
+        PleaseWaitDialog.featOpType = 1
+        PleaseWaitDialog.featSourceImg = MountDir
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
+                    Case "FRA"
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
+            Case 3
+                PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
+        End Select
+        If Not CompletedTasks(1) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        Select Case PleaseWaitDialog.featOpType
+            Case 0
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureState(x).Contains("Enable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
+                            Continue For
+                        End If
+                        EnableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
+                    Next
+                Catch ex As Exception
+                    ' We should have enough with the entries already added.
+                    Exit Try
+                End Try
+                ' Get number of available elements
+                Dim ElementCount As Integer = 0
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureNames(x) = "" Then
+                            Exit For
+                        End If
+                        ElementCount += 1
+                    Next
+                Catch ex As Exception
+                    Exit Try
+                End Try
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                            Case "ESN"
+                                EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
+                            Case "FRA"
+                                EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
+                        End Select
+                    Case 1
+                        EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                    Case 2
+                        EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
+                    Case 3
+                        EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
+                End Select
+            Case 1
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureState(x).Contains("Disable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
+                            Continue For
+                        End If
+                        DisableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
+                    Next
+                Catch ex As Exception
+                    ' We should have enough with the entries already added.
+                    Exit Try
+                End Try
+                ' Get number of available elements
+                Dim ElementCount As Integer
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureNames(x) = "" Then
+                            Exit For
+                        End If
+                        ElementCount += 1
+                    Next
+                Catch ex As Exception
+                    Exit Try
+                End Try
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                            Case "ESN"
+                                DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
+                            Case "FRA"
+                                EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
+                        End Select
+                    Case 1
+                        DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                    Case 2
+                        DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
+                    Case 3
+                        EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
+                End Select
+        End Select
+        DisableFeat.ShowDialog()
+    End Sub
+
+    Private Sub Button41_Click(sender As Object, e As EventArgs) Handles Button41.Click
+        ElementCount = 0
+        EnableFeat.ListView1.Items.Clear()
+        DisableFeat.ListView1.Items.Clear()
+        ProgressPanel.OperationNum = 994
+        PleaseWaitDialog.featOpType = 0
+        PleaseWaitDialog.featSourceImg = MountDir
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
+                    Case "FRA"
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
+            Case 3
+                PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
+        End Select
+        If Not CompletedTasks(1) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        Select Case PleaseWaitDialog.featOpType
+            Case 0
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureState(x).Contains("Enable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
+                            Continue For
+                        End If
+                        EnableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
+                    Next
+                Catch ex As Exception
+                    ' We should have enough with the entries already added.
+                    Exit Try
+                End Try
+                ' Get number of available elements
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureNames(x) = "" Then
+                            Exit For
+                        End If
+                        ElementCount += 1
+                    Next
+                Catch ex As Exception
+                    Exit Try
+                End Try
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                            Case "ESN"
+                                EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
+                            Case "FRA"
+                                EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
+                        End Select
+                    Case 1
+                        EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                    Case 2
+                        EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
+                    Case 3
+                        EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
+                End Select
+            Case 1
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureState(x).Contains("Disable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
+                            Continue For
+                        End If
+                        DisableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
+                    Next
+                Catch ex As Exception
+                    ' We should have enough with the entries already added.
+                    Exit Try
+                End Try
+                ' Get number of available elements
+                Dim ElementCount As Integer
+                Try
+                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                        If imgFeatureNames(x) = "" Then
+                            Exit For
+                        End If
+                        ElementCount += 1
+                    Next
+                Catch ex As Exception
+                    Exit Try
+                End Try
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                            Case "ESN"
+                                DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
+                            Case "FRA"
+                                EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
+                        End Select
+                    Case 1
+                        DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
+                    Case 2
+                        DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
+                    Case 3
+                        EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
+                End Select
+        End Select
+        EnableFeat.ShowDialog()
+    End Sub
+
+    Private Sub Button42_Click(sender As Object, e As EventArgs) Handles Button42.Click
+        If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
+            ImgInfoSaveDlg.SourceImage = SourceImg
+            ImgInfoSaveDlg.ImgMountDir = If(Not OnlineManagement, MountDir, "")
+            ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
+            ImgInfoSaveDlg.OnlineMode = OnlineManagement
+            ImgInfoSaveDlg.OfflineMode = OfflineManagement
+            ImgInfoSaveDlg.SkipQuestions = SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.SaveTask = 4
+            ImgInfoSaveDlg.ShowDialog()
+        End If
+    End Sub
+
+    Private Sub Button43_Click(sender As Object, e As EventArgs) Handles Button43.Click
+        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                        Case "FRA"
+                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                Case 3
+                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+            End Select
+            Exit Sub
+        End If
+        ElementCount = 0
+        RemProvAppxPackage.ListView1.Items.Clear()
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting provisioned AppX packages..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo paquetes aprovisionados AppX..."
+                    Case "FRA"
+                        PleaseWaitDialog.Label2.Text = "Obtention des paquets AppX provisionnés en cours..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting provisioned AppX packages..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo paquetes aprovisionados AppX..."
+            Case 3
+                PleaseWaitDialog.Label2.Text = "Obtention des paquets AppX provisionnés en cours..."
+        End Select
+        ProgressPanel.OperationNum = 994
+        If Not CompletedTasks(2) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        Try
+            For x = 0 To Array.LastIndexOf(imgAppxPackageNames, imgAppxPackageNames.Last)
+                If imgAppxPackageNames(x) = "" Or imgAppxPackageNames(x) = "Nothing" Then
+                    Continue For
+                Else
+                    If Directory.Exists(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x)) Then
+                        If My.Computer.FileSystem.GetFiles(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
+                            RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "No"}))
+                        Else
+                            RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "Yes"}))
+                        End If
+                    Else
+                        RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "No"}))
+                    End If
+                End If
+            Next
+        Catch ex As Exception
+            ' We should have enough with the entries already added.
+            Exit Try
+        End Try
+        ' Begin counting
+        Try
+            For x = 0 To Array.LastIndexOf(imgAppxPackageNames, imgAppxPackageNames.Last)
+                If imgAppxPackageNames(x) = "" Then
+                    Exit For
+                End If
+                ElementCount += 1
+            Next
+        Catch ex As Exception
+            Exit Try
+        End Try
+        If ElementCount <= 0 Then
+            ElementCount = RemProvAppxPackage.ListView1.Items.Count
+        End If
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        RemProvAppxPackage.Label2.Text = "This image contains " & ElementCount & " AppX packages."
+                    Case "ESN"
+                        RemProvAppxPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes AppX."
+                    Case "FRA"
+                        RemProvAppxPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets AppX."
+                End Select
+            Case 1
+                RemProvAppxPackage.Label2.Text = "This image contains " & ElementCount & " AppX packages."
+            Case 2
+                RemProvAppxPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes AppX."
+            Case 3
+                RemProvAppxPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets AppX."
+        End Select
+        RemProvAppxPackage.ShowDialog()
+    End Sub
+
+    Private Sub Button44_Click(sender As Object, e As EventArgs) Handles Button44.Click
+        If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+            AddProvAppxPackage.ShowDialog()
+        Else
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                        Case "FRA"
+                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                Case 3
+                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+            End Select
+        End If
+    End Sub
+
+    Private Sub Button45_Click(sender As Object, e As EventArgs) Handles Button45.Click
+        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                        Case "FRA"
+                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                Case 3
+                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+            End Select
+            Exit Sub
+        End If
+        ProgressPanel.OperationNum = 993
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting package names..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
+                    Case "FRA"
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting package names..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
+            Case 3
+                PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
+        End Select
+        If Not CompletedTasks(2) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        If AppxPackageInfoList IsNot Nothing Then GetAppxPkgInfoDlg.InstalledAppxPkgInfo = AppxPackageInfoList
+        GetAppxPkgInfoDlg.ShowDialog(Me)
+    End Sub
+
+    Private Sub Button46_Click(sender As Object, e As EventArgs) Handles Button46.Click
+        If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
+            ImgInfoSaveDlg.SourceImage = SourceImg
+            ImgInfoSaveDlg.ImgMountDir = If(Not OnlineManagement, MountDir, "")
+            ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
+            ImgInfoSaveDlg.OnlineMode = OnlineManagement
+            ImgInfoSaveDlg.OfflineMode = OfflineManagement
+            ImgInfoSaveDlg.SkipQuestions = SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.SaveTask = 5
+            ImgInfoSaveDlg.ShowDialog()
+        End If
+    End Sub
+
+    Private Sub Button47_Click(sender As Object, e As EventArgs) Handles Button47.Click
+        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                        Case "FRA"
+                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                Case 3
+                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+            End Select
+            Exit Sub
+        End If
+        ElementCount = 0
+        RemCapabilities.ListView1.Items.Clear()
+        ProgressPanel.OperationNum = 994
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
+                    Case "FRA"
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
+            Case 3
+                PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
+        End Select
+        If Not CompletedTasks(3) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        Try
+            For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
+                If imgCapabilityState(x) = "Removed" Or imgCapabilityState(x) = "Not present" Or imgCapabilityState(x) = "Uninstalled" Then
+                    Continue For
+                End If
+                RemCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapabilityIds(x), imgCapabilityState(x)}))
+            Next
+        Catch ex As Exception
+            Exit Try
+        End Try
+        Try
+            For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
+                If imgCapabilityIds(x) = "" Then
+                    Exit For
+                End If
+                ElementCount += 1
+            Next
+        Catch ex As Exception
+            Exit Try
+        End Try
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        RemCapabilities.Label2.Text = "This image contains " & ElementCount & " capabilities."
+                    Case "ESN"
+                        RemCapabilities.Label2.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
+                    Case "FRA"
+                        AddCapabilities.Label4.Text = "Cette image contient " & ElementCount & " capacités."
+                End Select
+            Case 1
+                RemCapabilities.Label2.Text = "This image contains " & ElementCount & " capabilities."
+            Case 2
+                RemCapabilities.Label2.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
+            Case 3
+                AddCapabilities.Label4.Text = "Cette image contient " & ElementCount & " capacités."
+        End Select
+        RemCapabilities.ShowDialog()
+    End Sub
+
+    Private Sub Button48_Click(sender As Object, e As EventArgs) Handles Button48.Click
+        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                        Case "FRA"
+                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                Case 3
+                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+            End Select
+            Exit Sub
+        End If
+        ElementCount = 0
+        AddCapabilities.ListView1.Items.Clear()
+        ProgressPanel.OperationNum = 994
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
+                    Case "FRA"
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
+            Case 3
+                PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
+        End Select
+        If Not CompletedTasks(3) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        Try
+            For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
+                If imgCapabilityState(x) = "Installed" Or imgCapabilityState(x) = "Install Pending" Then
+                    Continue For
+                End If
+                AddCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapabilityIds(x), imgCapabilityState(x)}))
+            Next
+        Catch ex As Exception
+            Exit Try
+        End Try
+        Try
+            For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
+                If imgCapabilityIds(x) = "" Then
+                    Exit For
+                End If
+                ElementCount += 1
+            Next
+        Catch ex As Exception
+            Exit Try
+        End Try
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        AddCapabilities.Label4.Text = "This image contains " & ElementCount & " capabilities."
+                    Case "ESN"
+                        AddCapabilities.Label4.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
+                    Case "FRA"
+                        AddCapabilities.Label4.Text = "Cette image contient " & ElementCount & " capacités."
+                End Select
+            Case 1
+                AddCapabilities.Label4.Text = "This image contains " & ElementCount & " capabilities."
+            Case 2
+                AddCapabilities.Label4.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
+            Case 3
+                AddCapabilities.Label4.Text = "Cette image contient " & ElementCount & " capacités."
+        End Select
+        AddCapabilities.ShowDialog()
+    End Sub
+
+    Private Sub Button49_Click(sender As Object, e As EventArgs) Handles Button49.Click
+        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                        Case "FRA"
+                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                Case 3
+                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+            End Select
+            Exit Sub
+        End If
+        ProgressPanel.OperationNum = 994
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
+                    Case "FRA"
+                        PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
+            Case 3
+                PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
+        End Select
+        If Not CompletedTasks(3) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(500)
+        End While
+        If CapabilityInfoList IsNot Nothing Then GetCapabilityInfoDlg.InstalledCapabilityInfo = CapabilityInfoList
+        GetCapabilityInfoDlg.ShowDialog(Me)
+    End Sub
+
+    Private Sub Button50_Click(sender As Object, e As EventArgs) Handles Button50.Click
+        If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
+            ImgInfoSaveDlg.SourceImage = SourceImg
+            ImgInfoSaveDlg.ImgMountDir = If(Not OnlineManagement, MountDir, "")
+            ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
+            ImgInfoSaveDlg.OnlineMode = OnlineManagement
+            ImgInfoSaveDlg.OfflineMode = OfflineManagement
+            ImgInfoSaveDlg.SkipQuestions = SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.SaveTask = 6
+            ImgInfoSaveDlg.ShowDialog()
+        End If
+    End Sub
+
+    Private Sub Button51_Click(sender As Object, e As EventArgs) Handles Button51.Click
+        If OnlineManagement Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
+                        Case "FRA"
+                            MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
+                Case 3
+                    MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+            End Select
+            Exit Sub
+        End If
+        RemDrivers.ListView1.Items.Clear()
+        ProgressPanel.OperationNum = 994
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
+                    Case "FRA"
+                        PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
+            Case 3
+                PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
+        End Select
+        If Not CompletedTasks(4) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        Try
+            For x = 0 To Array.LastIndexOf(imgDrvPublishedNames, imgDrvPublishedNames.Last)
+                If RemDrivers.CheckBox1.Checked Then
+                    If imgDrvBootCriticalStatus(x) Then Continue For
+                End If
+                If RemDrivers.CheckBox2.Checked Then
+                    If CBool(imgDrvInbox(x)) Then Continue For
+                End If
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Yes", "No"), If(imgDrvBootCriticalStatus(x), "Yes", "No"), imgDrvVersions(x), imgDrvDates(x)}))
+                            Case "ESN"
+                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sí", "No"), imgDrvVersions(x), imgDrvDates(x)}))
+                            Case "FRA"
+                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Oui", "Non"), If(imgDrvBootCriticalStatus(x), "Oui", "Non"), imgDrvVersions(x), imgDrvDates(x)}))
+                        End Select
+                    Case 1
+                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Yes", "No"), If(imgDrvBootCriticalStatus(x), "Yes", "No"), imgDrvVersions(x), imgDrvDates(x)}))
+                    Case 2
+                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sí", "No"), imgDrvVersions(x), imgDrvDates(x)}))
+                    Case 3
+                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Oui", "Non"), If(imgDrvBootCriticalStatus(x), "Oui", "Non"), imgDrvVersions(x), imgDrvDates(x)}))
+                End Select
+            Next
+        Catch ex As Exception
+            Exit Try
+        End Try
+        RemDrivers.ShowDialog()
+    End Sub
+
+    Private Sub Button52_Click(sender As Object, e As EventArgs) Handles Button52.Click
+        ProgressPanel.OperationNum = 994
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
+                    Case "FRA"
+                        PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
+            Case 3
+                PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
+        End Select
+        If Not CompletedTasks(4) Then
+            PleaseWaitDialog.ShowDialog(Me)
+            Exit Sub
+        End If
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(500)
+        End While
+        If DriverInfoList IsNot Nothing Then GetDriverInfo.InstalledDriverInfo = DriverInfoList
+        GetDriverInfo.ShowDialog()
+    End Sub
+
+    Private Sub Button53_Click(sender As Object, e As EventArgs) Handles Button53.Click
+        If Not OnlineManagement Then
+            AddDrivers.ShowDialog()
+        Else
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
+                        Case "FRA"
+                            MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
+                Case 3
+                    MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+            End Select
+        End If
+    End Sub
+
+    Private Sub Button54_Click(sender As Object, e As EventArgs) Handles Button54.Click
+        If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
+            If ImgInfoSaveDlg.DriverPkgs.Count > 0 Then ImgInfoSaveDlg.DriverPkgs.Clear()
+            ImgInfoSaveDlg.SourceImage = SourceImg
+            ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
+            ImgInfoSaveDlg.ImgMountDir = If(Not OnlineManagement, MountDir, "")
+            ImgInfoSaveDlg.OnlineMode = OnlineManagement
+            ImgInfoSaveDlg.OfflineMode = OfflineManagement
+            ImgInfoSaveDlg.AllDrivers = AllDrivers
+            ImgInfoSaveDlg.SkipQuestions = SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.SaveTask = 7
+            ImgInfoSaveDlg.ShowDialog()
+        End If
+    End Sub
+
+    Private Sub Button55_Click(sender As Object, e As EventArgs) Handles Button55.Click
+        If ImgBW.IsBusy Then
+            BGProcsBusyDialog.ShowDialog()
+            Exit Sub
+        End If
+        GetWinPESettings.ShowDialog()
+    End Sub
+
+    Private Sub Button56_Click(sender As Object, e As EventArgs) Handles Button56.Click
+        If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
+            ImgInfoSaveDlg.SourceImage = SourceImg
+            ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
+            ImgInfoSaveDlg.ImgMountDir = If(Not OnlineManagement, MountDir, "")
+            ImgInfoSaveDlg.OnlineMode = OnlineManagement
+            ImgInfoSaveDlg.SkipQuestions = SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.SaveTask = 9
+            ImgInfoSaveDlg.ShowDialog()
+        End If
+    End Sub
+
+    Private Sub Button57_Click(sender As Object, e As EventArgs) Handles Button57.Click
+        If ImgBW.IsBusy Then
+            BGProcsBusyDialog.ShowDialog()
+            Exit Sub
+        End If
+        SetPETargetPath.ShowDialog()
+    End Sub
+
+    Private Sub Button58_Click(sender As Object, e As EventArgs) Handles Button58.Click
+        If ImgBW.IsBusy Then
+            BGProcsBusyDialog.ShowDialog()
+            Exit Sub
+        End If
+        SetPEScratchSpace.ShowDialog()
+    End Sub
+
+#End Region
+
+    Sub GetFeedNews()
+        FeedContents = New SyndicationFeed()
+        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+        Try
+            Dim rssUrl As String = "https://reddit.com/r/DISMTools.rss"
+            Dim rssContent As String = ""
+            Using client As New WebClient()
+                client.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+                rssContent = client.DownloadString(rssUrl)
+            End Using
+            If Not String.IsNullOrWhiteSpace(rssContent) Then
+                Dim reader As XmlReader = XmlReader.Create(New StringReader(rssContent))
+                FeedContents = SyndicationFeed.Load(reader)
+                reader.Close()
+            End If
+        Catch ex As Exception
+            Debug.WriteLine("[GetFeedNews] Failed to get feed news")
+            FeedEx = ex
+        End Try
+    End Sub
+
+    Private Sub LinkLabel22_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel22.LinkClicked
+        GetStartedPanel.Visible = True
+        LatestNewsPanel.Visible = False
+        LinkLabel22.LinkColor = ForeColor
+        LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
+        LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
+    End Sub
+
+    Private Sub LinkLabel23_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel23.LinkClicked
+        GetStartedPanel.Visible = False
+        LatestNewsPanel.Visible = True
+        LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
+        LinkLabel23.LinkColor = ForeColor
+        LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
+    End Sub
+
+    Private Sub LinkLabel24_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel24.LinkClicked
+        LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
+        LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
+        LinkLabel24.LinkColor = ForeColor
+    End Sub
+
+    Private Sub ListView1_DoubleClick(sender As Object, e As EventArgs) Handles ListView1.DoubleClick
+        If ListView1.SelectedItems.Count = 1 Then
+            Process.Start(FeedLinks(ListView1.FocusedItem.Index).AbsoluteUri)
+        End If
+    End Sub
+
+    Private Sub HelpTopicsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles HelpTopicsToolStripMenuItem.Click
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\index.html")
+        HelpBrowserForm.MinimizeBox = True
+        HelpBrowserForm.MaximizeBox = True
+        HelpBrowserForm.Show()
+    End Sub
+
+    Private Sub LinkLabel12_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel12.MouseLeave
+        If SidePanel_ProjectView.Visible Then
+            LinkLabel12.LinkColor = Color.FromArgb(241, 241, 241)
+        Else
+            LinkLabel12.LinkColor = Color.FromArgb(153, 153, 153)
+        End If
+    End Sub
+
+    Private Sub LinkLabel13_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel13.MouseLeave
+        If SidePanel_ImageView.Visible Then
+            LinkLabel13.LinkColor = Color.FromArgb(241, 241, 241)
+        Else
+            LinkLabel13.LinkColor = Color.FromArgb(153, 153, 153)
+        End If
+    End Sub
+
+    Private Sub LinkLabel12_MouseEnter(sender As Object, e As EventArgs) Handles LinkLabel12.MouseEnter
+        If LinkLabel12.LinkColor = Color.FromArgb(241, 241, 241) Then
+            Cursor = Cursors.Arrow
+            Exit Sub
+        Else
+            LinkLabel12.LinkColor = Color.FromArgb(0, 151, 251)
+        End If
+    End Sub
+
+    Private Sub LinkLabel13_MouseEnter(sender As Object, e As EventArgs) Handles LinkLabel13.MouseEnter
+        If LinkLabel13.LinkColor = Color.FromArgb(241, 241, 241) Then
+            Cursor = Cursors.Arrow
+            Exit Sub
+        Else
+            LinkLabel13.LinkColor = Color.FromArgb(0, 151, 251)
+        End If
+    End Sub
+
+    Private Sub Button59_Click(sender As Object, e As EventArgs) Handles Button59.Click
+        ListView1.Items.Clear()
+        FeedLinks.Clear()
+        GetFeedNews()
+        If FeedContents.Items.Count > 0 Then
+            FeedsPanel.Visible = True
+            FeedErrorPanel.Visible = False
+            For Each item As SyndicationItem In FeedContents.Items.OrderByDescending(Function(x) x.PublishDate)
+                ListView1.Items.Add(New ListViewItem(New String() {item.Title.Text, item.PublishDate.ToString()}))
+                FeedLinks.Add(item.Links(0).Uri)
+            Next
+        Else
+            FeedsPanel.Visible = False
+            FeedErrorPanel.Visible = True
+            TextBox1.Text = FeedEx.ToString() & " - " & FeedEx.Message
+        End If
+    End Sub
+
+    Private Sub FeedWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles FeedWorker.DoWork
+        If FeedWorker.CancellationPending Then Exit Sub
+        GetFeedNews()
+        FeedWorker.ReportProgress(0)
+        If Not FeedWorker.CancellationPending Then Thread.Sleep(2000)
+    End Sub
+
+    Private Sub FeedWorker_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles FeedWorker.ProgressChanged
+        ListView1.Items.Clear()
+        FeedLinks.Clear()
+        If FeedContents.Items.Count > 0 Then
+            FeedsPanel.Visible = True
+            FeedErrorPanel.Visible = False
+            For Each item As SyndicationItem In FeedContents.Items.OrderByDescending(Function(x) x.PublishDate)
+                ListView1.Items.Add(New ListViewItem(New String() {item.Title.Text, item.PublishDate.ToString()}))
+                FeedLinks.Add(item.Links(0).Uri)
+            Next
+        Else
+            FeedsPanel.Visible = False
+            FeedErrorPanel.Visible = True
+            TextBox1.Text = FeedEx.ToString() & " - " & FeedEx.Message
+        End If
+    End Sub
+
+    Private Sub LinkLabel6_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel6.LinkClicked
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\new_to_servicing\index.html")
+        HelpBrowserForm.MinimizeBox = True
+        HelpBrowserForm.MaximizeBox = True
+        HelpBrowserForm.Show()
+    End Sub
+
+    Private Sub LinkLabel7_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel7.LinkClicked
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\start\index.html#first-steps")
+        HelpBrowserForm.MinimizeBox = True
+        HelpBrowserForm.MaximizeBox = True
+        HelpBrowserForm.Show()
+    End Sub
+
+    Private Sub LinkLabel8_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel8.LinkClicked
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\start\index.html")
+        HelpBrowserForm.MinimizeBox = True
+        HelpBrowserForm.MaximizeBox = True
+        HelpBrowserForm.Show()
+    End Sub
+
+    Private Sub LinkLabel9_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel9.LinkClicked
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\start\index.html#best-practices")
+        HelpBrowserForm.MinimizeBox = True
+        HelpBrowserForm.MaximizeBox = True
+        HelpBrowserForm.Show()
+    End Sub
+
+    Private Sub LinkLabel10_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel10.LinkClicked
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\info\infodlgs\index.html")
+        HelpBrowserForm.MinimizeBox = True
+        HelpBrowserForm.MaximizeBox = True
+        HelpBrowserForm.Show()
+    End Sub
+
+    Private Sub LinkLabel11_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel11.LinkClicked
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\info\infodlgs\index.html#saving-image-information")
+        HelpBrowserForm.MinimizeBox = True
+        HelpBrowserForm.MaximizeBox = True
+        HelpBrowserForm.Show()
+    End Sub
+
+    Private Sub Timer2_Tick(sender As Object, e As EventArgs) Handles Timer2.Tick
+        FeedWorker.RunWorkerAsync()
+    End Sub
+
+    Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel4.LinkClicked
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\online_inst_mgmt\index.html")
+        HelpBrowserForm.MinimizeBox = True
+        HelpBrowserForm.MaximizeBox = True
+        HelpBrowserForm.Show()
+    End Sub
+
+    Private Sub LinkLabel5_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel5.LinkClicked
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\offline_inst_mgmt\index.html")
+        HelpBrowserForm.MinimizeBox = True
+        HelpBrowserForm.MaximizeBox = True
+        HelpBrowserForm.Show()
+    End Sub
+
+    Private Sub LinkLabel22_MouseEnter(sender As Object, e As EventArgs) Handles LinkLabel22.MouseEnter
+        If LinkLabel22.LinkColor = Color.FromArgb(241, 241, 241) Then
+            Cursor = Cursors.Arrow
+            Exit Sub
+        Else
+            LinkLabel22.LinkColor = Color.FromArgb(0, 151, 251)
+        End If
+    End Sub
+
+    Private Sub LinkLabel22_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel22.MouseLeave
+        If GetStartedPanel.Visible Then
+            If BackColor = Color.FromArgb(48, 48, 48) Then
+                LinkLabel22.LinkColor = Color.FromArgb(241, 241, 241)
+            ElseIf BackColor = Color.FromArgb(239, 239, 242) Then
+                LinkLabel22.LinkColor = Color.Black
+            End If
+        Else
+            LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
+        End If
+    End Sub
+
+    Private Sub LinkLabel23_MouseEnter(sender As Object, e As EventArgs) Handles LinkLabel23.MouseEnter
+        If LinkLabel23.LinkColor = Color.FromArgb(241, 241, 241) Then
+            Cursor = Cursors.Arrow
+            Exit Sub
+        Else
+            LinkLabel23.LinkColor = Color.FromArgb(0, 151, 251)
+        End If
+    End Sub
+
+    Private Sub LinkLabel23_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel23.MouseLeave
+        If LatestNewsPanel.Visible Then
+            If BackColor = Color.FromArgb(48, 48, 48) Then
+                LinkLabel23.LinkColor = Color.FromArgb(241, 241, 241)
+            ElseIf BackColor = Color.FromArgb(239, 239, 242) Then
+                LinkLabel23.LinkColor = Color.Black
+            End If
+        Else
+            LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
+        End If
+    End Sub
+
+    Private Sub LinkLabel24_MouseEnter(sender As Object, e As EventArgs) Handles LinkLabel24.MouseEnter
+        If LinkLabel24.LinkColor = Color.FromArgb(241, 241, 241) Then
+            Cursor = Cursors.Arrow
+            Exit Sub
+        Else
+            LinkLabel24.LinkColor = Color.FromArgb(0, 151, 251)
+        End If
+    End Sub
+
+    Private Sub LinkLabel24_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel24.MouseLeave
+        If TutorialVideoPanel.Visible Then
+            If BackColor = Color.FromArgb(48, 48, 48) Then
+                LinkLabel24.LinkColor = Color.FromArgb(241, 241, 241)
+            ElseIf BackColor = Color.FromArgb(239, 239, 242) Then
+                LinkLabel24.LinkColor = Color.Black
+            End If
+        Else
+            LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
+        End If
+    End Sub
+
+    Private Sub LinkLabel25_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel25.LinkClicked
+        Process.Start("https://forums.mydigitallife.net/threads/discussion-dismtools.87263/")
     End Sub
 End Class

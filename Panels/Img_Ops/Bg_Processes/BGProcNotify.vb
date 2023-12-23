@@ -35,7 +35,7 @@ Public Class BGProcNotify
             If Environment.OSVersion.Version.Minor = 1 Then ' The same also applies to Windows 7
                 Location = New Point(MainForm.Left + 8, MainForm.Top + MainForm.StatusStrip.Top - (7 + MainForm.StatusStrip.Height))
             Else
-                Location = New Point(MainForm.Left, MainForm.Top + MainForm.StatusStrip.Top - MainForm.StatusStrip.Height)
+                Location = New Point(MainForm.Left + 8, MainForm.Top + MainForm.StatusStrip.Top - MainForm.StatusStrip.Height - 7)
             End If
         End If
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then

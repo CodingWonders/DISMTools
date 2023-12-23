@@ -25,6 +25,7 @@ Partial Class PrgSetup
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(PrgSetup))
         Me.wndControlPanel = New System.Windows.Forms.Panel()
         Me.Label1 = New System.Windows.Forms.Label()
+        Me.backBox = New System.Windows.Forms.PictureBox()
         Me.minBox = New System.Windows.Forms.PictureBox()
         Me.closeBox = New System.Windows.Forms.PictureBox()
         Me.btnControlPanel = New System.Windows.Forms.Panel()
@@ -38,6 +39,7 @@ Partial Class PrgSetup
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.CustomizationPanel = New System.Windows.Forms.Panel()
+        Me.CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.Label28 = New System.Windows.Forms.Label()
         Me.Label9 = New System.Windows.Forms.Label()
@@ -48,6 +50,8 @@ Partial Class PrgSetup
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.Panel9 = New System.Windows.Forms.Panel()
+        Me.Label29 = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Toggle1 = New System.Windows.Forms.CheckBox()
         Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
@@ -97,6 +101,7 @@ Partial Class PrgSetup
         Me.Panel6 = New System.Windows.Forms.Panel()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.wndControlPanel.SuspendLayout()
+        CType(Me.backBox, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.minBox, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.closeBox, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.btnControlPanel.SuspendLayout()
@@ -107,6 +112,7 @@ Partial Class PrgSetup
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.Panel3.SuspendLayout()
+        Me.Panel9.SuspendLayout()
         Me.Panel2.SuspendLayout()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel7.SuspendLayout()
@@ -126,6 +132,7 @@ Partial Class PrgSetup
         Me.wndControlPanel.BackColor = System.Drawing.Color.Transparent
         Me.wndControlPanel.BackgroundImage = Global.DISMTools.My.Resources.Resources.wndPanel_Backdrop
         Me.wndControlPanel.Controls.Add(Me.Label1)
+        Me.wndControlPanel.Controls.Add(Me.backBox)
         Me.wndControlPanel.Controls.Add(Me.minBox)
         Me.wndControlPanel.Controls.Add(Me.closeBox)
         Me.wndControlPanel.Dock = System.Windows.Forms.DockStyle.Top
@@ -144,6 +151,18 @@ Partial Class PrgSetup
         Me.Label1.Size = New System.Drawing.Size(98, 15)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Set up DISMTools"
+        '
+        'backBox
+        '
+        Me.backBox.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.backBox.Image = Global.DISMTools.My.Resources.Resources.backbox
+        Me.backBox.Location = New System.Drawing.Point(0, 0)
+        Me.backBox.Name = "backBox"
+        Me.backBox.Size = New System.Drawing.Size(46, 32)
+        Me.backBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.backBox.TabIndex = 0
+        Me.backBox.TabStop = False
+        Me.backBox.Visible = False
         '
         'minBox
         '
@@ -204,6 +223,7 @@ Partial Class PrgSetup
         Me.Back_Button.TabIndex = 0
         Me.Back_Button.Text = "Back"
         Me.Back_Button.UseVisualStyleBackColor = True
+        Me.Back_Button.Visible = False
         '
         'Next_Button
         '
@@ -226,6 +246,7 @@ Partial Class PrgSetup
         Me.Cancel_Button.TabIndex = 0
         Me.Cancel_Button.Text = "Cancel"
         Me.Cancel_Button.UseVisualStyleBackColor = True
+        Me.Cancel_Button.Visible = False
         '
         'BodyPanelContainer
         '
@@ -288,6 +309,7 @@ Partial Class PrgSetup
         '
         'CustomizationPanel
         '
+        Me.CustomizationPanel.Controls.Add(Me.CheckBox2)
         Me.CustomizationPanel.Controls.Add(Me.TableLayoutPanel1)
         Me.CustomizationPanel.Controls.Add(Me.Label5)
         Me.CustomizationPanel.Controls.Add(Me.Label6)
@@ -297,6 +319,19 @@ Partial Class PrgSetup
         Me.CustomizationPanel.Size = New System.Drawing.Size(880, 624)
         Me.CustomizationPanel.TabIndex = 1
         Me.CustomizationPanel.Visible = False
+        '
+        'CheckBox2
+        '
+        Me.CheckBox2.AutoSize = True
+        Me.CheckBox2.Checked = True
+        Me.CheckBox2.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox2.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CheckBox2.Location = New System.Drawing.Point(31, 564)
+        Me.CheckBox2.Name = "CheckBox2"
+        Me.CheckBox2.Size = New System.Drawing.Size(241, 24)
+        Me.CheckBox2.TabIndex = 3
+        Me.CheckBox2.Text = "Use the new project view design"
+        Me.CheckBox2.UseVisualStyleBackColor = True
         '
         'TableLayoutPanel1
         '
@@ -400,6 +435,7 @@ Partial Class PrgSetup
         'Panel1
         '
         Me.Panel1.Controls.Add(Me.Panel3)
+        Me.Panel1.Controls.Add(Me.Panel9)
         Me.Panel1.Controls.Add(Me.Panel2)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(185, 53)
@@ -413,7 +449,7 @@ Partial Class PrgSetup
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel3.Location = New System.Drawing.Point(0, 33)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(630, 210)
+        Me.Panel3.Size = New System.Drawing.Size(630, 177)
         Me.Panel3.TabIndex = 1
         '
         'TextBox1
@@ -426,9 +462,32 @@ Partial Class PrgSetup
         Me.TextBox1.Multiline = True
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TextBox1.Size = New System.Drawing.Size(630, 210)
+        Me.TextBox1.Size = New System.Drawing.Size(630, 177)
         Me.TextBox1.TabIndex = 0
         Me.TextBox1.Text = resources.GetString("TextBox1.Text")
+        '
+        'Panel9
+        '
+        Me.Panel9.Controls.Add(Me.Label29)
+        Me.Panel9.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Panel9.Location = New System.Drawing.Point(0, 210)
+        Me.Panel9.Name = "Panel9"
+        Me.Panel9.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Panel9.Size = New System.Drawing.Size(630, 33)
+        Me.Panel9.TabIndex = 2
+        Me.Panel9.Visible = False
+        '
+        'Label29
+        '
+        Me.Label29.AutoEllipsis = True
+        Me.Label29.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label29.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label29.Location = New System.Drawing.Point(0, 2)
+        Me.Label29.Name = "Label29"
+        Me.Label29.Size = New System.Drawing.Size(630, 31)
+        Me.Label29.TabIndex = 2
+        Me.Label29.Text = "This font may not be readable on log windows. While you can still use it, we reco" & _
+    "mmend monospaced fonts for increased readability."
         '
         'Panel2
         '
@@ -925,7 +984,6 @@ Partial Class PrgSetup
         'Button6
         '
         Me.Button6.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Button6.Enabled = False
         Me.Button6.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(49, Byte), Integer))
         Me.Button6.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(2, Byte), Integer), CType(CType(10, Byte), Integer), CType(CType(98, Byte), Integer))
         Me.Button6.FlatStyle = System.Windows.Forms.FlatStyle.System
@@ -1017,6 +1075,7 @@ Partial Class PrgSetup
         Me.Text = "Set up DISMTools"
         Me.wndControlPanel.ResumeLayout(False)
         Me.wndControlPanel.PerformLayout()
+        CType(Me.backBox, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.minBox, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.closeBox, System.ComponentModel.ISupportInitialize).EndInit()
         Me.btnControlPanel.ResumeLayout(False)
@@ -1031,6 +1090,7 @@ Partial Class PrgSetup
         Me.Panel1.ResumeLayout(False)
         Me.Panel3.ResumeLayout(False)
         Me.Panel3.PerformLayout()
+        Me.Panel9.ResumeLayout(False)
         Me.Panel2.ResumeLayout(False)
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel7.ResumeLayout(False)
@@ -1125,4 +1185,8 @@ Partial Class PrgSetup
     Friend WithEvents RadioButton1 As System.Windows.Forms.RadioButton
     Friend WithEvents Panel8 As System.Windows.Forms.Panel
     Friend WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
+    Friend WithEvents backBox As System.Windows.Forms.PictureBox
+    Friend WithEvents Panel9 As System.Windows.Forms.Panel
+    Friend WithEvents Label29 As System.Windows.Forms.Label
+    Friend WithEvents CheckBox2 As System.Windows.Forms.CheckBox
 End Class

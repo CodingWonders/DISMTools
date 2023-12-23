@@ -76,7 +76,7 @@
       <HintPath>packages\DarkUI.2.0.2\lib\DarkUI.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Dism, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5bba90053b345501, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Dism.2.5.2\lib\net40\Microsoft.Dism.dll</HintPath>
+      <HintPath>packages\Microsoft.Dism.3.0.0\lib\net40\Microsoft.Dism.dll</HintPath>
     </Reference>
     <Reference Include="ScintillaNET, Version=3.6.3.0, Culture=neutral, PublicKeyToken=d42c48f11a620156, processorArchitecture=MSIL">
       <HintPath>packages\jacobslusser.ScintillaNET.Signed.3.6.3\lib\net40\ScintillaNET.dll</HintPath>
@@ -89,6 +89,12 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Management">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ServiceModel">
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -132,10 +138,10 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Elements\AppxPackage.vb" />
-    <Compile Include="Help\Help_RegisteredAppxPkgsDlg.Designer.vb">
-      <DependentUpon>Help_RegisteredAppxPkgsDlg.vb</DependentUpon>
+    <Compile Include="Help\HelpBrowserForm.Designer.vb">
+      <DependentUpon>HelpBrowserForm.vb</DependentUpon>
     </Compile>
-    <Compile Include="Help\Help_RegisteredAppxPkgsDlg.vb">
+    <Compile Include="Help\HelpBrowserForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.vb">
@@ -268,6 +274,12 @@
     <Compile Include="Panels\Get_Ops\InfoSave\ImgInfoSaveDlg.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Get_Ops\InfoSave\InfoSaveResults.Designer.vb">
+      <DependentUpon>InfoSaveResults.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\InfoSave\InfoSaveResults.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Get_Ops\Pkgs\GetPkgInfo.Designer.vb">
       <DependentUpon>GetPkgInfo.vb</DependentUpon>
     </Compile>
@@ -358,6 +370,12 @@
     <Compile Include="Panels\Img_Ops\Drivers\AddDrivers.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Img_Ops\Drivers\DriverManualFilePicker.Designer.vb">
+      <DependentUpon>DriverManualFilePicker.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Drivers\DriverManualFilePicker.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\Drivers\ExportDrivers.Designer.vb">
       <DependentUpon>ExportDrivers.vb</DependentUpon>
     </Compile>
@@ -440,6 +458,12 @@
       <DependentUpon>MountedImgMgr.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\Img_Ops\MountedImgMgr.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\OfflineInstDriveLister.Designer.vb">
+      <DependentUpon>OfflineInstDriveLister.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\OfflineInstDriveLister.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Img_Ops\Pkgs\AddPackage.Designer.vb">
@@ -637,8 +661,8 @@
     <EmbeddedResource Include="Actions\Validation\Actions.Validation.resx">
       <DependentUpon>Actions.Validation.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Help\Help_RegisteredAppxPkgsDlg.resx">
-      <DependentUpon>Help_RegisteredAppxPkgsDlg.vb</DependentUpon>
+    <EmbeddedResource Include="Help\HelpBrowserForm.resx">
+      <DependentUpon>HelpBrowserForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.vb</DependentUpon>
@@ -703,6 +727,9 @@
     <EmbeddedResource Include="Panels\Get_Ops\InfoSave\ImgInfoSaveDlg.resx">
       <DependentUpon>ImgInfoSaveDlg.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Get_Ops\InfoSave\InfoSaveResults.resx">
+      <DependentUpon>InfoSaveResults.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Get_Ops\Pkgs\GetPkgInfo.resx">
       <DependentUpon>GetPkgInfo.vb</DependentUpon>
     </EmbeddedResource>
@@ -748,6 +775,9 @@
     <EmbeddedResource Include="Panels\Img_Ops\Drivers\AddDrivers.resx">
       <DependentUpon>AddDrivers.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Drivers\DriverManualFilePicker.resx">
+      <DependentUpon>DriverManualFilePicker.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Drivers\ExportDrivers.resx">
       <DependentUpon>ExportDrivers.vb</DependentUpon>
     </EmbeddedResource>
@@ -789,6 +819,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\MountedImgMgr.resx">
       <DependentUpon>MountedImgMgr.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\OfflineInstDriveLister.resx">
+      <DependentUpon>OfflineInstDriveLister.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Pkgs\AddPackage.resx">
       <DependentUpon>AddPackage.vb</DependentUpon>
@@ -888,6 +921,24 @@
     <None Include=".editorconfig" />
     <None Include="Actions\example.dta" />
     <None Include="app.config" />
+    <None Include="docs\css\fonts\fontawesome-webfont.eot" />
+    <None Include="docs\css\fonts\fontawesome-webfont.ttf" />
+    <None Include="docs\css\fonts\fontawesome-webfont.woff" />
+    <None Include="docs\css\fonts\fontawesome-webfont.woff2" />
+    <None Include="docs\css\fonts\lato-bold-italic.woff" />
+    <None Include="docs\css\fonts\lato-bold-italic.woff2" />
+    <None Include="docs\css\fonts\lato-bold.woff" />
+    <None Include="docs\css\fonts\lato-bold.woff2" />
+    <None Include="docs\css\fonts\lato-normal-italic.woff" />
+    <None Include="docs\css\fonts\lato-normal-italic.woff2" />
+    <None Include="docs\css\fonts\lato-normal.woff" />
+    <None Include="docs\css\fonts\lato-normal.woff2" />
+    <None Include="docs\css\fonts\Roboto-Slab-Bold.woff" />
+    <None Include="docs\css\fonts\Roboto-Slab-Bold.woff2" />
+    <None Include="docs\css\fonts\Roboto-Slab-Regular.woff" />
+    <None Include="docs\css\fonts\Roboto-Slab-Regular.woff2" />
+    <None Include="docs\search\search_index.json" />
+    <None Include="docs\sitemap.xml.gz" />
     <None Include="Helpers\dthelper.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -926,7 +977,9 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="settings.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -988,6 +1041,99 @@
     <Content Include="7z\amd64\7z.exe" />
     <Content Include="7z\i386\7z.dll" />
     <Content Include="7z\i386\7z.exe" />
+    <Content Include="docs\404.html" />
+    <Content Include="docs\css\fonts\fontawesome-webfont.svg" />
+    <Content Include="docs\css\theme.css" />
+    <Content Include="docs\css\theme_extra.css" />
+    <Content Include="docs\getting_started\msmg_migration\index.html" />
+    <Content Include="docs\getting_started\new_to_servicing\index.html" />
+    <Content Include="docs\getting_started\ntlite_migration\index.html" />
+    <Content Include="docs\getting_started\start\index.html" />
+    <Content Include="docs\img\favicon.ico" />
+    <Content Include="docs\img_tasks\appx\add_provisionedappxpackage\index.html" />
+    <Content Include="docs\img_tasks\appx\appx\index.html" />
+    <Content Include="docs\img_tasks\appx\remove_provisionedappxpackage\index.html" />
+    <Content Include="docs\img_tasks\capabilities\add_capability\index.html" />
+    <Content Include="docs\img_tasks\capabilities\capabilities\index.html" />
+    <Content Include="docs\img_tasks\capabilities\remove_capability\index.html" />
+    <Content Include="docs\img_tasks\drivers\add_driver\index.html" />
+    <Content Include="docs\img_tasks\drivers\drivers\index.html" />
+    <Content Include="docs\img_tasks\drivers\remove_driver\index.html" />
+    <Content Include="docs\img_tasks\features\disable_feature\index.html" />
+    <Content Include="docs\img_tasks\features\enable_feature\index.html" />
+    <Content Include="docs\img_tasks\features\features\index.html" />
+    <Content Include="docs\img_tasks\img_tasks\index.html" />
+    <Content Include="docs\img_tasks\info\appxpkg_info\index.html" />
+    <Content Include="docs\img_tasks\info\cap_info\index.html" />
+    <Content Include="docs\img_tasks\info\drv_info\index.html" />
+    <Content Include="docs\img_tasks\info\feat_info\index.html" />
+    <Content Include="docs\img_tasks\info\img_info\index.html" />
+    <Content Include="docs\img_tasks\info\infodlgs\index.html" />
+    <Content Include="docs\img_tasks\info\pkg_info\index.html" />
+    <Content Include="docs\img_tasks\info\winpe_info\index.html" />
+    <Content Include="docs\img_tasks\packages\add_package\index.html" />
+    <Content Include="docs\img_tasks\packages\packages\index.html" />
+    <Content Include="docs\img_tasks\packages\remove_package\index.html" />
+    <Content Include="docs\img_tasks\tools\mimgmgr\index.html" />
+    <Content Include="docs\index.html" />
+    <Content Include="docs\js\html5shiv.min.js" />
+    <Content Include="docs\js\jquery-3.6.0.min.js" />
+    <Content Include="docs\js\theme.js" />
+    <Content Include="docs\js\theme_extra.js" />
+    <Content Include="docs\res\getting_started\create_a_project.png" />
+    <Content Include="docs\res\getting_started\load_mount_directory.png" />
+    <Content Include="docs\res\getting_started\load_mount_directory_new.png" />
+    <Content Include="docs\res\getting_started\mount_an_image.png" />
+    <Content Include="docs\res\getting_started\msmg_toolkit.png" />
+    <Content Include="docs\res\getting_started\project_view.png" />
+    <Content Include="docs\res\img_tasks\appx\add_provisionedappxpackage.png" />
+    <Content Include="docs\res\img_tasks\appx\appxbundlemanifest.png" />
+    <Content Include="docs\res\img_tasks\appx\appxmanifest.png" />
+    <Content Include="docs\res\img_tasks\appx\appx_checkyouraccount.png" />
+    <Content Include="docs\res\img_tasks\appx\app_info.png" />
+    <Content Include="docs\res\img_tasks\appx\inside_manifest.png" />
+    <Content Include="docs\res\img_tasks\appx\logoasset.png" />
+    <Content Include="docs\res\img_tasks\appx\microsoft_apps.png" />
+    <Content Include="docs\res\img_tasks\appx\remove_provisionedappxpackage.png" />
+    <Content Include="docs\res\img_tasks\appx\store_rg-adguard.png" />
+    <Content Include="docs\res\img_tasks\capabilities\add_capability.png" />
+    <Content Include="docs\res\img_tasks\capabilities\remove_capability.png" />
+    <Content Include="docs\res\img_tasks\cmd_menu.png" />
+    <Content Include="docs\res\img_tasks\drivers\add_driver.png" />
+    <Content Include="docs\res\img_tasks\drivers\remove_driver.png" />
+    <Content Include="docs\res\img_tasks\drivers\remove_driver_inbox_bc.png" />
+    <Content Include="docs\res\img_tasks\drivers\remove_driver_noinbox_bc.png" />
+    <Content Include="docs\res\img_tasks\drivers\remove_driver_noinbox_nobc.png" />
+    <Content Include="docs\res\img_tasks\features\disable_feature.png" />
+    <Content Include="docs\res\img_tasks\features\enable_feature.png" />
+    <Content Include="docs\res\img_tasks\features\pkg_lookup.png" />
+    <Content Include="docs\res\img_tasks\info\appxpkg_info.png" />
+    <Content Include="docs\res\img_tasks\info\cap_info.png" />
+    <Content Include="docs\res\img_tasks\info\drvpkg_hw_target_controls.png" />
+    <Content Include="docs\res\img_tasks\info\drv_info.png" />
+    <Content Include="docs\res\img_tasks\info\feat_info.png" />
+    <Content Include="docs\res\img_tasks\info\get_drvfileinfo.png" />
+    <Content Include="docs\res\img_tasks\info\get_instdrvinfo.png" />
+    <Content Include="docs\res\img_tasks\info\get_instpkginfo.png" />
+    <Content Include="docs\res\img_tasks\info\get_pkgfileinfo.png" />
+    <Content Include="docs\res\img_tasks\info\img_info.png" />
+    <Content Include="docs\res\img_tasks\info\info_dlgs.png" />
+    <Content Include="docs\res\img_tasks\info\info_save.png" />
+    <Content Include="docs\res\img_tasks\info\pkg_info.png" />
+    <Content Include="docs\res\img_tasks\info\winpe_info.png" />
+    <Content Include="docs\res\img_tasks\mgmt\img_properties.png" />
+    <Content Include="docs\res\img_tasks\mgmt\prj_properties.png" />
+    <Content Include="docs\res\img_tasks\packages\add_package.png" />
+    <Content Include="docs\res\img_tasks\packages\remove_package.png" />
+    <Content Include="docs\res\img_tasks\quick_actions.png" />
+    <Content Include="docs\res\img_tasks\tools\mimgmgr\img_unmount.png" />
+    <Content Include="docs\res\img_tasks\tools\mimgmgr\mimgmgr.png" />
+    <Content Include="docs\res\product.png" />
+    <Content Include="docs\search.html" />
+    <Content Include="docs\search\lunr.js" />
+    <Content Include="docs\search\main.js" />
+    <Content Include="docs\search\worker.js" />
+    <Content Include="docs\sitemap.xml" />
     <Content Include="Installer\dt.iss" />
     <Content Include="Installer\ISCC.exe" />
     <Content Include="Installer\ISCmplr.dll" />
@@ -1023,6 +1169,13 @@
     <None Include="Resources\split_img.png" />
     <None Include="Resources\export_driver.png" />
     <None Include="Resources\about\mdl_discussion.png" />
+    <None Include="Resources\FirstUse\backbox.png" />
+    <None Include="Resources\FirstUse\backbox_down.png" />
+    <None Include="Resources\FirstUse\backbox_focus.png" />
+    <None Include="Resources\menus\explorer_view_glyph.png" />
+    <None Include="Resources\menus\explorer_view_glyph_dark.png" />
+    <None Include="Resources\menus\info_glyph.png" />
+    <None Include="Resources\menus\info_glyph_dark.png" />
     <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
     <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
     <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />
@@ -1314,8 +1467,9 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
     <PostBuildEvent>SET DELETELOGDIR="Yes"
-SET ISPREVIEW="No"
+SET ISPREVIEW="Yes"
 SET GEN_INSTALLER="Yes"
+SET COPY_DOCS="Yes"
 ECHO Generating program structure...
 IF EXIST "$(SolutionDir)portable" (
 	COPY "$(SolutionDir)portable" . /Y
@@ -1357,6 +1511,10 @@ IF NOT EXIST scratch (
 IF %25ISPREVIEW%25=="Yes" (
 	echo You will be running a preview release, which may not be ready for production. You may experience more bugs and less stability. Please switch to a stable release whenever possible.
 )
+IF %25COPY_DOCS%25=="Yes" (
+	echo Copying help documentation...
+	xcopy "$(ProjectDir)docs\*" "$(TargetDir)docs" /cehyi
+)
 IF %25GEN_INSTALLER%25=="Yes" (
 	echo The technology used for creating the installer is subject to a license. Refer to the "LICENSE.TXT" file in the "$(SolutionDir)Installer" directory for more information
 	echo Copying program files...
@@ -1386,6 +1544,9 @@ IF EXIST temp (
 )
 IF EXIST scratch (
 	rd scratch /s /q
+)
+IF EXIST docs (
+	rd docs /s /q
 )</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

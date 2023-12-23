@@ -173,6 +173,36 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property backbox() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("backbox", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property backbox_down() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("backbox_down", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property backbox_focus() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("backbox_focus", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property bg_ops() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("bg_ops", resourceCulture)
@@ -663,6 +693,26 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property explorer_view_glyph() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("explorer_view_glyph", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property explorer_view_glyph_dark() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("explorer_view_glyph_dark", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property export_driver() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("export_driver", resourceCulture)
@@ -936,6 +986,26 @@ Namespace My.Resources
         Friend ReadOnly Property info_from_pkg_file() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("info_from_pkg_file", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property info_glyph() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("info_glyph", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property info_glyph_dark() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("info_glyph_dark", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -1810,20 +1880,16 @@ Namespace My.Resources
         '''
         '''Bugfixes
         '''
-        '''- Fixed an issue where the installed driver detection notification panel would be shown when the user is getting information from driver files
-        '''- Fixed a couple of issues in the package information dialog
+        '''- Fixed an issue where the Save buttons of information dialogs weren&apos;t positioned correctly on Windows 8 hosts
+        '''- Fixed an issue where the AppX package information dialog would not work on Windows 8 hosts
         '''
         '''New features
         '''
-        '''- The CLI version of the mounted image manager now lets you switch indexes of mounted images
-        '''- Added more functionality to the information saver
+        '''- When dropping a folder to the driver addition list, you can now pick driver files in it manually
+        '''- The home screen has been redesigned
+        '''- Friendly representations of the sizes in the application drive specifier are now shown
         '''
-        '''Overall changes
-        '''
-        '''Bugfixes
-        '''
-        '''- Fixed a release status consistency issue
-        '''- The program sho [resto de la cadena truncado]&quot;;.
+        '''Overall ch [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

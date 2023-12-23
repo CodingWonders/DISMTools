@@ -8,7 +8,7 @@ assignees: CodingWonders
 
 ---
 
-This type of issue can happen on both DISMTools 0.3 and 0.3.1, and we want your help to fix it
+This type of issue can happen on DISMTools 0.3 and later versions, and we want your help to fix it
 
 **AppX package name**
 

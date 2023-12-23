@@ -440,7 +440,7 @@ Public Class AddProvAppxPackage
             Text = ""
             Win10Title.Visible = True
         End If
-        CheckBox2.Enabled = MainForm.OnlineManagement = False
+        CheckBox2.Enabled = If(MainForm.OnlineManagement Or MainForm.OfflineManagement, False, True)
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
@@ -497,14 +497,18 @@ Public Class AddProvAppxPackage
     End Sub
 
     Private Sub AppxFileOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles AppxFileOFD.FileOk
-        If Path.GetExtension(AppxFileOFD.FileName).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
-            If Not AppInstallerDownloader.IsDisposed Then AppInstallerDownloader.Dispose()
-            AppInstallerDownloader.AppInstallerFile = AppxFileOFD.FileName
-            If Not File.Exists(AppxFileOFD.FileName.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
-            If File.Exists(AppxFileOFD.FileName.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, AppxFileOFD.FileName.Replace(".appinstaller", ".appxbundle").Trim())
-            Exit Sub
+        If AppxFileOFD.FileNames.Count > 0 Then
+            For Each AppxFile In AppxFileOFD.FileNames
+                If Path.GetExtension(AppxFile).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
+                    If Not AppInstallerDownloader.IsDisposed Then AppInstallerDownloader.Dispose()
+                    AppInstallerDownloader.AppInstallerFile = AppxFile
+                    If Not File.Exists(AppxFile.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
+                    If File.Exists(AppxFile.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, AppxFile.Replace(".appinstaller", ".appxbundle").Trim())
+                    Continue For
+                End If
+                ScanAppxPackage(False, AppxFile)
+            Next
         End If
-        ScanAppxPackage(False, AppxFileOFD.FileName)
     End Sub
 
     Private Sub AppxDependencyOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles AppxDependencyOFD.FileOk
@@ -1157,6 +1161,20 @@ Public Class AddProvAppxPackage
             Else
                 Button9.Enabled = True
             End If
+            If ListView1.SelectedItems.Count > 1 Then
+                DetectMultiSelectionCommonProperties()
+            Else
+                Label9.Visible = True
+                PictureBox2.Visible = True
+                TableLayoutPanel3.Enabled = True
+                ListBox1.Enabled = True
+                CheckBox3.Enabled = True
+                TextBox1.Enabled = True
+                CheckBox1.Enabled = True
+                TextBox2.Enabled = True
+                CheckBox4.Enabled = True
+                TextBox3.Enabled = True
+            End If
         Catch ex As NullReferenceException
             Button9.Enabled = True
         End Try
@@ -1164,7 +1182,7 @@ Public Class AddProvAppxPackage
         AppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, False, True)
         AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
         FlowLayoutPanel1.Visible = If(ListView1.SelectedItems.Count <= 0, False, True)
-        If ListView1.SelectedItems.Count > 0 Then
+        If ListView1.SelectedItems.Count = 1 Then
             Try
                 Label7.Text = ListView1.FocusedItem.SubItems(2).Text
                 Select Case MainForm.Language
@@ -1251,6 +1269,149 @@ Public Class AddProvAppxPackage
             AppxDetailsPanel.Height = 520
             FlowLayoutPanel1.Visible = False
         End Try
+    End Sub
+
+    Sub DetectMultiSelectionCommonProperties()
+        NoAppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, True, False)
+        AppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, False, True)
+        AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
+        FlowLayoutPanel1.Visible = If(ListView1.SelectedItems.Count <= 0, False, True)
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        Label7.Text = "Multiple selection"
+                        Label8.Text = "View the common properties of all selected applications"
+                    Case "ESN"
+                        Label7.Text = "Selección múltiple"
+                        Label8.Text = "Vea las propiedades comunes de todas las aplicaciones seleccionadas"
+                    Case "FRA"
+                        Label7.Text = "Sélection multiple"
+                        Label8.Text = "Voir les propriétés communes de toutes les applications sélectionnées"
+                End Select
+            Case 1
+                Label7.Text = "Multiple selection"
+                Label8.Text = "View the common properties of all selected applications"
+            Case 2
+                Label7.Text = "Selección múltiple"
+                Label8.Text = "Vea las propiedades comunes de todas las aplicaciones seleccionadas"
+            Case 3
+                Label7.Text = "Sélection multiple"
+                Label8.Text = "Voir les propriétés communes de toutes les applications sélectionnées"
+        End Select
+        Label9.Visible = False
+        PictureBox2.Visible = False
+        ListBox1.Items.Clear()
+        TextBox1.Text = ""
+        ' Detect common properties. Use the Elements for that
+        Dim depLists As New List(Of AppxPackage)
+        Dim commonDeps As New List(Of String)
+        Dim liFileLists As New List(Of AppxPackage)
+        Dim commonLicense As String = ""
+        Dim cdFileLists As New List(Of AppxPackage)
+        Dim commonCustomDataFile As String = ""
+        Dim regionLists As New List(Of AppxPackage)
+        Dim commonRegions As String = ""
+        For Each SelectedItem As ListViewItem In ListView1.SelectedItems
+            ' Detect dependencies
+            depLists.Add(Packages(ListView1.Items.IndexOf(SelectedItem)))
+            ' Detect license files
+            liFileLists.Add(Packages(ListView1.Items.IndexOf(SelectedItem)))
+            ' Detect custom data files
+            cdFileLists.Add(Packages(ListView1.Items.IndexOf(SelectedItem)))
+            ' Detect regions
+            regionLists.Add(Packages(ListView1.Items.IndexOf(SelectedItem)))
+        Next
+        If depLists.Count > 0 Then
+            For Each dependency As AppxPackage In depLists
+                Dim depList As New List(Of AppxDependency)
+                depList = dependency.PackageSpecifiedDependencies
+                Dim depFileList As New List(Of String)
+                For Each dep As AppxDependency In depList
+                    depFileList.Add(dep.DependencyFile)
+                Next
+                If commonDeps.Count = 0 Then commonDeps = depFileList
+                commonDeps = commonDeps.Intersect(depFileList).ToList()
+            Next
+        End If
+        If commonDeps.Count > 0 Then
+            For Each commonDep In commonDeps
+                ListBox1.Items.Add(commonDep)
+            Next
+        End If
+        If liFileLists.Count > 0 Then
+            Dim liFileList As New List(Of String)
+            For Each LicenseFileInPkg As AppxPackage In liFileLists
+                liFileList.Add(LicenseFileInPkg.PackageLicenseFile)
+            Next
+            If liFileList.Count > 0 Then
+                commonLicense = liFileList(0)
+                Dim singleLiFile As String = liFileList(0)
+                ' If a license file is repeated every time, it's our common one
+                For Each licenseFile In liFileList
+                    If Not licenseFile = singleLiFile Then
+                        singleLiFile = licenseFile
+                        commonLicense = ""
+                    End If
+                Next
+            End If
+        End If
+        If commonLicense <> "" And File.Exists(commonLicense) Then
+            CheckBox3.Checked = True
+            TextBox1.Text = commonLicense
+        End If
+        If cdFileLists.Count > 0 Then
+            Dim cdFileList As New List(Of String)
+            For Each CustomDataFile As AppxPackage In cdFileLists
+                cdFileList.Add(CustomDataFile.PackageCustomDataFile)
+            Next
+            If cdFileList.Count > 0 Then
+                commonCustomDataFile = cdFileList(0)
+                Dim singleCdFile As String = cdFileList(0)
+                ' If a custom data file is repeated every time, it's our common one
+                For Each customDataFile In cdFileList
+                    If Not customDataFile = singleCdFile Then
+                        singleCdFile = customDataFile
+                        commonCustomDataFile = ""
+                    End If
+                Next
+            End If
+        End If
+        If commonCustomDataFile <> "" And File.Exists(commonCustomDataFile) Then
+            CheckBox1.Checked = True
+            TextBox2.Text = commonCustomDataFile
+        End If
+        If regionLists.Count > 0 Then
+            Dim regionList As New List(Of String)
+            For Each regionString As AppxPackage In regionLists
+                regionList.Add(regionString.PackageRegions)
+            Next
+            If regionList.Count > 0 Then
+                commonRegions = regionList(0)
+                Dim singleRegion As String = regionList(0)
+                ' If a custom data file is repeated every time, it's our common one
+                For Each regionStr In regionList
+                    If Not regionStr = singleRegion Then
+                        singleRegion = regionStr
+                        commonRegions = ""
+                    End If
+                Next
+            End If
+        End If
+        If commonRegions <> "" Then
+            CheckBox4.Checked = True
+            TextBox3.Text = commonRegions
+        End If
+
+        ' Disable manipulation controls, as editing is not implemented yet
+        TableLayoutPanel3.Enabled = False
+        ListBox1.Enabled = False
+        CheckBox3.Enabled = False
+        TextBox1.Enabled = False
+        CheckBox1.Enabled = False
+        TextBox2.Enabled = False
+        CheckBox4.Enabled = False
+        TextBox3.Enabled = False
     End Sub
 
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged

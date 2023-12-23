@@ -29,6 +29,7 @@ Public Class ImgInfoSaveDlg
     Public ImgMountDir As String
 
     Public OnlineMode As Boolean
+    Public OfflineMode As Boolean
 
     Public AllDrivers As Boolean
 
@@ -43,6 +44,9 @@ Public Class ImgInfoSaveDlg
 
     ' List of driver packages
     Public DriverPkgs As New List(Of String)
+
+    Public SkipQuestions As Boolean
+    Public AutoCompleteInfo(4) As Boolean
 
     Sub ReportChanges(Message As String, ProgressPercentage As Double)
         Label2.Text = Message
@@ -60,6 +64,11 @@ Public Class ImgInfoSaveDlg
                         "    - Name: " & My.Computer.Info.OSFullName & CrLf & _
                         "    - Boot point (mount point): " & Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & CrLf & _
                         "    - Version: " & Environment.OSVersion.Version.Major & "." & Environment.OSVersion.Version.Minor & "." & Environment.OSVersion.Version.Build & "." & FileVersionInfo.GetVersionInfo(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe").ProductPrivatePart & CrLf & CrLf
+            Exit Sub
+        ElseIf OfflineMode Then
+            Contents &= "  Offline installation information:" & CrLf & _
+                        "    - Boot point (mount point): " & ImgMountDir & CrLf & _
+                        "    - Version: " & FileVersionInfo.GetVersionInfo(ImgMountDir & "\Windows\system32\ntoskrnl.exe").ProductVersion.ToString() & CrLf & CrLf
             Exit Sub
         End If
         Contents &= " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "")
@@ -201,7 +210,112 @@ Public Class ImgInfoSaveDlg
                         msg(0) = "Des paquets ont été obtenus"
                 End Select
                 ReportChanges(msg(0), 10)
-                If MsgBox(msg(1), vbYesNo + vbQuestion, msg(2)) = MsgBoxResult.Yes Then
+                If SkipQuestions And AutoCompleteInfo(0) Then
+                    Debug.WriteLine("[GetPackageInformation] Getting complete package information...")
+                    For Each installedPackage As DismPackage In InstalledPkgInfo
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENU", "ENG"
+                                        msg(0) = "Getting information of packages... (package " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " of " & InstalledPkgInfo.Count & ")"
+                                    Case "ESN"
+                                        msg(0) = "Obteniendo información de paquetes... (paquete " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " de " & InstalledPkgInfo.Count & ")"
+                                    Case "FRA"
+                                        msg(0) = "Obtention des informations sur les paquets en cours... (paquet " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " de " & InstalledPkgInfo.Count & ")"
+                                End Select
+                            Case 1
+                                msg(0) = "Getting information of packages... (package " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " of " & InstalledPkgInfo.Count & ")"
+                            Case 2
+                                msg(0) = "Obteniendo información de paquetes... (paquete " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " de " & InstalledPkgInfo.Count & ")"
+                            Case 3
+                                msg(0) = "Obtention des informations sur les paquets en cours... (paquet " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " de " & InstalledPkgInfo.Count & ")"
+                        End Select
+                        ReportChanges(msg(0), (InstalledPkgInfo.IndexOf(installedPackage) / InstalledPkgInfo.Count) * 100)
+                        Dim pkgInfoEx As DismPackageInfoEx = Nothing
+                        Dim pkgInfo As DismPackageInfo = Nothing
+                        Dim cProps As DismCustomPropertyCollection = Nothing
+
+                        ' Determine Windows version, as capability identity information can't be obtained in Windows versions older than 10
+                        If Environment.OSVersion.Version.Major >= 10 Then
+                            pkgInfoEx = DismApi.GetPackageInfoExByName(imgSession, installedPackage.PackageName)
+                        Else
+                            pkgInfo = DismApi.GetPackageInfoByName(imgSession, installedPackage.PackageName)
+                        End If
+                        Contents &= "  Package " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " of " & InstalledPkgInfo.Count & ":" & CrLf
+                        If pkgInfoEx IsNot Nothing Then
+                            cProps = pkgInfoEx.CustomProperties
+                            Contents &= "    - Package name: " & pkgInfoEx.PackageName & CrLf & _
+                                        "    - Is applicable? " & Casters.CastDismApplicabilityStatus(pkgInfoEx.Applicable) & CrLf & _
+                                        "    - Copyright: " & pkgInfoEx.Copyright & CrLf & _
+                                        "    - Company: " & pkgInfoEx.Company & CrLf & _
+                                        "    - Creation time: " & pkgInfoEx.CreationTime & CrLf & _
+                                        "    - Description: " & pkgInfoEx.Description & CrLf & _
+                                        "    - Install client: " & pkgInfoEx.InstallClient & CrLf & _
+                                        "    - Install package name: " & pkgInfoEx.InstallPackageName & CrLf & _
+                                        "    - Install time: " & pkgInfoEx.InstallTime & CrLf & _
+                                        "    - Last update time: " & pkgInfoEx.LastUpdateTime & CrLf & _
+                                        "    - Display name: " & pkgInfoEx.DisplayName & CrLf & _
+                                        "    - Product name: " & pkgInfoEx.ProductName & CrLf & _
+                                        "    - Product version: " & pkgInfoEx.ProductVersion.ToString() & CrLf & _
+                                        "    - Release type: " & Casters.CastDismReleaseType(pkgInfoEx.ReleaseType) & CrLf & _
+                                        "    - Is a restart required? " & Casters.CastDismRestartType(pkgInfoEx.RestartRequired) & CrLf & _
+                                        "    - Support information: " & pkgInfoEx.SupportInformation & CrLf & _
+                                        "    - Package state: " & Casters.CastDismPackageState(pkgInfoEx.PackageState) & CrLf & _
+                                        "    - Is a boot up required for full installation? " & Casters.CastDismFullyOfflineInstallationType(pkgInfoEx.FullyOffline) & CrLf & _
+                                        "    - Capability identity: " & pkgInfoEx.CapabilityId & CrLf & _
+                                        "    - Custom properties: " & If(cProps.Count <= 0, "none", "") & CrLf
+                            If cProps.Count > 0 Then
+                                For Each cProp As DismCustomProperty In cProps
+                                    Contents &= "      - " & If(cProp.Path <> "", cProp.Path & "\", "") & cProp.Name & ": " & cProp.Value & CrLf
+                                Next
+                            End If
+                            Contents &= "    - Features: " & If(pkgInfoEx.Features.Count <= 0, "none", "") & CrLf
+                            If pkgInfoEx.Features.Count > 0 Then
+                                Dim pkgFeats As DismFeatureCollection = pkgInfoEx.Features
+                                For Each pkgFeat As DismFeature In pkgFeats
+                                    Contents &= "      - " & pkgFeat.FeatureName & " (" & Casters.CastDismFeatureState(pkgFeat.State) & ")" & CrLf
+                                Next
+                            End If
+                            Contents &= CrLf & CrLf
+                        ElseIf pkgInfo IsNot Nothing Then
+                            cProps = pkgInfo.CustomProperties
+                            Contents &= "    - Package name: " & pkgInfo.PackageName & CrLf & _
+                                        "    - Is applicable? " & Casters.CastDismApplicabilityStatus(pkgInfo.Applicable) & CrLf & _
+                                        "    - Copyright: " & pkgInfo.Copyright & CrLf & _
+                                        "    - Company: " & pkgInfo.Company & CrLf & _
+                                        "    - Creation time: " & pkgInfo.CreationTime & CrLf & _
+                                        "    - Description: " & pkgInfo.Description & CrLf & _
+                                        "    - Install client: " & pkgInfo.InstallClient & CrLf & _
+                                        "    - Install package name: " & pkgInfo.InstallPackageName & CrLf & _
+                                        "    - Install time: " & pkgInfo.InstallTime & CrLf & _
+                                        "    - Last update time: " & pkgInfo.LastUpdateTime & CrLf & _
+                                        "    - Display name: " & pkgInfo.DisplayName & CrLf & _
+                                        "    - Product name: " & pkgInfo.ProductName & CrLf & _
+                                        "    - Product version: " & pkgInfo.ProductVersion.ToString() & CrLf & _
+                                        "    - Release type: " & Casters.CastDismReleaseType(pkgInfo.ReleaseType) & CrLf & _
+                                        "    - Is a restart required? " & Casters.CastDismRestartType(pkgInfo.RestartRequired) & CrLf & _
+                                        "    - Support information: " & pkgInfo.SupportInformation & CrLf & _
+                                        "    - Package state: " & Casters.CastDismPackageState(pkgInfo.PackageState) & CrLf & _
+                                        "    - Is a boot up required for full installation? " & Casters.CastDismFullyOfflineInstallationType(pkgInfo.FullyOffline) & CrLf & _
+                                        "    - Capability identity: not applicable (the installation this information was obtained with can't get capability information)" & CrLf & _
+                                        "    - Custom properties: " & If(cProps.Count <= 0, "none", "") & CrLf
+                            If cProps.Count > 0 Then
+                                For Each cProp As DismCustomProperty In cProps
+                                    Contents &= "      - " & If(cProp.Path <> "", cProp.Path & "\", "") & cProp.Name & ": " & cProp.Value & CrLf
+                                Next
+                            End If
+                            Contents &= "    - Features: " & If(pkgInfo.Features.Count <= 0, "none", "") & CrLf
+                            If pkgInfo.Features.Count > 0 Then
+                                Dim pkgFeats As DismFeatureCollection = pkgInfo.Features
+                                For Each pkgFeat As DismFeature In pkgFeats
+                                    Contents &= "      - " & pkgFeat.FeatureName & " (" & Casters.CastDismFeatureState(pkgFeat.State) & ")" & CrLf
+                                Next
+                            End If
+                            Contents &= CrLf & CrLf
+                        End If
+                    Next
+                    Contents &= "  - Complete package information has been gathered" & CrLf & CrLf
+                ElseIf (Not SkipQuestions Or Not AutoCompleteInfo(0)) And MsgBox(msg(1), vbYesNo + vbQuestion, msg(2)) = MsgBoxResult.Yes Then
                     Debug.WriteLine("[GetPackageInformation] Getting complete package information...")
                     For Each installedPackage As DismPackage In InstalledPkgInfo
                         Select Case MainForm.Language
@@ -567,7 +681,45 @@ Public Class ImgInfoSaveDlg
                         msg(0) = "Des caractéristiques ont été obtenues"
                 End Select
                 ReportChanges(msg(0), 10)
-                If MsgBox(msg(1), vbYesNo + vbQuestion, msg(2)) = MsgBoxResult.Yes Then
+                If SkipQuestions And AutoCompleteInfo(1) Then
+                    Debug.WriteLine("[GetFeatureInformation] Getting complete feature information...")
+                    For Each feature As DismFeature In InstalledFeatInfo
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENU", "ENG"
+                                        msg(0) = "Getting information of features... (feature " & InstalledFeatInfo.IndexOf(feature) + 1 & " of " & InstalledFeatInfo.Count & ")"
+                                    Case "ESN"
+                                        msg(0) = "Obteniendo información de características... (característica " & InstalledFeatInfo.IndexOf(feature) + 1 & " de " & InstalledFeatInfo.Count & ")"
+                                    Case "FRA"
+                                        msg(0) = "Obtention des informations sur les caractéristiques en cours... (caractéristique " & InstalledFeatInfo.IndexOf(feature) + 1 & " de " & InstalledFeatInfo.Count & ")"
+                                End Select
+                            Case 1
+                                msg(0) = "Getting information of features... (feature " & InstalledFeatInfo.IndexOf(feature) + 1 & " of " & InstalledFeatInfo.Count & ")"
+                            Case 2
+                                msg(0) = "Obteniendo información de características... (característica " & InstalledFeatInfo.IndexOf(feature) + 1 & " de " & InstalledFeatInfo.Count & ")"
+                            Case 3
+                                msg(0) = "Obtention des informations sur les caractéristiques en cours... (caractéristique " & InstalledFeatInfo.IndexOf(feature) + 1 & " de " & InstalledFeatInfo.Count & ")"
+                        End Select
+                        ReportChanges(msg(0), (InstalledFeatInfo.IndexOf(feature) / InstalledFeatInfo.Count) * 100)
+                        Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, feature.FeatureName)
+                        Contents &= "  Feature " & InstalledFeatInfo.IndexOf(feature) + 1 & " of " & InstalledFeatInfo.Count & ":" & CrLf
+                        Dim cProps As DismCustomPropertyCollection = featInfo.CustomProperties
+                        Contents &= "    - Feature name: " & featInfo.FeatureName & CrLf & _
+                                    "    - Display name: " & featInfo.DisplayName & CrLf & _
+                                    "    - Description: " & featInfo.Description & CrLf & _
+                                    "    - Is a restart required? " & Casters.CastDismRestartType(featInfo.RestartRequired) & CrLf & _
+                                    "    - State: " & Casters.CastDismFeatureState(featInfo.FeatureState) & CrLf & _
+                                        "    - Custom properties: " & If(cProps.Count <= 0, "none", "") & CrLf
+                        If cProps.Count > 0 Then
+                            For Each cProp As DismCustomProperty In cProps
+                                Contents &= "      - " & If(cProp.Path <> "", cProp.Path & "\", "") & cProp.Name & ": " & cProp.Value & CrLf
+                            Next
+                        End If
+                        Contents &= CrLf & CrLf
+                    Next
+                    Contents &= "  - Complete feature information has been gathered" & CrLf & CrLf
+                ElseIf (Not SkipQuestions Or Not AutoCompleteInfo(1)) And MsgBox(msg(1), vbYesNo + vbQuestion, msg(2)) = MsgBoxResult.Yes Then
                     Debug.WriteLine("[GetFeatureInformation] Getting complete feature information...")
                     For Each feature As DismFeature In InstalledFeatInfo
                         Select Case MainForm.Language
@@ -701,7 +853,7 @@ Public Class ImgInfoSaveDlg
                 If Environment.OSVersion.Version.Major < 10 Then
                     Contents &= "  Installed AppX packages in this image: " & MainForm.imgAppxPackageNames.Count - 1 & CrLf & CrLf
                     For x = 0 To Array.LastIndexOf(MainForm.imgAppxPackageNames, MainForm.imgAppxPackageNames.Last)
-                        If x = MainForm.imgAppxPackageNames.Count - 1 Then Continue For
+                        If x = MainForm.imgAppxPackageNames.Count - 1 Or MainForm.imgAppxPackageNames(x) Is Nothing Then Continue For
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -839,7 +991,7 @@ Public Class ImgInfoSaveDlg
                                 msg(0) = "Des paquets AppX ont été obtenus"
                         End Select
                         ReportChanges(msg(0), 10)
-                        If MsgBox(msg(1), vbYesNo + vbQuestion, msg(2)) = MsgBoxResult.Yes Then
+                        If SkipQuestions And AutoCompleteInfo(2) Then
                             Debug.WriteLine("[GetAppxInformation] Getting complete AppX package information...")
                             If MainForm.imgAppxPackageNames.Count - 1 > pkgNames.Count Then
                                 For x = 0 To Array.LastIndexOf(MainForm.imgAppxPackageNames, MainForm.imgAppxPackageNames.Last)
@@ -1053,7 +1205,221 @@ Public Class ImgInfoSaveDlg
                                     End If
                                 Next
                             End If
-
+                            Contents &= "  - Complete AppX package information has been gathered" & CrLf & CrLf
+                        ElseIf (Not SkipQuestions Or Not AutoCompleteInfo(2)) And MsgBox(msg(1), vbYesNo + vbQuestion, msg(2)) = MsgBoxResult.Yes Then
+                            Debug.WriteLine("[GetAppxInformation] Getting complete AppX package information...")
+                            If MainForm.imgAppxPackageNames.Count - 1 > pkgNames.Count Then
+                                For x = 0 To Array.LastIndexOf(MainForm.imgAppxPackageNames, MainForm.imgAppxPackageNames.Last)
+                                    If x = MainForm.imgAppxPackageNames.Count - 1 Then Continue For
+                                    Select Case MainForm.Language
+                                        Case 0
+                                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                                Case "ENU", "ENG"
+                                                    msg(0) = "Getting information of AppX packages... (AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                                Case "ESN"
+                                                    msg(0) = "Obteniendo información de paquetes AppX... (paquete AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                                Case "FRA"
+                                                    msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                            End Select
+                                        Case 1
+                                            msg(0) = "Getting information of AppX packages... (AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                        Case 2
+                                            msg(0) = "Obteniendo información de paquetes AppX... (paquete AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                        Case 3
+                                            msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                    End Select
+                                    ReportChanges(msg(0), ((x + 1) / MainForm.imgAppxPackageNames.Count) * 100)
+                                    Contents &= "  AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ":" & CrLf & _
+                                                "    - Package name: " & MainForm.imgAppxPackageNames(x) & CrLf & _
+                                                "    - Application display name: " & MainForm.imgAppxDisplayNames(x) & CrLf & _
+                                                "    - Architecture: " & MainForm.imgAppxArchitectures(x) & CrLf & _
+                                                "    - Resource ID: " & MainForm.imgAppxResourceIds(x) & CrLf & _
+                                                "    - Version: " & MainForm.imgAppxVersions(x) & CrLf
+                                    ' Detect if *.pckgdep files are present in the AppRepository folder, as that's how this program gets the registration status of an AppX package
+                                    If Directory.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & MainForm.imgAppxPackageNames(x), _
+                                                           ImgMountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & MainForm.imgAppxPackageNames(x))) Then
+                                        ' Get the number of pckgdep files
+                                        If My.Computer.FileSystem.GetFiles(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & MainForm.imgAppxPackageNames(x), _
+                                                                              ImgMountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & MainForm.imgAppxPackageNames(x)), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count > 0 Then
+                                            Contents &= "    - Is registered to any user? Yes" & CrLf
+                                        Else
+                                            Contents &= "    - Is registered to any user? No" & CrLf
+                                        End If
+                                    Else
+                                        Contents &= "    - Is registered to any user? No" & CrLf
+                                    End If
+                                    Contents &= "    - Installation location: " & Quote & (If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & MainForm.imgAppxPackageNames(x)).Replace("\\", "\").Trim() & Quote & CrLf
+                                    Dim pkgDirs() As String = Directory.GetDirectories(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps", MainForm.imgAppxPackageNames(x) & "*", SearchOption.TopDirectoryOnly)
+                                    Dim instDir As String = ""
+                                    For Each folder In pkgDirs
+                                        If Not folder.Contains("neutral") Then
+                                            instDir = (folder & "\AppxManifest.xml").Replace("\\", "\").Trim()
+                                        End If
+                                    Next
+                                    If pkgDirs.Count <= 1 And Not instDir.Contains(MainForm.imgAppxPackageNames(x)) Then
+                                        If File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml") Then
+                                            instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml"
+                                        ElseIf File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml") Then
+                                            instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml"
+                                        Else
+                                            instDir = ""
+                                        End If
+                                    End If
+                                    Contents &= "    - Package manifest location: " & Quote & instDir & Quote & CrLf
+                                    ' Get store logo asset directory
+                                    Dim assetDir As String = ""
+                                    Try
+                                        assetDir = MainForm.GetSuitablePackageFolder(MainForm.imgAppxDisplayNames(x))
+                                    Catch ex As Exception
+                                        ' Continue
+                                    End Try
+                                    If assetDir <> "" Then
+                                        If File.Exists(assetDir & "\AppxManifest.xml") Then
+                                            Dim ManFile As New RichTextBox() With {
+                                                .Text = File.ReadAllText(assetDir & "\AppxManifest.xml")
+                                            }
+                                            For Each line In ManFile.Lines
+                                                If line.Contains("<Logo>") Then
+                                                    Dim SplitPaths As New List(Of String)
+                                                    SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
+                                                    SplitPaths.RemoveAt(SplitPaths.Count - 1)
+                                                    Dim newPath As String = String.Join("\", SplitPaths)
+                                                    Contents &= "    - Store logo asset directory: " & Quote & (assetDir & "\" & newPath).Replace("\\", "\").Trim() & Quote & CrLf
+                                                    Exit For
+                                                End If
+                                            Next
+                                        End If
+                                    Else
+                                        If File.Exists(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & MainForm.imgAppxPackageNames(x) & "\AppxManifest.xml") Then
+                                            Dim ManFile As New RichTextBox() With {
+                                                .Text = File.ReadAllText(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & MainForm.imgAppxPackageNames(x) & "\AppxManifest.xml")
+                                            }
+                                            For Each line In ManFile.Lines
+                                                If line.Contains("<Logo>") Then
+                                                    Dim SplitPaths As New List(Of String)
+                                                    SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
+                                                    SplitPaths.RemoveAt(SplitPaths.Count - 1)
+                                                    Dim newPath As String = String.Join("\", SplitPaths)
+                                                    Contents &= "    - Store logo asset directory: " & Quote & (If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & MainForm.imgAppxPackageNames(x) & "\" & newPath).Replace("\\", "\").Trim() & Quote & CrLf
+                                                    Exit For
+                                                End If
+                                            Next
+                                        End If
+                                    End If
+                                    ' Since store logo assets can't be saved on plain text files, output their locations
+                                    Dim mainAsset As String = MainForm.GetStoreAppMainLogo(MainForm.imgAppxPackageNames(x))
+                                    If mainAsset <> "" And File.Exists(mainAsset) Then
+                                        Contents &= "    - Main store logo asset: " & Quote & mainAsset.Replace("\\", "\").Trim() & Quote & CrLf & _
+                                                    "                             Do note that this is a guess, and may not be the asset you're looking for. If that happens, report an issue on the GitHub repo" & _
+                                                    " using the " & Quote & "Store logo asset preview issue" & Quote & " template. Then, provide the package name, the expected asset and the obtained asset." & CrLf & CrLf
+                                    Else
+                                        Contents &= "    - Main store logo asset: unknown" & CrLf & CrLf
+                                    End If
+                                Next
+                            Else
+                                For Each appxPkg As DismAppxPackage In InstalledAppxPackageInfo
+                                    Select Case MainForm.Language
+                                        Case 0
+                                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                                Case "ENU", "ENG"
+                                                    msg(0) = "Getting information of AppX packages... (AppX package " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " of " & InstalledAppxPackageInfo.Count & ")"
+                                                Case "ESN"
+                                                    msg(0) = "Obteniendo información de paquetes AppX ... (paquete AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " de " & InstalledAppxPackageInfo.Count & ")"
+                                                Case "FRA"
+                                                    msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " de " & InstalledAppxPackageInfo.Count & ")"
+                                            End Select
+                                        Case 1
+                                            msg(0) = "Getting information of AppX packages... (AppX package " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " of " & InstalledAppxPackageInfo.Count & ")"
+                                        Case 2
+                                            msg(0) = "Obteniendo información de paquetes AppX ... (paquete AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " de " & InstalledAppxPackageInfo.Count & ")"
+                                        Case 3
+                                            msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " de " & InstalledAppxPackageInfo.Count & ")"
+                                    End Select
+                                    ReportChanges(msg(0), (InstalledAppxPackageInfo.IndexOf(appxPkg) / InstalledAppxPackageInfo.Count) * 100)
+                                    Contents &= "  AppX package " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " of " & InstalledAppxPackageInfo.Count & ":" & CrLf & _
+                                                "    - Package name: " & appxPkg.PackageName & CrLf & _
+                                                "    - Application display name: " & appxPkg.DisplayName & CrLf & _
+                                                "    - Architecture: " & Casters.CastDismArchitecture(appxPkg.Architecture) & CrLf & _
+                                                "    - Resource ID: " & appxPkg.ResourceId & CrLf & _
+                                                "    - Version: " & appxPkg.Version.ToString() & CrLf
+                                    ' Detect if *.pckgdep files are present in the AppRepository folder, as that's how this program gets the registration status of an AppX package
+                                    If Directory.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxPkg.PackageName, _
+                                                           ImgMountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxPkg.PackageName)) Then
+                                        ' Get the number of pckgdep files
+                                        If My.Computer.FileSystem.GetFiles(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxPkg.PackageName, _
+                                                                              ImgMountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxPkg.PackageName), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count > 0 Then
+                                            Contents &= "    - Is registered to any user? Yes" & CrLf
+                                        Else
+                                            Contents &= "    - Is registered to any user? No" & CrLf
+                                        End If
+                                    Else
+                                        Contents &= "    - Is registered to any user? No" & CrLf
+                                    End If
+                                    ' Use the InstallLocation property of the AppxPackage class.
+                                    ' TODO: if this works, implement InstallLocation on all other cases
+                                    Contents &= "    - Installation location: " & Quote & appxPkg.InstallLocation.Replace("%SYSTEMDRIVE%", Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Replace("\", "").Trim()).Trim() & Quote & CrLf
+                                    ' Detect if the source is an appx or appxbundle package by the manifest file
+                                    If File.Exists(appxPkg.InstallLocation & "\AppxManifest.xml") Then
+                                        ' APPX/MSIX file
+                                        Contents &= "    - Package manifest location: " & Quote & appxPkg.InstallLocation & "\AppxManifest.xml" & Quote & CrLf
+                                    ElseIf File.Exists(appxPkg.InstallLocation & "\AppxMetadata\AppxBundleManifest.xml") Then
+                                        ' APPXBUNDLE/MSIXBUNDLE file
+                                        Contents &= "    - Package manifest location: " & Quote & appxPkg.InstallLocation & "\AppxMetadata\AppxBundleManifest.xml" & Quote & CrLf
+                                    Else
+                                        ' Unrecognized type of file
+                                        Contents &= "    - Package manifest location: unknown" & CrLf
+                                    End If
+                                    ' Get store logo asset directory
+                                    Dim assetDir As String = ""
+                                    Try
+                                        assetDir = MainForm.GetSuitablePackageFolder(appxPkg.DisplayName)
+                                    Catch ex As Exception
+                                        ' Continue
+                                    End Try
+                                    If assetDir <> "" Then
+                                        If File.Exists(assetDir & "\AppxManifest.xml") Then
+                                            Dim ManFile As New RichTextBox() With {
+                                                .Text = File.ReadAllText(assetDir & "\AppxManifest.xml")
+                                            }
+                                            For Each line In ManFile.Lines
+                                                If line.Contains("<Logo>") Then
+                                                    Dim SplitPaths As New List(Of String)
+                                                    SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
+                                                    SplitPaths.RemoveAt(SplitPaths.Count - 1)
+                                                    Dim newPath As String = String.Join("\", SplitPaths)
+                                                    Contents &= "    - Store logo asset directory: " & Quote & (assetDir & "\" & newPath).Replace("\\", "\").Trim() & Quote & CrLf
+                                                    Exit For
+                                                End If
+                                            Next
+                                        End If
+                                    Else
+                                        If File.Exists(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & appxPkg.PackageName & "\AppxManifest.xml") Then
+                                            Dim ManFile As New RichTextBox() With {
+                                                .Text = File.ReadAllText(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & appxPkg.PackageName & "\AppxManifest.xml")
+                                            }
+                                            For Each line In ManFile.Lines
+                                                If line.Contains("<Logo>") Then
+                                                    Dim SplitPaths As New List(Of String)
+                                                    SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
+                                                    SplitPaths.RemoveAt(SplitPaths.Count - 1)
+                                                    Dim newPath As String = String.Join("\", SplitPaths)
+                                                    Contents &= "    - Store logo asset directory: " & Quote & (If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & appxPkg.PackageName & "\" & newPath).Replace("\\", "\").Trim() & Quote & CrLf
+                                                    Exit For
+                                                End If
+                                            Next
+                                        End If
+                                    End If
+                                    ' Since store logo assets can't be saved on plain text files, output their locations
+                                    Dim mainAsset As String = MainForm.GetStoreAppMainLogo(appxPkg.PackageName)
+                                    If mainAsset <> "" And File.Exists(mainAsset) Then
+                                        Contents &= "    - Main store logo asset: " & Quote & mainAsset.Replace("\\", "\").Trim() & Quote & CrLf & _
+                                                    "                             Do note that this is a guess, and may not be the asset you're looking for. If that happens, report an issue on the GitHub repo" & _
+                                                    " using the " & Quote & "Store logo asset preview issue" & Quote & " template. Then, provide the package name, the expected asset and the obtained asset." & CrLf & CrLf
+                                    Else
+                                        Contents &= "    - Main store logo asset: unknown" & CrLf & CrLf
+                                    End If
+                                Next
+                            End If
                             Contents &= "  - Complete AppX package information has been gathered" & CrLf & CrLf
                         Else
                             Select Case MainForm.Language
@@ -1176,7 +1542,40 @@ Public Class ImgInfoSaveDlg
                             msg(0) = "Des capacités ont été obtenues"
                     End Select
                     ReportChanges(msg(0), 10)
-                    If MsgBox(msg(1), vbYesNo + vbQuestion, msg(2)) = MsgBoxResult.Yes Then
+                    If SkipQuestions And AutoCompleteInfo(3) Then
+                        Debug.WriteLine("[GetCapabilityInformation] Getting complete capability information...")
+                        For Each capability As DismCapability In InstalledCapInfo
+                            Select Case MainForm.Language
+                                Case 0
+                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                        Case "ENU", "ENG"
+                                            msg(0) = "Getting information of capabilities... (capability " & InstalledCapInfo.IndexOf(capability) + 1 & " of " & InstalledCapInfo.Count & ")"
+                                        Case "ESN"
+                                            msg(0) = "Obteniendo información de funcionalidades... (funcionalidad " & InstalledCapInfo.IndexOf(capability) + 1 & " de " & InstalledCapInfo.Count & ")"
+                                        Case "FRA"
+                                            msg(0) = "Obtention des informations sur les capacités en cours... (capacité " & InstalledCapInfo.IndexOf(capability) + 1 & " de " & InstalledCapInfo.Count & ")"
+                                    End Select
+                                Case 1
+                                    msg(0) = "Getting information of capabilities... (capability " & InstalledCapInfo.IndexOf(capability) + 1 & " of " & InstalledCapInfo.Count & ")"
+                                Case 2
+                                    msg(0) = "Obteniendo información de funcionalidades... (funcionalidad " & InstalledCapInfo.IndexOf(capability) + 1 & " de " & InstalledCapInfo.Count & ")"
+                                Case 3
+                                    msg(0) = "Obtention des informations sur les capacités en cours... (capacité " & InstalledCapInfo.IndexOf(capability) + 1 & " de " & InstalledCapInfo.Count & ")"
+                            End Select
+                            ReportChanges(msg(0), (InstalledCapInfo.IndexOf(capability) / InstalledCapInfo.Count) * 100)
+                            Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, capability.Name)
+                            Contents &= "  Capability " & InstalledCapInfo.IndexOf(capability) + 1 & " of " & InstalledCapInfo.Count & ":" & CrLf & _
+                                        "    - Capability identity: " & capInfo.Name & CrLf & _
+                                        "    - Capability name: " & capInfo.Name.Remove(InStr(capInfo.Name, "~") - 1) & CrLf & _
+                                        "    - Capability state: " & Casters.CastDismPackageState(capInfo.State) & CrLf & _
+                                        "    - Display name: " & capInfo.DisplayName & CrLf & _
+                                        "    - Capability description: " & capInfo.Description & CrLf & _
+                                        "    - Sizes:" & CrLf & _
+                                        "      - Download size: " & capInfo.DownloadSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")" & CrLf & _
+                                        "      - Install size: " & capInfo.InstallSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")" & CrLf & CrLf
+                        Next
+                        Contents &= "  - Complete capability information has been gathered" & CrLf & CrLf
+                    ElseIf (Not SkipQuestions Or Not AutoCompleteInfo(3)) And MsgBox(msg(1), vbYesNo + vbQuestion, msg(2)) = MsgBoxResult.Yes Then
                         Debug.WriteLine("[GetCapabilityInformation] Getting complete capability information...")
                         For Each capability As DismCapability In InstalledCapInfo
                             Select Case MainForm.Language
@@ -1345,7 +1744,43 @@ Public Class ImgInfoSaveDlg
                         msg(0) = "Des pilotes ont été obtenus"
                 End Select
                 ReportChanges(msg(0), 10)
-                If MsgBox(msg(1), vbYesNo + vbQuestion, msg(2)) = MsgBoxResult.Yes Then
+                If SkipQuestions And AutoCompleteInfo(4) Then
+                    Debug.WriteLine("[GetDriverInformation] Getting complete driver information...")
+                    For Each driver As DismDriverPackage In InstalledDrvInfo
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENU", "ENG"
+                                        msg(0) = "Getting information of drivers... (driver " & InstalledDrvInfo.IndexOf(driver) + 1 & " of " & InstalledDrvInfo.Count & ")"
+                                    Case "ESN"
+                                        msg(0) = "Obteniendo información de controladores... (controlador " & InstalledDrvInfo.IndexOf(driver) + 1 & " de " & InstalledDrvInfo.Count & ")"
+                                    Case "FRA"
+                                        msg(0) = "Obtention des informations sur les pilotes en cours... (pilote " & InstalledDrvInfo.IndexOf(driver) + 1 & " de " & InstalledDrvInfo.Count & ")"
+                                End Select
+                            Case 1
+                                msg(0) = "Getting information of drivers... (driver " & InstalledDrvInfo.IndexOf(driver) + 1 & " of " & InstalledDrvInfo.Count & ")"
+                            Case 2
+                                msg(0) = "Obteniendo información de controladores... (controlador " & InstalledDrvInfo.IndexOf(driver) + 1 & " de " & InstalledDrvInfo.Count & ")"
+                            Case 3
+                                msg(0) = "Obtention des informations sur les pilotes en cours... (pilote " & InstalledDrvInfo.IndexOf(driver) + 1 & " de " & InstalledDrvInfo.Count & ")"
+                        End Select
+                        ReportChanges(msg(0), (InstalledDrvInfo.IndexOf(driver) / InstalledDrvInfo.Count) * 100)
+                        Contents &= "  Driver " & InstalledDrvInfo.IndexOf(driver) + 1 & " of " & InstalledDrvInfo.Count & ":" & CrLf & _
+                                    "    - Published name: " & driver.PublishedName & CrLf & _
+                                    "    - Original file name: " & Path.GetFileName(driver.OriginalFileName) & " (" & Path.GetDirectoryName(driver.OriginalFileName) & ")" & CrLf & _
+                                    "    - Provider name: " & driver.ProviderName & CrLf & _
+                                    "    - Class name: " & driver.ClassName & CrLf & _
+                                    "    - Class description: " & driver.ClassDescription & CrLf & _
+                                    "    - Class GUID: " & CrLf & _
+                                    "    - Catalog file path: " & driver.CatalogFile & CrLf & _
+                                    "    - Is part of the Windows distribution? " & If(driver.InBox, "Yes", "No") & CrLf & _
+                                    "    - Is critical to the boot process? " & If(driver.BootCritical, "Yes", "No") & CrLf & _
+                                    "    - Version: " & driver.Version.ToString() & CrLf & _
+                                    "    - Date: " & driver.Date & CrLf & _
+                                    "    - Driver signature status: " & Casters.CastDismSignatureStatus(driver.DriverSignature) & CrLf & CrLf
+                    Next
+                    Contents &= "  - Complete driver information has been gathered" & CrLf & CrLf
+                ElseIf (Not SkipQuestions Or Not AutoCompleteInfo(4)) And MsgBox(msg(1), vbYesNo + vbQuestion, msg(2)) = MsgBoxResult.Yes Then
                     Debug.WriteLine("[GetDriverInformation] Getting complete driver information...")
                     For Each driver As DismDriverPackage In InstalledDrvInfo
                         Select Case MainForm.Language
@@ -1495,7 +1930,7 @@ Public Class ImgInfoSaveDlg
                                     Case 3
                                         msg = "Obtention des informations des matériels cibles en cours... (cible " & drvInfoCollection.IndexOf(hwTarget) + 1 & " de " & drvInfoCollection.Count & ")"
                                 End Select
-                                ReportChanges(msg, (DriverPkgs.IndexOf(drvPkg) / DriverPkgs.Count) * 100)
+                                ReportChanges(msg, (DriverPkgs.IndexOf(drvPkg) / DriverPkgs.Count) * 100 + (drvInfoCollection.IndexOf(hwTarget) + 1) / drvInfoCollection.Count * 100 / DriverPkgs.Count)
                                 Contents &= "      - Hardware description: " & hwTarget.HardwareDescription & CrLf & _
                                             "      - Hardware ID: " & hwTarget.HardwareId & CrLf & _
                                             "      - Additional IDs:" & CrLf & _
@@ -1608,7 +2043,8 @@ Public Class ImgInfoSaveDlg
                     End Select
                     ReportChanges(msg, 75)
                     regKey = Registry.LocalMachine.OpenSubKey("PE_SYS\ControlSet001\Services\FBWF", False)
-                    Contents &= "  - Scratch space: " & regKey.GetValue("WinPECacheThreshold", "could not get value").ToString() & " MB" & CrLf & CrLf
+                    Dim scSize As String = regKey.GetValue("WinPECacheThreshold", "").ToString()
+                    Contents &= "  - Scratch space: " & If(Not scSize = "", scSize & " MB", "could not get value") & CrLf & CrLf
                     regKey.Close()
                 Catch ex As Exception
 
@@ -1625,6 +2061,10 @@ Public Class ImgInfoSaveDlg
     End Sub
 
     Private Sub ImgInfoSaveDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If Not InfoSaveResults.IsDisposed Then
+            InfoSaveResults.Close()
+            InfoSaveResults.Dispose()
+        End If
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)
             ForeColor = Color.White
@@ -1765,6 +2205,8 @@ Public Class ImgInfoSaveDlg
                    " - Processes started at: " & Date.Now & CrLf & _
                    " - Report file target: " & Quote & SaveTarget & Quote & CrLf
 
+        If OfflineMode Then SourceImage = ImgMountDir
+
         ' Begin performing operations
         Select Case SaveTask
             Case 0
@@ -1809,9 +2251,30 @@ Public Class ImgInfoSaveDlg
         Contents &= " - Processes ended at: " & Date.Now & CrLf & CrLf & _
                     "                  We have ended. Have a nice day!"
 
+        ' Inform user that we are saving the file
+        Dim saveMsg As String = ""
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        saveMsg = "Saving contents..."
+                    Case "ESN"
+                        saveMsg = "Guardando contenidos..."
+                    Case "FRA"
+                        saveMsg = "Sauvegarde des contenus en cours..."
+                End Select
+            Case 1
+                saveMsg = "Saving contents..."
+            Case 2
+                saveMsg = "Guardando contenidos..."
+            Case 3
+                saveMsg = "Sauvegarde des contenus en cours..."
+        End Select
+        ReportChanges(saveMsg, ProgressBar1.Maximum)
+
         ' Save the file
         If Contents <> "" And File.Exists(SaveTarget) Then File.WriteAllText(SaveTarget, Contents, UTF8)
-        If Debugger.IsAttached Then Process.Start(SaveTarget)
+        If Debugger.IsAttached Then Process.Start(SaveTarget) Else InfoSaveResults.Show()
         If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
         Close()
     End Sub

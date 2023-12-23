@@ -176,6 +176,20 @@ Public Class Options
             MainForm.SaveDTSettings()
         End If
         If MainForm.IsImageMounted Then MainForm.DetectVersions(FileVersionInfo.GetVersionInfo(MainForm.DismExe), MainForm.imgVersionInfo)
+        MainForm.SkipQuestions = CheckBox14.Checked
+        MainForm.AutoCompleteInfo(0) = CheckBox15.Checked
+        MainForm.AutoCompleteInfo(1) = CheckBox16.Checked
+        MainForm.AutoCompleteInfo(2) = CheckBox17.Checked
+        MainForm.AutoCompleteInfo(3) = CheckBox18.Checked
+        MainForm.AutoCompleteInfo(4) = CheckBox19.Checked
+        MainForm.GoToNewView = CheckBox20.Checked
+        If MainForm.GoToNewView Then
+            MainForm.ProjectView.Visible = True
+            MainForm.SplitPanels.Visible = False
+        Else
+            MainForm.ProjectView.Visible = False
+            MainForm.SplitPanels.Visible = True
+        End If
     End Sub
 
     Sub GiveErrorExplanation(ErrorCode As Integer)
@@ -345,6 +359,8 @@ Public Class Options
                         Label44.Text = "The program will use the scratch directory provided by the project if one is loaded. If you are in online installation management mode, the program will use its scratch directory"
                         Label45.Text = "Secondary progress panel style:"
                         Label46.Text = "These settings aren't applicable to non-portable installations"
+                        Label47.Text = "This font may not be readable on log windows. While you can still use it, we recommend monospaced fonts for increased readability."
+                        Label48.Text = "Choose the settings the program should consider when saving image information:"
                         Button1.Text = "Browse..."
                         Button2.Text = "View DISM component versions"
                         Button3.Text = "Browse..."
@@ -371,12 +387,20 @@ Public Class Options
                         CheckBox11.Text = "Set custom file icons for DISMTools projects"
                         CheckBox12.Text = "Remount mounted images in need of a servicing session reload"
                         CheckBox13.Text = "Check for updates"
+                        CheckBox14.Text = "Always save complete information for the following elements:"
+                        CheckBox15.Text = "Installed packages"
+                        CheckBox16.Text = "Features"
+                        CheckBox17.Text = "Installed AppX packages"
+                        CheckBox18.Text = "Capabilities"
+                        CheckBox19.Text = "Installed drivers"
+                        CheckBox20.Text = "Use the new project view design"
                         DismOFD.Title = "Specify the DISM executable to use"
                         GroupBox1.Text = "Log customization"
                         GroupBox2.Text = "Notification frequency"
                         GroupBox3.Text = "Module details"
                         GroupBox4.Text = "Background process"
                         GroupBox5.Text = "Associations"
+                        GroupBox6.Text = "Saving information"
                         LinkLabel1.Text = "The program will enable or disable certain features according to what the DISM version supports. How is it going to affect my usage of this program, and which features will be disabled accordingly?"
                         LinkLabel1.LinkArea = New LinkArea(97, 100)
                         LinkLabel2.Text = "Learn more about background processes"
@@ -440,6 +464,8 @@ Public Class Options
                         Label44.Text = "El programa usará el directorio temporal proporcionado por el proyecto si se cargó alguno. Si está en modo de administración de instalaciones en línea, el programa utilizará su directorio temporal"
                         Label45.Text = "Estilo del panel de progreso secundario:"
                         Label46.Text = "Estas configuraciones no son aplicables a instalaciones no portátiles"
+                        Label47.Text = "Esta fuente podría no ser legible en ventanas de registro. Aunque todavía pueda utilizarla, le recomendamos fuentes monoespaciadas para una legibilidad aumentada."
+                        Label48.Text = "Escoja las opciones que el programa debería considerar al guardar información de la imagen:"
                         Button1.Text = "Examinar..."
                         Button2.Text = "Ver versiones de componentes"
                         Button3.Text = "Examinar..."
@@ -466,12 +492,20 @@ Public Class Options
                         CheckBox11.Text = "Establecer iconos personalizados para proyectos de DISMTools"
                         CheckBox12.Text = "Remontar imágenes montadas que necesitan una recarga de su sesión de servicio"
                         CheckBox13.Text = "Comprobar actualizaciones"
+                        CheckBox14.Text = "Siempre guardar información completa para los siguientes elementos:"
+                        CheckBox15.Text = "Paquetes instalados"
+                        CheckBox16.Text = "Características"
+                        CheckBox17.Text = "Paquetes AppX instalados"
+                        CheckBox18.Text = "Funcionalidades"
+                        CheckBox19.Text = "Controladores instalados"
+                        CheckBox20.Text = "Utilizar el nuevo diseño de la vista de proyectos"
                         DismOFD.Title = "Especifique el ejecutable de DISM a usar"
                         GroupBox1.Text = "Personalización del registro"
                         GroupBox2.Text = "Frecuencia de notificaciones"
                         GroupBox3.Text = "Detalles de módulo"
                         GroupBox4.Text = "Proceso en segundo plano"
                         GroupBox5.Text = "Asociaciones"
+                        GroupBox6.Text = "Guardando información"
                         LinkLabel1.Text = "El programa habilitará o deshabilitará algunas características atendiendo a lo que soporte la versión de DISM. ¿Cómo va a afectar esto mi uso del programa, y qué características serán deshabilitadas?"
                         LinkLabel1.LinkArea = New LinkArea(111, 88)
                         LinkLabel2.Text = "Conocer más sobre los procesos en segundo plano"
@@ -535,6 +569,8 @@ Public Class Options
                         Label44.Text = "Le programme utilisera le répertoire temporaire fourni par le projet s'il en existe un. Si vous êtes en mode de gestion de l'installation en ligne, le programme utilisera son répertoire temporaire."
                         Label45.Text = "Style du panneau de progression secondaire :"
                         Label46.Text = "Ces paramètres ne s'appliquent pas aux installations non portables."
+                        Label47.Text = "Cette police peut ne pas être lisible sur les fenêtres logiques. Bien que vous puissiez encore l'utiliser, nous recommandons les polices monospaces pour une meilleure lisibilité."
+                        Label48.Text = "Choisissez les paramètres que le programme doit prendre en compte lors de la sauvegarde des informations de l'image :"
                         Button1.Text = "Parcourir..."
                         Button2.Text = "Voir les versions des composants DISM"
                         Button3.Text = "Parcourir..."
@@ -561,12 +597,20 @@ Public Class Options
                         CheckBox11.Text = "Définir des icônes de fichiers personnalisés pour les projets DISMTools"
                         CheckBox12.Text = "Remonter les images montées nécessitant un rechargement de la session de maintenance"
                         CheckBox13.Text = "Mettre à jour les données"
+                        CheckBox14.Text = "Sauvegardez toujours des informations complètes pour les éléments suivants :"
+                        CheckBox15.Text = "Paquets installés"
+                        CheckBox16.Text = "Caractéristiques"
+                        CheckBox17.Text = "Paquets AppX installés"
+                        CheckBox18.Text = "Capacités"
+                        CheckBox19.Text = "Pilotes installés"
+                        CheckBox20.Text = "Utiliser le nouveau design de la vue du projet"
                         DismOFD.Title = "Spécifier l'exécutable DISM à utiliser"
                         GroupBox1.Text = "Personnalisation du journal"
                         GroupBox2.Text = "Fréquence des notifications"
                         GroupBox3.Text = "Détails du module"
                         GroupBox4.Text = "Processus en arrière plan"
                         GroupBox5.Text = "Associations"
+                        GroupBox6.Text = "Sauvegarde des informations"
                         LinkLabel1.Text = "Le programme activera ou désactivera certaines caractéristiques en fonction de ce que la version de DISM prend en charge. Comment cela va-t-il affecter mon utilisation de ce programme, et quelles caractéristiques seront désactivées en conséquence ?"
                         LinkLabel1.LinkArea = New LinkArea(122, 126)
                         LinkLabel2.Text = "Savoir plus sur les processus en arrière plan"
@@ -631,6 +675,8 @@ Public Class Options
                 Label44.Text = "The program will use the scratch directory provided by the project if one is loaded. If you are in online installation management mode, the program will use its scratch directory"
                 Label45.Text = "Secondary progress panel style:"
                 Label46.Text = "These settings aren't applicable to non-portable installations"
+                Label47.Text = "This font may not be readable on log windows. While you can still use it, we recommend monospaced fonts for increased readability."
+                Label48.Text = "Choose the settings the program should consider when saving image information:"
                 Button1.Text = "Browse..."
                 Button2.Text = "View DISM component versions"
                 Button3.Text = "Browse..."
@@ -657,12 +703,20 @@ Public Class Options
                 CheckBox11.Text = "Set custom file icons for DISMTools projects"
                 CheckBox12.Text = "Remount mounted images in need of a servicing session reload"
                 CheckBox13.Text = "Check for updates"
+                CheckBox14.Text = "Always save complete information for the following elements:"
+                CheckBox15.Text = "Installed packages"
+                CheckBox16.Text = "Features"
+                CheckBox17.Text = "Installed AppX packages"
+                CheckBox18.Text = "Capabilities"
+                CheckBox19.Text = "Installed drivers"
+                CheckBox20.Text = "Use the new project view design"
                 DismOFD.Title = "Specify the DISM executable to use"
                 GroupBox1.Text = "Log customization"
                 GroupBox2.Text = "Notification frequency"
                 GroupBox3.Text = "Module details"
                 GroupBox4.Text = "Background process"
                 GroupBox5.Text = "Associations"
+                GroupBox6.Text = "Saving information"
                 LinkLabel1.Text = "The program will enable or disable certain features according to what the DISM version supports. How is it going to affect my usage of this program, and which features will be disabled accordingly?"
                 LinkLabel1.LinkArea = New LinkArea(97, 100)
                 LinkLabel2.Text = "Learn more about background processes"
@@ -726,6 +780,8 @@ Public Class Options
                 Label44.Text = "El programa usará el directorio temporal proporcionado por el proyecto si se cargó alguno. Si está en modo de administración de instalaciones en línea, el programa utilizará su directorio temporal"
                 Label45.Text = "Estilo del panel de progreso secundario:"
                 Label46.Text = "Estas configuraciones no son aplicables a instalaciones no portátiles"
+                Label47.Text = "Esta fuente podría no ser legible en ventanas de registro. Aunque todavía pueda utilizarla, le recomendamos fuentes monoespaciadas para una legibilidad aumentada."
+                Label48.Text = "Escoja las opciones que el programa debería considerar al guardar información de la imagen:"
                 Button1.Text = "Examinar..."
                 Button2.Text = "Ver versiones de componentes"
                 Button3.Text = "Examinar..."
@@ -752,12 +808,20 @@ Public Class Options
                 CheckBox11.Text = "Establecer iconos personalizados para proyectos de DISMTools"
                 CheckBox12.Text = "Remontar imágenes montadas que necesitan una recarga de su sesión de servicio"
                 CheckBox13.Text = "Comprobar actualizaciones"
+                CheckBox14.Text = "Siempre guardar información completa para los siguientes elementos:"
+                CheckBox15.Text = "Paquetes instalados"
+                CheckBox16.Text = "Características"
+                CheckBox17.Text = "Paquetes AppX instalados"
+                CheckBox18.Text = "Funcionalidades"
+                CheckBox19.Text = "Controladores instalados"
+                CheckBox20.Text = "Utilizar el nuevo diseño de la vista de proyectos"
                 DismOFD.Title = "Especifique el ejecutable de DISM a usar"
                 GroupBox1.Text = "Personalización del registro"
                 GroupBox2.Text = "Frecuencia de notificaciones"
                 GroupBox3.Text = "Detalles de módulo"
                 GroupBox4.Text = "Proceso en segundo plano"
                 GroupBox5.Text = "Asociaciones"
+                GroupBox6.Text = "Guardando información"
                 LinkLabel1.Text = "El programa habilitará o deshabilitará algunas características atendiendo a lo que soporte la versión de DISM. ¿Cómo va a afectar esto mi uso del programa, y qué características serán deshabilitadas?"
                 LinkLabel1.LinkArea = New LinkArea(111, 88)
                 LinkLabel2.Text = "Conocer más sobre los procesos en segundo plano"
@@ -821,6 +885,8 @@ Public Class Options
                 Label44.Text = "Le programme utilisera le répertoire temporaire fourni par le projet s'il en existe un. Si vous êtes en mode de gestion de l'installation en ligne, le programme utilisera son répertoire temporaire."
                 Label45.Text = "Style du panneau de progression secondaire :"
                 Label46.Text = "Ces paramètres ne s'appliquent pas aux installations non portables."
+                Label47.Text = "Cette police peut ne pas être lisible sur les fenêtres logiques. Bien que vous puissiez encore l'utiliser, nous recommandons les polices monospaces pour une meilleure lisibilité."
+                Label48.Text = "Choisissez les paramètres que le programme doit prendre en compte lors de la sauvegarde des informations de l'image :"
                 Button1.Text = "Parcourir..."
                 Button2.Text = "Voir les versions des composants DISM"
                 Button3.Text = "Parcourir..."
@@ -847,12 +913,20 @@ Public Class Options
                 CheckBox11.Text = "Définir des icônes de fichiers personnalisés pour les projets DISMTools"
                 CheckBox12.Text = "Remonter les images montées nécessitant un rechargement de la session de maintenance"
                 CheckBox13.Text = "Mettre à jour les données"
+                CheckBox14.Text = "Sauvegardez toujours des informations complètes pour les éléments suivants :"
+                CheckBox15.Text = "Paquets installés"
+                CheckBox16.Text = "Caractéristiques"
+                CheckBox17.Text = "Paquets AppX installés"
+                CheckBox18.Text = "Capacités"
+                CheckBox19.Text = "Pilotes installés"
+                CheckBox20.Text = "Utiliser le nouveau design de la vue du projet"
                 DismOFD.Title = "Spécifier l'exécutable DISM à utiliser"
                 GroupBox1.Text = "Personnalisation du journal"
                 GroupBox2.Text = "Fréquence des notifications"
                 GroupBox3.Text = "Détails du module"
                 GroupBox4.Text = "Processus en arrière plan"
                 GroupBox5.Text = "Associations"
+                GroupBox6.Text = "Sauvegarde des informations"
                 LinkLabel1.Text = "Le programme activera ou désactivera certaines caractéristiques en fonction de ce que la version de DISM prend en charge. Comment cela va-t-il affecter mon utilisation de ce programme, et quelles caractéristiques seront désactivées en conséquence ?"
                 LinkLabel1.LinkArea = New LinkArea(122, 126)
                 LinkLabel2.Text = "Savoir plus sur les processus en arrière plan"
@@ -1019,6 +1093,7 @@ Public Class Options
             GroupBox3.ForeColor = Color.White
             GroupBox4.ForeColor = Color.White
             GroupBox5.ForeColor = Color.White
+            GroupBox6.ForeColor = Color.White
             TrackBar1.BackColor = Color.FromArgb(31, 31, 31)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Win10Title.BackColor = Color.White
@@ -1066,6 +1141,7 @@ Public Class Options
             GroupBox3.ForeColor = Color.Black
             GroupBox4.ForeColor = Color.Black
             GroupBox5.ForeColor = Color.Black
+            GroupBox6.ForeColor = Color.Black
             TrackBar1.BackColor = Color.FromArgb(238, 238, 242)
         End If
         Select Case MainForm.Language
@@ -1210,6 +1286,13 @@ Public Class Options
         CheckBox12.Checked = MainForm.StartupRemount
         CheckBox13.Checked = MainForm.StartupUpdateCheck
         CheckBox9.Checked = MainForm.AllCaps
+        CheckBox14.Checked = MainForm.SkipQuestions
+        CheckBox15.Checked = MainForm.AutoCompleteInfo(0)
+        CheckBox16.Checked = MainForm.AutoCompleteInfo(1)
+        CheckBox17.Checked = MainForm.AutoCompleteInfo(2)
+        CheckBox18.Checked = MainForm.AutoCompleteInfo(3)
+        CheckBox19.Checked = MainForm.AutoCompleteInfo(4)
+        CheckBox20.Checked = MainForm.GoToNewView
     End Sub
 
     Private Sub ComboBox5_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox5.SelectedIndexChanged
@@ -1250,7 +1333,27 @@ Public Class Options
         Else
             LogPreview.Font = New Font(ComboBox4.Text, NumericUpDown1.Value, FontStyle.Regular)
         End If
+        Panel4.Visible = Not IsMonospacedFont(ComboBox4.Text)
     End Sub
+
+    Function IsMonospacedFont(ftName As String) As Boolean
+        Using testFont As Font = New Font(ftName, 10)
+            Dim widthI As Decimal = MeasureCharacterWidth(testFont, "i")
+            Dim widthW As Decimal = MeasureCharacterWidth(testFont, "w")
+            Return widthI = widthW
+        End Using
+        Return False
+    End Function
+
+    Function MeasureCharacterWidth(ft As Font, character As Char) As Decimal
+        Using bmp As Bitmap = New Bitmap(1, 1)
+            Using g As Graphics = Graphics.FromImage(bmp)
+                Dim size As SizeF = g.MeasureString(character.ToString(), ft)
+                Return size.Width
+            End Using
+        End Using
+        Return 0
+    End Function
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         DismComponents.ShowDialog()
@@ -1808,5 +1911,9 @@ Public Class Options
             MainForm.ResetDTSettings()
             Cancel_Button.PerformClick()
         End If
+    End Sub
+
+    Private Sub CheckBox14_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox14.CheckedChanged
+        TableLayoutPanel2.Enabled = CheckBox14.Checked
     End Sub
 End Class

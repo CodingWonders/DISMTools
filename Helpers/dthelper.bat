@@ -1,10 +1,10 @@
-:: DISMTools Helper Script - version 0.3.3
+:: DISMTools Helper Script - version 0.4
 @echo off
 
 
 :init
 :: Set initial vars
-set script_ver=v0.3.3
+set script_ver=v0.4
 set outputmode=0
 :: outputmode=0 (output to file)
 ::            1 (output to console)
@@ -33,6 +33,11 @@ if "%1%"=="/sh" (
 
 :dt_wmic
 cls
+
+:: Show deprecation notice
+echo This function is deprecated and has been replaced by native WMI commands.
+echo You can still access this function, but it will be removed in the future.
+
 echo Getting drive information. Please wait...
 if exist .\wmic (
 	del .\wmic
