@@ -98,7 +98,7 @@ Partial Class GetWinPESettings
         Me.TableLayoutPanel1.ColumnCount = 3
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 94.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 349.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.Label5, 1, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Label6, 1, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.Button1, 2, 0)
@@ -179,6 +179,7 @@ Partial Class GetWinPESettings
         '
         'Button4
         '
+        Me.Button4.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button4.Location = New System.Drawing.Point(435, 182)
         Me.Button4.Name = "Button4"

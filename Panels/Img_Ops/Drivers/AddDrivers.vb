@@ -1,5 +1,6 @@
 ﻿Imports System.Windows.Forms
 Imports System.IO
+Imports Microsoft.VisualBasic.ControlChars
 
 Public Class AddDrivers
 
@@ -103,30 +104,76 @@ Public Class AddDrivers
             Case 3
                 ListView1.Items.Add(New ListViewItem(New String() {OpenFileDialog1.FileName, "Fichier"}))
         End Select
+        Button3.Enabled = ListView1.Items.Count > 0
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         If FolderBrowserDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
             Cursor = Cursors.WaitCursor
             If My.Computer.FileSystem.GetFiles(FolderBrowserDialog1.SelectedPath, FileIO.SearchOption.SearchAllSubDirectories, "*.inf").Count > 0 Then
+                Dim msg As String = ""
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENU", "ENG"
-                                ListView1.Items.Add(New ListViewItem(New String() {FolderBrowserDialog1.SelectedPath, "Folder"}))
+                                msg = "The package specified is a folder. You can let DISM scan it recursively to add all drivers in it, or you can specify the drivers to add manually." & CrLf & CrLf & _
+                                      "- To let DISM scan this folder recursively, click Yes" & CrLf & _
+                                      "- To pick the drivers in this folder manually, click No" & CrLf & _
+                                      "- To skip adding this folder, click Cancel"
                             Case "ESN"
-                                ListView1.Items.Add(New ListViewItem(New String() {FolderBrowserDialog1.SelectedPath, "Carpeta"}))
+                                msg = "El paquete especificado es una carpeta. Puede dejar que DISM la escanee de forma recursiva para añadir todos los controladores en ella, o puede especificar los controladores a añadir manualmente." & CrLf & CrLf & _
+                                      "- Para dejar que DISM escanee esta carpeta de forma recursiva, haga clic en Sí" & CrLf & _
+                                      "- Para escoger los controladores en esta carpeta manualmente, haga clic en No" & CrLf & _
+                                      "- Para omitir la adición de esta carpeta, haga clic en Cancelar"
                             Case "FRA"
-                                ListView1.Items.Add(New ListViewItem(New String() {FolderBrowserDialog1.SelectedPath, "Répertoire"}))
+                                msg = "Le paquet de pilotes spécifié est un dossier. Vous pouvez laisser DISM l'analyser de manière récursive pour ajouter tous les pilotes qu'il contient, ou vous pouvez spécifier les pilotes à ajouter manuellement." & CrLf & CrLf & _
+                                      "- Pour laisser DISM analyser ce dossier de manière récursive, cliquez sur Oui" & CrLf & _
+                                      "- Pour sélectionner manuellement les pilotes de ce dossier, cliquez sur Non" & CrLf & _
+                                      "- Pour ne pas ajouter ce dossier, cliquez sur Annuler"
                         End Select
                     Case 1
-                        ListView1.Items.Add(New ListViewItem(New String() {FolderBrowserDialog1.SelectedPath, "Folder"}))
+                        msg = "The package specified is a folder. You can let DISM scan it recursively to add all drivers in it, or you can specify the drivers to add manually." & CrLf & CrLf & _
+                              "- To let DISM scan this folder recursively, click Yes" & CrLf & _
+                              "- To pick the drivers in this folder manually, click No" & CrLf & _
+                              "- To skip adding this folder, click Cancel"
                     Case 2
-                        ListView1.Items.Add(New ListViewItem(New String() {FolderBrowserDialog1.SelectedPath, "Carpeta"}))
+                        msg = "El paquete especificado es una carpeta. Puede dejar que DISM la escanee de forma recursiva para añadir todos los controladores en ella, o puede especificar los controladores a añadir manualmente." & CrLf & CrLf & _
+                              "- Para dejar que DISM escanee esta carpeta de forma recursiva, haga clic en Sí" & CrLf & _
+                              "- Para escoger los controladores en esta carpeta manualmente, haga clic en No" & CrLf & _
+                              "- Para omitir la adición de esta carpeta, haga clic en Cancelar"
                     Case 3
-                        ListView1.Items.Add(New ListViewItem(New String() {FolderBrowserDialog1.SelectedPath, "Répertoire"}))
+                        msg = "Le paquet de pilotes spécifié est un dossier. Vous pouvez laisser DISM l'analyser de manière récursive pour ajouter tous les pilotes qu'il contient, ou vous pouvez spécifier les pilotes à ajouter manuellement." & CrLf & CrLf & _
+                              "- Pour laisser DISM analyser ce dossier de manière récursive, cliquez sur Oui" & CrLf & _
+                              "- Pour sélectionner manuellement les pilotes de ce dossier, cliquez sur Non" & CrLf & _
+                              "- Pour ne pas ajouter ce dossier, cliquez sur Annuler"
                 End Select
-                CheckedListBox1.Items.Add(FolderBrowserDialog1.SelectedPath)
+                Select Case MsgBox(msg, vbYesNoCancel + vbInformation, Label1.Text)
+                    Case MsgBoxResult.Yes
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENU", "ENG"
+                                        ListView1.Items.Add(New ListViewItem(New String() {FolderBrowserDialog1.SelectedPath, "Folder"}))
+                                    Case "ESN"
+                                        ListView1.Items.Add(New ListViewItem(New String() {FolderBrowserDialog1.SelectedPath, "Carpeta"}))
+                                    Case "FRA"
+                                        ListView1.Items.Add(New ListViewItem(New String() {FolderBrowserDialog1.SelectedPath, "Répertoire"}))
+                                End Select
+                            Case 1
+                                ListView1.Items.Add(New ListViewItem(New String() {FolderBrowserDialog1.SelectedPath, "Folder"}))
+                            Case 2
+                                ListView1.Items.Add(New ListViewItem(New String() {FolderBrowserDialog1.SelectedPath, "Carpeta"}))
+                            Case 3
+                                ListView1.Items.Add(New ListViewItem(New String() {FolderBrowserDialog1.SelectedPath, "Répertoire"}))
+                        End Select
+                        CheckedListBox1.Items.Add(FolderBrowserDialog1.SelectedPath)
+                        CheckedListBox1.SetItemChecked(CheckedListBox1.Items.IndexOf(FolderBrowserDialog1.SelectedPath), True)
+                    Case MsgBoxResult.No
+                        DriverManualFilePicker.DriverDir = FolderBrowserDialog1.SelectedPath
+                        DriverManualFilePicker.ShowDialog(Me)
+                    Case MsgBoxResult.Cancel
+                        Exit Sub
+                End Select
             Else
                 Select Case MainForm.Language
                     Case 0
@@ -148,6 +195,7 @@ Public Class AddDrivers
             End If
             Cursor = Cursors.Arrow
         End If
+        Button3.Enabled = ListView1.Items.Count > 0
     End Sub
 
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
@@ -343,30 +391,89 @@ Public Class AddDrivers
         For Each PkgFile In PackageFiles
             If Not File.GetAttributes(PkgFile) = FileAttributes.Directory And Not Path.GetExtension(PkgFile).EndsWith("inf", StringComparison.OrdinalIgnoreCase) Then Continue For
             If File.GetAttributes(PkgFile) = FileAttributes.Directory Then
-                Cursor = Cursors.WaitCursor
-                If My.Computer.FileSystem.GetFiles(PkgFile, FileIO.SearchOption.SearchAllSubDirectories, "*.inf").Count < 0 Then
-                    Continue For
-                End If
-                Cursor = Cursors.Arrow
+                Dim msg As String = ""
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                msg = "The package specified is a folder. You can let DISM scan it recursively to add all drivers in it, or you can specify the drivers to add manually." & CrLf & CrLf & _
+                                      "- To let DISM scan this folder recursively, click Yes" & CrLf & _
+                                      "- To pick the drivers in this folder manually, click No" & CrLf & _
+                                      "- To skip adding this folder, click Cancel"
+                            Case "ESN"
+                                msg = "El paquete especificado es una carpeta. Puede dejar que DISM la escanee de forma recursiva para añadir todos los controladores en ella, o puede especificar los controladores a añadir manualmente." & CrLf & CrLf & _
+                                      "- Para dejar que DISM escanee esta carpeta de forma recursiva, haga clic en Sí" & CrLf & _
+                                      "- Para escoger los controladores en esta carpeta manualmente, haga clic en No" & CrLf & _
+                                      "- Para omitir la adición de esta carpeta, haga clic en Cancelar"
+                            Case "FRA"
+                                msg = "Le paquet de pilotes spécifié est un dossier. Vous pouvez laisser DISM l'analyser de manière récursive pour ajouter tous les pilotes qu'il contient, ou vous pouvez spécifier les pilotes à ajouter manuellement." & CrLf & CrLf & _
+                                      "- Pour laisser DISM analyser ce dossier de manière récursive, cliquez sur Oui" & CrLf & _
+                                      "- Pour sélectionner manuellement les pilotes de ce dossier, cliquez sur Non" & CrLf & _
+                                      "- Pour ne pas ajouter ce dossier, cliquez sur Annuler"
+                        End Select
+                    Case 1
+                        msg = "The package specified is a folder. You can let DISM scan it recursively to add all drivers in it, or you can specify the drivers to add manually." & CrLf & CrLf & _
+                              "- To let DISM scan this folder recursively, click Yes" & CrLf & _
+                              "- To pick the drivers in this folder manually, click No" & CrLf & _
+                              "- To skip adding this folder, click Cancel"
+                    Case 2
+                        msg = "El paquete especificado es una carpeta. Puede dejar que DISM la escanee de forma recursiva para añadir todos los controladores en ella, o puede especificar los controladores a añadir manualmente." & CrLf & CrLf & _
+                              "- Para dejar que DISM escanee esta carpeta de forma recursiva, haga clic en Sí" & CrLf & _
+                              "- Para escoger los controladores en esta carpeta manualmente, haga clic en No" & CrLf & _
+                              "- Para omitir la adición de esta carpeta, haga clic en Cancelar"
+                    Case 3
+                        msg = "Le paquet de pilotes spécifié est un dossier. Vous pouvez laisser DISM l'analyser de manière récursive pour ajouter tous les pilotes qu'il contient, ou vous pouvez spécifier les pilotes à ajouter manuellement." & CrLf & CrLf & _
+                              "- Pour laisser DISM analyser ce dossier de manière récursive, cliquez sur Oui" & CrLf & _
+                              "- Pour sélectionner manuellement les pilotes de ce dossier, cliquez sur Non" & CrLf & _
+                              "- Pour ne pas ajouter ce dossier, cliquez sur Annuler"
+                End Select
+                Select Case MsgBox(msg, vbYesNoCancel + vbInformation, Label1.Text)
+                    Case MsgBoxResult.Yes
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENU", "ENG"
+                                        ListView1.Items.Add(New ListViewItem(New String() {PkgFile, "Folder"}))
+                                    Case "ESN"
+                                        ListView1.Items.Add(New ListViewItem(New String() {PkgFile, "Carpeta"}))
+                                    Case "FRA"
+                                        ListView1.Items.Add(New ListViewItem(New String() {PkgFile, "Répertoire"}))
+                                End Select
+                            Case 1
+                                ListView1.Items.Add(New ListViewItem(New String() {PkgFile, "Folder"}))
+                            Case 2
+                                ListView1.Items.Add(New ListViewItem(New String() {PkgFile, "Carpeta"}))
+                            Case 3
+                                ListView1.Items.Add(New ListViewItem(New String() {PkgFile, "Répertoire"}))
+                        End Select
+                        CheckedListBox1.Items.Add(PkgFile)
+                        CheckedListBox1.SetItemChecked(CheckedListBox1.Items.IndexOf(PkgFile), True)
+                    Case MsgBoxResult.No
+                        DriverManualFilePicker.DriverDir = PkgFile
+                        DriverManualFilePicker.ShowDialog(Me)
+                    Case MsgBoxResult.Cancel
+                        Continue For
+                End Select
+            Else
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                ListView1.Items.Add(New ListViewItem(New String() {PkgFile, "File"}))
+                            Case "ESN"
+                                ListView1.Items.Add(New ListViewItem(New String() {PkgFile, "Archivo"}))
+                            Case "FRA"
+                                ListView1.Items.Add(New ListViewItem(New String() {PkgFile, "Fichier"}))
+                        End Select
+                    Case 1
+                        ListView1.Items.Add(New ListViewItem(New String() {PkgFile, "File"}))
+                    Case 2
+                        ListView1.Items.Add(New ListViewItem(New String() {PkgFile, "Archivo"}))
+                    Case 3
+                        ListView1.Items.Add(New ListViewItem(New String() {PkgFile, "Fichier"}))
+                End Select
             End If
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            ListView1.Items.Add(New ListViewItem(New String() {PkgFile, If(File.GetAttributes(PkgFile) = FileAttributes.Directory, "Folder", "File")}))
-                        Case "ESN"
-                            ListView1.Items.Add(New ListViewItem(New String() {PkgFile, If(File.GetAttributes(PkgFile) = FileAttributes.Directory, "Carpeta", "Archivo")}))
-                        Case "FRA"
-                            ListView1.Items.Add(New ListViewItem(New String() {PkgFile, If(File.GetAttributes(PkgFile) = FileAttributes.Directory, "Répertoire", "Fichier")}))
-                    End Select
-                Case 1
-                    ListView1.Items.Add(New ListViewItem(New String() {PkgFile, If(File.GetAttributes(PkgFile) = FileAttributes.Directory, "Folder", "File")}))
-                Case 2
-                    ListView1.Items.Add(New ListViewItem(New String() {PkgFile, If(File.GetAttributes(PkgFile) = FileAttributes.Directory, "Carpeta", "Archivo")}))
-                Case 3
-                    ListView1.Items.Add(New ListViewItem(New String() {PkgFile, If(File.GetAttributes(PkgFile) = FileAttributes.Directory, "Répertoire", "Fichier")}))
-            End Select
-            If File.GetAttributes(PkgFile) = FileAttributes.Directory Then CheckedListBox1.Items.Add(PkgFile)
         Next
+        Button3.Enabled = ListView1.Items.Count > 0
     End Sub
 End Class

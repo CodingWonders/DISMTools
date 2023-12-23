@@ -1154,7 +1154,7 @@ Namespace Utilities
                 Case 1024 To 1048575
                     ' Use kilobyte (kB) format
                     If UseCountryRepresentation Then
-                        Return Math.Round(ByteSize / 1024, 2) & " ko"
+                        Return Math.Round(ByteSize / 1024, 2) & " Ko"
                     Else
                         Return Math.Round(ByteSize / 1024, 2) & " kB"
                     End If

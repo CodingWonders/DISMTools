@@ -4,6 +4,7 @@ Imports Microsoft.VisualBasic.ControlChars
 Imports System.Text.Encoding
 Imports System.Threading
 Imports System.Management
+Imports DISMTools.Utilities
 
 Public Class ApplicationDriveSpecifier
 
@@ -23,7 +24,7 @@ Public Class ApplicationDriveSpecifier
         Dim searcher As ManagementObjectSearcher = New ManagementObjectSearcher("SELECT DeviceID, Model, Partitions, Size FROM Win32_DiskDrive")
         Dim dskResults As ManagementObjectCollection = searcher.Get()
         For Each result As ManagementObject In dskResults
-            ListView1.Items.Add(New ListViewItem(New String() {result("DeviceID"), result("Model"), result("Partitions"), result("Size")}))
+            ListView1.Items.Add(New ListViewItem(New String() {result("DeviceID"), result("Model"), result("Partitions"), result("Size") & " (~" & Converters.BytesToReadableSize(result("Size")) & ")"}))
         Next
     End Sub
 

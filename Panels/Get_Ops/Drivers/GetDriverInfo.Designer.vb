@@ -30,6 +30,7 @@ Partial Class GetDriverInfo
         Me.Panel6 = New System.Windows.Forms.Panel()
         Me.Button7 = New System.Windows.Forms.Button()
         Me.Label48 = New System.Windows.Forms.Label()
+        Me.Button8 = New System.Windows.Forms.Button()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.DriverContainerPanel = New System.Windows.Forms.Panel()
         Me.InfoFromInstalledDrvsPanel = New System.Windows.Forms.Panel()
@@ -117,7 +118,6 @@ Partial Class GetDriverInfo
         Me.DriverFileLink = New System.Windows.Forms.LinkLabel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
-        Me.Button8 = New System.Windows.Forms.Button()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.DriverInfoContainerPanel.SuspendLayout()
@@ -244,6 +244,17 @@ Partial Class GetDriverInfo
     "his image, which includes drivers part of the Windows distribution, so you may n" & _
     "ot see the driver you're interested in."
         Me.Label48.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Button8
+        '
+        Me.Button8.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button8.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button8.Location = New System.Drawing.Point(848, 438)
+        Me.Button8.Name = "Button8"
+        Me.Button8.Size = New System.Drawing.Size(96, 23)
+        Me.Button8.TabIndex = 13
+        Me.Button8.Text = "Save..."
+        Me.Button8.UseVisualStyleBackColor = True
         '
         'Label5
         '
@@ -1226,16 +1237,6 @@ Partial Class GetDriverInfo
         Me.OpenFileDialog1.Filter = "Driver files|*.inf"
         Me.OpenFileDialog1.SupportMultiDottedExtensions = True
         Me.OpenFileDialog1.Title = "Locate driver files"
-        '
-        'Button8
-        '
-        Me.Button8.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button8.Location = New System.Drawing.Point(848, 438)
-        Me.Button8.Name = "Button8"
-        Me.Button8.Size = New System.Drawing.Size(96, 23)
-        Me.Button8.TabIndex = 13
-        Me.Button8.Text = "Save..."
-        Me.Button8.UseVisualStyleBackColor = True
         '
         'GetDriverInfo
         '

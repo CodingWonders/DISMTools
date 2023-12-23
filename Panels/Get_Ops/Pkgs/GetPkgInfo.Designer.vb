@@ -34,6 +34,7 @@ Partial Class GetPkgInfoDlg
         Me.PackageFileLink = New System.Windows.Forms.LinkLabel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.PackageInfoPanel = New System.Windows.Forms.Panel()
+        Me.Button4 = New System.Windows.Forms.Button()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.PackageContainerPanel = New System.Windows.Forms.Panel()
         Me.InfoFromInstalledPkgsPanel = New System.Windows.Forms.Panel()
@@ -152,7 +153,6 @@ Partial Class GetPkgInfoDlg
         Me.FlowLayoutPanel1 = New System.Windows.Forms.FlowLayoutPanel()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
-        Me.Button4 = New System.Windows.Forms.Button()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.MenuPanel.SuspendLayout()
@@ -320,6 +320,17 @@ Partial Class GetPkgInfoDlg
         Me.PackageInfoPanel.Size = New System.Drawing.Size(1008, 513)
         Me.PackageInfoPanel.TabIndex = 10
         Me.PackageInfoPanel.Visible = False
+        '
+        'Button4
+        '
+        Me.Button4.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button4.Location = New System.Drawing.Point(848, 450)
+        Me.Button4.Name = "Button4"
+        Me.Button4.Size = New System.Drawing.Size(96, 23)
+        Me.Button4.TabIndex = 11
+        Me.Button4.Text = "Save..."
+        Me.Button4.UseVisualStyleBackColor = True
         '
         'Label5
         '
@@ -1698,16 +1709,6 @@ Partial Class GetPkgInfoDlg
         '
         Me.OpenFileDialog1.Filter = "CAB files|*.cab"
         Me.OpenFileDialog1.Title = "Locate package files"
-        '
-        'Button4
-        '
-        Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button4.Location = New System.Drawing.Point(848, 450)
-        Me.Button4.Name = "Button4"
-        Me.Button4.Size = New System.Drawing.Size(96, 23)
-        Me.Button4.TabIndex = 11
-        Me.Button4.Text = "Save..."
-        Me.Button4.UseVisualStyleBackColor = True
         '
         'GetPkgInfoDlg
         '
