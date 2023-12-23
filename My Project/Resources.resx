@@ -1097,16 +1097,65 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <value>..\Resources\get_appxpkg_info.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Bugfixes
+    <value>Changes made since last preview
 
-- Fixed background process panel positioning issues on Windows 8 hosts
-- Fixed an issue where projects could not be created from the offline installation management mode
+Bugfixes
+
+- Fixed an issue where the Save buttons of information dialogs weren't positioned correctly on Windows 8 hosts
+- Fixed an issue where the AppX package information dialog would not work on Windows 8 hosts
 
 New features
 
-Update system
+- When dropping a folder to the driver addition list, you can now pick driver files in it manually
+- The home screen has been redesigned
+- Friendly representations of the sizes in the application drive specifier are now shown
 
-- The update system has been overhauled</value>
+Overall changes
+
+Bugfixes
+
+- Updated the managed DISM API package to version 3.0 to fix an issue where the sizes of capabilities could overflow and return negative values
+- The background process details panel is now hidden when leaving the offline or online installation management modes
+- Fixed an issue where the program threw an exception when attempting to save complete image information if no images were mounted
+- When getting Windows PE configuration, the program no longer returns "Could not get value MB" if it fails to get the scratch space configuration
+- Image information reports correctly detect the offline installation management mode now
+- The image information saver now informs you when the target report file is being saved
+- Fixed an issue where the feature information dialog would not load when its entry in the Commands menu was clicked
+- Added exception handling to the log file link in the progress panel
+- Fixed some issues in the new design:
+  - Fixed an issue where the program would not unmount read-only images when clicking "Unmount image"
+  - Fixed an issue where the program would not disable the commit operation buttons for read-only mounted images
+- The "Use mounted image" buttons are now disabled in online and offline installation management modes
+- The "Mount destination image for later use" check box is now disabled in online and offline installation management modes
+- Fixed an issue where the program could not capture an entire drive to an image file
+- Fixed background process panel positioning issues on Windows 8 hosts
+- Fixed an issue where projects could not be created from the offline installation management mode
+
+Overall new features
+
+- Introduced offline installation management capabilities
+- You can now specify multiple files in the file picker of the AppX package addition dialog, and can now perform multiple selections
+- All Windows Update-related settings are now disabled when managing an active installation in Safe Mode (without networking support)
+- You will now see an image information report preview right after the generation process has been completed
+- Added a menu entry to contribute to the help system
+- The program now recommends monospaced fonts for log windows
+- The initial setup wizard has had a minor redesign
+- The image application drive specifier now uses native WMI queries instead of the helper command
+- When getting information about driver packages, the progress bar will smoothly increase in value now
+- The project screen has been redesigned
+- You can now configure the image information saver settings
+- The image capture dialog has seen some enhancements to add translations
+- Help documentation contents are now included
+
+Removed features
+
+- The temporary help dialog in the AppX package removal dialog has been removed in favor of the help documentation contents
+
+Update system changes
+
+- The update system has been overhauled:
+  - The update system will now run the installer silently when updating non-portable installations
+  - The process close functionality has been improved</value>
   </data>
   <data name="split_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\split_img.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

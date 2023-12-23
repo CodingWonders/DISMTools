@@ -1876,16 +1876,20 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Bugfixes
+        '''  Busca una cadena traducida similar a Changes made since last preview
         '''
-        '''- Fixed background process panel positioning issues on Windows 8 hosts
-        '''- Fixed an issue where projects could not be created from the offline installation management mode
+        '''Bugfixes
+        '''
+        '''- Fixed an issue where the Save buttons of information dialogs weren&apos;t positioned correctly on Windows 8 hosts
+        '''- Fixed an issue where the AppX package information dialog would not work on Windows 8 hosts
         '''
         '''New features
         '''
-        '''Update system
+        '''- When dropping a folder to the driver addition list, you can now pick driver files in it manually
+        '''- The home screen has been redesigned
+        '''- Friendly representations of the sizes in the application drive specifier are now shown
         '''
-        '''- The update system has been overhauled.
+        '''Overall ch [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
