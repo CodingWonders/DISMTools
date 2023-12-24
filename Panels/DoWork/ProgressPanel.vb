@@ -3553,6 +3553,7 @@ Public Class ProgressPanel
                 End If
                 If File.GetAttributes(drvAdditionPkgs(x)) = FileAttributes.Directory And drvAdditionFolderRecursiveScan.Contains(drvAdditionPkgs(x)) Then
                     LogView.AppendText(CrLf & "This folder will be scanned recursively. Driver addition may take a longer time...")
+                    CommandArgs &= " /recurse"
                 End If
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
