@@ -103,7 +103,6 @@ Partial Class DriverManualFilePicker
         '
         'ScanBW
         '
-        Me.ScanBW.WorkerReportsProgress = True
         Me.ScanBW.WorkerSupportsCancellation = True
         '
         'CheckedListBox1
