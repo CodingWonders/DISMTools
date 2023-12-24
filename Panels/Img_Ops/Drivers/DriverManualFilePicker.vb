@@ -45,6 +45,7 @@ Public Class DriverManualFilePicker
     End Sub
 
     Private Sub DriverManualFilePicker_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Driver = ""
         CheckedListBox1.Items.Clear()
         Select Case MainForm.Language
             Case 0
@@ -140,8 +141,6 @@ Public Class DriverManualFilePicker
     End Sub
 
     Private Sub ScanBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ScanBW.RunWorkerCompleted
-        ' Remove the last entry of the list box, as it's a repeat of the first one
-        If CheckedListBox1.Items(CheckedListBox1.Items.Count - 1) = CheckedListBox1.Items(0) Then CheckedListBox1.Items.RemoveAt(CheckedListBox1.Items.Count - 1)
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -168,6 +167,7 @@ Public Class DriverManualFilePicker
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        Driver = ""
         CheckedListBox1.Items.Clear()
         If DriverDir <> "" And Directory.Exists(DriverDir) Then ScanBW.RunWorkerAsync()
     End Sub
