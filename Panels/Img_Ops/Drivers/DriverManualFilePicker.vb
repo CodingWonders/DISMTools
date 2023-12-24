@@ -5,7 +5,7 @@ Imports Microsoft.VisualBasic.ControlChars
 Public Class DriverManualFilePicker
 
     Public DriverDir As String = ""
-    Dim Driver As String = ""
+    Dim Language As Integer
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         If CheckedListBox1.CheckedItems.Count <= 0 Then Exit Sub
@@ -45,6 +45,8 @@ Public Class DriverManualFilePicker
     End Sub
 
     Private Sub DriverManualFilePicker_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Language = MainForm.Language
+        Control.CheckForIllegalCrossThreadCalls = False
         CheckedListBox1.Items.Clear()
         Select Case MainForm.Language
             Case 0
@@ -103,18 +105,7 @@ Public Class DriverManualFilePicker
     End Sub
 
     Private Sub ScanBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ScanBW.DoWork
-        ScanBW.ReportProgress(0)
-        For Each DrvFile In Directory.GetFiles(DriverDir, "*", SearchOption.AllDirectories)
-            If Path.GetExtension(DrvFile).EndsWith("inf", StringComparison.OrdinalIgnoreCase) Then
-                Driver = DrvFile
-                ScanBW.ReportProgress(0)
-            End If
-        Next
-    End Sub
-
-    Private Sub ScanBW_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles ScanBW.ProgressChanged
-        If Driver <> "" And File.Exists(Driver) Then CheckedListBox1.Items.Add(Driver)
-        Select Case MainForm.Language
+        Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
@@ -137,11 +128,35 @@ Public Class DriverManualFilePicker
                 Label2.Text = "Scannage du répertoire en cours..." & CrLf & _
                               "Fichiers de pilotes trouvés jusqu'à présent : " & CheckedListBox1.Items.Count
         End Select
+        For Each DrvFile In Directory.GetFiles(DriverDir, "*.inf", SearchOption.AllDirectories)
+            CheckedListBox1.Items.Add(DrvFile)
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            Label2.Text = "Scanning directory..." & CrLf & _
+                                          "Driver files found thus far: " & CheckedListBox1.Items.Count
+                        Case "ESN"
+                            Label2.Text = "Escaneando directorio..." & CrLf & _
+                                          "Archivos de controladores encontrados por ahora: " & CheckedListBox1.Items.Count
+                        Case "FRA"
+                            Label2.Text = "Scannage du répertoire en cours..." & CrLf & _
+                                          "Fichiers de pilotes trouvés jusqu'à présent : " & CheckedListBox1.Items.Count
+                    End Select
+                Case 1
+                    Label2.Text = "Scanning directory..." & CrLf & _
+                                  "Driver files found thus far: " & CheckedListBox1.Items.Count
+                Case 2
+                    Label2.Text = "Escaneando directorio..." & CrLf & _
+                                  "Archivos de controladores encontrados por ahora: " & CheckedListBox1.Items.Count
+                Case 3
+                    Label2.Text = "Scannage du répertoire en cours..." & CrLf & _
+                                  "Fichiers de pilotes trouvés jusqu'à présent : " & CheckedListBox1.Items.Count
+            End Select
+        Next
     End Sub
 
     Private Sub ScanBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ScanBW.RunWorkerCompleted
-        ' Remove the last entry of the list box, as it's a repeat of the first one
-        If CheckedListBox1.Items(CheckedListBox1.Items.Count - 1) = CheckedListBox1.Items(0) Then CheckedListBox1.Items.RemoveAt(CheckedListBox1.Items.Count - 1)
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
