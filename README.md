@@ -154,7 +154,7 @@ To speed up testing, you can perform these steps before running the program from
 You should have this setting configured like this:
 
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/cf3c8704-4c93-4047-9d42-aae7c8976522" />
+	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/4c9c9384-71bd-45fc-9e17-460f107a50f9" />
 </p>
 
 ## Contributions
