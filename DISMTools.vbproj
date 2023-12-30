@@ -653,6 +653,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Utilities\DT_Utils.vb" />
+    <Compile Include="Utilities\PriReader.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Actions\Actions.MainForm.resx">

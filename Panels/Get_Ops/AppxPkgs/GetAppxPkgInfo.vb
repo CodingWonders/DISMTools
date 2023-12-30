@@ -206,6 +206,19 @@ Public Class GetAppxPkgInfoDlg
 
             If packageDispName IsNot Nothing Then
                 appDisplayName = If(Not packageDispName.StartsWith("ms-resource:"), packageDispName, "")
+                If InstalledAppxPkgInfo IsNot Nothing And packageDispName.StartsWith("ms-resource:") Then
+                    If MainForm.imgAppxPackageNames.Count > InstalledAppxPkgInfo.Count Then
+                        Dim PriName As String = PriReader.ReadFromPri((If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & Label23.Text).Replace("\\", "\").Trim(), _
+                                                                      Label25.Text, _
+                                                                      packageDispName)
+                        If PriName <> "" And Not PriName = Label25.Text Then appDisplayName = PriName
+                    Else
+                        Dim PriName As String = PriReader.ReadFromPri(InstalledAppxPkgInfo(ListBox1.SelectedIndex).InstallLocation, _
+                                                                      InstalledAppxPkgInfo(ListBox1.SelectedIndex).DisplayName, _
+                                                                      packageDispName)
+                        If PriName <> "" And Not PriName = InstalledAppxPkgInfo(ListBox1.SelectedIndex).DisplayName Then appDisplayName = PriName
+                    End If
+                End If
             End If
 
             If appDisplayName <> "" Then Label25.Text &= " (" & appDisplayName & ")"
