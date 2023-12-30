@@ -226,6 +226,7 @@ Public Class MainForm
     Public imgVersionInfo As Version = Nothing
 
     Dim NoMigration As Boolean                                           ' Set this variable to true ONLY if the IDE started the program
+    Public SkipUpdates As Boolean                                        ' Same for this one
 
     Public drivePath As String = ""
 
@@ -311,6 +312,8 @@ Public Class MainForm
                     Thread.Sleep(1500)
                 ElseIf arg.StartsWith("/nomig", StringComparison.OrdinalIgnoreCase) Then
                     NoMigration = True
+                ElseIf arg.StartsWith("/noupd", StringComparison.OrdinalIgnoreCase) Then
+                    SkipUpdates = True
                 ElseIf arg.StartsWith("/exp", StringComparison.OrdinalIgnoreCase) Then
                     EnableExperiments = True
                 End If
@@ -372,7 +375,7 @@ Public Class MainForm
             Application.DoEvents()
             Thread.Sleep(100)
         End While
-        If StartupUpdateCheck Then
+        If StartupUpdateCheck And Not SkipUpdates Then
             UpdCheckerBW.RunWorkerAsync()
         Else
             UpdatePanel.Visible = False

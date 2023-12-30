@@ -128,6 +128,7 @@ Public Class PrgAbout
                         LinkLabel12.Text = "Site web"
                         LinkLabel13.Text = "Site web"
                         OK_Button.Text = "OK"
+                        UpdCheckBtn.Text = "Vérifier les mises à jour"
                 End Select
             Case 1
                 Text = "About this program"
@@ -242,6 +243,7 @@ Public Class PrgAbout
                 LinkLabel12.Text = "Site web"
                 LinkLabel13.Text = "Site web"
                 OK_Button.Text = "OK"
+                UpdCheckBtn.Text = "Vérifier les mises à jour"
         End Select
         RichTextBox1.Text = My.Resources.LicenseOverview
         RichTextBox2.Text = My.Resources.WhatsNew
@@ -265,6 +267,7 @@ Public Class PrgAbout
         RichTextBox2.ForeColor = ForeColor
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        UpdCheckBtn.Enabled = Not MainForm.SkipUpdates
     End Sub
 
     Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel4.LinkClicked
