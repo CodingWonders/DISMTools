@@ -81,7 +81,6 @@ Public Class MainForm
     Public LogFontIsBold As Boolean
     Public LogFontSize As Integer
     ' 0.2 settings
-    Public expBackgroundProcesses As Boolean = True     ' Experimental setting used during development. Everything now depends on it. This WILL be removed in the future
     Public NotificationShow As Boolean
     Public NotificationFrequency As Integer
     Public NotificationTimes As Integer = 0
@@ -3881,7 +3880,7 @@ Public Class MainForm
     ''' </summary>
     ''' <remarks>This procedure will detect the number of third-party drivers. If the image contains none, this procedure will end</remarks>
     Sub GetImageDrivers(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
-        If UseApi Then
+        If UseApi And IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
             Try
                 DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
                 Using session As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(sessionMntDir))
@@ -3926,44 +3925,6 @@ Public Class MainForm
             CompletedTasks(4) = True
             PendingTasks(4) = False
             Exit Sub
-            'Try
-            '    If session IsNot Nothing Then
-            '        Dim imgDrvPublishedNameList As New List(Of String)
-            '        Dim imgDrvOGFileNameList As New List(Of String)
-            '        Dim imgDrvInboxList As New List(Of String)
-            '        Dim imgDrvClassNameList As New List(Of String)
-            '        Dim imgDrvProviderNameList As New List(Of String)
-            '        Dim imgDrvDateList As New List(Of String)
-            '        Dim imgDrvVersionList As New List(Of String)
-            '        Dim DriverCollection As DismDriverPackageCollection = DismApi.GetDrivers(session, True)
-            '        For Each driver As DismDriverPackage In DriverCollection
-            '            If ImgBW.CancellationPending Then
-            '                If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
-            '                Exit Sub
-            '            End If
-            '            imgDrvPublishedNameList.Add(driver.PublishedName)
-            '            imgDrvOGFileNameList.Add(driver.OriginalFileName)
-            '            imgDrvInboxList.Add(driver.InBox)
-            '            imgDrvClassNameList.Add(driver.ClassName)
-            '            imgDrvProviderNameList.Add(driver.ProviderName)
-            '            imgDrvDateList.Add(driver.Date.ToString())
-            '            imgDrvVersionList.Add(driver.Version.ToString())
-            '        Next
-            '        imgDrvPublishedNames = imgDrvPublishedNameList.ToArray()
-            '        imgDrvOGFileNames = imgDrvOGFileNameList.ToArray()
-            '        imgDrvInbox = imgDrvInboxList.ToArray()
-            '        imgDrvClassNames = imgDrvClassNameList.ToArray()
-            '        imgDrvProviderNames = imgDrvProviderNameList.ToArray()
-            '        imgDrvDates = imgDrvDateList.ToArray()
-            '        imgDrvVersions = imgDrvVersionList.ToArray()
-            '        Exit Sub
-            '    Else
-            '        Throw New Exception("No valid DISM session has been provided")
-            '    End If
-            'Catch ex As Exception
-            '    DismApi.CloseSession(session)
-            '    Exit Try
-            'End Try
         End If
         Debug.WriteLine("[GetImageDrivers] Running function...")
         Debug.WriteLine("[GetImageDrivers] Determining whether there are third-party drivers in image...")
@@ -8810,193 +8771,7 @@ Public Class MainForm
         End If
         If SkipBGProcs Then Exit Sub
         ' Set image properties
-        If expBackgroundProcesses Then
-            ImgBW.RunWorkerAsync()
-            Exit Sub
-        End If
-        Label14.Text = ProgressPanel.ImgIndex
-        Label12.Text = ProgressPanel.MountDir
-        ' Loading the project directly with an image already mounted makes the two labels above be wrong.
-        ' Check them and use local vars
-        If Label14.Text = "0" Or Label12.Text = "" Then     ' Label14 (index preview label) returns 0 and Label12 (mount dir preview) returns blank
-            Label14.Text = ImgIndex
-            Label12.Text = MountDir
-        End If
-        Try
-            If ProgressPanel.MountDir = "" Then
-                Throw New Exception
-            Else
-                Dim KeVerInfo As FileVersionInfo = FileVersionInfo.GetVersionInfo(ProgressPanel.MountDir & "\Windows\system32\ntoskrnl.exe")    ' Get version info from ntoskrnl.exe
-                Dim KeVerStr As String = KeVerInfo.ProductVersion
-                Label17.Text = KeVerStr
-                Select Case DismVersionChecker.ProductMajorPart
-                    Case 6
-                        Select Case DismVersionChecker.ProductMinorPart
-                            Case 1
-                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " > imgname", _
-                                                  ASCII)
-                            Case Is >= 2
-                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " > imgname", _
-                                                  ASCII)
-                        End Select
-                    Case 10
-                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " > imgname", _
-                                          ASCII)
-                End Select
-                Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
-                Label18.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\imgname").Replace("Name : ", "").Trim()
-                File.Delete(Application.StartupPath & "\imgname")
-                File.Delete(Application.StartupPath & "\bin\exthelpers\temp.bat")
-                Select Case DismVersionChecker.ProductMajorPart
-                    Case 6
-                        Select Case DismVersionChecker.ProductMinorPart
-                            Case 1
-                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
-                                                  ASCII)
-                            Case Is >= 2
-                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
-                                                  ASCII)
-                        End Select
-                    Case 10
-                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
-                                          ASCII)
-                End Select
-                Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
-                Label20.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\imgdesc").Replace("Description : ", "").Trim()
-                File.Delete(Application.StartupPath & "\imgdesc")
-                File.Delete(Application.StartupPath & "\bin\exthelpers\temp.bat")
-                If Label18.Text = "" Or Label20.Text = "" Then
-                    Label18.Text = imgMountedName
-                    Label20.Text = imgMountedDesc
-                End If
-            End If
-        Catch ex As Exception
-            ' Maybe it was loaded directly. Check local vars
-            Try
-                Dim KeVerInfo As FileVersionInfo = FileVersionInfo.GetVersionInfo(MountDir & "\Windows\system32\ntoskrnl.exe")    ' Get version info from ntoskrnl.exe
-                Dim KeVerStr As String = KeVerInfo.ProductVersion
-                Label17.Text = KeVerStr
-                Select Case DismVersionChecker.ProductMajorPart
-                    Case 6
-                        Select Case DismVersionChecker.ProductMinorPart
-                            Case 1
-                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Name" & Quote & " > imgname", _
-                                                  ASCII)
-                            Case Is >= 2
-                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Name" & Quote & " > imgname", _
-                                                  ASCII)
-                        End Select
-                    Case 10
-                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Name" & Quote & " > imgname", _
-                                          ASCII)
-                End Select
-                Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
-                Label18.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\imgname").Replace("Name : ", "").Trim()
-                File.Delete(Application.StartupPath & "\imgname")
-                File.Delete(Application.StartupPath & "\bin\exthelpers\temp.bat")
-                Select Case DismVersionChecker.ProductMajorPart
-                    Case 6
-                        Select Case DismVersionChecker.ProductMinorPart
-                            Case 1
-                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
-                                                  ASCII)
-                            Case Is >= 2
-                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
-                                                  ASCII)
-                        End Select
-                    Case 10
-                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
-                                          ASCII)
-                End Select
-                Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
-                Label20.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\imgdesc").Replace("Description : ", "").Trim()
-                File.Delete(Application.StartupPath & "\imgdesc")
-                File.Delete(Application.StartupPath & "\bin\exthelpers\temp.bat")
-                If Label18.Text = "" Or Label20.Text = "" Then
-                    Label18.Text = imgMountedName
-                    Label20.Text = imgMountedDesc
-                End If
-            Catch ex2 As Exception      ' It is clear that something went seriously wrong. Assume the image was unmounted before loading the proj in first place
-                UpdateImgProps()        ' and exit the sub (a.k.a., give up)
-                Exit Sub
-            End Try
-        End Try
-        ' Detect whether the image needs a servicing session reload
-        Directory.CreateDirectory(projPath & "\tempinfo")
-        Select Case DismVersionChecker.ProductMajorPart
-            Case 6
-                Select Case DismVersionChecker.ProductMinorPart
-                    Case 1
-                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
-                                          "@echo off" & CrLf & _
-                                          "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus", ASCII)
-                    Case Is >= 2
-                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
-                                          "@echo off" & CrLf & _
-                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus", ASCII)
-                End Select
-            Case 10
-                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
-                                  "@echo off" & CrLf & _
-                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus", ASCII)
-        End Select
-        Process.Start(Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
-        mountedImgStatus = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgmountedstatus", ASCII).Replace("Status : ", "").Trim()
-        File.Delete(Application.StartupPath & "\bin\exthelpers\imginfo.bat")
-        Select Case DismVersionChecker.ProductMajorPart
-            Case 6
-                Select Case DismVersionChecker.ProductMinorPart
-                    Case 1
-                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
-                                          "@echo off" & CrLf & _
-                                          "dism /English /get-wiminfo /wimfile=" & SourceImg & " | find /c " & Quote & "Index" & Quote & " > " & projPath & "\tempinfo\indexcount", ASCII)
-                    Case Is >= 2
-                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
-                                          "@echo off" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " | find /c " & Quote & "Index" & Quote & " > " & projPath & "\tempinfo\indexcount", ASCII)
-                End Select
-            Case 10
-                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
-                                  "@echo off" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " | find /c " & Quote & "Index" & Quote & " > " & projPath & "\tempinfo\indexcount", ASCII)
-        End Select
-        Process.Start(Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
-        imgIndexCount = CInt(My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\indexcount", ASCII))
-        File.Delete(Application.StartupPath & "\bin\exthelpers\imginfo.bat")
-        For Each FoundFile In My.Computer.FileSystem.GetFiles(projPath & "\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
-            File.Delete(FoundFile)
-        Next
-        Directory.Delete(projPath & "\tempinfo")
-        If mountedImgStatus = "Ok" Then
-            isOrphaned = False
-        ElseIf mountedImgStatus = "Needs Remount" Then
-            isOrphaned = True
-        End If
-        If isOrphaned Then
-            OrphanedMountedImgDialog.ShowDialog(Me)
-            If OrphanedMountedImgDialog.DialogResult = Windows.Forms.DialogResult.OK Then
-                ProgressPanel.Validate()
-                ProgressPanel.MountDir = MountDir
-                ProgressPanel.OperationNum = 18
-                ProgressPanel.ShowDialog(Me)
-            ElseIf OrphanedMountedImgDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
-                UnloadDTProj(False, True, False)
-            End If
-            Exit Sub
-        End If
-        UpdateImgProps()
+        ImgBW.RunWorkerAsync()
     End Sub
 
     Sub UpdateImgProps()
