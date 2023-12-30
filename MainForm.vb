@@ -5001,8 +5001,8 @@ Public Class MainForm
             LinkLabel23.LinkColor = ForeColor
             LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
         End If
-        ListView1.BackColor = BackColor
-        ListView1.ForeColor = ForeColor
+        ListView1.BackColor = LatestNewsPanel.BackColor
+        ListView1.ForeColor = LatestNewsPanel.ForeColor
         TextBox1.BackColor = BackColor
         TextBox1.ForeColor = ForeColor
     End Sub
