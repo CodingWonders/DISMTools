@@ -763,7 +763,7 @@ Partial Class Options
         Me.Label23.Enabled = False
         Me.Label23.Location = New System.Drawing.Point(295, 179)
         Me.Label23.Name = "Label23"
-        Me.Label23.Size = New System.Drawing.Size(117, 25)
+        Me.Label23.Size = New System.Drawing.Size(431, 25)
         Me.Label23.TabIndex = 4
         Me.Label23.Text = "<scdir_space>"
         Me.Label23.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
