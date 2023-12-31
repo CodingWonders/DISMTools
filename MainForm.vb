@@ -12783,7 +12783,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ScratchDirectorySettingsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ScratchDirectorySettingsToolStripMenuItem.Click
-        Options.TabControl1.SelectedIndex = 4
+        Options.SectionNum = 3
         Options.ShowDialog()
     End Sub
 

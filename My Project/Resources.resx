@@ -1187,4 +1187,46 @@ Update system changes
   <data name="info_glyph_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\info_glyph_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="options_bgprocs_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\settings\options_bgprocs_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="options_bgprocs_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\settings\options_bgprocs_light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="options_imgdetect_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\settings\options_imgdetect_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="options_imgdetect_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\settings\options_imgdetect_light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="options_logs_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\settings\options_logs_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="options_logs_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\settings\options_logs_light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="options_output_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\settings\options_output_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="options_output_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\settings\options_output_light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="options_personalization_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\settings\options_personalization_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="options_personalization_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\settings\options_personalization_light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="options_program_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\settings\options_program_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="options_program_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\settings\options_program_light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="options_scratch_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\settings\options_scratch_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="options_scratch_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\settings\options_scratch_light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
