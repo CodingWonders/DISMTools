@@ -206,6 +206,12 @@ Public Class ImgSwmToWim
                     Thread.Sleep(500)
                 End While
             End If
+            MainForm.WatcherTimer.Enabled = False
+            If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
+            While MainForm.WatcherBW.IsBusy
+                Application.DoEvents()
+                Thread.Sleep(100)
+            End While
             Try
                 ListView1.Items.Clear()
                 DismApi.Initialize(DismLogLevel.LogErrors)

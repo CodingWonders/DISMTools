@@ -491,6 +491,12 @@ Public Class GetPkgInfoDlg
                         Thread.Sleep(500)
                     End While
                 End If
+                MainForm.WatcherTimer.Enabled = False
+                If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
+                While MainForm.WatcherBW.IsBusy
+                    Application.DoEvents()
+                    Thread.Sleep(100)
+                End While
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -695,6 +701,12 @@ Public Class GetPkgInfoDlg
                     Thread.Sleep(500)
                 End While
             End If
+            MainForm.WatcherTimer.Enabled = False
+            If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
+            While MainForm.WatcherBW.IsBusy
+                Application.DoEvents()
+                Thread.Sleep(100)
+            End While
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -940,6 +952,7 @@ Public Class GetPkgInfoDlg
 
     Private Sub GetPkgInfoDlg_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+        MainForm.WatcherTimer.Enabled = True
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click

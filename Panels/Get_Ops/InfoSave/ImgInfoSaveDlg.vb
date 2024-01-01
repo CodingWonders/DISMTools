@@ -2155,6 +2155,12 @@ Public Class ImgInfoSaveDlg
                 Thread.Sleep(500)
             End While
         End If
+        MainForm.WatcherTimer.Enabled = False
+        If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
+        While MainForm.WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
 
         ' Create the target if it doesn't exist
         If Not File.Exists(SaveTarget) Then
@@ -2276,6 +2282,7 @@ Public Class ImgInfoSaveDlg
         If Contents <> "" And File.Exists(SaveTarget) Then File.WriteAllText(SaveTarget, Contents, UTF8)
         If Debugger.IsAttached Then Process.Start(SaveTarget) Else InfoSaveResults.Show()
         If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+        MainForm.WatcherTimer.Enabled = True
         Close()
     End Sub
 End Class

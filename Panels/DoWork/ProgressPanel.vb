@@ -4794,6 +4794,7 @@ Public Class ProgressPanel
             MainForm.StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
             MainForm.ToolStripButton4.Visible = False
             If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+            MainForm.WatcherTimer.Enabled = True
             Close()
         Else
             MainForm.ToolStripButton4.Visible = False
@@ -5049,6 +5050,12 @@ Public Class ProgressPanel
         ' Cancel detector background worker which can interfere with image operations and cause crashes due to access violations
         MainForm.MountedImageDetectorBW.CancelAsync()
         While MainForm.MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        MainForm.WatcherTimer.Enabled = False
+        If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
+        While MainForm.WatcherBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(100)
         End While

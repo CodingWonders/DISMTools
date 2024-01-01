@@ -8,6 +8,7 @@ Imports Microsoft.Dism
 Imports System.Runtime.InteropServices
 Imports System.Xml
 Imports System.ServiceModel.Syndication
+Imports DISMTools.Utilities
 
 Public Class MainForm
 
@@ -241,6 +242,8 @@ Public Class MainForm
     Dim FeedLinks As New List(Of Uri)
     Dim FeedEx As Exception
 
+    Dim ImageStatus As ImageWatcher.Status
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -381,6 +384,7 @@ Public Class MainForm
             UpdatePanel.Visible = False
         End If
         MountedImageDetectorBW.RunWorkerAsync()
+        WatcherTimer.Enabled = True
         If dtBranch.Contains("preview") And Not Debugger.IsAttached Then
             VersionTSMI.Visible = True
         Else
@@ -8766,6 +8770,44 @@ Public Class MainForm
             ModifyTime = "N/A"
             imgLangs = "N/A"
             imgRW = "N/A"
+            ' Update the buttons in the new design accordingly
+            Button26.Enabled = True
+            Button27.Enabled = False
+            Button28.Enabled = False
+            Button29.Enabled = False
+            Button24.Enabled = False
+            Button25.Enabled = False
+            Button30.Enabled = False
+            Button31.Enabled = False
+            Button32.Enabled = False
+            Button33.Enabled = False
+            Button34.Enabled = False
+            Button35.Enabled = False
+            Button36.Enabled = False
+            Button37.Enabled = False
+            Button38.Enabled = False
+            Button39.Enabled = False
+            Button40.Enabled = False
+            Button41.Enabled = False
+            Button42.Enabled = False
+            Button43.Enabled = False
+            Button44.Enabled = False
+            Button45.Enabled = False
+            Button46.Enabled = False
+            Button47.Enabled = False
+            Button48.Enabled = False
+            Button49.Enabled = False
+            Button50.Enabled = False
+            Button51.Enabled = False
+            Button52.Enabled = False
+            Button53.Enabled = False
+            Button54.Enabled = False
+            Button55.Enabled = False
+            Button56.Enabled = False
+            Button57.Enabled = False
+            Button58.Enabled = False
+            RemountImageWithWritePermissionsToolStripMenuItem.Enabled = False
+            Exit Sub
         End If
         If IsReadOnly Then
             RemountImageWithWritePermissionsToolStripMenuItem.Enabled = True
@@ -8774,7 +8816,7 @@ Public Class MainForm
         End If
         If SkipBGProcs Then Exit Sub
         ' Set image properties
-        ImgBW.RunWorkerAsync()
+        If Not ImgBW.IsBusy Then ImgBW.RunWorkerAsync()
     End Sub
 
     Sub UpdateImgProps()
@@ -10057,6 +10099,12 @@ Public Class MainForm
                 Thread.Sleep(500)
             End While
         End If
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         If PackageInfoList IsNot Nothing Then GetPkgInfoDlg.InstalledPkgInfo = PackageInfoList
         GetPkgInfoDlg.ShowDialog(Me)
     End Sub
@@ -10089,6 +10137,12 @@ Public Class MainForm
             Application.DoEvents()
             Thread.Sleep(500)
         End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         If FeatureInfoList IsNot Nothing Then GetFeatureInfoDlg.InstalledFeatureInfo = FeatureInfoList
         GetFeatureInfoDlg.ShowDialog(Me)
     End Sub
@@ -10096,6 +10150,12 @@ Public Class MainForm
     Private Sub Button14_Click(sender As Object, e As EventArgs) Handles Button14.Click, ProjectPropertiesToolStripMenuItem.Click, Button23.Click
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(100)
         End While
@@ -10128,6 +10188,12 @@ Public Class MainForm
     Private Sub Button15_Click(sender As Object, e As EventArgs) Handles ImagePropertiesToolStripMenuItem.Click, Button15.Click
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(100)
         End While
@@ -10250,6 +10316,12 @@ Public Class MainForm
             Application.DoEvents()
             Thread.Sleep(100)
         End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(500)
+        End While
         If FeedWorker.IsBusy Then FeedWorker.CancelAsync()
         While FeedWorker.IsBusy
             Application.DoEvents()
@@ -10322,6 +10394,12 @@ Public Class MainForm
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(100)
         End While
@@ -10710,6 +10788,12 @@ Public Class MainForm
             Application.DoEvents()
             Thread.Sleep(100)
         End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         If bwAllBackgroundProcesses Then
             If bwGetImageInfo Then
                 If bwGetAdvImgInfo Then
@@ -10994,6 +11078,12 @@ Public Class MainForm
 
     Private Sub Button13_Click(sender As Object, e As EventArgs) Handles Button13.Click
         MountedImageDetectorBW.CancelAsync()
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         ProgressPanel.OperationNum = 995
         PleaseWaitDialog.indexesSourceImg = SourceImg
         Select Case Language
@@ -11015,6 +11105,7 @@ Public Class MainForm
         End Select
         PleaseWaitDialog.ShowDialog(Me)
         If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
+        WatcherTimer.Enabled = True
         If PleaseWaitDialog.imgIndexes > 1 Then
             ImgIndexSwitch.ShowDialog()
         End If
@@ -11075,6 +11166,7 @@ Public Class MainForm
         CompletedTasks = Enumerable.Repeat(True, CompletedTasks.Length).ToArray()
         BGProcDetails.ProgressBar1.Style = ProgressBarStyle.Blocks
         If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
+        WatcherTimer.Enabled = True
         areBackgroundProcessesDone = True
         BackgroundProcessesButton.Image = New Bitmap(My.Resources.bg_ops_complete)
         Select Case Language
@@ -11098,9 +11190,16 @@ Public Class MainForm
         BGProcDetails.ProgressBar1.Value = BGProcDetails.ProgressBar1.Maximum
         If Not ProgressPanel.IsDisposed And Not ProgressPanel.Visible Then ProgressPanel.Dispose()
         If isOrphaned Then
+            WatcherTimer.Enabled = False
+            If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+            While WatcherBW.IsBusy
+                Application.DoEvents()
+                Thread.Sleep(100)
+            End While
             If BGProcDetails.Visible Then
                 BGProcDetails.ProgressBar1.Value = 0
             End If
+            If Not OrphanedMountedImgDialog.IsDisposed Then OrphanedMountedImgDialog.Dispose()
             OrphanedMountedImgDialog.ShowDialog(Me)
             If OrphanedMountedImgDialog.DialogResult = Windows.Forms.DialogResult.OK Then
                 ProgressPanel.Validate()
@@ -11675,7 +11774,7 @@ Public Class MainForm
         Do
             If MountedImageDetectorBW.CancellationPending Or ImgBW.IsBusy Then Exit Do
             DetectMountedImages(False)
-            Thread.Sleep(500)
+            Thread.Sleep(1000)
         Loop
     End Sub
 
@@ -12801,6 +12900,12 @@ Public Class MainForm
             Application.DoEvents()
             Thread.Sleep(100)
         End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         ImgMount.ShowDialog()
     End Sub
 
@@ -12816,6 +12921,12 @@ Public Class MainForm
             Application.DoEvents()
             Threading.Thread.Sleep(100)
         End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
             If MountedImageMountDirs(x) = MountDir Then
                 ImgIndexDelete.TextBox1.Text = MountedImageImgFiles(x)
@@ -12827,6 +12938,12 @@ Public Class MainForm
 
     Private Sub SwitchImageIndexesToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles SwitchImageIndexesToolStripMenuItem1.Click
         MountedImageDetectorBW.CancelAsync()
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         ProgressPanel.OperationNum = 995
         PleaseWaitDialog.indexesSourceImg = SourceImg
         Select Case Language
@@ -12848,6 +12965,7 @@ Public Class MainForm
         End Select
         PleaseWaitDialog.ShowDialog(Me)
         If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
+        WatcherTimer.Enabled = True
         If PleaseWaitDialog.imgIndexes > 1 Then
             ImgIndexSwitch.ShowDialog()
         End If
@@ -12929,6 +13047,7 @@ Public Class MainForm
                 UpdateProjProperties(True, False, False)
             Else
                 If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
+                WatcherTimer.Enabled = True
             End If
         End If
     End Sub
@@ -12960,6 +13079,12 @@ Public Class MainForm
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(500)
+        End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
         End While
         If DriverInfoList IsNot Nothing Then GetDriverInfo.InstalledDriverInfo = DriverInfoList
         GetDriverInfo.ShowDialog()
@@ -13013,6 +13138,12 @@ Public Class MainForm
             Application.DoEvents()
             Thread.Sleep(500)
         End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         If FeatureInfoList IsNot Nothing Then GetFeatureInfoDlg.InstalledFeatureInfo = FeatureInfoList
         GetFeatureInfoDlg.ShowDialog(Me)
     End Sub
@@ -13065,6 +13196,12 @@ Public Class MainForm
             Application.DoEvents()
             Thread.Sleep(500)
         End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         If CapabilityInfoList IsNot Nothing Then GetCapabilityInfoDlg.InstalledCapabilityInfo = CapabilityInfoList
         GetCapabilityInfoDlg.ShowDialog(Me)
     End Sub
@@ -13099,6 +13236,12 @@ Public Class MainForm
                 Thread.Sleep(500)
             End While
         End If
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         If PackageInfoList IsNot Nothing Then GetPkgInfoDlg.InstalledPkgInfo = PackageInfoList
         GetPkgInfoDlg.ShowDialog(Me)
     End Sub
@@ -13358,6 +13501,12 @@ Public Class MainForm
             Application.DoEvents()
             Thread.Sleep(100)
         End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         ProjProperties.TabControl1.SelectedIndex = 0
         Select Case Language
             Case 0
@@ -13444,6 +13593,12 @@ Public Class MainForm
             Application.DoEvents()
             Thread.Sleep(100)
         End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         ProjProperties.TabControl1.SelectedIndex = 1
         Select Case Language
             Case 0
@@ -13480,6 +13635,12 @@ Public Class MainForm
 
     Private Sub Button24_Click(sender As Object, e As EventArgs) Handles Button24.Click
         MountedImageDetectorBW.CancelAsync()
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         ProgressPanel.OperationNum = 995
         PleaseWaitDialog.indexesSourceImg = SourceImg
         Select Case Language
@@ -13501,6 +13662,7 @@ Public Class MainForm
         End Select
         PleaseWaitDialog.ShowDialog(Me)
         If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
+        WatcherTimer.Enabled = True
         If PleaseWaitDialog.imgIndexes > 1 Then
             ImgIndexSwitch.ShowDialog()
         End If
@@ -13516,6 +13678,12 @@ Public Class MainForm
     Private Sub Button26_Click(sender As Object, e As EventArgs) Handles Button26.Click
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(100)
         End While
@@ -13607,6 +13775,12 @@ Public Class MainForm
                 Thread.Sleep(500)
             End While
         End If
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         If PackageInfoList IsNot Nothing Then GetPkgInfoDlg.InstalledPkgInfo = PackageInfoList
         GetPkgInfoDlg.ShowDialog(Me)
     End Sub
@@ -13730,6 +13904,12 @@ Public Class MainForm
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(500)
+        End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
         End While
         If FeatureInfoList IsNot Nothing Then GetFeatureInfoDlg.InstalledFeatureInfo = FeatureInfoList
         GetFeatureInfoDlg.ShowDialog(Me)
@@ -14382,6 +14562,12 @@ Public Class MainForm
             Application.DoEvents()
             Thread.Sleep(500)
         End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         If CapabilityInfoList IsNot Nothing Then GetCapabilityInfoDlg.InstalledCapabilityInfo = CapabilityInfoList
         GetCapabilityInfoDlg.ShowDialog(Me)
     End Sub
@@ -14504,6 +14690,12 @@ Public Class MainForm
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(500)
+        End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
         End While
         If DriverInfoList IsNot Nothing Then GetDriverInfo.InstalledDriverInfo = DriverInfoList
         GetDriverInfo.ShowDialog()
@@ -14847,5 +15039,52 @@ Public Class MainForm
 
     Private Sub LinkLabel25_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel25.LinkClicked
         Process.Start("https://forums.mydigitallife.net/threads/discussion-dismtools.87263/")
+    End Sub
+
+    Private Sub WatcherBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles WatcherBW.DoWork
+        ImageStatus = ImageWatcher.WatchStatus(SourceImg, MountedImageImgFiles.ToList(), MountedImageImgStatuses.ToList())
+    End Sub
+
+    Private Sub WatcherBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles WatcherBW.RunWorkerCompleted
+        If Not ImageStatus = ImageWatcher.Status.OK Then
+            WatcherTimer.Enabled = False
+            If MountedImageDetectorBW.IsBusy Then
+                MountedImageDetectorBW.CancelAsync()
+                While MountedImageDetectorBW.IsBusy
+                    Application.DoEvents()
+                    Thread.Sleep(500)
+                End While
+            End If
+        End If
+        Select Case ImageStatus
+            Case ImageWatcher.Status.NeedsRemount
+                If Not OrphanedMountedImgDialog.IsDisposed Then OrphanedMountedImgDialog.Dispose()
+                OrphanedMountedImgDialog.ShowDialog(Me)
+                If OrphanedMountedImgDialog.DialogResult = Windows.Forms.DialogResult.OK Then
+                    ProgressPanel.Validate()
+                    ProgressPanel.MountDir = MountDir
+                    ProgressPanel.OperationNum = 18
+                    ProgressPanel.ShowDialog(Me)
+                    If ProgressPanel.IsSuccessful Then ImageStatus = ImageWatcher.Status.OK
+                ElseIf OrphanedMountedImgDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
+                    UnloadDTProj(False, False, False)
+                    If ImgBW.IsBusy Then ImgBW.CancelAsync()
+                End If
+            Case ImageWatcher.Status.NotMounted
+                If Not ReloadProjectQuestionDialog.IsDisposed Then ReloadProjectQuestionDialog.Dispose()
+                ReloadProjectQuestionDialog.ShowDialog(Me)
+                If ReloadProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.OK Then
+                    UpdateProjProperties(False, False)
+                ElseIf ReloadProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
+                    UnloadDTProj(False, False, False)
+                    If ImgBW.IsBusy Then ImgBW.CancelAsync()
+                End If
+        End Select
+    End Sub
+
+    Private Sub WatcherTimer_Tick(sender As Object, e As EventArgs) Handles WatcherTimer.Tick
+        If isProjectLoaded And IsImageMounted And Not OnlineManagement And Not OfflineManagement Then
+            If Not WatcherBW.IsBusy Then WatcherBW.RunWorkerAsync()
+        End If
     End Sub
 End Class
