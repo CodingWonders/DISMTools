@@ -376,6 +376,7 @@ Public Class GetAppxPkgInfoDlg
             ImgInfoSaveDlg.AutoCompleteInfo = MainForm.AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 5
             ImgInfoSaveDlg.ShowDialog()
+            InfoSaveResults.Show()
         End If
     End Sub
 End Class

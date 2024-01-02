@@ -13445,6 +13445,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 0
             ImgInfoSaveDlg.ShowDialog()
+            InfoSaveResults.Show()
         End If
     End Sub
 
@@ -13742,6 +13743,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 0
             ImgInfoSaveDlg.ShowDialog()
+            InfoSaveResults.Show()
         End If
     End Sub
 
@@ -13873,6 +13875,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 2
             ImgInfoSaveDlg.ShowDialog()
+            InfoSaveResults.Show()
         End If
     End Sub
 
@@ -14156,6 +14159,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 4
             ImgInfoSaveDlg.ShowDialog()
+            InfoSaveResults.Show()
         End If
     End Sub
 
@@ -14341,6 +14345,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 5
             ImgInfoSaveDlg.ShowDialog()
+            InfoSaveResults.Show()
         End If
     End Sub
 
@@ -14584,6 +14589,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 6
             ImgInfoSaveDlg.ShowDialog()
+            InfoSaveResults.Show()
         End If
     End Sub
 
@@ -14739,6 +14745,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 7
             ImgInfoSaveDlg.ShowDialog()
+            InfoSaveResults.Show()
         End If
     End Sub
 
@@ -14761,6 +14768,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 9
             ImgInfoSaveDlg.ShowDialog()
+            InfoSaveResults.Show()
         End If
     End Sub
 

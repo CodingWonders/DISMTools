@@ -594,6 +594,7 @@ Public Class GetImgInfoDlg
             ImgInfoSaveDlg.OfflineMode = False
             ImgInfoSaveDlg.SaveTask = 1
             ImgInfoSaveDlg.ShowDialog()
+            InfoSaveResults.Show()
         End If
     End Sub
 End Class

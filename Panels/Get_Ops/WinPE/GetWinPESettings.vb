@@ -214,6 +214,7 @@ Public Class GetWinPESettings
             ImgInfoSaveDlg.AutoCompleteInfo = MainForm.AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 9
             ImgInfoSaveDlg.ShowDialog()
+            InfoSaveResults.Show()
         End If
     End Sub
 End Class

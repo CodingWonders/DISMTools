@@ -972,6 +972,7 @@ Public Class GetPkgInfoDlg
                 Next
             End If
             ImgInfoSaveDlg.ShowDialog()
+            InfoSaveResults.Show()
         End If
     End Sub
 End Class
