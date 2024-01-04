@@ -352,7 +352,7 @@ Public Class Options
                         Label41.Text = "Association status:"
                         Label42.Text = If(DetectFileAssociations(), "associations set", "associations not set")
                         Label43.Text = "Set options you would like to perform when the program starts up:"
-                        Label44.Text = "The program will use the scratch directory provided by the project if one is loaded. If you are in online installation management mode, the program will use its scratch directory"
+                        Label44.Text = "The program will use the scratch directory provided by the project if one is loaded. If you are in the online or offline installation management modes, the program will use its scratch directory"
                         Label45.Text = "Secondary progress panel style:"
                         Label46.Text = "These settings aren't applicable to non-portable installations"
                         Label47.Text = "This font may not be readable on log windows. While you can still use it, we recommend monospaced fonts for increased readability."
@@ -444,7 +444,7 @@ Public Class Options
                         Label41.Text = "Estado de asociaciones:"
                         Label42.Text = If(DetectFileAssociations(), "asociaciones establecidas", "asociaciones no establecidas")
                         Label43.Text = "Establezca las opciones que le gustaría realizar cuando el programa inicie:"
-                        Label44.Text = "El programa usará el directorio temporal proporcionado por el proyecto si se cargó alguno. Si está en modo de administración de instalaciones en línea, el programa utilizará su directorio temporal"
+                        Label44.Text = "El programa usará el directorio temporal proporcionado por el proyecto si se cargó alguno. Si está en los modos de administración de instalaciones en línea o fuera de línea, el programa utilizará su directorio temporal"
                         Label45.Text = "Estilo del panel de progreso secundario:"
                         Label46.Text = "Estas configuraciones no son aplicables a instalaciones no portátiles"
                         Label47.Text = "Esta fuente podría no ser legible en ventanas de registro. Aunque todavía pueda utilizarla, le recomendamos fuentes monoespaciadas para una legibilidad aumentada."
@@ -536,7 +536,7 @@ Public Class Options
                         Label41.Text = "État de l'association :"
                         Label42.Text = If(DetectFileAssociations(), "associations établies", "associations non établies")
                         Label43.Text = "Définissez les options que vous souhaitez exécuter au démarrage du programme :"
-                        Label44.Text = "Le programme utilisera le répertoire temporaire fourni par le projet s'il en existe un. Si vous êtes en mode de gestion de l'installation en ligne, le programme utilisera son répertoire temporaire."
+                        Label44.Text = "Le programme utilisera le répertoire temporaire fourni par le projet s'il en existe un. Si vous êtes en les modes de gestion de l'installation en ligne ou hors ligne, le programme utilisera son répertoire temporaire."
                         Label45.Text = "Style du panneau de progression secondaire :"
                         Label46.Text = "Ces paramètres ne s'appliquent pas aux installations non portables."
                         Label47.Text = "Cette police peut ne pas être lisible sur les fenêtres logiques. Bien que vous puissiez encore l'utiliser, nous recommandons les polices monospaces pour une meilleure lisibilité."
@@ -629,7 +629,7 @@ Public Class Options
                 Label41.Text = "Association status:"
                 Label42.Text = If(DetectFileAssociations(), "associations set", "associations not set")
                 Label43.Text = "Set options you would like to perform when the program starts up:"
-                Label44.Text = "The program will use the scratch directory provided by the project if one is loaded. If you are in online installation management mode, the program will use its scratch directory"
+                Label44.Text = "The program will use the scratch directory provided by the project if one is loaded. If you are in the online or offline installation management modes, the program will use its scratch directory"
                 Label45.Text = "Secondary progress panel style:"
                 Label46.Text = "These settings aren't applicable to non-portable installations"
                 Label47.Text = "This font may not be readable on log windows. While you can still use it, we recommend monospaced fonts for increased readability."
@@ -721,7 +721,7 @@ Public Class Options
                 Label41.Text = "Estado de asociaciones:"
                 Label42.Text = If(DetectFileAssociations(), "asociaciones establecidas", "asociaciones no establecidas")
                 Label43.Text = "Establezca las opciones que le gustaría realizar cuando el programa inicie:"
-                Label44.Text = "El programa usará el directorio temporal proporcionado por el proyecto si se cargó alguno. Si está en modo de administración de instalaciones en línea, el programa utilizará su directorio temporal"
+                Label44.Text = "El programa usará el directorio temporal proporcionado por el proyecto si se cargó alguno. Si está en los modos de administración de instalaciones en línea o fuera de línea, el programa utilizará su directorio temporal"
                 Label45.Text = "Estilo del panel de progreso secundario:"
                 Label46.Text = "Estas configuraciones no son aplicables a instalaciones no portátiles"
                 Label47.Text = "Esta fuente podría no ser legible en ventanas de registro. Aunque todavía pueda utilizarla, le recomendamos fuentes monoespaciadas para una legibilidad aumentada."
@@ -813,7 +813,7 @@ Public Class Options
                 Label41.Text = "État de l'association :"
                 Label42.Text = If(DetectFileAssociations(), "associations établies", "associations non établies")
                 Label43.Text = "Définissez les options que vous souhaitez exécuter au démarrage du programme :"
-                Label44.Text = "Le programme utilisera le répertoire temporaire fourni par le projet s'il en existe un. Si vous êtes en mode de gestion de l'installation en ligne, le programme utilisera son répertoire temporaire."
+                Label44.Text = "Le programme utilisera le répertoire temporaire fourni par le projet s'il en existe un. Si vous êtes en les modes de gestion de l'installation en ligne ou hors ligne, le programme utilisera son répertoire temporaire."
                 Label45.Text = "Style du panneau de progression secondaire :"
                 Label46.Text = "Ces paramètres ne s'appliquent pas aux installations non portables."
                 Label47.Text = "Cette police peut ne pas être lisible sur les fenêtres logiques. Bien que vous puissiez encore l'utiliser, nous recommandons les polices monospaces pour une meilleure lisibilité."
