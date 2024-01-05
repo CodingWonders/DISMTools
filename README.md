@@ -13,6 +13,7 @@
 	<a href="https://github.com/CodingWonders/DISMTools/releases/latest"><img src="https://img.shields.io/github/v/release/CodingWonders/DISMTools" /></a>
 	<a href="https://forums.mydigitallife.net/threads/dismtools.87263"><img src="https://img.shields.io/badge/MDL_Forums-blue" /></a>
 	<a href="https://reddit.com/r/DISMTools"><img src="https://img.shields.io/badge/Subreddit-orange?logo=reddit&logoColor=white" /></a>
+	<a href="https://matrix.to/#/#dismtools:gitter.im"><img src="https://img.shields.io/gitter/room/CodingWonders/DISMTools" /></a>
 </p>
 <hr>
 
