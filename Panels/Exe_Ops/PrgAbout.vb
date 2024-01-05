@@ -421,11 +421,11 @@ Public Class PrgAbout
     End Sub
 #End Region
 
-    Private Sub Picture_MouseEnter(sender As Object, e As EventArgs) Handles PictureBox3.MouseEnter, PictureBox2.MouseEnter, PictureBox4.MouseEnter
+    Private Sub Picture_MouseEnter(sender As Object, e As EventArgs) Handles PictureBox3.MouseEnter, PictureBox2.MouseEnter, PictureBox4.MouseEnter, PictureBox5.MouseEnter
         Cursor = Cursors.Hand
     End Sub
 
-    Private Sub Picture_MouseLeave(sender As Object, e As EventArgs) Handles PictureBox3.MouseLeave, PictureBox2.MouseLeave, PictureBox4.MouseLeave
+    Private Sub Picture_MouseLeave(sender As Object, e As EventArgs) Handles PictureBox3.MouseLeave, PictureBox2.MouseLeave, PictureBox4.MouseLeave, PictureBox5.MouseLeave
         Cursor = Cursors.Arrow
     End Sub
 
@@ -439,6 +439,10 @@ Public Class PrgAbout
 
     Private Sub PictureBox4_Click(sender As Object, e As EventArgs) Handles PictureBox4.Click
         Process.Start("https://forums.mydigitallife.net/threads/discussion-dismtools.87263/")
+    End Sub
+
+    Private Sub PictureBox5_Click(sender As Object, e As EventArgs) Handles PictureBox5.Click
+        Process.Start("https://matrix.to/#/#dismtools:gitter.im")
     End Sub
 
     Private Sub PictureBox2_MouseHover(sender As Object, e As EventArgs) Handles PictureBox2.MouseHover
@@ -498,6 +502,26 @@ Public Class PrgAbout
                 PictureToolTip.SetToolTip(sender, "Consulte la discusión del proyecto en los foros de My Digital Life")
             Case 3
                 PictureToolTip.SetToolTip(sender, "Consultez les discussions sur le projet sur les forums de My Digital Life")
+        End Select
+    End Sub
+
+    Private Sub PictureBox5_MouseHover(sender As Object, e As EventArgs) Handles PictureBox5.MouseHover
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PictureToolTip.SetToolTip(sender, "Check out the Gitter chat (powered by Matrix)")
+                    Case "ESN"
+                        PictureToolTip.SetToolTip(sender, "Consulte el chat de Gitter (potenciado por Matrix)")
+                    Case "FRA"
+                        PictureToolTip.SetToolTip(sender, "Consultez le chat sur Gitter (powered by Matrix)")
+                End Select
+            Case 1
+                PictureToolTip.SetToolTip(sender, "Check out the Gitter chat (powered by Matrix)")
+            Case 2
+                PictureToolTip.SetToolTip(sender, "Consulte el chat de Gitter (potenciado por Matrix)")
+            Case 3
+                PictureToolTip.SetToolTip(sender, "Consultez le chat sur Gitter (powered by Matrix)")
         End Select
     End Sub
 
