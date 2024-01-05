@@ -14840,10 +14840,18 @@ Public Class MainForm
     End Sub
 
     Private Sub HelpTopicsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles HelpTopicsToolStripMenuItem.Click
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\index.html")
-        HelpBrowserForm.MinimizeBox = True
-        HelpBrowserForm.MaximizeBox = True
-        HelpBrowserForm.Show()
+        If HelpBrowserForm.Visible Then
+            If HelpBrowserForm.WindowState = FormWindowState.Minimized Then
+                HelpBrowserForm.WindowState = FormWindowState.Normal
+            Else
+                HelpBrowserForm.BringToFront()
+            End If
+        Else
+            HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\index.html")
+            HelpBrowserForm.MinimizeBox = True
+            HelpBrowserForm.MaximizeBox = True
+            HelpBrowserForm.Show()
+        End If
     End Sub
 
     Private Sub LinkLabel12_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel12.MouseLeave
