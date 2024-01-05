@@ -129,7 +129,7 @@ DISMTools is compatible with the following operating systems:
 
 ## Downloading
 
-You can download DISMTools from the [Releases](https://github.com/CodingWonders/DISMTools/releases) section (recommended) or from [Softpedia](https://www.softpedia.com/get/Tweak/System-Tweak/DISMTools.shtml). This program is also 100% Free.
+You can download DISMTools from the [Releases](https://github.com/CodingWonders/DISMTools/releases) section (recommended), from [Softpedia](https://www.softpedia.com/get/Tweak/System-Tweak/DISMTools.shtml), or from WinGet (`winget install CodingWondersSoftware.DISMTools.Stable`). This program is also 100% Free.
 
 <p align="center">
 	<img src="https://www.softpedia.com/_img/softpedia_100_free.png" />
