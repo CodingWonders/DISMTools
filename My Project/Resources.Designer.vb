@@ -2026,20 +2026,17 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Changes made since last preview
+        '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''Bugfixes
-        '''
-        '''- Fixed an issue where the Save buttons of information dialogs weren&apos;t positioned correctly on Windows 8 hosts
-        '''- Fixed an issue where the AppX package information dialog would not work on Windows 8 hosts
+        '''- Driver information background processes no longer fail on Windows 7 images
+        '''- The image information report preview window is no longer shown behind other windows
+        '''- The help documentation content browser no longer redirects to the Help home page if its window lost focus or was minimized
         '''
         '''New features
         '''
-        '''- When dropping a folder to the driver addition list, you can now pick driver files in it manually
-        '''- The home screen has been redesigned
-        '''- Friendly representations of the sizes in the application drive specifier are now shown
-        '''
-        '''Overall ch [resto de la cadena truncado]&quot;;.
+        '''- You can now get image file information of SWM files
+        '''- Introduced a PRI resource extractor that comes in handy when getting friendly AppX package display names
+        '''- The Options window has bee [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
