@@ -616,6 +616,12 @@
     <Compile Include="Panels\Prj_Ops\ProjProperties.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Questions\ReloadProjectQuestionDialog.Designer.vb">
+      <DependentUpon>ReloadProjectQuestionDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Questions\ReloadProjectQuestionDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Questions\SaveProjectQuestionDialog.Designer.vb">
       <DependentUpon>SaveProjectQuestionDialog.vb</DependentUpon>
     </Compile>
@@ -653,6 +659,8 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Utilities\DT_Utils.vb" />
+    <Compile Include="Utilities\ImageWatcher.vb" />
+    <Compile Include="Utilities\PriReader.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Actions\Actions.MainForm.resx">
@@ -897,6 +905,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Prj_Ops\ProjProperties.resx">
       <DependentUpon>ProjProperties.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Questions\ReloadProjectQuestionDialog.resx">
+      <DependentUpon>ReloadProjectQuestionDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Questions\SaveProjectQuestionDialog.resx">
       <DependentUpon>SaveProjectQuestionDialog.vb</DependentUpon>
@@ -1176,6 +1187,21 @@
     <None Include="Resources\menus\explorer_view_glyph_dark.png" />
     <None Include="Resources\menus\info_glyph.png" />
     <None Include="Resources\menus\info_glyph_dark.png" />
+    <None Include="Resources\settings\options_bgprocs_dark.png" />
+    <None Include="Resources\settings\options_bgprocs_light.png" />
+    <None Include="Resources\settings\options_imgdetect_dark.png" />
+    <None Include="Resources\settings\options_imgdetect_light.png" />
+    <None Include="Resources\settings\options_logs_dark.png" />
+    <None Include="Resources\settings\options_logs_light.png" />
+    <None Include="Resources\settings\options_output_dark.png" />
+    <None Include="Resources\settings\options_output_light.png" />
+    <None Include="Resources\settings\options_personalization_dark.png" />
+    <None Include="Resources\settings\options_personalization_light.png" />
+    <None Include="Resources\settings\options_program_dark.png" />
+    <None Include="Resources\settings\options_program_light.png" />
+    <None Include="Resources\settings\options_scratch_dark.png" />
+    <None Include="Resources\settings\options_scratch_light.png" />
+    <None Include="Resources\about\gitter_chat.png" />
     <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
     <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
     <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />

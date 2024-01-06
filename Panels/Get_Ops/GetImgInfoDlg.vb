@@ -257,6 +257,12 @@ Public Class GetImgInfoDlg
                 Thread.Sleep(500)
             End While
         End If
+        MainForm.WatcherTimer.Enabled = False
+        If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
+        While MainForm.WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         ImageInfoList.Clear()
         ListView1.Items.Clear()
         Try
@@ -576,6 +582,7 @@ Public Class GetImgInfoDlg
 
     Private Sub GetImgInfoDlg_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         If Not MainForm.MountedImageDetectorBW.IsBusy And Not PleaseWaitDialog.Visible Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+        MainForm.WatcherTimer.Enabled = True
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
@@ -587,6 +594,7 @@ Public Class GetImgInfoDlg
             ImgInfoSaveDlg.OfflineMode = False
             ImgInfoSaveDlg.SaveTask = 1
             ImgInfoSaveDlg.ShowDialog()
+            InfoSaveResults.Show()
         End If
     End Sub
 End Class

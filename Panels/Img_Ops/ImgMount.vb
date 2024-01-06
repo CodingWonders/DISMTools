@@ -472,6 +472,12 @@ Public Class ImgMount
                     Thread.Sleep(500)
                 End While
             End If
+            MainForm.WatcherTimer.Enabled = False
+            If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
+            While MainForm.WatcherBW.IsBusy
+                Application.DoEvents()
+                Thread.Sleep(100)
+            End While
             ListView1.Items.Clear()
             DismApi.Initialize(DismLogLevel.LogErrors)
             Dim imgInfoCollection As DismImageInfoCollection = DismApi.GetImageInfo(ImgFile)
@@ -586,6 +592,7 @@ Public Class ImgMount
 
     Private Sub ImgMount_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+        MainForm.WatcherTimer.Enabled = True
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click

@@ -123,23 +123,10 @@
   <metadata name="ScratchFBD.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>120, 17</value>
   </metadata>
-  <data name="LogPreview.Text" xml:space="preserve">
-    <value>Adding packages to the mounted image...
-- Package source: C:\w100-glb
-- Addition operation: selective
-- Ignore applicability checks? No
-- Prevent package addition if online actions need to be performed? No
-- Commit image after operations are done? Yes
-Enumerating packages to add. Please wait...
-Total number of packages: 128
+  <data name="Label39.Text" xml:space="preserve">
+    <value>Keep in mind that this process will start once an action has finished, but will stop automatically unless the action is not image related (like mounting, unmounting or reloading servicing)
 
-Processing 128 packages...
-Package 1 of 128</value>
-  </data>
-  <data name="Label18.Text" xml:space="preserve">
-    <value>When quietly performing operation, the program will hide information and progress output. Error messages will still be shown.
-This option will not be used when getting information of, for example, packages or features.
-Also, when performing image servicing, your computer may restart automatically.</value>
+To disable this process entirely, uncheck the "Detect mounted images at all times" check box</value>
   </data>
   <data name="TextBox4.Text" xml:space="preserve">
     <value>Image Version: 10.0.19045.2075
@@ -164,10 +151,23 @@ State : Disabled
 Feature Name : NetFx3
 State : Enabled</value>
   </data>
-  <data name="Label39.Text" xml:space="preserve">
-    <value>Keep in mind that this process will start once an action has finished, but will stop automatically unless the action is not image related (like mounting, unmounting or reloading servicing)
+  <data name="Label18.Text" xml:space="preserve">
+    <value>When quietly performing operations, the program will hide information and progress output. Error messages will still be shown.
+This option will not be used when getting information of, for example, packages or features.
+Also, when performing image servicing, your computer may restart automatically.</value>
+  </data>
+  <data name="LogPreview.Text" xml:space="preserve">
+    <value>Adding packages to the mounted image...
+- Package source: C:\w100-glb
+- Addition operation: selective
+- Ignore applicability checks? No
+- Prevent package addition if online actions need to be performed? No
+- Commit image after operations are done? Yes
+Enumerating packages to add. Please wait...
+Total number of packages: 128
 
-To disable this process entirely, uncheck the "Detect mounted images at all times" check box</value>
+Processing 128 packages...
+Package 1 of 128</value>
   </data>
   <metadata name="LogSFD.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>233, 17</value>

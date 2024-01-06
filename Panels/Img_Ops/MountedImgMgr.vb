@@ -1,4 +1,7 @@
 ﻿Imports System.IO
+Imports System.Threading
+
+
 Public Class MountedImgMgr
 
     Public ignoreRepeats As Boolean = False
@@ -128,7 +131,7 @@ Public Class MountedImgMgr
     End Sub
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
-        Options.TabControl1.SelectedIndex = 8
+        Options.SectionNum = 7
         Options.PrefReset.Enabled = True
         If MainForm.WindowState = FormWindowState.Minimized Then MainForm.WindowState = FormWindowState.Normal
         Options.ShowDialog(MainForm)
@@ -369,6 +372,12 @@ Public Class MountedImgMgr
         While MainForm.MountedImageDetectorBW.IsBusy
             Application.DoEvents()
             Threading.Thread.Sleep(100)
+        End While
+        MainForm.WatcherTimer.Enabled = False
+        If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
+        While MainForm.WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
         End While
         ImgIndexDelete.TextBox1.Text = ListView1.FocusedItem.SubItems(0).Text
         ImgIndexDelete.ShowDialog()

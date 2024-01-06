@@ -8,6 +8,7 @@ Imports Microsoft.Dism
 Imports System.Runtime.InteropServices
 Imports System.Xml
 Imports System.ServiceModel.Syndication
+Imports DISMTools.Utilities
 
 Public Class MainForm
 
@@ -81,7 +82,6 @@ Public Class MainForm
     Public LogFontIsBold As Boolean
     Public LogFontSize As Integer
     ' 0.2 settings
-    Public expBackgroundProcesses As Boolean = True     ' Experimental setting used during development. Everything now depends on it. This WILL be removed in the future
     Public NotificationShow As Boolean
     Public NotificationFrequency As Integer
     Public NotificationTimes As Integer = 0
@@ -227,6 +227,7 @@ Public Class MainForm
     Public imgVersionInfo As Version = Nothing
 
     Dim NoMigration As Boolean                                           ' Set this variable to true ONLY if the IDE started the program
+    Public SkipUpdates As Boolean                                        ' Same for this one
 
     Public drivePath As String = ""
 
@@ -240,6 +241,8 @@ Public Class MainForm
     Dim FeedContents As New SyndicationFeed()
     Dim FeedLinks As New List(Of Uri)
     Dim FeedEx As Exception
+
+    Dim ImageStatus As ImageWatcher.Status
 
     Friend NotInheritable Class NativeMethods
 
@@ -312,6 +315,8 @@ Public Class MainForm
                     Thread.Sleep(1500)
                 ElseIf arg.StartsWith("/nomig", StringComparison.OrdinalIgnoreCase) Then
                     NoMigration = True
+                ElseIf arg.StartsWith("/noupd", StringComparison.OrdinalIgnoreCase) Then
+                    SkipUpdates = True
                 ElseIf arg.StartsWith("/exp", StringComparison.OrdinalIgnoreCase) Then
                     EnableExperiments = True
                 End If
@@ -373,12 +378,13 @@ Public Class MainForm
             Application.DoEvents()
             Thread.Sleep(100)
         End While
-        If StartupUpdateCheck Then
+        If StartupUpdateCheck And Not SkipUpdates Then
             UpdCheckerBW.RunWorkerAsync()
         Else
             UpdatePanel.Visible = False
         End If
         MountedImageDetectorBW.RunWorkerAsync()
+        WatcherTimer.Enabled = True
         If dtBranch.Contains("preview") And Not Debugger.IsAttached Then
             VersionTSMI.Visible = True
         Else
@@ -3881,7 +3887,7 @@ Public Class MainForm
     ''' </summary>
     ''' <remarks>This procedure will detect the number of third-party drivers. If the image contains none, this procedure will end</remarks>
     Sub GetImageDrivers(Optional UseApi As Boolean = False, Optional OnlineMode As Boolean = False)
-        If UseApi Then
+        If UseApi And IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
             Try
                 DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
                 Using session As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(sessionMntDir))
@@ -3926,44 +3932,6 @@ Public Class MainForm
             CompletedTasks(4) = True
             PendingTasks(4) = False
             Exit Sub
-            'Try
-            '    If session IsNot Nothing Then
-            '        Dim imgDrvPublishedNameList As New List(Of String)
-            '        Dim imgDrvOGFileNameList As New List(Of String)
-            '        Dim imgDrvInboxList As New List(Of String)
-            '        Dim imgDrvClassNameList As New List(Of String)
-            '        Dim imgDrvProviderNameList As New List(Of String)
-            '        Dim imgDrvDateList As New List(Of String)
-            '        Dim imgDrvVersionList As New List(Of String)
-            '        Dim DriverCollection As DismDriverPackageCollection = DismApi.GetDrivers(session, True)
-            '        For Each driver As DismDriverPackage In DriverCollection
-            '            If ImgBW.CancellationPending Then
-            '                If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
-            '                Exit Sub
-            '            End If
-            '            imgDrvPublishedNameList.Add(driver.PublishedName)
-            '            imgDrvOGFileNameList.Add(driver.OriginalFileName)
-            '            imgDrvInboxList.Add(driver.InBox)
-            '            imgDrvClassNameList.Add(driver.ClassName)
-            '            imgDrvProviderNameList.Add(driver.ProviderName)
-            '            imgDrvDateList.Add(driver.Date.ToString())
-            '            imgDrvVersionList.Add(driver.Version.ToString())
-            '        Next
-            '        imgDrvPublishedNames = imgDrvPublishedNameList.ToArray()
-            '        imgDrvOGFileNames = imgDrvOGFileNameList.ToArray()
-            '        imgDrvInbox = imgDrvInboxList.ToArray()
-            '        imgDrvClassNames = imgDrvClassNameList.ToArray()
-            '        imgDrvProviderNames = imgDrvProviderNameList.ToArray()
-            '        imgDrvDates = imgDrvDateList.ToArray()
-            '        imgDrvVersions = imgDrvVersionList.ToArray()
-            '        Exit Sub
-            '    Else
-            '        Throw New Exception("No valid DISM session has been provided")
-            '    End If
-            'Catch ex As Exception
-            '    DismApi.CloseSession(session)
-            '    Exit Try
-            'End Try
         End If
         Debug.WriteLine("[GetImageDrivers] Running function...")
         Debug.WriteLine("[GetImageDrivers] Determining whether there are third-party drivers in image...")
@@ -5037,8 +5005,8 @@ Public Class MainForm
             LinkLabel23.LinkColor = ForeColor
             LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
         End If
-        ListView1.BackColor = BackColor
-        ListView1.ForeColor = ForeColor
+        ListView1.BackColor = LatestNewsPanel.BackColor
+        ListView1.ForeColor = LatestNewsPanel.ForeColor
         TextBox1.BackColor = BackColor
         TextBox1.ForeColor = ForeColor
     End Sub
@@ -8802,6 +8770,44 @@ Public Class MainForm
             ModifyTime = "N/A"
             imgLangs = "N/A"
             imgRW = "N/A"
+            ' Update the buttons in the new design accordingly
+            Button26.Enabled = True
+            Button27.Enabled = False
+            Button28.Enabled = False
+            Button29.Enabled = False
+            Button24.Enabled = False
+            Button25.Enabled = False
+            Button30.Enabled = False
+            Button31.Enabled = False
+            Button32.Enabled = False
+            Button33.Enabled = False
+            Button34.Enabled = False
+            Button35.Enabled = False
+            Button36.Enabled = False
+            Button37.Enabled = False
+            Button38.Enabled = False
+            Button39.Enabled = False
+            Button40.Enabled = False
+            Button41.Enabled = False
+            Button42.Enabled = False
+            Button43.Enabled = False
+            Button44.Enabled = False
+            Button45.Enabled = False
+            Button46.Enabled = False
+            Button47.Enabled = False
+            Button48.Enabled = False
+            Button49.Enabled = False
+            Button50.Enabled = False
+            Button51.Enabled = False
+            Button52.Enabled = False
+            Button53.Enabled = False
+            Button54.Enabled = False
+            Button55.Enabled = False
+            Button56.Enabled = False
+            Button57.Enabled = False
+            Button58.Enabled = False
+            RemountImageWithWritePermissionsToolStripMenuItem.Enabled = False
+            Exit Sub
         End If
         If IsReadOnly Then
             RemountImageWithWritePermissionsToolStripMenuItem.Enabled = True
@@ -8810,193 +8816,7 @@ Public Class MainForm
         End If
         If SkipBGProcs Then Exit Sub
         ' Set image properties
-        If expBackgroundProcesses Then
-            ImgBW.RunWorkerAsync()
-            Exit Sub
-        End If
-        Label14.Text = ProgressPanel.ImgIndex
-        Label12.Text = ProgressPanel.MountDir
-        ' Loading the project directly with an image already mounted makes the two labels above be wrong.
-        ' Check them and use local vars
-        If Label14.Text = "0" Or Label12.Text = "" Then     ' Label14 (index preview label) returns 0 and Label12 (mount dir preview) returns blank
-            Label14.Text = ImgIndex
-            Label12.Text = MountDir
-        End If
-        Try
-            If ProgressPanel.MountDir = "" Then
-                Throw New Exception
-            Else
-                Dim KeVerInfo As FileVersionInfo = FileVersionInfo.GetVersionInfo(ProgressPanel.MountDir & "\Windows\system32\ntoskrnl.exe")    ' Get version info from ntoskrnl.exe
-                Dim KeVerStr As String = KeVerInfo.ProductVersion
-                Label17.Text = KeVerStr
-                Select Case DismVersionChecker.ProductMajorPart
-                    Case 6
-                        Select Case DismVersionChecker.ProductMinorPart
-                            Case 1
-                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " > imgname", _
-                                                  ASCII)
-                            Case Is >= 2
-                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " > imgname", _
-                                                  ASCII)
-                        End Select
-                    Case 10
-                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " > imgname", _
-                                          ASCII)
-                End Select
-                Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
-                Label18.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\imgname").Replace("Name : ", "").Trim()
-                File.Delete(Application.StartupPath & "\imgname")
-                File.Delete(Application.StartupPath & "\bin\exthelpers\temp.bat")
-                Select Case DismVersionChecker.ProductMajorPart
-                    Case 6
-                        Select Case DismVersionChecker.ProductMinorPart
-                            Case 1
-                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
-                                                  ASCII)
-                            Case Is >= 2
-                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
-                                                  ASCII)
-                        End Select
-                    Case 10
-                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & ProgressPanel.SourceImg & " /index=" & ProgressPanel.ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
-                                          ASCII)
-                End Select
-                Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
-                Label20.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\imgdesc").Replace("Description : ", "").Trim()
-                File.Delete(Application.StartupPath & "\imgdesc")
-                File.Delete(Application.StartupPath & "\bin\exthelpers\temp.bat")
-                If Label18.Text = "" Or Label20.Text = "" Then
-                    Label18.Text = imgMountedName
-                    Label20.Text = imgMountedDesc
-                End If
-            End If
-        Catch ex As Exception
-            ' Maybe it was loaded directly. Check local vars
-            Try
-                Dim KeVerInfo As FileVersionInfo = FileVersionInfo.GetVersionInfo(MountDir & "\Windows\system32\ntoskrnl.exe")    ' Get version info from ntoskrnl.exe
-                Dim KeVerStr As String = KeVerInfo.ProductVersion
-                Label17.Text = KeVerStr
-                Select Case DismVersionChecker.ProductMajorPart
-                    Case 6
-                        Select Case DismVersionChecker.ProductMinorPart
-                            Case 1
-                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Name" & Quote & " > imgname", _
-                                                  ASCII)
-                            Case Is >= 2
-                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Name" & Quote & " > imgname", _
-                                                  ASCII)
-                        End Select
-                    Case 10
-                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Name" & Quote & " > imgname", _
-                                          ASCII)
-                End Select
-                Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
-                Label18.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\imgname").Replace("Name : ", "").Trim()
-                File.Delete(Application.StartupPath & "\imgname")
-                File.Delete(Application.StartupPath & "\bin\exthelpers\temp.bat")
-                Select Case DismVersionChecker.ProductMajorPart
-                    Case 6
-                        Select Case DismVersionChecker.ProductMinorPart
-                            Case 1
-                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
-                                                  ASCII)
-                            Case Is >= 2
-                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
-                                                  ASCII)
-                        End Select
-                    Case 10
-                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", "@echo off" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr " & Quote & "Description" & Quote & " > imgdesc", _
-                                          ASCII)
-                End Select
-                Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
-                Label20.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\imgdesc").Replace("Description : ", "").Trim()
-                File.Delete(Application.StartupPath & "\imgdesc")
-                File.Delete(Application.StartupPath & "\bin\exthelpers\temp.bat")
-                If Label18.Text = "" Or Label20.Text = "" Then
-                    Label18.Text = imgMountedName
-                    Label20.Text = imgMountedDesc
-                End If
-            Catch ex2 As Exception      ' It is clear that something went seriously wrong. Assume the image was unmounted before loading the proj in first place
-                UpdateImgProps()        ' and exit the sub (a.k.a., give up)
-                Exit Sub
-            End Try
-        End Try
-        ' Detect whether the image needs a servicing session reload
-        Directory.CreateDirectory(projPath & "\tempinfo")
-        Select Case DismVersionChecker.ProductMajorPart
-            Case 6
-                Select Case DismVersionChecker.ProductMinorPart
-                    Case 1
-                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
-                                          "@echo off" & CrLf & _
-                                          "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus", ASCII)
-                    Case Is >= 2
-                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
-                                          "@echo off" & CrLf & _
-                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus", ASCII)
-                End Select
-            Case 10
-                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
-                                  "@echo off" & CrLf & _
-                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus", ASCII)
-        End Select
-        Process.Start(Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
-        mountedImgStatus = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgmountedstatus", ASCII).Replace("Status : ", "").Trim()
-        File.Delete(Application.StartupPath & "\bin\exthelpers\imginfo.bat")
-        Select Case DismVersionChecker.ProductMajorPart
-            Case 6
-                Select Case DismVersionChecker.ProductMinorPart
-                    Case 1
-                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
-                                          "@echo off" & CrLf & _
-                                          "dism /English /get-wiminfo /wimfile=" & SourceImg & " | find /c " & Quote & "Index" & Quote & " > " & projPath & "\tempinfo\indexcount", ASCII)
-                    Case Is >= 2
-                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
-                                          "@echo off" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " | find /c " & Quote & "Index" & Quote & " > " & projPath & "\tempinfo\indexcount", ASCII)
-                End Select
-            Case 10
-                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
-                                  "@echo off" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " | find /c " & Quote & "Index" & Quote & " > " & projPath & "\tempinfo\indexcount", ASCII)
-        End Select
-        Process.Start(Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
-        imgIndexCount = CInt(My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\indexcount", ASCII))
-        File.Delete(Application.StartupPath & "\bin\exthelpers\imginfo.bat")
-        For Each FoundFile In My.Computer.FileSystem.GetFiles(projPath & "\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
-            File.Delete(FoundFile)
-        Next
-        Directory.Delete(projPath & "\tempinfo")
-        If mountedImgStatus = "Ok" Then
-            isOrphaned = False
-        ElseIf mountedImgStatus = "Needs Remount" Then
-            isOrphaned = True
-        End If
-        If isOrphaned Then
-            OrphanedMountedImgDialog.ShowDialog(Me)
-            If OrphanedMountedImgDialog.DialogResult = Windows.Forms.DialogResult.OK Then
-                ProgressPanel.Validate()
-                ProgressPanel.MountDir = MountDir
-                ProgressPanel.OperationNum = 18
-                ProgressPanel.ShowDialog(Me)
-            ElseIf OrphanedMountedImgDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
-                UnloadDTProj(False, True, False)
-            End If
-            Exit Sub
-        End If
-        UpdateImgProps()
+        If Not ImgBW.IsBusy Then ImgBW.RunWorkerAsync()
     End Sub
 
     Sub UpdateImgProps()
@@ -10279,6 +10099,12 @@ Public Class MainForm
                 Thread.Sleep(500)
             End While
         End If
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         If PackageInfoList IsNot Nothing Then GetPkgInfoDlg.InstalledPkgInfo = PackageInfoList
         GetPkgInfoDlg.ShowDialog(Me)
     End Sub
@@ -10311,6 +10137,12 @@ Public Class MainForm
             Application.DoEvents()
             Thread.Sleep(500)
         End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         If FeatureInfoList IsNot Nothing Then GetFeatureInfoDlg.InstalledFeatureInfo = FeatureInfoList
         GetFeatureInfoDlg.ShowDialog(Me)
     End Sub
@@ -10318,6 +10150,12 @@ Public Class MainForm
     Private Sub Button14_Click(sender As Object, e As EventArgs) Handles Button14.Click, ProjectPropertiesToolStripMenuItem.Click, Button23.Click
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(100)
         End While
@@ -10350,6 +10188,12 @@ Public Class MainForm
     Private Sub Button15_Click(sender As Object, e As EventArgs) Handles ImagePropertiesToolStripMenuItem.Click, Button15.Click
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(100)
         End While
@@ -10472,6 +10316,12 @@ Public Class MainForm
             Application.DoEvents()
             Thread.Sleep(100)
         End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(500)
+        End While
         If FeedWorker.IsBusy Then FeedWorker.CancelAsync()
         While FeedWorker.IsBusy
             Application.DoEvents()
@@ -10544,6 +10394,12 @@ Public Class MainForm
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(100)
         End While
@@ -10932,6 +10788,12 @@ Public Class MainForm
             Application.DoEvents()
             Thread.Sleep(100)
         End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         If bwAllBackgroundProcesses Then
             If bwGetImageInfo Then
                 If bwGetAdvImgInfo Then
@@ -11216,6 +11078,12 @@ Public Class MainForm
 
     Private Sub Button13_Click(sender As Object, e As EventArgs) Handles Button13.Click
         MountedImageDetectorBW.CancelAsync()
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         ProgressPanel.OperationNum = 995
         PleaseWaitDialog.indexesSourceImg = SourceImg
         Select Case Language
@@ -11237,6 +11105,7 @@ Public Class MainForm
         End Select
         PleaseWaitDialog.ShowDialog(Me)
         If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
+        WatcherTimer.Enabled = True
         If PleaseWaitDialog.imgIndexes > 1 Then
             ImgIndexSwitch.ShowDialog()
         End If
@@ -11297,6 +11166,7 @@ Public Class MainForm
         CompletedTasks = Enumerable.Repeat(True, CompletedTasks.Length).ToArray()
         BGProcDetails.ProgressBar1.Style = ProgressBarStyle.Blocks
         If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
+        WatcherTimer.Enabled = True
         areBackgroundProcessesDone = True
         BackgroundProcessesButton.Image = New Bitmap(My.Resources.bg_ops_complete)
         Select Case Language
@@ -11320,9 +11190,16 @@ Public Class MainForm
         BGProcDetails.ProgressBar1.Value = BGProcDetails.ProgressBar1.Maximum
         If Not ProgressPanel.IsDisposed And Not ProgressPanel.Visible Then ProgressPanel.Dispose()
         If isOrphaned Then
+            WatcherTimer.Enabled = False
+            If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+            While WatcherBW.IsBusy
+                Application.DoEvents()
+                Thread.Sleep(100)
+            End While
             If BGProcDetails.Visible Then
                 BGProcDetails.ProgressBar1.Value = 0
             End If
+            If Not OrphanedMountedImgDialog.IsDisposed Then OrphanedMountedImgDialog.Dispose()
             OrphanedMountedImgDialog.ShowDialog(Me)
             If OrphanedMountedImgDialog.DialogResult = Windows.Forms.DialogResult.OK Then
                 ProgressPanel.Validate()
@@ -11897,7 +11774,7 @@ Public Class MainForm
         Do
             If MountedImageDetectorBW.CancellationPending Or ImgBW.IsBusy Then Exit Do
             DetectMountedImages(False)
-            Thread.Sleep(500)
+            Thread.Sleep(1000)
         Loop
     End Sub
 
@@ -13005,7 +12882,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ScratchDirectorySettingsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ScratchDirectorySettingsToolStripMenuItem.Click
-        Options.TabControl1.SelectedIndex = 4
+        Options.SectionNum = 3
         Options.ShowDialog()
     End Sub
 
@@ -13020,6 +12897,12 @@ Public Class MainForm
     Private Sub MountImageToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MountImageToolStripMenuItem.Click
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(100)
         End While
@@ -13038,6 +12921,12 @@ Public Class MainForm
             Application.DoEvents()
             Threading.Thread.Sleep(100)
         End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
             If MountedImageMountDirs(x) = MountDir Then
                 ImgIndexDelete.TextBox1.Text = MountedImageImgFiles(x)
@@ -13049,6 +12938,12 @@ Public Class MainForm
 
     Private Sub SwitchImageIndexesToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles SwitchImageIndexesToolStripMenuItem1.Click
         MountedImageDetectorBW.CancelAsync()
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         ProgressPanel.OperationNum = 995
         PleaseWaitDialog.indexesSourceImg = SourceImg
         Select Case Language
@@ -13070,6 +12965,7 @@ Public Class MainForm
         End Select
         PleaseWaitDialog.ShowDialog(Me)
         If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
+        WatcherTimer.Enabled = True
         If PleaseWaitDialog.imgIndexes > 1 Then
             ImgIndexSwitch.ShowDialog()
         End If
@@ -13151,6 +13047,7 @@ Public Class MainForm
                 UpdateProjProperties(True, False, False)
             Else
                 If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
+                WatcherTimer.Enabled = True
             End If
         End If
     End Sub
@@ -13182,6 +13079,12 @@ Public Class MainForm
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(500)
+        End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
         End While
         If DriverInfoList IsNot Nothing Then GetDriverInfo.InstalledDriverInfo = DriverInfoList
         GetDriverInfo.ShowDialog()
@@ -13235,6 +13138,12 @@ Public Class MainForm
             Application.DoEvents()
             Thread.Sleep(500)
         End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         If FeatureInfoList IsNot Nothing Then GetFeatureInfoDlg.InstalledFeatureInfo = FeatureInfoList
         GetFeatureInfoDlg.ShowDialog(Me)
     End Sub
@@ -13287,6 +13196,12 @@ Public Class MainForm
             Application.DoEvents()
             Thread.Sleep(500)
         End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         If CapabilityInfoList IsNot Nothing Then GetCapabilityInfoDlg.InstalledCapabilityInfo = CapabilityInfoList
         GetCapabilityInfoDlg.ShowDialog(Me)
     End Sub
@@ -13321,6 +13236,12 @@ Public Class MainForm
                 Thread.Sleep(500)
             End While
         End If
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         If PackageInfoList IsNot Nothing Then GetPkgInfoDlg.InstalledPkgInfo = PackageInfoList
         GetPkgInfoDlg.ShowDialog(Me)
     End Sub
@@ -13524,6 +13445,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 0
             ImgInfoSaveDlg.ShowDialog()
+            InfoSaveResults.Show()
         End If
     End Sub
 
@@ -13577,6 +13499,12 @@ Public Class MainForm
     Private Sub LinkLabel15_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel15.LinkClicked
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(100)
         End While
@@ -13666,6 +13594,12 @@ Public Class MainForm
             Application.DoEvents()
             Thread.Sleep(100)
         End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         ProjProperties.TabControl1.SelectedIndex = 1
         Select Case Language
             Case 0
@@ -13702,6 +13636,12 @@ Public Class MainForm
 
     Private Sub Button24_Click(sender As Object, e As EventArgs) Handles Button24.Click
         MountedImageDetectorBW.CancelAsync()
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         ProgressPanel.OperationNum = 995
         PleaseWaitDialog.indexesSourceImg = SourceImg
         Select Case Language
@@ -13723,6 +13663,7 @@ Public Class MainForm
         End Select
         PleaseWaitDialog.ShowDialog(Me)
         If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
+        WatcherTimer.Enabled = True
         If PleaseWaitDialog.imgIndexes > 1 Then
             ImgIndexSwitch.ShowDialog()
         End If
@@ -13738,6 +13679,12 @@ Public Class MainForm
     Private Sub Button26_Click(sender As Object, e As EventArgs) Handles Button26.Click
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(100)
         End While
@@ -13796,6 +13743,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 0
             ImgInfoSaveDlg.ShowDialog()
+            InfoSaveResults.Show()
         End If
     End Sub
 
@@ -13829,6 +13777,12 @@ Public Class MainForm
                 Thread.Sleep(500)
             End While
         End If
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         If PackageInfoList IsNot Nothing Then GetPkgInfoDlg.InstalledPkgInfo = PackageInfoList
         GetPkgInfoDlg.ShowDialog(Me)
     End Sub
@@ -13921,6 +13875,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 2
             ImgInfoSaveDlg.ShowDialog()
+            InfoSaveResults.Show()
         End If
     End Sub
 
@@ -13952,6 +13907,12 @@ Public Class MainForm
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(500)
+        End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
         End While
         If FeatureInfoList IsNot Nothing Then GetFeatureInfoDlg.InstalledFeatureInfo = FeatureInfoList
         GetFeatureInfoDlg.ShowDialog(Me)
@@ -14198,6 +14159,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 4
             ImgInfoSaveDlg.ShowDialog()
+            InfoSaveResults.Show()
         End If
     End Sub
 
@@ -14383,6 +14345,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 5
             ImgInfoSaveDlg.ShowDialog()
+            InfoSaveResults.Show()
         End If
     End Sub
 
@@ -14604,6 +14567,12 @@ Public Class MainForm
             Application.DoEvents()
             Thread.Sleep(500)
         End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         If CapabilityInfoList IsNot Nothing Then GetCapabilityInfoDlg.InstalledCapabilityInfo = CapabilityInfoList
         GetCapabilityInfoDlg.ShowDialog(Me)
     End Sub
@@ -14620,6 +14589,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 6
             ImgInfoSaveDlg.ShowDialog()
+            InfoSaveResults.Show()
         End If
     End Sub
 
@@ -14727,6 +14697,12 @@ Public Class MainForm
             Application.DoEvents()
             Thread.Sleep(500)
         End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         If DriverInfoList IsNot Nothing Then GetDriverInfo.InstalledDriverInfo = DriverInfoList
         GetDriverInfo.ShowDialog()
     End Sub
@@ -14769,6 +14745,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 7
             ImgInfoSaveDlg.ShowDialog()
+            InfoSaveResults.Show()
         End If
     End Sub
 
@@ -14791,6 +14768,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.SaveTask = 9
             ImgInfoSaveDlg.ShowDialog()
+            InfoSaveResults.Show()
         End If
     End Sub
 
@@ -14862,10 +14840,18 @@ Public Class MainForm
     End Sub
 
     Private Sub HelpTopicsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles HelpTopicsToolStripMenuItem.Click
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\index.html")
-        HelpBrowserForm.MinimizeBox = True
-        HelpBrowserForm.MaximizeBox = True
-        HelpBrowserForm.Show()
+        If HelpBrowserForm.Visible Then
+            If HelpBrowserForm.WindowState = FormWindowState.Minimized Then
+                HelpBrowserForm.WindowState = FormWindowState.Normal
+            Else
+                HelpBrowserForm.BringToFront()
+            End If
+        Else
+            HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\index.html")
+            HelpBrowserForm.MinimizeBox = True
+            HelpBrowserForm.MaximizeBox = True
+            HelpBrowserForm.Show()
+        End If
     End Sub
 
     Private Sub LinkLabel12_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel12.MouseLeave
@@ -15069,5 +15055,52 @@ Public Class MainForm
 
     Private Sub LinkLabel25_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel25.LinkClicked
         Process.Start("https://forums.mydigitallife.net/threads/discussion-dismtools.87263/")
+    End Sub
+
+    Private Sub WatcherBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles WatcherBW.DoWork
+        ImageStatus = ImageWatcher.WatchStatus(SourceImg, MountedImageImgFiles.ToList(), MountedImageImgStatuses.ToList())
+    End Sub
+
+    Private Sub WatcherBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles WatcherBW.RunWorkerCompleted
+        If Not ImageStatus = ImageWatcher.Status.OK Then
+            WatcherTimer.Enabled = False
+            If MountedImageDetectorBW.IsBusy Then
+                MountedImageDetectorBW.CancelAsync()
+                While MountedImageDetectorBW.IsBusy
+                    Application.DoEvents()
+                    Thread.Sleep(500)
+                End While
+            End If
+        End If
+        Select Case ImageStatus
+            Case ImageWatcher.Status.NeedsRemount
+                If Not OrphanedMountedImgDialog.IsDisposed Then OrphanedMountedImgDialog.Dispose()
+                OrphanedMountedImgDialog.ShowDialog(Me)
+                If OrphanedMountedImgDialog.DialogResult = Windows.Forms.DialogResult.OK Then
+                    ProgressPanel.Validate()
+                    ProgressPanel.MountDir = MountDir
+                    ProgressPanel.OperationNum = 18
+                    ProgressPanel.ShowDialog(Me)
+                    If ProgressPanel.IsSuccessful Then ImageStatus = ImageWatcher.Status.OK
+                ElseIf OrphanedMountedImgDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
+                    UnloadDTProj(False, False, False)
+                    If ImgBW.IsBusy Then ImgBW.CancelAsync()
+                End If
+            Case ImageWatcher.Status.NotMounted
+                If Not ReloadProjectQuestionDialog.IsDisposed Then ReloadProjectQuestionDialog.Dispose()
+                ReloadProjectQuestionDialog.ShowDialog(Me)
+                If ReloadProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.OK Then
+                    UpdateProjProperties(False, False)
+                ElseIf ReloadProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
+                    UnloadDTProj(False, False, False)
+                    If ImgBW.IsBusy Then ImgBW.CancelAsync()
+                End If
+        End Select
+    End Sub
+
+    Private Sub WatcherTimer_Tick(sender As Object, e As EventArgs) Handles WatcherTimer.Tick
+        If isProjectLoaded And IsImageMounted And Not OnlineManagement And Not OfflineManagement Then
+            If Not WatcherBW.IsBusy Then WatcherBW.RunWorkerAsync()
+        End If
     End Sub
 End Class

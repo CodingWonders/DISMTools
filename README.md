@@ -13,6 +13,7 @@
 	<a href="https://github.com/CodingWonders/DISMTools/releases/latest"><img src="https://img.shields.io/github/v/release/CodingWonders/DISMTools" /></a>
 	<a href="https://forums.mydigitallife.net/threads/dismtools.87263"><img src="https://img.shields.io/badge/MDL_Forums-blue" /></a>
 	<a href="https://reddit.com/r/DISMTools"><img src="https://img.shields.io/badge/Subreddit-orange?logo=reddit&logoColor=white" /></a>
+	<a href="https://matrix.to/#/#dismtools:gitter.im"><img src="https://img.shields.io/gitter/room/CodingWonders/DISMTools" /></a>
 </p>
 <hr>
 
@@ -126,6 +127,15 @@ DISMTools is compatible with the following operating systems:
 > [!NOTE]
 > DISMTools is not compatible with Windows 7/Server 2008 R2 (versions 0.2.1 onwards), [Wine](https://www.winehq.org/), or [ReactOS](https://github.com/reactos/reactos)
 
+## Downloading
+
+You can download DISMTools from the [Releases](https://github.com/CodingWonders/DISMTools/releases) section (recommended), from [Softpedia](https://www.softpedia.com/get/Tweak/System-Tweak/DISMTools.shtml), or from WinGet (`winget install CodingWondersSoftware.DISMTools.Stable`). This program is also 100% Free.
+
+<p align="center">
+	<img src="https://www.softpedia.com/_img/softpedia_100_free.png" />
+	<p align="center"><i>Last updated: December 2, 2023 (Alexandra Sava)</i></p>
+</p>
+
 ## Building
 
 If you want to grab a copy straight from the source code, follow these instructions:
@@ -140,20 +150,21 @@ If you want to grab a copy straight from the source code, follow these instructi
 3. Open the solution in Visual Studio 2012 or later
 4. Finally, go to "Build > Build solution", or press CTRL-Shift-B
 
-**NOTE:** in the event that the program detects an update and lets you download an older version, we suggest that you disregard its advice (it's not like it will affect the binary being compiled, as it will be recompiled when you build the project, but it will make you waste time)
-
-### Skipping setting migration
+### Additional startup flags
 
 To speed up testing, you can perform these steps before running the program from within Visual Studio:
 
 1. In the Solution Explorer, double-click `My Project`
 2. Go to the Debug tab
-3. Under the Startup options, type the following in the command line arguments text box: `/nomig`
+3. Under the Startup options, type the following in the command line arguments text box: `/nomig /noupd`
+
+- `/nomig` skips setting migration
+- `/noupd` disables update check functionality
 
 You should have this setting configured like this:
 
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/cf3c8704-4c93-4047-9d42-aae7c8976522" />
+	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/4c9c9384-71bd-45fc-9e17-460f107a50f9" />
 </p>
 
 ## Contributions

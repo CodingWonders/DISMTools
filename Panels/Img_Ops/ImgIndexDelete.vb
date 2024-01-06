@@ -3,6 +3,7 @@ Imports System.IO
 Imports System.Text.Encoding
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Dism
+Imports System.Threading
 
 Public Class ImgIndexDelete
 
@@ -328,6 +329,12 @@ Public Class ImgIndexDelete
             Application.DoEvents()
             Threading.Thread.Sleep(100)
         End While
+        MainForm.WatcherTimer.Enabled = False
+        If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
+        While MainForm.WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
         RemoveHandler ListView1.ItemChecked, AddressOf ListView1_ItemChecked
         ' Clear arrays
         Array.Clear(IndexNames, 0, IndexNames.Length)
@@ -374,6 +381,7 @@ Public Class ImgIndexDelete
         Label4.Visible = False
         AddHandler ListView1.ItemChecked, AddressOf ListView1_ItemChecked
         If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+        MainForm.WatcherTimer.Enabled = True
     End Sub
 
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
