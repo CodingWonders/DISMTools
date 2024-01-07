@@ -1770,7 +1770,7 @@ Public Class ProgressPanel
                                "Processing " & pkgCount & " packages..." & CrLf)
             If pkgAdditionOp = 0 Then
                 DISMProc.StartInfo.FileName = DismProgram
-                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-package /packagepath=" & Quote & pkgSource & Quote
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /norestart /add-package /packagepath=" & Quote & pkgSource & Quote
                 If pkgIgnoreApplicabilityChecks Then
                     CommandArgs &= " /ignorecheck"
                 End If
@@ -1880,7 +1880,7 @@ Public Class ProgressPanel
                     If Not pkgIsApplicable Or pkgIsInstalled Then Continue For
                     LogView.AppendText(CrLf & "Processing package...")
                     DISMProc.StartInfo.FileName = DismProgram
-                    CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-package /packagepath=" & Quote & pkgs(x) & Quote
+                    CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /norestart /add-package /packagepath=" & Quote & pkgs(x) & Quote
                     If pkgIgnoreApplicabilityChecks Then
                         CommandArgs &= " /ignorecheck"
                     End If
@@ -1936,6 +1936,9 @@ Public Class ProgressPanel
                 GetErrorCode(True)
             ElseIf pkgAdditionOp = 1 And pkgSuccessfulAdditions <= 0 Then
                 GetErrorCode(False)
+            End If
+            If PkgErrorText.RichTextBox1.Text.Contains("BC2") Then
+                LogView.AppendText(CrLf & "Some packages require a system restart to be fully processed. Save your work, close your programs, and restart when ready")
             End If
         ElseIf opNum = 27 Then
             Select Case Language
@@ -2048,7 +2051,7 @@ Public Class ProgressPanel
                     If pkgIsReadyForRemoval Then
                         LogView.AppendText(CrLf & "Processing package removal...")
                         DISMProc.StartInfo.FileName = DismProgram
-                        CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /remove-package /packagename=" & pkgRemovalNames(x)
+                        CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /norestart /remove-package /packagename=" & pkgRemovalNames(x)
                         DISMProc.StartInfo.Arguments = CommandArgs
                         DISMProc.Start()
                         DISMProc.WaitForExit()
@@ -2146,7 +2149,7 @@ Public Class ProgressPanel
                     If pkgIsReadyForRemoval Then
                         LogView.AppendText(CrLf & "Processing package removal...")
                         DISMProc.StartInfo.FileName = DismProgram
-                        CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /remove-package /packagepath=" & pkgRemovalFiles(x)
+                        CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /norestart /remove-package /packagepath=" & pkgRemovalFiles(x)
                         DISMProc.StartInfo.Arguments = CommandArgs
                         DISMProc.Start()
                         DISMProc.WaitForExit()
@@ -2195,6 +2198,9 @@ Public Class ProgressPanel
                 GetErrorCode(True)
             ElseIf pkgSuccessfulRemovals <= 0 Then
                 GetErrorCode(False)
+            End If
+            If PkgErrorText.RichTextBox1.Text.Contains("BC2") Then
+                LogView.AppendText(CrLf & "Some packages require a system restart to be fully processed. Save your work, close your programs, and restart when ready")
             End If
         ElseIf opNum = 30 Then
             Select Case Language
@@ -2318,7 +2324,7 @@ Public Class ProgressPanel
                 Finally
                     DismApi.Shutdown()
                 End Try
-                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /enable-feature /featurename=" & featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /norestart /enable-feature /featurename=" & featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
                 If featisParentPkgNameUsed And featParentPkgName <> "" Then
                     CommandArgs &= " /packagename=" & featParentPkgName
                 End If
@@ -2373,6 +2379,9 @@ Public Class ProgressPanel
                 GetErrorCode(True)
             ElseIf featSuccessfulEnablements <= 0 Then
                 GetErrorCode(False)
+            End If
+            If FeatErrorText.RichTextBox1.Text.Contains("BC2") Then
+                LogView.AppendText(CrLf & "Some features require a system restart to be fully processed. Save your work, close your programs, and restart when ready")
             End If
         ElseIf opNum = 31 Then
             Select Case Language
@@ -2473,7 +2482,7 @@ Public Class ProgressPanel
                 Finally
                     DismApi.Shutdown()
                 End Try
-                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /disable-feature /featurename=" & featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /norestart /disable-feature /featurename=" & featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
                 If featDisablementParentPkgUsed And featDisablementParentPkg <> "" Then
                     CommandArgs &= " /packagename=" & featParentPkgName
                 End If
@@ -2520,6 +2529,9 @@ Public Class ProgressPanel
                 GetErrorCode(True)
             ElseIf featSuccessfulDisablements <= 0 Then
                 GetErrorCode(False)
+            End If
+            If FeatErrorText.RichTextBox1.Text.Contains("BC2") Then
+                LogView.AppendText(CrLf & "Some features require a system restart to be fully processed. Save your work, close your programs, and restart when ready")
             End If
         ElseIf opNum = 32 Then
             Select Case Language
@@ -3248,7 +3260,7 @@ Public Class ProgressPanel
                 Finally
                     DismApi.Shutdown()
                 End Try
-                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-capability /capabilityname=" & capAdditionIds(x)
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /norestart /add-capability /capabilityname=" & capAdditionIds(x)
                 If capAdditionUseSource And Directory.Exists(capAdditionSource) Then
                     CommandArgs &= " /source=" & Quote & capAdditionSource & Quote
                 End If
@@ -3315,6 +3327,9 @@ Public Class ProgressPanel
                 GetErrorCode(True)
             ElseIf capSuccessfulAdditions <= 0 Then
                 GetErrorCode(False)
+            End If
+            If FeatErrorText.RichTextBox1.Text.Contains("BC2") Then
+                LogView.AppendText(CrLf & "Some capabilities require a system restart to be fully processed. Save your work, close your programs, and restart when ready")
             End If
         ElseIf opNum = 68 Then
             Select Case Language
@@ -3396,7 +3411,7 @@ Public Class ProgressPanel
                     DismApi.Shutdown()
                 End Try
                 DISMProc.StartInfo.FileName = DismProgram
-                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /remove-capability /capabilityname=" & capRemovalIds(x)
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /norestart /remove-capability /capabilityname=" & capRemovalIds(x)
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
                 DISMProc.WaitForExit()
@@ -3436,6 +3451,9 @@ Public Class ProgressPanel
                 GetErrorCode(True)
             ElseIf capSuccessfulRemovals <= 0 Then
                 GetErrorCode(False)
+            End If
+            If FeatErrorText.RichTextBox1.Text.Contains("BC2") Then
+                LogView.AppendText(CrLf & "Some capabilities require a system restart to be fully processed. Save your work, close your programs, and restart when ready")
             End If
         ElseIf opNum = 75 Then
             Select Case Language
@@ -4622,7 +4640,7 @@ Public Class ProgressPanel
                 End If
                 MainForm.DetectMountedImages(False)
             ElseIf OperationNum = 26 Then
-                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 If Not MainForm.RunAllProcs Then MainForm.bwBackgroundProcessAction = 1
                 MainForm.UpdateProjProperties(True, False)
                 AddPackageReport.Label4.Text = MountDir
@@ -4649,7 +4667,7 @@ Public Class ProgressPanel
                 AddPackageReport.Show()
             ElseIf OperationNum = 27 Then
                 If Not MainForm.RunAllProcs Then MainForm.bwBackgroundProcessAction = 1
-                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 30 Then
                 If Not MainForm.RunAllProcs Then
@@ -4657,7 +4675,7 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 2
                 End If
-                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 31 Then
                 If Not MainForm.RunAllProcs Then
@@ -4665,10 +4683,10 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 2
                 End If
-                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 33 Then
-                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 37 Then
                 If Not MainForm.RunAllProcs Then
@@ -4676,7 +4694,7 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 3
                 End If
-                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 38 Then
                 If Not MainForm.RunAllProcs Then
@@ -4684,7 +4702,7 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 3
                 End If
-                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 64 Then
                 If Not MainForm.RunAllProcs Then
@@ -4692,7 +4710,7 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 4
                 End If
-                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 68 Then
                 If Not MainForm.RunAllProcs Then
@@ -4700,7 +4718,7 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 4
                 End If
-                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 75 Then
                 If Not MainForm.RunAllProcs Then
@@ -4708,7 +4726,7 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 5
                 End If
-                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 76 Then
                 If Not MainForm.RunAllProcs Then
@@ -4716,7 +4734,7 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 5
                 End If
-                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 991 Then
                 Visible = False
@@ -4852,7 +4870,7 @@ Public Class ProgressPanel
                 ' The image, with read-only permissions, was attempted to be written
                 LogView.AppendText(CrLf & "The program tried to save changes to an image that was mounted as read-only. " & CrLf & _
                                           "To solve this, close this dialog, and click " & Quote & "Tools > Remount image with write permissions" & Quote & CrLf & _
-                                          "Do note that, if the image came from an installation media, you may need to copy the source file to perform modifications to it.")
+                                          "Do note that, if the image came from an installation medium, you may need to copy the source file to perform modifications to it.")
             ElseIf errCode = "C1420117" Then
                 ' Some applications (or hidden processes) have open handles on the mount dir
                 LogView.AppendText(CrLf & "The program tried to unmount the image, but some applications or processes have opened files or directories of the image." & CrLf & _
