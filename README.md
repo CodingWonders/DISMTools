@@ -126,6 +126,15 @@ DISMTools is compatible with the following operating systems:
 > [!NOTE]
 > DISMTools is not compatible with Windows 7/Server 2008 R2 (versions 0.2.1 onwards), [Wine](https://www.winehq.org/), or [ReactOS](https://github.com/reactos/reactos)
 
+## Downloading
+
+You can download DISMTools from the [Releases](https://github.com/CodingWonders/DISMTools/releases) section (recommended), from [Softpedia](https://www.softpedia.com/get/Tweak/System-Tweak/DISMTools.shtml), or from WinGet (`winget install CodingWondersSoftware.DISMTools.Stable`). This program is also 100% Free.
+
+<p align="center">
+	<img src="https://www.softpedia.com/_img/softpedia_100_free.png" />
+	<p align="center"><i>Last updated: December 2, 2023 (Alexandra Sava)</i></p>
+</p>
+
 ## Building
 
 If you want to grab a copy straight from the source code, follow these instructions:
