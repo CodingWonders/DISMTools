@@ -109,36 +109,37 @@
 ' 75                    Add-Driver
 ' 76                    Remove-Driver           (should be used with care)
 ' 77                    Export-Driver
+' 78                    Import-Driver
 
 ' OperationNums for unattended servicing
 ' --------------------------------------
-' 78                    Apply-Unattend
+' 79                    Apply-Unattend
 
 ' OperationNums for Windows PE servicing
 ' --------------------------------------
-' 79                    Get-PESettings
-' 80                    Get-ScratchSpace
-' 81                    Get-TargetPath
-' 82                    Set-ScratchSpace
-' 83                    Set-TargetPath
+' 80                    Get-PESettings
+' 81                    Get-ScratchSpace
+' 82                    Get-TargetPath
+' 83                    Set-ScratchSpace
+' 84                    Set-TargetPath
 
 ' OperationNums for operating system uninstall
 ' --------------------------------------------
-' 84                    Get-OSUninstallWindow
-' 85                    Initiate-OSUninstall
-' 86                    Remove-OSUninstall
-' 87                    Set-OSUninstallWindow
+' 85                    Get-OSUninstallWindow
+' 86                    Initiate-OSUninstall
+' 87                    Remove-OSUninstall
+' 88                    Set-OSUninstallWindow
 
 ' OperationNums for reserved storage
 ' ----------------------------------
-' 88                    Set-ReservedStorageState
-' 89                    Get-ReservedStorageState
+' 89                    Set-ReservedStorageState
+' 90                    Get-ReservedStorageState
 
 ' OperationNums for Microsoft Edge servicing
 ' ------------------------------------------
-' 90                    Add-Edge
-' 91                    Add-EdgeBrowser
-' 92                    Add-EdgeWebView
+' 91                    Add-Edge
+' 92                    Add-EdgeBrowser
+' 93                    Add-EdgeWebView
 
 ' DISMTools reserved OperationNums
 '---------------------------------
@@ -435,14 +436,21 @@ Public Class ProgressPanel
     ' OperationNum: 77
     Public drvExportTarget As String                        ' Path the drivers will be exported to
 
-    ' OperationNum: 82
-    Public peNewScratchSpace As Integer                     ' New scratch space amount to apply to the Windows PE image
+    ' OperationNum: 78
+    Public ImportSourceInt As Integer                       ' The import source
+    ' ImportSourceInt = 0
+    Public DrvImport_SourceImage As String                  ' The mounted image that will act as the source for the driver import
+    ' ImportSourceInt = 2
+    Public DrvImport_SourceDisk As String                   ' The disk drive that will act as the source for the driver import
 
     ' OperationNum: 83
+    Public peNewScratchSpace As Integer                     ' New scratch space amount to apply to the Windows PE image
+
+    ' OperationNum: 84
     Public peNewTargetPath As String                        ' New target path to apply to the Windows PE image
 
     ' <Space for other OperationNums>
-    ' OperationNum: 87
+    ' OperationNum: 88
     Public osUninstDayCount As Integer                      ' Number of days the user has to uninstall an OS upgrade
 
     ' OperationNum: 991
@@ -600,11 +608,15 @@ Public Class ProgressPanel
             taskCount = 1
         ElseIf opNum = 78 Then
             taskCount = 1
-        ElseIf opNum = 82 Then
+        ElseIf opNum = 88 Then
+            taskCount = 1
+        ElseIf opNum = 79 Then
             taskCount = 1
         ElseIf opNum = 83 Then
             taskCount = 1
-        ElseIf opNum = 87 Then
+        ElseIf opNum = 84 Then
+            taskCount = 1
+        ElseIf opNum = 88 Then
             taskCount = 1
         ElseIf opNum = 991 Then
             taskCount = 1
@@ -3725,7 +3737,7 @@ Public Class ProgressPanel
                                                    "- Class name: " & drv.ClassName & CrLf & _
                                                    "- Class description: " & drv.ClassDescription & CrLf & _
                                                    "- Class GUID: " & drv.ClassGuid & CrLf & _
-                                                   "- Version and date: " & drv.Version.ToString() & "/" & drv.Date.ToString() & CrLf & _
+                                                   "- Version and date: " & drv.Version.ToString() & " / " & drv.Date.ToString() & CrLf & _
                                                    "- Is part of the Windows distribution? " & If(drv.InBox, "Yes", "No") & CrLf & _
                                                    "- Is critical to the boot process? " & If(drv.BootCritical, "Yes", "No"))
                                 If drv.InBox Then
@@ -3839,7 +3851,97 @@ Public Class ProgressPanel
                 LogView.AppendText(" Error level : " & errCode)
             End If
             GetErrorCode(False)
-        ElseIf opNum = 82 Then
+        ElseIf opNum = 78 Then
+            allTasks.Text = "Importing drivers..."
+            currentTask.Text = "Preparing to import third-party drivers..."
+            'Select Case Language
+            '    Case 0
+            '        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+            '            Case "ENU", "ENG"
+            '                allTasks.Text = "Importing drivers..."
+            '                currentTask.Text = "Importing third-party drivers to the specified image..."
+            '            Case "ESN"
+            '                allTasks.Text = "Exportando controladores..."
+            '                currentTask.Text = "Exportando controladores de terceros a la carpeta especificada..."
+            '            Case "FRA"
+            '                allTasks.Text = "Exportation des pilotes en cours..."
+            '                currentTask.Text = "Exportation de pilotes tiers dans le dossier spécifié en cours..."
+            '        End Select
+            '    Case 1
+            '        allTasks.Text = "Exporting drivers..."
+            '        currentTask.Text = "Exporting third-party drivers to the specified folder..."
+            '    Case 2
+            '        allTasks.Text = "Exportando controladores..."
+            '        currentTask.Text = "Exportando controladores de terceros a la carpeta especificada..."
+            '    Case 3
+            '        allTasks.Text = "Exportation des pilotes en cours..."
+            '        currentTask.Text = "Exportation de pilotes tiers dans le dossier spécifié en cours..."
+            'End Select
+            LogView.AppendText(CrLf & "Importing third party drivers..." & CrLf)
+            Select Case ImportSourceInt
+                Case 0
+                    LogView.AppendText("- Driver import source: Windows image (" & Quote & DrvImport_SourceImage & Quote & ")" & CrLf)
+                Case 1
+                    LogView.AppendText("- Driver import source: active installation" & CrLf)
+                Case 2
+                    LogView.AppendText("- Driver import source: offline installation (" & Quote & DrvImport_SourceDisk & Quote & ")" & CrLf)
+            End Select
+            Thread.Sleep(500)
+            LogView.AppendText(CrLf & "Creating temporary folder for driver exports..." & CrLf)
+            currentTask.Text = "Exporting third-party drivers from driver import source..."
+            Try
+                Directory.CreateDirectory(Application.StartupPath & "\export_temp")
+            Catch ex As Exception
+                LogView.AppendText(CrLf & "The temporary folder could not be created. See below for reasons why:" & CrLf & CrLf & ex.ToString() & "-" & ex.Message)
+            End Try
+            If Directory.Exists(Application.StartupPath & "\export_temp") Then
+                LogView.AppendText(CrLf & "Exporting third-party drivers from import source..." & CrLf)
+                CommandArgs &= If(ImportSourceInt = 1, " /online", " /image=" & Quote & MountDir & Quote) & " /export-driver /destination=" & Quote & Application.StartupPath & "\export_temp" & Quote
+                DISMProc.StartInfo.FileName = DismProgram
+                DISMProc.StartInfo.Arguments = CommandArgs
+                DISMProc.Start()
+                DISMProc.WaitForExit()
+                LogView.AppendText(CrLf & "Getting error level...")
+                If Hex(DISMProc.ExitCode).Length < 8 Then
+                    errCode = DISMProc.ExitCode
+                Else
+                    errCode = Hex(DISMProc.ExitCode)
+                End If
+                If errCode.Length >= 8 Then
+                    LogView.AppendText(" Error level : 0x" & errCode)
+                Else
+                    LogView.AppendText(" Error level : " & errCode)
+                End If
+                If DISMProc.ExitCode = 0 Then
+                    CurrentPB.Value = CurrentPB.Maximum / 2
+                    AllPB.Value = AllPB.Maximum / 2
+                    currentTask.Text = "Importing third-party drivers to destination image..."
+                    LogView.AppendText(CrLf & "Importing third-party drivers from the temporary export directory to the destination image...")
+                    CommandArgs = BckArgs
+                    CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-driver /driver=" & Quote & Application.StartupPath & "\export_temp" & Quote & " /recurse"
+                    DISMProc.StartInfo.Arguments = CommandArgs
+                    DISMProc.Start()
+                    DISMProc.WaitForExit()
+                    If Hex(DISMProc.ExitCode).Length < 8 Then
+                        errCode = DISMProc.ExitCode
+                    Else
+                        errCode = Hex(DISMProc.ExitCode)
+                    End If
+                    If errCode.Length >= 8 Then
+                        LogView.AppendText(" Error level : 0x" & errCode)
+                    Else
+                        LogView.AppendText(" Error level : " & errCode)
+                    End If
+                    GetErrorCode(False)
+                End If
+                LogView.AppendText(CrLf & "Deleting temporary export directory...")
+                Try
+                    Directory.Delete(Application.StartupPath & "\export_temp", True)
+                Catch ex As Exception
+                    LogView.AppendText(CrLf & "We couldn't delete the temporary export directory. You'll need to delete the " & Quote & "export_temp" & Quote & " directory manually.")
+                End Try
+            End If
+        ElseIf opNum = 83 Then
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3882,7 +3984,7 @@ Public Class ProgressPanel
                 LogView.AppendText(" Error level : " & errCode)
             End If
             GetErrorCode(False)
-        ElseIf opNum = 83 Then
+        ElseIf opNum = 84 Then
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3925,7 +4027,7 @@ Public Class ProgressPanel
                 LogView.AppendText(" Error level : " & errCode)
             End If
             GetErrorCode(False)
-        ElseIf opNum = 87 Then
+        ElseIf opNum = 88 Then
             allTasks.Text = "Setting the uninstall window..."
             currentTask.Text = "Setting the amount of days an uninstall can happen..."
             LogView.AppendText(CrLf & "Setting the amount of days an uninstall can happen..." & CrLf &
@@ -4736,6 +4838,14 @@ Public Class ProgressPanel
                 End If
                 If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
+            ElseIf OperationNum = 78 Then
+                If Not MainForm.RunAllProcs Then
+                    MainForm.bwGetImageInfo = False
+                    MainForm.bwGetAdvImgInfo = False
+                    MainForm.bwBackgroundProcessAction = 5
+                End If
+                If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
+                MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 991 Then
                 Visible = False
                 ImgConversionSuccessDialog.ShowDialog(MainForm)
@@ -4900,6 +5010,9 @@ Public Class ProgressPanel
             ElseIf OperationNum = 31 Then
                 ' No features have been disabled successfully
                 LogView.AppendText(CrLf & "No features have been disabled successfully. Try looking up the error codes on the Internet")
+            ElseIf OperationNum = 78 Then
+                ' Cause is undetermined
+                LogView.AppendText(CrLf & "Either this operation has failed or some drivers were not installed. Consider reloading this project or mode to see whether there are driver changes. If not, export the drivers and add them manually.")
             ElseIf errCode = "00000001" Then
 
             ElseIf errCode = "C000013A" Then
@@ -4924,6 +5037,7 @@ Public Class ProgressPanel
                 ' Errors that weren't added to the database
                 LogView.AppendText(CrLf & "This error has not yet been added to the database, so a useful description can't be shown now. Try running the command manually and, if you see the same error, try looking it up on the Internet.")
             End If
+            LogView.AppendText(CrLf & CrLf & "For detailed information, consider reading the DISM operation logs.")
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
