@@ -3852,31 +3852,29 @@ Public Class ProgressPanel
             End If
             GetErrorCode(False)
         ElseIf opNum = 78 Then
-            allTasks.Text = "Importing drivers..."
-            currentTask.Text = "Preparing to import third-party drivers..."
-            'Select Case Language
-            '    Case 0
-            '        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-            '            Case "ENU", "ENG"
-            '                allTasks.Text = "Importing drivers..."
-            '                currentTask.Text = "Importing third-party drivers to the specified image..."
-            '            Case "ESN"
-            '                allTasks.Text = "Exportando controladores..."
-            '                currentTask.Text = "Exportando controladores de terceros a la carpeta especificada..."
-            '            Case "FRA"
-            '                allTasks.Text = "Exportation des pilotes en cours..."
-            '                currentTask.Text = "Exportation de pilotes tiers dans le dossier spécifié en cours..."
-            '        End Select
-            '    Case 1
-            '        allTasks.Text = "Exporting drivers..."
-            '        currentTask.Text = "Exporting third-party drivers to the specified folder..."
-            '    Case 2
-            '        allTasks.Text = "Exportando controladores..."
-            '        currentTask.Text = "Exportando controladores de terceros a la carpeta especificada..."
-            '    Case 3
-            '        allTasks.Text = "Exportation des pilotes en cours..."
-            '        currentTask.Text = "Exportation de pilotes tiers dans le dossier spécifié en cours..."
-            'End Select
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            allTasks.Text = "Importing drivers..."
+                            currentTask.Text = "Preparing to import third-party drivers..."
+                        Case "ESN"
+                            allTasks.Text = "Importando controladores..."
+                            currentTask.Text = "Preparándonos para importar controladores de terceros..."
+                        Case "FRA"
+                            allTasks.Text = "Importation des pilotes en cours..."
+                            currentTask.Text = "Préparation de l'importation de pilotes tiers en cours..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Importing drivers..."
+                    currentTask.Text = "Preparing to import third-party drivers..."
+                Case 2
+                    allTasks.Text = "Importando controladores..."
+                    currentTask.Text = "Preparándonos para importar controladores de terceros..."
+                Case 3
+                    allTasks.Text = "Importation des pilotes en cours..."
+                    currentTask.Text = "Préparation de l'importation de pilotes tiers en cours..."
+            End Select
             LogView.AppendText(CrLf & "Importing third party drivers..." & CrLf)
             Select Case ImportSourceInt
                 Case 0
@@ -3888,7 +3886,23 @@ Public Class ProgressPanel
             End Select
             Thread.Sleep(500)
             LogView.AppendText(CrLf & "Creating temporary folder for driver exports..." & CrLf)
-            currentTask.Text = "Exporting third-party drivers from driver import source..."
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            currentTask.Text = "Exporting third-party drivers from driver import source..."
+                        Case "ESN"
+                            currentTask.Text = "Exportando controladores de terceros del origen de importación de controladores..."
+                        Case "FRA"
+                            currentTask.Text = "Exportation de pilotes tiers à partir de la source d'importation des pilotes en cours..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Exporting third-party drivers from driver import source..."
+                Case 2
+                    currentTask.Text = "Exportando controladores de terceros del origen de importación de controladores..."
+                Case 3
+                    currentTask.Text = "Exportation de pilotes tiers à partir de la source d'importation des pilotes en cours..."
+            End Select
             Try
                 Directory.CreateDirectory(Application.StartupPath & "\export_temp")
             Catch ex As Exception
@@ -3915,7 +3929,23 @@ Public Class ProgressPanel
                 If DISMProc.ExitCode = 0 Then
                     CurrentPB.Value = CurrentPB.Maximum / 2
                     AllPB.Value = AllPB.Maximum / 2
-                    currentTask.Text = "Importing third-party drivers to destination image..."
+                    Select Case Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENU", "ENG"
+                                    currentTask.Text = "Importing third-party drivers to destination image..."
+                                Case "ESN"
+                                    currentTask.Text = "Importando controladores de terceros a la imagen de destino..."
+                                Case "FRA"
+                                    currentTask.Text = "Importation des pilotes tiers dans l'image de destination en cours..."
+                            End Select
+                        Case 1
+                            currentTask.Text = "Importing third-party drivers to destination image..."
+                        Case 2
+                            currentTask.Text = "Importando controladores de terceros a la imagen de destino..."
+                        Case 3
+                            currentTask.Text = "Importation des pilotes tiers dans l'image de destination en cours..."
+                    End Select
                     LogView.AppendText(CrLf & "Importing third-party drivers from the temporary export directory to the destination image...")
                     CommandArgs = BckArgs
                     CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-driver /driver=" & Quote & Application.StartupPath & "\export_temp" & Quote & " /recurse"
@@ -5012,7 +5042,9 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & "No features have been disabled successfully. Try looking up the error codes on the Internet")
             ElseIf OperationNum = 78 Then
                 ' Cause is undetermined
-                LogView.AppendText(CrLf & "Either this operation has failed or some drivers were not installed. Consider reloading this project or mode to see whether there are driver changes. If not, export the drivers and add them manually.")
+                LogView.AppendText(CrLf & "Either this operation has failed or some drivers were not installed. Consider reloading this project or mode to see whether there are driver changes." & CrLf & CrLf & _
+                                   "If there are driver changes, consider reading the driver installation logs, stored in the INF directory of the target image. Otherwise, export the drivers you want to add from the source image and add them to the target image manually." & CrLf & CrLf & _
+                                   "You can also manually customize the export directory by deleting the drivers you don't need. This may be another way to fix this problem, but you will need to temporarily pause the driver addition procedure before it scans the export directory (this can be done by selecting anything from the DISM command prompt window that appears when performing an operation)")
             ElseIf errCode = "00000001" Then
 
             ElseIf errCode = "C000013A" Then

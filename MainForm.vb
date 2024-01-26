@@ -5135,6 +5135,7 @@ Public Class MainForm
                         AddDriver.Text = "Add driver..."
                         RemoveDriver.Text = "Remove driver..."
                         ExportDriver.Text = "Export driver packages..."
+                        ImportDriver.Text = "Import driver packages..."
                         ' Menu - Commands - Unattended answer files
                         ApplyUnattend.Text = "Apply unattended answer file..."
                         ' Menu - Commands - Windows PE servicing
@@ -5496,6 +5497,7 @@ Public Class MainForm
                         AddDriver.Text = "Añadir controlador..."
                         RemoveDriver.Text = "Eliminar controlador..."
                         ExportDriver.Text = "Exportar paquetes de controlador..."
+                        ImportDriver.Text = "Importar paquetes de controlador..."
                         ' Menu - Commands - Unattended answer files
                         ApplyUnattend.Text = "Aplicar archivo de respuesta desatendida..."
                         ' Menu - Commands - Windows PE servicing
@@ -5857,6 +5859,7 @@ Public Class MainForm
                         AddDriver.Text = "Ajouter un pilote..."
                         RemoveDriver.Text = "Retirer le pilote..."
                         ExportDriver.Text = "Exporter des paquets de pilotes..."
+                        ImportDriver.Text = "Importer des paquets de pilotes..."
                         ' Menu - Commands - Unattended answer files
                         ApplyUnattend.Text = "Appliquer un fichier de réponse non surveillé..."
                         ' Menu - Commands - Windows PE servicing
@@ -6223,6 +6226,7 @@ Public Class MainForm
                 AddDriver.Text = "Add driver..."
                 RemoveDriver.Text = "Remove driver..."
                 ExportDriver.Text = "Export driver packages..."
+                ImportDriver.Text = "Import driver packages..."
                 ' Menu - Commands - Unattended answer files
                 ApplyUnattend.Text = "Apply unattended answer file..."
                 ' Menu - Commands - Windows PE servicing
@@ -6584,6 +6588,7 @@ Public Class MainForm
                 AddDriver.Text = "Añadir controlador..."
                 RemoveDriver.Text = "Eliminar controlador..."
                 ExportDriver.Text = "Exportar paquetes de controlador..."
+                ImportDriver.Text = "Importar paquetes de controlador..."
                 ' Menu - Commands - Unattended answer files
                 ApplyUnattend.Text = "Aplicar archivo de respuesta desatendida..."
                 ' Menu - Commands - Windows PE servicing
@@ -6944,6 +6949,7 @@ Public Class MainForm
                 AddDriver.Text = "Ajouter un pilote..."
                 RemoveDriver.Text = "Retirer le pilote..."
                 ExportDriver.Text = "Exporter des paquets de pilotes..."
+                ImportDriver.Text = "Importer des paquets de pilotes..."
                 ' Menu - Commands - Unattended answer files
                 ApplyUnattend.Text = "Appliquer un fichier de réponse non surveillé..."
                 ' Menu - Commands - Windows PE servicing
@@ -9385,36 +9391,38 @@ Public Class MainForm
                 Case 76
                     MenuDesc.Text = "Exports all third-party driver packages from the image to a destination path"
                 Case 77
-                    MenuDesc.Text = "Applies an Unattend.xml file to the image"
+                    MenuDesc.Text = "Imports all third-party drivers from a specified source to this image to provide the same hardware compatibility"
                 Case 78
-                    MenuDesc.Text = "Displays a list of Windows PE settings in the WinPE image"
+                    MenuDesc.Text = "Applies an Unattend.xml file to the image"
                 Case 79
-                    MenuDesc.Text = "Retrieves the configured amount of the Windows PE system volume scratch space"
+                    MenuDesc.Text = "Displays a list of Windows PE settings in the WinPE image"
                 Case 80
-                    MenuDesc.Text = "Retrieves the target path of the Windows PE image"
+                    MenuDesc.Text = "Retrieves the configured amount of the Windows PE system volume scratch space"
                 Case 81
-                    MenuDesc.Text = "Sets the available scratch space (in MB)"
+                    MenuDesc.Text = "Retrieves the target path of the Windows PE image"
                 Case 82
-                    MenuDesc.Text = "Sets the location of the WinPE image on the disk (for hard disk boot scenarios)"
+                    MenuDesc.Text = "Sets the available scratch space (in MB)"
                 Case 83
-                    MenuDesc.Text = "Gets the number of days an uninstall can be initiated after an upgrade"
+                    MenuDesc.Text = "Sets the location of the WinPE image on the disk (for hard disk boot scenarios)"
                 Case 84
-                    MenuDesc.Text = "Reverts a PC to a previous installation"
+                    MenuDesc.Text = "Gets the number of days an uninstall can be initiated after an upgrade"
                 Case 85
-                    MenuDesc.Text = "Removes the ability to roll back a PC to a previous installation"
+                    MenuDesc.Text = "Reverts a PC to a previous installation"
                 Case 86
-                    MenuDesc.Text = "Sets the number of days an uninstall can be initiated after an upgrade"
+                    MenuDesc.Text = "Removes the ability to roll back a PC to a previous installation"
                 Case 87
-                    MenuDesc.Text = "Gets the current state of reserved storage"
+                    MenuDesc.Text = "Sets the number of days an uninstall can be initiated after an upgrade"
                 Case 88
+                    MenuDesc.Text = "Gets the current state of reserved storage"
+                Case 89
                     MenuDesc.Text = "Sets the state of reserved storage"
-                Case 89             ' Edge can also be deployed
+                Case 90             ' Edge can also be deployed
                     MenuDesc.Text = "Adds the Microsoft Edge Browser and WebView2 component to the image"
-                Case 90
-                    MenuDesc.Text = "Adds the Microsoft Edge Browser to the image"
                 Case 91
-                    MenuDesc.Text = "Adds the Microsoft Edge WebView2 component to the image"
+                    MenuDesc.Text = "Adds the Microsoft Edge Browser to the image"
                 Case 92
+                    MenuDesc.Text = "Adds the Microsoft Edge WebView2 component to the image"
+                Case 93
                     MenuDesc.Text = "Saves complete image information to the file you want. Depending on the settings you had specified, you may be asked some questions during the process"
                 Case Else
                     ' Do not show anything
@@ -9597,7 +9605,7 @@ Public Class MainForm
         ShowChildDescs(True, 1)
     End Sub
 
-    Private Sub HideChildDescsTrigger(sender As Object, e As EventArgs) Handles AppendImage.MouseLeave, ApplyFFU.MouseLeave, ApplyImage.MouseLeave, CaptureCustomImage.MouseLeave, CaptureFFU.MouseLeave, CaptureImage.MouseLeave, CleanupMountpoints.MouseLeave, CommitImage.MouseLeave, DeleteImage.MouseLeave, ExportImage.MouseLeave, GetImageInfo.MouseLeave, GetWIMBootEntry.MouseLeave, ListImage.MouseLeave, MountImage.MouseLeave, OptimizeFFU.MouseLeave, OptimizeImage.MouseLeave, RemountImage.MouseLeave, SplitFFU.MouseLeave, SplitImage.MouseLeave, UnmountImage.MouseLeave, UpdateWIMBootEntry.MouseLeave, ApplySiloedPackage.MouseLeave, GetPackages.MouseLeave, AddPackage.MouseLeave, RemovePackage.MouseLeave, GetFeatures.MouseLeave, EnableFeature.MouseLeave, DisableFeature.MouseLeave, CleanupImage.MouseLeave, AddProvisionedAppxPackage.MouseLeave, GetProvisioningPackageInfo.MouseLeave, ApplyCustomDataImage.MouseLeave, GetProvisionedAppxPackages.MouseLeave, AddProvisionedAppxPackage.MouseLeave, RemoveProvisionedAppxPackage.MouseLeave, OptimizeProvisionedAppxPackages.MouseLeave, SetProvisionedAppxDataFile.MouseLeave, CheckAppPatch.MouseLeave, GetAppPatchInfo.MouseLeave, GetAppPatches.MouseLeave, GetAppInfo.MouseLeave, GetApps.MouseLeave, ExportDefaultAppAssociations.MouseLeave, GetDefaultAppAssociations.MouseLeave, ImportDefaultAppAssociations.MouseLeave, RemoveDefaultAppAssociations.MouseLeave, GetIntl.MouseLeave, SetUILangFallback.MouseLeave, SetSysUILang.MouseLeave, SetSysLocale.MouseLeave, SetUserLocale.MouseLeave, SetInputLocale.MouseLeave, SetAllIntl.MouseLeave, SetTimeZone.MouseLeave, SetSKUIntlDefaults.MouseLeave, SetLayeredDriver.MouseLeave, GenLangINI.MouseLeave, SetSetupUILang.MouseLeave, AddCapability.MouseLeave, ExportSource.MouseLeave, GetCapabilities.MouseLeave, RemoveCapability.MouseLeave, GetCurrentEdition.MouseLeave, GetTargetEditions.MouseLeave, SetEdition.MouseLeave, SetProductKey.MouseLeave, GetDrivers.MouseLeave, AddDriver.MouseLeave, RemoveDriver.MouseLeave, ExportDriver.MouseLeave, ApplyUnattend.MouseLeave, GetPESettings.MouseLeave, SetScratchSpace.MouseLeave, SetTargetPath.MouseLeave, GetOSUninstallWindow.MouseLeave, InitiateOSUninstall.MouseLeave, RemoveOSUninstall.MouseLeave, SetOSUninstallWindow.MouseLeave, SetReservedStorageState.MouseLeave, GetReservedStorageState.MouseLeave, NewProjectToolStripMenuItem.MouseLeave, OpenExistingProjectToolStripMenuItem.MouseLeave, SaveProjectToolStripMenuItem.MouseLeave, SaveProjectasToolStripMenuItem.MouseLeave, ExitToolStripMenuItem.MouseLeave, ViewProjectFilesInFileExplorerToolStripMenuItem.MouseLeave, UnloadProjectToolStripMenuItem.MouseLeave, SwitchImageIndexesToolStripMenuItem.MouseLeave, ProjectPropertiesToolStripMenuItem.MouseLeave, ImagePropertiesToolStripMenuItem.MouseLeave, ImageManagementToolStripMenuItem.MouseLeave, OSPackagesToolStripMenuItem.MouseLeave, ProvisioningPackagesToolStripMenuItem.MouseLeave, AppPackagesToolStripMenuItem.MouseLeave, AppPatchesToolStripMenuItem.MouseLeave, DefaultAppAssociationsToolStripMenuItem.MouseLeave, LanguagesAndRegionSettingsToolStripMenuItem.MouseLeave, CapabilitiesToolStripMenuItem.MouseLeave, WindowsEditionsToolStripMenuItem.MouseLeave, DriversToolStripMenuItem.MouseLeave, UnattendedAnswerFilesToolStripMenuItem.MouseLeave, WindowsPEServicingToolStripMenuItem.MouseLeave, OSUninstallToolStripMenuItem.MouseLeave, ReservedStorageToolStripMenuItem.MouseLeave, ImageConversionToolStripMenuItem.MouseLeave, WIMESDToolStripMenuItem.MouseLeave, RemountImageWithWritePermissionsToolStripMenuItem.MouseLeave, CommandShellToolStripMenuItem.MouseLeave, OptionsToolStripMenuItem.MouseLeave, HelpTopicsToolStripMenuItem.MouseLeave, GlossaryToolStripMenuItem.MouseLeave, CommandHelpToolStripMenuItem.MouseLeave, AboutDISMToolsToolStripMenuItem.MouseLeave, UnattendedAnswerFileManagerToolStripMenuItem.MouseLeave, AddEdge.MouseLeave, AddEdgeBrowser.MouseLeave, AddEdgeWebView.MouseLeave, ReportManagerToolStripMenuItem.MouseLeave, MergeSWM.MouseLeave, MountedImageManagerTSMI.MouseLeave, ReportFeedbackToolStripMenuItem.MouseLeave, ManageOnlineInstallationToolStripMenuItem.MouseLeave, AddProvisioningPackage.MouseLeave, SaveImageInformationToolStripMenuItem.MouseLeave, ContributeToTheHelpSystemToolStripMenuItem.MouseLeave
+    Private Sub HideChildDescsTrigger(sender As Object, e As EventArgs) Handles AppendImage.MouseLeave, ApplyFFU.MouseLeave, ApplyImage.MouseLeave, CaptureCustomImage.MouseLeave, CaptureFFU.MouseLeave, CaptureImage.MouseLeave, CleanupMountpoints.MouseLeave, CommitImage.MouseLeave, DeleteImage.MouseLeave, ExportImage.MouseLeave, GetImageInfo.MouseLeave, GetWIMBootEntry.MouseLeave, ListImage.MouseLeave, MountImage.MouseLeave, OptimizeFFU.MouseLeave, OptimizeImage.MouseLeave, RemountImage.MouseLeave, SplitFFU.MouseLeave, SplitImage.MouseLeave, UnmountImage.MouseLeave, UpdateWIMBootEntry.MouseLeave, ApplySiloedPackage.MouseLeave, GetPackages.MouseLeave, AddPackage.MouseLeave, RemovePackage.MouseLeave, GetFeatures.MouseLeave, EnableFeature.MouseLeave, DisableFeature.MouseLeave, CleanupImage.MouseLeave, AddProvisionedAppxPackage.MouseLeave, GetProvisioningPackageInfo.MouseLeave, ApplyCustomDataImage.MouseLeave, GetProvisionedAppxPackages.MouseLeave, AddProvisionedAppxPackage.MouseLeave, RemoveProvisionedAppxPackage.MouseLeave, OptimizeProvisionedAppxPackages.MouseLeave, SetProvisionedAppxDataFile.MouseLeave, CheckAppPatch.MouseLeave, GetAppPatchInfo.MouseLeave, GetAppPatches.MouseLeave, GetAppInfo.MouseLeave, GetApps.MouseLeave, ExportDefaultAppAssociations.MouseLeave, GetDefaultAppAssociations.MouseLeave, ImportDefaultAppAssociations.MouseLeave, RemoveDefaultAppAssociations.MouseLeave, GetIntl.MouseLeave, SetUILangFallback.MouseLeave, SetSysUILang.MouseLeave, SetSysLocale.MouseLeave, SetUserLocale.MouseLeave, SetInputLocale.MouseLeave, SetAllIntl.MouseLeave, SetTimeZone.MouseLeave, SetSKUIntlDefaults.MouseLeave, SetLayeredDriver.MouseLeave, GenLangINI.MouseLeave, SetSetupUILang.MouseLeave, AddCapability.MouseLeave, ExportSource.MouseLeave, GetCapabilities.MouseLeave, RemoveCapability.MouseLeave, GetCurrentEdition.MouseLeave, GetTargetEditions.MouseLeave, SetEdition.MouseLeave, SetProductKey.MouseLeave, GetDrivers.MouseLeave, AddDriver.MouseLeave, RemoveDriver.MouseLeave, ExportDriver.MouseLeave, ApplyUnattend.MouseLeave, GetPESettings.MouseLeave, SetScratchSpace.MouseLeave, SetTargetPath.MouseLeave, GetOSUninstallWindow.MouseLeave, InitiateOSUninstall.MouseLeave, RemoveOSUninstall.MouseLeave, SetOSUninstallWindow.MouseLeave, SetReservedStorageState.MouseLeave, GetReservedStorageState.MouseLeave, NewProjectToolStripMenuItem.MouseLeave, OpenExistingProjectToolStripMenuItem.MouseLeave, SaveProjectToolStripMenuItem.MouseLeave, SaveProjectasToolStripMenuItem.MouseLeave, ExitToolStripMenuItem.MouseLeave, ViewProjectFilesInFileExplorerToolStripMenuItem.MouseLeave, UnloadProjectToolStripMenuItem.MouseLeave, SwitchImageIndexesToolStripMenuItem.MouseLeave, ProjectPropertiesToolStripMenuItem.MouseLeave, ImagePropertiesToolStripMenuItem.MouseLeave, ImageManagementToolStripMenuItem.MouseLeave, OSPackagesToolStripMenuItem.MouseLeave, ProvisioningPackagesToolStripMenuItem.MouseLeave, AppPackagesToolStripMenuItem.MouseLeave, AppPatchesToolStripMenuItem.MouseLeave, DefaultAppAssociationsToolStripMenuItem.MouseLeave, LanguagesAndRegionSettingsToolStripMenuItem.MouseLeave, CapabilitiesToolStripMenuItem.MouseLeave, WindowsEditionsToolStripMenuItem.MouseLeave, DriversToolStripMenuItem.MouseLeave, UnattendedAnswerFilesToolStripMenuItem.MouseLeave, WindowsPEServicingToolStripMenuItem.MouseLeave, OSUninstallToolStripMenuItem.MouseLeave, ReservedStorageToolStripMenuItem.MouseLeave, ImageConversionToolStripMenuItem.MouseLeave, WIMESDToolStripMenuItem.MouseLeave, RemountImageWithWritePermissionsToolStripMenuItem.MouseLeave, CommandShellToolStripMenuItem.MouseLeave, OptionsToolStripMenuItem.MouseLeave, HelpTopicsToolStripMenuItem.MouseLeave, GlossaryToolStripMenuItem.MouseLeave, CommandHelpToolStripMenuItem.MouseLeave, AboutDISMToolsToolStripMenuItem.MouseLeave, UnattendedAnswerFileManagerToolStripMenuItem.MouseLeave, AddEdge.MouseLeave, AddEdgeBrowser.MouseLeave, AddEdgeWebView.MouseLeave, ReportManagerToolStripMenuItem.MouseLeave, MergeSWM.MouseLeave, MountedImageManagerTSMI.MouseLeave, ReportFeedbackToolStripMenuItem.MouseLeave, ManageOnlineInstallationToolStripMenuItem.MouseLeave, AddProvisioningPackage.MouseLeave, SaveImageInformationToolStripMenuItem.MouseLeave, ContributeToTheHelpSystemToolStripMenuItem.MouseLeave, ImportDriver.MouseLeave
         HideChildDescs()
     End Sub
 
@@ -9889,60 +9897,64 @@ Public Class MainForm
         ShowChildDescs(True, 76)
     End Sub
 
-    Private Sub ApplyUnattend_MouseEnter(sender As Object, e As EventArgs) Handles ApplyUnattend.MouseEnter
+    Private Sub ImportDriver_MouseEnter(sender As Object, e As EventArgs) Handles ImportDriver.MouseEnter
         ShowChildDescs(True, 77)
     End Sub
 
-    Private Sub GetPESettings_MouseEnter(sender As Object, e As EventArgs) Handles GetPESettings.MouseEnter
+    Private Sub ApplyUnattend_MouseEnter(sender As Object, e As EventArgs) Handles ApplyUnattend.MouseEnter
         ShowChildDescs(True, 78)
     End Sub
 
-    Private Sub SetScratchSpace_MouseEnter(sender As Object, e As EventArgs) Handles SetScratchSpace.MouseEnter
-        ShowChildDescs(True, 81)
+    Private Sub GetPESettings_MouseEnter(sender As Object, e As EventArgs) Handles GetPESettings.MouseEnter
+        ShowChildDescs(True, 79)
     End Sub
 
-    Private Sub SetTargetPath_MouseEnter(sender As Object, e As EventArgs) Handles SetTargetPath.MouseEnter
+    Private Sub SetScratchSpace_MouseEnter(sender As Object, e As EventArgs) Handles SetScratchSpace.MouseEnter
         ShowChildDescs(True, 82)
     End Sub
 
-    Private Sub GetOSUninstallWindow_MouseEnter(sender As Object, e As EventArgs) Handles GetOSUninstallWindow.MouseEnter
+    Private Sub SetTargetPath_MouseEnter(sender As Object, e As EventArgs) Handles SetTargetPath.MouseEnter
         ShowChildDescs(True, 83)
     End Sub
 
-    Private Sub InitiateOSUninstall_MouseEnter(sender As Object, e As EventArgs) Handles InitiateOSUninstall.MouseEnter
+    Private Sub GetOSUninstallWindow_MouseEnter(sender As Object, e As EventArgs) Handles GetOSUninstallWindow.MouseEnter
         ShowChildDescs(True, 84)
     End Sub
 
-    Private Sub RemoveOSUninstall_MouseEnter(sender As Object, e As EventArgs) Handles RemoveOSUninstall.MouseEnter
+    Private Sub InitiateOSUninstall_MouseEnter(sender As Object, e As EventArgs) Handles InitiateOSUninstall.MouseEnter
         ShowChildDescs(True, 85)
     End Sub
 
-    Private Sub SetOSUninstallWindow_MouseEnter(sender As Object, e As EventArgs) Handles SetOSUninstallWindow.MouseEnter
+    Private Sub RemoveOSUninstall_MouseEnter(sender As Object, e As EventArgs) Handles RemoveOSUninstall.MouseEnter
         ShowChildDescs(True, 86)
     End Sub
 
-    Private Sub GetReservedStorageState_MouseEnter(sender As Object, e As EventArgs) Handles GetReservedStorageState.MouseEnter
+    Private Sub SetOSUninstallWindow_MouseEnter(sender As Object, e As EventArgs) Handles SetOSUninstallWindow.MouseEnter
         ShowChildDescs(True, 87)
     End Sub
 
-    Private Sub SetReservedStorageState_MouseEnter(sender As Object, e As EventArgs) Handles SetReservedStorageState.MouseEnter
+    Private Sub GetReservedStorageState_MouseEnter(sender As Object, e As EventArgs) Handles GetReservedStorageState.MouseEnter
         ShowChildDescs(True, 88)
     End Sub
 
-    Private Sub AddEdge_MouseEnter(sender As Object, e As EventArgs) Handles AddEdge.MouseEnter
+    Private Sub SetReservedStorageState_MouseEnter(sender As Object, e As EventArgs) Handles SetReservedStorageState.MouseEnter
         ShowChildDescs(True, 89)
     End Sub
 
-    Private Sub AddEdgeBrowser_MouseEnter(sender As Object, e As EventArgs) Handles AddEdgeBrowser.MouseEnter
+    Private Sub AddEdge_MouseEnter(sender As Object, e As EventArgs) Handles AddEdge.MouseEnter
         ShowChildDescs(True, 90)
     End Sub
 
-    Private Sub AddEdgeWebView_MouseEnter(sender As Object, e As EventArgs) Handles AddEdgeWebView.MouseEnter
+    Private Sub AddEdgeBrowser_MouseEnter(sender As Object, e As EventArgs) Handles AddEdgeBrowser.MouseEnter
         ShowChildDescs(True, 91)
     End Sub
 
-    Private Sub SaveImageInformationToolStripMenuItem_MouseEnter(sender As Object, e As EventArgs) Handles SaveImageInformationToolStripMenuItem.MouseEnter
+    Private Sub AddEdgeWebView_MouseEnter(sender As Object, e As EventArgs) Handles AddEdgeWebView.MouseEnter
         ShowChildDescs(True, 92)
+    End Sub
+
+    Private Sub SaveImageInformationToolStripMenuItem_MouseEnter(sender As Object, e As EventArgs) Handles SaveImageInformationToolStripMenuItem.MouseEnter
+        ShowChildDescs(True, 93)
     End Sub
 
     Private Sub NewProject_MouseEnter(sender As Object, e As EventArgs) Handles NewProjectToolStripMenuItem.MouseEnter
@@ -15104,7 +15116,7 @@ Public Class MainForm
         End If
     End Sub
 
-    Private Sub ImportDriverPackagesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ImportDriverPackagesToolStripMenuItem.Click
+    Private Sub ImportDriver_Click(sender As Object, e As EventArgs) Handles ImportDriver.Click
         If Not OnlineManagement Then
             ImportDrivers.ShowDialog()
         Else
