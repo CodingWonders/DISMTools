@@ -2038,15 +2038,14 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''- Driver information background processes no longer fail on Windows 7 images
-        '''- The image information report preview window is no longer shown behind other windows
-        '''- The help documentation content browser no longer redirects to the Help home page if its window lost focus or was minimized
+        '''- Fixed an issue where the program would try to save the offline installation management mode pseudo-project after performing element processing
+        '''- Fixed a typo in the description of error code 0xC142010C
+        '''- Package, feature, and capability operations now pass the &quot;/norestart&quot; flag to DISM to skip system restart questions
         '''
         '''New features
         '''
-        '''- You can now get image file information of SWM files
-        '''- Introduced a PRI resource extractor that comes in handy when getting friendly AppX package display names
-        '''- The Options window has bee [resto de la cadena truncado]&quot;;.
+        '''- You can now import the driver packages from one image to another to provide the same hardware compatibility
+        '''- If some packages, features, or capabilities  [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
