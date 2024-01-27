@@ -1099,17 +1099,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes
 
-- Driver information background processes no longer fail on Windows 7 images
-- The image information report preview window is no longer shown behind other windows
-- The help documentation content browser no longer redirects to the Help home page if its window lost focus or was minimized
+- Fixed an issue where the program would try to save the offline installation management mode pseudo-project after performing element processing
+- Fixed a typo in the description of error code 0xC142010C
+- Package, feature, and capability operations now pass the "/norestart" flag to DISM to skip system restart questions
 
 New features
 
-- You can now get image file information of SWM files
-- Introduced a PRI resource extractor that comes in handy when getting friendly AppX package display names
-- The Options window has been redesigned
-- Image status watchers have been added, which detect status changes in an image and notify you of such changes
-- CODE: background processes no longer depend on the "expBackgroundProcesses" variable
+- You can now import the driver packages from one image to another to provide the same hardware compatibility
+- If some packages, features, or capabilities require a system restart, you will now be notified
 
 Help documentation update versions: "v0.4.1.2411"</value>
   </data>
@@ -1187,5 +1184,8 @@ Help documentation update versions: "v0.4.1.2411"</value>
   </data>
   <data name="gitter_chat" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\about\gitter_chat.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="import_driver" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\import_driver.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

@@ -142,7 +142,7 @@ Public Class SetPETargetPath
         End If
         ProgressPanel.peNewTargetPath = TextBox1.Text
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
-        ProgressPanel.OperationNum = 83
+        ProgressPanel.OperationNum = 84
         Visible = False
         ProgressPanel.ShowDialog(MainForm)
         Me.Close()

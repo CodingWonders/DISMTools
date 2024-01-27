@@ -382,6 +382,12 @@
     <Compile Include="Panels\Img_Ops\Drivers\ExportDrivers.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Img_Ops\Drivers\ImportDrivers.Designer.vb">
+      <DependentUpon>ImportDrivers.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Drivers\ImportDrivers.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\Drivers\RemDrivers.Designer.vb">
       <DependentUpon>RemDrivers.vb</DependentUpon>
     </Compile>
@@ -788,6 +794,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Drivers\ExportDrivers.resx">
       <DependentUpon>ExportDrivers.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Drivers\ImportDrivers.resx">
+      <DependentUpon>ImportDrivers.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Drivers\RemDrivers.resx">
       <DependentUpon>RemDrivers.vb</DependentUpon>
@@ -1202,6 +1211,7 @@
     <None Include="Resources\settings\options_scratch_dark.png" />
     <None Include="Resources\settings\options_scratch_light.png" />
     <None Include="Resources\about\gitter_chat.png" />
+    <None Include="Resources\import_driver.png" />
     <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
     <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
     <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />

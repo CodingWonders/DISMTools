@@ -35,7 +35,7 @@ Public Class SetPEScratchSpace
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.peNewScratchSpace = ComboBox1.SelectedItem
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
-        ProgressPanel.OperationNum = 82
+        ProgressPanel.OperationNum = 83
         Visible = False
         ProgressPanel.ShowDialog(MainForm)
         Me.Close()

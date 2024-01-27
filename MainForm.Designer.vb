@@ -133,6 +133,7 @@ Partial Class MainForm
         Me.AddDriver = New System.Windows.Forms.ToolStripMenuItem()
         Me.RemoveDriver = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExportDriver = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ImportDriver = New System.Windows.Forms.ToolStripMenuItem()
         Me.UnattendedAnswerFilesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ApplyUnattend = New System.Windows.Forms.ToolStripMenuItem()
         Me.WindowsPEServicingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -1223,7 +1224,7 @@ Partial Class MainForm
         '
         'DriversToolStripMenuItem
         '
-        Me.DriversToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GetDrivers, Me.AddDriver, Me.RemoveDriver, Me.ExportDriver})
+        Me.DriversToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GetDrivers, Me.AddDriver, Me.RemoveDriver, Me.ExportDriver, Me.ImportDriver})
         Me.DriversToolStripMenuItem.Name = "DriversToolStripMenuItem"
         Me.DriversToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
         Me.DriversToolStripMenuItem.Text = "Drivers"
@@ -1231,26 +1232,32 @@ Partial Class MainForm
         'GetDrivers
         '
         Me.GetDrivers.Name = "GetDrivers"
-        Me.GetDrivers.Size = New System.Drawing.Size(202, 22)
+        Me.GetDrivers.Size = New System.Drawing.Size(204, 22)
         Me.GetDrivers.Text = "Get driver information..."
         '
         'AddDriver
         '
         Me.AddDriver.Name = "AddDriver"
-        Me.AddDriver.Size = New System.Drawing.Size(202, 22)
+        Me.AddDriver.Size = New System.Drawing.Size(204, 22)
         Me.AddDriver.Text = "Add driver..."
         '
         'RemoveDriver
         '
         Me.RemoveDriver.Name = "RemoveDriver"
-        Me.RemoveDriver.Size = New System.Drawing.Size(202, 22)
+        Me.RemoveDriver.Size = New System.Drawing.Size(204, 22)
         Me.RemoveDriver.Text = "Remove driver..."
         '
         'ExportDriver
         '
         Me.ExportDriver.Name = "ExportDriver"
-        Me.ExportDriver.Size = New System.Drawing.Size(202, 22)
+        Me.ExportDriver.Size = New System.Drawing.Size(204, 22)
         Me.ExportDriver.Text = "Export driver packages..."
+        '
+        'ImportDriver
+        '
+        Me.ImportDriver.Name = "ImportDriver"
+        Me.ImportDriver.Size = New System.Drawing.Size(204, 22)
+        Me.ImportDriver.Text = "Import driver packages..."
         '
         'UnattendedAnswerFilesToolStripMenuItem
         '
@@ -3711,7 +3718,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32.42009!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 67.57991!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 93.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 99.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -3746,9 +3753,9 @@ Partial Class MainForm
         Me.LinkLabel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel1.Location = New System.Drawing.Point(67, 146)
+        Me.LinkLabel1.Location = New System.Drawing.Point(65, 146)
         Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(222, 254)
+        Me.LinkLabel1.Size = New System.Drawing.Size(224, 254)
         Me.LinkLabel1.TabIndex = 5
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "Click here to mount an image"
@@ -3758,9 +3765,9 @@ Partial Class MainForm
         Me.Panel8.Controls.Add(Me.projName)
         Me.Panel8.Controls.Add(Me.projNameText)
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel8.Location = New System.Drawing.Point(67, 3)
+        Me.Panel8.Location = New System.Drawing.Point(65, 3)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(128, 23)
+        Me.Panel8.Size = New System.Drawing.Size(124, 23)
         Me.Panel8.TabIndex = 8
         '
         'projName
@@ -3769,7 +3776,7 @@ Partial Class MainForm
         Me.projName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projName.Location = New System.Drawing.Point(0, 0)
         Me.projName.Name = "projName"
-        Me.projName.Size = New System.Drawing.Size(128, 23)
+        Me.projName.Size = New System.Drawing.Size(124, 23)
         Me.projName.TabIndex = 2
         Me.projName.Text = "projName"
         Me.projName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -3779,7 +3786,7 @@ Partial Class MainForm
         Me.projNameText.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projNameText.Location = New System.Drawing.Point(0, 0)
         Me.projNameText.Name = "projNameText"
-        Me.projNameText.Size = New System.Drawing.Size(128, 21)
+        Me.projNameText.Size = New System.Drawing.Size(124, 21)
         Me.projNameText.TabIndex = 4
         Me.projNameText.Text = "projName"
         Me.projNameText.Visible = False
@@ -3790,9 +3797,9 @@ Partial Class MainForm
         Me.Label5.AutoSize = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label5, 2)
         Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label5.Location = New System.Drawing.Point(67, 131)
+        Me.Label5.Location = New System.Drawing.Point(65, 131)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(222, 15)
+        Me.Label5.Size = New System.Drawing.Size(224, 15)
         Me.Label5.TabIndex = 2
         Me.Label5.Text = "imgStatus"
         '
@@ -3802,7 +3809,7 @@ Partial Class MainForm
         Me.Label2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label2.Location = New System.Drawing.Point(3, 29)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(58, 102)
+        Me.Label2.Size = New System.Drawing.Size(56, 102)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "Location:"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -3812,9 +3819,9 @@ Partial Class MainForm
         Me.Label3.AutoEllipsis = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label3, 2)
         Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label3.Location = New System.Drawing.Point(67, 29)
+        Me.Label3.Location = New System.Drawing.Point(65, 29)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(222, 102)
+        Me.Label3.Size = New System.Drawing.Size(224, 102)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "projPath"
         '
@@ -3825,7 +3832,7 @@ Partial Class MainForm
         Me.Label4.Location = New System.Drawing.Point(3, 131)
         Me.Label4.Name = "Label4"
         Me.TableLayoutPanel2.SetRowSpan(Me.Label4, 2)
-        Me.Label4.Size = New System.Drawing.Size(58, 269)
+        Me.Label4.Size = New System.Drawing.Size(56, 269)
         Me.Label4.TabIndex = 1
         Me.Label4.Text = "Images mounted?"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -3836,7 +3843,7 @@ Partial Class MainForm
         Me.Panel9.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel9.Location = New System.Drawing.Point(3, 3)
         Me.Panel9.Name = "Panel9"
-        Me.Panel9.Size = New System.Drawing.Size(58, 23)
+        Me.Panel9.Size = New System.Drawing.Size(56, 23)
         Me.Panel9.TabIndex = 9
         '
         'Label1
@@ -3844,7 +3851,7 @@ Partial Class MainForm
         Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label1.Location = New System.Drawing.Point(0, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(58, 23)
+        Me.Label1.Size = New System.Drawing.Size(56, 23)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Name:"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -5512,4 +5519,5 @@ Partial Class MainForm
     Friend WithEvents LinkLabel25 As System.Windows.Forms.LinkLabel
     Friend WithEvents WatcherBW As System.ComponentModel.BackgroundWorker
     Friend WithEvents WatcherTimer As System.Windows.Forms.Timer
+    Friend WithEvents ImportDriver As System.Windows.Forms.ToolStripMenuItem
 End Class
