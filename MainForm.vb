@@ -278,6 +278,30 @@ Public Class MainForm
         Dim args() As String = Environment.GetCommandLineArgs()
         If args.Length = 1 Then
             Exit Sub
+        ElseIf args.Length = 2 And args(1) = "/?" Then
+            ' Show command-line argument help
+            MsgBox("You can pass command line arguments like this:" & CrLf & CrLf & _
+                   "    DISMTools.exe <arguments>" & CrLf & CrLf & _
+                   "The command line arguments that are available to you are the following:" & CrLf & CrLf & _
+                   "  /setup" & CrLf & _
+                   "      Shows the initial setup wizard and reconfigures the program" & CrLf & _
+                   "  /load=<path-to-project>" & CrLf & _
+                   "      Loads a project file. You need to provide an absolute path for a project file, like this:" & CrLf & _
+                   "      DISMTools.exe /load=" & Quote & "C:\foo\bar.dtproj" & Quote & CrLf & _
+                   "  /online" & CrLf & _
+                   "      Enters the online installation management mode" & CrLf & _
+                   "  /offline:<drive>" & CrLf & _
+                   "      Enters the offline installation management mode. You need to provide a drive, like this:" & CrLf & _
+                   "      DISMTools.exe /offline:E:\" & CrLf & _
+                   "  /migrate" & CrLf & _
+                   "      Forces setting migration. While you can use this parameter, it should be used by the update system" & CrLf & _
+                   "  /nomig" & CrLf & _
+                   "      Skips setting migration. This parameter speeds up testing" & CrLf & _
+                   "  /noupd" & CrLf & _
+                   "      Disables update checks. Don't use this parameter unless you're testing a change" & CrLf & _
+                   "  /exp" & CrLf & _
+                   "      Enables program experiments if there are any" & CrLf & CrLf & _
+                   "DISMTools will continue starting up after you close this help message.", vbOKOnly + vbInformation, "DISMTools command line arguments")
         Else
             For Each arg In args
                 If arg.StartsWith("/setup", StringComparison.OrdinalIgnoreCase) Then
