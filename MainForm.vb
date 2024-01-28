@@ -192,6 +192,7 @@ Public Class MainForm
     Dim DismVersionChecker As FileVersionInfo
     Dim argProjPath As String = ""                                       ' String used to know which project to load if it's specified in an argument
     Dim argOnline As Boolean                                             ' Determine if program will be launched in online installation mode
+    Dim argOffline As Boolean                                            ' Determine if program will be launched in offline installation mode
 
     Dim sessionMntDir As String = ""
 
@@ -310,6 +311,23 @@ Public Class MainForm
                     Else
                         ' Add warning later
                     End If
+                ElseIf arg.StartsWith("/offline", StringComparison.OrdinalIgnoreCase) Then
+                    If argProjPath = "" Then
+                        If arg.Replace("/offline:", "").Trim() <> "" Then
+                            Dim diList As New List(Of DriveInfo)
+                            diList = DriveInfo.GetDrives().ToList()
+                            Dim diPaths As New List(Of String)
+                            For Each di As DriveInfo In diList
+                                If di.IsReady Then diPaths.Add(di.Name)
+                            Next
+                            If Path.GetPathRoot(arg.Replace("/offline:", "").Trim()) = arg.Replace("/offline:", "").Trim() And diPaths.Contains(arg.Replace("/offline:", "").Trim()) Then
+                                drivePath = arg.Replace("/offline:", "").Trim()
+                                argOffline = True
+                            End If
+                        End If
+                    Else
+                        ' Add warning later
+                    End If
                 ElseIf arg.StartsWith("/migrate", StringComparison.OrdinalIgnoreCase) Then
                     MigrationForm.ShowDialog()
                     Thread.Sleep(1500)
@@ -408,6 +426,9 @@ Public Class MainForm
         End If
         If argOnline Then
             BeginOnlineManagement(True)
+        End If
+        If argOffline And drivePath <> "" Then
+            BeginOfflineManagement(drivePath)
         End If
         Timer1.Enabled = True
         LinkLabel12.LinkColor = Color.FromArgb(241, 241, 241)
