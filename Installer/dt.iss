@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "DISMTools"
-#define MyAppVersion "0.4.1"
+#define MyAppVersion "0.4.2"
 #define MyAppPublisher "CodingWonders Software"
 #define MyAppURL "https://github.com/CodingWonders/DISMTools"
 #define MyAppExeName "DISMTools.exe"
