@@ -2036,16 +2036,25 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Bugfixes
+        '''  Busca una cadena traducida similar a Changes made since last preview
         '''
-        '''- Fixed an issue where the program would try to save the offline installation management mode pseudo-project after performing element processing
-        '''- Fixed a typo in the description of error code 0xC142010C
-        '''- Package, feature, and capability operations now pass the &quot;/norestart&quot; flag to DISM to skip system restart questions
+        '''Bugfixes
+        '''
+        '''- Dates of the RSS feed news are now represented correctly
         '''
         '''New features
         '''
-        '''- You can now import the driver packages from one image to another to provide the same hardware compatibility
-        '''- If some packages, features, or capabilities  [resto de la cadena truncado]&quot;;.
+        '''- Added 2 new command-line arguments: &quot;/offline&quot; (enters the offline installation management mode) and &quot;/?&quot; (shows a command line help message)
+        '''
+        '''Removed features
+        '''
+        '''- The old method of getting drives through WMIC is now removed. Typing &quot;dthelper /drinfo&quot; will now result in an unrecognized command
+        '''
+        '''Overall changes
+        '''
+        '''Bugfixes
+        '''
+        '''- Driver information background processes no longer f [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

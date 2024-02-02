@@ -125,7 +125,7 @@ Public Class MainForm
     Public isSqlServerDTProj As Boolean
 
     ' Set branch name and codenames
-    Public dtBranch As String = "dt_preview"
+    Public dtBranch As String = "dt_preview_relcndid"
 
     ' Arrays and other variables used on background processes
     Public imgPackageNames(65535) As String
@@ -192,6 +192,7 @@ Public Class MainForm
     Dim DismVersionChecker As FileVersionInfo
     Dim argProjPath As String = ""                                       ' String used to know which project to load if it's specified in an argument
     Dim argOnline As Boolean                                             ' Determine if program will be launched in online installation mode
+    Dim argOffline As Boolean                                            ' Determine if program will be launched in offline installation mode
 
     Dim sessionMntDir As String = ""
 
@@ -277,6 +278,30 @@ Public Class MainForm
         Dim args() As String = Environment.GetCommandLineArgs()
         If args.Length = 1 Then
             Exit Sub
+        ElseIf args.Length = 2 And args(1) = "/?" Then
+            ' Show command-line argument help
+            MsgBox("You can pass command line arguments like this:" & CrLf & CrLf & _
+                   "    DISMTools.exe <arguments>" & CrLf & CrLf & _
+                   "The command line arguments that are available to you are the following:" & CrLf & CrLf & _
+                   "  /setup" & CrLf & _
+                   "      Shows the initial setup wizard and reconfigures the program" & CrLf & _
+                   "  /load=<path-to-project>" & CrLf & _
+                   "      Loads a project file. You need to provide an absolute path for a project file, like this:" & CrLf & _
+                   "      DISMTools.exe /load=" & Quote & "C:\foo\bar.dtproj" & Quote & CrLf & _
+                   "  /online" & CrLf & _
+                   "      Enters the online installation management mode" & CrLf & _
+                   "  /offline:<drive>" & CrLf & _
+                   "      Enters the offline installation management mode. You need to provide a drive, like this:" & CrLf & _
+                   "      DISMTools.exe /offline:E:\" & CrLf & _
+                   "  /migrate" & CrLf & _
+                   "      Forces setting migration. While you can use this parameter, it should be used by the update system" & CrLf & _
+                   "  /nomig" & CrLf & _
+                   "      Skips setting migration. This parameter speeds up testing" & CrLf & _
+                   "  /noupd" & CrLf & _
+                   "      Disables update checks. Don't use this parameter unless you're testing a change" & CrLf & _
+                   "  /exp" & CrLf & _
+                   "      Enables program experiments if there are any" & CrLf & CrLf & _
+                   "DISMTools will continue starting up after you close this help message.", vbOKOnly + vbInformation, "DISMTools command line arguments")
         Else
             For Each arg In args
                 If arg.StartsWith("/setup", StringComparison.OrdinalIgnoreCase) Then
@@ -307,6 +332,23 @@ Public Class MainForm
                 ElseIf arg.StartsWith("/online", StringComparison.OrdinalIgnoreCase) Then
                     If argProjPath = "" Then
                         argOnline = True
+                    Else
+                        ' Add warning later
+                    End If
+                ElseIf arg.StartsWith("/offline", StringComparison.OrdinalIgnoreCase) Then
+                    If argProjPath = "" Then
+                        If arg.Replace("/offline:", "").Trim() <> "" Then
+                            Dim diList As New List(Of DriveInfo)
+                            diList = DriveInfo.GetDrives().ToList()
+                            Dim diPaths As New List(Of String)
+                            For Each di As DriveInfo In diList
+                                If di.IsReady Then diPaths.Add(di.Name)
+                            Next
+                            If Path.GetPathRoot(arg.Replace("/offline:", "").Trim()) = arg.Replace("/offline:", "").Trim() And diPaths.Contains(arg.Replace("/offline:", "").Trim()) Then
+                                drivePath = arg.Replace("/offline:", "").Trim()
+                                argOffline = True
+                            End If
+                        End If
                     Else
                         ' Add warning later
                     End If
@@ -408,6 +450,9 @@ Public Class MainForm
         End If
         If argOnline Then
             BeginOnlineManagement(True)
+        End If
+        If argOffline And drivePath <> "" Then
+            BeginOfflineManagement(drivePath)
         End If
         Timer1.Enabled = True
         LinkLabel12.LinkColor = Color.FromArgb(241, 241, 241)
@@ -14908,7 +14953,10 @@ Public Class MainForm
             FeedsPanel.Visible = True
             FeedErrorPanel.Visible = False
             For Each item As SyndicationItem In FeedContents.Items.OrderByDescending(Function(x) x.PublishDate)
-                ListView1.Items.Add(New ListViewItem(New String() {item.Title.Text, item.PublishDate.ToString()}))
+                ListView1.Items.Add(New ListViewItem(New String() {item.Title.Text, _
+                                                                   TimeZoneInfo.ConvertTime(item.PublishDate.DateTime, _
+                                                                                            TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"), _
+                                                                                            TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time")).ToString("dddd, MMMM dd, yyyy H:mm:ss")}))
                 FeedLinks.Add(item.Links(0).Uri)
             Next
         Else
@@ -14932,7 +14980,10 @@ Public Class MainForm
             FeedsPanel.Visible = True
             FeedErrorPanel.Visible = False
             For Each item As SyndicationItem In FeedContents.Items.OrderByDescending(Function(x) x.PublishDate)
-                ListView1.Items.Add(New ListViewItem(New String() {item.Title.Text, item.PublishDate.ToString()}))
+                ListView1.Items.Add(New ListViewItem(New String() {item.Title.Text, _
+                                                                   TimeZoneInfo.ConvertTime(item.PublishDate.DateTime, _
+                                                                                            TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"), _
+                                                                                            TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time")).ToString("dddd, MMMM dd, yyyy H:mm:ss")}))
                 FeedLinks.Add(item.Links(0).Uri)
             Next
         Else
