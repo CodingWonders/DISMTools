@@ -1,10 +1,10 @@
-:: DISMTools Helper Script - version 0.4
+:: DISMTools Helper Script - version 0.4.1
 @echo off
 
 
 :init
 :: Set initial vars
-set script_ver=v0.4
+set script_ver=v0.4.1
 set outputmode=0
 :: outputmode=0 (output to file)
 ::            1 (output to console)
@@ -24,28 +24,8 @@ if %ERRORLEVEL% gtr 0 (
 :detect_args
 if "%1%"=="/sh" (
     goto dt_sh
-) else if "%1%"=="/drinfo" (
-	goto dt_wmic
 ) else (
 	echo Unrecognized parameter. Available parameters: sh, drinfo
-	exit /b 1
-)
-
-:dt_wmic
-cls
-
-:: Show deprecation notice
-echo This function is deprecated and has been replaced by native WMI commands.
-echo You can still access this function, but it will be removed in the future.
-
-echo Getting drive information. Please wait...
-if exist .\wmic (
-	del .\wmic
-)
-wmic diskdrive list brief > .\wmic
-if %ERRORLEVEL% equ 0 (
-	exit /b 0
-) else (
 	exit /b 1
 )
 

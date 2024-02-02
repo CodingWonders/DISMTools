@@ -109,36 +109,37 @@
 ' 75                    Add-Driver
 ' 76                    Remove-Driver           (should be used with care)
 ' 77                    Export-Driver
+' 78                    Import-Driver
 
 ' OperationNums for unattended servicing
 ' --------------------------------------
-' 78                    Apply-Unattend
+' 79                    Apply-Unattend
 
 ' OperationNums for Windows PE servicing
 ' --------------------------------------
-' 79                    Get-PESettings
-' 80                    Get-ScratchSpace
-' 81                    Get-TargetPath
-' 82                    Set-ScratchSpace
-' 83                    Set-TargetPath
+' 80                    Get-PESettings
+' 81                    Get-ScratchSpace
+' 82                    Get-TargetPath
+' 83                    Set-ScratchSpace
+' 84                    Set-TargetPath
 
 ' OperationNums for operating system uninstall
 ' --------------------------------------------
-' 84                    Get-OSUninstallWindow
-' 85                    Initiate-OSUninstall
-' 86                    Remove-OSUninstall
-' 87                    Set-OSUninstallWindow
+' 85                    Get-OSUninstallWindow
+' 86                    Initiate-OSUninstall
+' 87                    Remove-OSUninstall
+' 88                    Set-OSUninstallWindow
 
 ' OperationNums for reserved storage
 ' ----------------------------------
-' 88                    Set-ReservedStorageState
-' 89                    Get-ReservedStorageState
+' 89                    Set-ReservedStorageState
+' 90                    Get-ReservedStorageState
 
 ' OperationNums for Microsoft Edge servicing
 ' ------------------------------------------
-' 90                    Add-Edge
-' 91                    Add-EdgeBrowser
-' 92                    Add-EdgeWebView
+' 91                    Add-Edge
+' 92                    Add-EdgeBrowser
+' 93                    Add-EdgeWebView
 
 ' DISMTools reserved OperationNums
 '---------------------------------
@@ -435,14 +436,21 @@ Public Class ProgressPanel
     ' OperationNum: 77
     Public drvExportTarget As String                        ' Path the drivers will be exported to
 
-    ' OperationNum: 82
-    Public peNewScratchSpace As Integer                     ' New scratch space amount to apply to the Windows PE image
+    ' OperationNum: 78
+    Public ImportSourceInt As Integer                       ' The import source
+    ' ImportSourceInt = 0
+    Public DrvImport_SourceImage As String                  ' The mounted image that will act as the source for the driver import
+    ' ImportSourceInt = 2
+    Public DrvImport_SourceDisk As String                   ' The disk drive that will act as the source for the driver import
 
     ' OperationNum: 83
+    Public peNewScratchSpace As Integer                     ' New scratch space amount to apply to the Windows PE image
+
+    ' OperationNum: 84
     Public peNewTargetPath As String                        ' New target path to apply to the Windows PE image
 
     ' <Space for other OperationNums>
-    ' OperationNum: 87
+    ' OperationNum: 88
     Public osUninstDayCount As Integer                      ' Number of days the user has to uninstall an OS upgrade
 
     ' OperationNum: 991
@@ -600,11 +608,15 @@ Public Class ProgressPanel
             taskCount = 1
         ElseIf opNum = 78 Then
             taskCount = 1
-        ElseIf opNum = 82 Then
+        ElseIf opNum = 88 Then
+            taskCount = 1
+        ElseIf opNum = 79 Then
             taskCount = 1
         ElseIf opNum = 83 Then
             taskCount = 1
-        ElseIf opNum = 87 Then
+        ElseIf opNum = 84 Then
+            taskCount = 1
+        ElseIf opNum = 88 Then
             taskCount = 1
         ElseIf opNum = 991 Then
             taskCount = 1
@@ -1770,7 +1782,7 @@ Public Class ProgressPanel
                                "Processing " & pkgCount & " packages..." & CrLf)
             If pkgAdditionOp = 0 Then
                 DISMProc.StartInfo.FileName = DismProgram
-                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-package /packagepath=" & Quote & pkgSource & Quote
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /norestart /add-package /packagepath=" & Quote & pkgSource & Quote
                 If pkgIgnoreApplicabilityChecks Then
                     CommandArgs &= " /ignorecheck"
                 End If
@@ -1880,7 +1892,7 @@ Public Class ProgressPanel
                     If Not pkgIsApplicable Or pkgIsInstalled Then Continue For
                     LogView.AppendText(CrLf & "Processing package...")
                     DISMProc.StartInfo.FileName = DismProgram
-                    CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-package /packagepath=" & Quote & pkgs(x) & Quote
+                    CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /norestart /add-package /packagepath=" & Quote & pkgs(x) & Quote
                     If pkgIgnoreApplicabilityChecks Then
                         CommandArgs &= " /ignorecheck"
                     End If
@@ -1936,6 +1948,9 @@ Public Class ProgressPanel
                 GetErrorCode(True)
             ElseIf pkgAdditionOp = 1 And pkgSuccessfulAdditions <= 0 Then
                 GetErrorCode(False)
+            End If
+            If PkgErrorText.RichTextBox1.Text.Contains("BC2") Then
+                LogView.AppendText(CrLf & "Some packages require a system restart to be fully processed. Save your work, close your programs, and restart when ready")
             End If
         ElseIf opNum = 27 Then
             Select Case Language
@@ -2048,7 +2063,7 @@ Public Class ProgressPanel
                     If pkgIsReadyForRemoval Then
                         LogView.AppendText(CrLf & "Processing package removal...")
                         DISMProc.StartInfo.FileName = DismProgram
-                        CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /remove-package /packagename=" & pkgRemovalNames(x)
+                        CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /norestart /remove-package /packagename=" & pkgRemovalNames(x)
                         DISMProc.StartInfo.Arguments = CommandArgs
                         DISMProc.Start()
                         DISMProc.WaitForExit()
@@ -2146,7 +2161,7 @@ Public Class ProgressPanel
                     If pkgIsReadyForRemoval Then
                         LogView.AppendText(CrLf & "Processing package removal...")
                         DISMProc.StartInfo.FileName = DismProgram
-                        CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /remove-package /packagepath=" & pkgRemovalFiles(x)
+                        CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /norestart /remove-package /packagepath=" & pkgRemovalFiles(x)
                         DISMProc.StartInfo.Arguments = CommandArgs
                         DISMProc.Start()
                         DISMProc.WaitForExit()
@@ -2195,6 +2210,9 @@ Public Class ProgressPanel
                 GetErrorCode(True)
             ElseIf pkgSuccessfulRemovals <= 0 Then
                 GetErrorCode(False)
+            End If
+            If PkgErrorText.RichTextBox1.Text.Contains("BC2") Then
+                LogView.AppendText(CrLf & "Some packages require a system restart to be fully processed. Save your work, close your programs, and restart when ready")
             End If
         ElseIf opNum = 30 Then
             Select Case Language
@@ -2318,7 +2336,7 @@ Public Class ProgressPanel
                 Finally
                     DismApi.Shutdown()
                 End Try
-                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /enable-feature /featurename=" & featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /norestart /enable-feature /featurename=" & featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
                 If featisParentPkgNameUsed And featParentPkgName <> "" Then
                     CommandArgs &= " /packagename=" & featParentPkgName
                 End If
@@ -2373,6 +2391,9 @@ Public Class ProgressPanel
                 GetErrorCode(True)
             ElseIf featSuccessfulEnablements <= 0 Then
                 GetErrorCode(False)
+            End If
+            If FeatErrorText.RichTextBox1.Text.Contains("BC2") Then
+                LogView.AppendText(CrLf & "Some features require a system restart to be fully processed. Save your work, close your programs, and restart when ready")
             End If
         ElseIf opNum = 31 Then
             Select Case Language
@@ -2473,7 +2494,7 @@ Public Class ProgressPanel
                 Finally
                     DismApi.Shutdown()
                 End Try
-                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /disable-feature /featurename=" & featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /norestart /disable-feature /featurename=" & featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
                 If featDisablementParentPkgUsed And featDisablementParentPkg <> "" Then
                     CommandArgs &= " /packagename=" & featParentPkgName
                 End If
@@ -2520,6 +2541,9 @@ Public Class ProgressPanel
                 GetErrorCode(True)
             ElseIf featSuccessfulDisablements <= 0 Then
                 GetErrorCode(False)
+            End If
+            If FeatErrorText.RichTextBox1.Text.Contains("BC2") Then
+                LogView.AppendText(CrLf & "Some features require a system restart to be fully processed. Save your work, close your programs, and restart when ready")
             End If
         ElseIf opNum = 32 Then
             Select Case Language
@@ -3248,7 +3272,7 @@ Public Class ProgressPanel
                 Finally
                     DismApi.Shutdown()
                 End Try
-                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-capability /capabilityname=" & capAdditionIds(x)
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /norestart /add-capability /capabilityname=" & capAdditionIds(x)
                 If capAdditionUseSource And Directory.Exists(capAdditionSource) Then
                     CommandArgs &= " /source=" & Quote & capAdditionSource & Quote
                 End If
@@ -3315,6 +3339,9 @@ Public Class ProgressPanel
                 GetErrorCode(True)
             ElseIf capSuccessfulAdditions <= 0 Then
                 GetErrorCode(False)
+            End If
+            If FeatErrorText.RichTextBox1.Text.Contains("BC2") Then
+                LogView.AppendText(CrLf & "Some capabilities require a system restart to be fully processed. Save your work, close your programs, and restart when ready")
             End If
         ElseIf opNum = 68 Then
             Select Case Language
@@ -3396,7 +3423,7 @@ Public Class ProgressPanel
                     DismApi.Shutdown()
                 End Try
                 DISMProc.StartInfo.FileName = DismProgram
-                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /remove-capability /capabilityname=" & capRemovalIds(x)
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /norestart /remove-capability /capabilityname=" & capRemovalIds(x)
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
                 DISMProc.WaitForExit()
@@ -3436,6 +3463,9 @@ Public Class ProgressPanel
                 GetErrorCode(True)
             ElseIf capSuccessfulRemovals <= 0 Then
                 GetErrorCode(False)
+            End If
+            If FeatErrorText.RichTextBox1.Text.Contains("BC2") Then
+                LogView.AppendText(CrLf & "Some capabilities require a system restart to be fully processed. Save your work, close your programs, and restart when ready")
             End If
         ElseIf opNum = 75 Then
             Select Case Language
@@ -3707,7 +3737,7 @@ Public Class ProgressPanel
                                                    "- Class name: " & drv.ClassName & CrLf & _
                                                    "- Class description: " & drv.ClassDescription & CrLf & _
                                                    "- Class GUID: " & drv.ClassGuid & CrLf & _
-                                                   "- Version and date: " & drv.Version.ToString() & "/" & drv.Date.ToString() & CrLf & _
+                                                   "- Version and date: " & drv.Version.ToString() & " / " & drv.Date.ToString() & CrLf & _
                                                    "- Is part of the Windows distribution? " & If(drv.InBox, "Yes", "No") & CrLf & _
                                                    "- Is critical to the boot process? " & If(drv.BootCritical, "Yes", "No"))
                                 If drv.InBox Then
@@ -3821,7 +3851,127 @@ Public Class ProgressPanel
                 LogView.AppendText(" Error level : " & errCode)
             End If
             GetErrorCode(False)
-        ElseIf opNum = 82 Then
+        ElseIf opNum = 78 Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            allTasks.Text = "Importing drivers..."
+                            currentTask.Text = "Preparing to import third-party drivers..."
+                        Case "ESN"
+                            allTasks.Text = "Importando controladores..."
+                            currentTask.Text = "Preparándonos para importar controladores de terceros..."
+                        Case "FRA"
+                            allTasks.Text = "Importation des pilotes en cours..."
+                            currentTask.Text = "Préparation de l'importation de pilotes tiers en cours..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Importing drivers..."
+                    currentTask.Text = "Preparing to import third-party drivers..."
+                Case 2
+                    allTasks.Text = "Importando controladores..."
+                    currentTask.Text = "Preparándonos para importar controladores de terceros..."
+                Case 3
+                    allTasks.Text = "Importation des pilotes en cours..."
+                    currentTask.Text = "Préparation de l'importation de pilotes tiers en cours..."
+            End Select
+            LogView.AppendText(CrLf & "Importing third party drivers..." & CrLf)
+            Select Case ImportSourceInt
+                Case 0
+                    LogView.AppendText("- Driver import source: Windows image (" & Quote & DrvImport_SourceImage & Quote & ")" & CrLf)
+                Case 1
+                    LogView.AppendText("- Driver import source: active installation" & CrLf)
+                Case 2
+                    LogView.AppendText("- Driver import source: offline installation (" & Quote & DrvImport_SourceDisk & Quote & ")" & CrLf)
+            End Select
+            Thread.Sleep(500)
+            LogView.AppendText(CrLf & "Creating temporary folder for driver exports..." & CrLf)
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            currentTask.Text = "Exporting third-party drivers from driver import source..."
+                        Case "ESN"
+                            currentTask.Text = "Exportando controladores de terceros del origen de importación de controladores..."
+                        Case "FRA"
+                            currentTask.Text = "Exportation de pilotes tiers à partir de la source d'importation des pilotes en cours..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Exporting third-party drivers from driver import source..."
+                Case 2
+                    currentTask.Text = "Exportando controladores de terceros del origen de importación de controladores..."
+                Case 3
+                    currentTask.Text = "Exportation de pilotes tiers à partir de la source d'importation des pilotes en cours..."
+            End Select
+            Try
+                Directory.CreateDirectory(Application.StartupPath & "\export_temp")
+            Catch ex As Exception
+                LogView.AppendText(CrLf & "The temporary folder could not be created. See below for reasons why:" & CrLf & CrLf & ex.ToString() & "-" & ex.Message)
+            End Try
+            If Directory.Exists(Application.StartupPath & "\export_temp") Then
+                LogView.AppendText(CrLf & "Exporting third-party drivers from import source..." & CrLf)
+                CommandArgs &= If(ImportSourceInt = 1, " /online", " /image=" & Quote & MountDir & Quote) & " /export-driver /destination=" & Quote & Application.StartupPath & "\export_temp" & Quote
+                DISMProc.StartInfo.FileName = DismProgram
+                DISMProc.StartInfo.Arguments = CommandArgs
+                DISMProc.Start()
+                DISMProc.WaitForExit()
+                LogView.AppendText(CrLf & "Getting error level...")
+                If Hex(DISMProc.ExitCode).Length < 8 Then
+                    errCode = DISMProc.ExitCode
+                Else
+                    errCode = Hex(DISMProc.ExitCode)
+                End If
+                If errCode.Length >= 8 Then
+                    LogView.AppendText(" Error level : 0x" & errCode)
+                Else
+                    LogView.AppendText(" Error level : " & errCode)
+                End If
+                If DISMProc.ExitCode = 0 Then
+                    CurrentPB.Value = CurrentPB.Maximum / 2
+                    AllPB.Value = AllPB.Maximum / 2
+                    Select Case Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENU", "ENG"
+                                    currentTask.Text = "Importing third-party drivers to destination image..."
+                                Case "ESN"
+                                    currentTask.Text = "Importando controladores de terceros a la imagen de destino..."
+                                Case "FRA"
+                                    currentTask.Text = "Importation des pilotes tiers dans l'image de destination en cours..."
+                            End Select
+                        Case 1
+                            currentTask.Text = "Importing third-party drivers to destination image..."
+                        Case 2
+                            currentTask.Text = "Importando controladores de terceros a la imagen de destino..."
+                        Case 3
+                            currentTask.Text = "Importation des pilotes tiers dans l'image de destination en cours..."
+                    End Select
+                    LogView.AppendText(CrLf & "Importing third-party drivers from the temporary export directory to the destination image...")
+                    CommandArgs = BckArgs
+                    CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-driver /driver=" & Quote & Application.StartupPath & "\export_temp" & Quote & " /recurse"
+                    DISMProc.StartInfo.Arguments = CommandArgs
+                    DISMProc.Start()
+                    DISMProc.WaitForExit()
+                    If Hex(DISMProc.ExitCode).Length < 8 Then
+                        errCode = DISMProc.ExitCode
+                    Else
+                        errCode = Hex(DISMProc.ExitCode)
+                    End If
+                    If errCode.Length >= 8 Then
+                        LogView.AppendText(" Error level : 0x" & errCode)
+                    Else
+                        LogView.AppendText(" Error level : " & errCode)
+                    End If
+                    GetErrorCode(False)
+                End If
+                LogView.AppendText(CrLf & "Deleting temporary export directory...")
+                Try
+                    Directory.Delete(Application.StartupPath & "\export_temp", True)
+                Catch ex As Exception
+                    LogView.AppendText(CrLf & "We couldn't delete the temporary export directory. You'll need to delete the " & Quote & "export_temp" & Quote & " directory manually.")
+                End Try
+            End If
+        ElseIf opNum = 83 Then
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3864,7 +4014,7 @@ Public Class ProgressPanel
                 LogView.AppendText(" Error level : " & errCode)
             End If
             GetErrorCode(False)
-        ElseIf opNum = 83 Then
+        ElseIf opNum = 84 Then
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3907,7 +4057,7 @@ Public Class ProgressPanel
                 LogView.AppendText(" Error level : " & errCode)
             End If
             GetErrorCode(False)
-        ElseIf opNum = 87 Then
+        ElseIf opNum = 88 Then
             allTasks.Text = "Setting the uninstall window..."
             currentTask.Text = "Setting the amount of days an uninstall can happen..."
             LogView.AppendText(CrLf & "Setting the amount of days an uninstall can happen..." & CrLf &
@@ -4622,7 +4772,7 @@ Public Class ProgressPanel
                 End If
                 MainForm.DetectMountedImages(False)
             ElseIf OperationNum = 26 Then
-                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 If Not MainForm.RunAllProcs Then MainForm.bwBackgroundProcessAction = 1
                 MainForm.UpdateProjProperties(True, False)
                 AddPackageReport.Label4.Text = MountDir
@@ -4649,7 +4799,7 @@ Public Class ProgressPanel
                 AddPackageReport.Show()
             ElseIf OperationNum = 27 Then
                 If Not MainForm.RunAllProcs Then MainForm.bwBackgroundProcessAction = 1
-                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 30 Then
                 If Not MainForm.RunAllProcs Then
@@ -4657,7 +4807,7 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 2
                 End If
-                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 31 Then
                 If Not MainForm.RunAllProcs Then
@@ -4665,10 +4815,10 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 2
                 End If
-                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 33 Then
-                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 37 Then
                 If Not MainForm.RunAllProcs Then
@@ -4676,7 +4826,7 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 3
                 End If
-                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 38 Then
                 If Not MainForm.RunAllProcs Then
@@ -4684,7 +4834,7 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 3
                 End If
-                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 64 Then
                 If Not MainForm.RunAllProcs Then
@@ -4692,7 +4842,7 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 4
                 End If
-                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 68 Then
                 If Not MainForm.RunAllProcs Then
@@ -4700,7 +4850,7 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 4
                 End If
-                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 75 Then
                 If Not MainForm.RunAllProcs Then
@@ -4708,7 +4858,7 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 5
                 End If
-                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 76 Then
                 If Not MainForm.RunAllProcs Then
@@ -4716,7 +4866,15 @@ Public Class ProgressPanel
                     MainForm.bwGetAdvImgInfo = False
                     MainForm.bwBackgroundProcessAction = 5
                 End If
-                If Not MainForm.OnlineManagement Then MainForm.SaveDTProj()
+                If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
+                MainForm.UpdateProjProperties(True, False)
+            ElseIf OperationNum = 78 Then
+                If Not MainForm.RunAllProcs Then
+                    MainForm.bwGetImageInfo = False
+                    MainForm.bwGetAdvImgInfo = False
+                    MainForm.bwBackgroundProcessAction = 5
+                End If
+                If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 991 Then
                 Visible = False
@@ -4794,6 +4952,7 @@ Public Class ProgressPanel
             MainForm.StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
             MainForm.ToolStripButton4.Visible = False
             If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+            MainForm.WatcherTimer.Enabled = True
             Close()
         Else
             MainForm.ToolStripButton4.Visible = False
@@ -4851,7 +5010,7 @@ Public Class ProgressPanel
                 ' The image, with read-only permissions, was attempted to be written
                 LogView.AppendText(CrLf & "The program tried to save changes to an image that was mounted as read-only. " & CrLf & _
                                           "To solve this, close this dialog, and click " & Quote & "Tools > Remount image with write permissions" & Quote & CrLf & _
-                                          "Do note that, if the image came from an installation media, you may need to copy the source file to perform modifications to it.")
+                                          "Do note that, if the image came from an installation medium, you may need to copy the source file to perform modifications to it.")
             ElseIf errCode = "C1420117" Then
                 ' Some applications (or hidden processes) have open handles on the mount dir
                 LogView.AppendText(CrLf & "The program tried to unmount the image, but some applications or processes have opened files or directories of the image." & CrLf & _
@@ -4881,6 +5040,11 @@ Public Class ProgressPanel
             ElseIf OperationNum = 31 Then
                 ' No features have been disabled successfully
                 LogView.AppendText(CrLf & "No features have been disabled successfully. Try looking up the error codes on the Internet")
+            ElseIf OperationNum = 78 Then
+                ' Cause is undetermined
+                LogView.AppendText(CrLf & "Either this operation has failed or some drivers were not installed. Consider reloading this project or mode to see whether there are driver changes." & CrLf & CrLf & _
+                                   "If there are driver changes, consider reading the driver installation logs, stored in the INF directory of the target image. Otherwise, export the drivers you want to add from the source image and add them to the target image manually." & CrLf & CrLf & _
+                                   "You can also manually customize the export directory by deleting the drivers you don't need. This may be another way to fix this problem, but you will need to temporarily pause the driver addition procedure before it scans the export directory (this can be done by selecting anything from the DISM command prompt window that appears when performing an operation)")
             ElseIf errCode = "00000001" Then
 
             ElseIf errCode = "C000013A" Then
@@ -4905,6 +5069,7 @@ Public Class ProgressPanel
                 ' Errors that weren't added to the database
                 LogView.AppendText(CrLf & "This error has not yet been added to the database, so a useful description can't be shown now. Try running the command manually and, if you see the same error, try looking it up on the Internet.")
             End If
+            LogView.AppendText(CrLf & CrLf & "For detailed information, consider reading the DISM operation logs.")
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -5049,6 +5214,12 @@ Public Class ProgressPanel
         ' Cancel detector background worker which can interfere with image operations and cause crashes due to access violations
         MainForm.MountedImageDetectorBW.CancelAsync()
         While MainForm.MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        MainForm.WatcherTimer.Enabled = False
+        If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
+        While MainForm.WatcherBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(100)
         End While

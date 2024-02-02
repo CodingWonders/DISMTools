@@ -4,6 +4,7 @@ Imports Microsoft.VisualBasic.ControlChars
 Imports System.Text.Encoding
 Imports Microsoft.Dism
 Imports DISMTools.Utilities
+Imports System.Threading
 
 Public Class ProjProperties
 
@@ -30,6 +31,12 @@ Public Class ProjProperties
         While MainForm.MountedImageDetectorBW.IsBusy
             Application.DoEvents()
             Threading.Thread.Sleep(100)
+        End While
+        MainForm.WatcherTimer.Enabled = False
+        If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
+        While MainForm.WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
         End While
         DismApi.Initialize(DismLogLevel.LogErrors)
         ' Detect mounted images to find the loaded one
@@ -1120,6 +1127,7 @@ Public Class ProjProperties
 
     Private Sub ProjProperties_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+        MainForm.WatcherTimer.Enabled = True
     End Sub
 
     Private Sub Label37_MouseHover(sender As Object, e As EventArgs) Handles Label37.MouseHover

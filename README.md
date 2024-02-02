@@ -13,6 +13,7 @@
 	<a href="https://github.com/CodingWonders/DISMTools/releases/latest"><img src="https://img.shields.io/github/v/release/CodingWonders/DISMTools" /></a>
 	<a href="https://forums.mydigitallife.net/threads/dismtools.87263"><img src="https://img.shields.io/badge/MDL_Forums-blue" /></a>
 	<a href="https://reddit.com/r/DISMTools"><img src="https://img.shields.io/badge/Subreddit-orange?logo=reddit&logoColor=white" /></a>
+	<a href="https://matrix.to/#/#dismtools:gitter.im"><img src="https://img.shields.io/gitter/room/CodingWonders/DISMTools" /></a>
 </p>
 <hr>
 
@@ -132,7 +133,7 @@ You can download DISMTools from the [Releases](https://github.com/CodingWonders/
 
 <p align="center">
 	<img src="https://www.softpedia.com/_img/softpedia_100_free.png" />
-	<p align="center"><i>Last updated: December 2, 2023 (Alexandra Sava)</i></p>
+	<p align="center"><i>Last updated: January 6, 2024 (Alexandra Sava)</i></p>
 </p>
 
 ## Building
@@ -149,20 +150,21 @@ If you want to grab a copy straight from the source code, follow these instructi
 3. Open the solution in Visual Studio 2012 or later
 4. Finally, go to "Build > Build solution", or press CTRL-Shift-B
 
-**NOTE:** in the event that the program detects an update and lets you download an older version, we suggest that you disregard its advice (it's not like it will affect the binary being compiled, as it will be recompiled when you build the project, but it will make you waste time)
-
-### Skipping setting migration
+### Additional startup flags
 
 To speed up testing, you can perform these steps before running the program from within Visual Studio:
 
 1. In the Solution Explorer, double-click `My Project`
 2. Go to the Debug tab
-3. Under the Startup options, type the following in the command line arguments text box: `/nomig`
+3. Under the Startup options, type the following in the command line arguments text box: `/nomig /noupd`
+
+- `/nomig` skips setting migration
+- `/noupd` disables update check functionality
 
 You should have this setting configured like this:
 
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/cf3c8704-4c93-4047-9d42-aae7c8976522" />
+	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/4c9c9384-71bd-45fc-9e17-460f107a50f9" />
 </p>
 
 ## Contributions
@@ -182,7 +184,9 @@ If you want to contribute to this project, you can do so in many ways:
 
 We continue the development of the next version in the Preview branch. To go to it, select "dt_preview" from the branch list. Commits are done every day, and new builds are released every Sunday.
 
-<!-- However, if you want to download the latest release AS SOON AS the project is built with new changes, you can download the [nightly installer](https://github.com/CodingWonders/DISMTools/raw/dt_pre_23124_relcndid/Installer/Output/dt_setup.exe). -->
+However, if you want to download the latest release AS SOON AS the project is built with new changes, you can download the [nightly installer](https://github.com/CodingWonders/DISMTools/raw/dt_pre_2413_relcndid/Installer/Output/dt_setup.exe).
+
+**NOTE:** this branch contains release candidate builds of DISMTools 0.4.1, and will be deleted once this version gets published as a stable release
 
 ## Stay in touch
 

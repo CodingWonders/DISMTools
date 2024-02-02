@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "DISMTools"
-#define MyAppVersion "0.4"
+#define MyAppVersion "0.4.1"
 #define MyAppPublisher "CodingWonders Software"
 #define MyAppURL "https://github.com/CodingWonders/DISMTools"
 #define MyAppExeName "DISMTools.exe"
@@ -10,9 +10,9 @@
 #define MyAppAssocExt ".dtproj"
 #define MyAppAssocKey StringChange(MyAppAssocName, " ", "") + MyAppAssocExt
 
-#define pfDir "{commonpf}\DISMTools\Stable"
+#define pfDir "{commonpf}\DISMTools\Preview"
 
-#define scName "DISMTools"
+#define scName "DISMTools Preview"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
@@ -89,65 +89,65 @@ Root: HKA; Subkey: "Software\Classes\Applications\{#MyAppExeName}\SupportedTypes
 
 ; Program registry entries
 Root: HKCU; Subkey: "Software\DISMTools"; ValueType: none; Flags: uninsdeletekey createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Stable"; ValueType: none; Flags: uninsdeletekey createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview"; ValueType: none; Flags: uninsdeletekey createvalueifdoesntexist
 
-Root: HKCU; Subkey: "Software\DISMTools\Stable\AdvBgProcesses"; Flags: uninsdeletekey
-Root: HKCU; Subkey: "Software\DISMTools\Stable\AdvBgProcesses"; ValueType: dword; ValueName: "DetectAllDrivers"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Stable\AdvBgProcesses"; ValueType: dword; ValueName: "EnhancedAppxGetter"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Stable\AdvBgProcesses"; ValueType: dword; ValueName: "RunAllProcs"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Stable\AdvBgProcesses"; ValueType: dword; ValueName: "SkipFrameworks"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Stable\AdvBgProcesses"; ValueType: dword; ValueName: "SkipNonRemovable"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\AdvBgProcesses"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "Software\DISMTools\Preview\AdvBgProcesses"; ValueType: dword; ValueName: "DetectAllDrivers"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\AdvBgProcesses"; ValueType: dword; ValueName: "EnhancedAppxGetter"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\AdvBgProcesses"; ValueType: dword; ValueName: "RunAllProcs"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\AdvBgProcesses"; ValueType: dword; ValueName: "SkipFrameworks"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\AdvBgProcesses"; ValueType: dword; ValueName: "SkipNonRemovable"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 
-Root: HKCU; Subkey: "Software\DISMTools\Stable\BgProcesses"; Flags: uninsdeletekey
-Root: HKCU; Subkey: "Software\DISMTools\Stable\BgProcesses"; ValueType: dword; ValueName: "NotifyFrequency"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Stable\BgProcesses"; ValueType: dword; ValueName: "ShowNotification"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\BgProcesses"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "Software\DISMTools\Preview\BgProcesses"; ValueType: dword; ValueName: "NotifyFrequency"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\BgProcesses"; ValueType: dword; ValueName: "ShowNotification"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 
-Root: HKCU; Subkey: "Software\DISMTools\Stable\ImgOps"; Flags: uninsdeletekey
-Root: HKCU; Subkey: "Software\DISMTools\Stable\ImgOps"; ValueType: dword; ValueName: "NoRestart"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Stable\ImgOps"; ValueType: dword; ValueName: "Quiet"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "NoRestart"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "Quiet"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 
-Root: HKCU; Subkey: "Software\DISMTools\Stable\Logs"; Flags: uninsdeletekey
-Root: HKCU; Subkey: "Software\DISMTools\Stable\Logs"; ValueType: dword; ValueName: "AutoLogs"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Stable\Logs"; ValueType: expandsz; ValueName: "LogFile"; ValueData: "{win}\Logs\DISM\DISM.log"; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Stable\Logs"; ValueType: dword; ValueName: "LogLevel"; ValueData: 3; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Logs"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Logs"; ValueType: dword; ValueName: "AutoLogs"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Logs"; ValueType: expandsz; ValueName: "LogFile"; ValueData: "{win}\Logs\DISM\DISM.log"; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Logs"; ValueType: dword; ValueName: "LogLevel"; ValueData: 3; Flags: uninsdeletevalue createvalueifdoesntexist
 
-Root: HKCU; Subkey: "Software\DISMTools\Stable\Output"; Flags: uninsdeletekey
-Root: HKCU; Subkey: "Software\DISMTools\Stable\Output"; ValueType: dword; ValueName: "EnglishOutput"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Stable\Output"; ValueType: dword; ValueName: "ReportView"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Output"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Output"; ValueType: dword; ValueName: "EnglishOutput"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Output"; ValueType: dword; ValueName: "ReportView"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 
-Root: HKCU; Subkey: "Software\DISMTools\Stable\Personalization"; Flags: uninsdeletekey
-Root: HKCU; Subkey: "Software\DISMTools\Stable\Personalization"; ValueType: dword; ValueName: "AllCaps"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Stable\Personalization"; ValueType: dword; ValueName: "ColorMode"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Stable\Personalization"; ValueType: dword; ValueName: "Language"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Stable\Personalization"; ValueType: string; ValueName: "LogFont"; ValueData: "Courier New"; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Stable\Personalization"; ValueType: dword; ValueName: "LogFontBold"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Stable\Personalization"; ValueType: dword; ValueName: "LogFontSi"; ValueData: 10; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Stable\Personalization"; ValueType: dword; ValueName: "NewDesign"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Stable\Personalization"; ValueType: dword; ValueName: "SecondaryProgressPanelStyle"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "AllCaps"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "ColorMode"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "Language"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: string; ValueName: "LogFont"; ValueData: "Courier New"; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "LogFontBold"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "LogFontSi"; ValueData: 10; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "NewDesign"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "SecondaryProgressPanelStyle"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 
-Root: HKCU; Subkey: "Software\DISMTools\Stable\Program"; Flags: uninsdeletekey
-Root: HKCU; Subkey: "Software\DISMTools\Stable\Program"; ValueType: expandsz; ValueName: "DismExe"; ValueData: "{win}\system32\dism.exe"; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Stable\Program"; ValueType: dword; ValueName: "SaveOnSettingsIni"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Stable\Program"; ValueType: dword; ValueName: "Volatile"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Program"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Program"; ValueType: expandsz; ValueName: "DismExe"; ValueData: "{win}\system32\dism.exe"; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Program"; ValueType: dword; ValueName: "SaveOnSettingsIni"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Program"; ValueType: dword; ValueName: "Volatile"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 
-Root: HKCU; Subkey: "Software\DISMTools\Stable\ScratchDir"; Flags: uninsdeletekey
-Root: HKCU; Subkey: "Software\DISMTools\Stable\ScratchDir"; ValueType: dword; ValueName: "AutoScratch"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Stable\ScratchDir"; ValueType: expandsz; ValueName: "ScratchDirLocation"; ValueData: ""; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Stable\ScratchDir"; ValueType: dword; ValueName: "UseScratch"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\ScratchDir"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "Software\DISMTools\Preview\ScratchDir"; ValueType: dword; ValueName: "AutoScratch"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\ScratchDir"; ValueType: expandsz; ValueName: "ScratchDirLocation"; ValueData: ""; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\ScratchDir"; ValueType: dword; ValueName: "UseScratch"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 
-Root: HKCU; Subkey: "Software\DISMTools\Stable\Startup"; Flags: uninsdeletekey
-Root: HKCU; Subkey: "Software\DISMTools\Stable\Startup"; ValueType: dword; ValueName: "CheckForUpdates"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Stable\Startup"; ValueType: dword; ValueName: "RemountImages"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Startup"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Startup"; ValueType: dword; ValueName: "CheckForUpdates"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Startup"; ValueType: dword; ValueName: "RemountImages"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 
-Root: HKCU; Subkey: "Software\DISMTools\Stable\WndParams"; Flags: uninsdeletekey createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\WndParams"; Flags: uninsdeletekey createvalueifdoesntexist
 
-Root: HKCU; Subkey: "Software\DISMTools\Stable\InfoSaver"; Flags: uninsdeletekey createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Stable\InfoSaver"; ValueType: dword; ValueName: "SkipQuestions"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Stable\InfoSaver"; ValueType: dword; ValueName: "Pkg_CompleteInfo"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Stable\InfoSaver"; ValueType: dword; ValueName: "Feat_CompleteInfo"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Stable\InfoSaver"; ValueType: dword; ValueName: "AppX_CompleteInfo"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Stable\InfoSaver"; ValueType: dword; ValueName: "Cap_CompleteInfo"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Stable\InfoSaver"; ValueType: dword; ValueName: "Drv_CompleteInfo"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\InfoSaver"; Flags: uninsdeletekey createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\InfoSaver"; ValueType: dword; ValueName: "SkipQuestions"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\InfoSaver"; ValueType: dword; ValueName: "Pkg_CompleteInfo"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\InfoSaver"; ValueType: dword; ValueName: "Feat_CompleteInfo"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\InfoSaver"; ValueType: dword; ValueName: "AppX_CompleteInfo"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\InfoSaver"; ValueType: dword; ValueName: "Cap_CompleteInfo"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\InfoSaver"; ValueType: dword; ValueName: "Drv_CompleteInfo"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 
 [Icons]
 Name: "{autoprograms}\{#scName}"; Filename: "{#pfDir}\{#MyAppExeName}"

@@ -173,6 +173,18 @@
     </li>
         </ul>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#command-line-version">Command-line version</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#differences-from-the-gui-version">Differences from the GUI version</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#accessing-this-version">Accessing this version</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#usage">Usage</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#tasks">Tasks</a>
+    </li>
+        </ul>
+    </li>
     </ul>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../wim2esd/">Image conversion</a>
@@ -195,8 +207,6 @@
                 <li class="toctree-l2"><a class="reference internal" href="#">Tools</a>
     <ul>
                 <li class="toctree-l3"><a class="" href="../../../cli_tools/cmdhelp.md">Command help</a>
-                </li>
-                <li class="toctree-l3"><a class="" href="../../../cli_tools/mimgmgr.md">Mounted image manager (CLI version)</a>
                 </li>
                 <li class="toctree-l3"><a class="" href="../../../cli_tools/extappx.md">Extended AppX package getter</a>
                 </li>
@@ -244,7 +254,6 @@
 <li>Remove volume images (for images with multiple indexes)</li>
 <li>Load a mount directory to projects with no images loaded</li>
 </ul>
-<p>DISMTools 0.3 introduces a command-line version of this tool. For more information, check <a href="../../cli_tools/mimgmgr.md">its dedicated page</a>.</p>
 <h2 id="operations">Operations</h2>
 <h3 id="unmounting-a-windows-image">Unmounting a Windows image</h3>
 <p>You can unmount a Windows image saving changes, discarding them, or with more settings; the last of which will open the image unmount dialog:</p>
@@ -252,7 +261,7 @@
     <img src="../../../res/img_tasks/tools/mimgmgr/img_unmount.png" />
 </p>
 
-<p>For read-only mounted images, clicking this button will directly unmount the image discarding changes. For more information, go to the <a href="https://example.com">image unmount</a> page.</p>
+<p>For read-only mounted images, clicking this button will directly unmount the image discarding changes. For more information, go to the <a href="../../mgmt/unmount_image">image unmount</a> page.</p>
 <h3 id="reloading-the-servicing-sessionrepairing-the-component-store">Reloading the servicing session/repairing the component store</h3>
 <p>Depending on the state of the mounted image, the program will let you do one task or the other.</p>
 <ul>
@@ -264,9 +273,105 @@
 <h3 id="accessing-the-mount-directory">Accessing the mount directory</h3>
 <p>This will open the mount directory in File Explorer, allowing you to browse the files of the Windows image. <strong>This is similar to an active installation, so don't delete any files you don't know what they do.</strong></p>
 <h3 id="removing-volume-images">Removing volume images</h3>
-<p>If the mounted image contains more than 1 index, you are able to remove volume images from it easily. Specify the indexes to remove, and click OK. For more information, refer to the <a href="https://example.com">volume image removal</a> page.</p>
+<p>If the mounted image contains more than 1 index, you are able to remove volume images from it easily. Specify the indexes to remove, and click OK. For more information, refer to the <a href="../../mgmt/delete_image">volume image removal</a> page.</p>
 <h3 id="loading-mounted-images">Loading mounted images</h3>
 <p>If you've opened a project with no images loaded, you can easily load the mounted image you want to the project.</p>
+<h2 id="command-line-version">Command-line version</h2>
+<p>DISMTools 0.3 introduces a command-line version of the mounted image manager with which you can easily manage your mounted images as well.</p>
+<h3 id="differences-from-the-gui-version">Differences from the GUI version</h3>
+<ul>
+<li>The mounted image list is not updated automatically in the CLI version</li>
+</ul>
+<h3 id="accessing-this-version">Accessing this version</h3>
+<p>You can access the CLI version of the mounted image manager through the Command Console in the Tools menu by typing <code>mimgmgr</code>. You will then see an overview of the mounted images:</p>
+<p align="center">
+    <img src="../../../res/img_tasks/tools/mimgmgr/cli/mimgmgr_defaultview.png" />
+</p>
+
+<h3 id="usage">Usage</h3>
+<p>When you load this version of the mounted image manager, you need to <strong>mark an image for management</strong>. You can easily do this by pressing the M key and selecting an image using its number. If the list was modified in the background, you'll see an updated list.</p>
+<p align="center">
+    <img src="../../../res/img_tasks/tools/mimgmgr/cli/mimgmgr_mark_image.png" />
+</p>
+
+<p>After marking an image, you can then perform management actions with it.</p>
+<p align="center">
+    <img src="../../../res/img_tasks/tools/mimgmgr/cli/mimgmgr_marked_image.png" />
+</p>
+
+<h3 id="tasks">Tasks</h3>
+<p>These are the tasks you can do with this version of the mounted image manager:</p>
+<ul>
+<li>If you want to switch to another image, you can <strong>mark it</strong> (M key)</li>
+<li>
+<p>Depending on the status of the image (R key):</p>
+<ul>
+<li>If it needs a servicing session reload (<code>Status: NeedsRemount</code>), you can <strong>reload</strong> it</li>
+<li>If it needs a component store repair (<code>Status: Invalid</code>), you can <strong>repair</strong> it</li>
+</ul>
+</li>
+<li>
+<p>When you've finished working with an image, you can <strong>unmount it</strong> (U key)</p>
+</li>
+<li>You can <strong>access its mount directory</strong> (A key)</li>
+<li>If the image contains multiple indexes (volume images), you can remove those from it (V key) or switch to another index (S key, <em>DISMTools 0.3.3 and later</em>)</li>
+<li>If images were mounted or unmounted from an external program, you can <strong>update the mounted image listing</strong> (L key)</li>
+<li>If the image is mounted with read-only privileges, you can <strong>enable write permissions</strong> (E key)</li>
+</ul>
+<p>Then, press ENTER to perform an action.</p>
+<h4 id="unmounting-an-image">Unmounting an image</h4>
+<p><strong>NOTE:</strong> if the image is mounted with read-only privileges, this action will directly unmount it discarding changes</p>
+<p align="center">
+    <img src="../../../res/img_tasks/tools/mimgmgr/cli/mimgmgr_unmount_image.png" />
+</p>
+
+<p>In this menu:</p>
+<ul>
+<li>You can <strong>commit the changes of an image and unmount it</strong> (C key)</li>
+<li>You can <strong>discard the changes of an image and unmount it</strong> (D key)</li>
+<li>You can <strong>configure unmount settings</strong> (S key)</li>
+</ul>
+<p><strong>Unmount settings</strong></p>
+<p><strong>NOTE:</strong> these settings only apply to the commit operation. You can't change settings for read-only mounted images.</p>
+<p align="center">
+    <img src="../../../res/img_tasks/tools/mimgmgr/cli/mimgmgr_unmount_settings.png" />
+</p>
+
+<p>These are the same settings you would find in the <a href="../../mgmt/unmount_image">image unmount dialog</a>. Configure them as you like and press ENTER to perform the unmount operation.</p>
+<h4 id="removing-volume-images_1">Removing volume images</h4>
+<p><strong>NOTE:</strong> this task is only applicable to images with multiple indexes</p>
+<p align="center">
+    <img src="../../../res/img_tasks/tools/mimgmgr/cli/mimgmgr_delete_image.png" />
+</p>
+
+<p>In this menu you can <strong>mark the volume images (indexes) to remove</strong> (M key) and <strong>proceed with the removal operation</strong> (P key).</p>
+<p>Do note that proceeding with the volume image operation will unmount the image <strong>discarding changes</strong>. Make sure you have saved them before beginning.</p>
+<p>During this operation, you can view the image that is being removed. Once this process finishes, you'll go back to the main menu.</p>
+<p align="center">
+    <img src="https://github.com/CodingWonders/DISMTools/assets/101426328/abb6704d-2e2b-493f-a80a-431b04fee453" />
+</p>
+
+<p><strong>Marking volume images to remove</strong></p>
+<p>From the image index list shown above, you can pick the volume images to remove by specifying its number. You can specify multiple indexes by separating numbers with commas (<code>,</code>). Finally, press ENTER:</p>
+<p align="center">
+    <img src="../../../res/img_tasks/tools/mimgmgr/cli/mimgmgr_delete_image_indexmark.png" />
+</p>
+
+<h4 id="switching-indexes">Switching indexes</h4>
+<p><strong>NOTE:</strong> this task is only applicable to images with multiple indexes</p>
+<p align="center">
+    <img src="../../../res/img_tasks/tools/mimgmgr/cli/mimgmgr_switch_image.png" />
+</p>
+
+<p>In this menu you can <strong>specify the target index to mount</strong> (S key), <strong>specify the unmount operation</strong> (C key) and <strong>proceed with the switch operation</strong> (P key).</p>
+<p><strong>Specifying the target index</strong></p>
+<p>From the image index list shown above, you can pick the target index to mount by specifying its number. Finally, press ENTER:</p>
+<p align="center">
+    <img src="../../../res/img_tasks/tools/mimgmgr/cli/mimgmgr_delete_image_indexmark.png" />
+</p>
+
+<h4 id="enabling-write-permissions_1">Enabling write permissions</h4>
+<p>This is an automated process that unmounts a read-only mounted image and mounts it again with write permissions. <strong>Make sure the location of the source image file is still available before proceeding</strong>.</p>
               
             </div>
           </div><footer>

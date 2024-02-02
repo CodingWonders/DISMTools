@@ -129,22 +129,18 @@ Public Class PkgParentNameLookupDlg
         OK_Button.Enabled = False
         Cancel_Button.Enabled = False
         ListBox1.Items.Clear()
-        If MainForm.expBackgroundProcesses Then
-            For x = 0 To MainForm.imgPackageNames.Length - 1
-                If MainForm.imgPackageNames(x) = "" Then
-                    Continue For
-                ElseIf MainForm.imgPackageNames(x) = Nothing Then
-                    Exit For
-                Else
-                    ListBox1.Items.Add(MainForm.imgPackageNames(x))
-                End If
-            Next
-            Label3.Visible = False
-            OK_Button.Enabled = True
-            Cancel_Button.Enabled = True
-        Else
-            PackageListerBW.RunWorkerAsync()
-        End If
+        For x = 0 To MainForm.imgPackageNames.Length - 1
+            If MainForm.imgPackageNames(x) = "" Then
+                Continue For
+            ElseIf MainForm.imgPackageNames(x) = Nothing Then
+                Exit For
+            Else
+                ListBox1.Items.Add(MainForm.imgPackageNames(x))
+            End If
+        Next
+        Label3.Visible = False
+        OK_Button.Enabled = True
+        Cancel_Button.Enabled = True
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
     End Sub
