@@ -14952,12 +14952,11 @@ Public Class MainForm
         If FeedContents.Items.Count > 0 Then
             FeedsPanel.Visible = True
             FeedErrorPanel.Visible = False
-            Dim sourceZone As TimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time")
-            Dim destZone As TimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time")
             For Each item As SyndicationItem In FeedContents.Items.OrderByDescending(Function(x) x.PublishDate)
-                Dim publishDate As DateTime = item.PublishDate.DateTime
-                Dim localDate As DateTime = TimeZoneInfo.ConvertTime(item.PublishDate.DateTime, sourceZone, destZone)
-                ListView1.Items.Add(New ListViewItem(New String() {item.Title.Text, localDate.ToString("dddd, MMMM dd, yyyy H:mm:ss")}))
+                ListView1.Items.Add(New ListViewItem(New String() {item.Title.Text, _
+                                                                   TimeZoneInfo.ConvertTime(item.PublishDate.DateTime, _
+                                                                                            TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"), _
+                                                                                            TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time")).ToString("dddd, MMMM dd, yyyy H:mm:ss")}))
                 FeedLinks.Add(item.Links(0).Uri)
             Next
         Else
@@ -14980,12 +14979,11 @@ Public Class MainForm
         If FeedContents.Items.Count > 0 Then
             FeedsPanel.Visible = True
             FeedErrorPanel.Visible = False
-            Dim sourceZone As TimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time")
-            Dim destZone As TimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time")
             For Each item As SyndicationItem In FeedContents.Items.OrderByDescending(Function(x) x.PublishDate)
-                Dim publishDate As DateTime = item.PublishDate.DateTime
-                Dim localDate As DateTime = TimeZoneInfo.ConvertTime(item.PublishDate.DateTime, sourceZone, destZone)
-                ListView1.Items.Add(New ListViewItem(New String() {item.Title.Text, localDate.ToString("dddd, MMMM dd, yyyy H:mm:ss")}))
+                ListView1.Items.Add(New ListViewItem(New String() {item.Title.Text, _
+                                                                   TimeZoneInfo.ConvertTime(item.PublishDate.DateTime, _
+                                                                                            TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"), _
+                                                                                            TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time")).ToString("dddd, MMMM dd, yyyy H:mm:ss")}))
                 FeedLinks.Add(item.Links(0).Uri)
             Next
         Else
