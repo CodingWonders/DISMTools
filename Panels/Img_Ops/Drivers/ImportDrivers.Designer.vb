@@ -54,6 +54,8 @@ Partial Class ImportDrivers
         Me.Button1 = New System.Windows.Forms.Button()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Label5 = New System.Windows.Forms.Label()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.Label10 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -164,9 +166,9 @@ Partial Class ImportDrivers
         '
         Me.ImportSourceContainer.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.ImportSourceContainer.Controls.Add(Me.WinImagePanel)
         Me.ImportSourceContainer.Controls.Add(Me.OfflineInstPanel)
         Me.ImportSourceContainer.Controls.Add(Me.DefaultPanel)
-        Me.ImportSourceContainer.Controls.Add(Me.WinImagePanel)
         Me.ImportSourceContainer.Location = New System.Drawing.Point(16, 116)
         Me.ImportSourceContainer.Name = "ImportSourceContainer"
         Me.ImportSourceContainer.Size = New System.Drawing.Size(596, 278)
@@ -301,6 +303,8 @@ Partial Class ImportDrivers
         '
         'WinImagePanel
         '
+        Me.WinImagePanel.Controls.Add(Me.Label10)
+        Me.WinImagePanel.Controls.Add(Me.Label9)
         Me.WinImagePanel.Controls.Add(Me.Label6)
         Me.WinImagePanel.Controls.Add(Me.Button1)
         Me.WinImagePanel.Controls.Add(Me.TextBox1)
@@ -315,7 +319,7 @@ Partial Class ImportDrivers
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(20, 70)
+        Me.Label6.Location = New System.Drawing.Point(20, 243)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(257, 13)
         Me.Label6.TabIndex = 3
@@ -347,6 +351,25 @@ Partial Class ImportDrivers
         Me.Label5.Size = New System.Drawing.Size(192, 13)
         Me.Label5.TabIndex = 0
         Me.Label5.Text = "Windows image to import drivers from:"
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Location = New System.Drawing.Point(23, 64)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(58, 13)
+        Me.Label9.TabIndex = 4
+        Me.Label9.Text = "Image file:"
+        '
+        'Label10
+        '
+        Me.Label10.AutoEllipsis = True
+        Me.Label10.Location = New System.Drawing.Point(23, 84)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(556, 13)
+        Me.Label10.TabIndex = 4
+        Me.Label10.Text = "<imgFile>"
+        Me.Label10.Visible = False
         '
         'ImportDrivers
         '
@@ -413,5 +436,7 @@ Partial Class ImportDrivers
     Friend WithEvents ColumnHeader6 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader7 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader8 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents Label10 As System.Windows.Forms.Label
+    Friend WithEvents Label9 As System.Windows.Forms.Label
 
 End Class

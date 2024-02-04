@@ -16,6 +16,7 @@ Public Class ImportDrivers
             MsgBox(msg, vbOKOnly + vbInformation, Label1.Text)
             Exit Sub
         Else
+            If DIList(ListView1.FocusedItem.Index).Name = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) Then ImportSourceInt = 1
             Select Case ImportSourceInt
                 Case 0
                     If TextBox1.Text <> "" Then
@@ -324,6 +325,8 @@ Public Class ImportDrivers
         If PopupImageManager.ShowDialog() = DialogResult.OK Then
             TextBox1.Text = PopupImageManager.selectedMntDir
             Label6.Visible = (TextBox1.Text = MainForm.MountDir)
+            Label10.Text = PopupImageManager.selectedImgFile
+            Label10.Visible = (TextBox1.Text <> "" And Directory.Exists(TextBox1.Text))
         End If
     End Sub
 
@@ -344,6 +347,7 @@ Public Class ImportDrivers
                 If DIList(x).Name = ListView1.FocusedItem.SubItems(0).Text Then
                     TextBox2.Text = DIList(x).Name
                     Label8.Visible = (DIList(x).Name = MainForm.MountDir)
+                    If DIList(x).Name = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) Then ComboBox1.SelectedIndex = 1
                 End If
             Next
         End If
