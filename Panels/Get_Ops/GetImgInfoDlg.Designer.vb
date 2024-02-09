@@ -83,6 +83,7 @@ Partial Class GetImgInfoDlg
         Me.Label37 = New System.Windows.Forms.Label()
         Me.FlowLayoutPanel4 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Button2 = New System.Windows.Forms.Button()
+        Me.Button3 = New System.Windows.Forms.Button()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ImageInfoPanel.SuspendLayout()
@@ -202,6 +203,7 @@ Partial Class GetImgInfoDlg
         '
         'Panel1
         '
+        Me.Panel1.Controls.Add(Me.Button3)
         Me.Panel1.Controls.Add(Me.Button1)
         Me.Panel1.Controls.Add(Me.TextBox1)
         Me.Panel1.Controls.Add(Me.RadioButton2)
@@ -217,7 +219,7 @@ Partial Class GetImgInfoDlg
         'Button1
         '
         Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button1.Location = New System.Drawing.Point(348, 93)
+        Me.Button1.Location = New System.Drawing.Point(267, 93)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 3
@@ -228,7 +230,7 @@ Partial Class GetImgInfoDlg
         '
         Me.TextBox1.Location = New System.Drawing.Point(49, 94)
         Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(293, 21)
+        Me.TextBox1.Size = New System.Drawing.Size(212, 21)
         Me.TextBox1.TabIndex = 2
         '
         'RadioButton2
@@ -777,6 +779,16 @@ Partial Class GetImgInfoDlg
         Me.Button2.Text = "Save..."
         Me.Button2.UseVisualStyleBackColor = True
         '
+        'Button3
+        '
+        Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button3.Location = New System.Drawing.Point(348, 93)
+        Me.Button3.Name = "Button3"
+        Me.Button3.Size = New System.Drawing.Size(75, 23)
+        Me.Button3.TabIndex = 4
+        Me.Button3.Text = "Pick..."
+        Me.Button3.UseVisualStyleBackColor = True
+        '
         'GetImgInfoDlg
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -874,5 +886,6 @@ Partial Class GetImgInfoDlg
     Friend WithEvents LanguageList As System.Windows.Forms.ListBox
     Friend WithEvents Label55 As System.Windows.Forms.Label
     Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents Button3 As System.Windows.Forms.Button
 
 End Class

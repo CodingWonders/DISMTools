@@ -46,6 +46,7 @@ Public Class GetImgInfoDlg
                         RadioButton2.Text = "Another image"
                         Button1.Text = "Browse..."
                         Button2.Text = "Save..."
+                        Button3.Text = "Pick..."
                         ListView1.Columns(0).Text = "Index"
                         ListView1.Columns(1).Text = "Image name"
                         OpenFileDialog1.Title = "Specify the image to get the information from"
@@ -77,6 +78,7 @@ Public Class GetImgInfoDlg
                         RadioButton2.Text = "Otra imagen"
                         Button1.Text = "Examinar..."
                         Button2.Text = "Guardar..."
+                        Button3.Text = "Escoger..."
                         ListView1.Columns(0).Text = "Índice"
                         ListView1.Columns(1).Text = "Nombre de imagen"
                         OpenFileDialog1.Title = "Especifique la imagen de la que obtener información"
@@ -108,6 +110,7 @@ Public Class GetImgInfoDlg
                         RadioButton2.Text = "Autre image"
                         Button1.Text = "Parcourir..."
                         Button2.Text = "Sauvegarder..."
+                        Button3.Text = "Choisir..."
                         ListView1.Columns(0).Text = "Index"
                         ListView1.Columns(1).Text = "Nom de l'image"
                         OpenFileDialog1.Title = "Spécifier l'image à partir de laquelle l'information doit être obtenue"
@@ -140,6 +143,7 @@ Public Class GetImgInfoDlg
                 RadioButton2.Text = "Another image"
                 Button1.Text = "Browse..."
                 Button2.Text = "Save..."
+                Button3.Text = "Pick..."
                 ListView1.Columns(0).Text = "Index"
                 ListView1.Columns(1).Text = "Image name"
                 OpenFileDialog1.Title = "Specify the image to get the information from"
@@ -171,6 +175,7 @@ Public Class GetImgInfoDlg
                 RadioButton2.Text = "Otra imagen"
                 Button1.Text = "Examinar..."
                 Button2.Text = "Guardar..."
+                Button3.Text = "Escoger..."
                 ListView1.Columns(0).Text = "Índice"
                 ListView1.Columns(1).Text = "Nombre de imagen"
                 OpenFileDialog1.Title = "Especifique la imagen de la que obtener información"
@@ -202,6 +207,7 @@ Public Class GetImgInfoDlg
                 RadioButton2.Text = "Autre image"
                 Button1.Text = "Parcourir..."
                 Button2.Text = "Sauvegarder..."
+                Button3.Text = "Choisir..."
                 ListView1.Columns(0).Text = "Index"
                 ListView1.Columns(1).Text = "Nom de l'image"
                 OpenFileDialog1.Title = "Spécifier l'image à partir de laquelle l'information doit être obtenue"
@@ -595,6 +601,13 @@ Public Class GetImgInfoDlg
             ImgInfoSaveDlg.SaveTask = 1
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
+        End If
+    End Sub
+
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        PopupImageManager.Location = Button3.PointToScreen(Point.Empty)
+        If PopupImageManager.ShowDialog() = DialogResult.OK Then
+            TextBox1.Text = PopupImageManager.selectedImgFile
         End If
     End Sub
 End Class
