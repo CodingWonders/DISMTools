@@ -3,6 +3,8 @@
 Public Class PopupImageManager
 
     Public selectedMntDir As String
+    Public selectedImgFile As String
+
     Private Sub PopupImageManager_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language
             Case 0
@@ -112,6 +114,7 @@ Public Class PopupImageManager
             Exit Sub
         End If
         selectedMntDir = ListView1.FocusedItem.SubItems(2).Text
+        selectedImgFile = ListView1.FocusedItem.SubItems(0).Text
         DialogResult = Windows.Forms.DialogResult.OK
         Close()
     End Sub

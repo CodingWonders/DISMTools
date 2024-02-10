@@ -10,7 +10,7 @@ Public Class Options
     Dim CanExit As Boolean
     Dim SaveLocations() As String = New String(1) {"Settings file", "Registry"}
     Dim ColorModes() As String = New String(2) {"Use system setting", "Light mode", "Dark mode"}
-    Dim Languages() As String = New String(3) {"Use system language", "English", "Spanish", "French"}
+    Dim Languages() As String = New String(4) {"Use system language", "English", "Spanish", "French", "Portuguese"}
     Dim LogViews() As String = New String(1) {"list", "table"}
     Dim NotFreqs() As String = New String(1) {"Every time a project has been loaded successfully", "Once"}
 

@@ -16,6 +16,7 @@ Public Class ImportDrivers
             MsgBox(msg, vbOKOnly + vbInformation, Label1.Text)
             Exit Sub
         Else
+            If DIList(ListView1.FocusedItem.Index).Name = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) Then ImportSourceInt = 1
             Select Case ImportSourceInt
                 Case 0
                     If TextBox1.Text <> "" Then
@@ -98,6 +99,7 @@ Public Class ImportDrivers
                         Label6.Text = "You can't use the import target as the import source"
                         Label7.Text = "Offline installation to import drivers from:"
                         Label8.Text = "You can't use the import target as the import source"
+                        Label9.Text = "Image file:"
                         Button1.Text = "Pick..."
                         Button2.Text = "Refresh"
                         OK_Button.Text = "OK"
@@ -123,6 +125,7 @@ Public Class ImportDrivers
                         Label6.Text = "No puede utilizar el destino de importación como el origen de importación"
                         Label7.Text = "Instalación fuera de línea de la que importar controladores:"
                         Label8.Text = "No puede utilizar el destino de importación como el origen de importación"
+                        Label9.Text = "Archivo de imagen:"
                         Button1.Text = "Escoger..."
                         Button2.Text = "Actualizar"
                         OK_Button.Text = "Aceptar"
@@ -148,6 +151,7 @@ Public Class ImportDrivers
                         Label6.Text = "Vous ne pouvez pas utiliser la cible d'importation comme source d'importation."
                         Label7.Text = "Installation hors ligne à partir de laquelle les pilotes sont importés :"
                         Label8.Text = "Vous ne pouvez pas utiliser la cible d'importation comme source d'importation."
+                        Label9.Text = "Fichier de l'image :"
                         Button1.Text = "Choisir..."
                         Button2.Text = "Actualiser"
                         OK_Button.Text = "OK"
@@ -174,6 +178,7 @@ Public Class ImportDrivers
                 Label6.Text = "You can't use the import target as the import source"
                 Label7.Text = "Offline installation to import drivers from:"
                 Label8.Text = "You can't use the import target as the import source"
+                Label9.Text = "Image file:"
                 Button1.Text = "Pick..."
                 Button2.Text = "Refresh"
                 OK_Button.Text = "OK"
@@ -199,6 +204,7 @@ Public Class ImportDrivers
                 Label6.Text = "No puede utilizar el destino de importación como el origen de importación"
                 Label7.Text = "Instalación fuera de línea de la que importar controladores:"
                 Label8.Text = "No puede utilizar el destino de importación como el origen de importación"
+                Label9.Text = "Archivo de imagen:"
                 Button1.Text = "Escoger..."
                 Button2.Text = "Actualizar"
                 OK_Button.Text = "Aceptar"
@@ -224,6 +230,7 @@ Public Class ImportDrivers
                 Label6.Text = "Vous ne pouvez pas utiliser la cible d'importation comme source d'importation."
                 Label7.Text = "Installation hors ligne à partir de laquelle les pilotes sont importés :"
                 Label8.Text = "Vous ne pouvez pas utiliser la cible d'importation comme source d'importation."
+                Label9.Text = "Fichier de l'image :"
                 Button1.Text = "Choisir..."
                 Button2.Text = "Actualiser"
                 OK_Button.Text = "OK"
@@ -324,6 +331,8 @@ Public Class ImportDrivers
         If PopupImageManager.ShowDialog() = DialogResult.OK Then
             TextBox1.Text = PopupImageManager.selectedMntDir
             Label6.Visible = (TextBox1.Text = MainForm.MountDir)
+            Label10.Text = PopupImageManager.selectedImgFile
+            Label10.Visible = (TextBox1.Text <> "" And Directory.Exists(TextBox1.Text))
         End If
     End Sub
 
@@ -344,6 +353,7 @@ Public Class ImportDrivers
                 If DIList(x).Name = ListView1.FocusedItem.SubItems(0).Text Then
                     TextBox2.Text = DIList(x).Name
                     Label8.Visible = (DIList(x).Name = MainForm.MountDir)
+                    If DIList(x).Name = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) Then ComboBox1.SelectedIndex = 1
                 End If
             Next
         End If
