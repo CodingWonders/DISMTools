@@ -5331,6 +5331,7 @@ Public Class MainForm
                         ' Context menu of AppX addition dialog
                         MicrosoftAppsToolStripMenuItem.Text = "Visit the Microsoft Apps website"
                         MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visit the Microsoft Store Generation Project website"
+                        AppxDownloadHelpToolStripMenuItem.Text = "How do I get applications?"
                         ' New design
                         GreetingLabel.Text = "Welcome to this servicing session"
                         LinkLabel12.Text = "PROJECT"
@@ -5693,6 +5694,7 @@ Public Class MainForm
                         ' Context menu of AppX addition dialog
                         MicrosoftAppsToolStripMenuItem.Text = "Visitar el sitio web de Aplicaciones de Microsoft"
                         MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visitar el sitio web del proyecto de generación de Microsoft Store"
+                        AppxDownloadHelpToolStripMenuItem.Text = "¿Cómo puedo obtener aplicaciones?"
                         ' New design
                         GreetingLabel.Text = "Le damos la bienvenida a esta sesión de servicio"
                         LinkLabel12.Text = "PROYECTO"
@@ -6055,6 +6057,7 @@ Public Class MainForm
                         ' Context menu of AppX addition dialog
                         MicrosoftAppsToolStripMenuItem.Text = "Visiter le site web de Microsoft Apps"
                         MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visiter le site web du projet Microsoft Store Generation"
+                        AppxDownloadHelpToolStripMenuItem.Text = "Comment puis-je obtenir des applications ?"
                         ' New design
                         GreetingLabel.Text = "Bienvenue à cette session de service"
                         LinkLabel12.Text = "PROJET"
@@ -6422,6 +6425,7 @@ Public Class MainForm
                 ' Context menu of AppX addition dialog
                 MicrosoftAppsToolStripMenuItem.Text = "Visit the Microsoft Apps website"
                 MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visit the Microsoft Store Generation Project website"
+                AppxDownloadHelpToolStripMenuItem.Text = "How do I get applications?"
                 ' New design
                 GreetingLabel.Text = "Welcome to this servicing session"
                 LinkLabel12.Text = "PROJECT"
@@ -6783,6 +6787,7 @@ Public Class MainForm
                 ' Context menu of AppX addition dialog
                 MicrosoftAppsToolStripMenuItem.Text = "Visitar el sitio web de Aplicaciones de Microsoft"
                 MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visitar el sitio web del proyecto de generación de Microsoft Store"
+                AppxDownloadHelpToolStripMenuItem.Text = "¿Cómo puedo obtener aplicaciones?"
                 ' New design
                 GreetingLabel.Text = "Le damos la bienvenida a esta sesión de servicio"
                 LinkLabel12.Text = "PROYECTO"
@@ -7145,6 +7150,7 @@ Public Class MainForm
                 ' Context menu of AppX addition dialog
                 MicrosoftAppsToolStripMenuItem.Text = "Visiter le site web de Microsoft Apps"
                 MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visiter le site web du projet Microsoft Store Generation"
+                AppxDownloadHelpToolStripMenuItem.Text = "Comment puis-je obtenir des applications ?"
                 ' New design
                 GreetingLabel.Text = "Bienvenue à cette session de service"
                 LinkLabel12.Text = "PROJET"
@@ -15551,5 +15557,12 @@ Public Class MainForm
                     MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
             End Select
         End If
+    End Sub
+
+    Private Sub AppxDownloadHelpToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AppxDownloadHelpToolStripMenuItem.Click
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\appx\add_provisionedappxpackage\index.html#questions")
+        HelpBrowserForm.MinimizeBox = False
+        HelpBrowserForm.MaximizeBox = False
+        HelpBrowserForm.ShowDialog(AddProvAppxPackage)
     End Sub
 End Class
