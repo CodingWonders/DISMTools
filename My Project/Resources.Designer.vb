@@ -2036,25 +2036,12 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Changes made since last preview
+        '''  Busca una cadena traducida similar a New features
         '''
-        '''Bugfixes
-        '''
-        '''- Dates of the RSS feed news are now represented correctly
-        '''
-        '''New features
-        '''
-        '''- Added 2 new command-line arguments: &quot;/offline&quot; (enters the offline installation management mode) and &quot;/?&quot; (shows a command line help message)
-        '''
-        '''Removed features
-        '''
-        '''- The old method of getting drives through WMIC is now removed. Typing &quot;dthelper /drinfo&quot; will now result in an unrecognized command
-        '''
-        '''Overall changes
-        '''
-        '''Bugfixes
-        '''
-        '''- Driver information background processes no longer f [resto de la cadena truncado]&quot;;.
+        '''- An initial implementation of Portuguese translations has been added
+        '''- When picking an image in the driver import dialog, you will now see the image file associated with its mount directory
+        '''- When selecting the boot drive in the offline installation source of the driver import dialog, it will switch to the online installation automatically
+        '''- You can now pick a mounted image in the image file information dialog.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

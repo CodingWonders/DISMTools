@@ -1097,42 +1097,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <value>..\Resources\get_appxpkg_info.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Changes made since last preview
+    <value>New features
 
-Bugfixes
-
-- Dates of the RSS feed news are now represented correctly
-
-New features
-
-- Added 2 new command-line arguments: "/offline" (enters the offline installation management mode) and "/?" (shows a command line help message)
-
-Removed features
-
-- The old method of getting drives through WMIC is now removed. Typing "dthelper /drinfo" will now result in an unrecognized command
-
-Overall changes
-
-Bugfixes
-
-- Driver information background processes no longer fail on Windows 7 images
-- The image information report preview window is no longer shown behind other windows
-- The help documentation content browser no longer redirects to the Help home page if its window lost focus or was minimized
-- Fixed an issue where the program would try to save the offline installation management mode pseudo-project after performing element processing
-- Fixed a typo in the description of error code 0xC142010C
-- Package, feature, and capability operations now pass the "/norestart" flag to DISM to skip system restart questions
-
-New features
-
-- You can now get image file information of SWM files
-- Introduced a PRI resource extractor that comes in handy when getting friendly AppX package display names
-- The Options window has been redesigned
-- Image status watchers have been added, which detect status changes in an image and notify you of such changes
-- CODE: background processes no longer depend on the "expBackgroundProcesses" variable
-- You can now import the driver packages from one image to another to provide the same hardware compatibility
-- If some packages, features, or capabilities require a system restart, you will now be notified
-
-Help documentation update versions: "v0.4.1.2411"</value>
+- An initial implementation of Portuguese translations has been added
+- When picking an image in the driver import dialog, you will now see the image file associated with its mount directory
+- When selecting the boot drive in the offline installation source of the driver import dialog, it will switch to the online installation automatically
+- You can now pick a mounted image in the image file information dialog</value>
   </data>
   <data name="split_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\split_img.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
