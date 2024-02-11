@@ -556,16 +556,16 @@
     <Compile Include="Panels\MSEdge\AddEdgeWebView.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Panels\OSUninst\OSNoRollbackErrorDlg.Designer.vb">
+    <Compile Include="Panels\Img_Ops\OSUninst\OSNoRollbackErrorDlg.Designer.vb">
       <DependentUpon>OSNoRollbackErrorDlg.vb</DependentUpon>
     </Compile>
-    <Compile Include="Panels\OSUninst\OSNoRollbackErrorDlg.vb">
+    <Compile Include="Panels\Img_Ops\OSUninst\OSNoRollbackErrorDlg.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Panels\OSUninst\SetOSUninstWindow.Designer.vb">
+    <Compile Include="Panels\Img_Ops\OSUninst\SetOSUninstWindow.Designer.vb">
       <DependentUpon>SetOSUninstWindow.vb</DependentUpon>
     </Compile>
-    <Compile Include="Panels\OSUninst\SetOSUninstWindow.vb">
+    <Compile Include="Panels\Img_Ops\OSUninst\SetOSUninstWindow.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\PopupDlgs\PopupImageManager.Designer.vb">
@@ -888,10 +888,10 @@
     <EmbeddedResource Include="Panels\MSEdge\AddEdgeWebView.resx">
       <DependentUpon>AddEdgeWebView.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Panels\OSUninst\OSNoRollbackErrorDlg.resx">
+    <EmbeddedResource Include="Panels\Img_Ops\OSUninst\OSNoRollbackErrorDlg.resx">
       <DependentUpon>OSNoRollbackErrorDlg.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Panels\OSUninst\SetOSUninstWindow.resx">
+    <EmbeddedResource Include="Panels\Img_Ops\OSUninst\SetOSUninstWindow.resx">
       <DependentUpon>SetOSUninstWindow.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\PopupDlgs\PopupImageManager.resx">

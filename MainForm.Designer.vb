@@ -4879,7 +4879,7 @@ Partial Class MainForm
         Me.AppxRelatedLinksCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MicrosoftAppsToolStripMenuItem, Me.MicrosoftStoreGenerationProjectToolStripMenuItem, Me.ToolStripSeparator36, Me.AppxDownloadHelpToolStripMenuItem})
         Me.AppxRelatedLinksCMS.Name = "AppxRelatedLinksCMS"
         Me.AppxRelatedLinksCMS.ShowImageMargin = False
-        Me.AppxRelatedLinksCMS.Size = New System.Drawing.Size(320, 98)
+        Me.AppxRelatedLinksCMS.Size = New System.Drawing.Size(320, 76)
         '
         'MicrosoftAppsToolStripMenuItem
         '

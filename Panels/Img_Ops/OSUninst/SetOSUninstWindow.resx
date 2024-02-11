@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Label2.Text" xml:space="preserve">
-    <value>By default, and after an OS update, you have 10 days to roll back to the previous Windows version. However, you can change this setting if you later want to revert to the old OS version.
+    <value>By default, and after an OS update, you have 10 days to roll back to the previous Windows version. However, you can change this setting if you want to revert to the old OS version at a later date.
 
 Please use the numeric slider to increase or decrease the amount of days you have to revert to the old Windows version. It must be between 2 and 60.</value>
   </data>

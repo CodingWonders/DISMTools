@@ -608,8 +608,6 @@ Public Class ProgressPanel
             taskCount = 1
         ElseIf opNum = 78 Then
             taskCount = 1
-        ElseIf opNum = 88 Then
-            taskCount = 1
         ElseIf opNum = 79 Then
             taskCount = 1
         ElseIf opNum = 83 Then
@@ -4063,7 +4061,7 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & "Setting the amount of days an uninstall can happen..." & CrLf &
                                "Number of days: " & osUninstDayCount)
             DISMProc.StartInfo.FileName = DismProgram
-            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /online /set-osuninstallwindow /value:" & osUninstDayCount
+            CommandArgs &= " /online /set-osuninstallwindow /value:" & osUninstDayCount
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
             DISMProc.WaitForExit()
