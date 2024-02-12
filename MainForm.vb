@@ -15566,9 +15566,96 @@ Public Class MainForm
         HelpBrowserForm.ShowDialog(AddProvAppxPackage)
     End Sub
 
+    Function CheckOSUninstallCapability() As Boolean
+        Try
+            Dim uninstReg As RegistryKey = Registry.LocalMachine.OpenSubKey("SYSTEM\Setup")
+            Dim uninstFlag As Integer = CInt(uninstReg.GetValue("UninstallActive").ToString())
+            uninstReg.Close()
+            Return (uninstFlag = 1)
+        Catch ex As Exception
+            Return False
+        End Try
+        Return False
+    End Function
+
     Private Sub SetOSUninstallWindow_Click(sender As Object, e As EventArgs) Handles SetOSUninstallWindow.Click
         If OnlineManagement Then
+            If Not CheckOSUninstallCapability() Then
+                OSNoRollbackErrorDlg.ShowDialog(Me)
+                Exit Sub
+            End If
             SetOSUninstWindow.ShowDialog()
+        Else
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            MsgBox("This action is only supported on online installations", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción solo está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
+                        Case "FRA"
+                            MsgBox("Cette action est seulement prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is only supported on online installations", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción solo está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
+                Case 3
+                    MsgBox("Cette action est seulement prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+            End Select
+        End If
+    End Sub
+
+    Private Sub GetOSUninstallWindow_Click(sender As Object, e As EventArgs) Handles GetOSUninstallWindow.Click
+        If OnlineManagement Then
+            Try
+                If Not CheckOSUninstallCapability() Then
+                    OSNoRollbackErrorDlg.ShowDialog(Me)
+                    Exit Sub
+                End If
+                Dim osUninstReg As RegistryKey = Registry.LocalMachine.OpenSubKey("SYSTEM\Setup")
+                Dim RollbackDays As Integer = CInt(osUninstReg.GetValue("UninstallWindow").ToString())
+                osUninstReg.Close()
+                Dim msg As String = ""
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                msg = "You have " & RollbackDays & " days to go back to the old version of Windows." & CrLf & CrLf & _
+                                      "- To increase or decrease this uninstall window, go to Commands -> OS uninstall -> Set uninstall window..." & CrLf & _
+                                      "- To initiate the OS rollback, go to Commands -> OS uninstall -> Initiate uninstall..." & CrLf & _
+                                      "- To remove the ability to revert to the old version, go to Commands -> OS uninstall -> Remove roll back ability..."
+                            Case "ESN"
+                                msg = "Tiene " & RollbackDays & " días para volver a la versión anterior de Windows." & CrLf & CrLf & _
+                                      "- Para aumentar o reducir este margen de desinstalación, vaya a Comandos -> Desinstalación del sistema operativo -> Establecer margen de desinstalación..." & CrLf & _
+                                      "- Para iniciar la desinstalación, vaya a Comandos -> Desinstalación del sistema operativo -> Iniciar desinstalación..." & CrLf & _
+                                      "- Para eliminar la habilidad de revertir a la versión anterior, vaya a Comandos -> Desinstalación del sistema operativo -> Eliminar habilidad de desinstalación..."
+                            Case "FRA"
+                                msg = "Vous avez " & RollbackDays & " jours pour revenir à l'ancienne version de Windows." & CrLf & CrLf & _
+                                      "- Pour augmenter ou réduire cette créneau de désinstallation, allez dans Commandes -> Désinstallation du système d'exploitation -> Définir la créneau de désinstallation..." & CrLf & _
+                                      "- Pour démarrer le retour en arrière du système d'exploitation, cliquez sur Commandes -> Désinstallation du système d'exploitation -> Démarrer la désinstallation..." & CrLf & _
+                                      "- Pour supprimer la possibilité de revenir à l'ancienne version, cliquez sur Commandes -> Désinstallation du système d'exploitation -> Supprimer la possibilité de revenir en arrière..."
+                        End Select
+                    Case 1
+                        msg = "You have " & RollbackDays & " days to go back to the old version of Windows." & CrLf & CrLf & _
+                              "- To increase or decrease this uninstall window, go to Commands -> OS uninstall -> Set uninstall window..." & CrLf & _
+                              "- To initiate the OS rollback, go to Commands -> OS uninstall -> Initiate uninstall..." & CrLf & _
+                              "- To remove the ability to revert to the old version, go to Commands -> OS uninstall -> Remove roll back ability..."
+                    Case 2
+                        msg = "Tiene " & RollbackDays & " días para volver a la versión anterior de Windows." & CrLf & CrLf & _
+                              "- Para aumentar o reducir este margen de desinstalación, vaya a Comandos -> Desinstalación del sistema operativo -> Establecer margen de desinstalación..." & CrLf & _
+                              "- Para iniciar la desinstalación, vaya a Comandos -> Desinstalación del sistema operativo -> Iniciar desinstalación..." & CrLf & _
+                              "- Para eliminar la habilidad de revertir a la versión anterior, vaya a Comandos -> Desinstalación del sistema operativo -> Eliminar habilidad de desinstalación..."
+                    Case 3
+                        msg = "Vous avez " & RollbackDays & " jours pour revenir à l'ancienne version de Windows." & CrLf & CrLf & _
+                              "- Pour augmenter ou réduire cette créneau de désinstallation, allez dans Commandes -> Désinstallation du système d'exploitation -> Définir la créneau de désinstallation..." & CrLf & _
+                              "- Pour démarrer le retour en arrière du système d'exploitation, cliquez sur Commandes -> Désinstallation du système d'exploitation -> Démarrer la désinstallation..." & CrLf & _
+                              "- Pour supprimer la possibilité de revenir à l'ancienne version, cliquez sur Commandes -> Désinstallation du système d'exploitation -> Supprimer la possibilité de revenir en arrière..."
+                End Select
+                MsgBox(msg, vbOKOnly + vbInformation, Text)
+            Catch ex As Exception
+                Exit Sub
+            End Try
         Else
             Select Case Language
                 Case 0
