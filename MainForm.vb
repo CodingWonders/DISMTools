@@ -15676,4 +15676,84 @@ Public Class MainForm
             End Select
         End If
     End Sub
+
+    Private Sub InitiateOSUninstall_Click(sender As Object, e As EventArgs) Handles InitiateOSUninstall.Click
+        If OnlineManagement Then
+            Try
+                If Not CheckOSUninstallCapability() Then
+                    OSNoRollbackErrorDlg.ShowDialog(Me)
+                    Exit Sub
+                End If
+                Dim msg As String = ""
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                msg = Environment.UserName & ", please read this message carefully before proceeding." & CrLf & CrLf & _
+                                      "If you have installed programs after the upgrade, proceeding with the rollback process may remove them. Make sure you have backed up their settings in case you need to reinstall them later on. Also, back up your files in case they are affected by the rollback process." & CrLf & CrLf & _
+                                      "Next, don't get locked out. If you have set a password for your current user, make sure you know it. Otherwise, you may not be able to log in." & CrLf & CrLf & _
+                                      "Finally, thanks for trying this version of Windows." & CrLf & CrLf & _
+                                      "Do you want to start the rollback process?"
+                            Case "ESN"
+                                msg = Environment.UserName & ", lea este mensaje antes de proceder." & CrLf & CrLf & _
+                                      "Si ha instalado programas tras la actualización, este proceso podría eliminarlos. Asegúrese de hacer una copia de seguridad de sus configuraciones en el caso de que deba reinstalarlos después. También, haga una copia de seguridad de sus archivos en el caso de que se vean afectados por este proceso." & CrLf & CrLf & _
+                                      "Después, si ha establecido una contraseña, asegúrese de recordarla para ser capaz de iniciar sesión." & CrLf & CrLf & _
+                                      "Finalmente, gracias por probar esta versión de Windows." & CrLf & CrLf & _
+                                      "¿Desea iniciar el proceso de desinstalación?"
+                            Case "FRA"
+                                msg = Environment.UserName & ", veuillez lire attentivement ce message avant de poursuivre." & CrLf & CrLf & _
+                                      "Si vous avez installé des programmes après la mise à niveau, le processus de retour en arrière risque de les supprimer. Assurez-vous d'avoir sauvegardé leurs paramètres au cas où vous devriez les réinstaller ultérieurement. Sauvegardez également vos fichiers au cas où ils seraient affectés par le processus de retour en arrière." & CrLf & CrLf & _
+                                      "Ensuite, ne vous laissez pas bloquer. Si vous avez défini un mot de passe pour votre utilisateur actuel, assurez-vous de le connaître. Sinon, vous risquez de ne pas pouvoir vous connecter." & CrLf & CrLf & _
+                                      "Enfin, merci d'avoir essayé cette version de Windows." & CrLf & CrLf & _
+                                      "Souhaitez-vous démarrer le processus de retour en arrière ?"
+                        End Select
+                    Case 1
+                        msg = Environment.UserName & ", please read this message carefully before proceeding." & CrLf & CrLf & _
+                              "If you have installed programs after the upgrade, proceeding with the rollback process may remove them. Make sure you have backed up their settings in case you need to reinstall them later on. Also, back up your files in case they are affected by the rollback process." & CrLf & CrLf & _
+                              "Next, don't get locked out. If you have set a password for your current user, make sure you know it. Otherwise, you may not be able to log in." & CrLf & CrLf & _
+                              "Finally, thanks for trying this version of Windows." & CrLf & CrLf & _
+                              "Do you want to start the rollback process?"
+                    Case 2
+                        msg = Environment.UserName & ", lea este mensaje antes de proceder." & CrLf & CrLf & _
+                              "Si ha instalado programas tras la actualización, este proceso podría eliminarlos. Asegúrese de hacer una copia de seguridad de sus configuraciones en el caso de que deba reinstalarlos después. También, haga una copia de seguridad de sus archivos en el caso de que se vean afectados por este proceso." & CrLf & CrLf & _
+                              "Después, si ha establecido una contraseña, asegúrese de recordarla para ser capaz de iniciar sesión." & CrLf & CrLf & _
+                              "Finalmente, gracias por probar esta versión de Windows." & CrLf & CrLf & _
+                              "¿Desea iniciar el proceso de desinstalación?"
+                    Case 3
+                        msg = Environment.UserName & ", veuillez lire attentivement ce message avant de poursuivre." & CrLf & CrLf & _
+                              "Si vous avez installé des programmes après la mise à niveau, le processus de retour en arrière risque de les supprimer. Assurez-vous d'avoir sauvegardé leurs paramètres au cas où vous devriez les réinstaller ultérieurement. Sauvegardez également vos fichiers au cas où ils seraient affectés par le processus de retour en arrière." & CrLf & CrLf & _
+                              "Ensuite, ne vous laissez pas bloquer. Si vous avez défini un mot de passe pour votre utilisateur actuel, assurez-vous de le connaître. Sinon, vous risquez de ne pas pouvoir vous connecter." & CrLf & CrLf & _
+                              "Enfin, merci d'avoir essayé cette version de Windows." & CrLf & CrLf & _
+                              "Souhaitez-vous démarrer le processus de retour en arrière ?"
+                End Select
+                If MsgBox(msg, vbYesNo + vbExclamation, Text) = MsgBoxResult.Yes Then
+                    ProgressPanel.OperationNum = 86
+                    ProgressPanel.ShowDialog(Me)
+                    Close()
+                Else
+                    Exit Sub
+                End If
+            Catch ex As Exception
+                Exit Sub
+            End Try
+        Else
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            MsgBox("This action is only supported on online installations", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción solo está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
+                        Case "FRA"
+                            MsgBox("Cette action est seulement prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is only supported on online installations", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción solo está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
+                Case 3
+                    MsgBox("Cette action est seulement prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+            End Select
+        End If
+    End Sub
 End Class

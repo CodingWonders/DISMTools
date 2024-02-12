@@ -614,6 +614,8 @@ Public Class ProgressPanel
             taskCount = 1
         ElseIf opNum = 84 Then
             taskCount = 1
+        ElseIf opNum = 86 Then
+            taskCount = 1
         ElseIf opNum = 88 Then
             taskCount = 1
         ElseIf opNum = 991 Then
@@ -4055,6 +4057,23 @@ Public Class ProgressPanel
                 LogView.AppendText(" Error level : " & errCode)
             End If
             GetErrorCode(False)
+        ElseIf opNum = 86 Then
+            allTasks.Text = "Uninstalling this version of Windows..."
+            currentTask.Text = "Preparing operating system rollback..."
+            LogView.AppendText(CrLf & "Preparing operating system rollback...")
+            DISMProc.StartInfo.FileName = DismProgram
+            CommandArgs = " /online /norestart /initiate-osuninstall"
+            DISMProc.StartInfo.Arguments = CommandArgs
+            DISMProc.Start()
+            DISMProc.WaitForExit()
+            currentTask.Text = "Gathering error level..."
+            LogView.AppendText(CrLf & "Gathering error level...")
+            GetErrorCode(False)
+            If errCode.Length >= 8 Then
+                LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            Else
+                LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            End If
         ElseIf opNum = 88 Then
             allTasks.Text = "Setting the uninstall window..."
             currentTask.Text = "Setting the amount of days an uninstall can happen..."
@@ -5062,7 +5081,17 @@ Public Class ProgressPanel
                 ' There are pending image operations
                 LogView.AppendText(CrLf & "The operation could not be performed because this image has pending online operations. Applying and booting up the image might fix this issue.")
             ElseIf errCode = "BC2" Then
-                LogView.AppendText(CrLf & "The specified operation completed successfully, but requires a restart in order to be fully applied. Save your work and restart when ready")
+                If OperationNum = 86 Then
+                    LogView.AppendText(CrLf & "The rollback process has started. Your system needs to be restarted in order to continue. It will restart automatically in 10 seconds. Make sure you have saved your work.")
+                    Dim restartProc As New Process()
+                    restartProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\shutdown.exe"
+                    restartProc.StartInfo.Arguments = "/r /t 10 /c " & Quote & "Shutdown initiated by DISMTools" & Quote
+                    restartProc.StartInfo.CreateNoWindow = True
+                    restartProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+                    restartProc.Start()
+                Else
+                    LogView.AppendText(CrLf & "The specified operation completed successfully, but requires a restart in order to be fully applied. Save your work and restart when ready")
+                End If
             Else
                 ' Errors that weren't added to the database
                 LogView.AppendText(CrLf & "This error has not yet been added to the database, so a useful description can't be shown now. Try running the command manually and, if you see the same error, try looking it up on the Internet.")
