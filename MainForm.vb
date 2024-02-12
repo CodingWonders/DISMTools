@@ -15756,4 +15756,77 @@ Public Class MainForm
             End Select
         End If
     End Sub
+
+    Private Sub RemoveOSUninstall_Click(sender As Object, e As EventArgs) Handles RemoveOSUninstall.Click
+        If OnlineManagement Then
+            Try
+                If Not CheckOSUninstallCapability() Then
+                    OSNoRollbackErrorDlg.ShowDialog(Me)
+                    Exit Sub
+                End If
+                Dim msg As String = ""
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                msg = Environment.UserName & ", please read this message carefully before proceeding." & CrLf & CrLf & _
+                                      "If you have used this new Windows version for some time and have determined that no issues are present, you can remove the ability to initiate a rollback." & CrLf & CrLf & _
+                                      "This won't delete the files from the old installation, so you need to use Disk Cleanup (cleanmgr) if you want to free up some space." & CrLf & CrLf & _
+                                      "Do you want to remove the ability to roll back to an older version of Windows?"
+                            Case "ESN"
+                                msg = Environment.UserName & ", lea este mensaje antes de proceder." & CrLf & CrLf & _
+                                      "Si ha utilizado esta versión nueva de Windows por un rato y ha determinado que no hay errores, puede eliminar la habilidad para iniciar un restablecimiento a una versión anterior." & CrLf & CrLf & _
+                                      "Esto no eliminará los archivos de la instalación anterior, así que debe utilizar la herramienta de Limpieza de Disco (cleanmgr) si desea liberar algo de espacio." & CrLf & CrLf & _
+                                      "¿Desea eliminar la habilidad para revertir a una versión anterior de Windows?"
+                            Case "FRA"
+                                msg = Environment.UserName & ", veuillez lire attentivement ce message avant de poursuivre." & CrLf & CrLf & _
+                                      "Si vous avez utilisé cette nouvelle version de Windows pendant un certain temps et que vous avez déterminé qu'il n'y a pas de problème, vous pouvez supprimer la possibilité de lancer un retour en arrière." & CrLf & CrLf & _
+                                      "Cette opération ne supprime pas les fichiers de l'ancienne installation ; vous devez donc utiliser l'outil de nettoyage de disque (cleanmgr) si vous souhaitez libérer de l'espace." & CrLf & CrLf & _
+                                      "Voulez-vous supprimer la possibilité de revenir à une ancienne version de Windows ?"
+                        End Select
+                    Case 1
+                        msg = Environment.UserName & ", please read this message carefully before proceeding." & CrLf & CrLf & _
+                              "If you have used this new Windows version for some time and have determined that no issues are present, you can remove the ability to initiate a rollback." & CrLf & CrLf & _
+                              "This won't delete the files from the old installation, so you need to use Disk Cleanup (cleanmgr) if you want to free up some space." & CrLf & CrLf & _
+                              "Do you want to remove the ability to roll back to an older version of Windows?"
+                    Case 2
+                        msg = Environment.UserName & ", lea este mensaje antes de proceder." & CrLf & CrLf & _
+                              "Si ha utilizado esta versión nueva de Windows por un rato y ha determinado que no hay errores, puede eliminar la habilidad para iniciar un restablecimiento a una versión anterior." & CrLf & CrLf & _
+                              "Esto no eliminará los archivos de la instalación anterior, así que debe utilizar la herramienta de Limpieza de Disco (cleanmgr) si desea liberar algo de espacio." & CrLf & CrLf & _
+                              "¿Desea eliminar la habilidad para revertir a una versión anterior de Windows?"
+                    Case 3
+                        msg = Environment.UserName & ", veuillez lire attentivement ce message avant de poursuivre." & CrLf & CrLf & _
+                              "Si vous avez utilisé cette nouvelle version de Windows pendant un certain temps et que vous avez déterminé qu'il n'y a pas de problème, vous pouvez supprimer la possibilité de lancer un retour en arrière." & CrLf & CrLf & _
+                              "Cette opération ne supprime pas les fichiers de l'ancienne installation ; vous devez donc utiliser l'outil de nettoyage de disque (cleanmgr) si vous souhaitez libérer de l'espace." & CrLf & CrLf & _
+                              "Voulez-vous supprimer la possibilité de revenir à une ancienne version de Windows ?"
+                End Select
+                If MsgBox(msg, vbYesNo + vbExclamation, Text) = MsgBoxResult.Yes Then
+                    ProgressPanel.OperationNum = 87
+                    ProgressPanel.ShowDialog(Me)
+                Else
+                    Exit Sub
+                End If
+            Catch ex As Exception
+                Exit Sub
+            End Try
+        Else
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            MsgBox("This action is only supported on online installations", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción solo está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
+                        Case "FRA"
+                            MsgBox("Cette action est seulement prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is only supported on online installations", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción solo está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
+                Case 3
+                    MsgBox("Cette action est seulement prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+            End Select
+        End If
+    End Sub
 End Class

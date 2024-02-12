@@ -616,6 +616,8 @@ Public Class ProgressPanel
             taskCount = 1
         ElseIf opNum = 86 Then
             taskCount = 1
+        ElseIf opNum = 87 Then
+            taskCount = 1
         ElseIf opNum = 88 Then
             taskCount = 1
         ElseIf opNum = 991 Then
@@ -4063,6 +4065,23 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & "Preparing operating system rollback...")
             DISMProc.StartInfo.FileName = DismProgram
             CommandArgs = " /online /norestart /initiate-osuninstall"
+            DISMProc.StartInfo.Arguments = CommandArgs
+            DISMProc.Start()
+            DISMProc.WaitForExit()
+            currentTask.Text = "Gathering error level..."
+            LogView.AppendText(CrLf & "Gathering error level...")
+            GetErrorCode(False)
+            If errCode.Length >= 8 Then
+                LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            Else
+                LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            End If
+        ElseIf opNum = 87 Then
+            allTasks.Text = "Removing OS rollback ability..."
+            currentTask.Text = "Removing the ability to revert to an old installation of Windows..."
+            LogView.AppendText(CrLf & "Removing the ability to revert to an old installation of Windows...")
+            DISMProc.StartInfo.FileName = DismProgram
+            CommandArgs &= " /online /remove-osuninstall"
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
             DISMProc.WaitForExit()
