@@ -55,6 +55,8 @@ Partial Class WimScriptEditor
         Me.ToolStripButton5 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripButton6 = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripDropDownButton1 = New System.Windows.Forms.ToolStripDropDownButton()
+        Me.NoOneDriveToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.WimScriptOFD = New System.Windows.Forms.OpenFileDialog()
         Me.WimScriptSFD = New System.Windows.Forms.SaveFileDialog()
         Me.Panel1.SuspendLayout()
@@ -329,7 +331,7 @@ Partial Class WimScriptEditor
         Me.DarkToolStrip1.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.DarkToolStrip1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer))
         Me.DarkToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.DarkToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton2, Me.ToolStripButton3, Me.ToolStripButton4, Me.ToolStripSeparator4, Me.FontFamilyTSCB, Me.FontSizeTSCB, Me.ToolStripSeparator5, Me.ToolStripButton5, Me.ToolStripSeparator6, Me.ToolStripButton6})
+        Me.DarkToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton2, Me.ToolStripButton3, Me.ToolStripButton4, Me.ToolStripSeparator4, Me.FontFamilyTSCB, Me.FontSizeTSCB, Me.ToolStripSeparator5, Me.ToolStripButton5, Me.ToolStripSeparator6, Me.ToolStripButton6, Me.ToolStripDropDownButton1})
         Me.DarkToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.DarkToolStrip1.Name = "DarkToolStrip1"
         Me.DarkToolStrip1.Padding = New System.Windows.Forms.Padding(5, 0, 1, 0)
@@ -435,6 +437,26 @@ Partial Class WimScriptEditor
         Me.ToolStripButton6.Size = New System.Drawing.Size(23, 25)
         Me.ToolStripButton6.Text = "Help"
         '
+        'ToolStripDropDownButton1
+        '
+        Me.ToolStripDropDownButton1.BackColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(63, Byte), Integer), CType(CType(65, Byte), Integer))
+        Me.ToolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
+        Me.ToolStripDropDownButton1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NoOneDriveToolStripMenuItem})
+        Me.ToolStripDropDownButton1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer))
+        Me.ToolStripDropDownButton1.Image = CType(resources.GetObject("ToolStripDropDownButton1.Image"), System.Drawing.Image)
+        Me.ToolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripDropDownButton1.Name = "ToolStripDropDownButton1"
+        Me.ToolStripDropDownButton1.Size = New System.Drawing.Size(45, 25)
+        Me.ToolStripDropDownButton1.Text = "Tools"
+        '
+        'NoOneDriveToolStripMenuItem
+        '
+        Me.NoOneDriveToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(63, Byte), Integer), CType(CType(65, Byte), Integer))
+        Me.NoOneDriveToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer))
+        Me.NoOneDriveToolStripMenuItem.Name = "NoOneDriveToolStripMenuItem"
+        Me.NoOneDriveToolStripMenuItem.Size = New System.Drawing.Size(231, 22)
+        Me.NoOneDriveToolStripMenuItem.Text = "Exclude user OneDrive folders..."
+        '
         'WimScriptOFD
         '
         Me.WimScriptOFD.Filter = "INI files|*.ini"
@@ -509,4 +531,6 @@ Partial Class WimScriptEditor
     Friend WithEvents ToolStripButton6 As System.Windows.Forms.ToolStripButton
     Friend WithEvents WimScriptOFD As System.Windows.Forms.OpenFileDialog
     Friend WithEvents WimScriptSFD As System.Windows.Forms.SaveFileDialog
+    Friend WithEvents ToolStripDropDownButton1 As System.Windows.Forms.ToolStripDropDownButton
+    Friend WithEvents NoOneDriveToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class
