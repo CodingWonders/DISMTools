@@ -4060,15 +4060,35 @@ Public Class ProgressPanel
             End If
             GetErrorCode(False)
         ElseIf opNum = 86 Then
-            allTasks.Text = "Uninstalling this version of Windows..."
-            currentTask.Text = "Preparing operating system rollback..."
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            allTasks.Text = "Uninstalling this version of Windows..."
+                            currentTask.Text = "Preparing operating system rollback..."
+                        Case "ESN"
+                            allTasks.Text = "Desinstalando esta versión de Windows..."
+                            currentTask.Text = "Preparando la desinstalación del sistema operativo..."
+                        Case "FRA"
+                            allTasks.Text = "Désinstallation de cette version de Windows en cours..."
+                            currentTask.Text = "Préparation du retour en arrière du système d'exploitation en cours..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Uninstalling this version of Windows..."
+                    currentTask.Text = "Preparing operating system rollback..."
+                Case 2
+                    allTasks.Text = "Desinstalando esta versión de Windows..."
+                    currentTask.Text = "Preparando la desinstalación del sistema operativo..."
+                Case 3
+                    allTasks.Text = "Désinstallation de cette version de Windows en cours..."
+                    currentTask.Text = "Préparation du retour en arrière du système d'exploitation en cours..."
+            End Select
             LogView.AppendText(CrLf & "Preparing operating system rollback...")
             DISMProc.StartInfo.FileName = DismProgram
             CommandArgs = " /online /norestart /initiate-osuninstall"
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
             DISMProc.WaitForExit()
-            currentTask.Text = "Gathering error level..."
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
             If errCode.Length >= 8 Then
@@ -4077,15 +4097,35 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 87 Then
-            allTasks.Text = "Removing OS rollback ability..."
-            currentTask.Text = "Removing the ability to revert to an old installation of Windows..."
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            allTasks.Text = "Removing OS rollback ability..."
+                            currentTask.Text = "Removing the ability to revert to an old installation of Windows..."
+                        Case "ESN"
+                            allTasks.Text = "Eliminando la habilidad de desinstalación..."
+                            currentTask.Text = "Eliminando la habilidad para revertir a una instalación anterior de Windows..."
+                        Case "FRA"
+                            allTasks.Text = "Suppression de la possibilité de retour en arrière du système d'exploitation en cours..."
+                            currentTask.Text = "Suppression de la possibilité de revenir à une ancienne installation de Windows en cours..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Removing OS rollback ability..."
+                    currentTask.Text = "Removing the ability to revert to an old installation of Windows..."
+                Case 2
+                    allTasks.Text = "Eliminando la habilidad de desinstalación..."
+                    currentTask.Text = "Eliminando la habilidad para revertir a una instalación anterior de Windows..."
+                Case 3
+                    allTasks.Text = "Suppression de la possibilité de retour en arrière du système d'exploitation en cours..."
+                    currentTask.Text = "Suppression de la possibilité de revenir à une ancienne installation de Windows en cours..."
+            End Select
             LogView.AppendText(CrLf & "Removing the ability to revert to an old installation of Windows...")
             DISMProc.StartInfo.FileName = DismProgram
             CommandArgs &= " /online /remove-osuninstall"
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
             DISMProc.WaitForExit()
-            currentTask.Text = "Gathering error level..."
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
             If errCode.Length >= 8 Then
@@ -4094,8 +4134,29 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 88 Then
-            allTasks.Text = "Setting the uninstall window..."
-            currentTask.Text = "Setting the amount of days an uninstall can happen..."
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            allTasks.Text = "Setting the uninstall window..."
+                            currentTask.Text = "Setting the amount of days in which an uninstall can happen..."
+                        Case "ESN"
+                            allTasks.Text = "Estableciendo el margen de desinstalación..."
+                            currentTask.Text = "Estableciendo el número de días en los que puede ocurrir una desinstalación..."
+                        Case "FRA"
+                            allTasks.Text = "Définition de la créneau de désinstallation en cours..."
+                            currentTask.Text = "Définition du nombre de jours au cours desquels une désinstallation peut avoir lieu en cours..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Setting the uninstall window..."
+                    currentTask.Text = "Setting the amount of days in which an uninstall can happen..."
+                Case 2
+                    allTasks.Text = "Estableciendo el margen de desinstalación..."
+                    currentTask.Text = "Estableciendo el número de días en los que puede ocurrir una desinstalación..."
+                Case 3
+                    allTasks.Text = "Définition de la créneau de désinstallation en cours..."
+                    currentTask.Text = "Définition du nombre de jours au cours desquels une désinstallation peut avoir lieu en cours..."
+            End Select
             LogView.AppendText(CrLf & "Setting the amount of days an uninstall can happen..." & CrLf &
                                "Number of days: " & osUninstDayCount)
             DISMProc.StartInfo.FileName = DismProgram
@@ -4103,7 +4164,6 @@ Public Class ProgressPanel
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
             DISMProc.WaitForExit()
-            currentTask.Text = "Gathering error level..."
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
             If errCode.Length >= 8 Then
