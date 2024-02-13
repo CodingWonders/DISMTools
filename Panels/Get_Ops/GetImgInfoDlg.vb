@@ -546,6 +546,7 @@ Public Class GetImgInfoDlg
             If MainForm.MountedImageImgFiles.Count > 0 Then
                 TextBox1.Enabled = False
                 Button1.Enabled = False
+                Button3.Enabled = False
                 For x = 0 To Array.LastIndexOf(MainForm.MountedImageImgFiles, MainForm.MountedImageImgFiles.Last)
                     If MainForm.MountedImageMountDirs(x) = MainForm.MountDir Then
                         GetImageInfo(MainForm.MountedImageImgFiles(x))
@@ -557,6 +558,7 @@ Public Class GetImgInfoDlg
         Else
             TextBox1.Enabled = True
             Button1.Enabled = True
+            Button3.Enabled = True
 
             ' If the user had specified an image file, get information of it immediately
             If TextBox1.Text <> "" And File.Exists(TextBox1.Text) Then
