@@ -7,8 +7,10 @@ Imports Microsoft.Win32
 Imports Microsoft.Dism
 Imports System.Runtime.InteropServices
 Imports System.Xml
+Imports System.Xml.Serialization
 Imports System.ServiceModel.Syndication
 Imports DISMTools.Utilities
+Imports DISMTools.Elements
 
 Public Class MainForm
 
@@ -245,6 +247,8 @@ Public Class MainForm
 
     Dim ImageStatus As ImageWatcher.Status
 
+    Public RecentList As New List(Of Recents)
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -365,6 +369,57 @@ Public Class MainForm
             Next
         End If
     End Sub
+
+    Function LoadRecents(filePath As String) As List(Of Recents)
+        Dim recList As New List(Of Recents)
+        Try
+            Using fs As FileStream = New FileStream(filePath, FileMode.Open)
+                Dim xs As New XmlReaderSettings()
+                xs.IgnoreWhitespace = True
+                Using reader As XmlReader = XmlReader.Create(fs, xs)
+                    While reader.Read()
+                        If reader.NodeType = XmlNodeType.Element AndAlso reader.Name = "Recents" Then
+                            Dim rec As New Recents()
+                            rec.ProjPath = reader.GetAttribute("Path")
+                            rec.ProjName = reader.GetAttribute("Name")
+                            rec.Order = Integer.Parse(reader.GetAttribute("Order"))
+                            recList.Add(rec)
+                        End If
+                    End While
+                End Using
+            End Using
+            Return recList
+        Catch ex As Exception
+            Return Nothing
+        End Try
+        Return Nothing
+    End Function
+
+    Sub SaveRecents(Of T)(obj As T, filePath As String)
+        Try
+            If File.Exists(Application.StartupPath & "\recents.xml.old") Then File.Delete(Application.StartupPath & "\recents.xml.old")
+            If File.Exists(Application.StartupPath & "\recents.xml") Then File.Move(Application.StartupPath & "\recents.xml", Application.StartupPath & "\recents.xml.old")
+            Dim serial As New XmlSerializer(GetType(T))
+            Using writer As New StreamWriter(filePath)
+                serial.Serialize(writer, obj)
+            End Using
+            If File.Exists(Application.StartupPath & "\recents.xml.old") Then File.Delete(Application.StartupPath & "\recents.xml.old")
+        Catch ex As Exception
+            MsgBox("An error occurred saving the recents list. Trying to reinstate old recents list...", vbOKOnly + vbCritical, Text)
+            If File.Exists(Application.StartupPath & "\recents.xml.old") Then File.Move(Application.StartupPath & "\recents.xml.old", Application.StartupPath & "\recents.xml")
+        End Try
+    End Sub
+
+    Sub ChangeRecentListOrder(Project As Recents, itmIndex As Integer)
+        ' Update listings
+        RecentsLV.Items.Clear()
+        RecentList.RemoveAt(itmIndex)
+        RecentList.Insert(0, Project)
+        For Each recentProject In RecentList
+            recentProject.Order = RecentList.IndexOf(recentProject)
+            RecentsLV.Items.Add(If(recentProject.ProjName <> "", recentProject.ProjName, Path.GetFileNameWithoutExtension(recentProject.ProjPath)))
+        Next
+    End Sub
     
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Because of the DISM API, Windows 7 compatibility is out the window (no pun intended)
@@ -472,6 +527,19 @@ Public Class MainForm
             LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
             LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
             LinkLabel24.LinkColor = ForeColor
+        End If
+        If Not File.Exists(Application.StartupPath & "\recents.xml") Then
+            File.Create(Application.StartupPath & "\recents.xml")
+        Else
+            RecentList = LoadRecents(Application.StartupPath & "\recents.xml")
+            If RecentList IsNot Nothing Then
+                If RecentList.Count > 0 Then
+                    For Each Project In RecentList
+                        RecentsLV.Items.Add(If(Project.ProjName <> "", Project.ProjName, _
+                                                                       Path.GetFileNameWithoutExtension(Project.ProjPath)))
+                    Next
+                End If
+            End If
         End If
     End Sub
 
@@ -5052,6 +5120,7 @@ Public Class MainForm
         End If
         ListView1.BackColor = LatestNewsPanel.BackColor
         ListView1.ForeColor = LatestNewsPanel.ForeColor
+        RecentsLV.BackColor = SidePanel.BackColor
         TextBox1.BackColor = BackColor
         TextBox1.ForeColor = ForeColor
     End Sub
@@ -5225,11 +5294,11 @@ Public Class MainForm
                         ' Start Panel
                         LabelHeader1.Text = "Begin"
                         Label10.Text = "Recent projects"
-                        Label11.Text = "Coming soon!"
                         NewProjLink.Text = "New project..."
                         ExistingProjLink.Text = "Open existing project..."
                         OnlineInstMgmt.Text = "Manage online installation"
                         OfflineInstMgmt.Text = "Manage offline installation..."
+                        RecentRemoveLink.Text = "Remove entry"
                         ' ToolStrip buttons
                         ToolStripButton1.Text = "Close tab"
                         ToolStripButton2.Text = "Save project"
@@ -5588,11 +5657,11 @@ Public Class MainForm
                         ' Start Panel
                         LabelHeader1.Text = "Comenzar"
                         Label10.Text = "Proyectos recientes"
-                        Label11.Text = "¡Próximamente!"
                         NewProjLink.Text = "Nuevo proyecto..."
                         ExistingProjLink.Text = "Abrir proyecto existente..."
                         OnlineInstMgmt.Text = "Administrar instalación activa"
                         OfflineInstMgmt.Text = "Administrar instalación fuera de línea..."
+                        RecentRemoveLink.Text = "Eliminar entrada"
                         ' ToolStrip buttons
                         ToolStripButton1.Text = "Cerrar pestaña"
                         ToolStripButton2.Text = "Guardar proyecto"
@@ -5951,11 +6020,11 @@ Public Class MainForm
                         ' Start Panel
                         LabelHeader1.Text = "Commencer"
                         Label10.Text = "Projets récents"
-                        Label11.Text = "A venir !"
                         NewProjLink.Text = "Nouveau projet..."
                         ExistingProjLink.Text = "Ouvrir un projet existant..."
                         OnlineInstMgmt.Text = "Gérer l'installation en ligne"
                         OfflineInstMgmt.Text = "Gérer l'installation hors ligne..."
+                        RecentRemoveLink.Text = "Supprimer entrée"
                         ' ToolStrip buttons
                         ToolStripButton1.Text = "Fermer l'onglet"
                         ToolStripButton2.Text = "Sauvegarder le projet"
@@ -6319,11 +6388,11 @@ Public Class MainForm
                 ' Start Panel
                 LabelHeader1.Text = "Begin"
                 Label10.Text = "Recent projects"
-                Label11.Text = "Coming soon!"
                 NewProjLink.Text = "New project..."
                 ExistingProjLink.Text = "Open existing project..."
                 OnlineInstMgmt.Text = "Manage online installation"
                 OfflineInstMgmt.Text = "Manage offline installation..."
+                RecentRemoveLink.Text = "Remove entry"
                 ' ToolStrip buttons
                 ToolStripButton1.Text = "Close tab"
                 ToolStripButton2.Text = "Save project"
@@ -6682,11 +6751,11 @@ Public Class MainForm
                 ' Start Panel
                 LabelHeader1.Text = "Comenzar"
                 Label10.Text = "Proyectos recientes"
-                Label11.Text = "¡Próximamente!"
                 NewProjLink.Text = "Nuevo proyecto..."
                 ExistingProjLink.Text = "Abrir proyecto existente..."
                 OnlineInstMgmt.Text = "Administrar instalación activa"
                 OfflineInstMgmt.Text = "Administrar instalación fuera de línea..."
+                RecentRemoveLink.Text = "Eliminar entrada"
                 ' ToolStrip buttons
                 ToolStripButton1.Text = "Cerrar pestaña"
                 ToolStripButton2.Text = "Guardar proyecto"
@@ -7044,11 +7113,11 @@ Public Class MainForm
                 ' Start Panel
                 LabelHeader1.Text = "Commencer"
                 Label10.Text = "Projets récents"
-                Label11.Text = "A venir !"
                 NewProjLink.Text = "Nouveau projet..."
                 ExistingProjLink.Text = "Ouvrir un projet existant..."
                 OnlineInstMgmt.Text = "Gérer l'installation en ligne"
                 OfflineInstMgmt.Text = "Gérer l'installation hors ligne..."
+                RecentRemoveLink.Text = "Supprimer entrée"
                 ' ToolStrip buttons
                 ToolStripButton1.Text = "Fermer l'onglet"
                 ToolStripButton2.Text = "Sauvegarder le projet"
@@ -7407,7 +7476,6 @@ Public Class MainForm
                 ' Start Panel
                 LabelHeader1.Text = "Begin"
                 Label10.Text = "Recent projects"
-                Label11.Text = "Coming soon!"
                 NewProjLink.Text = "New project..."
                 ExistingProjLink.Text = "Open existing project..."
                 OnlineInstMgmt.Text = "Manage online installation"
@@ -7901,6 +7969,18 @@ Public Class MainForm
                 Button56.Enabled = False
                 Button57.Enabled = False
                 Button58.Enabled = False
+                Dim Project As New Recents()
+                Project.ProjPath = DTProjPath
+                Project.ProjName = DTProjFileName
+                Project.Order = 0
+                If RecentList IsNot Nothing Then
+                    RecentsLV.Items.Clear()
+                    RecentList.Insert(0, Project)
+                    For Each recentProject In RecentList
+                        recentProject.Order = RecentList.IndexOf(recentProject)
+                        RecentsLV.Items.Add(If(recentProject.ProjName <> "", recentProject.ProjName, Path.GetFileNameWithoutExtension(recentProject.ProjPath)))
+                    Next
+                End If
             Else
                 If OpenFileDialog1.FileName = "" Then
                     If BypassFileDialog = False Then
@@ -10480,6 +10560,34 @@ Public Class MainForm
         If Not HomePanel.Visible Then Exit Sub
         If OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
             If File.Exists(OpenFileDialog1.FileName) Then
+                Dim Project As New Recents()
+                Project.ProjPath = OpenFileDialog1.FileName
+                Project.ProjName = Path.GetFileNameWithoutExtension(OpenFileDialog1.FileName)
+                Project.Order = 0
+                If RecentList IsNot Nothing Then
+                    Dim LVItems As ListView.ListViewItemCollection = RecentsLV.Items
+                    Dim ProjNames As New List(Of String)
+                    For Each LVI As ListViewItem In LVItems
+                        ProjNames.Add(LVI.SubItems(0).Text)
+                    Next
+                    Dim itmOrder As Integer = 0
+                    For Each Proj In ProjNames
+                        If Proj = Project.ProjName Then
+                            itmOrder = ProjNames.IndexOf(Proj)
+                            Exit For
+                        End If
+                    Next
+                    RecentsLV.Items.Clear()
+                    If ProjNames.Contains(Project.ProjName) Then
+                        ChangeRecentListOrder(Project, itmOrder)
+                    Else
+                        RecentList.Insert(0, Project)
+                        For Each recentProject In RecentList
+                            recentProject.Order = RecentList.IndexOf(recentProject)
+                            RecentsLV.Items.Add(If(recentProject.ProjName <> "", recentProject.ProjName, Path.GetFileNameWithoutExtension(recentProject.ProjPath)))
+                        Next
+                    End If
+                End If
                 ProgressPanel.OperationNum = 990
                 LoadDTProj(OpenFileDialog1.FileName, Path.GetFileNameWithoutExtension(OpenFileDialog1.FileName), False, False)
             End If
@@ -10753,6 +10861,13 @@ Public Class MainForm
             Thread.Sleep(100)
         End While
         Timer2.Enabled = False
+        Try
+            If (RecentList IsNot Nothing And RecentList.Count >= 0) Then
+                SaveRecents(RecentList, Application.StartupPath & "\recents.xml")
+            End If
+        Catch ex As Exception
+            ' Don't save the recent item. The recent list may not have been initialized
+        End Try
     End Sub
 
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
@@ -12299,6 +12414,34 @@ Public Class MainForm
             If File.Exists(OpenFileDialog1.FileName) Then
                 If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement Or OfflineManagement, False, True), False)
                 If ImgBW.IsBusy Then Exit Sub
+                Dim Project As New Recents()
+                Project.ProjPath = OpenFileDialog1.FileName
+                Project.ProjName = Path.GetFileNameWithoutExtension(OpenFileDialog1.FileName)
+                Project.Order = 0
+                If RecentList IsNot Nothing Then
+                    Dim LVItems As ListView.ListViewItemCollection = RecentsLV.Items
+                    Dim ProjNames As New List(Of String)
+                    For Each LVI As ListViewItem In LVItems
+                        ProjNames.Add(LVI.SubItems(0).Text)
+                    Next
+                    Dim itmOrder As Integer = 0
+                    For Each Proj In ProjNames
+                        If Proj = Project.ProjName Then
+                            itmOrder = ProjNames.IndexOf(Proj)
+                            Exit For
+                        End If
+                    Next
+                    RecentsLV.Items.Clear()
+                    If ProjNames.Contains(Project.ProjName) Then
+                        ChangeRecentListOrder(Project, itmOrder)
+                    Else
+                        RecentList.Insert(0, Project)
+                        For Each recentProject In RecentList
+                            recentProject.Order = RecentList.IndexOf(recentProject)
+                            RecentsLV.Items.Add(If(recentProject.ProjName <> "", recentProject.ProjName, Path.GetFileNameWithoutExtension(recentProject.ProjPath)))
+                        Next
+                    End If
+                End If
                 ProgressPanel.OperationNum = 990
                 LoadDTProj(OpenFileDialog1.FileName, Path.GetFileNameWithoutExtension(OpenFileDialog1.FileName), False, False)
             End If
@@ -15828,5 +15971,39 @@ Public Class MainForm
                     MsgBox("Cette action est seulement prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
             End Select
         End If
+    End Sub
+
+    Private Sub RecentsLV_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles RecentsLV.MouseDoubleClick
+        If RecentsLV.SelectedItems.Count = 1 Then
+            Dim itmOrder As Integer = 0
+            If RecentList(RecentsLV.FocusedItem.Index).ProjPath <> "" And File.Exists(RecentList(RecentsLV.FocusedItem.Index).ProjPath) Then
+                itmOrder = RecentsLV.FocusedItem.Index
+                Dim recentProj As Recents = RecentList(itmOrder)
+                ChangeRecentListOrder(recentProj, itmOrder)
+                ProgressPanel.OperationNum = 990
+                LoadDTProj(recentProj.ProjPath, _
+                           If(recentProj.ProjName <> "", _
+                              recentProj.ProjName, _
+                              Path.GetFileNameWithoutExtension(recentProj.ProjPath)), _
+                           True, False)
+            End If
+            RecentRemoveLink.Visible = False
+        End If
+    End Sub
+
+    Private Sub RecentsLV_SelectedIndexChanged(sender As Object, e As EventArgs) Handles RecentsLV.SelectedIndexChanged
+        RecentRemoveLink.Visible = RecentsLV.SelectedItems.Count = 1
+    End Sub
+
+    Private Sub RecentRemoveLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles RecentRemoveLink.LinkClicked
+        Dim itmOrder As Integer = 0
+        itmOrder = RecentsLV.FocusedItem.Index
+        RecentsLV.Items.Clear()
+        RecentList.RemoveAt(itmOrder)
+        For Each recentProject In RecentList
+            recentProject.Order = RecentList.IndexOf(recentProject)
+            RecentsLV.Items.Add(If(recentProject.ProjName <> "", recentProject.ProjName, Path.GetFileNameWithoutExtension(recentProject.ProjPath)))
+        Next
+        RecentRemoveLink.Visible = False
     End Sub
 End Class
