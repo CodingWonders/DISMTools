@@ -9,7 +9,7 @@ Imports System.Runtime.InteropServices
 ' Revisar los valores de los atributos del ensamblado
 
 <Assembly: AssemblyTitle("DISMTools")> 
-<Assembly: AssemblyDescription("A GUI and automation tool for DISM operations")> 
+<Assembly: AssemblyDescription("The connected place for Windows system administration.")> 
 <Assembly: AssemblyCompany("")> 
 <Assembly: AssemblyProduct("DISMTools")> 
 <Assembly: AssemblyCopyright("© 2022-2024 CodingWonders Software")> 
