@@ -324,7 +324,7 @@ Public Class MainForm
                                         MsgBox("Se ha especificado un proyecto no válido", vbOKOnly + vbCritical, Text)
                                     Case "FRA"
                                         MsgBox("Un projet non valide a été spécifié", vbOKOnly + vbCritical, Text)
-                                    Case "PTB"
+                                    Case "PTB", "PTG"
                                         MsgBox("Foi especificado um projeto inválido", vbOKOnly + vbCritical, Text)
                                 End Select
                             Case 1
@@ -639,7 +639,7 @@ Public Class MainForm
                         UpdateLink.Text = "Comprobando actualizaciones..."
                     Case "FRA"
                         UpdateLink.Text = "Vérification des mises à jour en cours..."
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         UpdateLink.Text = "Verificar actualizações..."
                 End Select
             Case 1
@@ -691,7 +691,7 @@ Public Class MainForm
                                 Case "FRA"
                                     UpdateLink.Text = "Une nouvelle version est disponible pour le téléchargement et l'installation. Cliquez ici pour en savoir plus"
                                     UpdateLink.LinkArea = New LinkArea(78, 31)
-                                Case "PTB"
+                                Case "PTB", "PTG"
                                     UpdateLink.Text = "Está disponível uma nova versão para transferência e instalação. Clique aqui para saber mais"
                                     UpdateLink.LinkArea = New LinkArea(65, 27)
                             End Select
@@ -735,7 +735,7 @@ Public Class MainForm
                             Label5.Text = "No"
                         Case "FRA"
                             Label5.Text = "Non"
-                        Case "PTB"
+                        Case "PTB", "PTG"
                             Label5.Text = "Não"
                     End Select
                 Case 1
@@ -759,7 +759,7 @@ Public Class MainForm
                             Label5.Text = "Sí"
                         Case "FRA"
                             Label5.Text = "Oui"
-                        Case "PTB"
+                        Case "PTB", "PTG"
                             Label5.Text = "Sim"
                     End Select
                 Case 1
@@ -1242,6 +1242,8 @@ Public Class MainForm
                     Language = 2
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("Language=3") Then
                     Language = 3
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("Language=4") Then
+                    Language = 4
                 End If
                 ' Apply language settings immediately
                 ChangeLangs(Language)
@@ -1609,7 +1611,7 @@ Public Class MainForm
                                             progressLabel = "Creando sesión para esta imagen..."
                                         Case "FRA"
                                             progressLabel = "Création d'une session pour cette image en cours..."
-                                        Case "PTB"
+                                        Case "PTB", "PTG"
                                             progressLabel = "Criar uma sessão para esta imagem..."
                                     End Select
                                 Case 1
@@ -1664,7 +1666,7 @@ Public Class MainForm
                         progressLabel = "Ejecutando procesos"
                     Case "FRA"
                         progressLabel = "Processus en cours"
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         progressLabel = "Processos em curso"
                 End Select
             Case 1
@@ -1687,7 +1689,7 @@ Public Class MainForm
                             progressLabel = "Obteniendo información básica de la imagen..."
                         Case "FRA"
                             progressLabel = "Obtention des informations basiques sur l'image en cours..."
-                        Case "PTB"
+                        Case "PTB", "PTG"
                             progressLabel = "Obter informações básicas sobre a imagem..."
                     End Select
                 Case 1
@@ -1722,7 +1724,7 @@ Public Class MainForm
                                 progressLabel = "Obteniendo información avanzada de la imagen..."
                             Case "FRA"
                                 progressLabel = "Obtention des informations avancées sur l'image en cours..."
-                            Case "PTB"
+                            Case "PTB", "PTG"
                                 progressLabel = "Obter informações avançadas sobre a imagem..."
                         End Select
                     Case 1
@@ -1801,7 +1803,7 @@ Public Class MainForm
                                 progressLabel = "Obteniendo paquetes de la imagen..."
                             Case "FRA"
                                 progressLabel = "Obtention des paquets de l'image en cours..."
-                            Case "PTB"
+                            Case "PTB", "PTG"
                                 progressLabel = "Obter pacotes de imagem..."
                         End Select
                     Case 1
@@ -1828,7 +1830,7 @@ Public Class MainForm
                                 progressLabel = "Obteniendo características de la imagen..."
                             Case "FRA"
                                 progressLabel = "Obtention des caractéristiques de l'image en cours..."
-                            Case "PTB"
+                            Case "PTB", "PTG"
                                 progressLabel = "Obter características de imagem..."
                         End Select
                     Case 1
@@ -1860,7 +1862,7 @@ Public Class MainForm
                                         progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
                                     Case "FRA"
                                         progressLabel = "Obtention des paquets AppX (applications de style Metro) provisionnés de l'image en cours..."
-                                    Case "PTB"
+                                    Case "PTB", "PTG"
                                         progressLabel = "Obter pacotes AppX provisionados por imagem (aplicações de estilo Metro)..."
                                 End Select
                             Case 1
@@ -1897,7 +1899,7 @@ Public Class MainForm
                                         progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
                                     Case "FRA"
                                         progressLabel = "Obtention de caractéristiques de l'image à la demande (capacités) en cours..."
-                                    Case "PTB"
+                                    Case "PTB", "PTG"
                                         progressLabel = "Obter capacidades de imagem..."
                                 End Select
                             Case 1
@@ -1930,7 +1932,7 @@ Public Class MainForm
                                 progressLabel = "Obteniendo controladores de la imagen..."
                             Case "FRA"
                                 progressLabel = "Obtention des pilotes de l'image en cours..."
-                            Case "PTB"
+                            Case "PTB", "PTG"
                                 progressLabel = "Obter controladores de imagem..."
                         End Select
                     Case 1
@@ -1958,7 +1960,7 @@ Public Class MainForm
                                 progressLabel = "Obteniendo paquetes de la imagen..."
                             Case "FRA"
                                 progressLabel = "Obtention des paquets de l'image en cours..."
-                            Case "PTB"
+                            Case "PTB", "PTG"
                                 progressLabel = "Obter pacotes de imagem..."
                         End Select
                     Case 1
@@ -1982,7 +1984,7 @@ Public Class MainForm
                                 progressLabel = "Obteniendo características de la imagen..."
                             Case "FRA"
                                 progressLabel = "Obtention des caractéristiques de l'image en cours..."
-                            Case "PTB"
+                            Case "PTB", "PTG"
                                 progressLabel = "Obter características de imagem..."
                         End Select
                     Case 1
@@ -2009,7 +2011,7 @@ Public Class MainForm
                                     progressLabel = "Obteniendo paquetes aprovisionados AppX de la imagen (aplicaciones estilo Metro)..."
                                 Case "FRA"
                                     progressLabel = "Obtention des paquets AppX (applications de style Metro) provisionnés de l'image en cours..."
-                                Case "PTB"
+                                Case "PTB", "PTG"
                                     progressLabel = "Obter pacotes AppX provisionados por imagem (aplicações de estilo Metro)..."
                             End Select
                         Case 1
@@ -2040,7 +2042,7 @@ Public Class MainForm
                                     progressLabel = "Obteniendo características opcionales de la imagen (funcionalidades)..."
                                 Case "FRA"
                                     progressLabel = "Obtention de caractéristiques de l'image à la demande (capacités) en cours..."
-                                Case "PTB"
+                                Case "PTB", "PTG"
                                     progressLabel = "Obter capacidades de imagem..."
                             End Select
                         Case 1
@@ -2068,7 +2070,7 @@ Public Class MainForm
                                 progressLabel = "Obteniendo controladores de la imagen..."
                             Case "FRA"
                                 progressLabel = "Obtention des pilotes de l'image en cours..."
-                            Case "PTB"
+                            Case "PTB", "PTG"
                                 progressLabel = "Obter controladores de imagem..."
                         End Select
                     Case 1
@@ -2093,7 +2095,7 @@ Public Class MainForm
                             progressLabel = "Ejecutando tareas pendientes. Esto puede llevar algo de tiempo..."
                         Case "FRA"
                             progressLabel = "Exécution des tâches en cours. Cela peut prendre un certain temps ..."
-                        Case "PTB"
+                        Case "PTB", "PTG"
                             progressLabel = "Execução de tarefas pendentes. Isto pode demorar algum tempo..."
                     End Select
                 Case 1
@@ -2155,7 +2157,7 @@ Public Class MainForm
                                 Label14.Text = "(Installation en ligne)"
                                 Label20.Text = "(Installation en ligne)"
                                 projName.Text = "(Installation en ligne)"
-                            Case "PTB"
+                            Case "PTB", "PTG"
                                 Label14.Text = "(Instalação em linha)"
                                 Label20.Text = "(Instalação em linha)"
                                 projName.Text = "(Instalação em linha)"
@@ -2215,7 +2217,7 @@ Public Class MainForm
                                 Label18.Text = "(Installation hors ligne)"
                                 Label20.Text = "(Installation hors ligne)"
                                 projName.Text = "(Installation hors ligne)"
-                            Case "PTB"
+                            Case "PTB", "PTG"
                                 Label14.Text = "(Instalação offline)"
                                 Label18.Text = "(Instalação offline)"
                                 Label20.Text = "(Instalação offline)"
@@ -6318,7 +6320,7 @@ Public Class MainForm
                         Label34.Text = "Information d'erreur :"
                         Label35.Text = "Essayez de connecter votre système au réseau. Si votre système est connecté au réseau mais que cette erreur persiste, vérifiez si vous pouvez accéder aux sites web."
                         Button59.Text = "Réessayer"
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         ' Top-level menu items
                         FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Ficheiro".ToUpper(), "&Ficheiro")
                         ProjectToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Projeto".ToUpper(), "&Projeto")
@@ -8169,7 +8171,7 @@ Public Class MainForm
                             Label41.Text = "(Installation en ligne)"
                             Label47.Text = "(Installation en ligne)"
                             Label49.Text = "(Installation en ligne)"
-                        Case "PTB"
+                        Case "PTB", "PTG"
                             Label5.Text = If(IsImageMounted, "Sim", "Não")
                             Text = "Instalação em linha - DISMTools"
                             Label14.Text = "(Instalação em linha)"
@@ -8262,7 +8264,7 @@ Public Class MainForm
                             Label46.Text = "(Installation hors ligne)"
                             Label47.Text = "(Installation hors ligne)"
                             Label49.Text = "(Installation hors ligne)"
-                        Case "PTB"
+                        Case "PTB", "PTG"
                             Label5.Text = If(IsImageMounted, "Sim", "Não")
                             Text = "Instalação offline - DISMTools"
                             Label14.Text = "(Instalação offline)"
@@ -8400,7 +8402,7 @@ Public Class MainForm
                                 PleaseWaitDialog.Label2.Text = "Cargando proyecto: " & Quote & prjName & Quote
                             Case "FRA"
                                 PleaseWaitDialog.Label2.Text = "Chargement du projet en cours : " & Quote & prjName & Quote
-                            Case "PTB"
+                            Case "PTB", "PTG"
                                 PleaseWaitDialog.Label2.Text = "Carregar projeto: " & Quote & prjName & Quote
                         End Select
                     Case 1
@@ -8513,7 +8515,7 @@ Public Class MainForm
                                         PleaseWaitDialog.Label2.Text = "Cargando proyecto: " & Quote & prjName & Quote
                                     Case "FRA"
                                         PleaseWaitDialog.Label2.Text = "Chargement du projet en cours : " & Quote & prjName & Quote
-                                    Case "PTB"
+                                    Case "PTB", "PTG"
                                         PleaseWaitDialog.Label2.Text = "Carregar projeto: " & Quote & prjName & Quote
                                 End Select
                             Case 1
@@ -8738,7 +8740,7 @@ Public Class MainForm
                                     PleaseWaitDialog.Label2.Text = "Cargando proyecto: " & Quote & prjName & Quote
                                 Case "FRA"
                                     PleaseWaitDialog.Label2.Text = "Chargement du projet en cours : " & Quote & prjName & Quote
-                                Case "PTB"
+                                Case "PTB", "PTG"
                                     PleaseWaitDialog.Label2.Text = "Carregar projeto: " & Quote & prjName & Quote
                             End Select
                         Case 1
@@ -9103,7 +9105,7 @@ Public Class MainForm
                             msg = "Procesos en segundo plano todavía están recopilando información de esta imagen. ¿Desea cancelarlos?"
                         Case "FRA"
                             msg = "Les processus en arrière-plan sont encore en train de recueillir des informations sur cette image. Voulez-vous les annuler ?"
-                        Case "PTB"
+                        Case "PTB", "PTG"
                             msg = "Os processos em segundo plano ainda estão a recolher informações sobre esta imagem. Deseja cancelá-los?"
                     End Select
                 Case 1
@@ -9129,7 +9131,7 @@ Public Class MainForm
                             MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
                         Case "FRA"
                             MenuDesc.Text = "Annulation des processus en arrière plan en cours. Veuillez patienter ..."
-                        Case "PTB"
+                        Case "PTB", "PTG"
                             MenuDesc.Text = "Cancelamento de processos em segundo plano. Por favor, aguarde..."
                     End Select
                 Case 1
@@ -9158,7 +9160,7 @@ Public Class MainForm
                             MenuDesc.Text = "Listo"
                         Case "FRA"
                             MenuDesc.Text = "Prêt"
-                        Case "PTB"
+                        Case "PTB", "PTG"
                             MenuDesc.Text = "Pronto"
                     End Select
                 Case 1
@@ -9244,7 +9246,7 @@ Public Class MainForm
                         Text = "Instalación activa - DISMTools"
                     Case "FRA"
                         Text = "Installation en ligne - DISMTools"
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         Text = "Instalação em linha - DISMTools"
                 End Select
             Case 1
@@ -9271,7 +9273,7 @@ Public Class MainForm
                         Label5.Text = "Sí"
                     Case "FRA"
                         Label5.Text = "Oui"
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         Label5.Text = "Sim"
                 End Select
             Case 1
@@ -9314,7 +9316,7 @@ Public Class MainForm
                     Case "FRA"
                         Label14.Text = "(Installation en ligne)"
                         Label12.Text = "(Installation en ligne)"
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         Label14.Text = "(Instalação em linha)"
                         Label12.Text = "(Instalação em linha)"
                 End Select
@@ -9357,7 +9359,7 @@ Public Class MainForm
                         Text = "Instalación fuera de línea - DISMTools"
                     Case "FRA"
                         Text = "Installation hors ligne - DISMTools"
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         Text = "Instalação offline - DISMTools"
                 End Select
             Case 1
@@ -9384,7 +9386,7 @@ Public Class MainForm
                         Label5.Text = "Sí"
                     Case "FRA"
                         Label5.Text = "Oui"
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         Label5.Text = "Sim"
                 End Select
             Case 1
@@ -9427,7 +9429,7 @@ Public Class MainForm
                     Case "FRA"
                         Label14.Text = "(Installation hors ligne)"
                         Label12.Text = "(Installation hors ligne)"
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         Label14.Text = "(Instalação offline)"
                         Label12.Text = "(Instalação offline)"
                 End Select
@@ -9470,7 +9472,7 @@ Public Class MainForm
                             msg = "Procesos en segundo plano todavía están recopilando información de esta imagen. ¿Desea cancelarlos?"
                         Case "FRA"
                             msg = "Les processus en arrière-plan sont encore en train de recueillir des informations sur cette image. Voulez-vous les annuler ?"
-                        Case "PTB"
+                        Case "PTB", "PTG"
                             msg = "Os processos em segundo plano ainda estão a recolher informações sobre esta imagem. Deseja cancelá-los?"
                     End Select
                 Case 1
@@ -9496,7 +9498,7 @@ Public Class MainForm
                             MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
                         Case "FRA"
                             MenuDesc.Text = "Annulation des processus en arrière plan en cours. Veuillez patienter ..."
-                        Case "PTB"
+                        Case "PTB", "PTG"
                             MenuDesc.Text = "Cancelamento de processos em segundo plano. Por favor, aguarde..."
                     End Select
                 Case 1
@@ -9525,7 +9527,7 @@ Public Class MainForm
                             MenuDesc.Text = "Listo"
                         Case "FRA"
                             MenuDesc.Text = "Prêt"
-                        Case "PTB"
+                        Case "PTB", "PTG"
                             MenuDesc.Text = "Pronto"
                     End Select
                 Case 1
@@ -9554,7 +9556,7 @@ Public Class MainForm
                         Label5.Text = "Sí"
                     Case "FRA"
                         Label5.Text = "Oui"
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         Label5.Text = "Sim"
                 End Select
             Case 1
@@ -9614,7 +9616,7 @@ Public Class MainForm
                             msg = "Procesos en segundo plano todavía están recopilando información de esta imagen. ¿Desea cancelarlos?"
                         Case "FRA"
                             msg = "Les processus en arrière-plan sont encore en train de recueillir des informations sur cette image. Voulez-vous les annuler ?"
-                        Case "PTB"
+                        Case "PTB", "PTG"
                             msg = "Os processos em segundo plano ainda estão a recolher informações sobre esta imagem. Deseja cancelá-los?"
                     End Select
                 Case 1
@@ -9640,7 +9642,7 @@ Public Class MainForm
                             MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
                         Case "FRA"
                             MenuDesc.Text = "Annulation des processus en arrière plan en cours. Veuillez patienter ..."
-                        Case "PTB"
+                        Case "PTB", "PTG"
                             MenuDesc.Text = "Cancelamento de processos em segundo plano. Por favor, aguarde..."
                     End Select
                 Case 1
@@ -9669,7 +9671,7 @@ Public Class MainForm
                             MenuDesc.Text = "Listo"
                         Case "FRA"
                             MenuDesc.Text = "Prêt"
-                        Case "PTB"
+                        Case "PTB", "PTG"
                             MenuDesc.Text = "Pronto"
                     End Select
                 Case 1
@@ -9698,7 +9700,7 @@ Public Class MainForm
                         Label5.Text = "Sí"
                     Case "FRA"
                         Label5.Text = "Oui"
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         Label5.Text = "Sim"
                 End Select
             Case 1
@@ -9757,7 +9759,7 @@ Public Class MainForm
                             Label5.Text = "Sí"
                         Case "FRA"
                             Label5.Text = "Oui"
-                        Case "PTB"
+                        Case "PTB", "PTG"
                             Label5.Text = "Sim"
                     End Select
                 Case 1
@@ -10189,7 +10191,7 @@ Public Class MainForm
                             prjTreeView.Nodes("parent").Nodes.Add("unattend_xml", "Fichiers de réponse non surveillés")
                             prjTreeView.Nodes("parent").Nodes.Add("scr_temp", "Répertoire temporaire")
                             prjTreeView.Nodes("parent").Nodes.Add("reports", "Rapports de projet")
-                        Case "PTB"
+                        Case "PTB", "PTG"
                             prjTreeView.Nodes.Add("parent", "Projeto: " & Quote & MainProjNameNode & Quote)
                             prjTreeView.Nodes("parent").Nodes.Add("dandi", "Ferramentas de implantação do ADK")
                             prjTreeView.Nodes("parent").Nodes("dandi").Nodes.Add("dandi_x86", "Ferramentas de implementação (x86)")
@@ -10547,7 +10549,7 @@ Public Class MainForm
                         MenuDesc.Text = "Listo"
                     Case "FRA"
                         MenuDesc.Text = "Prêt"
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         MenuDesc.Text = "Pronto"
                 End Select
             Case 1
@@ -10569,7 +10571,7 @@ Public Class MainForm
                             MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
                         Case "FRA"
                             MenuDesc.Text = "Annulation des processus en arrière plan en cours. Veuillez patienter ..."
-                        Case "PTB"
+                        Case "PTB", "PTG"
                             MenuDesc.Text = "Cancelamento de processos em segundo plano. Por favor, aguarde..."
                     End Select
                 Case 1
@@ -10594,7 +10596,7 @@ Public Class MainForm
                         MenuDesc.Text = "Listo"
                     Case "FRA"
                         MenuDesc.Text = "Prêt"
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         MenuDesc.Text = "Pronto"
                 End Select
             Case 1
@@ -10616,7 +10618,7 @@ Public Class MainForm
                             MenuDesc.Text = "Espere mientras cancelamos los procesos en segundo plano..."
                         Case "FRA"
                             MenuDesc.Text = "Annulation des processus en arrière plan en cours. Veuillez patienter ..."
-                        Case "PTB"
+                        Case "PTB", "PTG"
                             MenuDesc.Text = "Cancelamento de processos em segundo plano. Por favor, aguarde..."
                     End Select
                 Case 1
@@ -11190,7 +11192,7 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
                 End Select
             Case 1
@@ -11234,7 +11236,7 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
                 End Select
             Case 1
@@ -11287,7 +11289,7 @@ Public Class MainForm
                         ProjProperties.Label1.Text = "Propiedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del proyecto", "de la imagen")
                     Case "FRA"
                         ProjProperties.Label1.Text = "Propriétés " & If(ProjProperties.TabControl1.SelectedIndex = 0, "du projet", "de l'image")
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         ProjProperties.Label1.Text = "Propriedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "do projeto", "da imagem")
                 End Select
             Case 1
@@ -11329,7 +11331,7 @@ Public Class MainForm
                         ProjProperties.Label1.Text = "Propiedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del proyecto", "de la imagen")
                     Case "FRA"
                         ProjProperties.Label1.Text = "Propriétés " & If(ProjProperties.TabControl1.SelectedIndex = 0, "du projet", "de l'image")
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         ProjProperties.Label1.Text = "Propriedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "do projeto", "da imagem")
                 End Select
             Case 1
@@ -11574,7 +11576,7 @@ Public Class MainForm
                             Case "FRA"
                                 ExpandCollapseTSB.Text = "Réduire"
                                 ExpandToolStripMenuItem.Text = "Réduire élément"
-                            Case "PTB"
+                            Case "PTB", "PTG"
                                 ExpandCollapseTSB.Text = "Recolher"
                                 ExpandToolStripMenuItem.Text = "Recolher item"
                         End Select
@@ -11609,7 +11611,7 @@ Public Class MainForm
                             Case "FRA"
                                 ExpandCollapseTSB.Text = "Agrandir"
                                 ExpandToolStripMenuItem.Text = "Agrandir élément"
-                            Case "PTB"
+                            Case "PTB", "PTG"
                                 ExpandCollapseTSB.Text = "Expandir"
                                 ExpandToolStripMenuItem.Text = "Expandir item"
                         End Select
@@ -11653,7 +11655,7 @@ Public Class MainForm
                             Case "FRA"
                                 ExpandCollapseTSB.Text = "Réduire"
                                 ExpandToolStripMenuItem.Text = "Réduire élément"
-                            Case "PTB"
+                            Case "PTB", "PTG"
                                 ExpandCollapseTSB.Text = "Recolher"
                                 ExpandToolStripMenuItem.Text = "Recolher item"
                         End Select
@@ -11688,7 +11690,7 @@ Public Class MainForm
                             Case "FRA"
                                 ExpandCollapseTSB.Text = "Agrandir"
                                 ExpandToolStripMenuItem.Text = "Agrandir élément"
-                            Case "PTB"
+                            Case "PTB", "PTG"
                                 ExpandCollapseTSB.Text = "Expandir"
                                 ExpandToolStripMenuItem.Text = "Expandir item"
                         End Select
@@ -11724,7 +11726,7 @@ Public Class MainForm
                         Case "FRA"
                             ExpandCollapseTSB.Text = "Agrandir"
                             ExpandToolStripMenuItem.Text = "Agrandir élément"
-                        Case "PTB"
+                        Case "PTB", "PTG"
                             ExpandCollapseTSB.Text = "Expandir"
                             ExpandToolStripMenuItem.Text = "Expandir item"
                     End Select
@@ -11763,7 +11765,7 @@ Public Class MainForm
                         Case "FRA"
                             ExpandCollapseTSB.Text = "Réduire"
                             ExpandToolStripMenuItem.Text = "Réduire élément"
-                        Case "PTB"
+                        Case "PTB", "PTG"
                             ExpandCollapseTSB.Text = "Recolher"
                             ExpandToolStripMenuItem.Text = "Recolher item"
                     End Select
@@ -11798,7 +11800,7 @@ Public Class MainForm
                         Case "FRA"
                             ExpandCollapseTSB.Text = "Agrandir"
                             ExpandToolStripMenuItem.Text = "Agrandir élément"
-                        Case "PTB"
+                        Case "PTB", "PTG"
                             ExpandCollapseTSB.Text = "Expandir"
                             ExpandToolStripMenuItem.Text = "Expandir item"
                     End Select
@@ -11903,7 +11905,7 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
                 End Select
             Case 1
@@ -11950,7 +11952,7 @@ Public Class MainForm
                         RemPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes"
                     Case "FRA"
                         RemPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets"
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         RemPackage.Label2.Text = "Esta imagem contém " & ElementCount & " pacotes"
                 End Select
             Case 1
@@ -12008,7 +12010,7 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
                 End Select
             Case 1
@@ -12057,7 +12059,7 @@ Public Class MainForm
                                 EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
                             Case "FRA"
                                 EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                            Case "PTB"
+                            Case "PTB", "PTG"
                                 EnableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
                         End Select
                     Case 1
@@ -12102,7 +12104,7 @@ Public Class MainForm
                                 DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
                             Case "FRA"
                                 DisableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                            Case "PTB"
+                            Case "PTB", "PTG"
                                 DisableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
                         End Select
                     Case 1
@@ -12134,7 +12136,7 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
                 End Select
             Case 1
@@ -12209,7 +12211,7 @@ Public Class MainForm
                                 DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
                             Case "FRA"
                                 DisableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                            Case "PTB"
+                            Case "PTB", "PTG"
                                 DisableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
                         End Select
                     Case 1
@@ -12298,7 +12300,7 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours..."
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         PleaseWaitDialog.Label2.Text = "Obter índices de imagem..."
                 End Select
             Case 1
@@ -12385,7 +12387,7 @@ Public Class MainForm
                         progressLabel = "Los procesos de la imagen han completado"
                     Case "FRA"
                         progressLabel = "Les processus de l'image sont terminés"
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         progressLabel = "Os processos de imagem foram concluídos"
                 End Select
             Case 1
@@ -12544,7 +12546,7 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
                 End Select
             Case 1
@@ -12591,7 +12593,7 @@ Public Class MainForm
                         RemPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes"
                     Case "FRA"
                         RemPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets"
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         RemPackage.Label2.Text = "Esta imagem contém " & ElementCount & " pacotes"
                 End Select
             Case 1
@@ -12622,7 +12624,7 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
                 End Select
             Case 1
@@ -12671,7 +12673,7 @@ Public Class MainForm
                                 EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
                             Case "FRA"
                                 EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                            Case "PTB"
+                            Case "PTB", "PTG"
                                 EnableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
                         End Select
                     Case 1
@@ -12716,7 +12718,7 @@ Public Class MainForm
                                 DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
                             Case "FRA"
                                 DisableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                            Case "PTB"
+                            Case "PTB", "PTG"
                                 DisableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
                         End Select
                     Case 1
@@ -12748,7 +12750,7 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
                 End Select
             Case 1
@@ -12798,7 +12800,7 @@ Public Class MainForm
                                 EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
                             Case "FRA"
                                 EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                            Case "PTB"
+                            Case "PTB", "PTG"
                                 EnableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
                         End Select
                     Case 1
@@ -12843,7 +12845,7 @@ Public Class MainForm
                                 DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
                             Case "FRA"
                                 DisableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                            Case "PTB"
+                            Case "PTB", "PTG"
                                 DisableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
                         End Select
                     Case 1
@@ -12872,7 +12874,7 @@ Public Class MainForm
                             MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
                         Case "FRA"
                             MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                        Case "PTB"
+                        Case "PTB", "PTG"
                             MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
                     End Select
                 Case 1
@@ -12898,7 +12900,7 @@ Public Class MainForm
                             MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
                         Case "FRA"
                             MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                        Case "PTB"
+                        Case "PTB", "PTG"
                             MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
                     End Select
                 Case 1
@@ -12923,7 +12925,7 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo paquetes aprovisionados AppX..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des paquets AppX provisionnés en cours..."
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         PleaseWaitDialog.Label2.Text = "Obter pacotes AppX provisionados..."
                 End Select
             Case 1
@@ -12983,7 +12985,7 @@ Public Class MainForm
                         RemProvAppxPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes AppX."
                     Case "FRA"
                         RemProvAppxPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets AppX."
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         RemProvAppxPackage.Label2.Text = "Esta imagem contém " & ElementCount & " pacotes AppX."
                 End Select
             Case 1
@@ -13050,7 +13052,7 @@ Public Class MainForm
                     Case "FRA"
                         Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "démarré", "arrêté")
                         Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Arrêter", "Démarrer")
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         Options.Label38.Text = If(MountedImageDetectorBW.IsBusy, "funcionando", "parado")
                         Options.Button8.Text = If(MountedImageDetectorBW.IsBusy, "Parar", "Iniciar")
                 End Select
@@ -13184,7 +13186,7 @@ Public Class MainForm
                             MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
                         Case "FRA"
                             MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                        Case "PTB"
+                        Case "PTB", "PTG"
                             MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
                     End Select
                 Case 1
@@ -13210,7 +13212,7 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
                 End Select
             Case 1
@@ -13255,7 +13257,7 @@ Public Class MainForm
                         AddCapabilities.Label4.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
                     Case "FRA"
                         AddCapabilities.Label4.Text = "Cette image contient " & ElementCount & " capacités."
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         AddCapabilities.Label4.Text = "Esta imagem contém " & ElementCount & " capacidades."
                 End Select
             Case 1
@@ -13281,7 +13283,7 @@ Public Class MainForm
                             MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
                         Case "FRA"
                             MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                        Case "PTB"
+                        Case "PTB", "PTG"
                             MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
                     End Select
                 Case 1
@@ -13307,7 +13309,7 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
                 End Select
             Case 1
@@ -13352,7 +13354,7 @@ Public Class MainForm
                         RemCapabilities.Label2.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
                     Case "FRA"
                         RemCapabilities.Label2.Text = "Cette image contient " & ElementCount & " capacités."
-                    Case "PTB"
+                    Case "PTB", "PTG"
                         RemCapabilities.Label2.Text = "Esta imagem contém " & ElementCount & " capacidades."
                 End Select
             Case 1
@@ -13380,7 +13382,7 @@ Public Class MainForm
                             MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
                         Case "FRA"
                             MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
-                        Case "PTB"
+                        Case "PTB", "PTG"
                             MsgBox("Esta ação não é suportada em instalações em linha", vbOKOnly + vbCritical, Text)
                     End Select
                 Case 1
@@ -13406,7 +13408,7 @@ Public Class MainForm
                             MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
                         Case "FRA"
                             MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
-                        Case "PTB"
+                        Case "PTB", "PTG"
                             MsgBox("Esta ação não é suportada em instalações em linha", vbOKOnly + vbCritical, Text)
                     End Select
                 Case 1
@@ -13431,6 +13433,8 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
+                    Case "PTB", "PTG"
+                        PleaseWaitDialog.Label2.Text = "Obter pacotes de controladores instalados..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
@@ -13438,6 +13442,8 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
             Case 3
                 PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
+            Case 4
+                PleaseWaitDialog.Label2.Text = "Obter pacotes de controladores instalados..."
         End Select
         If Not CompletedTasks(4) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -13460,6 +13466,8 @@ Public Class MainForm
                                 RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sí", "No"), imgDrvVersions(x), imgDrvDates(x)}))
                             Case "FRA"
                                 RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Oui", "Non"), If(imgDrvBootCriticalStatus(x), "Oui", "Non"), imgDrvVersions(x), imgDrvDates(x)}))
+                            Case "PTB", "PTG"
+                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sim", "Não"), If(imgDrvBootCriticalStatus(x), "Sim", "Não"), imgDrvVersions(x), imgDrvDates(x)}))
                         End Select
                     Case 1
                         RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Yes", "No"), If(imgDrvBootCriticalStatus(x), "Yes", "No"), imgDrvVersions(x), imgDrvDates(x)}))
@@ -13467,6 +13475,8 @@ Public Class MainForm
                         RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sí", "No"), imgDrvVersions(x), imgDrvDates(x)}))
                     Case 3
                         RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Oui", "Non"), If(imgDrvBootCriticalStatus(x), "Oui", "Non"), imgDrvVersions(x), imgDrvDates(x)}))
+                    Case 4
+                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sim", "Não"), If(imgDrvBootCriticalStatus(x), "Sim", "Não"), imgDrvVersions(x), imgDrvDates(x)}))
                 End Select
             Next
         Catch ex As Exception
@@ -13500,6 +13510,8 @@ Public Class MainForm
                             MsgBox("No se pudo recopilar el origen de las políticas de grupo. Razón:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detectar políticas de grupo")
                         Case "FRA"
                             MsgBox("Impossible d'obtenir la source de la directive de groupe. Raison :" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Détecter à partir d'une directive de groupe")
+                        Case "PTB", "PTG"
+                            MsgBox("Não foi possível recolher a fonte da política de grupo. Motivo:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detetar a partir da política de grupo")
                     End Select
                 Case 1
                     MsgBox("Could not gather source from group policy. Reason:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detect from group policy")
@@ -13507,6 +13519,8 @@ Public Class MainForm
                     MsgBox("No se pudo recopilar el origen de las políticas de grupo. Razón:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detectar políticas de grupo")
                 Case 3
                     MsgBox("Impossible d'obtenir la source de la directive de groupe. Raison :" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Détecter à partir d'une directive de groupe")
+                Case 4
+                    MsgBox("Não foi possível recolher a fonte da política de grupo. Motivo:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, "Detetar a partir da política de grupo")
             End Select
             Return Nothing
         End Try
@@ -13744,6 +13758,8 @@ Public Class MainForm
                             MsgBox("No pudimos descargar el comprobador de actualizaciones. Razón:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Comprobar actualizaciones")
                         Case "FRA"
                             MsgBox("Nous n'avons pas pu télécharger le vérificateur de mise à jour. Raison :" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Vérifier les mises à jour du programme")
+                        Case "PTB", "PTG"
+                            MsgBox("Não foi possível descarregar o verificador de actualizações. Motivo:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Verificar actualizações")
                     End Select
                 Case 1
                     MsgBox("We couldn't download the update checker. Reason:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Check for updates")
@@ -13751,6 +13767,8 @@ Public Class MainForm
                     MsgBox("No pudimos descargar el comprobador de actualizaciones. Razón:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Comprobar actualizaciones")
                 Case 3
                     MsgBox("Nous n'avons pas pu télécharger le vérificateur de mise à jour. Raison :" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Vérifier les mises à jour du programme")
+                Case 4
+                    MsgBox("Não foi possível descarregar o verificador de actualizações. Motivo:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Verificar actualizações")
             End Select
             Exit Sub
         End Try
@@ -13830,6 +13848,8 @@ Public Class MainForm
                                                     MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
                                                 Case "FRA"
                                                     MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
+                                                Case "PTB", "PTG"
+                                                    MenuDesc.Text = "Preparar a cópia das ferramentas de implantação..." & If(adkCopyArg = 0, " (arquitetura " & archIntg & " de 4)", "")
                                             End Select
                                         Case 1
                                             MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
@@ -13837,6 +13857,8 @@ Public Class MainForm
                                             MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
                                         Case 3
                                             MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
+                                        Case 4
+                                            MenuDesc.Text = "Preparar a cópia das ferramentas de implantação..." & If(adkCopyArg = 0, " (arquitetura " & archIntg & " de 4)", "")
                                     End Select
                                     CurrentFileInt = 0
                                     For Each folder In My.Computer.FileSystem.GetDirectories(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\" & arches(x), FileIO.SearchOption.SearchAllSubDirectories)
@@ -13862,6 +13884,8 @@ Public Class MainForm
                                             MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
                                         Case "FRA"
                                             MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
+                                        Case "PTB", "PTG"
+                                            MenuDesc.Text = "Preparar a cópia das ferramentas de implantação..." & If(adkCopyArg = 0, " (arquitetura " & archIntg & " de 4)", "")
                                     End Select
                                 Case 1
                                     MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
@@ -13869,6 +13893,8 @@ Public Class MainForm
                                     MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
                                 Case 3
                                     MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
+                                Case 4
+                                    MenuDesc.Text = "Preparar a cópia das ferramentas de implantação..." & If(adkCopyArg = 0, " (arquitetura " & archIntg & " de 4)", "")
                             End Select
                             Dim CurrentFileInt As Integer = 0
                             For Each folder In My.Computer.FileSystem.GetDirectories(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\x86", FileIO.SearchOption.SearchAllSubDirectories)
@@ -13892,6 +13918,8 @@ Public Class MainForm
                                             MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
                                         Case "FRA"
                                             MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
+                                        Case "PTB", "PTG"
+                                            MenuDesc.Text = "Preparar a cópia das ferramentas de implantação..." & If(adkCopyArg = 0, " (arquitetura " & archIntg & " de 4)", "")
                                     End Select
                                 Case 1
                                     MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
@@ -13899,6 +13927,8 @@ Public Class MainForm
                                     MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
                                 Case 3
                                     MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
+                                Case 4
+                                    MenuDesc.Text = "Preparar a cópia das ferramentas de implantação..." & If(adkCopyArg = 0, " (arquitetura " & archIntg & " de 4)", "")
                             End Select
                             Dim CurrentFileInt As Integer = 0
                             For Each folder In My.Computer.FileSystem.GetDirectories(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64", FileIO.SearchOption.SearchAllSubDirectories)
@@ -13922,6 +13952,8 @@ Public Class MainForm
                                             MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
                                         Case "FRA"
                                             MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
+                                        Case "PTB", "PTG"
+                                            MenuDesc.Text = "Preparar a cópia das ferramentas de implantação..." & If(adkCopyArg = 0, " (arquitetura " & archIntg & " de 4)", "")
                                     End Select
                                 Case 1
                                     MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
@@ -13929,6 +13961,8 @@ Public Class MainForm
                                     MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
                                 Case 3
                                     MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
+                                Case 4
+                                    MenuDesc.Text = "Preparar a cópia das ferramentas de implantação..." & If(adkCopyArg = 0, " (arquitetura " & archIntg & " de 4)", "")
                             End Select
                             Dim CurrentFileInt As Integer = 0
                             For Each folder In My.Computer.FileSystem.GetDirectories(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm", FileIO.SearchOption.SearchAllSubDirectories)
@@ -13952,6 +13986,8 @@ Public Class MainForm
                                             MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
                                         Case "FRA"
                                             MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
+                                        Case "PTB", "PTG"
+                                            MenuDesc.Text = "Preparar a cópia das ferramentas de implantação..." & If(adkCopyArg = 0, " (arquitetura " & archIntg & " de 4)", "")
                                     End Select
                                 Case 1
                                     MenuDesc.Text = "Preparing to copy deployment tools..." & If(adkCopyArg = 0, " (architecture " & archIntg & " of 4)", "")
@@ -13959,6 +13995,8 @@ Public Class MainForm
                                     MenuDesc.Text = "Preparándonos para copiar las herramientas de implementación..." & If(adkCopyArg = 0, " (arquitectura " & archIntg & " de 4)", "")
                                 Case 3
                                     MenuDesc.Text = "Préparation de la copie des outils de déploiement en cours..." & If(adkCopyArg = 0, " (architecture " & archIntg & " de 4)", "")
+                                Case 4
+                                    MenuDesc.Text = "Preparar a cópia das ferramentas de implantação..." & If(adkCopyArg = 0, " (arquitetura " & archIntg & " de 4)", "")
                             End Select
                             Dim CurrentFileInt As Integer = 0
                             For Each folder In My.Computer.FileSystem.GetDirectories(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)) & "\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\arm64", FileIO.SearchOption.SearchAllSubDirectories)
@@ -14031,6 +14069,8 @@ Public Class MainForm
                                 MenuDesc.Text = "Las herramientas de implementación fueron copiadas al proyecto satisfactoriamente"
                             Case "FRA"
                                 MenuDesc.Text = "Les outils de déploiement ont été copiés dans le projet avec succès."
+                            Case "PTB", "PTG"
+                                MenuDesc.Text = "As ferramentas de implementação foram copiadas para o projeto com sucesso"
                         End Select
                     Case 1
                         MenuDesc.Text = "Deployment tools were copied to the project successfully"
@@ -14038,6 +14078,8 @@ Public Class MainForm
                         MenuDesc.Text = "Las herramientas de implementación fueron copiadas al proyecto satisfactoriamente"
                     Case 3
                         MenuDesc.Text = "Les outils de déploiement ont été copiés dans le projet avec succès."
+                    Case 4
+                        MenuDesc.Text = "As ferramentas de implementação foram copiadas para o projeto com sucesso"
                 End Select
             ElseIf adk <> "1" Then
                 Select Case Language
@@ -14049,6 +14091,8 @@ Public Class MainForm
                                 MenuDesc.Text = "Las herramientas de implementación no están presentes en este sistema"
                             Case "FRA"
                                 MenuDesc.Text = "Les outils de déploiement ne sont pas présents sur ce système."
+                            Case "PTB", "PTG"
+                                MenuDesc.Text = "As ferramentas de implantação não estão presentes neste sistema"
                         End Select
                     Case 1
                         MenuDesc.Text = "Deployment tools aren't present on this system"
@@ -14056,6 +14100,8 @@ Public Class MainForm
                         MenuDesc.Text = "Las herramientas de implementación no están presentes en este sistema"
                     Case 3
                         MenuDesc.Text = "Les outils de déploiement ne sont pas présents sur ce système."
+                    Case 4
+                        MenuDesc.Text = "As ferramentas de implantação não estão presentes neste sistema"
                 End Select
             End If
         Catch ex As Exception
@@ -14068,6 +14114,8 @@ Public Class MainForm
                             MenuDesc.Text = "Las herramientas de implementación no pudieron ser copiadas"
                         Case "FRA"
                             MenuDesc.Text = "Les outils de déploiement n'ont pas pu être copiés."
+                        Case "PTB", "PTG"
+                            MenuDesc.Text = "Não foi possível copiar as ferramentas de implantação"
                     End Select
                 Case 1
                     MenuDesc.Text = "Deployment tools could not be copied"
@@ -14075,6 +14123,8 @@ Public Class MainForm
                     MenuDesc.Text = "Las herramientas de implementación no pudieron ser copiadas"
                 Case 3
                     MenuDesc.Text = "Les outils de déploiement n'ont pas pu être copiés."
+                Case 4
+                    MenuDesc.Text = "Não foi possível copiar as ferramentas de implantação"
             End Select
         End Try
     End Sub
@@ -14091,6 +14141,8 @@ Public Class MainForm
                                 MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (" & currentArch & ", " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
                             Case "FRA"
                                 MenuDesc.Text = "Copie des outils de déploiement pour l'architecture en cours (" & currentArch & ", " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " de 4)...", ") ...")
+                            Case "PTB", "PTG"
+                                MenuDesc.Text = "Cópia das ferramentas de implementação para a arquitetura (" & currentArch & ", " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitetura " & archIntg & " de 4)...", ")...")
                         End Select
                     Case 1
                         MenuDesc.Text = "Copying deployment tools for architecture (" & currentArch & ", " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
@@ -14098,6 +14150,8 @@ Public Class MainForm
                         MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (" & currentArch & ", " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
                     Case 3
                         MenuDesc.Text = "Copie des outils de déploiement pour l'architecture en cours (" & currentArch & ", " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " de 4)...", ") ...")
+                    Case 4
+                        MenuDesc.Text = "Cópia das ferramentas de implementação para a arquitetura (" & currentArch & ", " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitetura " & archIntg & " de 4)...", ")...")
                 End Select
             Case 1
                 Select Case Language
@@ -14109,6 +14163,8 @@ Public Class MainForm
                                 MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (x86, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
                             Case "FRA"
                                 MenuDesc.Text = "Copie des outils de déploiement pour l'architecture en cours (x86," & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " de 4)...", ") ...")
+                            Case "PTB", "PTG"
+                                MenuDesc.Text = "Cópia das ferramentas de implementação para a arquitetura (x86, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitetura " & archIntg & " de 4)...", ")...")
                         End Select
                     Case 1
                         MenuDesc.Text = "Copying deployment tools for architecture (x86, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
@@ -14116,6 +14172,8 @@ Public Class MainForm
                         MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (x86, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
                     Case 3
                         MenuDesc.Text = "Copie des outils de déploiement pour l'architecture en cours (x86," & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " de 4)...", ") ...")
+                    Case 4
+                        MenuDesc.Text = "Cópia das ferramentas de implementação para a arquitetura (x86, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitetura " & archIntg & " de 4)...", ")...")
                 End Select
             Case 2
                 Select Case Language
@@ -14127,6 +14185,8 @@ Public Class MainForm
                                 MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (amd64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
                             Case "FRA"
                                 MenuDesc.Text = "Copie des outils de déploiement pour l'architecture en cours (amd64," & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " de 4)...", ") ...")
+                            Case "PTB", "PTG"
+                                MenuDesc.Text = "Cópia das ferramentas de implementação para a arquitetura (amd64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitetura " & archIntg & " de 4)...", ")...")
                         End Select
                     Case 1
                         MenuDesc.Text = "Copying deployment tools for architecture (amd64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
@@ -14134,6 +14194,8 @@ Public Class MainForm
                         MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (amd64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
                     Case 3
                         MenuDesc.Text = "Copie des outils de déploiement pour l'architecture en cours (amd64," & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " de 4)...", ") ...")
+                    Case 4
+                        MenuDesc.Text = "Cópia das ferramentas de implementação para a arquitetura (amd64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitetura " & archIntg & " de 4)...", ")...")
                 End Select
             Case 3
                 Select Case Language
@@ -14145,6 +14207,8 @@ Public Class MainForm
                                 MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (arm, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
                             Case "FRA"
                                 MenuDesc.Text = "Copie des outils de déploiement pour l'architecture en cours (arm," & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " de 4)...", ") ...")
+                            Case "PTB", "PTG"
+                                MenuDesc.Text = "Cópia das ferramentas de implementação para a arquitetura (arm, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitetura " & archIntg & " de 4)...", ")...")
                         End Select
                     Case 1
                         MenuDesc.Text = "Copying deployment tools for architecture (arm, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
@@ -14152,6 +14216,8 @@ Public Class MainForm
                         MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (arm, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
                     Case 3
                         MenuDesc.Text = "Copie des outils de déploiement pour l'architecture en cours (arm," & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " de 4)...", ") ...")
+                    Case 4
+                        MenuDesc.Text = "Cópia das ferramentas de implementação para a arquitetura (arm, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitetura " & archIntg & " de 4)...", ")...")
                 End Select
             Case 4
                 Select Case Language
@@ -14163,6 +14229,8 @@ Public Class MainForm
                                 MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (arm64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
                             Case "FRA"
                                 MenuDesc.Text = "Copie des outils de déploiement pour l'architecture en cours (arm64," & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " de 4)...", ") ...")
+                            Case "PTB", "PTG"
+                                MenuDesc.Text = "Cópia das ferramentas de implementação para a arquitetura (arm64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitetura " & archIntg & " de 4)...", ")...")
                         End Select
                     Case 1
                         MenuDesc.Text = "Copying deployment tools for architecture (arm64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " of 4)...", ")...")
@@ -14170,6 +14238,8 @@ Public Class MainForm
                         MenuDesc.Text = "Copiando herramientas de implementación para la arquitectura (arm64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitectura " & archIntg & " de 4)...", ")...")
                     Case 3
                         MenuDesc.Text = "Copie des outils de déploiement pour l'architecture en cours (arm64," & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", architecture " & archIntg & " de 4)...", ") ...")
+                    Case 4
+                        MenuDesc.Text = "Cópia das ferramentas de implementação para a arquitetura (arm64, " & e.ProgressPercentage & "%" & If(adkCopyArg = 0, ", arquitetura " & archIntg & " de 4)...", ")...")
                 End Select
         End Select
     End Sub
@@ -14280,6 +14350,8 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours..."
+                    Case "PTB", "PTG"
+                        PleaseWaitDialog.Label2.Text = "Obter índices de imagem..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting image indexes..."
@@ -14287,6 +14359,8 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
             Case 3
                 PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours..."
+            Case 4
+                PleaseWaitDialog.Label2.Text = "Obter índices de imagem..."
         End Select
         PleaseWaitDialog.ShowDialog(Me)
         If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
@@ -14388,6 +14462,8 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
+                    Case "PTB", "PTG"
+                        PleaseWaitDialog.Label2.Text = "Obter pacotes de controladores instalados..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
@@ -14395,6 +14471,8 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
             Case 3
                 PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
+            Case 4
+                PleaseWaitDialog.Label2.Text = "Obter pacotes de controladores instalados..."
         End Select
         If Not CompletedTasks(4) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -14446,6 +14524,8 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
+                    Case "PTB", "PTG"
+                        PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
@@ -14453,6 +14533,8 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
             Case 3
                 PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
+            Case 4
+                PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
         End Select
         If Not CompletedTasks(1) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -14484,6 +14566,8 @@ Public Class MainForm
                             MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
                         Case "FRA"
                             MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                        Case "PTB", "PTG"
+                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
                     End Select
                 Case 1
                     MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
@@ -14491,6 +14575,8 @@ Public Class MainForm
                     MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
                 Case 3
                     MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                Case 4
+                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
             End Select
             Exit Sub
         End If
@@ -14504,6 +14590,8 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
+                    Case "PTB", "PTG"
+                        PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
@@ -14511,6 +14599,8 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
             Case 3
                 PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
+            Case 4
+                PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
         End Select
         If Not CompletedTasks(3) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -14542,6 +14632,8 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
+                    Case "PTB", "PTG"
+                        PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting package names..."
@@ -14549,6 +14641,8 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
             Case 3
                 PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
+            Case 4
+                PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
         End Select
         If Not CompletedTasks(0) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -14582,6 +14676,8 @@ Public Class MainForm
                             MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
                         Case "FRA"
                             MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                        Case "PTB", "PTG"
+                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
                     End Select
                 Case 1
                     MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
@@ -14589,6 +14685,8 @@ Public Class MainForm
                     MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
                 Case 3
                     MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                Case 4
+                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
             End Select
             Exit Sub
         End If
@@ -14602,6 +14700,8 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
+                    Case "PTB", "PTG"
+                        PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting package names..."
@@ -14609,6 +14709,8 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
             Case 3
                 PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
+            Case 4
+                PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
         End Select
         If Not CompletedTasks(2) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -14641,6 +14743,9 @@ Public Class MainForm
                         Case "FRA"
                             Notifications.BalloonTipText = "Le fichier a été sauvegardé à l'emplacement que vous avez spécifié."
                             Notifications.BalloonTipTitle = "Sauvegarde du fichier réussie"
+                        Case "PTB", "PTG"
+                            Notifications.BalloonTipText = "O recurso foi guardado no local indicado"
+                            Notifications.BalloonTipTitle = "Guardado com sucesso"
                     End Select
                 Case 1
                     Notifications.BalloonTipText = "The asset has been saved to the location you specified"
@@ -14651,6 +14756,9 @@ Public Class MainForm
                 Case 3
                     Notifications.BalloonTipText = "Le fichier a été sauvegardé à l'emplacement que vous avez spécifié."
                     Notifications.BalloonTipTitle = "Sauvegarde du fichier réussie"
+                Case 4
+                    Notifications.BalloonTipText = "O recurso foi guardado no local indicado"
+                    Notifications.BalloonTipTitle = "Guardado com sucesso"
             End Select
             Notifications.ShowBalloonTip(3000)
         Catch ex As Exception
@@ -14677,6 +14785,9 @@ Public Class MainForm
                         Case "FRA"
                             Notifications.BalloonTipText = "Le fichier a été copié dans le presse-papiers."
                             Notifications.BalloonTipTitle = "Copie du fichier réussie"
+                        Case "PTB", "PTG"
+                            Notifications.BalloonTipText = "O recurso foi copiado para a área de transferência"
+                            Notifications.BalloonTipTitle = "Cópia com sucesso"
                     End Select
                 Case 1
                     Notifications.BalloonTipText = "The asset has been copied to the clipboard"
@@ -14687,6 +14798,9 @@ Public Class MainForm
                 Case 3
                     Notifications.BalloonTipText = "Le fichier a été copié dans le presse-papiers."
                     Notifications.BalloonTipTitle = "Copie du fichier réussie"
+                Case 4
+                    Notifications.BalloonTipText = "O recurso foi copiado para a área de transferência"
+                    Notifications.BalloonTipTitle = "Cópia com sucesso"
             End Select
             Notifications.ShowBalloonTip(3000)
         Catch ex As Exception
@@ -14843,6 +14957,8 @@ Public Class MainForm
                         ProjProperties.Label1.Text = "Propiedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del proyecto", "de la imagen")
                     Case "FRA"
                         ProjProperties.Label1.Text = "Propriétés " & If(ProjProperties.TabControl1.SelectedIndex = 0, "du projet", "de l'image")
+                    Case "PTB", "PTG"
+                        ProjProperties.Label1.Text = "Propriedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "do projeto", "da imagem")
                 End Select
             Case 1
                 ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
@@ -14850,6 +14966,8 @@ Public Class MainForm
                 ProjProperties.Label1.Text = "Propiedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del proyecto", "de la imagen")
             Case 3
                 ProjProperties.Label1.Text = "Propriétés " & If(ProjProperties.TabControl1.SelectedIndex = 0, "du projet", "de l'image")
+            Case 4
+                ProjProperties.Label1.Text = "Propriedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "do projeto", "da imagem")
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             ProjProperties.Text = ""
@@ -14935,6 +15053,8 @@ Public Class MainForm
                         ProjProperties.Label1.Text = "Propiedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del proyecto", "de la imagen")
                     Case "FRA"
                         ProjProperties.Label1.Text = "Propriétés " & If(ProjProperties.TabControl1.SelectedIndex = 0, "du projet", "de l'image")
+                    Case "PTB", "PTG"
+                        ProjProperties.Label1.Text = "Propriedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "do projeto", "da imagem")
                 End Select
             Case 1
                 ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
@@ -14942,6 +15062,8 @@ Public Class MainForm
                 ProjProperties.Label1.Text = "Propiedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del proyecto", "de la imagen")
             Case 3
                 ProjProperties.Label1.Text = "Propriétés " & If(ProjProperties.TabControl1.SelectedIndex = 0, "du projet", "de l'image")
+            Case 4
+                ProjProperties.Label1.Text = "Propriedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "do projeto", "da imagem")
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             ProjProperties.Text = ""
@@ -14978,6 +15100,8 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours..."
+                    Case "PTB", "PTG"
+                        PleaseWaitDialog.Label2.Text = "Obter índices de imagem..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting image indexes..."
@@ -14985,6 +15109,8 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
             Case 3
                 PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours..."
+            Case 4
+                PleaseWaitDialog.Label2.Text = "Obter índices de imagem..."
         End Select
         PleaseWaitDialog.ShowDialog(Me)
         If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
@@ -15083,6 +15209,8 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
+                    Case "PTB", "PTG"
+                        PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting package names..."
@@ -15090,6 +15218,8 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
             Case 3
                 PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
+            Case 4
+                PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
         End Select
         If Not CompletedTasks(0) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -15126,6 +15256,8 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
+                    Case "PTB", "PTG"
+                        PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting package names..."
@@ -15133,6 +15265,8 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
             Case 3
                 PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
+            Case 4
+                PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
         End Select
         If Not CompletedTasks(0) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -15169,6 +15303,8 @@ Public Class MainForm
                         RemPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes"
                     Case "FRA"
                         RemPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets"
+                    Case "PTB", "PTG"
+                        RemPackage.Label2.Text = "Esta imagem contém " & ElementCount & " pacotes"
                 End Select
             Case 1
                 RemPackage.Label2.Text = "This image contains " & ElementCount & " packages"
@@ -15176,6 +15312,8 @@ Public Class MainForm
                 RemPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes"
             Case 3
                 RemPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets"
+            Case 4
+                RemPackage.Label2.Text = "Esta imagem contém " & ElementCount & " pacotes"
         End Select
         RemPackage.ShowDialog()
     End Sub
@@ -15216,6 +15354,8 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
+                    Case "PTB", "PTG"
+                        PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
@@ -15223,6 +15363,8 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
             Case 3
                 PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
+            Case 4
+                PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
         End Select
         If Not CompletedTasks(1) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -15259,6 +15401,8 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
+                    Case "PTB", "PTG"
+                        PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
@@ -15266,6 +15410,8 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
             Case 3
                 PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
+            Case 4
+                PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
         End Select
         If Not CompletedTasks(1) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -15305,6 +15451,8 @@ Public Class MainForm
                                 EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
                             Case "FRA"
                                 EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
+                            Case "PTB", "PTG"
+                                EnableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
                         End Select
                     Case 1
                         EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
@@ -15312,6 +15460,8 @@ Public Class MainForm
                         EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
                     Case 3
                         EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
+                    Case 4
+                        EnableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
                 End Select
             Case 1
                 Try
@@ -15345,14 +15495,18 @@ Public Class MainForm
                             Case "ESN"
                                 DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
                             Case "FRA"
-                                EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
+                                DisableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
+                            Case "PTB", "PTG"
+                                DisableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
                         End Select
                     Case 1
                         DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
                     Case 2
                         DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
                     Case 3
-                        EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
+                        DisableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
+                    Case 4
+                        DisableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
                 End Select
         End Select
         DisableFeat.ShowDialog()
@@ -15374,6 +15528,8 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
+                    Case "PTB", "PTG"
+                        PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
@@ -15381,6 +15537,8 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
             Case 3
                 PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
+            Case 4
+                PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
         End Select
         If Not CompletedTasks(1) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -15419,6 +15577,8 @@ Public Class MainForm
                                 EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
                             Case "FRA"
                                 EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
+                            Case "PTB", "PTG"
+                                EnableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
                         End Select
                     Case 1
                         EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
@@ -15426,6 +15586,8 @@ Public Class MainForm
                         EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
                     Case 3
                         EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
+                    Case 4
+                        EnableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
                 End Select
             Case 1
                 Try
@@ -15460,6 +15622,8 @@ Public Class MainForm
                                 DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
                             Case "FRA"
                                 EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
+                            Case "PTB", "PTG"
+                                DisableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
                         End Select
                     Case 1
                         DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
@@ -15467,6 +15631,8 @@ Public Class MainForm
                         DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
                     Case 3
                         EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
+                    Case 4
+                        DisableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
                 End Select
         End Select
         EnableFeat.ShowDialog()
@@ -15499,6 +15665,8 @@ Public Class MainForm
                             MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
                         Case "FRA"
                             MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                        Case "PTB", "PTG"
+                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
                     End Select
                 Case 1
                     MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
@@ -15506,6 +15674,8 @@ Public Class MainForm
                     MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
                 Case 3
                     MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                Case 4
+                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
             End Select
             Exit Sub
         End If
@@ -15520,6 +15690,8 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo paquetes aprovisionados AppX..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des paquets AppX provisionnés en cours..."
+                    Case "PTB", "PTG"
+                        PleaseWaitDialog.Label2.Text = "Obter pacotes AppX provisionados..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting provisioned AppX packages..."
@@ -15527,6 +15699,8 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Obteniendo paquetes aprovisionados AppX..."
             Case 3
                 PleaseWaitDialog.Label2.Text = "Obtention des paquets AppX provisionnés en cours..."
+            Case 4
+                PleaseWaitDialog.Label2.Text = "Obter pacotes AppX provisionados..."
         End Select
         ProgressPanel.OperationNum = 994
         If Not CompletedTasks(2) Then
@@ -15576,6 +15750,8 @@ Public Class MainForm
                         RemProvAppxPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes AppX."
                     Case "FRA"
                         RemProvAppxPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets AppX."
+                    Case "PTB", "PTG"
+                        RemProvAppxPackage.Label2.Text = "Esta imagem contém " & ElementCount & " pacotes AppX."
                 End Select
             Case 1
                 RemProvAppxPackage.Label2.Text = "This image contains " & ElementCount & " AppX packages."
@@ -15583,6 +15759,8 @@ Public Class MainForm
                 RemProvAppxPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes AppX."
             Case 3
                 RemProvAppxPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets AppX."
+            Case 4
+                RemProvAppxPackage.Label2.Text = "Esta imagem contém " & ElementCount & " pacotes AppX."
         End Select
         RemProvAppxPackage.ShowDialog()
     End Sub
@@ -15600,6 +15778,8 @@ Public Class MainForm
                             MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
                         Case "FRA"
                             MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                        Case "PTB", "PTG"
+                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
                     End Select
                 Case 1
                     MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
@@ -15607,6 +15787,8 @@ Public Class MainForm
                     MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
                 Case 3
                     MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                Case 4
+                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
             End Select
         End If
     End Sub
@@ -15622,6 +15804,8 @@ Public Class MainForm
                             MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
                         Case "FRA"
                             MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                        Case "PTB", "PTG"
+                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
                     End Select
                 Case 1
                     MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
@@ -15629,6 +15813,8 @@ Public Class MainForm
                     MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
                 Case 3
                     MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                Case 4
+                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
             End Select
             Exit Sub
         End If
@@ -15642,6 +15828,8 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
+                    Case "PTB", "PTG"
+                        PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting package names..."
@@ -15649,6 +15837,8 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
             Case 3
                 PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
+            Case 4
+                PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
         End Select
         If Not CompletedTasks(2) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -15685,6 +15875,8 @@ Public Class MainForm
                             MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
                         Case "FRA"
                             MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                        Case "PTB", "PTG"
+                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
                     End Select
                 Case 1
                     MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
@@ -15692,6 +15884,8 @@ Public Class MainForm
                     MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
                 Case 3
                     MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                Case 4
+                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
             End Select
             Exit Sub
         End If
@@ -15707,6 +15901,8 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
+                    Case "PTB", "PTG"
+                        PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
@@ -15714,6 +15910,8 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
             Case 3
                 PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
+            Case 4
+                PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
         End Select
         If Not CompletedTasks(3) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -15747,14 +15945,18 @@ Public Class MainForm
                     Case "ESN"
                         RemCapabilities.Label2.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
                     Case "FRA"
-                        AddCapabilities.Label4.Text = "Cette image contient " & ElementCount & " capacités."
+                        RemCapabilities.Label2.Text = "Cette image contient " & ElementCount & " capacités."
+                    Case "PTB", "PTG"
+                        RemCapabilities.Label2.Text = "Esta imagem contém " & ElementCount & " capacidades."
                 End Select
             Case 1
                 RemCapabilities.Label2.Text = "This image contains " & ElementCount & " capabilities."
             Case 2
                 RemCapabilities.Label2.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
             Case 3
-                AddCapabilities.Label4.Text = "Cette image contient " & ElementCount & " capacités."
+                RemCapabilities.Label2.Text = "Cette image contient " & ElementCount & " capacités."
+            Case 4
+                RemCapabilities.Label2.Text = "Esta imagem contém " & ElementCount & " capacidades."
         End Select
         RemCapabilities.ShowDialog()
     End Sub
@@ -15770,6 +15972,8 @@ Public Class MainForm
                             MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
                         Case "FRA"
                             MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                        Case "PTB", "PTG"
+                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
                     End Select
                 Case 1
                     MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
@@ -15777,6 +15981,8 @@ Public Class MainForm
                     MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
                 Case 3
                     MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                Case 4
+                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
             End Select
             Exit Sub
         End If
@@ -15792,6 +15998,8 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
+                    Case "PTB", "PTG"
+                        PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
@@ -15799,6 +16007,8 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
             Case 3
                 PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
+            Case 4
+                PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
         End Select
         If Not CompletedTasks(3) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -15833,6 +16043,8 @@ Public Class MainForm
                         AddCapabilities.Label4.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
                     Case "FRA"
                         AddCapabilities.Label4.Text = "Cette image contient " & ElementCount & " capacités."
+                    Case "PTB", "PTG"
+                        AddCapabilities.Label4.Text = "Esta imagem contém " & ElementCount & " capacidades."
                 End Select
             Case 1
                 AddCapabilities.Label4.Text = "This image contains " & ElementCount & " capabilities."
@@ -15840,6 +16052,8 @@ Public Class MainForm
                 AddCapabilities.Label4.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
             Case 3
                 AddCapabilities.Label4.Text = "Cette image contient " & ElementCount & " capacités."
+            Case 4
+                AddCapabilities.Label2.Text = "Esta imagem contém " & ElementCount & " capacidades."
         End Select
         AddCapabilities.ShowDialog()
     End Sub
@@ -15855,6 +16069,8 @@ Public Class MainForm
                             MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
                         Case "FRA"
                             MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                        Case "PTB", "PTG"
+                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
                     End Select
                 Case 1
                     MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
@@ -15862,6 +16078,8 @@ Public Class MainForm
                     MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
                 Case 3
                     MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                Case 4
+                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
             End Select
             Exit Sub
         End If
@@ -15875,6 +16093,8 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
+                    Case "PTB", "PTG"
+                        PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
@@ -15882,6 +16102,8 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
             Case 3
                 PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
+            Case 4
+                PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
         End Select
         If Not CompletedTasks(3) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -15929,6 +16151,8 @@ Public Class MainForm
                             MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
                         Case "FRA"
                             MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+                        Case "PTB", "PTG"
+                            MsgBox("Esta ação não é suportada em instalações em linha", vbOKOnly + vbCritical, Text)
                     End Select
                 Case 1
                     MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
@@ -15936,6 +16160,8 @@ Public Class MainForm
                     MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
                 Case 3
                     MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+                Case 4
+                    MsgBox("Esta ação não é suportada em instalações em linha", vbOKOnly + vbCritical, Text)
             End Select
             Exit Sub
         End If
@@ -15950,6 +16176,8 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
+                    Case "PTB", "PTG"
+                        PleaseWaitDialog.Label2.Text = "Obter pacotes de controladores instalados..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
@@ -15957,6 +16185,8 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
             Case 3
                 PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
+            Case 4
+                PleaseWaitDialog.Label2.Text = "Obter pacotes de controladores instalados..."
         End Select
         If Not CompletedTasks(4) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -15979,6 +16209,8 @@ Public Class MainForm
                                 RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sí", "No"), imgDrvVersions(x), imgDrvDates(x)}))
                             Case "FRA"
                                 RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Oui", "Non"), If(imgDrvBootCriticalStatus(x), "Oui", "Non"), imgDrvVersions(x), imgDrvDates(x)}))
+                            Case "PTB", "PTG"
+                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sim", "Não"), If(imgDrvBootCriticalStatus(x), "Sim", "Não"), imgDrvVersions(x), imgDrvDates(x)}))
                         End Select
                     Case 1
                         RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Yes", "No"), If(imgDrvBootCriticalStatus(x), "Yes", "No"), imgDrvVersions(x), imgDrvDates(x)}))
@@ -15986,6 +16218,8 @@ Public Class MainForm
                         RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sí", "No"), imgDrvVersions(x), imgDrvDates(x)}))
                     Case 3
                         RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Oui", "Non"), If(imgDrvBootCriticalStatus(x), "Oui", "Non"), imgDrvVersions(x), imgDrvDates(x)}))
+                    Case 4
+                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sim", "Não"), If(imgDrvBootCriticalStatus(x), "Sim", "Não"), imgDrvVersions(x), imgDrvDates(x)}))
                 End Select
             Next
         Catch ex As Exception
@@ -16005,6 +16239,8 @@ Public Class MainForm
                         PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
                     Case "FRA"
                         PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
+                    Case "PTB", "PTG"
+                        PleaseWaitDialog.Label2.Text = "Obter pacotes de controladores instalados..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
@@ -16012,6 +16248,8 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
             Case 3
                 PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
+            Case 4
+                PleaseWaitDialog.Label2.Text = "Obter pacotes de controladores instalados..."
         End Select
         If Not CompletedTasks(4) Then
             PleaseWaitDialog.ShowDialog(Me)
@@ -16045,6 +16283,8 @@ Public Class MainForm
                             MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
                         Case "FRA"
                             MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+                        Case "PTB", "PTG"
+                            MsgBox("Esta ação não é suportada em instalações em linha", vbOKOnly + vbCritical, Text)
                     End Select
                 Case 1
                     MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
@@ -16052,6 +16292,8 @@ Public Class MainForm
                     MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
                 Case 3
                     MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+                Case 4
+                    MsgBox("Esta ação não é suportada em instalações em linha", vbOKOnly + vbCritical, Text)
             End Select
         End If
     End Sub
@@ -16448,6 +16690,8 @@ Public Class MainForm
                             MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
                         Case "FRA"
                             MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+                        Case "PTB", "PTG"
+                            MsgBox("Esta ação não é suportada em instalações em linha", vbOKOnly + vbCritical, Text)
                     End Select
                 Case 1
                     MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
@@ -16455,6 +16699,8 @@ Public Class MainForm
                     MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
                 Case 3
                     MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+                Case 4
+                    MsgBox("Esta ação não é suportada em instalações em linha", vbOKOnly + vbCritical, Text)
             End Select
         End If
     End Sub
@@ -16495,6 +16741,8 @@ Public Class MainForm
                             MsgBox("Esta acción solo está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
                         Case "FRA"
                             MsgBox("Cette action est seulement prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+                        Case "PTB", "PTG"
+                            MsgBox("Esta ação só é suportada em instalações online", vbOKOnly + vbCritical, Text)
                     End Select
                 Case 1
                     MsgBox("This action is only supported on online installations", vbOKOnly + vbCritical, Text)
@@ -16502,6 +16750,8 @@ Public Class MainForm
                     MsgBox("Esta acción solo está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
                 Case 3
                     MsgBox("Cette action est seulement prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+                Case 4
+                    MsgBox("Esta ação só é suportada em instalações online", vbOKOnly + vbCritical, Text)
             End Select
         End If
     End Sub
@@ -16535,6 +16785,11 @@ Public Class MainForm
                                       "- Pour augmenter ou réduire cette créneau de désinstallation, allez dans Commandes -> Désinstallation du système d'exploitation -> Définir la créneau de désinstallation..." & CrLf & _
                                       "- Pour démarrer le retour en arrière du système d'exploitation, cliquez sur Commandes -> Désinstallation du système d'exploitation -> Démarrer la désinstallation..." & CrLf & _
                                       "- Pour supprimer la possibilité de revenir à l'ancienne version, cliquez sur Commandes -> Désinstallation du système d'exploitation -> Supprimer la possibilité de revenir en arrière..."
+                            Case "PTB", "PTG"
+                                msg = "Tem " & RollbackDays & " dias para voltar à versão antiga do Windows." & CrLf & CrLf & _
+                                      "- Para aumentar ou diminuir esta janela de desinstalação, aceda a Comandos -> Desinstalação do sistema operativo -> Definir janela de desinstalação..." & CrLf & _
+                                      "- Para iniciar a reversão do SO, aceda a Comandos -> Desinstalação do sistema operativo -> Iniciar desinstalação..." & CrLf & _
+                                      "- Para remover a capacidade de reverter para a versão antiga, vá para Comandos -> Desinstalação do sistema operacional -> Remover capacidade de reversão..."
                         End Select
                     Case 1
                         msg = "You have " & RollbackDays & " days to go back to the old version of Windows." & CrLf & CrLf & _
@@ -16551,6 +16806,11 @@ Public Class MainForm
                               "- Pour augmenter ou réduire cette créneau de désinstallation, allez dans Commandes -> Désinstallation du système d'exploitation -> Définir la créneau de désinstallation..." & CrLf & _
                               "- Pour démarrer le retour en arrière du système d'exploitation, cliquez sur Commandes -> Désinstallation du système d'exploitation -> Démarrer la désinstallation..." & CrLf & _
                               "- Pour supprimer la possibilité de revenir à l'ancienne version, cliquez sur Commandes -> Désinstallation du système d'exploitation -> Supprimer la possibilité de revenir en arrière..."
+                    Case 4
+                        msg = "Tem " & RollbackDays & " dias para voltar à versão antiga do Windows." & CrLf & CrLf & _
+                              "- Para aumentar ou diminuir esta janela de desinstalação, aceda a Comandos -> Desinstalação do sistema operativo -> Definir janela de desinstalação..." & CrLf & _
+                              "- Para iniciar a reversão do SO, aceda a Comandos -> Desinstalação do sistema operativo -> Iniciar desinstalação..." & CrLf & _
+                              "- Para remover a capacidade de reverter para a versão antiga, vá para Comandos -> Desinstalação do sistema operacional -> Remover capacidade de reversão..."
                 End Select
                 MsgBox(msg, vbOKOnly + vbInformation, Text)
             Catch ex As Exception
@@ -16566,6 +16826,8 @@ Public Class MainForm
                             MsgBox("Esta acción solo está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
                         Case "FRA"
                             MsgBox("Cette action est seulement prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+                        Case "PTB", "PTG"
+                            MsgBox("Esta ação só é suportada em instalações online", vbOKOnly + vbCritical, Text)
                     End Select
                 Case 1
                     MsgBox("This action is only supported on online installations", vbOKOnly + vbCritical, Text)
@@ -16573,6 +16835,8 @@ Public Class MainForm
                     MsgBox("Esta acción solo está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
                 Case 3
                     MsgBox("Cette action est seulement prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+                Case 4
+                    MsgBox("Esta ação só é suportada em instalações online", vbOKOnly + vbCritical, Text)
             End Select
         End If
     End Sub
@@ -16606,6 +16870,12 @@ Public Class MainForm
                                       "Ensuite, ne vous laissez pas bloquer. Si vous avez défini un mot de passe pour votre utilisateur actuel, assurez-vous de le connaître. Sinon, vous risquez de ne pas pouvoir vous connecter." & CrLf & CrLf & _
                                       "Enfin, merci d'avoir essayé cette version de Windows." & CrLf & CrLf & _
                                       "Souhaitez-vous démarrer le processus de retour en arrière ?"
+                            Case "PTB", "PTG"
+                                msg = Environment.UserName & ", leia atentamente esta mensagem antes de prosseguir." & CrLf & CrLf & _
+                                      "Se tiver instalado programas após a atualização, o processo de reversão poderá removê-los. Certifique-se de que efectuou uma cópia de segurança das respectivas definições para o caso de ter de os reinstalar mais tarde. Além disso, faça uma cópia de segurança dos seus ficheiros para o caso de serem afectados pelo processo de reversão." & CrLf & CrLf & _
+                                      "De seguida, não obtenha o seu acesso bloqueado. Se tiver definido uma palavra-passe para o seu utilizador atual, certifique-se de que a sabe. Caso contrário, poderá não conseguir iniciar sessão." & CrLf & CrLf & _
+                                      "Por fim, obrigado por experimentar esta versão do Windows." & CrLf & CrLf & _
+                                      "Pretende iniciar o processo de reversão?"
                         End Select
                     Case 1
                         msg = Environment.UserName & ", please read this message carefully before proceeding." & CrLf & CrLf & _
@@ -16625,6 +16895,12 @@ Public Class MainForm
                               "Ensuite, ne vous laissez pas bloquer. Si vous avez défini un mot de passe pour votre utilisateur actuel, assurez-vous de le connaître. Sinon, vous risquez de ne pas pouvoir vous connecter." & CrLf & CrLf & _
                               "Enfin, merci d'avoir essayé cette version de Windows." & CrLf & CrLf & _
                               "Souhaitez-vous démarrer le processus de retour en arrière ?"
+                    Case 4
+                        msg = Environment.UserName & ", leia atentamente esta mensagem antes de prosseguir." & CrLf & CrLf & _
+                              "Se tiver instalado programas após a atualização, o processo de reversão poderá removê-los. Certifique-se de que efectuou uma cópia de segurança das respectivas definições para o caso de ter de os reinstalar mais tarde. Além disso, faça uma cópia de segurança dos seus ficheiros para o caso de serem afectados pelo processo de reversão." & CrLf & CrLf & _
+                              "De seguida, não obtenha o seu acesso bloqueado. Se tiver definido uma palavra-passe para o seu utilizador atual, certifique-se de que a sabe. Caso contrário, poderá não conseguir iniciar sessão." & CrLf & CrLf & _
+                              "Por fim, obrigado por experimentar esta versão do Windows." & CrLf & CrLf & _
+                              "Pretende iniciar o processo de reversão?"
                 End Select
                 If MsgBox(msg, vbYesNo + vbExclamation, Text) = MsgBoxResult.Yes Then
                     ProgressPanel.OperationNum = 86
@@ -16646,6 +16922,8 @@ Public Class MainForm
                             MsgBox("Esta acción solo está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
                         Case "FRA"
                             MsgBox("Cette action est seulement prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+                        Case "PTB", "PTG"
+                            MsgBox("Esta ação só é suportada em instalações online", vbOKOnly + vbCritical, Text)
                     End Select
                 Case 1
                     MsgBox("This action is only supported on online installations", vbOKOnly + vbCritical, Text)
@@ -16653,6 +16931,8 @@ Public Class MainForm
                     MsgBox("Esta acción solo está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
                 Case 3
                     MsgBox("Cette action est seulement prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+                Case 4
+                    MsgBox("Esta ação só é suportada em instalações online", vbOKOnly + vbCritical, Text)
             End Select
         End If
     End Sub
@@ -16683,6 +16963,11 @@ Public Class MainForm
                                       "Si vous avez utilisé cette nouvelle version de Windows pendant un certain temps et que vous avez déterminé qu'il n'y a pas de problème, vous pouvez supprimer la possibilité de lancer un retour en arrière." & CrLf & CrLf & _
                                       "Cette opération ne supprime pas les fichiers de l'ancienne installation ; vous devez donc utiliser l'outil de nettoyage de disque (cleanmgr) si vous souhaitez libérer de l'espace." & CrLf & CrLf & _
                                       "Voulez-vous supprimer la possibilité de revenir à une ancienne version de Windows ?"
+                            Case "PTB", "PTG"
+                                msg = Environment.UserName & ", leia atentamente esta mensagem antes de prosseguir." & CrLf & CrLf & _
+                                      "Se já utilizou esta nova versão do Windows durante algum tempo e determinou que não existem problemas, pode remover a capacidade de iniciar uma reversão." & CrLf & CrLf & _
+                                      "Isto não eliminará os ficheiros da instalação antiga, pelo que terá de utilizar a Limpeza de disco (cleanmgr) se pretender libertar algum espaço." & CrLf & CrLf & _
+                                      "Pretende remover a capacidade de retroceder para uma versão mais antiga do Windows?"
                         End Select
                     Case 1
                         msg = Environment.UserName & ", please read this message carefully before proceeding." & CrLf & CrLf & _
@@ -16699,6 +16984,11 @@ Public Class MainForm
                               "Si vous avez utilisé cette nouvelle version de Windows pendant un certain temps et que vous avez déterminé qu'il n'y a pas de problème, vous pouvez supprimer la possibilité de lancer un retour en arrière." & CrLf & CrLf & _
                               "Cette opération ne supprime pas les fichiers de l'ancienne installation ; vous devez donc utiliser l'outil de nettoyage de disque (cleanmgr) si vous souhaitez libérer de l'espace." & CrLf & CrLf & _
                               "Voulez-vous supprimer la possibilité de revenir à une ancienne version de Windows ?"
+                    Case 4
+                        msg = Environment.UserName & ", leia atentamente esta mensagem antes de prosseguir." & CrLf & CrLf & _
+                              "Se já utilizou esta nova versão do Windows durante algum tempo e determinou que não existem problemas, pode remover a capacidade de iniciar uma reversão." & CrLf & CrLf & _
+                              "Isto não eliminará os ficheiros da instalação antiga, pelo que terá de utilizar a Limpeza de disco (cleanmgr) se pretender libertar algum espaço." & CrLf & CrLf & _
+                              "Pretende remover a capacidade de retroceder para uma versão mais antiga do Windows?"
                 End Select
                 If MsgBox(msg, vbYesNo + vbExclamation, Text) = MsgBoxResult.Yes Then
                     ProgressPanel.OperationNum = 87
@@ -16719,6 +17009,8 @@ Public Class MainForm
                             MsgBox("Esta acción solo está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
                         Case "FRA"
                             MsgBox("Cette action est seulement prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+                        Case "PTB", "PTG"
+                            MsgBox("Esta ação só é suportada em instalações online", vbOKOnly + vbCritical, Text)
                     End Select
                 Case 1
                     MsgBox("This action is only supported on online installations", vbOKOnly + vbCritical, Text)
@@ -16726,6 +17018,8 @@ Public Class MainForm
                     MsgBox("Esta acción solo está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
                 Case 3
                     MsgBox("Cette action est seulement prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+                Case 4
+                    MsgBox("Esta ação só é suportada em instalações online", vbOKOnly + vbCritical, Text)
             End Select
         End If
     End Sub
