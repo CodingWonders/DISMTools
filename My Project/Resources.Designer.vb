@@ -1258,6 +1258,16 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property onedrive_exclusion() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("onedrive_exclusion", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property oobe_skip() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("oobe_skip", resourceCulture)
@@ -2036,12 +2046,17 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a New features
+        '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''- An initial implementation of Portuguese translations has been added
-        '''- When picking an image in the driver import dialog, you will now see the image file associated with its mount directory
-        '''- When selecting the boot drive in the offline installation source of the driver import dialog, it will switch to the online installation automatically
-        '''- You can now pick a mounted image in the image file information dialog.
+        '''- Fixed some minor text editor issues in the Configuration List Editor
+        '''- Fixed an issue where the &quot;Pick...&quot; button in the image file information dialog would not be disabled automatically when selecting &quot;Currently mounted image&quot;
+        '''
+        '''New features
+        '''
+        '''- You can now view the general information of a driver file
+        '''- A help entry for downloading applications has been added to the AppX package addition dialog
+        '''- You can now perform operating system uninstallation tasks
+        '''  - Setting the uninstall window        ''' [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

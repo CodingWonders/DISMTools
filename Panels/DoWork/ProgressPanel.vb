@@ -608,13 +608,15 @@ Public Class ProgressPanel
             taskCount = 1
         ElseIf opNum = 78 Then
             taskCount = 1
-        ElseIf opNum = 88 Then
-            taskCount = 1
         ElseIf opNum = 79 Then
             taskCount = 1
         ElseIf opNum = 83 Then
             taskCount = 1
         ElseIf opNum = 84 Then
+            taskCount = 1
+        ElseIf opNum = 86 Then
+            taskCount = 1
+        ElseIf opNum = 87 Then
             taskCount = 1
         ElseIf opNum = 88 Then
             taskCount = 1
@@ -4057,17 +4059,111 @@ Public Class ProgressPanel
                 LogView.AppendText(" Error level : " & errCode)
             End If
             GetErrorCode(False)
-        ElseIf opNum = 88 Then
-            allTasks.Text = "Setting the uninstall window..."
-            currentTask.Text = "Setting the amount of days an uninstall can happen..."
-            LogView.AppendText(CrLf & "Setting the amount of days an uninstall can happen..." & CrLf &
-                               "Number of days: " & osUninstDayCount)
+        ElseIf opNum = 86 Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            allTasks.Text = "Uninstalling this version of Windows..."
+                            currentTask.Text = "Preparing operating system rollback..."
+                        Case "ESN"
+                            allTasks.Text = "Desinstalando esta versión de Windows..."
+                            currentTask.Text = "Preparando la desinstalación del sistema operativo..."
+                        Case "FRA"
+                            allTasks.Text = "Désinstallation de cette version de Windows en cours..."
+                            currentTask.Text = "Préparation du retour en arrière du système d'exploitation en cours..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Uninstalling this version of Windows..."
+                    currentTask.Text = "Preparing operating system rollback..."
+                Case 2
+                    allTasks.Text = "Desinstalando esta versión de Windows..."
+                    currentTask.Text = "Preparando la desinstalación del sistema operativo..."
+                Case 3
+                    allTasks.Text = "Désinstallation de cette version de Windows en cours..."
+                    currentTask.Text = "Préparation du retour en arrière du système d'exploitation en cours..."
+            End Select
+            LogView.AppendText(CrLf & "Preparing operating system rollback...")
             DISMProc.StartInfo.FileName = DismProgram
-            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /online /set-osuninstallwindow /value:" & osUninstDayCount
+            CommandArgs = " /online /norestart /initiate-osuninstall"
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
             DISMProc.WaitForExit()
-            currentTask.Text = "Gathering error level..."
+            LogView.AppendText(CrLf & "Gathering error level...")
+            GetErrorCode(False)
+            If errCode.Length >= 8 Then
+                LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            Else
+                LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            End If
+        ElseIf opNum = 87 Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            allTasks.Text = "Removing OS rollback ability..."
+                            currentTask.Text = "Removing the ability to revert to an old installation of Windows..."
+                        Case "ESN"
+                            allTasks.Text = "Eliminando la habilidad de desinstalación..."
+                            currentTask.Text = "Eliminando la habilidad para revertir a una instalación anterior de Windows..."
+                        Case "FRA"
+                            allTasks.Text = "Suppression de la possibilité de retour en arrière du système d'exploitation en cours..."
+                            currentTask.Text = "Suppression de la possibilité de revenir à une ancienne installation de Windows en cours..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Removing OS rollback ability..."
+                    currentTask.Text = "Removing the ability to revert to an old installation of Windows..."
+                Case 2
+                    allTasks.Text = "Eliminando la habilidad de desinstalación..."
+                    currentTask.Text = "Eliminando la habilidad para revertir a una instalación anterior de Windows..."
+                Case 3
+                    allTasks.Text = "Suppression de la possibilité de retour en arrière du système d'exploitation en cours..."
+                    currentTask.Text = "Suppression de la possibilité de revenir à une ancienne installation de Windows en cours..."
+            End Select
+            LogView.AppendText(CrLf & "Removing the ability to revert to an old installation of Windows...")
+            DISMProc.StartInfo.FileName = DismProgram
+            CommandArgs &= " /online /remove-osuninstall"
+            DISMProc.StartInfo.Arguments = CommandArgs
+            DISMProc.Start()
+            DISMProc.WaitForExit()
+            LogView.AppendText(CrLf & "Gathering error level...")
+            GetErrorCode(False)
+            If errCode.Length >= 8 Then
+                LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            Else
+                LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            End If
+        ElseIf opNum = 88 Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            allTasks.Text = "Setting the uninstall window..."
+                            currentTask.Text = "Setting the amount of days in which an uninstall can happen..."
+                        Case "ESN"
+                            allTasks.Text = "Estableciendo el margen de desinstalación..."
+                            currentTask.Text = "Estableciendo el número de días en los que puede ocurrir una desinstalación..."
+                        Case "FRA"
+                            allTasks.Text = "Définition de la créneau de désinstallation en cours..."
+                            currentTask.Text = "Définition du nombre de jours au cours desquels une désinstallation peut avoir lieu en cours..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Setting the uninstall window..."
+                    currentTask.Text = "Setting the amount of days in which an uninstall can happen..."
+                Case 2
+                    allTasks.Text = "Estableciendo el margen de desinstalación..."
+                    currentTask.Text = "Estableciendo el número de días en los que puede ocurrir una desinstalación..."
+                Case 3
+                    allTasks.Text = "Définition de la créneau de désinstallation en cours..."
+                    currentTask.Text = "Définition du nombre de jours au cours desquels une désinstallation peut avoir lieu en cours..."
+            End Select
+            LogView.AppendText(CrLf & "Setting the amount of days an uninstall can happen..." & CrLf &
+                               "Number of days: " & osUninstDayCount)
+            DISMProc.StartInfo.FileName = DismProgram
+            CommandArgs &= " /online /set-osuninstallwindow /value:" & osUninstDayCount
+            DISMProc.StartInfo.Arguments = CommandArgs
+            DISMProc.Start()
+            DISMProc.WaitForExit()
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
             If errCode.Length >= 8 Then
@@ -5064,7 +5160,17 @@ Public Class ProgressPanel
                 ' There are pending image operations
                 LogView.AppendText(CrLf & "The operation could not be performed because this image has pending online operations. Applying and booting up the image might fix this issue.")
             ElseIf errCode = "BC2" Then
-                LogView.AppendText(CrLf & "The specified operation completed successfully, but requires a restart in order to be fully applied. Save your work and restart when ready")
+                If OperationNum = 86 Then
+                    LogView.AppendText(CrLf & "The rollback process has started. Your system needs to be restarted in order to continue. It will restart automatically in 10 seconds. Make sure you have saved your work.")
+                    Dim restartProc As New Process()
+                    restartProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\shutdown.exe"
+                    restartProc.StartInfo.Arguments = "/r /t 10 /c " & Quote & "Shutdown initiated by DISMTools" & Quote
+                    restartProc.StartInfo.CreateNoWindow = True
+                    restartProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+                    restartProc.Start()
+                Else
+                    LogView.AppendText(CrLf & "The specified operation completed successfully, but requires a restart in order to be fully applied. Save your work and restart when ready")
+                End If
             Else
                 ' Errors that weren't added to the database
                 LogView.AppendText(CrLf & "This error has not yet been added to the database, so a useful description can't be shown now. Try running the command manually and, if you see the same error, try looking it up on the Internet.")

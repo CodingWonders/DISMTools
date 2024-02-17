@@ -34,6 +34,8 @@ Public Class WimScriptEditor
                         ToolStripButton4.ToolTipText = "Save..."
                         ToolStripButton5.ToolTipText = "Toggle word wrap"
                         ToolStripButton6.ToolTipText = "Help"
+                        ToolStripDropDownButton1.Text = "Tools"
+                        NoOneDriveToolStripMenuItem.Text = "Exclude user OneDrive folders..."
                     Case "ESN"
                         Text = "Editor de lista de configuraciones de DISM"
                         Label1.Text = "El Editor de Lista de configuraciones le permite excluir archivos y/o carpetas durante acciones que le permiten especificar estos archivos, como capturar una imagen. Puede especificar las configuraciones desde la interfaz gráfica, o puede crear el archivo de configuración manualmente. Cuando haya acabado, haga clic en el icono de Guardar."
@@ -56,6 +58,8 @@ Public Class WimScriptEditor
                         ToolStripButton4.ToolTipText = "Guardar..."
                         ToolStripButton5.ToolTipText = "Cambiar ajuste de línea"
                         ToolStripButton6.ToolTipText = "Ayuda"
+                        ToolStripDropDownButton1.Text = "Herramientas"
+                        NoOneDriveToolStripMenuItem.Text = "Excluir carpetas de OneDrive del usuario..."
                     Case "FRA"
                         Text = "Éditeur de liste de configuration DISM"
                         Label1.Text = "L'éditeur de liste de configuration vous permet d'exclure des fichiers et/ou des dossiers lors d'actions qui vous permettent de spécifier ces fichiers, comme la capture d'une image. Vous pouvez soit spécifier les paramètres à partir de l'interface graphique, soit créer le fichier de configuration manuellement. Lorsque vous avez terminé, cliquez sur l'icône Sauvegarder."
@@ -78,6 +82,8 @@ Public Class WimScriptEditor
                         ToolStripButton4.ToolTipText = "Sauvegarder..."
                         ToolStripButton5.ToolTipText = "Basculer l'habillage des mots"
                         ToolStripButton6.ToolTipText = "Aide"
+                        ToolStripDropDownButton1.Text = "Outils"
+                        NoOneDriveToolStripMenuItem.Text = "Exclure les répertoires OneDrive de l'utilisateur..."
                 End Select
             Case 1
                 Text = "DISM Configuration List Editor"
@@ -101,6 +107,8 @@ Public Class WimScriptEditor
                 ToolStripButton4.ToolTipText = "Save..."
                 ToolStripButton5.ToolTipText = "Toggle word wrap"
                 ToolStripButton6.ToolTipText = "Help"
+                ToolStripDropDownButton1.Text = "Tools"
+                NoOneDriveToolStripMenuItem.Text = "Exclude user OneDrive folders..."
             Case 2
                 Text = "Editor de lista de configuraciones de DISM"
                 Label1.Text = "El Editor de Lista de configuraciones le permite excluir archivos y/o carpetas durante acciones que le permiten especificar estos archivos, como capturar una imagen. Puede especificar las configuraciones desde la interfaz gráfica, o puede crear el archivo de configuración manualmente. Cuando haya acabado, haga clic en el icono de Guardar."
@@ -123,6 +131,8 @@ Public Class WimScriptEditor
                 ToolStripButton4.ToolTipText = "Guardar..."
                 ToolStripButton5.ToolTipText = "Cambiar ajuste de línea"
                 ToolStripButton6.ToolTipText = "Ayuda"
+                ToolStripDropDownButton1.Text = "Herramientas"
+                NoOneDriveToolStripMenuItem.Text = "Excluir carpetas de OneDrive del usuario..."
             Case 3
                 Text = "Éditeur de liste de configuration DISM"
                 Label1.Text = "L'éditeur de liste de configuration vous permet d'exclure des fichiers et/ou des dossiers lors d'actions qui vous permettent de spécifier ces fichiers, comme la capture d'une image. Vous pouvez soit spécifier les paramètres à partir de l'interface graphique, soit créer le fichier de configuration manuellement. Lorsque vous avez terminé, cliquez sur l'icône Sauvegarder."
@@ -145,6 +155,8 @@ Public Class WimScriptEditor
                 ToolStripButton4.ToolTipText = "Sauvegarder..."
                 ToolStripButton5.ToolTipText = "Basculer l'habillage des mots"
                 ToolStripButton6.ToolTipText = "Aide"
+                ToolStripDropDownButton1.Text = "Outils"
+                NoOneDriveToolStripMenuItem.Text = "Exclure les répertoires OneDrive de l'utilisateur..."
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)
@@ -827,7 +839,7 @@ Public Class WimScriptEditor
             Scintilla1.AppendText(CrLf & _
                                   "[ExclusionList]" & CrLf)
             For Each LVI As ListViewItem In ListView1.Items
-                Scintilla1.AppendText(LVI.Text)
+                Scintilla1.AppendText(LVI.Text & If(Not LVI.Text.EndsWith(CrLf), CrLf, ""))
             Next
             ' End with carriage return line feed
             Scintilla1.AppendText(CrLf)
@@ -836,7 +848,7 @@ Public Class WimScriptEditor
             Scintilla1.AppendText(CrLf & _
                                   "[ExclusionException]" & CrLf)
             For Each LVI As ListViewItem In ListView2.Items
-                Scintilla1.AppendText(LVI.Text)
+                Scintilla1.AppendText(LVI.Text & If(Not LVI.Text.EndsWith(CrLf), CrLf, ""))
             Next
             ' End with carriage return line feed
             Scintilla1.AppendText(CrLf)
@@ -845,7 +857,7 @@ Public Class WimScriptEditor
             Scintilla1.AppendText(CrLf & _
                                   "[CompressionExclusionList]" & CrLf)
             For Each LVI As ListViewItem In ListView3.Items
-                Scintilla1.AppendText(LVI.Text)
+                Scintilla1.AppendText(LVI.Text & If(Not LVI.Text.EndsWith(CrLf), CrLf, ""))
             Next
             ' End with carriage return line feed
             Scintilla1.AppendText(CrLf)
@@ -1198,6 +1210,17 @@ Public Class WimScriptEditor
         If Visible Then
             Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
             If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        End If
+    End Sub
+
+    Private Sub NoOneDriveToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles NoOneDriveToolStripMenuItem.Click
+        If OneDriveExclusionDlg.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If OneDriveExclusionDlg.ExcludedFolders.Count > 0 Then
+                For Each ExcludedFolder In OneDriveExclusionDlg.ExcludedFolders
+                    ListView1.Items.Add(If(ExcludedFolder.Contains(" "), Quote & ExcludedFolder & Quote, ExcludedFolder))
+                    UpdateConfigListContents()
+                Next
+            End If
         End If
     End Sub
 End Class

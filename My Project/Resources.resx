@@ -1097,12 +1097,24 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <value>..\Resources\get_appxpkg_info.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>New features
+    <value>Bugfixes
 
-- An initial implementation of Portuguese translations has been added
-- When picking an image in the driver import dialog, you will now see the image file associated with its mount directory
-- When selecting the boot drive in the offline installation source of the driver import dialog, it will switch to the online installation automatically
-- You can now pick a mounted image in the image file information dialog</value>
+- Fixed some minor text editor issues in the Configuration List Editor
+- Fixed an issue where the "Pick..." button in the image file information dialog would not be disabled automatically when selecting "Currently mounted image"
+
+New features
+
+- You can now view the general information of a driver file
+- A help entry for downloading applications has been added to the AppX package addition dialog
+- You can now perform operating system uninstallation tasks
+  - Setting the uninstall window
+  - Initiating an OS uninstall
+  - Removing the rollback ability
+  - Getting the uninstall window
+- You can now exclude user OneDrive folders and add them to your configuration list automatically using the OneDrive folder exclusion tool
+- The Recents list has been implemented
+- Portuguese translations have been improved
+- CODE: updated the assembly description</value>
   </data>
   <data name="split_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\split_img.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -1181,5 +1193,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   </data>
   <data name="import_driver" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\import_driver.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="onedrive_exclusion" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\onedrive_exclusion.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

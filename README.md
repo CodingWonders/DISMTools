@@ -133,7 +133,7 @@ You can download DISMTools from the [Releases](https://github.com/CodingWonders/
 
 <p align="center">
 	<img src="https://www.softpedia.com/_img/softpedia_100_free.png" />
-	<p align="center"><i>Last updated: January 6, 2024 (Alexandra Sava)</i></p>
+	<p align="center"><i>Last updated: February 10, 2024 (Andrei Verdeanu)</i></p>
 </p>
 
 ## Building

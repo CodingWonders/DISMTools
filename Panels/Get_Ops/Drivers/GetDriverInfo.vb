@@ -60,6 +60,7 @@ Public Class GetDriverInfo
                         Button3.Text = "Remove all"
                         Button7.Text = "Change"
                         Button8.Text = "Save..."
+                        Button9.Text = "View driver file information"
                         LinkLabel1.Text = "<- Go back"
                         InstalledDriverLink.Text = "I want to get information about installed drivers in the image"
                         DriverFileLink.Text = "I want to get information about driver files"
@@ -103,6 +104,7 @@ Public Class GetDriverInfo
                         Button3.Text = "Eliminar todos"
                         Button7.Text = "Cambiar"
                         Button8.Text = "Guardar..."
+                        Button9.Text = "Ver información del archivo de controladores"
                         LinkLabel1.Text = "<- Atrás"
                         InstalledDriverLink.Text = "Deseo obtener información acerca de controladores instalados en la imagen"
                         DriverFileLink.Text = "Deseo obtener información acerca de archivos de controladores"
@@ -146,6 +148,7 @@ Public Class GetDriverInfo
                         Button3.Text = "Supprimer tout"
                         Button7.Text = "Changer"
                         Button8.Text = "Sauvegarder..."
+                        Button9.Text = "Voir les informations sur le fichier pilote"
                         LinkLabel1.Text = "<- Retourner"
                         InstalledDriverLink.Text = "Je souhaite obtenir des informations sur les pilotes installés dans l'image."
                         DriverFileLink.Text = "Je souhaite obtenir des informations sur les fichiers pilotes"
@@ -190,6 +193,7 @@ Public Class GetDriverInfo
                 Button3.Text = "Remove all"
                 Button7.Text = "Change"
                 Button8.Text = "Save..."
+                Button9.Text = "View driver file information"
                 LinkLabel1.Text = "<- Go back"
                 InstalledDriverLink.Text = "I want to get information about installed drivers in the image"
                 DriverFileLink.Text = "I want to get information about driver files"
@@ -233,6 +237,7 @@ Public Class GetDriverInfo
                 Button3.Text = "Eliminar todos"
                 Button7.Text = "Cambiar"
                 Button8.Text = "Guardar..."
+                Button9.Text = "Ver información del archivo de controladores"
                 LinkLabel1.Text = "<- Atrás"
                 InstalledDriverLink.Text = "Deseo obtener información acerca de controladores instalados en la imagen"
                 DriverFileLink.Text = "Deseo obtener información acerca de archivos de controladores"
@@ -276,6 +281,7 @@ Public Class GetDriverInfo
                 Button3.Text = "Supprimer tout"
                 Button7.Text = "Changer"
                 Button8.Text = "Sauvegarder..."
+                Button9.Text = "Voir les informations sur le fichier pilote"
                 LinkLabel1.Text = "<- Retourner"
                 InstalledDriverLink.Text = "Je souhaite obtenir des informations sur les pilotes installés dans l'image."
                 DriverFileLink.Text = "Je souhaite obtenir des informations sur les fichiers pilotes"
@@ -322,6 +328,9 @@ Public Class GetDriverInfo
         ' Forcefully hide that panel if the driver packages panel is visible
         If IsInDrvPkgs Then Panel6.Visible = False
 
+        Button9.Visible = IsInDrvPkgs
+        Button9.Enabled = False
+
         ' Switch to the selection panels
         Panel4.Visible = False
         Panel7.Visible = True
@@ -352,6 +361,7 @@ Public Class GetDriverInfo
         Label5.Visible = False
         IsInDrvPkgs = False
         Button8.Enabled = True
+        Button9.Visible = False
     End Sub
 
     Private Sub DriverFileLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles DriverFileLink.LinkClicked
@@ -363,6 +373,7 @@ Public Class GetDriverInfo
         Label5.Visible = True
         IsInDrvPkgs = True
         Button8.Enabled = ListBox1.Items.Count > 0
+        Button9.Visible = True
     End Sub
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
@@ -620,10 +631,12 @@ Public Class GetDriverInfo
                 Button5.Enabled = True
                 If Not CurrentHWFile = ListBox1.SelectedIndex Then DisplayDriverInformation(1)
                 CurrentHWFile = ListBox1.SelectedIndex
+                Button9.Enabled = True
             Else
                 NoDrvPanel.Visible = True
                 DrvPackageInfoPanel.Visible = False
                 Button2.Enabled = False
+                Button9.Enabled = False
             End If
         Catch ex As Exception
             ListBox1.Items.Remove(ListBox1.SelectedItem)
@@ -633,6 +646,7 @@ Public Class GetDriverInfo
                 Button2.Enabled = False
                 Button3.Enabled = False
                 Button8.Enabled = False
+                Button9.Enabled = False
             End If
         End Try
     End Sub
@@ -644,10 +658,12 @@ Public Class GetDriverInfo
             Button2.Enabled = True
             Button3.Enabled = True
             Button8.Enabled = True
+            Button9.Enabled = True
         Else
             Button2.Enabled = False
             Button3.Enabled = False
             Button8.Enabled = False
+            Button9.Enabled = False
         End If
         NoDrvPanel.Visible = True
         DrvPackageInfoPanel.Visible = False
@@ -659,6 +675,7 @@ Public Class GetDriverInfo
         Button2.Enabled = False
         Button3.Enabled = False
         Button8.Enabled = False
+        Button9.Enabled = False
         NoDrvPanel.Visible = True
         DrvPackageInfoPanel.Visible = False
     End Sub
@@ -895,5 +912,9 @@ Public Class GetDriverInfo
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
         End If
+    End Sub
+
+    Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
+        DriverFileInfoDlg.ShowDialog()
     End Sub
 End Class

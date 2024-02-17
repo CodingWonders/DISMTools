@@ -9,7 +9,7 @@ Imports System.Runtime.InteropServices
 ' Revisar los valores de los atributos del ensamblado
 
 <Assembly: AssemblyTitle("DISMTools")> 
-<Assembly: AssemblyDescription("A GUI and automation tool for DISM operations")> 
+<Assembly: AssemblyDescription("The connected place for Windows system administration.")> 
 <Assembly: AssemblyCompany("")> 
 <Assembly: AssemblyProduct("DISMTools")> 
 <Assembly: AssemblyCopyright("© 2022-2024 CodingWonders Software")> 
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' mediante el asterisco ('*'), como se muestra a continuación:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("0.4.2.2421")> 
-<Assembly: AssemblyFileVersion("0.4.2.2421")> 
+<Assembly: AssemblyVersion("0.4.2.2422")> 
+<Assembly: AssemblyFileVersion("0.4.2.2422")> 
