@@ -223,7 +223,7 @@
 <h2 id="operations">Operations</h2>
 <p>With MSMG Toolkit, you have to copy the files from a Windows Setup disc to the <code>ISO</code> folder of the Toolkit launch directory and specify a Windows image to customize. With DISMTools, however, you don't have to. You only have to copy the Windows image you want from the <code>sources</code> directory of the Windows Setup disc to any location, create a project, and mount the image to it.</p>
 <p>If you've loaded a Windows image into MSMG Toolkit and closed it, the program will unmount it. If you force the closure of the program and launch it again, it will remove EVERY file from the Windows image, making it <strong>invalid</strong> and <strong>unrepairable</strong>. This can be done because the Toolkit is launched as <code>TrustedInstaller</code> by default. You don't need to worry about that with DISMTools. After mounting an image to a project, it will stay there, even if you close the program; until you want to unmount it. Also, the program will <strong>leave the mounted images alone</strong> when starting up, apart from <a href="../../img_tasks/mgmt/remount_image/">reloading their servicing sessions</a> if the images need a remount.</p>
-<p>With MSMG Toolkit, you can only manage Windows images. However, with DISMTools, you can manage Windows images and (active) installations.</p>
+<p>With MSMG Toolkit, you can only manage Windows images. However, with DISMTools, you can manage Windows images and installations of any kind.</p>
               
             </div>
           </div><footer>
