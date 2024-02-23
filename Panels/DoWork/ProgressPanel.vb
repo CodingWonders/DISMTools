@@ -4799,7 +4799,7 @@ Public Class ProgressPanel
             AllPB.Value = AllPB.Maximum
             Refresh()
             MainForm.isModified = True
-            If OperationNum < 993 Then
+            If OperationNum < 993 And Not OperationNum = 0 Then
                 Thread.Sleep(2000)
             End If
             If OperationNum = 0 Then
