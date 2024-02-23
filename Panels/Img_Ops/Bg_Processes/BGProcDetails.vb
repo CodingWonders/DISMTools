@@ -126,6 +126,9 @@
                         Case "FRA"
                             Label1.Text = "Collecte des informations de l'image en cours..."
                             Label3.Text = "Ces processus peuvent prendre un certain temps"
+                        Case "PTB", "PTG"
+                            Label1.Text = "A recolher informação sobre a imagem..."
+                            Label3.Text = "Estes processos podem demorar algum tempo a concluir"
                     End Select
                 Case 1
                     Label1.Text = "Gathering image information..."
@@ -136,6 +139,9 @@
                 Case 3
                     Label1.Text = "Collecte des informations de l'image en cours..."
                     Label3.Text = "Ces processus peuvent prendre un certain temps"
+                Case 4
+                    Label1.Text = "A recolher informação sobre a imagem..."
+                    Label3.Text = "Estes processos podem demorar algum tempo a concluir"
             End Select
             If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
                 BackColor = Color.FromArgb(37, 37, 38)

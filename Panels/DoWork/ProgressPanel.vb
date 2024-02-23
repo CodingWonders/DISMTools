@@ -496,6 +496,8 @@ Public Class ProgressPanel
                             LogButton.Text = "Ocultar registro"
                         Case "FRA"
                             LogButton.Text = "Cacher le journal"
+                        Case "PTB", "PTG"
+                            LogButton.Text = "Ocultar registo"
                     End Select
                 Case 1
                     LogButton.Text = "Hide log"
@@ -503,6 +505,8 @@ Public Class ProgressPanel
                     LogButton.Text = "Ocultar registro"
                 Case 3
                     LogButton.Text = "Cacher le journal"
+                Case 4
+                    LogButton.Text = "Ocultar registo"
             End Select
             Height = 420
         ElseIf Height = 420 Then
@@ -515,6 +519,8 @@ Public Class ProgressPanel
                             LogButton.Text = "Mostrar registro"
                         Case "FRA"
                             LogButton.Text = "Afficher le journal"
+                        Case "PTB", "PTG"
+                            LogButton.Text = "Mostrar registo"
                     End Select
                 Case 1
                     LogButton.Text = "Show log"
@@ -522,6 +528,8 @@ Public Class ProgressPanel
                     LogButton.Text = "Mostrar registro"
                 Case 3
                     LogButton.Text = "Afficher le journal"
+                Case 4
+                    LogButton.Text = "Mostrar registo"
             End Select
             Height = 240
         End If
@@ -637,6 +645,8 @@ Public Class ProgressPanel
                         taskCountLbl.Text = "Tareas: 1/" & taskCount
                     Case "FRA"
                         taskCountLbl.Text = "Tâches : 1/" & taskCount
+                    Case "PTB", "PTG"
+                        taskCountLbl.Text = "Tarefas: 1/" & taskCount
                 End Select
             Case 1
                 taskCountLbl.Text = "Tasks: 1/" & taskCount
@@ -644,6 +654,8 @@ Public Class ProgressPanel
                 taskCountLbl.Text = "Tareas: 1/" & taskCount
             Case 3
                 taskCountLbl.Text = "Tâches : 1/" & taskCount
+            Case 4
+                taskCountLbl.Text = "Tarefas: 1/" & taskCount
         End Select
         CenterToParent()
     End Sub
@@ -743,7 +755,7 @@ Public Class ProgressPanel
                 Thread.Sleep(125)
                 AllPB.Value = CurrentPB.Value
                 Directory.CreateDirectory(projPath & "\" & projName & "\" & "settings")
-                CurrentPB.Value = 33.33
+                CurrentPB.Value = 33.329999999999998
                 Thread.Sleep(125)
                 AllPB.Value = CurrentPB.Value
                 Directory.CreateDirectory(projPath & "\" & projName & "\" & "mount")
@@ -778,7 +790,7 @@ Public Class ProgressPanel
                 Directory.CreateDirectory(projPath & "\" & projName & "\" & "DandI\amd64")
                 Directory.CreateDirectory(projPath & "\" & projName & "\" & "DandI\arm")
                 Directory.CreateDirectory(projPath & "\" & projName & "\" & "DandI\arm64")
-                CurrentPB.Value = 66.66
+                CurrentPB.Value = 66.659999999999997
                 Thread.Sleep(125)
                 AllPB.Value = CurrentPB.Value
                 File.WriteAllText(projPath & "\" & projName & "\" & "settings\project.ini", _
@@ -809,7 +821,7 @@ Public Class ProgressPanel
                                   "ImageLang=N/A" & CrLf & CrLf & _
                                   "[Params]" & CrLf & _
                                   "ImageReadWrite=N/A", ASCII)
-                CurrentPB.Value = 83.33
+                CurrentPB.Value = 83.329999999999998
                 Thread.Sleep(125)
                 AllPB.Value = CurrentPB.Value
                 File.WriteAllText(projPath & "\" & projName & "\" & projName & ".dtproj", _
@@ -5035,6 +5047,8 @@ Public Class ProgressPanel
                             MainForm.MenuDesc.Text = "Listo"
                         Case "FRA"
                             MainForm.MenuDesc.Text = "Prêt"
+                        Case "PTB", "PTG"
+                            MainForm.MenuDesc.Text = "Pronto"
                     End Select
                 Case 1
                     MainForm.MenuDesc.Text = "Ready"
@@ -5042,6 +5056,8 @@ Public Class ProgressPanel
                     MainForm.MenuDesc.Text = "Listo"
                 Case 3
                     MainForm.MenuDesc.Text = "Prêt"
+                Case 4
+                    MainForm.MenuDesc.Text = "Pronto"
             End Select
             ActionRunning = False
             TaskList.Clear()
@@ -5064,6 +5080,9 @@ Public Class ProgressPanel
                         Case "FRA"
                             Label1.Text = "Impossible d'effectuer des opérations de l'image"
                             Label2.Text = "Une erreur s'est produite, qui a interrompu les opérations sur l'image. Veuillez lire le journal ci-dessous pour plus d'informations."
+                        Case "PTB", "PTG"
+                            Label1.Text = "Não foi possível efetuar operações de imagem"
+                            Label2.Text = "Ocorreu um erro que interrompeu as operações de imagem. Leia o registo abaixo para obter mais informações."
                     End Select
                 Case 1
                     Label1.Text = "Could not perform image operations"
@@ -5074,6 +5093,9 @@ Public Class ProgressPanel
                 Case 3
                     Label1.Text = "Impossible d'effectuer des opérations de l'image"
                     Label2.Text = "Une erreur s'est produite, qui a interrompu les opérations sur l'image. Veuillez lire le journal ci-dessous pour plus d'informations."
+                Case 4
+                    Label1.Text = "Não foi possível efetuar operações de imagem"
+                    Label2.Text = "Ocorreu um erro que interrompeu as operações de imagem. Leia o registo abaixo para obter mais informações."
             End Select
             CurrentPB.Value = CurrentPB.Maximum
             AllPB.Value = AllPB.Maximum
@@ -5089,12 +5111,16 @@ Public Class ProgressPanel
                             Cancel_Button.Text = "Aceptar"
                         Case "FRA"
                             Cancel_Button.Text = "OK"
+                        Case "PTB", "PTG"
+                            Cancel_Button.Text = "OK"
                     End Select
                 Case 1
                     Cancel_Button.Text = "OK"
                 Case 2
                     Cancel_Button.Text = "Aceptar"
                 Case 3
+                    Cancel_Button.Text = "OK"
+                Case 4
                     Cancel_Button.Text = "OK"
             End Select
             LinkLabel1.Visible = True
@@ -5185,6 +5211,8 @@ Public Class ProgressPanel
                             MainForm.MenuDesc.Text = "Listo"
                         Case "FRA"
                             MainForm.MenuDesc.Text = "Prêt"
+                        Case "PTB", "PTG"
+                            MainForm.MenuDesc.Text = "Pronto"
                     End Select
                 Case 1
                     MainForm.MenuDesc.Text = "Ready"
@@ -5192,6 +5220,8 @@ Public Class ProgressPanel
                     MainForm.MenuDesc.Text = "Listo"
                 Case 3
                     MainForm.MenuDesc.Text = "Prêt"
+                Case 4
+                    MainForm.MenuDesc.Text = "Pronto"
             End Select
             MainForm.StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
             SaveLog(Application.StartupPath & "\logs\DISMTools.log")
@@ -5246,6 +5276,16 @@ Public Class ProgressPanel
                         GroupBox1.Text = "Journal"
                         allTasks.Text = "Veuillez patienter..."
                         currentTask.Text = "Veuillez patienter..."
+                    Case "PTB", "PTG"
+                        Text = "Progresso"
+                        Label1.Text = "Operações de imagem em curso..."
+                        Label2.Text = "Aguarde enquanto as seguintes tarefas são efectuadas. Isto pode demorar algum tempo"
+                        Cancel_Button.Text = "Cancelar"
+                        LogButton.Text = If(Height = 240, " Mostrar registo", "Ocultar registo")
+                        LinkLabel1.Text = "Mostrar ficheiro de registo DISM (avançado)"
+                        GroupBox1.Text = "Log"
+                        allTasks.Text = "Aguarde..."
+                        currentTask.Text = "Por favor, aguarde..."
                 End Select
             Case 1
                 Text = "Progress"
@@ -5277,6 +5317,16 @@ Public Class ProgressPanel
                 GroupBox1.Text = "Journal"
                 allTasks.Text = "Veuillez patienter..."
                 currentTask.Text = "Veuillez patienter..."
+            Case 4
+                Text = "Progresso"
+                Label1.Text = "Operações de imagem em curso..."
+                Label2.Text = "Aguarde enquanto as seguintes tarefas são efectuadas. Isto pode demorar algum tempo"
+                Cancel_Button.Text = "Cancelar"
+                LogButton.Text = If(Height = 240, " Mostrar registo", "Ocultar registo")
+                LinkLabel1.Text = "Mostrar ficheiro de registo DISM (avançado)"
+                GroupBox1.Text = "Log"
+                allTasks.Text = "Aguarde..."
+                currentTask.Text = "Por favor, aguarde..."
         End Select
         taskCountLbl.Visible = False
         MainForm.bwBackgroundProcessAction = 0
@@ -5362,6 +5412,8 @@ Public Class ProgressPanel
                         MainForm.MenuDesc.Text = "Realizando operaciones con la imagen. Espere..."
                     Case "FRA"
                         MainForm.MenuDesc.Text = "Exécution d'opérations sur les images en cours. Veuillez patienter..."
+                    Case "PTB", "PTG"
+                        MainForm.MenuDesc.Text = "Realização de operações de imagem. Por favor, aguarde..."
                 End Select
             Case 1
                 MainForm.MenuDesc.Text = "Performing image operations. Please wait..."
@@ -5369,6 +5421,8 @@ Public Class ProgressPanel
                 MainForm.MenuDesc.Text = "Realizando operaciones con la imagen. Espere..."
             Case 3
                 MainForm.MenuDesc.Text = "Exécution d'opérations sur les images en cours. Veuillez patienter..."
+            Case 4
+                MainForm.MenuDesc.Text = "Realização de operações de imagem. Por favor, aguarde..."
         End Select
         MainForm.StatusStrip.BackColor = Color.FromArgb(14, 99, 156)
         If Debugger.IsAttached Then
@@ -5404,6 +5458,8 @@ Public Class ProgressPanel
                             taskCountLbl.Text = "Tareas: 1/" & TaskList.Count
                         Case "FRA"
                             taskCountLbl.Text = "Tâches : 1/" & TaskList.Count
+                        Case "PTB", "PTG"
+                            taskCountLbl.Text = "Tarefas: 1/" & TaskList.Count
                     End Select
                 Case 1
                     taskCountLbl.Text = "Tasks: 1/" & TaskList.Count
@@ -5411,6 +5467,8 @@ Public Class ProgressPanel
                     taskCountLbl.Text = "Tareas: 1/" & TaskList.Count
                 Case 3
                     taskCountLbl.Text = "Tâches : 1/" & TaskList.Count
+                Case 4
+                    taskCountLbl.Text = "Tarefas: 1/" & TaskList.Count
             End Select
             InitializeActionRuntime(IsInValidationMode)
             ReadActionFile(ActionFile)
@@ -5426,6 +5484,8 @@ Public Class ProgressPanel
                                 taskCountLbl.Text = "Tareas: 1/" & TaskList.Count
                             Case "FRA"
                                 taskCountLbl.Text = "Tâches : 1/" & TaskList.Count
+                            Case "PTB", "PTG"
+                                taskCountLbl.Text = "Tarefas: 1/" & TaskList.Count
                         End Select
                     Case 1
                         taskCountLbl.Text = "Tasks: 1/" & TaskList.Count
@@ -5433,6 +5493,8 @@ Public Class ProgressPanel
                         taskCountLbl.Text = "Tareas: 1/" & TaskList.Count
                     Case 3
                         taskCountLbl.Text = "Tâches : 1/" & TaskList.Count
+                    Case 4
+                        taskCountLbl.Text = "Tarefas: 1/" & TaskList.Count
                 End Select
                 OperationNum = 1000
             Else

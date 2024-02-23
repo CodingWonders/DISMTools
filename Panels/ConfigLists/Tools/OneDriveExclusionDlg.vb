@@ -19,6 +19,8 @@ Public Class OneDriveExclusionDlg
                         Label3.Text = "Las carpetas de OneDrive del usuario han sido excluidas y serán añadidas a la lista de configuración."
                     Case "FRA"
                         Label3.Text = "Les répertoires OneDrive de l'utilisateur ont été exclus et seront ajoutés à la liste de configuration."
+                    Case "PTB", "PTG"
+                        Label3.Text = "As pastas do OneDrive dos utilizadores foram excluídas e serão adicionadas à lista de configuração."
                 End Select
             Case 1
                 Label3.Text = "User OneDrive folders have been excluded and will be added to the configuration list."
@@ -26,6 +28,8 @@ Public Class OneDriveExclusionDlg
                 Label3.Text = "Las carpetas de OneDrive del usuario han sido excluidas y serán añadidas a la lista de configuración."
             Case 3
                 Label3.Text = "Les répertoires OneDrive de l'utilisateur ont été exclus et seront ajoutés à la liste de configuration."
+            Case 4
+                Label3.Text = "As pastas do OneDrive dos utilizadores foram excluídas e serão adicionadas à lista de configuração."
         End Select
         Refresh()
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
@@ -53,6 +57,8 @@ Public Class OneDriveExclusionDlg
                                 Label3.Text = "Excluyendo carpetas de OneDrive del usuario..."
                             Case "FRA"
                                 Label3.Text = "Exclusion des répertoires OneDrive de l'utilisateur en cours..."
+                            Case "PTB", "PTG"
+                                Label3.Text = "Excluir pastas do OneDrive dos utilizadores..."
                         End Select
                     Case 1
                         Label3.Text = "Excluding user OneDrive folders..."
@@ -60,6 +66,8 @@ Public Class OneDriveExclusionDlg
                         Label3.Text = "Excluyendo carpetas de OneDrive del usuario..."
                     Case 3
                         Label3.Text = "Exclusion des répertoires OneDrive de l'utilisateur en cours..."
+                    Case 4
+                        Label3.Text = "Excluir pastas do OneDrive dos utilizadores..."
                 End Select
                 Refresh()
                 ' Go through all User folders and exclude all OneDrive folders
@@ -113,6 +121,16 @@ Public Class OneDriveExclusionDlg
                         OK_Button.Text = "Exclure"
                         Cancel_Button.Text = "Annuler"
                         FolderBrowserDialog1.Description = "Choisissez un chemin qui contient des répertoires d'utilisateurs :"
+                    Case "PTB", "PTG"
+                        Text = "Excluir pastas do OneDrive do utilizador"
+                        Label1.Text = "Esta ferramenta irá ajudá-lo a excluir pastas do OneDrive de utilizadores na lista de configuração em que está a trabalhar. Basta especificar o caminho ao qual pretende aplicar o ficheiro da lista de configuração e clicar em Excluir." & CrLf & CrLf & _
+                                      "NOTA: depois de executar esta ferramenta e excluir as pastas do OneDrive dos utilizadores, não deve utilizar a lista de configuração numa imagem que não seja a que especificou aqui. Se quiser usar a lista de configuração em outras imagens, remova as pastas do OneDrive do usuário na lista de configuração e execute esta ferramenta novamente."
+                        Label2.Text = "Caminho para excluir as pastas do OneDrive de:"
+                        Label3.Text = "Quando estiver pronto, clique em Excluir."
+                        Button1.Text = "Navegar..."
+                        OK_Button.Text = "Excluir"
+                        Cancel_Button.Text = "Cancelar"
+                        FolderBrowserDialog1.Description = "Escolha um caminho que contenha pastas dos utilizadores:"
                 End Select
             Case 1
                 Text = "Exclude user OneDrive folders"
@@ -144,6 +162,16 @@ Public Class OneDriveExclusionDlg
                 OK_Button.Text = "Exclure"
                 Cancel_Button.Text = "Annuler"
                 FolderBrowserDialog1.Description = "Choisissez un chemin qui contient des répertoires d'utilisateurs :"
+            Case 4
+                Text = "Excluir pastas do OneDrive do utilizador"
+                Label1.Text = "Esta ferramenta irá ajudá-lo a excluir pastas do OneDrive de utilizadores na lista de configuração em que está a trabalhar. Basta especificar o caminho ao qual pretende aplicar o ficheiro da lista de configuração e clicar em Excluir." & CrLf & CrLf & _
+                              "NOTA: depois de executar esta ferramenta e excluir as pastas do OneDrive dos utilizadores, não deve utilizar a lista de configuração numa imagem que não seja a que especificou aqui. Se quiser usar a lista de configuração em outras imagens, remova as pastas do OneDrive do usuário na lista de configuração e execute esta ferramenta novamente."
+                Label2.Text = "Caminho para excluir as pastas do OneDrive de:"
+                Label3.Text = "Quando estiver pronto, clique em Excluir."
+                Button1.Text = "Navegar..."
+                OK_Button.Text = "Excluir"
+                Cancel_Button.Text = "Cancelar"
+                FolderBrowserDialog1.Description = "Escolha um caminho que contenha pastas dos utilizadores:"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)
