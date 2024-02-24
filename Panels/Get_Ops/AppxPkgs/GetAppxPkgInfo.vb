@@ -66,6 +66,23 @@ Public Class GetAppxPkgInfoDlg
                         Label9.Text = "Logo du magasin principal :"
                         Label10.Text = "Ce bien a été deviné par DISMTools sur la base de sa taille, ce qui peut conduire à un résultat incorrect. Si cela se produit, veuillez signaler un problème sur le dépôt GitHub."
                         Button2.Text = "Sauvegarder..."
+                    Case "PTB", "PTG"
+                        Text = "Obter informações do pacote AppX"
+                        Label1.Text = Text
+                        Label36.Text = "Informações do pacote AppX"
+                        Label37.Text = "Seleccione um pacote AppX instalado à esquerda para ver as suas informações aqui"
+                        Label22.Text = "Nome do pacote:"
+                        Label24.Text = "Nome de apresentação da aplicação:"
+                        Label26.Text = "Arquitetura:"
+                        Label31.Text = "ID do recurso:"
+                        Label41.Text = "Versão:"
+                        Label43.Text = "Está registada para algum utilizador?"
+                        Label4.Text = "Diretório de instalação:"
+                        Label6.Text = "Localização do manifesto do pacote:"
+                        Label8.Text = "Diretório de activos do logótipo da loja:"
+                        Label9.Text = "Ativo do logótipo principal da loja:"
+                        Label10.Text = "Este ativo foi adivinhado pelo DISMTools com base no seu tamanho, o que pode conduzir a um resultado incorreto. Se isso acontecer, comunique um problema no repositório do GitHub"
+                        Button2.Text = "Guardar..."
                 End Select
             Case 1
                 Text = "Get AppX package information"
@@ -118,6 +135,23 @@ Public Class GetAppxPkgInfoDlg
                 Label9.Text = "Logo du magasin principal :"
                 Label10.Text = "Ce bien a été deviné par DISMTools sur la base de sa taille, ce qui peut conduire à un résultat incorrect. Si cela se produit, veuillez signaler un problème sur le dépôt GitHub."
                 Button2.Text = "Sauvegarder..."
+            Case 4
+                Text = "Obter informações do pacote AppX"
+                Label1.Text = Text
+                Label36.Text = "Informações do pacote AppX"
+                Label37.Text = "Seleccione um pacote AppX instalado à esquerda para ver as suas informações aqui"
+                Label22.Text = "Nome do pacote:"
+                Label24.Text = "Nome de apresentação da aplicação:"
+                Label26.Text = "Arquitetura:"
+                Label31.Text = "ID do recurso:"
+                Label41.Text = "Versão:"
+                Label43.Text = "Está registada para algum utilizador?"
+                Label4.Text = "Diretório de instalação:"
+                Label6.Text = "Localização do manifesto do pacote:"
+                Label8.Text = "Diretório de activos do logótipo da loja:"
+                Label9.Text = "Ativo do logótipo principal da loja:"
+                Label10.Text = "Este ativo foi adivinhado pelo DISMTools com base no seu tamanho, o que pode conduzir a um resultado incorreto. Se isso acontecer, comunique um problema no repositório do GitHub"
+                Button2.Text = "Guardar..."
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
@@ -235,6 +269,8 @@ Public Class GetAppxPkgInfoDlg
                                     Label42.Text = "No"
                                 Case "FRA"
                                     Label42.Text = "Non"
+                                Case "PTB", "PTG"
+                                    Label42.Text = "Não"
                             End Select
                         Case 1
                             Label42.Text = "No"
@@ -242,6 +278,8 @@ Public Class GetAppxPkgInfoDlg
                             Label42.Text = "No"
                         Case 3
                             Label42.Text = "Non"
+                        Case 4
+                            Label42.Text = "Não"
                     End Select
                 Else
                     Select Case MainForm.Language
@@ -253,6 +291,8 @@ Public Class GetAppxPkgInfoDlg
                                     Label42.Text = "Sí"
                                 Case "FRA"
                                     Label42.Text = "Oui"
+                                Case "PTB", "PTG"
+                                    Label42.Text = "Sim"
                             End Select
                         Case 1
                             Label42.Text = "Yes"
@@ -260,6 +300,8 @@ Public Class GetAppxPkgInfoDlg
                             Label42.Text = "Sí"
                         Case 3
                             Label42.Text = "Oui"
+                        Case 4
+                            Label42.Text = "Sim"
                     End Select
                 End If
             Else
@@ -272,6 +314,8 @@ Public Class GetAppxPkgInfoDlg
                                 Label42.Text = "No"
                             Case "FRA"
                                 Label42.Text = "Non"
+                            Case "PTB", "PTG"
+                                Label42.Text = "Não"
                         End Select
                     Case 1
                         Label42.Text = "No"
@@ -279,6 +323,8 @@ Public Class GetAppxPkgInfoDlg
                         Label42.Text = "No"
                     Case 3
                         Label42.Text = "Non"
+                    Case 4
+                        Label42.Text = "Não"
                 End Select
             End If
             mainAsset = MainForm.GetStoreAppMainLogo(Label23.Text)

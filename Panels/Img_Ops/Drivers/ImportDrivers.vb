@@ -167,6 +167,32 @@ Public Class ImportDrivers
                         ImportSources(0) = "Image de Windows"
                         ImportSources(1) = "Installation en ligne"
                         ImportSources(2) = "Installation hors ligne"
+                    Case "PTB", "PTG"
+                        Text = "Importar controladores"
+                        Label1.Text = Text
+                        Label2.Text = "Este processo irá importar todos os controladores de terceiros da fonte que especificar para esta imagem ou instalação. Isto assegura que a imagem de destino terá a mesma compatibilidade de hardware da imagem de origem"
+                        Label3.Text = "Importar fonte:"
+                        Label4.Text = If(ImportSourceInt = 1, "Esta fonte não tem quaisquer configurações adicionais disponíveis.", "Escolha uma fonte listada acima para configurar as suas definições.")
+                        Label5.Text = "Imagem do Windows a partir da qual importar controladores:"
+                        Label6.Text = "Não é possível utilizar o destino de importação como fonte de importação"
+                        Label7.Text = "Instalação offline para importar controladores de:"
+                        Label8.Text = "Não é possível utilizar o destino de importação como fonte de importação"
+                        Label9.Text = "Ficheiro de imagem:"
+                        Button1.Text = "Escolher..."
+                        Button2.Text = "Atualizar"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Cancelar"
+                        ListView1.Columns(0).Text = "Letra da unidade"
+                        ListView1.Columns(1).Text = "Label da unidade"
+                        ListView1.Columns(2).Text = "Tipo de unidade"
+                        ListView1.Columns(3).Text = "Tamanho total"
+                        ListView1.Columns(4).Text = "Espaço livre disponível"
+                        ListView1.Columns(5).Text = "Formato da unidade"
+                        ListView1.Columns(6).Text = "Contém Windows?"
+                        ListView1.Columns(7).Text = "Versão do Windows"
+                        ImportSources(0) = "Imagem do Windows"
+                        ImportSources(1) = "Instalação online"
+                        ImportSources(2) = "Instalação offline"
                 End Select
             Case 1
                 Text = "Import drivers"
@@ -246,6 +272,32 @@ Public Class ImportDrivers
                 ImportSources(0) = "Image de Windows"
                 ImportSources(1) = "Installation en ligne"
                 ImportSources(2) = "Installation hors ligne"
+            Case 4
+                Text = "Importar controladores"
+                Label1.Text = Text
+                Label2.Text = "Este processo irá importar todos os controladores de terceiros da fonte que especificar para esta imagem ou instalação. Isto assegura que a imagem de destino terá a mesma compatibilidade de hardware da imagem de origem"
+                Label3.Text = "Importar fonte:"
+                Label4.Text = If(ImportSourceInt = 1, "Esta fonte não tem quaisquer configurações adicionais disponíveis.", "Escolha uma fonte listada acima para configurar as suas definições.")
+                Label5.Text = "Imagem do Windows a partir da qual importar controladores:"
+                Label6.Text = "Não é possível utilizar o destino de importação como fonte de importação"
+                Label7.Text = "Instalação offline para importar controladores de:"
+                Label8.Text = "Não é possível utilizar o destino de importação como fonte de importação"
+                Label9.Text = "Ficheiro de imagem:"
+                Button1.Text = "Escolher..."
+                Button2.Text = "Atualizar"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Cancelar"
+                ListView1.Columns(0).Text = "Letra da unidade"
+                ListView1.Columns(1).Text = "Label da unidade"
+                ListView1.Columns(2).Text = "Tipo de unidade"
+                ListView1.Columns(3).Text = "Tamanho total"
+                ListView1.Columns(4).Text = "Espaço livre disponível"
+                ListView1.Columns(5).Text = "Formato da unidade"
+                ListView1.Columns(6).Text = "Contém Windows?"
+                ListView1.Columns(7).Text = "Versão do Windows"
+                ImportSources(0) = "Imagem do Windows"
+                ImportSources(1) = "Instalação online"
+                ImportSources(2) = "Instalação offline"
         End Select
         ComboBox1.Items.AddRange(ImportSources)
         If ImportSourceInt >= 0 Then ComboBox1.SelectedIndex = ImportSourceInt
@@ -316,6 +368,8 @@ Public Class ImportDrivers
                         Label4.Text = If(ImportSourceInt = 1, "Este origen no tiene opciones adicionales disponibles.", "Escoja un origen mostrado arriba para configurar sus opciones.")
                     Case "FRA"
                         Label4.Text = If(ImportSourceInt = 1, "Cette source ne dispose pas de paramètres supplémentaires.", "Choisissez une source dans la liste ci-dessus pour configurer ses paramètres.")
+                    Case "PTB", "PTG"
+                        Label4.Text = If(ImportSourceInt = 1, "Esta origem não tem quaisquer configurações adicionais disponíveis.", "Escolha uma origem listada acima para configurar as suas configurações.")
                 End Select
             Case 1
                 Label4.Text = If(ImportSourceInt = 1, "This source doesn't have any additional settings available.", "Choose a source listed above to configure its settings.")
@@ -323,6 +377,8 @@ Public Class ImportDrivers
                 Label4.Text = If(ImportSourceInt = 1, "Este origen no tiene opciones adicionales disponibles.", "Escoja un origen mostrado arriba para configurar sus opciones.")
             Case 3
                 Label4.Text = If(ImportSourceInt = 1, "Cette source ne dispose pas de paramètres supplémentaires.", "Choisissez une source dans la liste ci-dessus pour configurer ses paramètres.")
+            Case 4
+                Label4.Text = If(ImportSourceInt = 1, "Esta origem não tem quaisquer configurações adicionais disponíveis.", "Escolha uma origem listada acima para configurar as suas configurações.")
         End Select
     End Sub
 

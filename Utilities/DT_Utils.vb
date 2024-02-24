@@ -1172,12 +1172,19 @@ Namespace Utilities
                     Else
                         Return Math.Round(ByteSize / 1024 ^ 3, 2) & " GB"
                     End If
-                Case Is >= 1099511627776
+                Case 1099511627776 To 1125899906842623
                     ' Use terabyte (TB) format
                     If UseCountryRepresentation Then
                         Return Math.Round(ByteSize / 1024 ^ 4, 2) & " To"
                     Else
                         Return Math.Round(ByteSize / 1024 ^ 4, 2) & " TB"
+                    End If
+                Case Is >= 1125899906842624
+                    ' In a hypothetical world where drives that are petabytes big become mainstream, use petabyte (PB) format
+                    If UseCountryRepresentation Then
+                        Return Math.Round(ByteSize / 1024 ^ 5, 2) & " Po"
+                    Else
+                        Return Math.Round(ByteSize / 1024 ^ 5, 2) & " PB"
                     End If
             End Select
             Return Nothing

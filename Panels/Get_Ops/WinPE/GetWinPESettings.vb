@@ -23,6 +23,8 @@ Public Class GetWinPESettings
                                 Label5.Text = "No se pudo obtener el valor"
                             Case "FRA"
                                 Label5.Text = "Impossible d'obtenir la valeur"
+                            Case "PTB", "PTG"
+                                Label5.Text = "Não foi possível obter o valor"
                         End Select
                     Case 1
                         Label5.Text = "Could not get value"
@@ -30,6 +32,8 @@ Public Class GetWinPESettings
                         Label5.Text = "No se pudo obtener el valor"
                     Case 3
                         Label5.Text = "Impossible d'obtenir la valeur"
+                    Case 4
+                        Label5.Text = "Não foi possível obter o valor"
                 End Select
                 Button1.Visible = False
             End If
@@ -46,6 +50,8 @@ Public Class GetWinPESettings
                                 Label6.Text = "No se pudo obtener el valor"
                             Case "FRA"
                                 Label6.Text = "Impossible d'obtenir la valeur"
+                            Case "PTB", "PTG"
+                                Label6.Text = "Não foi possível obter o valor"
                         End Select
                     Case 1
                         Label6.Text = "Could not get value"
@@ -53,6 +59,8 @@ Public Class GetWinPESettings
                         Label6.Text = "No se pudo obtener el valor"
                     Case 3
                         Label6.Text = "Impossible d'obtenir la valeur"
+                    Case 4
+                        Label6.Text = "Não foi possível obter o valor"
                 End Select
                 Button2.Visible = False
             End If
@@ -67,6 +75,8 @@ Public Class GetWinPESettings
                                 msg = "No se pudo obtener el valor"
                             Case "FRA"
                                 msg = "Impossible d'obtenir la valeur"
+                            Case "PTB", "PTG"
+                                msg = "Não foi possível obter o valor"
                         End Select
                     Case 1
                         msg = "Could not get value"
@@ -74,13 +84,15 @@ Public Class GetWinPESettings
                         msg = "No se pudo obtener el valor"
                     Case 3
                         msg = "Impossible d'obtenir la valeur"
+                    Case 4
+                        msg = "Não foi possível obter o valor"
                 End Select
                 ' Get target path first
                 Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("PE_SOFT\Microsoft\Windows NT\CurrentVersion\WinPE", False)
                 Label5.Text = regKey.GetValue("InstRoot", msg).ToString()
                 regKey.Close()
                 regKey = Registry.LocalMachine.OpenSubKey("PE_SYS\ControlSet001\Services\FBWF", False)
-                Dim scSize As String = regKey.GetValue("WinPECacheThreshold","").ToString()
+                Dim scSize As String = regKey.GetValue("WinPECacheThreshold", "").ToString()
                 Label6.Text = If(Not scSize = "", scSize & " MB", msg)
                 regKey.Close()
             Catch ex As Exception
@@ -135,6 +147,16 @@ Public Class GetWinPESettings
                         Button2.Text = "Changer..."
                         OK_Button.Text = "OK"
                         Button4.Text = "Sauvegarder..."
+                    Case "PTB", "PTG"
+                        Text = "Obter as configurações do Windows PE"
+                        Label1.Text = Text
+                        Label2.Text = "Estas são as configurações do Windows PE para esta imagem:"
+                        Label3.Text = "Localização do destino:"
+                        Label4.Text = "Espaço temporário:"
+                        Button1.Text = "Alterar..."
+                        Button2.Text = "Alterar..."
+                        Button4.Text = "Guardar..."
+                        OK_Button.Text = "OK"
                 End Select
             Case 1
                 Text = "Get Windows PE settings"
@@ -166,6 +188,16 @@ Public Class GetWinPESettings
                 Button2.Text = "Changer..."
                 OK_Button.Text = "OK"
                 Button4.Text = "Sauvegarder..."
+            Case 4
+                Text = "Obter as configurações do Windows PE"
+                Label1.Text = Text
+                Label2.Text = "Estas são as configurações do Windows PE para esta imagem:"
+                Label3.Text = "Localização do destino:"
+                Label4.Text = "Espaço temporário:"
+                Button1.Text = "Alterar..."
+                Button2.Text = "Alterar..."
+                Button4.Text = "Guardar..."
+                OK_Button.Text = "OK"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""

@@ -69,6 +69,21 @@ Public Class GetCapabilityInfoDlg
                         ListView1.Columns(0).Text = "Identité de la capacité"
                         ListView1.Columns(1).Text = "État"
                         Button2.Text = "Sauvegarder..."
+                    Case "PTB", "PTG"
+                        Text = "Obter informações sobre as capacidades"
+                        Label1.Text = Text
+                        Label2.Text = "Pronto"
+                        Label22.Text = "Identidade da capacidade:"
+                        Label24.Text = "Nome da capacidade:"
+                        Label26.Text = "Estado da capacidade:"
+                        Label31.Text = "Nome de apresentação:"
+                        Label36.Text = "Informação sobre a capacidade"
+                        Label37.Text = "Seleccione uma capacidade instalada à esquerda para ver a sua informação aqui"
+                        Label41.Text = "Descrição da capacidade:"
+                        Label43.Text = "Tamanhos:"
+                        ListView1.Columns(0).Text = "Identidade da capacidade"
+                        ListView1.Columns(1).Text = "Estado"
+                        Button2.Text = "Guardar..."
                 End Select
             Case 1
                 Text = "Get capability information"
@@ -115,6 +130,21 @@ Public Class GetCapabilityInfoDlg
                 ListView1.Columns(0).Text = "Identité de la capacité"
                 ListView1.Columns(1).Text = "État"
                 Button2.Text = "Sauvegarder..."
+            Case 4
+                Text = "Obter informações sobre as capacidades"
+                Label1.Text = Text
+                Label2.Text = "Pronto"
+                Label22.Text = "Identidade da capacidade:"
+                Label24.Text = "Nome da capacidade:"
+                Label26.Text = "Estado da capacidade:"
+                Label31.Text = "Nome de apresentação:"
+                Label36.Text = "Informação sobre a capacidade"
+                Label37.Text = "Seleccione uma capacidade instalada à esquerda para ver a sua informação aqui"
+                Label41.Text = "Descrição da capacidade:"
+                Label43.Text = "Tamanhos:"
+                ListView1.Columns(0).Text = "Identidade da capacidade"
+                ListView1.Columns(1).Text = "Estado"
+                Button2.Text = "Guardar..."
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
@@ -146,6 +176,8 @@ Public Class GetCapabilityInfoDlg
                                     msg = "Los procesos en segundo plano deben haber completado antes de obtener información de la característica. Esperaremos hasta que hayan completado"
                                 Case "FRA"
                                     msg = "Les processus en plan doivent être terminés avant d'afficher les caractéristiques. Nous attendrons qu'ils soient terminés"
+                                Case "PTB", "PTG"
+                                    msg = "Os processos em segundo plano têm de estar concluídos antes de mostrar informações sobre as características. Vamos esperar até que estejam concluídos"
                             End Select
                         Case 1
                             msg = "Background processes need to have completed before showing feature information. We'll wait until they have completed"
@@ -153,6 +185,8 @@ Public Class GetCapabilityInfoDlg
                             msg = "Los procesos en segundo plano deben haber completado antes de obtener información de la característica. Esperaremos hasta que hayan completado"
                         Case 3
                             msg = "Les processus en plan doivent être terminés avant d'afficher les caractéristiques. Nous attendrons qu'ils soient terminés"
+                        Case 4
+                            msg = "Os processos em segundo plano têm de estar concluídos antes de mostrar informações sobre as características. Vamos esperar até que estejam concluídos"
                     End Select
                     MsgBox(msg, vbOKOnly + vbInformation, Label1.Text)
                     Select Case MainForm.Language
@@ -164,6 +198,8 @@ Public Class GetCapabilityInfoDlg
                                     Label2.Text = "Esperando a que terminen los procesos en segundo plano..."
                                 Case "FRA"
                                     Label2.Text = "Attente de la fin des processus en arrière plan..."
+                                Case "PTB", "PTG"
+                                    Label2.Text = "À espera que os processos em segundo plano terminem..."
                             End Select
                         Case 1
                             Label2.Text = "Waiting for background processes to finish..."
@@ -171,6 +207,8 @@ Public Class GetCapabilityInfoDlg
                             Label2.Text = "Esperando a que terminen los procesos en segundo plano..."
                         Case 3
                             Label2.Text = "Attente de la fin des processus en arrière plan..."
+                        Case 4
+                            Label2.Text = "À espera que os processos em segundo plano terminem..."
                     End Select
                     While MainForm.ImgBW.IsBusy
                         Application.DoEvents()
@@ -199,6 +237,8 @@ Public Class GetCapabilityInfoDlg
                                 Label2.Text = "Preparándonos para obtener información de la funcionalidad..."
                             Case "FRA"
                                 Label2.Text = "Préparation de l'obtention des informations de la capacité en cours..."
+                            Case "PTB", "PTG"
+                                Label2.Text = "Preparar-se para obter informações sobre a capacidade..."
                         End Select
                     Case 1
                         Label2.Text = "Preparing to get capability information..."
@@ -206,6 +246,8 @@ Public Class GetCapabilityInfoDlg
                         Label2.Text = "Preparándonos para obtener información de la funcionalidad..."
                     Case 3
                         Label2.Text = "Préparation de l'obtention des informations de la capacité en cours..."
+                    Case 4
+                        Label2.Text = "Preparar-se para obter informações sobre a capacidade..."
                 End Select
                 Application.DoEvents()
                 Try
@@ -220,6 +262,8 @@ Public Class GetCapabilityInfoDlg
                                         Label2.Text = "Obteniendo información de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
                                     Case "FRA"
                                         Label2.Text = "Obtention des informations de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & " en cours..."
+                                    Case "PTB", "PTG"
+                                        Label2.Text = "Obter informações de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
                                 End Select
                             Case 1
                                 Label2.Text = "Getting information from " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
@@ -227,6 +271,8 @@ Public Class GetCapabilityInfoDlg
                                 Label2.Text = "Obteniendo información de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
                             Case 3
                                 Label2.Text = "Obtention des informations de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & " en cours..."
+                            Case 4
+                                Label2.Text = "Obter informações de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
                         End Select
                         Application.DoEvents()
                         Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, ListView1.FocusedItem.SubItems(0).Text)
@@ -247,6 +293,9 @@ Public Class GetCapabilityInfoDlg
                                     Case "FRA"
                                         Label42.Text = "Taille du téléchargement : " & capInfo.DownloadSize & " octets (~" & Converters.BytesToReadableSize(capInfo.DownloadSize, True) & ")" & CrLf & _
                                             "Taille d'installation : " & capInfo.InstallSize & " octets (~" & Converters.BytesToReadableSize(capInfo.InstallSize, True) & ")"
+                                    Case "PTB", "PTG"
+                                        Label42.Text = "Tamanho do descarregamento: " & capInfo.DownloadSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")" & CrLf & _
+                                            "Tamanho da instalação: " & capInfo.InstallSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")"
                                 End Select
                             Case 1
                                 Label42.Text = "Download size: " & capInfo.DownloadSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")" & CrLf & _
@@ -257,6 +306,9 @@ Public Class GetCapabilityInfoDlg
                             Case 3
                                 Label42.Text = "Taille du téléchargement : " & capInfo.DownloadSize & " octets (~" & Converters.BytesToReadableSize(capInfo.DownloadSize, True) & ")" & CrLf & _
                                     "Taille d'installation : " & capInfo.InstallSize & " octets (~" & Converters.BytesToReadableSize(capInfo.InstallSize, True) & ")"
+                            Case 4
+                                Label42.Text = "Tamanho do descarregamento: " & capInfo.DownloadSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")" & CrLf & _
+                                    "Tamanho da instalação: " & capInfo.InstallSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")"
                         End Select
                     End Using
                 Catch NRE As NullReferenceException
@@ -273,6 +325,8 @@ Public Class GetCapabilityInfoDlg
                                     msg = "No pudimos obtener información de la funcionalidad. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                                 Case "FRA"
                                     msg = "Impossible d'obtenir des informations sur les capacités. Raison : " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                                Case "PTB", "PTG"
+                                    msg = "Não foi possível obter informações sobre a capacidade. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                             End Select
                         Case 1
                             msg = "Could not get capability information. Reason: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
@@ -280,6 +334,8 @@ Public Class GetCapabilityInfoDlg
                             msg = "No pudimos obtener información de la funcionalidad. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                         Case 3
                             msg = "Impossible d'obtenir des informations sur les capacités. Raison : " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                        Case 4
+                            msg = "Não foi possível obter informações sobre a capacidade. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                     End Select
                     MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
                 Finally
@@ -294,6 +350,8 @@ Public Class GetCapabilityInfoDlg
                                 Label2.Text = "Listo"
                             Case "FRA"
                                 Label2.Text = "Prêt"
+                            Case "PTB", "PTG"
+                                Label2.Text = "Pronto"
                         End Select
                     Case 1
                         Label2.Text = "Ready"
@@ -301,6 +359,8 @@ Public Class GetCapabilityInfoDlg
                         Label2.Text = "Listo"
                     Case 3
                         Label2.Text = "Prêt"
+                    Case 4
+                        Label2.Text = "Pronto"
                 End Select
                 Panel4.Visible = True
                 Panel7.Visible = False

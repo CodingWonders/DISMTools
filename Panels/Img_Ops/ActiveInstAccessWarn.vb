@@ -44,6 +44,15 @@ Public Class ActiveInstAccessWarn
                             "Si vous comprenez cet avertissement et que vous souhaitez continuer, cliquez sur OK. Sinon, cliquez sur OK, puis sur " & Quote & "Décharger projet" & Quote & ". Cela mettra fin à la gestion de l'installation en ligne."
                         Label2.Text = "Le projet actuel sera déchargé."
                         OK_Button.Text = "OK"
+                    Case "PTB", "PTG"
+                        Text = "Acerca da gestão da instalação ativa"
+                        Label1.Text = "Está prestes a entrar no modo de gestão da instalação online, que lhe permite efetuar alterações à sua instalação ativa do Windows." & CrLf & CrLf & _
+                            "Dado que este modo permite-lhe modificar a sua instalação, deve ser extremamente cuidadoso ao executar tarefas com este programa." & CrLf & CrLf & _
+                            "Se efetuar uma operação descuidada numa imagem online, pode quebrá-la, ao ponto de tornar a instalação impossível de arrancar." & CrLf & CrLf & _
+                            "NÃO NOS RESPONSABILIZAMOS por qualquer dano causado à sua instalação ativa. Se ficar com um sistema não arrancável, deve reinstalar o Windows (fazendo primeiro uma cópia de segurança dos seus ficheiros, se possível)" & CrLf & CrLf & _
+                            "Se compreender este aviso e pretender continuar, clique em OK. Caso contrário, clique em OK e, em seguida, clique em " & Quote & "Descarregar projeto" & Quote & ". Isto irá terminar a gestão da instalação online."
+                        Label2.Text = "O projeto atual será descarregado."
+                        OK_Button.Text = "OK"
                 End Select
             Case 1
                 Text = "About active installation management"
@@ -71,6 +80,15 @@ Public Class ActiveInstAccessWarn
                     "Nous NE SOMMES PAS RESPONSABLES des dommages causés à votre installation active. Si vous vous retrouvez avec un système non amorçable, vous devez réinstaller Windows (en sauvegardant d'abord vos fichiers, si possible)." & CrLf & CrLf & _
                     "Si vous comprenez cet avertissement et que vous souhaitez continuer, cliquez sur OK. Sinon, cliquez sur OK, puis sur " & Quote & "Décharger projet" & Quote & ". Cela mettra fin à la gestion de l'installation en ligne."
                 Label2.Text = "Le projet actuel sera déchargé."
+                OK_Button.Text = "OK"
+            Case 4
+                Text = "Acerca da gestão da instalação ativa"
+                Label1.Text = "Está prestes a entrar no modo de gestão da instalação online, que lhe permite efetuar alterações à sua instalação ativa do Windows." & CrLf & CrLf & _
+                    "Dado que este modo permite-lhe modificar a sua instalação, deve ser extremamente cuidadoso ao executar tarefas com este programa." & CrLf & CrLf & _
+                    "Se efetuar uma operação descuidada numa imagem online, pode quebrá-la, ao ponto de tornar a instalação impossível de arrancar." & CrLf & CrLf & _
+                    "NÃO NOS RESPONSABILIZAMOS por qualquer dano causado à sua instalação ativa. Se ficar com um sistema não arrancável, deve reinstalar o Windows (fazendo primeiro uma cópia de segurança dos seus ficheiros, se possível)" & CrLf & CrLf & _
+                    "Se compreender este aviso e pretender continuar, clique em OK. Caso contrário, clique em OK e, em seguida, clique em " & Quote & "Descarregar projeto" & Quote & ". Isto irá terminar a gestão da instalação online."
+                Label2.Text = "O projeto atual será descarregado."
                 OK_Button.Text = "OK"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then

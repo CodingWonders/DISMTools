@@ -114,6 +114,38 @@ Public Class GetImgInfoDlg
                         ListView1.Columns(0).Text = "Index"
                         ListView1.Columns(1).Text = "Nom de l'image"
                         OpenFileDialog1.Title = "Spécifier l'image à partir de laquelle l'information doit être obtenue"
+                    Case "PTB", "PTG"
+                        Text = "Obter informações sobre a imagem"
+                        Label1.Text = Text
+                        Label2.Text = "Ficheiro de imagem de onde obter informações:"
+                        Label3.Text = "Lista de índices do ficheiro de imagem:"
+                        Label22.Text = "Versão da imagem:"
+                        Label24.Text = "Nome da imagem:"
+                        Label26.Text = "Descrição da imagem:"
+                        Label31.Text = "Tamanho da imagem:"
+                        Label41.Text = "Suporta WIMBoot?"
+                        Label43.Text = "Arquitetura:"
+                        Label47.Text = "HAL:"
+                        Label33.Text = "Service Pack build:"
+                        Label28.Text = "Nível do Service Pack:"
+                        Label30.Text = "Tipo de instalação:"
+                        Label39.Text = "Edição:"
+                        Label45.Text = "Tipo de produto:"
+                        Label5.Text = "Conjunto de produtos:"
+                        Label7.Text = "Diretório raiz do sistema:"
+                        Label9.Text = "Contagem de ficheiros:"
+                        Label11.Text = "Datas:"
+                        Label13.Text = "Idiomas instalados:"
+                        Label36.Text = "Informações sobre a imagem"
+                        Label37.Text = "Seleccione um índice na vista de lista à esquerda para ver a respectiva informação aqui"
+                        RadioButton1.Text = "Imagem atualmente montada"
+                        RadioButton2.Text = "Outra imagem"
+                        Button1.Text = " Navegar..."
+                        Button2.Text = "Guardar..."
+                        Button3.Text = "Selecionar..."
+                        ListView1.Columns(0).Text = "Índice"
+                        ListView1.Columns(1).Text = "Nome da imagem"
+                        OpenFileDialog1.Title = "Especificar a imagem da qual obter a informação"
                 End Select
             Case 1
                 Text = "Get image information"
@@ -211,6 +243,38 @@ Public Class GetImgInfoDlg
                 ListView1.Columns(0).Text = "Index"
                 ListView1.Columns(1).Text = "Nom de l'image"
                 OpenFileDialog1.Title = "Spécifier l'image à partir de laquelle l'information doit être obtenue"
+            Case 4
+                Text = "Obter informações sobre a imagem"
+                Label1.Text = Text
+                Label2.Text = "Ficheiro de imagem de onde obter informações:"
+                Label3.Text = "Lista de índices do ficheiro de imagem:"
+                Label22.Text = "Versão da imagem:"
+                Label24.Text = "Nome da imagem:"
+                Label26.Text = "Descrição da imagem:"
+                Label31.Text = "Tamanho da imagem:"
+                Label41.Text = "Suporta WIMBoot?"
+                Label43.Text = "Arquitetura:"
+                Label47.Text = "HAL:"
+                Label33.Text = "Service Pack build:"
+                Label28.Text = "Nível do Service Pack:"
+                Label30.Text = "Tipo de instalação:"
+                Label39.Text = "Edição:"
+                Label45.Text = "Tipo de produto:"
+                Label5.Text = "Conjunto de produtos:"
+                Label7.Text = "Diretório raiz do sistema:"
+                Label9.Text = "Contagem de ficheiros:"
+                Label11.Text = "Datas:"
+                Label13.Text = "Idiomas instalados:"
+                Label36.Text = "Informações sobre a imagem"
+                Label37.Text = "Seleccione um índice na vista de lista à esquerda para ver a respectiva informação aqui"
+                RadioButton1.Text = "Imagem atualmente montada"
+                RadioButton2.Text = "Outra imagem"
+                Button1.Text = " Navegar..."
+                Button2.Text = "Guardar..."
+                Button3.Text = "Selecionar..."
+                ListView1.Columns(0).Text = "Índice"
+                ListView1.Columns(1).Text = "Nome da imagem"
+                OpenFileDialog1.Title = "Especificar a imagem da qual obter a informação"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
@@ -290,6 +354,8 @@ Public Class GetImgInfoDlg
                             msg = "No pudimos obtener información de este archivo de imagen. Razón:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                         Case "FRA"
                             msg = "Impossible de recueillir des informations sur ce fichier de l'image. Raison :" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                        Case "PTB", "PTG"
+                            msg = "Não foi possível recolher informações sobre este ficheiro de imagem. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                     End Select
                 Case 1
                     msg = "Could not gather information of this image file. Reason:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
@@ -297,6 +363,8 @@ Public Class GetImgInfoDlg
                     msg = "No pudimos obtener información de este archivo de imagen. Razón:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                 Case 3
                     msg = "Impossible de recueillir des informations sur ce fichier de l'image. Raison :" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                Case 4
+                    msg = "Não foi possível recolher informações sobre este ficheiro de imagem. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
             End Select
             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
         Finally
@@ -318,6 +386,8 @@ Public Class GetImgInfoDlg
                         Label32.Text = ImageInfoList(Index).ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(ImageInfoList(Index).ImageSize) & ")"
                     Case "FRA"
                         Label32.Text = ImageInfoList(Index).ImageSize.ToString("N0") & " octets (~" & Converters.BytesToReadableSize(ImageInfoList(Index).ImageSize, True) & ")"
+                    Case "PTB", "PTG"
+                        Label32.Text = ImageInfoList(Index).ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(ImageInfoList(Index).ImageSize) & ")"
                 End Select
             Case 1
                 Label32.Text = ImageInfoList(Index).ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(ImageInfoList(Index).ImageSize) & ")"
@@ -325,6 +395,8 @@ Public Class GetImgInfoDlg
                 Label32.Text = ImageInfoList(Index).ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(ImageInfoList(Index).ImageSize) & ")"
             Case 3
                 Label32.Text = ImageInfoList(Index).ImageSize.ToString("N0") & " octets (~" & Converters.BytesToReadableSize(ImageInfoList(Index).ImageSize, True) & ")"
+            Case 4
+                Label32.Text = ImageInfoList(Index).ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(ImageInfoList(Index).ImageSize) & ")"
         End Select
 
         Label42.Text = Casters.CastDismArchitecture(ImageInfoList(Index).Architecture, True)
@@ -337,6 +409,8 @@ Public Class GetImgInfoDlg
                         Label46.Text = If(Not ImageInfoList(Index).Hal = "", ImageInfoList(Index).Hal, "No definida por la imagen")
                     Case "FRA"
                         Label46.Text = If(Not ImageInfoList(Index).Hal = "", ImageInfoList(Index).Hal, "Non défini par l'image")
+                    Case "PTB", "PTG"
+                        Label46.Text = If(Not ImageInfoList(Index).Hal = "", ImageInfoList(Index).Hal, "Não definido pela imagem")
                 End Select
             Case 1
                 Label46.Text = If(Not ImageInfoList(Index).Hal = "", ImageInfoList(Index).Hal, "Undefined by the image")
@@ -344,6 +418,8 @@ Public Class GetImgInfoDlg
                 Label46.Text = If(Not ImageInfoList(Index).Hal = "", ImageInfoList(Index).Hal, "No definida por la imagen")
             Case 3
                 Label46.Text = If(Not ImageInfoList(Index).Hal = "", ImageInfoList(Index).Hal, "Non défini par l'image")
+            Case 4
+                Label46.Text = If(Not ImageInfoList(Index).Hal = "", ImageInfoList(Index).Hal, "Não definido pela imagem")
         End Select
         Label34.Text = ImageInfoList(Index).ProductVersion.Revision
         Label27.Text = ImageInfoList(Index).SpLevel
@@ -363,6 +439,8 @@ Public Class GetImgInfoDlg
                             LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(ImageInfoList(Index).DefaultLanguage.Name = language.Name, ", predeterminado", "") & ")")
                         Case "FRA"
                             LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(ImageInfoList(Index).DefaultLanguage.Name = language.Name, ", défaut", "") & ")")
+                        Case "PTB", "PTG"
+                            LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(ImageInfoList(Index).DefaultLanguage.Name = language.Name, ", predefinido", "") & ")")
                     End Select
                 Case 1
                     LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(ImageInfoList(Index).DefaultLanguage.Name = language.Name, ", default", "") & ")")
@@ -370,6 +448,8 @@ Public Class GetImgInfoDlg
                     LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(ImageInfoList(Index).DefaultLanguage.Name = language.Name, ", predeterminado", "") & ")")
                 Case 3
                     LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(ImageInfoList(Index).DefaultLanguage.Name = language.Name, ", défaut", "") & ")")
+                Case 4
+                    LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(ImageInfoList(Index).DefaultLanguage.Name = language.Name, ", predefinido", "") & ")")
             End Select
         Next
         Select Case MainForm.Language
@@ -387,6 +467,10 @@ Public Class GetImgInfoDlg
                         Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " fichiers dans " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " répertoires"
                         Label10.Text = "Date de création : " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
                             "Date de modification : " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
+                    Case "PTB", "PTG"
+                        Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " ficheiros em " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directórios"
+                        Label10.Text = "Data de criação: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
+                            "Data de modificação: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
                 End Select
             Case 1
                 Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " files in " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directories"
@@ -400,6 +484,10 @@ Public Class GetImgInfoDlg
                 Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " fichiers dans " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " répertoires"
                 Label10.Text = "Date de création : " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
                     "Date de modification : " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
+            Case 4
+                Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " ficheiros em " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directórios"
+                Label10.Text = "Data de criação: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
+                    "Data de modificação: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
         End Select
 
         ' The DISM API part is over. Switch to regular DISM.exe mode for missing details
@@ -522,6 +610,8 @@ Public Class GetImgInfoDlg
                         Label23.Text &= " (actualización de características: " & FeatUpd & ")"
                     Case "FRA"
                         Label23.Text &= "(m-à-j des caractéristiques: " & FeatUpd & ")"
+                    Case "PTB", "PTG"
+                        Label23.Text &= " (atualização de funcionalidades: " & FeatUpd & ")"
                 End Select
             Case 1
                 Label23.Text &= " (feature update: " & FeatUpd & ")"
@@ -529,6 +619,8 @@ Public Class GetImgInfoDlg
                 Label23.Text &= " (actualización de características: " & FeatUpd & ")"
             Case 3
                 Label23.Text &= "(m-à-j des caractéristiques: " & FeatUpd & ")"
+            Case 4
+                Label23.Text &= " (atualização de funcionalidades: " & FeatUpd & ")"
         End Select
     End Sub
 

@@ -36,6 +36,10 @@ Public Class AppInstallerDownloader
                         Text = "Téléchargement du paquet de l'application en cours..."
                         Label1.Text = "Veuillez patienter pendant que DISMTools télécharge le paquet d'application pour l'ajouter à cette image. Cela peut prendre un certain temps, en fonction de la vitesse de votre connexion réseau."
                         Label2.Text = "Veuillez patienter..."
+                    Case "PTB", "PTG"
+                        Text = "Descarregando o pacote da aplicação..."
+                        Label1.Text = "Aguarde enquanto o DISMTools baixa o pacote de aplicativos para adicioná-lo a esta imagem. Isso pode levar algum tempo, dependendo da velocidade da conexão de rede."
+                        Label2.Text = "Aguarde..."
                 End Select
             Case 1
                 Text = "Downloading application package..."
@@ -49,6 +53,10 @@ Public Class AppInstallerDownloader
                 Text = "Téléchargement du paquet de l'application en cours..."
                 Label1.Text = "Veuillez patienter pendant que DISMTools télécharge le paquet d'application pour l'ajouter à cette image. Cela peut prendre un certain temps, en fonction de la vitesse de votre connexion réseau."
                 Label2.Text = "Veuillez patienter..."
+            Case 4
+                Text = "Descarregando o pacote da aplicação..."
+                Label1.Text = "Aguarde enquanto o DISMTools baixa o pacote de aplicativos para adicioná-lo a esta imagem. Isso pode levar algum tempo, dependendo da velocidade da conexão de rede."
+                Label2.Text = "Aguarde..."
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)
@@ -128,6 +136,8 @@ Public Class AppInstallerDownloader
                         progress = "Descargando paquete de aplicación principal... (" & BytesToReadableSize(e.BytesReceived) & " de " & BytesToReadableSize(e.TotalBytesToReceive) & " descargados)"
                     Case "FRA"
                         progress = "Téléchargement de l'application principale en cours... (" & BytesToReadableSize(e.BytesReceived, True) & " of " & BytesToReadableSize(e.TotalBytesToReceive, True) & " téléchargés)"
+                    Case "PTB", "PTG"
+                        progress = "Descarregar o pacote da aplicação principal... (" & BytesToReadableSize(e.BytesReceived) & " de " & BytesToReadableSize(e.TotalBytesToReceive) & " descarregados)"
                 End Select
             Case 1
                 progress = "Downloading main application package... (" & BytesToReadableSize(e.BytesReceived) & " of " & BytesToReadableSize(e.TotalBytesToReceive) & " downloaded)"
@@ -135,6 +145,8 @@ Public Class AppInstallerDownloader
                 progress = "Descargando paquete de aplicación principal... (" & BytesToReadableSize(e.BytesReceived) & " de " & BytesToReadableSize(e.TotalBytesToReceive) & " descargados)"
             Case 3
                 progress = "Téléchargement de l'application principale en cours... (" & BytesToReadableSize(e.BytesReceived, True) & " of " & BytesToReadableSize(e.TotalBytesToReceive, True) & " téléchargés)"
+            Case 4
+                progress = "Descarregar o pacote da aplicação principal... (" & BytesToReadableSize(e.BytesReceived) & " de " & BytesToReadableSize(e.TotalBytesToReceive) & " descarregados)"
         End Select
     End Sub
 
