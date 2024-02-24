@@ -2046,17 +2046,9 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Bugfixes
-        '''
-        '''- Fixed some minor text editor issues in the Configuration List Editor
-        '''- Fixed an issue where the &quot;Pick...&quot; button in the image file information dialog would not be disabled automatically when selecting &quot;Currently mounted image&quot;
-        '''
-        '''New features
-        '''
-        '''- You can now view the general information of a driver file
-        '''- A help entry for downloading applications has been added to the AppX package addition dialog
-        '''- You can now perform operating system uninstallation tasks
-        '''  - Setting the uninstall window        ''' [resto de la cadena truncado]&quot;;.
+        '''  Busca una cadena traducida similar a - Portuguese translations are halfway done
+        '''- CODE: size representation procedures in the DISMTools Utilities class now support petabytes (PB)
+        '''- Project creation times have been reduced.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

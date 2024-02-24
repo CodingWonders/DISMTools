@@ -132,7 +132,7 @@ Public Class PrgAbout
                     Case "PTB", "PTG"
                         Text = "Acerca deste programa"
                         Label1.Text = "DISMTools - versão " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
-                        Label2.Text = "O DISMTools permite-lhe implementar, gerir e efetuar a manutenção de imagens do Windows com facilidade, graças a uma GUI"
+                        Label2.Text = "DISMTools permite-lhe implementar, gerir e efetuar a manutenção de imagens do Windows com facilidade, graças a uma GUI"
                         Label3.Text = "Estes recursos e componentes foram utilizados na criação deste programa:"
                         Label4.Text = "Recursos"
                         Label5.Text = "Fluência"
@@ -285,7 +285,7 @@ Public Class PrgAbout
             Case 4
                 Text = "Acerca deste programa"
                 Label1.Text = "DISMTools - versão " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
-                Label2.Text = "O DISMTools permite-lhe implementar, gerir e efetuar a manutenção de imagens do Windows com facilidade, graças a uma GUI"
+                Label2.Text = "DISMTools permite-lhe implementar, gerir e efetuar a manutenção de imagens do Windows com facilidade, graças a uma GUI"
                 Label3.Text = "Estes recursos e componentes foram utilizados na criação deste programa:"
                 Label4.Text = "Recursos"
                 Label5.Text = "Fluência"

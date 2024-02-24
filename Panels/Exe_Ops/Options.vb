@@ -598,7 +598,7 @@ Public Class Options
                         Label50.Text = "Personalização"
                         Label51.Text = "Registos"
                         Label52.Text = "Operações de imagem"
-                        Label53.Text = "Diretório Scratch"
+                        Label53.Text = "Diretório temporário"
                         Label54.Text = "Saída do programa"
                         Label55.Text = "Processos em segundo plano"
                         Label56.Text = "Deteção de imagens"
@@ -673,7 +673,7 @@ Public Class Options
                         GroupBox5.Text = "Associações"
                         Label9.Text = "Guardar informação da imagem"
                         LinkLabel1.Text = "O programa irá ativar ou desativar determinadas funcionalidades de acordo com o que a versão DISM suporta. Como é que isso vai afetar a minha utilização deste programa e que funcionalidades serão desactivadas em conformidade?"
-                        LinkLabel1.LinkArea = New LinkArea(97, 100)
+                        LinkLabel1.LinkArea = New LinkArea(107, 118)
                         LinkLabel2.Text = "Saiba mais sobre os processos em segundo plano"
                         LogSFD.Title = "Especificar a localização do ficheiro de registo"
                         'RadioButton1.Text = "Imagem do Windows montada"
@@ -967,7 +967,7 @@ Public Class Options
                 Label50.Text = "Personalização"
                 Label51.Text = "Registos"
                 Label52.Text = "Operações de imagem"
-                Label53.Text = "Diretório Scratch"
+                Label53.Text = "Diretório temporário"
                 Label54.Text = "Saída do programa"
                 Label55.Text = "Processos em segundo plano"
                 Label56.Text = "Deteção de imagens"
@@ -1042,7 +1042,7 @@ Public Class Options
                 GroupBox5.Text = "Associações"
                 Label9.Text = "Guardar informação da imagem"
                 LinkLabel1.Text = "O programa irá ativar ou desativar determinadas funcionalidades de acordo com o que a versão DISM suporta. Como é que isso vai afetar a minha utilização deste programa e que funcionalidades serão desactivadas em conformidade?"
-                LinkLabel1.LinkArea = New LinkArea(97, 100)
+                LinkLabel1.LinkArea = New LinkArea(107, 118)
                 LinkLabel2.Text = "Saiba mais sobre os processos em segundo plano"
                 LogSFD.Title = "Especificar a localização do ficheiro de registo"
                 'RadioButton1.Text = "Imagem do Windows montada"
