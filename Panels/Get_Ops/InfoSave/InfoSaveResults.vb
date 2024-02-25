@@ -53,6 +53,11 @@ Public Class InfoSaveResults
                         Label1.Text = "Le rapport a été sauvegardé à l'emplacement que vous aviez indiqué et son contenu s'affiche dans la zone de texte ci-dessous."
                         Button1.Text = "OK"
                         Button2.Text = "Imprimer..."
+                    Case "PTB", "PTG"
+                        Text = "Resultados do relatório de informações sobre imagens"
+                        Label1.Text = "O relatório foi guardado na localização que especificou e o seu conteúdo será apresentado na caixa de texto abaixo."
+                        Button1.Text = "OK"
+                        Button2.Text = "Imprimir..."
                 End Select
             Case 1
                 Text = "Image information report results"
@@ -69,6 +74,11 @@ Public Class InfoSaveResults
                 Label1.Text = "Le rapport a été sauvegardé à l'emplacement que vous aviez indiqué et son contenu s'affiche dans la zone de texte ci-dessous."
                 Button1.Text = "OK"
                 Button2.Text = "Imprimer..."
+            Case 4
+                Text = "Resultados do relatório de informações sobre imagens"
+                Label1.Text = "O relatório foi guardado na localização que especificou e o seu conteúdo será apresentado na caixa de texto abaixo."
+                Button1.Text = "OK"
+                Button2.Text = "Imprimir..."
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)

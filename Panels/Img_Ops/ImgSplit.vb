@@ -20,6 +20,8 @@ Public Class ImgSplit
                                 MsgBox("Especifique un nombre y un directorio para el archivo SWM de destino e inténtelo de nuevo. Asegúrese también de que el directorio de destino exista.", vbOKOnly + vbCritical, Label1.Text)
                             Case "FRA"
                                 MsgBox("Veuillez indiquer un nom et un chemin pour le fichier SWM cible et réessayez. Assurez-vous également que le chemin d'accès à la cible existe.", vbOKOnly + vbCritical, Label1.Text)
+                            Case "PTB", "PTG"
+                                MsgBox("Especifique um nome e uma localização para o ficheiro SWM de destino e tente novamente. Além disso, certifique-se de que o caminho de destino existe.", vbOKOnly + vbCritical, Label1.Text)
                         End Select
                     Case 1
                         MsgBox("Please specify a name and path for the target SWM file and try again. Also, make sure that the target path exists.", vbOKOnly + vbCritical, Label1.Text)
@@ -27,6 +29,8 @@ Public Class ImgSplit
                         MsgBox("Especifique un nombre y un directorio para el archivo SWM de destino e inténtelo de nuevo. Asegúrese también de que el directorio de destino exista.", vbOKOnly + vbCritical, Label1.Text)
                     Case 3
                         MsgBox("Veuillez indiquer un nom et un chemin pour le fichier SWM cible et réessayez. Assurez-vous également que le chemin d'accès à la cible existe.", vbOKOnly + vbCritical, Label1.Text)
+                    Case 4
+                        MsgBox("Especifique um nome e uma localização para o ficheiro SWM de destino e tente novamente. Além disso, certifique-se de que o caminho de destino existe.", vbOKOnly + vbCritical, Label1.Text)
                 End Select
                 Exit Sub
             End If
@@ -41,6 +45,8 @@ Public Class ImgSplit
                             MsgBox("Especifique un archivo WIM de origen e inténtelo de nuevo. Asegúrese también de que el archivo exista.", vbOKOnly + vbCritical, Label1.Text)
                         Case "FRA"
                             MsgBox("Veuillez indiquer un fichier WIM source et réessayer. Assurez-vous également qu'il existe.", vbOKOnly + vbCritical, Label1.Text)
+                        Case "PTB", "PTG"
+                            MsgBox("Especifique um ficheiro WIM de origem e tente novamente. Além disso, certifique-se de que ele existe.", vbOKOnly + vbCritical, Label1.Text)
                     End Select
                 Case 1
                     MsgBox("Please specify a source WIM file and try again. Also, make sure that it exists.", vbOKOnly + vbCritical, Label1.Text)
@@ -48,6 +54,8 @@ Public Class ImgSplit
                     MsgBox("Especifique un archivo WIM de origen e inténtelo de nuevo. Asegúrese también de que el archivo exista.", vbOKOnly + vbCritical, Label1.Text)
                 Case 3
                     MsgBox("Veuillez indiquer un fichier WIM source et réessayer. Assurez-vous également qu'il existe.", vbOKOnly + vbCritical, Label1.Text)
+                Case 4
+                    MsgBox("Especifique um ficheiro WIM de origem e tente novamente. Além disso, certifique-se de que ele existe.", vbOKOnly + vbCritical, Label1.Text)
             End Select
             Exit Sub
         End If
@@ -109,6 +117,20 @@ Public Class ImgSplit
                         CheckBox1.Text = "Vérifier l'intégrité de l'image"
                         OpenFileDialog1.Title = "Spécifiez le fichier WIM source à diviser :"
                         SaveFileDialog1.Title = "Spécifiez l'emplacement cible des images divisées :"
+                    Case "PTB", "PTG"
+                        Text = "Dividir imagens"
+                        Label1.Text = Text
+                        Label2.Text = "Imagem de origem a dividir:"
+                        Label3.Text = "Nome e caminho da imagem dividida de destino:"
+                        Label4.Text = "Tamanho máximo das imagens divididas (em MB):"
+                        Label5.Text = "Tenha em atenção que, para acomodar um ficheiro grande na imagem, um ficheiro de imagem dividida pode ser maior do que o valor especificado"
+                        Button1.Text = "Navegar..."
+                        Button2.Text = "Navegar..."
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Cancelar"
+                        CheckBox1.Text = "Verificar a integridade da imagem"
+                        OpenFileDialog1.Title = "Especificar o ficheiro WIM de origem a dividir:"
+                        SaveFileDialog1.Title = "Especificar a localização de destino das imagens divididas:"
                 End Select
             Case 1
                 Text = "Split images"
@@ -152,6 +174,20 @@ Public Class ImgSplit
                 CheckBox1.Text = "Vérifier l'intégrité de l'image"
                 OpenFileDialog1.Title = "Spécifiez le fichier WIM source à diviser :"
                 SaveFileDialog1.Title = "Spécifiez l'emplacement cible des images divisées :"
+            Case 4
+                Text = "Dividir imagens"
+                Label1.Text = Text
+                Label2.Text = "Imagem de origem a dividir:"
+                Label3.Text = "Nome e caminho da imagem dividida de destino:"
+                Label4.Text = "Tamanho máximo das imagens divididas (em MB):"
+                Label5.Text = "Tenha em atenção que, para acomodar um ficheiro grande na imagem, um ficheiro de imagem dividida pode ser maior do que o valor especificado"
+                Button1.Text = "Navegar..."
+                Button2.Text = "Navegar..."
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Cancelar"
+                CheckBox1.Text = "Verificar a integridade da imagem"
+                OpenFileDialog1.Title = "Especificar o ficheiro WIM de origem a dividir:"
+                SaveFileDialog1.Title = "Especificar a localização de destino das imagens divididas:"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)

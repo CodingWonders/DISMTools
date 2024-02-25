@@ -29,6 +29,8 @@ Namespace Utilities
                                         Return "Desconocida"
                                     Case "FRA"
                                         Return "Inconnu"
+                                    Case "PTB", "PTG"
+                                        Return "Desconhecido"
                                 End Select
                             Case 1
                                 Return "Unknown"
@@ -36,6 +38,8 @@ Namespace Utilities
                                 Return "Desconocida"
                             Case 3
                                 Return "Inconnu"
+                            Case 4
+                                Return "Desconhecido"
                         End Select
                     Else
                         Return "Unknown"
@@ -50,6 +54,8 @@ Namespace Utilities
                                     Return "Neutral"
                                 Case "FRA"
                                     Return "Neutre"
+                                Case "PTB", "PTG"
+                                    Return "Neutro"
                             End Select
                         Case 1
                             Return "Neutral"
@@ -57,6 +63,8 @@ Namespace Utilities
                             Return "Neutral"
                         Case 3
                             Return "Neutre"
+                        Case 4
+                            Return "Neutro"
                     End Select
                 Case DismProcessorArchitecture.Intel
                     Return "x86"
@@ -85,6 +93,8 @@ Namespace Utilities
                                         Return "Desconocido"
                                     Case "FRA"
                                         Return "Inconnu"
+                                    Case "PTB", "PTG"
+                                        Return "Desconhecido"
                                 End Select
                             Case 1
                                 Return "Unknown"
@@ -92,6 +102,8 @@ Namespace Utilities
                                 Return "Desconocido"
                             Case 3
                                 Return "Inconnu"
+                            Case 4
+                                Return "Desconhecido"
                         End Select
                     Else
                         Return "Unknown"
@@ -107,6 +119,8 @@ Namespace Utilities
                                         Return "No firmado. Compruebe la validez y la fecha de expiración del certificado del controlador"
                                     Case "FRA"
                                         Return "Non signé. Veuillez vérifier la validité et la date d'expiration du certificat de signature."
+                                    Case "PTB", "PTG"
+                                        Return "Não assinado. Verifique a validade e a data de expiração do certificado de assinatura"
                                 End Select
                             Case 1
                                 Return "Unsigned. Please check the validity and expiration date of the signing certificate"
@@ -114,6 +128,8 @@ Namespace Utilities
                                 Return "No firmado. Compruebe la validez y la fecha de expiración del certificado del controlador"
                             Case 3
                                 Return "Non signé. Veuillez vérifier la validité et la date d'expiration du certificat de signature."
+                            Case 4
+                                Return "Não assinado. Verifique a validade e a data de expiração do certificado de assinatura"
                         End Select
                     Else
                         Return "Unsigned. Please check the validity and expiration date of the signing certificate"
@@ -129,6 +145,8 @@ Namespace Utilities
                                         Return "Firmado"
                                     Case "FRA"
                                         Return "Signé"
+                                    Case "PTB", "PTG"
+                                        Return "Assinado"
                                 End Select
                             Case 1
                                 Return "Signed"
@@ -136,6 +154,8 @@ Namespace Utilities
                                 Return "Firmado"
                             Case 3
                                 Return "Signé"
+                            Case 4
+                                Return "Assinado"
                         End Select
                     Else
                         Return "Signed"
@@ -157,6 +177,8 @@ Namespace Utilities
                                         Return "No presente"
                                     Case "FRA"
                                         Return "Absent"
+                                    Case "PTB", "PTG"
+                                        Return "Não presente"
                                 End Select
                             Case 1
                                 Return "Not present"
@@ -164,6 +186,8 @@ Namespace Utilities
                                 Return "No presente"
                             Case 3
                                 Return "Absent"
+                            Case 4
+                                Return "Não presente"
                         End Select
                     Else
                         Return "Not present"
@@ -179,6 +203,8 @@ Namespace Utilities
                                         Return "Desinstalación pendiente"
                                     Case "FRA"
                                         Return "Désinstallation en cours"
+                                    Case "PTB", "PTG"
+                                        Return "Desinstalação pendente"
                                 End Select
                             Case 1
                                 Return "Uninstall Pending"
@@ -186,6 +212,8 @@ Namespace Utilities
                                 Return "Desinstalación pendiente"
                             Case 3
                                 Return "Désinstallation en cours"
+                            Case 4
+                                Return "Desinstalação pendente"
                         End Select
                     Else
                         Return "Uninstall Pending"
@@ -201,6 +229,8 @@ Namespace Utilities
                                         Return "Desinstalado"
                                     Case "FRA"
                                         Return "Désinstallé"
+                                    Case "PTB", "PTG"
+                                        Return "Desinstalado"
                                 End Select
                             Case 1
                                 Return "Uninstalled"
@@ -208,6 +238,8 @@ Namespace Utilities
                                 Return "Desinstalado"
                             Case 3
                                 Return "Désinstallé"
+                            Case 4
+                                Return "Desinstalado"
                         End Select
                     Else
                         Return "Uninstalled"
@@ -223,6 +255,8 @@ Namespace Utilities
                                         Return "Eliminado"
                                     Case "FRA"
                                         Return "Supprimé"
+                                    Case "PTB", "PTG"
+                                        Return "Removido"
                                 End Select
                             Case 1
                                 Return "Removed"
@@ -230,6 +264,8 @@ Namespace Utilities
                                 Return "Eliminado"
                             Case 3
                                 Return "Supprimé"
+                            Case 4
+                                Return "Removido"
                         End Select
                     Else
                         Return "Removed"
@@ -245,6 +281,8 @@ Namespace Utilities
                                         Return "Instalado"
                                     Case "FRA"
                                         Return "Installé"
+                                    Case "PTB", "PTG"
+                                        Return "Instalado"
                                 End Select
                             Case 1
                                 Return "Installed"
@@ -252,6 +290,8 @@ Namespace Utilities
                                 Return "Instalado"
                             Case 3
                                 Return "Installé"
+                            Case 4
+                                Return "Instalado"
                         End Select
                     Else
                         Return "Installed"
@@ -267,6 +307,8 @@ Namespace Utilities
                                         Return "Instalación pendiente"
                                     Case "FRA"
                                         Return "Installation en cours"
+                                    Case "PTB", "PTG"
+                                        Return "Instalação pendente"
                                 End Select
                             Case 1
                                 Return "Install Pending"
@@ -274,6 +316,8 @@ Namespace Utilities
                                 Return "Instalación pendiente"
                             Case 3
                                 Return "Installation en cours"
+                            Case 4
+                                Return "Instalação pendente"
                         End Select
                     Else
                         Return "Install Pending"
@@ -289,6 +333,8 @@ Namespace Utilities
                                         Return "Sustituido"
                                     Case "FRA"
                                         Return "Remplacé"
+                                    Case "PTB", "PTG"
+                                        Return "Substituído"
                                 End Select
                             Case 1
                                 Return "Superseded"
@@ -296,6 +342,8 @@ Namespace Utilities
                                 Return "Sustituido"
                             Case 3
                                 Return "Remplacé"
+                            Case 4
+                                Return "Substituído"
                         End Select
                     Else
                         Return "Superseded"
@@ -311,6 +359,8 @@ Namespace Utilities
                                         Return "Instalado parcialmente"
                                     Case "FRA"
                                         Return "Partiellement installé"
+                                    Case "PTB", "PTG"
+                                        Return "Parcialmente instalado"
                                 End Select
                             Case 1
                                 Return "Partially Installed"
@@ -318,6 +368,8 @@ Namespace Utilities
                                 Return "Instalado parcialmente"
                             Case 3
                                 Return "Partiellement installé"
+                            Case 4
+                                Return "Parcialmente instalado"
                         End Select
                     Else
                         Return "Partially Installed"
@@ -339,6 +391,8 @@ Namespace Utilities
                                         Return "No presente"
                                     Case "FRA"
                                         Return "Absente"
+                                    Case "PTB", "PTG"
+                                        Return "Não presente"
                                 End Select
                             Case 1
                                 Return "Not present"
@@ -346,6 +400,8 @@ Namespace Utilities
                                 Return "No presente"
                             Case 3
                                 Return "Absente"
+                            Case 4
+                                Return "Não presente"
                         End Select
                     Else
                         Return "Not present"
@@ -361,6 +417,8 @@ Namespace Utilities
                                         Return "Deshabilitación pendiente"
                                     Case "FRA"
                                         Return "Invalidité en cours"
+                                    Case "PTB", "PTG"
+                                        Return "Desativação pendente"
                                 End Select
                             Case 1
                                 Return "Disable Pending"
@@ -368,6 +426,8 @@ Namespace Utilities
                                 Return "Deshabilitación pendiente"
                             Case 3
                                 Return "Invalidité en cours"
+                            Case 4
+                                Return "Desativação pendente"
                         End Select
                     Else
                         Return "Disable Pending"
@@ -383,6 +443,8 @@ Namespace Utilities
                                         Return "Deshabilitado"
                                     Case "FRA"
                                         Return "Désactivée"
+                                    Case "PTB", "PTG"
+                                        Return "Desativado"
                                 End Select
                             Case 1
                                 Return "Disabled"
@@ -390,6 +452,8 @@ Namespace Utilities
                                 Return "Deshabilitado"
                             Case 3
                                 Return "Désactivée"
+                            Case 4
+                                Return "Desativado"
                         End Select
                     Else
                         Return "Disabled"
@@ -405,6 +469,8 @@ Namespace Utilities
                                         Return "Eliminado"
                                     Case "FRA"
                                         Return "Supprimée"
+                                    Case "PTB", "PTG"
+                                        Return "Removido"
                                 End Select
                             Case 1
                                 Return "Removed"
@@ -412,6 +478,8 @@ Namespace Utilities
                                 Return "Eliminado"
                             Case 3
                                 Return "Supprimée"
+                            Case 4
+                                Return "Removido"
                         End Select
                     Else
                         Return "Removed"
@@ -427,6 +495,8 @@ Namespace Utilities
                                         Return "Habilitado"
                                     Case "FRA"
                                         Return "Activée"
+                                    Case "PTB", "PTG"
+                                        Return "Ativado"
                                 End Select
                             Case 1
                                 Return "Enabled"
@@ -434,6 +504,8 @@ Namespace Utilities
                                 Return "Habilitado"
                             Case 3
                                 Return "Activée"
+                            Case 4
+                                Return "Ativado"
                         End Select
                     Else
                         Return "Enabled"
@@ -449,6 +521,8 @@ Namespace Utilities
                                         Return "Habilitación pendiente"
                                     Case "FRA"
                                         Return "Activation en cours"
+                                    Case "PTB", "PTG"
+                                        Return "Ativação pendente"
                                 End Select
                             Case 1
                                 Return "Enable Pending"
@@ -456,6 +530,8 @@ Namespace Utilities
                                 Return "Habilitación pendiente"
                             Case 3
                                 Return "Activation en cours"
+                            Case 4
+                                Return "Ativação pendente"
                         End Select
                     Else
                         Return "Enable Pending"
@@ -471,6 +547,8 @@ Namespace Utilities
                                         Return "Sustituido"
                                     Case "FRA"
                                         Return "Remplacée"
+                                    Case "PTB", "PTG"
+                                        Return "Substituído"
                                 End Select
                             Case 1
                                 Return "Superseded"
@@ -478,6 +556,8 @@ Namespace Utilities
                                 Return "Sustituido"
                             Case 3
                                 Return "Remplacée"
+                            Case 4
+                                Return "Substituído"
                         End Select
                     Else
                         Return "Superseded"
@@ -493,6 +573,8 @@ Namespace Utilities
                                         Return "Instalado parcialmente"
                                     Case "FRA"
                                         Return "Partiellement installée"
+                                    Case "PTB", "PTG"
+                                        Return "Parcialmente instalado"
                                 End Select
                             Case 1
                                 Return "Partially Installed"
@@ -500,6 +582,8 @@ Namespace Utilities
                                 Return "Instalado parcialmente"
                             Case 3
                                 Return "Partiellement installée"
+                            Case 4
+                                Return "Parcialmente instalado"
                         End Select
                     Else
                         Return "Partially Installed"
@@ -521,6 +605,8 @@ Namespace Utilities
                                         Return "No se requiere un reinicio"
                                     Case "FRA"
                                         Return "Un redémarrage n'est pas nécessaire"
+                                    Case "PTB", "PTG"
+                                        Return "Não é necessário reiniciar"
                                 End Select
                             Case 1
                                 Return "A restart is not required"
@@ -528,6 +614,8 @@ Namespace Utilities
                                 Return "No se requiere un reinicio"
                             Case 3
                                 Return "Un redémarrage n'est pas nécessaire"
+                            Case 4
+                                Return "Não é necessário reiniciar"
                         End Select
                     Else
                         Return "A restart is not required"
@@ -543,6 +631,8 @@ Namespace Utilities
                                         Return "Puede requerirse un reinicio"
                                     Case "FRA"
                                         Return "Un redémarrage peut être nécessaire"
+                                    Case "PTB", "PTG"
+                                        Return "Poderá ser necessário um reinício"
                                 End Select
                             Case 1
                                 Return "A restart may be required"
@@ -550,6 +640,8 @@ Namespace Utilities
                                 Return "Puede requerirse un reinicio"
                             Case 3
                                 Return "Un redémarrage peut être nécessaire"
+                            Case 4
+                                Return "Poderá ser necessário um reinício"
                         End Select
                     Else
                         Return "A restart may be required"
@@ -565,6 +657,8 @@ Namespace Utilities
                                         Return "Se requiere un reinicio"
                                     Case "FRA"
                                         Return "Un redémarrage est nécessaire"
+                                    Case "PTB", "PTG"
+                                        Return "É necessário um reinício"
                                 End Select
                             Case 1
                                 Return "A restart is required"
@@ -572,6 +666,8 @@ Namespace Utilities
                                 Return "Se requiere un reinicio"
                             Case 3
                                 Return "Un redémarrage est nécessaire"
+                            Case 4
+                                Return "É necessário um reinício"
                         End Select
                     Else
                         Return "A restart is required"
@@ -593,6 +689,8 @@ Namespace Utilities
                                         Return "Sí"
                                     Case "FRA"
                                         Return "Oui"
+                                    Case "PTB", "PTG"
+                                        Return "Sim"
                                 End Select
                             Case 1
                                 Return "Yes"
@@ -600,6 +698,8 @@ Namespace Utilities
                                 Return "Sí"
                             Case 3
                                 Return "Oui"
+                            Case 4
+                                Return "Sim"
                         End Select
                     Else
                         Return "Yes"
@@ -615,6 +715,8 @@ Namespace Utilities
                                         Return "No"
                                     Case "FRA"
                                         Return "Non"
+                                    Case "PTB", "PTG"
+                                        Return "Não"
                                 End Select
                             Case 1
                                 Return "No"
@@ -622,6 +724,8 @@ Namespace Utilities
                                 Return "No"
                             Case 3
                                 Return "Non"
+                            Case 4
+                                Return "Não"
                         End Select
                     Else
                         Return "No"
@@ -643,6 +747,8 @@ Namespace Utilities
                                         Return "Actualización crítica"
                                     Case "FRA"
                                         Return "Mise à jour critique"
+                                    Case "PTB", "PTG"
+                                        Return "Atualização crítica"
                                 End Select
                             Case 1
                                 Return "Critical update"
@@ -650,6 +756,8 @@ Namespace Utilities
                                 Return "Actualización crítica"
                             Case 3
                                 Return "Mise à jour critique"
+                            Case 4
+                                Return "Atualização crítica"
                         End Select
                     Else
                         Return "Critical update"
@@ -665,6 +773,8 @@ Namespace Utilities
                                         Return "Controlador"
                                     Case "FRA"
                                         Return "Pilote"
+                                    Case "PTB", "PTG"
+                                        Return "Controlador"
                                 End Select
                             Case 1
                                 Return "Driver"
@@ -672,6 +782,8 @@ Namespace Utilities
                                 Return "Controlador"
                             Case 3
                                 Return "Pilote"
+                            Case 4
+                                Return "Controlador"
                         End Select
                     Else
                         Return "Driver"
@@ -687,6 +799,8 @@ Namespace Utilities
                                         Return "Paquete de características"
                                     Case "FRA"
                                         Return "Pack de caractéristiques"
+                                    Case "PTB", "PTG"
+                                        Return "Pacote de características"
                                 End Select
                             Case 1
                                 Return "Feature Pack"
@@ -694,6 +808,8 @@ Namespace Utilities
                                 Return "Paquete de características"
                             Case 3
                                 Return "Pack de caractéristiques"
+                            Case 4
+                                Return "Pacote de características"
                         End Select
                     Else
                         Return "Feature Pack"
@@ -709,6 +825,8 @@ Namespace Utilities
                                         Return "Paquete de fundación"
                                     Case "FRA"
                                         Return "Paquet de base"
+                                    Case "PTB", "PTG"
+                                        Return "Pacote de fundação"
                                 End Select
                             Case 1
                                 Return "Foundation package"
@@ -716,6 +834,8 @@ Namespace Utilities
                                 Return "Paquete de fundación"
                             Case 3
                                 Return "Paquet de base"
+                            Case 4
+                                Return "Pacote de fundação"
                         End Select
                     Else
                         Return "Foundation package"
@@ -731,6 +851,8 @@ Namespace Utilities
                                         Return "Corrección de fallos"
                                     Case "FRA"
                                         Return "Correctif"
+                                    Case "PTB", "PTG"
+                                        Return "Correção"
                                 End Select
                             Case 1
                                 Return "Hotfix"
@@ -738,6 +860,8 @@ Namespace Utilities
                                 Return "Corrección de fallos"
                             Case 3
                                 Return "Correctif"
+                            Case 4
+                                Return "Correção"
                         End Select
                     Else
                         Return "Hotfix"
@@ -753,6 +877,8 @@ Namespace Utilities
                                         Return "Paquete de idiomas"
                                     Case "FRA"
                                         Return "Pack linguistique"
+                                    Case "PTB", "PTG"
+                                        Return "Pacote de idiomas"
                                 End Select
                             Case 1
                                 Return "Language pack"
@@ -760,6 +886,8 @@ Namespace Utilities
                                 Return "Paquete de idiomas"
                             Case 3
                                 Return "Pack linguistique"
+                            Case 4
+                                Return "Pacote de idiomas"
                         End Select
                     Else
                         Return "Language pack"
@@ -775,6 +903,8 @@ Namespace Utilities
                                         Return "Paquete local"
                                     Case "FRA"
                                         Return "Paquet local"
+                                    Case "PTB", "PTG"
+                                        Return "Pacote local"
                                 End Select
                             Case 1
                                 Return "Local pack"
@@ -782,6 +912,8 @@ Namespace Utilities
                                 Return "Paquete local"
                             Case 3
                                 Return "Paquet local"
+                            Case 4
+                                Return "Pacote local"
                         End Select
                     Else
                         Return "Local pack"
@@ -797,6 +929,8 @@ Namespace Utilities
                                         Return "Paquete de funcionalidad"
                                     Case "FRA"
                                         Return "Paquet de capacités"
+                                    Case "PTB", "PTG"
+                                        Return "Pacote de capacidades"
                                 End Select
                             Case 1
                                 Return "On Demand pack"
@@ -804,6 +938,8 @@ Namespace Utilities
                                 Return "Paquete de funcionalidad"
                             Case 3
                                 Return "Paquet de capacités"
+                            Case 4
+                                Return "Pacote de capacidades"
                         End Select
                     Else
                         Return "On Demand pack"
@@ -819,6 +955,8 @@ Namespace Utilities
                                         Return "Otros"
                                     Case "FRA"
                                         Return "Autres"
+                                    Case "PTB", "PTG"
+                                        Return "Outros"
                                 End Select
                             Case 1
                                 Return "Other"
@@ -826,6 +964,8 @@ Namespace Utilities
                                 Return "Otros"
                             Case 3
                                 Return "Autres"
+                            Case 4
+                                Return "Outros"
                         End Select
                     Else
                         Return "Other"
@@ -841,6 +981,8 @@ Namespace Utilities
                                         Return "Producto"
                                     Case "FRA"
                                         Return "Produit"
+                                    Case "PTB", "PTG"
+                                        Return "Produto"
                                 End Select
                             Case 1
                                 Return "Product"
@@ -848,6 +990,8 @@ Namespace Utilities
                                 Return "Producto"
                             Case 3
                                 Return "Produit"
+                            Case 4
+                                Return "Produto"
                         End Select
                     Else
                         Return "Product"
@@ -863,6 +1007,8 @@ Namespace Utilities
                                         Return "Actualización de seguridad"
                                     Case "FRA"
                                         Return "Mise à jour de la sécurité"
+                                    Case "PTB", "PTG"
+                                        Return "Atualização de segurança"
                                 End Select
                             Case 1
                                 Return "Security update"
@@ -870,6 +1016,8 @@ Namespace Utilities
                                 Return "Actualización de seguridad"
                             Case 3
                                 Return "Mise à jour de la sécurité"
+                            Case 4
+                                Return "Atualização de segurança"
                         End Select
                     Else
                         Return "Security update"
@@ -885,12 +1033,16 @@ Namespace Utilities
                                         Return "Service Pack"
                                     Case "FRA"
                                         Return "Service Pack"
+                                    Case "PTB", "PTG"
+                                        Return "Service Pack"
                                 End Select
                             Case 1
                                 Return "Service Pack"
                             Case 2
                                 Return "Service Pack"
                             Case 3
+                                Return "Service Pack"
+                            Case 4
                                 Return "Service Pack"
                         End Select
                     Else
@@ -907,6 +1059,8 @@ Namespace Utilities
                                         Return "Actualización de software"
                                     Case "FRA"
                                         Return "Mise à jour du logiciel"
+                                    Case "PTB", "PTG"
+                                        Return "Atualização do software"
                                 End Select
                             Case 1
                                 Return "Software update"
@@ -914,6 +1068,8 @@ Namespace Utilities
                                 Return "Actualización de software"
                             Case 3
                                 Return "Mise à jour du logiciel"
+                            Case 4
+                                Return "Atualização do software"
                         End Select
                     Else
                         Return "Software update"
@@ -929,6 +1085,8 @@ Namespace Utilities
                                         Return "Actualización"
                                     Case "FRA"
                                         Return "Mise à jour"
+                                    Case "PTB", "PTG"
+                                        Return "Atualização"
                                 End Select
                             Case 1
                                 Return "Update"
@@ -936,6 +1094,8 @@ Namespace Utilities
                                 Return "Actualización"
                             Case 3
                                 Return "Mise à jour"
+                            Case 4
+                                Return "Atualização"
                         End Select
                     Else
                         Return "Update"
@@ -951,6 +1111,8 @@ Namespace Utilities
                                         Return "Actualización acumulativa"
                                     Case "FRA"
                                         Return "Mise à jour cumulative"
+                                    Case "PTB", "PTG"
+                                        Return "Atualização cumulativa"
                                 End Select
                             Case 1
                                 Return "Update rollup"
@@ -958,6 +1120,8 @@ Namespace Utilities
                                 Return "Actualización acumulativa"
                             Case 3
                                 Return "Mise à jour cumulative"
+                            Case 4
+                                Return "Atualização cumulativa"
                         End Select
                     Else
                         Return "Update rollup"
@@ -979,6 +1143,8 @@ Namespace Utilities
                                         Return "Se requiere un arranque a la imagen de destino para instalar este paquete por completo"
                                     Case "FRA"
                                         Return "Un démarrage sur l'image cible est nécessaire pour installer complètement ce paquet."
+                                    Case "PTB", "PTG"
+                                        Return "É necessário um arranque para a imagem de destino para instalar completamente este pacote"
                                 End Select
                             Case 1
                                 Return "A boot up to the target image is required to fully install this package"
@@ -986,6 +1152,8 @@ Namespace Utilities
                                 Return "Se requiere un arranque a la imagen de destino para instalar este paquete por completo"
                             Case 3
                                 Return "Un démarrage sur l'image cible est nécessaire pour installer complètement ce paquet."
+                            Case 4
+                                Return "É necessário um arranque para a imagem de destino para instalar completamente este pacote"
                         End Select
                     Else
                         Return "A boot up to the target image is required to fully install this package"
@@ -1001,6 +1169,8 @@ Namespace Utilities
                                         Return "Se podría requerir un arranque a la imagen de destino para instalar este paquete por completo"
                                     Case "FRA"
                                         Return "Un démarrage sur l'image cible peut être nécessaire pour installer complètement ce paquet."
+                                    Case "PTB", "PTG"
+                                        Return "Poderá ser necessário um arranque para a imagem de destino para instalar completamente este pacote"
                                 End Select
                             Case 1
                                 Return "A boot up to the target image may be required to fully install this package"
@@ -1008,6 +1178,8 @@ Namespace Utilities
                                 Return "Se podría requerir un arranque a la imagen de destino para instalar este paquete por completo"
                             Case 3
                                 Return "Un démarrage sur l'image cible peut être nécessaire pour installer complètement ce paquet."
+                            Case 4
+                                Return "Poderá ser necessário um arranque para a imagem de destino para instalar completamente este pacote"
                         End Select
                     Else
                         Return "A boot up to the target image may be required to fully install this package"
@@ -1023,6 +1195,8 @@ Namespace Utilities
                                         Return "No se requiere un arranque a la imagen de destino para instalar este paquete por completo"
                                     Case "FRA"
                                         Return "Il n'est pas nécessaire de démarrer sur l'image cible pour installer complètement ce paquet."
+                                    Case "PTB", "PTG"
+                                        Return "Não é necessário arrancar com a imagem de destino para instalar completamente este pacote"
                                 End Select
                             Case 1
                                 Return "A boot up to the target image is not required to fully install this package"
@@ -1030,6 +1204,8 @@ Namespace Utilities
                                 Return "No se requiere un arranque a la imagen de destino para instalar este paquete por completo"
                             Case 3
                                 Return "Il n'est pas nécessaire de démarrer sur l'image cible pour installer complètement ce paquet."
+                            Case 4
+                                Return "Não é necessário arrancar com a imagem de destino para instalar completamente este pacote"
                         End Select
                     Else
                         Return "A boot up to the target image is not required to fully install this package"
@@ -1053,6 +1229,8 @@ Namespace Utilities
                                         Return "Fijo"
                                     Case "FRA"
                                         Return "Fixe"
+                                    Case "PTB", "PTG"
+                                        Return "Fixo"
                                 End Select
                             Case 1
                                 Return "Fixed"
@@ -1060,6 +1238,8 @@ Namespace Utilities
                                 Return "Fijo"
                             Case 3
                                 Return "Fixe"
+                            Case 4
+                                Return "Fixo"
                         End Select
                     Else
                         Return "Fixed"
@@ -1075,6 +1255,8 @@ Namespace Utilities
                                         Return "Red"
                                     Case "FRA"
                                         Return "Réseau"
+                                    Case "PTB", "PTG"
+                                        Return "Rede"
                                 End Select
                             Case 1
                                 Return "Network"
@@ -1082,6 +1264,8 @@ Namespace Utilities
                                 Return "Red"
                             Case 3
                                 Return "Réseau"
+                            Case 4
+                                Return "Rede"
                         End Select
                     Else
                         Return "Network"
@@ -1101,6 +1285,8 @@ Namespace Utilities
                                         Return "Removible"
                                     Case "FRA"
                                         Return "Amovible"
+                                    Case "PTB", "PTG"
+                                        Return "Removível"
                                 End Select
                             Case 1
                                 Return "Removable"
@@ -1108,6 +1294,8 @@ Namespace Utilities
                                 Return "Removible"
                             Case 3
                                 Return "Amovible"
+                            Case 4
+                                Return "Removível"
                         End Select
                     Else
                         Return "Removable"
@@ -1123,6 +1311,8 @@ Namespace Utilities
                                         Return "Desconocido"
                                     Case "FRA"
                                         Return "Inconnu"
+                                    Case "PTB", "PTG"
+                                        Return "Desconhecido"
                                 End Select
                             Case 1
                                 Return "Unknown"
@@ -1130,6 +1320,8 @@ Namespace Utilities
                                 Return "Desconocido"
                             Case 3
                                 Return "Inconnu"
+                            Case 4
+                                Return "Desconhecido"
                         End Select
                     Else
                         Return "Unknown"

@@ -76,7 +76,7 @@ Public Class ExportDrivers
                         Text = "Controladores de exportação"
                         Label1.Text = Text
                         Label2.Text = "Exportar destino:"
-                        Button1.Text = "Procurar..."
+                        Button1.Text = "Navegar..."
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Cancelar"
                         FolderBrowserDialog1.Description = "Especifique o caminho para onde os controladores serão exportados:"
@@ -109,7 +109,7 @@ Public Class ExportDrivers
                 Text = "Controladores de exportação"
                 Label1.Text = Text
                 Label2.Text = "Exportar destino:"
-                Button1.Text = "Procurar..."
+                Button1.Text = "Navegar..."
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Cancelar"
                 FolderBrowserDialog1.Description = "Especifique o caminho para onde os controladores serão exportados:"

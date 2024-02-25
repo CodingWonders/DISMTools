@@ -43,6 +43,11 @@ Public Class AddCapabilities
                                             CheckBox1.Checked = True
                                             Button1.PerformClick()
                                         End If
+                                    Case "PTB", "PTG"
+                                        If MsgBox("Algumas capacidades nesta imagem requerem a especificação de uma fonte para serem activadas. A fonte especificada não é válida para esta operação." & CrLf & CrLf & If(RichTextBox1.Text = "", "Especifique uma fonte válida e tente novamente.", "Certifique-se de que a fonte existe no sistema de ficheiros e tente novamente."), vbOKOnly + vbCritical, Label1.Text) = MsgBoxResult.Ok Then
+                                            CheckBox1.Checked = True
+                                            Button1.PerformClick()
+                                        End If
                                 End Select
                             Case 1
                                 If MsgBox("Some capabilities in this image require specifying a source for them to be enabled. The specified source is not valid for this operation." & CrLf & CrLf & If(RichTextBox1.Text = "", "Please specify a valid source and try again.", "Please make sure the source exists in the file system and try again."), vbOKOnly + vbCritical, Label1.Text) = MsgBoxResult.Ok Then
@@ -56,6 +61,11 @@ Public Class AddCapabilities
                                 End If
                             Case 3
                                 If MsgBox("Certaines capacités de cette image nécessitent la spécification d'une source pour être activées. La source spécifiée n'est pas valide pour cette opération." & CrLf & CrLf & If(RichTextBox1.Text = "", "Veuillez indiquer une source valide et réessayer.", "Assurez-vous que la source existe dans le système de fichiers et réessayez."), vbOKOnly + vbCritical, Label1.Text) = MsgBoxResult.Ok Then
+                                    CheckBox1.Checked = True
+                                    Button1.PerformClick()
+                                End If
+                            Case 4
+                                If MsgBox("Algumas capacidades nesta imagem requerem a especificação de uma fonte para serem activadas. A fonte especificada não é válida para esta operação." & CrLf & CrLf & If(RichTextBox1.Text = "", "Especifique uma fonte válida e tente novamente.", "Certifique-se de que a fonte existe no sistema de ficheiros e tente novamente."), vbOKOnly + vbCritical, Label1.Text) = MsgBoxResult.Ok Then
                                     CheckBox1.Checked = True
                                     Button1.PerformClick()
                                 End If
@@ -79,6 +89,8 @@ Public Class AddCapabilities
                                         MsgBox("El origen especificado no existe en el sistema de archivos. Asegúrese de que existe e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
                                     Case "FRA"
                                         MsgBox("La source spécifiée n'existe pas dans le système de fichiers. Assurez-vous qu'elle existe et réessayez.", vbOKOnly + vbCritical, Label1.Text)
+                                    Case "PTB", "PTG"
+                                        MsgBox("A origem especificada não existe no sistema de ficheiros. Certifique-se de que existe e tente novamente.", vbOKOnly + vbCritical, Label1.Text)
                                 End Select
                             Case 1
                                 MsgBox("The specified source does not exist in the file system. Make sure it exists and try again.", vbOKOnly + vbCritical, Label1.Text)
@@ -86,6 +98,8 @@ Public Class AddCapabilities
                                 MsgBox("El origen especificado no existe en el sistema de archivos. Asegúrese de que existe e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
                             Case 3
                                 MsgBox("La source spécifiée n'existe pas dans le système de fichiers. Assurez-vous qu'elle existe et réessayez.", vbOKOnly + vbCritical, Label1.Text)
+                            Case 4
+                                MsgBox("A origem especificada não existe no sistema de ficheiros. Certifique-se de que existe e tente novamente.", vbOKOnly + vbCritical, Label1.Text)
                         End Select
                         Exit Sub
                     End If
@@ -99,6 +113,8 @@ Public Class AddCapabilities
                                     MsgBox("No se ha especificado un origen. Especifique un origen e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
                                 Case "FRA"
                                     MsgBox("Aucune source n'est spécifiée. Indiquez une source et réessayez.", vbOKOnly + vbCritical, Label1.Text)
+                                Case "PTB", "PTG"
+                                    MsgBox("Não existe uma origem especificada. Especifique uma fonte e tente novamente.", vbOKOnly + vbCritical, Label1.Text)
                             End Select
                         Case 1
                             MsgBox("There is no source specified. Specify a source and try again.", vbOKOnly + vbCritical, Label1.Text)
@@ -106,6 +122,8 @@ Public Class AddCapabilities
                             MsgBox("No se ha especificado un origen. Especifique un origen e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
                         Case 3
                             MsgBox("Aucune source n'est spécifiée. Indiquez une source et réessayez.", vbOKOnly + vbCritical, Label1.Text)
+                        Case 4
+                            MsgBox("Não existe uma origem especificada. Especifique uma fonte e tente novamente.", vbOKOnly + vbCritical, Label1.Text)
                     End Select
                     Exit Sub
                 End If
@@ -130,6 +148,8 @@ Public Class AddCapabilities
                             MsgBox("No hay funcionalidades seleccionadas para instalar. Seleccione algunas de ellas e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
                         Case "FRA"
                             MsgBox("Il n'y a pas de capacités sélectionnées à installer. Veuillez sélectionner des capacités et réessayer.", vbOKOnly + vbCritical, Label1.Text)
+                        Case "PTB", "PTG"
+                            MsgBox("Não existem quaisquer capacidades seleccionadas para instalar. Por favor, seleccione algumas capacidades e tente novamente.", vbOKOnly + vbCritical, Label1.Text)
                     End Select
                 Case 1
                     MsgBox("There aren't any selected capabilities to install. Please select some capabilities and try again.", vbOKOnly + vbCritical, Label1.Text)
@@ -137,6 +157,8 @@ Public Class AddCapabilities
                     MsgBox("No hay funcionalidades seleccionadas para instalar. Seleccione algunas de ellas e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
                 Case 3
                     MsgBox("Il n'y a pas de capacités sélectionnées à installer. Veuillez sélectionner des capacités et réessayer.", vbOKOnly + vbCritical, Label1.Text)
+                Case 4
+                    MsgBox("Não existem quaisquer capacidades seleccionadas para instalar. Por favor, seleccione algumas capacidades e tente novamente.", vbOKOnly + vbCritical, Label1.Text)
             End Select
             Exit Sub
         End If
@@ -208,6 +230,23 @@ Public Class AddCapabilities
                         CheckBox3.Text = "Sauvegarder l'image après l'ajout de capacités"
                         ListView1.Columns(0).Text = "Capacité"
                         ListView1.Columns(1).Text = "État"
+                    Case "PTB", "PTG"
+                        Text = "Adicionar capacidades"
+                        Label1.Text = Text
+                        Label2.Text = " Origem:"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Cancelar"
+                        Button1.Text = "Navegar..."
+                        Button2.Text = "Selecionar tudo"
+                        Button3.Text = "Não selecionar nenhum"
+                        Button4.Text = "Detetar a partir da política de grupo"
+                        GroupBox1.Text = "Capacidades"
+                        GroupBox2.Text = "Opções"
+                        CheckBox1.Text = "Especificar uma origem diferente para as instalações de capacidades"
+                        CheckBox2.Text = "Limitar o acesso ao Windows Update"
+                        CheckBox3.Text = "Confirmar imagem depois de adicionar capacidades"
+                        ListView1.Columns(0).Text = "Capacidade"
+                        ListView1.Columns(1).Text = "Estado"
                 End Select
             Case 1
                 Text = "Add capabilities"
@@ -260,6 +299,23 @@ Public Class AddCapabilities
                 CheckBox3.Text = "Sauvegarder l'image après l'ajout de capacités"
                 ListView1.Columns(0).Text = "Capacité"
                 ListView1.Columns(1).Text = "État"
+            Case 4
+                Text = "Adicionar capacidades"
+                Label1.Text = Text
+                Label2.Text = " Origem:"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Cancelar"
+                Button1.Text = "Navegar..."
+                Button2.Text = "Selecionar tudo"
+                Button3.Text = "Não selecionar nenhum"
+                Button4.Text = "Detetar a partir da política de grupo"
+                GroupBox1.Text = "Capacidades"
+                GroupBox2.Text = "Opções"
+                CheckBox1.Text = "Especificar uma origem diferente para as instalações de capacidades"
+                CheckBox2.Text = "Limitar o acesso ao Windows Update"
+                CheckBox3.Text = "Confirmar imagem depois de adicionar capacidades"
+                ListView1.Columns(0).Text = "Capacidade"
+                ListView1.Columns(1).Text = "Estado"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
@@ -274,6 +330,8 @@ Public Class AddCapabilities
                         Label4.Text &= " Solo las funcionalidades no instaladas (" & ListView1.Items.Count & ") son mostradas"
                     Case "FRA"
                         Label4.Text &= " Seules les capacités non installées (" & ListView1.Items.Count & ") sont représentées"
+                    Case "PTB", "PTG"
+                        Label4.Text &= " Só são mostradas as capacidades não instaladas (" & ListView1.Items.Count & ")"
                 End Select
             Case 1
                 Label4.Text &= " Only not installed capabilities (" & ListView1.Items.Count & ") are shown"
@@ -281,6 +339,8 @@ Public Class AddCapabilities
                 Label4.Text &= " Solo las funcionalidades no instaladas (" & ListView1.Items.Count & ") son mostradas"
             Case 3
                 Label4.Text &= " Seules les capacités non installées (" & ListView1.Items.Count & ") sont représentées"
+            Case 4
+                Label4.Text &= " Só são mostradas as capacidades não instaladas (" & ListView1.Items.Count & ")"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)

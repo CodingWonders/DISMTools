@@ -21,6 +21,8 @@ Public Class RemProvAppxPackage
                             MsgBox("Especifique paquetes AppX a eliminar e inténtelo de nuevo.", vbOKOnly + vbCritical, "Eliminar paquetes aprovisionados AppX")
                         Case "FRA"
                             MsgBox("Veuillez indiquer les paquets AppX à supprimer et réessayer.", vbOKOnly + vbCritical, "Supprimer les paquets AppX provisionnés")
+                        Case "PTB", "PTG"
+                            MsgBox("Especifique os pacotes AppX a remover e tente novamente.", vbOKOnly + vbCritical, "Remover pacotes AppX aprovisionados")
                     End Select
                 Case 1
                     MsgBox("Please specify AppX packages to remove and try again.", vbOKOnly + vbCritical, "Remove provisioned AppX packages")
@@ -28,6 +30,8 @@ Public Class RemProvAppxPackage
                     MsgBox("Especifique paquetes AppX a eliminar e inténtelo de nuevo.", vbOKOnly + vbCritical, "Eliminar paquetes aprovisionados AppX")
                 Case 3
                     MsgBox("Veuillez indiquer les paquets AppX à supprimer et réessayer.", vbOKOnly + vbCritical, "Supprimer les paquets AppX provisionnés")
+                Case 4
+                    MsgBox("Especifique os pacotes AppX a remover e tente novamente.", vbOKOnly + vbCritical, "Remover pacotes AppX aprovisionados")
             End Select
             Exit Sub
         Else
@@ -69,6 +73,8 @@ Public Class RemProvAppxPackage
                                                     msg = "La característica Experiencia del Escritorio (DesktopExperience) debe estar habilitada para eliminar paquetes AppX en imágenes Windows Server Core/Nano Server." & CrLf & CrLf & "Habilite esta característica, arranque la imagen, e inténtelo de nuevo."
                                                 Case "FRA"
                                                     msg = "La caractéristique Expérience du bureau (DesktopExperience) doit être activée afin de supprimer les paquets AppX dans les images Windows Server Core/Nano Server." & CrLf & CrLf & "Activez cette caractéristique, démarrez sur l'image et réessayez."
+                                                Case "PTB", "PTG"
+                                                    msg = "A caraterística Área de Trabalho (DesktopExperience) tem de ser ativada para remover pacotes AppX nas imagens do Windows Server Core/Nano Server." & CrLf & CrLf & "Ative esta caraterística, arranque para a imagem e tente novamente."
                                             End Select
                                         Case 1
                                             msg = "The Desktop Experience (DesktopExperience) feature needs to be enabled in order to remove AppX packages in Windows Server Core/Nano Server images." & CrLf & CrLf & "Enable this feature, boot to the image, and try again."
@@ -76,6 +82,8 @@ Public Class RemProvAppxPackage
                                             msg = "La característica Experiencia del Escritorio (DesktopExperience) debe estar habilitada para eliminar paquetes AppX en imágenes Windows Server Core/Nano Server." & CrLf & CrLf & "Habilite esta característica, arranque la imagen, e inténtelo de nuevo."
                                         Case 3
                                             msg = "La caractéristique Expérience du bureau (DesktopExperience) doit être activée afin de supprimer les paquets AppX dans les images Windows Server Core/Nano Server." & CrLf & CrLf & "Activez cette caractéristique, démarrez sur l'image et réessayez."
+                                        Case 4
+                                            msg = "A caraterística Área de Trabalho (DesktopExperience) tem de ser ativada para remover pacotes AppX nas imagens do Windows Server Core/Nano Server." & CrLf & CrLf & "Ative esta caraterística, arranque para a imagem e tente novamente."
                                     End Select
                                     MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
                                     Exit Sub
@@ -147,6 +155,21 @@ Public Class RemProvAppxPackage
                         ListView1.Columns(3).Text = "ID de la ressource"
                         ListView1.Columns(4).Text = "Version"
                         ListView1.Columns(5).Text = "Enregistré au nom d'un utilisateur ?"
+                    Case "PTB", "PTG"
+                        Text = "Remover pacotes AppX provisionados"
+                        Label1.Text = Text
+                        Label3.Text = "Se um aplicativo estiver registrado para um usuário, você precisará executar este comando do PowerShell para removê-lo completamente:"
+                        Label4.Text = "Remove-AppxPackage -Package <nome do pacote>"
+                        Label5.Text = "Caso contrário, a aplicação não será aprovisionada para novos utilizadores. Consulte a coluna " & Quote & "Registado em qualquer utilizador?" & Quote & " para obter mais detalhes"
+                        LinkLabel1.Text = "Como é que o programa determina se uma aplicação está registada para um utilizador?"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Cancelar"
+                        ListView1.Columns(0).Text = "Nome do pacote"
+                        ListView1.Columns(1).Text = "Nome de apresentação da aplicação"
+                        ListView1.Columns(2).Text = "Arquitetura"
+                        ListView1.Columns(3).Text = "ID do recurso"
+                        ListView1.Columns(4).Text = "Versão"
+                        ListView1.Columns(5).Text = "Registado por algum utilizador?"
                 End Select
             Case 1
                 Text = "Remove provisioned AppX packages"
@@ -193,6 +216,21 @@ Public Class RemProvAppxPackage
                 ListView1.Columns(3).Text = "ID de la ressource"
                 ListView1.Columns(4).Text = "Version"
                 ListView1.Columns(5).Text = "Enregistré au nom d'un utilisateur ?"
+            Case 4
+                Text = "Remover pacotes AppX provisionados"
+                Label1.Text = Text
+                Label3.Text = "Se um aplicativo estiver registrado para um usuário, você precisará executar este comando do PowerShell para removê-lo completamente:"
+                Label4.Text = "Remove-AppxPackage -Package <nome do pacote>"
+                Label5.Text = "Caso contrário, a aplicação não será aprovisionada para novos utilizadores. Consulte a coluna " & Quote & "Registado em qualquer utilizador?" & Quote & " para obter mais detalhes"
+                LinkLabel1.Text = "Como é que o programa determina se uma aplicação está registada para um utilizador?"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Cancelar"
+                ListView1.Columns(0).Text = "Nome do pacote"
+                ListView1.Columns(1).Text = "Nome de apresentação da aplicação"
+                ListView1.Columns(2).Text = "Arquitetura"
+                ListView1.Columns(3).Text = "ID do recurso"
+                ListView1.Columns(4).Text = "Versão"
+                ListView1.Columns(5).Text = "Registado por algum utilizador?"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
@@ -237,6 +275,8 @@ Public Class RemProvAppxPackage
                                 MainForm.ResViewTSMI.Text = "Ver recursos de " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
                             Case "FRA"
                                 MainForm.ResViewTSMI.Text = "Voir les ressources de " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
+                            Case "PTB", "PTG"
+                                MainForm.ResViewTSMI.Text = "Ver recursos de " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
                         End Select
                     Case 1
                         MainForm.ResViewTSMI.Text = "View resources of " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
@@ -244,6 +284,8 @@ Public Class RemProvAppxPackage
                         MainForm.ResViewTSMI.Text = "Ver recursos de " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
                     Case 3
                         MainForm.ResViewTSMI.Text = "Voir les ressources de " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
+                    Case 4
+                        MainForm.ResViewTSMI.Text = "Ver recursos de " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
                 End Select
             Catch ex As Exception
                 MainForm.ResViewTSMI.Text = ""

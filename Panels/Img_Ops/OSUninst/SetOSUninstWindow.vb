@@ -50,6 +50,14 @@ Public Class SetOSUninstWindow
                         Label3.Text = "Nombre de jours nécessaires pour revenir à l'ancienne version de Windows :"
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Annuler"
+                    Case "PTB", "PTG"
+                        Text = "Configurar janela de desinstalação do sistema operativo"
+                        Label1.Text = Text
+                        Label2.Text = "Por predefinição, e após uma atualização do SO, tem 10 dias para reverter para a versão anterior do Windows. No entanto, pode alterar esta configuração se pretender reverter para a versão antiga do SO numa data posterior." & CrLf & CrLf & _
+                                      "Utilize o cursor numérico para aumentar ou diminuir o número de dias que tem para reverter para a versão antiga do Windows. Tem de estar entre 2 e 60."
+                        Label3.Text = "Quantidade de dias que tem para reverter para a versão antiga do Windows:"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Cancelar"
                 End Select
             Case 1
                 Text = "Set operating system uninstall window"
@@ -75,6 +83,14 @@ Public Class SetOSUninstWindow
                 Label3.Text = "Nombre de jours nécessaires pour revenir à l'ancienne version de Windows :"
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Annuler"
+            Case 4
+                Text = "Configurar janela de desinstalação do sistema operativo"
+                Label1.Text = Text
+                Label2.Text = "Por predefinição, e após uma atualização do SO, tem 10 dias para reverter para a versão anterior do Windows. No entanto, pode alterar esta configuração se pretender reverter para a versão antiga do SO numa data posterior." & CrLf & CrLf & _
+                              "Utilize o cursor numérico para aumentar ou diminuir o número de dias que tem para reverter para a versão antiga do Windows. Tem de estar entre 2 e 60."
+                Label3.Text = "Quantidade de dias que tem para reverter para a versão antiga do Windows:"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Cancelar"
         End Select
         ' Get the uninstall window from the registry first
         Try

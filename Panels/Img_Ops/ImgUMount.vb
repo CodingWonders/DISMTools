@@ -29,6 +29,8 @@ Public Class ImgUMount
                                     MsgBox("El directorio especificado no es un directorio de montaje válido.", vbOKOnly + vbCritical, Label1.Text)
                                 Case "FRA"
                                     MsgBox("Le répertoire spécifié n'est pas un répertoire de montage valide.", vbOKOnly + vbCritical, Label1.Text)
+                                Case "PTB", "PTG"
+                                    MsgBox("O diretório especificado não é um diretório de montagem válido.", vbOKOnly + vbCritical, Label1.Text)
                             End Select
                         Case 1
                             MsgBox("The specified directory isn't a valid mount directory.", vbOKOnly + vbCritical, Label1.Text)
@@ -36,6 +38,8 @@ Public Class ImgUMount
                             MsgBox("El directorio especificado no es un directorio de montaje válido.", vbOKOnly + vbCritical, Label1.Text)
                         Case 3
                             MsgBox("Le répertoire spécifié n'est pas un répertoire de montage valide.", vbOKOnly + vbCritical, Label1.Text)
+                        Case 4
+                            MsgBox("O diretório especificado não é um diretório de montagem válido.", vbOKOnly + vbCritical, Label1.Text)
                     End Select
                     Exit Sub
                 End If
@@ -49,6 +53,8 @@ Public Class ImgUMount
                                 MsgBox("El directorio de montaje no existe.", vbOKOnly + vbCritical, Label1.Text)
                             Case "FRA"
                                 MsgBox("Le répertoire de montage n'existe pas.", vbOKOnly + vbCritical, Label1.Text)
+                            Case "PTB", "PTG"
+                                MsgBox("O diretório de montagem não existe.", vbOKOnly + vbCritical, Label1.Text)
                         End Select
                     Case 1
                         MsgBox("The mount directory doesn't exist.", vbOKOnly + vbCritical, Label1.Text)
@@ -56,6 +62,8 @@ Public Class ImgUMount
                         MsgBox("El directorio de montaje no existe.", vbOKOnly + vbCritical, Label1.Text)
                     Case 3
                         MsgBox("Le répertoire de montage n'existe pas.", vbOKOnly + vbCritical, Label1.Text)
+                    Case 4
+                        MsgBox("O diretório de montagem não existe.", vbOKOnly + vbCritical, Label1.Text)
                 End Select
                 Exit Sub
             End If
@@ -113,7 +121,6 @@ Public Class ImgUMount
                         RadioButton2.Text = "is located somewhere else"
                         UMountOperations(0) = "Save changes and unmount"
                         UMountOperations(1) = "Discard changes and unmount"
-                        ComboBox1.Items.AddRange(UMountOperations)
                         GroupBox1.Text = "Mount directory"
                         GroupBox2.Text = "Additional options"
                     Case "ESN"
@@ -133,7 +140,6 @@ Public Class ImgUMount
                         RadioButton2.Text = "se ubica en otro lugar"
                         UMountOperations(0) = "Guardar cambios y desmontar"
                         UMountOperations(1) = "Descartar cambios y desmontar"
-                        ComboBox1.Items.AddRange(UMountOperations)
                         GroupBox1.Text = "Directorio de montaje"
                         GroupBox2.Text = "Opciones adicionales"
                     Case "FRA"
@@ -141,7 +147,7 @@ Public Class ImgUMount
                         Label1.Text = Text
                         Label2.Text = "Veuillez spécifier les options pour démonter cette image :"
                         Label3.Text = "Le répertoire de montage :"
-                        Label4.Text = "Répertoire de montage ::"
+                        Label4.Text = "Répertoire de montage :"
                         Label7.Text = "Opération de démontage :"
                         CheckBox1.Text = "Vérifier l'intégrité de l'image"
                         CheckBox2.Text = "Ajouter des modifications à un autre index"
@@ -153,9 +159,27 @@ Public Class ImgUMount
                         RadioButton2.Text = "est situé ailleurs"
                         UMountOperations(0) = "Sauvegarder les modifications et démonter"
                         UMountOperations(1) = "Annuler les modifications et démonter"
-                        ComboBox1.Items.AddRange(UMountOperations)
                         GroupBox1.Text = "Répertoire de montage"
                         GroupBox2.Text = "Paramètres supplémentaires"
+                    Case "PTB", "PTG"
+                        Text = "Desmontar uma imagem"
+                        Label1.Text = Text
+                        Label2.Text = "Por favor, especifique as opções para desmontar esta imagem:"
+                        Label3.Text = "O diretório de montagem:"
+                        Label4.Text = "Diretório de montagem:"
+                        Label7.Text = "Operação de desmontagem:"
+                        CheckBox1.Text = "Verificar a integridade da imagem"
+                        CheckBox2.Text = "Anexar alterações a outro índice"
+                        Button1.Text = "Escolher..."
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Cancelar"
+                        FolderBrowserDialog1.Description = "Por favor, especifique um diretório de montagem:"
+                        RadioButton1.Text = "está carregado no projeto"
+                        RadioButton2.Text = "está localizado noutro local"
+                        UMountOperations(0) = "Guardar alterações e desmontar"
+                        UMountOperations(1) = "Descartar alterações e desmontar"
+                        GroupBox1.Text = "Diretório de montagem"
+                        GroupBox2.Text = "Opções adicionais"
                 End Select
             Case 1
                 Text = "Unmount an image"
@@ -174,7 +198,6 @@ Public Class ImgUMount
                 RadioButton2.Text = "is located somewhere else"
                 UMountOperations(0) = "Save changes and unmount"
                 UMountOperations(1) = "Discard changes and unmount"
-                ComboBox1.Items.AddRange(UMountOperations)
                 GroupBox1.Text = "Mount directory"
                 GroupBox2.Text = "Additional options"
             Case 2
@@ -194,7 +217,6 @@ Public Class ImgUMount
                 RadioButton2.Text = "se ubica en otro lugar"
                 UMountOperations(0) = "Guardar cambios y desmontar"
                 UMountOperations(1) = "Descartar cambios y desmontar"
-                ComboBox1.Items.AddRange(UMountOperations)
                 GroupBox1.Text = "Directorio de montaje"
                 GroupBox2.Text = "Opciones adicionales"
             Case 3
@@ -202,7 +224,7 @@ Public Class ImgUMount
                 Label1.Text = Text
                 Label2.Text = "Veuillez spécifier les options pour démonter cette image :"
                 Label3.Text = "Le répertoire de montage :"
-                Label4.Text = "Répertoire de montage ::"
+                Label4.Text = "Répertoire de montage :"
                 Label7.Text = "Opération de démontage :"
                 CheckBox1.Text = "Vérifier l'intégrité de l'image"
                 CheckBox2.Text = "Ajouter des modifications à un autre index"
@@ -214,10 +236,29 @@ Public Class ImgUMount
                 RadioButton2.Text = "est situé ailleurs"
                 UMountOperations(0) = "Sauvegarder les modifications et démonter"
                 UMountOperations(1) = "Annuler les modifications et démonter"
-                ComboBox1.Items.AddRange(UMountOperations)
                 GroupBox1.Text = "Répertoire de montage"
                 GroupBox2.Text = "Paramètres supplémentaires"
+            Case 4
+                Text = "Desmontar uma imagem"
+                Label1.Text = Text
+                Label2.Text = "Por favor, especifique as opções para desmontar esta imagem:"
+                Label3.Text = "O diretório de montagem:"
+                Label4.Text = "Diretório de montagem:"
+                Label7.Text = "Operação de desmontagem:"
+                CheckBox1.Text = "Verificar a integridade da imagem"
+                CheckBox2.Text = "Anexar alterações a outro índice"
+                Button1.Text = "Escolher..."
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Cancelar"
+                FolderBrowserDialog1.Description = "Por favor, especifique um diretório de montagem:"
+                RadioButton1.Text = "está carregado no projeto"
+                RadioButton2.Text = "está localizado noutro local"
+                UMountOperations(0) = "Guardar alterações e desmontar"
+                UMountOperations(1) = "Descartar alterações e desmontar"
+                GroupBox1.Text = "Diretório de montagem"
+                GroupBox2.Text = "Opções adicionais"
         End Select
+        ComboBox1.Items.AddRange(UMountOperations)
         ComboBox1.SelectedIndex = 0
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
