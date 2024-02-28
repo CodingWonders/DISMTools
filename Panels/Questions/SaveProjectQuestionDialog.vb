@@ -42,6 +42,13 @@ Public Class SaveProjectQuestionDialog
                         Yes_Button.Text = "Oui"
                         No_Button.Text = "Non"
                         Cancel_Button.Text = "Annuler"
+                    Case "PTB", "PTG"
+                        Label1.Text = "Pretende guardar as alterações deste projeto?"
+                        Label2.Text = "Se desligar ou reiniciar o sistema sem desmontar as imagens, terá de recarregar a sessão de manutenção."
+                        CheckBox1.Text = "Guardar as alterações e desmontar a imagem"
+                        Yes_Button.Text = "Sim"
+                        No_Button.Text = "Não"
+                        Cancel_Button.Text = "Cancelar"
                 End Select
             Case 1
                 Label1.Text = "Do you want to save the changes of this project?"
@@ -64,6 +71,13 @@ Public Class SaveProjectQuestionDialog
                 Yes_Button.Text = "Oui"
                 No_Button.Text = "Non"
                 Cancel_Button.Text = "Annuler"
+            Case 4
+                Label1.Text = "Pretende guardar as alterações deste projeto?"
+                Label2.Text = "Se desligar ou reiniciar o sistema sem desmontar as imagens, terá de recarregar a sessão de manutenção."
+                CheckBox1.Text = "Guardar as alterações e desmontar a imagem"
+                Yes_Button.Text = "Sim"
+                No_Button.Text = "Não"
+                Cancel_Button.Text = "Cancelar"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)

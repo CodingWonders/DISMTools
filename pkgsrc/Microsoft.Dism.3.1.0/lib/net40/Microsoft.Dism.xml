@@ -4,6 +4,11 @@
         <name>Microsoft.Dism</name>
     </assembly>
     <members>
+        <member name="T:System.Runtime.CompilerServices.CallerMemberNameAttribute">
+            <summary>
+            Allows you to obtain the method or property name of the caller to the method.
+            </summary>
+        </member>
         <member name="T:Microsoft.Dism.DismApi">
             <summary>
             Represents the main entry point into the Deployment Image Servicing and Management (DISM) API.
@@ -1112,6 +1117,16 @@
             </summary>
             <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
             <param name="driverPath">A relative or absolute path to the driver .inf file.</param>
+            <returns>A <see cref="T:Microsoft.Dism.DismDriverCollection" /> object containing a collection of <see cref="T:Microsoft.Dism.DismDriver" /> objects.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.GetDriverInfo(Microsoft.Dism.DismSession,System.String,Microsoft.Dism.DismDriverPackage@)">
+            <summary>
+            Gets information about an .inf file in a specified image.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <param name="driverPath">A relative or absolute path to the driver .inf file.</param>
+            <param name="driverPackage">Receives a <see cref="T:Microsoft.Dism.DismDriverPackage" /> containing information about the driver package if available.</param>
             <returns>A <see cref="T:Microsoft.Dism.DismDriverCollection" /> object containing a collection of <see cref="T:Microsoft.Dism.DismDriver" /> objects.</returns>
             <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
         </member>

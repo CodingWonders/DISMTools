@@ -69,6 +69,21 @@ Public Class GetFeatureInfoDlg
                         ListView1.Columns(0).Text = "Nom de la caractéristique"
                         ListView1.Columns(1).Text = "État de la caractéristique"
                         Button2.Text = "Sauvegarder..."
+                    Case "PTB", "PTG"
+                        Text = "Obter informações sobre a caraterística"
+                        Label1.Text = Text
+                        Label2.Text = "Pronto"
+                        Label22.Text = "Nome da caraterística:"
+                        Label24.Text = "Nome do ecrã:"
+                        Label26.Text = "Descrição da caraterística:"
+                        Label31.Text = "É necessário reiniciar?"
+                        Label36.Text = "Informação sobre a caraterística"
+                        Label37.Text = "Seleccione uma caraterística instalada à esquerda para ver as suas informações aqui"
+                        Label41.Text = "Estado da funcionalidade:"
+                        Label43.Text = "Propriedades personalizadas:"
+                        ListView1.Columns(0).Text = "Nome da caraterística"
+                        ListView1.Columns(1).Text = "Estado da caraterística"
+                        Button2.Text = "Guardar..."
                 End Select
             Case 1
                 Text = "Get feature information"
@@ -115,6 +130,21 @@ Public Class GetFeatureInfoDlg
                 ListView1.Columns(0).Text = "Nom de la caractéristique"
                 ListView1.Columns(1).Text = "État de la caractéristique"
                 Button2.Text = "Sauvegarder..."
+            Case 4
+                Text = "Obter informações sobre a caraterística"
+                Label1.Text = Text
+                Label2.Text = "Pronto"
+                Label22.Text = "Nome da caraterística:"
+                Label24.Text = "Nome do ecrã:"
+                Label26.Text = "Descrição da caraterística:"
+                Label31.Text = "É necessário reiniciar?"
+                Label36.Text = "Informação sobre a caraterística"
+                Label37.Text = "Seleccione uma caraterística instalada à esquerda para ver as suas informações aqui"
+                Label41.Text = "Estado da funcionalidade:"
+                Label43.Text = "Propriedades personalizadas:"
+                ListView1.Columns(0).Text = "Nome da caraterística"
+                ListView1.Columns(1).Text = "Estado da caraterística"
+                Button2.Text = "Guardar..."
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
@@ -146,6 +176,8 @@ Public Class GetFeatureInfoDlg
                                     msg = "Los procesos en segundo plano deben haber completado antes de obtener información de la característica. Esperaremos hasta que hayan completado"
                                 Case "FRA"
                                     msg = "Les processus en plan doivent être terminés avant d'afficher les caractéristiques. Nous attendrons qu'ils soient terminés"
+                                Case "PTB", "PTG"
+                                    msg = "Os processos em segundo plano têm de estar concluídos antes de mostrar informações sobre as características. Vamos esperar até que estejam concluídos"
                             End Select
                         Case 1
                             msg = "Background processes need to have completed before showing feature information. We'll wait until they have completed"
@@ -153,6 +185,8 @@ Public Class GetFeatureInfoDlg
                             msg = "Los procesos en segundo plano deben haber completado antes de obtener información de la característica. Esperaremos hasta que hayan completado"
                         Case 3
                             msg = "Les processus en plan doivent être terminés avant d'afficher les caractéristiques. Nous attendrons qu'ils soient terminés"
+                        Case 4
+                            msg = "Os processos em segundo plano têm de estar concluídos antes de mostrar informações sobre as características. Vamos esperar até que estejam concluídos"
                     End Select
                     MsgBox(msg, vbOKOnly + vbInformation, Label1.Text)
                     Select Case MainForm.Language
@@ -164,6 +198,8 @@ Public Class GetFeatureInfoDlg
                                     Label2.Text = "Esperando a que terminen los procesos en segundo plano..."
                                 Case "FRA"
                                     Label2.Text = "Attente de la fin des processus en arrière plan..."
+                                Case "PTB", "PTG"
+                                    Label2.Text = "À espera que os processos em segundo plano terminem..."
                             End Select
                         Case 1
                             Label2.Text = "Waiting for background processes to finish..."
@@ -171,6 +207,8 @@ Public Class GetFeatureInfoDlg
                             Label2.Text = "Esperando a que terminen los procesos en segundo plano..."
                         Case 3
                             Label2.Text = "Attente de la fin des processus en arrière plan..."
+                        Case 4
+                            Label2.Text = "À espera que os processos em segundo plano terminem..."
                     End Select
                     While MainForm.ImgBW.IsBusy
                         Application.DoEvents()
@@ -199,6 +237,8 @@ Public Class GetFeatureInfoDlg
                                 Label2.Text = "Preparándonos para obtener información de la característica..."
                             Case "FRA"
                                 Label2.Text = "Préparation de l'obtention des informations de la caractéristique en cours..."
+                            Case "PTB", "PTG"
+                                Label2.Text = "Preparar-se para obter informações sobre a característica..."
                         End Select
                     Case 1
                         Label2.Text = "Preparing to get feature information..."
@@ -206,6 +246,8 @@ Public Class GetFeatureInfoDlg
                         Label2.Text = "Preparándonos para obtener información de la característica..."
                     Case 3
                         Label2.Text = "Préparation de l'obtention des informations de la caractéristique en cours..."
+                    Case 4
+                        Label2.Text = "Preparar-se para obter informações sobre a característica..."
                 End Select
                 Application.DoEvents()
                 Try
@@ -220,6 +262,8 @@ Public Class GetFeatureInfoDlg
                                         Label2.Text = "Obteniendo información de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
                                     Case "FRA"
                                         Label2.Text = "Obtention des informations de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & " en cours..."
+                                    Case "PTB", "PTG"
+                                        Label2.Text = "Obter informações de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
                                 End Select
                             Case 1
                                 Label2.Text = "Getting information from " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
@@ -227,6 +271,8 @@ Public Class GetFeatureInfoDlg
                                 Label2.Text = "Obteniendo información de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
                             Case 3
                                 Label2.Text = "Obtention des informations de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & " en cours..."
+                            Case 4
+                                Label2.Text = "Obter informações de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
                         End Select
                         Application.DoEvents()
                         Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, ListView1.FocusedItem.SubItems(0).Text)
@@ -251,6 +297,8 @@ Public Class GetFeatureInfoDlg
                                             Label42.Text = "Ninguna"
                                         Case "FRA"
                                             Label42.Text = "Aucune"
+                                        Case "PTB", "PTG"
+                                            Label42.Text = "Nenhum"
                                     End Select
                                 Case 1
                                     Label42.Text = "None"
@@ -258,6 +306,8 @@ Public Class GetFeatureInfoDlg
                                     Label42.Text = "Ninguna"
                                 Case 3
                                     Label42.Text = "Aucune"
+                                Case 4
+                                    Label42.Text = "Nenhum"
                             End Select
                         End If
                     End Using
@@ -275,6 +325,8 @@ Public Class GetFeatureInfoDlg
                                     msg = "No pudimos obtener información de la característica. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                                 Case "FRA"
                                     msg = "Impossible d'obtenir des informations sur les caractéristiques. Raison : " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                                Case "PTB", "PTG"
+                                    msg = "Não foi possível obter informações sobre a característica. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                             End Select
                         Case 1
                             msg = "Could not get feature information. Reason: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
@@ -282,6 +334,8 @@ Public Class GetFeatureInfoDlg
                             msg = "No pudimos obtener información de la característica. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                         Case 3
                             msg = "Impossible d'obtenir des informations sur les caractéristiques. Raison : " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                        Case 4
+                            msg = "Não foi possível obter informações sobre a característica. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                     End Select
                     MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
                 Finally
@@ -296,6 +350,8 @@ Public Class GetFeatureInfoDlg
                                 Label2.Text = "Listo"
                             Case "FRA"
                                 Label2.Text = "Prêt"
+                            Case "PTB", "PTG"
+                                Label2.Text = "Pronto"
                         End Select
                     Case 1
                         Label2.Text = "Ready"
@@ -303,6 +359,8 @@ Public Class GetFeatureInfoDlg
                         Label2.Text = "Listo"
                     Case 3
                         Label2.Text = "Prêt"
+                    Case 4
+                        Label2.Text = "Pronto"
                 End Select
                 Panel4.Visible = True
                 Panel7.Visible = False

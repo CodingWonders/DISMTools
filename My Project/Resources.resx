@@ -1099,40 +1099,37 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <data name="WhatsNew" xml:space="preserve">
     <value>Changes made since last preview
 
-Bugfixes
+Enhancements:
 
-- Dates of the RSS feed news are now represented correctly
-
-New features
-
-- Added 2 new command-line arguments: "/offline" (enters the offline installation management mode) and "/?" (shows a command line help message)
-
-Removed features
-
-- The old method of getting drives through WMIC is now removed. Typing "dthelper /drinfo" will now result in an unrecognized command
+- The default window size of the image information results dialog is now 1024x600
+- The alignment of the Recents list items to the home screen tasks has been improved
+- Portuguese translations are now complete
 
 Overall changes
 
-Bugfixes
+Overall bugfixes:
 
-- Driver information background processes no longer fail on Windows 7 images
-- The image information report preview window is no longer shown behind other windows
-- The help documentation content browser no longer redirects to the Help home page if its window lost focus or was minimized
-- Fixed an issue where the program would try to save the offline installation management mode pseudo-project after performing element processing
-- Fixed a typo in the description of error code 0xC142010C
-- Package, feature, and capability operations now pass the "/norestart" flag to DISM to skip system restart questions
+- Fixed some minor text editor issues in the Configuration List Editor
+- Fixed an issue where the "Pick..." button in the image file information dialog would not be disabled automatically when selecting "Currently mounted image"
 
-New features
+Overall new features and enhancements:
 
-- You can now get image file information of SWM files
-- Introduced a PRI resource extractor that comes in handy when getting friendly AppX package display names
-- The Options window has been redesigned
-- Image status watchers have been added, which detect status changes in an image and notify you of such changes
-- CODE: background processes no longer depend on the "expBackgroundProcesses" variable
-- You can now import the driver packages from one image to another to provide the same hardware compatibility
-- If some packages, features, or capabilities require a system restart, you will now be notified
-
-Help documentation update versions: "v0.4.1.2411"</value>
+- Portuguese translations have been implemented
+- When selecting the boot drive in the offline installation source of the driver import dialog, it will switch to the online installation automatically
+- You can now pick a mounted image in the image file information dialog
+- The managed DISM API library was updated to version 3.1
+- Thanks to the DISM API library update, you can now view the general information of a driver file
+- A help entry for downloading applications has been added to the AppX package addition dialog
+- Operating system uninstallation tasks have been added. These include:
+  - Setting the OS uninstall window
+  - Initiating an OS uninstall
+  - Removing the ability to roll back to an old Windows version
+  - Getting the uninstall window
+- You can now exclude user OneDrive folders by adding them to your configuration list automatically thanks to the OneDrive folder exclusion tool, available in the Tools menu of the DISM Configuration List Editor
+- The Recents list has been implemented
+- CODE: updated the assembly description
+- CODE: size representation procedures in the "Utilities" class now support petabytes (PB)
+- Project creation times have been reduced by ~2 seconds</value>
   </data>
   <data name="split_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\split_img.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -1211,5 +1208,8 @@ Help documentation update versions: "v0.4.1.2411"</value>
   </data>
   <data name="import_driver" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\import_driver.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="onedrive_exclusion" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\onedrive_exclusion.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

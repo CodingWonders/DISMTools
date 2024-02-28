@@ -3,6 +3,8 @@
 Public Class PopupImageManager
 
     Public selectedMntDir As String
+    Public selectedImgFile As String
+
     Private Sub PopupImageManager_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language
             Case 0
@@ -40,6 +42,17 @@ Public Class PopupImageManager
                         ListView1.Columns(3).Text = "État"
                         ListView1.Columns(4).Text = "Droits de lecture/écriture ?"
                         ListView1.Columns(5).Text = "Version"
+                    Case "PTB", "PTG"
+                        Text = "Escolher imagem"
+                        Button1.Text = "OK"
+                        Button2.Text = "Cancelar"
+                        Label1.Text = "Escolher uma imagem da lista abaixo:"
+                        ListView1.Columns(0).Text = "Ficheiro de imagem"
+                        ListView1.Columns(1).Text = "Índice"
+                        ListView1.Columns(2).Text = "Diretório de montagem"
+                        ListView1.Columns(3).Text = "Estado"
+                        ListView1.Columns(4).Text = "Permissões de leitura/escrita?"
+                        ListView1.Columns(5).Text = "Versão"
                 End Select
             Case 1
                 Text = "Pick image"
@@ -74,6 +87,17 @@ Public Class PopupImageManager
                 ListView1.Columns(3).Text = "État"
                 ListView1.Columns(4).Text = "Droits de lecture/écriture ?"
                 ListView1.Columns(5).Text = "Version"
+            Case 4
+                Text = "Escolher imagem"
+                Button1.Text = "OK"
+                Button2.Text = "Cancelar"
+                Label1.Text = "Escolher uma imagem da lista abaixo:"
+                ListView1.Columns(0).Text = "Ficheiro de imagem"
+                ListView1.Columns(1).Text = "Índice"
+                ListView1.Columns(2).Text = "Diretório de montagem"
+                ListView1.Columns(3).Text = "Estado"
+                ListView1.Columns(4).Text = "Permissões de leitura/escrita?"
+                ListView1.Columns(5).Text = "Versão"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)
@@ -101,6 +125,8 @@ Public Class PopupImageManager
                             MsgBox("Seleccione una imagen e inténtelo de nuevo.", vbOKOnly + vbInformation, Text)
                         Case "FRA"
                             MsgBox("Veuillez sélectionner une image et réessayer.", vbOKOnly + vbInformation, Text)
+                        Case "PTB", "PTG"
+                            MsgBox("Seleccione uma imagem e tente novamente.", vbOKOnly + vbInformation, Text)
                     End Select
                 Case 1
                     MsgBox("Please select an image and try again.", vbOKOnly + vbInformation, Text)
@@ -108,10 +134,13 @@ Public Class PopupImageManager
                     MsgBox("Seleccione una imagen e inténtelo de nuevo.", vbOKOnly + vbInformation, Text)
                 Case 3
                     MsgBox("Veuillez sélectionner une image et réessayer.", vbOKOnly + vbInformation, Text)
+                Case 4
+                    MsgBox("Seleccione uma imagem e tente novamente.", vbOKOnly + vbInformation, Text)
             End Select
             Exit Sub
         End If
         selectedMntDir = ListView1.FocusedItem.SubItems(2).Text
+        selectedImgFile = ListView1.FocusedItem.SubItems(0).Text
         DialogResult = Windows.Forms.DialogResult.OK
         Close()
     End Sub

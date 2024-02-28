@@ -27,6 +27,11 @@ Public Class BGProcsBusyDialog
                         Label2.Text = "Une fois ce processus terminé, vous pouvez commencer à exécuter les tâches liées à l'image. Cela prend généralement quelques minutes, mais cela peut dépendre de l'image et de la vitesse de votre ordinateur." & CrLf & CrLf & _
                             "Vous pouvez à tout moment vérifier l'état de ce processus en arrière plan en cliquant sur l'icône en bas à gauche."
                         OK_Button.Text = "OK"
+                    Case "PTB", "PTG"
+                        Label1.Text = "Ainda estamos a recolher informações sobre a imagem"
+                        Label2.Text = "Quando terminarmos este processo, pode começar a executar tarefas de imagem. Normalmente, isto demora alguns minutos, mas pode depender da imagem e da velocidade do seu computador." & CrLf & CrLf & _
+                            "Pode verificar o estado deste processo em segundo plano a qualquer momento, clicando no ícone no canto inferior esquerdo."
+                        OK_Button.Text = "OK"
                 End Select
             Case 1
                 Label1.Text = "We're still gathering image information"
@@ -42,6 +47,11 @@ Public Class BGProcsBusyDialog
                 Label1.Text = "Nous continuons à recueillir des informations de l'image"
                 Label2.Text = "Une fois ce processus terminé, vous pouvez commencer à exécuter les tâches liées à l'image. Cela prend généralement quelques minutes, mais cela peut dépendre de l'image et de la vitesse de votre ordinateur." & CrLf & CrLf & _
                     "Vous pouvez à tout moment vérifier l'état de ce processus en arrière plan en cliquant sur l'icône en bas à gauche."
+                OK_Button.Text = "OK"
+            Case 4
+                Label1.Text = "Ainda estamos a recolher informações sobre a imagem"
+                Label2.Text = "Quando terminarmos este processo, pode começar a executar tarefas de imagem. Normalmente, isto demora alguns minutos, mas pode depender da imagem e da velocidade do seu computador." & CrLf & CrLf & _
+                    "Pode verificar o estado deste processo em segundo plano a qualquer momento, clicando no ícone no canto inferior esquerdo."
                 OK_Button.Text = "OK"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then

@@ -12,8 +12,10 @@ Public Class MigrationForm
                 msg = "Cargando archivo antiguo de configuración..."
             Case "FRA"
                 msg = "Chargement d'un ancien fichier de paramètres en cours..."
+            Case "PTB", "PTG"
+                msg = "Carregar ficheiro de configurações antigo..."
         End Select
-        BackgroundWorker1.ReportProgress(33.3)
+        BackgroundWorker1.ReportProgress(33.299999999999997)
         MainForm.LoadDTSettings(1)
         Threading.Thread.Sleep(250)
         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -23,8 +25,10 @@ Public Class MigrationForm
                 msg = "Guardando archivo nuevo de configuración..."
             Case "FRA"
                 msg = "Sauvegarder le fichier des nouveaux paramètres en cours..."
+            Case "PTB", "PTG"
+                msg = "Guardar o novo ficheiro de configurações..."
         End Select
-        BackgroundWorker1.ReportProgress(66.6)
+        BackgroundWorker1.ReportProgress(66.599999999999994)
         MainForm.SaveDTSettings()
         Threading.Thread.Sleep(250)
         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -34,6 +38,8 @@ Public Class MigrationForm
                 msg = "Terminado"
             Case "FRA"
                 msg = "Terminé"
+            Case "PTB", "PTG"
+                msg = "Concluído"
         End Select
         BackgroundWorker1.ReportProgress(100)
         Threading.Thread.Sleep(1000)
@@ -70,6 +76,9 @@ Public Class MigrationForm
             Case "FRA"
                 Label1.Text = "Veuillez patienter pendant que DISMTools migre votre ancien fichier de paramètres pour qu'il fonctionne avec cette version. Cela peut prendre un certain temps."
                 Label2.Text = "Veuillez patienter..."
+            Case "PTB", "PTG"
+                Label1.Text = "Aguarde enquanto o DISMTools migra o seu ficheiro de configurações antigo para funcionar nesta versão. Isso pode levar algum tempo"
+                Label2.Text = "Aguarde..."
         End Select
         Refresh()
         BackgroundWorker1.RunWorkerAsync()

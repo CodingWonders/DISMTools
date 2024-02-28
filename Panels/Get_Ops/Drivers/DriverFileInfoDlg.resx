@@ -117,7 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Label2.Text" xml:space="preserve">
-    <value>No old versions were detected, because its files were not found. You may have had this version for longer than the uninstall window lets you have, or you may have deleted the old version files manually (to save space). You don't need to do anything.</value>
-  </data>
 </root>

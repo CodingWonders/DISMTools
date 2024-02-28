@@ -129,6 +129,44 @@ Public Class PrgAbout
                         LinkLabel13.Text = "Site web"
                         OK_Button.Text = "OK"
                         UpdCheckBtn.Text = "Vérifier les mises à jour"
+                    Case "PTB", "PTG"
+                        Text = "Acerca deste programa"
+                        Label1.Text = "DISMTools - versão " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
+                        Label2.Text = "DISMTools permite-lhe implementar, gerir e efetuar a manutenção de imagens do Windows com facilidade, graças a uma GUI"
+                        Label3.Text = "Estes recursos e componentes foram utilizados na criação deste programa:"
+                        Label4.Text = "Recursos"
+                        Label5.Text = "Fluency"
+                        Label6.Text = "Ícone do SQL Server (Cor)"
+                        Label7.Text = "Utilitários"
+                        Label8.Text = "7-Zip"
+                        Label9.Text = "wimlib-imagex (usado no futuro)"
+                        Label10.Text = "Documentação de ajuda"
+                        Label11.Text = "Fonte da Ajuda do Comando"
+                        Label12.Text = "Criação de ficheiros de resposta não assistida"
+                        Label13.Text = "Scintilla.NET (pacote NuGet)"
+                        If Not MainForm.dtBranch.Contains("preview") Then
+                            Label15.Text = "Construído em " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " por msbuild"
+                            Label15.Visible = True
+                        End If
+                        Label16.Text = "ManagedDism (pacote NuGet)"
+                        Label17.Text = "Activos de marca"
+                        Label18.Text = "Papel de parede do Windows Home Server"
+                        LinkLabel1.Text = "CRÉDITOS"
+                        LinkLabel2.Text = "LICENÇAS"
+                        LinkLabel3.Text = "O QUE HÁ DE NOVO"
+                        LinkLabel4.Text = "Ícones8"
+                        LinkLabel5.Text = "Sítio Web"
+                        LinkLabel6.Text = "Sítio Web"
+                        LinkLabel7.Text = "Microsoft"
+                        LinkLabel8.Text = "O assistente de criação de ficheiros de resposta não assistida baseia-se no sítio Web do Gerador de Ficheiros de Resposta do Windows"
+                        LinkLabel8.LinkArea = New LinkArea(76, 56)
+                        LinkLabel9.Text = "Sítio Web"
+                        LinkLabel10.Text = "Sítio Web"
+                        LinkLabel11.Text = "Microsoft, Kýnan Antos"
+                        LinkLabel12.Text = "Sítio Web"
+                        LinkLabel13.Text = "Sítio Web"
+                        OK_Button.Text = "OK"
+                        UpdCheckBtn.Text = "Verificar actualizações"
                 End Select
             Case 1
                 Text = "About this program"
@@ -244,6 +282,44 @@ Public Class PrgAbout
                 LinkLabel13.Text = "Site web"
                 OK_Button.Text = "OK"
                 UpdCheckBtn.Text = "Vérifier les mises à jour"
+            Case 4
+                Text = "Acerca deste programa"
+                Label1.Text = "DISMTools - versão " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
+                Label2.Text = "DISMTools permite-lhe implementar, gerir e efetuar a manutenção de imagens do Windows com facilidade, graças a uma GUI"
+                Label3.Text = "Estes recursos e componentes foram utilizados na criação deste programa:"
+                Label4.Text = "Recursos"
+                Label5.Text = "Fluency"
+                Label6.Text = "Ícone do SQL Server (Cor)"
+                Label7.Text = "Utilitários"
+                Label8.Text = "7-Zip"
+                Label9.Text = "wimlib-imagex (usado no futuro)"
+                Label10.Text = "Documentação de ajuda"
+                Label11.Text = "Fonte da Ajuda do Comando"
+                Label12.Text = "Criação de ficheiros de resposta não assistida"
+                Label13.Text = "Scintilla.NET (pacote NuGet)"
+                If Not MainForm.dtBranch.Contains("preview") Then
+                    Label15.Text = "Construído em " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " por msbuild"
+                    Label15.Visible = True
+                End If
+                Label16.Text = "ManagedDism (pacote NuGet)"
+                Label17.Text = "Activos de marca"
+                Label18.Text = "Papel de parede do Windows Home Server"
+                LinkLabel1.Text = "CRÉDITOS"
+                LinkLabel2.Text = "LICENÇAS"
+                LinkLabel3.Text = "O QUE HÁ DE NOVO"
+                LinkLabel4.Text = "Ícones8"
+                LinkLabel5.Text = "Sítio Web"
+                LinkLabel6.Text = "Sítio Web"
+                LinkLabel7.Text = "Microsoft"
+                LinkLabel8.Text = "O assistente de criação de ficheiros de resposta não assistida baseia-se no sítio Web do Gerador de Ficheiros de Resposta do Windows"
+                LinkLabel8.LinkArea = New LinkArea(76, 56)
+                LinkLabel9.Text = "Sítio Web"
+                LinkLabel10.Text = "Sítio Web"
+                LinkLabel11.Text = "Microsoft, Kýnan Antos"
+                LinkLabel12.Text = "Sítio Web"
+                LinkLabel13.Text = "Sítio Web"
+                OK_Button.Text = "OK"
+                UpdCheckBtn.Text = "Verificar actualizações"
         End Select
         RichTextBox1.Text = My.Resources.LicenseOverview
         RichTextBox2.Text = My.Resources.WhatsNew
@@ -455,6 +531,8 @@ Public Class PrgAbout
                         PictureToolTip.SetToolTip(sender, "Consulte el repositorio del proyecto en GitHub")
                     Case "FRA"
                         PictureToolTip.SetToolTip(sender, "Consultez le dépôt du projet sur GitHub")
+                    Case "PTB", "PTG"
+                        PictureToolTip.SetToolTip(sender, "Consulte o repositório do projeto no GitHub")
                 End Select
             Case 1
                 PictureToolTip.SetToolTip(sender, "Check out the project's repository on GitHub")
@@ -462,6 +540,8 @@ Public Class PrgAbout
                 PictureToolTip.SetToolTip(sender, "Consulte el repositorio del proyecto en GitHub")
             Case 3
                 PictureToolTip.SetToolTip(sender, "Consultez le dépôt du projet sur GitHub")
+            Case 4
+                PictureToolTip.SetToolTip(sender, "Consulte o repositório do projeto no GitHub")
         End Select
     End Sub
 
@@ -475,6 +555,8 @@ Public Class PrgAbout
                         PictureToolTip.SetToolTip(sender, "Consulte el subreddit oficial del proyecto")
                     Case "FRA"
                         PictureToolTip.SetToolTip(sender, "Consultez le subreddit officiel du projet")
+                    Case "PTB", "PTG"
+                        PictureToolTip.SetToolTip(sender, "Consulte o subreddit oficial do projeto")
                 End Select
             Case 1
                 PictureToolTip.SetToolTip(sender, "Check out the project's official subreddit")
@@ -482,6 +564,8 @@ Public Class PrgAbout
                 PictureToolTip.SetToolTip(sender, "Consulte el subreddit oficial del proyecto")
             Case 3
                 PictureToolTip.SetToolTip(sender, "Consultez le subreddit officiel du projet")
+            Case 4
+                PictureToolTip.SetToolTip(sender, "Consulte o subreddit oficial do projeto")
         End Select
     End Sub
 
@@ -495,6 +579,8 @@ Public Class PrgAbout
                         PictureToolTip.SetToolTip(sender, "Consulte la discusión del proyecto en los foros de My Digital Life")
                     Case "FRA"
                         PictureToolTip.SetToolTip(sender, "Consultez les discussions sur le projet sur les forums de My Digital Life")
+                    Case "PTB", "PTG"
+                        PictureToolTip.SetToolTip(sender, "Consulte o debate sobre o projeto nos fóruns do My Digital Life")
                 End Select
             Case 1
                 PictureToolTip.SetToolTip(sender, "Check out the project's discussion on the My Digital Life forums")
@@ -502,6 +588,8 @@ Public Class PrgAbout
                 PictureToolTip.SetToolTip(sender, "Consulte la discusión del proyecto en los foros de My Digital Life")
             Case 3
                 PictureToolTip.SetToolTip(sender, "Consultez les discussions sur le projet sur les forums de My Digital Life")
+            Case 4
+                PictureToolTip.SetToolTip(sender, "Consulte o debate sobre o projeto nos fóruns do My Digital Life")
         End Select
     End Sub
 
@@ -515,6 +603,8 @@ Public Class PrgAbout
                         PictureToolTip.SetToolTip(sender, "Consulte el chat de Gitter (potenciado por Matrix)")
                     Case "FRA"
                         PictureToolTip.SetToolTip(sender, "Consultez le chat sur Gitter (powered by Matrix)")
+                    Case "PTB", "PTG"
+                        PictureToolTip.SetToolTip(sender, "Consulte o chat do Gitter (com tecnologia Matrix)")
                 End Select
             Case 1
                 PictureToolTip.SetToolTip(sender, "Check out the Gitter chat (powered by Matrix)")
@@ -522,6 +612,8 @@ Public Class PrgAbout
                 PictureToolTip.SetToolTip(sender, "Consulte el chat de Gitter (potenciado por Matrix)")
             Case 3
                 PictureToolTip.SetToolTip(sender, "Consultez le chat sur Gitter (powered by Matrix)")
+            Case 4
+                PictureToolTip.SetToolTip(sender, "Consulte o chat do Gitter (com tecnologia Matrix)")
         End Select
     End Sub
 
@@ -542,6 +634,8 @@ Public Class PrgAbout
                             MsgBox("No pudimos descargar el comprobador de actualizaciones. Razón:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
                         Case "FRA"
                             MsgBox("Nous n'avons pas pu télécharger le vérificateur de mise à jour. Raison :" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
+                        Case "PTB", "PTG"
+                            MsgBox("Não foi possível descarregar o verificador de actualizações. Motivo:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
                     End Select
                 Case 1
                     MsgBox("We couldn't download the update checker. Reason:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
@@ -549,6 +643,8 @@ Public Class PrgAbout
                     MsgBox("No pudimos descargar el comprobador de actualizaciones. Razón:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
                 Case 3
                     MsgBox("Nous n'avons pas pu télécharger le vérificateur de mise à jour. Raison :" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
+                Case 4
+                    MsgBox("Não foi possível descarregar o verificador de actualizações. Motivo:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
             End Select
             Exit Sub
         End Try

@@ -1258,6 +1258,16 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property onedrive_exclusion() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("onedrive_exclusion", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property oobe_skip() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("oobe_skip", resourceCulture)
@@ -2038,23 +2048,18 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Changes made since last preview
         '''
-        '''Bugfixes
+        '''Enhancements:
         '''
-        '''- Dates of the RSS feed news are now represented correctly
-        '''
-        '''New features
-        '''
-        '''- Added 2 new command-line arguments: &quot;/offline&quot; (enters the offline installation management mode) and &quot;/?&quot; (shows a command line help message)
-        '''
-        '''Removed features
-        '''
-        '''- The old method of getting drives through WMIC is now removed. Typing &quot;dthelper /drinfo&quot; will now result in an unrecognized command
+        '''- The default window size of the image information results dialog is now 1024x600
+        '''- The alignment of the Recents list items to the home screen tasks has been improved
+        '''- Portuguese translations are now complete
         '''
         '''Overall changes
         '''
-        '''Bugfixes
+        '''Overall bugfixes:
         '''
-        '''- Driver information background processes no longer f [resto de la cadena truncado]&quot;;.
+        '''- Fixed some minor text editor issues in the Configuration List Editor
+        '''- Fixed an issue where the &quot;Pick...&quot; button in the image file information dialog would not be disabled automatically when selecting &quot; [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

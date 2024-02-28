@@ -27,6 +27,7 @@ Partial Class GetDriverInfo
         Me.Label1 = New System.Windows.Forms.Label()
         Me.DriverInfoContainerPanel = New System.Windows.Forms.Panel()
         Me.DriverInfoPanel = New System.Windows.Forms.Panel()
+        Me.Button9 = New System.Windows.Forms.Button()
         Me.Panel6 = New System.Windows.Forms.Panel()
         Me.Button7 = New System.Windows.Forms.Button()
         Me.Label48 = New System.Windows.Forms.Label()
@@ -198,6 +199,7 @@ Partial Class GetDriverInfo
         '
         'DriverInfoPanel
         '
+        Me.DriverInfoPanel.Controls.Add(Me.Button9)
         Me.DriverInfoPanel.Controls.Add(Me.Panel6)
         Me.DriverInfoPanel.Controls.Add(Me.Button8)
         Me.DriverInfoPanel.Controls.Add(Me.Label5)
@@ -209,6 +211,16 @@ Partial Class GetDriverInfo
         Me.DriverInfoPanel.Size = New System.Drawing.Size(1008, 513)
         Me.DriverInfoPanel.TabIndex = 3
         Me.DriverInfoPanel.Visible = False
+        '
+        'Button9
+        '
+        Me.Button9.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button9.Location = New System.Drawing.Point(601, 438)
+        Me.Button9.Name = "Button9"
+        Me.Button9.Size = New System.Drawing.Size(241, 23)
+        Me.Button9.TabIndex = 14
+        Me.Button9.Text = "View driver file information"
+        Me.Button9.UseVisualStyleBackColor = True
         '
         'Panel6
         '
@@ -1391,5 +1403,6 @@ Partial Class GetDriverInfo
     Friend WithEvents Label55 As System.Windows.Forms.Label
     Friend WithEvents Label49 As System.Windows.Forms.Label
     Friend WithEvents Button8 As System.Windows.Forms.Button
+    Friend WithEvents Button9 As System.Windows.Forms.Button
 
 End Class

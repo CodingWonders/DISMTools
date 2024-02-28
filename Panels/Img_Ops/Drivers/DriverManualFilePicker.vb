@@ -25,6 +25,8 @@ Public Class DriverManualFilePicker
                                 AddDrivers.ListView1.Items.Add(New ListViewItem(New String() {Item, "Archivo"}))
                             Case "FRA"
                                 AddDrivers.ListView1.Items.Add(New ListViewItem(New String() {Item, "Fichier"}))
+                            Case "PTB", "PTG"
+                                AddDrivers.ListView1.Items.Add(New ListViewItem(New String() {Item, "Ficheiro"}))
                         End Select
                     Case 1
                         AddDrivers.ListView1.Items.Add(New ListViewItem(New String() {Item, "File"}))
@@ -32,6 +34,8 @@ Public Class DriverManualFilePicker
                         AddDrivers.ListView1.Items.Add(New ListViewItem(New String() {Item, "Archivo"}))
                     Case 3
                         AddDrivers.ListView1.Items.Add(New ListViewItem(New String() {Item, "Fichier"}))
+                    Case 4
+                        AddDrivers.ListView1.Items.Add(New ListViewItem(New String() {Item, "Ficheiro"}))
                 End Select
             Next
         End If
@@ -69,6 +73,12 @@ Public Class DriverManualFilePicker
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Annuler"
                         Button1.Text = "Rafraîchir"
+                    Case "PTB", "PTG"
+                        Text = "Escolher ficheiros de controladores no diretório"
+                        Label1.Text = "Abaixo está uma lista recursiva de todos os controladores no diretório que está a especificar. A partir desta lista, escolha os controladores que pretende adicionar e clique em OK."
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Cancelar"
+                        Button1.Text = "Atualizar"
                 End Select
             Case 1
                 Text = "Choose driver files in directory"
@@ -88,6 +98,12 @@ Public Class DriverManualFilePicker
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Annuler"
                 Button1.Text = "Rafraîchir"
+            Case 4
+                Text = "Escolher ficheiros de controladores no diretório"
+                Label1.Text = "Abaixo está uma lista recursiva de todos os controladores no diretório que está a especificar. A partir desta lista, escolha os controladores que pretende adicionar e clique em OK."
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Cancelar"
+                Button1.Text = "Atualizar"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)
@@ -117,6 +133,9 @@ Public Class DriverManualFilePicker
                     Case "FRA"
                         Label2.Text = "Scannage du répertoire en cours..." & CrLf & _
                                       "Fichiers de pilotes trouvés jusqu'à présent : " & CheckedListBox1.Items.Count
+                    Case "PTB", "PTG"
+                        Label2.Text = "Pesquisar diretório..." & CrLf & _
+                                      "Ficheiros de controladores encontrados até agora: " & CheckedListBox1.Items.Count
                 End Select
             Case 1
                 Label2.Text = "Scanning directory..." & CrLf & _
@@ -127,6 +146,9 @@ Public Class DriverManualFilePicker
             Case 3
                 Label2.Text = "Scannage du répertoire en cours..." & CrLf & _
                               "Fichiers de pilotes trouvés jusqu'à présent : " & CheckedListBox1.Items.Count
+            Case 4
+                Label2.Text = "Pesquisar diretório..." & CrLf & _
+                              "Ficheiros de controladores encontrados até agora: " & CheckedListBox1.Items.Count
         End Select
         For Each DrvFile In Directory.GetFiles(DriverDir, "*.inf", SearchOption.AllDirectories)
             CheckedListBox1.Items.Add(DrvFile)
@@ -142,6 +164,9 @@ Public Class DriverManualFilePicker
                         Case "FRA"
                             Label2.Text = "Scannage du répertoire en cours..." & CrLf & _
                                           "Fichiers de pilotes trouvés jusqu'à présent : " & CheckedListBox1.Items.Count
+                        Case "PTB", "PTG"
+                            Label2.Text = "Pesquisar diretório..." & CrLf & _
+                                          "Ficheiros de controladores encontrados até agora: " & CheckedListBox1.Items.Count
                     End Select
                 Case 1
                     Label2.Text = "Scanning directory..." & CrLf & _
@@ -152,6 +177,9 @@ Public Class DriverManualFilePicker
                 Case 3
                     Label2.Text = "Scannage du répertoire en cours..." & CrLf & _
                                   "Fichiers de pilotes trouvés jusqu'à présent : " & CheckedListBox1.Items.Count
+                Case 4
+                    Label2.Text = "Pesquisar diretório..." & CrLf & _
+                                  "Ficheiros de controladores encontrados até agora: " & CheckedListBox1.Items.Count
             End Select
         Next
     End Sub
@@ -169,6 +197,9 @@ Public Class DriverManualFilePicker
                     Case "FRA"
                         Label2.Text = "Scannage du répertoire terminé." & CrLf & _
                                       "Fichiers de pilotes trouvés : " & CheckedListBox1.Items.Count
+                    Case "PTB", "PTG"
+                        Label2.Text = "Pesquisa de diretório concluída." & CrLf & _
+                                      "Ficheiros de controladores encontrados: " & CheckedListBox1.Items.Count
                 End Select
             Case 1
                 Label2.Text = "Directory scan complete." & CrLf & _
@@ -179,6 +210,9 @@ Public Class DriverManualFilePicker
             Case 3
                 Label2.Text = "Scannage du répertoire terminé." & CrLf & _
                               "Fichiers de pilotes trouvés : " & CheckedListBox1.Items.Count
+            Case 4
+                Label2.Text = "Pesquisa de diretório concluída." & CrLf & _
+                              "Ficheiros de controladores encontrados: " & CheckedListBox1.Items.Count
         End Select
     End Sub
 

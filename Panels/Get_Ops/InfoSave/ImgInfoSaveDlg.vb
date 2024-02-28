@@ -93,6 +93,8 @@ Public Class ImgInfoSaveDlg
                                 msg = "Obteniendo información de la imagen... (imagen " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & " de " & ImageInfoCollection.Count & ")"
                             Case "FRA"
                                 msg = "Obtention des informations sur l'image en cours... (image " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & " de " & ImageInfoCollection.Count & ")"
+                            Case "PTB", "PTG"
+                                msg = "Obter informações sobre a imagem... (imagem " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & " de " & ImageInfoCollection.Count & ")"
                         End Select
                     Case 1
                         msg = "Getting image information... (image " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & " of " & ImageInfoCollection.Count & ")"
@@ -100,6 +102,8 @@ Public Class ImgInfoSaveDlg
                         msg = "Obteniendo información de la imagen... (imagen " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & " de " & ImageInfoCollection.Count & ")"
                     Case 3
                         msg = "Obtention des informations sur l'image en cours... (image " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & " de " & ImageInfoCollection.Count & ")"
+                    Case 4
+                        msg = "Obter informações sobre a imagem... (imagem " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & " de " & ImageInfoCollection.Count & ")"
                 End Select
                 ReportChanges(msg, (ImageInfoCollection.IndexOf(ImageInfo) / ImageInfoCollection.Count) * 100)
                 Contents &= "  Image " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & ":" & CrLf & _
@@ -159,6 +163,12 @@ Public Class ImgInfoSaveDlg
                           "Notez que cette opération peut prendre plus de temps en fonction du nombre de paquets installés." & CrLf & CrLf & _
                           "Souhaitez-vous obtenir ces informations et les enregistrer dans le rapport ?"
                         msg(2) = "Informations sur les paquets"
+                    Case "PTB", "PTG"
+                        msg(0) = "A preparar processos de informação de pacotes..."
+                        msg(1) = "O programa obteve informações básicas sobre os pacotes instalados nesta imagem. Também pode obter informações completas sobre esses pacotes e guardá-las no relatório." & CrLf & CrLf & _
+                          "Tem em atenção que isto pode demorar mais tempo, dependendo do número de pacotes instalados." & CrLf & CrLf & _
+                          "Deseja obter esta informação e guardá-la no relatório?"
+                        msg(2) = "Informações do pacote"
                 End Select
             Case 1
                 msg(0) = "Preparing package information processes..."
@@ -178,6 +188,12 @@ Public Class ImgInfoSaveDlg
                   "Notez que cette opération peut prendre plus de temps en fonction du nombre de paquets installés." & CrLf & CrLf & _
                   "Souhaitez-vous obtenir ces informations et les enregistrer dans le rapport ?"
                 msg(2) = "Informations sur les paquets"
+            Case 4
+                msg(0) = "A preparar processos de informação de pacotes..."
+                msg(1) = "O programa obteve informações básicas sobre os pacotes instalados nesta imagem. Também pode obter informações completas sobre esses pacotes e guardá-las no relatório." & CrLf & CrLf & _
+                  "Tem em atenção que isto pode demorar mais tempo, dependendo do número de pacotes instalados." & CrLf & CrLf & _
+                  "Deseja obter esta informação e guardá-la no relatório?"
+                msg(2) = "Informações do pacote"
         End Select
         Contents &= "----> Package information" & CrLf & CrLf & _
                     " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
@@ -201,6 +217,8 @@ Public Class ImgInfoSaveDlg
                                 msg(0) = "Los paquetes han sido obtenidos"
                             Case "FRA"
                                 msg(0) = "Des paquets ont été obtenus"
+                            Case "PTB", "PTG"
+                                msg(0) = "Os pacotes foram obtidos"
                         End Select
                     Case 1
                         msg(0) = "Packages have been obtained"
@@ -208,6 +226,8 @@ Public Class ImgInfoSaveDlg
                         msg(0) = "Los paquetes han sido obtenidos"
                     Case 3
                         msg(0) = "Des paquets ont été obtenus"
+                    Case 4
+                        msg(0) = "Os pacotes foram obtidos"
                 End Select
                 ReportChanges(msg(0), 10)
                 If SkipQuestions And AutoCompleteInfo(0) Then
@@ -222,6 +242,8 @@ Public Class ImgInfoSaveDlg
                                         msg(0) = "Obteniendo información de paquetes... (paquete " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " de " & InstalledPkgInfo.Count & ")"
                                     Case "FRA"
                                         msg(0) = "Obtention des informations sur les paquets en cours... (paquet " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " de " & InstalledPkgInfo.Count & ")"
+                                    Case "PTB", "PTG"
+                                        msg(0) = "Obter informações sobre os pacotes... (pacote " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " de " & InstalledPkgInfo.Count & ")"
                                 End Select
                             Case 1
                                 msg(0) = "Getting information of packages... (package " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " of " & InstalledPkgInfo.Count & ")"
@@ -229,6 +251,8 @@ Public Class ImgInfoSaveDlg
                                 msg(0) = "Obteniendo información de paquetes... (paquete " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " de " & InstalledPkgInfo.Count & ")"
                             Case 3
                                 msg(0) = "Obtention des informations sur les paquets en cours... (paquet " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " de " & InstalledPkgInfo.Count & ")"
+                            Case 4
+                                msg(0) = "Obter informações sobre os pacotes... (pacote " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " de " & InstalledPkgInfo.Count & ")"
                         End Select
                         ReportChanges(msg(0), (InstalledPkgInfo.IndexOf(installedPackage) / InstalledPkgInfo.Count) * 100)
                         Dim pkgInfoEx As DismPackageInfoEx = Nothing
@@ -327,6 +351,8 @@ Public Class ImgInfoSaveDlg
                                         msg(0) = "Obteniendo información de paquetes... (paquete " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " de " & InstalledPkgInfo.Count & ")"
                                     Case "FRA"
                                         msg(0) = "Obtention des informations sur les paquets en cours... (paquet " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " de " & InstalledPkgInfo.Count & ")"
+                                    Case "PTB", "PTG"
+                                        msg(0) = "Obter informações sobre os pacotes... (pacote " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " de " & InstalledPkgInfo.Count & ")"
                                 End Select
                             Case 1
                                 msg(0) = "Getting information of packages... (package " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " of " & InstalledPkgInfo.Count & ")"
@@ -334,6 +360,8 @@ Public Class ImgInfoSaveDlg
                                 msg(0) = "Obteniendo información de paquetes... (paquete " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " de " & InstalledPkgInfo.Count & ")"
                             Case 3
                                 msg(0) = "Obtention des informations sur les paquets en cours... (paquet " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " de " & InstalledPkgInfo.Count & ")"
+                            Case 4
+                                msg(0) = "Obter informações sobre os pacotes... (pacote " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " de " & InstalledPkgInfo.Count & ")"
                         End Select
                         ReportChanges(msg(0), (InstalledPkgInfo.IndexOf(installedPackage) / InstalledPkgInfo.Count) * 100)
                         Dim pkgInfoEx As DismPackageInfoEx = Nothing
@@ -430,6 +458,8 @@ Public Class ImgInfoSaveDlg
                                     msg(0) = "Guardando paquetes instalados..."
                                 Case "FRA"
                                     msg(0) = "Sauvegarde des paquets installés en cours..."
+                                Case "PTB", "PTG"
+                                    msg(0) = "Guardar os pacotes instalados..."
                             End Select
                         Case 1
                             msg(0) = "Saving installed packages..."
@@ -437,6 +467,8 @@ Public Class ImgInfoSaveDlg
                             msg(0) = "Guardando paquetes instalados..."
                         Case 3
                             msg(0) = "Sauvegarde des paquets installés en cours..."
+                        Case 4
+                            msg(0) = "Guardar os pacotes instalados..."
                     End Select
                     ReportChanges(msg(0), 50)
                     Contents &= "  - Complete package information has not been gathered" & CrLf & CrLf & _
@@ -471,6 +503,8 @@ Public Class ImgInfoSaveDlg
                         msg = "Preparando procesos de información de paquetes..."
                     Case "FRA"
                         msg = "Préparation des processus d'information des paquets en cours..."
+                    Case "PTB", "PTG"
+                        msg = "A preparar processos de informação sobre pacotes..."
                 End Select
             Case 1
                 msg = "Preparing package information processes..."
@@ -478,6 +512,8 @@ Public Class ImgInfoSaveDlg
                 msg = "Preparando procesos de información de paquetes..."
             Case 3
                 msg = "Préparation des processus d'information des paquets en cours..."
+            Case 4
+                msg = "A preparar processos de informação sobre pacotes..."
         End Select
         Contents &= "----> Package file information" & CrLf & CrLf & _
                     " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
@@ -499,6 +535,8 @@ Public Class ImgInfoSaveDlg
                                     msg = "Obteniendo información de archivos de paquetes... (archivo de paquete " & PackageFiles.IndexOf(pkgFile) + 1 & " de " & PackageFiles.Count & ")"
                                 Case "FRA"
                                     msg = "Obtention des informations des fichiers paquets en cours... (fichier paquet " & PackageFiles.IndexOf(pkgFile) + 1 & " de " & PackageFiles.Count & ")"
+                                Case "PTB", "PTG"
+                                    msg = "Obter informações dos ficheiros do pacote... (ficheiro do pacote " & PackageFiles.IndexOf(pkgFile) + 1 & " de " & PackageFiles.Count & ")"
                             End Select
                         Case 1
                             msg = "Getting information from package files... (package file " & PackageFiles.IndexOf(pkgFile) + 1 & " of " & PackageFiles.Count & ")"
@@ -506,6 +544,8 @@ Public Class ImgInfoSaveDlg
                             msg = "Obteniendo información de archivos de paquetes... (archivo de paquete " & PackageFiles.IndexOf(pkgFile) + 1 & " de " & PackageFiles.Count & ")"
                         Case 3
                             msg = "Obtention des informations des fichiers paquets en cours... (fichier paquet " & PackageFiles.IndexOf(pkgFile) + 1 & " de " & PackageFiles.Count & ")"
+                        Case 4
+                            msg = "Obter informações dos ficheiros do pacote... (ficheiro do pacote " & PackageFiles.IndexOf(pkgFile) + 1 & " de " & PackageFiles.Count & ")"
                     End Select
                     ReportChanges(msg, (PackageFiles.IndexOf(pkgFile) / PackageFiles.Count) * 100)
                     If File.Exists(pkgFile) Then
@@ -630,6 +670,12 @@ Public Class ImgInfoSaveDlg
                           "Notez que cette opération peut prendre plus de temps en fonction du nombre de caractéristiques installées." & CrLf & CrLf & _
                           "Souhaitez-vous obtenir ces informations et les enregistrer dans le rapport ?"
                         msg(2) = "Informations sur les caractéristiques"
+                    Case "PTB", "PTG"
+                        msg(0) = "A preparar processos de informação de características..."
+                        msg(1) = "O programa obteve informações básicas sobre as características instaladas desta imagem. Também pode obter informações completas sobre essas características e guardá-las no relatório." & CrLf & CrLf & _
+                          "Tenha em atenção que isto pode demorar mais tempo, dependendo do número de características instaladas." & CrLf & CrLf & _
+                          "Pretende obter esta informação e guardá-la no relatório?"
+                        msg(2) = "Informação sobre as características"
                 End Select
             Case 1
                 msg(0) = "Preparing feature information processes..."
@@ -649,6 +695,12 @@ Public Class ImgInfoSaveDlg
                   "Notez que cette opération peut prendre plus de temps en fonction du nombre de caractéristiques installées." & CrLf & CrLf & _
                   "Souhaitez-vous obtenir ces informations et les enregistrer dans le rapport ?"
                 msg(2) = "Informations sur les caractéristiques"
+            Case 4
+                msg(0) = "A preparar processos de informação de características..."
+                msg(1) = "O programa obteve informações básicas sobre as características instaladas desta imagem. Também pode obter informações completas sobre essas características e guardá-las no relatório." & CrLf & CrLf & _
+                  "Tenha em atenção que isto pode demorar mais tempo, dependendo do número de características instaladas." & CrLf & CrLf & _
+                  "Pretende obter esta informação e guardá-la no relatório?"
+                msg(2) = "Informação sobre as características"
         End Select
         Contents &= "----> Feature information" & CrLf & CrLf & _
                     " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
@@ -672,6 +724,8 @@ Public Class ImgInfoSaveDlg
                                 msg(0) = "Las características han sido obtenidas"
                             Case "FRA"
                                 msg(0) = "Des caractéristiques ont été obtenues"
+                            Case "PTB", "PTG"
+                                msg(0) = "As características foram obtidas"
                         End Select
                     Case 1
                         msg(0) = "Features have been obtained"
@@ -679,6 +733,8 @@ Public Class ImgInfoSaveDlg
                         msg(0) = "Las características han sido obtenidas"
                     Case 3
                         msg(0) = "Des caractéristiques ont été obtenues"
+                    Case 4
+                        msg(0) = "As características foram obtidas"
                 End Select
                 ReportChanges(msg(0), 10)
                 If SkipQuestions And AutoCompleteInfo(1) Then
@@ -693,6 +749,8 @@ Public Class ImgInfoSaveDlg
                                         msg(0) = "Obteniendo información de características... (característica " & InstalledFeatInfo.IndexOf(feature) + 1 & " de " & InstalledFeatInfo.Count & ")"
                                     Case "FRA"
                                         msg(0) = "Obtention des informations sur les caractéristiques en cours... (caractéristique " & InstalledFeatInfo.IndexOf(feature) + 1 & " de " & InstalledFeatInfo.Count & ")"
+                                    Case "PTB", "PTG"
+                                        msg(0) = "Obter informações sobre as características... (caraterística " & InstalledFeatInfo.IndexOf(feature) + 1 & " de " & InstalledFeatInfo.Count & ")"
                                 End Select
                             Case 1
                                 msg(0) = "Getting information of features... (feature " & InstalledFeatInfo.IndexOf(feature) + 1 & " of " & InstalledFeatInfo.Count & ")"
@@ -700,6 +758,8 @@ Public Class ImgInfoSaveDlg
                                 msg(0) = "Obteniendo información de características... (característica " & InstalledFeatInfo.IndexOf(feature) + 1 & " de " & InstalledFeatInfo.Count & ")"
                             Case 3
                                 msg(0) = "Obtention des informations sur les caractéristiques en cours... (caractéristique " & InstalledFeatInfo.IndexOf(feature) + 1 & " de " & InstalledFeatInfo.Count & ")"
+                            Case 4
+                                msg(0) = "Obter informações sobre as características... (caraterística " & InstalledFeatInfo.IndexOf(feature) + 1 & " de " & InstalledFeatInfo.Count & ")"
                         End Select
                         ReportChanges(msg(0), (InstalledFeatInfo.IndexOf(feature) / InstalledFeatInfo.Count) * 100)
                         Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, feature.FeatureName)
@@ -731,6 +791,8 @@ Public Class ImgInfoSaveDlg
                                         msg(0) = "Obteniendo información de características... (característica " & InstalledFeatInfo.IndexOf(feature) + 1 & " de " & InstalledFeatInfo.Count & ")"
                                     Case "FRA"
                                         msg(0) = "Obtention des informations sur les caractéristiques en cours... (caractéristique " & InstalledFeatInfo.IndexOf(feature) + 1 & " de " & InstalledFeatInfo.Count & ")"
+                                    Case "PTB", "PTG"
+                                        msg(0) = "Obter informações sobre as características... (caraterística " & InstalledFeatInfo.IndexOf(feature) + 1 & " de " & InstalledFeatInfo.Count & ")"
                                 End Select
                             Case 1
                                 msg(0) = "Getting information of features... (feature " & InstalledFeatInfo.IndexOf(feature) + 1 & " of " & InstalledFeatInfo.Count & ")"
@@ -738,6 +800,8 @@ Public Class ImgInfoSaveDlg
                                 msg(0) = "Obteniendo información de características... (característica " & InstalledFeatInfo.IndexOf(feature) + 1 & " de " & InstalledFeatInfo.Count & ")"
                             Case 3
                                 msg(0) = "Obtention des informations sur les caractéristiques en cours... (caractéristique " & InstalledFeatInfo.IndexOf(feature) + 1 & " de " & InstalledFeatInfo.Count & ")"
+                            Case 4
+                                msg(0) = "Obter informações sobre as características... (caraterística " & InstalledFeatInfo.IndexOf(feature) + 1 & " de " & InstalledFeatInfo.Count & ")"
                         End Select
                         ReportChanges(msg(0), (InstalledFeatInfo.IndexOf(feature) / InstalledFeatInfo.Count) * 100)
                         Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, feature.FeatureName)
@@ -767,6 +831,8 @@ Public Class ImgInfoSaveDlg
                                     msg(0) = "Guardando características instaladas..."
                                 Case "FRA"
                                     msg(0) = "Sauvegarde des caractéristiques installés en cours..."
+                                Case "PTB", "PTG"
+                                    msg(0) = "Guardar as características instaladas..."
                             End Select
                         Case 1
                             msg(0) = "Saving installed features..."
@@ -774,6 +840,8 @@ Public Class ImgInfoSaveDlg
                             msg(0) = "Guardando características instaladas..."
                         Case 3
                             msg(0) = "Sauvegarde des caractéristiques installés en cours..."
+                        Case 4
+                            msg(0) = "Guardar as características instaladas..."
                     End Select
                     ReportChanges(msg(0), 50)
                     Contents &= "  - Complete feature information has not been gathered" & CrLf & CrLf & _
@@ -819,6 +887,12 @@ Public Class ImgInfoSaveDlg
                           "Notez que cette opération peut prendre plus de temps en fonction du nombre de paquets AppX installés." & CrLf & CrLf & _
                           "Souhaitez-vous obtenir ces informations et les enregistrer dans le rapport ?"
                         msg(2) = "Informations sur les paquets AppX"
+                    Case "PTB", "PTG"
+                        msg(0) = "A preparar processos de informação dos pacotes AppX..."
+                        msg(1) = "O programa obteve informações básicas sobre os pacotes AppX instalados nesta imagem. Também pode obter informações completas sobre esses pacotes AppX e guardá-las no relatório." & CrLf & CrLf & _
+                          "Tem em atenção que isto demorará mais tempo, dependendo do número de pacotes AppX instalados." & CrLf & CrLf & _
+                          "Deseja obter esta informação e guardá-la no relatório?"
+                        msg(2) = "Informação dos pacotes AppX"
                 End Select
             Case 1
                 msg(0) = "Preparing AppX package information processes..."
@@ -838,6 +912,12 @@ Public Class ImgInfoSaveDlg
                   "Notez que cette opération peut prendre plus de temps en fonction du nombre de paquets AppX installés." & CrLf & CrLf & _
                   "Souhaitez-vous obtenir ces informations et les enregistrer dans le rapport ?"
                 msg(2) = "Informations sur les paquets AppX"
+            Case 4
+                msg(0) = "A preparar processos de informação dos pacotes AppX..."
+                msg(1) = "O programa obteve informações básicas sobre os pacotes AppX instalados nesta imagem. Também pode obter informações completas sobre esses pacotes AppX e guardá-las no relatório." & CrLf & CrLf & _
+                  "Tem em atenção que isto demorará mais tempo, dependendo do número de pacotes AppX instalados." & CrLf & CrLf & _
+                  "Deseja obter esta informação e guardá-la no relatório?"
+                msg(2) = "Informação dos pacotes AppX"
         End Select
         Contents &= "----> AppX package information" & CrLf & CrLf & _
                     " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
@@ -863,6 +943,8 @@ Public Class ImgInfoSaveDlg
                                         msg(0) = "Obteniendo información de paquetes AppX... (paquete AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
                                     Case "FRA"
                                         msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                    Case "PTB", "PTG"
+                                        msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
                                 End Select
                             Case 1
                                 msg(0) = "Getting information of AppX packages... (AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ")"
@@ -870,6 +952,8 @@ Public Class ImgInfoSaveDlg
                                 msg(0) = "Obteniendo información de paquetes AppX... (paquete AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
                             Case 3
                                 msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                            Case 4
+                                msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
                         End Select
                         ReportChanges(msg(0), ((x + 1) / MainForm.imgAppxPackageNames.Count) * 100)
                         Contents &= "  AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ":" & CrLf & _
@@ -982,6 +1066,8 @@ Public Class ImgInfoSaveDlg
                                         msg(0) = "Los paquetes AppX han sido obtenidos"
                                     Case "FRA"
                                         msg(0) = "Des paquets AppX ont été obtenus"
+                                    Case "PTB", "PTG"
+                                        msg(0) = "Os pacotes AppX foram obtidos"
                                 End Select
                             Case 1
                                 msg(0) = "AppX packages have been obtained"
@@ -989,6 +1075,8 @@ Public Class ImgInfoSaveDlg
                                 msg(0) = "Los paquetes AppX han sido obtenidos"
                             Case 3
                                 msg(0) = "Des paquets AppX ont été obtenus"
+                            Case 4
+                                msg(0) = "Os pacotes AppX foram obtidos"
                         End Select
                         ReportChanges(msg(0), 10)
                         If SkipQuestions And AutoCompleteInfo(2) Then
@@ -1005,6 +1093,10 @@ Public Class ImgInfoSaveDlg
                                                     msg(0) = "Obteniendo información de paquetes AppX... (paquete AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
                                                 Case "FRA"
                                                     msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                                Case "PTB", "PTG"
+                                                    msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                                Case "PTB", "PTG"
+
                                             End Select
                                         Case 1
                                             msg(0) = "Getting information of AppX packages... (AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ")"
@@ -1012,6 +1104,8 @@ Public Class ImgInfoSaveDlg
                                             msg(0) = "Obteniendo información de paquetes AppX... (paquete AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
                                         Case 3
                                             msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                        Case 4
+                                            msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
                                     End Select
                                     ReportChanges(msg(0), ((x + 1) / MainForm.imgAppxPackageNames.Count) * 100)
                                     Contents &= "  AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ":" & CrLf & _
@@ -1220,6 +1314,8 @@ Public Class ImgInfoSaveDlg
                                                     msg(0) = "Obteniendo información de paquetes AppX... (paquete AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
                                                 Case "FRA"
                                                     msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                                Case "PTB", "PTG"
+                                                    msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
                                             End Select
                                         Case 1
                                             msg(0) = "Getting information of AppX packages... (AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ")"
@@ -1227,6 +1323,8 @@ Public Class ImgInfoSaveDlg
                                             msg(0) = "Obteniendo información de paquetes AppX... (paquete AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
                                         Case 3
                                             msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                        Case 4
+                                            msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
                                     End Select
                                     ReportChanges(msg(0), ((x + 1) / MainForm.imgAppxPackageNames.Count) * 100)
                                     Contents &= "  AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ":" & CrLf & _
@@ -1327,6 +1425,8 @@ Public Class ImgInfoSaveDlg
                                                     msg(0) = "Obteniendo información de paquetes AppX ... (paquete AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " de " & InstalledAppxPackageInfo.Count & ")"
                                                 Case "FRA"
                                                     msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " de " & InstalledAppxPackageInfo.Count & ")"
+                                                Case "PTB", "PTG"
+                                                    msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " de " & InstalledAppxPackageInfo.Count & ")"
                                             End Select
                                         Case 1
                                             msg(0) = "Getting information of AppX packages... (AppX package " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " of " & InstalledAppxPackageInfo.Count & ")"
@@ -1334,6 +1434,8 @@ Public Class ImgInfoSaveDlg
                                             msg(0) = "Obteniendo información de paquetes AppX ... (paquete AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " de " & InstalledAppxPackageInfo.Count & ")"
                                         Case 3
                                             msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " de " & InstalledAppxPackageInfo.Count & ")"
+                                        Case 4
+                                            msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " de " & InstalledAppxPackageInfo.Count & ")"
                                     End Select
                                     ReportChanges(msg(0), (InstalledAppxPackageInfo.IndexOf(appxPkg) / InstalledAppxPackageInfo.Count) * 100)
                                     Contents &= "  AppX package " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " of " & InstalledAppxPackageInfo.Count & ":" & CrLf & _
@@ -1431,6 +1533,8 @@ Public Class ImgInfoSaveDlg
                                             msg(0) = "Guardando paquetes AppX instalados..."
                                         Case "FRA"
                                             msg(0) = "Sauvegarde des paquets AppX installés en cours..."
+                                        Case "PTB", "PTG"
+                                            msg(0) = "Guardar os pacotes AppX instalados..."
                                     End Select
                                 Case 1
                                     msg(0) = "Saving installed AppX packages..."
@@ -1438,6 +1542,8 @@ Public Class ImgInfoSaveDlg
                                     msg(0) = "Guardando paquetes AppX instalados..."
                                 Case 3
                                     msg(0) = "Sauvegarde des paquets AppX installés en cours..."
+                                Case 4
+                                    msg(0) = "Guardar os pacotes AppX instalados..."
                             End Select
                             ReportChanges(msg(0), 50)
                             Contents &= "  - Complete AppX package information has not been gathered" & CrLf & CrLf & _
@@ -1488,6 +1594,12 @@ Public Class ImgInfoSaveDlg
                           "Notez que cette opération peut prendre plus de temps en fonction du nombre de capacités installées." & CrLf & CrLf & _
                           "Souhaitez-vous obtenir ces informations et les enregistrer dans le rapport ?"
                         msg(2) = "Informations sur les capacités"
+                    Case "PTB", "PTG"
+                        msg(0) = "A preparar processos de informação de capacidades..."
+                        msg(1) = "O programa obteve informações básicas sobre as capacidades instaladas desta imagem. Também pode obter informações completas sobre essas capacidades e guardá-las no relatório." & CrLf & CrLf & _
+                          "Tenha em atenção que isto pode demorar mais tempo, dependendo do número de capacidades instaladas." & CrLf & CrLf & _
+                          "Deseja obter esta informação e guardá-la no relatório?"
+                        msg(2) = "Informações sobre as capacidades"
                 End Select
             Case 1
                 msg(0) = "Preparing capability information processes..."
@@ -1507,6 +1619,12 @@ Public Class ImgInfoSaveDlg
                   "Notez que cette opération peut prendre plus de temps en fonction du nombre de capacités installées." & CrLf & CrLf & _
                   "Souhaitez-vous obtenir ces informations et les enregistrer dans le rapport ?"
                 msg(2) = "Informations sur les capacités"
+            Case 4
+                msg(0) = "A preparar processos de informação de capacidades..."
+                msg(1) = "O programa obteve informações básicas sobre as capacidades instaladas desta imagem. Também pode obter informações completas sobre essas capacidades e guardá-las no relatório." & CrLf & CrLf & _
+                  "Tenha em atenção que isto pode demorar mais tempo, dependendo do número de capacidades instaladas." & CrLf & CrLf & _
+                  "Deseja obter esta informação e guardá-la no relatório?"
+                msg(2) = "Informações sobre as capacidades"
         End Select
         Contents &= "----> Capability information" & CrLf & CrLf & _
                     " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
@@ -1533,6 +1651,8 @@ Public Class ImgInfoSaveDlg
                                     msg(0) = "Las funcionalidades han sido obtenidas"
                                 Case "FRA"
                                     msg(0) = "Des capacités ont été obtenues"
+                                Case "PTB", "PTG"
+                                    msg(0) = "As capacidades foram obtidas"
                             End Select
                         Case 1
                             msg(0) = "Capabilities have been obtained"
@@ -1540,6 +1660,8 @@ Public Class ImgInfoSaveDlg
                             msg(0) = "Las funcionalidades han sido obtenidas"
                         Case 3
                             msg(0) = "Des capacités ont été obtenues"
+                        Case 4
+                            msg(0) = "As capacidades foram obtidas"
                     End Select
                     ReportChanges(msg(0), 10)
                     If SkipQuestions And AutoCompleteInfo(3) Then
@@ -1554,6 +1676,8 @@ Public Class ImgInfoSaveDlg
                                             msg(0) = "Obteniendo información de funcionalidades... (funcionalidad " & InstalledCapInfo.IndexOf(capability) + 1 & " de " & InstalledCapInfo.Count & ")"
                                         Case "FRA"
                                             msg(0) = "Obtention des informations sur les capacités en cours... (capacité " & InstalledCapInfo.IndexOf(capability) + 1 & " de " & InstalledCapInfo.Count & ")"
+                                        Case "PTB", "PTG"
+                                            msg(0) = "Obter informações sobre as capacidades... (capacidade " & InstalledCapInfo.IndexOf(capability) + 1 & " de " & InstalledCapInfo.Count & ")"
                                     End Select
                                 Case 1
                                     msg(0) = "Getting information of capabilities... (capability " & InstalledCapInfo.IndexOf(capability) + 1 & " of " & InstalledCapInfo.Count & ")"
@@ -1561,6 +1685,8 @@ Public Class ImgInfoSaveDlg
                                     msg(0) = "Obteniendo información de funcionalidades... (funcionalidad " & InstalledCapInfo.IndexOf(capability) + 1 & " de " & InstalledCapInfo.Count & ")"
                                 Case 3
                                     msg(0) = "Obtention des informations sur les capacités en cours... (capacité " & InstalledCapInfo.IndexOf(capability) + 1 & " de " & InstalledCapInfo.Count & ")"
+                                Case 4
+                                    msg(0) = "Obter informações sobre as capacidades... (capacidade " & InstalledCapInfo.IndexOf(capability) + 1 & " de " & InstalledCapInfo.Count & ")"
                             End Select
                             ReportChanges(msg(0), (InstalledCapInfo.IndexOf(capability) / InstalledCapInfo.Count) * 100)
                             Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, capability.Name)
@@ -1587,6 +1713,8 @@ Public Class ImgInfoSaveDlg
                                             msg(0) = "Obteniendo información de funcionalidades... (funcionalidad " & InstalledCapInfo.IndexOf(capability) + 1 & " de " & InstalledCapInfo.Count & ")"
                                         Case "FRA"
                                             msg(0) = "Obtention des informations sur les capacités en cours... (capacité " & InstalledCapInfo.IndexOf(capability) + 1 & " de " & InstalledCapInfo.Count & ")"
+                                        Case "PTB", "PTG"
+                                            msg(0) = "Obter informações sobre as capacidades... (capacidade " & InstalledCapInfo.IndexOf(capability) + 1 & " de " & InstalledCapInfo.Count & ")"
                                     End Select
                                 Case 1
                                     msg(0) = "Getting information of capabilities... (capability " & InstalledCapInfo.IndexOf(capability) + 1 & " of " & InstalledCapInfo.Count & ")"
@@ -1594,6 +1722,8 @@ Public Class ImgInfoSaveDlg
                                     msg(0) = "Obteniendo información de funcionalidades... (funcionalidad " & InstalledCapInfo.IndexOf(capability) + 1 & " de " & InstalledCapInfo.Count & ")"
                                 Case 3
                                     msg(0) = "Obtention des informations sur les capacités en cours... (capacité " & InstalledCapInfo.IndexOf(capability) + 1 & " de " & InstalledCapInfo.Count & ")"
+                                Case 4
+                                    msg(0) = "Obter informações sobre as capacidades... (capacidade " & InstalledCapInfo.IndexOf(capability) + 1 & " de " & InstalledCapInfo.Count & ")"
                             End Select
                             ReportChanges(msg(0), (InstalledCapInfo.IndexOf(capability) / InstalledCapInfo.Count) * 100)
                             Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, capability.Name)
@@ -1618,6 +1748,8 @@ Public Class ImgInfoSaveDlg
                                         msg(0) = "Guardando funcionalidades instaladas..."
                                     Case "FRA"
                                         msg(0) = "Sauvegarde des caractéristiques installées en cours..."
+                                    Case "PTB", "PTG"
+                                        msg(0) = "Guardar as capacidades instaladas..."
                                 End Select
                             Case 1
                                 msg(0) = "Saving installed capabilities..."
@@ -1625,6 +1757,8 @@ Public Class ImgInfoSaveDlg
                                 msg(0) = "Guardando funcionalidades instaladas..."
                             Case 3
                                 msg(0) = "Sauvegarde des caractéristiques installées en cours..."
+                            Case 4
+                                msg(0) = "Guardar as capacidades instaladas..."
                         End Select
                         ReportChanges(msg(0), 50)
                         Contents &= "  - Complete capability information has not been gathered" & CrLf & CrLf
@@ -1679,6 +1813,15 @@ Public Class ImgInfoSaveDlg
                         msg(3) = "Vous avez configuré les processus d'arrière-plan pour qu'ils ne détectent pas tous les pilotes, ce qui inclut les pilotes faisant partie de la distribution Windows, il se peut donc que vous ne voyiez pas le pilote qui vous intéresse." & CrLf & CrLf & _
                       "Ce paramètre est également appliqué à cette tâche, mais vous pouvez obtenir les informations de tous les pilotes maintenant. Notez que cela peut prendre beaucoup de temps, en fonction du nombre de pilotes de première partie." & CrLf & CrLf & _
                       "Voulez-vous obtenir les informations de tous les pilotes, y compris les pilotes faisant partie de la distribution Windows ?"
+                    Case "PTB", "PTG"
+                        msg(0) = "A preparar processos de informação sobre controladores..."
+                        msg(1) = "O programa obteve informações básicas sobre os controladores instalados nesta imagem. Também pode obter informações completas sobre esses controladores e guardá-las no relatório." & CrLf & CrLf & _
+                          "Tenha em atenção que isto pode demorar mais tempo dependendo do número de controladores instalados." & CrLf & CrLf & _
+                          "Pretende obter esta informação e guardá-la no relatório?"
+                        msg(2) = "Informações do controlador"
+                        msg(3) = "Configurou os processos em segundo plano para não detectarem todos os controladores, o que inclui controladores que fazem parte da distribuição do Windows, pelo que poderá não ver o controlador em que está interessado." & CrLf & CrLf & _
+                      "Esta configuração também é aplicada a esta tarefa, mas pode obter as informações de todos os controladores agora. Tenha em atenção que isto pode demorar muito tempo, dependendo da quantidade de controladores originais." & CrLf & CrLf & _
+                      "Pretende obter as informações de todos os controladores, incluindo os controladores que fazem parte da distribuição do Windows?"
                 End Select
             Case 1
                 msg(0) = "Preparing driver information processes..."
@@ -1707,6 +1850,15 @@ Public Class ImgInfoSaveDlg
                 msg(3) = "Vous avez configuré les processus d'arrière-plan pour qu'ils ne détectent pas tous les pilotes, ce qui inclut les pilotes faisant partie de la distribution Windows, il se peut donc que vous ne voyiez pas le pilote qui vous intéresse." & CrLf & CrLf & _
               "Ce paramètre est également appliqué à cette tâche, mais vous pouvez obtenir les informations de tous les pilotes maintenant. Notez que cela peut prendre beaucoup de temps, en fonction du nombre de pilotes de première partie." & CrLf & CrLf & _
               "Voulez-vous obtenir les informations de tous les pilotes, y compris les pilotes faisant partie de la distribution Windows ?"
+            Case 4
+                msg(0) = "A preparar processos de informação sobre controladores..."
+                msg(1) = "O programa obteve informações básicas sobre os controladores instalados nesta imagem. Também pode obter informações completas sobre esses controladores e guardá-las no relatório." & CrLf & CrLf & _
+                  "Tenha em atenção que isto pode demorar mais tempo dependendo do número de controladores instalados." & CrLf & CrLf & _
+                  "Pretende obter esta informação e guardá-la no relatório?"
+                msg(2) = "Informações do controlador"
+                msg(3) = "Configurou os processos em segundo plano para não detectarem todos os controladores, o que inclui controladores que fazem parte da distribuição do Windows, pelo que poderá não ver o controlador em que está interessado." & CrLf & CrLf & _
+              "Esta configuração também é aplicada a esta tarefa, mas pode obter as informações de todos os controladores agora. Tenha em atenção que isto pode demorar muito tempo, dependendo da quantidade de controladores originais." & CrLf & CrLf & _
+              "Pretende obter as informações de todos os controladores, incluindo os controladores que fazem parte da distribuição do Windows?"
         End Select
         If SaveTask = 7 And Not AllDrivers Then
             If MsgBox(msg(3), vbYesNo + vbQuestion, msg(2)) = MsgBoxResult.Yes Then
@@ -1735,6 +1887,8 @@ Public Class ImgInfoSaveDlg
                                 msg(0) = "Los controladores han sido obtenidos"
                             Case "FRA"
                                 msg(0) = "Des pilotes ont été obtenus"
+                            Case "PTB", "PTG"
+                                msg(0) = "Os controladores foram obtidos"
                         End Select
                     Case 1
                         msg(0) = "Drivers have been obtained"
@@ -1742,6 +1896,8 @@ Public Class ImgInfoSaveDlg
                         msg(0) = "Los controladores han sido obtenidos"
                     Case 3
                         msg(0) = "Des pilotes ont été obtenus"
+                    Case 4
+                        msg(0) = "Os controladores foram obtidos"
                 End Select
                 ReportChanges(msg(0), 10)
                 If SkipQuestions And AutoCompleteInfo(4) Then
@@ -1756,6 +1912,8 @@ Public Class ImgInfoSaveDlg
                                         msg(0) = "Obteniendo información de controladores... (controlador " & InstalledDrvInfo.IndexOf(driver) + 1 & " de " & InstalledDrvInfo.Count & ")"
                                     Case "FRA"
                                         msg(0) = "Obtention des informations sur les pilotes en cours... (pilote " & InstalledDrvInfo.IndexOf(driver) + 1 & " de " & InstalledDrvInfo.Count & ")"
+                                    Case "PTB", "PTG"
+                                        msg(0) = "Obter informações sobre os controladores... (controlador " & InstalledDrvInfo.IndexOf(driver) + 1 & " de " & InstalledDrvInfo.Count & ")"
                                 End Select
                             Case 1
                                 msg(0) = "Getting information of drivers... (driver " & InstalledDrvInfo.IndexOf(driver) + 1 & " of " & InstalledDrvInfo.Count & ")"
@@ -1763,6 +1921,8 @@ Public Class ImgInfoSaveDlg
                                 msg(0) = "Obteniendo información de controladores... (controlador " & InstalledDrvInfo.IndexOf(driver) + 1 & " de " & InstalledDrvInfo.Count & ")"
                             Case 3
                                 msg(0) = "Obtention des informations sur les pilotes en cours... (pilote " & InstalledDrvInfo.IndexOf(driver) + 1 & " de " & InstalledDrvInfo.Count & ")"
+                            Case 4
+                                msg(0) = "Obter informações sobre os controladores... (controlador " & InstalledDrvInfo.IndexOf(driver) + 1 & " de " & InstalledDrvInfo.Count & ")"
                         End Select
                         ReportChanges(msg(0), (InstalledDrvInfo.IndexOf(driver) / InstalledDrvInfo.Count) * 100)
                         Contents &= "  Driver " & InstalledDrvInfo.IndexOf(driver) + 1 & " of " & InstalledDrvInfo.Count & ":" & CrLf & _
@@ -1792,6 +1952,8 @@ Public Class ImgInfoSaveDlg
                                         msg(0) = "Obteniendo información de controladores... (controlador " & InstalledDrvInfo.IndexOf(driver) + 1 & " de " & InstalledDrvInfo.Count & ")"
                                     Case "FRA"
                                         msg(0) = "Obtention des informations sur les pilotes en cours... (pilote " & InstalledDrvInfo.IndexOf(driver) + 1 & " de " & InstalledDrvInfo.Count & ")"
+                                    Case "PTB", "PTG"
+                                        msg(0) = "Obter informações sobre os controladores... (controlador " & InstalledDrvInfo.IndexOf(driver) + 1 & " de " & InstalledDrvInfo.Count & ")"
                                 End Select
                             Case 1
                                 msg(0) = "Getting information of drivers... (driver " & InstalledDrvInfo.IndexOf(driver) + 1 & " of " & InstalledDrvInfo.Count & ")"
@@ -1799,6 +1961,8 @@ Public Class ImgInfoSaveDlg
                                 msg(0) = "Obteniendo información de controladores... (controlador " & InstalledDrvInfo.IndexOf(driver) + 1 & " de " & InstalledDrvInfo.Count & ")"
                             Case 3
                                 msg(0) = "Obtention des informations sur les pilotes en cours... (pilote " & InstalledDrvInfo.IndexOf(driver) + 1 & " de " & InstalledDrvInfo.Count & ")"
+                            Case 4
+                                msg(0) = "Obter informações sobre os controladores... (controlador " & InstalledDrvInfo.IndexOf(driver) + 1 & " de " & InstalledDrvInfo.Count & ")"
                         End Select
                         ReportChanges(msg(0), (InstalledDrvInfo.IndexOf(driver) / InstalledDrvInfo.Count) * 100)
                         Contents &= "  Driver " & InstalledDrvInfo.IndexOf(driver) + 1 & " of " & InstalledDrvInfo.Count & ":" & CrLf & _
@@ -1826,6 +1990,8 @@ Public Class ImgInfoSaveDlg
                                     msg(0) = "Guardando controladores instalados..."
                                 Case "FRA"
                                     msg(0) = "Sauvegarde des pilotes installés en cours..."
+                                Case "PTB", "PTG"
+                                    msg(0) = "Guardar os controladores instalados..."
                             End Select
                         Case 1
                             msg(0) = "Saving installed drivers..."
@@ -1833,6 +1999,8 @@ Public Class ImgInfoSaveDlg
                             msg(0) = "Guardando controladores instalados..."
                         Case 3
                             msg(0) = "Sauvegarde des pilotes installés en cours..."
+                        Case 4
+                            msg(0) = "Guardar os controladores instalados..."
                     End Select
                     ReportChanges(msg(0), 50)
                     Contents &= "  - Complete driver information has not been gathered" & CrLf & CrLf
@@ -1869,6 +2037,8 @@ Public Class ImgInfoSaveDlg
                         msg = "Preparando procesos de información de controladores..."
                     Case "FRA"
                         msg = "Préparation des processus d'information des pilotes en cours..."
+                    Case "PTB", "PTG"
+                        msg = "Preparar os processos de informação dos controladores..."
                 End Select
             Case 1
                 msg = "Preparing driver information processes..."
@@ -1876,6 +2046,8 @@ Public Class ImgInfoSaveDlg
                 msg = "Preparando procesos de información de controladores..."
             Case 3
                 msg = "Préparation des processus d'information des pilotes en cours..."
+            Case 4
+                msg = "Preparar os processos de informação dos controladores..."
         End Select
         Contents &= "----> Driver package information" & CrLf & CrLf & _
                     " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
@@ -1897,6 +2069,8 @@ Public Class ImgInfoSaveDlg
                                     msg = "Obteniendo información de archivos de controladores... (archivo de controlador " & DriverPkgs.IndexOf(drvPkg) + 1 & " de " & DriverPkgs.Count & ")"
                                 Case "FRA"
                                     msg = "Obtention des informations des fichiers pilotes en cours... (fichier pilote " & DriverPkgs.IndexOf(drvPkg) + 1 & " de " & DriverPkgs.Count & ")"
+                                Case "PTB", "PTG"
+                                    msg = "Obter informações dos ficheiros de controladores... (ficheiro de controlador " & DriverPkgs.IndexOf(drvPkg) + 1 & " de " & DriverPkgs.Count & ")"
                             End Select
                         Case 1
                             msg = "Getting information from driver files... (driver file " & DriverPkgs.IndexOf(drvPkg) + 1 & " of " & DriverPkgs.Count & ")"
@@ -1904,6 +2078,8 @@ Public Class ImgInfoSaveDlg
                             msg = "Obteniendo información de archivos de controladores... (archivo de controlador " & DriverPkgs.IndexOf(drvPkg) + 1 & " de " & DriverPkgs.Count & ")"
                         Case 3
                             msg = "Obtention des informations des fichiers pilotes en cours... (fichier pilote " & DriverPkgs.IndexOf(drvPkg) + 1 & " de " & DriverPkgs.Count & ")"
+                        Case 4
+                            msg = "Obter informações dos ficheiros de controladores... (ficheiro de controlador " & DriverPkgs.IndexOf(drvPkg) + 1 & " de " & DriverPkgs.Count & ")"
                     End Select
                     ReportChanges(msg, (DriverPkgs.IndexOf(drvPkg) / DriverPkgs.Count) * 100)
                     If File.Exists(drvPkg) Then
@@ -1922,6 +2098,8 @@ Public Class ImgInfoSaveDlg
                                                 msg = "Obteniendo información de destinos de hardware... (destino " & drvInfoCollection.IndexOf(hwTarget) + 1 & " de " & drvInfoCollection.Count & ")"
                                             Case "FRA"
                                                 msg = "Obtention des informations des matériels cibles en cours... (cible " & drvInfoCollection.IndexOf(hwTarget) + 1 & " de " & drvInfoCollection.Count & ")"
+                                            Case "PTB", "PTG"
+                                                msg = "Obtendo informações de alvos de hardware... (alvo " & drvInfoCollection.IndexOf(hwTarget) + 1 & " de " & drvInfoCollection.Count & ")"
                                         End Select
                                     Case 1
                                         msg = "Getting information from hardware targets... (target " & drvInfoCollection.IndexOf(hwTarget) + 1 & " of " & drvInfoCollection.Count & ")"
@@ -1929,6 +2107,8 @@ Public Class ImgInfoSaveDlg
                                         msg = "Obteniendo información de destinos de hardware... (destino " & drvInfoCollection.IndexOf(hwTarget) + 1 & " de " & drvInfoCollection.Count & ")"
                                     Case 3
                                         msg = "Obtention des informations des matériels cibles en cours... (cible " & drvInfoCollection.IndexOf(hwTarget) + 1 & " de " & drvInfoCollection.Count & ")"
+                                    Case 4
+                                        msg = "Obtendo informações de alvos de hardware... (alvo " & drvInfoCollection.IndexOf(hwTarget) + 1 & " de " & drvInfoCollection.Count & ")"
                                 End Select
                                 ReportChanges(msg, (DriverPkgs.IndexOf(drvPkg) / DriverPkgs.Count) * 100 + (drvInfoCollection.IndexOf(hwTarget) + 1) / drvInfoCollection.Count * 100 / DriverPkgs.Count)
                                 Contents &= "      - Hardware description: " & hwTarget.HardwareDescription & CrLf & _
@@ -1967,6 +2147,8 @@ Public Class ImgInfoSaveDlg
                         msg = "Preparándonos para obtener la configuración de Windows PE..."
                     Case "FRA"
                         msg = "Préparation de l'obtention de la configuration de Windows PE en cours..."
+                    Case "PTB", "PTG"
+                        msg = "A preparar para obter a configuração do Windows PE..."
                 End Select
             Case 1
                 msg = "Preparing to get Windows PE configuration..."
@@ -1974,6 +2156,8 @@ Public Class ImgInfoSaveDlg
                 msg = "Preparándonos para obtener la configuración de Windows PE..."
             Case 3
                 msg = "Préparation de l'obtention de la configuration de Windows PE en cours..."
+            Case 4
+                msg = "A preparar para obter a configuração do Windows PE..."
         End Select
         Contents &= "----> Windows PE configuration" & CrLf & CrLf
         If Not MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
@@ -2011,6 +2195,8 @@ Public Class ImgInfoSaveDlg
                                     msg = "Obteniendo la ruta de destino de Windows PE..."
                                 Case "FRA"
                                     msg = "Obtention du chemin d'accès cible de Windows PE en cours..."
+                                Case "PTB", "PTG"
+                                    msg = "Obter a localização do objetivo do Windows PE..."
                             End Select
                         Case 1
                             msg = "Getting Windows PE target path..."
@@ -2018,6 +2204,8 @@ Public Class ImgInfoSaveDlg
                             msg = "Obteniendo la ruta de destino de Windows PE..."
                         Case 3
                             msg = "Obtention du chemin d'accès cible de Windows PE en cours..."
+                        Case 4
+                            msg = "Obter a localização do objetivo do Windows PE..."
                     End Select
                     ReportChanges(msg, 50)
                     ' Get target path first
@@ -2033,6 +2221,8 @@ Public Class ImgInfoSaveDlg
                                     msg = "Obteniendo espacio temporal de Windows PE..."
                                 Case "FRA"
                                     msg = "Obtention de l'espace temporaire de Windows PE en cours..."
+                                Case "PTB", "PTG"
+                                    msg = "A obter espaço temporário do Windows PE..."
                             End Select
                         Case 1
                             msg = "Getting Windows PE scratch space..."
@@ -2040,6 +2230,8 @@ Public Class ImgInfoSaveDlg
                             msg = "Obteniendo espacio temporal de Windows PE..."
                         Case 3
                             msg = "Obtention de l'espace temporaire de Windows PE en cours..."
+                        Case 4
+                            msg = "A obter espaço temporário do Windows PE..."
                     End Select
                     ReportChanges(msg, 75)
                     regKey = Registry.LocalMachine.OpenSubKey("PE_SYS\ControlSet001\Services\FBWF", False)
@@ -2090,6 +2282,10 @@ Public Class ImgInfoSaveDlg
                         Text = "Sauvegarde des informations sur l'image en cours..."
                         Label1.Text = "Veuillez patienter pendant que DISMTools enregistre l'information sur l'image dans un fichier. Cette opération peut prendre un certain temps, en fonction des tâches exécutées."
                         Label2.Text = "Veuillez patienter..."
+                    Case "PTB", "PTG"
+                        Text = "Salvando informações da imagem..."
+                        Label1.Text = "Aguarde enquanto o DISMTools salva as informações da imagem em um arquivo. Isso pode levar algum tempo, dependendo das tarefas que estão sendo executadas."
+                        Label2.Text = "Aguarde..."
                 End Select
             Case 1
                 Text = "Saving image information..."
@@ -2103,6 +2299,10 @@ Public Class ImgInfoSaveDlg
                 Text = "Sauvegarde des informations sur l'image en cours..."
                 Label1.Text = "Veuillez patienter pendant que DISMTools enregistre l'information sur l'image dans un fichier. Cette opération peut prendre un certain temps, en fonction des tâches exécutées."
                 Label2.Text = "Veuillez patienter..."
+            Case 4
+                Text = "Salvando informações da imagem..."
+                Label1.Text = "Aguarde enquanto o DISMTools salva as informações da imagem em um arquivo. Isso pode levar algum tempo, dependendo das tarefas que estão sendo executadas."
+                Label2.Text = "Aguarde..."
         End Select
         If MainForm.ImgBW.IsBusy Then
             Dim msg As String = ""
@@ -2110,18 +2310,22 @@ Public Class ImgInfoSaveDlg
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENU", "ENG"
-                            msg = "Background processes need to have completed before showing information. We'll wait until they have completed"
+                            msg = "Background processes need to have completed before getting information. We'll wait until they have completed"
                         Case "ESN"
                             msg = "Los procesos en segundo plano deben haber completado antes de obtener información. Esperaremos hasta que hayan completado"
                         Case "FRA"
                             msg = "Les processus en plan doivent être terminés avant d'afficher l'information. Nous attendrons qu'ils soient terminés"
+                        Case "PTB", "PTG"
+                            msg = "Os processos em segundo plano têm de estar concluídos antes de obter informações. Vamos esperar até que estejam concluídos"
                     End Select
                 Case 1
-                    msg = "Background processes need to have completed before showing information. We'll wait until they have completed"
+                    msg = "Background processes need to have completed before getting information. We'll wait until they have completed"
                 Case 2
                     msg = "Los procesos en segundo plano deben haber completado antes de obtener información. Esperaremos hasta que hayan completado"
                 Case 3
                     msg = "Les processus en plan doivent être terminés avant d'afficher l'information. Nous attendrons qu'ils soient terminés"
+                Case 4
+                    msg = "Os processos em segundo plano têm de estar concluídos antes de obter informações. Vamos esperar até que estejam concluídos"
             End Select
             MsgBox(msg, vbOKOnly + vbInformation, Text)
             Select Case MainForm.Language
@@ -2133,6 +2337,8 @@ Public Class ImgInfoSaveDlg
                             Label2.Text = "Esperando a que terminen los procesos en segundo plano..."
                         Case "FRA"
                             Label2.Text = "Attente de la fin des processus en arrière plan..."
+                        Case "PTB", "PTG"
+                            Label2.Text = "A aguardar que os processos em segundo plano terminem..."
                     End Select
                 Case 1
                     Label2.Text = "Waiting for background processes to finish..."
@@ -2140,6 +2346,8 @@ Public Class ImgInfoSaveDlg
                     Label2.Text = "Esperando a que terminen los procesos en segundo plano..."
                 Case 3
                     Label2.Text = "Attente de la fin des processus en arrière plan..."
+                Case 4
+                    Label2.Text = "A aguardar que os processos em segundo plano terminem..."
             End Select
             While MainForm.ImgBW.IsBusy
                 Application.DoEvents()
@@ -2180,6 +2388,9 @@ Public Class ImgInfoSaveDlg
                             Case "FRA"
                                 msg(0) = "Impossible de créer le fichier cible. Raison : "
                                 msg(1) = "L'opération a échoué"
+                            Case "PTB", "PTG"
+                                msg(0) = "Não foi possível criar o destino de gravação. Motivo: "
+                                msg(1) = "A operação falhou"
                         End Select
                     Case 1
                         msg(0) = "Could not create the save target. Reason: "
@@ -2190,6 +2401,9 @@ Public Class ImgInfoSaveDlg
                     Case 3
                         msg(0) = "Impossible de créer le fichier cible. Raison : "
                         msg(1) = "L'opération a échoué"
+                    Case 4
+                        msg(0) = "Não foi possível criar o destino de gravação. Motivo: "
+                        msg(1) = "A operação falhou"
                 End Select
                 MsgBox(msg(0) & ex.ToString() & ": " & ex.Message, vbOKOnly + vbCritical, msg(1))
                 Exit Sub
@@ -2268,6 +2482,8 @@ Public Class ImgInfoSaveDlg
                         saveMsg = "Guardando contenidos..."
                     Case "FRA"
                         saveMsg = "Sauvegarde des contenus en cours..."
+                    Case "PTB", "PTG"
+                        saveMsg = "A guardar o conteúdo..."
                 End Select
             Case 1
                 saveMsg = "Saving contents..."
@@ -2275,6 +2491,8 @@ Public Class ImgInfoSaveDlg
                 saveMsg = "Guardando contenidos..."
             Case 3
                 saveMsg = "Sauvegarde des contenus en cours..."
+            Case 4
+                saveMsg = "A guardar o conteúdo..."
         End Select
         ReportChanges(saveMsg, ProgressBar1.Maximum)
 

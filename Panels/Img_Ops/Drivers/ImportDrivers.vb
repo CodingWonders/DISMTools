@@ -16,6 +16,7 @@ Public Class ImportDrivers
             MsgBox(msg, vbOKOnly + vbInformation, Label1.Text)
             Exit Sub
         Else
+            If DIList(ListView1.FocusedItem.Index).Name = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) Then ImportSourceInt = 1
             Select Case ImportSourceInt
                 Case 0
                     If TextBox1.Text <> "" Then
@@ -98,6 +99,7 @@ Public Class ImportDrivers
                         Label6.Text = "You can't use the import target as the import source"
                         Label7.Text = "Offline installation to import drivers from:"
                         Label8.Text = "You can't use the import target as the import source"
+                        Label9.Text = "Image file:"
                         Button1.Text = "Pick..."
                         Button2.Text = "Refresh"
                         OK_Button.Text = "OK"
@@ -123,6 +125,7 @@ Public Class ImportDrivers
                         Label6.Text = "No puede utilizar el destino de importación como el origen de importación"
                         Label7.Text = "Instalación fuera de línea de la que importar controladores:"
                         Label8.Text = "No puede utilizar el destino de importación como el origen de importación"
+                        Label9.Text = "Archivo de imagen:"
                         Button1.Text = "Escoger..."
                         Button2.Text = "Actualizar"
                         OK_Button.Text = "Aceptar"
@@ -148,6 +151,7 @@ Public Class ImportDrivers
                         Label6.Text = "Vous ne pouvez pas utiliser la cible d'importation comme source d'importation."
                         Label7.Text = "Installation hors ligne à partir de laquelle les pilotes sont importés :"
                         Label8.Text = "Vous ne pouvez pas utiliser la cible d'importation comme source d'importation."
+                        Label9.Text = "Fichier de l'image :"
                         Button1.Text = "Choisir..."
                         Button2.Text = "Actualiser"
                         OK_Button.Text = "OK"
@@ -163,6 +167,32 @@ Public Class ImportDrivers
                         ImportSources(0) = "Image de Windows"
                         ImportSources(1) = "Installation en ligne"
                         ImportSources(2) = "Installation hors ligne"
+                    Case "PTB", "PTG"
+                        Text = "Importar controladores"
+                        Label1.Text = Text
+                        Label2.Text = "Este processo irá importar todos os controladores de terceiros da fonte que especificar para esta imagem ou instalação. Isto assegura que a imagem de destino terá a mesma compatibilidade de hardware da imagem de origem"
+                        Label3.Text = "Importar fonte:"
+                        Label4.Text = If(ImportSourceInt = 1, "Esta fonte não tem quaisquer configurações adicionais disponíveis.", "Escolha uma fonte listada acima para configurar as suas definições.")
+                        Label5.Text = "Imagem do Windows a partir da qual importar controladores:"
+                        Label6.Text = "Não é possível utilizar o destino de importação como fonte de importação"
+                        Label7.Text = "Instalação offline para importar controladores de:"
+                        Label8.Text = "Não é possível utilizar o destino de importação como fonte de importação"
+                        Label9.Text = "Ficheiro de imagem:"
+                        Button1.Text = "Escolher..."
+                        Button2.Text = "Atualizar"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Cancelar"
+                        ListView1.Columns(0).Text = "Letra da unidade"
+                        ListView1.Columns(1).Text = "Label da unidade"
+                        ListView1.Columns(2).Text = "Tipo de unidade"
+                        ListView1.Columns(3).Text = "Tamanho total"
+                        ListView1.Columns(4).Text = "Espaço livre disponível"
+                        ListView1.Columns(5).Text = "Formato da unidade"
+                        ListView1.Columns(6).Text = "Contém Windows?"
+                        ListView1.Columns(7).Text = "Versão do Windows"
+                        ImportSources(0) = "Imagem do Windows"
+                        ImportSources(1) = "Instalação online"
+                        ImportSources(2) = "Instalação offline"
                 End Select
             Case 1
                 Text = "Import drivers"
@@ -174,6 +204,7 @@ Public Class ImportDrivers
                 Label6.Text = "You can't use the import target as the import source"
                 Label7.Text = "Offline installation to import drivers from:"
                 Label8.Text = "You can't use the import target as the import source"
+                Label9.Text = "Image file:"
                 Button1.Text = "Pick..."
                 Button2.Text = "Refresh"
                 OK_Button.Text = "OK"
@@ -199,6 +230,7 @@ Public Class ImportDrivers
                 Label6.Text = "No puede utilizar el destino de importación como el origen de importación"
                 Label7.Text = "Instalación fuera de línea de la que importar controladores:"
                 Label8.Text = "No puede utilizar el destino de importación como el origen de importación"
+                Label9.Text = "Archivo de imagen:"
                 Button1.Text = "Escoger..."
                 Button2.Text = "Actualizar"
                 OK_Button.Text = "Aceptar"
@@ -224,6 +256,7 @@ Public Class ImportDrivers
                 Label6.Text = "Vous ne pouvez pas utiliser la cible d'importation comme source d'importation."
                 Label7.Text = "Installation hors ligne à partir de laquelle les pilotes sont importés :"
                 Label8.Text = "Vous ne pouvez pas utiliser la cible d'importation comme source d'importation."
+                Label9.Text = "Fichier de l'image :"
                 Button1.Text = "Choisir..."
                 Button2.Text = "Actualiser"
                 OK_Button.Text = "OK"
@@ -239,6 +272,32 @@ Public Class ImportDrivers
                 ImportSources(0) = "Image de Windows"
                 ImportSources(1) = "Installation en ligne"
                 ImportSources(2) = "Installation hors ligne"
+            Case 4
+                Text = "Importar controladores"
+                Label1.Text = Text
+                Label2.Text = "Este processo irá importar todos os controladores de terceiros da fonte que especificar para esta imagem ou instalação. Isto assegura que a imagem de destino terá a mesma compatibilidade de hardware da imagem de origem"
+                Label3.Text = "Importar fonte:"
+                Label4.Text = If(ImportSourceInt = 1, "Esta fonte não tem quaisquer configurações adicionais disponíveis.", "Escolha uma fonte listada acima para configurar as suas definições.")
+                Label5.Text = "Imagem do Windows a partir da qual importar controladores:"
+                Label6.Text = "Não é possível utilizar o destino de importação como fonte de importação"
+                Label7.Text = "Instalação offline para importar controladores de:"
+                Label8.Text = "Não é possível utilizar o destino de importação como fonte de importação"
+                Label9.Text = "Ficheiro de imagem:"
+                Button1.Text = "Escolher..."
+                Button2.Text = "Atualizar"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Cancelar"
+                ListView1.Columns(0).Text = "Letra da unidade"
+                ListView1.Columns(1).Text = "Label da unidade"
+                ListView1.Columns(2).Text = "Tipo de unidade"
+                ListView1.Columns(3).Text = "Tamanho total"
+                ListView1.Columns(4).Text = "Espaço livre disponível"
+                ListView1.Columns(5).Text = "Formato da unidade"
+                ListView1.Columns(6).Text = "Contém Windows?"
+                ListView1.Columns(7).Text = "Versão do Windows"
+                ImportSources(0) = "Imagem do Windows"
+                ImportSources(1) = "Instalação online"
+                ImportSources(2) = "Instalação offline"
         End Select
         ComboBox1.Items.AddRange(ImportSources)
         If ImportSourceInt >= 0 Then ComboBox1.SelectedIndex = ImportSourceInt
@@ -309,6 +368,8 @@ Public Class ImportDrivers
                         Label4.Text = If(ImportSourceInt = 1, "Este origen no tiene opciones adicionales disponibles.", "Escoja un origen mostrado arriba para configurar sus opciones.")
                     Case "FRA"
                         Label4.Text = If(ImportSourceInt = 1, "Cette source ne dispose pas de paramètres supplémentaires.", "Choisissez une source dans la liste ci-dessus pour configurer ses paramètres.")
+                    Case "PTB", "PTG"
+                        Label4.Text = If(ImportSourceInt = 1, "Esta origem não tem quaisquer configurações adicionais disponíveis.", "Escolha uma origem listada acima para configurar as suas configurações.")
                 End Select
             Case 1
                 Label4.Text = If(ImportSourceInt = 1, "This source doesn't have any additional settings available.", "Choose a source listed above to configure its settings.")
@@ -316,6 +377,8 @@ Public Class ImportDrivers
                 Label4.Text = If(ImportSourceInt = 1, "Este origen no tiene opciones adicionales disponibles.", "Escoja un origen mostrado arriba para configurar sus opciones.")
             Case 3
                 Label4.Text = If(ImportSourceInt = 1, "Cette source ne dispose pas de paramètres supplémentaires.", "Choisissez une source dans la liste ci-dessus pour configurer ses paramètres.")
+            Case 4
+                Label4.Text = If(ImportSourceInt = 1, "Esta origem não tem quaisquer configurações adicionais disponíveis.", "Escolha uma origem listada acima para configurar as suas configurações.")
         End Select
     End Sub
 
@@ -324,6 +387,8 @@ Public Class ImportDrivers
         If PopupImageManager.ShowDialog() = DialogResult.OK Then
             TextBox1.Text = PopupImageManager.selectedMntDir
             Label6.Visible = (TextBox1.Text = MainForm.MountDir)
+            Label10.Text = PopupImageManager.selectedImgFile
+            Label10.Visible = (TextBox1.Text <> "" And Directory.Exists(TextBox1.Text))
         End If
     End Sub
 
@@ -344,6 +409,7 @@ Public Class ImportDrivers
                 If DIList(x).Name = ListView1.FocusedItem.SubItems(0).Text Then
                     TextBox2.Text = DIList(x).Name
                     Label8.Visible = (DIList(x).Name = MainForm.MountDir)
+                    If DIList(x).Name = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) Then ComboBox1.SelectedIndex = 1
                 End If
             Next
         End If

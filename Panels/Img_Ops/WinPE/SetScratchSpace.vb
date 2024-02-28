@@ -71,6 +71,13 @@ Public Class SetPEScratchSpace
                         Label3.Text = "Espace temporaire :"
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Annuler"
+                    Case "PTB", "PTG"
+                        Text = "Configurar o espaço temporário do Windows PE"
+                        Label1.Text = Text
+                        Label2.Text = "O espaço de rascunho é a quantidade de espaço gravável disponível no volume do sistema Windows PE quando o seu conteúdo é copiado para a memória. Especifique uma quantidade de espaço de rascunho e clique em OK."
+                        Label3.Text = "Espaço temporário:"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Cancelar"
                 End Select
             Case 1
                 Text = "Set Windows PE scratch space"
@@ -93,6 +100,13 @@ Public Class SetPEScratchSpace
                 Label3.Text = "Espace temporaire :"
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Annuler"
+            Case 4
+                Text = "Configurar o espaço temporário do Windows PE"
+                Label1.Text = Text
+                Label2.Text = "O espaço de rascunho é a quantidade de espaço gravável disponível no volume do sistema Windows PE quando o seu conteúdo é copiado para a memória. Especifique uma quantidade de espaço de rascunho e clique em OK."
+                Label3.Text = "Espaço temporário:"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Cancelar"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""

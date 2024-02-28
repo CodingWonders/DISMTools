@@ -29,6 +29,8 @@ Public Class RemCapabilities
                             MsgBox("No hay funcionalidades seleccionadas para eliminar. Seleccione algunas de ellas e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
                         Case "FRA"
                             MsgBox("Il n'y a pas de capacités sélectionnées à supprimer. Veuillez sélectionner des capacités et réessayer.", vbOKOnly + vbCritical, Label1.Text)
+                        Case "PTB", "PTG"
+                            MsgBox("Não existem quaisquer capacidades seleccionadas para remover. Por favor, seleccione algumas capacidades e tente novamente.", vbOKOnly + vbCritical, Label1.Text)
                     End Select
                 Case 1
                     MsgBox("There aren't any selected capabilities to remove. Please select some capabilities and try again.", vbOKOnly + vbCritical, Label1.Text)
@@ -36,6 +38,8 @@ Public Class RemCapabilities
                     MsgBox("No hay funcionalidades seleccionadas para eliminar. Seleccione algunas de ellas e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
                 Case 3
                     MsgBox("Il n'y a pas de capacités sélectionnées à supprimer. Veuillez sélectionner des capacités et réessayer.", vbOKOnly + vbCritical, Label1.Text)
+                Case 4
+                    MsgBox("Não existem quaisquer capacidades seleccionadas para remover. Por favor, seleccione algumas capacidades e tente novamente.", vbOKOnly + vbCritical, Label1.Text)
             End Select
             Exit Sub
         End If
@@ -77,6 +81,13 @@ Public Class RemCapabilities
                         Cancel_Button.Text = "Annuler"
                         ListView1.Columns(0).Text = "Capacité"
                         ListView1.Columns(1).Text = "État"
+                    Case "PTB", "PTG"
+                        Text = "Remover capacidades"
+                        Label1.Text = Text
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Cancelar"
+                        ListView1.Columns(0).Text = "Capacidade"
+                        ListView1.Columns(1).Text = "Estado"
                 End Select
             Case 1
                 Text = "Remove capabilities"
@@ -99,6 +110,13 @@ Public Class RemCapabilities
                 Cancel_Button.Text = "Annuler"
                 ListView1.Columns(0).Text = "Capacité"
                 ListView1.Columns(1).Text = "État"
+            Case 4
+                Text = "Remover capacidades"
+                Label1.Text = Text
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Cancelar"
+                ListView1.Columns(0).Text = "Capacidade"
+                ListView1.Columns(1).Text = "Estado"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
@@ -125,6 +143,8 @@ Public Class RemCapabilities
                         Label2.Text &= " Solo las funcionalidades instaladas (" & ListView1.Items.Count & ") son mostradas"
                     Case "FRA"
                         Label2.Text &= " Seules les capacités installées (" & ListView1.Items.Count & ") sont représentées"
+                    Case "PTB", "PTG"
+                        Label2.Text &= " Só são mostradas as capacidades instaladas (" & ListView1.Items.Count & ")"
                 End Select
             Case 1
                 Label2.Text &= " Only installed capabilities (" & ListView1.Items.Count & ") are shown"
@@ -132,6 +152,8 @@ Public Class RemCapabilities
                 Label2.Text &= " Solo las funcionalidades instaladas (" & ListView1.Items.Count & ") son mostradas"
             Case 3
                 Label2.Text &= " Seules les capacités installées (" & ListView1.Items.Count & ") sont représentées"
+            Case 4
+                Label2.Text &= " Só são mostradas as capacidades instaladas (" & ListView1.Items.Count & ")"
         End Select
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))

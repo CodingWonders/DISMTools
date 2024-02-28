@@ -44,6 +44,8 @@ Public Class AddProvAppxPackage
                             MsgBox("Especifique archivos AppX empaquetados o desempaquetados e inténtelo de nuevo.", vbOKOnly + vbCritical, "Añadir paquetes aprovisionados AppX")
                         Case "FRA"
                             MsgBox("Veuillez spécifier les paquets AppX comprimés ou non et réessayez.", vbOKOnly + vbCritical, "Ajouter des paquets AppX provisionnés")
+                        Case "PTB", "PTG"
+                            MsgBox("Especifique pacotes AppX embalados ou não embalados e tente novamente.", vbOKOnly + vbCritical, "Adicionar pacotes AppX provisionados")
                     End Select
                 Case 1
                     MsgBox("Please specify packed or unpacked AppX packages and try again.", vbOKOnly + vbCritical, "Add provisioned AppX packages")
@@ -51,6 +53,8 @@ Public Class AddProvAppxPackage
                     MsgBox("Especifique archivos AppX empaquetados o desempaquetados e inténtelo de nuevo.", vbOKOnly + vbCritical, "Añadir paquetes aprovisionados AppX")
                 Case 3
                     MsgBox("Veuillez spécifier les paquets AppX comprimés ou non et réessayez.", vbOKOnly + vbCritical, "Ajouter des paquets AppX provisionnés")
+                Case 4
+                    MsgBox("Especifique pacotes AppX embalados ou não embalados e tente novamente.", vbOKOnly + vbCritical, "Adicionar pacotes AppX provisionados")
             End Select
             Exit Sub
         Else
@@ -88,6 +92,8 @@ Public Class AddProvAppxPackage
                                         MsgBox("Especifique un archivo de licencia e inténtelo de nuevo. También puede continuar sin uno, pero esta acción podría comprometer la imagen.", vbOKOnly + vbCritical, "Añadir paquetes aprovisionados AppX")
                                     Case "FRA"
                                         MsgBox("Veuillez indiquer un fichier de licence et réessayer. Vous pouvez également continuer sans licence, mais cela risque de compromettre l'image.", vbOKOnly + vbCritical, "Ajouter des paquets AppX provisionnés")
+                                    Case "PTB", "PTG"
+                                        MsgBox("Por favor, especifique um ficheiro de licença e tente novamente. Também pode continuar sem um, mas isso pode comprometer a imagem.", vbOKOnly + vbCritical, "Adicionar pacotes AppX provisionados")
                                 End Select
                             Case 1
                                 MsgBox("Please specify a license file and try again. You can also continue without one, but this may compromise the image.", vbOKOnly + vbCritical, "Add provisioned AppX packages")
@@ -95,6 +101,8 @@ Public Class AddProvAppxPackage
                                 MsgBox("Especifique un archivo de licencia e inténtelo de nuevo. También puede continuar sin uno, pero esta acción podría comprometer la imagen.", vbOKOnly + vbCritical, "Añadir paquetes aprovisionados AppX")
                             Case 3
                                 MsgBox("Veuillez indiquer un fichier de licence et réessayer. Vous pouvez également continuer sans licence, mais cela risque de compromettre l'image.", vbOKOnly + vbCritical, "Ajouter des paquets AppX provisionnés")
+                            Case 4
+                                MsgBox("Por favor, especifique um ficheiro de licença e tente novamente. Também pode continuar sem um, mas isso pode comprometer a imagem.", vbOKOnly + vbCritical, "Adicionar pacotes AppX provisionados")
                         End Select
                         Exit Sub
                     ElseIf Not File.Exists(TextBox1.Text) Then
@@ -107,6 +115,8 @@ Public Class AddProvAppxPackage
                                         MsgBox("El archivo de licencia especificado no se ha encontrado. Asegúrese de que exista en la ubicación especificada e inténtelo de nuevo.", vbOKOnly + vbCritical, "Añadir paquetes aprovisionados AppX")
                                     Case "FRA"
                                         MsgBox("Le fichier de licence spécifié n'a pas été trouvé. Assurez-vous qu'il existe à l'emplacement spécifié et réessayez.", vbOKOnly + vbCritical, "Ajouter des paquets AppX provisionnés")
+                                    Case "PTB", "PTG"
+                                        MsgBox("O ficheiro de licença especificado não foi encontrado. Certifique-se de que existe no local especificado e tente novamente.", vbOKOnly + vbCritical, "Adicionar pacotes AppX provisionados")
                                 End Select
                             Case 1
                                 MsgBox("The license file specified was not found. Make sure it exists on the specified location and try again.", vbOKOnly + vbCritical, "Add provisioned AppX packages")
@@ -114,6 +124,8 @@ Public Class AddProvAppxPackage
                                 MsgBox("El archivo de licencia especificado no se ha encontrado. Asegúrese de que exista en la ubicación especificada e inténtelo de nuevo.", vbOKOnly + vbCritical, "Añadir paquetes aprovisionados AppX")
                             Case 3
                                 MsgBox("Le fichier de licence spécifié n'a pas été trouvé. Assurez-vous qu'il existe à l'emplacement spécifié et réessayez.", vbOKOnly + vbCritical, "Ajouter des paquets AppX provisionnés")
+                            Case 4
+                                MsgBox("O ficheiro de licença especificado não foi encontrado. Certifique-se de que existe no local especificado e tente novamente.", vbOKOnly + vbCritical, "Adicionar pacotes AppX provisionados")
                         End Select
                         Exit Sub
                     Else
@@ -135,6 +147,8 @@ Public Class AddProvAppxPackage
                                         MsgBox("Especifique un archivo de datos personalizados e inténtelo de nuevo. También puede continuar sin uno", vbOKOnly + vbCritical, "Añadir paquetes aprovisionados AppX")
                                     Case "FRA"
                                         MsgBox("Veuillez spécifier un fichier de données personnalisé et réessayer. Vous pouvez également continuer sans fichier.", vbOKOnly + vbCritical, "Ajouter des paquets AppX provisionnés")
+                                    Case "PTB", "PTG"
+                                        MsgBox("Especifique um ficheiro de dados personalizado e tente novamente. Também pode continuar sem um.", vbOKOnly + vbCritical, "Adicionar pacotes AppX provisionados")
                                 End Select
                             Case 1
                                 MsgBox("Please specify a custom data file and try again. You can also continue without one.", vbOKOnly + vbCritical, "Add provisioned AppX packages")
@@ -142,6 +156,8 @@ Public Class AddProvAppxPackage
                                 MsgBox("Especifique un archivo de datos personalizados e inténtelo de nuevo. También puede continuar sin uno", vbOKOnly + vbCritical, "Añadir paquetes aprovisionados AppX")
                             Case 3
                                 MsgBox("Veuillez spécifier un fichier de données personnalisé et réessayer. Vous pouvez également continuer sans fichier.", vbOKOnly + vbCritical, "Ajouter des paquets AppX provisionnés")
+                            Case 4
+                                MsgBox("Especifique um ficheiro de dados personalizado e tente novamente. Também pode continuar sem um.", vbOKOnly + vbCritical, "Adicionar pacotes AppX provisionados")
                         End Select
                         Exit Sub
                     ElseIf Not File.Exists(TextBox2.Text) Then
@@ -154,6 +170,8 @@ Public Class AddProvAppxPackage
                                         MsgBox("El archivo de datos personalizados especificado no se ha encontrado. Asegúrese de que exista en la ubicación especificada e inténtelo de nuevo.", vbOKOnly + vbCritical, "Añadir paquetes aprovisionados AppX")
                                     Case "FRA"
                                         MsgBox("Le fichier de données personnalisées spécifié n'a pas été trouvé. Assurez-vous qu'il existe à l'emplacement spécifié et réessayez.", vbOKOnly + vbCritical, "Ajouter des paquets AppX provisionnés")
+                                    Case "PTB", "PTG"
+                                        MsgBox("O ficheiro de dados personalizado especificado não foi encontrado. Certifique-se de que existe na localização especificada e tente novamente.", vbOKOnly + vbCritical, "Adicionar pacotes AppX provisionados")
                                 End Select
                             Case 1
                                 MsgBox("The custom data file specified was not found. Make sure it exists on the specified location and try again.", vbOKOnly + vbCritical, "Add provisioned AppX packages")
@@ -161,6 +179,8 @@ Public Class AddProvAppxPackage
                                 MsgBox("El archivo de datos personalizados especificado no se ha encontrado. Asegúrese de que exista en la ubicación especificada e inténtelo de nuevo.", vbOKOnly + vbCritical, "Añadir paquetes aprovisionados AppX")
                             Case 3
                                 MsgBox("Le fichier de données personnalisées spécifié n'a pas été trouvé. Assurez-vous qu'il existe à l'emplacement spécifié et réessayez.", vbOKOnly + vbCritical, "Ajouter des paquets AppX provisionnés")
+                            Case 4
+                                MsgBox("O ficheiro de dados personalizado especificado não foi encontrado. Certifique-se de que existe na localização especificada e tente novamente.", vbOKOnly + vbCritical, "Adicionar pacotes AppX provisionados")
                         End Select
                         Exit Sub
                     Else
@@ -304,6 +324,40 @@ Public Class AddProvAppxPackage
                         CheckBox3.Text = "Fichier de licence :"
                         CheckBox4.Text = "Mettre l'application à la disposition de toutes les régions"
                         UnpackedAppxFolderFBD.Description = "Veuillez spécifier un répertoire contenant les fichiers AppX décompressés :"
+                    Case "PTB", "PTG"
+                        Text = "Adicionar pacotes AppX provisionados"
+                        Label1.Text = Text
+                        Label2.Text = "Adicione pacotes AppX embalados ou descompactados utilizando os botões abaixo, ou largando-os na vista de lista abaixo:"
+                        Label3.Text = "Um pacote AppX pode precisar de algumas dependências para ser instalado corretamente. Se assim for, pode especificar uma lista de dependências agora:"
+                        Label5.Text = "Para especificar várias regiões de aplicação, separe-as com um ponto e vírgula (;)"
+                        Label6.Text = "Seleccione uma entrada na vista de lista para mostrar os detalhes de uma aplicação e para configurar definições adicionais"
+                        Button1.Text = "Adicionar ficheiro"
+                        Button2.Text = "Adicionar pasta"
+                        Button3.Text = "Remover todas as entradas"
+                        Button4.Text = "Remover todas as dependências"
+                        Button5.Text = "Remover dependência"
+                        Button6.Text = "Adicionar dependência..."
+                        Button7.Text = "Navegar..."
+                        Button8.Text = "Navegar..."
+                        Button9.Text = "Remover entrada selecionada"
+                        Cancel_Button.Text = "Cancelar"
+                        OK_Button.Text = "OK"
+                        CheckBox1.Text = "Ficheiro de dados personalizado:"
+                        CheckBox2.Text = "Confirmar imagem depois de adicionar pacotes AppX"
+                        CustomDataFileOFD.Title = "Especificar um ficheiro de dados personalizado"
+                        GroupBox2.Text = "Dependências AppX"
+                        GroupBox3.Text = "Regiões da AppX"
+                        LicenseFileOFD.Title = "Especificar um ficheiro de licença"
+                        LinkLabel1.Text = "As regiões da aplicação têm de estar na forma de códigos ISO 3166-1 Alpha 2 ou Alpha-3. Para saber mais sobre estes códigos, clique aqui"
+                        LinkLabel1.LinkArea = New LinkArea(125, 11)
+                        ListView1.Columns(0).Text = "Ficheiro/Pasta"
+                        ListView1.Columns(1).Text = "Tipo"
+                        ListView1.Columns(2).Text = "Nome da aplicação"
+                        ListView1.Columns(3).Text = "Editor da aplicação"
+                        ListView1.Columns(4).Text = "Versão da aplicação"
+                        CheckBox3.Text = "Ficheiro de licença:"
+                        CheckBox4.Text = "Tornar a aplicação disponível para todas as regiões"
+                        UnpackedAppxFolderFBD.Description = "Especifique uma pasta que contenha ficheiros AppX descompactados:"
                 End Select
             Case 1
                 Text = "Add provisioned AppX packages"
@@ -407,6 +461,40 @@ Public Class AddProvAppxPackage
                 CheckBox3.Text = "Fichier de licence :"
                 CheckBox4.Text = "Mettre l'application à la disposition de toutes les régions"
                 UnpackedAppxFolderFBD.Description = "Veuillez spécifier un répertoire contenant les fichiers AppX décompressés :"
+            Case 4
+                Text = "Adicionar pacotes AppX provisionados"
+                Label1.Text = Text
+                Label2.Text = "Adicione pacotes AppX embalados ou descompactados utilizando os botões abaixo, ou largando-os na vista de lista abaixo:"
+                Label3.Text = "Um pacote AppX pode precisar de algumas dependências para ser instalado corretamente. Se assim for, pode especificar uma lista de dependências agora:"
+                Label5.Text = "Para especificar várias regiões de aplicação, separe-as com um ponto e vírgula (;)"
+                Label6.Text = "Seleccione uma entrada na vista de lista para mostrar os detalhes de uma aplicação e para configurar definições adicionais"
+                Button1.Text = "Adicionar ficheiro"
+                Button2.Text = "Adicionar pasta"
+                Button3.Text = "Remover todas as entradas"
+                Button4.Text = "Remover todas as dependências"
+                Button5.Text = "Remover dependência"
+                Button6.Text = "Adicionar dependência..."
+                Button7.Text = "Navegar..."
+                Button8.Text = "Navegar..."
+                Button9.Text = "Remover entrada selecionada"
+                Cancel_Button.Text = "Cancelar"
+                OK_Button.Text = "OK"
+                CheckBox1.Text = "Ficheiro de dados personalizado:"
+                CheckBox2.Text = "Confirmar imagem depois de adicionar pacotes AppX"
+                CustomDataFileOFD.Title = "Especificar um ficheiro de dados personalizado"
+                GroupBox2.Text = "Dependências AppX"
+                GroupBox3.Text = "Regiões da AppX"
+                LicenseFileOFD.Title = "Especificar um ficheiro de licença"
+                LinkLabel1.Text = "As regiões da aplicação têm de estar na forma de códigos ISO 3166-1 Alpha 2 ou Alpha-3. Para saber mais sobre estes códigos, clique aqui"
+                LinkLabel1.LinkArea = New LinkArea(125, 11)
+                ListView1.Columns(0).Text = "Ficheiro/Pasta"
+                ListView1.Columns(1).Text = "Tipo"
+                ListView1.Columns(2).Text = "Nome da aplicação"
+                ListView1.Columns(3).Text = "Editor da aplicação"
+                ListView1.Columns(4).Text = "Versão da aplicação"
+                CheckBox3.Text = "Ficheiro de licença:"
+                CheckBox4.Text = "Tornar a aplicação disponível para todas as regiões"
+                UnpackedAppxFolderFBD.Description = "Especifique uma pasta que contenha ficheiros AppX descompactados:"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
@@ -564,6 +652,8 @@ Public Class AddProvAppxPackage
                             msg = "El paquete:" & CrLf & CrLf & Package & CrLf & CrLf & "es un paquete de aplicación encriptado. Ni DISMTools ni DISM soportan añadir estos tipos de aplicaciones. Si le gustaría añadirlo, puede hacerlo, después de que la imagen se haya aplicado e iniciado."
                         Case "FRA"
                             msg = "Le paquet :" & CrLf & CrLf & Package & CrLf & CrLf & "est un paquet d'applications cryptées. Ni DISMTools ni DISM ne supportent l'ajout de ces types d'applications. Si vous souhaitez l'ajouter, vous pouvez le faire après l'application de l'image et le démarrage."
+                        Case "PTB", "PTG"
+                            msg = "O pacote:" & CrLf & CrLf & Package & CrLf & CrLf & "é um pacote de aplicações encriptadas. Nem o DISMTools nem o DISM suportam a adição destes tipos de aplicações. Se quiser adicioná-lo, pode fazê-lo depois de a imagem ser aplicada e inicializada."
                     End Select
                 Case 1
                     msg = "The package:" & CrLf & CrLf & Package & CrLf & CrLf & "is an encrypted application package. Neither DISMTools nor DISM support adding these application types. If you'd like to add it, you can do so, after the image is applied and booted to."
@@ -571,6 +661,8 @@ Public Class AddProvAppxPackage
                     msg = "El paquete:" & CrLf & CrLf & Package & CrLf & CrLf & "es un paquete de aplicación encriptado. Ni DISMTools ni DISM soportan añadir estos tipos de aplicaciones. Si le gustaría añadirlo, puede hacerlo, después de que la imagen se haya aplicado e iniciado."
                 Case 3
                     msg = "Le paquet :" & CrLf & CrLf & Package & CrLf & CrLf & "est un paquet d'applications cryptées. Ni DISMTools ni DISM ne supportent l'ajout de ces types d'applications. Si vous souhaitez l'ajouter, vous pouvez le faire après l'application de l'image et le démarrage."
+                Case 4
+                    msg = "O pacote:" & CrLf & CrLf & Package & CrLf & CrLf & "é um pacote de aplicações encriptadas. Nem o DISMTools nem o DISM suportam a adição destes tipos de aplicações. Se quiser adicioná-lo, pode fazê-lo depois de a imagem ser aplicada e inicializada."
             End Select
             MsgBox(msg, vbOKOnly + vbExclamation, Label1.Text)
             Exit Sub
@@ -686,6 +778,8 @@ Public Class AddProvAppxPackage
                                 MsgBox("Esta carpeta no parece contener una estructura de un paquete AppX. No será añadida a la lista", vbOKOnly + vbExclamation, "Añadir paquetes aprovisionados AppX")
                             Case "FRA"
                                 MsgBox("Ce répertoire ne semble pas contenir de structure de paquetage AppX. Il ne sera pas ajouté à la liste", vbOKOnly + vbExclamation, "Ajouter des paquets AppX provisionnés")
+                            Case "PTB", "PTG"
+                                MsgBox("Esta pasta não parece conter uma estrutura de pacotes AppX. Não será adicionada à lista", vbOKOnly + vbExclamation, "Adicionar pacotes AppX provisionados")
                         End Select
                     Case 1
                         MsgBox("This folder doesn't seem to contain an AppX package structure. It will not be added to the list", vbOKOnly + vbExclamation, "Add provisioned AppX packages")
@@ -693,6 +787,8 @@ Public Class AddProvAppxPackage
                         MsgBox("Esta carpeta no parece contener una estructura de un paquete AppX. No será añadida a la lista", vbOKOnly + vbExclamation, "Añadir paquetes aprovisionados AppX")
                     Case 3
                         MsgBox("Ce répertoire ne semble pas contenir de structure de paquetage AppX. Il ne sera pas ajouté à la liste", vbOKOnly + vbExclamation, "Ajouter des paquets AppX provisionnés")
+                    Case 4
+                        MsgBox("Esta pasta não parece conter uma estrutura de pacotes AppX. Não será adicionada à lista", vbOKOnly + vbExclamation, "Adicionar pacotes AppX provisionados")
                 End Select
                 Exit Sub
             End If
@@ -816,6 +912,8 @@ Public Class AddProvAppxPackage
                                     MsgBox("El paquete que desea añadir ya está añadido a la lista, y todas sus propiedades coinciden con las propiedades del paquete especificado. No añadiremos el paquete especificado", vbOKOnly + vbCritical, Label1.Text)
                                 Case "FRA"
                                     MsgBox("Le paquet que vous souhaitez ajouter est déjà ajouté à la liste et toutes ses propriétés correspondent à celles du paquet spécifié. Nous n'ajouterons pas le paquet spécifié", vbOKOnly + vbCritical, Label1.Text)
+                                Case "PTB", "PTG"
+                                    MsgBox("O pacote que pretende adicionar já foi adicionado à lista e todas as suas propriedades coincidem com as propriedades do pacote especificado. Não vamos adicionar o pacote especificado", vbOKOnly + vbCritical, Label1.Text)
                             End Select
                         Case 1
                             MsgBox("The package you want to add is already added to the list, and all its properties match with the properties of the package specified. We won't add the specified package", vbOKOnly + vbCritical, Label1.Text)
@@ -823,6 +921,8 @@ Public Class AddProvAppxPackage
                             MsgBox("El paquete que desea añadir ya está añadido a la lista, y todas sus propiedades coinciden con las propiedades del paquete especificado. No añadiremos el paquete especificado", vbOKOnly + vbCritical, Label1.Text)
                         Case 3
                             MsgBox("Le paquet que vous souhaitez ajouter est déjà ajouté à la liste et toutes ses propriétés correspondent à celles du paquet spécifié. Nous n'ajouterons pas le paquet spécifié", vbOKOnly + vbCritical, Label1.Text)
+                        Case 4
+                            MsgBox("O pacote que pretende adicionar já foi adicionado à lista e todas as suas propriedades coincidem com as propriedades do pacote especificado. Não vamos adicionar o pacote especificado", vbOKOnly + vbCritical, Label1.Text)
                     End Select
                     If Directory.Exists(Application.StartupPath & "\appxscan") Then
                         Directory.Delete(Application.StartupPath & "\appxscan", True)
@@ -839,6 +939,8 @@ Public Class AddProvAppxPackage
                                     msg = "El paquete que desea añadir ya está añadido a la lista, pero proviene de un desarrollador o publicador distinto." & CrLf & CrLf & "Dese cuenta de que las aplicaciones redistribuidas por publicadores o desarrolladores de terceros pueden dañar la imagen de Windows." & CrLf & CrLf & "¿Desea reemplazar la entrada en la lista por el paquete especificado?"
                                 Case "FRA"
                                     msg = "Le paquet que vous souhaitez ajouter a déjà été ajouté à la liste, mais il provient d'un développeur ou d'un éditeur différent." & CrLf & CrLf & "Notez que les applications redistribuées par des éditeurs ou des développeurs tiers peuvent endommager l'image Windows." & CrLf & CrLf & "Voulez-vous remplacer l'entrée de la liste par le paquet spécifié ?"
+                                Case "PTB", "PTG"
+                                    msg = "O pacote que pretende adicionar já foi adicionado à lista, mas vem de um programador ou editor diferente." & CrLf & CrLf & "Tenha em atenção que as aplicações redistribuídas por programadores ou editores terceiros podem causar danos na imagem do Windows." & CrLf & CrLf & "Pretende substituir a entrada na lista pelo pacote especificado?"
                             End Select
                         Case 1
                             msg = "The package you want to add is already added to the list, but it comes from a different developer or publisher." & CrLf & CrLf & "Do note that applications redistributed by third-party publishers or developers can cause damage to the Windows image." & CrLf & CrLf & "Do you want to replace the entry in the list with the package specified?"
@@ -846,6 +948,8 @@ Public Class AddProvAppxPackage
                             msg = "El paquete que desea añadir ya está añadido a la lista, pero proviene de un desarrollador o publicador distinto." & CrLf & CrLf & "Dese cuenta de que las aplicaciones redistribuidas por publicadores o desarrolladores de terceros pueden dañar la imagen de Windows." & CrLf & CrLf & "¿Desea reemplazar la entrada en la lista por el paquete especificado?"
                         Case 3
                             msg = "Le paquet que vous souhaitez ajouter a déjà été ajouté à la liste, mais il provient d'un développeur ou d'un éditeur différent." & CrLf & CrLf & "Notez que les applications redistribuées par des éditeurs ou des développeurs tiers peuvent endommager l'image Windows." & CrLf & CrLf & "Voulez-vous remplacer l'entrée de la liste par le paquet spécifié ?"
+                        Case 4
+                            msg = "O pacote que pretende adicionar já foi adicionado à lista, mas vem de um programador ou editor diferente." & CrLf & CrLf & "Tenha em atenção que as aplicações redistribuídas por programadores ou editores terceiros podem causar danos na imagem do Windows." & CrLf & CrLf & "Pretende substituir a entrada na lista pelo pacote especificado?"
                     End Select
                     If MsgBox(msg, vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.Yes Then
                         ' Set properties
@@ -859,6 +963,8 @@ Public Class AddProvAppxPackage
                                         Item.SubItems(1).Text = If(IsFolder, "Desempaquetado", "Empaquetado")
                                     Case "FRA"
                                         Item.SubItems(1).Text = If(IsFolder, "Décompacté", "Compacté")
+                                    Case "PTB", "PTG"
+                                        Item.SubItems(1).Text = If(IsFolder, "Desembalado", "Embalado")
                                 End Select
                             Case 1
                                 Item.SubItems(1).Text = If(IsFolder, "Unpacked", "Packed")
@@ -866,6 +972,8 @@ Public Class AddProvAppxPackage
                                 Item.SubItems(1).Text = If(IsFolder, "Desempaquetado", "Empaquetado")
                             Case 3
                                 Item.SubItems(1).Text = If(IsFolder, "Décompacté", "Compacté")
+                            Case 4
+                                Item.SubItems(1).Text = If(IsFolder, "Desembalado", "Embalado")
                         End Select
                         Item.SubItems(2).Text = currentAppxName
                         Item.SubItems(3).Text = currentAppxPublisher
@@ -896,6 +1004,8 @@ Public Class AddProvAppxPackage
                                     msg = "El paquete que desea añadir ya está añadido a la lista, pero contiene una nueva versión." & CrLf & CrLf & "¿Desea reemplazar la entrada en la lista por el paquete actualizado especificado?"
                                 Case "FRA"
                                     msg = "Le paquet que vous souhaitez ajouter est déjà ajouté à la liste, mais il contient une version plus récente." & CrLf & CrLf & "Voulez-vous remplacer l'entrée de la liste par le paquet mis à jour spécifié ?"
+                                Case "PTB", "PTG"
+                                    msg = "O pacote que pretende adicionar já foi adicionado à lista, mas contém uma versão mais recente." & CrLf & CrLf & "Pretende substituir a entrada na lista pelo pacote atualizado especificado?"
                             End Select
                         Case 1
                             msg = "The package you want to add is already added to the list, but it contains a newer version." & CrLf & CrLf & "Do you want to replace the entry in the list with the updated package specified?"
@@ -903,6 +1013,8 @@ Public Class AddProvAppxPackage
                             msg = "El paquete que desea añadir ya está añadido a la lista, pero contiene una nueva versión." & CrLf & CrLf & "¿Desea reemplazar la entrada en la lista por el paquete actualizado especificado?"
                         Case 3
                             msg = "Le paquet que vous souhaitez ajouter est déjà ajouté à la liste, mais il contient une version plus récente." & CrLf & CrLf & "Voulez-vous remplacer l'entrée de la liste par le paquet mis à jour spécifié ?"
+                        Case 4
+                            msg = "O pacote que pretende adicionar já foi adicionado à lista, mas contém uma versão mais recente." & CrLf & CrLf & "Pretende substituir a entrada na lista pelo pacote atualizado especificado?"
                     End Select
                     If MsgBox(msg, vbYesNo + vbQuestion, Label1.Text) = MsgBoxResult.Yes Then
                         ' Set properties
@@ -916,6 +1028,8 @@ Public Class AddProvAppxPackage
                                         Item.SubItems(1).Text = If(IsFolder, "Desempaquetado", "Empaquetado")
                                     Case "FRA"
                                         Item.SubItems(1).Text = If(IsFolder, "Décompacté", "Compacté")
+                                    Case "PTB", "PTG"
+                                        Item.SubItems(1).Text = If(IsFolder, "Desembalado", "Embalado")
                                 End Select
                             Case 1
                                 Item.SubItems(1).Text = If(IsFolder, "Unpacked", "Packed")
@@ -923,6 +1037,8 @@ Public Class AddProvAppxPackage
                                 Item.SubItems(1).Text = If(IsFolder, "Desempaquetado", "Empaquetado")
                             Case 3
                                 Item.SubItems(1).Text = If(IsFolder, "Décompacté", "Compacté")
+                            Case 4
+                                Item.SubItems(1).Text = If(IsFolder, "Desembalado", "Embalado")
                         End Select
                         Item.SubItems(2).Text = currentAppxName
                         Item.SubItems(3).Text = currentAppxPublisher
@@ -963,6 +1079,12 @@ Public Class AddProvAppxPackage
                         Else
                             ListView1.Items.Add(New ListViewItem(New String() {Package, "Compacté", currentAppxName, currentAppxPublisher, currentAppxVersion}))
                         End If
+                    Case "PTB", "PTG"
+                        If IsFolder Then
+                            ListView1.Items.Add(New ListViewItem(New String() {Package, "Desembalado", currentAppxName, currentAppxPublisher, currentAppxVersion}))
+                        Else
+                            ListView1.Items.Add(New ListViewItem(New String() {Package, "Embalado", currentAppxName, currentAppxPublisher, currentAppxVersion}))
+                        End If
                 End Select
             Case 1
                 If IsFolder Then
@@ -981,6 +1103,12 @@ Public Class AddProvAppxPackage
                     ListView1.Items.Add(New ListViewItem(New String() {Package, "Décompacté", currentAppxName, currentAppxPublisher, currentAppxVersion}))
                 Else
                     ListView1.Items.Add(New ListViewItem(New String() {Package, "Compacté", currentAppxName, currentAppxPublisher, currentAppxVersion}))
+                End If
+            Case 4
+                If IsFolder Then
+                    ListView1.Items.Add(New ListViewItem(New String() {Package, "Desembalado", currentAppxName, currentAppxPublisher, currentAppxVersion}))
+                Else
+                    ListView1.Items.Add(New ListViewItem(New String() {Package, "Embalado", currentAppxName, currentAppxPublisher, currentAppxVersion}))
                 End If
         End Select
         Dim currentPackage As New AppxPackage()
@@ -1055,6 +1183,8 @@ Public Class AddProvAppxPackage
                                     MsgBox("No se pudo obtener recursos de logotipos de este paquete - no se puede leer el manifiesto", vbOKOnly + vbCritical, "Añadir paquetes aprovisionados AppX")
                                 Case "FRA"
                                     MsgBox("Impossible d'obtenir les ressources du logo de la boutique d'applications à partir de ce paquet - impossible de lire le manifeste.", vbOKOnly + vbCritical, "Ajouter des paquets AppX provisionnés")
+                                Case "PTB", "PTG"
+                                    MsgBox("Não foi possível obter os activos do logótipo da loja de aplicações deste pacote - não é possível ler do manifesto", vbOKOnly + vbCritical, "Adicionar pacotes AppX provisionados")
                             End Select
                         Case 1
                             MsgBox("Could not get application store logo assets from this package - cannot read from manifest", vbOKOnly + vbCritical, "Add provisioned AppX packages")
@@ -1062,6 +1192,8 @@ Public Class AddProvAppxPackage
                             MsgBox("No se pudo obtener recursos de logotipos de este paquete - no se puede leer el manifiesto", vbOKOnly + vbCritical, "Añadir paquetes aprovisionados AppX")
                         Case 3
                             MsgBox("Impossible d'obtenir les ressources du logo de la boutique d'applications à partir de ce paquet - impossible de lire le manifeste.", vbOKOnly + vbCritical, "Ajouter des paquets AppX provisionnés")
+                        Case 4
+                            MsgBox("Não foi possível obter os activos do logótipo da loja de aplicações deste pacote - não é possível ler do manifesto", vbOKOnly + vbCritical, "Adicionar pacotes AppX provisionados")
                     End Select
                 End If
             Else
@@ -1197,6 +1329,9 @@ Public Class AddProvAppxPackage
                             Case "FRA"
                                 Label8.Text = "Éditeur : " & ListView1.FocusedItem.SubItems(3).Text
                                 Label9.Text = "Version : " & ListView1.FocusedItem.SubItems(4).Text
+                            Case "PTB", "PTG"
+                                Label8.Text = "Editora: " & ListView1.FocusedItem.SubItems(3).Text
+                                Label9.Text = "Versão: " & ListView1.FocusedItem.SubItems(4).Text
                         End Select
                     Case 1
                         Label8.Text = "Publisher: " & ListView1.FocusedItem.SubItems(3).Text
@@ -1207,6 +1342,9 @@ Public Class AddProvAppxPackage
                     Case 3
                         Label8.Text = "Éditeur : " & ListView1.FocusedItem.SubItems(3).Text
                         Label9.Text = "Version : " & ListView1.FocusedItem.SubItems(4).Text
+                    Case 4
+                        Label8.Text = "Editora: " & ListView1.FocusedItem.SubItems(3).Text
+                        Label9.Text = "Versão: " & ListView1.FocusedItem.SubItems(4).Text
                 End Select
             Catch ex As NullReferenceException
 
@@ -1288,6 +1426,9 @@ Public Class AddProvAppxPackage
                     Case "FRA"
                         Label7.Text = "Sélection multiple"
                         Label8.Text = "Voir les propriétés communes de toutes les applications sélectionnées"
+                    Case "PTB", "PTG"
+                        Label7.Text = "Seleção múltipla"
+                        Label8.Text = "Ver as propriedades comuns de todas as aplicações seleccionadas"
                 End Select
             Case 1
                 Label7.Text = "Multiple selection"
@@ -1298,6 +1439,9 @@ Public Class AddProvAppxPackage
             Case 3
                 Label7.Text = "Sélection multiple"
                 Label8.Text = "Voir les propriétés communes de toutes les applications sélectionnées"
+            Case 4
+                Label7.Text = "Seleção múltipla"
+                Label8.Text = "Ver as propriedades comuns de todas as aplicações seleccionadas"
         End Select
         Label9.Visible = False
         PictureBox2.Visible = False
@@ -1445,6 +1589,8 @@ Public Class AddProvAppxPackage
                             .Text = "Vista previa"
                         Case "FRA"
                             .Text = "Aperçu"
+                        Case "PTB", "PTG"
+                            .Text = "Pré-visualização"
                     End Select
                 Case 1
                     .Text = "Preview"
@@ -1452,6 +1598,8 @@ Public Class AddProvAppxPackage
                     .Text = "Vista previa"
                 Case 3
                     .Text = "Aperçu"
+                Case 4
+                    .Text = "Pré-visualização"
             End Select
             With LogoAssetPreview
                 .Parent = LogoAssetPopupForm
@@ -1501,6 +1649,8 @@ Public Class AddProvAppxPackage
                             previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Los recursos de este archivo no pudieron ser detectados", "Haga clic para agrandar la vista"))
                         Case "FRA"
                             previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Le logo de ce fichier n'a pas pu être détecté.", "Cliquez ici pour agrandir la vue"))
+                        Case "PTB", "PTG"
+                            previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Não foi possível detetar os activos do logótipo para este ficheiro", "Clique aqui para ampliar a vista"))
                     End Select
                 Case 1
                     previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "The logo assets for this file could not be detected", "Click here to enlarge the view"))
@@ -1508,6 +1658,8 @@ Public Class AddProvAppxPackage
                     previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Los recursos de este archivo no pudieron ser detectados", "Haga clic para agrandar la vista"))
                 Case 3
                     previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Le logo de ce fichier n'a pas pu être détecté.", "Cliquez ici pour agrandir la vue"))
+                Case 4
+                    previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Não foi possível detetar os activos do logótipo para este ficheiro", "Clique aqui para ampliar a vista"))
             End Select
         Catch ex As Exception
             Select Case MainForm.Language
@@ -1519,6 +1671,8 @@ Public Class AddProvAppxPackage
                             previewer.SetToolTip(sender, "Los recursos de este archivo no pudieron ser detectados")
                         Case "FRA"
                             previewer.SetToolTip(sender, "Le logo de ce fichier n'a pas pu être détecté.")
+                        Case "PTB", "PTG"
+                            previewer.SetToolTip(sender, "Não foi possível detetar os activos do logótipo para este ficheiro")
                     End Select
                 Case 1
                     previewer.SetToolTip(sender, "The logo assets for this file could not be detected")
@@ -1526,6 +1680,8 @@ Public Class AddProvAppxPackage
                     previewer.SetToolTip(sender, "Los recursos de este archivo no pudieron ser detectados")
                 Case 3
                     previewer.SetToolTip(sender, "Le logo de ce fichier n'a pas pu être détecté.")
+                Case 4
+                    previewer.SetToolTip(sender, "Não foi possível detetar os activos do logótipo para este ficheiro")
             End Select
         End Try
     End Sub
@@ -1613,6 +1769,24 @@ Public Class AddProvAppxPackage
                                     Else
                                         Continue For
                                     End If
+                                Case "PTB", "PTG"
+                                    If MsgBox("O seguinte diretório:" & CrLf & Quote & PackageFile & Quote & CrLf & "contém pacotes de aplicações. Deseja processá-los também?" & CrLf & CrLf & "NOTA: esta operação irá analisar este diretório recursivamente, pelo que poderá demorar mais tempo a ser concluída", vbYesNo + vbQuestion, "Adicionar pacotes AppX provisionados") = MsgBoxResult.Yes Then
+                                        For Each AppPkg In My.Computer.FileSystem.GetFiles(PackageFile, FileIO.SearchOption.SearchAllSubDirectories)
+                                            If Path.GetExtension(AppPkg).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or _
+                                                Path.GetExtension(AppPkg).Equals(".msix", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".msixbundle", StringComparison.OrdinalIgnoreCase) Then
+                                                ScanAppxPackage(False, AppPkg)
+                                            ElseIf Path.GetExtension(AppPkg).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
+                                                If Not AppInstallerDownloader.IsDisposed Then AppInstallerDownloader.Dispose()
+                                                AppInstallerDownloader.AppInstallerFile = AppPkg
+                                                If Not File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
+                                                If File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, AppPkg.Replace(".appinstaller", ".appxbundle").Trim())
+                                            Else
+                                                Continue For
+                                            End If
+                                        Next
+                                    Else
+                                        Continue For
+                                    End If
                             End Select
                         Case 1
                             If MsgBox("The following directory:" & CrLf & Quote & PackageFile & Quote & CrLf & "contains application packages. Do you want to process them as well?" & CrLf & CrLf & "NOTE: this will scan this directory recursively, so it may take longer for this operation to complete", vbYesNo + vbQuestion, "Add provisioned AppX packages") = MsgBoxResult.Yes Then
@@ -1668,6 +1842,24 @@ Public Class AddProvAppxPackage
                             Else
                                 Continue For
                             End If
+                        Case 4
+                            If MsgBox("O seguinte diretório:" & CrLf & Quote & PackageFile & Quote & CrLf & "contém pacotes de aplicações. Deseja processá-los também?" & CrLf & CrLf & "NOTA: esta operação irá analisar este diretório recursivamente, pelo que poderá demorar mais tempo a ser concluída", vbYesNo + vbQuestion, "Adicionar pacotes AppX provisionados") = MsgBoxResult.Yes Then
+                                For Each AppPkg In My.Computer.FileSystem.GetFiles(PackageFile, FileIO.SearchOption.SearchAllSubDirectories)
+                                    If Path.GetExtension(AppPkg).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or _
+                                        Path.GetExtension(AppPkg).Equals(".msix", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".msixbundle", StringComparison.OrdinalIgnoreCase) Then
+                                        ScanAppxPackage(False, AppPkg)
+                                    ElseIf Path.GetExtension(AppPkg).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
+                                        If Not AppInstallerDownloader.IsDisposed Then AppInstallerDownloader.Dispose()
+                                        AppInstallerDownloader.AppInstallerFile = AppPkg
+                                        If Not File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
+                                        If File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, AppPkg.Replace(".appinstaller", ".appxbundle").Trim())
+                                    Else
+                                        Continue For
+                                    End If
+                                Next
+                            Else
+                                Continue For
+                            End If
                     End Select
                 End If
             Else
@@ -1680,6 +1872,8 @@ Public Class AddProvAppxPackage
                                 MsgBox("El archivo que se ha soltado aquí no es un paquete de aplicación.", vbOKOnly + vbCritical, "Añadir paquetes aprovisionados AppX")
                             Case "FRA"
                                 MsgBox("Le fichier qui a été déposé ici n'est pas un paquet d'application.", vbOKOnly + vbCritical, "Ajouter des paquets AppX provisionnés")
+                            Case "PTB", "PTG"
+                                MsgBox("O ficheiro que foi deixado aqui não é um pacote de aplicações.", vbOKOnly + vbCritical, "Adicionar pacotes AppX provisionados")
                         End Select
                     Case 1
                         MsgBox("The file that has been dropped here isn't an application package.", vbOKOnly + vbCritical, "Add provisioned AppX packages")
@@ -1687,6 +1881,8 @@ Public Class AddProvAppxPackage
                         MsgBox("El archivo que se ha soltado aquí no es un paquete de aplicación.", vbOKOnly + vbCritical, "Añadir paquetes aprovisionados AppX")
                     Case 3
                         MsgBox("Le fichier qui a été déposé ici n'est pas un paquet d'application.", vbOKOnly + vbCritical, "Ajouter des paquets AppX provisionnés")
+                    Case 4
+                        MsgBox("O ficheiro que foi deixado aqui não é um pacote de aplicações.", vbOKOnly + vbCritical, "Adicionar pacotes AppX provisionados")
                 End Select
             End If
         Next

@@ -76,7 +76,7 @@
       <HintPath>packages\DarkUI.2.0.2\lib\DarkUI.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Dism, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5bba90053b345501, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Dism.3.0.0\lib\net40\Microsoft.Dism.dll</HintPath>
+      <HintPath>packages\Microsoft.Dism.3.1.0\lib\net40\Microsoft.Dism.dll</HintPath>
     </Reference>
     <Reference Include="ScintillaNET, Version=3.6.3.0, Culture=neutral, PublicKeyToken=d42c48f11a620156, processorArchitecture=MSIL">
       <HintPath>packages\jacobslusser.ScintillaNET.Signed.3.6.3\lib\net40\ScintillaNET.dll</HintPath>
@@ -138,6 +138,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Elements\AppxPackage.vb" />
+    <Compile Include="Elements\Recents.vb" />
     <Compile Include="Help\HelpBrowserForm.Designer.vb">
       <DependentUpon>HelpBrowserForm.vb</DependentUpon>
     </Compile>
@@ -170,6 +171,12 @@
       <DependentUpon>AddListEntryDlg.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\ConfigLists\AddListEntryDlg.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\ConfigLists\Tools\OneDriveExclusionDlg.Designer.vb">
+      <DependentUpon>OneDriveExclusionDlg.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\ConfigLists\Tools\OneDriveExclusionDlg.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\ConfigLists\WimScriptEditor.Designer.vb">
@@ -248,6 +255,12 @@
       <DependentUpon>GetCapabilityInfo.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\Get_Ops\Capabilities\GetCapabilityInfo.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\Drivers\DriverFileInfoDlg.Designer.vb">
+      <DependentUpon>DriverFileInfoDlg.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Get_Ops\Drivers\DriverFileInfoDlg.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Get_Ops\Drivers\GetDriverInfo.Designer.vb">
@@ -550,16 +563,16 @@
     <Compile Include="Panels\MSEdge\AddEdgeWebView.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Panels\OSUninst\OSNoRollbackErrorDlg.Designer.vb">
+    <Compile Include="Panels\Img_Ops\OSUninst\OSNoRollbackErrorDlg.Designer.vb">
       <DependentUpon>OSNoRollbackErrorDlg.vb</DependentUpon>
     </Compile>
-    <Compile Include="Panels\OSUninst\OSNoRollbackErrorDlg.vb">
+    <Compile Include="Panels\Img_Ops\OSUninst\OSNoRollbackErrorDlg.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Panels\OSUninst\SetOSUninstWindow.Designer.vb">
+    <Compile Include="Panels\Img_Ops\OSUninst\SetOSUninstWindow.Designer.vb">
       <DependentUpon>SetOSUninstWindow.vb</DependentUpon>
     </Compile>
-    <Compile Include="Panels\OSUninst\SetOSUninstWindow.vb">
+    <Compile Include="Panels\Img_Ops\OSUninst\SetOSUninstWindow.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\PopupDlgs\PopupImageManager.Designer.vb">
@@ -690,6 +703,9 @@
     <EmbeddedResource Include="Panels\ConfigLists\AddListEntryDlg.resx">
       <DependentUpon>AddListEntryDlg.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\ConfigLists\Tools\OneDriveExclusionDlg.resx">
+      <DependentUpon>OneDriveExclusionDlg.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\ConfigLists\WimScriptEditor.resx">
       <DependentUpon>WimScriptEditor.vb</DependentUpon>
     </EmbeddedResource>
@@ -728,6 +744,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Get_Ops\Capabilities\GetCapabilityInfo.resx">
       <DependentUpon>GetCapabilityInfo.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Get_Ops\Drivers\DriverFileInfoDlg.resx">
+      <DependentUpon>DriverFileInfoDlg.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Get_Ops\Drivers\GetDriverInfo.resx">
       <DependentUpon>GetDriverInfo.vb</DependentUpon>
@@ -879,10 +898,10 @@
     <EmbeddedResource Include="Panels\MSEdge\AddEdgeWebView.resx">
       <DependentUpon>AddEdgeWebView.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Panels\OSUninst\OSNoRollbackErrorDlg.resx">
+    <EmbeddedResource Include="Panels\Img_Ops\OSUninst\OSNoRollbackErrorDlg.resx">
       <DependentUpon>OSNoRollbackErrorDlg.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Panels\OSUninst\SetOSUninstWindow.resx">
+    <EmbeddedResource Include="Panels\Img_Ops\OSUninst\SetOSUninstWindow.resx">
       <DependentUpon>SetOSUninstWindow.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\PopupDlgs\PopupImageManager.resx">
@@ -1212,6 +1231,7 @@
     <None Include="Resources\settings\options_scratch_light.png" />
     <None Include="Resources\about\gitter_chat.png" />
     <None Include="Resources\import_driver.png" />
+    <None Include="Resources\onedrive_exclusion.png" />
     <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
     <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
     <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />

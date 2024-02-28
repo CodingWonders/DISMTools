@@ -1264,7 +1264,7 @@ Partial Class Options
         Me.ComboBox3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ComboBox3.FormattingEnabled = True
-        Me.ComboBox3.Items.AddRange(New Object() {"Use system language", "English", "Spanish"})
+        Me.ComboBox3.Items.AddRange(New Object() {"Use system language", "English", "Spanish", "French", "Portuguese"})
         Me.ComboBox3.Location = New System.Drawing.Point(119, 42)
         Me.ComboBox3.Name = "ComboBox3"
         Me.ComboBox3.Size = New System.Drawing.Size(592, 23)
