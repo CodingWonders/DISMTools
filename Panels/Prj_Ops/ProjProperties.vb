@@ -964,7 +964,7 @@ Public Class ProjProperties
                     Label19.Text = "No"
                 Case 3
                     Label19.Text = "Non"
-                Case "PTB", "PTG"
+                Case 4
                     Label19.Text = "Não"
             End Select
             Select Case MainForm.Language

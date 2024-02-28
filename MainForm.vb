@@ -128,6 +128,7 @@ Public Class MainForm
 
     ' Set branch name and codenames
     Public dtBranch As String = "dt_preview_relcndid"
+    Dim dt_codeName As String = "lisbon"
 
     ' Arrays and other variables used on background processes
     Public imgPackageNames(65535) As String
@@ -440,7 +441,7 @@ Public Class MainForm
             Environment.Exit(1)
         End If
         Visible = False
-        Debug.WriteLine("DISMTools, version " & My.Application.Info.Version.ToString() & " (" & dtBranch & ")" & CrLf & _
+        Debug.WriteLine("DISMTools, version " & My.Application.Info.Version.ToString() & " (" & dtBranch & ", codename " & Quote & dt_codeName & Quote & ")" & CrLf & _
                         "Loading program settings..." & CrLf)
         GetArguments()
         ' Detect mounted images
@@ -6590,6 +6591,7 @@ Public Class MainForm
                         ' Context menu of AppX addition dialog
                         MicrosoftAppsToolStripMenuItem.Text = "Visite o sítio Web das Aplicações Microsoft"
                         MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visite o Web site do Projeto de Geração da Microsoft Store"
+                        AppxDownloadHelpToolStripMenuItem.Text = "Como é que obtenho aplicações?"
                         ' New design
                         GreetingLabel.Text = "Bem-vindo a esta sessão de manutenção"
                         LinkLabel12.Text = "PROJECTO"
@@ -8044,6 +8046,7 @@ Public Class MainForm
                 ' Context menu of AppX addition dialog
                 MicrosoftAppsToolStripMenuItem.Text = "Visite o sítio Web das Aplicações Microsoft"
                 MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visite o Web site do Projeto de Geração da Microsoft Store"
+                AppxDownloadHelpToolStripMenuItem.Text = "Como é que obtenho aplicações?"
                 ' New design
                 GreetingLabel.Text = "Bem-vindo a esta sessão de manutenção"
                 LinkLabel12.Text = "PROJECTO"

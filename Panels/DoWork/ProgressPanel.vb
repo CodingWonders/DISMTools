@@ -2907,7 +2907,7 @@ Public Class ProgressPanel
                             currentTask.Text = "Reparando el almacén de componentes..."
                         Case 3
                             currentTask.Text = "Réparation du stock de composants en cours..."
-                        Case "PTB", "PTG"
+                        Case 4
                             currentTask.Text = "Reparar o armazenamento de componentes..."
                     End Select
                     LogView.AppendText(CrLf & _
@@ -5670,7 +5670,7 @@ Public Class ProgressPanel
                         Cancel_Button.Text = "Cancelar"
                         LogButton.Text = If(Height = 240, " Mostrar registo", "Ocultar registo")
                         LinkLabel1.Text = "Mostrar ficheiro de registo DISM (avançado)"
-                        GroupBox1.Text = "Log"
+                        GroupBox1.Text = "Registo"
                         allTasks.Text = "Aguarde..."
                         currentTask.Text = "Por favor, aguarde..."
                 End Select
@@ -5711,7 +5711,7 @@ Public Class ProgressPanel
                 Cancel_Button.Text = "Cancelar"
                 LogButton.Text = If(Height = 240, " Mostrar registo", "Ocultar registo")
                 LinkLabel1.Text = "Mostrar ficheiro de registo DISM (avançado)"
-                GroupBox1.Text = "Log"
+                GroupBox1.Text = "Registo"
                 allTasks.Text = "Aguarde..."
                 currentTask.Text = "Por favor, aguarde..."
         End Select
