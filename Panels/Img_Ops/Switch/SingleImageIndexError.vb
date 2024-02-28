@@ -36,6 +36,12 @@ Public Class SingleImageIndexError
                         LinkLabel1.Text = "Pour en savoir plus sur les index d'une image, ou sur certaines de ses propriétés spécifiques, allez dans " & Quote & "Commandes > Gestion des images > Obtenir des informations sur l'image" & Quote & ", ou cliquez ici"
                         LinkLabel1.LinkArea = New LinkArea(214, 3)
                         OK_Button.Text = "OK"
+                    Case "PTB", "PTG"
+                        Label1.Text = "Esta imagem parece ter apenas um índice"
+                        Label2.Text = "Não é possível mudar para outros índices. Se quiser guardar as alterações da imagem, pode fazê-lo utilizando um índice novo e separado."
+                        LinkLabel1.Text = "Para saber mais sobre os índices de uma imagem, ou sobre algumas das suas propriedades específicas, aceda a " & Quote & "Comandos > Gestão de imagens > Obter informações sobre a imagem" & Quote & ", ou clique aqui"
+                        LinkLabel1.LinkArea = New LinkArea(185, 4)
+                        OK_Button.Text = "OK"
                 End Select
             Case 1
                 Label1.Text = "This image seems to have only one index"
@@ -54,6 +60,12 @@ Public Class SingleImageIndexError
                 Label2.Text = "Vous ne pouvez pas passer à d'autres index. Si vous souhaitez sauvegarder les modifications apportées à l'image, vous pouvez le faire en utilisant un nouvel index distinct."
                 LinkLabel1.Text = "Pour en savoir plus sur les index d'une image, ou sur certaines de ses propriétés spécifiques, allez dans " & Quote & "Commandes > Gestion des images > Obtenir des informations sur l'image" & Quote & ", ou cliquez ici"
                 LinkLabel1.LinkArea = New LinkArea(214, 3)
+                OK_Button.Text = "OK"
+            Case 4
+                Label1.Text = "Esta imagem parece ter apenas um índice"
+                Label2.Text = "Não é possível mudar para outros índices. Se quiser guardar as alterações da imagem, pode fazê-lo utilizando um índice novo e separado."
+                LinkLabel1.Text = "Para saber mais sobre os índices de uma imagem, ou sobre algumas das suas propriedades específicas, aceda a " & Quote & "Comandos > Gestão de imagens > Obter informações sobre a imagem" & Quote & ", ou clique aqui"
+                LinkLabel1.LinkArea = New LinkArea(185, 4)
                 OK_Button.Text = "OK"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then

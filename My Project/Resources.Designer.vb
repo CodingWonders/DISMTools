@@ -2046,9 +2046,20 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a - Portuguese translations are halfway done
-        '''- CODE: size representation procedures in the DISMTools Utilities class now support petabytes (PB)
-        '''- Project creation times have been reduced.
+        '''  Busca una cadena traducida similar a Changes made since last preview
+        '''
+        '''Enhancements:
+        '''
+        '''- The default window size of the image information results dialog is now 1024x600
+        '''- The alignment of the Recents list items to the home screen tasks has been improved
+        '''- Portuguese translations are now complete
+        '''
+        '''Overall changes
+        '''
+        '''Overall bugfixes:
+        '''
+        '''- Fixed some minor text editor issues in the Configuration List Editor
+        '''- Fixed an issue where the &quot;Pick...&quot; button in the image file information dialog would not be disabled automatically when selecting &quot; [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

@@ -58,6 +58,8 @@ Public Class AddDrivers
                             MsgBox("No hay paquetes de controladores seleccionados para instalar. Especifique los paquetes de controladores que le gustaría instalar e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
                         Case "FRA"
                             MsgBox("Il n'y a pas de pilotes sélectionnés à installer. Veuillez spécifier les paquets de pilotes que vous souhaitez installer et réessayez.", vbOKOnly + vbCritical, Label1.Text)
+                        Case "PTB", "PTG"
+                            MsgBox("Não existem pacotes de controladores seleccionados para instalar. Especifique os pacotes de controladores que gostaria de instalar e tente novamente.", vbOKOnly + vbCritical, Label1.Text)
                     End Select
                 Case 1
                     MsgBox("There are no selected driver packages to install. Please specify the driver packages you'd like to install and try again.", vbOKOnly + vbCritical, Label1.Text)
@@ -65,6 +67,8 @@ Public Class AddDrivers
                     MsgBox("No hay paquetes de controladores seleccionados para instalar. Especifique los paquetes de controladores que le gustaría instalar e inténtelo de nuevo.", vbOKOnly + vbCritical, Label1.Text)
                 Case 3
                     MsgBox("Il n'y a pas de pilotes sélectionnés à installer. Veuillez spécifier les paquets de pilotes que vous souhaitez installer et réessayez.", vbOKOnly + vbCritical, Label1.Text)
+                Case 4
+                    MsgBox("Não existem pacotes de controladores seleccionados para instalar. Especifique os pacotes de controladores que gostaria de instalar e tente novamente.", vbOKOnly + vbCritical, Label1.Text)
             End Select
             Exit Sub
         End If
@@ -96,6 +100,8 @@ Public Class AddDrivers
                         ListView1.Items.Add(New ListViewItem(New String() {OpenFileDialog1.FileName, "Archivo"}))
                     Case "FRA"
                         ListView1.Items.Add(New ListViewItem(New String() {OpenFileDialog1.FileName, "Fichier"}))
+                    Case "PTB", "PTG"
+                        ListView1.Items.Add(New ListViewItem(New String() {OpenFileDialog1.FileName, "Ficheiro"}))
                 End Select
             Case 1
                 ListView1.Items.Add(New ListViewItem(New String() {OpenFileDialog1.FileName, "File"}))
@@ -103,6 +109,8 @@ Public Class AddDrivers
                 ListView1.Items.Add(New ListViewItem(New String() {OpenFileDialog1.FileName, "Archivo"}))
             Case 3
                 ListView1.Items.Add(New ListViewItem(New String() {OpenFileDialog1.FileName, "Fichier"}))
+            Case 4
+                ListView1.Items.Add(New ListViewItem(New String() {OpenFileDialog1.FileName, "Ficheiro"}))
         End Select
         Button3.Enabled = ListView1.Items.Count > 0
     End Sub
@@ -130,6 +138,11 @@ Public Class AddDrivers
                                       "- Pour laisser DISM analyser ce dossier de manière récursive, cliquez sur Oui" & CrLf & _
                                       "- Pour sélectionner manuellement les pilotes de ce dossier, cliquez sur Non" & CrLf & _
                                       "- Pour ne pas ajouter ce dossier, cliquez sur Annuler"
+                            Case "PTB", "PTG"
+                                msg = "O pacote especificado é uma pasta. Pode deixar que o DISM a analise recursivamente para adicionar todos os controladores nela contidos, ou pode especificar os controladores a adicionar manualmente." & CrLf & CrLf & _
+                                      "- Para permitir que o DISM verifique esta pasta recursivamente, clique em Sim" & CrLf & _
+                                      "- Para escolher manualmente os controladores desta pasta, clique em Não" & CrLf & _
+                                      "- Para não adicionar esta pasta, clique em Cancelar"
                         End Select
                     Case 1
                         msg = "The package specified is a folder. You can let DISM scan it recursively to add all drivers in it, or you can specify the drivers to add manually." & CrLf & CrLf & _
@@ -146,6 +159,11 @@ Public Class AddDrivers
                               "- Pour laisser DISM analyser ce dossier de manière récursive, cliquez sur Oui" & CrLf & _
                               "- Pour sélectionner manuellement les pilotes de ce dossier, cliquez sur Non" & CrLf & _
                               "- Pour ne pas ajouter ce dossier, cliquez sur Annuler"
+                    Case 4
+                        msg = "O pacote especificado é uma pasta. Pode deixar que o DISM a analise recursivamente para adicionar todos os controladores nela contidos, ou pode especificar os controladores a adicionar manualmente." & CrLf & CrLf & _
+                              "- Para permitir que o DISM verifique esta pasta recursivamente, clique em Sim" & CrLf & _
+                              "- Para escolher manualmente os controladores desta pasta, clique em Não" & CrLf & _
+                              "- Para não adicionar esta pasta, clique em Cancelar"
                 End Select
                 Select Case MsgBox(msg, vbYesNoCancel + vbInformation, Label1.Text)
                     Case MsgBoxResult.Yes
@@ -158,6 +176,8 @@ Public Class AddDrivers
                                         ListView1.Items.Add(New ListViewItem(New String() {FolderBrowserDialog1.SelectedPath, "Carpeta"}))
                                     Case "FRA"
                                         ListView1.Items.Add(New ListViewItem(New String() {FolderBrowserDialog1.SelectedPath, "Répertoire"}))
+                                    Case "PTB", "PTG"
+                                        ListView1.Items.Add(New ListViewItem(New String() {FolderBrowserDialog1.SelectedPath, "Pasta"}))
                                 End Select
                             Case 1
                                 ListView1.Items.Add(New ListViewItem(New String() {FolderBrowserDialog1.SelectedPath, "Folder"}))
@@ -165,6 +185,8 @@ Public Class AddDrivers
                                 ListView1.Items.Add(New ListViewItem(New String() {FolderBrowserDialog1.SelectedPath, "Carpeta"}))
                             Case 3
                                 ListView1.Items.Add(New ListViewItem(New String() {FolderBrowserDialog1.SelectedPath, "Répertoire"}))
+                            Case 4
+                                ListView1.Items.Add(New ListViewItem(New String() {FolderBrowserDialog1.SelectedPath, "Pasta"}))
                         End Select
                         CheckedListBox1.Items.Add(FolderBrowserDialog1.SelectedPath)
                         CheckedListBox1.SetItemChecked(CheckedListBox1.Items.IndexOf(FolderBrowserDialog1.SelectedPath), True)
@@ -184,6 +206,8 @@ Public Class AddDrivers
                                 MsgBox("No hay paquetes de controladores en la carpeta espcificada", vbOKOnly + vbCritical, Label1.Text)
                             Case "FRA"
                                 MsgBox("Il n'y a pas de pilotes dans le répertoire spécifié.", vbOKOnly + vbCritical, Label1.Text)
+                            Case "PTB", "PTG"
+                                MsgBox("Não existem pacotes de controladores na pasta especificada", vbOKOnly + vbCritical, Label1.Text)
                         End Select
                     Case 1
                         MsgBox("There are no driver packages in the specified folder", vbOKOnly + vbCritical, Label1.Text)
@@ -191,6 +215,8 @@ Public Class AddDrivers
                         MsgBox("No hay paquetes de controladores en la carpeta espcificada", vbOKOnly + vbCritical, Label1.Text)
                     Case 3
                         MsgBox("Il n'y a pas de pilotes dans le répertoire spécifié.", vbOKOnly + vbCritical, Label1.Text)
+                    Case 4
+                        MsgBox("Não existem pacotes de controladores na pasta especificada", vbOKOnly + vbCritical, Label1.Text)
                 End Select
             End If
             Cursor = Cursors.Arrow
@@ -288,6 +314,26 @@ Public Class AddDrivers
                         ListView1.Columns(1).Text = "Type"
                         OpenFileDialog1.Title = "Spécifier le paquet de pilotes à ajouter"
                         FolderBrowserDialog1.Description = "Indiquez le répertoire contenant les pilotes. Vous pourrez ensuite préciser s'il doit être analysé de manière récursive :"
+                    Case "PTB", "PTG"
+                        Text = "Adicionar controladores"
+                        Label1.Text = Text
+                        Label2.Text = "Especifique os controladores a adicionar utilizando os botões abaixo ou colocando-os na lista abaixo:"
+                        Label3.Text = "Pode deixar o programa procurar recursivamente as pastas de controladores presentes na lista abaixo e adicioná-las também. Para o fazer, assinale as entradas que pretende que sejam verificadas:"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Cancelar"
+                        Button1.Text = "Adicionar ficheiro..."
+                        Button2.Text = "Adicionar pasta..."
+                        Button3.Text = "Remover todos os registos"
+                        Button4.Text = "Remover entrada selecionada"
+                        CheckBox1.Text = "Forçar a instalação de controladores não assinados"
+                        CheckBox2.Text = "Confirmar imagem após adicionar controladores"
+                        GroupBox1.Text = "Ficheiros de controladores"
+                        GroupBox2.Text = "Pastas de controladores"
+                        GroupBox3.Text = "Opções"
+                        ListView1.Columns(0).Text = "Ficheiro/Pasta"
+                        ListView1.Columns(1).Text = "Tipo"
+                        OpenFileDialog1.Title = "Especificar o pacote de controladores a adicionar"
+                        FolderBrowserDialog1.Description = "Especificar a pasta que contém os pacotes de controladores. Poderá então especificar se é necessário efetuar uma verificação recursiva:"
                 End Select
             Case 1
                 Text = "Add drivers"
@@ -349,6 +395,26 @@ Public Class AddDrivers
                 ListView1.Columns(1).Text = "Type"
                 OpenFileDialog1.Title = "Spécifier le paquet de pilotes à ajouter"
                 FolderBrowserDialog1.Description = "Indiquez le répertoire contenant les pilotes. Vous pourrez ensuite préciser s'il doit être analysé de manière récursive :"
+            Case 4
+                Text = "Adicionar controladores"
+                Label1.Text = Text
+                Label2.Text = "Especifique os controladores a adicionar utilizando os botões abaixo ou colocando-os na lista abaixo:"
+                Label3.Text = "Pode deixar o programa procurar recursivamente as pastas de controladores presentes na lista abaixo e adicioná-las também. Para o fazer, assinale as entradas que pretende que sejam verificadas:"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Cancelar"
+                Button1.Text = "Adicionar ficheiro..."
+                Button2.Text = "Adicionar pasta..."
+                Button3.Text = "Remover todos os registos"
+                Button4.Text = "Remover entrada selecionada"
+                CheckBox1.Text = "Forçar a instalação de controladores não assinados"
+                CheckBox2.Text = "Confirmar imagem após adicionar controladores"
+                GroupBox1.Text = "Ficheiros de controladores"
+                GroupBox2.Text = "Pastas de controladores"
+                GroupBox3.Text = "Opções"
+                ListView1.Columns(0).Text = "Ficheiro/Pasta"
+                ListView1.Columns(1).Text = "Tipo"
+                OpenFileDialog1.Title = "Especificar o pacote de controladores a adicionar"
+                FolderBrowserDialog1.Description = "Especificar a pasta que contém os pacotes de controladores. Poderá então especificar se é necessário efetuar uma verificação recursiva:"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
@@ -410,6 +476,11 @@ Public Class AddDrivers
                                       "- Pour laisser DISM analyser ce dossier de manière récursive, cliquez sur Oui" & CrLf & _
                                       "- Pour sélectionner manuellement les pilotes de ce dossier, cliquez sur Non" & CrLf & _
                                       "- Pour ne pas ajouter ce dossier, cliquez sur Annuler"
+                            Case "PTB", "PTG"
+                                msg = "O pacote especificado é uma pasta. Pode deixar que o DISM a analise recursivamente para adicionar todos os controladores nela contidos, ou pode especificar os controladores a adicionar manualmente." & CrLf & CrLf & _
+                                      "- Para permitir que o DISM verifique esta pasta recursivamente, clique em Sim" & CrLf & _
+                                      "- Para escolher manualmente os controladores desta pasta, clique em Não" & CrLf & _
+                                      "- Para não adicionar esta pasta, clique em Cancelar"
                         End Select
                     Case 1
                         msg = "The package specified is a folder. You can let DISM scan it recursively to add all drivers in it, or you can specify the drivers to add manually." & CrLf & CrLf & _
@@ -426,6 +497,11 @@ Public Class AddDrivers
                               "- Pour laisser DISM analyser ce dossier de manière récursive, cliquez sur Oui" & CrLf & _
                               "- Pour sélectionner manuellement les pilotes de ce dossier, cliquez sur Non" & CrLf & _
                               "- Pour ne pas ajouter ce dossier, cliquez sur Annuler"
+                    Case 4
+                        msg = "O pacote especificado é uma pasta. Pode deixar que o DISM a analise recursivamente para adicionar todos os controladores nela contidos, ou pode especificar os controladores a adicionar manualmente." & CrLf & CrLf & _
+                              "- Para permitir que o DISM verifique esta pasta recursivamente, clique em Sim" & CrLf & _
+                              "- Para escolher manualmente os controladores desta pasta, clique em Não" & CrLf & _
+                              "- Para não adicionar esta pasta, clique em Cancelar"
                 End Select
                 Select Case MsgBox(msg, vbYesNoCancel + vbInformation, Label1.Text)
                     Case MsgBoxResult.Yes
@@ -438,6 +514,8 @@ Public Class AddDrivers
                                         ListView1.Items.Add(New ListViewItem(New String() {PkgFile, "Carpeta"}))
                                     Case "FRA"
                                         ListView1.Items.Add(New ListViewItem(New String() {PkgFile, "Répertoire"}))
+                                    Case "PTB", "PTG"
+                                        ListView1.Items.Add(New ListViewItem(New String() {PkgFile, "Pasta"}))
                                 End Select
                             Case 1
                                 ListView1.Items.Add(New ListViewItem(New String() {PkgFile, "Folder"}))
@@ -445,6 +523,8 @@ Public Class AddDrivers
                                 ListView1.Items.Add(New ListViewItem(New String() {PkgFile, "Carpeta"}))
                             Case 3
                                 ListView1.Items.Add(New ListViewItem(New String() {PkgFile, "Répertoire"}))
+                            Case 4
+                                ListView1.Items.Add(New ListViewItem(New String() {PkgFile, "Pasta"}))
                         End Select
                         CheckedListBox1.Items.Add(PkgFile)
                         CheckedListBox1.SetItemChecked(CheckedListBox1.Items.IndexOf(PkgFile), True)
@@ -464,6 +544,8 @@ Public Class AddDrivers
                                 ListView1.Items.Add(New ListViewItem(New String() {PkgFile, "Archivo"}))
                             Case "FRA"
                                 ListView1.Items.Add(New ListViewItem(New String() {PkgFile, "Fichier"}))
+                            Case "PTB", "PTG"
+                                ListView1.Items.Add(New ListViewItem(New String() {PkgFile, "Ficheiro"}))
                         End Select
                     Case 1
                         ListView1.Items.Add(New ListViewItem(New String() {PkgFile, "File"}))
@@ -471,6 +553,8 @@ Public Class AddDrivers
                         ListView1.Items.Add(New ListViewItem(New String() {PkgFile, "Archivo"}))
                     Case 3
                         ListView1.Items.Add(New ListViewItem(New String() {PkgFile, "Fichier"}))
+                    Case 4
+                        ListView1.Items.Add(New ListViewItem(New String() {PkgFile, "Ficheiro"}))
                 End Select
             End If
         Next

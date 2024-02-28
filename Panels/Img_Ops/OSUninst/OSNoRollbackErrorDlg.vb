@@ -28,6 +28,10 @@ Public Class OSNoRollbackErrorDlg
                         Label1.Text = "Vous ne pouvez pas revenir à une version antérieure"
                         Label2.Text = "Aucune ancienne version n'a été détectée, car ses fichiers n'ont pas été trouvés. Il se peut que vous possédiez cette version depuis plus longtemps que la fenêtre de désinstallation ne vous le permet, ou que vous ayez supprimé les fichiers de l'ancienne version (pour économiser de l'espace). Vous n'avez rien à faire."
                         OK_Button.Text = "OK"
+                    Case "PTB", "PTG"
+                        Label1.Text = "Não é possível retroceder para uma versão anterior"
+                        Label2.Text = "Não foram detectadas versões antigas, porque os seus ficheiros não foram encontrados. Poderá ter esta versão há mais tempo do que a janela de desinstalação lhe permite, ou poderá ter eliminado os ficheiros da versão antiga (para poupar espaço). Não precisa de fazer nada"
+                        OK_Button.Text = "OK"
                 End Select
             Case 1
                 Label1.Text = "You can't roll back to an older version"
@@ -40,6 +44,10 @@ Public Class OSNoRollbackErrorDlg
             Case 3
                 Label1.Text = "Vous ne pouvez pas revenir à une version antérieure"
                 Label2.Text = "Aucune ancienne version n'a été détectée, car ses fichiers n'ont pas été trouvés. Il se peut que vous possédiez cette version depuis plus longtemps que la fenêtre de désinstallation ne vous le permet, ou que vous ayez supprimé les fichiers de l'ancienne version (pour économiser de l'espace). Vous n'avez rien à faire."
+                OK_Button.Text = "OK"
+            Case 4
+                Label1.Text = "Não é possível retroceder para uma versão anterior"
+                Label2.Text = "Não foram detectadas versões antigas, porque os seus ficheiros não foram encontrados. Poderá ter esta versão há mais tempo do que a janela de desinstalação lhe permite, ou poderá ter eliminado os ficheiros da versão antiga (para poupar espaço). Não precisa de fazer nada"
                 OK_Button.Text = "OK"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then

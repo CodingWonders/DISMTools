@@ -6,7 +6,7 @@ Imports System.Net
 Public Class PrgSetup
 
     Dim ColorModes() As String = New String(2) {"Use system setting", "Light mode", "Dark mode"}
-    Dim Languages() As String = New String(3) {"Use system language", "English", "Spanish", "French"}
+    Dim Languages() As String = New String(4) {"Use system language", "English", "Spanish", "French", "Portuguese"}
 
     Dim btnToolTip As New ToolTip()
     Private isMouseDown As Boolean = False
@@ -38,6 +38,8 @@ Public Class PrgSetup
                 msg = "Minimizar"
             Case "FRA"
                 msg = "Minimiser"
+            Case "PTB", "PTG"
+                msg = "Minimizar"
         End Select
         btnToolTip.SetToolTip(sender, msg)
     End Sub
@@ -71,6 +73,8 @@ Public Class PrgSetup
                 msg = "Cerrar"
             Case "FRA"
                 msg = "Fermer"
+            Case "PTB", "PTG"
+                msg = "Fechar"
         End Select
         btnToolTip.SetToolTip(sender, msg)
     End Sub
@@ -107,6 +111,8 @@ Public Class PrgSetup
                 msg = "Atrás"
             Case "FRA"
                 msg = "Retourner"
+            Case "PTB", "PTG"
+                msg = "Voltar atrás"
         End Select
         btnToolTip.SetToolTip(sender, msg)
     End Sub
@@ -189,6 +195,8 @@ Public Class PrgSetup
                             msg = "La carpeta donde se almacenará el archivo de registro no existe. Asegúrese de que exista e inténtelo de nuevo."
                         Case "FRA"
                             msg = "Le dossier dans lequel le fichier journal sera stocké n'existe pas. Assurez-vous qu'il existe et réessayez."
+                        Case "PTB", "PTG"
+                            msg = "A pasta onde o ficheiro de registo será guardado não existe. Certifique-se de que existe e tente novamente."
                     End Select
                     MsgBox(msg, vbOKOnly + vbCritical, Text)
                     Exit Sub
@@ -216,6 +224,8 @@ Public Class PrgSetup
                     Next_Button.Text = "Finalizar"
                 Case "FRA"
                     Next_Button.Text = "Finir"
+                Case "PTB", "PTG"
+                    Next_Button.Text = "Terminar"
             End Select
             Cancel_Button.Enabled = False
             closeBox.Enabled = False
@@ -227,6 +237,8 @@ Public Class PrgSetup
                     Next_Button.Text = "Siguiente"
                 Case "FRA"
                     Next_Button.Text = "Suivant"
+                Case "PTB", "PTG"
+                    Next_Button.Text = "Seguinte"
             End Select
             Cancel_Button.Enabled = True
             closeBox.Enabled = True
@@ -291,6 +303,8 @@ Public Class PrgSetup
                     Next_Button.Text = "Finalizar"
                 Case "FRA"
                     Next_Button.Text = "Finir"
+                Case "PTB", "PTG"
+                    Next_Button.Text = "Terminar"
             End Select
             Cancel_Button.Enabled = False
             closeBox.Enabled = False
@@ -302,6 +316,8 @@ Public Class PrgSetup
                     Next_Button.Text = "Siguiente"
                 Case "FRA"
                     Next_Button.Text = "Suivant"
+                Case "PTB", "PTG"
+                    Next_Button.Text = "Seguinte"
             End Select
             Cancel_Button.Enabled = True
             closeBox.Enabled = True
@@ -411,6 +427,7 @@ Public Class PrgSetup
                 Languages(1) = "English"
                 Languages(2) = "Spanish"
                 Languages(3) = "French"
+                Languages(4) = "Portuguese"
             Case "ESN"
                 Text = "Configurar DISMTools"
                 Label1.Text = Text
@@ -460,6 +477,7 @@ Public Class PrgSetup
                 Languages(1) = "Inglés"
                 Languages(2) = "Español"
                 Languages(3) = "Francés"
+                Languages(4) = "Portugués"
             Case "FRA"
                 Text = "Configurer DISMTools"
                 Label1.Text = Text
@@ -509,6 +527,57 @@ Public Class PrgSetup
                 Languages(1) = "Anglais"
                 Languages(2) = "Espagnol"
                 Languages(3) = "Français"
+                Languages(4) = "Portugais"
+            Case "PTB", "PTG"
+                Text = "Configurar DISMTools"
+                Label1.Text = Text
+                Label2.Text = "Bem-vindo ao DISMTools"
+                Label3.Text = "DISMTools é uma GUI gratuita e de código aberto, orientada para projectos, para operações DISM. Para iniciar a configuração, clique em Seguinte."
+                Label5.Text = "Torne-o seu. Personalize este programa a seu gosto e clique em Next. Estas configurações podem ser feitas a qualquer momento na secção " & Quote & "Personalização" & Quote & " da janela Opções"
+                Label6.Text = "Personalizar este programa"
+                Label7.Text = "Modo de cor:"
+                Label8.Text = "Idioma:"
+                Label9.Text = "Tipo de letra da janela de registo:"
+                Label10.Text = "Ficheiro de registo:"
+                ' Since we start with log level 3, manually show that option
+                Label11.Text = "Erros, avisos e mensagens de informação (nível de registo 3)"
+                Label13.Text = "Especifique as configurações de registo e clique em Seguinte. Dependendo do nível de conteúdo que especificar, registaremos mais ou menos informações. Esta configuração pode ser feita a qualquer momento na secção " & Quote & "Logs" & Quote & " da janela Opções"
+                Label14.Text = "O que devemos registar quando executa uma operação?"
+                ' Same here
+                Label16.Text = "O ficheiro de registo deve apresentar erros, avisos e mensagens de informação após a execução de uma operação de imagem."
+                Label20.Text = "Há mais alguma coisa que gostaria de configurar?"
+                Label21.Text = "As configurações disponíveis são mais do que as que acabou de configurar. Se pretender alterar mais definições, clique no botão abaixo. Também vamos tornar essas configurações persistentes."
+                Label22.Text = "Pode executar estes passos em qualquer altura."
+                Label23.Text = "Terminou a configuração básica para usar o DISMTools da forma desejada. Clique em " & Quote & "Finish" & Quote & ", e as configurações serão mantidas."
+                Label24.Text = "A configuração está concluída"
+                Label25.Text = "Agora que já configurou tudo, recomendamos que efectue as seguintes acções:"
+                Label26.Text = "Mantenha-se atualizado para receber novas funcionalidades e uma experiência melhorada"
+                Label27.Text = "Começar a utilizar o DISMTools e o serviço de manutenção de imagens, para obter mais rapidamente"
+                Label28.Text = "Estilo do painel de progresso secundário:"
+                Label29.Text = "Esta fonte pode não ser legível em janelas de registo. Embora possa continuar a utilizá-lo, recomendamos tipos de letra monoespaçados para maior legibilidade."
+                Back_Button.Text = "Voltar"
+                Next_Button.Text = "Seguinte"
+                Cancel_Button.Text = "Cancelar"
+                Button1.Text = "Navegar..."
+                Button2.Text = "Utilizar ficheiro de registo predefinido"
+                Button5.Text = "Configurar mais definições"
+                Button6.Text = "Obter"
+                Button7.Text = "Verificar se há actualizações"
+                CheckBox1.Text = "Criar automaticamente registos no diretório de registos do programa"
+                CheckBox2.Text = "Utilizar o novo design da vista de projeto"
+                RadioButton1.Text = "Moderno"
+                RadioButton2.Text = "Clássico"
+                SaveFileDialog1.Title = "Especificar o ficheiro de registo"
+
+                ' Configure string arrays to put them in the comboboxes
+                ColorModes(0) = "Utilizar a configuração do sistema"
+                ColorModes(1) = "Modo de luz"
+                ColorModes(2) = "Modo escuro"
+                Languages(0) = "Utilizar o idioma do sistema"
+                Languages(1) = "Inglês"
+                Languages(2) = "Espanhol"
+                Languages(3) = "Francês"
+                Languages(4) = "Português"
         End Select
         ' Add new items to the comboboxes
         ComboBox1.Items.AddRange(ColorModes)
@@ -639,6 +708,21 @@ Public Class PrgSetup
                         Label11.Text = "Erreurs, avertissements, informations et messages de débogage (niveau du journal 4)"
                         Label16.Text = "Le fichier journal doit afficher les erreurs, les avertissements, les informations et les messages de débogage après l'exécution d'une opération d'image."
                 End Select
+            Case "PTB", "PTG"
+                Select Case TrackBar1.Value
+                    Case 0
+                        Label11.Text = "Erros (nível de registo 1)"
+                        Label16.Text = "O ficheiro de registo só deve apresentar erros depois de executar uma operação de imagem."
+                    Case 1
+                        Label11.Text = "Erros e avisos (nível de registo 2)"
+                        Label16.Text = "O ficheiro de registo deve apresentar erros e avisos após a realização de uma operação de imagem."
+                    Case 2
+                        Label11.Text = "Erros, avisos e mensagens de informação (nível de registo 3)"
+                        Label16.Text = "O ficheiro de registo deve apresentar erros, avisos e mensagens de informação após a realização de uma operação de imagem."
+                    Case 3
+                        Label11.Text = "Erros, avisos, informações e mensagens de depuração (nível de registo 4)"
+                        Label16.Text = "O ficheiro de registo deve apresentar erros, avisos, informações e mensagens de depuração após a realização de uma operação de imagem."
+                End Select
         End Select
         MainForm.LogLevel = TrackBar1.Value + 1
     End Sub
@@ -689,6 +773,8 @@ Public Class PrgSetup
                     MsgBox("No pudimos descargar el comprobador de actualizaciones. Razón:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Comprobar actualizaciones")
                 Case "FRA"
                     MsgBox("Nous n'avons pas pu télécharger le vérificateur de mise à jour. Raison :" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Mettre à jour les données")
+                Case "PTB", "PTG"
+                    MsgBox("Não foi possível descarregar o verificador de actualizações. Motivo:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Verificar actualizações")
             End Select
             Exit Sub
         End Try

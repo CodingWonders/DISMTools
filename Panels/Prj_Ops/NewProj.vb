@@ -36,11 +36,22 @@ Public Class NewProj
                                 Exit Sub
                             End If
                         Case "FRA"
-                            If MsgBox("Le répertoire: " & CrLf & Quote & TextBox2.Text & Quote & CrLf & "n'existe pas. Voulez-vous le créer ?", vbYesNo + vbQuestion, "Créer un nouveau projet") = MsgBoxResult.Yes Then
+                            If MsgBox("Le répertoire : " & CrLf & Quote & TextBox2.Text & Quote & CrLf & "n'existe pas. Voulez-vous le créer ?", vbYesNo + vbQuestion, "Créer un nouveau projet") = MsgBoxResult.Yes Then
                                 Try
                                     Directory.CreateDirectory(TextBox2.Text)
                                 Catch ex As Exception
                                     MsgBox("Nous n'avons pas pu créer le répertoire du projet pour vous pour les raisons suivantes : " & CrLf & ex.ToString() & "; " & ex.Message, vbOKOnly + vbCritical, "Créer un nouveau projet")
+                                    Exit Sub
+                                End Try
+                            Else
+                                Exit Sub
+                            End If
+                        Case "PTB", "PTG"
+                            If MsgBox("O diretório: " & CrLf & Quote & TextBox2.Text & Quote & CrLf & "Deseja criá-lo?", vbYesNo + vbQuestion, "Criar um novo projeto") = MsgBoxResult.Yes Then
+                                Try
+                                    Directory.CreateDirectory(TextBox2.Text)
+                                Catch ex As Exception
+                                    MsgBox("Não foi possível criar o diretório do projeto para si devido a: " & CrLf & ex.ToString() & "; " & ex.Message, vbOKOnly + vbCritical, "Criar um novo projeto")
                                     Exit Sub
                                 End Try
                             Else
@@ -70,11 +81,22 @@ Public Class NewProj
                         Exit Sub
                     End If
                 Case 3
-                    If MsgBox("Le répertoire: " & CrLf & Quote & TextBox2.Text & Quote & CrLf & "n'existe pas. Voulez-vous le créer ?", vbYesNo + vbQuestion, "Créer un nouveau projet") = MsgBoxResult.Yes Then
+                    If MsgBox("Le répertoire : " & CrLf & Quote & TextBox2.Text & Quote & CrLf & "n'existe pas. Voulez-vous le créer ?", vbYesNo + vbQuestion, "Créer un nouveau projet") = MsgBoxResult.Yes Then
                         Try
                             Directory.CreateDirectory(TextBox2.Text)
                         Catch ex As Exception
                             MsgBox("Nous n'avons pas pu créer le répertoire du projet pour vous pour les raisons suivantes : " & CrLf & ex.ToString() & "; " & ex.Message, vbOKOnly + vbCritical, "Créer un nouveau projet")
+                            Exit Sub
+                        End Try
+                    Else
+                        Exit Sub
+                    End If
+                Case 4
+                    If MsgBox("O diretório: " & CrLf & Quote & TextBox2.Text & Quote & CrLf & "Deseja criá-lo?", vbYesNo + vbQuestion, "Criar um novo projeto") = MsgBoxResult.Yes Then
+                        Try
+                            Directory.CreateDirectory(TextBox2.Text)
+                        Catch ex As Exception
+                            MsgBox("Não foi possível criar o diretório do projeto para si devido a: " & CrLf & ex.ToString() & "; " & ex.Message, vbOKOnly + vbCritical, "Criar um novo projeto")
                             Exit Sub
                         End Try
                     Else
@@ -141,6 +163,18 @@ Public Class NewProj
                         Cancel_Button.Text = "Annuler"
                         GroupBox1.Text = "Projet"
                         FolderBrowserDialog1.Description = "Veuillez sélectionner un dossier pour stocker ce projet :"
+                    Case "PTB", "PTG"
+                        Text = "Criar um novo projeto"
+                        Label1.Text = Text
+                        Label2.Text = "Por favor, especifique as opções para criar um novo projeto:"
+                        Label3.Text = "Nome*:"
+                        Label4.Text = "Localização*:"
+                        Label5.Text = "Os campos que terminam em * são obrigatórios"
+                        Button1.Text = "Navegar..."
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Cancelar"
+                        GroupBox1.Text = "Projeto"
+                        FolderBrowserDialog1.Description = "Por favor, seleccione uma pasta para armazenar este projeto:"
                 End Select
             Case 1
                 Text = "Create a new project"
@@ -178,6 +212,18 @@ Public Class NewProj
                 Cancel_Button.Text = "Annuler"
                 GroupBox1.Text = "Projet"
                 FolderBrowserDialog1.Description = "Veuillez sélectionner un dossier pour stocker ce projet :"
+            Case 4
+                Text = "Criar um novo projeto"
+                Label1.Text = Text
+                Label2.Text = "Por favor, especifique as opções para criar um novo projeto:"
+                Label3.Text = "Nome*:"
+                Label4.Text = "Localização*:"
+                Label5.Text = "Os campos que terminam em * são obrigatórios"
+                Button1.Text = "Navegar..."
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Cancelar"
+                GroupBox1.Text = "Projeto"
+                FolderBrowserDialog1.Description = "Por favor, seleccione uma pasta para armazenar este projeto:"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""

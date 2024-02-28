@@ -37,7 +37,7 @@ Partial Class InfoSaveResults
         Me.Label1.AutoEllipsis = True
         Me.Label1.Location = New System.Drawing.Point(13, 13)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(759, 26)
+        Me.Label1.Size = New System.Drawing.Size(983, 26)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "The report has been saved to the location you had specified, and its contents wil" & _
     "l be shown in the text box below."
@@ -46,7 +46,7 @@ Partial Class InfoSaveResults
         '
         Me.Button1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button1.Location = New System.Drawing.Point(696, 526)
+        Me.Button1.Location = New System.Drawing.Point(920, 526)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 2
@@ -78,7 +78,7 @@ Partial Class InfoSaveResults
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.ReadOnly = True
         Me.TextBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TextBox1.Size = New System.Drawing.Size(758, 477)
+        Me.TextBox1.Size = New System.Drawing.Size(982, 477)
         Me.TextBox1.TabIndex = 4
         '
         'InfoSaveResults
@@ -86,7 +86,7 @@ Partial Class InfoSaveResults
         Me.AcceptButton = Me.Button1
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(784, 561)
+        Me.ClientSize = New System.Drawing.Size(1008, 561)
         Me.Controls.Add(Me.TextBox1)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Button1)
