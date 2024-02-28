@@ -127,8 +127,8 @@ Public Class MainForm
     Public isSqlServerDTProj As Boolean
 
     ' Set branch name and codenames
-    Public dtBranch As String = "stable"
-    Dim dt_codeName As String = "lisbon"
+    Public dtBranch As String = "dt_preview"
+    Public dt_codeName As String = "DTV"
 
     ' Arrays and other variables used on background processes
     Public imgPackageNames(65535) As String
