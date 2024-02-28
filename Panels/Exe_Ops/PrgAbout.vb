@@ -37,7 +37,7 @@ Public Class PrgAbout
                         End If
                         Label16.Text = "ManagedDism (NuGet package)"
                         Label17.Text = "Branding assets"
-                        Label18.Text = "Windows Home Server wallpaper"
+                        Label18.Text = "Windows Home Server 2011"
                         LinkLabel1.Text = "CREDITS"
                         LinkLabel2.Text = "LICENSES"
                         LinkLabel3.Text = "WHAT'S NEW"
@@ -49,7 +49,7 @@ Public Class PrgAbout
                         LinkLabel8.LinkArea = New LinkArea(59, 29)
                         LinkLabel9.Text = "Visit website"
                         LinkLabel10.Text = "Visit website"
-                        LinkLabel11.Text = "Microsoft, Kýnan Antos"
+                        LinkLabel11.Text = "Microsoft"
                         LinkLabel12.Text = "Visit website"
                         LinkLabel13.Text = "Visit website"
                         OK_Button.Text = "OK"
@@ -74,7 +74,7 @@ Public Class PrgAbout
                         End If
                         Label16.Text = "ManagedDism (paquete NuGet)"
                         Label17.Text = "Recursos publicitarios"
-                        Label18.Text = "Fondo de pantalla de Windows Home Server"
+                        Label18.Text = "Windows Home Server 2011"
                         LinkLabel1.Text = "CRÉDITOS"
                         LinkLabel2.Text = "LICENCIAS"
                         LinkLabel3.Text = "NOVEDADES"
@@ -86,7 +86,7 @@ Public Class PrgAbout
                         LinkLabel8.LinkArea = New LinkArea(86, 29)
                         LinkLabel9.Text = "Visitar sitio"
                         LinkLabel10.Text = "Visitar sitio"
-                        LinkLabel11.Text = "Microsoft, Kýnan Antos"
+                        LinkLabel11.Text = "Microsoft"
                         LinkLabel12.Text = "Visitar sitio"
                         LinkLabel13.Text = "Visitar sitio"
                         OK_Button.Text = "Aceptar"
@@ -112,7 +112,7 @@ Public Class PrgAbout
                         End If
                         Label16.Text = "ManagedDism (paquet NuGet)"
                         Label17.Text = "Les atouts de la marque"
-                        Label18.Text = "Fond d'écran Windows Home Server"
+                        Label18.Text = "Windows Home Server 2011"
                         LinkLabel1.Text = "CRÉDITS"
                         LinkLabel2.Text = "LICENCES"
                         LinkLabel3.Text = "QUOI DE NEUF"
@@ -124,7 +124,7 @@ Public Class PrgAbout
                         LinkLabel8.LinkArea = New LinkArea(79, 41)
                         LinkLabel9.Text = "Site web"
                         LinkLabel10.Text = "Site web"
-                        LinkLabel11.Text = "Microsoft, Kýnan Antos"
+                        LinkLabel11.Text = "Microsoft"
                         LinkLabel12.Text = "Site web"
                         LinkLabel13.Text = "Site web"
                         OK_Button.Text = "OK"
@@ -150,7 +150,7 @@ Public Class PrgAbout
                         End If
                         Label16.Text = "ManagedDism (pacote NuGet)"
                         Label17.Text = "Activos de marca"
-                        Label18.Text = "Papel de parede do Windows Home Server"
+                        Label18.Text = "Windows Home Server 2011"
                         LinkLabel1.Text = "CRÉDITOS"
                         LinkLabel2.Text = "LICENÇAS"
                         LinkLabel3.Text = "O QUE HÁ DE NOVO"
@@ -162,7 +162,7 @@ Public Class PrgAbout
                         LinkLabel8.LinkArea = New LinkArea(76, 56)
                         LinkLabel9.Text = "Sítio Web"
                         LinkLabel10.Text = "Sítio Web"
-                        LinkLabel11.Text = "Microsoft, Kýnan Antos"
+                        LinkLabel11.Text = "Microsoft"
                         LinkLabel12.Text = "Sítio Web"
                         LinkLabel13.Text = "Sítio Web"
                         OK_Button.Text = "OK"
@@ -189,7 +189,7 @@ Public Class PrgAbout
                 End If
                 Label16.Text = "ManagedDism (NuGet package)"
                 Label17.Text = "Branding assets"
-                Label18.Text = "Windows Home Server wallpaper"
+                Label18.Text = "Windows Home Server 2011"
                 LinkLabel1.Text = "CREDITS"
                 LinkLabel2.Text = "LICENSES"
                 LinkLabel3.Text = "WHAT'S NEW"
@@ -201,7 +201,7 @@ Public Class PrgAbout
                 LinkLabel8.LinkArea = New LinkArea(59, 29)
                 LinkLabel9.Text = "Visit website"
                 LinkLabel10.Text = "Visit website"
-                LinkLabel11.Text = "Microsoft, Kýnan Antos"
+                LinkLabel11.Text = "Microsoft"
                 LinkLabel12.Text = "Visit website"
                 LinkLabel13.Text = "Visit website"
                 OK_Button.Text = "OK"
@@ -227,7 +227,7 @@ Public Class PrgAbout
                 End If
                 Label16.Text = "ManagedDism (paquete NuGet)"
                 Label17.Text = "Recursos publicitarios"
-                Label18.Text = "Fondo de pantalla de Windows Home Server"
+                Label18.Text = "Windows Home Server 2011"
                 LinkLabel1.Text = "CRÉDITOS"
                 LinkLabel2.Text = "LICENCIAS"
                 LinkLabel3.Text = "NOVEDADES"
@@ -239,7 +239,7 @@ Public Class PrgAbout
                 LinkLabel8.LinkArea = New LinkArea(86, 29)
                 LinkLabel9.Text = "Visitar sitio"
                 LinkLabel10.Text = "Visitar sitio"
-                LinkLabel11.Text = "Microsoft, Kýnan Antos"
+                LinkLabel11.Text = "Microsoft"
                 LinkLabel12.Text = "Visitar sitio"
                 LinkLabel13.Text = "Visitar sitio"
                 OK_Button.Text = "Aceptar"
@@ -265,7 +265,7 @@ Public Class PrgAbout
                 End If
                 Label16.Text = "ManagedDism (paquet NuGet)"
                 Label17.Text = "Les atouts de la marque"
-                Label18.Text = "Fond d'écran Windows Home Server"
+                Label18.Text = "Windows Home Server 2011"
                 LinkLabel1.Text = "CRÉDITS"
                 LinkLabel2.Text = "LICENCES"
                 LinkLabel3.Text = "QUOI DE NEUF"
@@ -277,7 +277,7 @@ Public Class PrgAbout
                 LinkLabel8.LinkArea = New LinkArea(79, 41)
                 LinkLabel9.Text = "Site web"
                 LinkLabel10.Text = "Site web"
-                LinkLabel11.Text = "Microsoft, Kýnan Antos"
+                LinkLabel11.Text = "Microsoft"
                 LinkLabel12.Text = "Site web"
                 LinkLabel13.Text = "Site web"
                 OK_Button.Text = "OK"
@@ -303,7 +303,7 @@ Public Class PrgAbout
                 End If
                 Label16.Text = "ManagedDism (pacote NuGet)"
                 Label17.Text = "Activos de marca"
-                Label18.Text = "Papel de parede do Windows Home Server"
+                Label18.Text = "Windows Home Server 2011"
                 LinkLabel1.Text = "CRÉDITOS"
                 LinkLabel2.Text = "LICENÇAS"
                 LinkLabel3.Text = "O QUE HÁ DE NOVO"
@@ -315,7 +315,7 @@ Public Class PrgAbout
                 LinkLabel8.LinkArea = New LinkArea(76, 56)
                 LinkLabel9.Text = "Sítio Web"
                 LinkLabel10.Text = "Sítio Web"
-                LinkLabel11.Text = "Microsoft, Kýnan Antos"
+                LinkLabel11.Text = "Microsoft"
                 LinkLabel12.Text = "Sítio Web"
                 LinkLabel13.Text = "Sítio Web"
                 OK_Button.Text = "OK"
@@ -324,6 +324,7 @@ Public Class PrgAbout
         RichTextBox1.Text = My.Resources.LicenseOverview
         RichTextBox2.Text = My.Resources.WhatsNew
         ForeColor = Color.White
+        Label15.ForeColor = Color.Black
         PictureBox1.Image = If(MainForm.dtBranch.Contains("preview"), My.Resources.logo_preview, My.Resources.logo_aboutdlg_dark)
         If CreditsPanel.Visible Then
             LinkLabel1.LinkColor = Color.FromArgb(241, 241, 241)

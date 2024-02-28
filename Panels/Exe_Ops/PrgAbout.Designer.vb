@@ -515,14 +515,14 @@ Partial Class PrgAbout
         '
         Me.LinkLabel11.AutoSize = True
         Me.LinkLabel11.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.LinkLabel11.LinkArea = New System.Windows.Forms.LinkArea(0, 0)
         Me.LinkLabel11.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel11.LinkColor = System.Drawing.Color.DodgerBlue
         Me.LinkLabel11.Location = New System.Drawing.Point(337, 319)
         Me.LinkLabel11.Name = "LinkLabel11"
-        Me.LinkLabel11.Size = New System.Drawing.Size(80, 30)
+        Me.LinkLabel11.Size = New System.Drawing.Size(80, 15)
         Me.LinkLabel11.TabIndex = 9
-        Me.LinkLabel11.TabStop = True
-        Me.LinkLabel11.Text = "Microsoft, Kýnan Antos"
+        Me.LinkLabel11.Text = "Microsoft"
         Me.LinkLabel11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label18
@@ -530,9 +530,9 @@ Partial Class PrgAbout
         Me.Label18.AutoSize = True
         Me.Label18.Location = New System.Drawing.Point(3, 319)
         Me.Label18.Name = "Label18"
-        Me.Label18.Size = New System.Drawing.Size(181, 15)
+        Me.Label18.Size = New System.Drawing.Size(154, 15)
         Me.Label18.TabIndex = 2
-        Me.Label18.Text = "Windows Home Server wallpaper"
+        Me.Label18.Text = "Windows Home Server 2011"
         '
         'LicensesPanel
         '
@@ -546,7 +546,7 @@ Partial Class PrgAbout
         '
         'RichTextBox1
         '
-        Me.RichTextBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(7, Byte), Integer), CType(CType(28, Byte), Integer), CType(CType(73, Byte), Integer))
+        Me.RichTextBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(31, Byte), Integer), CType(CType(90, Byte), Integer), CType(CType(25, Byte), Integer))
         Me.RichTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.RichTextBox1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.RichTextBox1.Location = New System.Drawing.Point(0, 0)
@@ -569,7 +569,7 @@ Partial Class PrgAbout
         '
         'RichTextBox2
         '
-        Me.RichTextBox2.BackColor = System.Drawing.Color.FromArgb(CType(CType(7, Byte), Integer), CType(CType(28, Byte), Integer), CType(CType(73, Byte), Integer))
+        Me.RichTextBox2.BackColor = System.Drawing.Color.FromArgb(CType(CType(31, Byte), Integer), CType(CType(90, Byte), Integer), CType(CType(25, Byte), Integer))
         Me.RichTextBox2.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.RichTextBox2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.RichTextBox2.Location = New System.Drawing.Point(0, 0)
