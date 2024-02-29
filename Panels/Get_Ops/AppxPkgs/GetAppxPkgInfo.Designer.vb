@@ -60,6 +60,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Button2 = New System.Windows.Forms.Button()
+        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.FeatureInfoPanel.SuspendLayout()
         CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer2.Panel1.SuspendLayout()
@@ -169,6 +170,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.FlowLayoutPanel3.Controls.Add(Me.Label9)
         Me.FlowLayoutPanel3.Controls.Add(Me.PictureBox2)
         Me.FlowLayoutPanel3.Controls.Add(Me.Label10)
+        Me.FlowLayoutPanel3.Controls.Add(Me.LinkLabel1)
         Me.FlowLayoutPanel3.Controls.Add(Me.Label55)
         Me.FlowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.FlowLayoutPanel3.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
@@ -409,7 +411,7 @@ Partial Class GetAppxPkgInfoDlg
         'Label55
         '
         Me.Label55.AutoEllipsis = True
-        Me.Label55.Location = New System.Drawing.Point(7, 493)
+        Me.Label55.Location = New System.Drawing.Point(7, 508)
         Me.Label55.Name = "Label55"
         Me.Label55.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label55.Size = New System.Drawing.Size(405, 16)
@@ -508,6 +510,19 @@ Partial Class GetAppxPkgInfoDlg
         Me.Button2.Text = "Save..."
         Me.Button2.UseVisualStyleBackColor = True
         '
+        'LinkLabel1
+        '
+        Me.LinkLabel1.AutoSize = True
+        Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel1.Location = New System.Drawing.Point(7, 493)
+        Me.LinkLabel1.Name = "LinkLabel1"
+        Me.LinkLabel1.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.LinkLabel1.Size = New System.Drawing.Size(194, 15)
+        Me.LinkLabel1.TabIndex = 3
+        Me.LinkLabel1.TabStop = True
+        Me.LinkLabel1.Text = "This asset is not the one I'm looking for"
+        '
         'GetAppxPkgInfoDlg
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -581,5 +596,6 @@ Partial Class GetAppxPkgInfoDlg
     Friend WithEvents Label10 As System.Windows.Forms.Label
     Friend WithEvents PictureBox2 As System.Windows.Forms.PictureBox
     Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
 
 End Class

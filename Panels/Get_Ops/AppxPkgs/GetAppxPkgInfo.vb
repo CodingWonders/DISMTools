@@ -31,6 +31,7 @@ Public Class GetAppxPkgInfoDlg
                         Label8.Text = "Store logo asset directory:"
                         Label9.Text = "Main store logo asset:"
                         Label10.Text = "This asset has been guessed by DISMTools based on its size, which can lead to an incorrect result. If that happens, please report an issue on the GitHub repository"
+                        LinkLabel1.Text = "This asset is not the one I'm looking for"
                         Button2.Text = "Save..."
                     Case "ESN"
                         Text = "Obtener información de paquetes AppX"
@@ -48,6 +49,7 @@ Public Class GetAppxPkgInfoDlg
                         Label8.Text = "Directorio de recursos de logotipos de Tienda:"
                         Label9.Text = "Recurso de logotipos de Tienda principal:"
                         Label10.Text = "Este recurso ha sido averiguado por DISMTools por su tamaño, lo que puede llevar a un resultado incorrecto. Si eso ocurre, informe de un problema en el repositorio de GitHub"
+                        LinkLabel1.Text = "Este recurso no es el que estaba buscando"
                         Button2.Text = "Guardar..."
                     Case "FRA"
                         Text = "Obtenir des informations sur les paquets AppX"
@@ -65,6 +67,7 @@ Public Class GetAppxPkgInfoDlg
                         Label8.Text = "Répertoire du logo du magasin :"
                         Label9.Text = "Logo du magasin principal :"
                         Label10.Text = "Ce bien a été deviné par DISMTools sur la base de sa taille, ce qui peut conduire à un résultat incorrect. Si cela se produit, veuillez signaler un problème sur le dépôt GitHub."
+                        LinkLabel1.Text = "Cette ressource n'est pas celle que je recherche"
                         Button2.Text = "Sauvegarder..."
                     Case "PTB", "PTG"
                         Text = "Obter informações do pacote AppX"
@@ -82,6 +85,7 @@ Public Class GetAppxPkgInfoDlg
                         Label8.Text = "Diretório de activos do logótipo da loja:"
                         Label9.Text = "Ativo do logótipo principal da loja:"
                         Label10.Text = "Este ativo foi adivinhado pelo DISMTools com base no seu tamanho, o que pode conduzir a um resultado incorreto. Se isso acontecer, comunique um problema no repositório do GitHub"
+                        LinkLabel1.Text = "Este recurso não é o que estou à procura"
                         Button2.Text = "Guardar..."
                 End Select
             Case 1
@@ -100,6 +104,7 @@ Public Class GetAppxPkgInfoDlg
                 Label8.Text = "Store logo asset directory:"
                 Label9.Text = "Main store logo asset:"
                 Label10.Text = "This asset has been guessed by DISMTools based on its size, which can lead to an incorrect result. If that happens, please report an issue on the GitHub repository"
+                LinkLabel1.Text = "This asset is not the one I'm looking for"
                 Button2.Text = "Save..."
             Case 2
                 Text = "Obtener información de paquetes AppX"
@@ -117,6 +122,7 @@ Public Class GetAppxPkgInfoDlg
                 Label8.Text = "Directorio de recursos de logotipos de Tienda:"
                 Label9.Text = "Recurso de logotipos de Tienda principal:"
                 Label10.Text = "Este recurso ha sido averiguado por DISMTools por su tamaño, lo que puede llevar a un resultado incorrecto. Si eso ocurre, informe de un problema en el repositorio de GitHub"
+                LinkLabel1.Text = "Este recurso no es el que estaba buscando"
                 Button2.Text = "Guardar..."
             Case 3
                 Text = "Obtenir des informations sur les paquets AppX"
@@ -134,6 +140,7 @@ Public Class GetAppxPkgInfoDlg
                 Label8.Text = "Répertoire du logo du magasin :"
                 Label9.Text = "Logo du magasin principal :"
                 Label10.Text = "Ce bien a été deviné par DISMTools sur la base de sa taille, ce qui peut conduire à un résultat incorrect. Si cela se produit, veuillez signaler un problème sur le dépôt GitHub."
+                LinkLabel1.Text = "Cette ressource n'est pas celle que je recherche"
                 Button2.Text = "Sauvegarder..."
             Case 4
                 Text = "Obter informações do pacote AppX"
@@ -151,6 +158,7 @@ Public Class GetAppxPkgInfoDlg
                 Label8.Text = "Diretório de activos do logótipo da loja:"
                 Label9.Text = "Ativo do logótipo principal da loja:"
                 Label10.Text = "Este ativo foi adivinhado pelo DISMTools com base no seu tamanho, o que pode conduzir a um resultado incorreto. Se isso acontecer, comunique um problema no repositório do GitHub"
+                LinkLabel1.Text = "Este recurso não é o que estou à procura"
                 Button2.Text = "Guardar..."
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
@@ -202,6 +210,7 @@ Public Class GetAppxPkgInfoDlg
 
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged
         Label10.Visible = True
+        LinkLabel1.Visible = True
         mainAsset = ""
         assetDir = ""
         ' Clear the values of Label7, Label5, and Label3; as the program can't update their text properties on some packages
@@ -337,6 +346,7 @@ Public Class GetAppxPkgInfoDlg
                 End If
             Else
                 Label10.Visible = False
+                LinkLabel1.Visible = False
                 PictureBox2.SizeMode = PictureBoxSizeMode.CenterImage
             End If
             If mainAsset <> "" And File.Exists(mainAsset) Then PictureBox2.Image = Image.FromFile(mainAsset) Else PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.preview_unavail_dark, My.Resources.preview_unavail_light)
@@ -424,5 +434,9 @@ Public Class GetAppxPkgInfoDlg
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
         End If
+    End Sub
+
+    Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
+        Process.Start("https://github.com/CodingWonders/DISMTools/issues/new?assignees=CodingWonders&labels=bug&projects=&template=store-logo-asset-preview-issue.md&title=")
     End Sub
 End Class
