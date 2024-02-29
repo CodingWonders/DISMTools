@@ -76,6 +76,10 @@ Public Class OneDriveExclusionDlg
                         Dim excludedPath As String = ""
                         excludedPath = UserDir.Replace(ImagePath & "\", "\").Trim() & "\OneDrive"
                         ExcludedFolders.Add(excludedPath)
+                    ElseIf Directory.Exists(UserDir & "\SkyDrive") Then
+                        Dim excludedPath As String = ""
+                        excludedPath = UserDir.Replace(ImagePath & "\", "\").Trim() & "\SkyDrive"
+                        ExcludedFolders.Add(excludedPath)
                     End If
                 Next
                 successfulExclusion = True

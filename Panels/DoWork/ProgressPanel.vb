@@ -5448,7 +5448,7 @@ Public Class ProgressPanel
             End Select
             ActionRunning = False
             TaskList.Clear()
-            MainForm.StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
+            MainForm.StatusStrip.BackColor = Color.FromArgb(53, 153, 41)
             MainForm.ToolStripButton4.Visible = False
             If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
             MainForm.WatcherTimer.Enabled = True
@@ -5610,7 +5610,7 @@ Public Class ProgressPanel
                 Case 4
                     MainForm.MenuDesc.Text = "Pronto"
             End Select
-            MainForm.StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
+            MainForm.StatusStrip.BackColor = Color.FromArgb(53, 153, 41)
             SaveLog(Application.StartupPath & "\logs\DISMTools.log")
         End If
     End Sub
@@ -5811,7 +5811,7 @@ Public Class ProgressPanel
             Case 4
                 MainForm.MenuDesc.Text = "Realização de operações de imagem. Por favor, aguarde..."
         End Select
-        MainForm.StatusStrip.BackColor = Color.FromArgb(14, 99, 156)
+        MainForm.StatusStrip.BackColor = Color.FromArgb(18, 51, 14)
         If Debugger.IsAttached Then
             IsDebugged = True
         Else
@@ -6013,7 +6013,7 @@ Public Class ProgressPanel
     End Sub
 
     Private Sub BodyPanel_Paint(sender As Object, e As PaintEventArgs) Handles BodyPanel.Paint
-        ControlPaint.DrawBorder(e.Graphics, BodyPanel.ClientRectangle, Color.FromArgb(0, 122, 204), ButtonBorderStyle.Solid)
+        ControlPaint.DrawBorder(e.Graphics, BodyPanel.ClientRectangle, Color.FromArgb(53, 153, 41), ButtonBorderStyle.Solid)
     End Sub
 
     Private Sub ProgressPanel_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
