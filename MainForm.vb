@@ -5226,6 +5226,39 @@ Public Class MainForm
         RecentsLV.BackColor = SidePanel.BackColor
         TextBox1.BackColor = BackColor
         TextBox1.ForeColor = ForeColor
+        ' New project view header and side panel tints
+        If BackColor = Color.FromArgb(48, 48, 48) Then
+            ProjectViewHeader.BackColor = Color.FromArgb(32, 90, 25)
+            ProjectSidePanel.BackColor = Color.FromArgb(32, 90, 25)
+            If SidePanel_ProjectView.Visible Then LinkLabel12.LinkColor = Color.FromArgb(241, 241, 241)
+            If SidePanel_ImageView.Visible Then LinkLabel13.LinkColor = Color.FromArgb(241, 241, 241)
+            PictureBox9.Image = My.Resources.info_glyph_dark
+            PictureBox10.Image = My.Resources.explorer_view_glyph_dark
+            PictureBox11.Image = My.Resources.prj_unload_glyph_dark
+            PictureBox14.Image = My.Resources.info_glyph_dark
+            PictureBox15.Image = My.Resources.openfile_dark
+        ElseIf BackColor = Color.FromArgb(239, 239, 242) Then
+            ProjectViewHeader.BackColor = Color.FromArgb(196, 229, 192)
+            ProjectSidePanel.BackColor = Color.FromArgb(196, 229, 192)
+            If SidePanel_ProjectView.Visible Then LinkLabel12.LinkColor = ForeColor
+            If SidePanel_ImageView.Visible Then LinkLabel13.LinkColor = ForeColor
+            PictureBox9.Image = My.Resources.info_glyph
+            PictureBox10.Image = My.Resources.explorer_view_glyph
+            PictureBox11.Image = My.Resources.prj_unload_glyph
+            PictureBox14.Image = My.Resources.info_glyph
+            PictureBox15.Image = My.Resources.openfile
+        End If
+        ProjectViewHeader.ForeColor = ForeColor
+        ProjectSidePanel.ForeColor = ForeColor
+        For Each LinkCtrl As LinkLabel In ImgTasks.Controls.OfType(Of LinkLabel)()
+            LinkCtrl.LinkColor = ForeColor
+        Next
+        For Each LinkCtrl As LinkLabel In PrjTasks.Controls.OfType(Of LinkLabel)()
+            LinkCtrl.LinkColor = ForeColor
+        Next
+        For Each LinkCtrl As LinkLabel In TableLayoutPanel7.Controls.OfType(Of LinkLabel)()
+            LinkCtrl.LinkColor = ForeColor
+        Next
     End Sub
 
     Sub ChangeLangs(LangCode As Integer)
@@ -14923,7 +14956,7 @@ Public Class MainForm
     End Sub
 
     Private Sub LinkLabel12_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel12.LinkClicked
-        LinkLabel12.LinkColor = Color.FromArgb(241, 241, 241)
+        LinkLabel12.LinkColor = If(BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(241, 241, 241), Color.Black)
         LinkLabel13.LinkColor = Color.FromArgb(153, 153, 153)
         SidePanel_ProjectView.Visible = True
         SidePanel_ImageView.Visible = False
@@ -14931,7 +14964,7 @@ Public Class MainForm
 
     Private Sub LinkLabel13_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel13.LinkClicked
         LinkLabel12.LinkColor = Color.FromArgb(153, 153, 153)
-        LinkLabel13.LinkColor = Color.FromArgb(241, 241, 241)
+        LinkLabel13.LinkColor = If(BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(241, 241, 241), Color.Black)
         SidePanel_ProjectView.Visible = False
         SidePanel_ImageView.Visible = True
     End Sub
@@ -16426,7 +16459,7 @@ Public Class MainForm
 
     Private Sub LinkLabel12_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel12.MouseLeave
         If SidePanel_ProjectView.Visible Then
-            LinkLabel12.LinkColor = Color.FromArgb(241, 241, 241)
+            LinkLabel12.LinkColor = If(BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(241, 241, 241), ForeColor)
         Else
             LinkLabel12.LinkColor = Color.FromArgb(153, 153, 153)
         End If
@@ -16434,14 +16467,14 @@ Public Class MainForm
 
     Private Sub LinkLabel13_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel13.MouseLeave
         If SidePanel_ImageView.Visible Then
-            LinkLabel13.LinkColor = Color.FromArgb(241, 241, 241)
+            LinkLabel13.LinkColor = If(BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(241, 241, 241), ForeColor)
         Else
             LinkLabel13.LinkColor = Color.FromArgb(153, 153, 153)
         End If
     End Sub
 
     Private Sub LinkLabel12_MouseEnter(sender As Object, e As EventArgs) Handles LinkLabel12.MouseEnter
-        If LinkLabel12.LinkColor = Color.FromArgb(241, 241, 241) Then
+        If LinkLabel12.LinkColor = Color.FromArgb(241, 241, 241) Or LinkLabel12.LinkColor = ForeColor Then
             Cursor = Cursors.Arrow
             Exit Sub
         Else
@@ -16450,7 +16483,7 @@ Public Class MainForm
     End Sub
 
     Private Sub LinkLabel13_MouseEnter(sender As Object, e As EventArgs) Handles LinkLabel13.MouseEnter
-        If LinkLabel13.LinkColor = Color.FromArgb(241, 241, 241) Then
+        If LinkLabel13.LinkColor = Color.FromArgb(241, 241, 241) Or LinkLabel13.LinkColor = ForeColor Then
             Cursor = Cursors.Arrow
             Exit Sub
         Else
