@@ -4792,7 +4792,6 @@ Public Class MainForm
                                 Continue For
                             End Try
                         Next
-                        StatusStrip.ForeColor = Color.White
                         TabPage1.BackColor = Color.FromArgb(40, 40, 43)
                         TabPage1.ForeColor = Color.White
                         TabPage2.BackColor = Color.FromArgb(40, 40, 43)
@@ -4907,7 +4906,6 @@ Public Class MainForm
                                 Continue For
                             End Try
                         Next
-                        StatusStrip.ForeColor = Color.White
                         TabPage1.BackColor = Color.White
                         TabPage1.ForeColor = Color.Black
                         TabPage2.BackColor = Color.White
@@ -5026,7 +5024,6 @@ Public Class MainForm
                         Continue For
                     End Try
                 Next
-                StatusStrip.ForeColor = Color.White
                 TabPage1.BackColor = Color.White
                 TabPage1.ForeColor = Color.Black
                 TabPage2.BackColor = Color.White
@@ -5141,7 +5138,6 @@ Public Class MainForm
                         Continue For
                     End Try
                 Next
-                StatusStrip.ForeColor = Color.White
                 TabPage1.BackColor = Color.FromArgb(40, 40, 43)
                 TabPage1.ForeColor = Color.White
                 TabPage2.BackColor = Color.FromArgb(40, 40, 43)
@@ -5284,7 +5280,7 @@ Public Class MainForm
             Case 1
                 StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
         End Select
-        StatusStrip.ForeColor = ForeColor
+        StatusStrip.ForeColor = Color.White
     End Sub
 
     Sub ChangeLangs(LangCode As Integer)
