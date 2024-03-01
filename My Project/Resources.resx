@@ -1212,4 +1212,22 @@ Overall new features and enhancements:
   <data name="onedrive_exclusion" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\onedrive_exclusion.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="CS_Idle_Blue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\color_schemes\CS_Idle_Blue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CS_Idle_Green" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\color_schemes\CS_Idle_Green.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CS_Ops_Blue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\color_schemes\CS_Ops_Blue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CS_Ops_Green" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\color_schemes\CS_Ops_Green.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CS_ProgressPanel_Blue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\color_schemes\CS_ProgressPanel_Blue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CS_ProgressPanel_Green" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\color_schemes\CS_ProgressPanel_Green.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

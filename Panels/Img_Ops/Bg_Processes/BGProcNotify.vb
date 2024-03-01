@@ -71,6 +71,6 @@ Public Class BGProcNotify
     End Sub
 
     Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
-        ControlPaint.DrawBorder(e.Graphics, Panel1.ClientRectangle, Color.FromArgb(53, 153, 41), ButtonBorderStyle.Solid)
+        ControlPaint.DrawBorder(e.Graphics, Panel1.ClientRectangle, If(MainForm.ColorSchemes = 0, Color.FromArgb(53, 153, 41), Color.FromArgb(0, 122, 204)), ButtonBorderStyle.Solid)
     End Sub
 End Class

@@ -242,6 +242,8 @@ Public Class MainForm
 
     Public GoToNewView As Boolean
 
+    Public ColorSchemes As Integer = 0           ' Color scheme for the status bar and panels. 0 = green (v0.5+); 1 = blue (v0.1.1-v0.4.2)
+
     Dim FeedContents As New SyndicationFeed()
     Dim FeedLinks As New List(Of Uri)
     Dim FeedEx As Exception
@@ -1131,6 +1133,7 @@ Public Class MainForm
                 ProgressPanelStyle = CInt(PersKey.GetValue("SecondaryProgressPanelStyle"))
                 AllCaps = (CInt(PersKey.GetValue("AllCaps")) = 1)
                 GoToNewView = (CInt(PersKey.GetValue("NewDesign")) = 1)
+                ColorSchemes = PersKey.GetValue("ColorSchemes")
                 If GoToNewView Then
                     ProjectView.Visible = True
                     SplitPanels.Visible = False
@@ -1299,6 +1302,11 @@ Public Class MainForm
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("NewDesign=0") Then
                     GoToNewView = False
                 End If
+                If DTSettingForm.RichTextBox1.Text.Contains("ColorSchemes=0") Then
+                    ColorSchemes = 0
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("ColorSchemes=1") Then
+                    ColorSchemes = 1
+                End If
                 If GoToNewView Then
                     ProjectView.Visible = True
                     SplitPanels.Visible = False
@@ -1457,6 +1465,12 @@ Public Class MainForm
                 Exit Sub
             End If
         End If
+        Select Case ColorSchemes
+            Case 0
+                StatusStrip.BackColor = Color.FromArgb(53, 153, 41)
+            Case 1
+                StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
+        End Select
         If Debugger.IsAttached Then
             Debug.WriteLine("Settings:" & CrLf & _
                             "DISMExe              =    " & Quote & DismExe & Quote & CrLf & _
@@ -4302,7 +4316,7 @@ Public Class MainForm
 #End Region
 
     Sub GenerateDTSettings()
-        DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.4.2) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.5) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & "{common:WinDir}\system32\dism.exe" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "Volatile=0")
@@ -4323,6 +4337,7 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SecondaryProgressPanelStyle=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "NewDesign=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "ColorSchemes=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & "{common:WinDir}\Logs\DISM\DISM.log" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=3")
@@ -4390,6 +4405,7 @@ Public Class MainForm
         PersKey.SetValue("SecondaryProgressPanelStyle", 1, RegistryValueKind.DWord)
         PersKey.SetValue("AllCaps", 0, RegistryValueKind.DWord)
         PersKey.SetValue("NewDesign", 1, RegistryValueKind.DWord)
+        PersKey.SetValue("ColorSchemes", 0, RegistryValueKind.DWord)
         PersKey.Close()
         Dim LogKey As RegistryKey = Key.CreateSubKey("Logs")
         LogKey.SetValue("LogFile", Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\logs\DISM\DISM.log" & Quote, RegistryValueKind.ExpandString)
@@ -4452,7 +4468,7 @@ Public Class MainForm
                     File.Delete(Application.StartupPath & "\settings.ini")
                 End If
                 DTSettingForm.RichTextBox2.Clear()
-                DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.4.2) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
+                DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.5) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
                 DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & DismExe & Quote)
                 If SaveOnSettingsIni Then
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=1")
@@ -4497,6 +4513,12 @@ Public Class MainForm
                 Else
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "NewDesign=0")
                 End If
+                Select Case ColorSchemes
+                    Case 0
+                        DTSettingForm.RichTextBox2.AppendText(CrLf & "ColorSchemes=0")
+                    Case 1
+                        DTSettingForm.RichTextBox2.AppendText(CrLf & "ColorSchemes=1")
+                End Select
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
                 DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & LogFile & Quote)
                 Select Case LogLevel
@@ -4646,6 +4668,7 @@ Public Class MainForm
                 PersKey.SetValue("SecondaryProgressPanelStyle", ProgressPanelStyle, RegistryValueKind.DWord)
                 PersKey.SetValue("AllCaps", If(AllCaps, 1, 0), RegistryValueKind.DWord)
                 PersKey.SetValue("NewDesign", If(GoToNewView, 1, 0), RegistryValueKind.DWord)
+                PersKey.SetValue("ColorSchemes", If(ColorSchemes = 0, 0, 1), RegistryValueKind.DWord)
                 PersKey.Close()
                 Dim LogKey As RegistryKey = Key.CreateSubKey("Logs")
                 LogKey.SetValue("LogFile", LogFile, RegistryValueKind.ExpandString)
@@ -4769,7 +4792,6 @@ Public Class MainForm
                                 Continue For
                             End Try
                         Next
-                        StatusStrip.BackColor = Color.FromArgb(53, 153, 41)
                         StatusStrip.ForeColor = Color.White
                         TabPage1.BackColor = Color.FromArgb(40, 40, 43)
                         TabPage1.ForeColor = Color.White
@@ -4885,7 +4907,6 @@ Public Class MainForm
                                 Continue For
                             End Try
                         Next
-                        StatusStrip.BackColor = Color.FromArgb(53, 153, 41)
                         StatusStrip.ForeColor = Color.White
                         TabPage1.BackColor = Color.White
                         TabPage1.ForeColor = Color.Black
@@ -5005,7 +5026,6 @@ Public Class MainForm
                         Continue For
                     End Try
                 Next
-                StatusStrip.BackColor = Color.FromArgb(53, 153, 41)
                 StatusStrip.ForeColor = Color.White
                 TabPage1.BackColor = Color.White
                 TabPage1.ForeColor = Color.Black
@@ -5121,7 +5141,6 @@ Public Class MainForm
                         Continue For
                     End Try
                 Next
-                StatusStrip.BackColor = Color.FromArgb(53, 153, 41)
                 StatusStrip.ForeColor = Color.White
                 TabPage1.BackColor = Color.FromArgb(40, 40, 43)
                 TabPage1.ForeColor = Color.White
@@ -5259,6 +5278,13 @@ Public Class MainForm
         For Each LinkCtrl As LinkLabel In TableLayoutPanel7.Controls.OfType(Of LinkLabel)()
             LinkCtrl.LinkColor = ForeColor
         Next
+        Select Case ColorSchemes
+            Case 0
+                StatusStrip.BackColor = Color.FromArgb(53, 153, 41)
+            Case 1
+                StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
+        End Select
+        StatusStrip.ForeColor = ForeColor
     End Sub
 
     Sub ChangeLangs(LangCode As Integer)
