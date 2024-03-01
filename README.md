@@ -4,7 +4,7 @@
 </p>
 -->
 
-![Product image](https://github.com/CodingWonders/DISMTools/assets/101426328/7f55a099-7e51-498e-9a31-c433fab7d8b9)
+![Product image](https://github.com/CodingWonders/DISMTools/assets/101426328/e34803b5-706d-4123-bb7f-75189c151039)
 
 <!-- Tags (powered by Shields.io) -->
 
