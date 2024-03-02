@@ -473,6 +473,66 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property CS_Idle_Blue() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("CS_Idle_Blue", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property CS_Idle_Green() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("CS_Idle_Green", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property CS_Ops_Blue() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("CS_Ops_Blue", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property CS_Ops_Green() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("CS_Ops_Green", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property CS_ProgressPanel_Blue() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("CS_ProgressPanel_Blue", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property CS_ProgressPanel_Green() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("CS_ProgressPanel_Green", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property delete_imgindex() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("delete_imgindex", resourceCulture)
@@ -2046,20 +2106,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Changes made since last preview
+        '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''Enhancements:
+        '''- Fixed an issue where the splash screen would not become fully opaque
         '''
-        '''- The default window size of the image information results dialog is now 1024x600
-        '''- The alignment of the Recents list items to the home screen tasks has been improved
-        '''- Portuguese translations are now complete
+        '''New features:
         '''
-        '''Overall changes
-        '''
-        '''Overall bugfixes:
-        '''
-        '''- Fixed some minor text editor issues in the Configuration List Editor
-        '''- Fixed an issue where the &quot;Pick...&quot; button in the image file information dialog would not be disabled automatically when selecting &quot; [resto de la cadena truncado]&quot;;.
+        '''- Branding and color tints have been refreshed
+        '''- You can now report Store logo asset preview issues from the AppX package information dialog
+        '''- The OneDrive folder exclusion tool now supports excluding user SkyDrive folders.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

@@ -14,6 +14,8 @@ Public Class SplashScreen
             Opacity = opacityFade
             Refresh()
         Next opacityFade
+        Opacity = 1
+        Refresh()
         Timer1.Enabled = False
         Timer1.Stop()
     End Sub

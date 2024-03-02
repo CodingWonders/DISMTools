@@ -1232,6 +1232,12 @@
     <None Include="Resources\about\gitter_chat.png" />
     <None Include="Resources\import_driver.png" />
     <None Include="Resources\onedrive_exclusion.png" />
+    <None Include="Resources\color_schemes\CS_Idle_Blue.png" />
+    <None Include="Resources\color_schemes\CS_Idle_Green.png" />
+    <None Include="Resources\color_schemes\CS_Ops_Blue.png" />
+    <None Include="Resources\color_schemes\CS_Ops_Green.png" />
+    <None Include="Resources\color_schemes\CS_ProgressPanel_Blue.png" />
+    <None Include="Resources\color_schemes\CS_ProgressPanel_Green.png" />
     <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
     <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
     <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />
