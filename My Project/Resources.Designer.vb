@@ -2106,20 +2106,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Changes made since last preview
+        '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''Enhancements:
+        '''- Fixed an issue where the splash screen would not become fully opaque
         '''
-        '''- The default window size of the image information results dialog is now 1024x600
-        '''- The alignment of the Recents list items to the home screen tasks has been improved
-        '''- Portuguese translations are now complete
+        '''New features:
         '''
-        '''Overall changes
-        '''
-        '''Overall bugfixes:
-        '''
-        '''- Fixed some minor text editor issues in the Configuration List Editor
-        '''- Fixed an issue where the &quot;Pick...&quot; button in the image file information dialog would not be disabled automatically when selecting &quot; [resto de la cadena truncado]&quot;;.
+        '''- Branding and color tints have been refreshed
+        '''- You can now report Store logo asset preview issues from the AppX package information dialog
+        '''- The OneDrive folder exclusion tool now supports excluding user SkyDrive folders.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

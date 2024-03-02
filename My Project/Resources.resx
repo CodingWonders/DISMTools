@@ -1097,39 +1097,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <value>..\Resources\get_appxpkg_info.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Changes made since last preview
+    <value>Bugfixes:
 
-Enhancements:
+- Fixed an issue where the splash screen would not become fully opaque
 
-- The default window size of the image information results dialog is now 1024x600
-- The alignment of the Recents list items to the home screen tasks has been improved
-- Portuguese translations are now complete
+New features:
 
-Overall changes
-
-Overall bugfixes:
-
-- Fixed some minor text editor issues in the Configuration List Editor
-- Fixed an issue where the "Pick..." button in the image file information dialog would not be disabled automatically when selecting "Currently mounted image"
-
-Overall new features and enhancements:
-
-- Portuguese translations have been implemented
-- When selecting the boot drive in the offline installation source of the driver import dialog, it will switch to the online installation automatically
-- You can now pick a mounted image in the image file information dialog
-- The managed DISM API library was updated to version 3.1
-- Thanks to the DISM API library update, you can now view the general information of a driver file
-- A help entry for downloading applications has been added to the AppX package addition dialog
-- Operating system uninstallation tasks have been added. These include:
-  - Setting the OS uninstall window
-  - Initiating an OS uninstall
-  - Removing the ability to roll back to an old Windows version
-  - Getting the uninstall window
-- You can now exclude user OneDrive folders by adding them to your configuration list automatically thanks to the OneDrive folder exclusion tool, available in the Tools menu of the DISM Configuration List Editor
-- The Recents list has been implemented
-- CODE: updated the assembly description
-- CODE: size representation procedures in the "Utilities" class now support petabytes (PB)
-- Project creation times have been reduced by ~2 seconds</value>
+- Branding and color tints have been refreshed
+- You can now report Store logo asset preview issues from the AppX package information dialog
+- The OneDrive folder exclusion tool now supports excluding user SkyDrive folders</value>
   </data>
   <data name="split_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\split_img.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
