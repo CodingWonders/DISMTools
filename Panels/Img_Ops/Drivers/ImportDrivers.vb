@@ -9,6 +9,7 @@ Public Class ImportDrivers
     Dim ImportSources() As String = New String(2) {"Windows image", "Online installation", "Offline installation"}
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         If ImportSourceInt < 0 Then Exit Sub
         Dim msg As String = ""
         If ComboBox1.SelectedItem = "" Then

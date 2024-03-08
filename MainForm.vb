@@ -16961,6 +16961,7 @@ Public Class MainForm
                               "Pretende iniciar o processo de reversão?"
                 End Select
                 If MsgBox(msg, vbYesNo + vbExclamation, Text) = MsgBoxResult.Yes Then
+                    If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
                     ProgressPanel.OperationNum = 86
                     ProgressPanel.ShowDialog(Me)
                     Close()
@@ -17049,6 +17050,7 @@ Public Class MainForm
                               "Pretende remover a capacidade de retroceder para uma versão mais antiga do Windows?"
                 End Select
                 If MsgBox(msg, vbYesNo + vbExclamation, Text) = MsgBoxResult.Yes Then
+                    If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
                     ProgressPanel.OperationNum = 87
                     ProgressPanel.ShowDialog(Me)
                 Else
@@ -17114,5 +17116,9 @@ Public Class MainForm
             RecentsLV.Items.Add(If(recentProject.ProjName <> "", recentProject.ProjName, Path.GetFileNameWithoutExtension(recentProject.ProjPath)))
         Next
         RecentRemoveLink.Visible = False
+    End Sub
+
+    Private Sub ExportImage_Click(sender As Object, e As EventArgs) Handles ExportImage.Click
+        ImgExport.ShowDialog()
     End Sub
 End Class

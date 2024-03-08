@@ -260,6 +260,17 @@ Public Class ProgressPanel
     Public imgIndexDeletionLastName As String               ' Last name of index checked
     Public imgIndexDeletionCount As Integer                 ' Volume image removal count
 
+    ' OperationNum: 10
+    Public imgExportSourceImage As String                   ' The source image to export
+    Public imgExportSourceIndex As Integer                  ' The source index to export
+    Public imgExportDestinationImage As String              ' The export target
+    Public imgExportDestinationUseCustomName As Boolean     ' Determine whether to use a custom destination name
+    Public imgExportDestinationName As String               ' The custom destination name
+    Public imgExportCompressType As Integer                 ' Compression used for the export (0: none; 1: fast; 2: max; 3: recovery)
+    Public imgExportMarkBootable As Boolean                 ' Determine whether to mark the target image as bootable (Windows PE only)
+    Public imgExportUseWimBoot As Boolean                   ' Determine whether to append the target image with WIMBoot configurations
+    Public imgExportCheckIntegrity As Boolean               ' Determine whether to check the integrity of the image before exporting it
+
     ' OperationNum: 11
     Public GetFromMountedImg As Boolean                     ' Get information from mounted image
     Public GetSpecificIndexInfo As Boolean                  ' Get information from specific image index
@@ -556,6 +567,8 @@ Public Class ProgressPanel
             Else
                 taskCount = 1
             End If
+        ElseIf opNum = 10 Then
+            taskCount = 1
         ElseIf opNum = 15 Then
             taskCount = 1
         ElseIf opNum = 18 Then
@@ -1326,6 +1339,92 @@ Public Class ProgressPanel
             CurrentPB.Value = CurrentPB.Maximum
             AllPB.Value = 100
             GetErrorCode(False)
+        ElseIf opNum = 10 Then
+            allTasks.Text = "Exporting image..."
+            currentTask.Text = "Exporting specified image..."
+            LogView.AppendText(CrLf & "Exporting the specified image to a destination image..." & CrLf & "Options:" & CrLf &
+                               "- Source image file: " & imgExportSourceImage & CrLf &
+                               "- Source image index: " & imgExportSourceIndex & CrLf &
+                               "- Destination image file: " & imgExportDestinationImage & CrLf &
+                               If(imgExportDestinationUseCustomName, "- Destination image name: " & imgExportDestinationName, ""))
+            Select Case imgExportCompressType
+                Case 0
+                    LogView.AppendText(CrLf & "- Compression type: no compression")
+                Case 1
+                    LogView.AppendText(CrLf & "- Compression type: fast compression")
+                Case 2
+                    LogView.AppendText(CrLf & "- Compression type: maximum compression")
+                Case 3
+                    LogView.AppendText(CrLf & "- Compression type: ESD conversion (recovery)")
+            End Select
+            LogView.AppendText(CrLf & "- Mark the image as bootable? " & If(imgExportMarkBootable, "Yes", "No") & CrLf &
+                               "- Append image with WIMBoot configuration? " & If(imgExportUseWimBoot, "Yes", "No") & CrLf &
+                               "- Check image integrity before exporting the image? " & If(imgExportCheckIntegrity, "Yes", "No"))
+            ' Show information regarding SWM files
+            If Path.GetExtension(imgExportSourceImage).EndsWith("swm", StringComparison.OrdinalIgnoreCase) Then
+                LogView.AppendText(CrLf & CrLf & "NOTE: the source image contains an asterisk sign (*) in the file name to merge all SWM files")
+            End If
+            DISMProc.StartInfo.FileName = DismProgram
+            ' Configure basic command arguments
+            Select Case DismVersionChecker.ProductMajorPart
+                Case 6
+                    Select Case DismVersionChecker.ProductMinorPart
+                        Case 1
+                            ' Not available
+                        Case Is >= 2
+                            CommandArgs &= " /export-image /sourceimagefile=" & Quote & imgExportSourceImage & Quote & " /sourceindex=" & imgExportSourceIndex & " /destinationimagefile=" & Quote & imgExportDestinationImage & Quote
+                    End Select
+                Case 10
+                    CommandArgs &= " /export-image /sourceimagefile=" & Quote & imgExportSourceImage & Quote & " /sourceindex=" & imgExportSourceIndex & " /destinationimagefile=" & Quote & imgExportDestinationImage & Quote
+            End Select
+            ' Configure additional command arguments
+            If imgExportDestinationUseCustomName Then
+                CommandArgs &= " /destinationname=" & Quote & imgExportDestinationName & Quote
+            End If
+            Select Case imgExportCompressType
+                Case 0
+                    CommandArgs &= " /compress:none"
+                Case 1
+                    CommandArgs &= " /compress:fast"
+                Case 2
+                    CommandArgs &= " /compress:max"
+                Case 3
+                    CommandArgs &= " /compress:recovery"
+            End Select
+            If imgExportMarkBootable Then CommandArgs &= " /bootable"
+            If imgExportUseWimBoot Then CommandArgs &= " /wimboot"
+            If imgExportCheckIntegrity Then CommandArgs &= " /checkintegrity"
+            DISMProc.StartInfo.Arguments = CommandArgs
+            DISMProc.Start()
+            DISMProc.WaitForExit()
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            currentTask.Text = "Gathering error level..."
+                        Case "ESN"
+                            currentTask.Text = "Recopilando nivel de error..."
+                        Case "FRA"
+                            currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                        Case "PTB", "PTG"
+                            currentTask.Text = "A recolher o nível de erro..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Gathering error level..."
+                Case 2
+                    currentTask.Text = "Recopilando nivel de error..."
+                Case 3
+                    currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                Case 4
+                    currentTask.Text = "A recolher o nível de erro..."
+            End Select
+            LogView.AppendText(CrLf & "Gathering error level...")
+            GetErrorCode(False)
+            If errCode.Length >= 8 Then
+                LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            Else
+                LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            End If
         ElseIf opNum = 11 Then
             ' Operation handled by the image file information dialog - Redundant OpNum
         ElseIf opNum = 15 Then

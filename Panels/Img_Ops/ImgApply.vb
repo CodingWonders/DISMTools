@@ -367,6 +367,8 @@ Public Class ImgApply
             GroupBox2.ForeColor = Color.Black
             GroupBox3.ForeColor = Color.Black
             GroupBox4.ForeColor = Color.Black
+            ListBox1.BackColor = Color.FromArgb(238, 238, 242)
+            StatusStrip1.BackColor = Color.FromArgb(238, 238, 242)
             ComboBox1.BackColor = Color.FromArgb(238, 238, 242)
         End If
         ComboBox1.ForeColor = ForeColor

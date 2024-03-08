@@ -8,6 +8,7 @@ Public Class SetOSUninstWindow
     Dim uninstWindow As Integer
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         If NumericUpDown1.Value = uninstWindow Then Exit Sub
         ProgressPanel.osUninstDayCount = NumericUpDown1.Value
         Me.DialogResult = System.Windows.Forms.DialogResult.OK

@@ -443,6 +443,12 @@
     <Compile Include="Panels\Img_Ops\ImgCapture.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Img_Ops\ImgExport.Designer.vb">
+      <DependentUpon>ImgExport.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\ImgExport.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\ImgIndexDelete.Designer.vb">
       <DependentUpon>ImgIndexDelete.vb</DependentUpon>
     </Compile>
@@ -837,6 +843,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\ImgCapture.resx">
       <DependentUpon>ImgCapture.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\ImgExport.resx">
+      <DependentUpon>ImgExport.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\ImgIndexDelete.resx">
       <DependentUpon>ImgIndexDelete.vb</DependentUpon>
