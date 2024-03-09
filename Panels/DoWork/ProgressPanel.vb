@@ -5576,7 +5576,7 @@ Public Class ProgressPanel
                 Visible = False
                 ImgConversionSuccessDialog.ShowDialog(MainForm)
                 If ImgConversionSuccessDialog.DialogResult = Windows.Forms.DialogResult.OK Then
-                    Process.Start("\Windows\explorer.exe", Path.GetDirectoryName(imgDestFile))
+                    Process.Start("\Windows\explorer.exe", "/select," & Quote & imgDestFile & Quote)
                 End If
             ElseIf OperationNum = 996 Then
                 MainForm.DetectMountedImages(False)
