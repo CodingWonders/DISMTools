@@ -778,7 +778,7 @@ Public Class ProgressPanel
                 Thread.Sleep(125)
                 AllPB.Value = CurrentPB.Value
                 Directory.CreateDirectory(projPath & "\" & projName & "\" & "settings")
-                CurrentPB.Value = 33.329999999999998
+                CurrentPB.Value = 33.33
                 Thread.Sleep(125)
                 AllPB.Value = CurrentPB.Value
                 Directory.CreateDirectory(projPath & "\" & projName & "\" & "mount")
@@ -813,7 +813,7 @@ Public Class ProgressPanel
                 Directory.CreateDirectory(projPath & "\" & projName & "\" & "DandI\amd64")
                 Directory.CreateDirectory(projPath & "\" & projName & "\" & "DandI\arm")
                 Directory.CreateDirectory(projPath & "\" & projName & "\" & "DandI\arm64")
-                CurrentPB.Value = 66.659999999999997
+                CurrentPB.Value = 66.66
                 Thread.Sleep(125)
                 AllPB.Value = CurrentPB.Value
                 File.WriteAllText(projPath & "\" & projName & "\" & "settings\project.ini", _
@@ -844,7 +844,7 @@ Public Class ProgressPanel
                                   "ImageLang=N/A" & CrLf & CrLf & _
                                   "[Params]" & CrLf & _
                                   "ImageReadWrite=N/A", ASCII)
-                CurrentPB.Value = 83.329999999999998
+                CurrentPB.Value = 83.33
                 Thread.Sleep(125)
                 AllPB.Value = CurrentPB.Value
                 File.WriteAllText(projPath & "\" & projName & "\" & projName & ".dtproj", _
