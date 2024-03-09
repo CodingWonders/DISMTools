@@ -244,6 +244,8 @@ Public Class MainForm
 
     Public ColorSchemes As Integer = 0           ' Color scheme for the status bar and panels. 0 = green (v0.5+); 1 = blue (v0.1.1-v0.4.2)
 
+    Public AutoCleanMounts As Boolean
+
     Dim FeedContents As New SyndicationFeed()
     Dim FeedLinks As New List(Of Uri)
     Dim FeedEx As Exception
@@ -1175,6 +1177,9 @@ Public Class MainForm
                 StartupRemount = (CInt(StartupKey.GetValue("RemountImages")) = 1)
                 StartupUpdateCheck = (CInt(StartupKey.GetValue("CheckForUpdates")) = 1)
                 StartupKey.Close()
+                Dim ShutdownKey As RegistryKey = Key.OpenSubKey("Shutdown")
+                AutoCleanMounts = (CInt(ShutdownKey.GetValue("AutoCleanMounts")) = 1)
+                ShutdownKey.Close()
                 Dim WndKey As RegistryKey = Key.OpenSubKey("WndParams")
                 Width = CInt(WndKey.GetValue("WndWidth"))
                 Height = CInt(WndKey.GetValue("WndHeight"))
@@ -1423,6 +1428,11 @@ Public Class MainForm
                     StartupUpdateCheck = True
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("CheckForUpdates=0") Then
                     StartupUpdateCheck = False
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("AutoCleanMounts=1") Then
+                    AutoCleanMounts = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("AutoCleanMounts=0") Then
+                    AutoCleanMounts = False
                 End If
                 If DTSettingForm.RichTextBox1.Text.Contains("WndMaximized=1") Then
                     WindowState = FormWindowState.Maximized
@@ -4440,6 +4450,9 @@ Public Class MainForm
         StartupKey.SetValue("RemountImages", 1, RegistryValueKind.DWord)
         StartupKey.SetValue("CheckForUpdates", 1, RegistryValueKind.DWord)
         StartupKey.Close()
+        Dim ShutdownKey As RegistryKey = Key.CreateSubKey("Startup")
+        ShutdownKey.SetValue("AutoCleanMounts", 0, RegistryValueKind.DWord)
+        ShutdownKey.Close()
         Dim WndKey As RegistryKey = Key.CreateSubKey("WndParams")
         WndKey.SetValue("WndWidth", 1280, RegistryValueKind.DWord)
         WndKey.SetValue("WndHeight", 720, RegistryValueKind.DWord)
@@ -4626,6 +4639,12 @@ Public Class MainForm
                 Else
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "CheckForUpdates=0")
                 End If
+                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Shutdown]" & CrLf)
+                If AutoCleanMounts Then
+                    DTSettingForm.RichTextBox2.AppendText("AutoCleanMounts=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText("AutoCleanMounts=0")
+                End If
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[WndParams]" & CrLf)
                 DTSettingForm.RichTextBox2.AppendText("WndWidth=" & WndWidth)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "WndHeight=" & WndHeight)
@@ -4703,6 +4722,9 @@ Public Class MainForm
                 StartupKey.SetValue("RemountImages", If(StartupRemount, 1, 0), RegistryValueKind.DWord)
                 StartupKey.SetValue("CheckForUpdates", If(StartupUpdateCheck, 1, 0), RegistryValueKind.DWord)
                 StartupKey.Close()
+                Dim ShutdownKey As RegistryKey = Key.CreateSubKey("Shutdown")
+                ShutdownKey.SetValue("AutoCleanMounts", If(AutoCleanMounts, 1, 0), RegistryValueKind.DWord)
+                ShutdownKey.Close()
                 Dim WndKey As RegistryKey = Key.CreateSubKey("WndParams")
                 WndKey.SetValue("WndWidth", WndWidth, RegistryValueKind.DWord)
                 WndKey.SetValue("WndHeight", WndHeight, RegistryValueKind.DWord)
@@ -11521,6 +11543,13 @@ Public Class MainForm
         Catch ex As Exception
             ' Don't save the recent item. The recent list may not have been initialized
         End Try
+        If AutoCleanMounts Then
+            ' Clean up corrupted mount points. Use the DISM executable to avoid slowing down program closure
+            Dim DismProc As New Process()
+            DismProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+            DismProc.StartInfo.Arguments = "/cleanup-mountpoints"
+            DismProc.Start()
+        End If
     End Sub
 
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
@@ -17120,5 +17149,11 @@ Public Class MainForm
 
     Private Sub ExportImage_Click(sender As Object, e As EventArgs) Handles ExportImage.Click
         ImgExport.ShowDialog()
+    End Sub
+
+    Private Sub CleanupMountpoints_Click(sender As Object, e As EventArgs) Handles CleanupMountpoints.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+        ProgressPanel.OperationNum = 7
+        ProgressPanel.ShowDialog(Me)
     End Sub
 End Class

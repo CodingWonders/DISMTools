@@ -559,6 +559,8 @@ Public Class ProgressPanel
             Else
                 taskCount = 1
             End If
+        ElseIf opNum = 7 Then
+            taskCount = 1
         ElseIf opNum = 8 Then
             taskCount = 1
         ElseIf opNum = 9 Then
@@ -1146,6 +1148,79 @@ Public Class ProgressPanel
             End Select
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
+            If errCode.Length >= 8 Then
+                LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            Else
+                LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            End If
+        ElseIf opNum = 7 Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            allTasks.Text = "Cleaning up mount points..."
+                            currentTask.Text = "Deleting resources from old or corrupted images..."
+                        Case "ESN"
+                            allTasks.Text = "Limpiando puntos de montaje..."
+                            currentTask.Text = "Eliminando recursos de imágenes antiguas o corruptas..."
+                        Case "FRA"
+                            allTasks.Text = "Nettoyage des points de montage en cours..."
+                            currentTask.Text = "Suppression des ressources des images anciennes ou corrompues en cours..."
+                        Case "PTB", "PTG"
+                            allTasks.Text = "Limpeza de pontos de montagem..."
+                            currentTask.Text = "Eliminar recursos de imagens antigas ou corrompidas..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Cleaning up mount points..."
+                    currentTask.Text = "Deleting resources from old or corrupted images..."
+                Case 2
+                    allTasks.Text = "Limpiando puntos de montaje..."
+                    currentTask.Text = "Eliminando recursos de imágenes antiguas o corruptas..."
+                Case 3
+                    allTasks.Text = "Nettoyage des points de montage en cours..."
+                    currentTask.Text = "Suppression des ressources des images anciennes ou corrompues en cours..."
+                Case 4
+                    allTasks.Text = "Limpeza de pontos de montagem..."
+                    currentTask.Text = "Eliminar recursos de imagens antigas ou corrompidas..."
+            End Select
+            LogView.AppendText(CrLf & "Cleaning up mount points..." & CrLf & CrLf &
+                               "This can take some time, depending on the drives connected to this system.")
+            Try
+                DismApi.Initialize(If(LogLevel = 1, DismLogLevel.LogErrors, If(LogLevel = 2, DismLogLevel.LogErrorsWarnings, If(LogLevel = 3, DismLogLevel.LogErrorsWarningsInfo, DismLogLevel.LogErrorsWarningsInfo))), If(AutoLogs, Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now), LogPath))
+                DismApi.CleanupMountpoints()
+            Catch ex As DismException
+                errCode = Hex(ex.ErrorCode)
+            Finally
+                DismApi.Shutdown()
+            End Try
+            CurrentPB.Value = 50
+            AllPB.Value = CurrentPB.Value
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            currentTask.Text = "Gathering error level..."
+                        Case "ESN"
+                            currentTask.Text = "Recopilando nivel de error..."
+                        Case "FRA"
+                            currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                        Case "PTB", "PTG"
+                            currentTask.Text = "A recolher o nível de erro..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Gathering error level..."
+                Case 2
+                    currentTask.Text = "Recopilando nivel de error..."
+                Case 3
+                    currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                Case 4
+                    currentTask.Text = "A recolher o nível de erro..."
+            End Select
+            LogView.AppendText(CrLf & "Gathering error level...")
+            If errCode Is Nothing Then
+                errCode = 0
+                IsSuccessful = True
+            End If
             If errCode.Length >= 8 Then
                 LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
             Else

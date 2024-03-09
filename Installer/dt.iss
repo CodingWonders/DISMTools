@@ -140,6 +140,9 @@ Root: HKCU; Subkey: "Software\DISMTools\Preview\Startup"; Flags: uninsdeletekey
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Startup"; ValueType: dword; ValueName: "CheckForUpdates"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Startup"; ValueType: dword; ValueName: "RemountImages"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Shutdown"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Shutdown"; ValueType: dword; ValueName: "AutoCleanMounts"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
+
 Root: HKCU; Subkey: "Software\DISMTools\Preview\WndParams"; Flags: uninsdeletekey createvalueifdoesntexist
 
 Root: HKCU; Subkey: "Software\DISMTools\Preview\InfoSaver"; Flags: uninsdeletekey createvalueifdoesntexist
