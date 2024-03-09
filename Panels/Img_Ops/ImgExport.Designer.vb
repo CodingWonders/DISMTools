@@ -59,7 +59,7 @@ Partial Class ImgExport
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
         Me.CheckBox4 = New System.Windows.Forms.CheckBox()
         Me.CheckBox5 = New System.Windows.Forms.CheckBox()
-        Me.Label55 = New System.Windows.Forms.Label()
+        Me.Label6 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.ListView1 = New System.Windows.Forms.ListView()
         Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
@@ -263,7 +263,7 @@ Partial Class ImgExport
         Me.FlowLayoutPanel3.Controls.Add(Me.CheckBox3)
         Me.FlowLayoutPanel3.Controls.Add(Me.CheckBox4)
         Me.FlowLayoutPanel3.Controls.Add(Me.CheckBox5)
-        Me.FlowLayoutPanel3.Controls.Add(Me.Label55)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Label6)
         Me.FlowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.FlowLayoutPanel3.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
         Me.FlowLayoutPanel3.Location = New System.Drawing.Point(492, 3)
@@ -284,10 +284,10 @@ Partial Class ImgExport
         '
         'CheckBox1
         '
-        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.AutoEllipsis = True
         Me.CheckBox1.Location = New System.Drawing.Point(12, 12)
         Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(125, 17)
+        Me.CheckBox1.Size = New System.Drawing.Size(432, 17)
         Me.CheckBox1.TabIndex = 3
         Me.CheckBox1.Text = "Reference SWM files"
         Me.CheckBox1.UseVisualStyleBackColor = True
@@ -355,9 +355,9 @@ Partial Class ImgExport
         'Button5
         '
         Me.Button5.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button5.Location = New System.Drawing.Point(161, 33)
+        Me.Button5.Location = New System.Drawing.Point(211, 33)
         Me.Button5.Name = "Button5"
-        Me.Button5.Size = New System.Drawing.Size(145, 23)
+        Me.Button5.Size = New System.Drawing.Size(196, 23)
         Me.Button5.TabIndex = 2
         Me.Button5.Text = "Scan pattern"
         Me.Button5.UseVisualStyleBackColor = True
@@ -365,16 +365,16 @@ Partial Class ImgExport
         'Button4
         '
         Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button4.Location = New System.Drawing.Point(10, 33)
+        Me.Button4.Location = New System.Drawing.Point(9, 33)
         Me.Button4.Name = "Button4"
-        Me.Button4.Size = New System.Drawing.Size(145, 23)
+        Me.Button4.Size = New System.Drawing.Size(196, 23)
         Me.Button4.TabIndex = 2
         Me.Button4.Text = "Use name of the image"
         Me.Button4.UseVisualStyleBackColor = True
         '
         'Label4
         '
-        Me.Label4.AutoSize = True
+        Me.Label4.AutoEllipsis = True
         Me.Label4.Location = New System.Drawing.Point(8, 8)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(87, 13)
@@ -400,12 +400,12 @@ Partial Class ImgExport
         '
         'CheckBox2
         '
-        Me.CheckBox2.AutoSize = True
+        Me.CheckBox2.AutoEllipsis = True
         Me.CheckBox2.Location = New System.Drawing.Point(12, 12)
         Me.CheckBox2.Name = "CheckBox2"
-        Me.CheckBox2.Size = New System.Drawing.Size(213, 17)
+        Me.CheckBox2.Size = New System.Drawing.Size(432, 17)
         Me.CheckBox2.TabIndex = 4
-        Me.CheckBox2.Text = "Specify destination name for the image"
+        Me.CheckBox2.Text = "Specify a custom name for the destination image"
         Me.CheckBox2.UseVisualStyleBackColor = True
         '
         'Panel5
@@ -446,49 +446,49 @@ Partial Class ImgExport
         Me.Label5.AutoEllipsis = True
         Me.Label5.Location = New System.Drawing.Point(12, 12)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(183, 13)
+        Me.Label5.Size = New System.Drawing.Size(432, 13)
         Me.Label5.TabIndex = 14
         Me.Label5.Text = "Destination image compression type:"
         '
         'CheckBox3
         '
-        Me.CheckBox3.AutoSize = True
+        Me.CheckBox3.AutoEllipsis = True
         Me.CheckBox3.Location = New System.Drawing.Point(7, 531)
         Me.CheckBox3.Name = "CheckBox3"
-        Me.CheckBox3.Size = New System.Drawing.Size(219, 17)
+        Me.CheckBox3.Size = New System.Drawing.Size(432, 17)
         Me.CheckBox3.TabIndex = 4
         Me.CheckBox3.Text = "Make image bootable (Windows PE only)"
         Me.CheckBox3.UseVisualStyleBackColor = True
         '
         'CheckBox4
         '
-        Me.CheckBox4.AutoSize = True
+        Me.CheckBox4.AutoEllipsis = True
         Me.CheckBox4.Location = New System.Drawing.Point(7, 554)
         Me.CheckBox4.Name = "CheckBox4"
-        Me.CheckBox4.Size = New System.Drawing.Size(230, 17)
+        Me.CheckBox4.Size = New System.Drawing.Size(432, 17)
         Me.CheckBox4.TabIndex = 4
         Me.CheckBox4.Text = "Append image with WIMBoot configuration"
         Me.CheckBox4.UseVisualStyleBackColor = True
         '
         'CheckBox5
         '
-        Me.CheckBox5.AutoSize = True
+        Me.CheckBox5.AutoEllipsis = True
         Me.CheckBox5.Location = New System.Drawing.Point(7, 577)
         Me.CheckBox5.Name = "CheckBox5"
-        Me.CheckBox5.Size = New System.Drawing.Size(213, 17)
+        Me.CheckBox5.Size = New System.Drawing.Size(432, 17)
         Me.CheckBox5.TabIndex = 4
         Me.CheckBox5.Text = "Check integrity before exporting image"
         Me.CheckBox5.UseVisualStyleBackColor = True
         '
-        'Label55
+        'Label6
         '
-        Me.Label55.AutoEllipsis = True
-        Me.Label55.Location = New System.Drawing.Point(7, 597)
-        Me.Label55.Name = "Label55"
-        Me.Label55.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label55.Size = New System.Drawing.Size(405, 16)
-        Me.Label55.TabIndex = 1
-        Me.Label55.UseMnemonic = False
+        Me.Label6.AutoEllipsis = True
+        Me.Label6.Location = New System.Drawing.Point(7, 597)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label6.Size = New System.Drawing.Size(405, 16)
+        Me.Label6.TabIndex = 1
+        Me.Label6.UseMnemonic = False
         '
         'Panel1
         '
@@ -588,9 +588,7 @@ Partial Class ImgExport
         Me.GroupBox2.ResumeLayout(False)
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.FlowLayoutPanel3.ResumeLayout(False)
-        Me.FlowLayoutPanel3.PerformLayout()
         Me.Panel3.ResumeLayout(False)
-        Me.Panel3.PerformLayout()
         Me.SWMFilePanel.ResumeLayout(False)
         Me.SWMFilePanel.PerformLayout()
         Me.StatusStrip1.ResumeLayout(False)
@@ -630,7 +628,7 @@ Partial Class ImgExport
     Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents FlowLayoutPanel3 As System.Windows.Forms.FlowLayoutPanel
-    Friend WithEvents Label55 As System.Windows.Forms.Label
+    Friend WithEvents Label6 As System.Windows.Forms.Label
     Friend WithEvents SWMFilePanel As System.Windows.Forms.Panel
     Friend WithEvents ListBox1 As System.Windows.Forms.ListBox
     Friend WithEvents StatusStrip1 As System.Windows.Forms.StatusStrip

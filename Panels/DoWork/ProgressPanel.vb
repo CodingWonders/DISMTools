@@ -1340,8 +1340,35 @@ Public Class ProgressPanel
             AllPB.Value = 100
             GetErrorCode(False)
         ElseIf opNum = 10 Then
-            allTasks.Text = "Exporting image..."
-            currentTask.Text = "Exporting specified image..."
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            allTasks.Text = "Exporting image..."
+                            currentTask.Text = "Exporting specified image..."
+                        Case "ESN"
+                            allTasks.Text = "Exportando imagen..."
+                            currentTask.Text = "Exportando imagen especificada..."
+                        Case "FRA"
+                            allTasks.Text = "Exportation de l'image en cours..."
+                            currentTask.Text = "Exportation de l'image spécifiée en cours..."
+                        Case "PTB"
+                            allTasks.Text = "Exportar imagem..."
+                            currentTask.Text = "Exportar imagem especificada..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Exporting image..."
+                    currentTask.Text = "Exporting specified image..."
+                Case 2
+                    allTasks.Text = "Exportando imagen..."
+                    currentTask.Text = "Exportando imagen especificada..."
+                Case 3
+                    allTasks.Text = "Exportation de l'image en cours..."
+                    currentTask.Text = "Exportation de l'image spécifiée en cours..."
+                Case 4
+                    allTasks.Text = "Exportar imagem..."
+                    currentTask.Text = "Exportar imagem especificada..."
+            End Select
             LogView.AppendText(CrLf & "Exporting the specified image to a destination image..." & CrLf & "Options:" & CrLf &
                                "- Source image file: " & imgExportSourceImage & CrLf &
                                "- Source image index: " & imgExportSourceIndex & CrLf &
