@@ -11553,7 +11553,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ExplorerView_Click(sender As Object, e As EventArgs) Handles ExplorerView.Click, Button22.Click
-        Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", projPath)
+        Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", "/select," & Quote & projPath & "\" & projName.Text & ".dtproj" & Quote)
     End Sub
 
     Private Sub GetImageInfo_Click(sender As Object, e As EventArgs) Handles GetImageInfo.Click
@@ -14981,7 +14981,7 @@ Public Class MainForm
     End Sub
 
     Private Sub LinkLabel16_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel16.LinkClicked
-        Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", projPath)
+        Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", "/select," & Quote & projPath & "\" & projName.Text & ".dtproj" & Quote)
     End Sub
 
     Private Sub LinkLabel17_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel17.LinkClicked
