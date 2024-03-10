@@ -1206,4 +1206,7 @@ New features:
   <data name="CS_ProgressPanel_Green" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\color_schemes\CS_ProgressPanel_Green.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="error_32px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\error_32px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
