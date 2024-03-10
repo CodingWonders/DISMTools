@@ -192,6 +192,12 @@
     <Compile Include="Panels\DoWork\ProgressPanel.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Exceptions\ExceptionForm.Designer.vb">
+      <DependentUpon>ExceptionForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Exceptions\ExceptionForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Exe_Ops\BGProcs\BGProcsAdvSettings.Designer.vb">
       <DependentUpon>BGProcsAdvSettings.vb</DependentUpon>
     </Compile>
@@ -713,6 +719,9 @@
     <EmbeddedResource Include="Panels\DoWork\ProgressPanel.resx">
       <DependentUpon>ProgressPanel.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Exceptions\ExceptionForm.resx">
+      <DependentUpon>ExceptionForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Exe_Ops\BGProcs\BGProcsAdvSettings.resx">
       <DependentUpon>BGProcsAdvSettings.vb</DependentUpon>
     </EmbeddedResource>
@@ -1233,6 +1242,7 @@
     <None Include="Resources\about\gitter_chat.png" />
     <None Include="Resources\import_driver.png" />
     <None Include="Resources\onedrive_exclusion.png" />
+    <None Include="Resources\error_32px.png" />
     <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
     <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
     <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />

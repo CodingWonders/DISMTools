@@ -1,4 +1,5 @@
 ﻿Imports Microsoft.Win32
+Imports Microsoft.VisualBasic.ControlChars
 
 Namespace My
     ' Los siguientes eventos están disponibles para MyApplication:
@@ -14,6 +15,18 @@ Namespace My
             AddHandler Microsoft.Win32.SystemEvents.UserPreferenceChanged, AddressOf SysEvts_UserPreferenceChanged
             AddHandler Microsoft.Win32.SystemEvents.DisplaySettingsChanging, AddressOf SysEvts_DisplaySettingsChanging
             AddHandler Microsoft.Win32.SystemEvents.DisplaySettingsChanged, AddressOf SysEvts_DisplaySettingsChanged
+        End Sub
+
+        Private Sub CatchEmAll(sender As Object, e As Microsoft.VisualBasic.ApplicationServices.UnhandledExceptionEventArgs) Handles Me.UnhandledException
+            ExceptionForm.ErrorText.Text = e.Exception.ToString() & CrLf & CrLf &
+                                           "Error Message: " & e.Exception.Message & CrLf & CrLf &
+                                           "Error Code (HRESULT): " & e.Exception.HResult
+            ExceptionForm.ShowDialog()
+            If ExceptionForm.DialogResult = DialogResult.OK Then
+                e.ExitApplication = False
+            ElseIf ExceptionForm.DialogResult = DialogResult.Cancel Then
+                e.ExitApplication = True
+            End If
         End Sub
 
         Private Sub SysEvts_UserPreferenceChanged(sender As Object, e As Microsoft.Win32.UserPreferenceChangedEventArgs)
