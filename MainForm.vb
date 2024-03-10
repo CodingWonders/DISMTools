@@ -679,7 +679,7 @@ Public Class MainForm
                 File.Delete(Application.StartupPath & "\info.ini")
                 Debug.WriteLine("Comparing versions...")
                 Dim fv As String = My.Application.Info.Version.ToString()
-                If fv = latestVer Then
+                If fv = latestVer Or New Version(fv) > New Version(latestVer) Then
                     Debug.WriteLine("There aren't any updates available")
                     UpdatePanel.Visible = False
                 Else
