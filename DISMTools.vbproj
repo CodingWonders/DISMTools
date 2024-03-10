@@ -137,6 +137,7 @@
     <Compile Include="Actions\Validation\Actions.Validation.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Elements\AppxPackage.vb" />
     <Compile Include="Elements\Recents.vb" />
     <Compile Include="Help\HelpBrowserForm.Designer.vb">
