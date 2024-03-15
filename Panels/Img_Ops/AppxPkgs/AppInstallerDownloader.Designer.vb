@@ -27,9 +27,15 @@ Partial Class AppInstallerDownloader
         Me.Label1 = New System.Windows.Forms.Label()
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
-        Me.Label2 = New System.Windows.Forms.Label()
+        Me.StatusLbl = New System.Windows.Forms.Label()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.downUriLbl = New System.Windows.Forms.Label()
+        Me.downSpdLbl = New System.Windows.Forms.Label()
+        Me.downETALbl = New System.Windows.Forms.Label()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
         'PictureBox1
@@ -56,7 +62,9 @@ Partial Class AppInstallerDownloader
         '
         'ProgressBar1
         '
-        Me.ProgressBar1.Location = New System.Drawing.Point(55, 118)
+        Me.ProgressBar1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ProgressBar1.Location = New System.Drawing.Point(55, 238)
         Me.ProgressBar1.Name = "ProgressBar1"
         Me.ProgressBar1.Size = New System.Drawing.Size(637, 23)
         Me.ProgressBar1.TabIndex = 2
@@ -66,30 +74,90 @@ Partial Class AppInstallerDownloader
         Me.BackgroundWorker1.WorkerReportsProgress = True
         Me.BackgroundWorker1.WorkerSupportsCancellation = True
         '
-        'Label2
+        'StatusLbl
         '
-        Me.Label2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.StatusLbl.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label2.AutoEllipsis = True
-        Me.Label2.Location = New System.Drawing.Point(52, 97)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(640, 18)
-        Me.Label2.TabIndex = 1
-        Me.Label2.Text = "Status"
+        Me.StatusLbl.AutoEllipsis = True
+        Me.StatusLbl.Location = New System.Drawing.Point(18, 130)
+        Me.StatusLbl.Name = "StatusLbl"
+        Me.StatusLbl.Size = New System.Drawing.Size(600, 18)
+        Me.StatusLbl.TabIndex = 1
+        Me.StatusLbl.Text = "Status"
         '
         'Timer1
         '
         Me.Timer1.Enabled = True
         Me.Timer1.Interval = 500
         '
+        'GroupBox1
+        '
+        Me.GroupBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox1.Controls.Add(Me.downUriLbl)
+        Me.GroupBox1.Controls.Add(Me.downETALbl)
+        Me.GroupBox1.Controls.Add(Me.downSpdLbl)
+        Me.GroupBox1.Controls.Add(Me.Label2)
+        Me.GroupBox1.Controls.Add(Me.StatusLbl)
+        Me.GroupBox1.Location = New System.Drawing.Point(55, 72)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(637, 160)
+        Me.GroupBox1.TabIndex = 3
+        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = "Transfer details"
+        '
+        'Label2
+        '
+        Me.Label2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label2.AutoEllipsis = True
+        Me.Label2.Location = New System.Drawing.Point(18, 28)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(600, 14)
+        Me.Label2.TabIndex = 1
+        Me.Label2.Text = "Download URL:"
+        '
+        'downUriLbl
+        '
+        Me.downUriLbl.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.downUriLbl.AutoEllipsis = True
+        Me.downUriLbl.Location = New System.Drawing.Point(18, 44)
+        Me.downUriLbl.Name = "downUriLbl"
+        Me.downUriLbl.Size = New System.Drawing.Size(600, 14)
+        Me.downUriLbl.TabIndex = 1
+        '
+        'downSpdLbl
+        '
+        Me.downSpdLbl.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.downSpdLbl.AutoEllipsis = True
+        Me.downSpdLbl.Location = New System.Drawing.Point(18, 64)
+        Me.downSpdLbl.Name = "downSpdLbl"
+        Me.downSpdLbl.Size = New System.Drawing.Size(600, 14)
+        Me.downSpdLbl.TabIndex = 1
+        Me.downSpdLbl.Text = "Download speed:"
+        '
+        'downETALbl
+        '
+        Me.downETALbl.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.downETALbl.AutoEllipsis = True
+        Me.downETALbl.Location = New System.Drawing.Point(18, 82)
+        Me.downETALbl.Name = "downETALbl"
+        Me.downETALbl.Size = New System.Drawing.Size(600, 14)
+        Me.downETALbl.TabIndex = 1
+        Me.downETALbl.Text = "Estimated time remaining:"
+        '
         'AppInstallerDownloader
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(704, 161)
+        Me.ClientSize = New System.Drawing.Size(704, 281)
         Me.ControlBox = False
+        Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.ProgressBar1)
-        Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.PictureBox1)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -101,6 +169,7 @@ Partial Class AppInstallerDownloader
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Downloading application package..."
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GroupBox1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -109,7 +178,12 @@ Partial Class AppInstallerDownloader
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents ProgressBar1 As System.Windows.Forms.ProgressBar
     Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
-    Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents StatusLbl As System.Windows.Forms.Label
     Friend WithEvents Timer1 As System.Windows.Forms.Timer
+    Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
+    Friend WithEvents downUriLbl As System.Windows.Forms.Label
+    Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents downETALbl As System.Windows.Forms.Label
+    Friend WithEvents downSpdLbl As System.Windows.Forms.Label
 
 End Class
