@@ -19,44 +19,84 @@ Public Class AppInstallerDownloader
     Dim Language As Integer
     Dim progress As String
 
+    Dim downSpd As Long
+
+    Private sw As Stopwatch = New Stopwatch()
+    Private time As TimeSpan = New TimeSpan()
+
     Private Sub AppInstallerDownloader_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Timer1.Enabled = True
+        downUriLbl.Text = ""
+        sw.Reset()
+        sw.Start()
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Downloading application package..."
                         Label1.Text = "Please wait while DISMTools downloads the application package to add it to this image. This can take some time, depending on your network connection speed."
-                        Label2.Text = "Please wait..."
+                        StatusLbl.Text = "Please wait..."
+                        GroupBox1.Text = "Transfer details"
+                        Label2.Text = "Download URL:"
+                        downSpdLbl.Text = "Download speed: unknown"
+                        downETALbl.Text = "Estimated time remaining: unknown"
                     Case "ESN"
                         Text = "Descargando paquete de aplicación..."
                         Label1.Text = "Espere mientras DISMTools descarga el paquete de aplicación para añadirlo a esta imagen. Esto puede llevar algo de tiempo, dependiendo de la velocidad de su conexión de red."
-                        Label2.Text = "Espere..."
+                        StatusLbl.Text = "Espere..."
+                        GroupBox1.Text = "Detalles de la transferencia"
+                        Label2.Text = "URL de descarga:"
+                        downSpdLbl.Text = "Velocidad de descarga: desconocida"
+                        downETALbl.Text = "Tiempo restante estimado: desconocido"
                     Case "FRA"
                         Text = "Téléchargement du paquet de l'application en cours..."
                         Label1.Text = "Veuillez patienter pendant que DISMTools télécharge le paquet d'application pour l'ajouter à cette image. Cela peut prendre un certain temps, en fonction de la vitesse de votre connexion réseau."
-                        Label2.Text = "Veuillez patienter..."
+                        StatusLbl.Text = "Veuillez patienter..."
+                        GroupBox1.Text = "Détails du transfert"
+                        Label2.Text = "URL de téléchargement :"
+                        downSpdLbl.Text = "Vitesse de téléchargement : inconnue"
+                        downETALbl.Text = "Temps restant estimé : inconnu"
                     Case "PTB", "PTG"
                         Text = "Descarregando o pacote da aplicação..."
                         Label1.Text = "Aguarde enquanto o DISMTools baixa o pacote de aplicativos para adicioná-lo a esta imagem. Isso pode levar algum tempo, dependendo da velocidade da conexão de rede."
-                        Label2.Text = "Aguarde..."
+                        StatusLbl.Text = "Aguarde..."
+                        GroupBox1.Text = "Detalhes da transferência"
+                        Label2.Text = "URL de transferência:"
+                        downSpdLbl.Text = "Velocidade de transferência: desconhecida"
+                        downETALbl.Text = "Tempo estimado restante: desconhecido"
                 End Select
             Case 1
                 Text = "Downloading application package..."
                 Label1.Text = "Please wait while DISMTools downloads the application package to add it to this image. This can take some time, depending on your network connection speed."
-                Label2.Text = "Please wait..."
+                StatusLbl.Text = "Please wait..."
+                GroupBox1.Text = "Transfer details"
+                Label2.Text = "Download URL:"
+                downSpdLbl.Text = "Download speed: unknown"
+                downETALbl.Text = "Estimated time remaining: unknown"
             Case 2
                 Text = "Descargando paquete de aplicación..."
                 Label1.Text = "Espere mientras DISMTools descarga el paquete de aplicación para añadirlo a esta imagen. Esto puede llevar algo de tiempo, dependiendo de la velocidad de su conexión de red."
-                Label2.Text = "Espere..."
+                StatusLbl.Text = "Espere..."
+                GroupBox1.Text = "Detalles de la transferencia"
+                Label2.Text = "URL de descarga:"
+                downSpdLbl.Text = "Velocidad de descarga: desconocida"
+                downETALbl.Text = "Tiempo restante estimado: desconocido"
             Case 3
                 Text = "Téléchargement du paquet de l'application en cours..."
                 Label1.Text = "Veuillez patienter pendant que DISMTools télécharge le paquet d'application pour l'ajouter à cette image. Cela peut prendre un certain temps, en fonction de la vitesse de votre connexion réseau."
-                Label2.Text = "Veuillez patienter..."
+                StatusLbl.Text = "Veuillez patienter..."
+                GroupBox1.Text = "Détails du transfert"
+                Label2.Text = "URL de téléchargement :"
+                downSpdLbl.Text = "Vitesse de téléchargement : inconnue"
+                downETALbl.Text = "Temps restant estimé : inconnu"
             Case 4
                 Text = "Descarregando o pacote da aplicação..."
                 Label1.Text = "Aguarde enquanto o DISMTools baixa o pacote de aplicativos para adicioná-lo a esta imagem. Isso pode levar algum tempo, dependendo da velocidade da conexão de rede."
-                Label2.Text = "Aguarde..."
+                StatusLbl.Text = "Aguarde..."
+                GroupBox1.Text = "Detalhes da transferência"
+                Label2.Text = "URL de transferência:"
+                downSpdLbl.Text = "Velocidade de transferência: desconhecida"
+                downETALbl.Text = "Tempo estimado restante: desconhecido"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)
@@ -65,6 +105,7 @@ Public Class AppInstallerDownloader
             BackColor = Color.FromArgb(238, 238, 242)
             ForeColor = Color.Black
         End If
+        GroupBox1.ForeColor = ForeColor
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         Language = MainForm.Language
@@ -108,6 +149,7 @@ Public Class AppInstallerDownloader
 
                 ' Detect if a URL has been detected and download it
                 If AppInstallerUri <> "" Then
+                    downUriLbl.Text = AppInstallerUri
                     BackgroundWorker1.RunWorkerAsync()
                 End If
             Catch ex As Exception
@@ -148,6 +190,10 @@ Public Class AppInstallerDownloader
             Case 4
                 progress = "Descarregar o pacote da aplicação principal... (" & BytesToReadableSize(e.BytesReceived) & " de " & BytesToReadableSize(e.TotalBytesToReceive) & " descarregados)"
         End Select
+        downSpd = CLng(Math.Round(e.BytesReceived / sw.Elapsed.TotalSeconds, 2))
+        If e.TotalBytesToReceive > 0 Then
+            time = TimeSpan.FromSeconds((e.TotalBytesToReceive - e.BytesReceived) / CDbl(downSpd))
+        End If
     End Sub
 
     Private Sub WebClient_DownloadFileCompleted(sender As Object, e As AsyncCompletedEventArgs)
@@ -158,7 +204,36 @@ Public Class AppInstallerDownloader
 #End Region
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
-        Label2.Text = progress
+        StatusLbl.Text = progress
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        downSpdLbl.Text = "Download speed: " & BytesToReadableSize(downSpd) & "/s"
+                        downETALbl.Text = "Estimated time remaining: " & time.ToString("m\:ss") & " seconds"
+                    Case "ESN"
+                        downSpdLbl.Text = "Velocidad de descarga: " & BytesToReadableSize(downSpd) & "/s"
+                        downETALbl.Text = "Tiempo restante estimado: " & time.ToString("m\:ss") & " segundos"
+                    Case "FRA"
+                        downSpdLbl.Text = "Vitesse de téléchargement : " & BytesToReadableSize(downSpd, True) & "/s"
+                        downETALbl.Text = "Estimation du temps restant : " & time.ToString("m\:ss") & " secondes"
+                    Case "PTB", "PTG"
+                        downSpdLbl.Text = "Velocidade de transferência: " & BytesToReadableSize(downSpd) & "/s"
+                        downETALbl.Text = "Tempo restante estimado: " & time.ToString("m\:ss") & " segundos"
+                End Select
+            Case 1
+                downSpdLbl.Text = "Download speed: " & BytesToReadableSize(downSpd) & "/s"
+                downETALbl.Text = "Estimated time remaining: " & time.ToString("m\:ss") & " seconds"
+            Case 2
+                downSpdLbl.Text = "Velocidad de descarga: " & BytesToReadableSize(downSpd) & "/s"
+                downETALbl.Text = "Tiempo restante estimado: " & time.ToString("m\:ss") & " segundos"
+            Case 3
+                downSpdLbl.Text = "Vitesse de téléchargement : " & BytesToReadableSize(downSpd, True) & "/s"
+                downETALbl.Text = "Estimation du temps restant : " & time.ToString("m\:ss") & " secondes"
+            Case 4
+                downSpdLbl.Text = "Velocidade de transferência: " & BytesToReadableSize(downSpd) & "/s"
+                downETALbl.Text = "Tempo restante estimado: " & time.ToString("m\:ss") & " segundos"
+        End Select
     End Sub
 
     Private Sub AppInstallerDownloader_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
