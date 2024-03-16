@@ -2118,13 +2118,15 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Fixed an issue where the splash screen would not become fully opaque
+        '''- Fixed an issue where the SWM file pattern chooser would not look right when switching from dark mode to light mode
+        '''- Fixed some improper progress panel disposal issues
+        '''- Fixed an issue where the program would show update recommendations for older versions of DISMTools (nightly versions only)
+        '''- Fixed some exceptions that were thrown by the AppX package information dialog
         '''
         '''New features:
         '''
-        '''- Branding and color tints have been refreshed
-        '''- You can now report Store logo asset preview issues from the AppX package information dialog
-        '''- The OneDrive folder exclusion tool now supports excluding user SkyDrive folders.
+        '''- Added the ability to export a Windows image
+        '''- The program can now clean up mount points on closure [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

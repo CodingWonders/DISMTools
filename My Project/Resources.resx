@@ -1099,13 +1099,18 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- Fixed an issue where the splash screen would not become fully opaque
+- Fixed an issue where the SWM file pattern chooser would not look right when switching from dark mode to light mode
+- Fixed some improper progress panel disposal issues
+- Fixed an issue where the program would show update recommendations for older versions of DISMTools (nightly versions only)
+- Fixed some exceptions that were thrown by the AppX package information dialog
 
 New features:
 
-- Branding and color tints have been refreshed
-- You can now report Store logo asset preview issues from the AppX package information dialog
-- The OneDrive folder exclusion tool now supports excluding user SkyDrive folders</value>
+- Added the ability to export a Windows image
+- The program can now clean up mount points on closure (option) and on-demand
+- When opening a File Explorer window to select a file, the program will now do that instead of just opening the directory the file is in
+- Internal errors are no longer shown on a generic dialog. Instead, they are now shown in a dedicated window
+- The App Installer downloader now shows the download URL, the download speed, and the estimated time remaining for the transfer</value>
   </data>
   <data name="split_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\split_img.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
