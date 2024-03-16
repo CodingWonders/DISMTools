@@ -137,6 +137,7 @@
     <Compile Include="Actions\Validation\Actions.Validation.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Elements\AppxPackage.vb" />
     <Compile Include="Elements\Recents.vb" />
     <Compile Include="Help\HelpBrowserForm.Designer.vb">
@@ -189,6 +190,12 @@
       <DependentUpon>ProgressPanel.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\DoWork\ProgressPanel.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Exceptions\ExceptionForm.Designer.vb">
+      <DependentUpon>ExceptionForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Exceptions\ExceptionForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Exe_Ops\BGProcs\BGProcsAdvSettings.Designer.vb">
@@ -441,6 +448,12 @@
       <DependentUpon>ImgCapture.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\Img_Ops\ImgCapture.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\ImgExport.Designer.vb">
+      <DependentUpon>ImgExport.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\ImgExport.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Img_Ops\ImgIndexDelete.Designer.vb">
@@ -712,6 +725,9 @@
     <EmbeddedResource Include="Panels\DoWork\ProgressPanel.resx">
       <DependentUpon>ProgressPanel.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Exceptions\ExceptionForm.resx">
+      <DependentUpon>ExceptionForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Exe_Ops\BGProcs\BGProcsAdvSettings.resx">
       <DependentUpon>BGProcsAdvSettings.vb</DependentUpon>
     </EmbeddedResource>
@@ -837,6 +853,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\ImgCapture.resx">
       <DependentUpon>ImgCapture.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\ImgExport.resx">
+      <DependentUpon>ImgExport.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\ImgIndexDelete.resx">
       <DependentUpon>ImgIndexDelete.vb</DependentUpon>
@@ -1238,6 +1257,7 @@
     <None Include="Resources\color_schemes\CS_Ops_Green.png" />
     <None Include="Resources\color_schemes\CS_ProgressPanel_Blue.png" />
     <None Include="Resources\color_schemes\CS_ProgressPanel_Green.png" />
+    <None Include="Resources\error_32px.png" />
     <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
     <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
     <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />

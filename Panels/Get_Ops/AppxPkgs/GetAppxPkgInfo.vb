@@ -395,15 +395,19 @@ Public Class GetAppxPkgInfoDlg
                     Label5.Text = (folder & "\AppxManifest.xml").Replace("\\", "\").Trim()
                 End If
             Next
-            If pkgDirs.Count <= 1 And Not Label5.Text.Contains(Label23.Text) Then
-                If File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml") Then
-                    Label5.Text = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml"
-                ElseIf File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml") Then
-                    Label5.Text = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml"
-                Else
-                    Label5.Text = ""
+            Try
+                If pkgDirs.Count <= 1 And Not Label5.Text.Contains(Label23.Text) Then
+                    If File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml") Then
+                        Label5.Text = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml"
+                    ElseIf File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml") Then
+                        Label5.Text = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml"
+                    Else
+                        Label5.Text = ""
+                    End If
                 End If
-            End If
+            Catch ex As Exception
+                MsgBox("Could not get some information about this application.", vbOKOnly + vbCritical, Label1.Text)
+            End Try
             Panel4.Visible = True
             Panel7.Visible = False
         Else
