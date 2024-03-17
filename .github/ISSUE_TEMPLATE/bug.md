@@ -27,3 +27,5 @@ If applicable, add screenshots to help explain your problem.
 
 **Additional context**
 Add any other context about the problem here.
+
+**NOTE:** in the case of a program exception, you need to paste the error information in the first section. Remove example information beforehand.
