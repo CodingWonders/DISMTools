@@ -31,6 +31,10 @@ Partial Class GetFeatureInfoDlg
         Me.ListView1 = New System.Windows.Forms.ListView()
         Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.SearchPanel = New System.Windows.Forms.Panel()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.SearchBox1 = New DISMTools.SearchBox()
+        Me.SearchPic = New System.Windows.Forms.PictureBox()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.Panel4 = New System.Windows.Forms.Panel()
         Me.FlowLayoutPanel3 = New System.Windows.Forms.FlowLayoutPanel()
@@ -62,6 +66,9 @@ Partial Class GetFeatureInfoDlg
         Me.SplitContainer2.Panel2.SuspendLayout()
         Me.SplitContainer2.SuspendLayout()
         Me.Panel2.SuspendLayout()
+        Me.SearchPanel.SuspendLayout()
+        Me.Panel1.SuspendLayout()
+        CType(Me.SearchPic, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel3.SuspendLayout()
         Me.Panel4.SuspendLayout()
         Me.FlowLayoutPanel3.SuspendLayout()
@@ -123,6 +130,7 @@ Partial Class GetFeatureInfoDlg
         'SplitContainer2.Panel1
         '
         Me.SplitContainer2.Panel1.Controls.Add(Me.Panel2)
+        Me.SplitContainer2.Panel1.Controls.Add(Me.SearchPanel)
         '
         'SplitContainer2.Panel2
         '
@@ -138,7 +146,7 @@ Partial Class GetFeatureInfoDlg
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel2.Location = New System.Drawing.Point(0, 0)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(440, 396)
+        Me.Panel2.Size = New System.Drawing.Size(440, 372)
         Me.Panel2.TabIndex = 1
         '
         'ListView1
@@ -148,7 +156,7 @@ Partial Class GetFeatureInfoDlg
         Me.ListView1.FullRowSelect = True
         Me.ListView1.Location = New System.Drawing.Point(0, 0)
         Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(440, 396)
+        Me.ListView1.Size = New System.Drawing.Size(440, 372)
         Me.ListView1.TabIndex = 5
         Me.ListView1.UseCompatibleStateImageBehavior = False
         Me.ListView1.View = System.Windows.Forms.View.Details
@@ -162,6 +170,47 @@ Partial Class GetFeatureInfoDlg
         '
         Me.ColumnHeader2.Text = "Feature state"
         Me.ColumnHeader2.Width = 118
+        '
+        'SearchPanel
+        '
+        Me.SearchPanel.Controls.Add(Me.Panel1)
+        Me.SearchPanel.Controls.Add(Me.SearchPic)
+        Me.SearchPanel.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.SearchPanel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.SearchPanel.Location = New System.Drawing.Point(0, 372)
+        Me.SearchPanel.Name = "SearchPanel"
+        Me.SearchPanel.Size = New System.Drawing.Size(440, 24)
+        Me.SearchPanel.TabIndex = 6
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.SearchBox1)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel1.Location = New System.Drawing.Point(24, 0)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(416, 24)
+        Me.Panel1.TabIndex = 3
+        '
+        'SearchBox1
+        '
+        Me.SearchBox1.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.SearchBox1.cueBanner = "Type here to search a feature..."
+        Me.SearchBox1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.SearchBox1.Location = New System.Drawing.Point(8, 3)
+        Me.SearchBox1.Name = "SearchBox1"
+        Me.SearchBox1.Size = New System.Drawing.Size(405, 18)
+        Me.SearchBox1.TabIndex = 1
+        '
+        'SearchPic
+        '
+        Me.SearchPic.Dock = System.Windows.Forms.DockStyle.Left
+        Me.SearchPic.Image = Global.DISMTools.My.Resources.Resources.search_light
+        Me.SearchPic.Location = New System.Drawing.Point(0, 0)
+        Me.SearchPic.Name = "SearchPic"
+        Me.SearchPic.Size = New System.Drawing.Size(24, 24)
+        Me.SearchPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
+        Me.SearchPic.TabIndex = 2
+        Me.SearchPic.TabStop = False
         '
         'Panel3
         '
@@ -443,6 +492,10 @@ Partial Class GetFeatureInfoDlg
         CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer2.ResumeLayout(False)
         Me.Panel2.ResumeLayout(False)
+        Me.SearchPanel.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
+        CType(Me.SearchPic, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel3.ResumeLayout(False)
         Me.Panel4.ResumeLayout(False)
         Me.FlowLayoutPanel3.ResumeLayout(False)
@@ -485,5 +538,9 @@ Partial Class GetFeatureInfoDlg
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents Label55 As System.Windows.Forms.Label
     Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents SearchPanel As System.Windows.Forms.Panel
+    Friend WithEvents SearchPic As System.Windows.Forms.PictureBox
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents SearchBox1 As DISMTools.SearchBox
 
 End Class
