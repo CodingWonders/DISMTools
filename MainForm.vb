@@ -253,6 +253,7 @@ Public Class MainForm
     Dim ImageStatus As ImageWatcher.Status
 
     Public RecentList As New List(Of Recents)
+    Public VideoList As New List(Of Video)
 
     Friend NotInheritable Class NativeMethods
 
@@ -429,6 +430,31 @@ Public Class MainForm
             RecentsLV.Items.Add(If(recentProject.ProjName <> "", recentProject.ProjName, Path.GetFileNameWithoutExtension(recentProject.ProjPath)))
         Next
     End Sub
+
+    Function LoadVideos(filePath As String) As List(Of Video)
+        Dim vidList As New List(Of Video)
+        Try
+            Using fs As FileStream = New FileStream(filePath, FileMode.Open)
+                Dim xs As New XmlReaderSettings()
+                xs.IgnoreWhitespace = True
+                Using reader As XmlReader = XmlReader.Create(fs, xs)
+                    While reader.Read()
+                        If reader.NodeType = XmlNodeType.Element AndAlso reader.Name = "Video" Then
+                            Dim vid As New Video()
+                            vid.YT_ID = reader.GetAttribute("ID")
+                            vid.VideoName = reader.GetAttribute("Name")
+                            vid.VideoDesc = reader.GetAttribute("Description")
+                            vidList.Add(vid)
+                        End If
+                    End While
+                End Using
+            End Using
+            Return vidList
+        Catch ex As Exception
+            Return Nothing
+        End Try
+        Return Nothing
+    End Function
     
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Because of the DISM API, Windows 7 compatibility is out the window (no pun intended)
@@ -548,6 +574,32 @@ Public Class MainForm
                                                                        Path.GetFileNameWithoutExtension(Project.ProjPath)))
                     Next
                 End If
+            End If
+        End If
+        If File.Exists(Application.StartupPath & "\videos.xml") Then File.Move(Application.StartupPath & "\videos.xml", Application.StartupPath & "\videos.xml.old")
+        Using client As New WebClient()
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+            Try
+                client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/DISMTools/" & dtBranch & "/Videos/videos.xml", Application.StartupPath & "\videos.xml")
+            Catch ex As Exception
+                Debug.WriteLine("Could not download video list")
+            End Try
+        End Using
+        Try
+            If File.Exists(Application.StartupPath & "\videos.xml") Then
+                VideoList = LoadVideos(Application.StartupPath & "\videos.xml")
+                File.Delete(Application.StartupPath & "\videos.xml.old")
+            End If
+        Catch ex As Exception
+            If File.Exists(Application.StartupPath & "\videos.xml.old") Then File.Move(Application.StartupPath & "\videos.xml.old", Application.StartupPath & "\videos.xml")
+            VideoList = LoadVideos(Application.StartupPath & "\videos.xml")
+        End Try
+        ListView2.Items.Clear()
+        If VideoList IsNot Nothing Then
+            If VideoList.Count > 0 Then
+                For Each VideoLink As Video In VideoList
+                    ListView2.Items.Add(New ListViewItem(New String() {VideoLink.VideoName, VideoLink.VideoDesc}))
+                Next
             End If
         End If
     End Sub
@@ -5257,9 +5309,15 @@ Public Class MainForm
             LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
             LinkLabel23.LinkColor = ForeColor
             LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
+        ElseIf TutorialVideoPanel.Visible Then
+            LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
+            LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
+            LinkLabel24.LinkColor = ForeColor
         End If
         ListView1.BackColor = LatestNewsPanel.BackColor
         ListView1.ForeColor = LatestNewsPanel.ForeColor
+        ListView2.BackColor = TutorialVideoPanel.BackColor
+        ListView2.ForeColor = TutorialVideoPanel.ForeColor
         RecentsLV.BackColor = SidePanel.BackColor
         TextBox1.BackColor = BackColor
         TextBox1.ForeColor = ForeColor
@@ -16468,6 +16526,7 @@ Public Class MainForm
     Private Sub LinkLabel22_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel22.LinkClicked
         GetStartedPanel.Visible = True
         LatestNewsPanel.Visible = False
+        TutorialVideoPanel.Visible = False
         LinkLabel22.LinkColor = ForeColor
         LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
         LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
@@ -16476,12 +16535,16 @@ Public Class MainForm
     Private Sub LinkLabel23_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel23.LinkClicked
         GetStartedPanel.Visible = False
         LatestNewsPanel.Visible = True
+        TutorialVideoPanel.Visible = False
         LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
         LinkLabel23.LinkColor = ForeColor
         LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
     End Sub
 
     Private Sub LinkLabel24_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel24.LinkClicked
+        GetStartedPanel.Visible = False
+        LatestNewsPanel.Visible = False
+        TutorialVideoPanel.Visible = True
         LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
         LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
         LinkLabel24.LinkColor = ForeColor
@@ -17155,5 +17218,39 @@ Public Class MainForm
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.OperationNum = 7
         ProgressPanel.ShowDialog(Me)
+    End Sub
+
+    Sub LoadVideo(ID As String, Name As String, Description As String)
+        If File.Exists(Application.StartupPath & "\videos\videoplay.html") Then File.Delete(Application.StartupPath & "\videos\videoplay.html")
+        If File.Exists(Application.StartupPath & "\videos\videoplay_tmp.html") Then
+            Dim vidPlayRTB As New RichTextBox() With {
+                .Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\videos\videoplay_tmp.html")
+            }
+            vidPlayRTB.Text = vidPlayRTB.Text.Replace("{#REPLACEME}", ID).Trim().Replace("{#NAME}", Name).Trim().Replace("{#DESCRIPTION}", Description).Trim()
+            File.WriteAllText(Application.StartupPath & "\videos\videoplay.html", vidPlayRTB.Text, UTF8)
+            HelpVideoPlayer.WebBrowser1.Navigate(Application.StartupPath & "\videos\videoplay.html")
+            ' Check emulation mode settings of IE for DISMTools and set them to IE11 (+Edge) (if not detected)
+            Try
+                Dim IECompatRk As RegistryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION", True)
+                Dim IECompatInt As Integer = IECompatRk.GetValue("DISMTools.exe", -1)
+                If IECompatInt <> 11001 Then
+                    IECompatRk.SetValue("DISMTools.exe", 11001, RegistryValueKind.DWord)
+                    MsgBox("Modified Internet Explorer emulation settings for DISMTools. You will need to restart DISMTools in order to start video playback", vbOKOnly + vbInformation, "DISMTools")
+                    IECompatRk.Close()
+                    Exit Sub
+                End If
+                IECompatRk.Close()
+            Catch ex As Exception
+                MsgBox("DISMTools could not modify Internet Explorer emulation settings. Video playback will not start.", vbOKOnly + vbCritical, "DISMTools")
+                Exit Sub
+            End Try
+            HelpVideoPlayer.Show()
+        End If
+    End Sub
+
+    Private Sub ListView2_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles ListView2.MouseDoubleClick
+        LoadVideo(VideoList(ListView2.FocusedItem.Index).YT_ID,
+                  VideoList(ListView2.FocusedItem.Index).VideoName,
+                  VideoList(ListView2.FocusedItem.Index).VideoDesc)
     End Sub
 End Class

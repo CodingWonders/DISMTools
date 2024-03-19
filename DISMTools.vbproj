@@ -149,6 +149,12 @@
     <Compile Include="Help\HelpBrowserForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Help\HelpVideoPlayer.Designer.vb">
+      <DependentUpon>HelpVideoPlayer.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Help\HelpVideoPlayer.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="MainForm.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -696,6 +702,7 @@
     <Compile Include="Utilities\DT_Utils.vb" />
     <Compile Include="Utilities\ImageWatcher.vb" />
     <Compile Include="Utilities\PriReader.vb" />
+    <Compile Include="Videos\Video.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Actions\Actions.MainForm.resx">
@@ -706,6 +713,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Help\HelpBrowserForm.resx">
       <DependentUpon>HelpBrowserForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Help\HelpVideoPlayer.resx">
+      <DependentUpon>HelpVideoPlayer.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.vb</DependentUpon>
@@ -1598,6 +1608,10 @@ IF NOT EXIST scratch (
 IF %25ISPREVIEW%25=="Yes" (
 	echo You will be running a preview release, which may not be ready for production. You may experience more bugs and less stability. Please switch to a stable release whenever possible.
 )
+IF NOT EXIST videos (
+	md videos
+	copy /y "$(SolutionDir)Videos\videoplay.html" "videos\videoplay_tmp.html"
+)
 IF %25COPY_DOCS%25=="Yes" (
 	echo Copying help documentation...
 	xcopy "$(ProjectDir)docs\*" "$(TargetDir)docs" /cehyi
@@ -1634,7 +1648,14 @@ IF EXIST scratch (
 )
 IF EXIST docs (
 	rd docs /s /q
-)</PreBuildEvent>
+)
+
+IF EXIST videos (
+	rd videos /s /q
+)
+
+IF EXIST videos.xml (del videos.xml)
+IF EXIST videos.xml.old (del videos.xml.old)</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
