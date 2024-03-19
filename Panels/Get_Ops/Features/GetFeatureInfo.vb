@@ -410,7 +410,7 @@ Public Class GetFeatureInfoDlg
     Sub SearchFeatures(sQuery As String)
         If InstalledFeatureInfo.Count > 0 Then
             For Each InstalledFeature As DismFeature In InstalledFeatureInfo
-                If InstalledFeature.FeatureName.Contains(sQuery) Then
+                If InstalledFeature.FeatureName.ToLower().Contains(sQuery.ToLower()) Then
                     ListView1.Items.Add(New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.State, True)}))
                 End If
             Next
