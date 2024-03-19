@@ -33,6 +33,7 @@ Public Class GetAppxPkgInfoDlg
                         Label10.Text = "This asset has been guessed by DISMTools based on its size, which can lead to an incorrect result. If that happens, please report an issue on the GitHub repository"
                         LinkLabel1.Text = "This asset is not the one I'm looking for"
                         Button2.Text = "Save..."
+                        SearchBox1.cueBanner = "Type here to search an application..."
                     Case "ESN"
                         Text = "Obtener información de paquetes AppX"
                         Label1.Text = Text
@@ -51,6 +52,7 @@ Public Class GetAppxPkgInfoDlg
                         Label10.Text = "Este recurso ha sido averiguado por DISMTools por su tamaño, lo que puede llevar a un resultado incorrecto. Si eso ocurre, informe de un problema en el repositorio de GitHub"
                         LinkLabel1.Text = "Este recurso no es el que estaba buscando"
                         Button2.Text = "Guardar..."
+                        SearchBox1.cueBanner = "Escriba aquí para buscar una aplicación..."
                     Case "FRA"
                         Text = "Obtenir des informations sur les paquets AppX"
                         Label1.Text = Text
@@ -69,6 +71,7 @@ Public Class GetAppxPkgInfoDlg
                         Label10.Text = "Ce bien a été deviné par DISMTools sur la base de sa taille, ce qui peut conduire à un résultat incorrect. Si cela se produit, veuillez signaler un problème sur le dépôt GitHub."
                         LinkLabel1.Text = "Cette ressource n'est pas celle que je recherche"
                         Button2.Text = "Sauvegarder..."
+                        SearchBox1.cueBanner = "Tapez ici pour rechercher une application..."
                     Case "PTB", "PTG"
                         Text = "Obter informações do pacote AppX"
                         Label1.Text = Text
@@ -87,6 +90,7 @@ Public Class GetAppxPkgInfoDlg
                         Label10.Text = "Este ativo foi adivinhado pelo DISMTools com base no seu tamanho, o que pode conduzir a um resultado incorreto. Se isso acontecer, comunique um problema no repositório do GitHub"
                         LinkLabel1.Text = "Este recurso não é o que estou à procura"
                         Button2.Text = "Guardar..."
+                        SearchBox1.cueBanner = "Digite aqui para pesquisar uma aplicação..."
                 End Select
             Case 1
                 Text = "Get AppX package information"
@@ -106,6 +110,7 @@ Public Class GetAppxPkgInfoDlg
                 Label10.Text = "This asset has been guessed by DISMTools based on its size, which can lead to an incorrect result. If that happens, please report an issue on the GitHub repository"
                 LinkLabel1.Text = "This asset is not the one I'm looking for"
                 Button2.Text = "Save..."
+                SearchBox1.cueBanner = "Type here to search an application..."
             Case 2
                 Text = "Obtener información de paquetes AppX"
                 Label1.Text = Text
@@ -124,6 +129,7 @@ Public Class GetAppxPkgInfoDlg
                 Label10.Text = "Este recurso ha sido averiguado por DISMTools por su tamaño, lo que puede llevar a un resultado incorrecto. Si eso ocurre, informe de un problema en el repositorio de GitHub"
                 LinkLabel1.Text = "Este recurso no es el que estaba buscando"
                 Button2.Text = "Guardar..."
+                SearchBox1.cueBanner = "Escriba aquí para buscar una aplicación..."
             Case 3
                 Text = "Obtenir des informations sur les paquets AppX"
                 Label1.Text = Text
@@ -142,6 +148,7 @@ Public Class GetAppxPkgInfoDlg
                 Label10.Text = "Ce bien a été deviné par DISMTools sur la base de sa taille, ce qui peut conduire à un résultat incorrect. Si cela se produit, veuillez signaler un problème sur le dépôt GitHub."
                 LinkLabel1.Text = "Cette ressource n'est pas celle que je recherche"
                 Button2.Text = "Sauvegarder..."
+                SearchBox1.cueBanner = "Tapez ici pour rechercher une application..."
             Case 4
                 Text = "Obter informações do pacote AppX"
                 Label1.Text = Text
@@ -160,6 +167,7 @@ Public Class GetAppxPkgInfoDlg
                 Label10.Text = "Este ativo foi adivinhado pelo DISMTools com base no seu tamanho, o que pode conduzir a um resultado incorreto. Se isso acontecer, comunique um problema no repositório do GitHub"
                 LinkLabel1.Text = "Este recurso não é o que estou à procura"
                 Button2.Text = "Guardar..."
+                SearchBox1.cueBanner = "Digite aqui para pesquisar uma aplicação..."
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
@@ -173,6 +181,9 @@ Public Class GetAppxPkgInfoDlg
             ListBox1.BackColor = Color.FromArgb(238, 238, 242)
         End If
         ListBox1.ForeColor = ForeColor
+        SearchBox1.BackColor = BackColor
+        SearchBox1.ForeColor = ForeColor
+        SearchPic.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.search_dark, My.Resources.search_light)
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True
@@ -192,10 +203,12 @@ Public Class GetAppxPkgInfoDlg
                 Next
                 ' An empty entry will appear, so remove it
                 ListBox1.Items.RemoveAt(ListBox1.Items.Count - 1)
+                SearchPanel.Visible = False
             Else
                 For Each InstalledAppxPkg As DismAppxPackage In InstalledAppxPkgInfo
                     ListBox1.Items.Add(InstalledAppxPkg.PackageName)
                 Next
+                SearchPanel.Visible = True
             End If
         Else
             ' This condition is met on Windows 8 hosts, as they can't get AppX package information with the DISM API.
@@ -205,6 +218,7 @@ Public Class GetAppxPkgInfoDlg
             Next
             ' An empty entry will appear, so remove it
             ListBox1.Items.RemoveAt(ListBox1.Items.Count - 1)
+            SearchPanel.Visible = False
         End If
     End Sub
 
@@ -218,6 +232,8 @@ Public Class GetAppxPkgInfoDlg
         Label5.Text = ""
         Label3.Text = ""
 
+        Dim trueIndex As Integer = 0
+
         If ListBox1.SelectedItems.Count = 1 Then
             If InstalledAppxPkgInfo IsNot Nothing Then
                 If MainForm.imgAppxPackageNames.Count > InstalledAppxPkgInfo.Count Then
@@ -227,11 +243,24 @@ Public Class GetAppxPkgInfoDlg
                     Label32.Text = MainForm.imgAppxResourceIds(ListBox1.SelectedIndex)
                     Label40.Text = MainForm.imgAppxVersions(ListBox1.SelectedIndex)
                 Else
-                    Label23.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).PackageName
-                    Label25.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).DisplayName
-                    Label35.Text = Casters.CastDismArchitecture(InstalledAppxPkgInfo(ListBox1.SelectedIndex).Architecture, True)
-                    Label32.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).ResourceId
-                    Label40.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).Version.ToString()
+                    For Each InstalledAppx As DismAppxPackage In InstalledAppxPkgInfo
+                        If InstalledAppx.PackageName.ToLower().Contains(SearchBox1.Text.ToLower()) Then
+                            trueIndex = InstalledAppxPkgInfo.IndexOf(InstalledAppx)
+                        End If
+                    Next
+                    If SearchBox1.Text = "" Then
+                        Label23.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).PackageName
+                        Label25.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).DisplayName
+                        Label35.Text = Casters.CastDismArchitecture(InstalledAppxPkgInfo(ListBox1.SelectedIndex).Architecture, True)
+                        Label32.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).ResourceId
+                        Label40.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).Version.ToString()
+                    Else
+                        Label23.Text = InstalledAppxPkgInfo(trueIndex).PackageName
+                        Label25.Text = InstalledAppxPkgInfo(trueIndex).DisplayName
+                        Label35.Text = Casters.CastDismArchitecture(InstalledAppxPkgInfo(trueIndex).Architecture, True)
+                        Label32.Text = InstalledAppxPkgInfo(trueIndex).ResourceId
+                        Label40.Text = InstalledAppxPkgInfo(trueIndex).Version.ToString()
+                    End If
                 End If
             Else
                 Label23.Text = MainForm.imgAppxPackageNames(MainForm.imgAppxPackageNames.Count - (ListBox1.Items.Count - ListBox1.SelectedIndex) - 1)
@@ -256,10 +285,17 @@ Public Class GetAppxPkgInfoDlg
                                                                       packageDispName)
                         If PriName <> "" And Not PriName = Label25.Text Then appDisplayName = PriName
                     Else
-                        Dim PriName As String = PriReader.ReadFromPri(InstalledAppxPkgInfo(ListBox1.SelectedIndex).InstallLocation, _
-                                                                      InstalledAppxPkgInfo(ListBox1.SelectedIndex).DisplayName, _
-                                                                      packageDispName)
-                        If PriName <> "" And Not PriName = InstalledAppxPkgInfo(ListBox1.SelectedIndex).DisplayName Then appDisplayName = PriName
+                        If SearchBox1.Text = "" Then
+                            Dim PriName As String = PriReader.ReadFromPri(InstalledAppxPkgInfo(ListBox1.SelectedIndex).InstallLocation, _
+                                                                          InstalledAppxPkgInfo(ListBox1.SelectedIndex).DisplayName, _
+                                                                          packageDispName)
+                            If PriName <> "" And Not PriName = InstalledAppxPkgInfo(ListBox1.SelectedIndex).DisplayName Then appDisplayName = PriName
+                        Else
+                            Dim PriName As String = PriReader.ReadFromPri(InstalledAppxPkgInfo(trueIndex).InstallLocation, _
+                                                                          InstalledAppxPkgInfo(trueIndex).DisplayName, _
+                                                                          packageDispName)
+                            If PriName <> "" And Not PriName = InstalledAppxPkgInfo(trueIndex).DisplayName Then appDisplayName = PriName
+                        End If
                     End If
                 End If
             End If
@@ -442,5 +478,26 @@ Public Class GetAppxPkgInfoDlg
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
         Process.Start("https://github.com/CodingWonders/DISMTools/issues/new?assignees=CodingWonders&labels=bug&projects=&template=store-logo-asset-preview-issue.md&title=")
+    End Sub
+
+    Sub SearchFeatures(sQuery As String)
+        If InstalledAppxPkgInfo.Count > 0 Then
+            For Each InstalledAppx As DismAppxPackage In InstalledAppxPkgInfo
+                If InstalledAppx.PackageName.ToLower().Contains(sQuery.ToLower()) Then
+                    ListBox1.Items.Add(InstalledAppx.PackageName)
+                End If
+            Next
+        End If
+    End Sub
+
+    Private Sub SearchBox1_TextChanged(sender As Object, e As EventArgs) Handles SearchBox1.TextChanged
+        ListBox1.Items.Clear()
+        If SearchBox1.Text <> "" Then
+            SearchFeatures(SearchBox1.Text)
+        Else
+            For Each InstalledAppx As DismAppxPackage In InstalledAppxPkgInfo
+                ListBox1.Items.Add(InstalledAppx.PackageName)
+            Next
+        End If
     End Sub
 End Class
