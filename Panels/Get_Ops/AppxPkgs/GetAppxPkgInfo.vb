@@ -244,7 +244,7 @@ Public Class GetAppxPkgInfoDlg
                     Label40.Text = MainForm.imgAppxVersions(ListBox1.SelectedIndex)
                 Else
                     For Each InstalledAppx As DismAppxPackage In InstalledAppxPkgInfo
-                        If InstalledAppx.PackageName.ToLower().Contains(SearchBox1.Text.ToLower()) Then
+                        If InstalledAppx.PackageName.ToLower().Contains(SearchBox1.Text.ToLower()) And InstalledAppx.PackageName = ListBox1.Items(ListBox1.SelectedIndex) Then
                             trueIndex = InstalledAppxPkgInfo.IndexOf(InstalledAppx)
                         End If
                     Next
