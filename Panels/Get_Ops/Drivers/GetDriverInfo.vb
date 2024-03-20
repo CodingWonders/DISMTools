@@ -67,6 +67,7 @@ Public Class GetDriverInfo
                         ListView1.Columns(0).Text = "Published name"
                         ListView1.Columns(1).Text = "Original file name"
                         OpenFileDialog1.Title = "Locate driver files"
+                        SearchBox1.Text = "Type here to search a driver..."
                     Case "ESN"
                         Text = "Obtener información de controladores"
                         Label1.Text = Text
@@ -111,6 +112,7 @@ Public Class GetDriverInfo
                         ListView1.Columns(0).Text = "Nombre publicado"
                         ListView1.Columns(1).Text = "Nombre de archivo original"
                         OpenFileDialog1.Title = "Ubique los archivos de controladores"
+                        SearchBox1.Text = "Escriba aquí para buscar un controlador..."
                     Case "FRA"
                         Text = "Obtenir des informations sur les pilotes"
                         Label1.Text = Text
@@ -155,6 +157,7 @@ Public Class GetDriverInfo
                         ListView1.Columns(0).Text = "Nom publié"
                         ListView1.Columns(1).Text = "Nom du fichier original"
                         OpenFileDialog1.Title = "Localiser les fichiers pilotes"
+                        SearchBox1.Text = "Tapez ici pour rechercher un pilote..."
                     Case "PTB", "PTG"
                         Text = "Obter informações do controlador"
                         Label1.Text = Text
@@ -197,6 +200,7 @@ Public Class GetDriverInfo
                         InstalledDriverLink.Text = "Quero obter informações sobre os controladores instalados na imagem"
                         DriverFileLink.Text = "Pretendo obter informações sobre ficheiros de controladores"
                         ListView1.Columns(0).Text = "Nome publicado"
+                        SearchBox1.Text = "Digite aqui para pesquisar um controlador..."
                 End Select
             Case 1
                 Text = "Get driver information"
@@ -242,6 +246,7 @@ Public Class GetDriverInfo
                 ListView1.Columns(0).Text = "Published name"
                 ListView1.Columns(1).Text = "Original file name"
                 OpenFileDialog1.Title = "Locate driver files"
+                SearchBox1.Text = "Type here to search a driver..."
             Case 2
                 Text = "Obtener información de controladores"
                 Label1.Text = Text
@@ -286,6 +291,7 @@ Public Class GetDriverInfo
                 ListView1.Columns(0).Text = "Nombre publicado"
                 ListView1.Columns(1).Text = "Nombre de archivo original"
                 OpenFileDialog1.Title = "Ubique los archivos de controladores"
+                SearchBox1.Text = "Escriba aquí para buscar un controlador..."
             Case 3
                 Text = "Obtenir des informations sur les pilotes"
                 Label1.Text = Text
@@ -330,6 +336,7 @@ Public Class GetDriverInfo
                 ListView1.Columns(0).Text = "Nom publié"
                 ListView1.Columns(1).Text = "Nom du fichier original"
                 OpenFileDialog1.Title = "Localiser les fichiers pilotes"
+                SearchBox1.Text = "Tapez ici pour rechercher un pilote..."
             Case 4
                 Text = "Obter informações do controlador"
                 Label1.Text = Text
@@ -372,6 +379,7 @@ Public Class GetDriverInfo
                 InstalledDriverLink.Text = "Quero obter informações sobre os controladores instalados na imagem"
                 DriverFileLink.Text = "Pretendo obter informações sobre ficheiros de controladores"
                 ListView1.Columns(0).Text = "Nome publicado"
+                SearchBox1.Text = "Digite aqui para pesquisar um controlador..."
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
@@ -391,6 +399,9 @@ Public Class GetDriverInfo
         ListBox1.ForeColor = ForeColor
         ListView1.ForeColor = ForeColor
         ComboBox1.ForeColor = ForeColor
+        SearchBox1.BackColor = BackColor
+        SearchBox1.ForeColor = ForeColor
+        SearchPic.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.search_dark, My.Resources.search_light)
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True
@@ -420,6 +431,8 @@ Public Class GetDriverInfo
         Panel7.Visible = True
         DrvPackageInfoPanel.Visible = False
         NoDrvPanel.Visible = True
+
+        SearchBox1.Text = ""
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -1062,5 +1075,32 @@ Public Class GetDriverInfo
 
     Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
         DriverFileInfoDlg.ShowDialog()
+    End Sub
+
+    Sub SearchDrivers(sQuery As String, OriginalNames As Boolean)
+        If InstalledDriverInfo.Count > 0 Then
+            For Each InstalledDriver As DismDriverPackage In InstalledDriverInfo
+                If OriginalNames Then
+                    If (Path.GetFileName(InstalledDriver.OriginalFileName)).ToLower().Contains(sQuery.Replace("og:", "").Trim().ToLower()) Then
+                        ListView1.Items.Add(New ListViewItem(New String() {InstalledDriver.PublishedName, Path.GetFileName(InstalledDriver.OriginalFileName)}))
+                    End If
+                Else
+                    If InstalledDriver.PublishedName.ToLower().Contains(sQuery.ToLower()) Then
+                        ListView1.Items.Add(New ListViewItem(New String() {InstalledDriver.PublishedName, Path.GetFileName(InstalledDriver.OriginalFileName)}))
+                    End If
+                End If
+            Next
+        End If
+    End Sub
+
+    Private Sub SearchBox1_TextChanged(sender As Object, e As EventArgs) Handles SearchBox1.TextChanged
+        ListView1.Items.Clear()
+        If SearchBox1.Text <> "" Then
+            SearchDrivers(SearchBox1.Text, SearchBox1.Text.StartsWith("og:", StringComparison.OrdinalIgnoreCase))
+        Else
+            For Each InstalledDriver As DismDriverPackage In InstalledDriverInfo
+                ListView1.Items.Add(New ListViewItem(New String() {InstalledDriver.PublishedName, Path.GetFileName(InstalledDriver.OriginalFileName)}))
+            Next
+        End If
     End Sub
 End Class
