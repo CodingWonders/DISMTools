@@ -983,15 +983,19 @@ Public Class ImgInfoSaveDlg
                                 instDir = (folder & "\AppxManifest.xml").Replace("\\", "\").Trim()
                             End If
                         Next
-                        If pkgDirs.Count <= 1 And Not instDir.Contains(MainForm.imgAppxPackageNames(x)) Then
-                            If File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml") Then
-                                instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml"
-                            ElseIf File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml") Then
-                                instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml"
-                            Else
-                                instDir = ""
+                        Try
+                            If pkgDirs.Count <= 1 And Not instDir.Contains(MainForm.imgAppxPackageNames(x)) Then
+                                If File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml") Then
+                                    instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml"
+                                ElseIf File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml") Then
+                                    instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml"
+                                Else
+                                    instDir = "Unknown"
+                                End If
                             End If
-                        End If
+                        Catch ex As Exception
+                            instDir = "Unknown"
+                        End Try
                         Contents &= "    - Package manifest location: " & Quote & instDir & Quote & CrLf
                         ' Get store logo asset directory
                         Dim assetDir As String = ""
@@ -1135,15 +1139,19 @@ Public Class ImgInfoSaveDlg
                                             instDir = (folder & "\AppxManifest.xml").Replace("\\", "\").Trim()
                                         End If
                                     Next
-                                    If pkgDirs.Count <= 1 And Not instDir.Contains(MainForm.imgAppxPackageNames(x)) Then
-                                        If File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml") Then
-                                            instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml"
-                                        ElseIf File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml") Then
-                                            instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml"
-                                        Else
-                                            instDir = ""
+                                    Try
+                                        If pkgDirs.Count <= 1 And Not instDir.Contains(MainForm.imgAppxPackageNames(x)) Then
+                                            If File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml") Then
+                                                instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml"
+                                            ElseIf File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml") Then
+                                                instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml"
+                                            Else
+                                                instDir = "Unknown"
+                                            End If
                                         End If
-                                    End If
+                                    Catch ex As Exception
+                                        instDir = "Unknown"
+                                    End Try
                                     Contents &= "    - Package manifest location: " & Quote & instDir & Quote & CrLf
                                     ' Get store logo asset directory
                                     Dim assetDir As String = ""
@@ -1354,15 +1362,19 @@ Public Class ImgInfoSaveDlg
                                             instDir = (folder & "\AppxManifest.xml").Replace("\\", "\").Trim()
                                         End If
                                     Next
-                                    If pkgDirs.Count <= 1 And Not instDir.Contains(MainForm.imgAppxPackageNames(x)) Then
-                                        If File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml") Then
-                                            instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml"
-                                        ElseIf File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml") Then
-                                            instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml"
-                                        Else
-                                            instDir = ""
+                                    Try
+                                        If pkgDirs.Count <= 1 And Not instDir.Contains(MainForm.imgAppxPackageNames(x)) Then
+                                            If File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml") Then
+                                                instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml"
+                                            ElseIf File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml") Then
+                                                instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml"
+                                            Else
+                                                instDir = "Unknown"
+                                            End If
                                         End If
-                                    End If
+                                    Catch ex As Exception
+                                        instDir = "Unknown"
+                                    End Try
                                     Contents &= "    - Package manifest location: " & Quote & instDir & Quote & CrLf
                                     ' Get store logo asset directory
                                     Dim assetDir As String = ""
