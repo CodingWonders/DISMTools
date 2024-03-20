@@ -220,6 +220,7 @@ Public Class GetAppxPkgInfoDlg
             ListBox1.Items.RemoveAt(ListBox1.Items.Count - 1)
             SearchPanel.Visible = False
         End If
+        SearchBox1.Text = ""
     End Sub
 
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged
