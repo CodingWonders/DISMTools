@@ -25,6 +25,9 @@ Public Class GetPkgInfoDlg
             ListBox1.BackColor = Color.FromArgb(238, 238, 242)
             ListBox2.BackColor = Color.FromArgb(238, 238, 242)
         End If
+        SearchBox1.BackColor = BackColor
+        SearchBox1.ForeColor = ForeColor
+        SearchPic.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.search_dark, My.Resources.search_light)
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -89,6 +92,7 @@ Public Class GetPkgInfoDlg
                         InstalledPackageLink.Text = "I want to get information about installed packages in the image"
                         PackageFileLink.Text = "I want to get information about package files"
                         OpenFileDialog1.Title = "Locate package files"
+                        SearchBox1.cueBanner = "Type here to search a package..."
                     Case "ESN"
                         Text = "Obtener información de paquetes"
                         Label1.Text = Text
@@ -150,6 +154,7 @@ Public Class GetPkgInfoDlg
                         InstalledPackageLink.Text = "Deseo obtener información acerca de paquetes instalados en la imagen"
                         PackageFileLink.Text = "Deseo obtener información acerca de archivos de paquetes"
                         OpenFileDialog1.Title = "Ubique los archivos de paquetes"
+                        SearchBox1.cueBanner = "Escriba aquí para buscar un paquete..."
                     Case "FRA"
                         Text = "Obtenir des informations sur les paquets"
                         Label1.Text = Text
@@ -211,6 +216,7 @@ Public Class GetPkgInfoDlg
                         InstalledPackageLink.Text = "Je souhaite obtenir des informations sur les paquets installés dans l'image."
                         PackageFileLink.Text = "Je souhaite obtenir des informations sur les fichiers de paquets"
                         OpenFileDialog1.Title = "Localiser les fichiers des paquets"
+                        SearchBox1.cueBanner = "Tapez ici pour rechercher un paquet..."
                     Case "PTB", "PTG"
                         Text = "Obter informações sobre o pacote"
                         Label1.Text = Text
@@ -272,6 +278,7 @@ Public Class GetPkgInfoDlg
                         InstalledPackageLink.Text = "Pretendo obter informações sobre os pacotes instalados na imagem"
                         PackageFileLink.Text = "Pretendo obter informações sobre ficheiros de pacotes"
                         OpenFileDialog1.Title = "Localizar ficheiros de pacotes"
+                        SearchBox1.cueBanner = "Digitar aqui para pesquisar um pacote..."
                 End Select
             Case 1
                 Text = "Get package information"
@@ -334,6 +341,7 @@ Public Class GetPkgInfoDlg
                 InstalledPackageLink.Text = "I want to get information about installed packages in the image"
                 PackageFileLink.Text = "I want to get information about package files"
                 OpenFileDialog1.Title = "Locate package files"
+                SearchBox1.cueBanner = "Type here to search a package..."
             Case 2
                 Text = "Obtener información de paquetes"
                 Label1.Text = Text
@@ -395,6 +403,7 @@ Public Class GetPkgInfoDlg
                 InstalledPackageLink.Text = "Deseo obtener información acerca de paquetes instalados en la imagen"
                 PackageFileLink.Text = "Deseo obtener información acerca de archivos de paquetes"
                 OpenFileDialog1.Title = "Ubique los archivos de paquetes"
+                SearchBox1.cueBanner = "Escriba aquí para buscar un paquete..."
             Case 3
                 Text = "Obtenir des informations sur les paquets"
                 Label1.Text = Text
@@ -456,6 +465,7 @@ Public Class GetPkgInfoDlg
                 InstalledPackageLink.Text = "Je souhaite obtenir des informations sur les paquets installés dans l'image."
                 PackageFileLink.Text = "Je souhaite obtenir des informations sur les fichiers de paquets"
                 OpenFileDialog1.Title = "Localiser les fichiers des paquets"
+                SearchBox1.cueBanner = "Tapez ici pour rechercher un paquet..."
             Case 4
                 Text = "Obter informações sobre o pacote"
                 Label1.Text = Text
@@ -517,6 +527,7 @@ Public Class GetPkgInfoDlg
                 InstalledPackageLink.Text = "Pretendo obter informações sobre os pacotes instalados na imagem"
                 PackageFileLink.Text = "Pretendo obter informações sobre ficheiros de pacotes"
                 OpenFileDialog1.Title = "Localizar ficheiros de pacotes"
+                SearchBox1.cueBanner = "Digitar aqui para pesquisar um pacote..."
         End Select
         ListBox1.ForeColor = ForeColor
         ListBox2.ForeColor = ForeColor
@@ -537,6 +548,7 @@ Public Class GetPkgInfoDlg
         PackageFileInfoPanel.Visible = False
         Panel4.Visible = False
         Panel7.Visible = True
+        SearchBox1.Text = ""
     End Sub
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
@@ -1151,6 +1163,27 @@ Public Class GetPkgInfoDlg
             End If
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
+        End If
+    End Sub
+
+    Sub SearchPackages(sQuery As String)
+        If InstalledPkgInfo.Count > 0 Then
+            For Each InstalledPackage As DismPackage In InstalledPkgInfo
+                If InstalledPackage.PackageName.ToLower().Contains(sQuery.ToLower()) Then
+                    ListBox2.Items.Add(InstalledPackage.PackageName)
+                End If
+            Next
+        End If
+    End Sub
+
+    Private Sub SearchBox1_TextChanged(sender As Object, e As EventArgs) Handles SearchBox1.TextChanged
+        ListBox2.Items.Clear()
+        If SearchBox1.Text <> "" Then
+            SearchPackages(SearchBox1.Text)
+        Else
+            For Each InstalledPackage As DismPackage In InstalledPkgInfo
+                ListBox2.Items.Add(InstalledPackage.PackageName)
+            Next
         End If
     End Sub
 End Class
