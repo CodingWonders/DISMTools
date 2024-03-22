@@ -33,7 +33,7 @@ Public Class GetAppxPkgInfoDlg
                         Label10.Text = "This asset has been guessed by DISMTools based on its size, which can lead to an incorrect result. If that happens, please report an issue on the GitHub repository"
                         LinkLabel1.Text = "This asset is not the one I'm looking for"
                         Button2.Text = "Save..."
-                        SearchBox1.cueBanner = "Type here to search an application..."
+                        SearchBox1.cueBanner = "Type here to search for an application..."
                     Case "ESN"
                         Text = "Obtener información de paquetes AppX"
                         Label1.Text = Text
@@ -110,7 +110,7 @@ Public Class GetAppxPkgInfoDlg
                 Label10.Text = "This asset has been guessed by DISMTools based on its size, which can lead to an incorrect result. If that happens, please report an issue on the GitHub repository"
                 LinkLabel1.Text = "This asset is not the one I'm looking for"
                 Button2.Text = "Save..."
-                SearchBox1.cueBanner = "Type here to search an application..."
+                SearchBox1.cueBanner = "Type here to search for an application..."
             Case 2
                 Text = "Obtener información de paquetes AppX"
                 Label1.Text = Text

@@ -42,7 +42,7 @@ Public Class GetCapabilityInfoDlg
                         ListView1.Columns(0).Text = "Capability identity"
                         ListView1.Columns(1).Text = "State"
                         Button2.Text = "Save..."
-                        SearchBox1.cueBanner = "Type here to search a capability..."
+                        SearchBox1.cueBanner = "Type here to search for a capability..."
                     Case "ESN"
                         Text = "Obtener información de funcionalidades"
                         Label1.Text = Text
@@ -107,7 +107,7 @@ Public Class GetCapabilityInfoDlg
                 ListView1.Columns(0).Text = "Capability identity"
                 ListView1.Columns(1).Text = "State"
                 Button2.Text = "Save..."
-                SearchBox1.cueBanner = "Type here to search a capability..."
+                SearchBox1.cueBanner = "Type here to search for a capability..."
             Case 2
                 Text = "Obtener información de funcionalidades"
                 Label1.Text = Text

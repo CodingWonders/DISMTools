@@ -67,7 +67,7 @@ Public Class GetDriverInfo
                         ListView1.Columns(0).Text = "Published name"
                         ListView1.Columns(1).Text = "Original file name"
                         OpenFileDialog1.Title = "Locate driver files"
-                        SearchBox1.Text = "Type here to search a driver..."
+                        SearchBox1.Text = "Type here to search for a driver..."
                     Case "ESN"
                         Text = "Obtener información de controladores"
                         Label1.Text = Text
@@ -246,7 +246,7 @@ Public Class GetDriverInfo
                 ListView1.Columns(0).Text = "Published name"
                 ListView1.Columns(1).Text = "Original file name"
                 OpenFileDialog1.Title = "Locate driver files"
-                SearchBox1.Text = "Type here to search a driver..."
+                SearchBox1.Text = "Type here to search for a driver..."
             Case 2
                 Text = "Obtener información de controladores"
                 Label1.Text = Text

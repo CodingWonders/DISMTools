@@ -42,7 +42,7 @@ Public Class GetFeatureInfoDlg
                         ListView1.Columns(0).Text = "Feature name"
                         ListView1.Columns(1).Text = "Feature state"
                         Button2.Text = "Save..."
-                        SearchBox1.cueBanner = "Type here to search a feature..."
+                        SearchBox1.cueBanner = "Type here to search for a feature..."
                     Case "ESN"
                         Text = "Obtener información de características"
                         Label1.Text = Text
@@ -107,7 +107,7 @@ Public Class GetFeatureInfoDlg
                 ListView1.Columns(0).Text = "Feature name"
                 ListView1.Columns(1).Text = "Feature state"
                 Button2.Text = "Save..."
-                SearchBox1.cueBanner = "Type here to search a feature..."
+                SearchBox1.cueBanner = "Type here to search for a feature..."
             Case 2
                 Text = "Obtener información de características"
                 Label1.Text = Text

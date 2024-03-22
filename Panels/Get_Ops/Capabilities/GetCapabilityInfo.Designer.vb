@@ -449,7 +449,7 @@ Partial Class GetCapabilityInfoDlg
         'SearchBox1
         '
         Me.SearchBox1.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.SearchBox1.cueBanner = "Type here to search a capability..."
+        Me.SearchBox1.cueBanner = "Type here to search for a capability..."
         Me.SearchBox1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.SearchBox1.Location = New System.Drawing.Point(8, 3)
         Me.SearchBox1.Name = "SearchBox1"

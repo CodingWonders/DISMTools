@@ -92,7 +92,7 @@ Public Class GetPkgInfoDlg
                         InstalledPackageLink.Text = "I want to get information about installed packages in the image"
                         PackageFileLink.Text = "I want to get information about package files"
                         OpenFileDialog1.Title = "Locate package files"
-                        SearchBox1.cueBanner = "Type here to search a package..."
+                        SearchBox1.cueBanner = "Type here to search for a package..."
                     Case "ESN"
                         Text = "Obtener información de paquetes"
                         Label1.Text = Text
@@ -341,7 +341,7 @@ Public Class GetPkgInfoDlg
                 InstalledPackageLink.Text = "I want to get information about installed packages in the image"
                 PackageFileLink.Text = "I want to get information about package files"
                 OpenFileDialog1.Title = "Locate package files"
-                SearchBox1.cueBanner = "Type here to search a package..."
+                SearchBox1.cueBanner = "Type here to search for a package..."
             Case 2
                 Text = "Obtener información de paquetes"
                 Label1.Text = Text
