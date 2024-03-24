@@ -17257,4 +17257,14 @@ Public Class MainForm
                   VideoList(ListView2.FocusedItem.Index).VideoName,
                   VideoList(ListView2.FocusedItem.Index).VideoDesc)
     End Sub
+
+    Private Sub MainForm_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
+        ' Alt-B (Background process panel)
+        If e.KeyCode = Keys.B And e.Alt Then
+            If Not HomePanel.Visible Then
+                BackgroundProcessesButton.PerformClick()
+                Focus()
+            End If
+        End If
+    End Sub
 End Class
