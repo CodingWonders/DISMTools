@@ -17062,4 +17062,14 @@ Public Class MainForm
         Next
         RecentRemoveLink.Visible = False
     End Sub
+
+    Private Sub MainForm_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
+        ' Alt-B (Background process panel)
+        If e.KeyCode = Keys.B And e.Alt Then
+            If Not HomePanel.Visible Then
+                BackgroundProcessesButton.PerformClick()
+                Focus()
+            End If
+        End If
+    End Sub
 End Class
