@@ -1054,6 +1054,7 @@
     <None Include="settings.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Tools\DT_IEConfig.reg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Panels\readme.md" />
@@ -1605,6 +1606,8 @@ IF NOT EXIST logs (
 IF NOT EXIST scratch (
 	md scratch
 )
+:: Copy the Internet Explorer browser emulation registry file to the program directory
+copy /y "$(SolutionDir)Tools\DT_IEConfig.reg" "DT_IEConfig.reg"
 IF %25ISPREVIEW%25=="Yes" (
 	echo You will be running a preview release, which may not be ready for production. You may experience more bugs and less stability. Please switch to a stable release whenever possible.
 )
