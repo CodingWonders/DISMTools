@@ -580,7 +580,7 @@ Public Class MainForm
         Using client As New WebClient()
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
             Try
-                client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/DISMTools/" & dtBranch & "/Videos/videos.xml", Application.StartupPath & "\videos.xml")
+                client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/dt_videos/main/videos.xml", Application.StartupPath & "\videos.xml")
             Catch ex As Exception
                 Debug.WriteLine("Could not download video list")
             End Try
@@ -17227,6 +17227,10 @@ Public Class MainForm
                 .Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\videos\videoplay_tmp.html")
             }
             vidPlayRTB.Text = vidPlayRTB.Text.Replace("{#REPLACEME}", ID).Trim().Replace("{#NAME}", Name).Trim().Replace("{#DESCRIPTION}", Description).Trim()
+            ' Set appropriate color mode in light theme
+            If BackColor = Color.FromArgb(239, 239, 242) Then
+                vidPlayRTB.Text = vidPlayRTB.Text.Replace("<body class=" & Quote & "pagebody-dark" & Quote & ">", "<body class=" & Quote & "pagebody" & Quote & ">").Trim()
+            End If
             File.WriteAllText(Application.StartupPath & "\videos\videoplay.html", vidPlayRTB.Text, UTF8)
             HelpVideoPlayer.WebBrowser1.Navigate(Application.StartupPath & "\videos\videoplay.html")
             ' Check emulation mode settings of IE for DISMTools and set them to IE11 (+Edge) (if not detected)
