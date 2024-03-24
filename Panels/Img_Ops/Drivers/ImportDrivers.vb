@@ -17,7 +17,9 @@ Public Class ImportDrivers
             MsgBox(msg, vbOKOnly + vbInformation, Label1.Text)
             Exit Sub
         Else
-            If DIList(ListView1.FocusedItem.Index).Name = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) Then ImportSourceInt = 1
+            If ListView1.SelectedItems.Count = 1 Then
+                If DIList(ListView1.FocusedItem.Index).Name = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) Then ImportSourceInt = 1
+            End If
             Select Case ImportSourceInt
                 Case 0
                     If TextBox1.Text <> "" Then
