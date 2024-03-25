@@ -595,14 +595,76 @@ Public Class MainForm
             VideoList = LoadVideos(Application.StartupPath & "\videos.xml")
         End Try
         ListView2.Items.Clear()
+        Dim thumbnailList As ImageList = New ImageList()
+        thumbnailList.ImageSize = New Size(160, 90)
+        thumbnailList.ColorDepth = ColorDepth.Depth32Bit
+        ListView2.View = View.LargeIcon
+        ListView2.LargeImageList = thumbnailList
         If VideoList IsNot Nothing Then
             If VideoList.Count > 0 Then
                 For Each VideoLink As Video In VideoList
-                    ListView2.Items.Add(New ListViewItem(New String() {VideoLink.VideoName, VideoLink.VideoDesc}))
+                    Dim thumbnail As Image = GetItemThumbnail(VideoLink.YT_ID)
+                    If thumbnail IsNot Nothing Then
+                        Dim newThumb As Image = CombineImages(thumbnail)
+                        thumbnailList.Images.Add(newThumb)
+                    End If
+                    Dim listItem As ListViewItem = New ListViewItem()
+                    listItem.ImageIndex = VideoList.IndexOf(VideoLink)
+                    listItem.Text = VideoLink.VideoName
+                    ListView2.Items.Add(listItem)
                 Next
             End If
         End If
     End Sub
+
+    Function GetItemThumbnail(videoId As String) As Image
+        Try
+            Dim thumbnailURI As String = "https://img.youtube.com/vi/" & videoId & "/maxresdefault.jpg"
+            Using client As WebClient = New WebClient()
+                Dim imgBytes() As Byte = client.DownloadData(thumbnailURI)
+                Using ms As MemoryStream = New MemoryStream(imgBytes)
+                    Dim ogImg As Image = Image.FromStream(ms)
+                    Dim thumbnail As Image = ResizeThumbnail(ogImg, 160, 90)
+                    Return thumbnail
+                End Using
+            End Using
+        Catch ex As Exception
+            Return Nothing
+        End Try
+        Return Nothing
+    End Function
+
+    Function ResizeThumbnail(img As Image, width As Integer, height As Integer) As Image
+        Try
+            Dim resImg As Bitmap = New Bitmap(width, height)
+            Using g As Graphics = Graphics.FromImage(resImg)
+                g.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBicubic
+                g.DrawImage(img, 0, 0, width, height)
+            End Using
+            Return resImg
+        Catch ex As Exception
+            Return Nothing
+        End Try
+        Return Nothing
+    End Function
+
+    Function CombineImages(thumbnail As Image) As Image
+        Try
+            Dim play As Image = My.Resources.video_play
+            Dim combinedImage As Bitmap = New Bitmap(thumbnail.Width, thumbnail.Height)
+            Using g As Graphics = Graphics.FromImage(combinedImage)
+                g.DrawImage(thumbnail, 0, 0, thumbnail.Width, thumbnail.Height)
+                ' Draw Play symbol
+                Dim pX As Integer = (thumbnail.Width - play.Width) / 2
+                Dim pY As Integer = (thumbnail.Height - play.Height) / 2
+                g.DrawImage(play, pX, pY, play.Width, play.Height)
+            End Using
+            Return combinedImage
+        Catch ex As Exception
+            Return Nothing
+        End Try
+        Return Nothing
+    End Function
 
     ''' <summary>
     ''' Detects all mounted images and their state. Calls the DISM API at program startup
@@ -5730,6 +5792,11 @@ Public Class MainForm
                         Label34.Text = "Error information:"
                         Label35.Text = "Try connecting your system to the network. If your system is connected to the network but this error still appears, check whether you can access websites."
                         Button59.Text = "Try again"
+                        ' - Tutorial videos panel
+                        Label11.Text = "We couldn't get the latest videos"
+                        Label7.Text = "Error information:"
+                        Label6.Text = "Try connecting your system to the network. If your system is connected to the network but this error still appears, check whether you can access websites."
+                        Button17.Text = "Try again"
                     Case "ESN"
                         ' Top-level menu items
                         FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -6093,6 +6160,11 @@ Public Class MainForm
                         Label34.Text = "Información del error:"
                         Label35.Text = "Pruebe conectar su sistema a la red. Si su sistema está conectado a la red pero sigue apareciendo este error, compruebe si puede acceder a sitios web."
                         Button59.Text = "Intentar de nuevo"
+                        ' - Tutorial videos panel
+                        Label11.Text = "No pudimos obtener los últimos vídeos"
+                        Label7.Text = "Información del error:"
+                        Label6.Text = "Pruebe conectar su sistema a la red. Si su sistema está conectado a la red pero sigue apareciendo este error, compruebe si puede acceder a sitios web."
+                        Button17.Text = "Intentar de nuevo"
                     Case "FRA"
                         ' Top-level menu items
                         FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Fichier".ToUpper(), "&Fichier")
@@ -6456,6 +6528,11 @@ Public Class MainForm
                         Label34.Text = "Information d'erreur :"
                         Label35.Text = "Essayez de connecter votre système au réseau. Si votre système est connecté au réseau mais que cette erreur persiste, vérifiez si vous pouvez accéder aux sites web."
                         Button59.Text = "Réessayer"
+                        ' - Tutorial videos panel
+                        Label11.Text = "Nous n'avons pas pu obtenir les dernières vidéos"
+                        Label7.Text = "Informations sur l'erreur :"
+                        Label6.Text = "Essayez de connecter votre système au réseau. Si votre système est connecté au réseau mais que cette erreur apparaît toujours, vérifiez si vous pouvez accéder aux sites web."
+                        Button17.Text = "Essayez à nouveau"
                     Case "PTB", "PTG"
                         ' Top-level menu items
                         FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Ficheiro".ToUpper(), "&Ficheiro")
@@ -6818,6 +6895,11 @@ Public Class MainForm
                         Label34.Text = "Informação de erro:"
                         Label35.Text = "Tente ligar o seu sistema à rede. Se o seu sistema estiver ligado à rede mas este erro continuar a aparecer, verifique se consegue aceder aos sítios Web."
                         Button59.Text = "Tentar novamente"
+                        ' - Tutorial videos panel
+                        Label11.Text = "Não foi possível obter os vídeos mais recentes"
+                        Label7.Text = "Informação de erro:"
+                        Label6.Text = "Tente ligar o seu sistema à rede. Se o seu sistema estiver ligado à rede mas este erro continuar a aparecer, verifique se consegue aceder aos sítios Web."
+                        Button17.Text = "Tentar novamente"
                     Case Else
                         Language = 1
                         ChangeLangs(Language)
@@ -7186,6 +7268,11 @@ Public Class MainForm
                 Label34.Text = "Error information:"
                 Label35.Text = "Try connecting your system to the network. If your system is connected to the network but this error still appears, check whether you can access websites."
                 Button59.Text = "Try again"
+                ' - Tutorial videos panel
+                Label11.Text = "We couldn't get the latest videos"
+                Label7.Text = "Error information:"
+                Label6.Text = "Try connecting your system to the network. If your system is connected to the network but this error still appears, check whether you can access websites."
+                Button17.Text = "Try again"
             Case 2
                 ' Top-level menu items
                 FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -7548,6 +7635,11 @@ Public Class MainForm
                 Label34.Text = "Información del error:"
                 Label35.Text = "Pruebe conectar su sistema a la red. Si su sistema está conectado a la red pero sigue apareciendo este error, compruebe si puede acceder a sitios web."
                 Button59.Text = "Intentar de nuevo"
+                ' - Tutorial videos panel
+                Label11.Text = "No pudimos obtener los últimos vídeos"
+                Label7.Text = "Información del error:"
+                Label6.Text = "Pruebe conectar su sistema a la red. Si su sistema está conectado a la red pero sigue apareciendo este error, compruebe si puede acceder a sitios web."
+                Button17.Text = "Intentar de nuevo"
             Case 3
                 ' Top-level menu items
                 FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Fichier".ToUpper(), "&Fichier")
@@ -7911,6 +8003,11 @@ Public Class MainForm
                 Label34.Text = "Information d'erreur :"
                 Label35.Text = "Essayez de connecter votre système au réseau. Si votre système est connecté au réseau mais que cette erreur persiste, vérifiez si vous pouvez accéder aux sites web."
                 Button59.Text = "Réessayer"
+                ' - Tutorial videos panel
+                Label11.Text = "Nous n'avons pas pu obtenir les dernières vidéos"
+                Label7.Text = "Informations sur l'erreur :"
+                Label6.Text = "Essayez de connecter votre système au réseau. Si votre système est connecté au réseau mais que cette erreur apparaît toujours, vérifiez si vous pouvez accéder aux sites web."
+                Button17.Text = "Essayez à nouveau"
             Case 4
                 ' Top-level menu items
                 FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Ficheiro".ToUpper(), "&Ficheiro")
@@ -8273,6 +8370,11 @@ Public Class MainForm
                 Label34.Text = "Informação de erro:"
                 Label35.Text = "Tente ligar o seu sistema à rede. Se o seu sistema estiver ligado à rede mas este erro continuar a aparecer, verifique se consegue aceder aos sítios Web."
                 Button59.Text = "Tentar novamente"
+                ' - Tutorial videos panel
+                Label11.Text = "Não foi possível obter os vídeos mais recentes"
+                Label7.Text = "Informação de erro:"
+                Label6.Text = "Tente ligar o seu sistema à rede. Se o seu sistema estiver ligado à rede mas este erro continuar a aparecer, verifique se consegue aceder aos sítios Web."
+                Button17.Text = "Tentar novamente"
         End Select
 
         If OnlineManagement Then

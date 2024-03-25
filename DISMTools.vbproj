@@ -1274,6 +1274,7 @@
     <None Include="Resources\error_32px.png" />
     <None Include="Resources\search_dark.png" />
     <None Include="Resources\search_light.png" />
+    <None Include="Resources\video_play.png" />
     <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
     <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
     <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />
