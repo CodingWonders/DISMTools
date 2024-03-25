@@ -2032,6 +2032,121 @@ Partial Class MainForm
         Me.TutorialVideoPanel.TabIndex = 0
         Me.TutorialVideoPanel.Visible = False
         '
+        'VideoContainer
+        '
+        Me.VideoContainer.Controls.Add(Me.VideosPanel)
+        Me.VideoContainer.Controls.Add(Me.VideoErrorPanel)
+        Me.VideoContainer.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.VideoContainer.Location = New System.Drawing.Point(0, 0)
+        Me.VideoContainer.Name = "VideoContainer"
+        Me.VideoContainer.Size = New System.Drawing.Size(1008, 619)
+        Me.VideoContainer.TabIndex = 2
+        '
+        'VideosPanel
+        '
+        Me.VideosPanel.Controls.Add(Me.ListView2)
+        Me.VideosPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.VideosPanel.Location = New System.Drawing.Point(0, 0)
+        Me.VideosPanel.Name = "VideosPanel"
+        Me.VideosPanel.Padding = New System.Windows.Forms.Padding(8)
+        Me.VideosPanel.Size = New System.Drawing.Size(1008, 619)
+        Me.VideosPanel.TabIndex = 1
+        '
+        'ListView2
+        '
+        Me.ListView2.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.ListView2.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader4, Me.ColumnHeader5})
+        Me.ListView2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ListView2.FullRowSelect = True
+        Me.ListView2.Location = New System.Drawing.Point(8, 8)
+        Me.ListView2.MultiSelect = False
+        Me.ListView2.Name = "ListView2"
+        Me.ListView2.Size = New System.Drawing.Size(992, 603)
+        Me.ListView2.TabIndex = 0
+        Me.ListView2.UseCompatibleStateImageBehavior = False
+        Me.ListView2.View = System.Windows.Forms.View.Details
+        '
+        'ColumnHeader4
+        '
+        Me.ColumnHeader4.Text = "Name"
+        Me.ColumnHeader4.Width = 375
+        '
+        'ColumnHeader5
+        '
+        Me.ColumnHeader5.Text = "Description"
+        Me.ColumnHeader5.Width = 592
+        '
+        'VideoErrorPanel
+        '
+        Me.VideoErrorPanel.Controls.Add(Me.Button17)
+        Me.VideoErrorPanel.Controls.Add(Me.TextBox2)
+        Me.VideoErrorPanel.Controls.Add(Me.Label6)
+        Me.VideoErrorPanel.Controls.Add(Me.Label7)
+        Me.VideoErrorPanel.Controls.Add(Me.Label11)
+        Me.VideoErrorPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.VideoErrorPanel.Location = New System.Drawing.Point(0, 0)
+        Me.VideoErrorPanel.Name = "VideoErrorPanel"
+        Me.VideoErrorPanel.Size = New System.Drawing.Size(1008, 619)
+        Me.VideoErrorPanel.TabIndex = 0
+        '
+        'Button17
+        '
+        Me.Button17.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button17.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button17.Location = New System.Drawing.Point(880, 385)
+        Me.Button17.Name = "Button17"
+        Me.Button17.Size = New System.Drawing.Size(114, 23)
+        Me.Button17.TabIndex = 2
+        Me.Button17.Text = "Try again"
+        Me.Button17.UseVisualStyleBackColor = True
+        '
+        'TextBox2
+        '
+        Me.TextBox2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBox2.Font = New System.Drawing.Font("Courier New", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TextBox2.Location = New System.Drawing.Point(18, 78)
+        Me.TextBox2.Multiline = True
+        Me.TextBox2.Name = "TextBox2"
+        Me.TextBox2.ReadOnly = True
+        Me.TextBox2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.TextBox2.Size = New System.Drawing.Size(972, 300)
+        Me.TextBox2.TabIndex = 1
+        '
+        'Label6
+        '
+        Me.Label6.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label6.AutoEllipsis = True
+        Me.Label6.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.Label6.Location = New System.Drawing.Point(14, 411)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(978, 49)
+        Me.Label6.TabIndex = 0
+        Me.Label6.Text = "Try connecting your system to the network. If your system is connected to the net" & _
+    "work but this error still appears, check whether you can access websites."
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.Label7.Location = New System.Drawing.Point(14, 55)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(101, 15)
+        Me.Label7.TabIndex = 0
+        Me.Label7.Text = "Error information:"
+        '
+        'Label11
+        '
+        Me.Label11.AutoSize = True
+        Me.Label11.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label11.Location = New System.Drawing.Point(12, 12)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(317, 30)
+        Me.Label11.TabIndex = 0
+        Me.Label11.Text = "We couldn't get the latest videos"
+        '
         'Panel1
         '
         Me.Panel1.Controls.Add(Me.FlowLayoutPanel2)
@@ -3791,7 +3906,7 @@ Partial Class MainForm
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel8.Location = New System.Drawing.Point(61, 3)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(114, 23)
+        Me.Panel8.Size = New System.Drawing.Size(112, 23)
         Me.Panel8.TabIndex = 8
         '
         'projName
@@ -3800,7 +3915,7 @@ Partial Class MainForm
         Me.projName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projName.Location = New System.Drawing.Point(0, 0)
         Me.projName.Name = "projName"
-        Me.projName.Size = New System.Drawing.Size(114, 23)
+        Me.projName.Size = New System.Drawing.Size(112, 23)
         Me.projName.TabIndex = 2
         Me.projName.Text = "projName"
         Me.projName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -3810,7 +3925,7 @@ Partial Class MainForm
         Me.projNameText.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projNameText.Location = New System.Drawing.Point(0, 0)
         Me.projNameText.Name = "projNameText"
-        Me.projNameText.Size = New System.Drawing.Size(114, 21)
+        Me.projNameText.Size = New System.Drawing.Size(112, 21)
         Me.projNameText.TabIndex = 4
         Me.projNameText.Text = "projName"
         Me.projNameText.Visible = False
