@@ -17369,4 +17369,8 @@ Public Class MainForm
             End If
         End If
     End Sub
+
+    Private Sub AppendImage_Click(sender As Object, e As EventArgs) Handles AppendImage.Click
+        ImgAppend.ShowDialog()
+    End Sub
 End Class

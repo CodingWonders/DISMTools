@@ -223,6 +223,19 @@ Public Class ProgressPanel
     Public projPath As String
     Public MountAfterCreation As Boolean
 
+    ' OperationNum: 1
+    Public AppendixSourceDir As String                      ' Source directory containing the image to append
+    Public AppendixDestinationImage As String               ' The destination image to append to
+    Public AppendixName As String                           ' Appended image name
+    Public AppendixDescription As String                    ' Appended image description
+    Public AppendixWimScriptConfig As String                ' Path for WimScript.ini (configuration list file)
+    Public AppendixUseWimBoot As Boolean                    ' Determine whether to append the image with WIMBoot configuration
+    Public AppendixBootable As Boolean                      ' Determine whether to make target image bootable (Windows PE only)
+    Public AppendixCheckIntegrity As Boolean                ' Determine whether to check integrity of the WIM file
+    Public AppendixVerify As Boolean                        ' Determine whether to check for errors and file duplication
+    Public AppendixReparsePt As Boolean                     ' Determine whether to use the reparse point tag fix
+    Public AppendixCaptureExtendedAttribs As Boolean        ' Determine whether to capture extended attributes
+
     ' OperationNum: 3
     Public ApplicationSourceImg As String                   ' String which determines which image to apply
     Public ApplicationIndex As Integer                      ' Index to apply to destination
@@ -551,6 +564,8 @@ Public Class ProgressPanel
     Sub GetTasks(opNum As Integer)
         If opNum = 0 Then
             taskCount = 1
+        ElseIf opNum = 1 Then
+            taskCount = 1
         ElseIf opNum = 3 Then
             taskCount = 1
         ElseIf opNum = 6 Then
@@ -870,6 +885,110 @@ Public Class ProgressPanel
                 End If
                 IsSuccessful = False
             End Try
+        ElseIf opNum = 1 Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            allTasks.Text = "Appending to image..."
+                            currentTask.Text = "Appending specified mount directory to the specified target image..."
+                        Case "ESN"
+                            allTasks.Text = "Anexando a la imagen..."
+                            currentTask.Text = "Anexando el directorio de montaje especificado a la imagen de destino..."
+                        Case "FRA"
+                            allTasks.Text = "Annexe à l'image... "
+                            currentTask.Text = "Annexe du répertoire de montage spécifié à l'image cible spécifiée..."
+                        Case "PTB", "PTG"
+                            allTasks.Text = "Anexo à imagem..."
+                            currentTask.Text = "Anexo do diretório de montagem especificado à imagem de destino especificada..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Appending to image..."
+                    currentTask.Text = "Appending specified mount directory to the specified target image..."
+                Case 2
+                    allTasks.Text = "Anexando a la imagen..."
+                    currentTask.Text = "Anexando el directorio de montaje especificado a la imagen de destino..."
+                Case 3
+                    allTasks.Text = "Annexe à l'image... "
+                    currentTask.Text = "Annexe du répertoire de montage spécifié à l'image cible spécifiée..."
+                Case 4
+                    allTasks.Text = "Anexo à imagem..."
+                    currentTask.Text = "Anexo do diretório de montagem especificado à imagem de destino especificada..."
+            End Select
+            LogView.AppendText(CrLf & "Appending mount directory to specified target image..." & CrLf & "Options:" & CrLf &
+                               "- Source image directory: " & AppendixSourceDir & CrLf &
+                               "- Destination image file: " & AppendixDestinationImage & CrLf &
+                               "- Destination image name: " & AppendixName & CrLf &
+                               "- Destination image description: " & If(AppendixDescription = "", "(none specified)", AppendixDescription) & CrLf)
+            If AppendixWimScriptConfig = "" Then
+                LogView.AppendText("- Configuration list file: not specified" & CrLf)
+            Else
+                LogView.AppendText("- Configuration list file: " & Quote & AppendixWimScriptConfig & Quote & CrLf)
+                If Not File.Exists(AppendixWimScriptConfig) Then
+                    LogView.AppendText("   WARNING: the configuration list file does not exist in the file system. Skipping file..." & CrLf)
+                End If
+            End If
+            LogView.AppendText("- Append image with WIMBoot configuration? " & If(AppendixUseWimBoot, "Yes", "No") & CrLf &
+                               "- Make image bootable? " & If(AppendixBootable, "Yes", "No") & CrLf &
+                               "- Verify image integrity? " & If(AppendixCheckIntegrity, "Yes", "No") & CrLf &
+                               "- Check for file errors? " & If(AppendixVerify, "Yes", "No") & CrLf &
+                               "- Use the reparse point tag fix? " & If(AppendixReparsePt, "Yes", "No") & CrLf &
+                               "- Capture extended attributes? " & If(AppendixCaptureExtendedAttribs, "Yes", "No"))
+            DISMProc.StartInfo.FileName = DismProgram
+            Select Case DismVersionChecker.ProductMajorPart
+                Case 6
+                    Select Case DismVersionChecker.ProductMinorPart
+                        Case 1
+                            ' Not available
+                        Case Is >= 2
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /append-image /imagefile=" & Quote & AppendixDestinationImage & Quote & " /capturedir=" & Quote & AppendixSourceDir & Quote & " /name=" & Quote & AppendixName & Quote
+                    End Select
+                Case 10
+                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /append-image /imagefile=" & Quote & AppendixDestinationImage & Quote & " /capturedir=" & Quote & AppendixSourceDir & Quote & " /name=" & Quote & AppendixName & Quote
+            End Select
+            If AppendixDescription <> "" Then
+                CommandArgs &= " /description=" & Quote & AppendixDescription & Quote
+            End If
+            If AppendixWimScriptConfig <> "" AndAlso File.Exists(AppendixWimScriptConfig) Then
+                CommandArgs &= " /configfile=" & Quote & AppendixWimScriptConfig & Quote
+            End If
+            If AppendixBootable Then CommandArgs &= " /bootable"
+            If AppendixUseWimBoot Then CommandArgs &= " /wimboot"
+            If AppendixCheckIntegrity Then CommandArgs &= " /checkintegrity"
+            If AppendixVerify Then CommandArgs &= " /verify"
+            If Not AppendixReparsePt Then CommandArgs &= " /norpfix"
+            If AppendixCaptureExtendedAttribs Then CommandArgs &= " /EA"
+            DISMProc.StartInfo.Arguments = CommandArgs
+            DISMProc.Start()
+            DISMProc.WaitForExit()
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            currentTask.Text = "Gathering error level..."
+                        Case "ESN"
+                            currentTask.Text = "Recopilando nivel de error..."
+                        Case "FRA"
+                            currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                        Case "PTB", "PTG"
+                            currentTask.Text = "A recolher o nível de erro..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Gathering error level..."
+                Case 2
+                    currentTask.Text = "Recopilando nivel de error..."
+                Case 3
+                    currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                Case 4
+                    currentTask.Text = "A recolher o nível de erro..."
+            End Select
+            LogView.AppendText(CrLf & "Gathering error level...")
+            GetErrorCode(False)
+            If errCode.Length >= 8 Then
+                LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            Else
+                LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            End If
         ElseIf opNum = 3 Then
             ' My love with DISM came from this very YouTube video:
             ' https://www.youtube.com/watch?v=JxJ6a-PY1KA (Enderman - Manually installing Windows 10)
@@ -1072,7 +1191,7 @@ Public Class ProgressPanel
                 If File.Exists(CaptureWimScriptConfig) Then
                     CommandArgs &= " /configfile=" & Quote & CaptureWimScriptConfig & Quote
                 Else
-                    LogView.AppendText("   WARNING: the following file does not exist in the file system. Skipping file..." & CrLf)
+                    LogView.AppendText("   WARNING: the configuration list file does not exist in the file system. Skipping file..." & CrLf)
                 End If
             End If
             If CaptureCompressType = 0 Then
