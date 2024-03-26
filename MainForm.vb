@@ -576,45 +576,61 @@ Public Class MainForm
                 End If
             End If
         End If
-        If File.Exists(Application.StartupPath & "\videos.xml") Then File.Move(Application.StartupPath & "\videos.xml", Application.StartupPath & "\videos.xml.old")
-        Using client As New WebClient()
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
-            Try
-                client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/dt_videos/main/videos.xml", Application.StartupPath & "\videos.xml")
-            Catch ex As Exception
-                Debug.WriteLine("Could not download video list")
-            End Try
-        End Using
         Try
-            If File.Exists(Application.StartupPath & "\videos.xml") Then
+            Dim videoEx As Exception = New Exception()
+            If File.Exists(Application.StartupPath & "\videos.xml") Then File.Move(Application.StartupPath & "\videos.xml", Application.StartupPath & "\videos.xml.old")
+            Using client As New WebClient()
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                Try
+                    client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/dt_videos/main/videos.xml", Application.StartupPath & "\videos.xml")
+                Catch ex As Exception
+                    videoEx = ex
+                    Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
+                    Debug.WriteLine("Could not download video list")
+                End Try
+            End Using
+            Try
+                If File.Exists(Application.StartupPath & "\videos.xml") Then
+                    VideoList = LoadVideos(Application.StartupPath & "\videos.xml")
+                    File.Delete(Application.StartupPath & "\videos.xml.old")
+                End If
+            Catch ex As Exception
+                videoEx = ex
+                If File.Exists(Application.StartupPath & "\videos.xml.old") Then File.Move(Application.StartupPath & "\videos.xml.old", Application.StartupPath & "\videos.xml")
                 VideoList = LoadVideos(Application.StartupPath & "\videos.xml")
-                File.Delete(Application.StartupPath & "\videos.xml.old")
+            End Try
+            ListView2.Items.Clear()
+            Dim thumbnailList As ImageList = New ImageList()
+            thumbnailList.ImageSize = New Size(160, 90)
+            thumbnailList.ColorDepth = ColorDepth.Depth32Bit
+            ListView2.View = View.LargeIcon
+            ListView2.LargeImageList = thumbnailList
+            If VideoList IsNot Nothing Then
+                If VideoList.Count > 0 Then
+                    For Each VideoLink As Video In VideoList
+                        Dim thumbnail As Image = GetItemThumbnail(VideoLink.YT_ID)
+                        If thumbnail IsNot Nothing Then
+                            Dim newThumb As Image = CombineImages(thumbnail)
+                            thumbnailList.Images.Add(newThumb)
+                        End If
+                        Dim listItem As ListViewItem = New ListViewItem()
+                        listItem.ImageIndex = VideoList.IndexOf(VideoLink)
+                        listItem.Text = VideoLink.VideoName
+                        ListView2.Items.Add(listItem)
+                    Next
+                Else
+                    Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
+                End If
+            Else
+                Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
             End If
+            VideosPanel.Visible = True
+            VideoErrorPanel.Visible = False
         Catch ex As Exception
-            If File.Exists(Application.StartupPath & "\videos.xml.old") Then File.Move(Application.StartupPath & "\videos.xml.old", Application.StartupPath & "\videos.xml")
-            VideoList = LoadVideos(Application.StartupPath & "\videos.xml")
+            VideosPanel.Visible = False
+            VideoErrorPanel.Visible = True
+            TextBox2.Text = ex.ToString() & " - " & ex.Message
         End Try
-        ListView2.Items.Clear()
-        Dim thumbnailList As ImageList = New ImageList()
-        thumbnailList.ImageSize = New Size(160, 90)
-        thumbnailList.ColorDepth = ColorDepth.Depth32Bit
-        ListView2.View = View.LargeIcon
-        ListView2.LargeImageList = thumbnailList
-        If VideoList IsNot Nothing Then
-            If VideoList.Count > 0 Then
-                For Each VideoLink As Video In VideoList
-                    Dim thumbnail As Image = GetItemThumbnail(VideoLink.YT_ID)
-                    If thumbnail IsNot Nothing Then
-                        Dim newThumb As Image = CombineImages(thumbnail)
-                        thumbnailList.Images.Add(newThumb)
-                    End If
-                    Dim listItem As ListViewItem = New ListViewItem()
-                    listItem.ImageIndex = VideoList.IndexOf(VideoLink)
-                    listItem.Text = VideoLink.VideoName
-                    ListView2.Items.Add(listItem)
-                Next
-            End If
-        End If
     End Sub
 
     Function GetItemThumbnail(videoId As String) As Image
@@ -5383,6 +5399,8 @@ Public Class MainForm
         RecentsLV.BackColor = SidePanel.BackColor
         TextBox1.BackColor = BackColor
         TextBox1.ForeColor = ForeColor
+        TextBox2.BackColor = BackColor
+        TextBox2.ForeColor = ForeColor
         ' New project view header and side panel tints
         If BackColor = Color.FromArgb(48, 48, 48) Then
             ProjectViewHeader.BackColor = Color.FromArgb(32, 90, 25)
@@ -17372,5 +17390,61 @@ Public Class MainForm
 
     Private Sub AppendImage_Click(sender As Object, e As EventArgs) Handles AppendImage.Click
         ImgAppend.ShowDialog()
+    End Sub
+
+    Private Sub Button17_Click(sender As Object, e As EventArgs) Handles Button17.Click
+        Try
+            Dim videoEx As Exception = New Exception()
+            If File.Exists(Application.StartupPath & "\videos.xml") Then File.Move(Application.StartupPath & "\videos.xml", Application.StartupPath & "\videos.xml.old")
+            Using client As New WebClient()
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                Try
+                    client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/dt_videos/main/videos.xml", Application.StartupPath & "\videos.xml")
+                Catch ex As Exception
+                    videoEx = ex
+                    Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
+                    Debug.WriteLine("Could not download video list")
+                End Try
+            End Using
+            Try
+                If File.Exists(Application.StartupPath & "\videos.xml") Then
+                    VideoList = LoadVideos(Application.StartupPath & "\videos.xml")
+                    File.Delete(Application.StartupPath & "\videos.xml.old")
+                End If
+            Catch ex As Exception
+                videoEx = ex
+                If File.Exists(Application.StartupPath & "\videos.xml.old") Then File.Move(Application.StartupPath & "\videos.xml.old", Application.StartupPath & "\videos.xml")
+                VideoList = LoadVideos(Application.StartupPath & "\videos.xml")
+            End Try
+            ListView2.Items.Clear()
+            Dim thumbnailList As ImageList = New ImageList()
+            thumbnailList.ImageSize = New Size(160, 90)
+            thumbnailList.ColorDepth = ColorDepth.Depth32Bit
+            ListView2.View = View.LargeIcon
+            ListView2.LargeImageList = thumbnailList
+            If VideoList IsNot Nothing Then
+                If VideoList.Count > 0 Then
+                    For Each VideoLink As Video In VideoList
+                        Dim thumbnail As Image = GetItemThumbnail(VideoLink.YT_ID)
+                        If thumbnail IsNot Nothing Then
+                            Dim newThumb As Image = CombineImages(thumbnail)
+                            thumbnailList.Images.Add(newThumb)
+                        End If
+                        Dim listItem As ListViewItem = New ListViewItem()
+                        listItem.ImageIndex = VideoList.IndexOf(VideoLink)
+                        listItem.Text = VideoLink.VideoName
+                        ListView2.Items.Add(listItem)
+                    Next
+                End If
+            ElseIf VideoList Is Nothing OrElse VideoList.Count = 0 Then
+                Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
+            End If
+            VideosPanel.Visible = True
+            VideoErrorPanel.Visible = False
+        Catch ex As Exception
+            VideosPanel.Visible = False
+            VideoErrorPanel.Visible = True
+            TextBox2.Text = ex.ToString() & " - " & ex.Message
+        End Try
     End Sub
 End Class
