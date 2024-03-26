@@ -429,6 +429,42 @@ Public Class MainForm
             recentProject.Order = RecentList.IndexOf(recentProject)
             RecentsLV.Items.Add(If(recentProject.ProjName <> "", recentProject.ProjName, Path.GetFileNameWithoutExtension(recentProject.ProjPath)))
         Next
+        Try
+            RecentProject1ToolStripMenuItem.Text = " "
+            RecentProject2ToolStripMenuItem.Text = " "
+            RecentProject3ToolStripMenuItem.Text = " "
+            RecentProject4ToolStripMenuItem.Text = " "
+            RecentProject5ToolStripMenuItem.Text = " "
+            RecentProject6ToolStripMenuItem.Text = " "
+            RecentProject7ToolStripMenuItem.Text = " "
+            RecentProject8ToolStripMenuItem.Text = " "
+            RecentProject9ToolStripMenuItem.Text = " "
+            RecentProject10ToolStripMenuItem.Text = " "
+
+            ' Reconfigure text
+            RecentProject1ToolStripMenuItem.Text = RecentList(0).ProjPath
+            RecentProject1ToolStripMenuItem.Visible = True
+            RecentProject2ToolStripMenuItem.Text = RecentList(1).ProjPath
+            RecentProject2ToolStripMenuItem.Visible = True
+            RecentProject3ToolStripMenuItem.Text = RecentList(2).ProjPath
+            RecentProject3ToolStripMenuItem.Visible = True
+            RecentProject4ToolStripMenuItem.Text = RecentList(3).ProjPath
+            RecentProject4ToolStripMenuItem.Visible = True
+            RecentProject5ToolStripMenuItem.Text = RecentList(4).ProjPath
+            RecentProject5ToolStripMenuItem.Visible = True
+            RecentProject6ToolStripMenuItem.Text = RecentList(5).ProjPath
+            RecentProject6ToolStripMenuItem.Visible = True
+            RecentProject7ToolStripMenuItem.Text = RecentList(6).ProjPath
+            RecentProject7ToolStripMenuItem.Visible = True
+            RecentProject8ToolStripMenuItem.Text = RecentList(7).ProjPath
+            RecentProject8ToolStripMenuItem.Visible = True
+            RecentProject9ToolStripMenuItem.Text = RecentList(8).ProjPath
+            RecentProject9ToolStripMenuItem.Visible = True
+            RecentProject10ToolStripMenuItem.Text = RecentList(9).ProjPath
+            RecentProject10ToolStripMenuItem.Visible = True
+        Catch ex As Exception
+            ' Don't do anything special here
+        End Try
     End Sub
 
     Function LoadVideos(filePath As String) As List(Of Video)
@@ -573,6 +609,42 @@ Public Class MainForm
                         RecentsLV.Items.Add(If(Project.ProjName <> "", Project.ProjName, _
                                                                        Path.GetFileNameWithoutExtension(Project.ProjPath)))
                     Next
+                    Try
+                        RecentProject1ToolStripMenuItem.Text = " "
+                        RecentProject2ToolStripMenuItem.Text = " "
+                        RecentProject3ToolStripMenuItem.Text = " "
+                        RecentProject4ToolStripMenuItem.Text = " "
+                        RecentProject5ToolStripMenuItem.Text = " "
+                        RecentProject6ToolStripMenuItem.Text = " "
+                        RecentProject7ToolStripMenuItem.Text = " "
+                        RecentProject8ToolStripMenuItem.Text = " "
+                        RecentProject9ToolStripMenuItem.Text = " "
+                        RecentProject10ToolStripMenuItem.Text = " "
+
+                        ' Reconfigure text
+                        RecentProject1ToolStripMenuItem.Text = RecentList(0).ProjPath
+                        RecentProject1ToolStripMenuItem.Visible = True
+                        RecentProject2ToolStripMenuItem.Text = RecentList(1).ProjPath
+                        RecentProject2ToolStripMenuItem.Visible = True
+                        RecentProject3ToolStripMenuItem.Text = RecentList(2).ProjPath
+                        RecentProject3ToolStripMenuItem.Visible = True
+                        RecentProject4ToolStripMenuItem.Text = RecentList(3).ProjPath
+                        RecentProject4ToolStripMenuItem.Visible = True
+                        RecentProject5ToolStripMenuItem.Text = RecentList(4).ProjPath
+                        RecentProject5ToolStripMenuItem.Visible = True
+                        RecentProject6ToolStripMenuItem.Text = RecentList(5).ProjPath
+                        RecentProject6ToolStripMenuItem.Visible = True
+                        RecentProject7ToolStripMenuItem.Text = RecentList(6).ProjPath
+                        RecentProject7ToolStripMenuItem.Visible = True
+                        RecentProject8ToolStripMenuItem.Text = RecentList(7).ProjPath
+                        RecentProject8ToolStripMenuItem.Visible = True
+                        RecentProject9ToolStripMenuItem.Text = RecentList(8).ProjPath
+                        RecentProject9ToolStripMenuItem.Visible = True
+                        RecentProject10ToolStripMenuItem.Text = RecentList(9).ProjPath
+                        RecentProject10ToolStripMenuItem.Visible = True
+                    Catch ex As Exception
+                        ' Don't do anything special here
+                    End Try
                 End If
             End If
         End If
@@ -5441,6 +5513,17 @@ Public Class MainForm
                 StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
         End Select
         StatusStrip.ForeColor = Color.White
+        ' Set foreground color on the recent list in File menu
+        Dim recItems = RecentProjectsListMenu.DropDownItems
+        Dim remItems As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(recItems)
+        Try
+            For Each dropDownItem As ToolStripDropDownItem In remItems
+                dropDownItem.BackColor = RecentProjectsListMenu.BackColor
+                dropDownItem.ForeColor = RecentProjectsListMenu.ForeColor
+            Next
+        Catch ex As Exception
+
+        End Try
     End Sub
 
     Sub ChangeLangs(LangCode As Integer)
@@ -5461,6 +5544,7 @@ Public Class MainForm
                         OpenExistingProjectToolStripMenuItem.Text = "&Open existing project"
                         ManageOnlineInstallationToolStripMenuItem.Text = "&Manage online installation"
                         ManageOfflineInstallationToolStripMenuItem.Text = "Manage o&ffline installation..."
+                        RecentProjectsListMenu.Text = "Recent projects"
                         SaveProjectToolStripMenuItem.Text = "&Save project..."
                         SaveProjectasToolStripMenuItem.Text = "Save project &as..."
                         ExitToolStripMenuItem.Text = "E&xit"
@@ -5829,6 +5913,7 @@ Public Class MainForm
                         OpenExistingProjectToolStripMenuItem.Text = "&Abrir proyecto existente"
                         ManageOnlineInstallationToolStripMenuItem.Text = "Administrar &instalación activa"
                         ManageOfflineInstallationToolStripMenuItem.Text = "Administrar instalación &fuera de línea..."
+                        RecentProjectsListMenu.Text = "Proyectos recientes"
                         SaveProjectToolStripMenuItem.Text = "&Guardar proyecto..."
                         SaveProjectasToolStripMenuItem.Text = "Guardar proyecto &como..."
                         ExitToolStripMenuItem.Text = "Sa&lir"
@@ -6197,6 +6282,7 @@ Public Class MainForm
                         OpenExistingProjectToolStripMenuItem.Text = "&Ouvrir un projet existant"
                         ManageOnlineInstallationToolStripMenuItem.Text = "&Gérer l'installation en ligne"
                         ManageOfflineInstallationToolStripMenuItem.Text = "Gérer l'installation &hors ligne..."
+                        RecentProjectsListMenu.Text = "Projets récents"
                         SaveProjectToolStripMenuItem.Text = "&Sauvegarder le projet..."
                         SaveProjectasToolStripMenuItem.Text = "Sauvegarder le projet so&us..."
                         ExitToolStripMenuItem.Text = "Sor&tir"
@@ -6565,6 +6651,7 @@ Public Class MainForm
                         OpenExistingProjectToolStripMenuItem.Text = "&Abrir projeto existente"
                         ManageOnlineInstallationToolStripMenuItem.Text = "&Gerir a instalação em linha"
                         ManageOfflineInstallationToolStripMenuItem.Text = "Gerir a instalação o&ffline..."
+                        RecentProjectsListMenu.Text = "Projectos recentes"
                         SaveProjectToolStripMenuItem.Text = "&Guardar projeto..."
                         SaveProjectasToolStripMenuItem.Text = "Save project &como..."
                         ExitToolStripMenuItem.Text = "Sa&ir"
@@ -6937,6 +7024,7 @@ Public Class MainForm
                 OpenExistingProjectToolStripMenuItem.Text = "&Open existing project"
                 ManageOnlineInstallationToolStripMenuItem.Text = "&Manage online installation"
                 ManageOfflineInstallationToolStripMenuItem.Text = "Manage o&ffline installation..."
+                RecentProjectsListMenu.Text = "Recent projects"
                 SaveProjectToolStripMenuItem.Text = "&Save project..."
                 SaveProjectasToolStripMenuItem.Text = "Save project &as..."
                 ExitToolStripMenuItem.Text = "E&xit"
@@ -7305,6 +7393,7 @@ Public Class MainForm
                 OpenExistingProjectToolStripMenuItem.Text = "&Abrir proyecto existente"
                 ManageOnlineInstallationToolStripMenuItem.Text = "Administrar &instalación activa"
                 ManageOfflineInstallationToolStripMenuItem.Text = "Administrar instalación &fuera de línea..."
+                RecentProjectsListMenu.Text = "Proyectos recientes"
                 SaveProjectToolStripMenuItem.Text = "&Guardar proyecto..."
                 SaveProjectasToolStripMenuItem.Text = "Guardar proyecto &como..."
                 ExitToolStripMenuItem.Text = "Sa&lir"
@@ -7672,6 +7761,7 @@ Public Class MainForm
                 OpenExistingProjectToolStripMenuItem.Text = "&Ouvrir un projet existant"
                 ManageOnlineInstallationToolStripMenuItem.Text = "&Gérer l'installation en ligne"
                 ManageOfflineInstallationToolStripMenuItem.Text = "Gérer l'installation &hors ligne..."
+                RecentProjectsListMenu.Text = "Projets récents"
                 SaveProjectToolStripMenuItem.Text = "&Sauvegarder le projet..."
                 SaveProjectasToolStripMenuItem.Text = "Sauvegarder le projet so&us..."
                 ExitToolStripMenuItem.Text = "Sor&tir"
@@ -8040,6 +8130,7 @@ Public Class MainForm
                 OpenExistingProjectToolStripMenuItem.Text = "&Abrir projeto existente"
                 ManageOnlineInstallationToolStripMenuItem.Text = "&Gerir a instalação em linha"
                 ManageOfflineInstallationToolStripMenuItem.Text = "Gerir a instalação o&ffline..."
+                RecentProjectsListMenu.Text = "Projectos recentes"
                 SaveProjectToolStripMenuItem.Text = "&Guardar projeto..."
                 SaveProjectasToolStripMenuItem.Text = "Save project &como..."
                 ExitToolStripMenuItem.Text = "Sa&ir"
@@ -11424,7 +11515,43 @@ Public Class MainForm
                             RecentsLV.Items.Add(If(recentProject.ProjName <> "", recentProject.ProjName, Path.GetFileNameWithoutExtension(recentProject.ProjPath)))
                         Next
                     End If
-                End If
+                    Try
+                        RecentProject1ToolStripMenuItem.Text = " "
+                        RecentProject2ToolStripMenuItem.Text = " "
+                        RecentProject3ToolStripMenuItem.Text = " "
+                        RecentProject4ToolStripMenuItem.Text = " "
+                        RecentProject5ToolStripMenuItem.Text = " "
+                        RecentProject6ToolStripMenuItem.Text = " "
+                        RecentProject7ToolStripMenuItem.Text = " "
+                        RecentProject8ToolStripMenuItem.Text = " "
+                        RecentProject9ToolStripMenuItem.Text = " "
+                        RecentProject10ToolStripMenuItem.Text = " "
+
+                        ' Reconfigure text
+                        RecentProject1ToolStripMenuItem.Text = RecentList(0).ProjPath
+                        RecentProject1ToolStripMenuItem.Visible = True
+                        RecentProject2ToolStripMenuItem.Text = RecentList(1).ProjPath
+                        RecentProject2ToolStripMenuItem.Visible = True
+                        RecentProject3ToolStripMenuItem.Text = RecentList(2).ProjPath
+                        RecentProject3ToolStripMenuItem.Visible = True
+                        RecentProject4ToolStripMenuItem.Text = RecentList(3).ProjPath
+                        RecentProject4ToolStripMenuItem.Visible = True
+                        RecentProject5ToolStripMenuItem.Text = RecentList(4).ProjPath
+                        RecentProject5ToolStripMenuItem.Visible = True
+                        RecentProject6ToolStripMenuItem.Text = RecentList(5).ProjPath
+                        RecentProject6ToolStripMenuItem.Visible = True
+                        RecentProject7ToolStripMenuItem.Text = RecentList(6).ProjPath
+                        RecentProject7ToolStripMenuItem.Visible = True
+                        RecentProject8ToolStripMenuItem.Text = RecentList(7).ProjPath
+                        RecentProject8ToolStripMenuItem.Visible = True
+                        RecentProject9ToolStripMenuItem.Text = RecentList(8).ProjPath
+                        RecentProject9ToolStripMenuItem.Visible = True
+                        RecentProject10ToolStripMenuItem.Text = RecentList(9).ProjPath
+                        RecentProject10ToolStripMenuItem.Visible = True
+                    Catch ex As Exception
+                        ' Don't do anything special here
+                    End Try
+            End If
                 ProgressPanel.OperationNum = 990
                 LoadDTProj(OpenFileDialog1.FileName, Path.GetFileNameWithoutExtension(OpenFileDialog1.FileName), False, False)
             End If
@@ -13433,6 +13560,42 @@ Public Class MainForm
                             RecentsLV.Items.Add(If(recentProject.ProjName <> "", recentProject.ProjName, Path.GetFileNameWithoutExtension(recentProject.ProjPath)))
                         Next
                     End If
+                    Try
+                        RecentProject1ToolStripMenuItem.Text = " "
+                        RecentProject2ToolStripMenuItem.Text = " "
+                        RecentProject3ToolStripMenuItem.Text = " "
+                        RecentProject4ToolStripMenuItem.Text = " "
+                        RecentProject5ToolStripMenuItem.Text = " "
+                        RecentProject6ToolStripMenuItem.Text = " "
+                        RecentProject7ToolStripMenuItem.Text = " "
+                        RecentProject8ToolStripMenuItem.Text = " "
+                        RecentProject9ToolStripMenuItem.Text = " "
+                        RecentProject10ToolStripMenuItem.Text = " "
+
+                        ' Reconfigure text
+                        RecentProject1ToolStripMenuItem.Text = RecentList(0).ProjPath
+                        RecentProject1ToolStripMenuItem.Visible = True
+                        RecentProject2ToolStripMenuItem.Text = RecentList(1).ProjPath
+                        RecentProject2ToolStripMenuItem.Visible = True
+                        RecentProject3ToolStripMenuItem.Text = RecentList(2).ProjPath
+                        RecentProject3ToolStripMenuItem.Visible = True
+                        RecentProject4ToolStripMenuItem.Text = RecentList(3).ProjPath
+                        RecentProject4ToolStripMenuItem.Visible = True
+                        RecentProject5ToolStripMenuItem.Text = RecentList(4).ProjPath
+                        RecentProject5ToolStripMenuItem.Visible = True
+                        RecentProject6ToolStripMenuItem.Text = RecentList(5).ProjPath
+                        RecentProject6ToolStripMenuItem.Visible = True
+                        RecentProject7ToolStripMenuItem.Text = RecentList(6).ProjPath
+                        RecentProject7ToolStripMenuItem.Visible = True
+                        RecentProject8ToolStripMenuItem.Text = RecentList(7).ProjPath
+                        RecentProject8ToolStripMenuItem.Visible = True
+                        RecentProject9ToolStripMenuItem.Text = RecentList(8).ProjPath
+                        RecentProject9ToolStripMenuItem.Visible = True
+                        RecentProject10ToolStripMenuItem.Text = RecentList(9).ProjPath
+                        RecentProject10ToolStripMenuItem.Visible = True
+                    Catch ex As Exception
+                        ' Don't do anything special here
+                    End Try
                 End If
                 ProgressPanel.OperationNum = 990
                 LoadDTProj(OpenFileDialog1.FileName, Path.GetFileNameWithoutExtension(OpenFileDialog1.FileName), False, False)
@@ -17311,6 +17474,42 @@ Public Class MainForm
                            True, False)
             End If
             RecentRemoveLink.Visible = False
+            Try
+                RecentProject1ToolStripMenuItem.Text = " "
+                RecentProject2ToolStripMenuItem.Text = " "
+                RecentProject3ToolStripMenuItem.Text = " "
+                RecentProject4ToolStripMenuItem.Text = " "
+                RecentProject5ToolStripMenuItem.Text = " "
+                RecentProject6ToolStripMenuItem.Text = " "
+                RecentProject7ToolStripMenuItem.Text = " "
+                RecentProject8ToolStripMenuItem.Text = " "
+                RecentProject9ToolStripMenuItem.Text = " "
+                RecentProject10ToolStripMenuItem.Text = " "
+
+                ' Reconfigure text
+                RecentProject1ToolStripMenuItem.Text = RecentList(0).ProjPath
+                RecentProject1ToolStripMenuItem.Visible = True
+                RecentProject2ToolStripMenuItem.Text = RecentList(1).ProjPath
+                RecentProject2ToolStripMenuItem.Visible = True
+                RecentProject3ToolStripMenuItem.Text = RecentList(2).ProjPath
+                RecentProject3ToolStripMenuItem.Visible = True
+                RecentProject4ToolStripMenuItem.Text = RecentList(3).ProjPath
+                RecentProject4ToolStripMenuItem.Visible = True
+                RecentProject5ToolStripMenuItem.Text = RecentList(4).ProjPath
+                RecentProject5ToolStripMenuItem.Visible = True
+                RecentProject6ToolStripMenuItem.Text = RecentList(5).ProjPath
+                RecentProject6ToolStripMenuItem.Visible = True
+                RecentProject7ToolStripMenuItem.Text = RecentList(6).ProjPath
+                RecentProject7ToolStripMenuItem.Visible = True
+                RecentProject8ToolStripMenuItem.Text = RecentList(7).ProjPath
+                RecentProject8ToolStripMenuItem.Visible = True
+                RecentProject9ToolStripMenuItem.Text = RecentList(8).ProjPath
+                RecentProject9ToolStripMenuItem.Visible = True
+                RecentProject10ToolStripMenuItem.Text = RecentList(9).ProjPath
+                RecentProject10ToolStripMenuItem.Visible = True
+            Catch ex As Exception
+                ' Don't do anything special here
+            End Try
         End If
     End Sub
 
@@ -17328,6 +17527,55 @@ Public Class MainForm
             RecentsLV.Items.Add(If(recentProject.ProjName <> "", recentProject.ProjName, Path.GetFileNameWithoutExtension(recentProject.ProjPath)))
         Next
         RecentRemoveLink.Visible = False
+        Try
+            RecentProject1ToolStripMenuItem.Text = " "
+            RecentProject2ToolStripMenuItem.Text = " "
+            RecentProject3ToolStripMenuItem.Text = " "
+            RecentProject4ToolStripMenuItem.Text = " "
+            RecentProject5ToolStripMenuItem.Text = " "
+            RecentProject6ToolStripMenuItem.Text = " "
+            RecentProject7ToolStripMenuItem.Text = " "
+            RecentProject8ToolStripMenuItem.Text = " "
+            RecentProject9ToolStripMenuItem.Text = " "
+            RecentProject10ToolStripMenuItem.Text = " "
+
+            ' Reconfigure text
+            RecentProject1ToolStripMenuItem.Text = RecentList(0).ProjPath
+            RecentProject1ToolStripMenuItem.Visible = True
+            RecentProject2ToolStripMenuItem.Text = RecentList(1).ProjPath
+            RecentProject2ToolStripMenuItem.Visible = True
+            RecentProject3ToolStripMenuItem.Text = RecentList(2).ProjPath
+            RecentProject3ToolStripMenuItem.Visible = True
+            RecentProject4ToolStripMenuItem.Text = RecentList(3).ProjPath
+            RecentProject4ToolStripMenuItem.Visible = True
+            RecentProject5ToolStripMenuItem.Text = RecentList(4).ProjPath
+            RecentProject5ToolStripMenuItem.Visible = True
+            RecentProject6ToolStripMenuItem.Text = RecentList(5).ProjPath
+            RecentProject6ToolStripMenuItem.Visible = True
+            RecentProject7ToolStripMenuItem.Text = RecentList(6).ProjPath
+            RecentProject7ToolStripMenuItem.Visible = True
+            RecentProject8ToolStripMenuItem.Text = RecentList(7).ProjPath
+            RecentProject8ToolStripMenuItem.Visible = True
+            RecentProject9ToolStripMenuItem.Text = RecentList(8).ProjPath
+            RecentProject9ToolStripMenuItem.Visible = True
+            RecentProject10ToolStripMenuItem.Text = RecentList(9).ProjPath
+            RecentProject10ToolStripMenuItem.Visible = True
+        Catch ex As Exception
+            ' Don't do anything special here
+        End Try
+
+        ' An empty item will appear at the end. Make it hidden
+        Dim recItems = RecentProjectsListMenu.DropDownItems
+        Dim remItems As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(recItems)
+        Try
+            For Each dropDownItem As ToolStripDropDownItem In remItems
+                If dropDownItem.Text = " " Then
+                    dropDownItem.Visible = False
+                End If
+            Next
+        Catch ex As Exception
+
+        End Try
     End Sub
 
     Private Sub ExportImage_Click(sender As Object, e As EventArgs) Handles ExportImage.Click
@@ -17446,5 +17694,99 @@ Public Class MainForm
             VideoErrorPanel.Visible = True
             TextBox2.Text = ex.ToString() & " - " & ex.Message
         End Try
+    End Sub
+
+    Sub LoadRecentsFromMenu(itemOrder As Integer)
+        Dim itmOrder As Integer = 0
+        If RecentList(itemOrder).ProjPath <> "" And File.Exists(RecentList(itemOrder).ProjPath) Then
+            If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement Or OfflineManagement, False, True), False)
+            If ImgBW.IsBusy Then Exit Sub
+            itmOrder = itemOrder
+            Dim recentProj As Recents = RecentList(itmOrder)
+            ChangeRecentListOrder(recentProj, itmOrder)
+            ProgressPanel.OperationNum = 990
+            LoadDTProj(recentProj.ProjPath, _
+                       If(recentProj.ProjName <> "", _
+                          recentProj.ProjName, _
+                          Path.GetFileNameWithoutExtension(recentProj.ProjPath)), _
+                       True, False)
+        End If
+        RecentRemoveLink.Visible = False
+        Try
+            RecentProject1ToolStripMenuItem.Text = " "
+            RecentProject2ToolStripMenuItem.Text = " "
+            RecentProject3ToolStripMenuItem.Text = " "
+            RecentProject4ToolStripMenuItem.Text = " "
+            RecentProject5ToolStripMenuItem.Text = " "
+            RecentProject6ToolStripMenuItem.Text = " "
+            RecentProject7ToolStripMenuItem.Text = " "
+            RecentProject8ToolStripMenuItem.Text = " "
+            RecentProject9ToolStripMenuItem.Text = " "
+            RecentProject10ToolStripMenuItem.Text = " "
+
+            ' Reconfigure text
+            RecentProject1ToolStripMenuItem.Text = RecentList(0).ProjPath
+            RecentProject1ToolStripMenuItem.Visible = True
+            RecentProject2ToolStripMenuItem.Text = RecentList(1).ProjPath
+            RecentProject2ToolStripMenuItem.Visible = True
+            RecentProject3ToolStripMenuItem.Text = RecentList(2).ProjPath
+            RecentProject3ToolStripMenuItem.Visible = True
+            RecentProject4ToolStripMenuItem.Text = RecentList(3).ProjPath
+            RecentProject4ToolStripMenuItem.Visible = True
+            RecentProject5ToolStripMenuItem.Text = RecentList(4).ProjPath
+            RecentProject5ToolStripMenuItem.Visible = True
+            RecentProject6ToolStripMenuItem.Text = RecentList(5).ProjPath
+            RecentProject6ToolStripMenuItem.Visible = True
+            RecentProject7ToolStripMenuItem.Text = RecentList(6).ProjPath
+            RecentProject7ToolStripMenuItem.Visible = True
+            RecentProject8ToolStripMenuItem.Text = RecentList(7).ProjPath
+            RecentProject8ToolStripMenuItem.Visible = True
+            RecentProject9ToolStripMenuItem.Text = RecentList(8).ProjPath
+            RecentProject9ToolStripMenuItem.Visible = True
+            RecentProject10ToolStripMenuItem.Text = RecentList(9).ProjPath
+            RecentProject10ToolStripMenuItem.Visible = True
+        Catch ex As Exception
+            ' Don't do anything special here
+        End Try
+    End Sub
+
+    Private Sub RecentProject10ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject10ToolStripMenuItem.Click
+        LoadRecentsFromMenu(9)
+    End Sub
+
+    Private Sub RecentProject9ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject9ToolStripMenuItem.Click
+        LoadRecentsFromMenu(8)
+    End Sub
+
+    Private Sub RecentProject8ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject8ToolStripMenuItem.Click
+        LoadRecentsFromMenu(7)
+    End Sub
+
+    Private Sub RecentProject7ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject7ToolStripMenuItem.Click
+        LoadRecentsFromMenu(6)
+    End Sub
+
+    Private Sub RecentProject6ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject6ToolStripMenuItem.Click
+        LoadRecentsFromMenu(5)
+    End Sub
+
+    Private Sub RecentProject5ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject5ToolStripMenuItem.Click
+        LoadRecentsFromMenu(4)
+    End Sub
+
+    Private Sub RecentProject4ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject4ToolStripMenuItem.Click
+        LoadRecentsFromMenu(3)
+    End Sub
+
+    Private Sub RecentProject3ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject3ToolStripMenuItem.Click
+        LoadRecentsFromMenu(2)
+    End Sub
+
+    Private Sub RecentProject2ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject2ToolStripMenuItem.Click
+        LoadRecentsFromMenu(1)
+    End Sub
+
+    Private Sub RecentProject1ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject1ToolStripMenuItem.Click
+        LoadRecentsFromMenu(0)
     End Sub
 End Class

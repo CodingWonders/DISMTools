@@ -31,6 +31,18 @@ Partial Class MainForm
         Me.ToolStripSeparator26 = New System.Windows.Forms.ToolStripSeparator()
         Me.ManageOnlineInstallationToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ManageOfflineInstallationToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator37 = New System.Windows.Forms.ToolStripSeparator()
+        Me.RecentProjectsListMenu = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RecentProject1ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RecentProject2ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RecentProject3ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RecentProject4ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RecentProject5ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RecentProject6ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RecentProject7ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RecentProject8ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RecentProject9ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RecentProject10ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.SaveProjectToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SaveProjectasToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -619,7 +631,7 @@ Partial Class MainForm
         '
         'FileToolStripMenuItem
         '
-        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewProjectToolStripMenuItem, Me.OpenExistingProjectToolStripMenuItem, Me.ToolStripSeparator26, Me.ManageOnlineInstallationToolStripMenuItem, Me.ManageOfflineInstallationToolStripMenuItem, Me.ToolStripSeparator1, Me.SaveProjectToolStripMenuItem, Me.SaveProjectasToolStripMenuItem, Me.ToolStripSeparator2, Me.ExitToolStripMenuItem})
+        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewProjectToolStripMenuItem, Me.OpenExistingProjectToolStripMenuItem, Me.ToolStripSeparator26, Me.ManageOnlineInstallationToolStripMenuItem, Me.ManageOfflineInstallationToolStripMenuItem, Me.ToolStripSeparator37, Me.RecentProjectsListMenu, Me.ToolStripSeparator1, Me.SaveProjectToolStripMenuItem, Me.SaveProjectasToolStripMenuItem, Me.ToolStripSeparator2, Me.ExitToolStripMenuItem})
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
         Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
         Me.FileToolStripMenuItem.Text = "&File"
@@ -652,6 +664,88 @@ Partial Class MainForm
         Me.ManageOfflineInstallationToolStripMenuItem.Name = "ManageOfflineInstallationToolStripMenuItem"
         Me.ManageOfflineInstallationToolStripMenuItem.Size = New System.Drawing.Size(224, 22)
         Me.ManageOfflineInstallationToolStripMenuItem.Text = "Manage o&ffline installation..."
+        '
+        'ToolStripSeparator37
+        '
+        Me.ToolStripSeparator37.Name = "ToolStripSeparator37"
+        Me.ToolStripSeparator37.Size = New System.Drawing.Size(221, 6)
+        '
+        'RecentProjectsListMenu
+        '
+        Me.RecentProjectsListMenu.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RecentProject1ToolStripMenuItem, Me.RecentProject2ToolStripMenuItem, Me.RecentProject3ToolStripMenuItem, Me.RecentProject4ToolStripMenuItem, Me.RecentProject5ToolStripMenuItem, Me.RecentProject6ToolStripMenuItem, Me.RecentProject7ToolStripMenuItem, Me.RecentProject8ToolStripMenuItem, Me.RecentProject9ToolStripMenuItem, Me.RecentProject10ToolStripMenuItem})
+        Me.RecentProjectsListMenu.Name = "RecentProjectsListMenu"
+        Me.RecentProjectsListMenu.Size = New System.Drawing.Size(224, 22)
+        Me.RecentProjectsListMenu.Text = "Recent projects"
+        '
+        'RecentProject1ToolStripMenuItem
+        '
+        Me.RecentProject1ToolStripMenuItem.Name = "RecentProject1ToolStripMenuItem"
+        Me.RecentProject1ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D1), System.Windows.Forms.Keys)
+        Me.RecentProject1ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RecentProject1ToolStripMenuItem.Visible = False
+        '
+        'RecentProject2ToolStripMenuItem
+        '
+        Me.RecentProject2ToolStripMenuItem.Name = "RecentProject2ToolStripMenuItem"
+        Me.RecentProject2ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D2), System.Windows.Forms.Keys)
+        Me.RecentProject2ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RecentProject2ToolStripMenuItem.Visible = False
+        '
+        'RecentProject3ToolStripMenuItem
+        '
+        Me.RecentProject3ToolStripMenuItem.Name = "RecentProject3ToolStripMenuItem"
+        Me.RecentProject3ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D3), System.Windows.Forms.Keys)
+        Me.RecentProject3ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RecentProject3ToolStripMenuItem.Visible = False
+        '
+        'RecentProject4ToolStripMenuItem
+        '
+        Me.RecentProject4ToolStripMenuItem.Name = "RecentProject4ToolStripMenuItem"
+        Me.RecentProject4ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D4), System.Windows.Forms.Keys)
+        Me.RecentProject4ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RecentProject4ToolStripMenuItem.Visible = False
+        '
+        'RecentProject5ToolStripMenuItem
+        '
+        Me.RecentProject5ToolStripMenuItem.Name = "RecentProject5ToolStripMenuItem"
+        Me.RecentProject5ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D5), System.Windows.Forms.Keys)
+        Me.RecentProject5ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RecentProject5ToolStripMenuItem.Visible = False
+        '
+        'RecentProject6ToolStripMenuItem
+        '
+        Me.RecentProject6ToolStripMenuItem.Name = "RecentProject6ToolStripMenuItem"
+        Me.RecentProject6ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D6), System.Windows.Forms.Keys)
+        Me.RecentProject6ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RecentProject6ToolStripMenuItem.Visible = False
+        '
+        'RecentProject7ToolStripMenuItem
+        '
+        Me.RecentProject7ToolStripMenuItem.Name = "RecentProject7ToolStripMenuItem"
+        Me.RecentProject7ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D7), System.Windows.Forms.Keys)
+        Me.RecentProject7ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RecentProject7ToolStripMenuItem.Visible = False
+        '
+        'RecentProject8ToolStripMenuItem
+        '
+        Me.RecentProject8ToolStripMenuItem.Name = "RecentProject8ToolStripMenuItem"
+        Me.RecentProject8ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D8), System.Windows.Forms.Keys)
+        Me.RecentProject8ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RecentProject8ToolStripMenuItem.Visible = False
+        '
+        'RecentProject9ToolStripMenuItem
+        '
+        Me.RecentProject9ToolStripMenuItem.Name = "RecentProject9ToolStripMenuItem"
+        Me.RecentProject9ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D9), System.Windows.Forms.Keys)
+        Me.RecentProject9ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RecentProject9ToolStripMenuItem.Visible = False
+        '
+        'RecentProject10ToolStripMenuItem
+        '
+        Me.RecentProject10ToolStripMenuItem.Name = "RecentProject10ToolStripMenuItem"
+        Me.RecentProject10ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D0), System.Windows.Forms.Keys)
+        Me.RecentProject10ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RecentProject10ToolStripMenuItem.Visible = False
         '
         'ToolStripSeparator1
         '
@@ -3857,7 +3951,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32.42009!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 67.57991!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 117.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 119.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -3906,7 +4000,7 @@ Partial Class MainForm
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel8.Location = New System.Drawing.Point(59, 3)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(112, 23)
+        Me.Panel8.Size = New System.Drawing.Size(110, 23)
         Me.Panel8.TabIndex = 8
         '
         'projName
@@ -3915,7 +4009,7 @@ Partial Class MainForm
         Me.projName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projName.Location = New System.Drawing.Point(0, 0)
         Me.projName.Name = "projName"
-        Me.projName.Size = New System.Drawing.Size(112, 23)
+        Me.projName.Size = New System.Drawing.Size(110, 23)
         Me.projName.TabIndex = 2
         Me.projName.Text = "projName"
         Me.projName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -3925,7 +4019,7 @@ Partial Class MainForm
         Me.projNameText.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projNameText.Location = New System.Drawing.Point(0, 0)
         Me.projNameText.Name = "projNameText"
-        Me.projNameText.Size = New System.Drawing.Size(112, 21)
+        Me.projNameText.Size = New System.Drawing.Size(110, 21)
         Me.projNameText.TabIndex = 4
         Me.projNameText.Text = "projName"
         Me.projNameText.Visible = False
@@ -5690,4 +5784,16 @@ Partial Class MainForm
     Friend WithEvents Label6 As System.Windows.Forms.Label
     Friend WithEvents Label7 As System.Windows.Forms.Label
     Friend WithEvents Label11 As System.Windows.Forms.Label
+    Friend WithEvents ToolStripSeparator37 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents RecentProjectsListMenu As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents RecentProject1ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents RecentProject2ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents RecentProject3ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents RecentProject4ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents RecentProject5ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents RecentProject6ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents RecentProject7ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents RecentProject8ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents RecentProject9ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents RecentProject10ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class
