@@ -5362,51 +5362,8 @@ Public Class MainForm
         RecentsLV.BackColor = SidePanel.BackColor
         TextBox1.BackColor = BackColor
         TextBox1.ForeColor = ForeColor
-<<<<<<< HEAD
-=======
         TextBox2.BackColor = BackColor
         TextBox2.ForeColor = ForeColor
-        ' New project view header and side panel tints
-        If BackColor = Color.FromArgb(48, 48, 48) Then
-            ProjectViewHeader.BackColor = Color.FromArgb(32, 90, 25)
-            ProjectSidePanel.BackColor = Color.FromArgb(32, 90, 25)
-            If SidePanel_ProjectView.Visible Then LinkLabel12.LinkColor = Color.FromArgb(241, 241, 241)
-            If SidePanel_ImageView.Visible Then LinkLabel13.LinkColor = Color.FromArgb(241, 241, 241)
-            PictureBox9.Image = My.Resources.info_glyph_dark
-            PictureBox10.Image = My.Resources.explorer_view_glyph_dark
-            PictureBox11.Image = My.Resources.prj_unload_glyph_dark
-            PictureBox14.Image = My.Resources.info_glyph_dark
-            PictureBox15.Image = My.Resources.openfile_dark
-        ElseIf BackColor = Color.FromArgb(239, 239, 242) Then
-            ProjectViewHeader.BackColor = Color.FromArgb(196, 229, 192)
-            ProjectSidePanel.BackColor = Color.FromArgb(196, 229, 192)
-            If SidePanel_ProjectView.Visible Then LinkLabel12.LinkColor = ForeColor
-            If SidePanel_ImageView.Visible Then LinkLabel13.LinkColor = ForeColor
-            PictureBox9.Image = My.Resources.info_glyph
-            PictureBox10.Image = My.Resources.explorer_view_glyph
-            PictureBox11.Image = My.Resources.prj_unload_glyph
-            PictureBox14.Image = My.Resources.info_glyph
-            PictureBox15.Image = My.Resources.openfile
-        End If
-        ProjectViewHeader.ForeColor = ForeColor
-        ProjectSidePanel.ForeColor = ForeColor
-        For Each LinkCtrl As LinkLabel In ImgTasks.Controls.OfType(Of LinkLabel)()
-            LinkCtrl.LinkColor = ForeColor
-        Next
-        For Each LinkCtrl As LinkLabel In PrjTasks.Controls.OfType(Of LinkLabel)()
-            LinkCtrl.LinkColor = ForeColor
-        Next
-        For Each LinkCtrl As LinkLabel In TableLayoutPanel7.Controls.OfType(Of LinkLabel)()
-            LinkCtrl.LinkColor = ForeColor
-        Next
-        Select Case ColorSchemes
-            Case 0
-                StatusStrip.BackColor = Color.FromArgb(53, 153, 41)
-            Case 1
-                StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
-        End Select
-        StatusStrip.ForeColor = Color.White
->>>>>>> afb399e (Added error handling to video functions)
     End Sub
 
     Sub ChangeLangs(LangCode As Integer)
@@ -17336,22 +17293,6 @@ Public Class MainForm
                   VideoList(ListView2.FocusedItem.Index).VideoName,
                   VideoList(ListView2.FocusedItem.Index).VideoDesc)
     End Sub
-<<<<<<< HEAD
-=======
-
-    Private Sub MainForm_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
-        ' Alt-B (Background process panel)
-        If e.KeyCode = Keys.B And e.Alt Then
-            If Not HomePanel.Visible Then
-                BackgroundProcessesButton.PerformClick()
-                Focus()
-            End If
-        End If
-    End Sub
-
-    Private Sub AppendImage_Click(sender As Object, e As EventArgs) Handles AppendImage.Click
-        ImgAppend.ShowDialog()
-    End Sub
 
     Private Sub Button17_Click(sender As Object, e As EventArgs) Handles Button17.Click
         Try
@@ -17408,5 +17349,4 @@ Public Class MainForm
             TextBox2.Text = ex.ToString() & " - " & ex.Message
         End Try
     End Sub
->>>>>>> afb399e (Added error handling to video functions)
 End Class
