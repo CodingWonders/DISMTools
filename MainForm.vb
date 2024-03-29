@@ -246,6 +246,8 @@ Public Class MainForm
 
     Public AutoCleanMounts As Boolean
 
+    Public ExpandedProgressPanel As Boolean      ' Determine whether to show the progress panel in its expanded form
+
     Dim FeedContents As New SyndicationFeed()
     Dim FeedLinks As New List(Of Uri)
     Dim FeedEx As Exception
@@ -1338,6 +1340,7 @@ Public Class MainForm
                 AllCaps = (CInt(PersKey.GetValue("AllCaps")) = 1)
                 GoToNewView = (CInt(PersKey.GetValue("NewDesign")) = 1)
                 ColorSchemes = PersKey.GetValue("ColorSchemes")
+                ExpandedProgressPanel = (CInt(PersKey.GetValue("ExpandedProgressPanel")) = 1)
                 If GoToNewView Then
                     ProjectView.Visible = True
                     SplitPanels.Visible = False
@@ -1513,6 +1516,11 @@ Public Class MainForm
                     ColorSchemes = 0
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("ColorSchemes=1") Then
                     ColorSchemes = 1
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("ExpandedProgressPanel=0") Then
+                    ExpandedProgressPanel = 0
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("ExpandedProgressPanel=1") Then
+                    ExpandedProgressPanel = 1
                 End If
                 If GoToNewView Then
                     ProjectView.Visible = True
@@ -4550,6 +4558,7 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "NewDesign=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "ColorSchemes=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "ExpandedProgressPanel=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & "{common:WinDir}\Logs\DISM\DISM.log" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=3")
@@ -4618,6 +4627,7 @@ Public Class MainForm
         PersKey.SetValue("AllCaps", 0, RegistryValueKind.DWord)
         PersKey.SetValue("NewDesign", 1, RegistryValueKind.DWord)
         PersKey.SetValue("ColorSchemes", 0, RegistryValueKind.DWord)
+        PersKey.SetValue("ExpandedProgressPanel", 1, RegistryValueKind.DWord)
         PersKey.Close()
         Dim LogKey As RegistryKey = Key.CreateSubKey("Logs")
         LogKey.SetValue("LogFile", Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\logs\DISM\DISM.log" & Quote, RegistryValueKind.ExpandString)
@@ -4734,6 +4744,11 @@ Public Class MainForm
                     Case 1
                         DTSettingForm.RichTextBox2.AppendText(CrLf & "ColorSchemes=1")
                 End Select
+                If ExpandedProgressPanel Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "ExpandedProgressPanel=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "ExpandedProgressPanel=0")
+                End If
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
                 DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & LogFile & Quote)
                 Select Case LogLevel
@@ -4890,6 +4905,7 @@ Public Class MainForm
                 PersKey.SetValue("AllCaps", If(AllCaps, 1, 0), RegistryValueKind.DWord)
                 PersKey.SetValue("NewDesign", If(GoToNewView, 1, 0), RegistryValueKind.DWord)
                 PersKey.SetValue("ColorSchemes", If(ColorSchemes = 0, 0, 1), RegistryValueKind.DWord)
+                PersKey.SetValue("ExpandedProgressPanel", If(ExpandedProgressPanel, 1, 0), RegistryValueKind.DWord)
                 PersKey.Close()
                 Dim LogKey As RegistryKey = Key.CreateSubKey("Logs")
                 LogKey.SetValue("LogFile", LogFile, RegistryValueKind.ExpandString)

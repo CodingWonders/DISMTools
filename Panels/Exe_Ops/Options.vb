@@ -195,6 +195,7 @@ Public Class Options
             Case 1
                 MainForm.StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
         End Select
+        MainForm.ExpandedProgressPanel = CheckBox7.Checked
     End Sub
 
     Sub GiveErrorExplanation(ErrorCode As Integer)
@@ -387,6 +388,7 @@ Public Class Options
                         CheckBox4.Text = "Use a scratch directory"
                         CheckBox5.Text = "Show command output in English"
                         CheckBox6.Text = "Notify me when background processes have started"
+                        CheckBox7.Text = "Show log view on the progress panel by default"
                         CheckBox8.Text = "Detect mounted images at all times"
                         CheckBox9.Text = "Use uppercase menus"
                         CheckBox10.Text = "Automatically create logs for each operation performed"
@@ -404,6 +406,7 @@ Public Class Options
                         DismOFD.Title = "Specify the DISM executable to use"
                         Label59.Text = "Log customization"
                         Label60.Text = "Set options you would like to perform when the program closes:"
+                        Label61.Text = "Preview:"
                         GroupBox5.Text = "Associations"
                         Label9.Text = "Saving image information"
                         LinkLabel1.Text = "The program will enable or disable certain features according to what the DISM version supports. How is it going to affect my usage of this program, and which features will be disabled accordingly?"
@@ -486,6 +489,7 @@ Public Class Options
                         CheckBox4.Text = "Usar un directorio temporal"
                         CheckBox5.Text = "Mostrar salida del programa en inglés"
                         CheckBox6.Text = "Notificarme cuando los procesos en segundo plano se hayan iniciado"
+                        CheckBox7.Text = "Mostrar vista de registro en el panel de progreso por defecto"
                         CheckBox8.Text = "Detectar imágenes montadas todo el tiempo"
                         CheckBox9.Text = "Usar menús en mayúscula"
                         CheckBox10.Text = "Crear registros para cada operación realizada automáticamente"
@@ -503,6 +507,7 @@ Public Class Options
                         DismOFD.Title = "Especifique el ejecutable de DISM a usar"
                         Label59.Text = "Personalización del registro"
                         Label60.Text = "Establezca las opciones que le gustaría realizar cuando el programa se cierra:"
+                        Label61.Text = "Vista previa:"
                         GroupBox5.Text = "Asociaciones"
                         Label9.Text = "Guardando información de la imagen"
                         LinkLabel1.Text = "El programa habilitará o deshabilitará algunas características atendiendo a lo que soporte la versión de DISM. ¿Cómo va a afectar esto mi uso del programa, y qué características serán deshabilitadas?"
@@ -585,6 +590,7 @@ Public Class Options
                         CheckBox4.Text = "Utiliser un répertoire temporaire"
                         CheckBox5.Text = "Afficher la sortie de la commande en anglais"
                         CheckBox6.Text = "M'avertir lorsque des processus en arrière plan ont démarré"
+                        CheckBox7.Text = "Afficher par défaut la vue du journal dans le panneau de progression"
                         CheckBox8.Text = "Détecter les images montées à tout moment"
                         CheckBox9.Text = "Utiliser des menus en majuscules"
                         CheckBox10.Text = "Créer automatiquement des journaux pour chaque opération effectuée"
@@ -602,6 +608,7 @@ Public Class Options
                         DismOFD.Title = "Spécifier l'exécutable DISM à utiliser"
                         Label59.Text = "Personnalisation du journal"
                         Label60.Text = "Définissez les paramètres que vous souhaitez effectuer à la fermeture du programme :"
+                        Label61.Text = "Aperçu :"
                         GroupBox5.Text = "Associations"
                         Label9.Text = "Sauvegarde des informations de l'image"
                         LinkLabel1.Text = "Le programme activera ou désactivera certaines caractéristiques en fonction de ce que la version de DISM prend en charge. Comment cela va-t-il affecter mon utilisation de ce programme, et quelles caractéristiques seront désactivées en conséquence ?"
@@ -684,6 +691,7 @@ Public Class Options
                         CheckBox4.Text = "Utilizar um diretório de rascunho"
                         CheckBox5.Text = "Mostrar a saída do comando em inglês"
                         CheckBox6.Text = "Notificar-me quando os processos em segundo plano tiverem iniciado"
+                        CheckBox7.Text = "Mostrar a vista de registo no painel de progresso por predefinição"
                         CheckBox8.Text = "Detetar imagens montadas a todo o momento"
                         CheckBox9.Text = "Utilizar menus em maiúsculas"
                         CheckBox10.Text = "Criar automaticamente registos para cada operação realizada"
@@ -701,6 +709,7 @@ Public Class Options
                         DismOFD.Title = "Especificar o executável DISM a utilizar"
                         Label59.Text = "Personalização do registo"
                         Label60.Text = "Configurar as opções que gostaria de executar quando o programa fecha:"
+                        Label61.Text = "Pré-visualização:"
                         GroupBox5.Text = "Associações"
                         Label9.Text = "Guardar informação da imagem"
                         LinkLabel1.Text = "O programa irá ativar ou desativar determinadas funcionalidades de acordo com o que a versão DISM suporta. Como é que isso vai afetar a minha utilização deste programa e que funcionalidades serão desactivadas em conformidade?"
@@ -784,6 +793,7 @@ Public Class Options
                 CheckBox4.Text = "Use a scratch directory"
                 CheckBox5.Text = "Show command output in English"
                 CheckBox6.Text = "Notify me when background processes have started"
+                CheckBox7.Text = "Show log view on the progress panel by default"
                 CheckBox8.Text = "Detect mounted images at all times"
                 CheckBox9.Text = "Use uppercase menus"
                 CheckBox10.Text = "Automatically create logs for each operation performed"
@@ -801,6 +811,7 @@ Public Class Options
                 DismOFD.Title = "Specify the DISM executable to use"
                 Label59.Text = "Log customization"
                 Label60.Text = "Set options you would like to perform when the program closes:"
+                Label61.Text = "Preview:"
                 GroupBox5.Text = "Associations"
                 Label9.Text = "Saving image information"
                 LinkLabel1.Text = "The program will enable or disable certain features according to what the DISM version supports. How is it going to affect my usage of this program, and which features will be disabled accordingly?"
@@ -883,6 +894,7 @@ Public Class Options
                 CheckBox4.Text = "Usar un directorio temporal"
                 CheckBox5.Text = "Mostrar salida del programa en inglés"
                 CheckBox6.Text = "Notificarme cuando los procesos en segundo plano se hayan iniciado"
+                CheckBox7.Text = "Mostrar vista de registro en el panel de progreso por defecto"
                 CheckBox8.Text = "Detectar imágenes montadas todo el tiempo"
                 CheckBox9.Text = "Usar menús en mayúscula"
                 CheckBox10.Text = "Crear registros para cada operación realizada automáticamente"
@@ -900,6 +912,7 @@ Public Class Options
                 DismOFD.Title = "Especifique el ejecutable de DISM a usar"
                 Label59.Text = "Personalización del registro"
                 Label60.Text = "Establezca las opciones que le gustaría realizar cuando el programa se cierra:"
+                Label61.Text = "Vista previa:"
                 GroupBox5.Text = "Asociaciones"
                 Label9.Text = "Guardando información de la imagen"
                 LinkLabel1.Text = "El programa habilitará o deshabilitará algunas características atendiendo a lo que soporte la versión de DISM. ¿Cómo va a afectar esto mi uso del programa, y qué características serán deshabilitadas?"
@@ -982,6 +995,7 @@ Public Class Options
                 CheckBox4.Text = "Utiliser un répertoire temporaire"
                 CheckBox5.Text = "Afficher la sortie de la commande en anglais"
                 CheckBox6.Text = "M'avertir lorsque des processus en arrière plan ont démarré"
+                CheckBox7.Text = "Afficher par défaut la vue du journal dans le panneau de progression"
                 CheckBox8.Text = "Détecter les images montées à tout moment"
                 CheckBox9.Text = "Utiliser des menus en majuscules"
                 CheckBox10.Text = "Créer automatiquement des journaux pour chaque opération effectuée"
@@ -999,6 +1013,7 @@ Public Class Options
                 DismOFD.Title = "Spécifier l'exécutable DISM à utiliser"
                 Label59.Text = "Personnalisation du journal"
                 Label60.Text = "Définissez les paramètres que vous souhaitez effectuer à la fermeture du programme :"
+                Label61.Text = "Aperçu :"
                 GroupBox5.Text = "Associations"
                 Label9.Text = "Sauvegarde des informations de l'image"
                 LinkLabel1.Text = "Le programme activera ou désactivera certaines caractéristiques en fonction de ce que la version de DISM prend en charge. Comment cela va-t-il affecter mon utilisation de ce programme, et quelles caractéristiques seront désactivées en conséquence ?"
@@ -1081,6 +1096,7 @@ Public Class Options
                 CheckBox4.Text = "Utilizar um diretório de rascunho"
                 CheckBox5.Text = "Mostrar a saída do comando em inglês"
                 CheckBox6.Text = "Notificar-me quando os processos em segundo plano tiverem iniciado"
+                CheckBox7.Text = "Mostrar a vista de registo no painel de progresso por predefinição"
                 CheckBox8.Text = "Detetar imagens montadas a todo o momento"
                 CheckBox9.Text = "Utilizar menus em maiúsculas"
                 CheckBox10.Text = "Criar automaticamente registos para cada operação realizada"
@@ -1098,6 +1114,7 @@ Public Class Options
                 DismOFD.Title = "Especificar o executável DISM a utilizar"
                 Label59.Text = "Personalização do registo"
                 Label60.Text = "Configurar as opções que gostaria de executar quando o programa fecha:"
+                Label61.Text = "Pré-visualização:"
                 GroupBox5.Text = "Associações"
                 Label9.Text = "Guardar informação da imagem"
                 LinkLabel1.Text = "O programa irá ativar ou desativar determinadas funcionalidades de acordo com o que a versão DISM suporta. Como é que isso vai afetar a minha utilização deste programa e que funcionalidades serão desactivadas em conformidade?"
@@ -1493,6 +1510,7 @@ Public Class Options
                 RadioButton1.Checked = False
                 RadioButton2.Checked = True
         End Select
+        CheckBox7.Checked = MainForm.ExpandedProgressPanel
     End Sub
 
     Private Sub ComboBox5_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox5.SelectedIndexChanged
@@ -2673,5 +2691,9 @@ Public Class Options
             StatusBar_Ops.Image = My.Resources.CS_Ops_Blue
             ProgressPanel_Ops.Image = My.Resources.CS_ProgressPanel_Blue
         End If
+    End Sub
+
+    Private Sub CheckBox7_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox7.CheckedChanged
+        ProgressPanelPic.Image = If(CheckBox7.Checked, My.Resources.progresspanel_logview_shown, My.Resources.progresspanel_logview_hidden)
     End Sub
 End Class

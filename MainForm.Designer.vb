@@ -681,70 +681,70 @@ Partial Class MainForm
         '
         Me.RecentProject1ToolStripMenuItem.Name = "RecentProject1ToolStripMenuItem"
         Me.RecentProject1ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D1), System.Windows.Forms.Keys)
-        Me.RecentProject1ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RecentProject1ToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
         Me.RecentProject1ToolStripMenuItem.Visible = False
         '
         'RecentProject2ToolStripMenuItem
         '
         Me.RecentProject2ToolStripMenuItem.Name = "RecentProject2ToolStripMenuItem"
         Me.RecentProject2ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D2), System.Windows.Forms.Keys)
-        Me.RecentProject2ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RecentProject2ToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
         Me.RecentProject2ToolStripMenuItem.Visible = False
         '
         'RecentProject3ToolStripMenuItem
         '
         Me.RecentProject3ToolStripMenuItem.Name = "RecentProject3ToolStripMenuItem"
         Me.RecentProject3ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D3), System.Windows.Forms.Keys)
-        Me.RecentProject3ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RecentProject3ToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
         Me.RecentProject3ToolStripMenuItem.Visible = False
         '
         'RecentProject4ToolStripMenuItem
         '
         Me.RecentProject4ToolStripMenuItem.Name = "RecentProject4ToolStripMenuItem"
         Me.RecentProject4ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D4), System.Windows.Forms.Keys)
-        Me.RecentProject4ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RecentProject4ToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
         Me.RecentProject4ToolStripMenuItem.Visible = False
         '
         'RecentProject5ToolStripMenuItem
         '
         Me.RecentProject5ToolStripMenuItem.Name = "RecentProject5ToolStripMenuItem"
         Me.RecentProject5ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D5), System.Windows.Forms.Keys)
-        Me.RecentProject5ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RecentProject5ToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
         Me.RecentProject5ToolStripMenuItem.Visible = False
         '
         'RecentProject6ToolStripMenuItem
         '
         Me.RecentProject6ToolStripMenuItem.Name = "RecentProject6ToolStripMenuItem"
         Me.RecentProject6ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D6), System.Windows.Forms.Keys)
-        Me.RecentProject6ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RecentProject6ToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
         Me.RecentProject6ToolStripMenuItem.Visible = False
         '
         'RecentProject7ToolStripMenuItem
         '
         Me.RecentProject7ToolStripMenuItem.Name = "RecentProject7ToolStripMenuItem"
         Me.RecentProject7ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D7), System.Windows.Forms.Keys)
-        Me.RecentProject7ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RecentProject7ToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
         Me.RecentProject7ToolStripMenuItem.Visible = False
         '
         'RecentProject8ToolStripMenuItem
         '
         Me.RecentProject8ToolStripMenuItem.Name = "RecentProject8ToolStripMenuItem"
         Me.RecentProject8ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D8), System.Windows.Forms.Keys)
-        Me.RecentProject8ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RecentProject8ToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
         Me.RecentProject8ToolStripMenuItem.Visible = False
         '
         'RecentProject9ToolStripMenuItem
         '
         Me.RecentProject9ToolStripMenuItem.Name = "RecentProject9ToolStripMenuItem"
         Me.RecentProject9ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D9), System.Windows.Forms.Keys)
-        Me.RecentProject9ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RecentProject9ToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
         Me.RecentProject9ToolStripMenuItem.Visible = False
         '
         'RecentProject10ToolStripMenuItem
         '
         Me.RecentProject10ToolStripMenuItem.Name = "RecentProject10ToolStripMenuItem"
         Me.RecentProject10ToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D0), System.Windows.Forms.Keys)
-        Me.RecentProject10ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RecentProject10ToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
         Me.RecentProject10ToolStripMenuItem.Visible = False
         '
         'ToolStripSeparator1
@@ -3951,7 +3951,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32.42009!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 67.57991!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 119.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -3986,9 +3986,9 @@ Partial Class MainForm
         Me.LinkLabel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel1.Location = New System.Drawing.Point(59, 146)
+        Me.LinkLabel1.Location = New System.Drawing.Point(58, 146)
         Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(230, 254)
+        Me.LinkLabel1.Size = New System.Drawing.Size(231, 254)
         Me.LinkLabel1.TabIndex = 5
         Me.LinkLabel1.TabStop = True
         Me.LinkLabel1.Text = "Click here to mount an image"
@@ -3998,7 +3998,7 @@ Partial Class MainForm
         Me.Panel8.Controls.Add(Me.projName)
         Me.Panel8.Controls.Add(Me.projNameText)
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel8.Location = New System.Drawing.Point(59, 3)
+        Me.Panel8.Location = New System.Drawing.Point(58, 3)
         Me.Panel8.Name = "Panel8"
         Me.Panel8.Size = New System.Drawing.Size(110, 23)
         Me.Panel8.TabIndex = 8
@@ -4030,9 +4030,9 @@ Partial Class MainForm
         Me.Label5.AutoSize = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label5, 2)
         Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label5.Location = New System.Drawing.Point(59, 131)
+        Me.Label5.Location = New System.Drawing.Point(58, 131)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(230, 15)
+        Me.Label5.Size = New System.Drawing.Size(231, 15)
         Me.Label5.TabIndex = 2
         Me.Label5.Text = "imgStatus"
         '
@@ -4042,7 +4042,7 @@ Partial Class MainForm
         Me.Label2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label2.Location = New System.Drawing.Point(3, 29)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(50, 102)
+        Me.Label2.Size = New System.Drawing.Size(49, 102)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "Location:"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -4052,9 +4052,9 @@ Partial Class MainForm
         Me.Label3.AutoEllipsis = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label3, 2)
         Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label3.Location = New System.Drawing.Point(59, 29)
+        Me.Label3.Location = New System.Drawing.Point(58, 29)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(230, 102)
+        Me.Label3.Size = New System.Drawing.Size(231, 102)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "projPath"
         '
@@ -4065,7 +4065,7 @@ Partial Class MainForm
         Me.Label4.Location = New System.Drawing.Point(3, 131)
         Me.Label4.Name = "Label4"
         Me.TableLayoutPanel2.SetRowSpan(Me.Label4, 2)
-        Me.Label4.Size = New System.Drawing.Size(50, 269)
+        Me.Label4.Size = New System.Drawing.Size(49, 269)
         Me.Label4.TabIndex = 1
         Me.Label4.Text = "Images mounted?"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -4076,7 +4076,7 @@ Partial Class MainForm
         Me.Panel9.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel9.Location = New System.Drawing.Point(3, 3)
         Me.Panel9.Name = "Panel9"
-        Me.Panel9.Size = New System.Drawing.Size(50, 23)
+        Me.Panel9.Size = New System.Drawing.Size(49, 23)
         Me.Panel9.TabIndex = 9
         '
         'Label1
@@ -4084,7 +4084,7 @@ Partial Class MainForm
         Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label1.Location = New System.Drawing.Point(0, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(50, 23)
+        Me.Label1.Size = New System.Drawing.Size(49, 23)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Name:"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight

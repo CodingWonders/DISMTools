@@ -6035,6 +6035,9 @@ Public Class ProgressPanel
                 allTasks.Text = "Aguarde..."
                 currentTask.Text = "Por favor, aguarde..."
         End Select
+        If MainForm.ExpandedProgressPanel AndAlso Height = 240 Then
+            LogButton.PerformClick()
+        End If
         taskCountLbl.Visible = False
         MainForm.bwBackgroundProcessAction = 0
         MainForm.bwGetImageInfo = True
