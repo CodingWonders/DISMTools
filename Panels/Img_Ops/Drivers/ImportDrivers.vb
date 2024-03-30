@@ -9,6 +9,7 @@ Public Class ImportDrivers
     Dim ImportSources() As String = New String(2) {"Windows image", "Online installation", "Offline installation"}
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         If ImportSourceInt < 0 Then Exit Sub
         Dim msg As String = ""
         If ComboBox1.SelectedItem = "" Then
@@ -16,7 +17,9 @@ Public Class ImportDrivers
             MsgBox(msg, vbOKOnly + vbInformation, Label1.Text)
             Exit Sub
         Else
-            If DIList(ListView1.FocusedItem.Index).Name = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) Then ImportSourceInt = 1
+            If ListView1.SelectedItems.Count = 1 Then
+                If DIList(ListView1.FocusedItem.Index).Name = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) Then ImportSourceInt = 1
+            End If
             Select Case ImportSourceInt
                 Case 0
                     If TextBox1.Text <> "" Then

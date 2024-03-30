@@ -137,12 +137,19 @@
     <Compile Include="Actions\Validation\Actions.Validation.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Elements\AppxPackage.vb" />
     <Compile Include="Elements\Recents.vb" />
     <Compile Include="Help\HelpBrowserForm.Designer.vb">
       <DependentUpon>HelpBrowserForm.vb</DependentUpon>
     </Compile>
     <Compile Include="Help\HelpBrowserForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Help\HelpVideoPlayer.Designer.vb">
+      <DependentUpon>HelpVideoPlayer.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Help\HelpVideoPlayer.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.vb">
@@ -189,6 +196,12 @@
       <DependentUpon>ProgressPanel.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\DoWork\ProgressPanel.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Exceptions\ExceptionForm.Designer.vb">
+      <DependentUpon>ExceptionForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Exceptions\ExceptionForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Exe_Ops\BGProcs\BGProcsAdvSettings.Designer.vb">
@@ -680,6 +693,7 @@
     <Compile Include="Utilities\DT_Utils.vb" />
     <Compile Include="Utilities\ImageWatcher.vb" />
     <Compile Include="Utilities\PriReader.vb" />
+    <Compile Include="Videos\Video.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Actions\Actions.MainForm.resx">
@@ -690,6 +704,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Help\HelpBrowserForm.resx">
       <DependentUpon>HelpBrowserForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Help\HelpVideoPlayer.resx">
+      <DependentUpon>HelpVideoPlayer.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.vb</DependentUpon>
@@ -711,6 +728,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\DoWork\ProgressPanel.resx">
       <DependentUpon>ProgressPanel.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Exceptions\ExceptionForm.resx">
+      <DependentUpon>ExceptionForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Exe_Ops\BGProcs\BGProcsAdvSettings.resx">
       <DependentUpon>BGProcsAdvSettings.vb</DependentUpon>
@@ -1022,6 +1042,7 @@
     <None Include="settings.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Tools\DT_IEConfig.reg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Panels\readme.md" />
@@ -1232,6 +1253,8 @@
     <None Include="Resources\about\gitter_chat.png" />
     <None Include="Resources\import_driver.png" />
     <None Include="Resources\onedrive_exclusion.png" />
+    <None Include="Resources\error_32px.png" />
+    <None Include="Resources\video_play.png" />
     <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
     <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
     <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />
@@ -1564,8 +1587,14 @@ IF NOT EXIST logs (
 IF NOT EXIST scratch (
 	md scratch
 )
+:: Copy the Internet Explorer browser emulation registry file to the program directory
+copy /y "$(SolutionDir)Tools\DT_IEConfig.reg" "DT_IEConfig.reg"
 IF %25ISPREVIEW%25=="Yes" (
 	echo You will be running a preview release, which may not be ready for production. You may experience more bugs and less stability. Please switch to a stable release whenever possible.
+)
+IF NOT EXIST videos (
+	md videos
+	copy /y "$(SolutionDir)Videos\videoplay.html" "videos\videoplay_tmp.html"
 )
 IF %25COPY_DOCS%25=="Yes" (
 	echo Copying help documentation...
@@ -1603,7 +1632,14 @@ IF EXIST scratch (
 )
 IF EXIST docs (
 	rd docs /s /q
-)</PreBuildEvent>
+)
+
+IF EXIST videos (
+	rd videos /s /q
+)
+
+IF EXIST videos.xml (del videos.xml)
+IF EXIST videos.xml.old (del videos.xml.old)</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

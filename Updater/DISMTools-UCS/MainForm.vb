@@ -236,7 +236,7 @@ Public Class MainForm
     Sub CompareVersions()
         If File.Exists(Application.StartupPath & "\DISMTools.exe") Then
             Dim fv As String = FileVersionInfo.GetVersionInfo(Application.StartupPath & "\DISMTools.exe").ProductVersion.ToString()
-            If fv = latestVer Then
+            If fv = latestVer Or New Version(fv) > New Version(latestVer) Then
                 MsgBox("There aren't any updates available", vbOKOnly + vbInformation, Text)
                 End
             Else

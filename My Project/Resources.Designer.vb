@@ -643,6 +643,16 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property error_32px() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("error_32px", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property eula() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("eula", resourceCulture)
@@ -2028,6 +2038,16 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property video_play() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("video_play", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property vs_32px() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("vs_32px", resourceCulture)
@@ -2046,20 +2066,9 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Changes made since last preview
+        '''  Busca una cadena traducida similar a To get more information about what&apos;s new in this release, check out the release notes over at:
         '''
-        '''Enhancements:
-        '''
-        '''- The default window size of the image information results dialog is now 1024x600
-        '''- The alignment of the Recents list items to the home screen tasks has been improved
-        '''- Portuguese translations are now complete
-        '''
-        '''Overall changes
-        '''
-        '''Overall bugfixes:
-        '''
-        '''- Fixed some minor text editor issues in the Configuration List Editor
-        '''- Fixed an issue where the &quot;Pick...&quot; button in the image file information dialog would not be disabled automatically when selecting &quot; [resto de la cadena truncado]&quot;;.
+        '''https://github.com/CodingWonders/DISMTools/releases/tag/v0.4.2_upd1.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
