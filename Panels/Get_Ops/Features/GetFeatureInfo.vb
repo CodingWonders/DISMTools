@@ -20,7 +20,10 @@ Public Class GetFeatureInfoDlg
             ForeColor = Color.Black
             ListView1.BackColor = Color.FromArgb(238, 238, 242)
         End If
+        SearchBox1.BackColor = BackColor
+        SearchBox1.ForeColor = ForeColor
         ListView1.ForeColor = ForeColor
+        SearchPic.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.search_dark, My.Resources.search_light)
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -39,6 +42,7 @@ Public Class GetFeatureInfoDlg
                         ListView1.Columns(0).Text = "Feature name"
                         ListView1.Columns(1).Text = "Feature state"
                         Button2.Text = "Save..."
+                        SearchBox1.cueBanner = "Type here to search for a feature..."
                     Case "ESN"
                         Text = "Obtener información de características"
                         Label1.Text = Text
@@ -54,6 +58,7 @@ Public Class GetFeatureInfoDlg
                         ListView1.Columns(0).Text = "Nombre de característica"
                         ListView1.Columns(1).Text = "Estado"
                         Button2.Text = "Guardar..."
+                        SearchBox1.cueBanner = "Escriba aquí para buscar una característica..."
                     Case "FRA"
                         Text = "Obtenir des informations sur les caractéristiques"
                         Label1.Text = Text
@@ -69,6 +74,7 @@ Public Class GetFeatureInfoDlg
                         ListView1.Columns(0).Text = "Nom de la caractéristique"
                         ListView1.Columns(1).Text = "État de la caractéristique"
                         Button2.Text = "Sauvegarder..."
+                        SearchBox1.cueBanner = "Tapez ici pour rechercher une caractéristique..."
                     Case "PTB", "PTG"
                         Text = "Obter informações sobre a caraterística"
                         Label1.Text = Text
@@ -84,6 +90,7 @@ Public Class GetFeatureInfoDlg
                         ListView1.Columns(0).Text = "Nome da caraterística"
                         ListView1.Columns(1).Text = "Estado da caraterística"
                         Button2.Text = "Guardar..."
+                        SearchBox1.cueBanner = "Digite aqui para pesquisar uma caraterística..."
                 End Select
             Case 1
                 Text = "Get feature information"
@@ -100,6 +107,7 @@ Public Class GetFeatureInfoDlg
                 ListView1.Columns(0).Text = "Feature name"
                 ListView1.Columns(1).Text = "Feature state"
                 Button2.Text = "Save..."
+                SearchBox1.cueBanner = "Type here to search for a feature..."
             Case 2
                 Text = "Obtener información de características"
                 Label1.Text = Text
@@ -115,6 +123,7 @@ Public Class GetFeatureInfoDlg
                 ListView1.Columns(0).Text = "Nombre de característica"
                 ListView1.Columns(1).Text = "Estado"
                 Button2.Text = "Guardar..."
+                SearchBox1.cueBanner = "Escriba aquí para buscar una característica..."
             Case 3
                 Text = "Obtenir des informations sur les caractéristiques"
                 Label1.Text = Text
@@ -130,6 +139,7 @@ Public Class GetFeatureInfoDlg
                 ListView1.Columns(0).Text = "Nom de la caractéristique"
                 ListView1.Columns(1).Text = "État de la caractéristique"
                 Button2.Text = "Sauvegarder..."
+                SearchBox1.cueBanner = "Tapez ici pour rechercher une caractéristique..."
             Case 4
                 Text = "Obter informações sobre a caraterística"
                 Label1.Text = Text
@@ -145,6 +155,7 @@ Public Class GetFeatureInfoDlg
                 ListView1.Columns(0).Text = "Nome da caraterística"
                 ListView1.Columns(1).Text = "Estado da caraterística"
                 Button2.Text = "Guardar..."
+                SearchBox1.cueBanner = "Digite aqui para pesquisar uma caraterística..."
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
@@ -159,6 +170,7 @@ Public Class GetFeatureInfoDlg
         For Each InstalledFeature As DismFeature In InstalledFeatureInfo
             ListView1.Items.Add(New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.State, True)}))
         Next
+        SearchBox1.Text = ""
     End Sub
 
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
@@ -392,6 +404,27 @@ Public Class GetFeatureInfoDlg
             ImgInfoSaveDlg.SaveTask = 4
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
+        End If
+    End Sub
+
+    Sub SearchFeatures(sQuery As String)
+        If InstalledFeatureInfo.Count > 0 Then
+            For Each InstalledFeature As DismFeature In InstalledFeatureInfo
+                If InstalledFeature.FeatureName.ToLower().Contains(sQuery.ToLower()) Then
+                    ListView1.Items.Add(New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.State, True)}))
+                End If
+            Next
+        End If
+    End Sub
+
+    Private Sub SearchBox1_TextChanged(sender As Object, e As EventArgs) Handles SearchBox1.TextChanged
+        ListView1.Items.Clear()
+        If SearchBox1.Text <> "" Then
+            SearchFeatures(SearchBox1.Text)
+        Else
+            For Each InstalledFeature As DismFeature In InstalledFeatureInfo
+                ListView1.Items.Add(New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.State, True)}))
+            Next
         End If
     End Sub
 End Class

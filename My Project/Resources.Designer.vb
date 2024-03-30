@@ -1688,6 +1688,26 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property progresspanel_logview_hidden() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("progresspanel_logview_hidden", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property progresspanel_logview_shown() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("progresspanel_logview_shown", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property proj_name_edit() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("proj_name_edit", resourceCulture)
@@ -1811,6 +1831,26 @@ Namespace My.Resources
         Friend ReadOnly Property save_glyph_dark() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("save_glyph_dark", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property search_dark() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("search_dark", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property search_light() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("search_light", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -2098,6 +2138,16 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property video_play() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("video_play", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property vs_32px() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("vs_32px", resourceCulture)
@@ -2116,17 +2166,17 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Bugfixes:
+        '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''- Fixed an issue where the SWM file pattern chooser would not look right when switching from dark mode to light mode
-        '''- Fixed some improper progress panel disposal issues
-        '''- Fixed an issue where the program would show update recommendations for older versions of DISMTools (nightly versions only)
-        '''- Fixed some exceptions that were thrown by the AppX package information dialog
+        '''- Fixed an issue where the image information saver would throw an exception when getting information about some AppX packages
+        '''- Fixed an issue where the program would throw an exception in the driver import dialog
         '''
-        '''New features:
+        '''New features
         '''
-        '''- Added the ability to export a Windows image
-        '''- The program can now clean up mount points on closure [resto de la cadena truncado]&quot;;.
+        '''- All information dialogs have received Search capabilities
+        '''- Video playback support has been added
+        '''- Added initial feature update detection for builds in the Dilithium semester
+        '''- You can access the background process details panel by pressing the Alt + B key com [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

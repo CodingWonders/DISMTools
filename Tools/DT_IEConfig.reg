@@ -1,0 +1,5 @@
+﻿Windows Registry Editor Version 5.00
+
+; Set browser emulation mode for DISMTools to Internet Explorer 11 (+ Edge)
+[HKEY_CURRENT_USER\SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION]
+"DISMTools.exe"=dword:00002af9

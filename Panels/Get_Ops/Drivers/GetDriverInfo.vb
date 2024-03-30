@@ -10,6 +10,7 @@ Public Class GetDriverInfo
     Dim DriverInfoList As New List(Of DismDriverCollection)
     Public InstalledDriverInfo As DismDriverPackageCollection
     Dim InstalledDriverList As New List(Of DismDriverPackage)
+    Dim SearchedDriverList As New List(Of DismDriverPackage)
 
     Dim CurrentHWTarget As Integer
     Dim CurrentHWFile As Integer = -1        ' This variable gets updated every time an element is selected in the driver packages list box
@@ -67,6 +68,7 @@ Public Class GetDriverInfo
                         ListView1.Columns(0).Text = "Published name"
                         ListView1.Columns(1).Text = "Original file name"
                         OpenFileDialog1.Title = "Locate driver files"
+                        SearchBox1.Text = "Type here to search for a driver..."
                     Case "ESN"
                         Text = "Obtener información de controladores"
                         Label1.Text = Text
@@ -111,6 +113,7 @@ Public Class GetDriverInfo
                         ListView1.Columns(0).Text = "Nombre publicado"
                         ListView1.Columns(1).Text = "Nombre de archivo original"
                         OpenFileDialog1.Title = "Ubique los archivos de controladores"
+                        SearchBox1.Text = "Escriba aquí para buscar un controlador..."
                     Case "FRA"
                         Text = "Obtenir des informations sur les pilotes"
                         Label1.Text = Text
@@ -155,6 +158,7 @@ Public Class GetDriverInfo
                         ListView1.Columns(0).Text = "Nom publié"
                         ListView1.Columns(1).Text = "Nom du fichier original"
                         OpenFileDialog1.Title = "Localiser les fichiers pilotes"
+                        SearchBox1.Text = "Tapez ici pour rechercher un pilote..."
                     Case "PTB", "PTG"
                         Text = "Obter informações do controlador"
                         Label1.Text = Text
@@ -197,6 +201,7 @@ Public Class GetDriverInfo
                         InstalledDriverLink.Text = "Quero obter informações sobre os controladores instalados na imagem"
                         DriverFileLink.Text = "Pretendo obter informações sobre ficheiros de controladores"
                         ListView1.Columns(0).Text = "Nome publicado"
+                        SearchBox1.Text = "Digite aqui para pesquisar um controlador..."
                 End Select
             Case 1
                 Text = "Get driver information"
@@ -242,6 +247,7 @@ Public Class GetDriverInfo
                 ListView1.Columns(0).Text = "Published name"
                 ListView1.Columns(1).Text = "Original file name"
                 OpenFileDialog1.Title = "Locate driver files"
+                SearchBox1.Text = "Type here to search for a driver..."
             Case 2
                 Text = "Obtener información de controladores"
                 Label1.Text = Text
@@ -286,6 +292,7 @@ Public Class GetDriverInfo
                 ListView1.Columns(0).Text = "Nombre publicado"
                 ListView1.Columns(1).Text = "Nombre de archivo original"
                 OpenFileDialog1.Title = "Ubique los archivos de controladores"
+                SearchBox1.Text = "Escriba aquí para buscar un controlador..."
             Case 3
                 Text = "Obtenir des informations sur les pilotes"
                 Label1.Text = Text
@@ -330,6 +337,7 @@ Public Class GetDriverInfo
                 ListView1.Columns(0).Text = "Nom publié"
                 ListView1.Columns(1).Text = "Nom du fichier original"
                 OpenFileDialog1.Title = "Localiser les fichiers pilotes"
+                SearchBox1.Text = "Tapez ici pour rechercher un pilote..."
             Case 4
                 Text = "Obter informações do controlador"
                 Label1.Text = Text
@@ -372,6 +380,7 @@ Public Class GetDriverInfo
                 InstalledDriverLink.Text = "Quero obter informações sobre os controladores instalados na imagem"
                 DriverFileLink.Text = "Pretendo obter informações sobre ficheiros de controladores"
                 ListView1.Columns(0).Text = "Nome publicado"
+                SearchBox1.Text = "Digite aqui para pesquisar um controlador..."
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
@@ -391,6 +400,9 @@ Public Class GetDriverInfo
         ListBox1.ForeColor = ForeColor
         ListView1.ForeColor = ForeColor
         ComboBox1.ForeColor = ForeColor
+        SearchBox1.BackColor = BackColor
+        SearchBox1.ForeColor = ForeColor
+        SearchPic.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.search_dark, My.Resources.search_light)
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True
@@ -398,6 +410,7 @@ Public Class GetDriverInfo
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         InstalledDriverList.Clear()
+        SearchedDriverList.Clear()
         ListView1.Items.Clear()
         If InstalledDriverInfo.Count > 0 Then
             For Each DriverPackage As DismDriverPackage In InstalledDriverInfo
@@ -420,6 +433,8 @@ Public Class GetDriverInfo
         Panel7.Visible = True
         DrvPackageInfoPanel.Visible = False
         NoDrvPanel.Visible = True
+
+        SearchBox1.Text = ""
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -978,45 +993,51 @@ Public Class GetDriverInfo
             If ListView1.SelectedItems.Count = 1 Then
                 Panel4.Visible = True
                 Panel7.Visible = False
-                Label23.Text = InstalledDriverList(ListView1.FocusedItem.Index).PublishedName
-                Label25.Text = Path.GetFileName(InstalledDriverList(ListView1.FocusedItem.Index).OriginalFileName)
+                Dim drv As DismDriverPackage = Nothing
+                If SearchBox1.Text = "" Then
+                    drv = InstalledDriverList(ListView1.FocusedItem.Index)
+                Else
+                    drv = SearchedDriverList(ListView1.FocusedItem.Index)
+                End If
+                Label23.Text = drv.PublishedName
+                Label25.Text = Path.GetFileName(drv.OriginalFileName)
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENU", "ENG"
-                                Label27.Text = If(InstalledDriverList(ListView1.FocusedItem.Index).BootCritical, "Yes", "No")
-                                Label34.Text = If(InstalledDriverList(ListView1.FocusedItem.Index).InBox, "Yes", "No")
+                                Label27.Text = If(drv.BootCritical, "Yes", "No")
+                                Label34.Text = If(drv.InBox, "Yes", "No")
                             Case "ESN"
-                                Label27.Text = If(InstalledDriverList(ListView1.FocusedItem.Index).BootCritical, "Sí", "No")
-                                Label34.Text = If(InstalledDriverList(ListView1.FocusedItem.Index).InBox, "Sí", "No")
+                                Label27.Text = If(drv.BootCritical, "Sí", "No")
+                                Label34.Text = If(drv.InBox, "Sí", "No")
                             Case "FRA"
-                                Label27.Text = If(InstalledDriverList(ListView1.FocusedItem.Index).BootCritical, "Oui", "Non")
-                                Label34.Text = If(InstalledDriverList(ListView1.FocusedItem.Index).InBox, "Oui", "Non")
+                                Label27.Text = If(drv.BootCritical, "Oui", "Non")
+                                Label34.Text = If(drv.InBox, "Oui", "Non")
                             Case "PTB", "PTG"
-                                Label27.Text = If(InstalledDriverList(ListView1.FocusedItem.Index).BootCritical, "Sim", "Não")
-                                Label34.Text = If(InstalledDriverList(ListView1.FocusedItem.Index).InBox, "Sim", "Não")
+                                Label27.Text = If(drv.BootCritical, "Sim", "Não")
+                                Label34.Text = If(drv.InBox, "Sim", "Não")
                         End Select
                     Case 1
-                        Label27.Text = If(InstalledDriverList(ListView1.FocusedItem.Index).BootCritical, "Yes", "No")
-                        Label34.Text = If(InstalledDriverList(ListView1.FocusedItem.Index).InBox, "Yes", "No")
+                        Label27.Text = If(drv.BootCritical, "Yes", "No")
+                        Label34.Text = If(drv.InBox, "Yes", "No")
                     Case 2
-                        Label27.Text = If(InstalledDriverList(ListView1.FocusedItem.Index).BootCritical, "Sí", "No")
-                        Label34.Text = If(InstalledDriverList(ListView1.FocusedItem.Index).InBox, "Sí", "No")
+                        Label27.Text = If(drv.BootCritical, "Sí", "No")
+                        Label34.Text = If(drv.InBox, "Sí", "No")
                     Case 3
-                        Label27.Text = If(InstalledDriverList(ListView1.FocusedItem.Index).BootCritical, "Oui", "Non")
-                        Label34.Text = If(InstalledDriverList(ListView1.FocusedItem.Index).InBox, "Oui", "Non")
+                        Label27.Text = If(drv.BootCritical, "Oui", "Non")
+                        Label34.Text = If(drv.InBox, "Oui", "Non")
                     Case 4
-                        Label27.Text = If(InstalledDriverList(ListView1.FocusedItem.Index).BootCritical, "Sim", "Não")
-                        Label34.Text = If(InstalledDriverList(ListView1.FocusedItem.Index).InBox, "Sim", "Não")
+                        Label27.Text = If(drv.BootCritical, "Sim", "Não")
+                        Label34.Text = If(drv.InBox, "Sim", "Não")
                 End Select
-                Label29.Text = InstalledDriverList(ListView1.FocusedItem.Index).Version.ToString()
-                Label32.Text = InstalledDriverList(ListView1.FocusedItem.Index).ClassName
-                Label35.Text = InstalledDriverList(ListView1.FocusedItem.Index).ProviderName
-                Label38.Text = InstalledDriverList(ListView1.FocusedItem.Index).Date
-                Label40.Text = InstalledDriverList(ListView1.FocusedItem.Index).ClassDescription
-                Label42.Text = InstalledDriverList(ListView1.FocusedItem.Index).ClassGuid
-                Label44.Text = Casters.CastDismSignatureStatus(InstalledDriverList(ListView1.FocusedItem.Index).DriverSignature, True)
-                Label46.Text = InstalledDriverList(ListView1.FocusedItem.Index).CatalogFile
+                Label29.Text = drv.Version.ToString()
+                Label32.Text = drv.ClassName
+                Label35.Text = drv.ProviderName
+                Label38.Text = drv.Date
+                Label40.Text = drv.ClassDescription
+                Label42.Text = drv.ClassGuid
+                Label44.Text = Casters.CastDismSignatureStatus(drv.DriverSignature, True)
+                Label46.Text = drv.CatalogFile
             Else
                 Panel4.Visible = False
                 Panel7.Visible = True
@@ -1062,5 +1083,35 @@ Public Class GetDriverInfo
 
     Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
         DriverFileInfoDlg.ShowDialog()
+    End Sub
+
+    Sub SearchDrivers(sQuery As String, OriginalNames As Boolean)
+        If InstalledDriverInfo.Count > 0 Then
+            For Each InstalledDriver As DismDriverPackage In InstalledDriverInfo
+                If OriginalNames Then
+                    If (Path.GetFileName(InstalledDriver.OriginalFileName)).ToLower().Contains(sQuery.Replace("og:", "").Trim().ToLower()) Then
+                        ListView1.Items.Add(New ListViewItem(New String() {InstalledDriver.PublishedName, Path.GetFileName(InstalledDriver.OriginalFileName)}))
+                        SearchedDriverList.Add(InstalledDriver)
+                    End If
+                Else
+                    If InstalledDriver.PublishedName.ToLower().Contains(sQuery.ToLower()) Then
+                        ListView1.Items.Add(New ListViewItem(New String() {InstalledDriver.PublishedName, Path.GetFileName(InstalledDriver.OriginalFileName)}))
+                        SearchedDriverList.Add(InstalledDriver)
+                    End If
+                End If
+            Next
+        End If
+    End Sub
+
+    Private Sub SearchBox1_TextChanged(sender As Object, e As EventArgs) Handles SearchBox1.TextChanged
+        ListView1.Items.Clear()
+        SearchedDriverList.Clear()
+        If SearchBox1.Text <> "" Then
+            SearchDrivers(SearchBox1.Text, SearchBox1.Text.StartsWith("og:", StringComparison.OrdinalIgnoreCase))
+        Else
+            For Each InstalledDriver As DismDriverPackage In InstalledDriverInfo
+                ListView1.Items.Add(New ListViewItem(New String() {InstalledDriver.PublishedName, Path.GetFileName(InstalledDriver.OriginalFileName)}))
+            Next
+        End If
     End Sub
 End Class

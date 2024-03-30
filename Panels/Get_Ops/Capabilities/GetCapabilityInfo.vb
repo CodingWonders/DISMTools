@@ -20,7 +20,10 @@ Public Class GetCapabilityInfoDlg
             ForeColor = Color.Black
             ListView1.BackColor = Color.FromArgb(238, 238, 242)
         End If
+        SearchBox1.BackColor = BackColor
+        SearchBox1.ForeColor = ForeColor
         ListView1.ForeColor = ForeColor
+        SearchPic.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.search_dark, My.Resources.search_light)
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -39,6 +42,7 @@ Public Class GetCapabilityInfoDlg
                         ListView1.Columns(0).Text = "Capability identity"
                         ListView1.Columns(1).Text = "State"
                         Button2.Text = "Save..."
+                        SearchBox1.cueBanner = "Type here to search for a capability..."
                     Case "ESN"
                         Text = "Obtener información de funcionalidades"
                         Label1.Text = Text
@@ -54,6 +58,7 @@ Public Class GetCapabilityInfoDlg
                         ListView1.Columns(0).Text = "Identidad de funcionalidad"
                         ListView1.Columns(1).Text = "Estado"
                         Button2.Text = "Guardar..."
+                        SearchBox1.cueBanner = "Escriba aquí para buscar una funcionalidad..."
                     Case "FRA"
                         Text = "Obtenir des informations sur les capacités"
                         Label1.Text = Text
@@ -69,6 +74,7 @@ Public Class GetCapabilityInfoDlg
                         ListView1.Columns(0).Text = "Identité de la capacité"
                         ListView1.Columns(1).Text = "État"
                         Button2.Text = "Sauvegarder..."
+                        SearchBox1.cueBanner = "Tapez ici pour rechercher une capacité..."
                     Case "PTB", "PTG"
                         Text = "Obter informações sobre as capacidades"
                         Label1.Text = Text
@@ -84,6 +90,7 @@ Public Class GetCapabilityInfoDlg
                         ListView1.Columns(0).Text = "Identidade da capacidade"
                         ListView1.Columns(1).Text = "Estado"
                         Button2.Text = "Guardar..."
+                        SearchBox1.cueBanner = "Digite aqui para pesquisar uma capacidade..."
                 End Select
             Case 1
                 Text = "Get capability information"
@@ -100,6 +107,7 @@ Public Class GetCapabilityInfoDlg
                 ListView1.Columns(0).Text = "Capability identity"
                 ListView1.Columns(1).Text = "State"
                 Button2.Text = "Save..."
+                SearchBox1.cueBanner = "Type here to search for a capability..."
             Case 2
                 Text = "Obtener información de funcionalidades"
                 Label1.Text = Text
@@ -115,6 +123,7 @@ Public Class GetCapabilityInfoDlg
                 ListView1.Columns(0).Text = "Identidad de funcionalidad"
                 ListView1.Columns(1).Text = "Estado"
                 Button2.Text = "Guardar..."
+                SearchBox1.cueBanner = "Escriba aquí para buscar una funcionalidad..."
             Case 3
                 Text = "Obtenir des informations sur les capacités"
                 Label1.Text = Text
@@ -130,6 +139,7 @@ Public Class GetCapabilityInfoDlg
                 ListView1.Columns(0).Text = "Identité de la capacité"
                 ListView1.Columns(1).Text = "État"
                 Button2.Text = "Sauvegarder..."
+                SearchBox1.cueBanner = "Tapez ici pour rechercher une capacité..."
             Case 4
                 Text = "Obter informações sobre as capacidades"
                 Label1.Text = Text
@@ -145,6 +155,7 @@ Public Class GetCapabilityInfoDlg
                 ListView1.Columns(0).Text = "Identidade da capacidade"
                 ListView1.Columns(1).Text = "Estado"
                 Button2.Text = "Guardar..."
+                SearchBox1.cueBanner = "Digite aqui para pesquisar uma capacidade..."
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
@@ -159,6 +170,7 @@ Public Class GetCapabilityInfoDlg
         For Each InstalledCapability As DismCapability In InstalledCapabilityInfo
             ListView1.Items.Add(New ListViewItem(New String() {InstalledCapability.Name, Casters.CastDismPackageState(InstalledCapability.State, True)}))
         Next
+        SearchBox1.Text = ""
     End Sub
 
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
@@ -392,6 +404,27 @@ Public Class GetCapabilityInfoDlg
             ImgInfoSaveDlg.SaveTask = 6
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
+        End If
+    End Sub
+
+    Sub SearchCapabilities(sQuery As String)
+        If InstalledCapabilityInfo.Count > 0 Then
+            For Each InstalledCapability As DismCapability In InstalledCapabilityInfo
+                If InstalledCapability.Name.ToLower().Contains(sQuery.ToLower()) Then
+                    ListView1.Items.Add(New ListViewItem(New String() {InstalledCapability.Name, Casters.CastDismFeatureState(InstalledCapability.State, True)}))
+                End If
+            Next
+        End If
+    End Sub
+
+    Private Sub SearchBox1_TextChanged(sender As Object, e As EventArgs) Handles SearchBox1.TextChanged
+        ListView1.Items.Clear()
+        If SearchBox1.Text <> "" Then
+            SearchCapabilities(SearchBox1.Text)
+        Else
+            For Each InstalledCapability As DismCapability In InstalledCapabilityInfo
+                ListView1.Items.Add(New ListViewItem(New String() {InstalledCapability.Name, Casters.CastDismFeatureState(InstalledCapability.State, True)}))
+            Next
         End If
     End Sub
 End Class

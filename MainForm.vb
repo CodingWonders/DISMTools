@@ -246,6 +246,8 @@ Public Class MainForm
 
     Public AutoCleanMounts As Boolean
 
+    Public ExpandedProgressPanel As Boolean      ' Determine whether to show the progress panel in its expanded form
+
     Dim FeedContents As New SyndicationFeed()
     Dim FeedLinks As New List(Of Uri)
     Dim FeedEx As Exception
@@ -253,6 +255,7 @@ Public Class MainForm
     Dim ImageStatus As ImageWatcher.Status
 
     Public RecentList As New List(Of Recents)
+    Public VideoList As New List(Of Video)
 
     Friend NotInheritable Class NativeMethods
 
@@ -428,7 +431,68 @@ Public Class MainForm
             recentProject.Order = RecentList.IndexOf(recentProject)
             RecentsLV.Items.Add(If(recentProject.ProjName <> "", recentProject.ProjName, Path.GetFileNameWithoutExtension(recentProject.ProjPath)))
         Next
+        Try
+            RecentProject1ToolStripMenuItem.Text = " "
+            RecentProject2ToolStripMenuItem.Text = " "
+            RecentProject3ToolStripMenuItem.Text = " "
+            RecentProject4ToolStripMenuItem.Text = " "
+            RecentProject5ToolStripMenuItem.Text = " "
+            RecentProject6ToolStripMenuItem.Text = " "
+            RecentProject7ToolStripMenuItem.Text = " "
+            RecentProject8ToolStripMenuItem.Text = " "
+            RecentProject9ToolStripMenuItem.Text = " "
+            RecentProject10ToolStripMenuItem.Text = " "
+
+            ' Reconfigure text
+            RecentProject1ToolStripMenuItem.Text = RecentList(0).ProjPath
+            RecentProject1ToolStripMenuItem.Visible = True
+            RecentProject2ToolStripMenuItem.Text = RecentList(1).ProjPath
+            RecentProject2ToolStripMenuItem.Visible = True
+            RecentProject3ToolStripMenuItem.Text = RecentList(2).ProjPath
+            RecentProject3ToolStripMenuItem.Visible = True
+            RecentProject4ToolStripMenuItem.Text = RecentList(3).ProjPath
+            RecentProject4ToolStripMenuItem.Visible = True
+            RecentProject5ToolStripMenuItem.Text = RecentList(4).ProjPath
+            RecentProject5ToolStripMenuItem.Visible = True
+            RecentProject6ToolStripMenuItem.Text = RecentList(5).ProjPath
+            RecentProject6ToolStripMenuItem.Visible = True
+            RecentProject7ToolStripMenuItem.Text = RecentList(6).ProjPath
+            RecentProject7ToolStripMenuItem.Visible = True
+            RecentProject8ToolStripMenuItem.Text = RecentList(7).ProjPath
+            RecentProject8ToolStripMenuItem.Visible = True
+            RecentProject9ToolStripMenuItem.Text = RecentList(8).ProjPath
+            RecentProject9ToolStripMenuItem.Visible = True
+            RecentProject10ToolStripMenuItem.Text = RecentList(9).ProjPath
+            RecentProject10ToolStripMenuItem.Visible = True
+        Catch ex As Exception
+            ' Don't do anything special here
+        End Try
     End Sub
+
+    Function LoadVideos(filePath As String) As List(Of Video)
+        Dim vidList As New List(Of Video)
+        Try
+            Using fs As FileStream = New FileStream(filePath, FileMode.Open)
+                Dim xs As New XmlReaderSettings()
+                xs.IgnoreWhitespace = True
+                Using reader As XmlReader = XmlReader.Create(fs, xs)
+                    While reader.Read()
+                        If reader.NodeType = XmlNodeType.Element AndAlso reader.Name = "Video" Then
+                            Dim vid As New Video()
+                            vid.YT_ID = reader.GetAttribute("ID")
+                            vid.VideoName = reader.GetAttribute("Name")
+                            vid.VideoDesc = reader.GetAttribute("Description")
+                            vidList.Add(vid)
+                        End If
+                    End While
+                End Using
+            End Using
+            Return vidList
+        Catch ex As Exception
+            Return Nothing
+        End Try
+        Return Nothing
+    End Function
     
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Because of the DISM API, Windows 7 compatibility is out the window (no pun intended)
@@ -547,10 +611,150 @@ Public Class MainForm
                         RecentsLV.Items.Add(If(Project.ProjName <> "", Project.ProjName, _
                                                                        Path.GetFileNameWithoutExtension(Project.ProjPath)))
                     Next
+                    Try
+                        RecentProject1ToolStripMenuItem.Text = " "
+                        RecentProject2ToolStripMenuItem.Text = " "
+                        RecentProject3ToolStripMenuItem.Text = " "
+                        RecentProject4ToolStripMenuItem.Text = " "
+                        RecentProject5ToolStripMenuItem.Text = " "
+                        RecentProject6ToolStripMenuItem.Text = " "
+                        RecentProject7ToolStripMenuItem.Text = " "
+                        RecentProject8ToolStripMenuItem.Text = " "
+                        RecentProject9ToolStripMenuItem.Text = " "
+                        RecentProject10ToolStripMenuItem.Text = " "
+
+                        ' Reconfigure text
+                        RecentProject1ToolStripMenuItem.Text = RecentList(0).ProjPath
+                        RecentProject1ToolStripMenuItem.Visible = True
+                        RecentProject2ToolStripMenuItem.Text = RecentList(1).ProjPath
+                        RecentProject2ToolStripMenuItem.Visible = True
+                        RecentProject3ToolStripMenuItem.Text = RecentList(2).ProjPath
+                        RecentProject3ToolStripMenuItem.Visible = True
+                        RecentProject4ToolStripMenuItem.Text = RecentList(3).ProjPath
+                        RecentProject4ToolStripMenuItem.Visible = True
+                        RecentProject5ToolStripMenuItem.Text = RecentList(4).ProjPath
+                        RecentProject5ToolStripMenuItem.Visible = True
+                        RecentProject6ToolStripMenuItem.Text = RecentList(5).ProjPath
+                        RecentProject6ToolStripMenuItem.Visible = True
+                        RecentProject7ToolStripMenuItem.Text = RecentList(6).ProjPath
+                        RecentProject7ToolStripMenuItem.Visible = True
+                        RecentProject8ToolStripMenuItem.Text = RecentList(7).ProjPath
+                        RecentProject8ToolStripMenuItem.Visible = True
+                        RecentProject9ToolStripMenuItem.Text = RecentList(8).ProjPath
+                        RecentProject9ToolStripMenuItem.Visible = True
+                        RecentProject10ToolStripMenuItem.Text = RecentList(9).ProjPath
+                        RecentProject10ToolStripMenuItem.Visible = True
+                    Catch ex As Exception
+                        ' Don't do anything special here
+                    End Try
                 End If
             End If
         End If
+        Try
+            Dim videoEx As Exception = New Exception()
+            If File.Exists(Application.StartupPath & "\videos.xml") Then File.Move(Application.StartupPath & "\videos.xml", Application.StartupPath & "\videos.xml.old")
+            Using client As New WebClient()
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                Try
+                    client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/dt_videos/main/videos.xml", Application.StartupPath & "\videos.xml")
+                Catch ex As Exception
+                    videoEx = ex
+                    Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
+                    Debug.WriteLine("Could not download video list")
+                End Try
+            End Using
+            Try
+                If File.Exists(Application.StartupPath & "\videos.xml") Then
+                    VideoList = LoadVideos(Application.StartupPath & "\videos.xml")
+                    File.Delete(Application.StartupPath & "\videos.xml.old")
+                End If
+            Catch ex As Exception
+                videoEx = ex
+                If File.Exists(Application.StartupPath & "\videos.xml.old") Then File.Move(Application.StartupPath & "\videos.xml.old", Application.StartupPath & "\videos.xml")
+                VideoList = LoadVideos(Application.StartupPath & "\videos.xml")
+            End Try
+            ListView2.Items.Clear()
+            Dim thumbnailList As ImageList = New ImageList()
+            thumbnailList.ImageSize = New Size(160, 90)
+            thumbnailList.ColorDepth = ColorDepth.Depth32Bit
+            ListView2.View = View.LargeIcon
+            ListView2.LargeImageList = thumbnailList
+            If VideoList IsNot Nothing Then
+                If VideoList.Count > 0 Then
+                    For Each VideoLink As Video In VideoList
+                        Dim thumbnail As Image = GetItemThumbnail(VideoLink.YT_ID)
+                        If thumbnail IsNot Nothing Then
+                            Dim newThumb As Image = CombineImages(thumbnail)
+                            thumbnailList.Images.Add(newThumb)
+                        End If
+                        Dim listItem As ListViewItem = New ListViewItem()
+                        listItem.ImageIndex = VideoList.IndexOf(VideoLink)
+                        listItem.Text = VideoLink.VideoName
+                        ListView2.Items.Add(listItem)
+                    Next
+                Else
+                    Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
+                End If
+            Else
+                Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
+            End If
+            VideosPanel.Visible = True
+            VideoErrorPanel.Visible = False
+        Catch ex As Exception
+            VideosPanel.Visible = False
+            VideoErrorPanel.Visible = True
+            TextBox2.Text = ex.ToString() & " - " & ex.Message
+        End Try
     End Sub
+
+    Function GetItemThumbnail(videoId As String) As Image
+        Try
+            Dim thumbnailURI As String = "https://img.youtube.com/vi/" & videoId & "/maxresdefault.jpg"
+            Using client As WebClient = New WebClient()
+                Dim imgBytes() As Byte = client.DownloadData(thumbnailURI)
+                Using ms As MemoryStream = New MemoryStream(imgBytes)
+                    Dim ogImg As Image = Image.FromStream(ms)
+                    Dim thumbnail As Image = ResizeThumbnail(ogImg, 160, 90)
+                    Return thumbnail
+                End Using
+            End Using
+        Catch ex As Exception
+            Return Nothing
+        End Try
+        Return Nothing
+    End Function
+
+    Function ResizeThumbnail(img As Image, width As Integer, height As Integer) As Image
+        Try
+            Dim resImg As Bitmap = New Bitmap(width, height)
+            Using g As Graphics = Graphics.FromImage(resImg)
+                g.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBicubic
+                g.DrawImage(img, 0, 0, width, height)
+            End Using
+            Return resImg
+        Catch ex As Exception
+            Return Nothing
+        End Try
+        Return Nothing
+    End Function
+
+    Function CombineImages(thumbnail As Image) As Image
+        Try
+            Dim play As Image = My.Resources.video_play
+            Dim combinedImage As Bitmap = New Bitmap(thumbnail.Width, thumbnail.Height)
+            Using g As Graphics = Graphics.FromImage(combinedImage)
+                g.DrawImage(thumbnail, 0, 0, thumbnail.Width, thumbnail.Height)
+                ' Draw Play symbol
+                Dim pX As Integer = (thumbnail.Width - play.Width) / 2
+                Dim pY As Integer = (thumbnail.Height - play.Height) / 2
+                g.DrawImage(play, pX, pY, play.Width, play.Height)
+            End Using
+            Return combinedImage
+        Catch ex As Exception
+            Return Nothing
+        End Try
+        Return Nothing
+    End Function
 
     ''' <summary>
     ''' Detects all mounted images and their state. Calls the DISM API at program startup
@@ -1136,6 +1340,7 @@ Public Class MainForm
                 AllCaps = (CInt(PersKey.GetValue("AllCaps")) = 1)
                 GoToNewView = (CInt(PersKey.GetValue("NewDesign")) = 1)
                 ColorSchemes = PersKey.GetValue("ColorSchemes")
+                ExpandedProgressPanel = (CInt(PersKey.GetValue("ExpandedProgressPanel")) = 1)
                 If GoToNewView Then
                     ProjectView.Visible = True
                     SplitPanels.Visible = False
@@ -1311,6 +1516,11 @@ Public Class MainForm
                     ColorSchemes = 0
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("ColorSchemes=1") Then
                     ColorSchemes = 1
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("ExpandedProgressPanel=0") Then
+                    ExpandedProgressPanel = 0
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("ExpandedProgressPanel=1") Then
+                    ExpandedProgressPanel = 1
                 End If
                 If GoToNewView Then
                     ProjectView.Visible = True
@@ -4348,6 +4558,7 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "NewDesign=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "ColorSchemes=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "ExpandedProgressPanel=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & "{common:WinDir}\Logs\DISM\DISM.log" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=3")
@@ -4416,6 +4627,7 @@ Public Class MainForm
         PersKey.SetValue("AllCaps", 0, RegistryValueKind.DWord)
         PersKey.SetValue("NewDesign", 1, RegistryValueKind.DWord)
         PersKey.SetValue("ColorSchemes", 0, RegistryValueKind.DWord)
+        PersKey.SetValue("ExpandedProgressPanel", 1, RegistryValueKind.DWord)
         PersKey.Close()
         Dim LogKey As RegistryKey = Key.CreateSubKey("Logs")
         LogKey.SetValue("LogFile", Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\logs\DISM\DISM.log" & Quote, RegistryValueKind.ExpandString)
@@ -4532,6 +4744,11 @@ Public Class MainForm
                     Case 1
                         DTSettingForm.RichTextBox2.AppendText(CrLf & "ColorSchemes=1")
                 End Select
+                If ExpandedProgressPanel Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "ExpandedProgressPanel=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "ExpandedProgressPanel=0")
+                End If
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
                 DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & LogFile & Quote)
                 Select Case LogLevel
@@ -4688,6 +4905,7 @@ Public Class MainForm
                 PersKey.SetValue("AllCaps", If(AllCaps, 1, 0), RegistryValueKind.DWord)
                 PersKey.SetValue("NewDesign", If(GoToNewView, 1, 0), RegistryValueKind.DWord)
                 PersKey.SetValue("ColorSchemes", If(ColorSchemes = 0, 0, 1), RegistryValueKind.DWord)
+                PersKey.SetValue("ExpandedProgressPanel", If(ExpandedProgressPanel, 1, 0), RegistryValueKind.DWord)
                 PersKey.Close()
                 Dim LogKey As RegistryKey = Key.CreateSubKey("Logs")
                 LogKey.SetValue("LogFile", LogFile, RegistryValueKind.ExpandString)
@@ -5257,12 +5475,20 @@ Public Class MainForm
             LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
             LinkLabel23.LinkColor = ForeColor
             LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
+        ElseIf TutorialVideoPanel.Visible Then
+            LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
+            LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
+            LinkLabel24.LinkColor = ForeColor
         End If
         ListView1.BackColor = LatestNewsPanel.BackColor
         ListView1.ForeColor = LatestNewsPanel.ForeColor
+        ListView2.BackColor = TutorialVideoPanel.BackColor
+        ListView2.ForeColor = TutorialVideoPanel.ForeColor
         RecentsLV.BackColor = SidePanel.BackColor
         TextBox1.BackColor = BackColor
         TextBox1.ForeColor = ForeColor
+        TextBox2.BackColor = BackColor
+        TextBox2.ForeColor = ForeColor
         ' New project view header and side panel tints
         If BackColor = Color.FromArgb(48, 48, 48) Then
             ProjectViewHeader.BackColor = Color.FromArgb(32, 90, 25)
@@ -5303,6 +5529,17 @@ Public Class MainForm
                 StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
         End Select
         StatusStrip.ForeColor = Color.White
+        ' Set foreground color on the recent list in File menu
+        Dim recItems = RecentProjectsListMenu.DropDownItems
+        Dim remItems As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(recItems)
+        Try
+            For Each dropDownItem As ToolStripDropDownItem In remItems
+                dropDownItem.BackColor = RecentProjectsListMenu.BackColor
+                dropDownItem.ForeColor = RecentProjectsListMenu.ForeColor
+            Next
+        Catch ex As Exception
+
+        End Try
     End Sub
 
     Sub ChangeLangs(LangCode As Integer)
@@ -5323,6 +5560,7 @@ Public Class MainForm
                         OpenExistingProjectToolStripMenuItem.Text = "&Open existing project"
                         ManageOnlineInstallationToolStripMenuItem.Text = "&Manage online installation"
                         ManageOfflineInstallationToolStripMenuItem.Text = "Manage o&ffline installation..."
+                        RecentProjectsListMenu.Text = "Recent projects"
                         SaveProjectToolStripMenuItem.Text = "&Save project..."
                         SaveProjectasToolStripMenuItem.Text = "Save project &as..."
                         ExitToolStripMenuItem.Text = "E&xit"
@@ -5672,6 +5910,11 @@ Public Class MainForm
                         Label34.Text = "Error information:"
                         Label35.Text = "Try connecting your system to the network. If your system is connected to the network but this error still appears, check whether you can access websites."
                         Button59.Text = "Try again"
+                        ' - Tutorial videos panel
+                        Label11.Text = "We couldn't get the latest videos"
+                        Label7.Text = "Error information:"
+                        Label6.Text = "Try connecting your system to the network. If your system is connected to the network but this error still appears, check whether you can access websites."
+                        Button17.Text = "Try again"
                     Case "ESN"
                         ' Top-level menu items
                         FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -5686,6 +5929,7 @@ Public Class MainForm
                         OpenExistingProjectToolStripMenuItem.Text = "&Abrir proyecto existente"
                         ManageOnlineInstallationToolStripMenuItem.Text = "Administrar &instalación activa"
                         ManageOfflineInstallationToolStripMenuItem.Text = "Administrar instalación &fuera de línea..."
+                        RecentProjectsListMenu.Text = "Proyectos recientes"
                         SaveProjectToolStripMenuItem.Text = "&Guardar proyecto..."
                         SaveProjectasToolStripMenuItem.Text = "Guardar proyecto &como..."
                         ExitToolStripMenuItem.Text = "Sa&lir"
@@ -6035,6 +6279,11 @@ Public Class MainForm
                         Label34.Text = "Información del error:"
                         Label35.Text = "Pruebe conectar su sistema a la red. Si su sistema está conectado a la red pero sigue apareciendo este error, compruebe si puede acceder a sitios web."
                         Button59.Text = "Intentar de nuevo"
+                        ' - Tutorial videos panel
+                        Label11.Text = "No pudimos obtener los últimos vídeos"
+                        Label7.Text = "Información del error:"
+                        Label6.Text = "Pruebe conectar su sistema a la red. Si su sistema está conectado a la red pero sigue apareciendo este error, compruebe si puede acceder a sitios web."
+                        Button17.Text = "Intentar de nuevo"
                     Case "FRA"
                         ' Top-level menu items
                         FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Fichier".ToUpper(), "&Fichier")
@@ -6049,6 +6298,7 @@ Public Class MainForm
                         OpenExistingProjectToolStripMenuItem.Text = "&Ouvrir un projet existant"
                         ManageOnlineInstallationToolStripMenuItem.Text = "&Gérer l'installation en ligne"
                         ManageOfflineInstallationToolStripMenuItem.Text = "Gérer l'installation &hors ligne..."
+                        RecentProjectsListMenu.Text = "Projets récents"
                         SaveProjectToolStripMenuItem.Text = "&Sauvegarder le projet..."
                         SaveProjectasToolStripMenuItem.Text = "Sauvegarder le projet so&us..."
                         ExitToolStripMenuItem.Text = "Sor&tir"
@@ -6398,6 +6648,11 @@ Public Class MainForm
                         Label34.Text = "Information d'erreur :"
                         Label35.Text = "Essayez de connecter votre système au réseau. Si votre système est connecté au réseau mais que cette erreur persiste, vérifiez si vous pouvez accéder aux sites web."
                         Button59.Text = "Réessayer"
+                        ' - Tutorial videos panel
+                        Label11.Text = "Nous n'avons pas pu obtenir les dernières vidéos"
+                        Label7.Text = "Informations sur l'erreur :"
+                        Label6.Text = "Essayez de connecter votre système au réseau. Si votre système est connecté au réseau mais que cette erreur apparaît toujours, vérifiez si vous pouvez accéder aux sites web."
+                        Button17.Text = "Essayez à nouveau"
                     Case "PTB", "PTG"
                         ' Top-level menu items
                         FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Ficheiro".ToUpper(), "&Ficheiro")
@@ -6412,6 +6667,7 @@ Public Class MainForm
                         OpenExistingProjectToolStripMenuItem.Text = "&Abrir projeto existente"
                         ManageOnlineInstallationToolStripMenuItem.Text = "&Gerir a instalação em linha"
                         ManageOfflineInstallationToolStripMenuItem.Text = "Gerir a instalação o&ffline..."
+                        RecentProjectsListMenu.Text = "Projectos recentes"
                         SaveProjectToolStripMenuItem.Text = "&Guardar projeto..."
                         SaveProjectasToolStripMenuItem.Text = "Save project &como..."
                         ExitToolStripMenuItem.Text = "Sa&ir"
@@ -6760,6 +7016,11 @@ Public Class MainForm
                         Label34.Text = "Informação de erro:"
                         Label35.Text = "Tente ligar o seu sistema à rede. Se o seu sistema estiver ligado à rede mas este erro continuar a aparecer, verifique se consegue aceder aos sítios Web."
                         Button59.Text = "Tentar novamente"
+                        ' - Tutorial videos panel
+                        Label11.Text = "Não foi possível obter os vídeos mais recentes"
+                        Label7.Text = "Informação de erro:"
+                        Label6.Text = "Tente ligar o seu sistema à rede. Se o seu sistema estiver ligado à rede mas este erro continuar a aparecer, verifique se consegue aceder aos sítios Web."
+                        Button17.Text = "Tentar novamente"
                     Case Else
                         Language = 1
                         ChangeLangs(Language)
@@ -6779,6 +7040,7 @@ Public Class MainForm
                 OpenExistingProjectToolStripMenuItem.Text = "&Open existing project"
                 ManageOnlineInstallationToolStripMenuItem.Text = "&Manage online installation"
                 ManageOfflineInstallationToolStripMenuItem.Text = "Manage o&ffline installation..."
+                RecentProjectsListMenu.Text = "Recent projects"
                 SaveProjectToolStripMenuItem.Text = "&Save project..."
                 SaveProjectasToolStripMenuItem.Text = "Save project &as..."
                 ExitToolStripMenuItem.Text = "E&xit"
@@ -7128,6 +7390,11 @@ Public Class MainForm
                 Label34.Text = "Error information:"
                 Label35.Text = "Try connecting your system to the network. If your system is connected to the network but this error still appears, check whether you can access websites."
                 Button59.Text = "Try again"
+                ' - Tutorial videos panel
+                Label11.Text = "We couldn't get the latest videos"
+                Label7.Text = "Error information:"
+                Label6.Text = "Try connecting your system to the network. If your system is connected to the network but this error still appears, check whether you can access websites."
+                Button17.Text = "Try again"
             Case 2
                 ' Top-level menu items
                 FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -7142,6 +7409,7 @@ Public Class MainForm
                 OpenExistingProjectToolStripMenuItem.Text = "&Abrir proyecto existente"
                 ManageOnlineInstallationToolStripMenuItem.Text = "Administrar &instalación activa"
                 ManageOfflineInstallationToolStripMenuItem.Text = "Administrar instalación &fuera de línea..."
+                RecentProjectsListMenu.Text = "Proyectos recientes"
                 SaveProjectToolStripMenuItem.Text = "&Guardar proyecto..."
                 SaveProjectasToolStripMenuItem.Text = "Guardar proyecto &como..."
                 ExitToolStripMenuItem.Text = "Sa&lir"
@@ -7490,6 +7758,11 @@ Public Class MainForm
                 Label34.Text = "Información del error:"
                 Label35.Text = "Pruebe conectar su sistema a la red. Si su sistema está conectado a la red pero sigue apareciendo este error, compruebe si puede acceder a sitios web."
                 Button59.Text = "Intentar de nuevo"
+                ' - Tutorial videos panel
+                Label11.Text = "No pudimos obtener los últimos vídeos"
+                Label7.Text = "Información del error:"
+                Label6.Text = "Pruebe conectar su sistema a la red. Si su sistema está conectado a la red pero sigue apareciendo este error, compruebe si puede acceder a sitios web."
+                Button17.Text = "Intentar de nuevo"
             Case 3
                 ' Top-level menu items
                 FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Fichier".ToUpper(), "&Fichier")
@@ -7504,6 +7777,7 @@ Public Class MainForm
                 OpenExistingProjectToolStripMenuItem.Text = "&Ouvrir un projet existant"
                 ManageOnlineInstallationToolStripMenuItem.Text = "&Gérer l'installation en ligne"
                 ManageOfflineInstallationToolStripMenuItem.Text = "Gérer l'installation &hors ligne..."
+                RecentProjectsListMenu.Text = "Projets récents"
                 SaveProjectToolStripMenuItem.Text = "&Sauvegarder le projet..."
                 SaveProjectasToolStripMenuItem.Text = "Sauvegarder le projet so&us..."
                 ExitToolStripMenuItem.Text = "Sor&tir"
@@ -7853,6 +8127,11 @@ Public Class MainForm
                 Label34.Text = "Information d'erreur :"
                 Label35.Text = "Essayez de connecter votre système au réseau. Si votre système est connecté au réseau mais que cette erreur persiste, vérifiez si vous pouvez accéder aux sites web."
                 Button59.Text = "Réessayer"
+                ' - Tutorial videos panel
+                Label11.Text = "Nous n'avons pas pu obtenir les dernières vidéos"
+                Label7.Text = "Informations sur l'erreur :"
+                Label6.Text = "Essayez de connecter votre système au réseau. Si votre système est connecté au réseau mais que cette erreur apparaît toujours, vérifiez si vous pouvez accéder aux sites web."
+                Button17.Text = "Essayez à nouveau"
             Case 4
                 ' Top-level menu items
                 FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Ficheiro".ToUpper(), "&Ficheiro")
@@ -7867,6 +8146,7 @@ Public Class MainForm
                 OpenExistingProjectToolStripMenuItem.Text = "&Abrir projeto existente"
                 ManageOnlineInstallationToolStripMenuItem.Text = "&Gerir a instalação em linha"
                 ManageOfflineInstallationToolStripMenuItem.Text = "Gerir a instalação o&ffline..."
+                RecentProjectsListMenu.Text = "Projectos recentes"
                 SaveProjectToolStripMenuItem.Text = "&Guardar projeto..."
                 SaveProjectasToolStripMenuItem.Text = "Save project &como..."
                 ExitToolStripMenuItem.Text = "Sa&ir"
@@ -8215,6 +8495,11 @@ Public Class MainForm
                 Label34.Text = "Informação de erro:"
                 Label35.Text = "Tente ligar o seu sistema à rede. Se o seu sistema estiver ligado à rede mas este erro continuar a aparecer, verifique se consegue aceder aos sítios Web."
                 Button59.Text = "Tentar novamente"
+                ' - Tutorial videos panel
+                Label11.Text = "Não foi possível obter os vídeos mais recentes"
+                Label7.Text = "Informação de erro:"
+                Label6.Text = "Tente ligar o seu sistema à rede. Se o seu sistema estiver ligado à rede mas este erro continuar a aparecer, verifique se consegue aceder aos sítios Web."
+                Button17.Text = "Tentar novamente"
         End Select
 
         If OnlineManagement Then
@@ -11246,7 +11531,43 @@ Public Class MainForm
                             RecentsLV.Items.Add(If(recentProject.ProjName <> "", recentProject.ProjName, Path.GetFileNameWithoutExtension(recentProject.ProjPath)))
                         Next
                     End If
-                End If
+                    Try
+                        RecentProject1ToolStripMenuItem.Text = " "
+                        RecentProject2ToolStripMenuItem.Text = " "
+                        RecentProject3ToolStripMenuItem.Text = " "
+                        RecentProject4ToolStripMenuItem.Text = " "
+                        RecentProject5ToolStripMenuItem.Text = " "
+                        RecentProject6ToolStripMenuItem.Text = " "
+                        RecentProject7ToolStripMenuItem.Text = " "
+                        RecentProject8ToolStripMenuItem.Text = " "
+                        RecentProject9ToolStripMenuItem.Text = " "
+                        RecentProject10ToolStripMenuItem.Text = " "
+
+                        ' Reconfigure text
+                        RecentProject1ToolStripMenuItem.Text = RecentList(0).ProjPath
+                        RecentProject1ToolStripMenuItem.Visible = True
+                        RecentProject2ToolStripMenuItem.Text = RecentList(1).ProjPath
+                        RecentProject2ToolStripMenuItem.Visible = True
+                        RecentProject3ToolStripMenuItem.Text = RecentList(2).ProjPath
+                        RecentProject3ToolStripMenuItem.Visible = True
+                        RecentProject4ToolStripMenuItem.Text = RecentList(3).ProjPath
+                        RecentProject4ToolStripMenuItem.Visible = True
+                        RecentProject5ToolStripMenuItem.Text = RecentList(4).ProjPath
+                        RecentProject5ToolStripMenuItem.Visible = True
+                        RecentProject6ToolStripMenuItem.Text = RecentList(5).ProjPath
+                        RecentProject6ToolStripMenuItem.Visible = True
+                        RecentProject7ToolStripMenuItem.Text = RecentList(6).ProjPath
+                        RecentProject7ToolStripMenuItem.Visible = True
+                        RecentProject8ToolStripMenuItem.Text = RecentList(7).ProjPath
+                        RecentProject8ToolStripMenuItem.Visible = True
+                        RecentProject9ToolStripMenuItem.Text = RecentList(8).ProjPath
+                        RecentProject9ToolStripMenuItem.Visible = True
+                        RecentProject10ToolStripMenuItem.Text = RecentList(9).ProjPath
+                        RecentProject10ToolStripMenuItem.Visible = True
+                    Catch ex As Exception
+                        ' Don't do anything special here
+                    End Try
+            End If
                 ProgressPanel.OperationNum = 990
                 LoadDTProj(OpenFileDialog1.FileName, Path.GetFileNameWithoutExtension(OpenFileDialog1.FileName), False, False)
             End If
@@ -13255,6 +13576,42 @@ Public Class MainForm
                             RecentsLV.Items.Add(If(recentProject.ProjName <> "", recentProject.ProjName, Path.GetFileNameWithoutExtension(recentProject.ProjPath)))
                         Next
                     End If
+                    Try
+                        RecentProject1ToolStripMenuItem.Text = " "
+                        RecentProject2ToolStripMenuItem.Text = " "
+                        RecentProject3ToolStripMenuItem.Text = " "
+                        RecentProject4ToolStripMenuItem.Text = " "
+                        RecentProject5ToolStripMenuItem.Text = " "
+                        RecentProject6ToolStripMenuItem.Text = " "
+                        RecentProject7ToolStripMenuItem.Text = " "
+                        RecentProject8ToolStripMenuItem.Text = " "
+                        RecentProject9ToolStripMenuItem.Text = " "
+                        RecentProject10ToolStripMenuItem.Text = " "
+
+                        ' Reconfigure text
+                        RecentProject1ToolStripMenuItem.Text = RecentList(0).ProjPath
+                        RecentProject1ToolStripMenuItem.Visible = True
+                        RecentProject2ToolStripMenuItem.Text = RecentList(1).ProjPath
+                        RecentProject2ToolStripMenuItem.Visible = True
+                        RecentProject3ToolStripMenuItem.Text = RecentList(2).ProjPath
+                        RecentProject3ToolStripMenuItem.Visible = True
+                        RecentProject4ToolStripMenuItem.Text = RecentList(3).ProjPath
+                        RecentProject4ToolStripMenuItem.Visible = True
+                        RecentProject5ToolStripMenuItem.Text = RecentList(4).ProjPath
+                        RecentProject5ToolStripMenuItem.Visible = True
+                        RecentProject6ToolStripMenuItem.Text = RecentList(5).ProjPath
+                        RecentProject6ToolStripMenuItem.Visible = True
+                        RecentProject7ToolStripMenuItem.Text = RecentList(6).ProjPath
+                        RecentProject7ToolStripMenuItem.Visible = True
+                        RecentProject8ToolStripMenuItem.Text = RecentList(7).ProjPath
+                        RecentProject8ToolStripMenuItem.Visible = True
+                        RecentProject9ToolStripMenuItem.Text = RecentList(8).ProjPath
+                        RecentProject9ToolStripMenuItem.Visible = True
+                        RecentProject10ToolStripMenuItem.Text = RecentList(9).ProjPath
+                        RecentProject10ToolStripMenuItem.Visible = True
+                    Catch ex As Exception
+                        ' Don't do anything special here
+                    End Try
                 End If
                 ProgressPanel.OperationNum = 990
                 LoadDTProj(OpenFileDialog1.FileName, Path.GetFileNameWithoutExtension(OpenFileDialog1.FileName), False, False)
@@ -16468,6 +16825,7 @@ Public Class MainForm
     Private Sub LinkLabel22_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel22.LinkClicked
         GetStartedPanel.Visible = True
         LatestNewsPanel.Visible = False
+        TutorialVideoPanel.Visible = False
         LinkLabel22.LinkColor = ForeColor
         LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
         LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
@@ -16476,12 +16834,16 @@ Public Class MainForm
     Private Sub LinkLabel23_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel23.LinkClicked
         GetStartedPanel.Visible = False
         LatestNewsPanel.Visible = True
+        TutorialVideoPanel.Visible = False
         LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
         LinkLabel23.LinkColor = ForeColor
         LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
     End Sub
 
     Private Sub LinkLabel24_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel24.LinkClicked
+        GetStartedPanel.Visible = False
+        LatestNewsPanel.Visible = False
+        TutorialVideoPanel.Visible = True
         LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
         LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
         LinkLabel24.LinkColor = ForeColor
@@ -17128,6 +17490,42 @@ Public Class MainForm
                            True, False)
             End If
             RecentRemoveLink.Visible = False
+            Try
+                RecentProject1ToolStripMenuItem.Text = " "
+                RecentProject2ToolStripMenuItem.Text = " "
+                RecentProject3ToolStripMenuItem.Text = " "
+                RecentProject4ToolStripMenuItem.Text = " "
+                RecentProject5ToolStripMenuItem.Text = " "
+                RecentProject6ToolStripMenuItem.Text = " "
+                RecentProject7ToolStripMenuItem.Text = " "
+                RecentProject8ToolStripMenuItem.Text = " "
+                RecentProject9ToolStripMenuItem.Text = " "
+                RecentProject10ToolStripMenuItem.Text = " "
+
+                ' Reconfigure text
+                RecentProject1ToolStripMenuItem.Text = RecentList(0).ProjPath
+                RecentProject1ToolStripMenuItem.Visible = True
+                RecentProject2ToolStripMenuItem.Text = RecentList(1).ProjPath
+                RecentProject2ToolStripMenuItem.Visible = True
+                RecentProject3ToolStripMenuItem.Text = RecentList(2).ProjPath
+                RecentProject3ToolStripMenuItem.Visible = True
+                RecentProject4ToolStripMenuItem.Text = RecentList(3).ProjPath
+                RecentProject4ToolStripMenuItem.Visible = True
+                RecentProject5ToolStripMenuItem.Text = RecentList(4).ProjPath
+                RecentProject5ToolStripMenuItem.Visible = True
+                RecentProject6ToolStripMenuItem.Text = RecentList(5).ProjPath
+                RecentProject6ToolStripMenuItem.Visible = True
+                RecentProject7ToolStripMenuItem.Text = RecentList(6).ProjPath
+                RecentProject7ToolStripMenuItem.Visible = True
+                RecentProject8ToolStripMenuItem.Text = RecentList(7).ProjPath
+                RecentProject8ToolStripMenuItem.Visible = True
+                RecentProject9ToolStripMenuItem.Text = RecentList(8).ProjPath
+                RecentProject9ToolStripMenuItem.Visible = True
+                RecentProject10ToolStripMenuItem.Text = RecentList(9).ProjPath
+                RecentProject10ToolStripMenuItem.Visible = True
+            Catch ex As Exception
+                ' Don't do anything special here
+            End Try
         End If
     End Sub
 
@@ -17145,6 +17543,55 @@ Public Class MainForm
             RecentsLV.Items.Add(If(recentProject.ProjName <> "", recentProject.ProjName, Path.GetFileNameWithoutExtension(recentProject.ProjPath)))
         Next
         RecentRemoveLink.Visible = False
+        Try
+            RecentProject1ToolStripMenuItem.Text = " "
+            RecentProject2ToolStripMenuItem.Text = " "
+            RecentProject3ToolStripMenuItem.Text = " "
+            RecentProject4ToolStripMenuItem.Text = " "
+            RecentProject5ToolStripMenuItem.Text = " "
+            RecentProject6ToolStripMenuItem.Text = " "
+            RecentProject7ToolStripMenuItem.Text = " "
+            RecentProject8ToolStripMenuItem.Text = " "
+            RecentProject9ToolStripMenuItem.Text = " "
+            RecentProject10ToolStripMenuItem.Text = " "
+
+            ' Reconfigure text
+            RecentProject1ToolStripMenuItem.Text = RecentList(0).ProjPath
+            RecentProject1ToolStripMenuItem.Visible = True
+            RecentProject2ToolStripMenuItem.Text = RecentList(1).ProjPath
+            RecentProject2ToolStripMenuItem.Visible = True
+            RecentProject3ToolStripMenuItem.Text = RecentList(2).ProjPath
+            RecentProject3ToolStripMenuItem.Visible = True
+            RecentProject4ToolStripMenuItem.Text = RecentList(3).ProjPath
+            RecentProject4ToolStripMenuItem.Visible = True
+            RecentProject5ToolStripMenuItem.Text = RecentList(4).ProjPath
+            RecentProject5ToolStripMenuItem.Visible = True
+            RecentProject6ToolStripMenuItem.Text = RecentList(5).ProjPath
+            RecentProject6ToolStripMenuItem.Visible = True
+            RecentProject7ToolStripMenuItem.Text = RecentList(6).ProjPath
+            RecentProject7ToolStripMenuItem.Visible = True
+            RecentProject8ToolStripMenuItem.Text = RecentList(7).ProjPath
+            RecentProject8ToolStripMenuItem.Visible = True
+            RecentProject9ToolStripMenuItem.Text = RecentList(8).ProjPath
+            RecentProject9ToolStripMenuItem.Visible = True
+            RecentProject10ToolStripMenuItem.Text = RecentList(9).ProjPath
+            RecentProject10ToolStripMenuItem.Visible = True
+        Catch ex As Exception
+            ' Don't do anything special here
+        End Try
+
+        ' An empty item will appear at the end. Make it hidden
+        Dim recItems = RecentProjectsListMenu.DropDownItems
+        Dim remItems As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(recItems)
+        Try
+            For Each dropDownItem As ToolStripDropDownItem In remItems
+                If dropDownItem.Text = " " Then
+                    dropDownItem.Visible = False
+                End If
+            Next
+        Catch ex As Exception
+
+        End Try
     End Sub
 
     Private Sub ExportImage_Click(sender As Object, e As EventArgs) Handles ExportImage.Click
@@ -17155,5 +17602,207 @@ Public Class MainForm
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.OperationNum = 7
         ProgressPanel.ShowDialog(Me)
+    End Sub
+
+    Sub LoadVideo(ID As String, Name As String, Description As String)
+        If File.Exists(Application.StartupPath & "\videos\videoplay.html") Then File.Delete(Application.StartupPath & "\videos\videoplay.html")
+        If File.Exists(Application.StartupPath & "\videos\videoplay_tmp.html") Then
+            Dim vidPlayRTB As New RichTextBox() With {
+                .Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\videos\videoplay_tmp.html")
+            }
+            vidPlayRTB.Text = vidPlayRTB.Text.Replace("{#REPLACEME}", ID).Trim().Replace("{#NAME}", Name).Trim().Replace("{#DESCRIPTION}", Description).Trim()
+            ' Set appropriate color mode in light theme
+            If BackColor = Color.FromArgb(239, 239, 242) Then
+                vidPlayRTB.Text = vidPlayRTB.Text.Replace("<body class=" & Quote & "pagebody-dark" & Quote & ">", "<body class=" & Quote & "pagebody" & Quote & ">").Trim()
+            End If
+            File.WriteAllText(Application.StartupPath & "\videos\videoplay.html", vidPlayRTB.Text, UTF8)
+            HelpVideoPlayer.WebBrowser1.Navigate(Application.StartupPath & "\videos\videoplay.html")
+            ' Check emulation mode settings of IE for DISMTools and set them to IE11 (+Edge) (if not detected)
+            Try
+                Dim IECompatRk As RegistryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION", True)
+                Dim IECompatInt As Integer = IECompatRk.GetValue("DISMTools.exe", -1)
+                If IECompatInt <> 11001 Then
+                    IECompatRk.SetValue("DISMTools.exe", 11001, RegistryValueKind.DWord)
+                    MsgBox("Modified Internet Explorer emulation settings for DISMTools. You will need to restart DISMTools in order to start video playback", vbOKOnly + vbInformation, "DISMTools")
+                    IECompatRk.Close()
+                    Exit Sub
+                End If
+                IECompatRk.Close()
+            Catch ex As Exception
+                MsgBox("DISMTools could not modify Internet Explorer emulation settings. Video playback will not start.", vbOKOnly + vbCritical, "DISMTools")
+                Exit Sub
+            End Try
+            HelpVideoPlayer.Show()
+        End If
+    End Sub
+
+    Private Sub ListView2_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles ListView2.MouseDoubleClick
+        LoadVideo(VideoList(ListView2.FocusedItem.Index).YT_ID,
+                  VideoList(ListView2.FocusedItem.Index).VideoName,
+                  VideoList(ListView2.FocusedItem.Index).VideoDesc)
+    End Sub
+
+    Private Sub MainForm_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
+        ' Alt-B (Background process panel)
+        If e.KeyCode = Keys.B And e.Alt Then
+            If Not HomePanel.Visible Then
+                BackgroundProcessesButton.PerformClick()
+                Focus()
+            End If
+        End If
+    End Sub
+
+    Private Sub AppendImage_Click(sender As Object, e As EventArgs) Handles AppendImage.Click
+        ImgAppend.ShowDialog()
+    End Sub
+
+    Private Sub Button17_Click(sender As Object, e As EventArgs) Handles Button17.Click
+        Try
+            Dim videoEx As Exception = New Exception()
+            If File.Exists(Application.StartupPath & "\videos.xml") Then File.Move(Application.StartupPath & "\videos.xml", Application.StartupPath & "\videos.xml.old")
+            Using client As New WebClient()
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                Try
+                    client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/dt_videos/main/videos.xml", Application.StartupPath & "\videos.xml")
+                Catch ex As Exception
+                    videoEx = ex
+                    Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
+                    Debug.WriteLine("Could not download video list")
+                End Try
+            End Using
+            Try
+                If File.Exists(Application.StartupPath & "\videos.xml") Then
+                    VideoList = LoadVideos(Application.StartupPath & "\videos.xml")
+                    File.Delete(Application.StartupPath & "\videos.xml.old")
+                End If
+            Catch ex As Exception
+                videoEx = ex
+                If File.Exists(Application.StartupPath & "\videos.xml.old") Then File.Move(Application.StartupPath & "\videos.xml.old", Application.StartupPath & "\videos.xml")
+                VideoList = LoadVideos(Application.StartupPath & "\videos.xml")
+            End Try
+            ListView2.Items.Clear()
+            Dim thumbnailList As ImageList = New ImageList()
+            thumbnailList.ImageSize = New Size(160, 90)
+            thumbnailList.ColorDepth = ColorDepth.Depth32Bit
+            ListView2.View = View.LargeIcon
+            ListView2.LargeImageList = thumbnailList
+            If VideoList IsNot Nothing Then
+                If VideoList.Count > 0 Then
+                    For Each VideoLink As Video In VideoList
+                        Dim thumbnail As Image = GetItemThumbnail(VideoLink.YT_ID)
+                        If thumbnail IsNot Nothing Then
+                            Dim newThumb As Image = CombineImages(thumbnail)
+                            thumbnailList.Images.Add(newThumb)
+                        End If
+                        Dim listItem As ListViewItem = New ListViewItem()
+                        listItem.ImageIndex = VideoList.IndexOf(VideoLink)
+                        listItem.Text = VideoLink.VideoName
+                        ListView2.Items.Add(listItem)
+                    Next
+                End If
+            ElseIf VideoList Is Nothing OrElse VideoList.Count = 0 Then
+                Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
+            End If
+            VideosPanel.Visible = True
+            VideoErrorPanel.Visible = False
+        Catch ex As Exception
+            VideosPanel.Visible = False
+            VideoErrorPanel.Visible = True
+            TextBox2.Text = ex.ToString() & " - " & ex.Message
+        End Try
+    End Sub
+
+    Sub LoadRecentsFromMenu(itemOrder As Integer)
+        Dim itmOrder As Integer = 0
+        If RecentList(itemOrder).ProjPath <> "" And File.Exists(RecentList(itemOrder).ProjPath) Then
+            If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement Or OfflineManagement, False, True), False)
+            If ImgBW.IsBusy Then Exit Sub
+            itmOrder = itemOrder
+            Dim recentProj As Recents = RecentList(itmOrder)
+            ChangeRecentListOrder(recentProj, itmOrder)
+            ProgressPanel.OperationNum = 990
+            LoadDTProj(recentProj.ProjPath, _
+                       If(recentProj.ProjName <> "", _
+                          recentProj.ProjName, _
+                          Path.GetFileNameWithoutExtension(recentProj.ProjPath)), _
+                       True, False)
+        End If
+        RecentRemoveLink.Visible = False
+        Try
+            RecentProject1ToolStripMenuItem.Text = " "
+            RecentProject2ToolStripMenuItem.Text = " "
+            RecentProject3ToolStripMenuItem.Text = " "
+            RecentProject4ToolStripMenuItem.Text = " "
+            RecentProject5ToolStripMenuItem.Text = " "
+            RecentProject6ToolStripMenuItem.Text = " "
+            RecentProject7ToolStripMenuItem.Text = " "
+            RecentProject8ToolStripMenuItem.Text = " "
+            RecentProject9ToolStripMenuItem.Text = " "
+            RecentProject10ToolStripMenuItem.Text = " "
+
+            ' Reconfigure text
+            RecentProject1ToolStripMenuItem.Text = RecentList(0).ProjPath
+            RecentProject1ToolStripMenuItem.Visible = True
+            RecentProject2ToolStripMenuItem.Text = RecentList(1).ProjPath
+            RecentProject2ToolStripMenuItem.Visible = True
+            RecentProject3ToolStripMenuItem.Text = RecentList(2).ProjPath
+            RecentProject3ToolStripMenuItem.Visible = True
+            RecentProject4ToolStripMenuItem.Text = RecentList(3).ProjPath
+            RecentProject4ToolStripMenuItem.Visible = True
+            RecentProject5ToolStripMenuItem.Text = RecentList(4).ProjPath
+            RecentProject5ToolStripMenuItem.Visible = True
+            RecentProject6ToolStripMenuItem.Text = RecentList(5).ProjPath
+            RecentProject6ToolStripMenuItem.Visible = True
+            RecentProject7ToolStripMenuItem.Text = RecentList(6).ProjPath
+            RecentProject7ToolStripMenuItem.Visible = True
+            RecentProject8ToolStripMenuItem.Text = RecentList(7).ProjPath
+            RecentProject8ToolStripMenuItem.Visible = True
+            RecentProject9ToolStripMenuItem.Text = RecentList(8).ProjPath
+            RecentProject9ToolStripMenuItem.Visible = True
+            RecentProject10ToolStripMenuItem.Text = RecentList(9).ProjPath
+            RecentProject10ToolStripMenuItem.Visible = True
+        Catch ex As Exception
+            ' Don't do anything special here
+        End Try
+    End Sub
+
+    Private Sub RecentProject10ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject10ToolStripMenuItem.Click
+        LoadRecentsFromMenu(9)
+    End Sub
+
+    Private Sub RecentProject9ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject9ToolStripMenuItem.Click
+        LoadRecentsFromMenu(8)
+    End Sub
+
+    Private Sub RecentProject8ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject8ToolStripMenuItem.Click
+        LoadRecentsFromMenu(7)
+    End Sub
+
+    Private Sub RecentProject7ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject7ToolStripMenuItem.Click
+        LoadRecentsFromMenu(6)
+    End Sub
+
+    Private Sub RecentProject6ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject6ToolStripMenuItem.Click
+        LoadRecentsFromMenu(5)
+    End Sub
+
+    Private Sub RecentProject5ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject5ToolStripMenuItem.Click
+        LoadRecentsFromMenu(4)
+    End Sub
+
+    Private Sub RecentProject4ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject4ToolStripMenuItem.Click
+        LoadRecentsFromMenu(3)
+    End Sub
+
+    Private Sub RecentProject3ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject3ToolStripMenuItem.Click
+        LoadRecentsFromMenu(2)
+    End Sub
+
+    Private Sub RecentProject2ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject2ToolStripMenuItem.Click
+        LoadRecentsFromMenu(1)
+    End Sub
+
+    Private Sub RecentProject1ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject1ToolStripMenuItem.Click
+        LoadRecentsFromMenu(0)
     End Sub
 End Class
