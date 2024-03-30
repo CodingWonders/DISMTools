@@ -1097,20 +1097,20 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <value>..\Resources\get_appxpkg_info.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Bugfixes:
+    <value>Bugfixes
 
-- Fixed an issue where the SWM file pattern chooser would not look right when switching from dark mode to light mode
-- Fixed some improper progress panel disposal issues
-- Fixed an issue where the program would show update recommendations for older versions of DISMTools (nightly versions only)
-- Fixed some exceptions that were thrown by the AppX package information dialog
+- Fixed an issue where the image information saver would throw an exception when getting information about some AppX packages
+- Fixed an issue where the program would throw an exception in the driver import dialog
 
-New features:
+New features
 
-- Added the ability to export a Windows image
-- The program can now clean up mount points on closure (option) and on-demand
-- When opening a File Explorer window to select a file, the program will now do that instead of just opening the directory the file is in
-- Internal errors are no longer shown on a generic dialog. Instead, they are now shown in a dedicated window
-- The App Installer downloader now shows the download URL, the download speed, and the estimated time remaining for the transfer</value>
+- All information dialogs have received Search capabilities
+- Video playback support has been added
+- Added initial feature update detection for builds in the Dilithium semester
+- You can access the background process details panel by pressing the Alt + B key combination now
+- Added the ability to append directories to a new index in the Windows image
+- You can now access the 10 most recent projects from the File menu
+- You can now configure the program to show the expanded progress panel by default</value>
   </data>
   <data name="split_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\split_img.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

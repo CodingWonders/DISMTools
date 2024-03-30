@@ -2166,17 +2166,17 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Bugfixes:
+        '''  Busca una cadena traducida similar a Bugfixes
         '''
-        '''- Fixed an issue where the SWM file pattern chooser would not look right when switching from dark mode to light mode
-        '''- Fixed some improper progress panel disposal issues
-        '''- Fixed an issue where the program would show update recommendations for older versions of DISMTools (nightly versions only)
-        '''- Fixed some exceptions that were thrown by the AppX package information dialog
+        '''- Fixed an issue where the image information saver would throw an exception when getting information about some AppX packages
+        '''- Fixed an issue where the program would throw an exception in the driver import dialog
         '''
-        '''New features:
+        '''New features
         '''
-        '''- Added the ability to export a Windows image
-        '''- The program can now clean up mount points on closure [resto de la cadena truncado]&quot;;.
+        '''- All information dialogs have received Search capabilities
+        '''- Video playback support has been added
+        '''- Added initial feature update detection for builds in the Dilithium semester
+        '''- You can access the background process details panel by pressing the Alt + B key com [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
