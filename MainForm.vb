@@ -249,6 +249,7 @@ Public Class MainForm
     Dim ImageStatus As ImageWatcher.Status
 
     Public RecentList As New List(Of Recents)
+    Public VideoList As New List(Of Video)
 
     Friend NotInheritable Class NativeMethods
 
@@ -425,6 +426,31 @@ Public Class MainForm
             RecentsLV.Items.Add(If(recentProject.ProjName <> "", recentProject.ProjName, Path.GetFileNameWithoutExtension(recentProject.ProjPath)))
         Next
     End Sub
+
+    Function LoadVideos(filePath As String) As List(Of Video)
+        Dim vidList As New List(Of Video)
+        Try
+            Using fs As FileStream = New FileStream(filePath, FileMode.Open)
+                Dim xs As New XmlReaderSettings()
+                xs.IgnoreWhitespace = True
+                Using reader As XmlReader = XmlReader.Create(fs, xs)
+                    While reader.Read()
+                        If reader.NodeType = XmlNodeType.Element AndAlso reader.Name = "Video" Then
+                            Dim vid As New Video()
+                            vid.YT_ID = reader.GetAttribute("ID")
+                            vid.VideoName = reader.GetAttribute("Name")
+                            vid.VideoDesc = reader.GetAttribute("Description")
+                            vidList.Add(vid)
+                        End If
+                    End While
+                End Using
+            End Using
+            Return vidList
+        Catch ex As Exception
+            Return Nothing
+        End Try
+        Return Nothing
+    End Function
     
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Because of the DISM API, Windows 7 compatibility is out the window (no pun intended)
@@ -546,7 +572,111 @@ Public Class MainForm
                 End If
             End If
         End If
+        Try
+            Dim videoEx As Exception = New Exception()
+            If File.Exists(Application.StartupPath & "\videos.xml") Then File.Move(Application.StartupPath & "\videos.xml", Application.StartupPath & "\videos.xml.old")
+            Using client As New WebClient()
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                Try
+                    client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/dt_videos/main/videos.xml", Application.StartupPath & "\videos.xml")
+                Catch ex As Exception
+                    videoEx = ex
+                    Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
+                    Debug.WriteLine("Could not download video list")
+                End Try
+            End Using
+            Try
+                If File.Exists(Application.StartupPath & "\videos.xml") Then
+                    VideoList = LoadVideos(Application.StartupPath & "\videos.xml")
+                    File.Delete(Application.StartupPath & "\videos.xml.old")
+                End If
+            Catch ex As Exception
+                videoEx = ex
+                If File.Exists(Application.StartupPath & "\videos.xml.old") Then File.Move(Application.StartupPath & "\videos.xml.old", Application.StartupPath & "\videos.xml")
+                VideoList = LoadVideos(Application.StartupPath & "\videos.xml")
+            End Try
+            ListView2.Items.Clear()
+            Dim thumbnailList As ImageList = New ImageList()
+            thumbnailList.ImageSize = New Size(160, 90)
+            thumbnailList.ColorDepth = ColorDepth.Depth32Bit
+            ListView2.View = View.LargeIcon
+            ListView2.LargeImageList = thumbnailList
+            If VideoList IsNot Nothing Then
+                If VideoList.Count > 0 Then
+                    For Each VideoLink As Video In VideoList
+                        Dim thumbnail As Image = GetItemThumbnail(VideoLink.YT_ID)
+                        If thumbnail IsNot Nothing Then
+                            Dim newThumb As Image = CombineImages(thumbnail)
+                            thumbnailList.Images.Add(newThumb)
+                        End If
+                        Dim listItem As ListViewItem = New ListViewItem()
+                        listItem.ImageIndex = VideoList.IndexOf(VideoLink)
+                        listItem.Text = VideoLink.VideoName
+                        ListView2.Items.Add(listItem)
+                    Next
+                Else
+                    Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
+                End If
+            Else
+                Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
+            End If
+            VideosPanel.Visible = True
+            VideoErrorPanel.Visible = False
+        Catch ex As Exception
+            VideosPanel.Visible = False
+            VideoErrorPanel.Visible = True
+            TextBox2.Text = ex.ToString() & " - " & ex.Message
+        End Try
     End Sub
+
+    Function GetItemThumbnail(videoId As String) As Image
+        Try
+            Dim thumbnailURI As String = "https://img.youtube.com/vi/" & videoId & "/maxresdefault.jpg"
+            Using client As WebClient = New WebClient()
+                Dim imgBytes() As Byte = client.DownloadData(thumbnailURI)
+                Using ms As MemoryStream = New MemoryStream(imgBytes)
+                    Dim ogImg As Image = Image.FromStream(ms)
+                    Dim thumbnail As Image = ResizeThumbnail(ogImg, 160, 90)
+                    Return thumbnail
+                End Using
+            End Using
+        Catch ex As Exception
+            Return Nothing
+        End Try
+        Return Nothing
+    End Function
+
+    Function ResizeThumbnail(img As Image, width As Integer, height As Integer) As Image
+        Try
+            Dim resImg As Bitmap = New Bitmap(width, height)
+            Using g As Graphics = Graphics.FromImage(resImg)
+                g.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBicubic
+                g.DrawImage(img, 0, 0, width, height)
+            End Using
+            Return resImg
+        Catch ex As Exception
+            Return Nothing
+        End Try
+        Return Nothing
+    End Function
+
+    Function CombineImages(thumbnail As Image) As Image
+        Try
+            Dim play As Image = My.Resources.video_play
+            Dim combinedImage As Bitmap = New Bitmap(thumbnail.Width, thumbnail.Height)
+            Using g As Graphics = Graphics.FromImage(combinedImage)
+                g.DrawImage(thumbnail, 0, 0, thumbnail.Width, thumbnail.Height)
+                ' Draw Play symbol
+                Dim pX As Integer = (thumbnail.Width - play.Width) / 2
+                Dim pY As Integer = (thumbnail.Height - play.Height) / 2
+                g.DrawImage(play, pX, pY, play.Width, play.Height)
+            End Using
+            Return combinedImage
+        Catch ex As Exception
+            Return Nothing
+        End Try
+        Return Nothing
+    End Function
 
     ''' <summary>
     ''' Detects all mounted images and their state. Calls the DISM API at program startup
@@ -675,7 +805,7 @@ Public Class MainForm
                 File.Delete(Application.StartupPath & "\info.ini")
                 Debug.WriteLine("Comparing versions...")
                 Dim fv As String = My.Application.Info.Version.ToString()
-                If fv = latestVer Then
+                If fv = latestVer Or New Version(fv) > New Version(latestVer) Then
                     Debug.WriteLine("There aren't any updates available")
                     UpdatePanel.Visible = False
                 Else
@@ -5220,12 +5350,20 @@ Public Class MainForm
             LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
             LinkLabel23.LinkColor = ForeColor
             LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
+        ElseIf TutorialVideoPanel.Visible Then
+            LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
+            LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
+            LinkLabel24.LinkColor = ForeColor
         End If
         ListView1.BackColor = LatestNewsPanel.BackColor
         ListView1.ForeColor = LatestNewsPanel.ForeColor
+        ListView2.BackColor = TutorialVideoPanel.BackColor
+        ListView2.ForeColor = TutorialVideoPanel.ForeColor
         RecentsLV.BackColor = SidePanel.BackColor
         TextBox1.BackColor = BackColor
         TextBox1.ForeColor = ForeColor
+        TextBox2.BackColor = BackColor
+        TextBox2.ForeColor = ForeColor
     End Sub
 
     Sub ChangeLangs(LangCode As Integer)
@@ -5595,6 +5733,11 @@ Public Class MainForm
                         Label34.Text = "Error information:"
                         Label35.Text = "Try connecting your system to the network. If your system is connected to the network but this error still appears, check whether you can access websites."
                         Button59.Text = "Try again"
+                        ' - Tutorial videos panel
+                        Label11.Text = "We couldn't get the latest videos"
+                        Label7.Text = "Error information:"
+                        Label6.Text = "Try connecting your system to the network. If your system is connected to the network but this error still appears, check whether you can access websites."
+                        Button17.Text = "Try again"
                     Case "ESN"
                         ' Top-level menu items
                         FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -5958,6 +6101,11 @@ Public Class MainForm
                         Label34.Text = "Información del error:"
                         Label35.Text = "Pruebe conectar su sistema a la red. Si su sistema está conectado a la red pero sigue apareciendo este error, compruebe si puede acceder a sitios web."
                         Button59.Text = "Intentar de nuevo"
+                        ' - Tutorial videos panel
+                        Label11.Text = "No pudimos obtener los últimos vídeos"
+                        Label7.Text = "Información del error:"
+                        Label6.Text = "Pruebe conectar su sistema a la red. Si su sistema está conectado a la red pero sigue apareciendo este error, compruebe si puede acceder a sitios web."
+                        Button17.Text = "Intentar de nuevo"
                     Case "FRA"
                         ' Top-level menu items
                         FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Fichier".ToUpper(), "&Fichier")
@@ -6321,6 +6469,11 @@ Public Class MainForm
                         Label34.Text = "Information d'erreur :"
                         Label35.Text = "Essayez de connecter votre système au réseau. Si votre système est connecté au réseau mais que cette erreur persiste, vérifiez si vous pouvez accéder aux sites web."
                         Button59.Text = "Réessayer"
+                        ' - Tutorial videos panel
+                        Label11.Text = "Nous n'avons pas pu obtenir les dernières vidéos"
+                        Label7.Text = "Informations sur l'erreur :"
+                        Label6.Text = "Essayez de connecter votre système au réseau. Si votre système est connecté au réseau mais que cette erreur apparaît toujours, vérifiez si vous pouvez accéder aux sites web."
+                        Button17.Text = "Essayez à nouveau"
                     Case "PTB", "PTG"
                         ' Top-level menu items
                         FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Ficheiro".ToUpper(), "&Ficheiro")
@@ -6683,6 +6836,11 @@ Public Class MainForm
                         Label34.Text = "Informação de erro:"
                         Label35.Text = "Tente ligar o seu sistema à rede. Se o seu sistema estiver ligado à rede mas este erro continuar a aparecer, verifique se consegue aceder aos sítios Web."
                         Button59.Text = "Tentar novamente"
+                        ' - Tutorial videos panel
+                        Label11.Text = "Não foi possível obter os vídeos mais recentes"
+                        Label7.Text = "Informação de erro:"
+                        Label6.Text = "Tente ligar o seu sistema à rede. Se o seu sistema estiver ligado à rede mas este erro continuar a aparecer, verifique se consegue aceder aos sítios Web."
+                        Button17.Text = "Tentar novamente"
                     Case Else
                         Language = 1
                         ChangeLangs(Language)
@@ -7051,6 +7209,11 @@ Public Class MainForm
                 Label34.Text = "Error information:"
                 Label35.Text = "Try connecting your system to the network. If your system is connected to the network but this error still appears, check whether you can access websites."
                 Button59.Text = "Try again"
+                ' - Tutorial videos panel
+                Label11.Text = "We couldn't get the latest videos"
+                Label7.Text = "Error information:"
+                Label6.Text = "Try connecting your system to the network. If your system is connected to the network but this error still appears, check whether you can access websites."
+                Button17.Text = "Try again"
             Case 2
                 ' Top-level menu items
                 FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Archivo".ToUpper(), "&Archivo")
@@ -7413,6 +7576,11 @@ Public Class MainForm
                 Label34.Text = "Información del error:"
                 Label35.Text = "Pruebe conectar su sistema a la red. Si su sistema está conectado a la red pero sigue apareciendo este error, compruebe si puede acceder a sitios web."
                 Button59.Text = "Intentar de nuevo"
+                ' - Tutorial videos panel
+                Label11.Text = "No pudimos obtener los últimos vídeos"
+                Label7.Text = "Información del error:"
+                Label6.Text = "Pruebe conectar su sistema a la red. Si su sistema está conectado a la red pero sigue apareciendo este error, compruebe si puede acceder a sitios web."
+                Button17.Text = "Intentar de nuevo"
             Case 3
                 ' Top-level menu items
                 FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Fichier".ToUpper(), "&Fichier")
@@ -7776,6 +7944,11 @@ Public Class MainForm
                 Label34.Text = "Information d'erreur :"
                 Label35.Text = "Essayez de connecter votre système au réseau. Si votre système est connecté au réseau mais que cette erreur persiste, vérifiez si vous pouvez accéder aux sites web."
                 Button59.Text = "Réessayer"
+                ' - Tutorial videos panel
+                Label11.Text = "Nous n'avons pas pu obtenir les dernières vidéos"
+                Label7.Text = "Informations sur l'erreur :"
+                Label6.Text = "Essayez de connecter votre système au réseau. Si votre système est connecté au réseau mais que cette erreur apparaît toujours, vérifiez si vous pouvez accéder aux sites web."
+                Button17.Text = "Essayez à nouveau"
             Case 4
                 ' Top-level menu items
                 FileToolStripMenuItem.Text = If(Options.CheckBox9.Checked, "&Ficheiro".ToUpper(), "&Ficheiro")
@@ -8138,6 +8311,11 @@ Public Class MainForm
                 Label34.Text = "Informação de erro:"
                 Label35.Text = "Tente ligar o seu sistema à rede. Se o seu sistema estiver ligado à rede mas este erro continuar a aparecer, verifique se consegue aceder aos sítios Web."
                 Button59.Text = "Tentar novamente"
+                ' - Tutorial videos panel
+                Label11.Text = "Não foi possível obter os vídeos mais recentes"
+                Label7.Text = "Informação de erro:"
+                Label6.Text = "Tente ligar o seu sistema à rede. Se o seu sistema estiver ligado à rede mas este erro continuar a aparecer, verifique se consegue aceder aos sítios Web."
+                Button17.Text = "Tentar novamente"
         End Select
 
         If OnlineManagement Then
@@ -11553,7 +11731,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ExplorerView_Click(sender As Object, e As EventArgs) Handles ExplorerView.Click, Button22.Click
-        Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", projPath)
+        Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", "/select," & Quote & projPath & "\" & projName.Text & ".dtproj" & Quote)
     End Sub
 
     Private Sub GetImageInfo_Click(sender As Object, e As EventArgs) Handles GetImageInfo.Click
@@ -14981,7 +15159,7 @@ Public Class MainForm
     End Sub
 
     Private Sub LinkLabel16_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel16.LinkClicked
-        Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", projPath)
+        Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", "/select," & Quote & projPath & "\" & projName.Text & ".dtproj" & Quote)
     End Sub
 
     Private Sub LinkLabel17_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel17.LinkClicked
@@ -16384,6 +16562,7 @@ Public Class MainForm
     Private Sub LinkLabel22_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel22.LinkClicked
         GetStartedPanel.Visible = True
         LatestNewsPanel.Visible = False
+        TutorialVideoPanel.Visible = False
         LinkLabel22.LinkColor = ForeColor
         LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
         LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
@@ -16392,12 +16571,16 @@ Public Class MainForm
     Private Sub LinkLabel23_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel23.LinkClicked
         GetStartedPanel.Visible = False
         LatestNewsPanel.Visible = True
+        TutorialVideoPanel.Visible = False
         LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
         LinkLabel23.LinkColor = ForeColor
         LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
     End Sub
 
     Private Sub LinkLabel24_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel24.LinkClicked
+        GetStartedPanel.Visible = False
+        LatestNewsPanel.Visible = False
+        TutorialVideoPanel.Visible = True
         LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
         LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
         LinkLabel24.LinkColor = ForeColor
@@ -16906,6 +17089,7 @@ Public Class MainForm
                               "Pretende iniciar o processo de reversão?"
                 End Select
                 If MsgBox(msg, vbYesNo + vbExclamation, Text) = MsgBoxResult.Yes Then
+                    If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
                     ProgressPanel.OperationNum = 86
                     ProgressPanel.ShowDialog(Me)
                     Close()
@@ -16994,6 +17178,7 @@ Public Class MainForm
                               "Pretende remover a capacidade de retroceder para uma versão mais antiga do Windows?"
                 End Select
                 If MsgBox(msg, vbYesNo + vbExclamation, Text) = MsgBoxResult.Yes Then
+                    If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
                     ProgressPanel.OperationNum = 87
                     ProgressPanel.ShowDialog(Me)
                 Else
@@ -17059,5 +17244,109 @@ Public Class MainForm
             RecentsLV.Items.Add(If(recentProject.ProjName <> "", recentProject.ProjName, Path.GetFileNameWithoutExtension(recentProject.ProjPath)))
         Next
         RecentRemoveLink.Visible = False
+    End Sub
+
+    Private Sub MainForm_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
+        ' Alt-B (Background process panel)
+        If e.KeyCode = Keys.B And e.Alt Then
+            If Not HomePanel.Visible Then
+                BackgroundProcessesButton.PerformClick()
+                Focus()
+            End If
+        End If
+    End Sub
+
+    Sub LoadVideo(ID As String, Name As String, Description As String)
+        If File.Exists(Application.StartupPath & "\videos\videoplay.html") Then File.Delete(Application.StartupPath & "\videos\videoplay.html")
+        If File.Exists(Application.StartupPath & "\videos\videoplay_tmp.html") Then
+            Dim vidPlayRTB As New RichTextBox() With {
+                .Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\videos\videoplay_tmp.html")
+            }
+            vidPlayRTB.Text = vidPlayRTB.Text.Replace("{#REPLACEME}", ID).Trim().Replace("{#NAME}", Name).Trim().Replace("{#DESCRIPTION}", Description).Trim()
+            ' Set appropriate color mode in light theme
+            If BackColor = Color.FromArgb(239, 239, 242) Then
+                vidPlayRTB.Text = vidPlayRTB.Text.Replace("<body class=" & Quote & "pagebody-dark" & Quote & ">", "<body class=" & Quote & "pagebody" & Quote & ">").Trim()
+            End If
+            File.WriteAllText(Application.StartupPath & "\videos\videoplay.html", vidPlayRTB.Text, UTF8)
+            HelpVideoPlayer.WebBrowser1.Navigate(Application.StartupPath & "\videos\videoplay.html")
+            ' Check emulation mode settings of IE for DISMTools and set them to IE11 (+Edge) (if not detected)
+            Try
+                Dim IECompatRk As RegistryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION", True)
+                Dim IECompatInt As Integer = IECompatRk.GetValue("DISMTools.exe", -1)
+                If IECompatInt <> 11001 Then
+                    IECompatRk.SetValue("DISMTools.exe", 11001, RegistryValueKind.DWord)
+                    MsgBox("Modified Internet Explorer emulation settings for DISMTools. You will need to restart DISMTools in order to start video playback", vbOKOnly + vbInformation, "DISMTools")
+                    IECompatRk.Close()
+                    Exit Sub
+                End If
+                IECompatRk.Close()
+            Catch ex As Exception
+                MsgBox("DISMTools could not modify Internet Explorer emulation settings. Video playback will not start.", vbOKOnly + vbCritical, "DISMTools")
+                Exit Sub
+            End Try
+            HelpVideoPlayer.Show()
+        End If
+    End Sub
+
+    Private Sub ListView2_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles ListView2.MouseDoubleClick
+        LoadVideo(VideoList(ListView2.FocusedItem.Index).YT_ID,
+                  VideoList(ListView2.FocusedItem.Index).VideoName,
+                  VideoList(ListView2.FocusedItem.Index).VideoDesc)
+    End Sub
+
+    Private Sub Button17_Click(sender As Object, e As EventArgs) Handles Button17.Click
+        Try
+            Dim videoEx As Exception = New Exception()
+            If File.Exists(Application.StartupPath & "\videos.xml") Then File.Move(Application.StartupPath & "\videos.xml", Application.StartupPath & "\videos.xml.old")
+            Using client As New WebClient()
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                Try
+                    client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/dt_videos/main/videos.xml", Application.StartupPath & "\videos.xml")
+                Catch ex As Exception
+                    videoEx = ex
+                    Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
+                    Debug.WriteLine("Could not download video list")
+                End Try
+            End Using
+            Try
+                If File.Exists(Application.StartupPath & "\videos.xml") Then
+                    VideoList = LoadVideos(Application.StartupPath & "\videos.xml")
+                    File.Delete(Application.StartupPath & "\videos.xml.old")
+                End If
+            Catch ex As Exception
+                videoEx = ex
+                If File.Exists(Application.StartupPath & "\videos.xml.old") Then File.Move(Application.StartupPath & "\videos.xml.old", Application.StartupPath & "\videos.xml")
+                VideoList = LoadVideos(Application.StartupPath & "\videos.xml")
+            End Try
+            ListView2.Items.Clear()
+            Dim thumbnailList As ImageList = New ImageList()
+            thumbnailList.ImageSize = New Size(160, 90)
+            thumbnailList.ColorDepth = ColorDepth.Depth32Bit
+            ListView2.View = View.LargeIcon
+            ListView2.LargeImageList = thumbnailList
+            If VideoList IsNot Nothing Then
+                If VideoList.Count > 0 Then
+                    For Each VideoLink As Video In VideoList
+                        Dim thumbnail As Image = GetItemThumbnail(VideoLink.YT_ID)
+                        If thumbnail IsNot Nothing Then
+                            Dim newThumb As Image = CombineImages(thumbnail)
+                            thumbnailList.Images.Add(newThumb)
+                        End If
+                        Dim listItem As ListViewItem = New ListViewItem()
+                        listItem.ImageIndex = VideoList.IndexOf(VideoLink)
+                        listItem.Text = VideoLink.VideoName
+                        ListView2.Items.Add(listItem)
+                    Next
+                End If
+            ElseIf VideoList Is Nothing OrElse VideoList.Count = 0 Then
+                Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
+            End If
+            VideosPanel.Visible = True
+            VideoErrorPanel.Visible = False
+        Catch ex As Exception
+            VideosPanel.Visible = False
+            VideoErrorPanel.Visible = True
+            TextBox2.Text = ex.ToString() & " - " & ex.Message
+        End Try
     End Sub
 End Class

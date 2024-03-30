@@ -78,6 +78,7 @@ Source: ".\files\WeifenLuo.WinFormsUI.Docking.dll"; DestDir: "{#pfDir}"; Flags: 
 Source: ".\files\WeifenLuo.WinFormsUI.Docking.ThemeVS2012.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\bin\*"; DestDir: "{#pfDir}\bin"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: ".\files\docs\*"; DestDir: "{#pfDir}\docs"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: ".\files\videos\*"; DestDir: "{#pfDir}\videos"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Registry]
@@ -148,6 +149,9 @@ Root: HKCU; Subkey: "Software\DISMTools\Stable\InfoSaver"; ValueType: dword; Val
 Root: HKCU; Subkey: "Software\DISMTools\Stable\InfoSaver"; ValueType: dword; ValueName: "AppX_CompleteInfo"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Stable\InfoSaver"; ValueType: dword; ValueName: "Cap_CompleteInfo"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Stable\InfoSaver"; ValueType: dword; ValueName: "Drv_CompleteInfo"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
+
+; Special - Set Internet Explorer browser emulation settings
+Root: HKCU; Subkey: "Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION"; ValueType: dword; ValueName: "DISMTools.exe"; ValueData: 11001; Flags: uninsdeletevalue createvalueifdoesntexist
 
 [Icons]
 Name: "{autoprograms}\{#scName}"; Filename: "{#pfDir}\{#MyAppExeName}"
