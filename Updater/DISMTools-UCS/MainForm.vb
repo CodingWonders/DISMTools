@@ -544,6 +544,7 @@ Public Class MainForm
         DirCopy(Application.StartupPath & "\new\Resources", Application.StartupPath & "\Resources", True, False)
         DirCopy(Application.StartupPath & "\new\bin", Application.StartupPath & "\bin", True, False)
         DirCopy(Application.StartupPath & "\new\docs", Application.StartupPath & "\docs", True, False)
+        DirCopy(Application.StartupPath & "\new\videos", Application.StartupPath & "\videos", True, False)
         If IsPortable And Not File.Exists(Application.StartupPath & "\portable") Then File.Create(Application.StartupPath & "\portable")
     End Sub
 
