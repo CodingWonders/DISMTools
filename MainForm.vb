@@ -17805,4 +17805,8 @@ Public Class MainForm
     Private Sub RecentProject1ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject1ToolStripMenuItem.Click
         LoadRecentsFromMenu(0)
     End Sub
+
+    Private Sub CreateDiscImageToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateDiscImageToolStripMenuItem.Click
+        ISOCreator.Show()
+    End Sub
 End Class

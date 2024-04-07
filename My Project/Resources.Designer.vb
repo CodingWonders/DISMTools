@@ -473,6 +473,16 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property create_iso() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("create_iso", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property CS_Idle_Blue() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("CS_Idle_Blue", resourceCulture)

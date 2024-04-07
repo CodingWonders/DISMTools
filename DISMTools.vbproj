@@ -567,6 +567,12 @@
     <Compile Include="Panels\Internal\ProjectValueLoadForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\ISOFiles\ISOCreator.Designer.vb">
+      <DependentUpon>ISOCreator.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\ISOFiles\ISOCreator.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\MSEdge\AddEdgeBrowser.Designer.vb">
       <DependentUpon>AddEdgeBrowser.vb</DependentUpon>
     </Compile>
@@ -921,6 +927,9 @@
     <EmbeddedResource Include="Panels\Internal\ProjectValueLoadForm.resx">
       <DependentUpon>ProjectValueLoadForm.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\ISOFiles\ISOCreator.resx">
+      <DependentUpon>ISOCreator.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\MSEdge\AddEdgeBrowser.resx">
       <DependentUpon>AddEdgeBrowser.vb</DependentUpon>
     </EmbeddedResource>
@@ -1023,6 +1032,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\mImgMgr.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\files\diskpart\dp_listdisk.dp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\files\startup\startnet.cmd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\PE_Helper.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Installer\Default.isl" />
@@ -1206,6 +1224,18 @@
     <Content Include="docs\search\main.js" />
     <Content Include="docs\search\worker.js" />
     <Content Include="docs\sitemap.xml" />
+    <Content Include="Helpers\extps1\PE_Helper\backgrounds\winpe_amd64.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Helpers\extps1\PE_Helper\backgrounds\winpe_arm.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Helpers\extps1\PE_Helper\backgrounds\winpe_arm64.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Helpers\extps1\PE_Helper\backgrounds\winpe_x86.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Installer\dt.iss" />
     <Content Include="Installer\ISCC.exe" />
     <Content Include="Installer\ISCmplr.dll" />
@@ -1277,6 +1307,7 @@
     <None Include="Resources\video_play.png" />
     <None Include="Resources\progresspanel_logview_hidden.png" />
     <None Include="Resources\progresspanel_logview_shown.png" />
+    <None Include="Resources\create_iso.png" />
     <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
     <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
     <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />
@@ -1577,14 +1608,16 @@ IF EXIST "$(SolutionDir)portable" (
 	ATTRIB portable +H
 )
 IF NOT EXIST bin (
-	md bin
-	md bin\exthelpers
-	md bin\extbatch
-	md bin\utils
-	md bin\extps1
-	move helpers\extbatch\*.* bin\extbatch
-	move helpers\dthelper.bat bin
-	move helpers\extps1\*.* bin\extps1
+	md "bin"
+	md "bin\exthelpers"
+	md "bin\extbatch"
+	md "bin\utils"
+	md "bin\extps1"
+	move "helpers\extbatch\*.*" "bin\extbatch"
+	move "helpers\dthelper.bat" "bin"
+	move "helpers\extps1\*.*" "bin\extps1"
+	md "bin\extps1\PE_Helper"
+	xcopy "helpers\extps1\PE_Helper\*.*" "bin\extps1\PE_Helper" /cehyi
 	IF EXIST HELPERS (
 		rd HELPERS /s /q
 	)

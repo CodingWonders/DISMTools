@@ -524,6 +524,8 @@ Partial Class MainForm
         Me.Timer2 = New System.Windows.Forms.Timer(Me.components)
         Me.WatcherBW = New System.ComponentModel.BackgroundWorker()
         Me.WatcherTimer = New System.Windows.Forms.Timer(Me.components)
+        Me.CreateDiscImageToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator38 = New System.Windows.Forms.ToolStripSeparator()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -1486,7 +1488,7 @@ Partial Class MainForm
         '
         'ToolsToolStripMenuItem
         '
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImageConversionToolStripMenuItem, Me.ToolStripSeparator12, Me.MergeSWM, Me.ToolStripSeparator18, Me.RemountImageWithWritePermissionsToolStripMenuItem, Me.ToolStripSeparator13, Me.CommandShellToolStripMenuItem, Me.ToolStripSeparator16, Me.UnattendedAnswerFileManagerToolStripMenuItem, Me.ReportManagerToolStripMenuItem, Me.MountedImageManagerTSMI, Me.ToolStripSeparator28, Me.WimScriptEditorCommand, Me.ToolStripSeparator9, Me.ActionEditorToolStripMenuItem, Me.ToolStripSeparator22, Me.OptionsToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImageConversionToolStripMenuItem, Me.ToolStripSeparator12, Me.MergeSWM, Me.ToolStripSeparator18, Me.RemountImageWithWritePermissionsToolStripMenuItem, Me.ToolStripSeparator13, Me.CommandShellToolStripMenuItem, Me.ToolStripSeparator16, Me.UnattendedAnswerFileManagerToolStripMenuItem, Me.ReportManagerToolStripMenuItem, Me.MountedImageManagerTSMI, Me.ToolStripSeparator28, Me.CreateDiscImageToolStripMenuItem, Me.ToolStripSeparator38, Me.WimScriptEditorCommand, Me.ToolStripSeparator9, Me.ActionEditorToolStripMenuItem, Me.ToolStripSeparator22, Me.OptionsToolStripMenuItem})
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(46, 20)
         Me.ToolsToolStripMenuItem.Text = "&Tools"
@@ -3951,7 +3953,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32.42009!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 67.57991!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 121.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -4000,7 +4002,7 @@ Partial Class MainForm
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel8.Location = New System.Drawing.Point(58, 3)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(110, 23)
+        Me.Panel8.Size = New System.Drawing.Size(109, 23)
         Me.Panel8.TabIndex = 8
         '
         'projName
@@ -4009,7 +4011,7 @@ Partial Class MainForm
         Me.projName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projName.Location = New System.Drawing.Point(0, 0)
         Me.projName.Name = "projName"
-        Me.projName.Size = New System.Drawing.Size(110, 23)
+        Me.projName.Size = New System.Drawing.Size(109, 23)
         Me.projName.TabIndex = 2
         Me.projName.Text = "projName"
         Me.projName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -4019,7 +4021,7 @@ Partial Class MainForm
         Me.projNameText.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projNameText.Location = New System.Drawing.Point(0, 0)
         Me.projNameText.Name = "projNameText"
-        Me.projNameText.Size = New System.Drawing.Size(110, 21)
+        Me.projNameText.Size = New System.Drawing.Size(109, 21)
         Me.projNameText.TabIndex = 4
         Me.projNameText.Text = "projName"
         Me.projNameText.Visible = False
@@ -5160,6 +5162,17 @@ Partial Class MainForm
         '
         Me.WatcherTimer.Interval = 1000
         '
+        'CreateDiscImageToolStripMenuItem
+        '
+        Me.CreateDiscImageToolStripMenuItem.Name = "CreateDiscImageToolStripMenuItem"
+        Me.CreateDiscImageToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
+        Me.CreateDiscImageToolStripMenuItem.Text = "Create disc image..."
+        '
+        'ToolStripSeparator38
+        '
+        Me.ToolStripSeparator38.Name = "ToolStripSeparator38"
+        Me.ToolStripSeparator38.Size = New System.Drawing.Size(277, 6)
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -5796,4 +5809,6 @@ Partial Class MainForm
     Friend WithEvents RecentProject8ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents RecentProject9ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents RecentProject10ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents CreateDiscImageToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator38 As System.Windows.Forms.ToolStripSeparator
 End Class
