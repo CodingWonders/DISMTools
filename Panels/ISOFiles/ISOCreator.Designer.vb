@@ -358,7 +358,7 @@ Partial Class ISOCreator
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(949, 13)
         Me.Label8.TabIndex = 0
-        Me.Label8.Text = "Creating ISO file. This can take some time. Please wait..."
+        Me.Label8.Text = "Status"
         '
         'OpenFileDialog1
         '
