@@ -641,7 +641,71 @@ Public Class AddProvAppxPackage
     ''' <remarks>Scans the header of AppX packages to gather application name, publisher, and version information</remarks>
     Sub ScanAppxPackage(IsFolder As Boolean, Package As String)
         ' Detect if the package specified is encrypted
-        If Path.GetExtension(Package).Replace(".", "").Trim().StartsWith("e", StringComparison.OrdinalIgnoreCase) Then
+        If Path.GetExtension(Package).Replace(".", "").Trim().StartsWith("e", StringComparison.OrdinalIgnoreCase) AndAlso MainForm.OnlineManagement Then
+            ' Add the package right away
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            If IsFolder Then
+                                ListView1.Items.Add(New ListViewItem(New String() {Package, "Unpacked (Encrypted)", "Encrypted application", "Encrypted application", "Encrypted application"}))
+                            Else
+                                ListView1.Items.Add(New ListViewItem(New String() {Package, "Packed (Encrypted)", "Encrypted application", "Encrypted application", "Encrypted application"}))
+                            End If
+                        Case "ESN"
+                            If IsFolder Then
+                                ListView1.Items.Add(New ListViewItem(New String() {Package, "Desempaquetado (Encriptado)", "Aplicación encriptada", "Aplicación encriptada", "Aplicación encriptada"}))
+                            Else
+                                ListView1.Items.Add(New ListViewItem(New String() {Package, "Empaquetado (Encriptado)", "Aplicación encriptada", "Aplicación encriptada", "Aplicación encriptada"}))
+                            End If
+                        Case "FRA"
+                            If IsFolder Then
+                                ListView1.Items.Add(New ListViewItem(New String() {Package, "Décompacté (Crypté)", "Application cryptée", "Application cryptée", "Application cryptée"}))
+                            Else
+                                ListView1.Items.Add(New ListViewItem(New String() {Package, "Compacté (Crypté)", "Application cryptée", "Application cryptée", "Application cryptée"}))
+                            End If
+                        Case "PTB", "PTG"
+                            If IsFolder Then
+                                ListView1.Items.Add(New ListViewItem(New String() {Package, "Desembalado (Encriptado)", "Aplicação encriptada", "Aplicação encriptada", "Aplicação encriptada"}))
+                            Else
+                                ListView1.Items.Add(New ListViewItem(New String() {Package, "Embalado (Encriptado)", "Aplicação encriptada", "Aplicação encriptada", "Aplicação encriptada"}))
+                            End If
+                    End Select
+                Case 1
+                    If IsFolder Then
+                        ListView1.Items.Add(New ListViewItem(New String() {Package, "Unpacked (Encrypted)", "Encrypted application", "Encrypted application", "Encrypted application"}))
+                    Else
+                        ListView1.Items.Add(New ListViewItem(New String() {Package, "Packed (Encrypted)", "Encrypted application", "Encrypted application", "Encrypted application"}))
+                    End If
+                Case 2
+                    If IsFolder Then
+                        ListView1.Items.Add(New ListViewItem(New String() {Package, "Desempaquetado (Encriptado)", "Aplicación encriptada", "Aplicación encriptada", "Aplicación encriptada"}))
+                    Else
+                        ListView1.Items.Add(New ListViewItem(New String() {Package, "Empaquetado (Encriptado)", "Aplicación encriptada", "Aplicación encriptada", "Aplicación encriptada"}))
+                    End If
+                Case 3
+                    If IsFolder Then
+                        ListView1.Items.Add(New ListViewItem(New String() {Package, "Décompacté (Crypté)", "Application cryptée", "Application cryptée", "Application cryptée"}))
+                    Else
+                        ListView1.Items.Add(New ListViewItem(New String() {Package, "Compacté (Crypté)", "Application cryptée", "Application cryptée", "Application cryptée"}))
+                    End If
+                Case 4
+                    If IsFolder Then
+                        ListView1.Items.Add(New ListViewItem(New String() {Package, "Desembalado (Encriptado)", "Aplicação encriptada", "Aplicação encriptada", "Aplicação encriptada"}))
+                    Else
+                        ListView1.Items.Add(New ListViewItem(New String() {Package, "Embalado (Encriptado)", "Aplicação encriptada", "Aplicação encriptada", "Aplicação encriptada"}))
+                    End If
+            End Select
+            Dim encPackage As New AppxPackage()
+            encPackage.PackageFile = Package
+            encPackage.PackageName = "<Encrypted>"
+            encPackage.PackagePublisher = "<Encrypted>"
+            encPackage.PackageVersion = "<Encrypted>"
+            encPackage.PackageArchitecture = "<Encrypted>"
+            If Not Packages.Contains(encPackage) Then Packages.Add(encPackage)
+            Button3.Enabled = True
+            Exit Sub
+        ElseIf Path.GetExtension(Package).Replace(".", "").Trim().StartsWith("e", StringComparison.OrdinalIgnoreCase) AndAlso Not MainForm.OnlineManagement Then
             Dim msg As String = ""
             Select Case MainForm.Language
                 Case 0

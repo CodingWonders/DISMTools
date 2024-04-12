@@ -3464,59 +3464,104 @@ Public Class ProgressPanel
                                    "- Application name: " & appxAdditionPackageList(x).PackageName & CrLf & _
                                    "- Application publisher: " & appxAdditionPackageList(x).PackagePublisher & CrLf & _
                                    "- Application version: " & appxAdditionPackageList(x).PackageVersion & CrLf)
-
-                ' Initialize command
-                DISMProc.StartInfo.FileName = DismProgram
-                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-provisionedappxpackage "
-                If File.GetAttributes(appxAdditionPackageList(x).PackageFile) = FileAttributes.Directory Then
-                    CommandArgs &= "/folderpath=" & Quote & appxAdditionPackageList(x).PackageFile & Quote
-                Else
-                    CommandArgs &= "/packagepath=" & Quote & appxAdditionPackageList(x).PackageFile & Quote
-                End If
-                If appxAdditionPackageList(x).PackageLicenseFile <> "" And File.Exists(appxAdditionPackageList(x).PackageLicenseFile) Then
-                    CommandArgs &= " /licensefile=" & Quote & appxAdditionPackageList(x).PackageLicenseFile & Quote
-                Else
-                    If appxAdditionPackageList(x).PackageLicenseFile <> "" Then
-                        LogView.AppendText(CrLf & _
-                                           "Warning: the license file does not exist. Continuing without one..." & CrLf & _
-                                           "         Do note that, if this app requires a license file, it may fail addition." & CrLf & _
-                                           "         Also, this may compromise the image.")
-                    End If
-                    CommandArgs &= " /skiplicense"
-                End If
-                ' Inform user that a package will be installed with dependencies
-                If appxAdditionPackageList(x).PackageSpecifiedDependencies.Count > 0 Then
-                    LogView.AppendText("- The following dependency packages will be installed alongside this application:" & CrLf)
-                End If
-                ' Add dependencies
-                For Each Dependency As AppxDependency In appxAdditionPackageList(x).PackageSpecifiedDependencies
-                    If File.Exists(Dependency.DependencyFile) Then
-                        LogView.AppendText("    - Dependency: " & Quote & Path.GetFileName(Dependency.DependencyFile) & Quote & CrLf)
-                        CommandArgs &= " /dependencypackagepath=" & Quote & Dependency.DependencyFile & Quote
+                ' Detect if it is an encrypted application
+                If Path.GetExtension(appxAdditionPackageList(x).PackageFile).Replace(".", "").Trim().StartsWith("e", StringComparison.OrdinalIgnoreCase) AndAlso OnlineMgmt Then
+                    ' Run PowerShell command. Support will be improved
+                    LogView.AppendText(CrLf & "The application about to be added is an encrypted file. Since the program is managing the active installation, a PowerShell command will be run." & CrLf)
+                    Dim AppxAuxProc As New Process()
+                    AppxAuxProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
+                    CommandArgs = "-Command Add-AppxPackage -Path '" & appxAdditionPackageList(x).PackageFile & "'"
+                    AppxAuxProc.StartInfo.Arguments = CommandArgs
+                    AppxAuxProc.Start()
+                    AppxAuxProc.WaitForExit()
+                    LogView.AppendText(CrLf & "Getting error level...")
+                    If Hex(AppxAuxProc.ExitCode).Length < 8 Then
+                        errCode = AppxAuxProc.ExitCode
                     Else
-                        LogView.AppendText(CrLf & _
-                                           "Warning: the dependency" & CrLf & _
-                                           Quote & Dependency.DependencyFile & Quote & CrLf & _
-                                           "does not exist in the file system. Skipping dependency...")
-                        Continue For
+                        errCode = Hex(AppxAuxProc.ExitCode)
                     End If
-                Next
-                If appxAdditionPackageList(x).PackageCustomDataFile <> "" And File.Exists(appxAdditionPackageList(x).PackageCustomDataFile) Then
-                    CommandArgs &= " /customdatapath=" & Quote & appxAdditionCustomDataFile & Quote
-                ElseIf appxAdditionPackageList(x).PackageCustomDataFile <> "" And Not File.Exists(appxAdditionPackageList(x).PackageCustomDataFile) Then
-                    LogView.AppendText(CrLf & _
-                                       "Warning: the custom data file does not exist. Continuing without one...")
-                End If
-                If FileVersionInfo.GetVersionInfo(DismProgram).ProductMajorPart = 10 And ImgVersion.Major = 10 Then
-                    If appxAdditionPackageList(x).PackageRegions = "" Then
-                        CommandArgs &= " /region:all"
+                    If AppxAuxProc.ExitCode = 0 Then
+                        appxSuccessfulAdditions += 1
                     Else
-                        CommandArgs &= " /region:" & Quote & appxAdditionPackageList(x).PackageRegions & Quote
+                        appxFailedAdditions += 1
                     End If
+                    If errCode.Length >= 8 Then
+                        LogView.AppendText(" Error level : 0x" & errCode)
+                    Else
+                        LogView.AppendText(" Error level : " & errCode)
+                    End If
+                    If PkgErrorText.RichTextBox1.Text = "" Then
+                        If errCode.Length >= 8 Then
+                            PkgErrorText.RichTextBox1.AppendText("0x" & errCode)
+                        Else
+                            PkgErrorText.RichTextBox1.AppendText(errCode)
+                        End If
+                    Else
+                        If errCode.Length >= 8 Then
+                            PkgErrorText.RichTextBox1.AppendText(CrLf & "0x" & errCode)
+                        Else
+                            PkgErrorText.RichTextBox1.AppendText(CrLf & errCode)
+                        End If
+                    End If
+                    Continue For
+                ElseIf Path.GetExtension(appxAdditionPackageList(x).PackageFile).Replace(".", "").Trim().StartsWith("e", StringComparison.OrdinalIgnoreCase) AndAlso Not OnlineMgmt Then
+                    ' Continue loop without installing application
+                    LogView.AppendText(CrLf & "The application about to be added is an encrypted file. Encrypted packages can only be added to active installations. Skipping this package..." & CrLf)
+                    Continue For
+                Else
+                    ' Initialize command
+                    DISMProc.StartInfo.FileName = DismProgram
+                    CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-provisionedappxpackage "
+                    If File.GetAttributes(appxAdditionPackageList(x).PackageFile) = FileAttributes.Directory Then
+                        CommandArgs &= "/folderpath=" & Quote & appxAdditionPackageList(x).PackageFile & Quote
+                    Else
+                        CommandArgs &= "/packagepath=" & Quote & appxAdditionPackageList(x).PackageFile & Quote
+                    End If
+                    If appxAdditionPackageList(x).PackageLicenseFile <> "" And File.Exists(appxAdditionPackageList(x).PackageLicenseFile) Then
+                        CommandArgs &= " /licensefile=" & Quote & appxAdditionPackageList(x).PackageLicenseFile & Quote
+                    Else
+                        If appxAdditionPackageList(x).PackageLicenseFile <> "" Then
+                            LogView.AppendText(CrLf & _
+                                               "Warning: the license file does not exist. Continuing without one..." & CrLf & _
+                                               "         Do note that, if this app requires a license file, it may fail addition." & CrLf & _
+                                               "         Also, this may compromise the image.")
+                        End If
+                        CommandArgs &= " /skiplicense"
+                    End If
+                    ' Inform user that a package will be installed with dependencies
+                    If appxAdditionPackageList(x).PackageSpecifiedDependencies.Count > 0 Then
+                        LogView.AppendText("- The following dependency packages will be installed alongside this application:" & CrLf)
+                    End If
+                    ' Add dependencies
+                    For Each Dependency As AppxDependency In appxAdditionPackageList(x).PackageSpecifiedDependencies
+                        If File.Exists(Dependency.DependencyFile) Then
+                            LogView.AppendText("    - Dependency: " & Quote & Path.GetFileName(Dependency.DependencyFile) & Quote & CrLf)
+                            CommandArgs &= " /dependencypackagepath=" & Quote & Dependency.DependencyFile & Quote
+                        Else
+                            LogView.AppendText(CrLf & _
+                                               "Warning: the dependency" & CrLf & _
+                                               Quote & Dependency.DependencyFile & Quote & CrLf & _
+                                               "does not exist in the file system. Skipping dependency...")
+                            Continue For
+                        End If
+                    Next
+                    If appxAdditionPackageList(x).PackageCustomDataFile <> "" And File.Exists(appxAdditionPackageList(x).PackageCustomDataFile) Then
+                        CommandArgs &= " /customdatapath=" & Quote & appxAdditionCustomDataFile & Quote
+                    ElseIf appxAdditionPackageList(x).PackageCustomDataFile <> "" And Not File.Exists(appxAdditionPackageList(x).PackageCustomDataFile) Then
+                        LogView.AppendText(CrLf & _
+                                           "Warning: the custom data file does not exist. Continuing without one...")
+                    End If
+                    If FileVersionInfo.GetVersionInfo(DismProgram).ProductMajorPart = 10 And ImgVersion.Major = 10 Then
+                        If appxAdditionPackageList(x).PackageRegions = "" Then
+                            CommandArgs &= " /region:all"
+                        Else
+                            CommandArgs &= " /region:" & Quote & appxAdditionPackageList(x).PackageRegions & Quote
+                        End If
+                    End If
+                    DISMProc.StartInfo.Arguments = CommandArgs
+                    DISMProc.Start()
+                    DISMProc.WaitForExit()
                 End If
-                DISMProc.StartInfo.Arguments = CommandArgs
-                DISMProc.Start()
-                DISMProc.WaitForExit()
                 LogView.AppendText(CrLf & "Getting error level...")
                 If Hex(DISMProc.ExitCode).Length < 8 Then
                     errCode = DISMProc.ExitCode
