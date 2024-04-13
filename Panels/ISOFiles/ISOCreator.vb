@@ -236,6 +236,7 @@ Public Class ISOCreator
     End Sub
 
     Sub GetImageInfo(ImageFile As String)
+        TextBox2.Text = ""
         If MainForm.MountedImageDetectorBW.IsBusy Then
             MainForm.MountedImageDetectorBW.CancelAsync()
             While MainForm.MountedImageDetectorBW.IsBusy
@@ -253,11 +254,11 @@ Public Class ISOCreator
             DismApi.Initialize(DismLogLevel.LogErrors)
             ImageInfoCollection = DismApi.GetImageInfo(ImageFile)
             For Each ImageInfo As DismImageInfo In ImageInfoCollection
-                TextBox2.Text = "Images in selected file: " & ImageInfoCollection.Count & CrLf & CrLf &
-                                " - Image " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & " of " & ImageInfoCollection.Count & CrLf &
-                                "   - Image name: " & ImageInfo.ImageName & CrLf &
-                                "   - Image description: " & ImageInfo.ImageDescription & CrLf &
-                                "   - Image version: " & ImageInfo.ProductVersion.ToString() & CrLf & CrLf
+                TextBox2.AppendText("Images in selected file: " & ImageInfoCollection.Count & CrLf & CrLf &
+                                    " - Image " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & " of " & ImageInfoCollection.Count & CrLf &
+                                    "   - Image name: " & ImageInfo.ImageName & CrLf &
+                                    "   - Image description: " & ImageInfo.ImageDescription & CrLf &
+                                    "   - Image version: " & ImageInfo.ProductVersion.ToString() & CrLf & CrLf)
             Next
         Catch ex As Exception
             Dim msg As String = ""
@@ -387,7 +388,7 @@ Public Class ISOCreator
         Dim ISOCreator As New Process()
         ISOCreator.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
         ISOCreator.StartInfo.WorkingDirectory = Application.StartupPath & "\bin\extps1\PE_Helper"
-        ISOCreator.StartInfo.Arguments = Quote & Application.StartupPath & "\bin\extps1\PE_Helper\PE_Helper.ps1" & Quote & " -cmd StartPEGen -arch " & ComboBox1.SelectedItem & " -imgFile " & Quote & TextBox1.Text & Quote & " -isoPath " & Quote & TextBox3.Text & Quote
+        ISOCreator.StartInfo.Arguments = "-executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\PE_Helper\PE_Helper.ps1" & Quote & " -cmd StartPEGen -arch " & ComboBox1.SelectedItem & " -imgFile " & Quote & TextBox1.Text & Quote & " -isoPath " & Quote & TextBox3.Text & Quote
         ISOCreator.Start()
         ISOCreator.WaitForExit()
         success = (ISOCreator.ExitCode = 0)

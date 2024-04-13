@@ -335,6 +335,8 @@ Partial Class ISOCreator
         '
         'ProgressBar1
         '
+        Me.ProgressBar1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ProgressBar1.Location = New System.Drawing.Point(15, 29)
         Me.ProgressBar1.MarqueeAnimationSpeed = 150
         Me.ProgressBar1.Name = "ProgressBar1"
@@ -343,6 +345,8 @@ Partial Class ISOCreator
         '
         'Label9
         '
+        Me.Label9.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label9.AutoEllipsis = True
         Me.Label9.Location = New System.Drawing.Point(12, 57)
         Me.Label9.Name = "Label9"
@@ -353,6 +357,8 @@ Partial Class ISOCreator
         '
         'Label8
         '
+        Me.Label8.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label8.AutoEllipsis = True
         Me.Label8.Location = New System.Drawing.Point(12, 12)
         Me.Label8.Name = "Label8"
