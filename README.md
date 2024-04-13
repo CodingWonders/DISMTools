@@ -4,7 +4,7 @@
 </p>
 -->
 
-![Product image](https://github.com/CodingWonders/DISMTools/assets/101426328/e34803b5-706d-4123-bb7f-75189c151039)
+![Product image](https://github.com/CodingWonders/DISMTools/assets/101426328/84dda638-1475-48c8-8d90-39a85115cc20)
 
 <!-- Tags (powered by Shields.io) -->
 
@@ -59,7 +59,7 @@ DISMTools isn't just a front-end for DISM, but an advanced one. As you perform t
 - **Easily create configuration lists.** With the *DISM Configuration List Editor* you can quickly create your configuration list to exclude certain items during operations like capturing an image:
 
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/5b472424-4595-4082-9574-c147babba64b" />
+	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/f82873b6-b59a-4e12-9682-1624872e6d30" />
 </p>
 
 - **Quickly manage all your mounted images in one interface.** The mounted image manager lets you perform basic image management tasks with your mounted images:
@@ -73,6 +73,18 @@ DISMTools isn't just a front-end for DISM, but an advanced one. As you perform t
 <p align="center">
 	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/d668f94e-0d39-49bb-b98f-ec045fed725b" />
 </p>
+
+- **Quickly test your Windows images.** With the ISO creation wizard, you can test your Windows image quickly and easily:
+
+<p align="center">
+	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/102d829d-aeb1-4697-9225-27775bea2b61" />
+</p>
+<p align="center">
+	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/eb0e2332-520c-4d2f-9cee-27c608546f6f" />
+</p>
+
+> [!NOTE]
+> The Windows ADK and its Windows PE plugin are required for this feature to work
 
 ## Supported actions
 
@@ -130,7 +142,12 @@ DISMTools is compatible with the following operating systems:
 
 ## Downloading
 
-You can download DISMTools from the [Releases](https://github.com/CodingWonders/DISMTools/releases) section (recommended), from [Softpedia](https://www.softpedia.com/get/Tweak/System-Tweak/DISMTools.shtml), or from WinGet (`winget install CodingWondersSoftware.DISMTools.Stable`). This program is also 100% Free.
+You can download DISMTools from the [Releases](https://github.com/CodingWonders/DISMTools/releases) section (recommended), from [Softpedia](https://www.softpedia.com/get/Tweak/System-Tweak/DISMTools.shtml), or from WinGet:
+
+- Stable version: `winget install CodingWondersSoftware.DISMTools.Stable` (moniker: `DISMTools`)
+- Preview version: `winget install CodingWondersSoftware.DISMTools.Preview` (moniker: `DISMTools-pre`)
+
+This program is also 100% Free.
 
 <p align="center">
 	<img src="https://www.softpedia.com/_img/softpedia_100_free.png" />
@@ -172,13 +189,7 @@ You should have this setting configured like this:
 
 If you want to contribute to this project, you can do so in many ways:
 
-- Code changes: changes that WILL make it to the next release. If you want to do these, do the following:
-
-  1. Create your separate branch, based on the **latest** `dt_pre_****` one (you don't want to work on your changes based on an outdated source tree). This will make sure your change can arrive in the next preview
-  2. Clone the newly created branch or, if you already cloned the repository, fetch the origin (`git fetch origin`) and switch to your branch
-  3. Work on your changes **and test them**. We want to make sure your changes work as expected, and there aren't any [regressions](https://en.wikipedia.org/wiki/Regression_testing) because of them
-  4. Commit your changes and create a pull request. If not set automatically, select the **latest** `dt_pre_****` branch to merge the contents to it. We'll review your changes and, if they're ready, we'll merge them.
-
+- Code changes: changes that WILL make it to the next release. If you want to do these, please read [the contribution guidelines](https://github.com/CodingWonders/DISMTools/blob/stable/CONTRIBUTING.md)
 - Documentation and/or artwork: if you like the visual side of things more, we recommend contributing to the help system! Check out the last section for instructions.
 
 ## Testing the latest
