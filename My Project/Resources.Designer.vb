@@ -2176,17 +2176,11 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Bugfixes
+        '''  Busca una cadena traducida similar a New features:
         '''
-        '''- Fixed an issue where the image information saver would throw an exception when getting information about some AppX packages
-        '''- Fixed an issue where the program would throw an exception in the driver import dialog
-        '''
-        '''New features
-        '''
-        '''- All information dialogs have received Search capabilities
-        '''- Video playback support has been added
-        '''- Added initial feature update detection for builds in the Dilithium semester
-        '''- You can access the background process details panel by pressing the Alt + B key com [resto de la cadena truncado]&quot;;.
+        '''- Added the ability to create custom ISO files that can be used to test your Windows image easily
+        '''- The pop-up version of the mounted image manager can now be closed by pressing the Esc key
+        '''- Encrypted AppX packages (&quot;.eappx&quot;, &quot;.eappxbundle&quot;, &quot;.emsix&quot; and &quot;.emsixbundle&quot;) can now be added when managing the active installation.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
