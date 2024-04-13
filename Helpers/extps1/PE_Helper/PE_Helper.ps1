@@ -486,102 +486,10 @@ function Start-OSApplication
     Start-DismCommand -Verb Apply -ImagePath "C:\" -WimFile "$((Get-Location).Path)sources\install.wim" -WimIndex $index
     Set-Serviceability -ImagePath "C:\"
     New-BootFiles
-    # Apply custom things before reboot
-    if (Test-Path ".\files\custom-inst" -PathType Leaf)
-    {
-        # Start custom procedure
-        if (Test-Path ".\files\pkgs\pkg_add" -PathType Leaf)
-        {
-            $pkgFiles = [IO.File]::ReadAllText(".\files\pkgs\pkg_add").Split("`r`n")
-            foreach ($pkg in $pkgFiles)
-            {
-                if (Test-Path "$pkg" -PathType Leaf)
-                {
-                    Start-DismCommand -Verb Add-Package -ImagePath "C:\" -PackagePath "$pkg" | Out-Null
-                }
-            }
-        }
-        if (Test-Path ".\files\pkgs\pkg_rem" -PathType Leaf)
-        {
-            $pkgFiles = [IO.File]::ReadAllText(".\files\pkgs\pkg_rem").Split("`r`n")
-            foreach ($pkg in $pkgFiles)
-            {
-                # This will throw errors in case a package is superseded or is a permanent one. Check changes over at https://github.com/ChrisTitusTech/winutil/pull/1776/files for more information.
-                Start-DismCommand -Verb Remove-Package -ImagePath "C:\" -PackageName "$pkg" | Out-Null
-            }            
-        }
-        if (Test-Path ".\files\feats\feat_enable" -PathType Leaf)
-        {
-            $features = [IO.File]::ReadAllText(".\files\feats\feat_enable").Split("`r`n")
-            $featSource = [IO.File]::ReadAllText(".\files\feats\source")
-            foreach ($feature in $features)
-            {
-                Start-DismCommand -Verb Enable-Feature -ImagePath "C:\" -FeatureEnablementName $feature -FeatureEnablementSource "$featSource" | Out-Null
-            }            
-        }
-        if (Test-Path ".\files\feats\feat_disable" -PathType Leaf)
-        {
-            $features = [IO.File]::ReadAllText(".\files\feats\feat_disable").Split("`r`n")
-            foreach ($feature in $features)
-            {
-                Start-DismCommand -Verb Disable-Feature -ImagePath "C:\" -FeatureDisablementName $feature -FeatureDisablementRemove $false | Out-Null
-            }            
-        }
-        if (Test-Path ".\files\appx\appx_add" -PathType Leaf)
-        {
-            $appxFiles = [IO.File]::ReadAllText(".\files\appx\appx_add").Split("`r`n")
-            foreach ($appx in $appxFiles)
-            {
-                if (Test-Path "$appx" -PathType Leaf)
-                {
-                    Start-DismCommand -Verb Add-Appx -ImagePath "C:\" -AppxPackageFile "$appx" -AppxLicenseFile "" -AppxCustomDataFile "" -AppxRegions "all" | Out-Null
-                }
-            }
-        }
-        if (Test-Path ".\files\appx\appx_rem" -PathType Leaf)
-        {
-            $appxFiles = [IO.File]::ReadAllText(".\files\appx\appx_rem").Split("`r`n")
-            foreach ($appx in $appxFiles)
-            {
-                Start-DismCommand -Verb Remove-Appx -ImagePath "C:\" -AppxPackageName "$appx" | Out-Null
-            }
-        }
-        if (Test-Path ".\files\caps\caps_enable" -PathType Leaf)
-        {
-            $capabilities = [IO.File]::ReadAllText(".\files\caps\caps_enable").Split("`r`n")
-            $capSource = [IO.File]::ReadAllText(".\files\caps\source")
-            foreach ($capability in $capabilities)
-            {
-                Start-DismCommand -Verb Add-Capability -ImagePath "C:\" -CapabilityAdditionName $capability -CapabilityAdditionSource "$capSource" | Out-Null
-            }            
-        }
-        if (Test-Path ".\files\caps\caps_disable" -PathType Leaf)
-        {
-            $capabilities = [IO.File]::ReadAllText(".\files\caps\caps_disable").Split("`r`n")
-            foreach ($capability in $capabilities)
-            {
-                Start-DismCommand -Verb Remove-Capability -ImagePath "C:\" -CapabilityRemovalName $capability | Out-Null
-            }            
-        }
-        if (Test-Path ".\files\drvs\drvs_add" -PathType Leaf)
-        {
-            $drvFiles = [IO.File]::ReadAllText(".\files\drvs\drvs_add").Split("`r`n")
-            foreach ($drv in $drvFiles)
-            {
-                if (Test-Path "$drv" -PathType Leaf)
-                {
-                    Start-DismCommand -Verb Add-Driver -ImagePath "C:\" -DriverAdditionFile "$drv" -DriverAdditionRecurse $false | Out-Null
-                }
-                elseif (Test-Path "$drv")
-                {
-                    Start-DismCommand -Verb Add-Driver -ImagePath "C:\" -DriverAdditionFile "$drv" -DriverAdditionRecurse $true | Out-Null
-                }
-            }
-        }
-    }
     # Show message before rebooting system
     Write-Host "The first stage of Setup has completed, and your system will reboot automatically.`n`nIf there are any bootable devices, remove those.`n`nWhen your computer restarts, Setup will continue.`n"
     Show-Timeout -Seconds 15
+    Write-Host "Restarting your system..."
     wpeutil reboot
 }
 
