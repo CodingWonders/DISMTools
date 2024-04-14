@@ -1581,6 +1581,7 @@
   <ItemGroup>
     <Folder Include="bin\Debug\" />
     <Folder Include="Panels\Set_Ops\" />
+    <Folder Include="Tools\UnpEax\" />
     <Folder Include="Updater\" />
     <Folder Include="wimlib\" />
   </ItemGroup>
@@ -1644,6 +1645,12 @@ IF NOT EXIST scratch (
 )
 :: Copy the Internet Explorer browser emulation registry file to the program directory
 copy /y "$(SolutionDir)Tools\DT_IEConfig.reg" "DT_IEConfig.reg"
+
+IF EXIST "$(SolutionDir)Tools\UnpEax\bin\Debug\UnpEax.exe" (
+	md "Tools\UnpEax"
+	copy /y "$(SolutionDir)Tools\UnpEax\bin\Debug\UnpEax.exe" "Tools\UnpEax\UnpEax.exe"
+)
+
 IF %25ISPREVIEW%25=="Yes" (
 	echo You will be running a preview release, which may not be ready for production. You may experience more bugs and less stability. Please switch to a stable release whenever possible.
 )
@@ -1694,7 +1701,11 @@ IF EXIST videos (
 )
 
 IF EXIST videos.xml (del videos.xml)
-IF EXIST videos.xml.old (del videos.xml.old)</PreBuildEvent>
+IF EXIST videos.xml.old (del videos.xml.old)
+
+IF EXIST tools (
+	rd tools /s /q
+)</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
