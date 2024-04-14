@@ -253,9 +253,9 @@ Public Class ISOCreator
         Try
             DismApi.Initialize(DismLogLevel.LogErrors)
             ImageInfoCollection = DismApi.GetImageInfo(ImageFile)
+            TextBox2.Text = "Images in selected file: " & ImageInfoCollection.Count & CrLf & CrLf
             For Each ImageInfo As DismImageInfo In ImageInfoCollection
-                TextBox2.AppendText("Images in selected file: " & ImageInfoCollection.Count & CrLf & CrLf &
-                                    " - Image " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & " of " & ImageInfoCollection.Count & CrLf &
+                TextBox2.AppendText(" - Image " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & " of " & ImageInfoCollection.Count & CrLf &
                                     "   - Image name: " & ImageInfo.ImageName & CrLf &
                                     "   - Image description: " & ImageInfo.ImageDescription & CrLf &
                                     "   - Image version: " & ImageInfo.ProductVersion.ToString() & CrLf & CrLf)
