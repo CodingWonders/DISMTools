@@ -609,7 +609,7 @@ Public Class PrgSetup
         For Each fntFamily As FontFamily In FontFamily.Families
             ComboBox3.Items.Add(fntFamily.Name)
         Next
-        ComboBox3.SelectedItem = "Courier New"
+        ComboBox3.SelectedItem = "Consolas"
     End Sub
 
     Private Sub ComboBox3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox3.SelectedIndexChanged

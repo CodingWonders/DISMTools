@@ -1462,7 +1462,7 @@ Public Class MainForm
                 ' Apply language settings immediately
                 ChangeLangs(Language)
                 ' Detect log font setting. Do note that, if a system does not contain the font set in this program,
-                ' it will revert to "Courier New"
+                ' it will revert to "Consolas"
                 For Each line In DTSettingForm.RichTextBox1.Lines
                     If line.StartsWith("LogFont=", StringComparison.OrdinalIgnoreCase) Then
                         LogFont = line.Replace("LogFont=", "").Trim().Replace(Quote, "").Trim()
@@ -1728,7 +1728,7 @@ Public Class MainForm
             If Not fontTester.Name = TestingFontName Then
                 ProblematicStrings(1) = LogFont
                 isLogFontProblematic = True
-                LogFont = "Courier New"
+                LogFont = "Consolas"
             End If
         End Using
         If Not File.Exists(LogFile) Then
@@ -4551,8 +4551,8 @@ Public Class MainForm
             DTSettingForm.RichTextBox2.AppendText("ColorMode=1")
         End Try
         DTSettingForm.RichTextBox2.AppendText(CrLf & "Language=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFont=" & Quote & "Courier New" & Quote)
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontSi=10")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFont=" & Quote & "Consolas" & Quote)
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontSi=11")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontBold=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SecondaryProgressPanelStyle=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=0")
@@ -4620,8 +4620,8 @@ Public Class MainForm
             PersKey.SetValue("ColorMode", 1, RegistryValueKind.DWord)
         End Try
         PersKey.SetValue("Language", 0, RegistryValueKind.DWord)
-        PersKey.SetValue("LogFont", "Courier New", RegistryValueKind.String)
-        PersKey.SetValue("LogFontSi", 10, RegistryValueKind.DWord)
+        PersKey.SetValue("LogFont", "Consolas", RegistryValueKind.String)
+        PersKey.SetValue("LogFontSi", 11, RegistryValueKind.DWord)
         PersKey.SetValue("LogFontBold", 0, RegistryValueKind.DWord)
         PersKey.SetValue("SecondaryProgressPanelStyle", 1, RegistryValueKind.DWord)
         PersKey.SetValue("AllCaps", 0, RegistryValueKind.DWord)
