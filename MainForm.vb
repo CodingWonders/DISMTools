@@ -251,6 +251,8 @@ Public Class MainForm
     Public RecentList As New List(Of Recents)
     Public VideoList As New List(Of Video)
 
+    Dim AdkCopyEx As Exception
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -14191,7 +14193,7 @@ Public Class MainForm
                     End Select
                 End If
             Catch ex As Exception
-
+                AdkCopyEx = ex
             End Try
         End If
     End Sub
@@ -14307,6 +14309,9 @@ Public Class MainForm
                 Case 4
                     MenuDesc.Text = "Não foi possível copiar as ferramentas de implantação"
             End Select
+            If AdkCopyEx IsNot Nothing Then
+                MenuDesc.Text &= " (" & AdkCopyEx.Message & ")"
+            End If
         End Try
     End Sub
 
