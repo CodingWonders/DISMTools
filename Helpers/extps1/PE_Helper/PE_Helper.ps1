@@ -841,7 +841,7 @@ function Show-Timeout {
         Start-Sleep -Seconds 1
     }
     Write-Progress -Activity "Restarting system..." -Status "Restarting your system" -PercentComplete 100
- }
+}
 
 if ($cmd -eq "StartApply")
 {
