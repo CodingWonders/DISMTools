@@ -473,6 +473,33 @@ function Start-OSApplication
     $partition = Get-Partitions $drive
     if ($partition -eq 0)
     {
+        $msg = "This will perform disk configuration changes on disk $drive. THIS WILL DELETE ALL PARTITIONS IN IT. IF YOU ARE NOT WILLING TO LOSE DATA, DO NOT CONTINUE."
+    }
+    else
+    {
+        $msg = "This will perform disk configuration changes on partition $partition. THIS WILL FORMAT IT IT. IF YOU ARE NOT WILLING TO LOSE DATA, DO NOT CONTINUE."
+    }
+    Write-Host $msg -BackgroundColor Black -ForegroundColor Yellow
+    $choice = Read-Host "Are you sure you want to continue (Y/N)"
+    if ($choice -ne "Y")
+    {
+        do
+        {
+            $partition = Get-Partitions $drive
+            if ($partition -eq 0)
+            {
+                $msg = "This will perform disk configuration changes on disk $drive. THIS WILL DELETE ALL PARTITIONS IN IT. IF YOU ARE NOT WILLING TO LOSE DATA, DO NOT CONTINUE.`n"
+            }
+            else
+            {
+                $msg = "This will perform disk configuration changes on partition $partition. THIS WILL FORMAT IT. IF YOU ARE NOT WILLING TO LOSE DATA, DO NOT CONTINUE.`n"
+            }
+            Write-Host $msg -BackgroundColor Black -ForegroundColor Yellow
+            $choice = Read-Host "Are you sure you want to continue (Y/N)"
+        } until ($choice -eq "Y")
+    }
+    if ($partition -eq 0)
+    {
         # Proceed with default disk configuration
         Write-DiskConfiguration $drive $true
     }
@@ -481,15 +508,22 @@ function Start-OSApplication
         # Proceed with custom disk configuration
         Write-DiskConfiguration $drive $false
     }
+    wpeutil createpagefile /path="C:\pagefile.sys" /size=256
     $index = Get-WimIndexes
     Write-Host "Applying Windows image. This can take some time..."
-    Start-DismCommand -Verb Apply -ImagePath "C:\" -WimFile "$((Get-Location).Path)sources\install.wim" -WimIndex $index
+    if ((Start-DismCommand -Verb Apply -ImagePath "C:\" -WimFile "$((Get-Location).Path)sources\install.wim" -WimIndex $index) -eq $true)
+    {
+        Write-Host "The Windows image has been applied successfully."
+    }
+    else
+    {
+        Write-Host "Failed to apply the Windows image."
+    }
     Set-Serviceability -ImagePath "C:\"
     New-BootFiles
     # Show message before rebooting system
     Write-Host "The first stage of Setup has completed, and your system will reboot automatically.`n`nIf there are any bootable devices, remove those.`n`nWhen your computer restarts, Setup will continue.`n"
     Show-Timeout -Seconds 15
-    Write-Host "Restarting your system..."
     wpeutil reboot
 }
 
@@ -798,14 +832,15 @@ function New-BootFiles
 }
 
 function Show-Timeout {
-     param (
-         [Parameter(Mandatory = $true, Position = 0)] [int] $seconds
-     )
-     for ($i = 0; $i -lt $seconds; $i++)
-     {
-         Write-Progress -Activity "Restarting system..." -Status "Your system will restart in $($seconds - $i) seconds" -PercentComplete (($i / $seconds) * 100)
-         Start-Sleep -Seconds 1
-     }
+    param (
+        [Parameter(Mandatory = $true, Position = 0)] [int] $seconds
+    )
+    for ($i = 0; $i -lt $seconds; $i++)
+    {
+        Write-Progress -Activity "Restarting system..." -Status "Your system will restart in $($seconds - $i) seconds" -PercentComplete (($i / $seconds) * 100)
+        Start-Sleep -Seconds 1
+    }
+    Write-Progress -Activity "Restarting system..." -Status "Restarting your system" -PercentComplete 100
  }
 
 if ($cmd -eq "StartApply")
