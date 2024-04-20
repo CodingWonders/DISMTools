@@ -739,7 +739,15 @@ Public Class MainForm
     ''' </summary>
     ''' <remarks></remarks>
     Sub RemountOrphanedImages()
-        AutoReloadForm.ShowDialog()
+        Dim NeedToRemount As Boolean = False
+        If MountedImageImgStatuses.Count > 0 Then
+            For x = 0 To Array.LastIndexOf(MountedImageImgStatuses, MountedImageImgStatuses.Last)
+                If MountedImageImgStatuses(x) = 1 Then
+                    NeedToRemount = True
+                End If
+            Next
+        End If
+        If NeedToRemount Then AutoReloadForm.ShowDialog()
         HasRemounted = True
     End Sub
 
