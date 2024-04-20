@@ -739,25 +739,7 @@ Public Class MainForm
     ''' </summary>
     ''' <remarks></remarks>
     Sub RemountOrphanedImages()
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
-        If MountedImageMountDirs.Count > 0 Then
-            Try
-                DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
-                For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
-                    If MountedImageImgStatuses(x) = 1 Then
-                        DismApi.RemountImage(MountedImageMountDirs(x))
-                    End If
-                Next
-            Catch ex As Exception
-                Debug.WriteLine("Could not remount all orphaned images. Reason:" & CrLf & ex.ToString())
-            Finally
-                DismApi.Shutdown()
-            End Try
-        End If
+        AutoReloadForm.ShowDialog()
         HasRemounted = True
     End Sub
 
