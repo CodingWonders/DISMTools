@@ -687,6 +687,12 @@
     <Compile Include="Panels\Report_Dlgs\Get-ImageInfo\ReportForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Startup\AutoReload\AutoReloadForm.Designer.vb">
+      <DependentUpon>AutoReloadForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Startup\AutoReload\AutoReloadForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Startup\SplashScreen.Designer.vb">
       <DependentUpon>SplashScreen.vb</DependentUpon>
     </Compile>
@@ -986,6 +992,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Report_Dlgs\Get-ImageInfo\ReportForm.resx">
       <DependentUpon>ReportForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Startup\AutoReload\AutoReloadForm.resx">
+      <DependentUpon>AutoReloadForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Startup\SplashScreen.resx">
       <DependentUpon>SplashScreen.vb</DependentUpon>
