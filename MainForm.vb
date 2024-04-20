@@ -707,6 +707,49 @@ Public Class MainForm
             VideoErrorPanel.Visible = True
             TextBox2.Text = ex.ToString() & " - " & ex.Message
         End Try
+        ' Detect custom themes
+        Try
+            Dim themeRk As RegistryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\ThemeManager")
+            Dim ThemeDll As String = themeRk.GetValue("DllName")
+            Dim PrePol As String = themeRk.GetValue("PrePolicy-DllName")
+            themeRk.Close()
+            If Not ThemeDll.Equals(PrePol, StringComparison.OrdinalIgnoreCase) Then
+                Dim msg As String = ""
+                Dim titleMsg As String = ""
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                titleMsg = "Beware of custom themes"
+                                msg = "DISMTools has detected that a custom theme has been set on this system. Some custom themes make the program not look correctly, so it's recommended to switch to the default theme."
+                            Case "ESN"
+                                titleMsg = "Cuidado con temas personalizados"
+                                msg = "DISMTools ha detectado que se ha establecido un tema personalizado en este sistema. Algunos temas de terceros hacen que el programa tenga errores visuales, así que se recomienda que cambie al tema predeterminado."
+                            Case "FRA"
+                                titleMsg = "Attention aux thèmes personnalisés"
+                                msg = "DISMTools a détecté qu'un thème personnalisé a été défini sur ce système. Certains thèmes personnalisés font que le programme ne s'affiche pas correctement, il est donc recommandé de passer au thème par défaut."
+                            Case "PTB", "PTG"
+                                titleMsg = "Cuidado com os temas personalizados"
+                                msg = "O DISMTools detectou que foi definido um tema personalizado neste sistema. Alguns temas personalizados fazem com que o programa não tenha um aspeto correto, pelo que se recomenda a mudança para o tema predefinido."
+                        End Select
+                    Case 1
+                        titleMsg = "Beware of custom themes"
+                        msg = "DISMTools has detected that a custom theme has been set on this system. Some custom themes make the program not look correctly, so it's recommended to switch to the default theme."
+                    Case 2
+                        titleMsg = "Cuidado con temas personalizados"
+                        msg = "DISMTools ha detectado que se ha establecido un tema personalizado en este sistema. Algunos temas de terceros hacen que el programa tenga errores visuales, así que se recomienda que cambie al tema predeterminado."
+                    Case 3
+                        titleMsg = "Attention aux thèmes personnalisés"
+                        msg = "DISMTools a détecté qu'un thème personnalisé a été défini sur ce système. Certains thèmes personnalisés font que le programme ne s'affiche pas correctement, il est donc recommandé de passer au thème par défaut."
+                    Case 4
+                        titleMsg = "Cuidado com os temas personalizados"
+                        msg = "O DISMTools detectou que foi definido um tema personalizado neste sistema. Alguns temas personalizados fazem com que o programa não tenha um aspeto correto, pelo que se recomenda a mudança para o tema predefinido."
+                End Select
+                MsgBox(msg, vbOKOnly + vbExclamation, titleMsg)
+            End If
+        Catch ex As Exception
+
+        End Try
     End Sub
 
     Function GetItemThumbnail(videoId As String) As Image
