@@ -53,6 +53,7 @@ Partial Class ISOCreator
         Me.Label8 = New System.Windows.Forms.Label()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
+        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
@@ -377,12 +378,25 @@ Partial Class ISOCreator
         '
         Me.SaveFileDialog1.Filter = "ISO files|*.iso"
         '
+        'LinkLabel1
+        '
+        Me.LinkLabel1.AutoEllipsis = True
+        Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel1.Location = New System.Drawing.Point(12, 531)
+        Me.LinkLabel1.Name = "LinkLabel1"
+        Me.LinkLabel1.Size = New System.Drawing.Size(343, 13)
+        Me.LinkLabel1.TabIndex = 11
+        Me.LinkLabel1.TabStop = True
+        Me.LinkLabel1.Text = "Download the Windows ADK"
+        '
         'ISOCreator
         '
         Me.AcceptButton = Me.OK_Button
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1008, 561)
+        Me.Controls.Add(Me.LinkLabel1)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.OK_Button)
         Me.Controls.Add(Me.Cancel_Button)
@@ -439,4 +453,5 @@ Partial Class ISOCreator
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
     Friend WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
+    Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
 End Class

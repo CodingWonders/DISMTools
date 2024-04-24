@@ -36,6 +36,7 @@ Public Class ISOCreator
                         Cancel_Button.Text = "Cancel"
                         GroupBox1.Text = "Options"
                         GroupBox2.Text = "Progress"
+                        LinkLabel1.Text = "Download the Windows ADK"
                     Case "ESN"
                         progressMessages(0) = "Estado"
                         progressMessages(1) = "Creando archivo ISO. Esto puede llevar algo de tiempo. Espere..."
@@ -58,6 +59,7 @@ Public Class ISOCreator
                         Cancel_Button.Text = "Cancelar"
                         GroupBox1.Text = "Opciones"
                         GroupBox2.Text = "Progreso"
+                        LinkLabel1.Text = "Descargar el ADK de Windows"
                     Case "FRA"
                         progressMessages(0) = "Statut"
                         progressMessages(1) = "Création du fichier ISO en cours. Cela peut prendre un certain temps. Veuillez patienter..."
@@ -80,6 +82,7 @@ Public Class ISOCreator
                         Cancel_Button.Text = "Annuler"
                         GroupBox1.Text = "Paramètres"
                         GroupBox2.Text = "Progrès"
+                        LinkLabel1.Text = "Télécharger l'ADK Windows"
                     Case "PTB", "PTG"
                         progressMessages(0) = "Estado"
                         progressMessages(1) = "A criar ficheiro ISO. Isto pode demorar algum tempo. Por favor, aguarde..."
@@ -102,6 +105,7 @@ Public Class ISOCreator
                         Cancel_Button.Text = "Cancelar"
                         GroupBox1.Text = "Configurações"
                         GroupBox2.Text = "Progresso"
+                        LinkLabel1.Text = "Baixar o Windows ADK"
                 End Select
             Case 1
                 progressMessages(0) = "Status"
@@ -125,6 +129,7 @@ Public Class ISOCreator
                 Cancel_Button.Text = "Cancel"
                 GroupBox1.Text = "Options"
                 GroupBox2.Text = "Progress"
+                LinkLabel1.Text = "Download the Windows ADK"
             Case 2
                 progressMessages(0) = "Estado"
                 progressMessages(1) = "Creando archivo ISO. Esto puede llevar algo de tiempo. Espere..."
@@ -147,6 +152,7 @@ Public Class ISOCreator
                 Cancel_Button.Text = "Cancelar"
                 GroupBox1.Text = "Opciones"
                 GroupBox2.Text = "Progreso"
+                LinkLabel1.Text = "Descargar el ADK de Windows"
             Case 3
                 progressMessages(0) = "Statut"
                 progressMessages(1) = "Création du fichier ISO en cours. Cela peut prendre un certain temps. Veuillez patienter..."
@@ -169,6 +175,7 @@ Public Class ISOCreator
                 Cancel_Button.Text = "Annuler"
                 GroupBox1.Text = "Paramètres"
                 GroupBox2.Text = "Progrès"
+                LinkLabel1.Text = "Télécharger l'ADK Windows"
             Case 4
                 progressMessages(0) = "Estado"
                 progressMessages(1) = "A criar ficheiro ISO. Isto pode demorar algum tempo. Por favor, aguarde..."
@@ -191,6 +198,7 @@ Public Class ISOCreator
                 Cancel_Button.Text = "Cancelar"
                 GroupBox1.Text = "Configurações"
                 GroupBox2.Text = "Progresso"
+                LinkLabel1.Text = "Baixar o Windows ADK"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
@@ -457,5 +465,29 @@ Public Class ISOCreator
         If TextBox1.Text <> "" And File.Exists(TextBox1.Text) Then
             GetImageInfo(TextBox1.Text)
         End If
+    End Sub
+
+    Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        Process.Start("https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install")
+                    Case "ESN"
+                        Process.Start("https://learn.microsoft.com/es-es/windows-hardware/get-started/adk-install")
+                    Case "FRA"
+                        Process.Start("https://learn.microsoft.com/fr-fr/windows-hardware/get-started/adk-install")
+                    Case "PTB", "PTG"
+                        Process.Start("https://learn.microsoft.com/pt-pt/windows-hardware/get-started/adk-install")
+                End Select
+            Case 1
+                Process.Start("https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install")
+            Case 2
+                Process.Start("https://learn.microsoft.com/es-es/windows-hardware/get-started/adk-install")
+            Case 3
+                Process.Start("https://learn.microsoft.com/fr-fr/windows-hardware/get-started/adk-install")
+            Case 4
+                Process.Start("https://learn.microsoft.com/pt-pt/windows-hardware/get-started/adk-install")
+        End Select
     End Sub
 End Class
