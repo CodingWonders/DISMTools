@@ -48,6 +48,8 @@ Public Class ImgInfoSaveDlg
     Public SkipQuestions As Boolean
     Public AutoCompleteInfo(4) As Boolean
 
+    Public ForceAppxApi As Boolean
+
     Sub ReportChanges(Message As String, ProgressPercentage As Double)
         Label2.Text = Message
         ProgressBar1.Value = ProgressPercentage
@@ -921,6 +923,9 @@ Public Class ImgInfoSaveDlg
         End Select
         Contents &= "----> AppX package information" & CrLf & CrLf & _
                     " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
+        If MainForm.imgEdition Is Nothing Then
+            MainForm.imgEdition = " "
+        End If
         ' Detect if the image is Windows 8 or later. If not, skip this task
         If (Not OnlineMode And (Not MainForm.IsWindows8OrHigher(ImgMountDir & "\Windows\system32\ntoskrnl.exe") Or MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase))) Or (OnlineMode And Not MainForm.IsWindows8OrHigher(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe")) Then
             Contents &= "    This task is not supported on the specified Windows image. Check that it contains Windows 8 or a later Windows version, and that it isn't a Windows PE image. Skipping task..." & CrLf & CrLf
@@ -1085,7 +1090,7 @@ Public Class ImgInfoSaveDlg
                         ReportChanges(msg(0), 10)
                         If SkipQuestions And AutoCompleteInfo(2) Then
                             Debug.WriteLine("[GetAppxInformation] Getting complete AppX package information...")
-                            If MainForm.imgAppxPackageNames.Count - 1 > pkgNames.Count Then
+                            If Not ForceAppxApi AndAlso MainForm.imgAppxPackageNames.Count - 1 > pkgNames.Count Then
                                 For x = 0 To Array.LastIndexOf(MainForm.imgAppxPackageNames, MainForm.imgAppxPackageNames.Last)
                                     If x = MainForm.imgAppxPackageNames.Count - 1 Then Continue For
                                     Select Case MainForm.Language
@@ -1640,6 +1645,9 @@ Public Class ImgInfoSaveDlg
         End Select
         Contents &= "----> Capability information" & CrLf & CrLf & _
                     " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
+        If MainForm.imgEdition Is Nothing Then
+            MainForm.imgEdition = " "
+        End If
         If (Not OnlineMode And (Not MainForm.IsWindows10OrHigher(ImgMountDir & "\Windows\system32\ntoskrnl.exe") Or MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase))) Or (OnlineMode And Not MainForm.IsWindows10OrHigher(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe")) Then
             Contents &= "    This task is not supported on the specified Windows image. Check that it contains Windows 10 or a later Windows version, and that it isn't a Windows PE image. Skipping task..." & CrLf & CrLf
             Exit Sub

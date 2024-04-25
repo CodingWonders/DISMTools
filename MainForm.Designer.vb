@@ -526,6 +526,10 @@ Partial Class MainForm
         Me.Timer2 = New System.Windows.Forms.Timer(Me.components)
         Me.WatcherBW = New System.ComponentModel.BackgroundWorker()
         Me.WatcherTimer = New System.Windows.Forms.Timer(Me.components)
+        Me.ImgSpecialToolsCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.GetImageFileInformationToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator39 = New System.Windows.Forms.ToolStripSeparator()
+        Me.SaveCompleteImageInformationToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -619,6 +623,7 @@ Partial Class MainForm
         Me.TreeViewCMS.SuspendLayout()
         Me.AppxResCMS.SuspendLayout()
         Me.AppxRelatedLinksCMS.SuspendLayout()
+        Me.ImgSpecialToolsCMS.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
@@ -3964,7 +3969,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32.42009!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 67.57991!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 124.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 125.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -4013,7 +4018,7 @@ Partial Class MainForm
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel8.Location = New System.Drawing.Point(57, 3)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(107, 23)
+        Me.Panel8.Size = New System.Drawing.Size(106, 23)
         Me.Panel8.TabIndex = 8
         '
         'projName
@@ -4022,7 +4027,7 @@ Partial Class MainForm
         Me.projName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projName.Location = New System.Drawing.Point(0, 0)
         Me.projName.Name = "projName"
-        Me.projName.Size = New System.Drawing.Size(107, 23)
+        Me.projName.Size = New System.Drawing.Size(106, 23)
         Me.projName.TabIndex = 2
         Me.projName.Text = "projName"
         Me.projName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -4032,7 +4037,7 @@ Partial Class MainForm
         Me.projNameText.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projNameText.Location = New System.Drawing.Point(0, 0)
         Me.projNameText.Name = "projNameText"
-        Me.projNameText.Size = New System.Drawing.Size(107, 21)
+        Me.projNameText.Size = New System.Drawing.Size(106, 21)
         Me.projNameText.TabIndex = 4
         Me.projNameText.Text = "projName"
         Me.projNameText.Visible = False
@@ -5173,6 +5178,30 @@ Partial Class MainForm
         '
         Me.WatcherTimer.Interval = 1000
         '
+        'ImgSpecialToolsCMS
+        '
+        Me.ImgSpecialToolsCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GetImageFileInformationToolStripMenuItem, Me.ToolStripSeparator39, Me.SaveCompleteImageInformationToolStripMenuItem})
+        Me.ImgSpecialToolsCMS.Name = "ImgSpecialToolsCMS"
+        Me.ImgSpecialToolsCMS.ShowImageMargin = False
+        Me.ImgSpecialToolsCMS.Size = New System.Drawing.Size(238, 76)
+        '
+        'GetImageFileInformationToolStripMenuItem
+        '
+        Me.GetImageFileInformationToolStripMenuItem.Name = "GetImageFileInformationToolStripMenuItem"
+        Me.GetImageFileInformationToolStripMenuItem.Size = New System.Drawing.Size(237, 22)
+        Me.GetImageFileInformationToolStripMenuItem.Text = "Get image file information..."
+        '
+        'ToolStripSeparator39
+        '
+        Me.ToolStripSeparator39.Name = "ToolStripSeparator39"
+        Me.ToolStripSeparator39.Size = New System.Drawing.Size(259, 6)
+        '
+        'SaveCompleteImageInformationToolStripMenuItem
+        '
+        Me.SaveCompleteImageInformationToolStripMenuItem.Name = "SaveCompleteImageInformationToolStripMenuItem"
+        Me.SaveCompleteImageInformationToolStripMenuItem.Size = New System.Drawing.Size(237, 22)
+        Me.SaveCompleteImageInformationToolStripMenuItem.Text = "Save complete image information..."
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -5305,6 +5334,7 @@ Partial Class MainForm
         Me.TreeViewCMS.ResumeLayout(False)
         Me.AppxResCMS.ResumeLayout(False)
         Me.AppxRelatedLinksCMS.ResumeLayout(False)
+        Me.ImgSpecialToolsCMS.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -5811,4 +5841,8 @@ Partial Class MainForm
     Friend WithEvents RecentProject10ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents CreateDiscImageToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator38 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents ImgSpecialToolsCMS As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents GetImageFileInformationToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator39 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents SaveCompleteImageInformationToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class

@@ -234,6 +234,7 @@ Public Class MountedImgMgr
             Else
                 Button6.Enabled = False
             End If
+            Button7.Enabled = True
         Else
             Button1.Enabled = False
             Button2.Enabled = False
@@ -241,6 +242,7 @@ Public Class MountedImgMgr
             Button4.Enabled = False
             Button5.Enabled = False
             Button6.Enabled = False
+            Button7.Enabled = False
         End If
     End Sub
 
@@ -417,6 +419,7 @@ Public Class MountedImgMgr
             Button4.Enabled = False
             Button5.Enabled = False
             Button6.Enabled = False
+            Button7.Enabled = False
             Exit Try
         End Try
     End Sub
@@ -441,5 +444,9 @@ Public Class MountedImgMgr
         If MainForm.MountedImageMountDirs.Count > 0 Then
             MainForm.EnableWritePermissions(ListView1.FocusedItem.SubItems(0).Text, CInt(ListView1.FocusedItem.SubItems(1).Text), ListView1.FocusedItem.SubItems(2).Text)
         End If
+    End Sub
+
+    Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
+        MainForm.ImgSpecialToolsCMS.Show(sender, New Point(8, Button7.Height * 0.75))
     End Sub
 End Class

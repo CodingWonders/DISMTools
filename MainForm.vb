@@ -5122,12 +5122,14 @@ Public Class MainForm
                         AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                        ImgSpecialToolsCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         PkgInfoCMS.ForeColor = Color.White
                         ImgUMountPopupCMS.ForeColor = Color.White
                         AppxPackagePopupCMS.ForeColor = Color.White
                         AppxRelatedLinksCMS.ForeColor = Color.White
                         TreeViewCMS.ForeColor = Color.White
                         AppxResCMS.ForeColor = Color.White
+                        ImgSpecialToolsCMS.ForeColor = Color.White
                         Dim items = TreeViewCMS.Items
                         Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
                         For Each item As ToolStripDropDownItem In mItem
@@ -5236,12 +5238,14 @@ Public Class MainForm
                         AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                        ImgSpecialToolsCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         PkgInfoCMS.ForeColor = Color.Black
                         ImgUMountPopupCMS.ForeColor = Color.Black
                         AppxPackagePopupCMS.ForeColor = Color.Black
                         AppxRelatedLinksCMS.ForeColor = Color.Black
                         TreeViewCMS.ForeColor = Color.Black
                         AppxResCMS.ForeColor = Color.Black
+                        ImgSpecialToolsCMS.ForeColor = Color.Black
                         Dim items = TreeViewCMS.Items
                         Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
                         For Each item As ToolStripDropDownItem In mItem
@@ -5354,12 +5358,14 @@ Public Class MainForm
                 AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                ImgSpecialToolsCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 PkgInfoCMS.ForeColor = Color.Black
                 ImgUMountPopupCMS.ForeColor = Color.Black
                 AppxPackagePopupCMS.ForeColor = Color.Black
                 AppxRelatedLinksCMS.ForeColor = Color.Black
                 TreeViewCMS.ForeColor = Color.Black
                 AppxResCMS.ForeColor = Color.Black
+                ImgSpecialToolsCMS.ForeColor = Color.Black
                 Dim items = TreeViewCMS.Items
                 Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
                 For Each item As ToolStripDropDownItem In mItem
@@ -5468,12 +5474,14 @@ Public Class MainForm
                 AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                ImgSpecialToolsCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 PkgInfoCMS.ForeColor = Color.White
                 ImgUMountPopupCMS.ForeColor = Color.White
                 AppxPackagePopupCMS.ForeColor = Color.White
                 AppxRelatedLinksCMS.ForeColor = Color.White
                 TreeViewCMS.ForeColor = Color.White
                 AppxResCMS.ForeColor = Color.White
+                ImgSpecialToolsCMS.ForeColor = Color.White
                 Dim items = TreeViewCMS.Items
                 Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
                 For Each item As ToolStripDropDownItem In mItem
@@ -5818,6 +5826,8 @@ Public Class MainForm
                         DiscardAndUnmountTSMI.Text = "Discard changes and unmount image"
                         UnmountSettingsToolStripMenuItem.Text = "Unmount settings..."
                         ViewPackageDirectoryToolStripMenuItem.Text = "View package directory"
+                        GetImageFileInformationToolStripMenuItem.Text = "Get image file information..."
+                        SaveCompleteImageInformationToolStripMenuItem.Text = "Save complete image information..."
                         ' OpenFileDialogs and FolderBrowsers
                         OpenFileDialog1.Title = "Specify the project file to load"
                         LocalMountDirFBD.Description = "Please specify the mount directory you want to load into this project:"
@@ -6188,6 +6198,8 @@ Public Class MainForm
                         DiscardAndUnmountTSMI.Text = "Descartar cambios y desmontar imagen"
                         UnmountSettingsToolStripMenuItem.Text = "Configuración de desmontaje..."
                         ViewPackageDirectoryToolStripMenuItem.Text = "Ver directorio del paquete"
+                        GetImageFileInformationToolStripMenuItem.Text = "Obtener información del archivo de imagen..."
+                        SaveCompleteImageInformationToolStripMenuItem.Text = "Guardar información completa de la imagen..."
                         ' OpenFileDialogs and FolderBrowsers
                         OpenFileDialog1.Title = "Especifique el archivo de proyecto a cargar"
                         LocalMountDirFBD.Description = "Especifique el directorio de montaje que desea cargar en este proyecto:"
@@ -6558,6 +6570,8 @@ Public Class MainForm
                         DiscardAndUnmountTSMI.Text = "Annuler les modifications et démonter l'image"
                         UnmountSettingsToolStripMenuItem.Text = "Configurer les paramètres de démontage......"
                         ViewPackageDirectoryToolStripMenuItem.Text = "Afficher le répertoire des paquets"
+                        GetImageFileInformationToolStripMenuItem.Text = "Obtenir des informations sur le fichier image..."
+                        SaveCompleteImageInformationToolStripMenuItem.Text = "Enregistrer les informations complètes sur l'image..."
                         ' OpenFileDialogs and FolderBrowsers
                         OpenFileDialog1.Title = "Spécifier le fichier de projet à charger"
                         LocalMountDirFBD.Description = "Veuillez spécifier le répertoire de montage que vous souhaitez charger dans ce projet:"
@@ -6927,6 +6941,8 @@ Public Class MainForm
                         DiscardAndUnmountTSMI.Text = "Descartar alterações e desmontar a imagem"
                         UnmountSettingsToolStripMenuItem.Text = "Desmontar definições..."
                         ViewPackageDirectoryToolStripMenuItem.Text = "Ver diretório de pacotes"
+                        GetImageFileInformationToolStripMenuItem.Text = "Obter informações sobre o ficheiro de imagem..."
+                        SaveCompleteImageInformationToolStripMenuItem.Text = "Guardar informações completas sobre a imagem..."
                         ' OpenFileDialogs and FolderBrowsers
                         OpenFileDialog1.Title = "Especifique o ficheiro de projeto a carregar"
                         LocalMountDirFBD.Description = "Especifique o diretório de montagem que pretende carregar para este projeto:"
@@ -7302,6 +7318,8 @@ Public Class MainForm
                 DiscardAndUnmountTSMI.Text = "Discard changes and unmount image"
                 UnmountSettingsToolStripMenuItem.Text = "Unmount settings..."
                 ViewPackageDirectoryToolStripMenuItem.Text = "View package directory"
+                GetImageFileInformationToolStripMenuItem.Text = "Get image file information..."
+                SaveCompleteImageInformationToolStripMenuItem.Text = "Save complete image information..."
                 ' OpenFileDialogs and FolderBrowsers
                 OpenFileDialog1.Title = "Specify the project file to load"
                 LocalMountDirFBD.Description = "Please specify the mount directory you want to load into this project:"
@@ -7672,6 +7690,8 @@ Public Class MainForm
                 DiscardAndUnmountTSMI.Text = "Descartar cambios y desmontar imagen"
                 UnmountSettingsToolStripMenuItem.Text = "Configuración de desmontaje..."
                 ViewPackageDirectoryToolStripMenuItem.Text = "Ver directorio del paquete"
+                GetImageFileInformationToolStripMenuItem.Text = "Obtener información del archivo de imagen..."
+                SaveCompleteImageInformationToolStripMenuItem.Text = "Guardar información completa de la imagen..."
                 ' OpenFileDialogs and FolderBrowsers
                 OpenFileDialog1.Title = "Especifique el archivo de proyecto a cargar"
                 LocalMountDirFBD.Description = "Especifique el directorio de montaje que desea cargar en este proyecto:"
@@ -8041,6 +8061,8 @@ Public Class MainForm
                 DiscardAndUnmountTSMI.Text = "Annuler les modifications et démonter l'image"
                 UnmountSettingsToolStripMenuItem.Text = "Configurer les paramètres de démontage......"
                 ViewPackageDirectoryToolStripMenuItem.Text = "Afficher le répertoire des paquets"
+                GetImageFileInformationToolStripMenuItem.Text = "Obtenir des informations sur le fichier image..."
+                SaveCompleteImageInformationToolStripMenuItem.Text = "Enregistrer les informations complètes sur l'image..."
                 ' OpenFileDialogs and FolderBrowsers
                 OpenFileDialog1.Title = "Spécifier le fichier de projet à charger"
                 LocalMountDirFBD.Description = "Veuillez spécifier le répertoire de montage que vous souhaitez charger dans ce projet:"
@@ -8410,6 +8432,8 @@ Public Class MainForm
                 DiscardAndUnmountTSMI.Text = "Descartar alterações e desmontar a imagem"
                 UnmountSettingsToolStripMenuItem.Text = "Desmontar definições..."
                 ViewPackageDirectoryToolStripMenuItem.Text = "Ver diretório de pacotes"
+                GetImageFileInformationToolStripMenuItem.Text = "Obter informações sobre o ficheiro de imagem..."
+                SaveCompleteImageInformationToolStripMenuItem.Text = "Guardar informações completas sobre a imagem..."
                 ' OpenFileDialogs and FolderBrowsers
                 OpenFileDialog1.Title = "Especifique o ficheiro de projeto a carregar"
                 LocalMountDirFBD.Description = "Especifique o diretório de montagem que pretende carregar para este projeto:"
@@ -15372,6 +15396,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AllDrivers = AllDrivers
             ImgInfoSaveDlg.SkipQuestions = SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 0
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
@@ -15682,6 +15707,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AllDrivers = AllDrivers
             ImgInfoSaveDlg.SkipQuestions = SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 0
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
@@ -15826,6 +15852,7 @@ Public Class MainForm
             ImgInfoSaveDlg.OnlineMode = OnlineManagement
             ImgInfoSaveDlg.SkipQuestions = SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 2
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
@@ -16138,6 +16165,7 @@ Public Class MainForm
             ImgInfoSaveDlg.OfflineMode = OfflineManagement
             ImgInfoSaveDlg.SkipQuestions = SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 4
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
@@ -16348,6 +16376,7 @@ Public Class MainForm
             ImgInfoSaveDlg.OfflineMode = OfflineManagement
             ImgInfoSaveDlg.SkipQuestions = SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 5
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
@@ -16624,6 +16653,7 @@ Public Class MainForm
             ImgInfoSaveDlg.OfflineMode = OfflineManagement
             ImgInfoSaveDlg.SkipQuestions = SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 6
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
@@ -16800,6 +16830,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AllDrivers = AllDrivers
             ImgInfoSaveDlg.SkipQuestions = SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 7
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
@@ -16823,6 +16854,7 @@ Public Class MainForm
             ImgInfoSaveDlg.OnlineMode = OnlineManagement
             ImgInfoSaveDlg.SkipQuestions = SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 9
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
@@ -17854,5 +17886,30 @@ Public Class MainForm
 
     Private Sub CreateDiscImageToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateDiscImageToolStripMenuItem.Click
         ISOCreator.Show()
+    End Sub
+
+    Private Sub GetImageFileInformationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles GetImageFileInformationToolStripMenuItem.Click
+        GetImgInfoDlg.RadioButton1.Checked = False
+        GetImgInfoDlg.RadioButton2.Checked = True
+        GetImgInfoDlg.TextBox1.Text = MountedImgMgr.ListView1.FocusedItem.SubItems(0).Text
+        GetImgInfoDlg.ShowDialog(MountedImgMgr)
+    End Sub
+
+    Private Sub SaveCompleteImageInformationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaveCompleteImageInformationToolStripMenuItem.Click
+        If ImgInfoSFD.ShowDialog(MountedImgMgr) = Windows.Forms.DialogResult.OK Then
+            If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
+            ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
+            ImgInfoSaveDlg.SourceImage = MountedImgMgr.ListView1.FocusedItem.SubItems(0).Text
+            ImgInfoSaveDlg.ImgMountDir = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text
+            ImgInfoSaveDlg.OnlineMode = OnlineManagement
+            ImgInfoSaveDlg.OfflineMode = OfflineManagement
+            ImgInfoSaveDlg.AllDrivers = AllDrivers
+            ImgInfoSaveDlg.SkipQuestions = SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = True
+            ImgInfoSaveDlg.SaveTask = 0
+            ImgInfoSaveDlg.ShowDialog(MountedImgMgr)
+            InfoSaveResults.Show()
+        End If
     End Sub
 End Class

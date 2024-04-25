@@ -471,6 +471,7 @@ Public Class GetAppxPkgInfoDlg
             ImgInfoSaveDlg.OfflineMode = MainForm.OfflineManagement
             ImgInfoSaveDlg.SkipQuestions = MainForm.SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = MainForm.AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 5
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
