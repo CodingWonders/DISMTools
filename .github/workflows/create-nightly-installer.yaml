@@ -22,8 +22,8 @@ jobs:
       continue-on-error: false
     - name: Generate installer
       run: |
-        $solutionDir = (Get-Location).Path
-        $projectDir = (Get-Location).Path
+        $solutionDir = "$((Get-Location).Path)\"
+        $projectDir = "$((Get-Location).Path)\"
         $targetDir = (Get-Location).Path + "\bin\Debug"
         msbuild DISMTools.vbproj /p:Configuration=Debug /p:DeployOnBuild=true /p:SolutionDir=$solutionDir /p:ProjectDir=$projectDir /p:TargetDir=$targetDir
     - name: Push nightly installer
