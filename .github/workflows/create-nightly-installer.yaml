@@ -21,7 +21,7 @@ jobs:
       run: .\nugetpkgprep.bat
       continue-on-error: false
     - name: Generate installer
-      run: msbuild DISMTools.vbproj /p:Configuration=Debug /p:DeployOnBuild=true /p:SolutionDir=%cd%\ /p:ProjectDir=%cd%\ /p:TargetDir=%cd%\bin\Debug
+      run: msbuild DISMTools.vbproj /p:Configuration=Debug /p:DeployOnBuild=true /p:SolutionDir=$((Get-Location).Path)\ /p:ProjectDir=$((Get-Location).Path)\ /p:TargetDir=$((Get-Location).Path)\bin\Debug
     - name: Push nightly installer
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
