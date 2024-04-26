@@ -1,0 +1,27 @@
+name: Create Nightly Installer
+
+on:
+  push:
+    branches:
+      - stable
+      - dt_pre*
+
+jobs:
+  build-runspace:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.head_ref }}
+    - name: Set up MSBuild
+      uses: warrenbuckley/Setup-MSBuild@v1
+    - name: Prepare NuGet packages
+      run: nugetpkgprep.bat
+      continue-on-error: false
+    - name: Generate installer
+      run: msbuild DISMTools.sln /p:Configuration=Debug /p:DeployOnBuild=true
+    - name: Push nightly installer
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: DISMTools Nightly Installer
+      if: success()
