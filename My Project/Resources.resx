@@ -1117,7 +1117,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- If a custom system theme is applied, the following warning will appear (thanks @Fraaaaaunimib)
+- If a custom system theme is applied, a warning will appear (thanks @Fraaaaaunimib)
 - Fixed a CSS layout issue in the Help documentation contents (thanks CodenameFlux)
 - Fixed a couple of issues in the ISO creator
 - The program now detects unsupported languages in the Initial Setup wizard and reverts to English

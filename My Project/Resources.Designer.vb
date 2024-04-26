@@ -2178,14 +2178,14 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- If a custom system theme is applied, the following warning will appear (thanks @Fraaaaaunimib)
+        '''- If a custom system theme is applied, a warning will appear (thanks @Fraaaaaunimib)
         '''- Fixed a CSS layout issue in the Help documentation contents (thanks CodenameFlux)
         '''- Fixed a couple of issues in the ISO creator
         '''- The program now detects unsupported languages in the Initial Setup wizard and reverts to English
         '''
         '''New features:
         '''
-        '''- When adding encrypted AppX and MSIX packages (&quot;.eappx&quot; and &quot;.emsix&quot; files) to active installations, the program now uses a custom version of UnpEax  [resto de la cadena truncado]&quot;;.
+        '''- When adding encrypted AppX and MSIX packages (&quot;.eappx&quot; and &quot;.emsix&quot; files) to active installations, the program now uses a custom version of UnpEax to get rich  [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
