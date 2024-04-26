@@ -18,7 +18,7 @@ jobs:
     - name: Set up MSBuild
       uses: warrenbuckley/Setup-MSBuild@v1
     - name: Prepare NuGet packages
-      run: nugetpkgprep.bat
+      run: .\nugetpkgprep.bat
       continue-on-error: false
     - name: Generate installer
       run: msbuild DISMTools.sln /p:Configuration=Debug /p:DeployOnBuild=true
