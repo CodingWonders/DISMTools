@@ -5,6 +5,8 @@ on:
     branches:
       - stable
       - dt_pre*
+env:
+  env_var: "ACTIONS_ALLOW_UNSECURE_COMMANDS"
 
 jobs:
   build-runspace:
