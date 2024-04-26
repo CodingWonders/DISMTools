@@ -5,6 +5,7 @@ on:
     branches:
       - stable
       - dt_pre*
+      - dt_rel*
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
