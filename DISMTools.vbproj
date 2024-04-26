@@ -1612,6 +1612,7 @@ IF %25COPY_DOCS%25=="Yes" (
 IF %25GEN_INSTALLER%25=="Yes" (
 	echo The technology used for creating the installer is subject to a license. Refer to the "LICENSE.TXT" file in the "$(SolutionDir)Installer" directory for more information
 	echo Copying program files...
+	IF EXIST "$(SolutionDir)Installer\files" (rd "$(SolutionDir)Installer\files" /s /q)
 	IF NOT EXIST "$(SolutionDir)Installer\files" (md "$(SolutionDir)Installer\files")
 	XCOPY "$(TargetDir)*.*" "$(SolutionDir)Installer\files" /cehyi
 	IF EXIST "$(SolutionDir)Installer\files\VS*.tmp" (del "$(SolutionDir)Installer\files\VS*.tmp" /f /q)
