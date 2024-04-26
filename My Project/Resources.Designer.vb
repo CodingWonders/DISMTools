@@ -2176,11 +2176,16 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a New features:
+        '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Added the ability to create custom ISO files that can be used to test your Windows image easily
-        '''- The pop-up version of the mounted image manager can now be closed by pressing the Esc key
-        '''- Encrypted AppX packages (&quot;.eappx&quot;, &quot;.eappxbundle&quot;, &quot;.emsix&quot; and &quot;.emsixbundle&quot;) can now be added when managing the active installation.
+        '''- If a custom system theme is applied, the following warning will appear (thanks @Fraaaaaunimib)
+        '''- Fixed a CSS layout issue in the Help documentation contents (thanks CodenameFlux)
+        '''- Fixed a couple of issues in the ISO creator
+        '''- The program now detects unsupported languages in the Initial Setup wizard and reverts to English
+        '''
+        '''New features:
+        '''
+        '''- When adding encrypted AppX and MSIX packages (&quot;.eappx&quot; and &quot;.emsix&quot; files) to active installations, the program now uses a custom version of UnpEax  [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

@@ -1115,11 +1115,25 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <value>..\Resources\get_appxpkg_info.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>New features:
+    <value>Bugfixes:
 
-- Added the ability to create custom ISO files that can be used to test your Windows image easily
-- The pop-up version of the mounted image manager can now be closed by pressing the Esc key
-- Encrypted AppX packages (".eappx", ".eappxbundle", ".emsix" and ".emsixbundle") can now be added when managing the active installation</value>
+- If a custom system theme is applied, the following warning will appear (thanks @Fraaaaaunimib)
+- Fixed a CSS layout issue in the Help documentation contents (thanks CodenameFlux)
+- Fixed a couple of issues in the ISO creator
+- The program now detects unsupported languages in the Initial Setup wizard and reverts to English
+
+New features:
+
+- When adding encrypted AppX and MSIX packages (".eappx" and ".emsix" files) to active installations, the program now uses a custom version of UnpEax to get rich information
+- New copies of DISMTools now use Consolas (11 pt.) as the default log view font (thanks CodenameFlux)
+- You will now get error information if the ADK Deployment Tools copier fails
+- The ISO creation process has been improved:
+  - Before writing disk configuration, you will see a data loss warning
+  - You will now see a more appropriate message after the image has been applied
+  - The restart timeout has been improved
+  - A link has been added to download the Windows ADK
+- The automatic orphaned image reload procedure has been improved, now featuring greater visual feedback thanks to a progress dialog
+- You can now get image file information and save complete image information of a mounted Windows image from within the mounted image manager</value>
   </data>
   <data name="split_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\split_img.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
