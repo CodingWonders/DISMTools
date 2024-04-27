@@ -202,7 +202,7 @@ Public Class GetAppxPkgInfoDlg
                     ListBox1.Items.Add(PackageName)
                 Next
                 ' An empty entry will appear, so remove it
-                ListBox1.Items.RemoveAt(ListBox1.Items.Count - 1)
+                If ListBox1.Items.Count > 0 Then ListBox1.Items.RemoveAt(ListBox1.Items.Count - 1)
                 SearchPanel.Visible = False
             Else
                 For Each InstalledAppxPkg As DismAppxPackage In InstalledAppxPkgInfo
@@ -217,7 +217,7 @@ Public Class GetAppxPkgInfoDlg
                 ListBox1.Items.Add(PackageName)
             Next
             ' An empty entry will appear, so remove it
-            ListBox1.Items.RemoveAt(ListBox1.Items.Count - 1)
+            If ListBox1.Items.Count > 0 Then ListBox1.Items.RemoveAt(ListBox1.Items.Count - 1)
             SearchPanel.Visible = False
         End If
         SearchBox1.Text = ""
