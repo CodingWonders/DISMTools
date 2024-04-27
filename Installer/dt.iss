@@ -120,9 +120,9 @@ Root: HKCU; Subkey: "Software\DISMTools\Stable\Personalization"; Flags: uninsdel
 Root: HKCU; Subkey: "Software\DISMTools\Stable\Personalization"; ValueType: dword; ValueName: "AllCaps"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Stable\Personalization"; ValueType: dword; ValueName: "ColorMode"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Stable\Personalization"; ValueType: dword; ValueName: "Language"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Stable\Personalization"; ValueType: string; ValueName: "LogFont"; ValueData: "Courier New"; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Stable\Personalization"; ValueType: string; ValueName: "LogFont"; ValueData: "Consolas"; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Stable\Personalization"; ValueType: dword; ValueName: "LogFontBold"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Stable\Personalization"; ValueType: dword; ValueName: "LogFontSi"; ValueData: 10; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Stable\Personalization"; ValueType: dword; ValueName: "LogFontSi"; ValueData: 11; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Stable\Personalization"; ValueType: dword; ValueName: "NewDesign"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Stable\Personalization"; ValueType: dword; ValueName: "SecondaryProgressPanelStyle"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 
