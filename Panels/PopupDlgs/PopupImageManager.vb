@@ -153,4 +153,10 @@ Public Class PopupImageManager
     Private Sub PopupImageManager_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         MountedImgMgr.Close()
     End Sub
+
+    Private Sub PopupImageManager_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
+        If e.KeyCode = Keys.Escape Then
+            Button2.PerformClick()
+        End If
+    End Sub
 End Class

@@ -251,6 +251,8 @@ Public Class MainForm
     Public RecentList As New List(Of Recents)
     Public VideoList As New List(Of Video)
 
+    Dim AdkCopyEx As Exception
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -627,6 +629,49 @@ Public Class MainForm
             VideoErrorPanel.Visible = True
             TextBox2.Text = ex.ToString() & " - " & ex.Message
         End Try
+        ' Detect custom themes
+        Try
+            Dim themeRk As RegistryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\ThemeManager")
+            Dim ThemeDll As String = themeRk.GetValue("DllName")
+            Dim PrePol As String = themeRk.GetValue("PrePolicy-DllName")
+            themeRk.Close()
+            If Not ThemeDll.Equals(PrePol, StringComparison.OrdinalIgnoreCase) Then
+                Dim msg As String = ""
+                Dim titleMsg As String = ""
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                titleMsg = "Beware of custom themes"
+                                msg = "DISMTools has detected that a custom theme has been set on this system. Some custom themes make the program not look correctly, so it's recommended to switch to the default theme."
+                            Case "ESN"
+                                titleMsg = "Cuidado con temas personalizados"
+                                msg = "DISMTools ha detectado que se ha establecido un tema personalizado en este sistema. Algunos temas de terceros hacen que el programa tenga errores visuales, así que se recomienda que cambie al tema predeterminado."
+                            Case "FRA"
+                                titleMsg = "Attention aux thèmes personnalisés"
+                                msg = "DISMTools a détecté qu'un thème personnalisé a été défini sur ce système. Certains thèmes personnalisés font que le programme ne s'affiche pas correctement, il est donc recommandé de passer au thème par défaut."
+                            Case "PTB", "PTG"
+                                titleMsg = "Cuidado com os temas personalizados"
+                                msg = "O DISMTools detectou que foi definido um tema personalizado neste sistema. Alguns temas personalizados fazem com que o programa não tenha um aspeto correto, pelo que se recomenda a mudança para o tema predefinido."
+                        End Select
+                    Case 1
+                        titleMsg = "Beware of custom themes"
+                        msg = "DISMTools has detected that a custom theme has been set on this system. Some custom themes make the program not look correctly, so it's recommended to switch to the default theme."
+                    Case 2
+                        titleMsg = "Cuidado con temas personalizados"
+                        msg = "DISMTools ha detectado que se ha establecido un tema personalizado en este sistema. Algunos temas de terceros hacen que el programa tenga errores visuales, así que se recomienda que cambie al tema predeterminado."
+                    Case 3
+                        titleMsg = "Attention aux thèmes personnalisés"
+                        msg = "DISMTools a détecté qu'un thème personnalisé a été défini sur ce système. Certains thèmes personnalisés font que le programme ne s'affiche pas correctement, il est donc recommandé de passer au thème par défaut."
+                    Case 4
+                        titleMsg = "Cuidado com os temas personalizados"
+                        msg = "O DISMTools detectou que foi definido um tema personalizado neste sistema. Alguns temas personalizados fazem com que o programa não tenha um aspeto correto, pelo que se recomenda a mudança para o tema predefinido."
+                End Select
+                MsgBox(msg, vbOKOnly + vbExclamation, titleMsg)
+            End If
+        Catch ex As Exception
+
+        End Try
     End Sub
 
     Function GetItemThumbnail(videoId As String) As Image
@@ -737,25 +782,15 @@ Public Class MainForm
     ''' </summary>
     ''' <remarks></remarks>
     Sub RemountOrphanedImages()
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
-        If MountedImageMountDirs.Count > 0 Then
-            Try
-                DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
-                For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
-                    If MountedImageImgStatuses(x) = 1 Then
-                        DismApi.RemountImage(MountedImageMountDirs(x))
-                    End If
-                Next
-            Catch ex As Exception
-                Debug.WriteLine("Could not remount all orphaned images. Reason:" & CrLf & ex.ToString())
-            Finally
-                DismApi.Shutdown()
-            End Try
+        Dim NeedToRemount As Boolean = False
+        If MountedImageImgStatuses.Count > 0 Then
+            For x = 0 To Array.LastIndexOf(MountedImageImgStatuses, MountedImageImgStatuses.Last)
+                If MountedImageImgStatuses(x) = 1 Then
+                    NeedToRemount = True
+                End If
+            Next
         End If
+        If NeedToRemount Then AutoReloadForm.ShowDialog()
         HasRemounted = True
     End Sub
 
@@ -1379,7 +1414,7 @@ Public Class MainForm
                 ' Apply language settings immediately
                 ChangeLangs(Language)
                 ' Detect log font setting. Do note that, if a system does not contain the font set in this program,
-                ' it will revert to "Courier New"
+                ' it will revert to "Consolas"
                 For Each line In DTSettingForm.RichTextBox1.Lines
                     If line.StartsWith("LogFont=", StringComparison.OrdinalIgnoreCase) Then
                         LogFont = line.Replace("LogFont=", "").Trim().Replace(Quote, "").Trim()
@@ -1624,7 +1659,7 @@ Public Class MainForm
             If Not fontTester.Name = TestingFontName Then
                 ProblematicStrings(1) = LogFont
                 isLogFontProblematic = True
-                LogFont = "Courier New"
+                LogFont = "Consolas"
             End If
         End Using
         If Not File.Exists(LogFile) Then
@@ -4447,8 +4482,8 @@ Public Class MainForm
             DTSettingForm.RichTextBox2.AppendText("ColorMode=1")
         End Try
         DTSettingForm.RichTextBox2.AppendText(CrLf & "Language=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFont=" & Quote & "Courier New" & Quote)
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontSi=10")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFont=" & Quote & "Consolas" & Quote)
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontSi=11")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontBold=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SecondaryProgressPanelStyle=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=0")
@@ -4514,8 +4549,8 @@ Public Class MainForm
             PersKey.SetValue("ColorMode", 1, RegistryValueKind.DWord)
         End Try
         PersKey.SetValue("Language", 0, RegistryValueKind.DWord)
-        PersKey.SetValue("LogFont", "Courier New", RegistryValueKind.String)
-        PersKey.SetValue("LogFontSi", 10, RegistryValueKind.DWord)
+        PersKey.SetValue("LogFont", "Consolas", RegistryValueKind.String)
+        PersKey.SetValue("LogFontSi", 11, RegistryValueKind.DWord)
         PersKey.SetValue("LogFontBold", 0, RegistryValueKind.DWord)
         PersKey.SetValue("SecondaryProgressPanelStyle", 1, RegistryValueKind.DWord)
         PersKey.SetValue("AllCaps", 0, RegistryValueKind.DWord)
@@ -14191,7 +14226,7 @@ Public Class MainForm
                     End Select
                 End If
             Catch ex As Exception
-
+                AdkCopyEx = ex
             End Try
         End If
     End Sub
@@ -14307,6 +14342,9 @@ Public Class MainForm
                 Case 4
                     MenuDesc.Text = "Não foi possível copiar as ferramentas de implantação"
             End Select
+            If AdkCopyEx IsNot Nothing Then
+                MenuDesc.Text &= " (" & AdkCopyEx.Message & ")"
+            End If
         End Try
     End Sub
 

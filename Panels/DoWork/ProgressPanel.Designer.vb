@@ -141,7 +141,7 @@ Partial Class ProgressPanel
         '
         Me.LogView.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.LogView.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.LogView.Font = New System.Drawing.Font("Courier New", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LogView.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LogView.Location = New System.Drawing.Point(0, 0)
         Me.LogView.Multiline = True
         Me.LogView.Name = "LogView"

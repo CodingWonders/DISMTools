@@ -59,7 +59,7 @@ Partial Class ExceptionForm
         'ErrorText
         '
         Me.ErrorText.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.ErrorText.Font = New System.Drawing.Font("Courier New", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ErrorText.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ErrorText.Location = New System.Drawing.Point(54, 73)
         Me.ErrorText.Multiline = True
         Me.ErrorText.Name = "ErrorText"

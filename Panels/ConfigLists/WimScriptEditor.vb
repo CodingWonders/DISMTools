@@ -227,8 +227,8 @@ Public Class WimScriptEditor
         For Each fntFamily As FontFamily In FontFamily.Families
             FontFamilyTSCB.Items.Add(fntFamily.Name)
         Next
-        InitScintilla("Courier New", 10)
-        FontFamilyTSCB.SelectedItem = "Courier New"
+        InitScintilla("Consolas", 11)
+        FontFamilyTSCB.SelectedItem = "Consolas"
     End Sub
 
     ''' <summary>

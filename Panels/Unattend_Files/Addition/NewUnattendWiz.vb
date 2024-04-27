@@ -203,10 +203,10 @@ Public Class NewUnattendWiz
         For Each fntFamily As FontFamily In FontFamily.Families
             FontFamilyTSCB.Items.Add(fntFamily.Name)
         Next
-        InitScintilla("Courier New", 10)
+        InitScintilla("Consolas", 11)
         StepsTreeView.ExpandAll()
 
-        FontFamilyTSCB.SelectedItem = "Courier New"
+        FontFamilyTSCB.SelectedItem = "Consolas"
         SetNodeColors(StepsTreeView.Nodes, BackColor, ForeColor)
     End Sub
 
