@@ -6156,7 +6156,7 @@ Public Class ProgressPanel
                 LogView.Font = New Font(MainForm.LogFont, MainForm.LogFontSize)
             End If
         Catch ex As Exception
-            LogView.Font = New Font("Courier New", 9.75)
+            LogView.Font = New Font("Consolas", 11.25)
         End Try
         Select Case MainForm.Language
             Case 0

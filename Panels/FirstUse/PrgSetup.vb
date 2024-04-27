@@ -7,6 +7,7 @@ Public Class PrgSetup
 
     Dim ColorModes() As String = New String(2) {"Use system setting", "Light mode", "Dark mode"}
     Dim Languages() As String = New String(4) {"Use system language", "English", "Spanish", "French", "Portuguese"}
+    Dim SupportedLangCodes() As String = New String(5) {"ENU", "ENG", "ESN", "FRA", "PTB", "PTG"}
 
     Dim btnToolTip As New ToolTip()
     Private isMouseDown As Boolean = False
@@ -147,6 +148,8 @@ Public Class PrgSetup
 
     Private Sub Next_Button_Click(sender As Object, e As EventArgs) Handles Next_Button.Click
         If pageInt = 4 Then
+            ' Set program to English if the system language is not supported
+            If Not SupportedLangCodes.Contains(My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName) Then MainForm.Language = 1
             MainForm.SaveDTSettings()
             Close()
         End If
@@ -609,7 +612,7 @@ Public Class PrgSetup
         For Each fntFamily As FontFamily In FontFamily.Families
             ComboBox3.Items.Add(fntFamily.Name)
         Next
-        ComboBox3.SelectedItem = "Courier New"
+        ComboBox3.SelectedItem = "Consolas"
     End Sub
 
     Private Sub ComboBox3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox3.SelectedIndexChanged

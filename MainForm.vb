@@ -257,6 +257,8 @@ Public Class MainForm
     Public RecentList As New List(Of Recents)
     Public VideoList As New List(Of Video)
 
+    Dim AdkCopyEx As Exception
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -705,6 +707,49 @@ Public Class MainForm
             VideoErrorPanel.Visible = True
             TextBox2.Text = ex.ToString() & " - " & ex.Message
         End Try
+        ' Detect custom themes
+        Try
+            Dim themeRk As RegistryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\ThemeManager")
+            Dim ThemeDll As String = themeRk.GetValue("DllName")
+            Dim PrePol As String = themeRk.GetValue("PrePolicy-DllName")
+            themeRk.Close()
+            If Not ThemeDll.Equals(PrePol, StringComparison.OrdinalIgnoreCase) Then
+                Dim msg As String = ""
+                Dim titleMsg As String = ""
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                titleMsg = "Beware of custom themes"
+                                msg = "DISMTools has detected that a custom theme has been set on this system. Some custom themes make the program not look correctly, so it's recommended to switch to the default theme."
+                            Case "ESN"
+                                titleMsg = "Cuidado con temas personalizados"
+                                msg = "DISMTools ha detectado que se ha establecido un tema personalizado en este sistema. Algunos temas de terceros hacen que el programa tenga errores visuales, así que se recomienda que cambie al tema predeterminado."
+                            Case "FRA"
+                                titleMsg = "Attention aux thèmes personnalisés"
+                                msg = "DISMTools a détecté qu'un thème personnalisé a été défini sur ce système. Certains thèmes personnalisés font que le programme ne s'affiche pas correctement, il est donc recommandé de passer au thème par défaut."
+                            Case "PTB", "PTG"
+                                titleMsg = "Cuidado com os temas personalizados"
+                                msg = "O DISMTools detectou que foi definido um tema personalizado neste sistema. Alguns temas personalizados fazem com que o programa não tenha um aspeto correto, pelo que se recomenda a mudança para o tema predefinido."
+                        End Select
+                    Case 1
+                        titleMsg = "Beware of custom themes"
+                        msg = "DISMTools has detected that a custom theme has been set on this system. Some custom themes make the program not look correctly, so it's recommended to switch to the default theme."
+                    Case 2
+                        titleMsg = "Cuidado con temas personalizados"
+                        msg = "DISMTools ha detectado que se ha establecido un tema personalizado en este sistema. Algunos temas de terceros hacen que el programa tenga errores visuales, así que se recomienda que cambie al tema predeterminado."
+                    Case 3
+                        titleMsg = "Attention aux thèmes personnalisés"
+                        msg = "DISMTools a détecté qu'un thème personnalisé a été défini sur ce système. Certains thèmes personnalisés font que le programme ne s'affiche pas correctement, il est donc recommandé de passer au thème par défaut."
+                    Case 4
+                        titleMsg = "Cuidado com os temas personalizados"
+                        msg = "O DISMTools detectou que foi definido um tema personalizado neste sistema. Alguns temas personalizados fazem com que o programa não tenha um aspeto correto, pelo que se recomenda a mudança para o tema predefinido."
+                End Select
+                MsgBox(msg, vbOKOnly + vbExclamation, titleMsg)
+            End If
+        Catch ex As Exception
+
+        End Try
     End Sub
 
     Function GetItemThumbnail(videoId As String) As Image
@@ -815,25 +860,15 @@ Public Class MainForm
     ''' </summary>
     ''' <remarks></remarks>
     Sub RemountOrphanedImages()
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
-        If MountedImageMountDirs.Count > 0 Then
-            Try
-                DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
-                For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
-                    If MountedImageImgStatuses(x) = 1 Then
-                        DismApi.RemountImage(MountedImageMountDirs(x))
-                    End If
-                Next
-            Catch ex As Exception
-                Debug.WriteLine("Could not remount all orphaned images. Reason:" & CrLf & ex.ToString())
-            Finally
-                DismApi.Shutdown()
-            End Try
+        Dim NeedToRemount As Boolean = False
+        If MountedImageImgStatuses.Count > 0 Then
+            For x = 0 To Array.LastIndexOf(MountedImageImgStatuses, MountedImageImgStatuses.Last)
+                If MountedImageImgStatuses(x) = 1 Then
+                    NeedToRemount = True
+                End If
+            Next
         End If
+        If NeedToRemount Then AutoReloadForm.ShowDialog()
         HasRemounted = True
     End Sub
 
@@ -1462,7 +1497,7 @@ Public Class MainForm
                 ' Apply language settings immediately
                 ChangeLangs(Language)
                 ' Detect log font setting. Do note that, if a system does not contain the font set in this program,
-                ' it will revert to "Courier New"
+                ' it will revert to "Consolas"
                 For Each line In DTSettingForm.RichTextBox1.Lines
                     If line.StartsWith("LogFont=", StringComparison.OrdinalIgnoreCase) Then
                         LogFont = line.Replace("LogFont=", "").Trim().Replace(Quote, "").Trim()
@@ -1728,7 +1763,7 @@ Public Class MainForm
             If Not fontTester.Name = TestingFontName Then
                 ProblematicStrings(1) = LogFont
                 isLogFontProblematic = True
-                LogFont = "Courier New"
+                LogFont = "Consolas"
             End If
         End Using
         If Not File.Exists(LogFile) Then
@@ -4551,8 +4586,8 @@ Public Class MainForm
             DTSettingForm.RichTextBox2.AppendText("ColorMode=1")
         End Try
         DTSettingForm.RichTextBox2.AppendText(CrLf & "Language=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFont=" & Quote & "Courier New" & Quote)
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontSi=10")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFont=" & Quote & "Consolas" & Quote)
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontSi=11")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontBold=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SecondaryProgressPanelStyle=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=0")
@@ -4620,8 +4655,8 @@ Public Class MainForm
             PersKey.SetValue("ColorMode", 1, RegistryValueKind.DWord)
         End Try
         PersKey.SetValue("Language", 0, RegistryValueKind.DWord)
-        PersKey.SetValue("LogFont", "Courier New", RegistryValueKind.String)
-        PersKey.SetValue("LogFontSi", 10, RegistryValueKind.DWord)
+        PersKey.SetValue("LogFont", "Consolas", RegistryValueKind.String)
+        PersKey.SetValue("LogFontSi", 11, RegistryValueKind.DWord)
         PersKey.SetValue("LogFontBold", 0, RegistryValueKind.DWord)
         PersKey.SetValue("SecondaryProgressPanelStyle", 1, RegistryValueKind.DWord)
         PersKey.SetValue("AllCaps", 0, RegistryValueKind.DWord)
@@ -5087,12 +5122,14 @@ Public Class MainForm
                         AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                        ImgSpecialToolsCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         PkgInfoCMS.ForeColor = Color.White
                         ImgUMountPopupCMS.ForeColor = Color.White
                         AppxPackagePopupCMS.ForeColor = Color.White
                         AppxRelatedLinksCMS.ForeColor = Color.White
                         TreeViewCMS.ForeColor = Color.White
                         AppxResCMS.ForeColor = Color.White
+                        ImgSpecialToolsCMS.ForeColor = Color.White
                         Dim items = TreeViewCMS.Items
                         Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
                         For Each item As ToolStripDropDownItem In mItem
@@ -5201,12 +5238,14 @@ Public Class MainForm
                         AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                        ImgSpecialToolsCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         PkgInfoCMS.ForeColor = Color.Black
                         ImgUMountPopupCMS.ForeColor = Color.Black
                         AppxPackagePopupCMS.ForeColor = Color.Black
                         AppxRelatedLinksCMS.ForeColor = Color.Black
                         TreeViewCMS.ForeColor = Color.Black
                         AppxResCMS.ForeColor = Color.Black
+                        ImgSpecialToolsCMS.ForeColor = Color.Black
                         Dim items = TreeViewCMS.Items
                         Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
                         For Each item As ToolStripDropDownItem In mItem
@@ -5319,12 +5358,14 @@ Public Class MainForm
                 AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                ImgSpecialToolsCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 PkgInfoCMS.ForeColor = Color.Black
                 ImgUMountPopupCMS.ForeColor = Color.Black
                 AppxPackagePopupCMS.ForeColor = Color.Black
                 AppxRelatedLinksCMS.ForeColor = Color.Black
                 TreeViewCMS.ForeColor = Color.Black
                 AppxResCMS.ForeColor = Color.Black
+                ImgSpecialToolsCMS.ForeColor = Color.Black
                 Dim items = TreeViewCMS.Items
                 Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
                 For Each item As ToolStripDropDownItem In mItem
@@ -5433,12 +5474,14 @@ Public Class MainForm
                 AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                ImgSpecialToolsCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 PkgInfoCMS.ForeColor = Color.White
                 ImgUMountPopupCMS.ForeColor = Color.White
                 AppxPackagePopupCMS.ForeColor = Color.White
                 AppxRelatedLinksCMS.ForeColor = Color.White
                 TreeViewCMS.ForeColor = Color.White
                 AppxResCMS.ForeColor = Color.White
+                ImgSpecialToolsCMS.ForeColor = Color.White
                 Dim items = TreeViewCMS.Items
                 Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
                 For Each item As ToolStripDropDownItem In mItem
@@ -5783,6 +5826,8 @@ Public Class MainForm
                         DiscardAndUnmountTSMI.Text = "Discard changes and unmount image"
                         UnmountSettingsToolStripMenuItem.Text = "Unmount settings..."
                         ViewPackageDirectoryToolStripMenuItem.Text = "View package directory"
+                        GetImageFileInformationToolStripMenuItem.Text = "Get image file information..."
+                        SaveCompleteImageInformationToolStripMenuItem.Text = "Save complete image information..."
                         ' OpenFileDialogs and FolderBrowsers
                         OpenFileDialog1.Title = "Specify the project file to load"
                         LocalMountDirFBD.Description = "Please specify the mount directory you want to load into this project:"
@@ -6153,6 +6198,8 @@ Public Class MainForm
                         DiscardAndUnmountTSMI.Text = "Descartar cambios y desmontar imagen"
                         UnmountSettingsToolStripMenuItem.Text = "Configuración de desmontaje..."
                         ViewPackageDirectoryToolStripMenuItem.Text = "Ver directorio del paquete"
+                        GetImageFileInformationToolStripMenuItem.Text = "Obtener información del archivo de imagen..."
+                        SaveCompleteImageInformationToolStripMenuItem.Text = "Guardar información completa de la imagen..."
                         ' OpenFileDialogs and FolderBrowsers
                         OpenFileDialog1.Title = "Especifique el archivo de proyecto a cargar"
                         LocalMountDirFBD.Description = "Especifique el directorio de montaje que desea cargar en este proyecto:"
@@ -6523,6 +6570,8 @@ Public Class MainForm
                         DiscardAndUnmountTSMI.Text = "Annuler les modifications et démonter l'image"
                         UnmountSettingsToolStripMenuItem.Text = "Configurer les paramètres de démontage......"
                         ViewPackageDirectoryToolStripMenuItem.Text = "Afficher le répertoire des paquets"
+                        GetImageFileInformationToolStripMenuItem.Text = "Obtenir des informations sur le fichier image..."
+                        SaveCompleteImageInformationToolStripMenuItem.Text = "Enregistrer les informations complètes sur l'image..."
                         ' OpenFileDialogs and FolderBrowsers
                         OpenFileDialog1.Title = "Spécifier le fichier de projet à charger"
                         LocalMountDirFBD.Description = "Veuillez spécifier le répertoire de montage que vous souhaitez charger dans ce projet:"
@@ -6892,6 +6941,8 @@ Public Class MainForm
                         DiscardAndUnmountTSMI.Text = "Descartar alterações e desmontar a imagem"
                         UnmountSettingsToolStripMenuItem.Text = "Desmontar definições..."
                         ViewPackageDirectoryToolStripMenuItem.Text = "Ver diretório de pacotes"
+                        GetImageFileInformationToolStripMenuItem.Text = "Obter informações sobre o ficheiro de imagem..."
+                        SaveCompleteImageInformationToolStripMenuItem.Text = "Guardar informações completas sobre a imagem..."
                         ' OpenFileDialogs and FolderBrowsers
                         OpenFileDialog1.Title = "Especifique o ficheiro de projeto a carregar"
                         LocalMountDirFBD.Description = "Especifique o diretório de montagem que pretende carregar para este projeto:"
@@ -7267,6 +7318,8 @@ Public Class MainForm
                 DiscardAndUnmountTSMI.Text = "Discard changes and unmount image"
                 UnmountSettingsToolStripMenuItem.Text = "Unmount settings..."
                 ViewPackageDirectoryToolStripMenuItem.Text = "View package directory"
+                GetImageFileInformationToolStripMenuItem.Text = "Get image file information..."
+                SaveCompleteImageInformationToolStripMenuItem.Text = "Save complete image information..."
                 ' OpenFileDialogs and FolderBrowsers
                 OpenFileDialog1.Title = "Specify the project file to load"
                 LocalMountDirFBD.Description = "Please specify the mount directory you want to load into this project:"
@@ -7637,6 +7690,8 @@ Public Class MainForm
                 DiscardAndUnmountTSMI.Text = "Descartar cambios y desmontar imagen"
                 UnmountSettingsToolStripMenuItem.Text = "Configuración de desmontaje..."
                 ViewPackageDirectoryToolStripMenuItem.Text = "Ver directorio del paquete"
+                GetImageFileInformationToolStripMenuItem.Text = "Obtener información del archivo de imagen..."
+                SaveCompleteImageInformationToolStripMenuItem.Text = "Guardar información completa de la imagen..."
                 ' OpenFileDialogs and FolderBrowsers
                 OpenFileDialog1.Title = "Especifique el archivo de proyecto a cargar"
                 LocalMountDirFBD.Description = "Especifique el directorio de montaje que desea cargar en este proyecto:"
@@ -8006,6 +8061,8 @@ Public Class MainForm
                 DiscardAndUnmountTSMI.Text = "Annuler les modifications et démonter l'image"
                 UnmountSettingsToolStripMenuItem.Text = "Configurer les paramètres de démontage......"
                 ViewPackageDirectoryToolStripMenuItem.Text = "Afficher le répertoire des paquets"
+                GetImageFileInformationToolStripMenuItem.Text = "Obtenir des informations sur le fichier image..."
+                SaveCompleteImageInformationToolStripMenuItem.Text = "Enregistrer les informations complètes sur l'image..."
                 ' OpenFileDialogs and FolderBrowsers
                 OpenFileDialog1.Title = "Spécifier le fichier de projet à charger"
                 LocalMountDirFBD.Description = "Veuillez spécifier le répertoire de montage que vous souhaitez charger dans ce projet:"
@@ -8375,6 +8432,8 @@ Public Class MainForm
                 DiscardAndUnmountTSMI.Text = "Descartar alterações e desmontar a imagem"
                 UnmountSettingsToolStripMenuItem.Text = "Desmontar definições..."
                 ViewPackageDirectoryToolStripMenuItem.Text = "Ver diretório de pacotes"
+                GetImageFileInformationToolStripMenuItem.Text = "Obter informações sobre o ficheiro de imagem..."
+                SaveCompleteImageInformationToolStripMenuItem.Text = "Guardar informações completas sobre a imagem..."
                 ' OpenFileDialogs and FolderBrowsers
                 OpenFileDialog1.Title = "Especifique o ficheiro de projeto a carregar"
                 LocalMountDirFBD.Description = "Especifique o diretório de montagem que pretende carregar para este projeto:"
@@ -14462,7 +14521,7 @@ Public Class MainForm
                     End Select
                 End If
             Catch ex As Exception
-
+                AdkCopyEx = ex
             End Try
         End If
     End Sub
@@ -14578,6 +14637,9 @@ Public Class MainForm
                 Case 4
                     MenuDesc.Text = "Não foi possível copiar as ferramentas de implantação"
             End Select
+            If AdkCopyEx IsNot Nothing Then
+                MenuDesc.Text &= " (" & AdkCopyEx.Message & ")"
+            End If
         End Try
     End Sub
 
@@ -15334,6 +15396,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AllDrivers = AllDrivers
             ImgInfoSaveDlg.SkipQuestions = SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 0
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
@@ -15644,6 +15707,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AllDrivers = AllDrivers
             ImgInfoSaveDlg.SkipQuestions = SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 0
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
@@ -15788,6 +15852,7 @@ Public Class MainForm
             ImgInfoSaveDlg.OnlineMode = OnlineManagement
             ImgInfoSaveDlg.SkipQuestions = SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 2
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
@@ -16100,6 +16165,7 @@ Public Class MainForm
             ImgInfoSaveDlg.OfflineMode = OfflineManagement
             ImgInfoSaveDlg.SkipQuestions = SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 4
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
@@ -16310,6 +16376,7 @@ Public Class MainForm
             ImgInfoSaveDlg.OfflineMode = OfflineManagement
             ImgInfoSaveDlg.SkipQuestions = SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 5
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
@@ -16586,6 +16653,7 @@ Public Class MainForm
             ImgInfoSaveDlg.OfflineMode = OfflineManagement
             ImgInfoSaveDlg.SkipQuestions = SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 6
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
@@ -16762,6 +16830,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AllDrivers = AllDrivers
             ImgInfoSaveDlg.SkipQuestions = SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 7
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
@@ -16785,6 +16854,7 @@ Public Class MainForm
             ImgInfoSaveDlg.OnlineMode = OnlineManagement
             ImgInfoSaveDlg.SkipQuestions = SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 9
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
@@ -17816,5 +17886,30 @@ Public Class MainForm
 
     Private Sub CreateDiscImageToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateDiscImageToolStripMenuItem.Click
         ISOCreator.Show()
+    End Sub
+
+    Private Sub GetImageFileInformationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles GetImageFileInformationToolStripMenuItem.Click
+        GetImgInfoDlg.RadioButton1.Checked = False
+        GetImgInfoDlg.RadioButton2.Checked = True
+        GetImgInfoDlg.TextBox1.Text = MountedImgMgr.ListView1.FocusedItem.SubItems(0).Text
+        GetImgInfoDlg.ShowDialog(MountedImgMgr)
+    End Sub
+
+    Private Sub SaveCompleteImageInformationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaveCompleteImageInformationToolStripMenuItem.Click
+        If ImgInfoSFD.ShowDialog(MountedImgMgr) = Windows.Forms.DialogResult.OK Then
+            If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
+            ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
+            ImgInfoSaveDlg.SourceImage = MountedImgMgr.ListView1.FocusedItem.SubItems(0).Text
+            ImgInfoSaveDlg.ImgMountDir = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text
+            ImgInfoSaveDlg.OnlineMode = OnlineManagement
+            ImgInfoSaveDlg.OfflineMode = OfflineManagement
+            ImgInfoSaveDlg.AllDrivers = AllDrivers
+            ImgInfoSaveDlg.SkipQuestions = SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = True
+            ImgInfoSaveDlg.SaveTask = 0
+            ImgInfoSaveDlg.ShowDialog(MountedImgMgr)
+            InfoSaveResults.Show()
+        End If
     End Sub
 End Class

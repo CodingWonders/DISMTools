@@ -401,6 +401,7 @@ Public Class GetFeatureInfoDlg
             ImgInfoSaveDlg.OfflineMode = MainForm.OfflineManagement
             ImgInfoSaveDlg.SkipQuestions = MainForm.SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = MainForm.AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 4
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()

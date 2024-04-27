@@ -687,6 +687,12 @@
     <Compile Include="Panels\Report_Dlgs\Get-ImageInfo\ReportForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Startup\AutoReload\AutoReloadForm.Designer.vb">
+      <DependentUpon>AutoReloadForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Startup\AutoReload\AutoReloadForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Startup\SplashScreen.Designer.vb">
       <DependentUpon>SplashScreen.vb</DependentUpon>
     </Compile>
@@ -986,6 +992,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Report_Dlgs\Get-ImageInfo\ReportForm.resx">
       <DependentUpon>ReportForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Startup\AutoReload\AutoReloadForm.resx">
+      <DependentUpon>AutoReloadForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Startup\SplashScreen.resx">
       <DependentUpon>SplashScreen.vb</DependentUpon>
@@ -1581,6 +1590,7 @@
   <ItemGroup>
     <Folder Include="bin\Debug\" />
     <Folder Include="Panels\Set_Ops\" />
+    <Folder Include="Tools\UnpEax\" />
     <Folder Include="Updater\" />
     <Folder Include="wimlib\" />
   </ItemGroup>
@@ -1644,6 +1654,12 @@ IF NOT EXIST scratch (
 )
 :: Copy the Internet Explorer browser emulation registry file to the program directory
 copy /y "$(SolutionDir)Tools\DT_IEConfig.reg" "DT_IEConfig.reg"
+
+IF EXIST "$(SolutionDir)Tools\UnpEax\bin\Debug\UnpEax.exe" (
+	md "Tools\UnpEax"
+	copy /y "$(SolutionDir)Tools\UnpEax\bin\Debug\UnpEax.exe" "Tools\UnpEax\UnpEax.exe"
+)
+
 IF %25ISPREVIEW%25=="Yes" (
 	echo You will be running a preview release, which may not be ready for production. You may experience more bugs and less stability. Please switch to a stable release whenever possible.
 )
@@ -1658,6 +1674,7 @@ IF %25COPY_DOCS%25=="Yes" (
 IF %25GEN_INSTALLER%25=="Yes" (
 	echo The technology used for creating the installer is subject to a license. Refer to the "LICENSE.TXT" file in the "$(SolutionDir)Installer" directory for more information
 	echo Copying program files...
+	IF EXIST "$(SolutionDir)Installer\files" (rd "$(SolutionDir)Installer\files" /s /q)
 	IF NOT EXIST "$(SolutionDir)Installer\files" (md "$(SolutionDir)Installer\files")
 	XCOPY "$(TargetDir)*.*" "$(SolutionDir)Installer\files" /cehyi
 	IF EXIST "$(SolutionDir)Installer\files\VS*.tmp" (del "$(SolutionDir)Installer\files\VS*.tmp" /f /q)
@@ -1694,7 +1711,11 @@ IF EXIST videos (
 )
 
 IF EXIST videos.xml (del videos.xml)
-IF EXIST videos.xml.old (del videos.xml.old)</PreBuildEvent>
+IF EXIST videos.xml.old (del videos.xml.old)
+
+IF EXIST tools (
+	rd tools /s /q
+)</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

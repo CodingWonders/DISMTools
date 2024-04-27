@@ -12,6 +12,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "DISMTools-Setup", "installe
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "DISMTools-UCS", "Updater\DISMTools-UCS\DISMTools-UCS.vbproj", "{C084B601-F395-47D3-9E66-C0582139DCF4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnpEax", "Tools\UnpEax\UnpEax.csproj", "{5330BC3F-1BFF-4200-8872-3A2236F814AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +32,10 @@ Global
 		{C084B601-F395-47D3-9E66-C0582139DCF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C084B601-F395-47D3-9E66-C0582139DCF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C084B601-F395-47D3-9E66-C0582139DCF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5330BC3F-1BFF-4200-8872-3A2236F814AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5330BC3F-1BFF-4200-8872-3A2236F814AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5330BC3F-1BFF-4200-8872-3A2236F814AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5330BC3F-1BFF-4200-8872-3A2236F814AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

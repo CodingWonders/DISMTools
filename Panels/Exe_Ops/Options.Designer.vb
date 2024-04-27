@@ -696,7 +696,7 @@ Partial Class Options
         '
         'TextBox4
         '
-        Me.TextBox4.Font = New System.Drawing.Font("Courier New", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TextBox4.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBox4.Location = New System.Drawing.Point(19, 106)
         Me.TextBox4.Multiline = True
         Me.TextBox4.Name = "TextBox4"
@@ -1245,7 +1245,7 @@ Partial Class Options
         '
         Me.LogPreview.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.LogPreview.Font = New System.Drawing.Font("Courier New", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LogPreview.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LogPreview.Location = New System.Drawing.Point(44, 122)
         Me.LogPreview.Multiline = True
         Me.LogPreview.Name = "LogPreview"
@@ -1281,7 +1281,7 @@ Partial Class Options
         Me.ComboBox4.Name = "ComboBox4"
         Me.ComboBox4.Size = New System.Drawing.Size(430, 23)
         Me.ComboBox4.TabIndex = 3
-        Me.ComboBox4.Text = "Courier New"
+        Me.ComboBox4.Text = "Consolas"
         '
         'CheckBox9
         '

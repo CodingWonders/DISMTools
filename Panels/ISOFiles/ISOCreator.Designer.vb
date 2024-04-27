@@ -53,6 +53,7 @@ Partial Class ISOCreator
         Me.Label8 = New System.Windows.Forms.Label()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
+        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
@@ -136,7 +137,7 @@ Partial Class ISOCreator
         '
         'Panel1
         '
-        Me.Panel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.Panel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel1.Controls.Add(Me.ComboBox1)
         Me.Panel1.Controls.Add(Me.Label6)
@@ -167,6 +168,7 @@ Partial Class ISOCreator
         '
         'Label5
         '
+        Me.Label5.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label5.AutoSize = True
         Me.Label5.Location = New System.Drawing.Point(24, 192)
         Me.Label5.Name = "Label5"
@@ -176,10 +178,11 @@ Partial Class ISOCreator
         '
         'TextBox2
         '
-        Me.TextBox2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.TextBox2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBox2.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.TextBox2.Font = New System.Drawing.Font("Courier New", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TextBox2.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBox2.Location = New System.Drawing.Point(27, 73)
         Me.TextBox2.Multiline = True
         Me.TextBox2.Name = "TextBox2"
@@ -201,7 +204,7 @@ Partial Class ISOCreator
         '
         'Button3
         '
-        Me.Button3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button3.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button3.Location = New System.Drawing.Point(878, 260)
         Me.Button3.Name = "Button3"
@@ -223,7 +226,7 @@ Partial Class ISOCreator
         '
         'TextBox3
         '
-        Me.TextBox3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.TextBox3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBox3.Location = New System.Drawing.Point(24, 261)
         Me.TextBox3.Name = "TextBox3"
@@ -241,6 +244,7 @@ Partial Class ISOCreator
         '
         'Label7
         '
+        Me.Label7.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label7.AutoSize = True
         Me.Label7.Location = New System.Drawing.Point(21, 244)
         Me.Label7.Name = "Label7"
@@ -335,6 +339,8 @@ Partial Class ISOCreator
         '
         'ProgressBar1
         '
+        Me.ProgressBar1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ProgressBar1.Location = New System.Drawing.Point(15, 29)
         Me.ProgressBar1.MarqueeAnimationSpeed = 150
         Me.ProgressBar1.Name = "ProgressBar1"
@@ -343,6 +349,8 @@ Partial Class ISOCreator
         '
         'Label9
         '
+        Me.Label9.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label9.AutoEllipsis = True
         Me.Label9.Location = New System.Drawing.Point(12, 57)
         Me.Label9.Name = "Label9"
@@ -353,6 +361,8 @@ Partial Class ISOCreator
         '
         'Label8
         '
+        Me.Label8.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label8.AutoEllipsis = True
         Me.Label8.Location = New System.Drawing.Point(12, 12)
         Me.Label8.Name = "Label8"
@@ -368,12 +378,25 @@ Partial Class ISOCreator
         '
         Me.SaveFileDialog1.Filter = "ISO files|*.iso"
         '
+        'LinkLabel1
+        '
+        Me.LinkLabel1.AutoEllipsis = True
+        Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel1.Location = New System.Drawing.Point(12, 531)
+        Me.LinkLabel1.Name = "LinkLabel1"
+        Me.LinkLabel1.Size = New System.Drawing.Size(343, 13)
+        Me.LinkLabel1.TabIndex = 11
+        Me.LinkLabel1.TabStop = True
+        Me.LinkLabel1.Text = "Download the Windows ADK"
+        '
         'ISOCreator
         '
         Me.AcceptButton = Me.OK_Button
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1008, 561)
+        Me.Controls.Add(Me.LinkLabel1)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.OK_Button)
         Me.Controls.Add(Me.Cancel_Button)
@@ -430,4 +453,5 @@ Partial Class ISOCreator
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
     Friend WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
+    Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
 End Class

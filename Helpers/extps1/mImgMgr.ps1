@@ -53,7 +53,6 @@ $global:mImage = Get-WindowsImage -Mounted
 $global:mImages = Get-WindowsImage -Mounted
 $global:selImage = 0
 $global:imgInfo = ''
-$newImg = 0
 $selImgPath = ''
 $ver = '0.5'
 $global:img_removalIndexes = New-Object System.Collections.ArrayList
@@ -70,7 +69,7 @@ $suMountOp = 0
 # Set window title
 $host.UI.RawUI.WindowTitle = "Mounted image manager"
 
-function Mark-Image {
+function Set-Image {
     # Refresh the mounted image variable
     $global:mImage = Get-WindowsImage -Mounted
     if ($global:mImage.Count -ne $global:mImages.Count)
@@ -115,7 +114,7 @@ function Mark-Image {
         else
         {
             Write-Host "You have marked a non-existent mounted image"
-            Mark-Image
+            Set-Image
         }
     }
     if ($option -le $global:mImage.Count)
@@ -131,16 +130,16 @@ function Mark-Image {
     elseif ([System.String]::IsNullOrWhiteSpace($option))
     {
         Write-Host "You have marked a non-existent mounted image"
-        Mark-Image
+        Set-Image
     }
     else
     {
         Write-Host "You have marked a non-existent mounted image"
-        Mark-Image
+        Set-Image
     }
 }
 
-function Unmount-Image {
+function Dismount-Image {
     Clear-Host
     Write-Host "Image about to be unmounted: $($global:mImage[$global:selImage - 1].ImagePath)"`n
     if ($global:mImage[$global:selImage - 1].MountMode -eq 1)
@@ -161,7 +160,7 @@ function Unmount-Image {
                 Write-Host "This image is mounted with read-only permissions. Changes cannot be committed to this image."`n`n"If you want to make changes to this image, you must enable write permissions by pressing the [E] key in the main menu."`n -ForegroundColor Black -BackgroundColor DarkRed
                 Write-Host "Press ENTER to continue..."
                 Read-Host | Out-Null
-                Unmount-Image
+                Dismount-Image
             }
             Write-Host "Unmounting Windows image:"`n"- Image file and index: $($global:mImage[$global:selImage - 1].ImagePath) (index $($global:mImage[$global:selImage - 1].ImageIndex))"`n"- Mount directory: $($global:mImage[$global:selImage - 1].MountPath)"`n"- Operation: Commit"`n"- Additional opperations: don't check integrity, don't append to new index"
             Dismount-WindowsImage -Path $global:mImage[$global:selImage - 1].MountPath -Save
@@ -196,25 +195,25 @@ function Unmount-Image {
             MainMenu
         }
         "S" {
-            Unmount-Settings $false, $false
+            Dismount-Settings $false, $false
         }
         "B" {
             MainMenu
         }
         default {
-            Unmount-Image
+            Dismount-Image
         }
     }
 }
 
-function Unmount-Settings {
+function Dismount-Settings {
     Clear-Host
     if ($global:mImage[$global:selImage - 1].MountMode -eq 1)
     {
         Write-Host "Unmount settings apply to the commit operation. This image was mounted with read-only permissions. Changes cannot be committed to this image."`n`n"If you want to make changes to this image, you must enable write permissions by pressing the [E] key in the main menu."`n -ForegroundColor Black -BackgroundColor DarkRed
         Write-Host "Press ENTER to continue..."
         Read-Host | Out-Null
-        Unmount-Image
+        Dismount-Image
     }
     Write-Host "Unmount settings for image: $($global:mImage[$global:selImage - 1].ImagePath)"`n
     if ($global:checkIntegrity)
@@ -239,11 +238,11 @@ function Unmount-Settings {
     {
         "C" {
             $global:checkIntegrity = -not $global:checkIntegrity
-            Unmount-Settings
+            Dismount-Settings
         }
         "A" {
             $global:appendIndex = -not $global:appendIndex
-            Unmount-Settings
+            Dismount-Settings
         }
         "P" {
             Write-Host `n"Unmounting image with specified settings..."`n
@@ -279,7 +278,7 @@ function Unmount-Settings {
             MainMenu
         }
         default {
-            Unmount-Settings
+            Dismount-Settings
         }
     }
 }
@@ -673,7 +672,7 @@ function Get-MenuItems {
     Write-Host "[X]: Exit"
 }
 
-function Detect-MountedImageIndexChanges {
+function Get-MountedImageIndexChanges {
     if ($global:selImage -eq 0) { return }
     $global:mImage = Get-WindowsImage -Mounted
     $global:mImages = Get-WindowsImage -Mounted
@@ -711,7 +710,7 @@ function MainMenu {
     # List mounted Windows images
     Get-WindowsImage -Mounted | Format-Table
     Write-Host `n`n`n
-    Detect-MountedImageIndexChanges
+    Get-MountedImageIndexChanges
     if (($global:selImage -eq 0) -and $global:mImage.Count -ge 1)
     {
         Write-Host "No image has been marked for management. Press the [M] key to mark a mounted image..."
@@ -732,11 +731,11 @@ function MainMenu {
     $option = Read-Host -Prompt "Select an option and press ENTER"
     switch ($option)
     {
-        "M" { Mark-Image }
+        "M" { Set-Image }
         "U" {
             if ($global:mImage[$global:selImage - 1].MountMode -eq 0)
             {             
-                Unmount-Image
+                Dismount-Image
             }
             elseif ($global:mImage[$global:selImage - 1].MountMode -eq 1)
             {

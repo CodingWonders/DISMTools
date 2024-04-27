@@ -78,6 +78,7 @@ Source: ".\files\WeifenLuo.WinFormsUI.Docking.dll"; DestDir: "{#pfDir}"; Flags: 
 Source: ".\files\WeifenLuo.WinFormsUI.Docking.ThemeVS2012.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\bin\*"; DestDir: "{#pfDir}\bin"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: ".\files\docs\*"; DestDir: "{#pfDir}\docs"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: ".\files\tools\*"; DestDir: "{#pfDir}\tools"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: ".\files\videos\*"; DestDir: "{#pfDir}\videos"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
@@ -122,9 +123,9 @@ Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dwo
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "ColorSchemes"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "ExpandedProgressPanel"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "Language"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: string; ValueName: "LogFont"; ValueData: "Courier New"; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: string; ValueName: "LogFont"; ValueData: "Consolas"; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "LogFontBold"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "LogFontSi"; ValueData: 10; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "LogFontSi"; ValueData: 11; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "NewDesign"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Personalization"; ValueType: dword; ValueName: "SecondaryProgressPanelStyle"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 

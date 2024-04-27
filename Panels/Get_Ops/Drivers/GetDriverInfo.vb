@@ -1070,6 +1070,7 @@ Public Class GetDriverInfo
             ImgInfoSaveDlg.AllDrivers = MainForm.AllDrivers
             ImgInfoSaveDlg.SkipQuestions = MainForm.SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = MainForm.AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = If(InfoFromDrvPackagesPanel.Visible, 8, 7)
             If InfoFromDrvPackagesPanel.Visible Then
                 For Each drvFile In ListBox1.Items
