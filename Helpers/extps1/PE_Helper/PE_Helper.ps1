@@ -498,20 +498,37 @@ function Start-OSApplication
             $choice = Read-Host "Are you sure you want to continue (Y/N)"
         } until ($choice -eq "Y")
     }
+    $driveLetter = ""
     if ($partition -eq 0)
     {
+        $driveLetter = "C"
         # Proceed with default disk configuration
-        Write-DiskConfiguration $drive $true
+        Write-DiskConfiguration $drive $true $partition
     }
     else
     {
         # Proceed with custom disk configuration
-        Write-DiskConfiguration $drive $false
+        Write-DiskConfiguration $drive $false $partition
+        $volLister = @'
+        lis vol
+        exit
+'@
+        $volLister | Out-File "X:\files\diskpart\dp_vols.dp" -Force -Encoding utf8
+        diskpart /s "X:\files\diskpart\dp_vols.dp" | Out-Host
+        $driveLetter = Read-Host "Type the letter to assign to the new partition"
+        if ($driveLetter -eq "")
+        {
+            do
+            {
+                Write-Host "No drive letter has been specified."
+                $driveLetter = Read-Host "Type the letter to assign to the new partition"
+            } until ($driveLetter -ne "")
+        }
     }
-    wpeutil createpagefile /path="C:\pagefile.sys" /size=256
+    wpeutil createpagefile /path="$($driveLetter):\pagefile.sys" /size=256
     $index = Get-WimIndexes
     Write-Host "Applying Windows image. This can take some time..."
-    if ((Start-DismCommand -Verb Apply -ImagePath "C:\" -WimFile "$((Get-Location).Path)sources\install.wim" -WimIndex $index) -eq $true)
+    if ((Start-DismCommand -Verb Apply -ImagePath "$($driveLetter):\" -WimFile "$((Get-Location).Path)sources\install.wim" -WimIndex $index) -eq $true)
     {
         Write-Host "The Windows image has been applied successfully."
     }
@@ -519,8 +536,8 @@ function Start-OSApplication
     {
         Write-Host "Failed to apply the Windows image."
     }
-    Set-Serviceability -ImagePath "C:\"
-    New-BootFiles
+    Set-Serviceability -ImagePath "$($driveLetter):\"
+    New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive
     # Show message before rebooting system
     Write-Host "The first stage of Setup has completed, and your system will reboot automatically.`n`nIf there are any bootable devices, remove those.`n`nWhen your computer restarts, Setup will continue.`n"
     Show-Timeout -Seconds 15
@@ -592,7 +609,8 @@ function Write-DiskConfiguration
 {
     param (
         [Parameter(Mandatory = $true, Position = 0)] [int] $diskid,
-        [Parameter(Mandatory = $true, Position = 1)] [bool] $cleanDrive
+        [Parameter(Mandatory = $true, Position = 1)] [bool] $cleanDrive,
+        [Parameter(Mandatory = $true, Position = 2)] [int] $partId
     )
     Write-Host "Writing disk configuration. Please wait..."
     if ($cleanDrive)
@@ -651,6 +669,19 @@ function Write-DiskConfiguration
         }
         $formatter | Out-File "X:\files\diskpart\dp_format.dp" -Force -Encoding utf8
         diskpart /s "X:\files\diskpart\dp_format.dp" | Out-Host
+    }
+    else
+    {
+        $formatter = @'
+        sel dis #DISKID#
+        sel par #PARTID#
+        for quick label="Windows"
+        exit
+'@
+        $formatter = $formatter.Replace("#DISKID#", $diskId).Trim()
+        $formatter = $formatter.Replace("#PARTID#", $partId).Trim()
+        $formatter | Out-File "X:\files\diskpart\dp_format.dp" -Force -Encoding utf8
+        diskpart /s "X:\files\diskpart\dp_format.dp" | Out-Host        
     }
     Write-Host "Disk configuration has been written successfully."
 }
@@ -817,17 +848,70 @@ function Set-Serviceability
 
 function New-BootFiles
 {
+    param (
+        [Parameter(Mandatory = $true, Position = 0)] [string] $drLetter,
+        [Parameter(Mandatory = $true, Position = 1)] [string] $bootPart,
+        [Parameter(Mandatory = $true, Position = 2)] [int] $diskId
+    )
     if ($env:firmware_type -eq "UEFI")
     {
         # Make boot files for both BIOS and UEFI firmwares
-        bcdboot "C:\Windows" /s "W:" /f ALL
+        if ($bootpart -eq "auto")
+        {
+            foreach ($disk in $(Get-CimInstance -ClassName Win32_DiskPartition))
+            {
+                if ($disk.BootPartition)
+                {
+                    $MSRAssign = @'
+                    sel dis #DISKID#
+                    sel par #VOLNUM#
+                    ass letter w
+                    exit
+'@
+                    $MSRAssign = $MSRAssign.Replace("#DISKID#", $diskId).Trim()
+                    $MSRAssign = $MSRAssign.Replace("#VOLNUM#", $disk.Index).Trim()
+                    $MSRAssign | Out-File "X:\files\diskpart\dp_bootassign.dp" -Force -Encoding utf8
+                    diskpart /s "X:\files\diskpart\dp_bootassign.dp" | Out-Host
+                }
+            }
+            bcdboot "$($drLetter):\Windows" /s "W:" /f ALL
+        }
+        else
+        {
+            bcdboot "$($drLetter):\Windows" /s "W:" /f ALL
+        }
     }
     else
     {
         # Install boot sector and make boot files for BIOS
-        bootsect /nt60 W:
-        bootsect /nt60 W: /mbr
-        bcdboot "C:\Windows" /s "W:" /f BIOS        
+        if ($bootpart -eq "auto")
+        {
+            foreach ($disk in $(Get-CimInstance -ClassName Win32_DiskPartition))
+            {
+                if ($disk.BootPartition)
+                {
+                    $MSRAssign = @'
+                    sel dis #DISKID#
+                    sel par #VOLNUM#
+                    ass letter w
+                    exit
+'@
+                    $MSRAssign = $MSRAssign.Replace("#DISKID#", $diskId).Trim()
+                    $MSRAssign = $MSRAssign.Replace("#VOLNUM#", $($disk.Index + 1)).Trim()
+                    $MSRAssign | Out-File "X:\files\diskpart\dp_bootassign.dp" -Force -Encoding utf8
+                    diskpart /s "X:\files\diskpart\dp_bootassign.dp" | Out-Host
+                }
+            }
+            bootsect /nt60 W:
+            bootsect /nt60 W: /mbr
+            bcdboot "$($drLetter):\Windows" /s "W:" /f BIOS
+        }
+        else
+        {
+            bootsect /nt60 W:
+            bootsect /nt60 W: /mbr
+            bcdboot "$($drLetter):\Windows" /s "W:" /f BIOS
+        }
     }
 }
 
