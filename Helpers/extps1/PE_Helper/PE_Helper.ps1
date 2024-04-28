@@ -29,7 +29,7 @@ using namespace System.Collections.Generic
 
 [CmdletBinding(DefaultParameterSetName='Default')]
 param (
-    [Parameter(Mandatory = $true, Position = 0)] [ValidateSet('StartPEGen', 'StartApply')] [string] $cmd,
+    [Parameter(Mandatory = $true, Position = 0)] [ValidateSet('StartPEGen', 'StartApply', 'Help')] [string] $cmd,
     [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 1)] [string] $arch,
     [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 2)] [string] $imgFile,
     [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 3)] [string] $isoPath
@@ -851,8 +851,33 @@ elseif ($cmd -eq "StartPEGen")
 {
     Start-PEGeneration
 }
+elseif ($cmd -eq "Help")
+{
+    # Show help documentation
+    Write-Host "DISMTools - Preinstallation Environment Helper"
+    Write-Host "(c) 2024. CodingWonders Software"
+    Write-Host "-----------------------------------------------------------`n"
+
+    Write-Host "Usage: PE_Helper.ps1 {-cmd} [StartPEGen -arch <arch> -imgFile <imgFile> -isoPath <isoPath>] [StartApply] [Help]`n"
+    Write-Host " -cmd: Specifies the command to run. Typing this is optional. Valid options: StartPEGen, StartApply, Help`n"
+    Write-Host "    StartPEGen: starts the Preinstallation Environment (PE) generation process. Parameters:"
+    Write-Host "      -arch: (Mandatory) Specifies the architecture of the target Preinstallation Environment (PE). Valid options:"
+    Write-Host "             x86, amd64, arm, arm64"
+    Write-Host "      -imgFile: (Mandatory) Specifies the WIM file to copy to the target Preinstallation Environment (PE)"
+    Write-Host "      -isoPath: (Mandatory) Specifies the target path of the ISO file"
+    Write-Host "      You need the Windows ADK and the PE plugin, which you can download here:"
+    Write-Host "        https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install"
+    Write-Host "    StartApply: starts the Windows image application process from the Preinstallation Environment (PE). Parameters: none"
+    Write-Host "      This can only be run on Windows PE. Starting this action on other environments will fail."
+    Write-Host "    Help: shows this help documentation`n"
+
+    Write-Host "Examples:`n"
+    Write-Host "    PE_Helper.ps1 [-cmd] StartPEGen -arch amd64 -imgFile `"C:\Whatever.wim`" -isoPath `"C:\dt_pe.iso`""
+    Write-Host "    PE_Helper.ps1 [-cmd] StartApply"
+    Write-Host "    PE_Helper.ps1 [-cmd] Help"
+}
 else
 {
-    Write-Host "Invalid command. Available commands: StartApply (begins OS application), StartPEGen (begins custom PE generation)"
+    Write-Host "Invalid command. Available commands: StartApply (begins OS application), StartPEGen (begins custom PE generation), Help"
     exit 1
 }
