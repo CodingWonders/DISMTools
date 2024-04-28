@@ -515,13 +515,13 @@ function Start-OSApplication
 '@
         $volLister | Out-File "X:\files\diskpart\dp_vols.dp" -Force -Encoding utf8
         diskpart /s "X:\files\diskpart\dp_vols.dp" | Out-Host
-        $driveLetter = Read-Host "Type the letter to assign to the new partition"
+        $driveLetter = Read-Host "Specify a drive letter"
         if ($driveLetter -eq "")
         {
             do
             {
                 Write-Host "No drive letter has been specified."
-                $driveLetter = Read-Host "Type the letter to assign to the new partition"
+                $driveLetter = Read-Host "Specify a drive letter"
             } until ($driveLetter -ne "")
         }
     }
@@ -869,7 +869,7 @@ function New-BootFiles
                     exit
 '@
                     $MSRAssign = $MSRAssign.Replace("#DISKID#", $diskId).Trim()
-                    $MSRAssign = $MSRAssign.Replace("#VOLNUM#", $disk.Index).Trim()
+                    $MSRAssign = $MSRAssign.Replace("#VOLNUM#", $($disk.Index + 1)).Trim()
                     $MSRAssign | Out-File "X:\files\diskpart\dp_bootassign.dp" -Force -Encoding utf8
                     diskpart /s "X:\files\diskpart\dp_bootassign.dp" | Out-Host
                 }
