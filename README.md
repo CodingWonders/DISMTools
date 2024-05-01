@@ -74,15 +74,6 @@ DISMTools isn't just a front-end for DISM, but an advanced one. As you perform t
 	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/d668f94e-0d39-49bb-b98f-ec045fed725b" />
 </p>
 
-- **Quickly test your Windows images.** With the ISO creation wizard, you can test your Windows image quickly and easily:
-
-<p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/102d829d-aeb1-4697-9225-27775bea2b61" />
-</p>
-<p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/eb0e2332-520c-4d2f-9cee-27c608546f6f" />
-</p>
-
 > [!NOTE]
 > The Windows ADK and its Windows PE plugin are required for this feature to work
 
