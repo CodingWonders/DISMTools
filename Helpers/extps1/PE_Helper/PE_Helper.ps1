@@ -537,7 +537,7 @@ function Start-OSApplication
         Write-Host "Failed to apply the Windows image."
     }
     Set-Serviceability -ImagePath "$($driveLetter):\"
-    New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive
+    New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partition -eq 0)
     # Show message before rebooting system
     Write-Host "The first stage of Setup has completed, and your system will reboot automatically.`n`nIf there are any bootable devices, remove those.`n`nWhen your computer restarts, Setup will continue.`n"
     Show-Timeout -Seconds 15
@@ -851,27 +851,31 @@ function New-BootFiles
     param (
         [Parameter(Mandatory = $true, Position = 0)] [string] $drLetter,
         [Parameter(Mandatory = $true, Position = 1)] [string] $bootPart,
-        [Parameter(Mandatory = $true, Position = 2)] [int] $diskId
+        [Parameter(Mandatory = $true, Position = 2)] [int] $diskId,
+        [Parameter(Mandatory = $true, Position = 3)] [bool] $cleanDrive
     )
     if ($env:firmware_type -eq "UEFI")
     {
         # Make boot files for both BIOS and UEFI firmwares
         if ($bootpart -eq "auto")
         {
-            foreach ($disk in $(Get-CimInstance -ClassName Win32_DiskPartition))
+            if (-not $cleanDrive)
             {
-                if ($disk.BootPartition)
+                foreach ($disk in $(Get-CimInstance -ClassName Win32_DiskPartition))
                 {
-                    $MSRAssign = @'
-                    sel dis #DISKID#
-                    sel par #VOLNUM#
-                    ass letter w
-                    exit
+                    if ($disk.BootPartition)
+                    {
+                        $MSRAssign = @'
+                        sel dis #DISKID#
+                        sel par #VOLNUM#
+                        ass letter w
+                        exit
 '@
-                    $MSRAssign = $MSRAssign.Replace("#DISKID#", $diskId).Trim()
-                    $MSRAssign = $MSRAssign.Replace("#VOLNUM#", $($disk.Index + 1)).Trim()
-                    $MSRAssign | Out-File "X:\files\diskpart\dp_bootassign.dp" -Force -Encoding utf8
-                    diskpart /s "X:\files\diskpart\dp_bootassign.dp" | Out-Host
+                        $MSRAssign = $MSRAssign.Replace("#DISKID#", $diskId).Trim()
+                        $MSRAssign = $MSRAssign.Replace("#VOLNUM#", $($disk.Index + 1)).Trim()
+                        $MSRAssign | Out-File "X:\files\diskpart\dp_bootassign.dp" -Force -Encoding utf8
+                        diskpart /s "X:\files\diskpart\dp_bootassign.dp" | Out-Host
+                    }
                 }
             }
             bcdboot "$($drLetter):\Windows" /s "W:" /f ALL
@@ -886,20 +890,23 @@ function New-BootFiles
         # Install boot sector and make boot files for BIOS
         if ($bootpart -eq "auto")
         {
-            foreach ($disk in $(Get-CimInstance -ClassName Win32_DiskPartition))
+            if (-not $cleanDrive)
             {
-                if ($disk.BootPartition)
+                foreach ($disk in $(Get-CimInstance -ClassName Win32_DiskPartition))
                 {
-                    $MSRAssign = @'
-                    sel dis #DISKID#
-                    sel par #VOLNUM#
-                    ass letter w
-                    exit
+                    if ($disk.BootPartition)
+                    {
+                        $MSRAssign = @'
+                        sel dis #DISKID#
+                        sel par #VOLNUM#
+                        ass letter w
+                        exit
 '@
-                    $MSRAssign = $MSRAssign.Replace("#DISKID#", $diskId).Trim()
-                    $MSRAssign = $MSRAssign.Replace("#VOLNUM#", $($disk.Index + 1)).Trim()
-                    $MSRAssign | Out-File "X:\files\diskpart\dp_bootassign.dp" -Force -Encoding utf8
-                    diskpart /s "X:\files\diskpart\dp_bootassign.dp" | Out-Host
+                        $MSRAssign = $MSRAssign.Replace("#DISKID#", $diskId).Trim()
+                        $MSRAssign = $MSRAssign.Replace("#VOLNUM#", $($disk.Index + 1)).Trim()
+                        $MSRAssign | Out-File "X:\files\diskpart\dp_bootassign.dp" -Force -Encoding utf8
+                        diskpart /s "X:\files\diskpart\dp_bootassign.dp" | Out-Host
+                    }
                 }
             }
             bootsect /nt60 W:
