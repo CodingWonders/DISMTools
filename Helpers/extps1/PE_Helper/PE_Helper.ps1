@@ -50,6 +50,10 @@ if (([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]:
 
 function Start-PEGeneration
 {
+    <#
+        .SYNOPSIS
+            Generates a Preinstallation Environment (PE) that contains the Windows image specified in the GUI or via the command line
+    #>
     $architecture = [PE_Arch]::($arch)
     $version = "0.5"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
@@ -200,6 +204,18 @@ function Start-PEGeneration
 
 function Copy-PEFiles
 {
+    <#
+        .SYNOPSIS
+            Copies the Preinstallation Environment (PE) files to a temporary folder in the working directory
+        .PARAMETER peToolsPath
+            The path of the Preinstallation Environment (PE) tools. By default, this is "Program Files\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools"
+        .PARAMETER architecture
+            The architecture of the target Preinstallation Environment (PE). Valid options: x86, amd64, arm, arm64
+        .PARAMETER targetDir
+            The target directory to copy the Preinstallation Environment (PE) files to
+        .EXAMPLE
+            Copy-PEFiles -peToolsPath "C:\Program Files\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools" -architecture amd64 -targetDir "ISOTEMP"
+    #>
     param (
         [Parameter(Mandatory = $true, Position = 0)] [string] $peToolsPath,
         [Parameter(Mandatory = $true, Position = 1)] [PE_Arch] $architecture,
@@ -240,6 +256,18 @@ function Copy-PEFiles
 
 function Copy-PEComponents
 {
+    <#
+        .SYNOPSIS
+            Copies the Preinstallation Environment (PE) component files to a temporary folder in the working directory
+        .PARAMETER peToolsPath
+            The path of the Preinstallation Environment (PE) tools. By default, this is "Program Files\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools"
+        .PARAMETER architecture
+            The architecture of the target Preinstallation Environment (PE). Valid options: x86, amd64, arm, arm64
+        .PARAMETER targetDir
+            The target directory to copy the Preinstallation Environment (PE) component files to
+        .EXAMPLE
+            Copy-PEComponents -peToolsPath "C:\Program Files\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools" -architecture amd64 -targetDir "ISOTEMP"
+    #>
     param (
         [Parameter(Mandatory = $true, Position = 0)] [string] $peToolsPath,
         [Parameter(Mandatory = $true, Position = 1)] [PE_Arch] $architecture,
@@ -279,6 +307,16 @@ function Copy-PEComponents
 
 function Start-PECustomization
 {
+    <#
+        .SYNOPSIS
+            Starts the customization process of the Windows Preinstallation Environment (PE). This is a process required for the installer to work
+        .PARAMETER imagePath
+            The path of the mounted Windows PE image
+        .PARAMETER arch
+            The architecture of the target Windows PE image, which is used to customize the wallpaper
+        .EXAMPLE
+            Start-PECustomization -imagePath "<Mount Directory>" -arch "amd64"
+    #>
     param (
         [Parameter(Mandatory = $true, Position = 0)] [string] $imagePath,
         [Parameter(Mandatory = $true, Position = 1)] [PE_Arch] $arch
@@ -366,6 +404,16 @@ function Start-PECustomization
 
 function Get-LocalizedUsers
 {
+    <#
+        .SYNOPSIS
+            Gets a localized user group representation for ICACLS commands
+        .PARAMETER admins
+            Determines whether to get a localized user group representation for the Administrators user group
+        .OUTPUTS
+            A string containing the localized user group
+        .EXAMPLE
+            Get-LocalizedUsers -admins $true
+    #>
     param (
         [Parameter(Mandatory = $true, Position = 0)] [bool] $admins
     )
@@ -381,6 +429,20 @@ function Get-LocalizedUsers
 
 function Open-PERegistry
 {
+    <#
+        .SYNOPSIS
+            Performs actions with the registry hives of the Windows Preinstallation Environment (PE)
+        .PARAMETER regFile
+            The file of the registry hive to load
+        .PARAMETER regName
+            The name to use when loading a registry hive
+        .PARAMETER regLoad
+            Determine whether to load or unload a registry hive
+        .EXAMPLE
+            Open-PERegistry -regFile "<Mount Directory>\Windows\system32\config\SOFTWARE" -regName "PESoft" -regLoad $true
+        .EXAMPLE
+            Open-PERegistry -regFile "" -regName "PESoft" -regLoad $false
+    #>
     param (
         [Parameter(Mandatory = $true, Position = 0)] [string] $regFile,
         [Parameter(Mandatory = $true, Position = 1)] [string] $regName,
@@ -407,6 +469,16 @@ function Open-PERegistry
 
 function New-WinPEIso
 {
+    <#
+        .SYNOPSIS
+            Creates the target ISO file defined either in the GUI or via the command line
+        .PARAMETER peToolsPath
+            The path of the Preinstallation Environment (PE) tools. By default, this is "Program Files\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools"
+        .PARAMETER isoLocation
+            The path of the target ISO file
+        .EXAMPLE
+            New-WinPEIso -peToolsPath "C:\Program Files\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools" -isoLocation "C:\PreInstEnv.iso"
+    #>    
     param (
         [Parameter(Mandatory = $true, Position = 0)] [string] $peToolsPath,
         [Parameter(Mandatory = $true, Position = 1)] [string] $isoLocation
@@ -456,6 +528,10 @@ function New-WinPEIso
 
 function Start-OSApplication
 {
+    <#
+        .SYNOPSIS
+            Starts the OS installation stage
+    #>
     # Detect if it's run on Windows PE
     if ((Get-ItemPropertyValue -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name 'EditionID') -ne "WindowsPE")
     {
@@ -546,6 +622,10 @@ function Start-OSApplication
 
 function Get-Disks
 {
+    <#
+        .SYNOPSIS
+            Gets the available disks with DiskPart
+    #>
     # Show disk list with diskpart
     if (Test-Path .\files\diskpart\dp_listdisk.dp -PathType Leaf)
     {
@@ -572,6 +652,14 @@ function Get-Disks
 
 function Get-Partitions
 {
+    <#
+        .SYNOPSIS
+            Gets the partitions of a drive using DiskPart
+        .PARAMETER driveNum
+            The drive number
+        .EXAMPLE
+            Get-Partitions 0
+    #>
     param (
         [Parameter(Mandatory = $true)] [int] $driveNum
     )
@@ -607,6 +695,22 @@ function Get-Partitions
 
 function Write-DiskConfiguration
 {
+    <#
+        .SYNOPSIS
+            Writes disk configuration using DiskPart
+        .PARAMETER diskid
+            The index number of the disk
+        .PARAMETER cleanDrive
+            Determine whether to clean the entire drive. Useful for single-boot scenarios
+        .PARAMETER partId
+            The partition number
+        .NOTES
+            The partition ID is 0 if the user decides to clean a drive
+        .EXAMPLE
+            Write-DiskConfiguration -diskid 0 -cleanDrive $true -partId 0
+        .EXAMPLE
+            Write-DiskConfiguration -diskid 0 -cleanDrive $false -partId 2
+    #>
     param (
         [Parameter(Mandatory = $true, Position = 0)] [int] $diskid,
         [Parameter(Mandatory = $true, Position = 1)] [bool] $cleanDrive,
@@ -688,6 +792,10 @@ function Write-DiskConfiguration
 
 function Get-WimIndexes
 {
+    <#
+        .SYNOPSIS
+            Gets the image indexes of the Windows Imaging (WIM) file
+    #>
     Import-Module Dism
     # Replace hard-coded value with dynamic one
     (Get-WindowsImage -ImagePath "$((Get-Location).Path)sources\install.wim" | Format-Table ImageIndex, ImageName) | Out-Host
@@ -706,6 +814,56 @@ function Get-WimIndexes
 
 function Start-DismCommand
 {
+    <#
+        .SYNOPSIS
+            Starts a DISM command/cmdlet
+        .PARAMETER Verb
+            The DISM action to perform
+        .PARAMETER ImagePath
+            The target image to perform changes to/WIM file to mount
+        .PARAMETER ImageIndex
+            The image index to mount
+        .PARAMETER MountPath
+            The directory to mount the Windows image to
+        .PARAMETER Commit
+            Determine whether to commit (save) the changes made to a Windows image
+        .PARAMETER WimFile
+            The source WIM file to apply
+        .PARAMETER WimIndex
+            The image index to apply
+        .PARAMETER PackagePath
+            The source package file to add to the Windows image
+        .PARAMETER PackageName
+            The package to remove from the Windows image
+        .PARAMETER FeatureEnablementName
+            The feature to enable on the Windows image
+        .PARAMETER FeatureEnablementSource
+            The source to use for feature enablement
+        .PARAMETER FeatureDisablementName
+            The feature to disable on the Windows image
+        .PARAMETER FeatureDisablementRemove
+            Determine whether to remove the manifest of a feature
+        .PARAMETER AppxPackageFile
+            The application (AppX) package to add to the Windows image
+        .PARAMETER AppxLicenseFile
+            The license file to add in order to install an application
+        .PARAMETER AppxCustomDataFile
+            The custom data file for an application
+        .PARAMETER AppxRegions
+            The regions to make an application available on
+        .PARAMETER AppxPackageName
+            The name of the application (AppX) package to remove
+        .PARAMETER CapabilityAdditionName
+            The name of the capability to add
+        .PARAMETER CapabilityAdditionSource
+            The source to use for capability addition
+        .PARAMETER CapabilityRemovalName
+            The name of the capability to remove
+        .PARAMETER DriverAdditionFile
+            The driver package to add to the Windows image
+        .PARAMETER DriverAdditionRecurse
+            Determine whether to scan a driver folder recursively for additional packages
+    #>
     [CmdletBinding(DefaultParameterSetName='Default')]
     param (
         [Parameter(Mandatory = $true, Position=0)] [ValidateSet('Mount', 'Commit', 'Unmount', 'Apply', 'Add-Package', 'Remove-Package', 'Enable-Feature', 'Disable-Feature', 'Add-Appx', 'Remove-Appx', 'Add-Capability', 'Remove-Capability', 'Add-Driver')] [string] $Verb,
@@ -830,6 +988,19 @@ function Start-DismCommand
 
 function Set-Serviceability
 {
+    <#
+        .SYNOPSIS
+            Runs the serviceability tests to make sure the Windows image is valid for installation
+        .PARAMETER ImagePath
+            The path of the deployed image to test
+        .NOTES
+            Passing the serviceability tests is required for a successful installation. This test may fail due to these reasons:
+            - The component store of the image is corrupted. Run "dism /image=<image> /cleanup-image /restorehealth /source=<source> /limitaccess" to attempt repairs
+            - The architectures of the Preinstallation Environment (PE) and the target image are different
+            If the serviceability tests fail due to the former, the second stage of Windows Setup (windeploy stage) will fail and, because of how the Setup system works in Windows Vista and later, you will not be able to install your image
+        .EXAMPLE
+            Set-Serviceability -ImagePath "C:"
+    #>
     param (
         [Parameter(Mandatory = $true, Position = 0)] [string] $ImagePath
     )
@@ -848,6 +1019,20 @@ function Set-Serviceability
 
 function New-BootFiles
 {
+    <#
+        .SYNOPSIS
+            Creates boot files compatible with BIOS/UEFI systems
+        .PARAMETER drLetter
+            The drive letter containing the Windows installation
+        .PARAMETER bootPart
+            The letter of the boot (System Reserved) partition. A value of "auto" can be passed to let the script determine the boot partition
+        .PARAMETER diskId
+            The index of a disk
+        .PARAMETER cleanDrive
+            Determine whether to run detections for specific boot scenarios
+        .EXAMPLE
+            New-BootFiles -drLetter "C:" -bootPart "auto" -diskId 0 -cleanDrive $false
+    #>
     param (
         [Parameter(Mandatory = $true, Position = 0)] [string] $drLetter,
         [Parameter(Mandatory = $true, Position = 1)] [string] $bootPart,
@@ -923,6 +1108,14 @@ function New-BootFiles
 }
 
 function Show-Timeout {
+    <#
+        .SYNOPSIS
+            Displays a timeout for the amount of seconds given
+        .PARAMETER seconds
+            The number of seconds of the timeout. This must be a non-zero, positive number
+        .EXAMPLE
+            Show-Timeout -seconds 15
+    #>
     param (
         [Parameter(Mandatory = $true, Position = 0)] [int] $seconds
     )
