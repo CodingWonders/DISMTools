@@ -36,6 +36,9 @@ Public Class Options
                 CanExit = True
             Else
                 Try
+                    If Not Directory.Exists(Path.GetDirectoryName(TextBox2.Text)) Then
+                        Directory.CreateDirectory(Path.GetDirectoryName(TextBox2.Text))
+                    End If
                     File.Create(TextBox2.Text)
                     CanExit = True
                 Catch ex As Exception
