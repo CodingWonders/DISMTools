@@ -522,7 +522,7 @@ Partial Class PrgSetup
         Me.NumericUpDown1.Name = "NumericUpDown1"
         Me.NumericUpDown1.Size = New System.Drawing.Size(94, 25)
         Me.NumericUpDown1.TabIndex = 7
-        Me.NumericUpDown1.Value = New Decimal(New Integer() {10, 0, 0, 0})
+        Me.NumericUpDown1.Value = New Decimal(New Integer() {11, 0, 0, 0})
         '
         'ComboBox3
         '
