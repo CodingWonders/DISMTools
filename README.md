@@ -74,9 +74,6 @@ DISMTools isn't just a front-end for DISM, but an advanced one. As you perform t
 	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/d668f94e-0d39-49bb-b98f-ec045fed725b" />
 </p>
 
-> [!NOTE]
-> The Windows ADK and its Windows PE plugin are required for this feature to work
-
 ## Supported actions
 
 The following actions are supported by DISMTools:
