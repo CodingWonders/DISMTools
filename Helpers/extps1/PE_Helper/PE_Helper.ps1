@@ -603,6 +603,7 @@ function Start-OSApplication
     }
     wpeutil createpagefile /path="$($driveLetter):\pagefile.sys" /size=256
     $index = Get-WimIndexes
+    $serviceableArchitecture = (((Get-CimInstance -Class Win32_Processor | Where-Object { $_.DeviceID -eq "CPU0" }).Architecture) -eq (Get-WindowsImage -ImagePath "$((Get-Location).Path)sources\install.wim" -Index $index).Architecture)
     Write-Host "Applying Windows image. This can take some time..."
     if ((Start-DismCommand -Verb Apply -ImagePath "$($driveLetter):\" -WimFile "$((Get-Location).Path)sources\install.wim" -WimIndex $index) -eq $true)
     {
@@ -612,7 +613,7 @@ function Start-OSApplication
     {
         Write-Host "Failed to apply the Windows image."
     }
-    Set-Serviceability -ImagePath "$($driveLetter):\"
+    if ($serviceableArchitecture) { Set-Serviceability -ImagePath "$($driveLetter):\" } else { Write-Host "Serviceability tests will not be run: the image architecture and the PE architecture are different." }
     New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partition -eq 0)
     # Show message before rebooting system
     Write-Host "The first stage of Setup has completed, and your system will reboot automatically.`n`nIf there are any bootable devices, remove those.`n`nWhen your computer restarts, Setup will continue.`n"
