@@ -2,6 +2,7 @@
 Imports System.Threading
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Dism
+Imports DISMTools.Utilities
 
 Public Class ISOCreator
 
@@ -271,7 +272,8 @@ Public Class ISOCreator
                 TextBox2.AppendText(" - Image " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & " of " & ImageInfoCollection.Count & CrLf &
                                     "   - Image name: " & ImageInfo.ImageName & CrLf &
                                     "   - Image description: " & ImageInfo.ImageDescription & CrLf &
-                                    "   - Image version: " & ImageInfo.ProductVersion.ToString() & CrLf & CrLf)
+                                    "   - Image version: " & ImageInfo.ProductVersion.ToString() & CrLf &
+                                    "   - Image architecture: " & Casters.CastDismArchitecture(ImageInfo.Architecture) & CrLf & CrLf)
             Next
         Catch ex As Exception
             Dim msg As String = ""
