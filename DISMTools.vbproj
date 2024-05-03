@@ -696,6 +696,7 @@
     <Compile Include="Panels\Unattend_Files\Management\UnattendMgr.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Utilities\DriverSignerViewer.vb" />
     <Compile Include="Utilities\DT_Utils.vb" />
     <Compile Include="Utilities\ImageWatcher.vb" />
     <Compile Include="Utilities\PriReader.vb" />
