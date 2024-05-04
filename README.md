@@ -139,7 +139,7 @@ This program is also 100% Free.
 
 <p align="center">
 	<img src="https://www.softpedia.com/_img/softpedia_100_free.png" />
-	<p align="center"><i>Last updated: March 16, 2024 (Alexandra Sava)</i></p>
+	<p align="center"><i>Last updated: April 28, 2024 (Alexandra Sava)</i></p>
 </p>
 
 ## Building
