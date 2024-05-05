@@ -142,6 +142,8 @@ This program is also 100% Free.
 	<p align="center"><i>Last updated: April 28, 2024 (Alexandra Sava)</i></p>
 </p>
 
+The [SourceForge project](https://sourceforge.net/projects/dismtools/) also keeps track of new releases in this repository, so you can download the latest releases from there as well.
+
 ## Building
 
 If you want to grab a copy straight from the source code, follow these instructions:
