@@ -5828,6 +5828,7 @@ Public Class MainForm
                         ViewPackageDirectoryToolStripMenuItem.Text = "View package directory"
                         GetImageFileInformationToolStripMenuItem.Text = "Get image file information..."
                         SaveCompleteImageInformationToolStripMenuItem.Text = "Save complete image information..."
+                        CreateDiscImageWithThisFileToolStripMenuItem.Text = "Create disc image with this file..."
                         ' OpenFileDialogs and FolderBrowsers
                         OpenFileDialog1.Title = "Specify the project file to load"
                         LocalMountDirFBD.Description = "Please specify the mount directory you want to load into this project:"
@@ -6200,6 +6201,7 @@ Public Class MainForm
                         ViewPackageDirectoryToolStripMenuItem.Text = "Ver directorio del paquete"
                         GetImageFileInformationToolStripMenuItem.Text = "Obtener información del archivo de imagen..."
                         SaveCompleteImageInformationToolStripMenuItem.Text = "Guardar información completa de la imagen..."
+                        CreateDiscImageWithThisFileToolStripMenuItem.Text = "Crear archivo de disco con este archivo..."
                         ' OpenFileDialogs and FolderBrowsers
                         OpenFileDialog1.Title = "Especifique el archivo de proyecto a cargar"
                         LocalMountDirFBD.Description = "Especifique el directorio de montaje que desea cargar en este proyecto:"
@@ -6572,6 +6574,7 @@ Public Class MainForm
                         ViewPackageDirectoryToolStripMenuItem.Text = "Afficher le répertoire des paquets"
                         GetImageFileInformationToolStripMenuItem.Text = "Obtenir des informations sur le fichier image..."
                         SaveCompleteImageInformationToolStripMenuItem.Text = "Enregistrer les informations complètes sur l'image..."
+                        CreateDiscImageWithThisFileToolStripMenuItem.Text = "Créer une image disque avec ce fichier..."
                         ' OpenFileDialogs and FolderBrowsers
                         OpenFileDialog1.Title = "Spécifier le fichier de projet à charger"
                         LocalMountDirFBD.Description = "Veuillez spécifier le répertoire de montage que vous souhaitez charger dans ce projet:"
@@ -6943,6 +6946,7 @@ Public Class MainForm
                         ViewPackageDirectoryToolStripMenuItem.Text = "Ver diretório de pacotes"
                         GetImageFileInformationToolStripMenuItem.Text = "Obter informações sobre o ficheiro de imagem..."
                         SaveCompleteImageInformationToolStripMenuItem.Text = "Guardar informações completas sobre a imagem..."
+                        CreateDiscImageWithThisFileToolStripMenuItem.Text = "Criar imagem de disco com este ficheiro..."
                         ' OpenFileDialogs and FolderBrowsers
                         OpenFileDialog1.Title = "Especifique o ficheiro de projeto a carregar"
                         LocalMountDirFBD.Description = "Especifique o diretório de montagem que pretende carregar para este projeto:"
@@ -7320,6 +7324,7 @@ Public Class MainForm
                 ViewPackageDirectoryToolStripMenuItem.Text = "View package directory"
                 GetImageFileInformationToolStripMenuItem.Text = "Get image file information..."
                 SaveCompleteImageInformationToolStripMenuItem.Text = "Save complete image information..."
+                CreateDiscImageWithThisFileToolStripMenuItem.Text = "Create disc image with this file..."
                 ' OpenFileDialogs and FolderBrowsers
                 OpenFileDialog1.Title = "Specify the project file to load"
                 LocalMountDirFBD.Description = "Please specify the mount directory you want to load into this project:"
@@ -7692,6 +7697,7 @@ Public Class MainForm
                 ViewPackageDirectoryToolStripMenuItem.Text = "Ver directorio del paquete"
                 GetImageFileInformationToolStripMenuItem.Text = "Obtener información del archivo de imagen..."
                 SaveCompleteImageInformationToolStripMenuItem.Text = "Guardar información completa de la imagen..."
+                CreateDiscImageWithThisFileToolStripMenuItem.Text = "Crear archivo de disco con este archivo..."
                 ' OpenFileDialogs and FolderBrowsers
                 OpenFileDialog1.Title = "Especifique el archivo de proyecto a cargar"
                 LocalMountDirFBD.Description = "Especifique el directorio de montaje que desea cargar en este proyecto:"
@@ -8063,6 +8069,7 @@ Public Class MainForm
                 ViewPackageDirectoryToolStripMenuItem.Text = "Afficher le répertoire des paquets"
                 GetImageFileInformationToolStripMenuItem.Text = "Obtenir des informations sur le fichier image..."
                 SaveCompleteImageInformationToolStripMenuItem.Text = "Enregistrer les informations complètes sur l'image..."
+                CreateDiscImageWithThisFileToolStripMenuItem.Text = "Créer une image disque avec ce fichier..."
                 ' OpenFileDialogs and FolderBrowsers
                 OpenFileDialog1.Title = "Spécifier le fichier de projet à charger"
                 LocalMountDirFBD.Description = "Veuillez spécifier le répertoire de montage que vous souhaitez charger dans ce projet:"
@@ -8434,6 +8441,7 @@ Public Class MainForm
                 ViewPackageDirectoryToolStripMenuItem.Text = "Ver diretório de pacotes"
                 GetImageFileInformationToolStripMenuItem.Text = "Obter informações sobre o ficheiro de imagem..."
                 SaveCompleteImageInformationToolStripMenuItem.Text = "Guardar informações completas sobre a imagem..."
+                CreateDiscImageWithThisFileToolStripMenuItem.Text = "Criar imagem de disco com este ficheiro..."
                 ' OpenFileDialogs and FolderBrowsers
                 OpenFileDialog1.Title = "Especifique o ficheiro de projeto a carregar"
                 LocalMountDirFBD.Description = "Especifique o diretório de montagem que pretende carregar para este projeto:"
@@ -17910,6 +17918,21 @@ Public Class MainForm
             ImgInfoSaveDlg.SaveTask = 0
             ImgInfoSaveDlg.ShowDialog(MountedImgMgr)
             InfoSaveResults.Show()
+        End If
+    End Sub
+
+    Private Sub CreateDiscImageWithThisFileToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateDiscImageWithThisFileToolStripMenuItem.Click
+        If ISOCreator.BackgroundWorker1.IsBusy Then Exit Sub
+        ISOCreator.TextBox1.Text = MountedImgMgr.ListView1.FocusedItem.SubItems(0).Text
+        If ISOCreator.Visible Then
+            If ISOCreator.WindowState = FormWindowState.Minimized Then
+                ISOCreator.WindowState = FormWindowState.Normal
+            Else
+                ISOCreator.BringToFront()
+            End If
+            ISOCreator.Focus()
+        Else
+            ISOCreator.Show()
         End If
     End Sub
 End Class
