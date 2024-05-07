@@ -63,9 +63,9 @@ Public Class NewUnattendWiz
         Scintilla1.StyleResetDefault()
         ' Use VS's selection color, as I find it the most natural
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Scintilla1.SetSelectionBackColor(True, Color.FromArgb(38, 79, 120))
+            Scintilla1.SelectionBackColor = Color.FromArgb(38, 79, 120)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Scintilla1.SetSelectionBackColor(True, Color.FromArgb(153, 201, 239))
+            Scintilla1.SelectionBackColor = Color.FromArgb(153, 201, 239)
         End If
         Scintilla1.Styles(Style.Default).Font = fntName
         Scintilla1.Styles(Style.Default).Size = fntSize
@@ -115,7 +115,7 @@ Public Class NewUnattendWiz
             Scintilla1.Styles(Style.Xml.Entity).ForeColor = Color.Black
         End If
         ' Set lexer
-        Scintilla1.Lexer = Lexer.Xml
+        Scintilla1.LexerName = "xml"
 
         ' Set line number margin properties
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
