@@ -3,7 +3,6 @@ name: Create Nightly Installer
 on:
   push:
     branches:
-      - stable
       - dt_pre*
       - dt_rel*
 env:
