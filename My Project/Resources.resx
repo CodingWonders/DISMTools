@@ -1119,23 +1119,22 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- If a custom system theme is applied, a warning will appear (thanks @Fraaaaaunimib)
-- Fixed a CSS layout issue in the Help documentation contents (thanks CodenameFlux)
-- Fixed a couple of issues in the ISO creator
-- The program now detects unsupported languages in the Initial Setup wizard and reverts to English
+- Fixed some issues when setting the log path if the directory does not exist
+- Fixed an issue where the log view font size would not be 11 pt. on the Initial Setup wizard
+- Added some warnings to fix issues #119 and #121 (thanks @AnubyteCode)
+- Fixed some anchoring issues in the ISO creator
 
 New features:
 
-- When adding encrypted AppX and MSIX packages (".eappx" and ".emsix" files) to active installations, the program now uses a custom version of UnpEax to get rich information
-- New copies of DISMTools now use Consolas (11 pt.) as the default log view font (thanks CodenameFlux)
-- You will now get error information if the ADK Deployment Tools copier fails
-- The ISO creation process has been improved:
-  - Before writing disk configuration, you will see a data loss warning
-  - You will now see a more appropriate message after the image has been applied
-  - The restart timeout has been improved
-  - A link has been added to download the Windows ADK
-- The automatic orphaned image reload procedure has been improved, now featuring greater visual feedback thanks to a progress dialog
-- You can now get image file information and save complete image information of a mounted Windows image from within the mounted image manager</value>
+- The Preinstallation Environment (PE) helper has had several improvements:
+  - A new parameter has been added that shows help contents for the script
+  - You can now install a Windows image in multi-boot scenarios
+  - Serviceability tests are no longer run when the architectures of the image and the PE differ
+- You can now pick the currently loaded image to test in the ISO creator, and you can now view the image architecture there
+- You can now view basic driver signer information for installed drivers
+- Internal error logging has been improved, as the program can now save this information to disk
+- The offline drive lister now updates automatically every minute
+- The Scintilla.NET library has been updated to the latest version</value>
   </data>
   <data name="split_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\split_img.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

@@ -2178,14 +2178,16 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- If a custom system theme is applied, a warning will appear (thanks @Fraaaaaunimib)
-        '''- Fixed a CSS layout issue in the Help documentation contents (thanks CodenameFlux)
-        '''- Fixed a couple of issues in the ISO creator
-        '''- The program now detects unsupported languages in the Initial Setup wizard and reverts to English
+        '''- Fixed some issues when setting the log path if the directory does not exist
+        '''- Fixed an issue where the log view font size would not be 11 pt. on the Initial Setup wizard
+        '''- Added some warnings to fix issues #119 and #121 (thanks @AnubyteCode)
+        '''- Fixed some anchoring issues in the ISO creator
         '''
         '''New features:
         '''
-        '''- When adding encrypted AppX and MSIX packages (&quot;.eappx&quot; and &quot;.emsix&quot; files) to active installations, the program now uses a custom version of UnpEax to get rich  [resto de la cadena truncado]&quot;;.
+        '''- The Preinstallation Environment (PE) helper has had several improvements:
+        '''  - A new parameter has been added that shows help contents for the script
+        '''  - You can now install a Wind [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
