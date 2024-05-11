@@ -71,8 +71,12 @@ Public Class DismComponents
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         Visible = True
         For Each DismComponent In My.Computer.FileSystem.GetFiles(Path.GetDirectoryName(Options.TextBox1.Text) & "\dism", FileIO.SearchOption.SearchTopLevelOnly)
-            fv = FileVersionInfo.GetVersionInfo(DismComponent)
-            ListView1.Items.Add(Path.GetFileName(DismComponent)).SubItems.Add(fv.ProductVersion.ToString())
+            Try
+                fv = FileVersionInfo.GetVersionInfo(DismComponent)
+                ListView1.Items.Add(Path.GetFileName(DismComponent)).SubItems.Add(fv.ProductVersion.ToString())
+            Catch ex As Exception
+                Continue For
+            End Try
         Next
     End Sub
 End Class

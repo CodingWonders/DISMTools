@@ -1,6 +1,8 @@
 ﻿Imports Microsoft.Win32
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.Management
+Imports System.IO
+Imports System.Text.Encoding
 
 Namespace My
     ' Los siguientes eventos están disponibles para MyApplication:
@@ -60,6 +62,14 @@ Namespace My
                                                    "If you don't want to send this information to the developers, paste the text that was copied to the clipboard in a text editor, remove this information, and copy the new text again.")
             Catch ex As Exception
                 ' Could not get basic machine information
+            End Try
+            Try
+                If Not Directory.Exists(Path.Combine(Windows.Forms.Application.StartupPath, "logs", "errors")) Then
+                    Directory.CreateDirectory(Path.Combine(Windows.Forms.Application.StartupPath, "logs", "errors"))
+                End If
+                File.WriteAllText(Path.Combine(Windows.Forms.Application.StartupPath, "logs", "errors") & "\DT-Error-" & Now.ToString().Replace("/", "-").Trim().Replace(":", "-").Trim() & ".log", ExceptionForm.ErrorText.Text, UTF8)
+            Catch ex As Exception
+                ' Could not save error information
             End Try
             ExceptionForm.ShowDialog()
             If ExceptionForm.DialogResult = DialogResult.OK Then

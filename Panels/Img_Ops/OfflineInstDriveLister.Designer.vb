@@ -22,6 +22,7 @@ Partial Class OfflineInstDriveLister
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(OfflineInstDriveLister))
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.OK_Button = New System.Windows.Forms.Button()
@@ -37,6 +38,7 @@ Partial Class OfflineInstDriveLister
         Me.ColumnHeader6 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader7 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader8 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.TableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -153,6 +155,10 @@ Partial Class OfflineInstDriveLister
         Me.ColumnHeader8.Text = "Windows version"
         Me.ColumnHeader8.Width = 104
         '
+        'Timer1
+        '
+        Me.Timer1.Interval = 60000
+        '
         'OfflineInstDriveLister
         '
         Me.AcceptButton = Me.OK_Button
@@ -190,5 +196,6 @@ Partial Class OfflineInstDriveLister
     Friend WithEvents ColumnHeader6 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader7 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader8 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents Timer1 As System.Windows.Forms.Timer
 
 End Class

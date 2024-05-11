@@ -2,6 +2,7 @@
 Imports System.Threading
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Dism
+Imports DISMTools.Utilities
 
 Public Class ISOCreator
 
@@ -224,6 +225,11 @@ Public Class ISOCreator
         GroupBox2.ForeColor = ForeColor
         ComboBox1.ForeColor = ForeColor
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+        If MainForm.SourceImg = "N/A" Or Not File.Exists(MainForm.SourceImg) Or MainForm.OnlineManagement Or MainForm.OfflineManagement Then
+            Button4.Enabled = False
+        Else
+            Button4.Enabled = True
+        End If
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
@@ -266,7 +272,8 @@ Public Class ISOCreator
                 TextBox2.AppendText(" - Image " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & " of " & ImageInfoCollection.Count & CrLf &
                                     "   - Image name: " & ImageInfo.ImageName & CrLf &
                                     "   - Image description: " & ImageInfo.ImageDescription & CrLf &
-                                    "   - Image version: " & ImageInfo.ProductVersion.ToString() & CrLf & CrLf)
+                                    "   - Image version: " & ImageInfo.ProductVersion.ToString() & CrLf &
+                                    "   - Image architecture: " & Casters.CastDismArchitecture(ImageInfo.Architecture) & CrLf & CrLf)
             Next
         Catch ex As Exception
             Dim msg As String = ""
@@ -489,5 +496,9 @@ Public Class ISOCreator
             Case 4
                 Process.Start("https://learn.microsoft.com/pt-pt/windows-hardware/get-started/adk-install")
         End Select
+    End Sub
+
+    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+        TextBox1.Text = MainForm.SourceImg
     End Sub
 End Class

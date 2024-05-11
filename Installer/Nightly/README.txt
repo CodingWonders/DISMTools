@@ -1,0 +1,1 @@
+This is a folder where the nightly installers will go in. DO NOT MODIFY ANY FILES IN THIS FOLDER, so let automation step in.

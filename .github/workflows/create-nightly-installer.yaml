@@ -3,7 +3,6 @@ name: Create Nightly Installer
 on:
   push:
     branches:
-      - stable
       - dt_pre*
       - dt_rel*
 env:
@@ -28,6 +27,7 @@ jobs:
         $targetDir = (Get-Location).Path + "\bin\Debug\"
         msbuild Tools\UnpEax\UnpEax.csproj /p:Configuration=Debug /p:DeployOnBuild=true
         msbuild DISMTools.vbproj /p:Configuration=Debug /p:DeployOnBuild=true /p:SolutionDir=$solutionDir /p:ProjectDir=$projectDir /p:TargetDir=$targetDir
+        Move-Item -Path "$($solutionDir.TrimEnd("\"))\Installer\Output\dt_setup.exe" -Destination "$($solutionDir.TrimEnd("\"))\Installer\Nightly\dt_setup.exe" -Force
     - name: Push nightly installer
       uses: stefanzweifel/git-auto-commit-action@v5
       with:

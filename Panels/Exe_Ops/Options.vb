@@ -36,6 +36,9 @@ Public Class Options
                 CanExit = True
             Else
                 Try
+                    If Not Directory.Exists(Path.GetDirectoryName(TextBox2.Text)) Then
+                        Directory.CreateDirectory(Path.GetDirectoryName(TextBox2.Text))
+                    End If
                     File.Create(TextBox2.Text)
                     CanExit = True
                 Catch ex As Exception
@@ -1574,6 +1577,32 @@ Public Class Options
     End Function
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        If Not Directory.Exists(Path.Combine(Path.GetDirectoryName(TextBox1.Text), "dism")) Then
+            Dim msg As String = ""
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            msg = "The DISM components directory could not be found. If you have all components in the same folder of the DISM executable, please create a " & Quote & "dism" & Quote & " folder and try again."
+                        Case "ESN"
+                            msg = "La carpeta de componentes de DISM no pudo ser encontrada. Si tiene todos los componentes en la misma carpeta del ejecutable de DISM, cree una carpeta " & Quote & "dism" & Quote & " e inténtelo de nuevo."
+                        Case "FRA"
+                            msg = "Le répertoire des composants DISM n'a pas été trouvé. Si vous avez tous les composants dans le même dossier de l'exécutable DISM, veuillez créer un dossier " & Quote & "dism" & Quote & " et réessayer."
+                        Case "PTB", "PTG"
+                            msg = "Não foi possível encontrar o diretório de componentes do DISM. Se tiver todos os componentes na mesma pasta do executável DISM, crie uma pasta " & Quote & "dism" & Quote & " e tente novamente."
+                    End Select
+                Case 1
+                    msg = "The DISM components directory could not be found. If you have all components in the same folder of the DISM executable, please create a " & Quote & "dism" & Quote & " folder and try again."
+                Case 2
+                    msg = "La carpeta de componentes de DISM no pudo ser encontrada. Si tiene todos los componentes en la misma carpeta del ejecutable de DISM, cree una carpeta " & Quote & "dism" & Quote & " e inténtelo de nuevo."
+                Case 3
+                    msg = "Le répertoire des composants DISM n'a pas été trouvé. Si vous avez tous les composants dans le même dossier de l'exécutable DISM, veuillez créer un dossier " & Quote & "dism" & Quote & " et réessayer."
+                Case 4
+                    msg = "Não foi possível encontrar o diretório de componentes do DISM. Se tiver todos os componentes na mesma pasta do executável DISM, crie uma pasta " & Quote & "dism" & Quote & " e tente novamente."
+            End Select
+            MsgBox(msg, vbOKOnly + vbExclamation, Label1.Text)
+            Exit Sub
+        End If
         DismComponents.ShowDialog()
     End Sub
 

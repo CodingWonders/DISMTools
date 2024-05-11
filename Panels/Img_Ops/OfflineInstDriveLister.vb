@@ -23,7 +23,7 @@ Public Class OfflineInstDriveLister
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "Choose a disk"
-                        Label1.Text = "To begin performing offline installation management, please choose a disk shown in the list below. If additional disks that contain Windows installations have been added or removed, simply click the Refresh button."
+                        Label1.Text = "To begin performing offline installation management, please choose a disk shown in the list below. This list will be updated automatically every minute, or when you click the Refresh button."
                         ListView1.Columns(0).Text = "Drive letter"
                         ListView1.Columns(1).Text = "Drive label"
                         ListView1.Columns(2).Text = "Drive type"
@@ -37,7 +37,7 @@ Public Class OfflineInstDriveLister
                         Cancel_Button.Text = "Cancel"
                     Case "ESN"
                         Text = "Elija un disco"
-                        Label1.Text = "Para comenzar a realizar el mantenimiento de instalaciones fuera de línea, escoja un disco mostrado en la lista de abajo. Si se han añadido o removido discos adicionales que contienen instalaciones de Windows, simplemente haga clic en el botón Actualizar."
+                        Label1.Text = "Para comenzar a realizar el mantenimiento de instalaciones fuera de línea, escoja un disco mostrado en la lista de abajo. Esta lista se actualizará automáticamente cada minuto, o cuando haga clic en el botón Actualizar."
                         ListView1.Columns(0).Text = "Letra de disco"
                         ListView1.Columns(1).Text = "Etiqueta de disco"
                         ListView1.Columns(2).Text = "Tipo de disco"
@@ -51,7 +51,7 @@ Public Class OfflineInstDriveLister
                         Cancel_Button.Text = "Cancelar"
                     Case "FRA"
                         Text = "Choisir un disque"
-                        Label1.Text = "Pour commencer à gérer l'installation hors ligne, choisissez un disque dans la liste ci-dessous. Si des disques contenant des installations Windows ont été ajoutés ou supprimés, il suffit de cliquer sur le bouton Actualiser."
+                        Label1.Text = "Pour commencer la gestion de l'installation hors ligne, veuillez choisir un disque dans la liste ci-dessous. Cette liste sera mise à jour automatiquement toutes les minutes, ou lorsque vous cliquez sur le bouton Actualiser."
                         ListView1.Columns(0).Text = "Lettre de disque"
                         ListView1.Columns(1).Text = "Étiquette de disque"
                         ListView1.Columns(2).Text = "Type de disque"
@@ -65,7 +65,7 @@ Public Class OfflineInstDriveLister
                         Cancel_Button.Text = "Annuler"
                     Case "PTB", "PTG"
                         Text = "Escolha um disco"
-                        Label1.Text = "Para começar a efetuar a gestão de instalações offline, escolha um disco apresentado na lista abaixo. Se tiverem sido adicionados ou removidos discos adicionais que contenham instalações do Windows, basta clicar no botão Atualizar."
+                        Label1.Text = "Para começar a efetuar a gestão da instalação offline, escolha um disco apresentado na lista abaixo. Esta lista será actualizada automaticamente a cada minuto, ou quando clicar no botão Atualizar."
                         ListView1.Columns(0).Text = "Letra da unidade"
                         ListView1.Columns(1).Text = "Etiqueta da unidade"
                         ListView1.Columns(2).Text = "Tipo de unidade"
@@ -80,7 +80,7 @@ Public Class OfflineInstDriveLister
                 End Select
             Case 1
                 Text = "Choose a disk"
-                Label1.Text = "To begin performing offline installation management, please choose a disk shown in the list below. If additional disks that contain Windows installations have been added or removed, simply click the Refresh button."
+                Label1.Text = "To begin performing offline installation management, please choose a disk shown in the list below. This list will be updated automatically every minute, or when you click the Refresh button."
                 ListView1.Columns(0).Text = "Drive letter"
                 ListView1.Columns(1).Text = "Drive label"
                 ListView1.Columns(2).Text = "Drive type"
@@ -94,7 +94,7 @@ Public Class OfflineInstDriveLister
                 Cancel_Button.Text = "Cancel"
             Case 2
                 Text = "Elija un disco"
-                Label1.Text = "Para comenzar a realizar el mantenimiento de instalaciones fuera de línea, escoja un disco mostrado en la lista de abajo. Si se han añadido o removido discos adicionales que contienen instalaciones de Windows, simplemente haga clic en el botón Actualizar."
+                Label1.Text = "Para comenzar a realizar el mantenimiento de instalaciones fuera de línea, escoja un disco mostrado en la lista de abajo. Esta lista se actualizará automáticamente cada minuto, o cuando haga clic en el botón Actualizar."
                 ListView1.Columns(0).Text = "Letra de disco"
                 ListView1.Columns(1).Text = "Etiqueta de disco"
                 ListView1.Columns(2).Text = "Tipo de disco"
@@ -108,7 +108,7 @@ Public Class OfflineInstDriveLister
                 Cancel_Button.Text = "Cancelar"
             Case 3
                 Text = "Choisir un disque"
-                Label1.Text = "Pour commencer à gérer l'installation hors ligne, choisissez un disque dans la liste ci-dessous. Si des disques contenant des installations Windows ont été ajoutés ou supprimés, il suffit de cliquer sur le bouton Actualiser."
+                Label1.Text = "Pour commencer la gestion de l'installation hors ligne, veuillez choisir un disque dans la liste ci-dessous. Cette liste sera mise à jour automatiquement toutes les minutes, ou lorsque vous cliquez sur le bouton Actualiser."
                 ListView1.Columns(0).Text = "Lettre de disque"
                 ListView1.Columns(1).Text = "Étiquette de disque"
                 ListView1.Columns(2).Text = "Type de disque"
@@ -122,7 +122,7 @@ Public Class OfflineInstDriveLister
                 Cancel_Button.Text = "Annuler"
             Case 4
                 Text = "Escolha um disco"
-                Label1.Text = "Para começar a efetuar a gestão de instalações offline, escolha um disco apresentado na lista abaixo. Se tiverem sido adicionados ou removidos discos adicionais que contenham instalações do Windows, basta clicar no botão Atualizar."
+                Label1.Text = "Para começar a efetuar a gestão da instalação offline, escolha um disco apresentado na lista abaixo. Esta lista será actualizada automaticamente a cada minuto, ou quando clicar no botão Atualizar."
                 ListView1.Columns(0).Text = "Letra da unidade"
                 ListView1.Columns(1).Text = "Etiqueta da unidade"
                 ListView1.Columns(2).Text = "Tipo de unidade"
@@ -154,6 +154,7 @@ Public Class OfflineInstDriveLister
         Next
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        Timer1.Enabled = True
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -193,5 +194,13 @@ Public Class OfflineInstDriveLister
         Else
             OK_Button.Enabled = False
         End If
+    End Sub
+
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        Button1.PerformClick()
+    End Sub
+
+    Private Sub OfflineInstDriveLister_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        Timer1.Enabled = False
     End Sub
 End Class

@@ -8,8 +8,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "DISMTools-Setup", "installer\DISMTools-Setup\DISMTools-Setup.vbproj", "{B5709CC5-633B-45DE-A398-B6D56F56CD7B}"
-EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "DISMTools-UCS", "Updater\DISMTools-UCS\DISMTools-UCS.vbproj", "{C084B601-F395-47D3-9E66-C0582139DCF4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnpEax", "Tools\UnpEax\UnpEax.csproj", "{5330BC3F-1BFF-4200-8872-3A2236F814AB}"
@@ -24,10 +22,6 @@ Global
 		{042ED465-C910-407A-93D1-736639FF0EA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{042ED465-C910-407A-93D1-736639FF0EA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{042ED465-C910-407A-93D1-736639FF0EA5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B5709CC5-633B-45DE-A398-B6D56F56CD7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B5709CC5-633B-45DE-A398-B6D56F56CD7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B5709CC5-633B-45DE-A398-B6D56F56CD7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B5709CC5-633B-45DE-A398-B6D56F56CD7B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C084B601-F395-47D3-9E66-C0582139DCF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C084B601-F395-47D3-9E66-C0582139DCF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C084B601-F395-47D3-9E66-C0582139DCF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
