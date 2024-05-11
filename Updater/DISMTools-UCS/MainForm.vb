@@ -473,6 +473,9 @@ Public Class MainForm
         DirCopy(Application.StartupPath & "\Resources", Application.StartupPath & "\old\Resources", True, False)
         DirCopy(Application.StartupPath & "\bin", Application.StartupPath & "\old\bin", True, False)
         DirCopy(Application.StartupPath & "\docs", Application.StartupPath & "\old\docs", True, False)
+        DirCopy(Application.StartupPath & "\tools", Application.StartupPath & "\old\tools", True, False)
+        DirCopy(Application.StartupPath & "\runtimes", Application.StartupPath & "\old\runtimes", True, False)
+        DirCopy(Application.StartupPath & "\videos", Application.StartupPath & "\old\videos", True, False)
         File.Copy(Application.StartupPath & "\LICENSE", Application.StartupPath & "\old\LICENSE")
         File.Copy(Application.StartupPath & "\DISMTools.exe", Application.StartupPath & "\old\DISMTools.exe")
         CopiedFiles += 2
@@ -544,6 +547,8 @@ Public Class MainForm
         DirCopy(Application.StartupPath & "\new\Resources", Application.StartupPath & "\Resources", True, False)
         DirCopy(Application.StartupPath & "\new\bin", Application.StartupPath & "\bin", True, False)
         DirCopy(Application.StartupPath & "\new\docs", Application.StartupPath & "\docs", True, False)
+        DirCopy(Application.StartupPath & "\new\tools", Application.StartupPath & "\tools", True, False)
+        DirCopy(Application.StartupPath & "\new\runtimes", Application.StartupPath & "\runtimes", True, False)
         DirCopy(Application.StartupPath & "\new\videos", Application.StartupPath & "\videos", True, False)
         If IsPortable And Not File.Exists(Application.StartupPath & "\portable") Then File.Create(Application.StartupPath & "\portable")
     End Sub
