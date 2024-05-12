@@ -50,10 +50,6 @@ $ver = '0.5'
 $global:img_removalIndexes = New-Object System.Collections.ArrayList
 $global:img_remIndexesBck = New-Object System.Collections.ArrayList
 
-# Unmount setting variables
-$global:checkIntegrity = $false
-$global:appendIndex = $false
-
 # Image index switch parameters
 $destIndex = 0
 $suMountOp = 0
@@ -187,7 +183,7 @@ function Dismount-Image {
             MainMenu
         }
         "S" {
-            Dismount-Settings $false, $false
+            Dismount-Settings -checkIntegrity $false -appendIndex $false
         }
         "B" {
             MainMenu
@@ -199,6 +195,10 @@ function Dismount-Image {
 }
 
 function Dismount-Settings {
+    param (
+        [Parameter(Mandatory = $true, Position = 0)] [bool] $checkIntegrity,
+        [Parameter(Mandatory = $true, Position = 1)] [bool] $appendIndex
+    )
     Clear-Host
     if ($global:mImage[$global:selImage - 1].MountMode -eq 1)
     {
@@ -208,7 +208,7 @@ function Dismount-Settings {
         Dismount-Image
     }
     Write-Host "Unmount settings for image: $($global:mImage[$global:selImage - 1].ImagePath)"`n
-    if ($global:checkIntegrity)
+    if ($checkIntegrity)
     {
         Write-Host " [X] Check image integrity (press C to modify this setting)"
     }
@@ -216,7 +216,7 @@ function Dismount-Settings {
     {
         Write-Host " [ ] Check image integrity (press C to modify this setting)"
     }
-    if ($global:appendIndex)
+    if ($appendIndex)
     {
         Write-Host " [X] Append changes to new image index (press A to modify this setting)"
     }
@@ -229,24 +229,22 @@ function Dismount-Settings {
     switch ($option)
     {
         "C" {
-            $global:checkIntegrity = -not $global:checkIntegrity
-            Dismount-Settings
+            Dismount-Settings -checkIntegrity $(-not $checkIntegrity) -appendIndex $appendIndex
         }
         "A" {
-            $global:appendIndex = -not $global:appendIndex
-            Dismount-Settings
+            Dismount-Settings -checkIntegrity $checkIntegrity -appendIndex $(-not $appendIndex)
         }
         "P" {
             Write-Host `n"Unmounting image with specified settings..."`n
-            if (($global:appendIndex) -and ($global:checkIntegrity))
+            if (($appendIndex) -and ($checkIntegrity))
             {
                 Dismount-WindowsImage -Path $global:mImage[$global:selImage - 1].MountPath -Save -CheckIntegrity -Append
             }
-            elseif ($global:appendIndex)
+            elseif ($appendIndex)
             {
                 Dismount-WindowsImage -Path $global:mImage[$global:selImage - 1].MountPath -Save -Append
             }
-            elseif ($global:checkIntegrity)
+            elseif ($checkIntegrity)
             {
                 Dismount-WindowsImage -Path $global:mImage[$global:selImage - 1].MountPath -Save -CheckIntegrity
             }
@@ -270,7 +268,7 @@ function Dismount-Settings {
             MainMenu
         }
         default {
-            Dismount-Settings
+            Dismount-Settings -checkIntegrity $checkIntegrity -appendIndex $appendIndex
         }
     }
 }
