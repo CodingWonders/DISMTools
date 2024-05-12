@@ -400,3 +400,6 @@ FodyWeavers.xsd
 # Installer leftovers
 [Ii]nstaller/[Ff]iles/
 [Ii]nstaller/[Oo]utput/
+
+# JetBrains software
+.idea/
