@@ -51,6 +51,16 @@ function Get-MountedImages
 
 function Get-MenuItems
 {
+    <#
+        .SYNOPSIS
+            Gets menu items to be displayed
+        .PARAMETER selImage
+            The index of the selected image
+        .PARAMETER mountedImages
+            The currently mounted images on this system
+        .EXAMPLE
+            Get-MenuItems -selImage 2 -mountedImages (Get-WindowsImage -Mounted)
+    #>
     param (
         [Parameter(Mandatory = $true, Position = 0)] [int] $selImage,
         [Parameter(Mandatory = $true, Position = 1)] [Object[]] $mountedImages
@@ -100,6 +110,16 @@ function Get-MenuItems
 
 function Get-UserOption
 {
+    <#
+        .SYNOPSIS
+            Gets the option provided by the user
+        .PARAMETER validOptions
+            The array containing the valid options the user can choose from
+        .OUTPUTS
+            The selected option
+        .EXAMPLE
+            Get-UserOption -validOptions @("A", "B", "C")
+    #>
     param (
         [Parameter(Mandatory = $true, Position = 0)] [string[]] $validOptions
     )
@@ -120,6 +140,10 @@ function Get-UserOption
 
 function Show-MountedImages
 {
+    <#
+        .SYNOPSIS
+            Shows the mounted images to the user
+    #>
     Clear-Host
     # Write version information
     Write-Host "DISMTools $ver - Mounted image manager"
@@ -127,8 +151,17 @@ function Show-MountedImages
     ($mountedImages | Format-Table) | Out-Host
     Write-Host `n`n`n
 }
+
 function Show-Menu
 {
+    <#
+        .SYNOPSIS
+            Shows a menu to the user
+        .PARAMETER selImage
+            The index of the selected image
+        .EXAMPLE
+            Show-Menu -selImage 2
+    #>
     param (
         [Parameter(Mandatory = $true, Position = 0)] [int] $selImage
     )
@@ -248,9 +281,19 @@ function Show-Menu
 
 function Set-Image
 {
+    <#
+        .SYNOPSIS
+            Sets the image that will be marked for management
+        .PARAMETER mountedImages
+            The currently mounted images on this system
+        .PARAMETER selImage
+            The index of the selected image
+        .EXAMPLE
+            Get-MenuItems -mountedImages (Get-WindowsImage -Mounted) -selImage 2
+    #>
     param (
         [Parameter(Mandatory = $true, Position = 0)] [Object[]] $mountedImages,
-        [Parameter(Mandatory = $true, Position = 0)] [int] $selImage
+        [Parameter(Mandatory = $true, Position = 1)] [int] $selImage
     )
     $mountedImages = Get-WindowsImage -Mounted
     Clear-Host
@@ -310,6 +353,20 @@ function Set-Image
 
 function Set-ImageStatus
 {
+    <#
+        .SYNOPSIS
+            Modifies the mount status of the selected Windows image
+        .PARAMETER action
+            The action to perform on the Windows image. Valid options:
+            - "remount": reloads the servicing session of this Windows image if it is orphaned
+            - "repair": attempts to repair the component store of this Windows image if it is corrupted. You will be asked for a source
+        .PARAMETER mountDir
+            The directory the Windows image has been mounted to
+        .EXAMPLE
+            Set-ImageStatus -action "remount" -mountDir "D:\foo\bar"
+        .EXAMPLE
+            Set-ImageStatus -action "repair" -mountDir "D:\foo\bar"
+    #>
     param (
         [Parameter(Mandatory = $true, Position = 0)] [string] $action,
         [Parameter(Mandatory = $true, Position = 1)] [string] $mountDir
@@ -385,6 +442,22 @@ function Set-ImageStatus
 
 function Dismount-Image
 {
+    <#
+        .SYNOPSIS
+            Unmounts the selected Windows image
+        .PARAMETER mountDir
+            The directory the Windows image has been mounted to
+        .PARAMETER action
+            The action to perform on the Windows image. Valid options:
+            - "commit": saves any changes made to this Windows image and unmounts it
+            - "discard": unmounts the Windows image discarding any changes made
+        .EXAMPLE
+            Set-ImageStatus -mountDir "D:\foo\bar" -action "commit"
+        .EXAMPLE
+            Set-ImageStatus -mountDir "D:\foo\bar" -action "discard"
+        .NOTES
+            If the image is mounted with read-only privileges, you will not be able to unmount it while saving changes
+    #>
     param (
         [Parameter(Mandatory = $true, Position = 0)] [string] $mountDir,
         [Parameter(Mandatory = $true, Position = 1)] [string] $action
@@ -417,7 +490,7 @@ function Dismount-Image
             Write-Host "Unmounting Windows image...`n"
             Write-Host "- Image file and index: `"$path`" (index $index)"
             Write-Host "- Mount directory: `"$mountDir`""
-            Write-Host "- Operation: commit"
+            Write-Host "- Operation: commit`n"
             Dismount-WindowsImage -Path "$mountDir" -Save
             $success = $?
             if ($success)
@@ -443,7 +516,7 @@ function Dismount-Image
             Write-Host "Unmounting Windows image...`n"
             Write-Host "- Image file and index: `"$path`" (index $index)"
             Write-Host "- Mount directory: `"$mountDir`""
-            Write-Host "- Operation: discard"
+            Write-Host "- Operation: discard`n"
             Dismount-WindowsImage -Path "$mountDir" -Discard
             $success = $?
             if ($success)
@@ -498,6 +571,24 @@ function Dismount-Image
 
 function Dismount-Settings
 {
+    <#
+        .SYNOPSIS
+            Allows you to configure the settings to use when unmounting the selected Windows image
+        .PARAMETER checkIntegrity
+            Determines whether to check the integrity of the Windows image before saving changes
+        .PARAMETER appendIndex
+            Determines whether to save changes to a new index in the Windows image, leaving the current one intact
+        .PARAMETER mountDir
+            The directory the Windows image has been mounted to
+        .EXAMPLE
+            Dismount-Settings -checkIntegrity $true -appendIndex $false -mountDir "D:\foo\bar"
+        .EXAMPLE
+            Dismount-Settings -checkIntegrity $false -appendIndex $true -mountDir "D:\foo\bar"
+        .EXAMPLE
+            Dismount-Settings -checkIntegrity $true -appendIndex $true -mountDir "D:\foo\bar"
+        .EXAMPLE
+            Dismount-Settings -checkIntegrity $false -appendIndex $false -mountDir "D:\foo\bar"
+    #>
     param (
         [Parameter(Mandatory = $true, Position = 0)] [bool] $checkIntegrity,
         [Parameter(Mandatory = $true, Position = 1)] [bool] $appendIndex,
@@ -599,6 +690,18 @@ function Dismount-Settings
 
 function Enable-WritePermissions
 {
+    <#
+        .SYNOPSIS
+            Enables write permissions in the selected image
+        .DESCRIPTION
+            This function unmounts the Windows image selected and remounts it with write privileges
+        .PARAMETER mountDir
+            The directory the Windows image has been mounted to
+        .EXAMPLE
+            Enable-WritePermissions -mountDir "D:\foo\bar"
+        .NOTES
+            Make sure that the image is present in its location at all times. Also make sure that it is not present in read-only media, like disc images
+    #>
     param (
         [Parameter(Mandatory = $true, Position = 0)] [string] $mountDir
     )
@@ -661,6 +764,20 @@ function Enable-WritePermissions
 
 function Remove-VolumeImages
 {
+    <#
+        .SYNOPSIS
+            Removes volume images from the selected Windows image
+        .PARAMETER imagePath
+            The path to the source image file
+        .PARAMETER mountDir
+            The directory the Windows image has been mounted to
+        .PARAMETER removalIndexes
+            The indexes to be removed from the Windows image
+        .EXAMPLE
+            Remove-VolumeImages -imagePath "D:\foo.wim" -mountDir "D:\foo\bar" -removalIndexes @(1, 3, 5, 2, 7)
+        .NOTES
+            This will not make the image smaller. If you want to achieve this result, consider exporting the indexes you like
+    #>
     param (
         [Parameter(Mandatory = $true, Position = 0)] [string] $imagePath,
         [Parameter(Mandatory = $true, Position = 1)] [string] $mountDir,
@@ -819,6 +936,25 @@ function Remove-VolumeImages
 
 function Switch-Indexes
 {
+    <#
+        .SYNOPSIS
+            Switches the index of the selected Windows image
+        .DESCRIPTION
+            This function unmounts the selected Windows index and mounts the target index in the mount location
+        .PARAMETER imagePath
+            The path to the Windows image
+        .PARAMETER mountDir
+            The directory the Windows image has been mounted to
+        .PARAMETER destIndex
+            The destination index to mount
+        .PARAMETER suMountOp
+            The unmount operation for the source index. Valid options:
+            - 0: not specified
+            - 1: commit
+            - 2: discard
+        .EXAMPLE
+            Switch-Indexes -imagePath "D:\foo.wim" -mountDir "D:\foo\bar" -destIndex 3 -suMountOp 1
+    #>
     param (
         [Parameter(Mandatory = $true, Position = 0)] [string] $imagePath,
         [Parameter(Mandatory = $true, Position = 1)] [string] $mountDir,
