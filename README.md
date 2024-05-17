@@ -1,9 +1,3 @@
-<!--
-<p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/4c753c9a-1440-44cb-a742-04e71d077dff">
-</p>
--->
-
 ![Product image](https://github.com/CodingWonders/DISMTools/assets/101426328/84dda638-1475-48c8-8d90-39a85115cc20)
 
 <!-- Tags (powered by Shields.io) -->
@@ -24,7 +18,15 @@ DISMTools is a front-end for DISM that lets you manage your Windows Imaging (WIM
 
 ### Working with projects
 
-DISMTools is the first project-based GUI. Projects store the mounted image and unattended answer files you want to apply (using the command line at this time), while also providing a scratch directory for temporary operations.
+Inspired by Visual Studio, DISMTools is the first project-based GUI. Projects store the mounted image and unattended answer files you want to apply (using the command line at this time), while also providing a scratch directory for temporary operations.
+
+DISMTools projects are also tiny when you create them, and contain a structure that is easy to navigate.
+
+<p align="center">
+	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/4c39c657-30fa-4cb7-99eb-c502574efc00" />
+</p>
+
+The program also supports setting and removing file associations for projects with the click of a button (only on portable installations), so you can load your projects instantly by double-clicking them. You can also **copy your installed deployment tools** to your projects, allowing you to use those anywhere you take them.
 
 ### Manage your active installation, or installations on any drive
 
@@ -43,7 +45,7 @@ DISMTools isn't just a front-end for DISM, but an advanced one. As you perform t
 - **Download content from App Installer packages automatically.** Have an App Installer package? No problem. Add it, and DISMTools will download the main package and use it automatically:
 
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/ad39f3ba-b29d-4874-a219-f2595bf8073a" />
+	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/54b561f7-cc62-4b6f-8683-73ca382af4d2" />
 </p>
 
 - **Automatic detection of sources from Group Policy.** If you want to enable a feature, repair the component store of a Windows image, or add a capability, with a source defined in the Group Policy; you can easily use it:
@@ -85,6 +87,12 @@ DISMTools isn't just a front-end for DISM, but an advanced one. As you perform t
 
 > [!NOTE]
 > The Windows ADK and its Windows PE plugin are required for this feature to work
+
+- **View who signed an installed driver.** When getting installed driver information, you can view the signer information of a driver if it is signed:
+
+<p align="center">
+	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/9c84b0c3-6571-4b28-8ee4-44c4e6511e89" />
+</p>
 
 ## Supported actions
 
