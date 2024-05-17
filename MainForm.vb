@@ -466,6 +466,7 @@ Public Class MainForm
         Thread.Sleep(2000)
         ' I once tested this on a computer which didn't require me to ask for admin privileges. This is a requirement of DISM. Check this
         If Not My.User.IsInRole(ApplicationServices.BuiltInRole.Administrator) Then
+            SplashScreen.Hide()
             MsgBox("This program must be run as an administrator." & CrLf & "There are certain software configurations in which Windows will run this program without admin privileges, so you must ask for them manually." & CrLf & CrLf & "Right-click the executable, and select " & Quote & "Run as administrator" & Quote, vbOKOnly + vbCritical, "DISMTools")
             Environment.Exit(1)
         End If
