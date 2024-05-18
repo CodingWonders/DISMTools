@@ -42,6 +42,17 @@ enum PE_Arch {
     arm64 = 3
 }
 
+class TargetImage {
+    [int] $index
+    [string] $wimPath
+    TargetImage() { $this.Init(@{} )}
+    # Create constructor
+    TargetImage([int] $index, [string] $wimPath) {
+        $this.index = $index
+        $this.wimPath = $wimPath
+    }        
+}
+
 if (([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator) -eq $false)
 {
     Write-Host "You need to run this script as an administrator"
@@ -602,10 +613,10 @@ function Start-OSApplication
         }
     }
     wpeutil createpagefile /path="$($driveLetter):\pagefile.sys" /size=256
-    $index = Get-WimIndexes
-    $serviceableArchitecture = (((Get-CimInstance -Class Win32_Processor | Where-Object { $_.DeviceID -eq "CPU0" }).Architecture) -eq (Get-WindowsImage -ImagePath "$((Get-Location).Path)sources\install.wim" -Index $index).Architecture)
+    $wimFile = Get-WimIndexes
+    $serviceableArchitecture = (((Get-CimInstance -Class Win32_Processor | Where-Object { $_.DeviceID -eq "CPU0" }).Architecture) -eq (Get-WindowsImage -ImagePath "$($wimFile.wimPath)" -Index $wimFile.index).Architecture)
     Write-Host "Applying Windows image. This can take some time..."
-    if ((Start-DismCommand -Verb Apply -ImagePath "$($driveLetter):\" -WimFile "$((Get-Location).Path)sources\install.wim" -WimIndex $index) -eq $true)
+    if ((Start-DismCommand -Verb Apply -ImagePath "$($driveLetter):\" -WimFile "$($wimFile.wimPath)" -WimIndex $wimFile.index) -eq $true)
     {
         Write-Host "The Windows image has been applied successfully."
     }
@@ -798,13 +809,34 @@ function Get-WimIndexes
             Gets the image indexes of the Windows Imaging (WIM) file
     #>
     Import-Module Dism
-    # Replace hard-coded value with dynamic one
-    (Get-WindowsImage -ImagePath "$((Get-Location).Path)sources\install.wim" | Format-Table ImageIndex, ImageName) | Out-Host
+    $wimPath = ""
+    if ((Get-ChildItem -Path "$((Get-Location).Path)sources\*.wim" -Exclude "boot.wim").Count -gt 1)
+    {
+        Write-Host "`nMultiple installation images have been found in this installation medium. Please select an image file from the list and press ENTER."
+        Write-Host "`nDo note that, after the selection of an image, you may not be able to go back."
+        (Get-ChildItem -Path "$((Get-Location).Path)sources\*.wim" -Exclude "boot.wim") | Out-Host
+        $wimPath = Read-Host "Choose the image file to apply"
+        $wimPath = "$((Get-Location).Path)sources\$wimPath"
+        if (($wimPath -eq "") -or (-not (Test-Path "$wimPath" -PathType Leaf)))
+        {
+            do {
+                $wimPath = Read-Host "Choose the image file to apply"
+                $wimPath = "$((Get-Location).Path)sources\$wimPath"
+            } until (($wimPath -ne "") -and (Test-Path "$wimPath" -PathType Leaf))
+        }
+    }
+    elseif ((Get-ChildItem -Path "$((Get-Location).Path)sources\*.wim" -Exclude "boot.wim").Count -eq 1)
+    {
+        $wimPath = "$((Get-Location).Path)sources\install.wim"
+    }
+    (Get-WindowsImage -ImagePath "$wimPath" | Format-Table ImageIndex, ImageName) | Out-Host
     $idx = Read-Host -Prompt "Specify the image index to apply"
     try
     {
         $index = [int]$idx
-        return $index
+        # return $index
+        $wimFile = [TargetImage]::new($index, $wimPath)
+        return $wimFile
     }
     catch
     {
