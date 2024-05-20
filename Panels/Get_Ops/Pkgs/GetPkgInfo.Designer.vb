@@ -41,6 +41,10 @@ Partial Class GetPkgInfoDlg
         Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.ListBox2 = New System.Windows.Forms.ListBox()
+        Me.SearchPanel = New System.Windows.Forms.Panel()
+        Me.Panel6 = New System.Windows.Forms.Panel()
+        Me.SearchBox1 = New DISMTools.SearchBox()
+        Me.SearchPic = New System.Windows.Forms.PictureBox()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.Panel4 = New System.Windows.Forms.Panel()
         Me.FlowLayoutPanel3 = New System.Windows.Forms.FlowLayoutPanel()
@@ -84,6 +88,12 @@ Partial Class GetPkgInfoDlg
         Me.Label56 = New System.Windows.Forms.Label()
         Me.Label58 = New System.Windows.Forms.Label()
         Me.Label57 = New System.Windows.Forms.Label()
+        Me.CPropViewer = New System.Windows.Forms.Panel()
+        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.cPropPathView = New System.Windows.Forms.TreeView()
+        Me.Panel8 = New System.Windows.Forms.Panel()
+        Me.cPropValue = New System.Windows.Forms.TextBox()
+        Me.cPropName = New System.Windows.Forms.Label()
         Me.Label60 = New System.Windows.Forms.Label()
         Me.Label59 = New System.Windows.Forms.Label()
         Me.Label55 = New System.Windows.Forms.Label()
@@ -153,10 +163,6 @@ Partial Class GetPkgInfoDlg
         Me.FlowLayoutPanel1 = New System.Windows.Forms.FlowLayoutPanel()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
-        Me.SearchPanel = New System.Windows.Forms.Panel()
-        Me.Panel6 = New System.Windows.Forms.Panel()
-        Me.SearchBox1 = New DISMTools.SearchBox()
-        Me.SearchPic = New System.Windows.Forms.PictureBox()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.MenuPanel.SuspendLayout()
@@ -170,9 +176,15 @@ Partial Class GetPkgInfoDlg
         Me.SplitContainer2.Panel2.SuspendLayout()
         Me.SplitContainer2.SuspendLayout()
         Me.Panel2.SuspendLayout()
+        Me.SearchPanel.SuspendLayout()
+        Me.Panel6.SuspendLayout()
+        CType(Me.SearchPic, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel3.SuspendLayout()
         Me.Panel4.SuspendLayout()
         Me.FlowLayoutPanel3.SuspendLayout()
+        Me.CPropViewer.SuspendLayout()
+        Me.TableLayoutPanel1.SuspendLayout()
+        Me.Panel8.SuspendLayout()
         Me.Panel5.SuspendLayout()
         Me.Panel7.SuspendLayout()
         Me.InfoFromPackageFilesPanel.SuspendLayout()
@@ -187,9 +199,6 @@ Partial Class GetPkgInfoDlg
         Me.FlowLayoutPanel2.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.NoPkgPanel.SuspendLayout()
-        Me.SearchPanel.SuspendLayout()
-        Me.Panel6.SuspendLayout()
-        CType(Me.SearchPic, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'Win10Title
@@ -404,11 +413,53 @@ Partial Class GetPkgInfoDlg
         '
         Me.ListBox2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ListBox2.FormattingEnabled = True
+        Me.ListBox2.IntegralHeight = False
         Me.ListBox2.Location = New System.Drawing.Point(0, 0)
         Me.ListBox2.Name = "ListBox2"
         Me.ListBox2.ScrollAlwaysVisible = True
         Me.ListBox2.Size = New System.Drawing.Size(440, 352)
         Me.ListBox2.TabIndex = 0
+        '
+        'SearchPanel
+        '
+        Me.SearchPanel.Controls.Add(Me.Panel6)
+        Me.SearchPanel.Controls.Add(Me.SearchPic)
+        Me.SearchPanel.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.SearchPanel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.SearchPanel.Location = New System.Drawing.Point(0, 352)
+        Me.SearchPanel.Name = "SearchPanel"
+        Me.SearchPanel.Size = New System.Drawing.Size(440, 24)
+        Me.SearchPanel.TabIndex = 8
+        '
+        'Panel6
+        '
+        Me.Panel6.Controls.Add(Me.SearchBox1)
+        Me.Panel6.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel6.Location = New System.Drawing.Point(24, 0)
+        Me.Panel6.Name = "Panel6"
+        Me.Panel6.Size = New System.Drawing.Size(416, 24)
+        Me.Panel6.TabIndex = 3
+        '
+        'SearchBox1
+        '
+        Me.SearchBox1.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.SearchBox1.cueBanner = "Type here to search for a package..."
+        Me.SearchBox1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.SearchBox1.Location = New System.Drawing.Point(8, 3)
+        Me.SearchBox1.Name = "SearchBox1"
+        Me.SearchBox1.Size = New System.Drawing.Size(405, 18)
+        Me.SearchBox1.TabIndex = 1
+        '
+        'SearchPic
+        '
+        Me.SearchPic.Dock = System.Windows.Forms.DockStyle.Left
+        Me.SearchPic.Image = Global.DISMTools.My.Resources.Resources.search_light
+        Me.SearchPic.Location = New System.Drawing.Point(0, 0)
+        Me.SearchPic.Name = "SearchPic"
+        Me.SearchPic.Size = New System.Drawing.Size(24, 24)
+        Me.SearchPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
+        Me.SearchPic.TabIndex = 2
+        Me.SearchPic.TabStop = False
         '
         'Panel3
         '
@@ -474,6 +525,7 @@ Partial Class GetPkgInfoDlg
         Me.FlowLayoutPanel3.Controls.Add(Me.Label56)
         Me.FlowLayoutPanel3.Controls.Add(Me.Label58)
         Me.FlowLayoutPanel3.Controls.Add(Me.Label57)
+        Me.FlowLayoutPanel3.Controls.Add(Me.CPropViewer)
         Me.FlowLayoutPanel3.Controls.Add(Me.Label60)
         Me.FlowLayoutPanel3.Controls.Add(Me.Label59)
         Me.FlowLayoutPanel3.Controls.Add(Me.Label55)
@@ -924,11 +976,78 @@ Partial Class GetPkgInfoDlg
         Me.Label57.TabIndex = 0
         Me.Label57.Text = "Label8"
         Me.Label57.UseMnemonic = False
+        Me.Label57.Visible = False
+        '
+        'CPropViewer
+        '
+        Me.CPropViewer.Controls.Add(Me.TableLayoutPanel1)
+        Me.CPropViewer.Location = New System.Drawing.Point(7, 645)
+        Me.CPropViewer.Name = "CPropViewer"
+        Me.CPropViewer.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.CPropViewer.Size = New System.Drawing.Size(405, 306)
+        Me.CPropViewer.TabIndex = 3
+        '
+        'TableLayoutPanel1
+        '
+        Me.TableLayoutPanel1.ColumnCount = 1
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel1.Controls.Add(Me.cPropPathView, 0, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.Panel8, 0, 1)
+        Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 2)
+        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
+        Me.TableLayoutPanel1.RowCount = 2
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(405, 304)
+        Me.TableLayoutPanel1.TabIndex = 1
+        '
+        'cPropPathView
+        '
+        Me.cPropPathView.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.cPropPathView.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.cPropPathView.Location = New System.Drawing.Point(3, 3)
+        Me.cPropPathView.Name = "cPropPathView"
+        Me.cPropPathView.Size = New System.Drawing.Size(399, 146)
+        Me.cPropPathView.TabIndex = 0
+        '
+        'Panel8
+        '
+        Me.Panel8.Controls.Add(Me.cPropValue)
+        Me.Panel8.Controls.Add(Me.cPropName)
+        Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel8.Location = New System.Drawing.Point(3, 155)
+        Me.Panel8.Name = "Panel8"
+        Me.Panel8.Size = New System.Drawing.Size(399, 146)
+        Me.Panel8.TabIndex = 1
+        '
+        'cPropValue
+        '
+        Me.cPropValue.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cPropValue.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.cPropValue.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cPropValue.Location = New System.Drawing.Point(1, 8)
+        Me.cPropValue.Multiline = True
+        Me.cPropValue.Name = "cPropValue"
+        Me.cPropValue.ReadOnly = True
+        Me.cPropValue.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.cPropValue.Size = New System.Drawing.Size(395, 135)
+        Me.cPropValue.TabIndex = 1
+        '
+        'cPropName
+        '
+        Me.cPropName.AutoEllipsis = True
+        Me.cPropName.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cPropName.Location = New System.Drawing.Point(4, 4)
+        Me.cPropName.Name = "cPropName"
+        Me.cPropName.Size = New System.Drawing.Size(392, 15)
+        Me.cPropName.TabIndex = 0
         '
         'Label60
         '
         Me.Label60.AutoSize = True
-        Me.Label60.Location = New System.Drawing.Point(7, 642)
+        Me.Label60.Location = New System.Drawing.Point(7, 954)
         Me.Label60.Name = "Label60"
         Me.Label60.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
         Me.Label60.Size = New System.Drawing.Size(54, 17)
@@ -939,7 +1058,7 @@ Partial Class GetPkgInfoDlg
         '
         Me.Label59.AutoEllipsis = True
         Me.Label59.AutoSize = True
-        Me.Label59.Location = New System.Drawing.Point(7, 659)
+        Me.Label59.Location = New System.Drawing.Point(7, 971)
         Me.Label59.Name = "Label59"
         Me.Label59.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label59.Size = New System.Drawing.Size(38, 15)
@@ -950,7 +1069,7 @@ Partial Class GetPkgInfoDlg
         'Label55
         '
         Me.Label55.AutoEllipsis = True
-        Me.Label55.Location = New System.Drawing.Point(7, 674)
+        Me.Label55.Location = New System.Drawing.Point(7, 986)
         Me.Label55.Name = "Label55"
         Me.Label55.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label55.Size = New System.Drawing.Size(405, 16)
@@ -1718,47 +1837,6 @@ Partial Class GetPkgInfoDlg
         Me.OpenFileDialog1.Filter = "CAB files|*.cab"
         Me.OpenFileDialog1.Title = "Locate package files"
         '
-        'SearchPanel
-        '
-        Me.SearchPanel.Controls.Add(Me.Panel6)
-        Me.SearchPanel.Controls.Add(Me.SearchPic)
-        Me.SearchPanel.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.SearchPanel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.SearchPanel.Location = New System.Drawing.Point(0, 352)
-        Me.SearchPanel.Name = "SearchPanel"
-        Me.SearchPanel.Size = New System.Drawing.Size(440, 24)
-        Me.SearchPanel.TabIndex = 8
-        '
-        'Panel6
-        '
-        Me.Panel6.Controls.Add(Me.SearchBox1)
-        Me.Panel6.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel6.Location = New System.Drawing.Point(24, 0)
-        Me.Panel6.Name = "Panel6"
-        Me.Panel6.Size = New System.Drawing.Size(416, 24)
-        Me.Panel6.TabIndex = 3
-        '
-        'SearchBox1
-        '
-        Me.SearchBox1.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.SearchBox1.cueBanner = "Type here to search for a package..."
-        Me.SearchBox1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.SearchBox1.Location = New System.Drawing.Point(8, 3)
-        Me.SearchBox1.Name = "SearchBox1"
-        Me.SearchBox1.Size = New System.Drawing.Size(405, 18)
-        Me.SearchBox1.TabIndex = 1
-        '
-        'SearchPic
-        '
-        Me.SearchPic.Dock = System.Windows.Forms.DockStyle.Left
-        Me.SearchPic.Image = Global.DISMTools.My.Resources.Resources.search_light
-        Me.SearchPic.Location = New System.Drawing.Point(0, 0)
-        Me.SearchPic.Name = "SearchPic"
-        Me.SearchPic.Size = New System.Drawing.Size(24, 24)
-        Me.SearchPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
-        Me.SearchPic.TabIndex = 2
-        Me.SearchPic.TabStop = False
-        '
         'GetPkgInfoDlg
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1791,10 +1869,18 @@ Partial Class GetPkgInfoDlg
         CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer2.ResumeLayout(False)
         Me.Panel2.ResumeLayout(False)
+        Me.SearchPanel.ResumeLayout(False)
+        Me.Panel6.ResumeLayout(False)
+        Me.Panel6.PerformLayout()
+        CType(Me.SearchPic, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel3.ResumeLayout(False)
         Me.Panel4.ResumeLayout(False)
         Me.FlowLayoutPanel3.ResumeLayout(False)
         Me.FlowLayoutPanel3.PerformLayout()
+        Me.CPropViewer.ResumeLayout(False)
+        Me.TableLayoutPanel1.ResumeLayout(False)
+        Me.Panel8.ResumeLayout(False)
+        Me.Panel8.PerformLayout()
         Me.Panel5.ResumeLayout(False)
         Me.Panel7.ResumeLayout(False)
         Me.InfoFromPackageFilesPanel.ResumeLayout(False)
@@ -1810,10 +1896,6 @@ Partial Class GetPkgInfoDlg
         Me.FlowLayoutPanel2.PerformLayout()
         Me.Panel1.ResumeLayout(False)
         Me.NoPkgPanel.ResumeLayout(False)
-        Me.SearchPanel.ResumeLayout(False)
-        Me.Panel6.ResumeLayout(False)
-        Me.Panel6.PerformLayout()
-        CType(Me.SearchPic, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1952,5 +2034,11 @@ Partial Class GetPkgInfoDlg
     Friend WithEvents Panel6 As System.Windows.Forms.Panel
     Friend WithEvents SearchBox1 As DISMTools.SearchBox
     Friend WithEvents SearchPic As System.Windows.Forms.PictureBox
+    Friend WithEvents CPropViewer As System.Windows.Forms.Panel
+    Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents cPropPathView As System.Windows.Forms.TreeView
+    Friend WithEvents Panel8 As System.Windows.Forms.Panel
+    Friend WithEvents cPropValue As System.Windows.Forms.TextBox
+    Friend WithEvents cPropName As System.Windows.Forms.Label
 
 End Class

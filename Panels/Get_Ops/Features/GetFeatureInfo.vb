@@ -14,15 +14,21 @@ Public Class GetFeatureInfoDlg
             BackColor = Color.FromArgb(31, 31, 31)
             ForeColor = Color.White
             ListView1.BackColor = Color.FromArgb(31, 31, 31)
+            cPropPathView.BackColor = Color.FromArgb(31, 31, 31)
+            cPropValue.BackColor = Color.FromArgb(31, 31, 31)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Win10Title.BackColor = Color.White
             BackColor = Color.FromArgb(238, 238, 242)
             ForeColor = Color.Black
             ListView1.BackColor = Color.FromArgb(238, 238, 242)
+            cPropPathView.BackColor = Color.FromArgb(238, 238, 242)
+            cPropValue.BackColor = Color.FromArgb(238, 238, 242)
         End If
         SearchBox1.BackColor = BackColor
         SearchBox1.ForeColor = ForeColor
         ListView1.ForeColor = ForeColor
+        cPropPathView.ForeColor = ForeColor
+        cPropValue.ForeColor = ForeColor
         SearchPic.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.search_dark, My.Resources.search_light)
         Select Case MainForm.Language
             Case 0
@@ -240,6 +246,9 @@ Public Class GetFeatureInfoDlg
                     Application.DoEvents()
                     Thread.Sleep(100)
                 End While
+                cPropPathView.Nodes.Clear()
+                cPropName.Text = ""
+                cPropValue.Text = ""
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -293,12 +302,15 @@ Public Class GetFeatureInfoDlg
                         Label35.Text = featInfo.Description
                         Label32.Text = Casters.CastDismRestartType(featInfo.RestartRequired, True)
                         Label40.Text = Casters.CastDismFeatureState(featInfo.FeatureState, True)
-                        Label42.Text = ""
                         Dim cProps As DismCustomPropertyCollection = featInfo.CustomProperties
                         If cProps.Count > 0 Then
+                            Label42.Visible = False
+                            CPropViewer.Visible = True
+                            Dim cPropContents As String = ""
                             For Each cProp As DismCustomProperty In cProps
-                                Label42.Text &= "- " & If(cProp.Path <> "", cProp.Path & "\", "") & cProp.Name & ": " & cProp.Value & CrLf
+                                cPropContents &= "- " & If(cProp.Path <> "", cProp.Path & "\", "") & cProp.Name & ": " & cProp.Value & CrLf
                             Next
+                            PopulateTreeView(cPropPathView, cPropContents.Replace("- ", "").Trim())
                         Else
                             Select Case MainForm.Language
                                 Case 0
@@ -321,6 +333,8 @@ Public Class GetFeatureInfoDlg
                                 Case 4
                                     Label42.Text = "Nenhum"
                             End Select
+                            Label42.Visible = True
+                            CPropViewer.Visible = False
                         End If
                     End Using
                 Catch NRE As NullReferenceException
@@ -384,6 +398,74 @@ Public Class GetFeatureInfoDlg
             Panel4.Visible = False
             Panel7.Visible = True
         End Try
+    End Sub
+
+    Private Sub PopulateTreeView(treeView As TreeView, input As String)
+        Dim lines As String() = input.Split(New String() {Environment.NewLine}, StringSplitOptions.None)
+        For Each line As String In lines
+            ' Split the line at the last colon to get the path and value
+            Dim colonIndex As Integer = line.LastIndexOf(":"c)
+            If colonIndex = -1 Then Continue For ' Skip lines without a colon
+            Dim path As String = line.Substring(0, colonIndex).Trim()
+            Dim value As String = line.Substring(colonIndex + 1).Trim()
+            Dim pathParts As String() = path.Split("\"c)
+            AddNodeRecursive(treeView.Nodes, pathParts, 0, value)
+        Next
+    End Sub
+
+    Private Sub AddNodeRecursive(parentNodes As TreeNodeCollection, parts As String(), startIndex As Integer, value As String)
+        If startIndex >= parts.Length Then
+            Return
+        End If
+        Dim nodeName As String = parts(startIndex).Trim()
+        Dim existingNode As TreeNode = parentNodes.Cast(Of TreeNode)().FirstOrDefault(Function(n) n.Text = nodeName)
+        If existingNode Is Nothing Then
+            existingNode = New TreeNode(nodeName)
+            parentNodes.Add(existingNode)
+        Else
+            If startIndex = parts.Length - 1 Then
+                ' If the node already exists and we are at the last part, add a new node
+                Dim newNode As New TreeNode(nodeName)
+                newNode.Tag = value
+                parentNodes.Add(newNode)
+                Return
+            End If
+        End If
+        If startIndex = parts.Length - 1 Then
+            existingNode.Tag = value
+        Else
+            AddNodeRecursive(existingNode.Nodes, parts, startIndex + 1, value)
+        End If
+    End Sub
+
+    Private Sub cPropPathView_AfterSelect(sender As Object, e As TreeViewEventArgs) Handles cPropPathView.AfterSelect
+        cPropName.Text = cPropPathView.SelectedNode.Text
+        Dim selectedNode As TreeNode = cPropPathView.SelectedNode
+        If selectedNode IsNot Nothing AndAlso selectedNode.Tag IsNot Nothing Then
+            cPropValue.Text = selectedNode.Tag.ToString()
+        Else
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            cPropValue.Text = "No value has been defined. If the selected item has subitems, expand it."
+                        Case "ESN"
+                            cPropValue.Text = "No se ha definido un valor. Si el elemento seleccionado tiene elementos secundarios, expándalo."
+                        Case "FRA"
+                            cPropValue.Text = "Aucune valeur n'a été définie. Si l'élément sélectionné a des sous-éléments, développez-le."
+                        Case "PTB", "PTG"
+                            cPropValue.Text = "Nenhum valor foi definido. Se o item selecionado tiver subitens, expanda-o."
+                    End Select
+                Case 1
+                    cPropValue.Text = "No value has been defined. If the selected item has subitems, expand it."
+                Case 2
+                    cPropValue.Text = "No se ha definido un valor. Si el elemento seleccionado tiene elementos secundarios, expándalo."
+                Case 3
+                    cPropValue.Text = "Aucune valeur n'a été définie. Si l'élément sélectionné a des sous-éléments, développez-le."
+                Case 4
+                    cPropValue.Text = "Nenhum valor foi definido. Se o item selecionado tiver subitens, expanda-o."
+            End Select
+        End If
     End Sub
 
     Private Sub GetFeatureInfoDlg_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
