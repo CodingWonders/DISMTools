@@ -404,7 +404,7 @@ Public Class GetFeatureInfoDlg
         Dim lines As String() = input.Split(New String() {Environment.NewLine}, StringSplitOptions.None)
         For Each line As String In lines
             ' Split the line at the last colon to get the path and value
-            Dim colonIndex As Integer = line.LastIndexOf(":"c)
+            Dim colonIndex As Integer = line.LastIndexOf(": ")
             If colonIndex = -1 Then Continue For ' Skip lines without a colon
             Dim path As String = line.Substring(0, colonIndex).Trim()
             Dim value As String = line.Substring(colonIndex + 1).Trim()

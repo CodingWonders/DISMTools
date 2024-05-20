@@ -1027,12 +1027,12 @@ Partial Class GetPkgInfoDlg
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cPropValue.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.cPropValue.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cPropValue.Location = New System.Drawing.Point(1, 8)
+        Me.cPropValue.Location = New System.Drawing.Point(1, 28)
         Me.cPropValue.Multiline = True
         Me.cPropValue.Name = "cPropValue"
         Me.cPropValue.ReadOnly = True
         Me.cPropValue.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.cPropValue.Size = New System.Drawing.Size(395, 135)
+        Me.cPropValue.Size = New System.Drawing.Size(395, 115)
         Me.cPropValue.TabIndex = 1
         '
         'cPropName
