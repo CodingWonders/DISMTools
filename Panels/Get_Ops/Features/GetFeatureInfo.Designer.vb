@@ -33,6 +33,7 @@ Partial Class GetFeatureInfoDlg
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.SearchPanel = New System.Windows.Forms.Panel()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.SearchBox1 = New DISMTools.SearchBox()
         Me.SearchPic = New System.Windows.Forms.PictureBox()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.Panel4 = New System.Windows.Forms.Panel()
@@ -54,6 +55,7 @@ Partial Class GetFeatureInfoDlg
         Me.Panel6 = New System.Windows.Forms.Panel()
         Me.cPropValue = New System.Windows.Forms.TextBox()
         Me.cPropName = New System.Windows.Forms.Label()
+        Me.Label55 = New System.Windows.Forms.Label()
         Me.Panel5 = New System.Windows.Forms.Panel()
         Me.Label36 = New System.Windows.Forms.Label()
         Me.Panel7 = New System.Windows.Forms.Panel()
@@ -61,8 +63,7 @@ Partial Class GetFeatureInfoDlg
         Me.FlowLayoutPanel4 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Button2 = New System.Windows.Forms.Button()
-        Me.SearchBox1 = New DISMTools.SearchBox()
-        Me.Label55 = New System.Windows.Forms.Label()
+        Me.Label42 = New System.Windows.Forms.Label()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.FeatureInfoPanel.SuspendLayout()
@@ -199,6 +200,16 @@ Partial Class GetFeatureInfoDlg
         Me.Panel1.Size = New System.Drawing.Size(416, 24)
         Me.Panel1.TabIndex = 3
         '
+        'SearchBox1
+        '
+        Me.SearchBox1.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.SearchBox1.cueBanner = "Type here to search for a feature..."
+        Me.SearchBox1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.SearchBox1.Location = New System.Drawing.Point(8, 3)
+        Me.SearchBox1.Name = "SearchBox1"
+        Me.SearchBox1.Size = New System.Drawing.Size(405, 18)
+        Me.SearchBox1.TabIndex = 1
+        '
         'SearchPic
         '
         Me.SearchPic.Dock = System.Windows.Forms.DockStyle.Left
@@ -245,6 +256,7 @@ Partial Class GetFeatureInfoDlg
         Me.FlowLayoutPanel3.Controls.Add(Me.Label41)
         Me.FlowLayoutPanel3.Controls.Add(Me.Label40)
         Me.FlowLayoutPanel3.Controls.Add(Me.Label43)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Label42)
         Me.FlowLayoutPanel3.Controls.Add(Me.CPropViewer)
         Me.FlowLayoutPanel3.Controls.Add(Me.Label55)
         Me.FlowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
@@ -377,7 +389,7 @@ Partial Class GetFeatureInfoDlg
         'CPropViewer
         '
         Me.CPropViewer.Controls.Add(Me.TableLayoutPanel1)
-        Me.CPropViewer.Location = New System.Drawing.Point(7, 182)
+        Me.CPropViewer.Location = New System.Drawing.Point(7, 197)
         Me.CPropViewer.Name = "CPropViewer"
         Me.CPropViewer.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.CPropViewer.Size = New System.Drawing.Size(405, 337)
@@ -439,6 +451,16 @@ Partial Class GetFeatureInfoDlg
         Me.cPropName.Name = "cPropName"
         Me.cPropName.Size = New System.Drawing.Size(392, 15)
         Me.cPropName.TabIndex = 0
+        '
+        'Label55
+        '
+        Me.Label55.AutoEllipsis = True
+        Me.Label55.Location = New System.Drawing.Point(7, 537)
+        Me.Label55.Name = "Label55"
+        Me.Label55.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label55.Size = New System.Drawing.Size(405, 6)
+        Me.Label55.TabIndex = 1
+        Me.Label55.UseMnemonic = False
         '
         'Panel5
         '
@@ -508,25 +530,18 @@ Partial Class GetFeatureInfoDlg
         Me.Button2.Text = "Save..."
         Me.Button2.UseVisualStyleBackColor = True
         '
-        'SearchBox1
+        'Label42
         '
-        Me.SearchBox1.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.SearchBox1.cueBanner = "Type here to search for a feature..."
-        Me.SearchBox1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.SearchBox1.Location = New System.Drawing.Point(8, 3)
-        Me.SearchBox1.Name = "SearchBox1"
-        Me.SearchBox1.Size = New System.Drawing.Size(405, 18)
-        Me.SearchBox1.TabIndex = 1
-        '
-        'Label55
-        '
-        Me.Label55.AutoEllipsis = True
-        Me.Label55.Location = New System.Drawing.Point(7, 522)
-        Me.Label55.Name = "Label55"
-        Me.Label55.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label55.Size = New System.Drawing.Size(405, 6)
-        Me.Label55.TabIndex = 1
-        Me.Label55.UseMnemonic = False
+        Me.Label42.AutoEllipsis = True
+        Me.Label42.AutoSize = True
+        Me.Label42.Location = New System.Drawing.Point(7, 179)
+        Me.Label42.Name = "Label42"
+        Me.Label42.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label42.Size = New System.Drawing.Size(38, 15)
+        Me.Label42.TabIndex = 3
+        Me.Label42.Text = "Label8"
+        Me.Label42.UseMnemonic = False
+        Me.Label42.Visible = False
         '
         'GetFeatureInfoDlg
         '
@@ -613,5 +628,6 @@ Partial Class GetFeatureInfoDlg
     Friend WithEvents cPropValue As System.Windows.Forms.TextBox
     Friend WithEvents cPropName As System.Windows.Forms.Label
     Friend WithEvents Label55 As System.Windows.Forms.Label
+    Friend WithEvents Label42 As System.Windows.Forms.Label
 
 End Class

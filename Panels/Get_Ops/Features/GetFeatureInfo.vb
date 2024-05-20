@@ -304,6 +304,8 @@ Public Class GetFeatureInfoDlg
                         Label40.Text = Casters.CastDismFeatureState(featInfo.FeatureState, True)
                         Dim cProps As DismCustomPropertyCollection = featInfo.CustomProperties
                         If cProps.Count > 0 Then
+                            Label42.Visible = False
+                            CPropViewer.Visible = True
                             Dim cPropContents As String = ""
                             For Each cProp As DismCustomProperty In cProps
                                 cPropContents &= "- " & If(cProp.Path <> "", cProp.Path & "\", "") & cProp.Name & ": " & cProp.Value & CrLf
@@ -314,23 +316,25 @@ Public Class GetFeatureInfoDlg
                                 Case 0
                                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                         Case "ENU", "ENG"
-                                            cPropValue.Text = "None"
+                                            Label42.Text = "None"
                                         Case "ESN"
-                                            cPropValue.Text = "Ninguna"
+                                            Label42.Text = "Ninguna"
                                         Case "FRA"
-                                            cPropValue.Text = "Aucune"
+                                            Label42.Text = "Aucune"
                                         Case "PTB", "PTG"
-                                            cPropValue.Text = "Nenhum"
+                                            Label42.Text = "Nenhum"
                                     End Select
                                 Case 1
-                                    cPropValue.Text = "None"
+                                    Label42.Text = "None"
                                 Case 2
-                                    cPropValue.Text = "Ninguna"
+                                    Label42.Text = "Ninguna"
                                 Case 3
-                                    cPropValue.Text = "Aucune"
+                                    Label42.Text = "Aucune"
                                 Case 4
-                                    cPropValue.Text = "Nenhum"
+                                    Label42.Text = "Nenhum"
                             End Select
+                            Label42.Visible = True
+                            CPropViewer.Visible = False
                         End If
                     End Using
                 Catch NRE As NullReferenceException
