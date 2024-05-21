@@ -628,7 +628,7 @@ function Start-OSApplication
     New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partition -eq 0)
     # Show message before rebooting system
     Write-Host "The first stage of Setup has completed, and your system will reboot automatically.`n`nIf there are any bootable devices, remove those.`n`nWhen your computer restarts, Setup will continue.`n"
-    Show-Timeout -Seconds 15
+    Show-Timeout -Seconds 10
     wpeutil reboot
 }
 
