@@ -322,6 +322,31 @@
             </summary>
             <param name="line">The zero-based line index of the annotation that changed.</param>
         </member>
+        <member name="T:ScintillaNET.ChangeHistory">
+            <summary>
+            Bit-flags for whether Scintilla should keep track of document change history and in which ways it should display the difference.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.ChangeHistory.Disabled">
+            <summary>
+            The default: change history turned off.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.ChangeHistory.Enabled">
+            <summary>
+            Track changes to the document.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.ChangeHistory.Markers">
+            <summary>
+            Display changes in the margin using the SC_MARKNUM_HISTORY markers.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.ChangeHistory.Indicators">
+            <summary>
+            Display changes in the text using the INDICATOR_HISTORY indicators.
+            </summary>
+        </member>
         <member name="T:ScintillaNET.CharAddedEventArgs">
             <summary>
             Provides data for the <see cref="E:ScintillaNET.Scintilla.CharAdded" /> event.
@@ -338,6 +363,38 @@
             Initializes a new instance of the <see cref="T:ScintillaNET.CharAddedEventArgs" /> class.
             </summary>
             <param name="ch">The character added.</param>
+        </member>
+        <member name="T:ScintillaNET.OkLab">
+            <summary>
+            OkLab color.
+            </summary>
+            <param name="L">Luminance (perceived lightness) in range [0.0, 1.0].</param>
+            <param name="a">How green/red the color is in range [-0.233887, +0.276216].</param>
+            <param name="b">How blue/yellow the color is in range [-0.311528, +0.198570].</param>
+        </member>
+        <member name="M:ScintillaNET.OkLab.#ctor(System.Single,System.Single,System.Single)">
+            <summary>
+            OkLab color.
+            </summary>
+            <param name="L">Luminance (perceived lightness) in range [0.0, 1.0].</param>
+            <param name="a">How green/red the color is in range [-0.233887, +0.276216].</param>
+            <param name="b">How blue/yellow the color is in range [-0.311528, +0.198570].</param>
+        </member>
+        <member name="T:ScintillaNET.Srgb">
+            <summary>
+            sRGB color.
+            </summary>
+            <param name="R">Red component.</param>
+            <param name="G">Green component.</param>
+            <param name="B">Blue component.</param>
+        </member>
+        <member name="M:ScintillaNET.Srgb.#ctor(System.Single,System.Single,System.Single)">
+            <summary>
+            sRGB color.
+            </summary>
+            <param name="R">Red component.</param>
+            <param name="G">Green component.</param>
+            <param name="B">Blue component.</param>
         </member>
         <member name="T:ScintillaNET.Command">
             <summary>
@@ -1035,6 +1092,23 @@
             Line Feed '\n' (0x0A).
             </summary>
         </member>
+        <member name="F:ScintillaNET.FlagsEditorControl.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:ScintillaNET.FlagsEditorControl.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:ScintillaNET.FlagsEditorControl.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
         <member name="T:ScintillaNET.FoldAction">
             <summary>
             Fold actions.
@@ -1159,6 +1233,20 @@
             Helper methods for the <see cref="T:ScintillaNET.Scintilla"/> control.
             </summary>
         </member>
+        <member name="M:ScintillaNET.HelperMethods.FromWin32Color(System.Int32)">
+            <summary>
+            Converts a 32-bit WinAPI color to <see cref="T:System.Drawing.Color"/>.
+            </summary>
+            <param name="color">The color value to convert.</param>
+            <returns>A <see cref="T:System.Drawing.Color"/> equivalent of the 32-bit WinAPI color.</returns>
+        </member>
+        <member name="M:ScintillaNET.HelperMethods.ToWin32Color(System.Drawing.Color)">
+            <summary>
+            Converts a <see cref="T:System.Drawing.Color"/> to 32-bit WinAPI color.
+            </summary>
+            <param name="color">The <see cref="T:System.Drawing.Color"/> instance to convert.</param>
+            <returns>32-bit WinAPI color value of the <see cref="T:System.Drawing.Color"/> instance.</returns>
+        </member>
         <member name="M:ScintillaNET.HelperMethods.GetFoldingState(ScintillaNET.Scintilla,System.String)">
             <summary>
             Gets the folding state of the control as a delimited string containing line indexes.
@@ -1174,6 +1262,19 @@
             <param name="scintilla">The <see cref="T:ScintillaNET.Scintilla"/> control instance.</param>
             <param name="foldingState">A string containing the folded line indexes separated with the <paramref name="separator"/> to restore the folding.</param>
             <param name="separator">The string to use as a separator.</param>
+        </member>
+        <member name="M:ScintillaNET.Helpers.MaxIndex``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``0,System.Int32})">
+            <summary>Returns index of the maximum value in a generic sequence.</summary>
+            <typeparam name="TSource">The type of the elements of <paramref name="source" />.</typeparam>
+            <param name="source">A sequence of values to determine the index of the maximum value of.</param>
+            <param name="comparer">The <see cref="T:System.Collections.Generic.IComparer`1" /> to compare values.</param>
+            <returns>The index of the maximum value in the sequence.</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="source" /> is <see langword="null" />.</exception>
+            <exception cref="T:System.ArgumentException">No object in <paramref name="source" /> implements the <see cref="T:System.IComparable" /> or <see cref="T:System.IComparable`1" /> interface.</exception>
+            <remarks>
+            <para>If type <typeparamref name="TSource" /> implements <see cref="T:System.IComparable`1" />, the <see cref="M:ScintillaNET.Helpers.MaxIndex``1(System.Collections.Generic.IEnumerable{``0})" /> method uses that implementation to compare values. Otherwise, if type <typeparamref name="TSource" /> implements <see cref="T:System.IComparable" />, that implementation is used to compare values.</para>
+            <para>If <typeparamref name="TSource" /> is a reference type and the source sequence is empty or contains only values that are <see langword="null" />, this method returns -1.</para>
+            </remarks>
         </member>
         <member name="T:ScintillaNET.HotspotClickEventArgs">
             <summary>
@@ -1592,6 +1693,11 @@
             <see cref="P:ScintillaNET.Indicator.Alpha" /> and <see cref="P:ScintillaNET.Indicator.OutlineAlpha" />.
             </summary>
         </member>
+        <member name="F:ScintillaNET.IndicatorStyle.SquigglePixmap">
+            <summary>
+            A version of Squiggle that draws using a pixmap instead of as a series of line segments for performance.
+            </summary>
+        </member>
         <member name="F:ScintillaNET.IndicatorStyle.CompositionThick">
             <summary>
             A 2-pixel thick underline with 1 pixel insets on either side.
@@ -1621,6 +1727,21 @@
         <member name="F:ScintillaNET.IndicatorStyle.PointCharacter">
             <summary>
             A triangle below the center of the first character of the indicator range.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.IndicatorStyle.Gradient">
+            <summary>
+            A vertical gradient between a color and alpha at top to fully transparent at bottom.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.IndicatorStyle.GradientCenter">
+            <summary>
+            A vertical gradient with color and alpha in the mid-line fading to fully transparent at top and bottom.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.IndicatorStyle.PointTop">
+            <summary>
+            A triangle above the start of the indicator range.
             </summary>
         </member>
         <member name="T:ScintillaNET.InsertCheckEventArgs">
@@ -1668,6 +1789,698 @@
         <member name="F:ScintillaNET.Layer.OverText">
             <summary>
             Draw the selection background translucently over the text.
+            </summary>
+        </member>
+        <member name="T:ScintillaNET.Lexer">
+            <summary>
+            Supported lexer names helper.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_A68K">
+            <summary>
+            Lexer for Assembler, just for the MASM syntax
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_ADPL">
+            <summary>
+            Lexer for APDL. Based on the lexer for Assembler by The Black Horus.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_ASYMPTOTE">
+            <summary>
+            This lexer is for the Asymptote vector graphics language
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_AU3">
+            <summary>
+            Lexer for AutoIt3
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_AVE">
+            <summary>
+            Lexer for Avenue
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_AVS">
+            <summary>
+            Lexer for AviSynth
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_ABAQUS">
+            <summary>
+            Lexer for ABAQUS. Based on the lexer for APDL by Hadar Raz.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_ADA">
+            <summary>
+            Lexer for Ada 95
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_ASCIIDOC">
+            <summary>
+            Lexer for Asciidoc
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_ASM">
+            <summary>
+            Lexer for Assembler, just for the MASM syntax
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_AS">
+            <summary>
+            Lexer for Assembler
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_ASN1">
+            <summary>
+            Lexer for ASN.1
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_BAAN">
+            <summary>
+            Lexer for Baan.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_BASH">
+            <summary>
+            Lexer for Bash.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_BLITZBASIC">
+            <summary>
+            Lexer for BlitzBasic.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_PUREBASIC">
+            <summary>
+            Lexer for PureBasic.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_FREEBASIC">
+            <summary>
+            Lexer for FreeBasic.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_BATCH">
+            <summary>
+            Lexer for batch files
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_BIBTEX">
+            <summary>
+            Lexer for BibTeX coloring scheme.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_BULLANT">
+            <summary>
+            Lexer for Bullant
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_CIL">
+            <summary>
+            Lexer for Common Intermediate Language (CIL)
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_CLW">
+            <summary>
+            Case Sensitive Clarion Language Lexer
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_CLWNOCASE">
+            <summary>
+            Lexer for Clarion with no case sensitivity.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_COBOL">
+            <summary>
+            Lexer for COBOL
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_CPP">
+            <summary>
+            Lexer for Case Sensitive C++
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_CPPNOCASE">
+            <summary>
+            Lexer for no case sensitivity C++
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_CSHARP">
+            <summary>
+            Lexer for C#
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_CSS">
+            <summary>
+            Lexer for Cascading Style Sheets
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_JAVA">
+            <summary>
+            Lexer for Java
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_JAVASCRIPT">
+            <summary>
+            Lexer for JavaScript
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_CAML">
+            <summary>
+            Lexer for Objective Caml.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_CMAKE">
+            <summary>
+            Lexer for Cmake
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_COFFEESCRIPT">
+            <summary>
+            Lexer for CoffeeScript.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_CONF">
+            <summary>
+            Apache Configuration Files
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_NNCRONTAB">
+            <summary>
+            Lexer to use with extended crontab files used by a powerful
+            Windows scheduler/event monitor/automation manager nnCron.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_CSOUND">
+            <summary>
+            Lexer for Csound (Orchestra and Score)
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_D">
+            <summary>
+            Lexer for D
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_DMAP">
+            <summary>
+            Lexer for MSC Nastran DMAP.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_DMIS">
+            <summary>
+            Lexer for DMIS.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_DATAFLEX">
+            <summary>
+            Lexer for DataFlex.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_DIFF">
+            <summary>
+            Lexer for diff results.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_ECL">
+            <summary>
+            Lexer for ECL.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_EDIFACT">
+            <summary>
+            Lexer for EDIFACT
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_ESCRIPT">
+            <summary>
+            Lexer for ESCRIPT
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_EIFFEL">
+            <summary>
+            Lexer for Eiffel.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_EIFFELKW">
+            <summary>
+            Lexer for EiffelKW
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_ERLANG">
+            <summary>
+            Lexer for Erlang.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_ERRORLIST">
+            <summary>
+            Lexer for error lists. Used for the output pane in SciTE
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_FSHARP">
+            <summary>
+            Lexer for F# 5.0
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_FLAGSHIP">
+            <summary>
+            Lexer for Harbour and FlagShip.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_FORTH">
+            <summary>
+            Lexer for Forth
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_FORTRAN">
+            <summary>
+            Lexer for Fortran
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_F77">
+            <summary>
+            Lexer for Fortran 77
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_GAP">
+            <summary>
+            Lexer for the GAP language. (The GAP System for Computational Discrete Algebra)
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_GDSCRIPT">
+            <summary>
+            Lexer for GDScript.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_GUI4CLI">
+            <summary>
+            This is the Lexer for Gui4Cli, included in SciLexer.dll
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_HTML">
+            <summary>
+            Lexer for HTML
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_XML">
+            <summary>
+            Lexer for XML
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_PHPSCRIPT">
+            <summary>
+            Lexer for PHPScript
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_HASKELL">
+            <summary>
+            A haskell lexer for the scintilla code control.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_LITERATEHASKELL">
+            <summary>
+            Lexer for Literate Haskell
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_SREC">
+            <summary>
+            Lexer for Motorola S-Record.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_IHEX">
+            <summary>
+            Lexer for Intel HEX
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_TEHEX">
+            <summary>
+            Lexer for Tektronix extended HEX
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_HOLLYWOOD">
+            <summary>
+            Lexer for Hollywood
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_INDENT">
+            <summary>
+            Lexer for no language. Used for indentation-based folding of files.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_INNOSETUP">
+            <summary>
+            Lexer for Inno Setup scripts.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_JSON">
+            <summary>
+            Lexer for JSON and JSON-LD formats
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_JULIA">
+            <summary>
+            Lexer for Julia
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_KIX">
+            <summary>
+            Lexer for KIX-Scripts.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_KVIRC">
+            <summary>
+            Lexer for KVIrc script.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_LATEX">
+            <summary>
+            Lexer for LaTeX2e.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_LISP">
+            <summary>
+            Lexer for Lisp
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_LOUT">
+            <summary>
+            Lexer for the Basser Lout (>= version 3) typesetting language
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_LUA">
+            <summary>
+            Lexer for Lua language
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_MMIXAL">
+            <summary>
+            Lexer for MMIX Assembler Language.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_LOT">
+            <summary>
+            Lexer for MPT specific files. Based on LexOthers.cxx
+            LOT = the text log file created by the MPT application while running a test program
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_MSSQL">
+            <summary>
+            Lexer for MSSQL
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_MAGIK">
+            <summary>
+            Lexer for GE(r) Smallworld(tm) MagikSF
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_MAKEFILE">
+            <summary>
+            Lexer for make files.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_MARKDOWN">
+            <summary>
+            A simple Markdown lexer for scintilla.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_MATLAB">
+            <summary>
+            Lexer for Matlab.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_OCTAVE">
+            <summary>
+            Lexer for Octave
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_MAXIMA">
+            <summary>
+            Lexer for Maxima 
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_METAPOST">
+            <summary>
+            Lexer for general context conformant metapost coloring scheme
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_MODULA">
+            <summary>
+            Lexer for Modula-2/3 documents.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_MYSQL">
+            <summary>
+            Lexer for MySQL
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_NIM">
+            <summary>
+            Lexer for NIM
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_NIMROD">
+            <summary>
+            Lexer for NIMROD
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_NSIS">
+            <summary>
+            Lexer for NSIS
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_NULL">
+            <summary>
+            Lexer for no language. Used for plain text and unrecognized files.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_OSCRIPT">
+            <summary>
+            Lexer for OScript sources; ocx files and/or OSpace dumps.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_OPAL">
+            <summary>
+            Lexer for OPAL (functional language similar to Haskell)
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_POWERBASIC">
+            <summary>
+            Lexer for PowerBasic 
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_PLM">
+            <summary>
+            Lexer for PL/M
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_PO">
+            <summary>
+            Lexer for GetText Translation (PO) files.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_POV">
+            <summary>
+            Lexer for POV-Ray SDL
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_POSTSCRIPT">
+            <summary>
+            Lexer for PostScript
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_PASCAL">
+            <summary>
+            Lexer for Pascal
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_PERL">
+            <summary>
+            Lexer for Perl
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_POWERPRO">
+            <summary>
+            Lexer for PowerPro
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_POWERSHELL">
+            <summary>
+            Lexer for PowerShellj scripts
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_PROGRESS">
+            <summary>
+            Lexer for Progress 4GL.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_PROPERTIES">
+            <summary>
+            Lexer for properties files.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_PYTHON">
+            <summary>
+            Lexer for Python
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_R">
+            <summary>
+            Lexer for R.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_S">
+            <summary>
+            Lexer for S.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_SPLUS">
+            <summary>
+            Lexer for SPlus Statistics Program.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_RAKU">
+            <summary>
+            Lexer for Raku
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_REBOL">
+            <summary>
+            Lexer for REBOL
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_REGISTRY">
+            <summary>
+            Lexer for Windows registration files(.reg)
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_RUBY">
+            <summary>
+            Lexer for Ruby
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_RUST">
+            <summary>
+            Lexer for Rust
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_SAS">
+            <summary>
+            Lexer for SAS
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_SML">
+            <summary>
+            Lexer for SML
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_SQL">
+            <summary>
+            Lexer for SQL, including PL/SQL and SQL*Plus.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_STTXT">
+            <summary>
+            Lexer for Structured Text language.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_SCRIPTOL">
+            <summary>
+            Lexer for Scriptol
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_SMALLTALK">
+            <summary>
+            Lexer for SmallTalk
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_SORCUS">
+            <summary>
+            Lexer for SORCUS installation files
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_SPECMAN">
+            <summary>
+            Lexer for Specman E language.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_SPICE">
+            <summary>
+            Lexer for SPICE
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_STATA">
+            <summary>
+            Lexer for Stata
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_TACL">
+            <summary>
+            Lexer for TACL
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_TADS3">
+            <summary>
+            Lexer for TADS3
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_TAL">
+            <summary>
+            Lexer for TAL
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_TCL">
+            <summary>
+            Lexer for TCL
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_TCMD">
+            <summary>
+            Lexer for Take Command / TCC batch scripts (.bat, .btm, .cmd).
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_TEX">
+            <summary>
+            Lexer for LaTeX general context conformant tex coloring scheme
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_TXT2TAGS">
+            <summary>
+            A simple Txt2tags lexer for scintilla.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_VB">
+            <summary>
+            Visual Basic
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_VBSCRIPT">
+            <summary>
+            Visual Basic Script
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_VHDL">
+            <summary>
+            Lexer for vhdl
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_VERILOG">
+            <summary>
+            Lexer for Verilog
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_VISUALPROLOG">
+            <summary>
+            Lexer for Visual Prolog
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_X12">
+            <summary>
+            Lexer for X12
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_YAML">
+            <summary>
+            Lexer for Yaml
             </summary>
         </member>
         <member name="T:ScintillaNET.Lexilla">
@@ -2374,6 +3187,32 @@
             An unsigned 32-bit mask of all <see cref="T:ScintillaNET.Margin" /> indexes where each bit cooresponds to a margin index.
             </summary>
         </member>
+        <member name="F:ScintillaNET.Marker.MaskHistory">
+            <summary>
+            An unsigned 32-bit mask of history <see cref="T:ScintillaNET.Margin" /> indexes (21 through 24) where each bit cooresponds to a margin index.
+            </summary>
+            <seealso cref="P:ScintillaNET.Margin.Mask" />
+        </member>
+        <member name="F:ScintillaNET.Marker.HistoryRevertedToOrigin">
+            <summary>
+            A change was made to this line and saved but then reverted to its original state.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Marker.HistorySaved">
+            <summary>
+            This line was modified and saved.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Marker.HistoryModified">
+            <summary>
+            This line was modified but not yet saved.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Marker.HistoryRevertedToModified">
+            <summary>
+            A change was made to this line and saved but then reverted but not to its original state.
+            </summary>
+        </member>
         <member name="F:ScintillaNET.Marker.MaskFolders">
             <summary>
             An unsigned 32-bit mask of folder <see cref="T:ScintillaNET.Margin" /> indexes (25 through 31) where each bit cooresponds to a margin index.
@@ -2708,6 +3547,16 @@
             A left-rotated bookmark.
             </summary>
         </member>
+        <member name="F:ScintillaNET.MarkerSymbol.VerticalBookmark">
+            <summary>
+            A bookmark.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.MarkerSymbol.Bar">
+            <summary>
+            A slim  rectangular vertical bar.
+            </summary>
+        </member>
         <member name="T:ScintillaNET.ModificationEventArgs">
             <summary>
             Provides data for the <see cref="E:ScintillaNET.Scintilla.Insert" /> and <see cref="E:ScintillaNET.Scintilla.Delete" /> events.
@@ -2976,6 +3825,12 @@
             Represents a Scintilla editor control.
             </summary>
         </member>
+        <member name="M:ScintillaNET.Scintilla.EnumerateSatelliteLibrarySearchPaths">
+            <summary>
+            Enumerates a list of folder paths that the native satellite libraries
+            ('Scintilla.dll' &amp; 'Lexilla.dll') are searched in.
+            </summary>
+        </member>
         <member name="F:ScintillaNET.Scintilla.TimeForever">
             <summary>
             A constant used to specify an infinite mouse dwell wait time.
@@ -3164,7 +4019,7 @@
         </member>
         <member name="M:ScintillaNET.Scintilla.ChangeLexerState(System.Int32,System.Int32)">
             <summary>
-            Indicates to the current <see cref="!:Lexer" /> that the internal lexer state has changed in the specified
+            Indicates to the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see> that the internal lexer state has changed in the specified
             range and therefore may need to be redrawn.
             </summary>
             <param name="startPos">The zero-based document position at which the lexer state change starts.</param>
@@ -3329,11 +4184,11 @@
         </member>
         <member name="M:ScintillaNET.Scintilla.DescribeProperty(System.String)">
             <summary>
-            Retrieves a brief description of the specified property name for the current <see cref="!:Lexer" />.
+            Retrieves a brief description of the specified property name for the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see>.
             </summary>
-            <param name="name">A property name supported by the current <see cref="!:Lexer" />.</param>
+            <param name="name">A property name supported by the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see>.</param>
             <returns>A String describing the lexer property name if found; otherwise, String.Empty.</returns>
-            <remarks>A list of supported property names for the current <see cref="!:Lexer" /> can be obtained by calling <see cref="M:ScintillaNET.Scintilla.PropertyNames" />.</remarks>
+            <remarks>A list of supported property names for the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see> can be obtained by calling <see cref="M:ScintillaNET.Scintilla.PropertyNames" />.</remarks>
         </member>
         <member name="M:ScintillaNET.Scintilla.DirectMessage(System.Int32,System.IntPtr,System.IntPtr)">
             <summary>
@@ -3444,7 +4299,7 @@
         </member>
         <member name="M:ScintillaNET.Scintilla.GetProperty(System.String)">
             <summary>
-            Lookup a property value for the current <see cref="!:Lexer" />.
+            Lookup a property value for the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see>.
             </summary>
             <param name="name">The property name to lookup.</param>
             <returns>
@@ -3455,7 +4310,7 @@
         </member>
         <member name="M:ScintillaNET.Scintilla.GetPropertyExpanded(System.String)">
             <summary>
-            Lookup a property value for the current <see cref="!:Lexer" /> and expand any embedded property macros.
+            Lookup a property value for the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see> and expand any embedded property macros.
             </summary>
             <param name="name">The property name to lookup.</param>
             <returns>
@@ -3466,7 +4321,7 @@
         </member>
         <member name="M:ScintillaNET.Scintilla.GetPropertyInt(System.String,System.Int32)">
             <summary>
-            Lookup a property value for the current <see cref="!:Lexer" /> and convert it to an integer.
+            Lookup a property value for the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see> and convert it to an integer.
             </summary>
             <param name="name">The property name to lookup.</param>
             <param name="defaultValue">A default value to return if the property name is not found or has no value.</param>
@@ -3519,6 +4374,14 @@
             <param name="position">The zero-based starting character position of the range to get.</param>
             <param name="length">The number of characters (including wide) to get.</param>
             <returns>A string representing the text range.</returns>
+        </member>
+        <member name="M:ScintillaNET.Scintilla.GetLexerIDFromLexer(ScintillaNET.Lexer)">
+            <summary>
+            Map Lexer enum value to supported lexer ID
+            </summary>
+            <param name="lexer">Supported Lexer enum value</param>
+            <returns>LexerName string for corresponding lexer value</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException"></exception>
         </member>
         <member name="M:ScintillaNET.Scintilla.GetTextRange(System.Int32,System.Int32)">
             <summary>
@@ -3933,17 +4796,17 @@
         </member>
         <member name="M:ScintillaNET.Scintilla.PropertyNames">
             <summary>
-            Retrieves a list of property names that can be set for the current <see cref="!:Lexer" />.
+            Retrieves a list of property names that can be set for the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see>.
             </summary>
             <returns>A String of property names separated by line breaks.</returns>
         </member>
         <member name="M:ScintillaNET.Scintilla.PropertyType(System.String)">
             <summary>
-            Retrieves the data type of the specified property name for the current <see cref="!:Lexer" />.
+            Retrieves the data type of the specified property name for the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see>.
             </summary>
-            <param name="name">A property name supported by the current <see cref="!:Lexer" />.</param>
+            <param name="name">A property name supported by the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see>.</param>
             <returns>One of the <see cref="M:ScintillaNET.Scintilla.PropertyType(System.String)" /> enumeration values. The default is <see cref="F:ScintillaNET.PropertyType.Boolean" />.</returns>
-            <remarks>A list of supported property names for the current <see cref="!:Lexer" /> can be obtained by calling <see cref="M:ScintillaNET.Scintilla.PropertyNames" />.</remarks>
+            <remarks>A list of supported property names for the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see> can be obtained by calling <see cref="M:ScintillaNET.Scintilla.PropertyNames" />.</remarks>
         </member>
         <member name="M:ScintillaNET.Scintilla.Redo">
             <summary>
@@ -4096,13 +4959,13 @@
         </member>
         <member name="M:ScintillaNET.Scintilla.SetKeywords(System.Int32,System.String)">
             <summary>
-            Updates a keyword set used by the current <see cref="!:Lexer" />.
+            Updates a keyword set used by the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see>.
             </summary>
             <param name="set">The zero-based index of the keyword set to update.</param>
             <param name="keywords">
-            A list of keywords pertaining to the current <see cref="!:Lexer" /> separated by whitespace (space, tab, '\n', '\r') characters.
+            A list of keywords pertaining to the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see> separated by whitespace (space, tab, '\n', '\r') characters.
             </param>
-            <remarks>The keywords specified will be styled according to the current <see cref="!:Lexer" />.</remarks>
+            <remarks>The keywords specified will be styled according to the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see>.</remarks>
             <seealso cref="M:ScintillaNET.Scintilla.DescribeKeywordSets" />
         </member>
         <member name="M:ScintillaNET.Scintilla.SetDestroyHandleBehavior(System.Boolean)">
@@ -4117,12 +4980,12 @@
         </member>
         <member name="M:ScintillaNET.Scintilla.SetProperty(System.String,System.String)">
             <summary>
-            Passes the specified property name-value pair to the current <see cref="!:Lexer" />.
+            Passes the specified property name-value pair to the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see>.
             </summary>
             <param name="name">The property name to set.</param>
             <param name="value">
             The property value. Values can refer to other property names using the syntax $(name), where 'name' is another property
-            name for the current <see cref="!:Lexer" />. When the property value is retrieved by a call to <see cref="M:ScintillaNET.Scintilla.GetPropertyExpanded(System.String)" />
+            name for the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see>. When the property value is retrieved by a call to <see cref="M:ScintillaNET.Scintilla.GetPropertyExpanded(System.String)" />
             the embedded property name macro will be replaced (expanded) with that current property value.
             </param>
             <remarks>Property names are case-sensitive.</remarks>
@@ -4371,6 +5234,12 @@
             Clears the representation from a specified character string.
             </summary>
             <param name="encodedString">The encoded string. I.e. the Ohm character: Ω = \u2126.</param>
+        </member>
+        <member name="M:ScintillaNET.Scintilla.ClearChangeHistory">
+            <summary>
+            Clears the change history so that scintilla does not show any saved/modified markers.
+            Undo buffer is cleared but <see cref="M:ScintillaNET.Scintilla.SetSavePoint"/> is not called.
+            </summary>
         </member>
         <member name="P:ScintillaNET.Scintilla._ScintillaManagedDragDrop">
             <summary>
@@ -4699,6 +5568,11 @@
             The caret width can only be set to a value of 0, 1, 2 or 3 pixels and is only effective
             when the <see cref="P:ScintillaNET.Scintilla.CaretStyle" /> property is set to <see cref="F:ScintillaNET.CaretStyle.Line" />.
             </remarks>
+        </member>
+        <member name="P:ScintillaNET.Scintilla.ChangeHistory">
+            <summary>
+            Gets or sets whether Scintilla should keep track of document change history and in which ways it should display the difference.
+            </summary>
         </member>
         <member name="P:ScintillaNET.Scintilla.CreateParams">
             <summary>

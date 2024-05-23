@@ -1,12 +1,12 @@
 # Scintilla.NET
+[![.Build validate](https://github.com/desjarlais/Scintilla.NET/actions/workflows/dotnet-desktop-build.yml/badge.svg)](https://github.com/desjarlais/Scintilla.NET/actions/workflows/dotnet-desktop-build.yml) [![.NET NuGet Release](https://github.com/desjarlais/Scintilla.NET/actions/workflows/dotnet-nuget-release.yml/badge.svg)](https://github.com/desjarlais/Scintilla.NET/actions/workflows/dotnet-nuget-release.yml) [![NuGet](https://img.shields.io/nuget/v/Scintilla5.NET)](https://www.nuget.org/packages/Scintilla5.NET)
 
-Scintilla.NET is a Windows Forms control, wrapper, and bindings for the versatile [Scintilla](http://www.scintilla.org/) source code editing component.  
+Scintilla.NET is a Windows Forms control, wrapper, and bindings for the versatile [Scintilla](http://www.scintilla.org) source code editing component.
 
-* NOTE: I updated the Nuget package name to [Scintilla5.NET](https://www.nuget.org/packages/Scintilla5.NET) for those searching the gallery.
+> [!NOTE]
+> I updated the Nuget package name to [Scintilla5.NET](https://www.nuget.org/packages/Scintilla5.NET) for those searching the gallery.
 
-[![.Build validate](https://github.com/desjarlais/Scintilla.NET/actions/workflows/dotnet-desktop-build.yml/badge.svg)](https://github.com/desjarlais/Scintilla.NET/actions/workflows/dotnet-desktop-build.yml) [![.NET NuGet Release](https://github.com/desjarlais/Scintilla.NET/actions/workflows/dotnet-nuget-release.yml/badge.svg)](https://github.com/desjarlais/Scintilla.NET/actions/workflows/dotnet-nuget-release.yml) [![Nuget](https://img.shields.io/nuget/v/Scintilla5.NET)](https://www.nuget.org/packages/Scintilla5.NET)
-
-> "As well as features found in standard text editing components, Scintilla includes features especially useful when editing and debugging source code. These include support for syntax styling, error indicators, code completion and call tips. The selection margin can contain markers like those used in debuggers to indicate breakpoints and the current line. Styling choices are more open than with many editors, allowing the use of proportional fonts, bold and italics, multiple foreground and background colours and multiple fonts." -- [scintilla.org](http://www.scintilla.org/)
+> "As well as features found in standard text editing components, Scintilla includes features especially useful when editing and debugging source code. These include support for syntax styling, error indicators, code completion and call tips. The selection margin can contain markers like those used in debuggers to indicate breakpoints and the current line. Styling choices are more open than with many editors, allowing the use of proportional fonts, bold and italics, multiple foreground and background colours and multiple fonts." -- [scintilla.org](http://www.scintilla.org)
 
 Scintilla.NET can also be used with WPF using the <a href="https://msdn.microsoft.com/en-us/library/system.windows.forms.integration.windowsformshost(v=vs.110).aspx">WindowsFormsHost</a>.
 For Linux, see the [Scintilla.NET.Gtk](https://github.com/VPKSoft/Scintilla.NET.Gtk).
@@ -26,7 +26,7 @@ This project is continuing from the abandoned [ScintillaNET](https://github.com/
 
 Scintilla.NET is in active development. If you find any issues or just have a question feel free to use the [Issues](https://github.com/desjarlais/Scintilla.NET/issues) feature at our GitHub page. **NOTE:** I don't read the issues posted to the main fork - so if your issue is about this project, post it here.
 
-Compiled versions which are production ready can be downloaded from [NuGet](https://www.nuget.org/packages/Scintilla5.NET/) or the [Releases](https://github.com/desjarlais/Scintilla.NET/releases) page.
+Compiled versions which are production ready can be downloaded from [NuGet](https://www.nuget.org/packages/Scintilla5.NET) or the [Releases](https://github.com/desjarlais/Scintilla.NET/releases) page.
 
 For the latest and greatest you can build the [Master](https://github.com/desjarlais/Scintilla.NET/archive/master.zip) branch from source using Visual Studio 2022.
 
@@ -34,9 +34,9 @@ For the latest and greatest you can build the [Master](https://github.com/desjar
 **Versions before v.5.3.1.1:**
 [Microsoft Visual C++ Redistributable for Visual Studio 2015, 2017, 2019, and 2022](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170) is required for the component to work, see [#16](https://github.com/desjarlais/Scintilla.NET/issues/16).
 
-Scintilla library version = 5.4.3
+Scintilla library version = 5.5.0
 
-Lexilla library version = 5.3.1
+Lexilla library version = 5.3.2
 
 ## Background
 For more information about the history and background information, look at the wiki [here](https://github.com/desjarlais/Scintilla.NET/wiki/Scintilla.NET-History).
