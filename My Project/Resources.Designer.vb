@@ -2178,16 +2178,13 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Fixed some issues when setting the log path if the directory does not exist
-        '''- Fixed an issue where the log view font size would not be 11 pt. on the Initial Setup wizard
-        '''- Added some warnings to fix issues #119 and #121 (thanks @AnubyteCode)
-        '''- Fixed some anchoring issues in the ISO creator
+        '''- Fixed some splash screen issues if the program is run on Windows 7/Server 2008 R2 or if the program is run without administrative privileges (thanks liliactr on the My Digital Life forums for spotting)
         '''
         '''New features:
         '''
-        '''- The Preinstallation Environment (PE) helper has had several improvements:
-        '''  - A new parameter has been added that shows help contents for the script
-        '''  - You can now install a Wind [resto de la cadena truncado]&quot;;.
+        '''- Existing PowerShell tooling (excluding the PE Helper) has been refactored and cleaned up for increased code readability and quality
+        '''- If you were to add multiple installation images to your customized ISO files, the PE helper will now ask you what image to apply
+        '''- You ca [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
