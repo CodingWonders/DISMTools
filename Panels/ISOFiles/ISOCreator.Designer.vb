@@ -390,6 +390,7 @@ Partial Class ISOCreator
         'SaveFileDialog1
         '
         Me.SaveFileDialog1.Filter = "ISO files|*.iso"
+        Me.SaveFileDialog1.OverwritePrompt = False
         '
         'LinkLabel1
         '

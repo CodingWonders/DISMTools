@@ -1945,6 +1945,7 @@ Public Class ImgInfoSaveDlg
                                 msg(0) = "Obter informações sobre os controladores... (controlador " & InstalledDrvInfo.IndexOf(driver) + 1 & " de " & InstalledDrvInfo.Count & ")"
                         End Select
                         ReportChanges(msg(0), (InstalledDrvInfo.IndexOf(driver) / InstalledDrvInfo.Count) * 100)
+                        Dim signer As String = DriverSignerViewer.GetSignerInfo(driver.OriginalFileName)
                         Contents &= "  Driver " & InstalledDrvInfo.IndexOf(driver) + 1 & " of " & InstalledDrvInfo.Count & ":" & CrLf & _
                                     "    - Published name: " & driver.PublishedName & CrLf & _
                                     "    - Original file name: " & Path.GetFileName(driver.OriginalFileName) & " (" & Path.GetDirectoryName(driver.OriginalFileName) & ")" & CrLf & _
@@ -1957,7 +1958,7 @@ Public Class ImgInfoSaveDlg
                                     "    - Is critical to the boot process? " & If(driver.BootCritical, "Yes", "No") & CrLf & _
                                     "    - Version: " & driver.Version.ToString() & CrLf & _
                                     "    - Date: " & driver.Date & CrLf & _
-                                    "    - Driver signature status: " & Casters.CastDismSignatureStatus(driver.DriverSignature) & CrLf & CrLf
+                                    "    - Driver signature status: " & Casters.CastDismSignatureStatus(driver.DriverSignature) & If(Not (signer Is Nothing OrElse signer = ""), " by " & signer, "") & CrLf & CrLf
                     Next
                     Contents &= "  - Complete driver information has been gathered" & CrLf & CrLf
                 ElseIf (Not SkipQuestions Or Not AutoCompleteInfo(4)) And MsgBox(msg(1), vbYesNo + vbQuestion, msg(2)) = MsgBoxResult.Yes Then
